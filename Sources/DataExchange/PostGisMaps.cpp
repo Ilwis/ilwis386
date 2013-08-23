@@ -101,44 +101,28 @@ PostGisMaps::PostGisMaps() :
 
 }
 
-void PostGisMaps::replaceString(string &str, const string &search, const string &replace ) {
-    for( size_t pos = 0; ; pos += replace.length() ) {
-        pos = str.find( search, pos );
-        if( pos == string::npos )
-			break;
-        str.erase( pos, search.length() ); // Replace by erasing and inserting
-        str.insert( pos, replace );
-    }
-}
-
-String PostGisMaps::merge(String table, String column) {
-	replaceString(table, "_", "-_");
-	replaceString(column, "_", "-_");
-	return table + "_" + column;
-}
-
-void PostGisMaps::split(String fileName, String & table, String & column) {
-	int iPos = fileName.find("_");
-	while (iPos > 0 && fileName[iPos - 1] == '-')
-		iPos = fileName.find("_", iPos + 1);
-	table = fileName.substr(0, iPos);
-	column = fileName.substr(iPos + 1);
-	replaceString(table, "-_", "_");
-	replaceString(column, "-_", "_");
-}
-
 PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, ParmList& pm) :
 	PostgreSQLTables(fn, fnDomAttrTable, pm)
 	, rasterTiles(0)
 {
 	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(fn);
+	String tablecol;
+	String id;
+	split(fn.sFile, tablecol, id, "@");
+	if (id != "") {
+		split(tablecol, tableName, geometryColumn, "_");
+		sQuery = String("Select * From %S.%S Where rid='%S'", schema, tableName, id);
+	} else {
+		split(fn.sFile, tableName, geometryColumn, "_");
+		sQuery = String("Select * From %S.%S", schema, tableName);
+	}
+	ObjectInfo::WriteElement("ForeignFormat","Table",fn,tableName);
+	ObjectInfo::WriteElement("ForeignFormat","Query",fn,sQuery);
 	if ( type == IlwisObject::iotPOINTMAP ||  type == IlwisObject::iotSEGMENTMAP ||  type == IlwisObject::iotPOLYGONMAP) {
-		split(fn.sFile, tableName, geometryColumn);
-		sQuery = "Select * From " + tableName;		
 		PostGreSQL db(sConnectionString.c_str());
-   	    String query("Select srid from geometry_columns where f_table_schema='%S' and f_geometry_column='%S'", schema, geometryColumn);
+   	    String query("Select srid from geometry_columns where f_table_schema='%S' and f_table_name='%S' and f_geometry_column='%S'", schema, tableName, geometryColumn);
 		db.getNTResult(query.c_str());
-		ForeignCollection fc(pm.sGet("collection"));
+		ForeignCollection fc(pm.fExist("parentcollection") ? pm.sGet("parentcollection") : pm.sGet("collection"));
 		if(db.getNumberOf(PostGreSQL::ROW) > 0) {
 			String srid(db.getValue(0,"srid"));
 			csy = getCoordSystem( FileName(geometryColumn), String("EPSG:%S",srid));
@@ -146,10 +130,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				fc->Add(csy);
 			}
 		}
-		ObjectInfo::WriteElement("ForeignFormat","Table",fn,tableName);
-		ObjectInfo::WriteElement("ForeignFormat","Query",fn,sQuery);
 	} else if ( type == IlwisObject::iotRASMAP) {
-		split(fn.sFile, tableName, geometryColumn);
 		LayerInfo inf;
 
 		if (fn.fExist()) {
@@ -168,10 +149,11 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				ObjectInfo::ReadElement("ForeignFormat", "srid", fn, srid);
 				ObjectInfo::ReadElement("ForeignFormat", "x_pixels_tile", fn, x_pixels_tile);
 				ObjectInfo::ReadElement("ForeignFormat", "y_pixels_tile", fn, y_pixels_tile);
+				ObjectInfo::ReadElement("ForeignFormat", "x_pixels", fn, x_pixels);
 				ObjectInfo::ReadElement("ForeignFormat", "nodata_value", fn, nodata_value);
 				ObjectInfo::ReadElement("ForeignFormat", "pixel_type", fn, pixel_type);
 				SetStoreType(pixel_type, inf, stPostgres);
-				rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, inf.grf, srid, x_pixels_tile, y_pixels_tile, nodata_value, stPostgres);
+				rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, nodata_value, stPostgres);
 
 				return;
 			}
@@ -179,7 +161,11 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 
 		// GetRasterInfo
 		PostGreSQL db(sConnectionString.c_str());
-   	    String query("Select srid, scale_x, scale_y, blocksize_x, blocksize_y, st_astext(extent), num_bands, pixel_types, nodata_values from raster_columns where r_table_schema='%S' and r_raster_column='%S'", schema, geometryColumn);
+		String query;
+		if (id != "")
+			query = String("Select ST_SRID(%S), ST_ScaleX(%S), ST_ScaleY(%S), ST_Width(%S), ST_Height(%S), st_astext(ST_Envelope(%S)), ST_NumBands(%S), ST_BandPixelType(%S), ST_BandNoDataValue(%S) From %S.%S Where rid=%S", geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, schema, tableName, id);
+		else
+   			query = String("Select srid, scale_x, scale_y, blocksize_x, blocksize_y, st_astext(extent), num_bands, pixel_types, nodata_values from raster_columns where r_table_schema='%S' and r_table_name='%S' and r_raster_column='%S'", schema, tableName, geometryColumn);
 		db.getNTResult(query.c_str());
 		if(db.getNumberOf(PostGreSQL::ROW) > 0) {
 			// CoordinateSystem
@@ -218,24 +204,32 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 			int nrBands = String(db.getValue(0, 6)).iVal();
 			String pixel_types(db.getValue(0, 7));
 			String nodata_values(db.getValue(0, 8));
+			String pixel_type;
+			double nodata_value;
 			int iBand = 0; // first band
-			pixel_types = pixel_types.sSub(1, pixel_types.size() - 2); // remove { and }
-			nodata_values = nodata_values.sSub(1, nodata_values.size() - 2); // remove { and }
-			Array<String> bands;
-			Split(pixel_types, bands, ",");
-			String pixel_type = bands[iBand];
-			bands.clear();
-			Split(nodata_values, bands, ",");
-			double nodata_value = bands[iBand].rVal();
+			if (pixel_types.iPos('{') == 0) {
+				pixel_types = pixel_types.sSub(1, pixel_types.size() - 2); // remove { and }
+				nodata_values = nodata_values.sSub(1, nodata_values.size() - 2); // remove { and }
+				Array<String> bands;
+				Split(pixel_types, bands, ",");
+				pixel_type = bands[iBand];
+				bands.clear();
+				Split(nodata_values, bands, ",");
+				nodata_value = bands[iBand].rVal();
+			} else {
+				pixel_type = pixel_types;
+				nodata_value = nodata_values.rVal();
+			}
 
 			StoreType stPostgres;
 			SetStoreType(pixel_type, inf, stPostgres);
 
-			rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, inf.grf, srid, x_pixels_tile, y_pixels_tile, nodata_value, stPostgres);
+			rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, nodata_value, stPostgres);
 
 			ObjectInfo::WriteElement("ForeignFormat", "srid", fn, srid);
 			ObjectInfo::WriteElement("ForeignFormat", "x_pixels_tile", fn, x_pixels_tile);
 			ObjectInfo::WriteElement("ForeignFormat", "y_pixels_tile", fn, y_pixels_tile);
+			ObjectInfo::WriteElement("ForeignFormat", "x_pixels", fn, x_pixels);
 			ObjectInfo::WriteElement("ForeignFormat", "nodata_value", fn, nodata_value);
 			ObjectInfo::WriteElement("ForeignFormat", "pixel_type", fn, pixel_type);
 		}
@@ -250,8 +244,11 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 		else
 			map->SetUseAs(false);
 
-		if (inf.dvrsMap.fValues()) {
-			query = String("SELECT ST_SummaryStats('%S', '%S')", tableName, geometryColumn);
+		if (inf.dvrsMap.fValues() && id == "" /* temporarily disable fetching stats from postgis as they are wrong */) {
+			if (id != "")
+				query = String("SELECT ST_SummaryStats(%S) From %S.%S Where rid=%S", geometryColumn, schema, tableName, id);
+			else
+				query = String("SELECT ST_SummaryStats('%S', '%S')", tableName, geometryColumn);
 			db.getNTResult(query.c_str());
 			if(db.getNumberOf(PostGreSQL::ROW) > 0) {
 				String res (db.getValue(0, 0));
@@ -274,7 +271,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 		map->Store();
 		map->gr()->Store();
 		Store(map);
-		ForeignCollection fc(pm.sGet("collection"));
+		ForeignCollection fc(pm.fExist("parentcollection") ? pm.sGet("parentcollection") : pm.sGet("collection"));
 		if (fc.fValid()) {
 			fc->Add(map->gr());
 			fc->Add(map->cs());
@@ -360,50 +357,102 @@ PostGisMaps::~PostGisMaps()
 // fills a database collection with appropriate tables
 void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList& pm)
 {
+	bool fAdded = false;
 	PostGreSQL db(sConnectionString.c_str());
-	db.getNTResult(String("SELECT table_name,column_name FROM INFORMATION_SCHEMA.Columns WHERE table_schema = '%S' and udt_name='geometry'", schema).c_str());
-	int rows = db.getNumberOf(PostGreSQL::ROW);
-	//if ( rows <= 0)
-	//	throw ErrorObject("Meta data of the database is invalid or incomplete"); // not incomplete; just no 'geometry' columns found
+	if (schema == "") {
+		db.getNTResult(String("SELECT distinct table_schema FROM INFORMATION_SCHEMA.Columns").c_str());
+		int rows = db.getNumberOf(PostGreSQL::ROW);
+		for (int i = 0; i < rows; ++i) {
+			String schemaName (db.getValue(i, 0));
+			String fileName (merge(collection->fnObj.sFile, schemaName, "."));
+			collection->Add(FileName("'" + fileName + "'", ".ioc"));
+			fAdded = true;
+		}
+	} else if (tableName != "" && geometryColumn != "") {
+		db.getNTResult(String("SELECT rid FROM %S.%S", schema, tableName).c_str());
+		int rows = db.getNumberOf(PostGreSQL::ROW);
+		String name = merge(tableName, geometryColumn, "_");
+		for(int i = 0; i < rows; ++i) {
+			String id (db.getValue(i, 0));
+			String fileName = merge(name, id, "@");
+			String sMap = String("%S.mpr", fileName);
+			collection->Add(sMap);
+			fAdded = true;
+		}
+	} else {
+		db.getNTResult(String("SELECT table_name,column_name FROM INFORMATION_SCHEMA.Columns WHERE table_schema='%S' and udt_name='geometry'", schema).c_str());
+		int rows = db.getNumberOf(PostGreSQL::ROW);
+		//if ( rows <= 0)
+		//	throw ErrorObject("Meta data of the database is invalid or incomplete"); // not incomplete; just no 'geometry' columns found
 
-	for(int i = 0; i < rows; ++i)
-	{
-		String tname(db.getValue(i, "table_name"));
-		String cname(db.getValue(i, "column_name"));
-		PostGreSQL db2(sConnectionString.c_str());
-		String query = String("Select distinct(ST_GeometryType(%S)) from %S",cname, tname);
-		db2.getNTResult(query.c_str());
-		if (db2.getNumberOf(PostGreSQL::ROW) > 0) {
-			for(int j = 0; j < db2.getNumberOf(PostGreSQL::ROW); ++j) {
-				String type = String(db2.getValue(j,0)).toLower();
-				String name = merge(tname, cname);
-				name.sTrimSpaces();
-				String sMap;
-				if (type == "st_point" || type == "st_multipoint") 
-					sMap = String("%S.mpp", name);
-				else if (type == "st_linestring" || type == "st_multilinestring")
-					sMap = String("%S.mps", name);
-				else if (type == "st_polygon" || type == "st_multipolygon")
-					sMap = String("%S.mpa", name);
-				if ( sMap != "")
-					collection->Add(sMap);
+		for(int i = 0; i < rows; ++i)
+		{
+			String tname(db.getValue(i, "table_name"));
+			String cname(db.getValue(i, "column_name"));
+			PostGreSQL db2(sConnectionString.c_str());
+			String query = String("Select distinct(ST_GeometryType(%S)) from %S.%S",cname, schema, tname);
+			db2.getNTResult(query.c_str());
+			if (db2.getNumberOf(PostGreSQL::ROW) > 0) {
+				for(int j = 0; j < db2.getNumberOf(PostGreSQL::ROW); ++j) {
+					String type = String(db2.getValue(j,0)).toLower();
+					String name = merge(tname, cname, "_");
+					name.sTrimSpaces();
+					String sMap;
+					if (type == "st_point" || type == "st_multipoint") 
+						sMap = String("%S.mpp", name);
+					else if (type == "st_linestring" || type == "st_multilinestring")
+						sMap = String("%S.mps", name);
+					else if (type == "st_polygon" || type == "st_multipolygon")
+						sMap = String("%S.mpa", name);
+					if ( sMap != "") {
+						collection->Add(sMap);
+						fAdded = true;
+					}
+				}
+			}
+		}
+		std::vector<std::pair<String, String>> rasters;
+		db.getNTResult(String("SELECT table_name,column_name FROM INFORMATION_SCHEMA.Columns WHERE table_schema='%S' and udt_name='raster'", schema).c_str());
+		rows = db.getNumberOf(PostGreSQL::ROW);
+		for (int i = 0; i < rows; ++i)
+		{
+			String tname(db.getValue(i, "table_name"));
+			String cname(db.getValue(i, "column_name"));
+			rasters.push_back(pair<String, String>(tname,cname));
+		}
+
+		for (std::vector<std::pair<String, String>>::iterator raster = rasters.begin(); raster != rasters.end(); ++raster)
+		{
+			String & tname = raster->first;
+			String & cname = raster->second;
+			String name = merge(tname, cname, "_");
+			name.sTrimSpaces();
+			if (name != "") {
+				//String query("Select same_alignment,regular_blocking from raster_columns where r_table_schema='%S' and r_table_name='%S' and r_raster_column='%S'", schema, tname, cname);
+	   			String query = String("Select scale_x, scale_y, blocksize_x, blocksize_y, extent from raster_columns where r_table_schema='%S' and r_table_name='%S' and r_raster_column='%S'", schema, tname, cname);
+				db.getNTResult(query.c_str());
+				if(db.getNumberOf(PostGreSQL::ROW) > 0) {
+					bool fOk = String(db.getValue(0, 0)) != "";
+					fOk = fOk && (String(db.getValue(0, 1)) != "");
+					fOk = fOk && (String(db.getValue(0, 2)) != "");
+					fOk = fOk && (String(db.getValue(0, 3)) != "");
+					fOk = fOk && (String(db.getValue(0, 4)) != "");
+					if (fOk /* same_alignment && regular_blocking */) { // currently (postgis 2.x / AddRasterConstraints) same_alignment has a random value and regular_blocking is always false, we rely on same_alignment
+						String sMap = String("%S.mpr", name);
+						collection->Add(sMap);
+						fAdded = true;
+					} else {
+						String sCollection = String("%S.ioc", name);
+						collection->Add(sCollection);
+						fAdded = true;
+					}
+				}
 			}
 		}
 	}
-	db.getNTResult(String("SELECT table_name,column_name FROM INFORMATION_SCHEMA.Columns WHERE table_schema = '%S' and udt_name='raster'", schema).c_str());
-	rows = db.getNumberOf(PostGreSQL::ROW);
-	for (int i = 0; i < rows; ++i)
-	{
-		String tname(db.getValue(i, "table_name"));
-		String cname(db.getValue(i, "column_name"));
-		String name = merge(tname, cname);
-		name.sTrimSpaces();
-		String sMap = String("%S.mpr", name);
-		if(sMap != "")
-			collection->Add(sMap);
-	}
 
-	Store(IlwisObject::obj(collection->fnObj));
+	if (fAdded)
+		Store(IlwisObject::obj(collection->fnObj));
 }
 
 bool PostGisMaps::fIsSupported(const FileName& fn, ForeignFormat::Capability dtType ) const
@@ -513,7 +562,7 @@ void PostGisMaps::LoadTable(TablePtr *tbl)
 			type = "point";
 	}
 
-	String geometryQuery("Select st_astext(%S) from %S where lower(ST_GeometryType(%S)) like '%%%S'",geometryColumn,tableName,geometryColumn,type);
+	String geometryQuery("Select st_astext(%S) from %S.%S where lower(ST_GeometryType(%S)) like '%%%S'",geometryColumn,schema,tableName,geometryColumn,type);
 	db.getNTResult(geometryQuery.c_str());	
 	
 	int iNumColumns = db.getNumberOf(PostGreSQL::COLUMN);
@@ -663,7 +712,7 @@ bool PostGisMaps::fMatchType(const String& sFileName, const String& sType)
 {
 	// Templates object type name
 	if ( fIsCollection(sFileName))
-		return sType == "ILWIS ForeignCollections";
+		return sType == "ILWIS Postgres DataBase Collections";
 	else
 		return sType == "ILWIS Tables";
 }
@@ -688,7 +737,7 @@ LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 			type = "point";
 	}
 	String query = parms.sGet("query").sUnQuote().c_str();
-	String geometryQuery("Select *,st_astext(%S) as _coords_ from %S where lower(ST_GeometryType(%S)) like'%%%S'",geometryColumn,tableName,geometryColumn,type);
+	String geometryQuery("Select *,st_astext(%S) as _coords_ from %S.%S where lower(ST_GeometryType(%S)) like'%%%S'",geometryColumn,schema,tableName,geometryColumn,type);
 	if (query != "")
 		query = query + "in (" + geometryQuery + ")";
 	else
@@ -713,7 +762,7 @@ LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 		else if ( p->sOpt() == "table")
 			p2 = new Parm("table",tableName);
 		else if ( p->sOpt() == "query")
-			p2 = new Parm("query", String("Select * FROM %S", tableName));
+			p2 = new Parm("query", String("Select * FROM %S.%S", schema, tableName));
 		else
 			p2 = new Parm(p->sOpt(), p->sVal());
 
@@ -874,11 +923,12 @@ double PostGisMaps::rValue(RowCol rc) const
 	return buf[rc.Col];
 }
 
-PostGisRasterTileset::PostGisRasterTileset(String sConnectionString, String _schema, String _tableName, String _geometryColumn, const GeoRef & _gr, String _srid, int _x_pixels_tile, int _y_pixels_tile, double _nodata_value, StoreType _stPostgres)
+PostGisRasterTileset::PostGisRasterTileset(String sConnectionString, String _schema, String _tableName, String _geometryColumn, String _id, const GeoRef & _gr, String _srid, int _x_pixels_tile, int _y_pixels_tile, double _nodata_value, StoreType _stPostgres)
 : db(new PostGreSQL (sConnectionString.c_str()))
 , schema(_schema)
 , tableName(_tableName)
 , geometryColumn(_geometryColumn)
+, id(_id)
 , gr(_gr)
 , srid(_srid)
 , x_pixels_tile(_x_pixels_tile)
@@ -1070,16 +1120,26 @@ char PostGisRasterTileset::hex2dec(char * str)
 
 void PostGisRasterTileset::RenewTiles(long iLine, long iFrom, long iNum)
 {
-	Coord crd1;
-	Coord crd2;
-	gr->RowCol2Coord(iLine + 0.5, iFrom + 0.5, crd1);
-	gr->RowCol2Coord(iLine + 0.5, iFrom + iNum - 1.5, crd2);
-	//String str("SELECT %S FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;POLYGON((%.18f %.18f,%.18f %.18f,%.18f %.18f,%.18f %.18f,%.18f %.18f))')) order by ST_UpperLeftX(%S)", geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd1.y, crd2.x, crd2.y, crd1.x, crd2.y, crd1.x, crd1.y, geometryColumn);
-	String str("SELECT %S FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;LINESTRING(%.18f %.18f,%.18f %.18f)')) order by ST_UpperLeftX(%S)", geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd2.y, geometryColumn);
-	db->getNTResult(str.c_str());
-	iNumTiles = db->getNumberOf(PostGreSQL::ROW);
-	iLeft = iFrom - iFrom % x_pixels_tile;
-	iRight = iLeft + iNumTiles * x_pixels_tile - 1;
-	iTop = iLine - iLine % y_pixels_tile;
-	iBottom = iTop + y_pixels_tile - 1;
+	if (id != "") {
+		String str("SELECT %S FROM %S.%S WHERE rid=%S", geometryColumn, schema, tableName, id);
+		db->getNTResult(str.c_str());
+		iNumTiles = db->getNumberOf(PostGreSQL::ROW);
+		iLeft = iFrom - iFrom % x_pixels_tile;
+		iRight = iLeft + iNumTiles * x_pixels_tile - 1;
+		iTop = iLine - iLine % y_pixels_tile;
+		iBottom = iTop + y_pixels_tile - 1;
+	} else {
+		Coord crd1;
+		Coord crd2;
+		gr->RowCol2Coord(iLine + 0.5, iFrom + 0.5, crd1);
+		gr->RowCol2Coord(iLine + 0.5, iFrom + iNum - 1.5, crd2);
+		//String str("SELECT %S FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;POLYGON((%.18f %.18f,%.18f %.18f,%.18f %.18f,%.18f %.18f,%.18f %.18f))')) order by ST_UpperLeftX(%S)", geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd1.y, crd2.x, crd2.y, crd1.x, crd2.y, crd1.x, crd1.y, geometryColumn);
+		String str("SELECT %S FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;LINESTRING(%.18f %.18f,%.18f %.18f)')) order by ST_UpperLeftX(%S)", geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd2.y, geometryColumn);
+		db->getNTResult(str.c_str());
+		iNumTiles = db->getNumberOf(PostGreSQL::ROW);
+		iLeft = iFrom - iFrom % x_pixels_tile;
+		iRight = iLeft + iNumTiles * x_pixels_tile - 1;
+		iTop = iLine - iLine % y_pixels_tile;
+		iBottom = iTop + y_pixels_tile - 1;
+	}
 }

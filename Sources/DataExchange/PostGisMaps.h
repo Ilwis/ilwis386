@@ -45,7 +45,7 @@ ForeignFormat *CreateImportObjectPostGis(const FileName& fnObj, ParmList& pm); /
 class PostGisRasterTileset
 {
 public:
-	PostGisRasterTileset(String sConnectionString, String schema, String tableName, String geometryColumn, const GeoRef & gr, String srid, int x_pixels_tile, int y_pixels_tile, double nodata_value, StoreType stPostgres);
+	PostGisRasterTileset(String sConnectionString, String schema, String tableName, String geometryColumn, String id, const GeoRef & gr, String srid, int x_pixels_tile, int y_pixels_tile, double nodata_value, StoreType stPostgres);
 	~PostGisRasterTileset();
 	void GetLineVal(long iLine, LongBuf& buf, long iFrom, long iNum);
 	void GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum);
@@ -65,6 +65,7 @@ private:
 	const String schema;
 	const String tableName;
 	const String geometryColumn;
+	const String id;
 	const int headerSize;
 	const int bandHeaderSize;
 	const double nodata_value;
@@ -114,9 +115,6 @@ protected:
 	PostGisRasterTileset*		 rasterTiles;
 private:
 	static void					 SetStoreType(String pixel_type, LayerInfo & inf, StoreType & stPostgres);
-	static void                  replaceString(string &str, const string &search, const string &replace);
-	static String                merge(String table, String column);
-	static void                  split(String fileName, String & table, String & column);
 	int                          x_pixels;
 };
 
