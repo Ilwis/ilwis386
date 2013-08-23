@@ -7,14 +7,12 @@
 #include "DataExchange\ConnectorWFS.h"
 
 PostGresOptions::PostGresOptions(CWnd *parent)  : FormExtraImportOptions(parent,"Postgres Options"){
-	schema = "public";
 	fsUserName = new FieldString(root,"User name",&userName);
 	fsPassword = new FieldString(root, "Password", &passWord, Domain(), true, ES_AUTOHSCROLL|WS_TABSTOP|WS_GROUP|WS_BORDER|ES_PASSWORD);
-	fsSchema = new FieldString(root, "Schema", &schema);
 }
 
 String PostGresOptions::sGetExtraOptionsPart(const String& currentExp) {
-	return String("%S -username=%S -password=%S -schema=%S",currentExp, userName, passWord, schema);
+	return String("%S -username=%S -password=%S",currentExp, userName, passWord);
 }
 
 FormEntry *PostGresOptions::CheckData() {
