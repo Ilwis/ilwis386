@@ -181,6 +181,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "Client\MainWindow\Catalog\DataBaseCatalog.h"
 #include "Client\MainWindow\Catalog\DataBaseCollectionDoc.h"
 #include "Client\MainWindow\Catalog\DataBaseCollectionWindow.h"
+#include "Client\MainWindow\Catalog\PostgresDataBaseCatalog.h"
 #include "Client\MainWindow\Catalog\ForeignCatalog.h"
 #include "Engine\Matrix\Matrxobj.h"
 #include "Client\Editors\MatrixDoc.h"
@@ -943,6 +944,14 @@ void IlwisWinApp::RegisterDocTemplates()
 		RUNTIME_CLASS(DataBaseCollectionDoc),
 		RUNTIME_CLASS(DataBaseCollectionWindow),
 		RUNTIME_CLASS(DataBaseCatalog));
+	AddDocTemplate(dtObjectCollection);	
+
+	dtObjectCollection = new ForeignMultiDocTemplate(
+		"DataBaseCollection", 
+		"ILWIS Postgres DataBase Collections",
+		RUNTIME_CLASS(DataBaseCollectionDoc),
+		RUNTIME_CLASS(DataBaseCollectionWindow),
+		RUNTIME_CLASS(PostgresDataBaseCatalog));
 	AddDocTemplate(dtObjectCollection);	
 
 	dtObjectCollection = new ForeignMultiDocTemplate(
@@ -1725,7 +1734,7 @@ CDocument *IlwisWinApp::OpenDocumentFile(const String& sFO, ParmList& pm)
 		fnIOC = FileName::fnUnique(FileName(fnIOC.sFullPathQuoted(), ".ioc"));
 
 		ForeignCollection fc;
-		if ( ff && ff->fMatchType(fnFO.sFullPath(), "ILWIS DataBase Collections"))
+		if ( ff && (ff->fMatchType(fnFO.sFullPath(), "ILWIS DataBase Collections") || ff->fMatchType(fnFO.sFullPath(), "ILWIS Postgres DataBase Collections")))
 		{
 			String loc = pm.sGet(0);
 			String databaseName = loc.sHead("\\").sUnQuote();
@@ -2490,7 +2499,7 @@ CDocument *IlwisWinApp::OpenDocumentFile(const URL& url, ParmList& pm)
 		pm.Add(new Parm("url", url.sVal()));
 		ForeignCollection fc;
 		FileName fnIOC = ff->createCollectionName(url.sVal(), pm);
-		if ( ff && (ff->fMatchType(url.sVal(), "ILWIS DataBase Collections"))){
+		if ( ff && (ff->fMatchType(url.sVal(), "ILWIS DataBase Collections") || ff->fMatchType(url.sVal(), "ILWIS Postgres DataBase Collections"))){
 			SplitUrl(url, pm);
 			fc = DataBaseCollection(fnIOC, pm);
 		}  else if (ff && (ff->fMatchType(url.sVal(), "ILWIS ForeignCollections"))) {
