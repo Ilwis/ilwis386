@@ -104,6 +104,8 @@ PostGisMaps::PostGisMaps() :
 PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, ParmList& pm) :
 	PostgreSQLTables(fn, fnDomAttrTable, pm)
 	, rasterTiles(0)
+	, x_pixels(1)
+	, y_pixels(1)
 {
 	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(fn);
 	String tablecol;
@@ -150,6 +152,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				ObjectInfo::ReadElement("ForeignFormat", "x_pixels_tile", fn, x_pixels_tile);
 				ObjectInfo::ReadElement("ForeignFormat", "y_pixels_tile", fn, y_pixels_tile);
 				ObjectInfo::ReadElement("ForeignFormat", "x_pixels", fn, x_pixels);
+				ObjectInfo::ReadElement("ForeignFormat", "y_pixels", fn, y_pixels);
 				ObjectInfo::ReadElement("ForeignFormat", "nodata_value", fn, nodata_value);
 				ObjectInfo::ReadElement("ForeignFormat", "pixel_type", fn, pixel_type);
 				SetStoreType(pixel_type, inf, stPostgres);
@@ -193,7 +196,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 					GeoRef gr;
 					FileName fnGrf(FileName::fnUnique(FileName(fn, ".grf")));
 					x_pixels = round(abs(cb.width() / x_pixel_size));
-					int y_pixels = round(abs(cb.height() / y_pixel_size));
+					y_pixels = round(abs(cb.height() / y_pixel_size));
 					gr.SetPointer(new GeoRefCorners(fnGrf, csy, RowCol(y_pixels, x_pixels), true, cb.cMin, cb.cMax));		
 					inf.cbActual = inf.cbMap = cb;
 					inf.grf = gr;
@@ -230,6 +233,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 			ObjectInfo::WriteElement("ForeignFormat", "x_pixels_tile", fn, x_pixels_tile);
 			ObjectInfo::WriteElement("ForeignFormat", "y_pixels_tile", fn, y_pixels_tile);
 			ObjectInfo::WriteElement("ForeignFormat", "x_pixels", fn, x_pixels);
+			ObjectInfo::WriteElement("ForeignFormat", "y_pixels", fn, y_pixels);
 			ObjectInfo::WriteElement("ForeignFormat", "nodata_value", fn, nodata_value);
 			ObjectInfo::WriteElement("ForeignFormat", "pixel_type", fn, pixel_type);
 		}
@@ -873,7 +877,7 @@ CoordSystem PostGisMaps::getCoordSystem(const FileName& fnBase, const String& sr
 
 void PostGisMaps::getImportFormats(vector<ImportFormat>& formats) {
 	ImportFormat frm;
-	frm.type = ImportFormat::ifPoint | ImportFormat::ifSegment;
+	frm.type = ImportFormat::ifPoint | ImportFormat::ifSegment | ImportFormat::ifPolygon | ImportFormat::ifRaster;
 	frm.name = frm.shortName = "Database";
 	frm.method = "POSTGIS";
 	frm.provider = frm.method;
@@ -911,16 +915,22 @@ long PostGisMaps::iRaw(RowCol) const
 
 long PostGisMaps::iValue(RowCol rc) const
 {
-	LongBuf buf (x_pixels);
-	rasterTiles->GetLineVal(rc.Row, buf, 0, x_pixels);
-	return buf[rc.Col];
+	if (rc.Col >= 0 && rc.Col < x_pixels && rc.Row >= 0 && rc.Row < y_pixels) {
+		LongBuf buf (x_pixels);
+		rasterTiles->GetLineVal(rc.Row, buf, 0, x_pixels);
+		return buf[rc.Col];
+	} else
+		return iUNDEF;
 }
 
 double PostGisMaps::rValue(RowCol rc) const
 {
-	RealBuf buf (x_pixels);
-	rasterTiles->GetLineVal(rc.Row, buf, 0, x_pixels);
-	return buf[rc.Col];
+	if (rc.Col >= 0 && rc.Col < x_pixels && rc.Row >= 0 && rc.Row < y_pixels) {
+		RealBuf buf (x_pixels);
+		rasterTiles->GetLineVal(rc.Row, buf, 0, x_pixels);
+		return buf[rc.Col];
+	} else
+		return rUNDEF;
 }
 
 PostGisRasterTileset::PostGisRasterTileset(String sConnectionString, String _schema, String _tableName, String _geometryColumn, String _id, const GeoRef & _gr, String _srid, int _x_pixels_tile, int _y_pixels_tile, double _nodata_value, StoreType _stPostgres)
