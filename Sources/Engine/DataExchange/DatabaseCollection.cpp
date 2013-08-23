@@ -114,7 +114,10 @@ ObjectCollectionPtr *DataBaseCollectionPtr::Create(const FileName& fn, ParmList&
 
 void DataBaseCollectionPtr::Add(const FileName& fnTable)
 {
-	if ( IlwisObject::iotObjectType(fnTable) == IlwisObject::iotTABLE )
+	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(fnTable);
+	if ( type == IlwisObject::iotRASMAP || type == IlwisObject::iotPOLYGONMAP || type == IlwisObject::iotSEGMENTMAP 
+		|| type == IlwisObject::iotPOINTMAP || type == IlwisObject::iotGEOREF || type == IlwisObject::iotCOORDSYSTEM 
+		|| type == IlwisObject::iotTABLE || type == IlwisObject::iotOBJECTCOLLECTION )
 	{
 		ObjectCollectionPtr::Add(fnTable);
 		// non-existing tables (from databases may just bee created). They dont have a collection section yet
