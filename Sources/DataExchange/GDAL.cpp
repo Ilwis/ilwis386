@@ -59,6 +59,7 @@
 #include "Engine\SpatialReference\Cslatlon.h"
 #include "Engine\SpatialReference\Ellips.h"
 #include "Engine\Domain\dmcoord.h"
+#include "Engine\base\System\engine.h"
 #include "Engine\Domain\dminfo.h"
 #include "Engine\Domain\dmsort.h"
 #include "Engine\Domain\DomainUniqueID.h"
@@ -823,18 +824,21 @@ GDALRasterBandH GDALFormat::OpenLayer(int iChannel)
 
 CoordSystem GDALFormat::GetCoordSystem()
 {
-	const char *cwkt = funcs.getProjectionRef(dataSet);
-	char wkt[5000];
-	char *wkt2 = (char *)wkt;
-	strcpy(wkt, cwkt);
-	OGRSpatialReferenceH handle = funcs.newSRS(NULL);
+	String wkt(funcs.getProjectionRef(dataSet));
+	return getEngine()->gdal->getCoordSystem(fnBaseOutputName,wkt);
 
-	//OGRErr err = funcs.fromEPSG(handle, 4326);
+	//char wkt[5000];
+	//
+	//strcpy(wkt, cwkt);
+	//char *wkt2 = (char *)wkt;
+	//OGRSpatialReferenceH handle = funcs.newSRS(NULL);
 
-	OGRErr err = funcs.srsImportFromWkt(handle, &wkt2);
-	if ( err == OGRERR_UNSUPPORTED_SRS )
-		 	return CoordSystem("unknown");
-	return getCoordSystemFrom(handle, wkt2);
+	////OGRErr err = funcs.fromEPSG(handle, 4326);
+
+	//OGRErr err = funcs.srsImportFromWkt(handle, &wkt2);
+	//if ( err == OGRERR_UNSUPPORTED_SRS )
+	//	 	return CoordSystem("unknown");
+	//return getCoordSystemFrom(handle, wkt);
 }
 
 CoordSystem GDALFormat::getCoordSystemFrom(OGRSpatialReferenceH handle, char *wkt) {
@@ -850,7 +854,7 @@ CoordSystem GDALFormat::getCoordSystemFrom(OGRSpatialReferenceH handle, char *wk
 		try{
 			CoordSystemProjection *csp =  new CoordSystemProjection(fnCsy, 1);
 			String dn = Datum::WKTToILWISName(datumName);
-			if ( dn == "") {
+			if ( dn == "" || dn == "?") {
 				Projection proj = ProjectionPtr::WKTToILWISName(wkt);
 				if ( proj.fValid() == false)
 					throw ErrorObject("Projection can't be transformed to an ILWIS known datum");
