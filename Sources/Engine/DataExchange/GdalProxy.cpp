@@ -94,18 +94,7 @@ void GdalProxy::loadMethods(const String& ilwDir) {
 
 }
 
-CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
-	String path = getEngine()->getContext()->sIlwDir();
-	path += "Resources\\gdal_data";
-//	OGRSpatialReference oSRS;
-	finderLoc(path.c_str());
-
-	OGRSpatialReferenceH handle = newSRS(NULL);
-	OGRErr err = fromEPSG( handle, epsg);
-
-	if ( err == OGRERR_UNSUPPORTED_SRS )
-		throw ErrorObject(String("The epsg %d is not supported", epsg));
-
+CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenceH handle) {
 	String datumName(getAttribute(handle, "Datum",0));
 	//map<String, ProjectionConversionFunctions>::iterator where = mpCsyConvers.find(projectionName);
 
@@ -126,6 +115,8 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
 			projName = "Lambert Conformal Conic";
 		if ( projName == "Polar_Stereographic")
 			projName = "StereoPolar";
+		if ( projName == "Albers_Conic_Equal_Area")
+			projName = "Albers EqualArea Conic";
 		replace(projName.begin(), projName.end(),'_',' ');
 
 		String spheroid = getEngine()->gdal->getAttribute(handle,"SPHEROID",0);
@@ -133,6 +124,7 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
 		Ellipsoid ell(spheroid);
 		csp->ell = ell;
 		} catch (ErrorObject& ) {
+			csp->ell.sName = "User Defined";
 			String majoraxis = getEngine()->gdal->getAttribute(handle,"SPHEROID",1);
 			String invFlattening = getEngine()->gdal->getAttribute(handle,"SPHEROID",2);
 			double ma = majoraxis.rVal();
@@ -140,12 +132,11 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
 			if ( ma == rUNDEF || ifl == rUNDEF)
 				throw ErrorObject(String(TR("Ellipsoid %S could not be found").c_str(),spheroid));
 			csp->ell = Ellipsoid(ma, ifl);
-			csp->ell.sName = spheroid;
+			//csp->ell.sName = spheroid;
 
 
 		} 
-
-
+		OGRErr err = CP_NONE;
 		double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",rUNDEF,&err);
 		double northing = getEngine()->gdal->getProjParam(handle, "false_northing",rUNDEF,&err);
 		double scale = getEngine()->gdal->getProjParam(handle, "scale_factor",rUNDEF,&err);
@@ -184,4 +175,38 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
 	csy->Store();
 
 	return csy;
+}
+
+CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, const String& wkt) {
+	String path = getEngine()->getContext()->sIlwDir();
+	path += "Resources\\gdal_data";
+//	OGRSpatialReference oSRS;
+	finderLoc(path.c_str());
+
+	OGRSpatialReferenceH handle = newSRS(NULL);
+	char wktRaw[5000];
+	
+	strcpy(wktRaw, wkt.c_str());
+	char *wkt2 = (char *)wktRaw;
+	OGRErr err = srsImportFromWkt(handle, &wkt2);
+	if ( err == OGRERR_UNSUPPORTED_SRS )
+		 	return CoordSystem("unknown");
+
+	return getCoordSystem(fnBase, handle);
+
+}
+
+CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
+	String path = getEngine()->getContext()->sIlwDir();
+	path += "Resources\\gdal_data";
+//	OGRSpatialReference oSRS;
+	finderLoc(path.c_str());
+
+	OGRSpatialReferenceH handle = newSRS(NULL);
+	OGRErr err = fromEPSG( handle, epsg);
+
+	if ( err == OGRERR_UNSUPPORTED_SRS )
+		throw ErrorObject(String("The epsg %d is not supported", epsg));
+
+	return getCoordSystem(fnBase, handle);
 }
