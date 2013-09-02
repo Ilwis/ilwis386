@@ -79,6 +79,7 @@ class _export GdalProxy {
 public:
 	void loadMethods(const String& ilwDir);
 	CoordSystem getCoordSystem(const FileName& fnBase, int epsg);
+	CoordSystem getCoordSystem(const FileName& fnBase, const String& wkt);
 
 	GDALCloseFunc close;
 	GDALAllRegisterFunc registerAll;
@@ -150,5 +151,8 @@ public:
 	GetFeatureCountFunc ogrGetFeatureCount;
 	GetLayerExtentFunc ogrGetLayerExtent;
 	GetFieldNameFunc ogrGetFieldName;
+
+private:
+	CoordSystem getCoordSystem(const FileName& fnBase, OGRSpatialReferenceH handle);
 
 };
