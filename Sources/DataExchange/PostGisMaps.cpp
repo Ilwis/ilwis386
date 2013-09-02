@@ -64,6 +64,7 @@
 #include "Engine\Map\basemap.h"
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\Table\Colbinar.h"
+#include "Engine\DataExchange\GdalProxy.h"
 #include "Headers\Hs\IMPEXP.hs"
 //#include "temp\msado15.tlh"
 
@@ -127,7 +128,8 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 		ForeignCollection fc(pm.fExist("parentcollection") ? pm.sGet("parentcollection") : pm.sGet("collection"));
 		if(db.getNumberOf(PostGreSQL::ROW) > 0) {
 			String srid(db.getValue(0,"srid"));
-			csy = getCoordSystem( FileName(geometryColumn), String("EPSG:%S",srid));
+			csy = getEngine()->gdal->getCoordSystem(FileName(geometryColumn), srid.iVal());
+			//csy = getCoordSystem( FileName(geometryColumn), String("EPSG:%S",srid));
 			if ( fc.fValid()) {
 				fc->Add(csy);
 			}
@@ -173,7 +175,8 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 		if(db.getNumberOf(PostGreSQL::ROW) > 0) {
 			// CoordinateSystem
 			String srid(db.getValue(0, 0));
-			csy = getCoordSystem( FileName(geometryColumn), String("EPSG:%S",srid));
+			//csy = getCoordSystem( FileName(geometryColumn), String("EPSG:%S",srid));
+			csy = getEngine()->gdal->getCoordSystem(FileName(geometryColumn), srid.iVal());
 			inf.csy = csy;
 			
 			// GeoReference
