@@ -76,6 +76,21 @@ BOOL GeoRefDoc::OnOpenDocument(LPCTSTR lpszPathName, int os)
   return TRUE;
 }
 
+BOOL GeoRefDoc::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm, int os) 
+{
+  ISTRUE(fINotEqual, lpszPathName, (LPCTSTR)0);
+  ISTRUE(fINotEqual, lpszPathName[0], (char)0);
+	if (!IlwisDocument::OnOpenDocument(lpszPathName))
+		return FALSE;
+
+  FileName fn(lpszPathName);
+  m_gr = GeoRef(fn);
+  if (!m_gr.fValid())
+    return FALSE;
+
+  return TRUE;
+}
+
 IlwisObject GeoRefDoc::obj() const
 {
 	return m_gr;
