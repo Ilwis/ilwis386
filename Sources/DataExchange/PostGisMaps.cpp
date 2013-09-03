@@ -464,54 +464,56 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 
 bool PostGisMaps::fIsSupported(const FileName& fn, ForeignFormat::Capability dtType ) const
 {
-	return true;
+	return dtType & ForeignFormat::cbEDIT;
 }
 
 void PostGisMaps::createFeatureColumns(TablePtr* tbl) {
-		Domain dmcrd;
-		dmcrd.SetPointer(new DomainCoord(csy->fnObj));
-		if ( AssociatedMapType() == ForeignFormat::mtPointMap) {
-			Column col = tbl->colNew("Name", *dmKey);
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-			col = tbl->colNew("Coordinate", dmcrd, ValueRange());
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-		} else if ( AssociatedMapType() == ForeignFormat::mtSegmentMap) {
-			Domain dmcrdbuf("CoordBuf");
-			Column col = tbl->colNew("SegmentValue", *dmKey);
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-			col = tbl->colNew("Coords", dmcrdbuf);
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-			col = tbl->colNew("MinCoords", dmcrd, ValueRange());
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-			col = tbl->colNew("MaxCoords", dmcrd, ValueRange());
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-			col = tbl->colNew("Deleted", Domain("bool"));
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-		} else if ( AssociatedMapType() == ForeignFormat::mtPolygonMap) {
-			Domain dmbin("Binary");
-			Column col = tbl->colNew("PolygonValue", *dmKey);
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-			col = tbl->colNew("Coords", dmbin);
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-			col = tbl->colNew("MinCoords", dmcrd, ValueRange());
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-			col = tbl->colNew("MaxCoords", dmcrd, ValueRange());
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-			col = tbl->colNew("Deleted", Domain("bool"));
-			col->SetOwnedByTable();
-			col->SetLoadingForeignData(true);
-		}
+	if ( tbl->iCols() != 0) // already done this
+		return;
+	Domain dmcrd;
+	dmcrd.SetPointer(new DomainCoord(csy->fnObj));
+	if ( AssociatedMapType() == ForeignFormat::mtPointMap) {
+		Column col = tbl->colNew("Name", *dmKey);
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+		col = tbl->colNew("Coordinate", dmcrd, ValueRange());
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+	} else if ( AssociatedMapType() == ForeignFormat::mtSegmentMap) {
+		Domain dmcrdbuf("CoordBuf");
+		Column col = tbl->colNew("SegmentValue", *dmKey);
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+		col = tbl->colNew("Coords", dmcrdbuf);
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+		col = tbl->colNew("MinCoords", dmcrd, ValueRange());
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+		col = tbl->colNew("MaxCoords", dmcrd, ValueRange());
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+		col = tbl->colNew("Deleted", Domain("bool"));
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+	} else if ( AssociatedMapType() == ForeignFormat::mtPolygonMap) {
+		Domain dmbin("Binary");
+		Column col = tbl->colNew("PolygonValue", *dmKey);
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+		col = tbl->colNew("Coords", dmbin);
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+		col = tbl->colNew("MinCoords", dmcrd, ValueRange());
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+		col = tbl->colNew("MaxCoords", dmcrd, ValueRange());
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+		col = tbl->colNew("Deleted", Domain("bool"));
+		col->SetOwnedByTable();
+		col->SetLoadingForeignData(true);
+	}
 }
 
 void PostGisMaps::CreateColumns(PostGreSQL& db, TablePtr* tbl, int iNumColumns, int &iKeyColumn, vector<String>& vDataTypes) {
@@ -541,7 +543,7 @@ void PostGisMaps::FillRecords(PostGreSQL& db, TablePtr* tbl, int iNumRecords, co
 			Column col = tbl->col("Coords");
 			PutData(col,iRec + 1, v, &cb);
 			col = tbl->col("PolygonValue");
-			PutData(col,iRec + 1, (*dmKey)->pdsrt()->sValue(iRec + 1));
+			PutData(col,iRec + 1, (*dmKey)->pdsrt()->sValue(iRec + 1).sTrimSpaces());
 			tbl->col("MinCoords")->PutVal(iRec + 1, cb.cMin);
 			tbl->col("MaxCoords")->PutVal(iRec + 1, cb.cMax);
 			tbl->col("Deleted")->PutVal(iRec + 1, (long)false);
