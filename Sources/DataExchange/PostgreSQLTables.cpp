@@ -444,7 +444,6 @@ void PostgreSQLTables::FillRecords(PostGreSQL& db, TablePtr* tbl, int iNumRecord
 				PutData(col, iRec + 1, val);
 			}
 			col->SetLoadingForeignData(false);
-			col->Loaded(true);
 		}
 	}
 }
