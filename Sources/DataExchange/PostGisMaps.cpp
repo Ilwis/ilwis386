@@ -127,9 +127,17 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 		db.getNTResult(query.c_str());
 		ForeignCollection fc(pm.fExist("parentcollection") ? pm.sGet("parentcollection") : pm.sGet("collection"));
 		if(db.getNumberOf(PostGreSQL::ROW) > 0) {
-			String srid(db.getValue(0,"srid"));
-			csy = getEngine()->gdal->getCoordSystem(FileName(geometryColumn), srid.iVal());
-			//csy = getCoordSystem( FileName(geometryColumn), String("EPSG:%S",srid));
+			FileName fnCsy(FileName(geometryColumn), ".csy");
+			if ( _access(fnCsy.sRelative().c_str(),0) == 0)
+				csy = CoordSystem(fnCsy);
+			else {
+				String srid(db.getValue(0,"srid"));
+				try {
+					csy = getEngine()->gdal->getCoordSystem(FileName(geometryColumn), srid.iVal());
+				} catch (ErrorObject&) {
+					csy = CoordSystem("unknown");
+				}
+			}
 			if ( fc.fValid()) {
 				fc->Add(csy);
 			}
@@ -174,9 +182,17 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 		db.getNTResult(query.c_str());
 		if(db.getNumberOf(PostGreSQL::ROW) > 0) {
 			// CoordinateSystem
+			FileName fnCsy(FileName(geometryColumn), ".csy");
 			String srid(db.getValue(0, 0));
-			//csy = getCoordSystem( FileName(geometryColumn), String("EPSG:%S",srid));
-			csy = getEngine()->gdal->getCoordSystem(FileName(geometryColumn), srid.iVal());
+			if ( _access(fnCsy.sRelative().c_str(),0) == 0)
+				csy = CoordSystem(fnCsy);
+			else {
+				try {
+					csy = getEngine()->gdal->getCoordSystem(FileName(geometryColumn), srid.iVal());
+				} catch (ErrorObject&) {
+					csy = CoordSystem("unknown");
+				}
+			}
 			inf.csy = csy;
 			
 			// GeoReference
@@ -468,8 +484,6 @@ bool PostGisMaps::fIsSupported(const FileName& fn, ForeignFormat::Capability dtT
 }
 
 void PostGisMaps::createFeatureColumns(TablePtr* tbl) {
-	if ( tbl->iCols() != 0) // already done this
-		return;
 	Domain dmcrd;
 	dmcrd.SetPointer(new DomainCoord(csy->fnObj));
 	if ( AssociatedMapType() == ForeignFormat::mtPointMap) {
@@ -543,7 +557,7 @@ void PostGisMaps::FillRecords(PostGreSQL& db, TablePtr* tbl, int iNumRecords, co
 			Column col = tbl->col("Coords");
 			PutData(col,iRec + 1, v, &cb);
 			col = tbl->col("PolygonValue");
-			PutData(col,iRec + 1, (*dmKey)->pdsrt()->sValue(iRec + 1).sTrimSpaces());
+			PutData(col,iRec + 1, (*dmKey)->pdsrt()->sValue(iRec + 1));
 			tbl->col("MinCoords")->PutVal(iRec + 1, cb.cMin);
 			tbl->col("MaxCoords")->PutVal(iRec + 1, cb.cMax);
 			tbl->col("Deleted")->PutVal(iRec + 1, (long)false);
