@@ -104,12 +104,14 @@ void GlobalOperationTool::doAction(int option) {
 void GlobalOperationTool::doOperation() {
 	DisplayOptionTreeItem *item = (DisplayOptionTreeItem *)tree->getCurrent();
 	if ( item) {
-		Action *act = itemActions[(long)item];
-		long *handle = new long((long)(tree->GetDocument()->mpvGetView()->m_hWnd));
-		getEngine()->getContext()->SetThreadLocalVar(IlwisAppContext::tlvMAPWINDOWAPP, handle);
-		IlwWinApp()->ExecuteUI(act->sAction(), tree);
+		map<long, Action *>::const_iterator iter = itemActions.find((long)item);
+		if ( iter != itemActions.end()) {
+			Action *act = (*iter).second;
+			long *handle = new long((long)(tree->GetDocument()->mpvGetView()->m_hWnd));
+			getEngine()->getContext()->SetThreadLocalVar(IlwisAppContext::tlvMAPWINDOWAPP, handle);
+			IlwWinApp()->ExecuteUI(act->sAction(), tree);
+		}
 	}
-
 }
 
 String GlobalOperationTool::getMenuString() const {
