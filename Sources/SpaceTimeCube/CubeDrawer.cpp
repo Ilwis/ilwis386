@@ -67,8 +67,8 @@ void CubeDrawer::prepare(PreparationParameters *pp) {
 		cbMap.MinZ() = cube.cMin.z;
 		rootDrawer->setCoordBoundsMap(cube);
 		CoordSystem csy = rootDrawer->getCoordinateSystem();
-		String sMin = csy->sValue(cube.cMin, 0);
-		String sMax = csy->sValue(cube.cMax, 0);
+		String sMin = csy->sValue(rootDrawer->glToWorld(cube.cMin), 0);
+		String sMax = csy->sValue(rootDrawer->glToWorld(cube.cMax), 0);
 		if (csy->pcsLatLon()) {
 			sxMin = sMin.sTail(",").sTrimSpaces();
 			syMin = sMin.sHead(",").sTrimSpaces();
