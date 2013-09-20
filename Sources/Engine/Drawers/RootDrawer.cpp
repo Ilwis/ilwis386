@@ -336,7 +336,8 @@ void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 }
 
 void RootDrawer::setGeoreference(const GeoRef& _gr, bool overruleMapBounds) {
-	if (_gr.fValid() && !_gr->rcSize().fUndef()) {
+	if (_gr.fValid() && !_gr->rcSize().fUndef() && (!fUseGeoRef || _gr != gr)) {
+		clearGeoreference();
 		gr = _gr;
 		cs = gr->cs();
 		fUseGeoRef = true;
