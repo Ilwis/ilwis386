@@ -107,6 +107,7 @@ public:
 	ILWIS::DrawerTool *getRootTool();
 	LayerTreeItem *getCurrent() const;
 	HTREEITEM addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEITEM after, int lastTool);
+	void ClearTree();
 	//}}AFX_MSG
 protected:
 	void SwitchCheckBox(HTREEITEM hti);

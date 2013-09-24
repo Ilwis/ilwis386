@@ -313,6 +313,14 @@ HTREEITEM LayerTreeView::addMapItem(ILWIS::SpatialDataDrawer *mapDrawer, HTREEIT
 	return htiMap;
 }
 
+void LayerTreeView::ClearTree()
+{
+	DeleteAllItems();
+	if ( drwTool != 0)
+		delete drwTool;
+	drwTool = 0;
+}
+
 void LayerTreeView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
 	if (lHint == 4) // maplistdrawer replaces map

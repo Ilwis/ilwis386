@@ -80,7 +80,7 @@ void  GeoReferenceForm::apply() {
 	//bool fConvertPossible = grf->fConvertFrom(drw->getRootDrawer()->getGeoReference());
 	//if ( fConvertPossible) {
 		drw->getRootDrawer()->setGeoreference(grf);
-
+		view->ClearTree();
 		PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER | NewDrawer::ptNEWCSY);
 		drw->getRootDrawer()->prepare(&pp);
 		view->OnUpdate(NULL, 2, NULL); // for now limit the change to the LayerTreeView; if it appears that "drawer" is remembered in more places, call UpdateAllViews(0, 2)
