@@ -40,6 +40,7 @@
 
 #include "Client\Headers\formelementspch.h"
 #include "TimePositionBar.h"
+#include "TimeBounds.h"
 #include "Client\Mapwindow\InfoLine.h"
 
 #ifdef _DEBUG
@@ -85,18 +86,42 @@ void TimeSliderCtrl::SetTimePosText(String * _sTimePosText)
 	sTimePosText = _sTimePosText;
 }
 
-void TimeSliderCtrl::VScroll(UINT nSBCode, UINT nPos)
+void TimeSliderCtrl::SetTimeBounds(TimeBounds * _timeBounds)
 {
-	if (nSBCode == TB_THUMBTRACK || nSBCode == TB_THUMBPOSITION)
-		SendTimeMessage((sliderRange - nPos) / (double)sliderRange, long(this));
-	else
-		SendTimeMessage((sliderRange - GetPos()) / (double)sliderRange, long(this));
+	timeBounds = _timeBounds;
 }
 
-void TimeSliderCtrl::SetTime(double timePerc, long sender)
+void TimeSliderCtrl::VScroll(UINT nSBCode, UINT nPos)
+{
+	if (timeBounds->fValid()) {
+		if (nSBCode == TB_THUMBTRACK || nSBCode == TB_THUMBPOSITION)
+			SendTimeMessage(timeBounds->tMin() + (ILWIS::Time)((timeBounds->tMax() - timeBounds->tMin()) * (sliderRange - nPos) / (double)sliderRange), long(this));
+		else
+			SendTimeMessage(timeBounds->tMin() + (ILWIS::Time)((timeBounds->tMax() - timeBounds->tMin()) * (sliderRange - GetPos()) / (double)sliderRange), long(this));
+	} else {
+		if (nSBCode == TB_THUMBTRACK || nSBCode == TB_THUMBPOSITION)
+			SendTimeMessage((sliderRange - nPos) / (double)sliderRange, long(this));
+		else
+			SendTimeMessage((sliderRange - GetPos()) / (double)sliderRange, long(this));
+	}
+}
+
+void TimeSliderCtrl::SetTime(ILWIS::Time time, long sender)
 {
 	if (sender == (long) this)
 		return;
+
+	double timePerc;
+	if (timeBounds->fValid())
+		timePerc = (time - timeBounds->tMin()) / (timeBounds->tMax() - timeBounds->tMin());
+	else
+		timePerc = time;
+
+	if (timePerc > 1)
+		timePerc = 1;
+	else if (timePerc < 0)
+		timePerc = 0;
+
 	SetPos(sliderRange - timePerc * sliderRange);
 }
 
@@ -144,7 +169,8 @@ BEGIN_MESSAGE_MAP( TimePositionBar, CSizingControlBar )
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-TimePositionBar::TimePositionBar()
+TimePositionBar::TimePositionBar(TimeBounds & timeBounds)
+: timeBounds(timeBounds)
 {
 }
 
@@ -172,6 +198,7 @@ BOOL TimePositionBar::Create(CWnd* pParent)
 	slider.Create(WS_CHILD | WS_VISIBLE | TBS_VERT | TBS_NOTICKS | TBS_RIGHT, scrollRect, this, ID_STC_TIMEPOSITIONSLIDER);
 	slider.SetRange(0, sliderRange);
 	slider.SetPos(sliderRange);
+	slider.SetTimeBounds(&timeBounds);
 	//slider.SetTicFreq(20);
 	//slider.ShowWindow(SW_SHOW);
 
@@ -185,9 +212,9 @@ void TimePositionBar::OnSize(UINT nType, int cx, int cy)
 		slider.MoveWindow(0, 0, cx, cy);
 }
 
-void TimePositionBar::SetTime(double timePerc)
+void TimePositionBar::SetTime(ILWIS::Time time)
 {
-	slider.SetTime(timePerc, 0);
+	slider.SetTime(time, 0);
 }
 
 void TimePositionBar::SetTimePosText(String * _sTimePosText)

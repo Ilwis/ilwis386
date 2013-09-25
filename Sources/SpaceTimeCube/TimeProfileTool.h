@@ -6,7 +6,7 @@ ILWIS::DrawerTool *createTimeProfileTool(ZoomableView* zv, LayerTreeView *view, 
 #include "Client\FormElements\FieldGraph.h"
 #include "Engine\Base\Algorithm\SimpleFunction.h"
 #include "Client\FormElements\FormBaseWnd.h"
-#include "TimeMessages.h"
+#include "Engine\Drawers\TimeMessages.h"
 
 class InfoLine;
 
@@ -38,7 +38,7 @@ namespace ILWIS {
 		void SetGrid(bool gridXN, bool gridXT, bool gridYT);
 		void SelectFeatures(RowSelectInfo & inf);
 		virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
-		virtual void SetTime(double timePerc, long sender);
+		virtual void SetTime(ILWIS::Time time, long sender);
 
 	protected:
 		virtual void DrawFunction(CDC* pDC, const SimpleFunction * pFunc);

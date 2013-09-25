@@ -64,7 +64,7 @@ void TimeZoomTool::displayOptionTimeZoom() {
 		delete timeZoomForm;
 		timeZoomForm = 0;
 	}
-	if (stc->fUseSpaceTimeCube() && stc->getTimeBoundsFullExtent()->fValid()) {
+	if (stc->fUseSpaceTimeCube() && stc->getTimeBoundsFullExtent().fValid()) {
 		timeZoomForm = new TimeZoomForm(tree, (ComplexDrawer *)drawer, htiNode, stc, cbFullExtent, *this);
 		if (fRestorePosition)
 			timeZoomForm->SetWindowPos(tree, rect.left, rect.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER | SWP_NOREPOSITION);
@@ -91,8 +91,8 @@ TimeZoomForm::TimeZoomForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM hti, SpaceTi
 , timeZoomTool(_timeZoomTool)
 , fInCallback(false)
 {
-	tMin = stc->getTimeBoundsFullExtent()->tMin();
-	tMax = 	stc->getTimeBoundsFullExtent()->tMax();
+	tMin = stc->getTimeBoundsFullExtent().tMin();
+	tMax = 	stc->getTimeBoundsFullExtent().tMax();
 	zoom = 1.0;
 	prevZoom = 1.0;
 	xPos = cbFullExtent.MinX() + cbFullExtent.width() / 2.0;
@@ -157,16 +157,16 @@ TimeZoomForm::TimeZoomForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM hti, SpaceTi
 }
 
 void TimeZoomForm::calcSliderFromMinMax() {
-	ILWIS::Time tMinFull = stc->getTimeBoundsFullExtent()->tMin();
-	ILWIS::Time tMaxFull = stc->getTimeBoundsFullExtent()->tMax();
+	ILWIS::Time tMinFull = stc->getTimeBoundsFullExtent().tMin();
+	ILWIS::Time tMaxFull = stc->getTimeBoundsFullExtent().tMax();
 	ILWIS::Time tWidth = tMaxFull - tMinFull;
 	timeZoomFrom = (tMin - tMinFull) * maxSlider / tWidth;
 	timeZoomTo = (tMax - tMaxFull) * maxSlider / tWidth + maxSlider;
 }
 
 void TimeZoomForm::calcMinMaxFromSlider() {
-	tMin = stc->getTimeBoundsFullExtent()->tMin();
-	tMax = stc->getTimeBoundsFullExtent()->tMax();
+	tMin = stc->getTimeBoundsFullExtent().tMin();
+	tMax = stc->getTimeBoundsFullExtent().tMax();
 	ILWIS::Time tWidth = tMax - tMin;
 	tMin = tMin + (ILWIS::Time)(timeZoomFrom * tWidth / maxSlider);
 	tMax = tMax - (ILWIS::Time)((maxSlider - timeZoomTo) * tWidth / maxSlider);
@@ -275,8 +275,8 @@ void TimeZoomForm::apply() {
 	ftFrom->StoreData();
 	ftTo->StoreData();
 
-	ILWIS::Time tMinFull = stc->getTimeBoundsFullExtent()->tMin();
-	ILWIS::Time tMaxFull = stc->getTimeBoundsFullExtent()->tMax();
+	ILWIS::Time tMinFull = stc->getTimeBoundsFullExtent().tMin();
+	ILWIS::Time tMaxFull = stc->getTimeBoundsFullExtent().tMax();
 
 	if (tMin < tMinFull) {
 		tMin = tMinFull;
@@ -308,7 +308,7 @@ void TimeZoomForm::apply() {
 
 void TimeZoomForm::SetNewValues()
 {
-	*(stc->getTimeBoundsZoom()) = TimeBounds(tMin, tMax);
+	stc->getTimeBoundsZoom() = TimeBounds(tMin, tMax);
 	double xWidth = zoom * cbFullExtent.width() / 2.0;
 	double yWidth = zoom * cbFullExtent.height() / 2.0;
 	CoordBounds cbMap (Coord(xPos - xWidth, yPos - yWidth), Coord(xPos + xWidth, yPos + yWidth));

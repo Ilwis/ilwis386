@@ -159,18 +159,25 @@ void ProfileGraphWindow::Drag(CPoint point)
 		mousePos = point;
 		CRect functionPlotRect (GetFunctionPlotRect());
 		if (mousePos.y >= functionPlotRect.top && mousePos.y <= functionPlotRect.bottom)
-			SendTimeMessage((functionPlotRect.bottom - mousePos.y) / (double)functionPlotRect.Height(), long(this));
+			SendTimeMessage(ILWIS::Time(rScreenToY(mousePos.y)), long(this));
 		SelectionChanged();
 		fDrawAxes = true;
 		SetDirty();
 	}
 }
 
-void ProfileGraphWindow::SetTime(double timePerc, long sender)
+void ProfileGraphWindow::SetTime(ILWIS::Time time, long sender)
 {
 	if (sender == (long) this)
 		return;
 	CRect functionPlotRect (GetFunctionPlotRect());
+
+	double timePerc = ((double)time - m_XYFunctionDomain.bottom) / (m_XYFunctionDomain.Height());
+	if (timePerc > 1)
+		timePerc = 1;
+	else if (timePerc < 0)
+		timePerc = 0;
+
 	mousePos.y = functionPlotRect.bottom - functionPlotRect.Height() * timePerc;
 	SelectionChanged(); // for now we allow this to influence the selections too; solve if users find this too much of a side-effect
 	fDrawAxes = true;

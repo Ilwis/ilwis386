@@ -14,11 +14,6 @@
 #include "SizableDrawer.h"
 #include "PreTimeOffsetDrawer.h"
 #include "PostTimeOffsetDrawer.h"
-//#include "Drawers\LayerDrawer.h"
-//#include "Drawers\FeatureLayerDrawer.h"
-//#include "Drawers\PointLayerDrawer.h"
-//#include "SpaceTimePathDrawer.h"
-//#include "Drawers\RasterLayerDrawer.h"
 #include "Client\FormElements\fldcol.h"
 #include "Client\FormElements\FldOneSelectTextOnly.h"
 #include "Client\FormElements\objlist.h"
@@ -223,8 +218,6 @@ SpaceTimeCube::SpaceTimeCube(ZoomableView * _mpv, LayerTreeView * _tree, NewDraw
 , useSpaceTimeCube(false)
 , timePosBar(0)
 , layerOptionsForm(0)
-, timeBoundsZoom(new TimeBounds())
-, timeBoundsFullExtent(new TimeBounds())
 , timePos(0)
 , timeOffset(0)
 , timeShift(0)
@@ -240,14 +233,6 @@ SpaceTimeCube::~SpaceTimeCube()
 	if (layerOptionsForm) {
 		delete layerOptionsForm;
 		layerOptionsForm = 0;
-	}
-	if (timeBoundsZoom) {
-		delete timeBoundsZoom;
-		timeBoundsZoom = 0;
-	}
-	if (timeBoundsFullExtent) {
-		delete timeBoundsFullExtent;
-		timeBoundsFullExtent = 0;
 	}
 }
 
@@ -303,9 +288,9 @@ void SpaceTimeCube::update(bool fFillForm) {
 void SpaceTimeCube::setUseSpaceTimeCube(bool yesno) {
 	useSpaceTimeCube = yesno;
 	if (useSpaceTimeCube) {
-		timePosBar = new TimePositionBar();
+		timePosBar = new TimePositionBar(timeBoundsZoom);
 		timePosBar->Create(mpv->dwParent());
-		timePosBar->SetTime(timePos);
+		timePosBar->SetTime(timeBoundsZoom.fValid() ? timeBoundsZoom.tMin() + (ILWIS::Time)((timeBoundsZoom.tMax() - timeBoundsZoom.tMin()) * timePos) : timePos);
 		timePosBar->SetTimePosText(&sTimePosText);
 		mpv->GetParentFrame()->DockControlBar(timePosBar, AFX_IDW_DOCKBAR_LEFT);
 		refreshDrawerList(false);
@@ -348,7 +333,7 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 
 	update(false);		
 
-	timeBoundsFullExtent->Reset();
+	timeBoundsFullExtent.Reset();
 	sizeStretch = RangeReal();
 
 	mpv->noTool(0); // ensure the mapview has no tools
@@ -383,9 +368,9 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 		PreparationParameters pp(NewDrawer::ptALL);
 		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(((ComplexDrawer*)drawer)->getDrawer(0));
 		if (temporalDrawer) {
-			temporalDrawer->SetTimeBounds(timeBoundsZoom);
+			temporalDrawer->SetTimeBounds(&timeBoundsZoom);
 			RangeReal rrMinMax (layerList[i].rrTimeMinMax());
-			timeBoundsFullExtent->AddMinMax(Time(rrMinMax.rLo()), Time(rrMinMax.rHi()));
+			timeBoundsFullExtent.AddMinMax(Time(rrMinMax.rLo()), Time(rrMinMax.rHi()));
 			if (layerList[i].isSelfTime())
 				temporalDrawer->SetSelfTime();
 			else {
@@ -468,7 +453,7 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 			}
 		}
 
-		*timeBoundsZoom = *timeBoundsFullExtent;
+		timeBoundsZoom = timeBoundsFullExtent;
 
 		CubeDrawer * cube = (CubeDrawer*)(rootDrawer->getDrawer("CubeDrawer"));
 		if (cube == 0) {
@@ -476,7 +461,7 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 			rootDrawer->insertDrawer(0, cube);
 		}
 		TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(cube);
-		temporalDrawer->SetTimeBounds(timeBoundsZoom);
+		temporalDrawer->SetTimeBounds(&timeBoundsZoom);
 		cube->SetTimePosVariables(&timePos, &sTimePosText); // before prepare!! (so that "prepare" can take care of these variables as well)
 		cube->prepare(&pp);
 		AddTimeOffsetDrawers(cube, &timeShift, dp, pp);
@@ -509,13 +494,13 @@ void SpaceTimeCube::AddTimeOffsetDrawers(ComplexDrawer * drw, double * timeOffse
 	PreTimeOffsetDrawer* preTimeOffset = dynamic_cast<PreTimeOffsetDrawer*>(NewDrawer::getDrawer("PreTimeOffsetDrawer", "Cube", &dp));
 	ownDrawerIDs.push_back(preTimeOffset->getId());
 	TemporalDrawer * temporalDrawer = dynamic_cast<TemporalDrawer*>(preTimeOffset);
-	temporalDrawer->SetTimeBounds(timeBoundsZoom);
+	temporalDrawer->SetTimeBounds(&timeBoundsZoom);
 	preTimeOffset->prepare(&pp);
 	preTimeOffset->SetTimeOffsetVariable(timeOffsetVariable);
 	PostTimeOffsetDrawer* postTimeOffset = dynamic_cast<PostTimeOffsetDrawer*>(NewDrawer::getDrawer("PostTimeOffsetDrawer", "Cube", &dp));
 	ownDrawerIDs.push_back(postTimeOffset->getId());
 	temporalDrawer = dynamic_cast<TemporalDrawer*>(postTimeOffset);
-	temporalDrawer->SetTimeBounds(timeBoundsZoom);
+	temporalDrawer->SetTimeBounds(&timeBoundsZoom);
 	postTimeOffset->prepare(&pp);
 	drw->addPreDrawer(0, preTimeOffset);
 	drw->addPostDrawer(999, postTimeOffset);
@@ -602,28 +587,31 @@ bool SpaceTimeCube::showingLayerOptionsForm()
 	return layerOptionsForm != 0;
 }
 
-void SpaceTimeCube::SetTime(double timePerc, long sender) {
+void SpaceTimeCube::SetTime(ILWIS::Time time, long sender) {
 	bool fShiftDown = GetKeyState(VK_SHIFT) & 0x8000 ? true : false;
-	if (fShiftDown)
-		timeShift += timePos - timePerc;
-	else 
-		timeOffset += timePerc - timePos;
-	timePos = timePerc;
-	if (timeBoundsZoom->tMin().isValid() && timeBoundsZoom->tMax().isValid()) {
-		Time tPos (timeBoundsZoom->tMin() + (Time)((timeBoundsZoom->tMax() - timeBoundsZoom->tMin()) * timePos));
-		sTimePosText = tPos.toString();
-	} else
-		sTimePosText = "";
+	double timePosNew = timeBoundsZoom.fValid() ? (time - timeBoundsZoom.tMin()) / (timeBoundsZoom.tMax() - timeBoundsZoom.tMin()) : time;
+	if (timePosNew >= 0 && timePosNew <= 1) {
+		if (fShiftDown)
+			timeShift += timePos - timePosNew;
+		else 
+			timeOffset += timePosNew - timePos;
+		timePos = timePosNew;
+		if (timeBoundsZoom.tMin().isValid() && timeBoundsZoom.tMax().isValid()) {
+			Time tPos (timeBoundsZoom.tMin() + (Time)((timeBoundsZoom.tMax() - timeBoundsZoom.tMin()) * timePos));
+			sTimePosText = tPos.toString();
+		} else
+			sTimePosText = "";
+	}
 
 	mpv->Invalidate();
 }
 
-TimeBounds * SpaceTimeCube::getTimeBoundsZoom() const
+TimeBounds & SpaceTimeCube::getTimeBoundsZoom()
 {
 	return timeBoundsZoom;
 }
 
-const TimeBounds * SpaceTimeCube::getTimeBoundsFullExtent() const
+const TimeBounds & SpaceTimeCube::getTimeBoundsFullExtent() const
 {
 	return timeBoundsFullExtent;
 }

@@ -46,11 +46,13 @@
 #endif // _MSC_VER > 1000
 
 #include "Client\Editors\Utils\sizecbar.h"
-#include "TimeMessages.h"
+#include "Engine\Drawers\TimeMessages.h"
 
 class InfoLine;
 
 namespace ILWIS {
+
+	class TimeBounds;
 
 	static const unsigned int ID_STC_TIMEPOSITIONSLIDER=15940;
 	static const unsigned int sliderRange = 1000;
@@ -66,13 +68,15 @@ namespace ILWIS {
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void SetTimePosText(String * _sTimePosText);
-		virtual void SetTime(double timePerc, long sender);
+		void SetTimeBounds(TimeBounds * timeBounds);
+		virtual void SetTime(ILWIS::Time time, long sender);
 	private:
 		void ShowInfoText();
 		void HideInfoText();
 		InfoLine* info;
 		bool fDragging;
 		String * sTimePosText;
+		TimeBounds * timeBounds;
 
 		DECLARE_MESSAGE_MAP();
 	};
@@ -80,17 +84,18 @@ namespace ILWIS {
 	class TimePositionBar: public CSizingControlBar  
 	{
 	public:
-		TimePositionBar();
+		TimePositionBar(TimeBounds & timeBounds);
 		virtual ~TimePositionBar();
 		BOOL Create(CWnd* pParent);
 
 		//{{AFX_MSG(TimePositionBar)
 		void OnSize(UINT nType, int cx, int cy);
 		//}}AFX_MSG
-		void SetTime(double timePerc);
+		void SetTime(ILWIS::Time time);
 		void SetTimePosText(String * _sTimePosText);
 	protected:
 		TimeSliderCtrl slider;
+		TimeBounds & timeBounds;
 
 	  DECLARE_MESSAGE_MAP()
 	};

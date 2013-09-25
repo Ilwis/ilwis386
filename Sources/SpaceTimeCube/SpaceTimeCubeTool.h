@@ -7,7 +7,8 @@
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\MapWindow\Drawers\DrawerTool.h"
-#include "TimeMessages.h"
+#include "Engine\Drawers\TimeMessages.h"
+#include "TimeBounds.h"
 
 ILWIS::DrawerTool *createSpaceTimeCubeTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
@@ -78,7 +79,6 @@ namespace ILWIS {
 		RangeReal m_rrSizeMinMax;
 	};
 
-	class TimeBounds;
 	class PreTimeOffsetDrawer;
 	class PostTimeOffsetDrawer;
 	class LayerOptionsForm;
@@ -96,9 +96,9 @@ namespace ILWIS {
 		void setFormAutoDeleted();
 		void startLayerOptionsForm();
 		bool showingLayerOptionsForm();
-		virtual void SetTime(double timePerc, long sender);
-		TimeBounds * getTimeBoundsZoom() const;
-		const TimeBounds * getTimeBoundsFullExtent() const;
+		virtual void SetTime(ILWIS::Time time, long sender);
+		TimeBounds & getTimeBoundsZoom();
+		const TimeBounds & getTimeBoundsFullExtent() const;
 		void loadMapview();
 	private:
 		static map<ZoomableView*, SpaceTimeCube*> spaceTimeCubes;
@@ -112,8 +112,8 @@ namespace ILWIS {
 		TimePositionBar * timePosBar;
 		vector<LayerData> layerList;
 		vector<String> ownDrawerIDs;
-		TimeBounds * timeBoundsZoom;
-		TimeBounds * timeBoundsFullExtent;
+		TimeBounds timeBoundsZoom;
+		TimeBounds timeBoundsFullExtent;
 		RangeReal sizeStretch;
 		bool useSpaceTimeCube;
 		double timePos;
