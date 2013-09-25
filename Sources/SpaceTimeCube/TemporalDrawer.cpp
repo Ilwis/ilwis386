@@ -28,6 +28,11 @@ void TemporalDrawer::SetTimeAttribute2(const Column & col)
 		colTime2 = col;
 }
 
+const Column & TemporalDrawer::getTimeAttribute() const
+{
+	return colTime;
+}
+
 void TemporalDrawer::SetSelfTime()
 {
 	fTimeAttribute = false;
