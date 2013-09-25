@@ -36,7 +36,6 @@ AnimationDrawer::AnimationDrawer(DrawerParameters *parms) :
 	SetDrawer(parms,"AnimationDrawer"),
 	timerid(iUNDEF),
 	interval(1.0),
-	loop(true),
 	index(0),
 	useTime(false),
 	mapIndex(0),
@@ -149,8 +148,6 @@ bool AnimationDrawer::timerPerIndex() {
 	getDrawer(activeMaps[nindex])->setActive(true);
 	mapIndex = nindex;
 	IlwisObjectPtr *obj = getObject();
-	if ( obj) 
-		getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
 	for(int i=0; i < slaves.size(); ++i) {
 		SlaveProperties& props = slaves.at(i);
 		props.threshold += props.slaveStep;
@@ -158,32 +155,31 @@ bool AnimationDrawer::timerPerIndex() {
 			props.slave->timedEvent(SLAVE_TIMER_ID);
 			props.threshold -= 1.0;
 		}
-
-
 	}
+	if ( obj)
+		getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
+
 	return true;
 }
 
 bool AnimationDrawer::activeOnTime(const Column& col, double currentTime) {
-	if ( mapIndex < activeMaps.size() - 1 && col->rValue(activeMaps[mapIndex]) < currentTime){
+	int newMapIndex = 0;
+	while ((newMapIndex < activeMaps.size()) && (col->rValue(activeMaps[newMapIndex]) < currentTime)) // change this to find "nearest" map in maplist
+		++newMapIndex;
+	if (newMapIndex > 0)
+		--newMapIndex;
+	if (newMapIndex != mapIndex) {
 		getDrawer(activeMaps[mapIndex])->setActive(false);
-		++mapIndex;
+		mapIndex = newMapIndex;
 		getDrawer(activeMaps[mapIndex])->setActive(true);
 		IlwisObjectPtr *obj = getObject();
 		if ( obj) 
 			getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
 		return true;
-	} else {
-		if (loop && mapIndex >= activeMaps.size() -1 && currentTime >= col->rValue(col->iRecs() - 1)) {
-			getDrawer(activeMaps[mapIndex])->setActive(false);
-			mapIndex = 0;
-			index = 0;
-			getDrawer(activeMaps[0])->setActive(true);
-			return true;
-		}
-	}
-	return false;
+	} else
+		return false;
 }
+
 bool AnimationDrawer::timerPerTime() {
 	if ( (double)timestep == rUNDEF || (double)timestep == 0.0)
 		return false;
@@ -197,6 +193,10 @@ bool AnimationDrawer::timerPerTime() {
 		ILWIS::Duration duration = (col->rrMinMax().rHi() - col->rrMinMax().rLo());
 		double steps = 1000.0 / REAL_TIME_INTERVAL;
 		double offset =  timestep * (double)index / steps;
+		if (offset > duration) {
+			offset = 0;
+			index = 0;
+		}
 		double lowtime = col->rrMinMax().rLo();
 		double currentTime = lowtime + offset;
 		redraw = activeOnTime(col, currentTime);
@@ -205,6 +205,7 @@ bool AnimationDrawer::timerPerTime() {
 			props.slave->timedEvent(SLAVE_TIMER_ID);
 
 		}
+		SendTimeMessage(currentTime, long(this));
 	}
 	
 	++index;
@@ -213,25 +214,18 @@ bool AnimationDrawer::timerPerTime() {
 
 }
 
+void AnimationDrawer::SetTime(ILWIS::Time time, long sender)
+{
+	if (sender == (long) this)
+		return;
+	Column col = mpl->tblAtt()->col(colTime);
+	bool redraw = activeOnTime(col, time);
+	if ( redraw)
+		getRootDrawer()->getDrawerContext()->doDraw();
+}
+
 void AnimationDrawer::setTimeStep(ILWIS::Duration dur) 
 {
-	//MapList mpl;
-	//mpl.SetPointer(datasource->pointer());
-	//Column col = mpl->tblAtt()->col(colTime);
-	//if ( useTime && col.fValid() && (double)timestep > 0) {
-	//	index = 0;
-	//	if ( (double)timestep < 300.0  )
-	//		mapIndex = 13;
-	//	double steps = 1000.0 / REAL_TIME_INTERVAL;
-	//	double baseTime = col->rrMinMax().rLo();
-	//	double offset = 0;
-	//	double currentTime = col->rValue(activeMaps[mapIndex]);
-	//	while ( currentTime > (baseTime + offset)){
-	//		offset =  timestep * (double)index / steps;
-	//		++index;
-	//	}
-
-	//}
 	index = 0;
 	setMapIndex(0);
 	timestep = dur; 

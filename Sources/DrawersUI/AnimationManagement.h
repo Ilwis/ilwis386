@@ -88,9 +88,13 @@ namespace ILWIS {
 		~AnimationRun();
 		int changeActive(Event *ev);
 		void timed();
+		void refreshTimer();
 	private:
 		void stopAvi();
 		void startAvi();
+		void UpdateUIState();
+		FlatIconButton *fiPause;
+		FlatIconButton *fiRun;
 		FieldOneSelect *foAnimations;
 		FieldRealSliderEx *sliderFps;
 		FieldString *fldAviName;
@@ -100,6 +104,7 @@ namespace ILWIS {
 		bool saveToAvi;
 		CGLToMovie *movieRecorder;
 		String fnAvi;
+		bool fRunning;
 
 		AnimationPropertySheet	&propsheet;
 		virtual int DataChanged(Event*);
@@ -161,7 +166,7 @@ namespace ILWIS {
 
 	class RealTimePage : public FormBasePropertyPage {
 	public:
-		RealTimePage(AnimationPropertySheet& sheet);
+		RealTimePage(AnimationPropertySheet& sheet, AnimationRun * _animationRun);
 	private:
 		AnimationPropertySheet	&propsheet;
 		FieldGroup *fgTime;
@@ -182,7 +187,7 @@ namespace ILWIS {
 		int changeTimeColumn(Event *e);
 		void setTimeElements(FormEntry *entry);
 		double calcNiceStep(Duration time);
-		void changeTimer(bool isRealTime, AnimationProperties *props);
+		AnimationRun * animationRun;
 
 	};
 

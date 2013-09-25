@@ -163,7 +163,7 @@ extern "C" _export void moduleInit(ILWIS::Module *module) {
 			AnimationTool::animManagement->AddPage(page2);
 			AnimationProgress *page3 = new AnimationProgress(*AnimationTool::animManagement);
 			AnimationTool::animManagement->AddPage(page3);
-			RealTimePage *page4 = new RealTimePage(*AnimationTool::animManagement);
+			RealTimePage *page4 = new RealTimePage(*AnimationTool::animManagement, page);
 			AnimationTool::animManagement->AddPage(page4);
 			AnimationTool::animManagement->Create(0,WS_SYSMENU | WS_POPUP | WS_CAPTION | DS_MODALFRAME );
 			//AnimationTool::animManagement->ShowWindow(SW_HIDE);

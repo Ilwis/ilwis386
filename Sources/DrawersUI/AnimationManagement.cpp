@@ -192,7 +192,14 @@ void AnimationPropertySheet::OnSysCommand(UINT nID, LPARAM p) {
 	CPropertySheet::OnSysCommand(nID, p);
 }
 //--------------------------------------
-AnimationRun::AnimationRun(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Run").c_str()), propsheet(sheet), animIndex(0), fps(1),saveToAvi(false),movieRecorder(0)
+AnimationRun::AnimationRun(AnimationPropertySheet& sheet)
+: FormBasePropertyPage(TR("Run").c_str())
+, propsheet(sheet)
+, animIndex(0)
+, fps(1)
+, saveToAvi(false)
+, movieRecorder(0)
+, fRunning(false)
 {
 	FieldGroup *fgRest = new FieldGroup(root, true);
 	foAnimations = new FieldOneSelect(fgRest,&animIndex);
@@ -211,12 +218,12 @@ AnimationRun::AnimationRun(AnimationPropertySheet& sheet) : FormBasePropertyPage
 	fiTemp = fi1;
 	FlatIconButton *fi2 = new FlatIconButton(fg,"OneFrameMinus","",(NotifyProc)&AnimationRun::frameMinus, FileName());
 	fi2->Align(fi1, AL_AFTER);
-	fi1 = new FlatIconButton(fg,"Pause","",(NotifyProc)&AnimationRun::pause, FileName());
-	fi1->Align(fi2,AL_AFTER,-10);
-	fi2 = new FlatIconButton(fg,"Run","",(NotifyProc)&AnimationRun::run, FileName());
-	fi2->Align(fi1,AL_AFTER,-10);
+	fiPause = new FlatIconButton(fg,"Pause","",(NotifyProc)&AnimationRun::pause, FileName());
+	fiPause->Align(fi2,AL_AFTER,-10);
+	fiRun = new FlatIconButton(fg,"Run","",(NotifyProc)&AnimationRun::run, FileName());
+	fiRun->Align(fi2,AL_AFTER,-10);
 	fi1 = new FlatIconButton(fg,"Stop","",(NotifyProc)&AnimationRun::stop, FileName());
-	fi1->Align(fi2, AL_AFTER,-10);
+	fi1 ->Align(fiRun, AL_AFTER,-10);
 	fi2 = new FlatIconButton(fg,"OneFramePlus","",(NotifyProc)&AnimationRun::framePlus, FileName());
 	fi2->Align(fi1, AL_AFTER,-10);
 	fi1 = new FlatIconButton(fg,"End","",(NotifyProc)&AnimationRun::end, FileName());
@@ -295,6 +302,11 @@ void AnimationRun::stopAvi() {
 	movieRecorder = 0;
 }
 
+void AnimationRun::refreshTimer() {
+	if (fRunning)
+		run(0);
+}
+
 int AnimationRun::speed(Event *ev) {
 	sliderFps->StoreData();
 	AnimationProperties *prop = propsheet.getActiveAnimation();
@@ -304,7 +316,7 @@ int AnimationRun::speed(Event *ev) {
 	if ( fps == 0 || fps == rUNDEF)
 		return 1;
 	andr->setInterval(1.0 / fps);
-	run(0);
+	refreshTimer();
 	return 1;
 }
 
@@ -325,6 +337,7 @@ int AnimationRun::DataChanged(Event* ev) {
 			animIndex = 0;
 		}
 	}
+	UpdateUIState();
 	return 1;
 }
 
@@ -357,6 +370,8 @@ int AnimationRun::framePlus(Event *ev) {
 }
 
 int AnimationRun::stop(Event  *ev) {
+	fRunning = false;
+	UpdateUIState();
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
@@ -364,19 +379,20 @@ int AnimationRun::stop(Event  *ev) {
 		stopAvi();
 	}
 	props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
-	KillTimer(props->drawer->getTimerId());
 	props->drawer->setMapIndex(0);
 	props->drawer->setIndex(0);
 	props->drawer->setTimerId(iUNDEF);
+	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
 }
 
 int AnimationRun::pause(Event  *ev) {
+	fRunning = false;
+	UpdateUIState();
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
 	props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
-	KillTimer(props->drawer->getTimerId());
 	return 1;
 }
 
@@ -384,33 +400,30 @@ int AnimationRun::end(Event  *ev) {
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
-	props->drawer->setMapIndex(props->drawer->getDrawerCount());
-	props->drawer->setIndex(0);
+	props->drawer->setMapIndex(props->drawer->getDrawerCount() - 1);
+	props->drawer->setIndex(props->drawer->getActiveMaps().size() - 1);
+	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
 }
 
 int AnimationRun::run(Event  *ev) {
-	//sliderFps->StoreData();
+	fRunning = true;
+	UpdateUIState();
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
-	if ( props->drawer->getTimerId() != iUNDEF) {
+	if ( props->drawer->getTimerId() != iUNDEF)
 		props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
-		KillTimer(props->drawer->getTimerId());
-	}else{
+	else {
 		int timeIdC = AnimationDrawer::getTimerIdCounter(true);
 		props->drawer->setTimerId(timeIdC);
 	}
-	if ( props->drawer->getUseTime()) {
-		props->mdoc->mpvGetView()->SetTimer(props->drawer->getTimerId(),REAL_TIME_INTERVAL,0);
-		SetTimer(props->drawer->getTimerId(),REAL_TIME_INTERVAL,0);
-	} else {
-		props->mdoc->mpvGetView()->SetTimer(props->drawer->getTimerId(),props->drawer->getInterval() * 1000.0,0);
-		SetTimer(props->drawer->getTimerId(),props->drawer->getInterval() * 1000.0,0);
-	}
-	if ( saveToAvi) {
-			startAvi();
-	}
+	if ( props->drawer->getUseTime())
+		props->mdoc->mpvGetView()->SetTimer(props->drawer->getTimerId(), props->drawer->getInterval() * REAL_TIME_INTERVAL,0);
+	else
+		props->mdoc->mpvGetView()->SetTimer(props->drawer->getTimerId(), props->drawer->getInterval() * 1000.0,0);
+	if (saveToAvi)
+		startAvi();
 	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
 }
@@ -421,8 +434,24 @@ int AnimationRun::begin(Event  *ev) {
 		return 0;
 	props->drawer->setMapIndex(0);
 	props->drawer->setIndex(0);
+	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
 }
+
+void AnimationRun::UpdateUIState() {
+	if (fRunning) {
+		fiPause->Show();
+		fiRun->Hide();
+		cbAvi->disable();
+		fldAviName->Disable();
+	} else {
+		fiPause->Hide();
+		fiRun->Show();
+		cbAvi->enable();
+		fldAviName->Enable();
+	}
+}
+
 //-------------------------------------------------------------------
 AnimationSynchronization::AnimationSynchronization(AnimationPropertySheet& sheet) : 
 FormBasePropertyPage(TR("Synchronization").c_str()), 
@@ -772,7 +801,11 @@ void GraphPropertyForm::OnClose() {
 }
 
 //---------------------------------------------
-RealTimePage::RealTimePage(ILWIS::AnimationPropertySheet &sheet) :FormBasePropertyPage(TR("Real time progress").c_str()), propsheet(sheet), useTimeAttribute(false) 
+RealTimePage::RealTimePage(ILWIS::AnimationPropertySheet &sheet, AnimationRun * _animationRun)
+: FormBasePropertyPage(TR("Real time progress").c_str())
+, propsheet(sheet)
+, useTimeAttribute(false)
+, animationRun(_animationRun)
 {
 	year = month = day = hour = minute = 0;
 
@@ -853,17 +886,6 @@ int RealTimePage::DataChanged(Event*ev) {
 	return 1;
 }
 
-void RealTimePage::changeTimer(bool isRealTime, AnimationProperties *props) {
-	if ( isRealTime){
-		props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
-		props->mdoc->mpvGetView()->SetTimer(props->drawer->getTimerId(),REAL_TIME_INTERVAL,0);
-		props->mdoc->mpvGetView()->Invalidate();
-	} else {
-		props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
-		props->mdoc->mpvGetView()->SetTimer(props->drawer->getTimerId(),props->drawer->getInterval() * 1000.0,0);
-	}
-}
-
 int RealTimePage::changeDuration(Event *ev) {
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
@@ -879,12 +901,11 @@ int RealTimePage::changeDuration(Event *ev) {
 			return 1;
 		Duration dur(String("P%04dY%02dM%02dDT%02dH%02dM00",year,month,day,hour,minute));
 		adrw->setTimeStep(dur);
-		changeTimer(true, props);
-	} else {
-		changeTimer(false, props);
 	}
+	animationRun->refreshTimer();
 	return 1;
 }
+
 int RealTimePage::changeTimeColumn(Event *e) {
 	fcolTime->StoreData();
 	AnimationProperties *props = propsheet.getActiveAnimation();
@@ -901,7 +922,7 @@ int RealTimePage::changeTimeColumn(Event *e) {
 			if ( mpl->fTblAtt()) {
 				Column col = mpl->tblAtt()->col(timeColName);
 				if ( col.fValid()) {
-					double timeStep = calcNiceStep((col->rrMinMax().rHi() - col->rrMinMax().rLo()) / mpl->iSize());
+					double timeStep = calcNiceStep((col->rrMinMax().rHi() - col->rrMinMax().rLo()) / ((mpl->iSize() > 1) ? (mpl->iSize() - 1) : 1));
 					ILWIS::Duration t(timeStep);
 					String s = t.toString(true,ILWIS::Time::mDATETIME);
 					fiYr->SetVal(t.get(ILWIS::Time::tpYEAR));
@@ -978,7 +999,7 @@ int RealTimePage::setTimingMode(Event *ev) {
 	adrw->setUseTime(useTimeAttribute);
 	if ( fgTime)
 		fgTime->Hide();
-	if ( adrw->getUseTime()) {
+	if ( useTimeAttribute) {
 		if ( fgTime)
 			fgTime->Show();
 		IlwisObject *source = (IlwisObject *)adrw->getDataSource();
@@ -993,6 +1014,7 @@ int RealTimePage::setTimingMode(Event *ev) {
 
 		propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pProgress);
 	}
+	animationRun->refreshTimer();
 	return 1;
 }
 //---------------------------
@@ -1126,7 +1148,7 @@ void AnimationBar::updateTime(/*const AnimationProperties* props*/) // called by
 	if ( animation.drawer->getUseTime()) {
 		String tmstring = setTimeString();
 		if ( ed.GetSafeHwnd())
-			ed.SetWindowText(String("%S",tmstring).c_str());
+			ed.SetWindowText(tmstring.c_str());
 	}
 	else {
 		if ( ed.GetSafeHwnd())
@@ -1146,12 +1168,12 @@ String AnimationBar::setTimeString(/*const AnimationProperties* props*/) {
 			Duration timestep = animation.drawer->getTimeStep();
 			double steps = 1000.0 / REAL_TIME_INTERVAL;
 			//double currentTime = mpl->tblAtt()->col(colTime)->rrMinMax().rLo() +  timestep * (double)index / steps;
-			double currentTime = timeCol->rValue(ind);
+			double currentTime = timeCol->rValue(ind + 1);
 			ILWIS::Time ct(currentTime);
-			timestring += ":" + ct.toString(true,timeCol->dm()->pdtime()->getMode());
+			timestring = ct.toString(true,timeCol->dm()->pdtime()->getMode());
 		}
 	}
-	return String("index %d : %S",ind, timestring);
+	return String("index %d : %S", ind, timestring);
 }
 
 

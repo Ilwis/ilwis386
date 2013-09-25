@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engine\Drawers\TimeMessages.h"
 
 #define SLAVE_TIMER_ID 46757736
 
@@ -19,7 +20,7 @@ namespace ILWIS{
 		double threshold;
 	};
 
-	class _export AnimationDrawer : public SetDrawer {
+	class _export AnimationDrawer : public SetDrawer, public TimeListener, public TimeProvider {
 	public:
 		AnimationDrawer(DrawerParameters *parms);
 		virtual ~AnimationDrawer();
@@ -63,6 +64,7 @@ namespace ILWIS{
 		bool timerPerIndex() ;
 		bool timerPerTime() ;
 		bool activeOnTime(const Column& col, double currentTime);
+		void SetTime(ILWIS::Time time, long sender);
 		double interval;
 		UINT timerid;
 		vector<String> names;
@@ -70,7 +72,6 @@ namespace ILWIS{
 		vector<SlaveProperties> slaves;
 		int index;
 		int mapIndex;
-		bool loop;
 		bool useTime;
 		String colTime;
 		clock_t last;
