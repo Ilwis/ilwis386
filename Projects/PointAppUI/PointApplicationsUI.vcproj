@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="PointApplicationsUI"
 	ProjectGUID="{7754DA7E-7D50-49CC-A369-CD424C28F0D9}"
 	RootNamespace="PointApplicationsUI"
@@ -208,10 +208,6 @@
 			Filter="h;hpp"
 			>
 			<File
-				RelativePath="..\..\Sources\PointApplicationsUI\FormPointMapCross.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\PointApplicationsUI\FormPointMapCross.h"
 				>
 			</File>
@@ -250,6 +246,10 @@
 			>
 			<File
 				RelativePath="..\..\Sources\PointApplicationsUI\apps.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\PointApplicationsUI\FormPointMapCross.cpp"
 				>
 			</File>
 			<File
