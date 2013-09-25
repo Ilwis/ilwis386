@@ -1,3 +1,4 @@
+#include "Headers\toolspch.h"
 #include "TimeMessages.h"
 
 using namespace ILWIS;
@@ -23,9 +24,9 @@ TimeProvider::TimeProvider()
 {
 }
 
-void TimeProvider::SendTimeMessage(double timePerc, long sender)
+void TimeProvider::SendTimeMessage(ILWIS::Time time, long sender)
 {
 	list<TimeListener*> & timeListeners = TimeListener::getTimeListeners();
 	for (list<TimeListener*>::iterator it = timeListeners.begin(); it != timeListeners.end(); ++it)
-		(*it)->SetTime(timePerc, sender);
+		(*it)->SetTime(time, sender);
 }

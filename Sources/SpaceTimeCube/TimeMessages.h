@@ -8,18 +8,18 @@ namespace ILWIS {
 
 class TimeListener {
 public:
-	TimeListener();
-	~TimeListener();
+	_export TimeListener();
+	_export ~TimeListener();
 	static list<TimeListener*> & getTimeListeners();
-	virtual void SetTime(double timePerc, long sender) = 0;
+	_export virtual void SetTime(ILWIS::Time time, long sender) = 0;
 private:
 	static list<TimeListener*> timeListeners;
 };
 
 class TimeProvider {
 public:
-	TimeProvider();
-	void SendTimeMessage(double timePerc, long sender);
+	_export TimeProvider();
+	_export void SendTimeMessage(ILWIS::Time time, long sender);
 };
 
 }
