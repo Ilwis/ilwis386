@@ -120,9 +120,9 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenc
 		replace(projName.begin(), projName.end(),'_',' ');
 
 		String spheroid = getEngine()->gdal->getAttribute(handle,"SPHEROID",0);
-		try{
-		Ellipsoid ell(spheroid);
-		csp->ell = ell;
+		try {
+			Ellipsoid ell(spheroid);
+			csp->ell = ell;
 		} catch (ErrorObject& ) {
 			csp->ell.sName = "User Defined";
 			String majoraxis = getEngine()->gdal->getAttribute(handle,"SPHEROID",1);
@@ -168,6 +168,7 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenc
 	} else {
 		csv = new CoordSystemLatLon(fnCsy, 1);
 		csv->datum = new MolodenskyDatum("WGS 1984","");
+		csv->ell = csv->datum->ell;
 	}
 
 	CoordSystem csy;
