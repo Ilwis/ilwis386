@@ -82,12 +82,14 @@ void OpenGLText::renderText(const Coordinate& c, const String& text) {
 		glRotatef(rotY,1,0,0);
 		FTPoint pStart(0, 0, 0);
 		wchar_t wtext[512];
-		mbstowcs(wtext, text.c_str(), 512);
+		//mbstowcs(wtext, text.c_str(), 512); // substituted by next statement because this did not work with PostgreSQL UTF-8 .. check if it still work with WFS (TODO)
+		::MultiByteToWideChar( CP_UTF8, 0, text.c_str(), text.length() + 1, wtext, 512 ); // note: "text.length() + 1" is intentional, documentation says "does not null-terminate an output string if the input string length is explicitly specified without a terminating null character"
 		FTPoint pEnd =  font->Render(wtext,-1, pStart);
 	} else {
 		FTPoint pStart(horizontalShift + c.x / scale, verticalShift + c.y / scale, c.z);
 		wchar_t wtext[512];
-		mbstowcs(wtext, text.c_str(), 512);
+		//mbstowcs(wtext, text.c_str(), 512);
+		::MultiByteToWideChar( CP_UTF8, 0, text.c_str(), text.length() + 1, wtext, 512 ); // note: "text.length() + 1" is intentional, see above
 		FTPoint pEnd =  font->Render(wtext,-1, pStart);
 	}
 	glDisable(GL_BLEND);
