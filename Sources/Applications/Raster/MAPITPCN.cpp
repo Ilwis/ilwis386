@@ -404,6 +404,8 @@ bool MapInterpolContour::fForwardDistances(long& iChanges, bool fFirstPass)
             }
           }
 
+          if ( iMinDistToNearestContour1 == HIVAL)
+            rMinNearestContour1 = rUNDEF;
           if ( iMinDistToNearestContour2 == HIVAL)
             rMinNearestContour2 = rUNDEF;
           if ((*iCurrDistToNearestCont1 != iMinDistToNearestContour1) ||
@@ -591,6 +593,8 @@ bool MapInterpolContour::fBackwardDistances(long& iChanges)
             }
           }
 
+        if ( iMinDistToNearestContour1 == HIVAL)
+          rMinNearestContour1 = rUNDEF;
         if ( iMinDistToNearestContour2 == HIVAL)
           rMinNearestContour2 = rUNDEF;
         if ((*iCurrDistToNearestCont1 != iMinDistToNearestContour1) ||
