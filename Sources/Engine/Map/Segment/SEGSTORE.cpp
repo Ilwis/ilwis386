@@ -203,6 +203,8 @@ void SegmentMapStore::Store()
 		Column colDeleted = tblSegment->colNew("Deleted", Domain("bool"));
 		Column colSegmentValue = tblSegment->colNew("SegmentValue", ptr.dvrs());
 		int actual = 0;
+		bool fRaw = ptr.dvrs().fRawAvailable(); // modeled after Pntstore.cpp because there it works properly
+		bool fReal = ptr.dvrs().fRealValues();
 		for(int i = 0; i < geometries->size(); ++i) {
 			ILWIS::Segment *seg = (ILWIS::Segment *)geometries->at(i);	
 			if ( seg->fDeleted()) continue;
@@ -211,7 +213,10 @@ void SegmentMapStore::Store()
 			tblSegment->recNew();
 			const CoordinateSequence *seq = seg->getCoordinates();
 			colCrdBuf->PutVal(actual,seq, seq->size());
-			colSegmentValue->PutRaw(actual,seg->iValue());
+			if (fRaw)
+				colSegmentValue->PutRaw(actual,seg->iValue());
+			else if (fReal)
+				colSegmentValue->PutVal(actual,seg->rValue());
 			colMinCoords->PutVal(actual, cb.cMin);
 			colMaxCoords->PutVal(actual,cb.cMax);
 			colDeleted->PutVal(actual,(long)0);
