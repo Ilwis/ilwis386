@@ -1717,7 +1717,7 @@ void Catalog::OnBegindrag(NMHDR* pNMHDR, LRESULT* pResult)
 			fn = vfn[id];
 			if ( fn.sExt != "drive" && fn.sExt != "directory" )
 			{
-				sFileList &= fn.sFullPathQuoted();
+				sFileList &= fn.sFullPath(); // Try sFullPath() for more successful drag/drop from ILWIS to Notepad (without the single quotes). Note that this line was changed by Willem on 14-September-2000 from sFullName() to sFullPathQuoted() with comment "For maplist the sectionpostfix is now also passed to open file and drag functions". However I didn't understand how to drag a maplist with sectionpostfix.
 				sFileList &= '\0';
 			}
 		}
