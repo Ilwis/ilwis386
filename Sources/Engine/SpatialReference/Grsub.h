@@ -72,6 +72,7 @@ public:
 	void GetObjectStructure(ObjectStructure& os);
 	virtual bool fGeoRefNone() const;
 	GeoRef grfParentGeoRef() { return gr;}
+	void BreakDependency();
 protected:
 	GeoRef gr;
 	RowCol rcStart;
