@@ -71,30 +71,199 @@ bool CriteriaTreeObjectPtr::fUsesDependentObjects() const
 void CriteriaTreeObjectPtr::GetObjectStructure(ObjectStructure& os)
 {
 	IlwisObjectPtr::GetObjectStructure(os);
-/*	if (os.fGetAssociatedFiles() ||
+	if (os.fGetAssociatedFiles() ||
 		( os.caGetCommandAction() != ObjectStructure::caCOPY &&
 		  os.caGetCommandAction() != ObjectStructure::caDELETE)
 		)
 	{
 		CFile cfCriteriaTreeFile(fnObj.sFullPath().c_str(), CFile::modeRead);
 		CArchive ar(&cfCriteriaTreeFile, CArchive::load);
-		//ElementMap em = new ElementMap;
-		//em->Serialize(ca);
 		
 		ElementContainer en;
 		en.em = new ElementMap; // deleted in ~ElementContainer
 		// First read the entire ElementMap
 		en.em->Serialize(ar);
-		// Now reconstruct the entire criteria tree
-		EffectGroup egCriteriaTreeRoot ((CriteriaTreeDoc*)0,"");
-		egCriteriaTreeRoot.ReadElements("Root", en);
 
-		// Then use its GetObjectStructure function to fill os
-		egCriteriaTreeRoot.GetObjectStructure(os);
-		
+		// Read the maps of the criteria tree
+		EffectGroupGetObjectStructure("Root", en, os);
+
 		// Include the map or mapview that is used for overlay
-		CriteriaTreeDoc::GetObjectStructure(en, os); // static function }
-}*/
+		CriteriaTreeDocGetObjectStructure(en, os);
+	}
+}
+
+void CriteriaTreeObjectPtr::EffectGroupGetObjectStructure(const char* sSection, const ElementContainer& en, ObjectStructure& os)
+{
+	String sName;
+	ObjectInfo::ReadElement(sSection, "Name", en, sName);
+	int iNrOutputMaps;
+	if (!ObjectInfo::ReadElement(sSection, "NrOutputMaps", en, iNrOutputMaps))
+		iNrOutputMaps = 1;
+	for (int i=0; i<iNrOutputMaps; ++i) {
+		FileName fnOutputMap;
+		ObjectInfo::ReadElement(sSection, String("OutputMap%d", i).c_str(), en, fnOutputMap);
+		if (fnOutputMap.fExist())
+		{
+			os.AddFile(fnOutputMap);
+			// Retrieve the files belonging to the map (georef, tables, domains)
+			if (IlwisObject::iotObjectType(fnOutputMap) != IlwisObject::iotANY)
+			{
+				IlwisObject obj = IlwisObject::obj(fnOutputMap);
+				if ( obj.fValid())
+					obj->GetObjectStructure(os);
+			}					
+		}
+
+		String sSlicedMapName ("%S_sliced", fnOutputMap.sShortName(false));
+		FileName fnSlicedMapName (sSlicedMapName.sQuote(), ".mpr");
+		if (fnSlicedMapName.fExist()) {
+			os.AddFile(fnSlicedMapName);
+			// Retrieve the files belonging to the map (georef, tables, domains)
+			if (IlwisObject::iotObjectType(fnSlicedMapName) != IlwisObject::iotANY)
+			{
+				IlwisObject obj = IlwisObject::obj(fnSlicedMapName);
+				if ( obj.fValid())
+					obj->GetObjectStructure(os);
+			}
+		}
+
+		String sContourMapName ("%S_contours", fnOutputMap.sShortName(false));
+		FileName fnContourMapName (sContourMapName.sQuote(), ".mps");
+		if (fnContourMapName.fExist()) {
+			os.AddFile(fnContourMapName);
+			// Retrieve the files belonging to the map (tables, domains)
+			if (IlwisObject::iotObjectType(fnContourMapName) != IlwisObject::iotANY)
+			{
+				IlwisObject obj = IlwisObject::obj(fnContourMapName);
+				if ( obj.fValid())
+					obj->GetObjectStructure(os);
+			}
+
+			CFileFind finder;
+			String strPattern(fnContourMapName.sFullPath(false) + "_*.mps");
+			BOOL bWorking = finder.FindFile(strPattern.c_str());
+			while (bWorking)
+			{
+				bWorking = finder.FindNextFile();
+				FileName fnDetailedContourMapName(finder.GetFilePath());
+				os.AddFile(fnDetailedContourMapName);
+				if (IlwisObject::iotObjectType(fnDetailedContourMapName) != IlwisObject::iotANY)
+				{
+					IlwisObject obj = IlwisObject::obj(fnDetailedContourMapName);
+					if ( obj.fValid())
+						obj->GetObjectStructure(os);
+				}
+			}
+
+			finder.Close();
+		}
+	}
+
+	int iNrChildren;
+	if (!ObjectInfo::ReadElement(sSection, "NrChildren", en, iNrChildren))
+		iNrChildren = 0;
+	for (int i=0; i<iNrChildren; ++i)
+	{
+		String sType;
+		ObjectInfo::ReadElement(sSection, String("Child%dType", i).c_str(), en, sType);
+		if ("Group" == sType)
+			EffectGroupGetObjectStructure(String("%s_%S_%d", sSection, sName, i).c_str(), en, os);
+		else if ("Map" == sType)
+			MapEffectGetObjectStructure(String("%s_%S_%d", sSection, sName, i).c_str(), en, os);
+	}
+}
+
+void CriteriaTreeObjectPtr::MapEffectGetObjectStructure(const char* sSection, const ElementContainer& en, ObjectStructure& os)
+{
+	// If a map is used for aggregation, read it
+	String sOperation;
+	bool fAggregate = (0 != ObjectInfo::ReadElement(sSection, "AggregateValueOperation", en, sOperation));
+	if (fAggregate)
+	{
+		FileName fnAdditional;
+		if (0 != ObjectInfo::ReadElement(sSection, "AggregateValueAdditionalFilename", en, fnAdditional)) {
+			if (fnAdditional.fExist())
+			{
+				os.AddFile(fnAdditional);
+				// Retrieve the files belonging to the map (georef, tables, domains)
+				if (IlwisObject::iotObjectType(fnAdditional) != IlwisObject::iotANY)
+				{
+					IlwisObject obj = IlwisObject::obj(fnAdditional);
+					if ( obj.fValid())
+						obj->GetObjectStructure(os);
+				}
+			}
+		}
+	}
+
+	// Then continue with the map effect
+
+	int iSize;
+	if (!ObjectInfo::ReadElement(sSection, "NrInputMaps", en, iSize))
+		iSize = 1;
+	for (int i=0; i<iSize; ++i)
+	{
+		String sMapFileName; // this is a workaround -- sCol is lost when reading a FileName
+		ObjectInfo::ReadElement(sSection, String("InputMap%d", i).c_str(), en, sMapFileName);
+		FileName fnMap = sMapFileName;
+		FileName fn (fnMap);
+		fn.sCol = ""; // remove sCol otherwise the ObjectStructure functions have a wrong result
+		// The only reason for above lines (first add the column, then remove it) is to keep it the same as the original code in CriteiaTreeItem.cpp
+		os.AddFile(fn); 
+		// Retrieve the files belonging to the map (georef, tables, domains)
+		if (IlwisObject::iotObjectType(fn) != IlwisObject::iotANY)
+		{
+			IlwisObject obj = IlwisObject::obj(fn);
+			if ( obj.fValid())
+				obj->GetObjectStructure(os);
+		}
+
+		String sStandardizedMapName ("%S_standardized", fnMap.sShortName(false));
+		FileName fnStandardizedMapName (sStandardizedMapName.sQuote(), ".mpr");
+		if (fnStandardizedMapName.fExist())
+		{
+			os.AddFile(fnStandardizedMapName);
+			// Retrieve the files belonging to the map (georef, tables, domains)
+			if (IlwisObject::iotObjectType(fnStandardizedMapName) != IlwisObject::iotANY)
+			{
+				IlwisObject obj = IlwisObject::obj(fnStandardizedMapName);
+				if ( obj.fValid())
+					obj->GetObjectStructure(os);
+			}
+		}
+	}
+}
+
+void CriteriaTreeObjectPtr::CriteriaTreeDocGetObjectStructure(const ElementContainer& en, ObjectStructure& os)
+{
+	int iOverlayMapsOption = 0;
+	if (!ObjectInfo::ReadElement("Display", "Mode", en, iOverlayMapsOption))
+		iOverlayMapsOption = 0;
+
+	FileName fnToCopy;
+	switch(iOverlayMapsOption)
+	{
+		case 0:
+			break;
+		case 1:
+			ObjectInfo::ReadElement("Display", "Map", en, fnToCopy);
+			break;
+		case 2:
+			ObjectInfo::ReadElement("Display", "MapView", en, fnToCopy);
+			break;
+	}
+
+	if (fnToCopy.fValid() && fnToCopy.fExist())
+	{
+		os.AddFile(fnToCopy);
+		// Retrieve the files belonging to the map (georef, tables, domains)
+		if (IlwisObject::iotObjectType(fnToCopy) != IlwisObject::iotANY)
+		{
+			IlwisObject obj = IlwisObject::obj(fnToCopy);
+			if ( obj.fValid())
+				obj->GetObjectStructure(os);
+		}					
+	}
 }
 
 CriteriaTreeObject::CriteriaTreeObject() 

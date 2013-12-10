@@ -986,36 +986,3 @@ void CriteriaTreeDoc::ShowContourMapCombination(vector<FileName> vfnContourMaps,
 		}
 	}
 }
-
-
-void CriteriaTreeDoc::GetObjectStructure(const ElementContainer& en, ObjectStructure& os)
-{
-	int iOverlayMapsOption = 0;
-	if (!ObjectInfo::ReadElement("Display", "Mode", en, iOverlayMapsOption))
-		iOverlayMapsOption = 0;
-
-	FileName fnToCopy;
-	switch(iOverlayMapsOption)
-	{
-		case 0:
-			break;
-		case 1:
-			ObjectInfo::ReadElement("Display", "Map", en, fnToCopy);
-			break;
-		case 2:
-			ObjectInfo::ReadElement("Display", "MapView", en, fnToCopy);
-			break;
-	}
-
-	if (fnToCopy.fValid() && fnToCopy.fExist())
-	{
-		os.AddFile(fnToCopy);
-		// Retrieve the files belonging to the map (georef, tables, domains)
-		if (IlwisObject::iotObjectType(fnToCopy) != IlwisObject::iotANY)
-		{
-			IlwisObject obj = IlwisObject::obj(fnToCopy);
-			if ( obj.fValid())
-				obj->GetObjectStructure(os);
-		}					
-	}
-}

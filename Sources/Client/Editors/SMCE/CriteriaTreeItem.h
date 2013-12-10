@@ -118,7 +118,6 @@ public:
 	CriteriaTreeItem* GetParent();
 	void SetParent(CriteriaTreeItem* ctiNewParent);
 	virtual AttributeFileName afnFindFirstInputMap();
-	virtual void GetObjectStructure(ObjectStructure& os);
 
 	virtual void Edit(int iCol, RECT rect, CWnd* wnd) = 0;
 	// to change the name, standardization, aggregation etc
@@ -240,7 +239,6 @@ public:
 	list <String> liChildLabels();
 	bool fWeightsOk();
 	String sWeighMethod();
-	void _export GetObjectStructure(ObjectStructure& os);
 	int iRecursivelyCalculateOutput(bool fCountOnly, bool fSpatialOnly, bool fShow = false);
 	void RecursivelyDeleteOutputMaps();
 	bool fSpatialItem();
@@ -371,7 +369,6 @@ public:
 	String sStatusBarText();
 	void RefreshDomain();
 	void RefreshInputType();
-	void GetObjectStructure(ObjectStructure& os);
 	void RecursivelyDeleteOutputMaps();
 	bool fSpatialItem();
 	void AggregateValues();

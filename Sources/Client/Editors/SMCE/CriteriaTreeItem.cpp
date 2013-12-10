@@ -453,11 +453,6 @@ void CriteriaTreeItem::SetModifiedFlag(BOOL bModified)
 		GetDocument()->SetModifiedFlag(bModified);
 }
 
-void CriteriaTreeItem::GetObjectStructure(ObjectStructure& os)
-{
-  // handle in derivatives
-}
-
 void CriteriaTreeItem::RecursivelyDeleteOutputMaps()
 {
 	if (GetParent())
@@ -2358,79 +2353,6 @@ String EffectGroup::sWeighMethod()
 	return sReturn;
 }
 
-void EffectGroup::GetObjectStructure(ObjectStructure& os)
-{
-	// First our own maps (output, sliced output and contour maps)
-	int iNrOutputMaps = vOutputMaps.size();
-	for (int iCol=1; iCol<=iNrOutputMaps; ++iCol)
-	{
-		if (fDataExists(iCol))
-		{
-			os.AddFile(vOutputMaps[iCol-1]);
-			// Retrieve the files belonging to the map (georef, tables, domains)
-			if (IlwisObject::iotObjectType(vOutputMaps[iCol-1]) != IlwisObject::iotANY)
-			{
-				IlwisObject obj = IlwisObject::obj(vOutputMaps[iCol-1]);
-				if ( obj.fValid())
-					obj->GetObjectStructure(os);
-			}					
-		}
-	}
-	for (int iCol=1; iCol<=iNrOutputMaps; ++iCol)
-	{
-		if (fSlicedExists(iCol))
-		{
-			String sSlicedMapName ("%S_sliced", vOutputMaps[iCol-1].sShortName(false));
-			FileName fnSlicedMapName (sSlicedMapName.sQuote(), ".mpr");
-			os.AddFile(fnSlicedMapName);
-			// Retrieve the files belonging to the map (georef, tables, domains)
-			if (IlwisObject::iotObjectType(fnSlicedMapName) != IlwisObject::iotANY)
-			{
-				IlwisObject obj = IlwisObject::obj(fnSlicedMapName);
-				if ( obj.fValid())
-					obj->GetObjectStructure(os);
-			}					
-		}
-	}
-	for (int iCol=1; iCol<=iNrOutputMaps; ++iCol)
-	{
-		if (fContourMapExists(iCol))
-		{
-			String sContourMapName ("%S_contours", vOutputMaps[iCol-1].sShortName(false));
-			FileName fnContourMapName (sContourMapName.sQuote(), ".mps");
-			os.AddFile(fnContourMapName);
-			// Retrieve the files belonging to the map (tables, domains)
-			if (IlwisObject::iotObjectType(fnContourMapName) != IlwisObject::iotANY)
-			{
-				IlwisObject obj = IlwisObject::obj(fnContourMapName);
-				if ( obj.fValid())
-					obj->GetObjectStructure(os);
-			}
-
-			CFileFind finder;
-			String strPattern(fnContourMapName.sFullPath(false) + "_*.mps");
-			BOOL bWorking = finder.FindFile(strPattern.c_str());
-			while (bWorking)
-			{
-				bWorking = finder.FindNextFile();
-				FileName fnDetailedContourMapName(finder.GetFilePath());
-				os.AddFile(fnDetailedContourMapName);
-				if (IlwisObject::iotObjectType(fnDetailedContourMapName) != IlwisObject::iotANY)
-				{
-					IlwisObject obj = IlwisObject::obj(fnDetailedContourMapName);
-					if ( obj.fValid())
-						obj->GetObjectStructure(os);
-				}
-			}
-
-			finder.Close();
-		}
-	}
-	// Then files of children
-	for (list<CriteriaTreeItem*>::iterator it = itFirstChild(); it != itLastChild(); ++it)
-		(*it)->GetObjectStructure(os);
-}
-
 void EffectGroup::RecursivelyDeleteOutputMaps()
 {
 	if (fSpatialItem())
@@ -3785,40 +3707,6 @@ int MapEffect::iIconIndex()
 String MapEffect::sStatusBarText()
 {
 	return String("Map %S", Effect::sStatusBarText());
-}
-
-void MapEffect::GetObjectStructure(ObjectStructure& os)
-{
-	int iSize = vMaps.size();
-	for (int i=0; i<iSize; ++i)
-	{
-		FileName fn (vMaps[i]);
-		fn.sCol = ""; // remove sCol otherwise the ObjectStructure functions have a wrong result
-		os.AddFile(fn); 
-		// Retrieve the files belonging to the map (georef, tables, domains)
-		if (IlwisObject::iotObjectType(fn) != IlwisObject::iotANY)
-		{
-			IlwisObject obj = IlwisObject::obj(fn);
-			if ( obj.fValid())
-				obj->GetObjectStructure(os);
-		}					
-	}
-	for (int i=1; i<=iSize; ++i)
-	{
-		String sStandardizedMapName ("%S_standardized", vMaps[i-1].sShortName(false));
-		FileName fnStandardizedMapName (sStandardizedMapName.sQuote(), ".mpr");
-		if (fnStandardizedMapName.fExist())
-		{
-			os.AddFile(fnStandardizedMapName);
-			// Retrieve the files belonging to the map (georef, tables, domains)
-			if (IlwisObject::iotObjectType(fnStandardizedMapName) != IlwisObject::iotANY)
-			{
-				IlwisObject obj = IlwisObject::obj(fnStandardizedMapName);
-				if ( obj.fValid())
-					obj->GetObjectStructure(os);
-			}
-		}
-	}
 }
 
 bool MapEffect::fSpatialItem()

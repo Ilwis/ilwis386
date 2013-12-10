@@ -96,7 +96,6 @@ public:
 	virtual zIcon icon() const;
 	void ShowMap(FileName fnMap); // Takes care of overlaying the layers specified in "Overlay Maps"
 	void ShowContourMapCombination(vector<FileName> vfnContourMaps, vector<ValueRange> vvrCustomValueRanges, FileName fnInfoMap); // Takes care of overlaying the layers specified in "Overlay Maps"
-	static void GetObjectStructure(const ElementContainer& en, ObjectStructure& os);
 
 protected:
 	CriteriaTreeDoc(); // create from serialization only

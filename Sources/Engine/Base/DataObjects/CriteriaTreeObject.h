@@ -48,6 +48,10 @@ public:
 	void Store();
 	bool fUsesDependentObjects() const;
 	virtual void GetObjectStructure(ObjectStructure& os);
+private:
+	void EffectGroupGetObjectStructure(const char* sSection, const ElementContainer& en, ObjectStructure& os);
+	void MapEffectGetObjectStructure(const char* sSection, const ElementContainer& en, ObjectStructure& os);
+	void CriteriaTreeDocGetObjectStructure(const ElementContainer& en, ObjectStructure& os);
 };
 
 class _export CriteriaTreeObject: public IlwisObject
