@@ -54,6 +54,7 @@ LRESULT Cmddeleteobjects(CWnd *wnd, const String& s)
 	ParmList pl(s);
 	ObjectStructure *osStruct = new ObjectStructure();
 	osStruct->GetAssociatedFiles(pl.fGet("noassociated") ? false : true);
+	osStruct->SetCommandAction(ObjectStructure::caDELETE);
 	FilesForRemovalCollector frc(osStruct, pl);
 	frc.CollectFiles();
 
