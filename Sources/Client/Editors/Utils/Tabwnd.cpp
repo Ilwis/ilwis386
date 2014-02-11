@@ -94,8 +94,9 @@ END_MESSAGE_MAP()
 
 BOOL CTabWnd::Create(DWORD dwStyle, CWnd* pParentWnd, UINT nID)
 {
-        CRect rect, parent;
+        CRect rect;
         ASSERT(pParentWnd);
+		pParentWnd->GetWindowRect(rect);
     if (!CWnd::Create(NULL, "SealiteTabWnd", WS_CHILD|WS_VISIBLE, rect, pParentWnd, nID, NULL))
         return FALSE;
 
