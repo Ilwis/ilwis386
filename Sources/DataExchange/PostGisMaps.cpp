@@ -380,7 +380,8 @@ PostGisMaps::~PostGisMaps()
 // fills a database collection with appropriate tables
 void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList& pm)
 {
-	bool fAdded = false;
+	bool fChanged = false;
+	vector<FileName> lfnCurrent;
 	PostGreSQL db(sConnectionString.c_str());
 	if (schema == "") {
 		db.getNTResult(String("SELECT distinct table_schema FROM INFORMATION_SCHEMA.Columns").c_str());
@@ -388,8 +389,12 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 		for (int i = 0; i < rows; ++i) {
 			String schemaName (db.getValue(i, 0));
 			String fileName (merge(collection->fnObj.sFile, schemaName, "."));
-			collection->Add(FileName("'" + fileName + "'", ".ioc"));
-			fAdded = true;
+			FileName fnOC ("'" + fileName + "'", ".ioc");
+			lfnCurrent.push_back(fnOC);
+			if (!collection->fObjectAlreadyInCollection(fnOC)) {
+				collection->Add(fnOC);
+				fChanged = true;
+			}
 		}
 	} else if (tableName != "" && geometryColumn != "") {
 		db.getNTResult(String("SELECT rid FROM %S.%S", schema, tableName).c_str());
@@ -398,9 +403,12 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 		for(int i = 0; i < rows; ++i) {
 			String id (db.getValue(i, 0));
 			String fileName = merge(name, id, "@");
-			String sMap = String("%S.mpr", fileName);
-			collection->Add(sMap);
-			fAdded = true;
+			FileName fnMap ("'" + fileName + "'", ".mpr");
+			lfnCurrent.push_back(fnMap);
+			if (!collection->fObjectAlreadyInCollection(fnMap)) {
+				collection->Add(fnMap);
+				fChanged = true;
+			}
 		}
 	} else {
 		db.getNTResult(String("SELECT table_name,column_name FROM INFORMATION_SCHEMA.Columns WHERE table_schema='%S' and udt_name='geometry'", schema).c_str());
@@ -420,16 +428,19 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 					String type = String(db2.getValue(j,0)).toLower();
 					String name = merge(tname, cname, "_");
 					name.sTrimSpaces();
-					String sMap;
-					if (type == "st_point" || type == "st_multipoint") 
-						sMap = String("%S.mpp", name);
-					else if (type == "st_linestring" || type == "st_multilinestring")
-						sMap = String("%S.mps", name);
-					else if (type == "st_polygon" || type == "st_multipolygon")
-						sMap = String("%S.mpa", name);
-					if ( sMap != "") {
-						collection->Add(sMap);
-						fAdded = true;
+					if (name != "") {
+						FileName fnMap;
+						if (type == "st_point" || type == "st_multipoint") 
+							fnMap = FileName("'" + name + "'", ".mpp");
+						else if (type == "st_linestring" || type == "st_multilinestring")
+							fnMap = FileName("'" + name + "'", ".mps");
+						else if (type == "st_polygon" || type == "st_multipolygon")
+							fnMap = FileName("'" + name + "'", ".mpa");
+						lfnCurrent.push_back(fnMap);
+						if (!collection->fObjectAlreadyInCollection(fnMap)) {
+							collection->Add(fnMap);
+							fChanged = true;
+						}
 					}
 				}
 			}
@@ -461,20 +472,42 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 					fOk = fOk && (String(db.getValue(0, 3)) != "");
 					fOk = fOk && (String(db.getValue(0, 4)) != "");
 					if (fOk /* same_alignment && regular_blocking */) { // currently (postgis 2.x / AddRasterConstraints) same_alignment has a random value and regular_blocking is always false, we rely on same_alignment
-						String sMap = String("%S.mpr", name);
-						collection->Add(sMap);
-						fAdded = true;
+						FileName fnMap ("'" + name + "'", ".mpr");
+						lfnCurrent.push_back(fnMap);
+						if (!collection->fObjectAlreadyInCollection(fnMap)) {
+							collection->Add(fnMap);
+							fChanged = true;
+						}
 					} else {
-						String sCollection = String("%S.ioc", name);
-						collection->Add(sCollection);
-						fAdded = true;
+						FileName fnCollection ("'" + name + "'", ".ioc");
+						lfnCurrent.push_back(fnCollection);
+						if (!collection->fObjectAlreadyInCollection(fnCollection)) {
+							collection->Add(fnCollection);
+							fChanged = true;
+						}
 					}
 				}
 			}
 		}
 	}
 
-	if (fAdded)
+	// remove filenames from collection that aren't in the database anymore
+	vector<FileName> lfnRemove;
+	for (int i = 0; i < collection->iNrObjects(); ++i) {
+		FileName fn (collection->fnObject(i));
+		IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(fn);
+		if (type != IlwisObject::iotRASMAP && type != IlwisObject::iotPOLYGONMAP && type != IlwisObject::iotSEGMENTMAP && type != IlwisObject::iotPOINTMAP && type != IlwisObject::iotOBJECTCOLLECTION)
+			continue; // it is not an item that was added to the collection by this function, so we can't remove it
+		if (find(lfnCurrent.begin(), lfnCurrent.end(), fn) == lfnCurrent.end())
+			lfnRemove.push_back(fn);
+	}
+	if (lfnRemove.size() > 0) {
+		for (vector<FileName>::iterator fnit = lfnRemove.begin(); fnit != lfnRemove.end(); ++fnit)
+			collection->Remove(*fnit);
+		fChanged = true;
+	}
+
+	if (fChanged)
 		Store(IlwisObject::obj(collection->fnObj));
 }
 
