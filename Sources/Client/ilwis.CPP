@@ -1731,7 +1731,8 @@ CDocument *IlwisWinApp::OpenDocumentFile(const String& sFO, ParmList& pm)
 			fnIOC = FileName(pm.sGet("output"));	
 		}
 		fnIOC.Dir(dirOut.sFullPath());
-		fnIOC = FileName::fnUnique(FileName(fnIOC.sFullPathQuoted(), ".ioc"));
+		if (!pm.fExist("refresh"))
+			fnIOC = FileName::fnUnique(FileName(fnIOC.sFullPathQuoted(), ".ioc"));
 
 		ForeignCollection fc;
 		if ( ff && (ff->fMatchType(fnFO.sFullPath(), "ILWIS DataBase Collections") || ff->fMatchType(fnFO.sFullPath(), "ILWIS Postgres DataBase Collections")))
