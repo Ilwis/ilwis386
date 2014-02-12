@@ -2659,6 +2659,14 @@ void CommandHandler::BreakDepObjects(const String& sCommand, Tranquilizer* trq)
 				obj->BreakDependency();
 		}
 	}
+	if (afn.iSize() == 0 && IlwisObject::iotObjectType(sFileMask) == IlwisObject::iotGEOREF) {
+		if (ObjectInfo::fDependent(sFileMask)) 
+		{
+			IlwisObject obj = IlwisObject::obj(sFileMask);
+			if (!obj->fReadOnly())
+				obj->BreakDependency();
+		}
+	}
 }
 
 void CommandHandler::UpdateObjects(const String& sCommand, Tranquilizer* trq)
