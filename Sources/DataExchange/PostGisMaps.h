@@ -117,6 +117,7 @@ private:
 	static void					 SetStoreType(String pixel_type, LayerInfo & inf, StoreType & stPostgres);
 	int                          x_pixels;
 	int                          y_pixels;
+	DomainValueRangeStruct       dvrsMap;
 };
 
 #endif

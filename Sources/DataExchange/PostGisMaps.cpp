@@ -167,6 +167,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				ObjectInfo::ReadElement("ForeignFormat", "pixel_type", fn, pixel_type);
 				SetStoreType(pixel_type, inf, stPostgres);
 				rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, nodata_value, stPostgres);
+				dvrsMap = inf.dvrsMap;
 
 				return;
 			}
@@ -247,6 +248,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 			SetStoreType(pixel_type, inf, stPostgres);
 
 			rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, nodata_value, stPostgres);
+			dvrsMap = inf.dvrsMap;
 
 			ObjectInfo::WriteElement("ForeignFormat", "srid", fn, srid);
 			ObjectInfo::WriteElement("ForeignFormat", "x_pixels_tile", fn, x_pixels_tile);
@@ -960,9 +962,12 @@ void PostGisMaps::GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum) co
 	rasterTiles->GetLineVal(iLine, buf, iFrom, iNum);
 }
 
-long PostGisMaps::iRaw(RowCol) const
+long PostGisMaps::iRaw(RowCol rc) const
 {
-	return iUNDEF;
+	if (dvrsMap.fRawAvailable()) {
+		return dvrsMap.iRaw(iValue(rc));
+	} else
+		return iValue(rc);
 }
 
 long PostGisMaps::iValue(RowCol rc) const
