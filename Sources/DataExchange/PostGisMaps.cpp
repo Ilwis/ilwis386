@@ -1103,6 +1103,22 @@ void PostGisRasterTileset::GetLineVal(long iLine, LongBuf& buf, long iFrom, long
 				break;
 			case stREAL:
 				tileHex += 2 * sizeof(double);
+				{
+					double d;
+					char * c = (char*)(&d);
+					for (int j = jMin; j < jMax; ++j) {
+						c[0] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j]);
+						c[1] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 2]);
+						c[2] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 4]);
+						c[3] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 6]);
+						c[4] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 8]);
+						c[5] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 10]);
+						c[6] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 12]);
+						c[7] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 14]);
+						ptrBuf[pos++] = round(d);
+					}
+				}
+
 				break;
 		}
 	}
@@ -1181,6 +1197,21 @@ void PostGisRasterTileset::GetLineVal(long iLine, RealBuf& buf, long iFrom, long
 				break;
 			case stREAL:
 				tileHex += 2 * sizeof(double);
+				{
+					double d;
+					char * c = (char*)(&d);
+					for (int j = jMin; j < jMax; ++j) {
+						c[0] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j]);
+						c[1] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 2]);
+						c[2] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 4]);
+						c[3] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 6]);
+						c[4] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 8]);
+						c[5] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 10]);
+						c[6] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 12]);
+						c[7] = hex2dec(&tileHex[16 * iLine * x_pixels_tile + 16 * j + 14]);
+						ptrBuf[pos++] = d;
+					}
+				}
 				break;
 		}
 	}
