@@ -572,30 +572,36 @@ void PostGisMaps::CreateColumns(PostGreSQL& db, TablePtr* tbl, int iNumColumns, 
 }
 
 void PostGisMaps::FillRecords(PostGreSQL& db, TablePtr* tbl, int iNumRecords, const vector<String>& vDataTypes) {
-	for(int iRec = 0; iRec < iNumRecords; ++iRec) {
+	int iRec = 0;
+	for(int i = 0; i < iNumRecords; ++i) {
 		CoordBounds cb;
-		String v(db.getValue(iRec, 0));
-		if ( mtLoadType == mtPointMap) {
-			Column col = tbl->col("Coordinate");
-			PutData(col, iRec + 1, v, &cb);
-			col = tbl->col("Name");
-			PutData(col, iRec + 1, (*dmKey)->pdsrt()->sValue(iRec + 1));
-		} else if ( mtLoadType == mtSegmentMap) {
-			Column col = tbl->col("Coords");
-			PutData(col,iRec + 1, v, &cb);
-			col = tbl->col("SegmentValue");
-			PutData(col,iRec + 1, (*dmKey)->pdsrt()->sValue(iRec + 1));
-			tbl->col("MinCoords")->PutVal(iRec + 1, cb.cMin);
-			tbl->col("MaxCoords")->PutVal(iRec + 1, cb.cMax);
-			tbl->col("Deleted")->PutVal(iRec + 1, (long)false);
-		} else if ( mtLoadType == mtPolygonMap) {
-			Column col = tbl->col("Coords");
-			PutData(col,iRec + 1, v, &cb);
-			col = tbl->col("PolygonValue");
-			PutData(col,iRec + 1, (*dmKey)->pdsrt()->sValue(iRec + 1));
-			tbl->col("MinCoords")->PutVal(iRec + 1, cb.cMin);
-			tbl->col("MaxCoords")->PutVal(iRec + 1, cb.cMax);
-			tbl->col("Deleted")->PutVal(iRec + 1, (long)false);
+		String val (db.getValue(i, 0));
+		bool fValid ((val.length() > 0) ? val.fVal() : false);
+		if (fValid) {
+			String v(db.getValue(i, 1));
+			if ( mtLoadType == mtPointMap) {
+				Column col = tbl->col("Coordinate");
+				PutData(col, iRec + 1, v, &cb);
+				col = tbl->col("Name");
+				PutData(col, iRec + 1, (*dmKey)->pdsrt()->sValue(i + 1));
+			} else if ( mtLoadType == mtSegmentMap) {
+				Column col = tbl->col("Coords");
+				PutData(col,iRec + 1, v, &cb);
+				col = tbl->col("SegmentValue");
+				PutData(col,iRec + 1, (*dmKey)->pdsrt()->sValue(i + 1));
+				tbl->col("MinCoords")->PutVal(iRec + 1, cb.cMin);
+				tbl->col("MaxCoords")->PutVal(iRec + 1, cb.cMax);
+				tbl->col("Deleted")->PutVal(iRec + 1, (long)false);
+			} else if ( mtLoadType == mtPolygonMap) {
+				Column col = tbl->col("Coords");
+				PutData(col,iRec + 1, v, &cb);
+				col = tbl->col("PolygonValue");
+				PutData(col,iRec + 1, (*dmKey)->pdsrt()->sValue(i + 1));
+				tbl->col("MinCoords")->PutVal(iRec + 1, cb.cMin);
+				tbl->col("MaxCoords")->PutVal(iRec + 1, cb.cMax);
+				tbl->col("Deleted")->PutVal(iRec + 1, (long)false);
+			}
+			++iRec;
 		}
 	}
 }
@@ -620,7 +626,7 @@ void PostGisMaps::LoadTable(TablePtr *tbl)
 			type = "point";
 	}
 
-	String geometryQuery("Select st_astext(%S) from %S.%S where lower(ST_GeometryType(%S)) like '%%%S'",geometryColumn,schema,tableName,geometryColumn,type);
+	String geometryQuery("Select lower(ST_GeometryType(%S)) like '%%%S', st_astext(%S) from %S.%S",geometryColumn,type,geometryColumn,schema,tableName);
 	db.getNTResult(geometryQuery.c_str());	
 	
 	int iNumColumns = db.getNumberOf(PostGreSQL::COLUMN);
@@ -633,7 +639,17 @@ void PostGisMaps::LoadTable(TablePtr *tbl)
 	int iNumRecords = db.getNumberOf(PostGreSQL::ROW);
 	if ( tbl->iRecs() == 0) // true for new tables
 	{
-		tbl->iRecNew(iNumRecords);
+		PostGreSQL db2(sConnectionString.c_str());
+		geometryQuery = String("Select count(*) from %S.%S where lower(ST_GeometryType(%S)) like'%%%S'",schema,tableName,geometryColumn,type);
+		db2.getNTResult(geometryQuery.c_str());
+		if (db2.getNumberOf(PostGreSQL::ROW) == 1 && db2.getNumberOf(PostGreSQL::COLUMN) == 1) {
+			int iNettoRecs = String(db2.getValue(0, 0)).iVal();
+			if (iNettoRecs > 0)
+				tbl->iRecNew(iNettoRecs);
+			else
+				tbl->iRecNew(iNumRecords);
+		} else
+			tbl->iRecNew(iNumRecords);
 	}				
 	
 	FillRecords(db, tbl, iNumRecords, vDataTypes);
@@ -835,8 +851,7 @@ LayerInfo PostGisMaps::GetLayerInfo(ParmList& parms) {
 
 	createFeatureColumns(info.tbl.ptr());
 	CoordBounds cb;
-	for(int i = 0; i < info.iShapes; ++i) {
-		int iRaw = i ; //(*dmKey)->iRaw(id);
+	for(int i = 0; i < info.iShapes; ++i) { // the only purpose of this loop is to compute cb
 		String res(db.getValue(i, "_coords_"));
 		if ( mtLoadType == mtPointMap) {
 			Column col = info.tbl->col("Coordinate");
