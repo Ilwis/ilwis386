@@ -110,10 +110,10 @@ protected:
 
 protected:
 	void InitializePyramids(const FileName& fnPyr);
-	virtual void IterateCreatePyramidLayer(int iPyrLayer, long &iLastFilePos, Tranquilizer *trq) {}	
+	virtual void IterateCreatePyramidLayer(int iPyrLayer, ULONGLONG &iLastFilePos, Tranquilizer *trq) {}	
 	RowCol rcSize;
 	bool& fChanged;
-	vector<long> iPyramidLayerOffset;
+	vector<ULONGLONG> iPyramidLayerOffset;
 };
 
 inline bool MapStoreBase::fInside(const RowCol& rc) const

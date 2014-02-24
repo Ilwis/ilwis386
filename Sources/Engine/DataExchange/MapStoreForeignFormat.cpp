@@ -138,7 +138,7 @@ template<class T> void GetLineRaw(long l, Buf<T>& b, const MapStoreForeignFormat
 			{
 				ByteBuf buf(b.iSize());
 				byte HUGEBUFPTR* p = buf.buf()+iLeftCols;
-				long iOff = iFOffSet + (l * int(mpf->iCols()/ iDiv) + (iColFrom+iLeftCols));
+				ULONGLONG iOff = iFOffSet + ((ULONGLONG)l * int(mpf->iCols()/ iDiv) + (iColFrom+iLeftCols));
 				mpf->filePyramid->Seek(iOff);
 				mpf->filePyramid->Read((iNum - iLeftCols-iRightCols), p);
 				for(int i=0; i<b.iSize(); ++i)
@@ -149,7 +149,7 @@ template<class T> void GetLineRaw(long l, Buf<T>& b, const MapStoreForeignFormat
 			{
 				IntBuf buf(b.iSize());
 				short HUGEBUFPTR* p = buf.buf()+iLeftCols;
-				long iOff = iFOffSet + 2 * (l * int(mpf->iCols()/ iDiv) + (iColFrom+iLeftCols));
+				ULONGLONG iOff = iFOffSet + 2 * ((ULONGLONG)l * int(mpf->iCols()/ iDiv) + (iColFrom+iLeftCols));
 				mpf->filePyramid->Seek(iOff);
 				mpf->filePyramid->Read(2 * (iNum - iLeftCols-iRightCols), p);
 				for(int i=0; i<b.iSize(); ++i)
@@ -160,7 +160,7 @@ template<class T> void GetLineRaw(long l, Buf<T>& b, const MapStoreForeignFormat
 			{
 				LongBuf buf(b.iSize());
 				long HUGEBUFPTR* p = buf.buf()+iLeftCols;
-				long iOff = iFOffSet + 4 * (l * int(mpf->iCols()/ iDiv) + (iColFrom+iLeftCols));
+				ULONGLONG iOff = iFOffSet + 4 * ((ULONGLONG)l * int(mpf->iCols()/ iDiv) + (iColFrom+iLeftCols));
 				mpf->filePyramid->Seek(iOff);
 				mpf->filePyramid->Read(4 * (iNum - iLeftCols-iRightCols), p);
 				for(int i=0; i<b.iSize(); ++i)
@@ -171,7 +171,7 @@ template<class T> void GetLineRaw(long l, Buf<T>& b, const MapStoreForeignFormat
 			{
 				FloatBuf buf(b.iSize());
 				float HUGEBUFPTR* p = buf.buf()+iLeftCols;
-				long iOff = iFOffSet + 4 * (l * int(mpf->iCols()/ iDiv) + (iColFrom+iLeftCols));
+				ULONGLONG iOff = iFOffSet + 4 * ((ULONGLONG)l * int(mpf->iCols()/ iDiv) + (iColFrom+iLeftCols));
 				mpf->filePyramid->Seek(iOff);
 				mpf->filePyramid->Read(4 * (iNum - iLeftCols-iRightCols), p);
 				for(int i=0; i<b.iSize(); ++i)
@@ -182,7 +182,7 @@ template<class T> void GetLineRaw(long l, Buf<T>& b, const MapStoreForeignFormat
 			{
 				RealBuf buf(b.iSize());
 				double HUGEBUFPTR* p = buf.buf()+iLeftCols;
-				long iOff = iFOffSet + 8 * (l * int(mpf->iCols()/ iDiv) + (iColFrom+iLeftCols));
+				ULONGLONG iOff = iFOffSet + 8 * ((ULONGLONG)l * int(mpf->iCols()/ iDiv) + (iColFrom+iLeftCols));
 				mpf->filePyramid->Seek(iOff);
 				mpf->filePyramid->Read(8 * (iNum - iLeftCols-iRightCols), p);
 				for(int i=0; i<b.iSize(); ++i)
@@ -325,7 +325,7 @@ void MapStoreForeignFormat::Store()
 
 
 
-void MapStoreForeignFormat::IterateCreatePyramidLayer(int iPyrLayer, long &iLastFilePos, Tranquilizer *trq)
+void MapStoreForeignFormat::IterateCreatePyramidLayer(int iPyrLayer, ULONGLONG &iLastFilePos, Tranquilizer *trq)
 {
 	int iDiv = (int)pow(2, (double)iPyrLayer);	
 	int iColsPyrLayer = iCols() / iDiv;

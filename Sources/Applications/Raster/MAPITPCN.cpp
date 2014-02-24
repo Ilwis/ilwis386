@@ -260,7 +260,7 @@ bool MapInterpolContour::fForwardDistances(long& iChanges, bool fFirstPass)
   double rMinNearestContour1, rMinNearestContour2;
 //  String sForward = SDItpForward;
 
-  long iStart;
+  ULONGLONG iStart;
 
 // iCurLine = current line of the input file
 // iCurCol =  current column of the input file and the buffers
@@ -303,7 +303,7 @@ bool MapInterpolContour::fForwardDistances(long& iChanges, bool fFirstPass)
       }
     }
     else {
-      iStart = iCurLine * 2L * (sizeof(short) + sizeof(double)) * iCols();
+      iStart = (ULONGLONG)iCurLine * 2L * (sizeof(short) + sizeof(double)) * iCols();
       filTemp->Seek(iStart);
       filTemp->Read(iCols()*sizeof(short), iCurrDistToNearestContour1.buf());
       filTemp->Read(iCols()*sizeof(double), rCurrNearestContour1.buf());
@@ -429,7 +429,7 @@ bool MapInterpolContour::fForwardDistances(long& iChanges, bool fFirstPass)
         rPrevNearestCont2++;
       }
     if (fFirstPass || iLineChanges != 0) {
-      iStart = iCurLine * 2L * (sizeof(short) + sizeof(double)) * iCols();
+      iStart = (ULONGLONG)iCurLine * 2L * (sizeof(short) + sizeof(double)) * iCols();
       filTemp->Seek(iStart);
       filTemp->Write(iCols()*sizeof(short), iCurrDistToNearestContour1.buf());
       filTemp->Write(iCols()*sizeof(double), rCurrNearestContour1.buf());
@@ -457,7 +457,7 @@ bool MapInterpolContour::fBackwardDistances(long& iChanges)
 //  String sBackward = SDItpBackward;
 //  String sChanges = SDItpChanges;
 
-  long iStart;
+  ULONGLONG iStart;
 
 // iCurLine = current line of the input file
 // iCurCol =  current column of the input file and the buffers
@@ -493,7 +493,7 @@ bool MapInterpolContour::fBackwardDistances(long& iChanges)
 //    fLineChanged[iCurLine] = false;
 //    continue;
 //  }  
-    iStart = iCurLine * 2L * (sizeof(short) + sizeof(double)) * iCols();
+    iStart = (ULONGLONG)iCurLine * 2L * (sizeof(short) + sizeof(double)) * iCols();
     filTemp->Seek(iStart);
     filTemp->Read(iCols()*sizeof(short), iCurrDistToNearestContour1.buf());
     filTemp->Read(iCols()*sizeof(double), rCurrNearestContour1.buf());
@@ -619,7 +619,7 @@ bool MapInterpolContour::fBackwardDistances(long& iChanges)
     }
     fLineChanged[iCurLine] = iLineChanges != 0;
     if (iLineChanges != 0) {
-      iStart = iCurLine * 2L * (sizeof(short) + sizeof(double)) * iCols();
+      iStart = (ULONGLONG)iCurLine * 2L * (sizeof(short) + sizeof(double)) * iCols();
       filTemp->Seek(iStart);
       filTemp->Write(iCols()*sizeof(short), iCurrDistToNearestContour1.buf());
       filTemp->Write(iCols()*sizeof(double), rCurrNearestContour1.buf());
@@ -642,7 +642,7 @@ bool MapInterpolContour::fInterpolate()
   int iCurCol;
   int  iCurLine;
   double rVal, rW1, rW2;
-  long iStart;
+  ULONGLONG iStart;
   IntBuf iDist1(iCols());
   RealBuf rNearestContour1(iCols());
   IntBuf iDist2(iCols());
@@ -656,7 +656,7 @@ bool MapInterpolContour::fInterpolate()
   for (iCurLine = 0; iCurLine < iLines(); iCurLine++) {
     if (trq.fUpdate(iCurLine, iLines()))
       return false;
-    iStart = iCurLine * 2L * (sizeof(short) + sizeof(double)) * iCols();
+    iStart = (ULONGLONG)iCurLine * 2L * (sizeof(short) + sizeof(double)) * iCols();
     filTemp->Seek(iStart);
     filTemp->Read(iCols()*sizeof(short), iDist1.buf());
     filTemp->Read(iCols()*sizeof(double), rNearestContour1.buf());

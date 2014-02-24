@@ -350,7 +350,7 @@ void ImpExp::ImportGISLAN(File& FileIn, const FileName& fnObject)
 				{
 					for (short j = 0; j < iBands; ++j)
 					{
-						long loc = 128 + (j + 1) * (l * iCol) / 2;
+						ULONGLONG loc = 128 + (j + 1) * (l * iCol) / 2;
 						FileIn.Seek(loc);
 						if (trq.fUpdate(i, iLine))
 							return;

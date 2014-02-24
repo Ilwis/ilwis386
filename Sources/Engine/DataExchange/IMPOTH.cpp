@@ -250,7 +250,7 @@ void ImpExp::ImportOTH(const FileName& fnFile, const FileName& fnObject,
 						{
 							if (fErase = trq.fUpdate(j, iNrLines)) 
 								break;
-							filOld.Seek(iHeaderSize + j * (iNrBands*iBytesPerLine) + i * iBytesPerLine);
+							filOld.Seek(iHeaderSize + (ULONGLONG)j * (ULONGLONG)(iNrBands*iBytesPerLine) + (ULONGLONG)i * iBytesPerLine);
 							filOld.Read(iBytesPerLine, buf);
 							if (fByteSwap)
 								SwapLine(buf, iBytesPerLine, iBytesPerPixel);
@@ -261,7 +261,7 @@ void ImpExp::ImportOTH(const FileName& fnFile, const FileName& fnObject,
 					}
 					case irfsBANDSEQUENTIAL: 
 					{ // start at offset for map i in the input file
-						filOld.Seek(iHeaderSize+i*(iNrLines*iBytesPerLine));
+						filOld.Seek(iHeaderSize+(ULONGLONG)i*(ULONGLONG)(iNrLines*iBytesPerLine));
 						for (long j=0; j < iNrLines; j++)
 						{
 							if (fErase = trq.fUpdate(j, iNrLines)) 
@@ -282,7 +282,7 @@ void ImpExp::ImportOTH(const FileName& fnFile, const FileName& fnObject,
 								break;
 							for (long k=0; k < iNrCols; k++)
 							{
-								filOld.Seek(iHeaderSize+i*iBytesPerPixel+j*iBytesPerLine+k*iNrBands*iBytesPerPixel);
+								filOld.Seek(iHeaderSize+(ULONGLONG)i*iBytesPerPixel+(ULONGLONG)j*iBytesPerLine+(ULONGLONG)k*iNrBands*iBytesPerPixel);
 								filOld.Read(iBytesPerPixel, buf);
 								if (fByteSwap)
 									SwapLine(buf, iBytesPerPixel, iBytesPerPixel);

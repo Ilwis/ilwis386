@@ -59,7 +59,7 @@ const int iNoIllegalFileNames=21;
 
 void FileOpenError(const String& sName, int iErr);
 void FileCreateError(const String& sName, int iErr);
-void FileSeekError(const String& sName, long iPos);
+void FileSeekError(const String& sName, ULONGLONG iPos);
 void FileReadError(const String& sName, int iSize);
 void FileReadBufError(const String& sName);
 void FileWriteError(const String& sName, int iSize);
@@ -80,7 +80,7 @@ File::File(const FileName& fn, FileAccess fac) :
 	} CATCH (COleException,ex) {
 	}
 	END_CATCH
-	iFileSize = (long)fs.m_size;
+	iFileSize = fs.m_size;
 }
 
 File::File(const String& s, FileAccess fac) : CFile(s.c_str()
@@ -94,7 +94,7 @@ fErase(false)
 	} CATCH (COleException,ex) {
 	}
 	END_CATCH
-	iFileSize = (long)fs.m_size;		
+	iFileSize = fs.m_size;		
 }
 
 File::File(const char* s, FileAccess fac) :
@@ -108,7 +108,7 @@ File::File(const char* s, FileAccess fac) :
 	}CATCH(COleException,ex) {
 	}
 	END_CATCH
-	iFileSize = (long)fs.m_size;		
+	iFileSize = fs.m_size;		
 }
 
 File::~File()
@@ -134,7 +134,7 @@ bool File::fIllegalName(const String& sName)
     return false;        
 }
 
-void File::Seek(long iLoc, bool fEnd)
+void File::Seek(LONGLONG iLoc, bool fEnd)
 // seek to location iLoc, if fEnd = true then seek from end of file
 {
   ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
@@ -148,10 +148,10 @@ void File::Seek(long iLoc, bool fEnd)
 	}		
 }
 
-long File::iLoc() 
+ULONGLONG File::iLoc() 
 // Return file pointer position
 {
-  return (long)GetPosition();
+  return GetPosition();
 }
 
 inline bool File::fEof() 
@@ -159,7 +159,7 @@ inline bool File::fEof()
   return iLoc() == iSize();
 }
 
-long File::iSize() const
+ULONGLONG File::iSize() const
 {
   return iFileSize;
 }
@@ -588,7 +588,7 @@ void FileCreateError(const String& sName, int iErr)
   throw FileErrorObject(sErr, errFileCreate);
 }
 
-void FileSeekError(const String& sName, long iPos)
+void FileSeekError(const String& sName, ULONGLONG iPos)
 {
   String sErr("%S '%S'\n%S %li", SDATErrFileSeekErrorIn, sName, SDATOthPosition, iPos);
   throw FileErrorObject(sErr, errFileSeek);

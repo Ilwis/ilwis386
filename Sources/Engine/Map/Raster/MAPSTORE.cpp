@@ -1019,21 +1019,33 @@ void MapStoreBase::InitializePyramids(const FileName& fnPyr)
 		filePyramid->Read(4, &iLayers);
 		if ( iLayers > 0 )
 		{
-			filePyramid->Seek(filePyramid->GetLength() - iLayers * sizeof(long) - 4);
-			iPyramidLayerOffset.resize(iLayers);
-			for(int i=0; i < iLayers; ++i)
-			{
-				long iOffset;
-				filePyramid->Read(sizeof(long), &iOffset);
-				if ( iOffset >= 0)
-					iPyramidLayerOffset[i] = iOffset;
-				else
+			bool f2GB = (file != 0) && (file->GetLength() > ((ULONGLONG)2 * 1024 * 1024 * 1024));
+			if (f2GB) {
+				filePyramid->Seek(filePyramid->GetLength() - iLayers * sizeof(ULONGLONG) - 4);
+				iPyramidLayerOffset.resize(iLayers);
+				for(int i=0; i < iLayers; ++i)
 				{
-					filePyramid->SetErase();
-					delete filePyramid;
-					filePyramid = 0;
-					throw ErrorObject("Pyramid file corrupt");
-				}					
+					ULONGLONG iOffset;
+					filePyramid->Read(sizeof(ULONGLONG), &iOffset);
+					iPyramidLayerOffset[i] = iOffset;
+				}
+			} else {
+				filePyramid->Seek(filePyramid->GetLength() - iLayers * sizeof(long) - 4);
+				iPyramidLayerOffset.resize(iLayers);
+				for(int i=0; i < iLayers; ++i)
+				{
+					long iOffset;
+					filePyramid->Read(sizeof(long), &iOffset);
+					if ( iOffset >= 0)
+						iPyramidLayerOffset[i] = iOffset;
+					else
+					{
+						filePyramid->SetErase();
+						delete filePyramid;
+						filePyramid = 0;
+						throw ErrorObject("Pyramid file corrupt");
+					}
+				}
 			}
 		}		
 	}	
@@ -1641,7 +1653,7 @@ void MapStoreBase::CreatePyramidLayers(const FileName& fn)
 	MutexFileName mutD2(fnNew);	
 	long iPyrLayer = 0;
 	int iDiv = (int)pow(2, (double)iPyrLayer);
-	long iLastFilePos = 0;
+	ULONGLONG iLastFilePos = 0;
 	Tranquilizer trq;
 	trq.SetTitle(TR("Creating Pyramid layer"));
 	trq.Start();
@@ -1661,8 +1673,16 @@ void MapStoreBase::CreatePyramidLayers(const FileName& fn)
 			return;
 		iDiv = (int)pow(2, (double)++iPyrLayer);
 	}
-	for (int i=0; i < iPyrLayer ; ++i)
-		filePyramid->Write(sizeof(long), &iPyramidLayerOffset[i]);
+	bool f2GB = (file != 0) && (file->GetLength() > ((ULONGLONG)2 * 1024 * 1024 * 1024));
+	if (f2GB) {
+		for (int i=0; i < iPyrLayer ; ++i)
+			filePyramid->Write(sizeof(ULONGLONG), &iPyramidLayerOffset[i]);
+	} else {
+		for (int i=0; i < iPyrLayer ; ++i) {
+			long iOffset = (long)(iPyramidLayerOffset[i]);
+			filePyramid->Write(sizeof(long), &iOffset);
+		}
+	}
 
 	filePyramid->Write(sizeof(long), &iPyrLayer);	
 //	filePyramid->Close();

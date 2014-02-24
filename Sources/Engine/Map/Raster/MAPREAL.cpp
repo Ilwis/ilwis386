@@ -62,9 +62,9 @@ double MapReal::rValue(RowCol rc) const
 	if (!fInside(rc))
 		return rUNDEF;
 	if (fPixelInterLeaved)
-		file->Seek(iStartOffset + 8 * (rc.Row * iRowLength + rc.Col * iNrBands));
+		file->Seek(iStartOffset + 8 * ((ULONGLONG)rc.Row * iRowLength + rc.Col * iNrBands));
 	else
-		file->Seek(iStartOffset + 8 * (rc.Row * iRowLength + rc.Col));
+		file->Seek(iStartOffset + 8 * ((ULONGLONG)rc.Row * iRowLength + rc.Col));
 	file->Read(8, &d);
 	if (fSwapBytes)
 		swapbytes(&d);
@@ -78,9 +78,9 @@ void MapReal::PutVal(RowCol rc, double val)
 	if (!fInside(rc))
 		return;
 	if (fPixelInterLeaved)
-		file->Seek(iStartOffset + 8 * (rc.Row * iRowLength + rc.Col * iNrBands));
+		file->Seek(iStartOffset + 8 * ((ULONGLONG)rc.Row * iRowLength + rc.Col * iNrBands));
 	else
-		file->Seek(iStartOffset + 8 * (rc.Row * iRowLength + rc.Col));
+		file->Seek(iStartOffset + 8 * ((ULONGLONG)rc.Row * iRowLength + rc.Col));
 
 	if (fSwapBytes)
 	{
@@ -164,14 +164,13 @@ void MapReal::GetLineVal(long l, RealBuf& b, long iColFrom, long iColNum, int iP
 	long iRightCols = max(0, iNum+iColFrom-iCols() / iDiv); //columns to right of map
 	long iLeftCols = -min(iColFrom, 0); // columns to left of map
 	
-	int iFOffSet;
-	iFOffSet = iPyrLayer == 0 ? iStartOffset : iPyramidLayerOffset[iPyrLayer - 1] ;	// 0 based index	
+	ULONGLONG iFOffSet = iPyrLayer == 0 ? iStartOffset : iPyramidLayerOffset[iPyrLayer - 1] ;	// 0 based index	
 	
 	for (long i=0; i < iLeftCols ; ++i)
 		b[i] = rUNDEF;
 	double HUGEBUFPTR* p = b.buf()+iLeftCols;
 	if (fPixelInterLeaved) {
-		long iOff = iFOffSet + 8 * (l * int(iRowLength/iDiv) + (iColFrom+iLeftCols) * iNrBands);
+		ULONGLONG iOff = iFOffSet + 8 * ((ULONGLONG)l * (ULONGLONG)(iRowLength/iDiv) + (iColFrom+iLeftCols) * iNrBands);
 		for (long c = 0; c < iColNum; c++, p++)
 		{
 			fileData->Seek(iOff);
@@ -183,7 +182,7 @@ void MapReal::GetLineVal(long l, RealBuf& b, long iColFrom, long iColNum, int iP
 	}
 	else 
 	{
-		iFOffSet += 8 * (l * int(iRowLength/iDiv) + iColFrom+iLeftCols);
+		iFOffSet += 8 * ((ULONGLONG)l * (ULONGLONG)(iRowLength/iDiv) + iColFrom+iLeftCols);
 		fileData->Seek(iFOffSet);
 		fileData->Read(8 * (iNum-iLeftCols-iRightCols), p);
 		if (fSwap)
@@ -231,7 +230,7 @@ void MapReal::PutLineVal(long l, const RealBuf& b, long iColFrom, long iColNum)
 		rb[i] = rr.fContains(b[i]) ? b[i] : rUNDEF;
 	if (fPixelInterLeaved) {
 		double HUGEBUFPTR* p = b.buf();
-		long iOff = iStartOffset + 8 * (l * iRowLength + iColFrom * iNrBands);
+		ULONGLONG iOff = iStartOffset + 8 * ((ULONGLONG)l * iRowLength + iColFrom * iNrBands);
 		for (long c = 0; c < iColNum; c++, p++)
 		{
 			file->Seek(iOff);
@@ -243,7 +242,7 @@ void MapReal::PutLineVal(long l, const RealBuf& b, long iColFrom, long iColNum)
 	}
 	else
 	{
-		file->Seek(iStartOffset + 8 * (l * iRowLength + iColFrom));
+		file->Seek(iStartOffset + 8 * ((ULONGLONG)l * iRowLength + iColFrom));
 		if (fSwapBytes)
 		{
 			double r = *(rb.buf());
@@ -256,7 +255,7 @@ void MapReal::PutLineVal(long l, const RealBuf& b, long iColFrom, long iColNum)
 	fChanged = true;
 }
 
-void MapReal::IterateCreatePyramidLayer(int iPyrLayer, long &iLastFilePos, Tranquilizer *trq)
+void MapReal::IterateCreatePyramidLayer(int iPyrLayer, ULONGLONG &iLastFilePos, Tranquilizer *trq)
 {
 	int iDiv = (int)pow(2, (double)iPyrLayer);	
 	int iColsPyrLayer = iCols() / iDiv;

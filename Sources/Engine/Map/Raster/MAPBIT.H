@@ -77,7 +77,7 @@ class DATEXPORT MapBit: public MapLine
 	virtual String sType() const;
 	virtual StoreType st() const;
 protected:
-	void IterateCreatePyramidLayer(int iPyrLayer, long &iLastFilePos);	
+	void IterateCreatePyramidLayer(int iPyrLayer, ULONGLONG &iLastFilePos);	
 };
 
 #endif

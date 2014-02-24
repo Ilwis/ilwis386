@@ -79,7 +79,7 @@ void ImpExp::ImportPCX(File& FileIn, const FileName& fnObject)
   ByteBuf bbufOut(iColUnPak);
   LongBuf colorOut(iColUnPak);
 
-  long Loc=FileIn.iLoc();
+  ULONGLONG Loc=FileIn.iLoc();
   byte bTemp1, bTemp2;
 
 	Domain dm("Image");

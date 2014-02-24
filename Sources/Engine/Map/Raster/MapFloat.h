@@ -77,7 +77,7 @@ public:
 	virtual String sType() const;
 	virtual StoreType st() const;
 protected:
-	void IterateCreatePyramidLayer(int iPyrLayer, long &iLastFilePos, Tranquilizer *trq);
+	void IterateCreatePyramidLayer(int iPyrLayer, ULONGLONG &iLastFilePos, Tranquilizer *trq);
 };
 
 #endif // ILWMAPFloat_H

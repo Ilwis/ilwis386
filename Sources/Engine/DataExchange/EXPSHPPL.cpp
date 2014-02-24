@@ -106,7 +106,7 @@ void ImpExp::ExpPolToSHP(const FileName& fnObject, const FileName& fnFile) {
 	else
 		fileDBF.Write(sizeof(DBF.Descriptor), &DBF.Descriptor);
 	fileDBF.Write(1, &DBF.bEndDescriptor);
-	long iPos = fileDBF.iLoc();
+	ULONGLONG iPos = fileDBF.iLoc();
 	fileDBF.Seek(0);
 	fileDBF.Write(sizeof(DBF.Header), &DBF.Header);
 	fileDBF.Seek(iPos);

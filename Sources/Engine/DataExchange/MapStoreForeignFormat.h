@@ -69,7 +69,7 @@ public:
 
  
 protected:
-	void IterateCreatePyramidLayer(int iPyrLayer, long &iLastFilePos, Tranquilizer *trq);
+	void IterateCreatePyramidLayer(int iPyrLayer, ULONGLONG &iLastFilePos, Tranquilizer *trq);
  
 private:
 	ForeignFormat *createForeignFormat();

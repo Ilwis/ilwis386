@@ -60,7 +60,7 @@ long MapPatchInt::iRaw(RowCol rc) const {
   long iPatch;
   int iPRow, iPCol;
   RowCol2Patch(rc, iPatch, iPRow, iPCol);
-  file->Seek(sizeof(short) * (iPatch * PATCH_UNITS + iPRow * PATCH_SIDE + iPCol) );
+  file->Seek(sizeof(short) * ((ULONGLONG)iPatch * PATCH_UNITS + (ULONGLONG)iPRow * PATCH_SIDE + iPCol) );
   file->Read(sizeof(short), &iVal);
   return iVal;
 }
@@ -70,7 +70,7 @@ void MapPatchInt::PutRaw(RowCol rc, long iVal) {
   long iPatch;
   int iPRow, iPCol;
   RowCol2Patch(rc, iPatch, iPRow, iPCol);
-  file->Seek(sizeof(short) * (iPatch * PATCH_UNITS + iPRow * PATCH_SIDE + iPCol) );
+  file->Seek(sizeof(short) * ((ULONGLONG)iPatch * PATCH_UNITS + (ULONGLONG)iPRow * PATCH_SIDE + iPCol) );
   file->Write(sizeof(short), &iVal);
   fChanged = true;
 }
@@ -88,7 +88,7 @@ void MapPatchInt::GetPatchRaw(RowCol rc, IntPatch& patch) const {
   long iPatch;
   int iPRow, iPCol;
   RowCol2Patch(rc, iPatch, iPRow, iPCol);
-  file->Seek(sizeof(short) * iPatch * PATCH_UNITS );
+  file->Seek(sizeof(short) * (ULONGLONG)iPatch * PATCH_UNITS );
   file->Read(sizeof(short) * PATCH_UNITS, patch.buf());
 }
 
@@ -137,7 +137,7 @@ void MapPatchInt::PutPatchRaw(RowCol rc, const IntPatch& patch) {
   long iPatch;
   int iPRow, iPCol;
   RowCol2Patch(rc, iPatch, iPRow, iPCol);
-  file->Seek(sizeof(short) * iPatch * PATCH_UNITS);
+  file->Seek(sizeof(short) * (ULONGLONG)iPatch * PATCH_UNITS);
   file->Write(sizeof(short) * PATCH_UNITS, patch.buf());
   fChanged = true;
 }

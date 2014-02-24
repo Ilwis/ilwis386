@@ -254,7 +254,7 @@ bool MapDistance::fForwardDistances(long& iChanges, bool fFirstPass)
 {
 	long iCurLine, iCurCol, iMinSource, iLineChanges, iWeight;
 	long iMinDist, iDist, iW1, iW2;
-	long iStart;
+	ULONGLONG iStart;
 	long iColumns = iCols();
 
 // iCurLine = current line of the input file
@@ -305,9 +305,9 @@ bool MapDistance::fForwardDistances(long& iChanges, bool fFirstPass)
 		}
 		else
 		{
-			iStart = iCurLine * 1L * iColumns * sizeof(long);
+			iStart = (ULONGLONG)iCurLine * 1L * iColumns * sizeof(long);
 			if (fCalcThiessen)
-				iStart = iCurLine * 2L * iColumns * sizeof(long);
+				iStart = (ULONGLONG)iCurLine * 2L * iColumns * sizeof(long);
 			filTemp->Seek(iStart);
 			filTemp->Read(iColumns*sizeof(long), iCurrDist.buf());
 			if (fCalcThiessen)
@@ -427,9 +427,9 @@ bool MapDistance::fForwardDistances(long& iChanges, bool fFirstPass)
 
 		if (fFirstPass || iLineChanges != 0)
 		{
-			iStart = iCurLine * 1L * iColumns * sizeof(long);
+			iStart = (ULONGLONG)iCurLine * 1L * iColumns * sizeof(long);
 			if (fCalcThiessen)
-				iStart = iCurLine * 2L * iColumns * sizeof(long);
+				iStart = (ULONGLONG)iCurLine * 2L * iColumns * sizeof(long);
 			filTemp->Seek(iStart);
 			filTemp->Write(iColumns*sizeof(long), iCurrDist.buf());
 			if (fCalcThiessen)
@@ -450,7 +450,7 @@ bool MapDistance::fBackwardDistances(long& iChanges)
 //  int iLines = mpWeight->iLines();
 //  bool fComplex = Mp.fComplex;
   long iMinDist, iDist, iW1, iW2;
-  long iStart;
+  ULONGLONG iStart;
   long iColumns = iCols();
 
 // iCurLine = current line of the input file
@@ -484,9 +484,9 @@ bool MapDistance::fBackwardDistances(long& iChanges)
       for (iCurCol = 0; iCurCol < iColumns; iCurCol++)
         brCurrWeight[iCurCol] = 1;
 //    CheckErrP(mpWeight);
-    iStart = iCurLine * 1L * iColumns * sizeof(long);
+    iStart = (ULONGLONG)iCurLine * 1L * iColumns * sizeof(long);
     if (fCalcThiessen)
-      iStart = iCurLine * 2L * iColumns * sizeof(long);
+      iStart = (ULONGLONG)iCurLine * 2L * iColumns * sizeof(long);
     filTemp->Seek(iStart);
     filTemp->Read(iColumns*sizeof(long), iCurrDist.buf());
     if (fCalcThiessen)
@@ -580,9 +580,9 @@ bool MapDistance::fBackwardDistances(long& iChanges)
     }
 
     if (iLineChanges != 0) {
-      iStart = iCurLine * 1L * iColumns * sizeof(long);
+      iStart = (ULONGLONG)iCurLine * 1L * iColumns * sizeof(long);
       if (fCalcThiessen)
-        iStart = iCurLine * 2L * iColumns * sizeof(long);
+        iStart = (ULONGLONG)iCurLine * 2L * iColumns * sizeof(long);
       filTemp->Seek(iStart);
       filTemp->Write(iColumns*sizeof(long), iCurrDist.buf());
       if (fCalcThiessen)

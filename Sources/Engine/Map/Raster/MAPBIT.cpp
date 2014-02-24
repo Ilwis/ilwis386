@@ -116,7 +116,7 @@ long MapBit::iRaw(RowCol rc) const
   if (!fInside(rc))
     return iUNDEF;
   byte b;
-  long loc = iStartOffset + rc.Row * ((iRowLength+7) >> 3) + (rc.Col >> 3);
+  ULONGLONG loc = iStartOffset + (ULONGLONG)rc.Row * ((iRowLength+7) >> 3) + (rc.Col >> 3);
   file->Seek(loc);
   file->Read(1, &b);
   return (b & (0x80 >> (rc.Col & 7))) ? 1 : 0;
@@ -128,7 +128,7 @@ void MapBit::PutRaw(RowCol rc, long v)
     return;
   if (!fInside(rc)) return;
   byte b;
-  long loc = iStartOffset + rc.Row * ((iRowLength+7) >> 3) + (rc.Col >> 3);
+  ULONGLONG loc = iStartOffset + (ULONGLONG)rc.Row * ((iRowLength+7) >> 3) + (rc.Col >> 3);
   file->Seek(loc);
   file->Read(1, &b);
   if (v == 0 || v == iUNDEF)
@@ -156,7 +156,7 @@ void MapBit::GetLine(long l, BitBuf& b, long iColFrom, long iColNum, int iPyrLay
   long iLen = (iNum+iSh+7)>>3;    // number of bytes to fit the bits
   long iLineSize = (iRowLength+7)>>3;  // number of bytes per line of bits
   
-  file->Seek(iStartOffset + l * iLineSize + iPos);
+  file->Seek(iStartOffset + (ULONGLONG)l * iLineSize + iPos);
   file->Read(iLen, b.buf());
 
   if (iSh != 0) {          // not at byte boundary so a bit-shift is needed
@@ -249,7 +249,7 @@ void MapBit::PutLine(long l, BitBuf& b, long iColFrom, long iColNum)
   if (iSh != 0) {          // not at byte boundary so a bit-shift is needed
      b.ShiftRight(iSh);
   }
-  file->Seek(iStartOffset + l * iLineSize + iPos);
+  file->Seek(iStartOffset + (ULONGLONG)l * iLineSize + iPos);
   file->Write(iLen, b.buf());
   fChanged = true;
 }
@@ -317,7 +317,7 @@ void MapBit::PutLineVal(long l, const RealBuf& b, long iColFrom, long iColNum)
 }
 
 
-void MapBit::IterateCreatePyramidLayer(int iPyrLayer, long &iLastFilePos)
+void MapBit::IterateCreatePyramidLayer(int iPyrLayer, ULONGLONG &iLastFilePos)
 {
 	/*int iDiv = pow(2, iPyrLayer);	
 	int iColsPyrLayer = iCols() / iDiv;

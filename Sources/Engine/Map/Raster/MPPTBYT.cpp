@@ -60,7 +60,7 @@ long MapPatchByte::iRaw(RowCol rc) const {
   long iPatch;
   int iPRow, iPCol;
   RowCol2Patch(rc, iPatch, iPRow, iPCol);
-  file->Seek(iPatch * PATCH_UNITS + iPRow * PATCH_SIDE + iPCol);
+  file->Seek((ULONGLONG)iPatch * PATCH_UNITS + (ULONGLONG)iPRow * PATCH_SIDE + iPCol);
   file->Read(1, &b);
   return b;
 }
@@ -70,7 +70,7 @@ void MapPatchByte::PutRaw(RowCol rc, long iVal) {
   long iPatch;
   int iPRow, iPCol;
   RowCol2Patch(rc, iPatch, iPRow, iPCol);
-  file->Seek(iPatch * PATCH_UNITS + iPRow * PATCH_SIDE + iPCol);
+  file->Seek((ULONGLONG)iPatch * PATCH_UNITS + (ULONGLONG)iPRow * PATCH_SIDE + iPCol);
   byte b = byteConv(iVal);
   file->Write(1, &b);
   fChanged = true;
@@ -80,7 +80,7 @@ void MapPatchByte::GetPatchRaw(RowCol rc, BytePatch& patch) const {
   long iPatch;
   int iPRow, iPCol;
   RowCol2Patch(rc, iPatch, iPRow, iPCol);
-  file->Seek(iPatch * PATCH_UNITS);
+  file->Seek((ULONGLONG)iPatch * PATCH_UNITS);
   file->Read(PATCH_UNITS, patch.buf());
 }
 
@@ -153,7 +153,7 @@ void MapPatchByte::PutPatchRaw(RowCol rc, const BytePatch& patch) {
   long iPatch;
   int iPRow, iPCol;
   RowCol2Patch(rc, iPatch, iPRow, iPCol);
-  file->Seek(iPatch * PATCH_UNITS);
+  file->Seek((ULONGLONG)iPatch * PATCH_UNITS);
   file->Write(PATCH_UNITS, patch.buf());
   fChanged = true;
 }

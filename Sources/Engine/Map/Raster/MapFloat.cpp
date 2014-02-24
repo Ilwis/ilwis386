@@ -62,9 +62,9 @@ double MapFloat::rValue(RowCol rc) const
 	if (!fInside(rc))
 		return rUNDEF;
 	if (fPixelInterLeaved)
-		file->Seek(iStartOffset + 4 * (rc.Row * iRowLength + rc.Col * iNrBands));
+		file->Seek(iStartOffset + 4 * ((ULONGLONG)rc.Row * iRowLength + rc.Col * iNrBands));
 	else
-		file->Seek(iStartOffset + 4 * (rc.Row * iRowLength + rc.Col));
+		file->Seek(iStartOffset + 4 * ((ULONGLONG)rc.Row * iRowLength + rc.Col));
 	file->Read(4, &fl);
 	if (fSwapBytes)
 		swapbytes((long*)(void*)&fl);
@@ -78,9 +78,9 @@ void MapFloat::PutVal(RowCol rc, double val)
 	if (!fInside(rc))
 		return;
 	if (fPixelInterLeaved)
-		file->Seek(iStartOffset + 8 * (rc.Row * iRowLength + rc.Col * iNrBands));
+		file->Seek(iStartOffset + 4 * ((ULONGLONG)rc.Row * iRowLength + rc.Col * iNrBands));
 	else
-		file->Seek(iStartOffset + 8 * (rc.Row * iRowLength + rc.Col));
+		file->Seek(iStartOffset + 4 * ((ULONGLONG)rc.Row * iRowLength + rc.Col));
 	float fl = floatConv(val);
 	if (fSwapBytes)
 		swapbytes((long*)(void*)&fl);
@@ -156,15 +156,14 @@ void MapFloat::GetLineVal(long l, RealBuf& b, long iColFrom, long iColNum, int i
 	long iRightCols = max(0, iNum+iColFrom-iCols() / iDiv); //columns to right of map
 	long iLeftCols = -min(iColFrom, 0); // columns to left of map
 	
-	int iFOffSet;
-	iFOffSet = iPyrLayer == 0 ? iStartOffset : iPyramidLayerOffset[iPyrLayer - 1] ;	// 0 based index
+	ULONGLONG iFOffSet = iPyrLayer == 0 ? iStartOffset : iPyramidLayerOffset[iPyrLayer - 1] ;	// 0 based index
 	
 	for (long i=0; i < iLeftCols ; ++i)
 		b[i] = rUNDEF;
 	double HUGEBUFPTR* p = b.buf()+iLeftCols;
 	float fl;
 	if (fPixelInterLeaved) {
-		long iOff = iFOffSet + 4 * (l * iRowLength + (iColFrom+iLeftCols) * iNrBands);
+		ULONGLONG iOff = iFOffSet + 4 * ((ULONGLONG)l * iRowLength + (iColFrom+iLeftCols) * iNrBands);
 		for (long c = 0; c < iColNum; c++, p++){
 			fileData->Seek(iOff);  
 			fileData->Read(4, &fl);
@@ -177,7 +176,7 @@ void MapFloat::GetLineVal(long l, RealBuf& b, long iColFrom, long iColNum, int i
 	else {
 		FloatBuf bufFl(iNum-iLeftCols-iRightCols);
 		float HUGEBUFPTR* pfl = bufFl.buf();
-		fileData->Seek(iFOffSet + 4 * (l * int(iRowLength / iDiv) + iColFrom+iLeftCols));
+		fileData->Seek(iFOffSet + 4 * ((ULONGLONG)l * (ULONGLONG)(iRowLength / iDiv) + iColFrom+iLeftCols));
 		fileData->Read(4 * (iNum-iLeftCols-iRightCols), pfl);
 		for (long i=0; i < bufFl.iSize(); i++, pfl++, p++) {
 			if (fSwap)
@@ -227,7 +226,7 @@ void MapFloat::PutLineVal(long l, const RealBuf& b, long iColFrom, long iColNum)
 	double HUGEBUFPTR* p = b.buf();
 	if (fPixelInterLeaved) {
 		double HUGEBUFPTR* p = b.buf();
-		long iOff = iStartOffset + 8 * (l * iRowLength + iColFrom * iNrBands);
+		ULONGLONG iOff = iStartOffset + 4 * ((ULONGLONG)l * iRowLength + iColFrom * iNrBands);
 		for (long c = 0; c < iColNum; c++, p++){
 			file->Seek(iOff);  
 			float fl = floatConv(*p);
@@ -245,13 +244,13 @@ void MapFloat::PutLineVal(long l, const RealBuf& b, long iColFrom, long iColNum)
 			if (fSwapBytes)
 				swapbytes((long*)(void*)pfl);
 		} 
-		file->Seek(iStartOffset + 4 * (l * iRowLength + iColFrom));
+		file->Seek(iStartOffset + 4 * ((ULONGLONG)l * iRowLength + iColFrom));
 		file->Write(4 * iNum, bufFl.buf());
 	}
 	fChanged = true;
 }
 
-void MapFloat::IterateCreatePyramidLayer(int iPyrLayer, long &iLastFilePos, Tranquilizer *trq)
+void MapFloat::IterateCreatePyramidLayer(int iPyrLayer, ULONGLONG &iLastFilePos, Tranquilizer *trq)
 {
 	int iDiv = (int)pow(2, (double)iPyrLayer);	
 	int iColsPyrLayer = iCols() / iDiv;

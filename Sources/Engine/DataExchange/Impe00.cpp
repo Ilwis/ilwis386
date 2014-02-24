@@ -1034,7 +1034,8 @@ void ArcInfoE00::E00LogFile() {
 
 void ArcInfoE00::SkipMSKSection() {
   bool fEndMsk = false;
-  long iVal, iPos;
+  long iVal;
+  ULONGLONG iPos;
   // try to find the next section: the MSK section is assumed to
   // include only numbers. The end of the section is found by locating
   // the next section tag. 

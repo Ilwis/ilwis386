@@ -64,9 +64,9 @@ long MapByte::iRaw(RowCol rc) const
   if (0 == file)
     return iUNDEF;
   if (fPixelInterLeaved)
-    file->Seek(iStartOffset + rc.Row * iRowLength + rc.Col * iNrBands);
+    file->Seek(iStartOffset + (ULONGLONG)rc.Row * iRowLength + rc.Col * iNrBands);
   else
-    file->Seek(iStartOffset + rc.Row * iRowLength + rc.Col);
+    file->Seek(iStartOffset + (ULONGLONG)rc.Row * iRowLength + rc.Col);
   file->Read(1, &b);
   if (b == 0)
     if (dvs.iRawUndef() == 0)
@@ -81,9 +81,9 @@ void MapByte::PutRaw(RowCol rc, long v)
   if (!fInside(rc)) return;
   byte b = byteConv(v);
   if (fPixelInterLeaved)
-    file->Seek(iStartOffset + rc.Row * iRowLength + rc.Col * iNrBands);
+    file->Seek(iStartOffset + (ULONGLONG)rc.Row * iRowLength + rc.Col * iNrBands);
   else
-    file->Seek(iStartOffset + rc.Row * iRowLength + rc.Col);
+    file->Seek(iStartOffset + (ULONGLONG)rc.Row * iRowLength + rc.Col);
   file->Write(1, &b);
   fChanged = true;
 }
@@ -109,14 +109,13 @@ void MapByte::GetLineRaw(long l, ByteBuf& b, long iColFrom, long iColNum, int iP
   long iRightCols = max(0, iNum+iColFrom-iCols() / iDiv); //columns to right of map
   long iLeftCols = -min(iColFrom, 0); // columns to left of map
 		
-	int iFOffSet;
-	iFOffSet = iPyrLayer == 0 ? iStartOffset : iPyramidLayerOffset[iPyrLayer - 1] ;	// 0 based index
+	ULONGLONG iFOffSet = iPyrLayer == 0 ? iStartOffset : iPyramidLayerOffset[iPyrLayer - 1] ;	// 0 based index
   for (long i=0; i < iLeftCols ; ++i)
     b[i] = 0;
   byte HUGEBUFPTR* p = b.buf()+iLeftCols;
   if (fPixelInterLeaved) 
 	{
-    long iOff = iFOffSet + l * int(iRowLength/iDiv) + (iColFrom+iLeftCols) * iNrBands;
+    ULONGLONG iOff = iFOffSet + (ULONGLONG)l * (ULONGLONG)(iRowLength/iDiv) + (iColFrom+iLeftCols) * iNrBands;
     for (long c = 0; c < iColNum; c++, p++){
       fileData->Seek(iOff);  
       fileData->Read(1, p);
@@ -125,7 +124,7 @@ void MapByte::GetLineRaw(long l, ByteBuf& b, long iColFrom, long iColNum, int iP
   }
   else 
 	{
-    long iOff = iFOffSet + l * int(iRowLength/iDiv) + (iColFrom+iLeftCols);		
+    ULONGLONG iOff = iFOffSet + (ULONGLONG)l * (ULONGLONG)(iRowLength/iDiv) + (iColFrom+iLeftCols);		
     fileData->Seek(iOff);
     fileData->Read(iNum-iLeftCols-iRightCols, p);
   }
@@ -229,7 +228,7 @@ void MapByte::PutLineRaw(long l, const ByteBuf& b, long iColFrom, long iColNum)
     return;
   if (fPixelInterLeaved) {
     byte HUGEBUFPTR* p = b.buf();
-    long iOff = iStartOffset + l * iRowLength + iColFrom * iNrBands;
+    ULONGLONG iOff = iStartOffset + (ULONGLONG)l * iRowLength + iColFrom * iNrBands;
     for (long c = 0; c < iColNum; c++, p++){
       file->Seek(iOff);  
       file->Write(1, p);
@@ -237,7 +236,7 @@ void MapByte::PutLineRaw(long l, const ByteBuf& b, long iColFrom, long iColNum)
     }
   }
   else {
-    file->Seek(iStartOffset + l * iRowLength + iColFrom);
+    file->Seek(iStartOffset + (ULONGLONG)l * iRowLength + iColFrom);
     file->Write(iNum, b.buf());
   }
   fChanged = true;
@@ -295,7 +294,7 @@ void MapByte::PutLineVal(long l, const RealBuf& b, long iColFrom, long iColNum)
   PutLineRaw(l, bb, iColFrom, iNum);
 }
 
-void MapByte::IterateCreatePyramidLayer(int iPyrLayer, long &iLastFilePos, Tranquilizer *trq)
+void MapByte::IterateCreatePyramidLayer(int iPyrLayer, ULONGLONG &iLastFilePos, Tranquilizer *trq)
 {
 	int iDiv = (int)pow(2, (double)iPyrLayer);	
 	int iColsPyrLayer = iCols() / iDiv;

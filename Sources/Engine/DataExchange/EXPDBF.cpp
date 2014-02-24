@@ -75,7 +75,7 @@ void ImpExp::ExportDBF(const FileName& fnObject, const FileName& fnFile)
 
 	fileOut.Write(1, &DBF.bEndDescriptor);
 
-	long iPos=fileOut.iLoc();
+	ULONGLONG iPos=fileOut.iLoc();
 	fileOut.Seek(0);
 	fileOut.Write( sizeof(DBF.Header), &DBF.Header);
 	fileOut.Seek(iPos);

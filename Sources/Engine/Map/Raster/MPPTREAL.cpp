@@ -60,7 +60,7 @@ double MapPatchReal::rValue(RowCol rc) const {
   long iPatch;
   int iPRow, iPCol;
   RowCol2Patch(rc, iPatch, iPRow, iPCol);
-  file->Seek(sizeof(double) * (iPatch * PATCH_UNITS + iPRow * PATCH_SIDE + iPCol) );
+  file->Seek(sizeof(double) * ((ULONGLONG)iPatch * PATCH_UNITS + (ULONGLONG)iPRow * PATCH_SIDE + iPCol) );
   file->Read(sizeof(double), &rVal);
   return rVal;
 }
@@ -70,7 +70,7 @@ void MapPatchReal::PutVal(RowCol rc, double rVal) {
   long iPatch;
   int iPRow, iPCol;
   RowCol2Patch(rc, iPatch, iPRow, iPCol);
-  file->Seek(sizeof(double) * (iPatch * PATCH_UNITS + iPRow * PATCH_SIDE + iPCol) );
+  file->Seek(sizeof(double) * ((ULONGLONG)iPatch * PATCH_UNITS + (ULONGLONG)iPRow * PATCH_SIDE + iPCol) );
   file->Write(sizeof(double), &rVal);
   fChanged = true;
 }
@@ -121,7 +121,7 @@ void MapPatchReal::GetPatchVal(RowCol rc, RealPatch& patch) const {
   long iPatch;
   int iPRow, iPCol;
   RowCol2Patch(rc, iPatch, iPRow, iPCol);
-  file->Seek(sizeof(double) * iPatch * PATCH_UNITS);
+  file->Seek(sizeof(double) * (ULONGLONG)iPatch * PATCH_UNITS);
   file->Read(sizeof(double) * PATCH_UNITS, patch.buf());
 }
 
@@ -154,7 +154,7 @@ void MapPatchReal::PutPatchVal(RowCol rc, const RealPatch& patch) {
   for (int iL=0; iL < rcPatchOrg.Row ; iL++)
         for (int iC=0; iC < rcPatchOrg.Col ; iC++)
       rpt(iL, iC) = rr.fContains(patch(iL, iC)) ? patch(iL, iC) : rUNDEF;
-  file->Seek(sizeof(double) * iPatch * PATCH_UNITS);
+  file->Seek(sizeof(double) * (ULONGLONG)iPatch * PATCH_UNITS);
   file->Write(sizeof(double) * PATCH_UNITS, rpt.buf());
   fChanged = true;
 }

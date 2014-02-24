@@ -90,13 +90,13 @@ public:
   const String sName() const { return GetFilePath(); }
   inline void SetErase(bool f = true) { fErase = f; }
 
-  void Seek(long iLoc, bool fEnd = false);
+  void Seek(LONGLONG iLoc, bool fEnd = false);
   // seek to location iLoc, if fEnd = true then seek from end of file
-  long iLoc() ;
+  ULONGLONG iLoc() ;
   // Return file pointer position
   bool fEof() ;
   // returns true if end of file has been reached
-  long iSize() const;
+  ULONGLONG iSize() const;
 
   size_t Read(long iSize, void * p);
   // read iSize bytes from file into p
@@ -151,7 +151,7 @@ public:
 
 private:
   bool fErase;
-  long iFileSize;
+  ULONGLONG iFileSize;
   int iMode;  // selected as new file access: file reopen needed
 
 private:
