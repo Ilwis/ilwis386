@@ -164,6 +164,8 @@ NASExporter::iconvtype NASExporter::ictDetermineDomainType(const Map& mp)
 		}
 		else
 		{
+			if (abs(rStep) < 1e-18)
+				rStep = (rStep < 0) ? -1e-18 : 1e-18;
 			double rTmp = max(abs(rrMap.rLo()), abs(rrMap.rHi()));
 			m_iDblPrecision = 9;
 			if (rTmp > 1e-11 && rTmp < 1e12)
