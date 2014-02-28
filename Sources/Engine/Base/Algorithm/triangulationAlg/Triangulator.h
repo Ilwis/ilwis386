@@ -1,33 +1,38 @@
 #pragma once
 
+#include <gl/gl.h>
+#include <gl/glu.h>
+
 namespace ILWIS {
 class Polygon;
-class RootDrawer;
 
 class _export Triangulator {
 public:
 	Triangulator();
-	void getTriangulation(const vector<Coord>& crds, vector<vector<Coord> >& triangleStrips);
+	virtual ~Triangulator();
+	void getTriangulation(const vector<Coord>& crds, vector<pair<unsigned int, vector<Coord>>>& triangleStrips);
 
 protected:
-	gpc_vertex *makeVertexList(const LineString* ring) const;
-	virtual void prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes,	vector<vector<Coord> >& triangleStrips);
-
-
+	GLUtesselator * tesselator;
+	static void __stdcall tessBeginData(GLenum type, void * polygon_data);
+	static void __stdcall tessEdgeFlag(GLboolean);
+	static void __stdcall tessEnd();
+	static void __stdcall tessVertexData(void * vertex_data, void * polygon_data);
+	static void __stdcall tessCombineData(GLdouble coords[3], void *d[4], GLfloat w[4], void **dataOut, void * polygon_data);
+	static void __stdcall tessError(GLenum errno);
 };
 
 class _export MapPolygonTriangulator : public Triangulator {
 public:
 	MapPolygonTriangulator();
+	virtual ~MapPolygonTriangulator();
 
-	void getTriangulation(ILWIS::Polygon *polygon,	vector<vector<Coord> >& triangleStrips);
-	void getTriangulation(long *buffer, long* count, const CoordSystem& csData, const RootDrawer* rootDrawer, vector<vector<Coord> >& triangleStrips);
-	virtual void prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes,	vector<vector<Coord> >& triangleStrips, long iRaw);
+	void getTriangulation(ILWIS::Polygon *polygon,	vector<pair<unsigned int, vector<Coord>>>& triangleStrips);
+	void getTriangulation(long *buffer, long* count, vector<pair<unsigned int, vector<Coord>>>& triangleStrips);
 	long writeTriangleData(ofstream& file);
 
 private:
 	long *trianglePol;
-
 };
 
 }

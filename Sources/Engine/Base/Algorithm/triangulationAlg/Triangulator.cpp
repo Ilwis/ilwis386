@@ -1,186 +1,216 @@
 #include "Headers\toolspch.h"
 #include "Engine\Map\basemap.h"
 #include "Engine\Map\Polygon\POL.h"
-#include "Engine\Base\Algorithm\triangulationAlg\gpc.h"
 #include "Engine\Base\Algorithm\TriangulationAlg\Triangulator.h"
 #include "Engine\Drawers\RootDrawer.h"
 
 using namespace ILWIS;
 
 //-----------------------------------------------------------
+// struct so that x, y, z are consecutive in memory, to make glu tess happy
+
+struct CoordinateStruct {
+	double x;
+	double y;
+	double z;
+	CoordinateStruct()
+	{
+	};
+	CoordinateStruct(double _x, double _y)
+		: x(_x)
+		, y(_y)
+		, z(0)
+	{			
+	};
+	void setCoordinate(double _x, double _y)
+	{
+		x = _x;
+		y = _y;
+		z = 0;
+	};
+};
+
+struct TriangulationData {
+	vector<CoordinateStruct> coordinates;
+	vector<CoordinateStruct*> coordinatePtrs;
+	vector<pair<unsigned int, vector<Coord>>>& triangleStrips;
+	TriangulationData(vector<pair<unsigned int, vector<Coord>>>& _triangleStrips)
+		: triangleStrips(_triangleStrips)
+	{
+	}
+	~TriangulationData()
+	{
+		for (vector<CoordinateStruct*>::iterator coordinatePtr = coordinatePtrs.begin(); coordinatePtr != coordinatePtrs.end(); ++coordinatePtr)
+			delete(*coordinatePtr);
+	}
+};
+
+//-----------------------------------------------------------
 Triangulator::Triangulator() {
-
+	tesselator = gluNewTess();
+	gluTessCallback(tesselator, GLU_TESS_BEGIN_DATA, (void (__stdcall *)())&tessBeginData);
+	//gluTessCallback(tesselator, GLU_TESS_EDGE_FLAG, (void (__stdcall *)()) tessEdgeFlag);
+	gluTessCallback(tesselator, GLU_TESS_VERTEX_DATA, (void (__stdcall *)())tessVertexData);
+	//gluTessCallback(tesselator, GLU_TESS_END, (void (__stdcall *)())tessEnd);
+	gluTessCallback(tesselator, GLU_TESS_COMBINE_DATA, (void (__stdcall *)())tessCombineData);
+	//gluTessCallback(tesselator, GLU_TESS_ERROR, (void (__stdcall *)())tessError);
+	gluTessNormal(tesselator, 0, 0, 1);
 }
 
-void Triangulator::getTriangulation(const vector<Coord>& crds, vector<vector<Coord> >& triangleStrips) {
-	gpc_vertex_list exteriorBoundary;
-	vector<gpc_vertex_list> holes;
-
-	vector<Coordinate> coords(crds.size());
-	for(int  i =0 ; i < crds.size(); ++i)
-		coords[i] = crds[i];
-	CoordinateArraySequence seq;
-	seq.setPoints(coords);
-	GeometryFactory fact;
-	LineString *ring = fact.createLineString(seq);
-	exteriorBoundary.num_vertices = ring->getNumPoints() - 1;
-	exteriorBoundary.vertex = makeVertexList(ring);
-	prepareList(exteriorBoundary, holes,triangleStrips);
-	delete [] exteriorBoundary.vertex;
-
+Triangulator::~Triangulator() {
+	gluDeleteTess(tesselator);
 }
 
-gpc_vertex *Triangulator::makeVertexList(const LineString* ring) const{
-	int npoints = ring->getNumPoints() - 1;
-	gpc_vertex *vertices = new gpc_vertex[npoints];
-	for(int j = 0; j < npoints; ++j) {
-		Coordinate c = ring->getCoordinateN(j);
-		gpc_vertex vertex;
-		vertex.x = c.x;
-		vertex.y = c.y;
-		vertices[j] = vertex;
+void Triangulator::getTriangulation(const vector<Coord>& crds, vector<pair<unsigned int, vector<Coord>>>& triangleStrips) {
+	TriangulationData triangulationData (triangleStrips);
+
+	gluTessBeginPolygon(tesselator, &triangulationData);
+	gluTessBeginContour(tesselator);
+
+	triangulationData.coordinates.resize(crds.size());
+	long coords_size = 0;
+	for (int i = 0; i < crds.size(); ++i) { // closed or open ring? (nr points or nr points -1?)
+		const Coord & c = crds[i];
+		triangulationData.coordinates[coords_size].setCoordinate(c.x, c.y);
+		gluTessVertex(tesselator, (double*)&(triangulationData.coordinates[coords_size]), (void*)&(triangulationData.coordinates[coords_size]));
+		++coords_size;
 	}
-	return vertices;
+	gluTessEndContour(tesselator);
+	gluTessEndPolygon(tesselator);
 }
-void Triangulator::prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes, vector<vector<Coord> >& triangleStrips) {
 
-	triangleStrips.clear();
-	gpc_polygon polygon;
-	polygon.contour = 0;
-	polygon.hole = 0;
-	polygon.num_contours = 0;
+void __stdcall Triangulator::tessBeginData(GLenum type, void * polygon_data)
+{
+	((TriangulationData*)polygon_data)->triangleStrips.push_back(pair<unsigned int, vector<Coord>>(type, vector<Coord>()));
+}
 
-	gpc_add_contour(&polygon,&exteriorBoundary,0);
+void __stdcall Triangulator::tessEdgeFlag(GLboolean)
+{
+}
 
-	for(int i = 0 ; i < holes.size(); ++i) {
-		gpc_add_contour(&polygon,&(holes[i]),1);
-	}
+void __stdcall Triangulator::tessEnd()
+{
+}
 
-	gpc_tristrip tristrip;
-	tristrip.num_strips = 0;
-	tristrip.strip = 0;
-	gpc_polygon_to_tristrip(&polygon, &tristrip);
+void __stdcall Triangulator::tessVertexData(void * vertex_data, void * polygon_data)
+{
+	((TriangulationData*)polygon_data)->triangleStrips[((TriangulationData*)polygon_data)->triangleStrips.size() - 1].second.push_back(Coord(((CoordinateStruct*)vertex_data)->x, ((CoordinateStruct*)vertex_data)->y));
+}
 
-	long count = 2;
-	//count += tristrip.num_strips;
-	for(int i = 0; i < tristrip.num_strips; ++i) {
-		gpc_vertex_list list = tristrip.strip[i];
-		int n = list.num_vertices;
-		count += n * 2 * 3 + 1;
-	}
-	triangleStrips.resize(tristrip.num_strips);
-	for(int i = 0; i < tristrip.num_strips; ++i) {
-		gpc_vertex_list list = tristrip.strip[i];
-		int n = list.num_vertices;
-		triangleStrips[i].resize(n);
-		for(int j = 0; j < n; ++j) {
-			gpc_vertex b = list.vertex[j];
-			triangleStrips.at(i)[j] = (Coord(b.x, b.y));
-		}
+void __stdcall Triangulator::tessCombineData(GLdouble coords[3], void *d[4], GLfloat w[4], void **dataOut, void * polygon_data)
+{
+	TriangulationData * triangulationData = (TriangulationData*)polygon_data;
+	*dataOut = new CoordinateStruct(coords[0], coords[1]);
+	triangulationData->coordinatePtrs.push_back((CoordinateStruct*)(*dataOut));
+}
+
+void __stdcall Triangulator::tessError(GLenum errno)
+{
+	switch(errno) {
+		case GLU_TESS_COORD_TOO_LARGE:
+			printf("GLU_TESS_COORD_TOO_LARGE\n");
+			break;
+		case GLU_TESS_NEED_COMBINE_CALLBACK:
+			printf("GLU_TESS_NEED_COMBINE_CALLBACK\n");
+			break;
+		default:
+			break;
 	}
 }
 
 //-------------------------------------------------------------------------------
-MapPolygonTriangulator::MapPolygonTriangulator() : Triangulator() {
+
+MapPolygonTriangulator::MapPolygonTriangulator()
+: Triangulator()
+, trianglePol(0)
+{
 }
 
-void MapPolygonTriangulator::getTriangulation(ILWIS::Polygon *polygon, vector<vector<Coord> >& triangleStrips) {
-	gpc_vertex_list exteriorBoundary;
-	vector<gpc_vertex_list> holes;
+MapPolygonTriangulator::~MapPolygonTriangulator()
+{
+	delete trianglePol;
+}
+
+void MapPolygonTriangulator::getTriangulation(ILWIS::Polygon *polygon, vector<pair<unsigned int, vector<Coord>>>& triangleStrips) {
+
 	const LineString *ring = polygon->getExteriorRing();
-	exteriorBoundary.num_vertices = ring->getNumPoints() - 1;
-	exteriorBoundary.vertex = makeVertexList(ring);
-	holes.resize(polygon->getNumInteriorRing());
+
+	TriangulationData triangulationData (triangleStrips);
+
+	gluTessBeginPolygon(tesselator, &triangulationData);
+	gluTessBeginContour(tesselator);
+
+	long coords_size = polygon->getExteriorRing()->getNumPoints();
+	for(int i = 0; i < polygon->getNumInteriorRing(); ++i)
+		coords_size += polygon->getInteriorRingN(i)->getNumPoints();
+	triangulationData.coordinates.resize(coords_size);
+	coords_size = 0;
+
+	for (int i = 0; i < ring->getNumPoints(); ++i) { // closed or open ring?
+		const Coordinate & c = ring->getCoordinateN(i);
+		triangulationData.coordinates[coords_size].setCoordinate(c.x, c.y);
+		gluTessVertex(tesselator, (double*)&(triangulationData.coordinates[coords_size]), (void*)&(triangulationData.coordinates[coords_size]));
+		++coords_size;
+	}
+	gluTessEndContour(tesselator);
 	for(int i = 0; i < polygon->getNumInteriorRing(); ++i) {
+		gluTessBeginContour(tesselator);
 		const LineString * ring = polygon->getInteriorRingN(i);
-		holes[i].num_vertices = ring->getNumPoints() - 1;
-		holes[i].vertex = makeVertexList(ring);
-	}
-	prepareList(exteriorBoundary, holes,triangleStrips, polygon->iValue());
-	for(int i = 0; i < holes.size(); ++i) {
-		delete [] holes[i].vertex	;
-	}
-	delete [] exteriorBoundary.vertex;
-}
-
-void MapPolygonTriangulator::prepareList(gpc_vertex_list& exteriorBoundary, vector<gpc_vertex_list>& holes, vector<vector<Coord> >& triangleStrips, long iRaw) {
-
-	triangleStrips.clear();
-	gpc_polygon polygon;
-	polygon.contour = 0;
-	polygon.hole = 0;
-	polygon.num_contours = 0;
-
-	gpc_add_contour(&polygon,&exteriorBoundary,0);
-
-	for(int i = 0 ; i < holes.size(); ++i) {
-		gpc_add_contour(&polygon,&(holes[i]),1);
-	}
-
-	gpc_tristrip tristrip;
-	tristrip.num_strips = 0;
-	tristrip.strip = 0;
-	gpc_polygon_to_tristrip(&polygon, &tristrip);
-
-	long count = 2;
-	//count += tristrip.num_strips;
-	for(int i = 0; i < tristrip.num_strips; ++i) {
-		if ( iRaw == 5935) {
-			TRACE(String("%d\n", i).c_str());
+		for (int j = 0; j < ring->getNumPoints(); ++j) { // closed or open ring?
+			const Coordinate & c = ring->getCoordinateN(j);
+			triangulationData.coordinates[coords_size].setCoordinate(c.x, c.y);
+			gluTessVertex(tesselator, (double*)&(triangulationData.coordinates[coords_size]), (void*)&(triangulationData.coordinates[coords_size]));
+			++coords_size;
 		}
+		gluTessEndContour(tesselator);
+	}
+	gluTessEndPolygon(tesselator);
 
-		gpc_vertex_list list = tristrip.strip[i];
-		int n = list.num_vertices;
-		count += n * 2 * 3 + 1;
+	long count = 2; // first "long" is "total nr of longs", second "long" is "total nr of strips"
+	for(int i = 0; i < triangleStrips.size(); ++i) {
+		int n = triangleStrips[i].second.size();
+		count += n * 2 * 3 + 2; // nr strips * 2 longs per double * 3 components per coordinate (x, y, z) + one long for type of strip + one long for nr vertices in strip
 	}
 	trianglePol = new long[ count ]; // number of pointer plus one long indicating howmany pointers + one for totalsize of block
-	trianglePol[0] = count;
-	trianglePol[1] = tristrip.num_strips;
-	count = 2;
-	triangleStrips.resize(tristrip.num_strips);
-	for(int i = 0; i < tristrip.num_strips; ++i) {
-		gpc_vertex_list list = tristrip.strip[i];
-		int n = list.num_vertices;
-		trianglePol[count++] = n;
-		triangleStrips[i].resize(n);
+	trianglePol[0] = count; // "total nr of longs"
+	trianglePol[1] = triangleStrips.size(); // "total nr of strips"
+	count = 2; // first "long" is "total nr of longs", second "long" is "total nr of strips"
+	for(int i = 0; i < triangleStrips.size(); ++i) {
+		int n = triangleStrips[i].second.size();
+		trianglePol[count++] = triangleStrips[i].first; // type of strip
+		trianglePol[count++] = n; // nr vertices in strip
 		for(int j = 0; j < n; ++j) {
-			gpc_vertex b = list.vertex[j];
-			triangleStrips.at(i)[j] = (Coord(b.x, b.y));
-			((double *)(trianglePol + count))[j*3] = b.x;
-			((double*)(trianglePol + count))[j*3 + 1] = b.y;
+			((double *)(trianglePol + count))[j*3] = triangleStrips[i].second[j].x;
+			((double*)(trianglePol + count))[j*3 + 1] = triangleStrips[i].second[j].y;
 			((double*)(trianglePol + count))[j*3 + 2] = 0;
 		}
 		count += n * 2 *3;
 	}
 }
 
-
 long MapPolygonTriangulator::writeTriangleData(ofstream& file) {
 	file.write((char *)trianglePol, trianglePol[0]*4);
 	return trianglePol[0];
 }
 
-void MapPolygonTriangulator::getTriangulation(long *buffer, long* count, const CoordSystem& csData, const RootDrawer* rootDrawer, vector<vector<Coord> >& triangleStrips) {
-	long number;
-	number = buffer[*count];
+void MapPolygonTriangulator::getTriangulation(long *buffer, long* count, vector<pair<unsigned int, vector<Coord>>>& triangleStrips) {
+	long number = buffer[*count];
 	trianglePol = new long[number];
 	trianglePol[0] = number;
-	memcpy(trianglePol,buffer + *count,number * 4);
-	long current = 2;
+	memcpy(trianglePol, buffer + *count, number * 4);
+	long current = 2; // first "long" is "total nr of longs", second "long" is "total nr of strips"
 	triangleStrips.resize(trianglePol[1]);
-	bool coordNeedsConversion = rootDrawer->fConvNeeded(csData);
 	for(int i = 0; i < trianglePol[1]; ++i) {
-		int n = trianglePol[current++];
-		triangleStrips[i].resize(n);
+		triangleStrips[i].first = trianglePol[current++]; // type of strip
+		int n = trianglePol[current++]; // nr vertices in strip
+		triangleStrips[i].second.resize(n);
 		for(int j = 0; j < n; ++j) {
 			double x = ((double *)(trianglePol + current))[j*3];
 			double y = ((double *)(trianglePol + current))[j*3 + 1];
 			double z = ((double *)(trianglePol + current))[j*3 + 2];
-			triangleStrips.at(i)[j] = Coord(x,y,z);
+			triangleStrips[i].second[j] = Coord(x,y,z);
 		}
-		if (coordNeedsConversion)
-			triangleStrips.at(i) = rootDrawer->glConv(csData, triangleStrips.at(i));
 		current += n * 2 *3;
 	}
-	*count += number;
+	*count += number; // "seek" the triangulation data buffer to the next polygon
 }
