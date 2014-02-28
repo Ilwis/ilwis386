@@ -34,7 +34,7 @@ namespace ILWIS {
 		Color fillColor, strokeColor;
 		double opacity, rx, ry, rwidth, rheight, strokewidth;
 		vector<Coord> points;
-		vector<vector<Coord> > triangleStrips;
+		vector<pair<unsigned int, vector<Coord>>> triangleStrips;
 		ShapeType type;
 		CoordBounds bounds;
 		vector<Transform> transformations;

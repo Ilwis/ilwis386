@@ -433,9 +433,9 @@ void PointDrawer::drawLine(const IVGAttributes* attributes) const {
 
 void PointDrawer::drawPolygonArea(const IVGAttributes* attributes) const {
 	for(int i=0; i < attributes->triangleStrips.size(); ++i){
-		glBegin(GL_TRIANGLE_STRIP);
-		for(int j=0; j < attributes->triangleStrips.at(i).size(); ++j) {
-			Coord c = attributes->triangleStrips.at(i).at(j);
+		glBegin(attributes->triangleStrips[i].first);
+		for(int j=0; j < attributes->triangleStrips[i].second.size(); ++j) {
+			Coord c = attributes->triangleStrips[i].second[j];
 			glVertex3d(c.x,c.y,0.0);
 		}
 		glEnd();

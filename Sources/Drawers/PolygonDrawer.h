@@ -39,7 +39,7 @@ class _export PolygonDrawer : public SimpleDrawer {
 		HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) ;
 		LineDrawer *boundary;
 
-		vector<vector<Coord> > triangleStrips;
+		vector<pair<unsigned int, vector<Coord>>> triangleStrips;
 		Color drawColor;
 		Color backgroundColor; // for hatching background
 		CoordBounds cb;

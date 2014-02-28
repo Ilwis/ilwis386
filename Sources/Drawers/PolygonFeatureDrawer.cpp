@@ -109,22 +109,29 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		Coord c2 = getRootDrawer()->glConv(csy,cb.cMax);
 		cb = CoordBounds(c1,c2);
 		cb.getArea(); // initializes the area
+		bool coordNeedsConversion = getRootDrawer()->fConvNeeded(csy);
 		long *data;
 		long *count;
 		bool firstTime = polygonLayer->getTriangleData(&data, &count);
-		if ( data) {
-			if ( firstTime)
-				tri->getTriangulation(data, count, csy, getRootDrawer(),triangleStrips);
+		if (data) { // triangulation file exists
+			if ( firstTime) { // file has not been read yet
+				tri->getTriangulation(data, count, triangleStrips);
+				if (coordNeedsConversion) // triangulation data is in original projection; reproject to map window
+					for (vector<pair<unsigned int, vector<Coord>>>::iterator & strip = triangleStrips.begin(); strip != triangleStrips.end(); ++strip)
+						strip->second = rootDrawer->glConv(csy, strip->second);
+			}
 		} else {
-			tri->getTriangulation(polygon,triangleStrips);
+			tri->getTriangulation(polygon, triangleStrips); // generate new
+			if (coordNeedsConversion) // triangulation data is in original projection; reproject to map window
+				for (vector<pair<unsigned int, vector<Coord>>>::iterator & strip = triangleStrips.begin(); strip != triangleStrips.end(); ++strip)
+					strip->second = rootDrawer->glConv(csy, strip->second);
 		}
-
 	}
 	if ( p->type & NewDrawer::pt3D || p->type & ptRESTORE) {
 		ZValueMaker *zmaker = ((ComplexDrawer *)parentDrawer)->getZMaker();
 		for(int i = 0; i < triangleStrips.size(); ++i) {
-			for(int j = 0; j < triangleStrips.at(i).size(); ++j) {
-				Coord &c = triangleStrips.at(i).at(j);
+			for(int j = 0; j < triangleStrips[i].second.size(); ++j) {
+				Coord &c = triangleStrips[i].second[j];
 				double zv = zmaker->getValue(c,feature);
 				c.z = zv;
 			}

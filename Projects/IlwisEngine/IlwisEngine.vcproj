@@ -1123,14 +1123,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Engine\Base\Algorithm\triangulationAlg\gpc.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Engine\Base\Algorithm\triangulationAlg\gpc.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Engine\Base\Algorithm\GROUPLIM.CPP"
 						>
 					</File>

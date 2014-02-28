@@ -69,7 +69,10 @@ bool PolygonLayerDrawer::getTriangleData(long **data, long** count) {
 
 void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
 	BaseMap *bmap = (BaseMap *)getDataSource();
-	FileName fnTriangle((*bmap)->fnObj,".tria#");
+	FileName fnTriangle((*bmap)->fnObj,".tria#"); // old format, the code is not adapted for backwards compatibility, easiest is just delete it and re-create it
+	if (fnTriangle.fExist())
+		fnTriangle.fDelete();
+	fnTriangle = FileName((*bmap)->fnObj,".tri#");
 	if ( (parms->type & RootDrawer::ptGEOMETRY) && fnTriangle.fExist()) {
 		if ( triData == 0) { // is already read or not
 			ifstream file(fnTriangle.sFullPath().c_str(), ios::in|ios::binary);

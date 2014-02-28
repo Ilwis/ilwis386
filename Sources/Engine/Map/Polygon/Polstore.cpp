@@ -350,7 +350,11 @@ void PolygonMapStore::GetDataFiles(Array<FileName>& afnDat, Array<String>* asSec
     FileName fnDat;
     ptr.ReadElement("PolygonMapStore", "DataPol", fnDat);
     ObjectInfo::Add(afnDat, fnDat, fnObj.sPath());
-	FileName fnTriangle(ptr.fnObj,".tria#");
+
+	FileName fnTriangle(ptr.fnObj,".tria#"); // old format, the code is not adapted for backwards compatibility, easiest is just delete it and re-create it
+	if (fnTriangle.fExist())
+		fnTriangle.fDelete();
+	fnTriangle = FileName(ptr.fnObj,".tri#");
 	if ( fnTriangle.fExist()) {
 		ObjectInfo::Add(afnDat, fnTriangle, fnObj.sPath());
 	}

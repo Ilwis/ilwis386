@@ -82,10 +82,10 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 			glEnd();
 		} else {
 		for(int i=0; i < triangleStrips.size() && showArea; ++i){
-				glBegin(GL_TRIANGLE_STRIP);
+				glBegin(triangleStrips[i].first);
 				//glBegin(GL_LINE_STRIP);
-				for(int j=0; j < triangleStrips.at(i).size(); ++j) {
-					Coord c = triangleStrips.at(i).at(j);
+				for(int j=0; j < triangleStrips[i].second.size(); ++j) {
+					Coord c = triangleStrips[i].second[j];
 					double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : z0;
 					glVertex3d(c.x,c.y,z);
 				}
@@ -105,10 +105,10 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 				glEnd();
 			} else {
 			for(int i=0; i < triangleStrips.size() && showArea; ++i){
-					glBegin(GL_TRIANGLE_STRIP);
+					glBegin(triangleStrips[i].first);
 					//glBegin(GL_LINE_STRIP);
-					for(int j=0; j < triangleStrips.at(i).size(); ++j) {
-						Coord c = triangleStrips.at(i).at(j);
+					for(int j=0; j < triangleStrips[i].second.size(); ++j) {
+						Coord c = triangleStrips[i].second[j];
 						double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : z0;
 						glVertex3d(c.x,c.y,z);
 					}
