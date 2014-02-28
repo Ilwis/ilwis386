@@ -128,7 +128,7 @@ MapPolygonTriangulator::MapPolygonTriangulator()
 
 MapPolygonTriangulator::~MapPolygonTriangulator()
 {
-	delete trianglePol;
+	delete [] trianglePol;
 }
 
 void MapPolygonTriangulator::getTriangulation(ILWIS::Polygon *polygon, vector<pair<unsigned int, vector<Coord>>>& triangleStrips) {
