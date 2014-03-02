@@ -8,8 +8,7 @@ class Polygon;
 
 class _export Triangulator {
 public:
-	Triangulator();
-	virtual ~Triangulator();
+	Triangulator(GLUtesselator * _tesselator);
 	void getTriangulation(const vector<Coord>& crds, vector<pair<unsigned int, vector<Coord>>>& triangleStrips);
 
 protected:
@@ -24,7 +23,7 @@ protected:
 
 class _export MapPolygonTriangulator : public Triangulator {
 public:
-	MapPolygonTriangulator();
+	MapPolygonTriangulator(GLUtesselator * _tesselator);
 	virtual ~MapPolygonTriangulator();
 
 	void getTriangulation(ILWIS::Polygon *polygon,	vector<pair<unsigned int, vector<Coord>>>& triangleStrips);

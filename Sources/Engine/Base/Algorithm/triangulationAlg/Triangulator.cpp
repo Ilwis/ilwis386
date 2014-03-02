@@ -46,8 +46,9 @@ struct TriangulationData {
 };
 
 //-----------------------------------------------------------
-Triangulator::Triangulator() {
-	tesselator = gluNewTess();
+Triangulator::Triangulator(GLUtesselator * _tesselator)
+: tesselator(_tesselator)
+{
 	gluTessCallback(tesselator, GLU_TESS_BEGIN_DATA, (void (__stdcall *)())&tessBeginData);
 	//gluTessCallback(tesselator, GLU_TESS_EDGE_FLAG, (void (__stdcall *)()) tessEdgeFlag);
 	gluTessCallback(tesselator, GLU_TESS_VERTEX_DATA, (void (__stdcall *)())tessVertexData);
@@ -55,10 +56,6 @@ Triangulator::Triangulator() {
 	gluTessCallback(tesselator, GLU_TESS_COMBINE_DATA, (void (__stdcall *)())tessCombineData);
 	//gluTessCallback(tesselator, GLU_TESS_ERROR, (void (__stdcall *)())tessError);
 	gluTessNormal(tesselator, 0, 0, 1);
-}
-
-Triangulator::~Triangulator() {
-	gluDeleteTess(tesselator);
 }
 
 void Triangulator::getTriangulation(const vector<Coord>& crds, vector<pair<unsigned int, vector<Coord>>>& triangleStrips) {
@@ -120,8 +117,8 @@ void __stdcall Triangulator::tessError(GLenum errno)
 
 //-------------------------------------------------------------------------------
 
-MapPolygonTriangulator::MapPolygonTriangulator()
-: Triangulator()
+MapPolygonTriangulator::MapPolygonTriangulator(GLUtesselator * _tesselator)
+: Triangulator(_tesselator)
 , trianglePol(0)
 {
 }
