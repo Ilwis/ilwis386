@@ -48,14 +48,14 @@ PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms) : PolygonDra
 	setDrawMethod(NewDrawer::drmRPR);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
 	boundary = (LineDrawer *)NewDrawer::getDrawer("LineFeatureDrawer", &pp, parms);
-	tri = new MapPolygonTriangulator();
+	tri = new MapPolygonTriangulator(static_cast<PolygonLayerDrawer *>(parentDrawer)->getTesselator());
 }
 
 PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms, const String& name) : PolygonDrawer(parms,name) {
 	setDrawMethod(NewDrawer::drmRPR);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
 	boundary = (LineDrawer *)NewDrawer::getDrawer("LineFeatureDrawer", &pp, parms);
-	tri = new MapPolygonTriangulator();
+	tri = new MapPolygonTriangulator(static_cast<PolygonLayerDrawer *>(parentDrawer)->getTesselator());
 }
 
 PolygonFeatureDrawer::~PolygonFeatureDrawer() {

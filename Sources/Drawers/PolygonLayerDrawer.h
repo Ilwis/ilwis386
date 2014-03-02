@@ -1,5 +1,6 @@
 #pragma once
 
+#include <gl/glu.h>
 
 ILWIS::NewDrawer *createPolygonLayerDrawer(ILWIS::DrawerParameters *parms);
 
@@ -29,8 +30,8 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 		void setHatch(const String& name);
 		String getHatchName() const;
 		bool getTriangleData(long **data,long** loc);
-		GeneralDrawerProperties *getProperties() ;
-		
+		GeneralDrawerProperties *getProperties();
+		GLUtesselator * getTesselator();
 
 	protected:
 		String store(const FileName& fnView, const String& parenSection) const;
@@ -46,6 +47,6 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 		long currentLoc;
 		int triaFileSize;
 		PolygonProperties properties;
-		
+		GLUtesselator * tesselator;		
 	};
 }

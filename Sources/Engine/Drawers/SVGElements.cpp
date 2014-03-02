@@ -461,9 +461,11 @@ void IVGElement::normalizePositions() {
 			att->points[i].x = att->points[i].x - shiftx;
 			att->points[i].y = att->points[i].y - shifty;
 		}
-		if ( att->isPolygon()) { // need tot triangulate
-			Triangulator tri;
+		if ( att->isPolygon()) { // need to triangulate
+			GLUtesselator * tesselator = gluNewTess();
+			Triangulator tri (tesselator);
 			tri.getTriangulation(att->points, att->triangleStrips);
+			gluDeleteTess(tesselator);
 		}
 	}
 }

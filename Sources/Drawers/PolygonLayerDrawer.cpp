@@ -31,7 +31,8 @@ PolygonLayerDrawer::PolygonLayerDrawer(DrawerParameters *parms) :
 	usesTriangleFile(true),
 	triData(0),
 	currentLoc(0),
-	triaFileSize(0)
+	triaFileSize(0),
+	tesselator(gluNewTess())
 {
 
 }
@@ -40,6 +41,7 @@ PolygonLayerDrawer::~PolygonLayerDrawer() {
 		delete [] triData;
 		triData = 0;
 	}
+	gluDeleteTess(tesselator);
 }
 
 NewDrawer *PolygonLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
@@ -193,6 +195,10 @@ void PolygonLayerDrawer::load(const FileName& fnView, const String& parentSectio
 	lp.load(fnView, currentSection);
 }
 
+GLUtesselator * PolygonLayerDrawer::getTesselator()
+{
+	return tesselator;
+}
 
 
 
