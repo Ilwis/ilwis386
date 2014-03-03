@@ -192,7 +192,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 }
 
 long PolygonFeatureDrawer::writeTriangleData(ofstream& file) {
-	return tri->writeTriangleData(file);
+	return tri->writeTriangleData(file, triangleStrips);
 }
 
 
