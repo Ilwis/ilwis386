@@ -119,13 +119,11 @@ void __stdcall Triangulator::tessError(GLenum errno)
 
 MapPolygonTriangulator::MapPolygonTriangulator(GLUtesselator * _tesselator)
 : Triangulator(_tesselator)
-, trianglePol(0)
 {
 }
 
 MapPolygonTriangulator::~MapPolygonTriangulator()
 {
-	delete [] trianglePol;
 }
 
 void MapPolygonTriangulator::getTriangulation(ILWIS::Polygon *polygon, vector<pair<unsigned int, vector<Coord>>>& triangleStrips) {
@@ -162,13 +160,15 @@ void MapPolygonTriangulator::getTriangulation(ILWIS::Polygon *polygon, vector<pa
 		gluTessEndContour(tesselator);
 	}
 	gluTessEndPolygon(tesselator);
+}
 
+long MapPolygonTriangulator::writeTriangleData(ofstream& file, vector<pair<unsigned int, vector<Coord>>>& triangleStrips) {
 	long count = 2; // first "long" is "total nr of longs", second "long" is "total nr of strips"
 	for(int i = 0; i < triangleStrips.size(); ++i) {
 		int n = triangleStrips[i].second.size();
 		count += n * 2 * 3 + 2; // nr strips * 2 longs per double * 3 components per coordinate (x, y, z) + one long for type of strip + one long for nr vertices in strip
 	}
-	trianglePol = new long[ count ]; // number of pointer plus one long indicating howmany pointers + one for totalsize of block
+	long * trianglePol = new long[ count ]; // number of pointer plus one long indicating howmany pointers + one for totalsize of block
 	trianglePol[0] = count; // "total nr of longs"
 	trianglePol[1] = triangleStrips.size(); // "total nr of strips"
 	count = 2; // first "long" is "total nr of longs", second "long" is "total nr of strips"
@@ -183,18 +183,15 @@ void MapPolygonTriangulator::getTriangulation(ILWIS::Polygon *polygon, vector<pa
 		}
 		count += n * 2 *3;
 	}
-}
 
-long MapPolygonTriangulator::writeTriangleData(ofstream& file) {
 	file.write((char *)trianglePol, trianglePol[0]*4);
-	return trianglePol[0];
+	delete [] trianglePol;
+	return count;
 }
 
 void MapPolygonTriangulator::getTriangulation(long *buffer, long* count, vector<pair<unsigned int, vector<Coord>>>& triangleStrips) {
-	long number = buffer[*count];
-	trianglePol = new long[number];
-	trianglePol[0] = number;
-	memcpy(trianglePol, buffer + *count, number * 4);
+	long * trianglePol = buffer + *count;
+	long number = trianglePol[0];
 	long current = 2; // first "long" is "total nr of longs", second "long" is "total nr of strips"
 	triangleStrips.resize(trianglePol[1]);
 	for(int i = 0; i < trianglePol[1]; ++i) {

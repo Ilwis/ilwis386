@@ -28,10 +28,7 @@ public:
 
 	void getTriangulation(ILWIS::Polygon *polygon,	vector<pair<unsigned int, vector<Coord>>>& triangleStrips);
 	void getTriangulation(long *buffer, long* count, vector<pair<unsigned int, vector<Coord>>>& triangleStrips);
-	long writeTriangleData(ofstream& file);
-
-private:
-	long *trianglePol;
+	long writeTriangleData(ofstream& file, vector<pair<unsigned int, vector<Coord>>>& triangleStrips);
 };
 
 }
