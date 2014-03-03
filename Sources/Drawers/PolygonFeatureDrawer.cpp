@@ -32,16 +32,20 @@ using namespace ILWIS;
 
 ILWIS::NewDrawer *createPolygonFeatureDrawer(DrawerParameters *parms) {
 	if ( parms->managed) {
-		if ( parms->parent && parms->parent->getType() == "PolygonFeatureDrawer") {
+		if ( parms->parent && parms->parent->getType() == "PolygonLayerDrawer") {
 			PolygonFeatureDrawer *pfdr =  ((FeatureLayerDrawer *)parms->parent)->allocator<PolygonFeatureDrawer>()->allocate();
 			pfdr->setDrawerParameters(parms);
+			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
+			pfdr->setBoundaryDrawer((LineDrawer *)NewDrawer::getDrawer("LineFeatureDrawer", &pp, parms));
+			pfdr->setTriangulator(new MapPolygonTriangulator(static_cast<PolygonLayerDrawer *>(parms->parent)->getTesselator()));
 			return pfdr;
 		}
 	}
 	return new PolygonFeatureDrawer(parms);
 }
 
-PolygonFeatureDrawer::PolygonFeatureDrawer() : PolygonDrawer(0,"PolygonFeatureDrawer") {
+PolygonFeatureDrawer::PolygonFeatureDrawer() : PolygonDrawer(0,"PolygonFeatureDrawer"), tri(0) {
+	setDrawMethod(NewDrawer::drmRPR);
 }
 
 PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms) : PolygonDrawer(parms,"PolygonFeatureDrawer") {
@@ -60,6 +64,13 @@ PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms, const String
 
 PolygonFeatureDrawer::~PolygonFeatureDrawer() {
 	delete tri;
+}
+
+void PolygonFeatureDrawer::setTriangulator(MapPolygonTriangulator * _tri)
+{
+	if (tri)
+		delete tri;
+	tri = _tri;
 }
 
 bool PolygonFeatureDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {

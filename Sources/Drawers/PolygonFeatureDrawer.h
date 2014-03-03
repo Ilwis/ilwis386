@@ -17,6 +17,7 @@ class _export PolygonFeatureDrawer : public PolygonDrawer {
 		virtual Feature *getFeature() const;
 		void* getDataSource() const;
 		long writeTriangleData(ofstream& file);
+		void setTriangulator(MapPolygonTriangulator * _tri);
 	protected:
 		PolygonFeatureDrawer(DrawerParameters *parms, const String& name);
 

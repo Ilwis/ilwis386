@@ -30,6 +30,7 @@ PointLayerDrawer::PointLayerDrawer(DrawerParameters *parms) :
 }
 
 PointLayerDrawer::~PointLayerDrawer() {
+	delete (MemoryManager<PointFeatureDrawer>*)managedDrawers;
 	delete properties;
 }
 

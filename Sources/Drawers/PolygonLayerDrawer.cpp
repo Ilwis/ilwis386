@@ -37,6 +37,7 @@ PolygonLayerDrawer::PolygonLayerDrawer(DrawerParameters *parms) :
 
 }
 PolygonLayerDrawer::~PolygonLayerDrawer() {
+	delete (MemoryManager<PolygonFeatureDrawer>*)managedDrawers;
 	if ( triData != 0) {
 		delete [] triData;
 		triData = 0;

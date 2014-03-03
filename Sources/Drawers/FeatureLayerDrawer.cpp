@@ -36,8 +36,6 @@ FeatureLayerDrawer::FeatureLayerDrawer(DrawerParameters *parms, const String& na
 }
 
 FeatureLayerDrawer::~FeatureLayerDrawer() {
-	delete managedDrawers;
-
 }
 
 void FeatureLayerDrawer::addDataSource(void *bmap,int options) {

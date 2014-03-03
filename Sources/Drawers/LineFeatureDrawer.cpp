@@ -23,7 +23,7 @@ using namespace ILWIS;
 
 ILWIS::NewDrawer *createLineFeatureDrawer(DrawerParameters *parms) {
 	if ( parms->managed) {
-		if ( parms->parent && parms->parent->getType() == "LineFeatureDrawer") {
+		if ( parms->parent && parms->parent->getType() == "LineLayerDrawer") {
 			LineFeatureDrawer *pfdr =  ((FeatureLayerDrawer *)parms->parent)->allocator<LineFeatureDrawer>()->allocate();
 			pfdr->setDrawerParameters(parms);
 			return pfdr;
@@ -33,6 +33,7 @@ ILWIS::NewDrawer *createLineFeatureDrawer(DrawerParameters *parms) {
 }
 
 LineFeatureDrawer::LineFeatureDrawer() : LineDrawer(0,"LineFeatureDrawer"), feature(0) {
+	lproperties.drawColor = Color(0,167,18);
 }
 
 LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms) : 
@@ -45,6 +46,7 @@ LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms) :
 LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms, const String& name) : 
 	LineDrawer(parms,name),feature(0)
 {
+	lproperties.drawColor = Color(0,167,18);
 }
 
 LineFeatureDrawer::~LineFeatureDrawer() {

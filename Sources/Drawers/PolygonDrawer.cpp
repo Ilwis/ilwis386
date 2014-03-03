@@ -168,6 +168,11 @@ LineDrawer *PolygonDrawer::getBoundaryDrawer(){
 	return boundary;
 }
 
+void PolygonDrawer::setBoundaryDrawer(LineDrawer * _boundary)
+{
+	boundary = _boundary;
+}
+
 void PolygonDrawer::areasActive(bool yesno) {
 	showArea = yesno;
 }

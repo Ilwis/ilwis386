@@ -23,6 +23,7 @@ class _export PolygonDrawer : public SimpleDrawer {
 		void prepare(PreparationParameters *);
 		void setDrawColor(const Color& col);
 		LineDrawer *getBoundaryDrawer();
+		void setBoundaryDrawer(LineDrawer * _boundary);
 		void areasActive(bool yesno);
 		void boundariesActive(bool active);
 		void setTransparencyArea(double v);

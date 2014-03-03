@@ -30,6 +30,7 @@ LineLayerDrawer::LineLayerDrawer(DrawerParameters *parms) :
 }
 
 LineLayerDrawer::~LineLayerDrawer() {
+	delete (MemoryManager<LineFeatureDrawer>*)managedDrawers;
 }
 
 NewDrawer *LineLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const{
