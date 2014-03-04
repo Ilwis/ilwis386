@@ -16,7 +16,6 @@
 #include "Drawers\PolygonLayerDrawer.h"
 #include "geos\algorithm\CGAlgorithms.h"
 #include "Drawers\DrawingColor.h" 
-#include "Engine\Base\Algorithm\TriangulationAlg\gpc.h"
 #include "Engine\Base\Algorithm\TriangulationAlg\Triangulator.h"
 #include "Drawers\PolygonFeatureDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"

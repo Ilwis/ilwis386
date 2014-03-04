@@ -16,7 +16,6 @@
 #include "drawers\linefeaturedrawer.h"
 #include "drawers\PointDrawer.h"
 #include "drawers\PointFeatureDrawer.h"
-#include "Engine\Base\Algorithm\TriangulationAlg\gpc.h"
 #include "Engine\Base\Algorithm\TriangulationAlg\Triangulator.h"
 #include "drawers\polygondrawer.h"
 #include "Drawers\PolygonLayerDrawer.h"
