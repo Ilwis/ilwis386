@@ -352,6 +352,7 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 			fChangeType |= ((subType == "Cube:<stations>") && (sPlotOption != "<stations>"));
 			if (fChangeType) {
 				DeleteDrawerTools(tree->getRootTool(), childDrawer);
+				((ComplexDrawer*)childDrawer)->clear();
 				drawer->removeDrawer(childDrawer->getId()); // remove the old drawer
 				childDrawer = 0;
 			}
