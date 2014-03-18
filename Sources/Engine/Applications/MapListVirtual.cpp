@@ -57,7 +57,8 @@ MapListVirtual::MapListVirtual(const FileName& fn, MapListPtr& p, bool fCreate)
     try {
       Domain dm;
       ValueRange vr;
-      ptr.ReadElement("MapListVirtual", "Domain", dm);
+      if (!ptr.ReadElement("MapListVirtual", "Domain", dm))
+		  dm = Domain(); // compensate for the behaviour change of ReadElement on 10-07-2013, which returns a valid Domain regardless of the existence of the entry
       ptr.ReadElement("MapListVirtual", "ValueRange", vr);
       dvrsMaps.SetDomain(dm);
       dvrsMaps.SetValueRange(vr);
