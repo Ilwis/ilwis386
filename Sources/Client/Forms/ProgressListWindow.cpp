@@ -65,7 +65,7 @@ END_MESSAGE_MAP()
 
 int ProgressListWindow::iNrReportWindows = 0;
 const int iDEFHEIGHT=150;
-const int iDEFWIDTH=560;
+const int iDEFWIDTH=580;
 
 ProgressListWindow::ProgressListWindow() : 
 	CFrameWnd(),

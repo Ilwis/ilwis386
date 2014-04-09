@@ -263,6 +263,17 @@ int ReportListCtrl::Create(CWnd *parent, CRect rct)
 {
 	int iRet = CListCtrl::Create(WS_CHILD | WS_VISIBLE | WS_BORDER | LVS_SINGLESEL | LVS_REPORT | WS_HSCROLL, rct, parent, ID_REPLIST);
 	SetExtendedStyle(LVS_EX_FULLROWSELECT);
+
+	int iMaxXSize = 1024;
+	CWnd* wnd = GetDesktopWindow();
+	if (wnd != NULL) {
+		CDC* dc = wnd->GetDC();
+		if (dc != NULL) {
+			HDC hdc = dc->m_hDC;
+			if (hdc != NULL)
+				iMaxXSize = GetDeviceCaps(hdc, HORZRES);
+		}
+	}
 	
 	rlcHeader = new ProgressListHeaderCtrl(this);
 	
@@ -271,20 +282,20 @@ int ReportListCtrl::Create(CWnd *parent, CRect rct)
 	rlcHeader->SubclassWindow(hdr->GetSafeHwnd());
 	IlwisSettings settings("ProgressWindow");
 	CRect rect;
-	rect = settings.rctValue("Operation");
-	int iW = rect.Width() > 0 ? rect.Width() : 150;
+	rect = settings.rctValue("Operation", CRect(-1, -1, -1, -1));
+	int iW = (rect.Width() > 0 && rect.Width() < iMaxXSize) ? rect.Width() : 150;
 	InsertColumn(0, "Operation", LVCFMT_LEFT, iW);
 
-	rect = settings.rctValue("Progress");
-	iW = rect.Width() > 0 ? rect.Width() : 80;
+	rect = settings.rctValue("Progress", CRect(-1, -1, -1, -1));
+	iW = (rect.Width() > 0 && rect.Width() < iMaxXSize) ? rect.Width() : 80;
 	InsertColumn(1, "Progress", LVCFMT_LEFT, iW);
 
-	rect = settings.rctValue("Completed");
-	iW = rect.Width() > 0 ? rect.Width() : 60;
+	rect = settings.rctValue("Completed", CRect(-1, -1, -1, -1));
+	iW = (rect.Width() > 0 && rect.Width() < iMaxXSize) ? rect.Width() : 80;
 	InsertColumn(2, "Completed", LVCFMT_LEFT, iW);
 
-	rect = settings.rctValue("Info");
-	iW = rect.Width() > 0 ? rect.Width() : 250;
+	rect = settings.rctValue("Info", CRect(-1, -1, -1, -1));
+	iW = (rect.Width() > 0 && rect.Width() < iMaxXSize) ? rect.Width() : 250;
 	InsertColumn(3, "Info", LVCFMT_LEFT, 250);
 
 	return iRet;
