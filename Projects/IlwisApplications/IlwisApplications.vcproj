@@ -259,6 +259,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Applications\Raster\MapColorFromRpr.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Applications\Raster\MAPCOLSP.cpp"
 					>
 				</File>
@@ -427,6 +431,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Applications\Raster\MAPCOKRI.H"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Applications\Raster\MapColorFromRpr.h"
 						>
 					</File>
 					<File
