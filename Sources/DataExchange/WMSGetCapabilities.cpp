@@ -108,7 +108,7 @@ CoordBounds WMSGetCapabilities::parseBoundingBox(const pugi::xml_node& node, Str
 	for(pugi::xml_attribute atr = node.first_attribute(); atr; atr = atr.next_attribute()) {
 		String name = atr.name();
 		name.toLower();
-		if ( name == "srs")
+		if ( name == "srs" || name == "crs")
 			srs = atr.value();
 		if ( name == "maxx")
 			max = String("%s", atr.value()).rVal();
