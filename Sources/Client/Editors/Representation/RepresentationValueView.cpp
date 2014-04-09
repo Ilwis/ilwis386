@@ -988,7 +988,7 @@ void RepresentationValueView::OnStretchSteps()
     StretchStepsForm(CWnd* wPar, int* iStretchSteps)
     : FormWithDest(wPar, TR("Stretch Steps"))
     {
-      fi = new FieldInt(root, TR("&Stretch Steps"), iStretchSteps, ValueRange(2,30), true);
+      fi = new FieldInt(root, TR("&Stretch Steps"), iStretchSteps, ValueRange(2,127), true);
       SetMenHelpTopic("ilwismen\\representation_value_gradual_editor_stretch_steps.htm");
       create();
     }

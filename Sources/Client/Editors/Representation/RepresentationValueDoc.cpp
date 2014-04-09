@@ -136,7 +136,7 @@ void RepresentationValueDoc::SetStretchSteps(int iSteps)
 {
 	if ( iSteps == iGetStretchSteps()) return ;
 
-	prg()->SetStretchSteps( min(30, max( 2, iSteps)));
+	prg()->SetStretchSteps( min(127, max( 2, iSteps)));
 	prg()->Updated();
 }
 
