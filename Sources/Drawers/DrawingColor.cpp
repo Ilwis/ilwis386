@@ -117,9 +117,8 @@ Color DrawingColor::clrVal(double rVal) const
 				RangeReal rr = getStretchRangeReal();
 				double rMax = 1 + rr.rHi() - rr.rLo();
 				rMax = log(rMax);
-				rVal -= rr.rLo();
-				rVal = log(rVal);
 				rr = RangeReal(0, rMax);
+				rVal = log(1 + rVal - rr.rLo());
 				cRet = (Color)rpr->clr(rVal, rr);
 			} break;
 		}
@@ -239,7 +238,7 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 				double rMax = 1 + rr.rHi() - rr.rLo();
 				rr = RangeReal(0, log(rMax));
 				for (long i = 0; i < iLen; ++i) {
-					Color clr = rpr->clr(log(buf[i] - rr.rLo()));
+					Color clr = rpr->clr(log(1 + buf[i] - rr.rLo()), rr);
 					setTransparency(buf[i], clr);
 					if (!done)
 						done = setTresholdColors(buf[i], clr);
@@ -326,7 +325,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 							DomainValueRangeStruct dvrs = dataValues.dvrs();
 							for (long i = 0; i < iLen; ++i){
 								double v = dataValues.rValByRaw(buf[i]);
-								Color clr = rpr->clr(log(dvrs.rValue(v) - rr.rLo()), rr);
+								Color clr = rpr->clr(log(1 + dvrs.rValue(v) - rr.rLo()), rr);
 								setTransparency(v, clr);
 								setTresholdColors(v, clr);
 								bufOut[i] = clr.iVal();
