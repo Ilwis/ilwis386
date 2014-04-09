@@ -93,9 +93,9 @@ public:
   virtual Color _export clr(double rValue, RangeReal) const; // stretch
   Color                 clrBoundary() const 
                           { return clrBoundaryColor; } 
-  virtual byte          iColor(double rValue) const;  // 0..1 
-  virtual byte          iColor(long iValue, RangeInt) const;
-  virtual byte          iColor(double rValue, RangeReal) const;
+  virtual int          iColor(double rValue) const;  // 0..1 
+  virtual int          iColor(long iValue, RangeInt) const;
+  virtual int          iColor(double rValue, RangeReal) const;
   virtual short         iPattern(long iRaw) const;
   virtual short         iSymbolType(long iRaw) const;
   virtual short         iSymbolSize(long iRaw) const;

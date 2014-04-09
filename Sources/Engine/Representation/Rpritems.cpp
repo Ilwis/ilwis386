@@ -254,7 +254,7 @@ double RepresentationItems::rTransparencyItem(long iRaw) const{
   return 1.0;
 }
 
-byte RepresentationItems::iColor(double rValue) const  // 0..1 
+int RepresentationItems::iColor(double rValue) const  // 0..1 
 {
   if (!colColor.fValid())
     return 0;

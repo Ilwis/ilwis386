@@ -221,7 +221,7 @@ Color RepresentationGradual::clrRaw(long iRaw) const
 	return col;  
 }
 
-byte RepresentationGradual::iColor(double rValue) const
+int RepresentationGradual::iColor(double rValue) const
 {
 	if (rValue < arLimits[0])
 		return 1;

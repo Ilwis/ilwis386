@@ -58,7 +58,7 @@ public:
 	Color clrRaw(long iRaw) const;
 	virtual Color clrRawDefault(long iRaw) const;
 	Color clrSecondRaw(long iRaw) const;
-	byte iColor(double rValue) const;  // 0..1 
+	int iColor(double rValue) const;  // 0..1 
 	short iPattern(long iRaw) const;
 	void GetPattern(long iRaw, short aPat[8]) const;
 	String sSymbolType(long iRaw) const;

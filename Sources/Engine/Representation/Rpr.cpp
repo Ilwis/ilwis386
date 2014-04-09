@@ -359,12 +359,12 @@ double RepresentationPtr::rSymbolRotation(long) const
   return 0;
 }
 
-byte RepresentationPtr::iColor(double rValue) const  // 0..1 
+int RepresentationPtr::iColor(double rValue) const  // 0..1 
 {
   return 0;
 }
 
-byte RepresentationPtr::iColor(long iValue, RangeInt ri) const
+int RepresentationPtr::iColor(long iValue, RangeInt ri) const
 {
   if (iValue == iUNDEF)
     return 0;
@@ -374,7 +374,7 @@ byte RepresentationPtr::iColor(long iValue, RangeInt ri) const
   return iColor(rValue);
 }
 
-byte RepresentationPtr::iColor(double rValue, RangeReal rr) const
+int RepresentationPtr::iColor(double rValue, RangeReal rr) const
 {
   if (rValue == rUNDEF)
     return 0;

@@ -62,7 +62,7 @@ public:
 	virtual void			GetColorLut(ColorBuf&) const;
 
 	virtual Color			clrRaw(long iRaw) const;        // 0 <  iRaw <= iClrSteps
-	virtual					byte iColor(double rValue) const;  // 0..1
+	virtual					int iColor(double rValue) const;  // 0..1
 	int						iLimits() const { return arLimits.iSize(); }
 	double					rValue(int iLim) const { return arLimits[iLim]; }
 	int						iNoColors() { return ac.iSize(); }
