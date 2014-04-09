@@ -519,12 +519,14 @@ void WMSFormat::GetRasterInfo(LayerInfo& inf, String sLayers) {
 	pair<String, CoordBounds > start;
 	bool containsWGS84 = false;
 	WMSLayerInfo *srsLayer = findRelevantSrsLayer(layers, layer,NULL);
-	for(map<String, CoordBounds>::iterator p = srsLayer->srs.begin() ; p != srsLayer->srs.end(); ++p) {
-		if ( (*p).second.fValid())
-			start = *p;
-		if ( (*p).first == "EPSG:4326")
-			containsWGS84 = true;
+	if (srsLayer != 0) {
+		for(map<String, CoordBounds>::iterator p = srsLayer->srs.begin() ; p != srsLayer->srs.end(); ++p) {
+			if ( (*p).second.fValid())
+				start = *p;
+			if ( (*p).first == "EPSG:4326")
+				containsWGS84 = true;
 
+		}
 	}
 	bool validSRSDef= start.first != "" || start.second.fValid();
 	if (  !validSRSDef && !containsWGS84) {
