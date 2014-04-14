@@ -48,7 +48,8 @@ IMPLEMENT_DYNCREATE(PostgresDataBaseCatalog, DataBaseCatalog)
 
 BEGIN_MESSAGE_MAP(PostgresDataBaseCatalog, DataBaseCatalog)
 	//{{AFX_MSG_MAP(DataBaseCatalog)
-	ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblclk)	
+	ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblclk)
+	ON_WM_CONTEXTMENU()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -75,4 +76,21 @@ void PostgresDataBaseCatalog::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult)
 	
 	char* str = sCmd.sVal();
 	IlwWinApp()->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)str);	
+}
+
+void PostgresDataBaseCatalog::OnContextMenu(CWnd* pWnd, CPoint point) 
+{
+	FileName fn, fnFileSub;
+	int iNr, iSub;
+	bool fReport;
+	CalcMenuProps(pWnd, point, fn, fnFileSub, iNr, iSub, fReport);
+
+	try
+	{
+		IlwWinApp()->ShowPopupMenu(this, point, fn, &assSel);	
+	}
+	catch (...)
+	{
+		// silent catch: CreateTable already displays a message
+	}
 }

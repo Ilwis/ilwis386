@@ -48,6 +48,7 @@ class IMPEXP PostgresDataBaseCatalog : public DataBaseCatalog
 {
 protected:
 	void OnDblclk(NMHDR* pNMHDR, LRESULT* pResult);
+	void OnContextMenu(CWnd* pWnd, CPoint point);
 
 	DECLARE_DYNCREATE(PostgresDataBaseCatalog);
 	DECLARE_MESSAGE_MAP()
