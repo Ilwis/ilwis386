@@ -382,7 +382,7 @@ bool MapResample::fFreezing()
   					if (fPatch)
   						iBuf[j] = iRawFromPatch(grIn->rcConv(crdIn));
   					else
-  						rBuf[j] = mp->iRaw(grIn->rcConv(crdIn));
+  						iBuf[j] = mp->iRaw(grIn->rcConv(crdIn));
   				}
   			}
   			if (fUseReal)
