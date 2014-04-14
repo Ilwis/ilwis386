@@ -217,6 +217,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\ApplicationsUI\FormMapColorFromRpr.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\ApplicationsUI\FormMapListChangeDetection.cpp"
 				>
 			</File>
@@ -294,6 +298,10 @@
 				>
 				<File
 					RelativePath="..\..\Sources\ApplicationsUI\FormMapAggregateMapList.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\ApplicationsUI\FormMapColorFromRpr.h"
 					>
 				</File>
 				<File

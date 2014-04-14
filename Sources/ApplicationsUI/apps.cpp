@@ -53,6 +53,7 @@ Last change:  WK   17 Sep 98    2:14 pm
 #include "ApplicationsUI\frmstereopaircr.h"
 #include "ApplicationsUI\FormMaplistGraph.h"
 #include "ApplicationsUI\FormMapAggregateMapList.h"
+#include "ApplicationsUI\FormMapColorFromRpr.h"
 #include "ApplicationsUI\FormMapListChangeDetection.h"
 #include "Client\Base\IlwisDocument.h"
 #include "Engine\Table\tblinfo.h"
@@ -93,6 +94,7 @@ extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("mapcolorcomp","clrcmp",OpenMapListColorComp,"Image &Processing..Color Composite","Color Composite","ExeMap16IcoL","",4222,"Create a color composite of three image bands"));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("cluster","",Cmdcluster,TR("Image &Processing..Cluster"),TR("Cluster"),"ExeMap16IcoL",".mpr",4212,TR("Perform automatic classification of values from multiple maps into clusters")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("classify","clsfy",Cmdclassify,TR("Image &Processing..&Classify"),TR("Classify"),"ExeMap16IcoL",".sms.clf",4032,TR("Perform an image classification according to training pixels in a sample set")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("frmmapcolorfromrpr","",Cmdmapcolorfromrpr,TR("Image &Processing..&Color from Representation"),TR("Color from Representation"),"ExeMap16IcoL",".mpr",0000,TR("Apply a representation to a raster map and get a color map")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("resample","",Cmdresample,TR("&Spatial Reference Operations.&Raster.&Resample"),TR("Resample"),"ExeMap16IcoL",".mpr.grf.mpl",4092,TR("Resample a raster map to another georeference")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("makestpfromdtm","",Cmdmakestpfromdtm,TR("Image &Processing..&Stereo Pair From DTM"),TR("Stereo Pair From DTM"),".stp",".mpr",6102,TR("Create a stereo pair from an image (or photo) and a DTM")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("histogram","hist",Cmdhistogram,TR("&Statistics..&Histogram"),TR("Histogram"),"ExeTbl16IcoL",".mpr.mpa.mps.mpp",5205,TR("Calculate the histogram of a raster or vector map")));
