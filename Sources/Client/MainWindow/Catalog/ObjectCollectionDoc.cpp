@@ -150,7 +150,8 @@ bool ObjectCollectionDoc::fEditable() const
 
 void ObjectCollectionDoc::AddObject(const FileName& fn)
 {
-
+	if (!fEditable())
+		return;
 	oc->Add(fn);
 	Catalog *cat = dynamic_cast<Catalog *>(wndGetActiveView());
 	if (!cat) return;
@@ -160,6 +161,8 @@ void ObjectCollectionDoc::AddObject(const FileName& fn)
 
 void ObjectCollectionDoc::RemoveObject(const FileName& fn)
 {
+	if (!fEditable())
+		return;
 	oc->Remove(fn);
 	SetModifiedFlag(true);
 }
