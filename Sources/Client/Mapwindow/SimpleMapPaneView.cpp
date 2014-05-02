@@ -475,6 +475,8 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 			bool fHide = true;
 			if (fValid && !fOutside && mode == cNone){
 				String s = mcd->rootDrawer->getInfo(c);
+				if (s == "")
+					s = "?";
 				info->text(point,s);
 			}
 			else
@@ -513,10 +515,10 @@ void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
 	if ( tools.size() == 0) {
 		SetCapture();
 		String s = mcd->rootDrawer->getInfo(c);
-		if (s != "") {
-			info->text(point,s);
-			info->ShowWindow(SW_SHOW);
-		}
+		if (s == "")
+			s = "?";
+		info->text(point,s);
+		info->ShowWindow(SW_SHOW);
 	}
 
 	//mcd->mpvGetView()->Invalidate();
