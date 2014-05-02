@@ -64,8 +64,8 @@ public:
 	void _export            Remove(const IlwisObject& );
 	void _export            Remove(const FileName& fnObj); // remove single object from object collection
 	void _export            RemoveAllObjects(); // remove all objects from object collection
-	IlwisObject  _export    ioObj(int i);
-	int _export             iNrObjects();
+	IlwisObject  _export    ioObj(int i) const;
+	int _export             iNrObjects() const;
 	FileName _export        fnObject(int i);
 	void _export            getBaseMaps(const Coord& crd, set<String>& bmps);
 	void _export            DeleteEntireCollection();
@@ -76,6 +76,7 @@ public:
 	static ObjectCollectionPtr*	create(const FileName& fn, const String& sExpression);
 	bool					fDependent() const;
 	void					BreakDependency();
+	virtual void _export	DeleteCalc(); 
 	bool					fCalculated() const;
 	void				    Calc(bool fMakeUpToDate);
 	void _export			SetAttributeTable(const Table& tbl);

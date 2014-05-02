@@ -244,7 +244,20 @@ bool ObjectCollectionPtr::fCalculated() const
   if (!fDependent())
     return IlwisObjectPtr::fCalculated();
   ILWISSingleLock sl(const_cast<CCriticalSection*>(&csCalc), TRUE);
-  return 0 != ocv;
+  if (iNrObjects() == 0)
+	  return false;
+  // The following is commented out because ioObj() occasionally causes a crash (see also comment at ioObj)
+  /*
+  for(int i = 0; i <= iNrObjects(); ++i)
+  {
+    IlwisObject obj = ioObj(i);
+    if (!obj.fValid())
+      return false;
+    if (!obj->fCalculated())
+      return false;
+  }
+  */
+  return true;
 } 
 
 void ObjectCollectionPtr::BreakDependency() {
@@ -287,6 +300,18 @@ void ObjectCollectionPtr::Calc(bool fMakeUpToDate)
       return;
   if (0 != ocv) 
     ocv->Freeze();
+}
+
+void ObjectCollectionPtr::DeleteCalc()
+// deletes calculated  result     
+{
+	ILWISSingleLock sl(&csCalc, TRUE, SOURCE_LOCATION);
+	OpenCollectionVirtual();
+	range = RangeReal();
+	if (0 != ocv) 
+		ocv->UnFreeze();
+	arObjects.clear();
+	Store();
 }
 
 bool ObjectCollectionPtr::fCanAdd(const FileName& fn)
@@ -450,7 +475,7 @@ FileName ObjectCollectionPtr::fnObject(int i)
 	return FileName();
 }
 
-IlwisObject ObjectCollectionPtr::ioObj(int i)
+IlwisObject ObjectCollectionPtr::ioObj(int i) const
 {
 	IlwisObject obj = IlwisObject::obj(arObjects[i]);
 	//for the moment postponed; causes a crash in the drawers as apparently one references isnt deleted and so all object remain with invalid entries in the object list.
@@ -460,7 +485,7 @@ IlwisObject ObjectCollectionPtr::ioObj(int i)
 	return obj;
 }
 
-int ObjectCollectionPtr::iNrObjects()
+int ObjectCollectionPtr::iNrObjects() const
 {
 	return arObjects.size();
 }
