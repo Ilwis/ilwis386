@@ -56,21 +56,23 @@ ProjectionGKGermany::ProjectionGKGermany(const Ellipsoid& ell)
   k0 = 1.0;
   phi0 = 0;
   y0 = 0;
-  Param(pvZONE, 1);
+  Param(pvZONE, 2);
 }
 
 void ProjectionGKGermany::Param(ProjectionParamValue pv, long iValue)
 {
   ProjectionPtr::Param(pv, iValue);
   if (pvZONE == pv) {
-    if (iNr <= 0 || iNr > 3)  {
-      iNr = 1;
+    if (iNr <= 0 || iNr > 5)  {
+      iNr = 2;
       InvalidGKGermanyZone();
     }
     switch (iNr) {
-      case 1: lam0 = M_PI/30; x0 = 2500000; break;
-      case 2: lam0 = M_PI/20; x0 = 3500000; break;     
-      case 3: lam0 = M_PI/15; x0 = 4500000; break;
+      case 1: lam0 = M_PI/60; x0 = 1500000; break;
+      case 2: lam0 = M_PI/30; x0 = 2500000; break;
+      case 3: lam0 = M_PI/20; x0 = 3500000; break;
+      case 4: lam0 = M_PI/15; x0 = 4500000; break;
+      case 5: lam0 = M_PI/12; x0 = 5500000; break;
     }  
   }
 }
@@ -82,12 +84,12 @@ Datum* ProjectionGKGermany::datumDefault() const
 
 long ProjectionGKGermany::iMaxZoneNr() const
 {
-	return 3;
+	return 5;
 }
 
 String ProjectionGKGermany::sInvalidZone() const
 {
-  return TR("Gauss-Krueger zones are numbered 1,2,3");
+  return TR("Gauss-Krueger zones are numbered 1,2,3,4,5");
 }
 
 
