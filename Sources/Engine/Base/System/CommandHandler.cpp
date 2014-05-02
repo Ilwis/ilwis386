@@ -1061,7 +1061,7 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 						case IlwisObject::iotMATRIX :
 							sType = "mat"; break;
 						case IlwisObject::iotOBJECTCOLLECTION :
-							sType = "col"; break;
+							sType = "ioc"; break;
 						case IlwisObject::iotSTEREOPAIR :
 							sType = "stp"; break;
 											};
