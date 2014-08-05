@@ -110,7 +110,7 @@ PointMapCross::PointMapCross(const FileName& fn, PointMapPtr& p, const PointMap&
    Table tbl;
   if ( pmap->fTblAtt()) {
 	Table tblatt = pmap->tblAtt();
-	String cmd("copy %S %S;", tblatt->fnObj.sRelative(), fnTable.sRelative());
+	String cmd("copy %S %S;", tblatt->fnObj.sRelativeQuoted(), fnTable.sRelativeQuoted());
 	getEngine()->Execute(cmd);
 	tbl = Table(fnTable);
   } else {
@@ -180,7 +180,7 @@ bool PointMapCross::fFreezing()
 			Map mp = maps->map(i);
 			Column col = tblAtt->col(mp->fnObj.sFile);
 			double rVal = mp->rValue(c);
-			col->PutVal(f,rVal);
+			col->PutVal(f + 1,rVal);
 		}
 	}
 	if ( tblAtt->fChanged)
