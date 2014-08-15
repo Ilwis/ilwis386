@@ -419,8 +419,6 @@ void StereoscopeWindow::StereoPairUpdated()
 
 void StereoscopeWindow::OnClose()
 {
-  docLeft->RemoveView(vwLeft);
-  docRight->RemoveView(vwRight);
 	DataWindow::OnClose();
 }
 
