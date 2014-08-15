@@ -274,22 +274,25 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				query = String("SELECT ST_SummaryStats(%S) From %S.%S Where rid=%S", geometryColumn, schema, tableName, id);
 			else
 				query = String("SELECT ST_SummaryStats('%S', '%S')", tableName, geometryColumn);
-			db.getNTResult(query.c_str());
-			if(db.getNumberOf(PostGreSQL::ROW) > 0) {
-				String res (db.getValue(0, 0));
-				res = res.sSub(1, res.size() - 2); // remove ( and )
-				Array<String> parts;
-				Split(res, parts, ",");
-				if (inf.dvrsMap.fRealValues()) {
-					double rMin = parts[4].rVal();
-					double rMax = parts[5].rVal();
-					map->SetMinMax(RangeReal(rMin, rMax));
+			try {
+				db.getNTResult(query.c_str());
+				if(db.getNumberOf(PostGreSQL::ROW) > 0) {
+					String res (db.getValue(0, 0));
+					res = res.sSub(1, res.size() - 2); // remove ( and )
+					Array<String> parts;
+					Split(res, parts, ",");
+					if (inf.dvrsMap.fRealValues()) {
+						double rMin = parts[4].rVal();
+						double rMax = parts[5].rVal();
+						map->SetMinMax(RangeReal(rMin, rMax));
+					}
+					else {
+						long iMin = parts[4].iVal();
+						long iMax = parts[5].iVal();
+						map->SetMinMax(RangeInt(iMin, iMax));
+					}
 				}
-				else {
-					long iMin = parts[4].iVal();
-					long iMax = parts[5].iVal();
-					map->SetMinMax(RangeInt(iMin, iMax));
-				}
+			} catch (ErrorObject& ) {
 			}
 		}
 
@@ -965,6 +968,7 @@ void PostGisMaps::GetLineRaw(long iLine, IntBuf& buf, long iFrom, long iNum) con
 
 void PostGisMaps::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long iNum) const
 {
+	rasterTiles->GetLineVal(iLine, buf, iFrom, iNum);
 }
 
 void PostGisMaps::GetLineVal(long iLine, LongBuf& buf, long iFrom, long iNum) const
@@ -1057,7 +1061,7 @@ void PostGisRasterTileset::GetLineVal(long iLine, LongBuf& buf, long iFrom, long
 				nodata_val = hex2dec(tileHex);
 				tileHex += 2;
 				for (int j = jMin; j < jMax; ++j) {
-					char b = hex2dec(&tileHex[2 * iLine * x_pixels_tile + 2 * j]);
+					unsigned char b = hex2dec(&tileHex[2 * iLine * x_pixels_tile + 2 * j]);
 					ptrBuf[pos++] = b;
 				}
 				break;
