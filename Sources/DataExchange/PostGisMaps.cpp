@@ -276,7 +276,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				trq.SetTitle(String(TR("Computing ST_SummaryStats of raster '%S' in table '%S'").c_str(), id, tableName));
 			} else {
 				query = String("SELECT ST_SummaryStats('%S', '%S')", tableName, geometryColumn);
-				trq.SetTitle(String(TR("Computing ST_SummaryStats of table '%S'").c_str(), tableName));
+				trq.SetTitle(String(TR("Computing ST_SummaryStats of raster in table '%S'").c_str(), tableName));
 			}
 			try {
 				trq.SetText(TR("Processing..."));
