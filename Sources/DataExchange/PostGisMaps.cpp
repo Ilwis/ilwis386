@@ -153,7 +153,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				String srid;
 				int x_pixels_tile;
 				int y_pixels_tile;
-				double nodata_value;
+				String nodata_value;
 				String pixel_type;
 				StoreType stPostgres;
 				ObjectInfo::ReadElement("Map", "GeoRef", fn, inf.grf);
@@ -166,7 +166,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				ObjectInfo::ReadElement("ForeignFormat", "nodata_value", fn, nodata_value);
 				ObjectInfo::ReadElement("ForeignFormat", "pixel_type", fn, pixel_type);
 				SetStoreType(pixel_type, inf, stPostgres);
-				rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, nodata_value, stPostgres);
+				rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, getNodataVal(nodata_value, pixel_type), stPostgres);
 				dvrsMap = inf.dvrsMap;
 
 				return;
@@ -228,7 +228,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 			String pixel_types(db.getValue(0, 7));
 			String nodata_values(db.getValue(0, 8));
 			String pixel_type;
-			double nodata_value;
+			String nodata_value;
 			int iBand = 0; // first band
 			if (pixel_types.iPos('{') == 0) {
 				pixel_types = pixel_types.sSub(1, pixel_types.size() - 2); // remove { and }
@@ -238,16 +238,16 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				pixel_type = bands[iBand];
 				bands.clear();
 				Split(nodata_values, bands, ",");
-				nodata_value = bands[iBand].rVal();
+				nodata_value = bands[iBand];
 			} else {
 				pixel_type = pixel_types;
-				nodata_value = nodata_values.rVal();
+				nodata_value = nodata_values;
 			}
 
 			StoreType stPostgres;
 			SetStoreType(pixel_type, inf, stPostgres);
 
-			rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, nodata_value, stPostgres);
+			rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, getNodataVal(nodata_value, pixel_type), stPostgres);
 			dvrsMap = inf.dvrsMap;
 
 			ObjectInfo::WriteElement("ForeignFormat", "srid", fn, srid);
@@ -357,6 +357,70 @@ void PostGisMaps::SetStoreType(String pixel_type, LayerInfo & inf, StoreType & s
 	} else {
 		inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0);
 	}
+}
+
+double PostGisMaps::getNodataVal(String & val, String & pixel_type) {
+
+	if (pixel_type == "32BF") {
+		float f;
+		char * c = (char*)(&f);
+		if (val == "Infinity") {
+			c[0] = PostGisRasterTileset::hex2dec("00");
+			c[1] = PostGisRasterTileset::hex2dec("00");
+			c[2] = PostGisRasterTileset::hex2dec("80");
+			c[3] = PostGisRasterTileset::hex2dec("7F");
+			return f;
+		} else if (val == "-Infinity") {
+			c[0] = PostGisRasterTileset::hex2dec("00");
+			c[1] = PostGisRasterTileset::hex2dec("00");
+			c[2] = PostGisRasterTileset::hex2dec("80");
+			c[3] = PostGisRasterTileset::hex2dec("FF");
+			return f;
+		} else if (val == "NaN") {
+			c[0] = PostGisRasterTileset::hex2dec("00");
+			c[1] = PostGisRasterTileset::hex2dec("00");
+			c[2] = PostGisRasterTileset::hex2dec("C0");
+			c[3] = PostGisRasterTileset::hex2dec("FF");
+			return f;
+		} else
+			return val.rVal();
+	} else if (pixel_type == "64BF") {
+		double d;
+		char * c = (char*)(&d);
+		if (val == "Infinity") {
+			c[0] = PostGisRasterTileset::hex2dec("00");
+			c[1] = PostGisRasterTileset::hex2dec("00");
+			c[2] = PostGisRasterTileset::hex2dec("00");
+			c[3] = PostGisRasterTileset::hex2dec("00");
+			c[4] = PostGisRasterTileset::hex2dec("00");
+			c[5] = PostGisRasterTileset::hex2dec("00");
+			c[6] = PostGisRasterTileset::hex2dec("F0");
+			c[7] = PostGisRasterTileset::hex2dec("7F");
+			return d;
+		} else if (val == "-Infinity") {
+			c[0] = PostGisRasterTileset::hex2dec("00");
+			c[1] = PostGisRasterTileset::hex2dec("00");
+			c[2] = PostGisRasterTileset::hex2dec("00");
+			c[3] = PostGisRasterTileset::hex2dec("00");
+			c[4] = PostGisRasterTileset::hex2dec("00");
+			c[5] = PostGisRasterTileset::hex2dec("00");
+			c[6] = PostGisRasterTileset::hex2dec("F0");
+			c[7] = PostGisRasterTileset::hex2dec("fF");
+			return d;
+		} else if (val == "NaN") {
+			c[0] = PostGisRasterTileset::hex2dec("00");
+			c[1] = PostGisRasterTileset::hex2dec("00");
+			c[2] = PostGisRasterTileset::hex2dec("00");
+			c[3] = PostGisRasterTileset::hex2dec("00");
+			c[4] = PostGisRasterTileset::hex2dec("00");
+			c[5] = PostGisRasterTileset::hex2dec("00");
+			c[6] = PostGisRasterTileset::hex2dec("F8");
+			c[7] = PostGisRasterTileset::hex2dec("FF");
+			return d;
+		} else
+			return val.rVal();
+	} else
+		return val.rVal();
 }
 
 void PostGisMaps::ReadParameters(const FileName& fnObj, ParmList& pm) 

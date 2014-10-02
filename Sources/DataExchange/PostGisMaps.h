@@ -50,8 +50,8 @@ public:
 	void GetLineVal(long iLine, LongBuf& buf, long iFrom, long iNum);
 	void GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum);
 	void RenewTiles(long iLine, long iFrom, long iNum);
+	static char hex2dec(char * str);
 private:
-	char hex2dec(char * str);
 	const GeoRef gr;
 	const String srid;
 	PostGreSQL * db;
@@ -115,6 +115,7 @@ protected:
 	PostGisRasterTileset*		 rasterTiles;
 private:
 	static void					 SetStoreType(String pixel_type, LayerInfo & inf, StoreType & stPostgres);
+	static double				 getNodataVal(String & val, String & pixel_type);
 	int                          x_pixels;
 	int                          y_pixels;
 	DomainValueRangeStruct       dvrsMap;
