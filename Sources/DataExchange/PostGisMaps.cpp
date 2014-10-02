@@ -270,11 +270,17 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 			map->SetUseAs(false);
 
 		if (inf.dvrsMap.fValues() && id == "" /* temporarily disable fetching stats from postgis as they are wrong */) {
-			if (id != "")
+			Tranquilizer trq;
+			if (id != "") {
 				query = String("SELECT ST_SummaryStats(%S) From %S.%S Where rid=%S", geometryColumn, schema, tableName, id);
-			else
+				trq.SetTitle(String(TR("Computing ST_SummaryStats of raster '%S' in table '%S'").c_str(), id, tableName));
+			} else {
 				query = String("SELECT ST_SummaryStats('%S', '%S')", tableName, geometryColumn);
+				trq.SetTitle(String(TR("Computing ST_SummaryStats of table '%S'").c_str(), tableName));
+			}
 			try {
+				trq.SetText(TR("Processing..."));
+				trq.fUpdate(0, 100);
 				db.getNTResult(query.c_str());
 				if(db.getNumberOf(PostGreSQL::ROW) > 0) {
 					String res (db.getValue(0, 0));
@@ -292,6 +298,7 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 						map->SetMinMax(RangeInt(iMin, iMax));
 					}
 				}
+				trq.fUpdate(100, 100);
 			} catch (ErrorObject& ) {
 			}
 		}
@@ -469,8 +476,12 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 		db.getNTResult(String("SELECT rid FROM %S.%S", schema, tableName).c_str());
 		int rows = db.getNumberOf(PostGreSQL::ROW);
 		String name = merge(tableName, geometryColumn, "_");
+		Tranquilizer trq;
+		trq.SetTitle(String(TR("Reading rasters in table '%S'").c_str(), tableName));
 		for(int i = 0; i < rows; ++i) {
 			String id (db.getValue(i, 0));
+			trq.SetText(String(TR("Processing raster '%S'").c_str(), id));
+			trq.fUpdate(i, rows);
 			String fileName = merge(name, id, "@");
 			FileName fnMap ("'" + fileName + "'", ".mpr");
 			lfnCurrent.push_back(fnMap);
@@ -479,6 +490,7 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 				fChanged = true;
 			}
 		}
+		trq.fUpdate(rows, rows);
 	} else {
 		db.getNTResult(String("SELECT table_name,column_name FROM INFORMATION_SCHEMA.Columns WHERE table_schema='%S' and udt_name='geometry'", schema).c_str());
 		int rows = db.getNumberOf(PostGreSQL::ROW);
