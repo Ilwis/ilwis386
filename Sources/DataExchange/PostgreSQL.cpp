@@ -47,7 +47,7 @@ PostGreSQL::PostGreSQL(const char *conninfo, bool fThrowException) : res(NULL), 
 		char *s = PQerrorMessage(conn);
 		String error(String(TR("Connection to database failed: %s:").c_str(), s));
 
-        exit();
+        finish();
 		
 		if (fThrowException)
 			throw ErrorObject(error);
@@ -68,7 +68,7 @@ PGconn *PostGreSQL::getConnection() {
 	return conn;
 }
 
-void PostGreSQL::exit()	{
+void PostGreSQL::finish()	{
 	clear();
 	res = NULL;
 
@@ -78,7 +78,7 @@ void PostGreSQL::exit()	{
 }
 
 PostGreSQL::~PostGreSQL() {
-	exit();
+	finish();
 }
 
 void PostGreSQL::getNTResult(const char *query) {
@@ -91,7 +91,7 @@ void PostGreSQL::getNTResult(const char *query) {
     {
 		const char *s = PQerrorMessage(conn);
 		String error(String(TR("Query failed: %s").c_str(), PQerrorMessage(conn)));
-        exit();
+        finish();
 		throw ErrorObject(error);
     }
 }

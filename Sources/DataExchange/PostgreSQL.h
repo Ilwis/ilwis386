@@ -58,5 +58,6 @@ public:
 	String getFieldName(int index);
 	PGconn *getConnection();
 	bool fValid();
-	void	   exit();
+private:
+	void finish();
 };
