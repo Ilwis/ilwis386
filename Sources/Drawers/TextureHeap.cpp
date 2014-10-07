@@ -268,13 +268,13 @@ Texture * TextureHeap::GetTexture(const unsigned int offsetX, const unsigned int
 			}
 		}
 		// if it is queued already, don't add it again, just be patient as it will come
+		csChangeTexCreatorList.Lock();
 		bool fQueued = workingTexture && workingTexture->equals(offsetX, offsetY, offsetX + sizeX, offsetY + sizeY, zoomFactor);
 		if (!fQueued) {
-			csChangeTexCreatorList.Lock();
 			for (vector<Texture*>::iterator it = textureRequest.begin(); it != textureRequest.end() && !fQueued; ++it)
 				fQueued = (*it)->equals(offsetX, offsetY, offsetX + sizeX, offsetY + sizeY, zoomFactor);
-			csChangeTexCreatorList.Unlock();
 		}
+		csChangeTexCreatorList.Unlock();
 		if (!fQueued)
 			GenerateTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, palette, fInThread);
 	} else { // caller is waiting for the Texture*
@@ -341,24 +341,35 @@ Texture * TextureHeap::GenerateNextTexture(bool fInThread)
 	csChangeTexCreatorList.Unlock();
 
 	if (tex != 0) {
-		bool fReGenerate = tex->fValid();
-		clock_t start = clock();
-		if (fReGenerate)
-			tex->ReCreateTexture(drawerContext, fInThread, &fAbortTexGen);
-		else
-			tex->CreateTexture(drawerContext, fInThread, &fAbortTexGen);
-		clock_t end = clock();
-		double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
-		//TRACE("Texture generated in %2.2f milliseconds;\n", duration);
-		if (!fReGenerate) {
-			if (tex->fValid())
-				textures.push_back(tex);
-			else {
-				delete tex;
-				tex = 0;
+		try {
+			bool fReGenerate = tex->fValid();
+			clock_t start = clock();
+			if (fReGenerate)
+				tex->ReCreateTexture(drawerContext, fInThread, &fAbortTexGen);
+			else
+				tex->CreateTexture(drawerContext, fInThread, &fAbortTexGen);
+			clock_t end = clock();
+			double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
+			//TRACE("Texture generated in %2.2f milliseconds;\n", duration);
+			if (!fReGenerate) {
+				if (tex->fValid())
+					textures.push_back(tex);
+				else {
+					delete tex;
+					tex = 0;
+				}
 			}
+			csChangeTexCreatorList.Lock();
+			workingTexture = 0;
+			csChangeTexCreatorList.Unlock();
+		} catch (ErrorObject& err) {
+			csChangeTexCreatorList.Lock();
+			workingTexture = 0;
+			delete tex;
+			tex = 0;
+			csChangeTexCreatorList.Unlock();
+			throw err;
 		}
-		workingTexture = 0;
 	}
 	return tex;
 }
@@ -371,11 +382,12 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 		return 1;
 	}
 
-	pObject->csThread.Lock();
-	try{
+	bool fErrorShown = false;
 
-		while (!pObject->fStopThread)
-		{
+	pObject->csThread.Lock();
+	while (!pObject->fStopThread)
+	{
+		try {
 			clock_t start = clock();
 			Texture * tex = pObject->GenerateNextTexture(true);
 			while (tex != 0) {
@@ -391,10 +403,14 @@ UINT TextureHeap::GenerateTexturesInThread(LPVOID pParam)
 				pObject->drawerContext->doDraw();
 			if (!pObject->fStopThread)
 				pObject->textureThread->SuspendThread(); // wait here, and dont consume CPU time either
+		} catch (ErrorObject& err) {
+			if (!fErrorShown) {
+				fErrorShown = true;
+				err.Show();
+			}
+			pObject->ClearQueuedTextures();
+			pObject->fAbortTexGen = true;
 		}
-	} catch (ErrorObject& err) {
-		err.Show();
-		return 0;
 	}
 
 	pObject->fStopThread = false;

@@ -54,13 +54,13 @@ Texture * WMSTextureHeap::GetTexture(const CoordBounds & cb, bool fInThread)
 			}
 		}
 		// if it is queued already, don't add it again, just be patient as it will come
+		csChangeTexCreatorList.Lock();
 		bool fQueued = workingTexture && (((WMSTexture*)workingTexture)->cb() == cb);
 		if (!fQueued) {
-			csChangeTexCreatorList.Lock();
 			for (vector<Texture*>::iterator it = textureRequest.begin(); it != textureRequest.end() && !fQueued; ++it)
 				fQueued = ((WMSTexture*)(*it))->cb() == cb;
-			csChangeTexCreatorList.Unlock();
 		}
+		csChangeTexCreatorList.Unlock();
 		if (!fQueued)
 			GenerateTexture(cb, fInThread);
 	} else { // caller is waiting for the Texture*
