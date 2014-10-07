@@ -91,7 +91,7 @@ void PostGreSQL::getNTResult(const char *query) {
     {
 		const char *s = PQerrorMessage(conn);
 		String error(String(TR("Query failed: %s").c_str(), PQerrorMessage(conn)));
-        finish();
+        clear();
 		throw ErrorObject(error);
     }
 }
