@@ -1069,7 +1069,11 @@ long PostGisMaps::iValue(RowCol rc) const
 {
 	if (rc.Col >= 0 && rc.Col < x_pixels && rc.Row >= 0 && rc.Row < y_pixels) {
 		LongBuf buf (x_pixels);
-		rasterTiles->GetLineVal(rc.Row, buf, 0, x_pixels);
+		try {
+			rasterTiles->GetLineVal(rc.Row, buf, 0, x_pixels);
+		} catch (ErrorObject& err) {
+			err.Show();
+		}
 		return buf[rc.Col];
 	} else
 		return iUNDEF;
@@ -1079,7 +1083,11 @@ double PostGisMaps::rValue(RowCol rc) const
 {
 	if (rc.Col >= 0 && rc.Col < x_pixels && rc.Row >= 0 && rc.Row < y_pixels) {
 		RealBuf buf (x_pixels);
-		rasterTiles->GetLineVal(rc.Row, buf, 0, x_pixels);
+		try {
+			rasterTiles->GetLineVal(rc.Row, buf, 0, x_pixels);
+		} catch (ErrorObject & err) {
+			err.Show();
+		}
 		return buf[rc.Col];
 	} else
 		return rUNDEF;
