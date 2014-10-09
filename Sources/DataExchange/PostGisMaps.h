@@ -45,7 +45,7 @@ ForeignFormat *CreateImportObjectPostGis(const FileName& fnObj, ParmList& pm); /
 class PostGisRasterTileset
 {
 public:
-	PostGisRasterTileset(String sConnectionString, String schema, String tableName, String geometryColumn, String id, const GeoRef & gr, String srid, int x_pixels_tile, int y_pixels_tile, double nodata_value, StoreType stPostgres);
+	PostGisRasterTileset(String sConnectionString, String schema, String tableName, String geometryColumn, String id, const GeoRef & gr, String srid, int x_pixels_tile, int y_pixels_tile, double nodata_value, StoreType stPostgres, bool out_db, bool new_style_st_asbinary);
 	~PostGisRasterTileset();
 	void GetLineVal(long iLine, LongBuf& buf, long iFrom, long iNum);
 	void GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum);
@@ -70,6 +70,8 @@ private:
 	const int bandHeaderSize;
 	const double nodata_value;
 	const StoreType stPostgres;
+	const bool out_db;
+	const bool new_style_st_asbinary;
 };
 
 class PostGisMaps : public PostgreSQLTables

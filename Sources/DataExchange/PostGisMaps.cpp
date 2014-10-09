@@ -155,6 +155,8 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				int y_pixels_tile;
 				String nodata_value;
 				String pixel_type;
+				bool out_db;
+				bool new_style_st_asbinary;
 				StoreType stPostgres;
 				ObjectInfo::ReadElement("Map", "GeoRef", fn, inf.grf);
 				ObjectInfo::ReadElement("BaseMap", "CoordSystem", fn, csy);
@@ -165,8 +167,10 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				ObjectInfo::ReadElement("ForeignFormat", "y_pixels", fn, y_pixels);
 				ObjectInfo::ReadElement("ForeignFormat", "nodata_value", fn, nodata_value);
 				ObjectInfo::ReadElement("ForeignFormat", "pixel_type", fn, pixel_type);
+				ObjectInfo::ReadElement("ForeignFormat", "out_db", fn, out_db);
+				ObjectInfo::ReadElement("ForeignFormat", "new_style_st_asbinary", fn, new_style_st_asbinary);
 				SetStoreType(pixel_type, inf, stPostgres);
-				rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, getNodataVal(nodata_value, pixel_type), stPostgres);
+				rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, getNodataVal(nodata_value, pixel_type), stPostgres, out_db, new_style_st_asbinary);
 				dvrsMap = inf.dvrsMap;
 
 				return;
@@ -177,9 +181,9 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 		PostGreSQL db(sConnectionString.c_str());
 		String query;
 		if (id != "")
-			query = String("Select ST_SRID(%S), ST_ScaleX(%S), ST_ScaleY(%S), ST_Width(%S), ST_Height(%S), st_astext(ST_Envelope(%S)), ST_NumBands(%S), ST_BandPixelType(%S), ST_BandNoDataValue(%S) From %S.%S Where rid=%S", geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, schema, tableName, id);
+			query = String("With metadata1 as (Select ST_SRID(%S), ST_ScaleX(%S), ST_ScaleY(%S), ST_Width(%S), ST_Height(%S), st_astext(ST_Envelope(%S)), ST_NumBands(%S), ST_BandPixelType(%S), ST_BandNoDataValue(%S) From %S.%S Where rid=%S), metadata2 as (Select out_db From raster_columns where r_table_schema='%S' and r_table_name='%S' and r_raster_column='%S'), metadata3 as (SELECT pg_type.typname FROM pg_proc, pg_type WHERE proname='st_asbinary' and pg_proc.proargtypes[1]=pg_type.oid and pg_type.typname='bool' limit 1) Select * from metadata1, metadata2 left outer join metadata3 on true", geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, geometryColumn, schema, tableName, id, schema, tableName, geometryColumn);
 		else
-   			query = String("Select srid, scale_x, scale_y, blocksize_x, blocksize_y, st_astext(extent), num_bands, pixel_types, nodata_values from raster_columns where r_table_schema='%S' and r_table_name='%S' and r_raster_column='%S'", schema, tableName, geometryColumn);
+   			query = String("With metadata1 as (Select srid, scale_x, scale_y, blocksize_x, blocksize_y, st_astext(extent), num_bands, pixel_types, nodata_values, out_db from raster_columns where r_table_schema='%S' and r_table_name='%S' and r_raster_column='%S'), metadata2 as (SELECT pg_type.typname FROM pg_proc, pg_type WHERE proname='st_asbinary' and pg_proc.proargtypes[1]=pg_type.oid and pg_type.typname='bool' limit 1) Select * from metadata1 left outer join metadata2 on true", schema, tableName, geometryColumn);
 		db.getNTResult(query.c_str());
 		if(db.getNumberOf(PostGreSQL::ROW) > 0) {
 			// CoordinateSystem
@@ -227,27 +231,35 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 			int nrBands = String(db.getValue(0, 6)).iVal();
 			String pixel_types(db.getValue(0, 7));
 			String nodata_values(db.getValue(0, 8));
+			String out_db_values(db.getValue(0, 9));
 			String pixel_type;
 			String nodata_value;
+			bool out_db;
+			bool new_style_st_asbinary = !db.isNull(0, 10);
 			int iBand = 0; // first band
 			if (pixel_types.iPos('{') == 0) {
 				pixel_types = pixel_types.sSub(1, pixel_types.size() - 2); // remove { and }
 				nodata_values = nodata_values.sSub(1, nodata_values.size() - 2); // remove { and }
+				out_db_values = out_db_values.sSub(1, out_db_values.size() - 2); // remove { and }
 				Array<String> bands;
 				Split(pixel_types, bands, ",");
 				pixel_type = bands[iBand];
 				bands.clear();
 				Split(nodata_values, bands, ",");
 				nodata_value = bands[iBand];
+				bands.clear();
+				Split(out_db_values, bands, ",");
+				out_db = bands[iBand].fVal();
 			} else {
 				pixel_type = pixel_types;
 				nodata_value = nodata_values;
+				out_db = out_db_values.fVal();
 			}
 
 			StoreType stPostgres;
 			SetStoreType(pixel_type, inf, stPostgres);
 
-			rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, getNodataVal(nodata_value, pixel_type), stPostgres);
+			rasterTiles = new PostGisRasterTileset(sConnectionString, schema, tableName, geometryColumn, id, inf.grf, srid, x_pixels_tile, y_pixels_tile, getNodataVal(nodata_value, pixel_type), stPostgres, out_db, new_style_st_asbinary);
 			dvrsMap = inf.dvrsMap;
 
 			ObjectInfo::WriteElement("ForeignFormat", "srid", fn, srid);
@@ -257,6 +269,8 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 			ObjectInfo::WriteElement("ForeignFormat", "y_pixels", fn, y_pixels);
 			ObjectInfo::WriteElement("ForeignFormat", "nodata_value", fn, nodata_value);
 			ObjectInfo::WriteElement("ForeignFormat", "pixel_type", fn, pixel_type);
+			ObjectInfo::WriteElement("ForeignFormat", "out_db", fn, out_db);
+			ObjectInfo::WriteElement("ForeignFormat", "new_style_st_asbinary", fn, new_style_st_asbinary);
 		}
 
 		inf.fnObj = fn;
@@ -1093,7 +1107,7 @@ double PostGisMaps::rValue(RowCol rc) const
 		return rUNDEF;
 }
 
-PostGisRasterTileset::PostGisRasterTileset(String sConnectionString, String _schema, String _tableName, String _geometryColumn, String _id, const GeoRef & _gr, String _srid, int _x_pixels_tile, int _y_pixels_tile, double _nodata_value, StoreType _stPostgres)
+PostGisRasterTileset::PostGisRasterTileset(String sConnectionString, String _schema, String _tableName, String _geometryColumn, String _id, const GeoRef & _gr, String _srid, int _x_pixels_tile, int _y_pixels_tile, double _nodata_value, StoreType _stPostgres, bool _out_db, bool _new_style_st_asbinary)
 : db(new PostGreSQL (sConnectionString.c_str()))
 , schema(_schema)
 , tableName(_tableName)
@@ -1112,6 +1126,8 @@ PostGisRasterTileset::PostGisRasterTileset(String sConnectionString, String _sch
 , bandHeaderSize(1)
 , nodata_value(_nodata_value)
 , stPostgres(_stPostgres)
+, out_db(_out_db)
+, new_style_st_asbinary(_new_style_st_asbinary)
 {
 }
 
@@ -1142,7 +1158,7 @@ void PostGisRasterTileset::GetLineVal(long iLine, LongBuf& buf, long iFrom, long
 			case stBIT:
 				break;
 			case stBYTE:
-				nodata_val = hex2dec(tileHex);
+				nodata_val = hex2dec(tileHex); // ???? what is this line doing here?
 				tileHex += 2;
 				for (int j = jMin; j < jMax; ++j) {
 					unsigned char b = hex2dec(&tileHex[2 * iLine * x_pixels_tile + 2 * j]);
@@ -1322,7 +1338,7 @@ char PostGisRasterTileset::hex2dec(char * str)
 void PostGisRasterTileset::RenewTiles(long iLine, long iFrom, long iNum)
 {
 	if (id != "") {
-		String str("SELECT %S FROM %S.%S WHERE rid=%S", geometryColumn, schema, tableName, id);
+		String str ("SELECT %S FROM %S.%S WHERE rid=%S", out_db ? (String("ST_AsBinary(%S%s)", geometryColumn, new_style_st_asbinary?",TRUE":"")) : geometryColumn, schema, tableName, id);
 		db->getNTResult(str.c_str());
 		iNumTiles = db->getNumberOf(PostGreSQL::ROW);
 		iLeft = iFrom - iFrom % x_pixels_tile;
@@ -1335,7 +1351,7 @@ void PostGisRasterTileset::RenewTiles(long iLine, long iFrom, long iNum)
 		gr->RowCol2Coord(iLine + 0.5, iFrom + 0.5, crd1);
 		gr->RowCol2Coord(iLine + 0.5, iFrom + iNum - 1.5, crd2);
 		//String str("SELECT %S FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;POLYGON((%.18f %.18f,%.18f %.18f,%.18f %.18f,%.18f %.18f,%.18f %.18f))')) order by ST_UpperLeftX(%S)", geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd1.y, crd2.x, crd2.y, crd1.x, crd2.y, crd1.x, crd1.y, geometryColumn);
-		String str("SELECT %S FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;LINESTRING(%.18f %.18f,%.18f %.18f)')) order by ST_UpperLeftX(%S)", geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd2.y, geometryColumn);
+		String str ("SELECT %S FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;LINESTRING(%.18f %.18f,%.18f %.18f)')) order by ST_UpperLeftX(%S)", out_db ? (String("ST_AsBinary(%S%s)", geometryColumn, new_style_st_asbinary?",TRUE":"")) : geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd2.y, geometryColumn);
 		db->getNTResult(str.c_str());
 		iNumTiles = db->getNumberOf(PostGreSQL::ROW);
 		iLeft = iFrom - iFrom % x_pixels_tile;
