@@ -53,6 +53,7 @@ public:
 	int getNumberOf(Dim d);
 	char *getValue(int row, const char* column);
 	char *getValue(int row, int column);
+	bool isNull(int row, int column);
 	void putStringValue(char *column, const String& sV);
 	void clear();
 	String getFieldName(int index);

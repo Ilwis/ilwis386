@@ -129,6 +129,17 @@ char * PostGreSQL::getValue(int row, int column) {
 	return PQgetvalue(res, row, column);
 }
 
+bool PostGreSQL::isNull(int row, int column) {
+	if ( res == NULL) {
+		String error(TR("No query yet executed"));
+		throw ErrorObject(error);
+	}
+	if ( row < 0 || column < 0 )
+		return NULL;
+
+	return 1 == PQgetisnull(res, row, column);
+}
+
 void PostGreSQL::putStringValue(char *column, const String& sV) {
 
 }
