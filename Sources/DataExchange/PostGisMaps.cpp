@@ -1153,7 +1153,7 @@ void PostGisRasterTileset::GetLineVal(long iLine, LongBuf& buf, long iFrom, long
 		int jMin = ((i == iStartTile) && (iFrom > iLeft)) ? ((iFrom - iLeft) % x_pixels_tile) : 0;
 		int jMax = ((i == (iEndTile - 1)) && (iFrom + iNum - 1 < iRight)) ? (x_pixels_tile - (iRight - iNum - iFrom + 1) % x_pixels_tile) : x_pixels_tile;
 		char * tileHex = db->getValue(i, 0);
-		tileHex += 2 * (headerSize + bandHeaderSize);
+		tileHex += 2 + 2 * (headerSize + bandHeaderSize);
 		switch(stPostgres) {
 			case stBIT:
 				break;
@@ -1248,7 +1248,7 @@ void PostGisRasterTileset::GetLineVal(long iLine, RealBuf& buf, long iFrom, long
 		int jMin = ((i == iStartTile) && (iFrom > iLeft)) ? ((iFrom - iLeft) % x_pixels_tile) : 0;
 		int jMax = ((i == (iEndTile - 1)) && (iFrom + iNum - 1 < iRight)) ? (x_pixels_tile - (iRight - iNum - iFrom + 1) % x_pixels_tile) : x_pixels_tile;
 		char * tileHex = db->getValue(i, 0);
-		tileHex += 2 * (headerSize + bandHeaderSize);
+		tileHex += 2 + 2 * (headerSize + bandHeaderSize);
 		switch(stPostgres) {
 			case stBIT:
 				break;
@@ -1329,8 +1329,8 @@ char PostGisRasterTileset::hex2dec(char * str)
 {
 	char h = str[0];
 	char l = str[1];
-	char h1 = (h <= '9') ? (h - '0') : (h - 'A' + 10);
-	char l1 = (l <= '9') ? (l - '0') : (l - 'A' + 10);
+	char h1 = (h <= '9') ? (h - '0') : (h - 'a' + 10);
+	char l1 = (l <= '9') ? (l - '0') : (l - 'a' + 10);
 	char hl = (h1 << 4) | l1;
 	return hl;
 }
@@ -1338,7 +1338,7 @@ char PostGisRasterTileset::hex2dec(char * str)
 void PostGisRasterTileset::RenewTiles(long iLine, long iFrom, long iNum)
 {
 	if (id != "") {
-		String str ("SELECT %S FROM %S.%S WHERE rid=%S", out_db ? (String("ST_AsBinary(%S%s)", geometryColumn, new_style_st_asbinary?",TRUE":"")) : geometryColumn, schema, tableName, id);
+		String str ("SELECT ST_AsBinary(%S) FROM %S.%S WHERE rid=%S", out_db ? (String(new_style_st_asbinary ? "%S,TRUE" : "ST_MapAlgebraExpr(%S,1,NULL,'[rast]')", geometryColumn)) : geometryColumn, schema, tableName, id);
 		db->getNTResult(str.c_str());
 		iNumTiles = db->getNumberOf(PostGreSQL::ROW);
 		iLeft = iFrom - iFrom % x_pixels_tile;
@@ -1351,7 +1351,7 @@ void PostGisRasterTileset::RenewTiles(long iLine, long iFrom, long iNum)
 		gr->RowCol2Coord(iLine + 0.5, iFrom + 0.5, crd1);
 		gr->RowCol2Coord(iLine + 0.5, iFrom + iNum - 1.5, crd2);
 		//String str("SELECT %S FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;POLYGON((%.18f %.18f,%.18f %.18f,%.18f %.18f,%.18f %.18f,%.18f %.18f))')) order by ST_UpperLeftX(%S)", geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd1.y, crd2.x, crd2.y, crd1.x, crd2.y, crd1.x, crd1.y, geometryColumn);
-		String str ("SELECT %S FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;LINESTRING(%.18f %.18f,%.18f %.18f)')) order by ST_UpperLeftX(%S)", out_db ? (String("ST_AsBinary(%S%s)", geometryColumn, new_style_st_asbinary?",TRUE":"")) : geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd2.y, geometryColumn);
+		String str ("SELECT ST_AsBinary(%S) FROM %S.%S WHERE ST_Intersects(%S, ST_GeomFromEWKT('SRID=%S;LINESTRING(%.18f %.18f,%.18f %.18f)')) order by ST_UpperLeftX(%S)", out_db ? (String(new_style_st_asbinary ? "%S,TRUE" : "ST_MapAlgebraExpr(%S,1,NULL,'[rast]')", geometryColumn)) : geometryColumn, schema, tableName, geometryColumn, srid, crd1.x, crd1.y, crd2.x, crd2.y, geometryColumn);
 		db->getNTResult(str.c_str());
 		iNumTiles = db->getNumberOf(PostGreSQL::ROW);
 		iLeft = iFrom - iFrom % x_pixels_tile;
