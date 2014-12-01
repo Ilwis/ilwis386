@@ -630,8 +630,8 @@ void MapPaneView::OnCoordSysEdit()
 		if (edit)
 			delete edit;
 		edit = 0;
-		//edit = new CoordSystemEditor(this,cs);
-		throw ErrorObject(String("TO be done %s %s", __FILE__, __LINE__));
+		edit = new CoordSystemEditor(this,cs);
+		//throw ErrorObject(String("TO be done %s %s", __FILE__, __LINE__));
 		if (edit)	{
 			Invalidate();
 		}

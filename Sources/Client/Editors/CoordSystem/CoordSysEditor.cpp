@@ -82,6 +82,9 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Editors\Georef\EditFiducialMarksForm.h"
 #include "Client\Editors\Digitizer\DIGITIZR.H"
+#include "Engine\Drawers\SimpleDrawer.h"
+#include "Engine\Drawers\TextDrawer.h"
+#include "Engine\Drawers\OpenGLText.h"
 
 using namespace ILWIS;
 
@@ -326,8 +329,13 @@ String CoordSystemEditor::sTitle() const
 
 int CoordSystemEditor::draw(volatile bool* fDrawStop)
 {
-	//cdc->SetTextAlign(TA_LEFT|TA_TOP); //	default
-	//cdc->SetBkMode(TRANSPARENT);
+	RootDrawer * rootDrawer = mpv->GetDocument()->rootDrawer;
+	ILWIS::DrawerParameters dpLayerDrawer (rootDrawer, 0);
+	ILWIS::TextLayerDrawer *textLayerDrawer = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dpLayerDrawer);	
+	ILWIS::DrawerParameters dpTextDrawer (rootDrawer, textLayerDrawer);
+	ILWIS::TextDrawer *textDrawer = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dpTextDrawer);
+	OpenGLText * font = new OpenGLText (rootDrawer, "arial.ttf", 15, true, 1, -15);
+	textLayerDrawer->setFont(font);
 	for (long r = 1; r <= csctp->iNr(); ++r) {
 		Color clr;
 		if (csctp->fActive(r))
@@ -348,24 +356,24 @@ int CoordSystemEditor::draw(volatile bool* fDrawStop)
 		}
 		else
 			clr = colPassive;
-		//cdc->SetTextColor(clr);
 		smb.col = clr;
 		Coord crd = csctp->crd(r);
-		//zPoint pnt = psn->pntPos(crd);
-		zPoint pnt = zPoint(crd.x, crd.y);
-		//zPoint pntText = smb.pntText(cdc, pnt);
 		String s("%li", r);
-		//cdc->TextOut(pntText.x,pntText.y,s.sVal());
-		//smb.drawSmb(cdc, 0, pnt);
 		glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
-		glBegin(GL_POINT);
+		glPointSize(5.0);
+		glBegin(GL_POINTS);
 		glVertex3f(crd.x, crd.y, 0);
 		glEnd();
+		textDrawer->addDataSource(&s);
+		textDrawer->setCoord(Coordinate(crd.x, crd.y, 0));
+		font->setColor(clr);
+		textDrawer->draw(ILWIS::NewDrawer::drl2D);
 	}
 	if (efmf) {
 		efmf->draw();
 		efmf->drawPrincPoint();
 	}
+	delete textLayerDrawer;
 	return 0;
 }
 
@@ -653,7 +661,7 @@ int CoordSystemEditor::drawPoint(long iNr)
 bool CoordSystemEditor::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	mpv->SetFocus();
-	Coord crd = mpv->crdPnt(point);
+	Coord crd = mpv->GetDocument()->rootDrawer->screenToOpenGL(RowCol(point.y,point.x));
 	if (efmf) {
 		efmf->OnLButtonDown(crd);
 		return true;
