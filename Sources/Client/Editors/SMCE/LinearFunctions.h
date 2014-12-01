@@ -107,4 +107,28 @@ private:
 	double b3; // y = a3x + b3 in third interval
 };
 
+class PiecewiseLinear5Function : public SmceFunction
+{
+public:
+	PiecewiseLinear5Function(const DoubleRect & drDomain, bool fBenefit);
+	virtual ~PiecewiseLinear5Function();
+	virtual double rGetFx(double x) const;
+	virtual void SetDefaultAnchors();
+	virtual String sGetFx(String sData);
+	virtual String sDescription();
+protected:
+	virtual void SolveParams();
+private:
+	double a1;
+	double b1; // y = a1x + b1 in first interval
+	double a2;
+	double b2; // y = a2x + b2 in second interval
+	double a3;
+	double b3; // y = a3x + b3 in third interval
+	double a4;
+	double b4; // y = a4x + b4 in fourth interval
+	double a5;
+	double b5; // y = a5x + b5 in fifth interval
+};
+
 #endif // !defined(AFX_LINEFUNCTION_H__B90CBC59_5D00_439A_96A8_E53430122F30__INCLUDED_)

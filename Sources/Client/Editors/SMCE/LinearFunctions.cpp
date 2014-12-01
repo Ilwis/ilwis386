@@ -295,3 +295,99 @@ String PiecewiseLinearFunction::sDescription()
 {
 	return String("%S(%.3f,%.3f)", String("PiecewiseLinear"), m_Anchors[0].X, m_Anchors[3].X);
 }
+
+//////////////////////////////////////////////////////////////////////
+// PiecewiseLinear5Function
+//////////////////////////////////////////////////////////////////////
+
+PiecewiseLinear5Function::PiecewiseLinear5Function(const DoubleRect & drDomain, bool fBenefit)
+: SmceFunction(6, drDomain, fBenefit)
+{
+
+}
+
+PiecewiseLinear5Function::~PiecewiseLinear5Function()
+{
+
+}
+
+double PiecewiseLinear5Function::rGetFx(double x) const
+{
+	if (x < m_Anchors[1].X)
+		return a1 * x + b1;
+	else if (x < m_Anchors[2].X)
+		return a2 * x + b2;
+	else if (x < m_Anchors[3].X)
+		return a3 * x + b3;
+	else if (x < m_Anchors[4].X)
+		return a4 * x + b4;
+	else
+		return a5 * x + b5;
+}
+
+void PiecewiseLinear5Function::SolveParams()
+{
+	m_Anchors[0].X = m_Domain.left;
+	m_Anchors[5].X = m_Domain.right;
+	for (int i = 0; i < 6; ++i)
+	{
+		if (m_Anchors[i].Y < m_Domain.bottom)
+			m_Anchors[i].Y = m_Domain.bottom;
+		else if (m_Anchors[i].Y > m_Domain.top)
+			m_Anchors[i].Y = m_Domain.top;
+	}
+
+	a1 = (m_Anchors[1].Y - m_Anchors[0].Y) / (m_Anchors[1].X - m_Anchors[0].X);
+	b1 = m_Anchors[0].Y - a1 * m_Anchors[0].X;
+
+	a2 = (m_Anchors[2].Y - m_Anchors[1].Y) / (m_Anchors[2].X - m_Anchors[1].X);
+	b2 = m_Anchors[1].Y - a2 * m_Anchors[1].X;
+	
+	a3 = (m_Anchors[3].Y - m_Anchors[2].Y) / (m_Anchors[3].X - m_Anchors[2].X);
+	b3 = m_Anchors[2].Y - a3 * m_Anchors[2].X;
+
+	a4 = (m_Anchors[4].Y - m_Anchors[3].Y) / (m_Anchors[4].X - m_Anchors[3].X);
+	b4 = m_Anchors[3].Y - a4 * m_Anchors[3].X;
+
+	a5 = (m_Anchors[5].Y - m_Anchors[4].Y) / (m_Anchors[5].X - m_Anchors[4].X);
+	b5 = m_Anchors[4].Y - a5 * m_Anchors[4].X;
+}
+
+void PiecewiseLinear5Function::SetDefaultAnchors()
+{
+	m_Anchors[1].X = m_Domain.left + m_Domain.Width() / 5;
+	m_Anchors[2].X = m_Domain.left + m_Domain.Width() * 2 / 5;
+	m_Anchors[3].X = m_Domain.left + m_Domain.Width() * 3 / 5;
+	m_Anchors[4].X = m_Domain.left + m_Domain.Width() * 4 / 5;
+	if (fBenefit())
+	{
+		m_Anchors[0].Y = m_Domain.bottom;
+		m_Anchors[1].Y = m_Domain.bottom + m_Domain.Height() / 5;
+		m_Anchors[2].Y = m_Domain.bottom + m_Domain.Height() * 2 / 5;
+		m_Anchors[3].Y = m_Domain.bottom + m_Domain.Height() * 3 / 5;
+		m_Anchors[4].Y = m_Domain.bottom + m_Domain.Height() * 4 / 5;
+		m_Anchors[5].Y = m_Domain.top;
+	}
+	else
+	{
+		m_Anchors[0].Y = m_Domain.top;
+		m_Anchors[1].Y = m_Domain.bottom + m_Domain.Height() * 4 / 5;
+		m_Anchors[2].Y = m_Domain.bottom + m_Domain.Height() * 3 / 5;
+		m_Anchors[3].Y = m_Domain.bottom + m_Domain.Height() * 2 / 5;
+		m_Anchors[4].Y = m_Domain.bottom + m_Domain.Height() / 5;
+		m_Anchors[5].Y = m_Domain.bottom;
+	}
+	SolveParams();
+}
+
+String PiecewiseLinear5Function::sGetFx(String sData)
+{
+	SolveParams();
+	//return a * x + b;
+	return String ("iff(%S<%lg,%lg*%S+%lg,iff(%S<%lg,%lg*%S+%lg,iff(%S<%lg,%lg*%S+%lg,iff(%S<%lg,%lg*%S+%lg,%lg*%S+%lg))))", sData, m_Anchors[1].X, a1, sData, b1, sData, m_Anchors[2].X, a2, sData, b2, sData, m_Anchors[3].X, a3, sData, b3, sData, m_Anchors[4].X, a4, sData, b4, a5, sData, b5);
+}
+
+String PiecewiseLinear5Function::sDescription()
+{
+	return String("%S(%.3f,%.3f)", String("PiecewiseLinear5"), m_Anchors[0].X, m_Anchors[5].X);
+}

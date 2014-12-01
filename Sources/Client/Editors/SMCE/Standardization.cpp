@@ -199,6 +199,10 @@ void StdValueMethodToInt(StandardizationValue::eStdValueMethodTP eMethod, Standa
 			iMethod = 9;
 			iCostBenefit = 2;
 			break;
+		case StandardizationValue::iPIECEWISELINEAR5:
+			iMethod = 10;
+			iCostBenefit = 2;
+			break;
 	}
 }
 
@@ -250,6 +254,10 @@ void IntToStdValueMethod(int iMethod, int iCostBenefit, StandardizationValue::eS
 			eMethod = StandardizationValue::iPIECEWISELINEAR;
 			eCostBenefit = StandardizationValue::iBENEFIT;
 			break;
+		case 10:
+			eMethod = StandardizationValue::iPIECEWISELINEAR5;
+			eCostBenefit = StandardizationValue::iBENEFIT;
+			break;
 	}
 }
 
@@ -288,6 +296,9 @@ SmceFunction* pGetNewFunction(StandardizationValue::eStdValueMethodTP eStdValueM
 			break;
 		case StandardizationValue::iPIECEWISELINEAR:
 			pNewFunction = new PiecewiseLinearFunction(drFunctionDomain, fBenefit);
+			break;
+		case StandardizationValue::iPIECEWISELINEAR5:
+			pNewFunction = new PiecewiseLinear5Function(drFunctionDomain, fBenefit);
 			break;
 	}
 
@@ -400,7 +411,6 @@ public:
 			stTwo->SetIndependentPos();
 		}
 
-
 		// Cost/Benefit consideration
 		rgCostBenefit = new RadioGroup(fgLeft, TR("Consider as:"), &m_iCostBenefit);
 		rgCostBenefit->SetCallBack((NotifyProc)&StandardizationValueForm::CallBackCostBenefitChanged);
@@ -408,8 +418,6 @@ public:
 		new RadioButton(rgCostBenefit, TR("Benefit"));
 		new RadioButton(rgCostBenefit, TR("Cost"));
 		new RadioButton(rgCostBenefit, "Combination");
-
-
 
 		StaticText * stMethodLabel = new StaticText(fgLeft, TR("Method"));
 		rgStdValueMethod = new RadioGroup(fgLeft, "", &m_iMethod);
@@ -425,6 +433,7 @@ public:
 		rbGaussian_up = new RadioButton(rgStdValueMethod, "Gaussian, up");
 		rbGaussian_down = new RadioButton(rgStdValueMethod, "Gaussian, down");
 		rbPiecewiseLinear = new RadioButton(rgStdValueMethod, "Piecewise Linear");
+		rbPiecewiseLinear5 = new RadioButton(rgStdValueMethod, "Piecewise Linear5");
 		for (int i = 0; i < ANCHORS_IN_FORM; ++i)
 		{
 			frAnchorX[i] = new FieldReal(fgLeft, String("X%d", i+1), &m_Anchors[i].X, vrPrecision);
@@ -469,6 +478,7 @@ public:
 			rbGaussian_up->Hide();
 			rbGaussian_down->Hide();
 			rbPiecewiseLinear->Hide();
+			rbPiecewiseLinear5->Hide();
 			
 			if (rgStdValueMethod->iVal() > 4)
 				rgStdValueMethod->SetVal(0);
@@ -503,6 +513,7 @@ public:
 			rbGaussian_up->Show();
 			rbGaussian_down->Show();
 			rbPiecewiseLinear->Show();
+			rbPiecewiseLinear5->Show();
 			if (rgStdValueMethod->iVal() < 5)
 				rgStdValueMethod->SetVal(5);
 			break;
@@ -695,6 +706,7 @@ private:
 	RadioButton * rbGaussian_up;
 	RadioButton * rbGaussian_down;
 	RadioButton * rbPiecewiseLinear;
+	RadioButton * rbPiecewiseLinear5;
 	RadioGroup* rgCostBenefit;
 	RadioGroup* rgStdValueMethod;
 	FieldGraph* fgFunctionGraph;

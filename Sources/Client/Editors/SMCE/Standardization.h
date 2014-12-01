@@ -106,7 +106,7 @@ protected:
 	StandardizationValue(Effect* peOwner);
 	virtual ~StandardizationValue();
 public:
-	enum eStdValueMethodTP{iMAXIMUM, iINTERVAL, iGOAL, iCONVEX, iCONCAVE, iUSHAPE, iGAUSSIAN, iPIECEWISELINEAR}; // VALUE standardization
+	enum eStdValueMethodTP{iMAXIMUM, iINTERVAL, iGOAL, iCONVEX, iCONCAVE, iUSHAPE, iGAUSSIAN, iPIECEWISELINEAR, iPIECEWISELINEAR5}; // VALUE standardization
 
 	void ShowForm();
 	static Standardization* create(Effect* peOwner);
@@ -149,6 +149,9 @@ private:
 		case iPIECEWISELINEAR:
 			return "PiecewiseLinear";
 			break;
+		case iPIECEWISELINEAR5:
+			return "PiecewiseLinear5";
+			break;
 		default:
 			return "";
 		}
@@ -172,6 +175,8 @@ private:
 			return iGAUSSIAN;
 		else if ("PiecewiseLinear" == s)
 			return iPIECEWISELINEAR;
+		else if ("PiecewiseLinear5" == s)
+			return iPIECEWISELINEAR5;
 		else
 			return iMAXIMUM; // wrong!!
 	};
