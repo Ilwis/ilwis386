@@ -151,17 +151,24 @@ void SpaceTimeDrawer::prepare(PreparationParameters *parms){
 			selectedObjectIDs = getObjectIDs(selectedRaws);
 			// highlight selected items
 			if (rootDrawer->getDrawerContext()->TakeContext()) {
-				long numberOfFeatures = basemap->iFeatures();
-				bool fPrevSelected = false;
-				for (map<long, GLuint>::iterator mapEntry = subDisplayLists->begin(); mapEntry != subDisplayLists->end(); ++mapEntry) {
-					bool fSelected = find(selectedObjectIDs.begin(), selectedObjectIDs.end(), mapEntry->first) != selectedObjectIDs.end();
-					glNewList(mapEntry->second, GL_COMPILE);
-					if (fSelected && !fPrevSelected)
-						glTranslated(0, 0.5, 0);
-					else if (fPrevSelected && !fSelected)
-						glTranslated(0, -0.5, 0);
-					glEndList();
-					fPrevSelected = fSelected;
+				//long numberOfFeatures = basemap->iFeatures();
+				if (selectedObjectIDs.size() > 0) {
+					bool fPrevSelected = true;
+					for (map<long, GLuint>::iterator mapEntry = subDisplayLists->begin(); mapEntry != subDisplayLists->end(); ++mapEntry) {
+						bool fSelected = find(selectedObjectIDs.begin(), selectedObjectIDs.end(), mapEntry->first) != selectedObjectIDs.end();
+						glNewList(mapEntry->second, GL_COMPILE);
+						if (fSelected && !fPrevSelected)
+							glTranslated(0, -0.5, 0);
+						else if (fPrevSelected && !fSelected)
+							glTranslated(0, 0.5, 0);
+						glEndList();
+						fPrevSelected = fSelected;
+					}
+				} else {
+					for (map<long, GLuint>::iterator mapEntry = subDisplayLists->begin(); mapEntry != subDisplayLists->end(); ++mapEntry) {
+						glNewList(mapEntry->second, GL_COMPILE);
+						glEndList();
+					}
 				}
 				rootDrawer->getDrawerContext()->ReleaseContext();
 			}
@@ -483,17 +490,24 @@ void SpaceTimeDrawer::select(const CRect& rect, vector<long> & selectedRaws, Sel
 	// highlight selected item
 
 	if (rootDrawer->getDrawerContext()->TakeContext()) {
-		long numberOfFeatures = basemap->iFeatures();
-		bool fPrevSelected = false;
-		for (map<long, GLuint>::iterator mapEntry = subDisplayLists->begin(); mapEntry != subDisplayLists->end(); ++mapEntry) {
-			bool fSelected = (find(selectedObjectIDs.begin(), selectedObjectIDs.end(), mapEntry->first) != selectedObjectIDs.end());
-			glNewList(mapEntry->second, GL_COMPILE);
-			if (fSelected && !fPrevSelected)
-				glTranslated(0, 0.5, 0);
-			else if (fPrevSelected && !fSelected)
-				glTranslated(0, -0.5, 0);
-			glEndList();
-			fPrevSelected = fSelected;
+		//long numberOfFeatures = basemap->iFeatures();
+		if (selectedObjectIDs.size() > 0) {
+			bool fPrevSelected = true;
+			for (map<long, GLuint>::iterator mapEntry = subDisplayLists->begin(); mapEntry != subDisplayLists->end(); ++mapEntry) {
+				bool fSelected = (find(selectedObjectIDs.begin(), selectedObjectIDs.end(), mapEntry->first) != selectedObjectIDs.end());
+				glNewList(mapEntry->second, GL_COMPILE);
+				if (fSelected && !fPrevSelected)
+					glTranslated(0, -0.5, 0);
+				else if (fPrevSelected && !fSelected)
+					glTranslated(0, 0.5, 0);
+				glEndList();
+				fPrevSelected = fSelected;
+			}
+		} else {
+			for (map<long, GLuint>::iterator mapEntry = subDisplayLists->begin(); mapEntry != subDisplayLists->end(); ++mapEntry) {
+				glNewList(mapEntry->second, GL_COMPILE);
+				glEndList();
+			}
 		}
 		rootDrawer->getDrawerContext()->ReleaseContext();
 	}
@@ -627,7 +641,7 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 				texture_data[i] = singleColor;
 				texture_data[i] |= (255 << 24);
 				Color clr (texture_data[i]);
-				clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 2)));
+				clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 4)));
 				texture_data[i + iTextureSize] = clr.iVal();
 			}
 		} else {
@@ -647,7 +661,7 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 				for (int i = 0; i < iTextureSize; ++i) {
 					texture_data[i] |= (255 << 24);
 					Color clr (texture_data[i]);
-					clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 2)));
+					clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 4)));
 					texture_data[i + iTextureSize] = clr.iVal();
 				}
 				delete [] buf;
@@ -663,14 +677,14 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 						else
 							texture_data[i] |= (255 << 24);
 						Color clr (texture_data[i]);
-						clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 2)));
+						clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 4)));
 						texture_data[i + iTextureSize] = clr.iVal();
 					}
 				} else {
 					for (int i = 0; i < iTextureSize; ++i) {
 						texture_data[i] |= (255 << 24);
 						Color clr (texture_data[i]);
-						clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 2)));
+						clr.SetHSI(clr.hue(), clr.sat(), min(255, (clr.intens() * 4)));
 						texture_data[i + iTextureSize] = clr.iVal();
 					}
 				}
