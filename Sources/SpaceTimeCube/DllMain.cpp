@@ -2,6 +2,8 @@
 #include "client\formelements\fldlist.h"
 #include "Client\FormElements\fldcol.h"
 #include "Engine\Base\System\Module.h"
+#include "Engine\Applications\ModuleMap.h"
+#include "Engine\Base\System\commandhandler.h"
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Engine\Drawers\SimpleDrawer.h" 
 
@@ -18,6 +20,7 @@
 #include "SpaceTimePathTool.h"
 #include "SpaceTimePathDrawer.h"
 #include "StationsDrawer.h"
+#include "SpaceTimeRoseDrawer.h"
 #include "CubeDrawer.h"
 #include "PreTimeOffsetDrawer.h"
 #include "PostTimeOffsetDrawer.h"
@@ -45,6 +48,7 @@ DrawerInfoVector *createDrawer() {
 	DrawerInfoVector *infos = new DrawerInfoVector();
 	infos->push_back(new DrawerInfo("PointLayerDrawer","Cube:<stp>",createSpaceTimePathDrawer));
 	infos->push_back(new DrawerInfo("PointLayerDrawer","Cube:<stations>",createStationsDrawer));
+	infos->push_back(new DrawerInfo("PointLayerDrawer","Cube:<rose>",createSpaceTimeRoseDrawer));
 	infos->push_back(new DrawerInfo("CubeDrawer","Cube",createCubeDrawer));
 	infos->push_back(new DrawerInfo("PreTimeOffsetDrawer","Cube",createPreTimeOffsetDrawer));
 	infos->push_back(new DrawerInfo("PostTimeOffsetDrawer","Cube",createPostTimeOffsetDrawer));
@@ -52,9 +56,14 @@ DrawerInfoVector *createDrawer() {
 	return infos;
 }
 
+void moduleInit(ILWIS::Module *module) {
+	getEngine()->getContext()->ComHandler()->AddCommand("stccommand", executeStcCommand);
+}
+
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
 	ILWIS::Module *module = new ILWIS::Module("SpaceTimeCube", fnModule,ILWIS::Module::mi38,"1.3");
 	module->addMethod(ILWIS::Module::ifDrawerTools, (void *)createDrawerTool);
-	module->addMethod(ILWIS::Module::ifDrawers, (void *)createDrawer);  
+	module->addMethod(ILWIS::Module::ifDrawers, (void *)createDrawer);
+	module->addMethod(ILWIS::Module::ifInit, (void *)moduleInit);
 	return module;
 }
