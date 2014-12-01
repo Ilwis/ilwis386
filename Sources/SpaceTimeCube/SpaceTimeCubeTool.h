@@ -44,6 +44,7 @@ namespace ILWIS {
 		void setSortColumn(String sColName);
 		void setGroupColumn(String sColName);
 		void setSizeColumn(String sColName);
+		void setSize2Column(String sColName);
 		RangeReal rrTimeMinMax() {return m_rrTimeMinMax;};
 		RangeReal rrSizeMinMax() {return m_rrSizeMinMax;};
 		bool isSelfTime() {return fSelfTime;};
@@ -52,6 +53,7 @@ namespace ILWIS {
 		Column & getSortColumn() {return sortColumn;};
 		Column & getGroupColumn() {return groupColumn;};
 		Column & getSizeColumn() {return sizeColumn;};
+		Column & getSize2Column() {return size2Column;};
 		void updateFromLayer();
 	private:
 		const NewDrawer *drawer;
@@ -75,6 +77,7 @@ namespace ILWIS {
 		Column sortColumn;
 		Column groupColumn;
 		Column sizeColumn;
+		Column size2Column;
 		RangeReal m_rrTimeMinMax;
 		RangeReal m_rrSizeMinMax;
 	};
@@ -163,6 +166,8 @@ namespace ILWIS {
 		vector<FieldColumn*> fcSortColumn;
 		vector<FieldColumn*> fcGroupColumn;
 		vector<FieldColumn*> fcSizeColumn;
+		vector<FieldColumn*> fcAngleColumn;
+		vector<FieldColumn*> fcSpeedColumn;
 		vector<CheckBox*> cbTime2;
 		vector<CheckBox*> cbSort;
 		vector<CheckBox*> cbGroup;
@@ -172,6 +177,8 @@ namespace ILWIS {
 		vector<String> vsSortColumnNames;
 		vector<String> vsGroupColumnNames;
 		vector<String> vsSizeColumnNames;
+		vector<String> vsAngleColumnNames;
+		vector<String> vsSpeedColumnNames;
 		vector<bool*> vbTime2;
 		vector<bool*> vbSort;
 		vector<bool*> vbGroup;

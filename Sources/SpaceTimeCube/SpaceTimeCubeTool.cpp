@@ -73,6 +73,7 @@ LayerData::LayerData(NewDrawer *drw)
 			if (sizeColumns.size() > 0) {
 				sizeColumn = sizeColumns[0];
 				m_rrSizeMinMax = sizeColumn->rrMinMax();
+				size2Column = sizeColumns[0];
 			}
 		}
 		updateFromLayer();
@@ -151,6 +152,10 @@ void LayerData::setSizeColumn(String sColName) {
 	m_rrSizeMinMax = sizeColumn->rrMinMax();
 }
 
+void LayerData::setSize2Column(String sColName) {
+	size2Column = attTable->col(sColName);
+}
+
 void LayerData::updateFromLayer() {
 	if (drawer != 0) {
 		NewDrawer * childDrawer = ((ComplexDrawer*)drawer)->getDrawer(0);
@@ -177,6 +182,7 @@ void LayerData::updateFromLayer() {
 					if (sizableDrawer) {
 						fSize = sizableDrawer->fGetUseSize();
 						sizeColumn = sizableDrawer->getSizeAttribute();
+						size2Column = sizableDrawer->getSize2Attribute();
 					}
 				}
 			} else
@@ -350,6 +356,7 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 			bool fChangeType = (fCIStrEqual(subType, "ilwis38") && (sPlotOption != "<regular>"));
 			fChangeType |= ((subType == "Cube:<stp>") && (sPlotOption != "<stp>"));
 			fChangeType |= ((subType == "Cube:<stations>") && (sPlotOption != "<stations>"));
+			fChangeType |= ((subType == "Cube:<rose>") && (sPlotOption != "<rose>"));
 			if (fChangeType) {
 				DeleteDrawerTools(tree->getRootTool(), childDrawer);
 				((ComplexDrawer*)childDrawer)->clear();
@@ -422,6 +429,7 @@ void SpaceTimeCube::refreshDrawerList(bool fFromForm) {
 						sizableDrawer->SetNoSize();
 					sizableDrawer->SetSizeStretch(&sizeStretch);
 				}
+				sizableDrawer->SetSize2Attribute(layerList[i].getSize2Column());
 			}
 		}
 		pp = PreparationParameters (NewDrawer::pt3D); // re-prepare otherwise sort/nosort etc has no effect
@@ -636,6 +644,8 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 		vsSortColumnNames.resize(nrLayers);
 		vsGroupColumnNames.resize(nrLayers);
 		vsSizeColumnNames.resize(nrLayers);
+		vsAngleColumnNames.resize(nrLayers);
+		vsSpeedColumnNames.resize(nrLayers);
 		vbTime2.resize(nrLayers);
 		vbSort.resize(nrLayers);
 		vbGroup.resize(nrLayers);
@@ -755,6 +765,23 @@ LayerOptionsForm::LayerOptionsForm(CWnd *wPar, SpaceTimeCube & _spaceTimeCube, v
 				feSize2 = fcol;
 			}
 			feSize1->Align(feGroup2, AL_AFTER);
+			if (!layerData.hasSize()) {
+				fcAngleColumn.push_back(0);
+				fcSpeedColumn.push_back(0);
+			} else {
+				if (layerData.getSize2Column().fValid())
+					vsAngleColumnNames[i] = layerData.getSize2Column()->sName();
+				FieldColumn *fcol1 = new FieldColumn(root, "angle", layerData.getAttTable(), &vsAngleColumnNames[i], dmVALUE);
+				fcAngleColumn.push_back(fcol1);				
+				if (layerData.getSizeColumn().fValid())
+					vsSpeedColumnNames[i] = layerData.getSizeColumn()->sName();
+				FieldColumn *fcol2 = new FieldColumn(root, "speed", layerData.getAttTable(), &vsSpeedColumnNames[i], dmVALUE);
+				fcSpeedColumn.push_back(fcol2);
+				fcol2->Align(fcol1, AL_AFTER);
+				feSize1 = fcol1;
+				feSize2 = fcol2;
+			}
+			feSize1->Align(feGroup2, AL_AFTER);
 		}
 	}
 
@@ -784,6 +811,7 @@ int LayerOptionsForm::ComboCallBackFunc(Event*)
 			if (layerData.isPointMap()) {
 				fosPlotMethod[i]->AddString("<stp>");
 				fosPlotMethod[i]->AddString("<stations>");
+				fosPlotMethod[i]->AddString("<rose>");
 			}
 			fosPlotMethod[i]->SelectItem(vsPlotMethod[i]);
 		}
@@ -796,18 +824,32 @@ int LayerOptionsForm::ComboCallBackFunc(Event*)
 			if (cbSort[i]) cbSort[i]->Hide();
 			if (cbGroup[i]) cbGroup[i]->Hide();
 			if (cbSize[i]) cbSize[i]->Hide();
+			if (fcAngleColumn[i]) fcAngleColumn[i]->Hide();
+			if (fcSpeedColumn[i]) fcSpeedColumn[i]->Hide();
 		} else if (fosPlotMethod[i]->sGetText() == "<stp>") {
 			if (fcTimeColumn[i]) fcTimeColumn[i]->Show();
 			if (cbTime2[i]) cbTime2[i]->Hide();
 			if (cbSort[i]) cbSort[i]->Show();
 			if (cbGroup[i]) cbGroup[i]->Show();
 			if (cbSize[i]) cbSize[i]->Show();
+			if (fcAngleColumn[i]) fcAngleColumn[i]->Hide();
+			if (fcSpeedColumn[i]) fcSpeedColumn[i]->Hide();
 		} else if (fosPlotMethod[i]->sGetText() == "<stations>") {
 			if (fcTimeColumn[i]) fcTimeColumn[i]->Show();
 			if (cbTime2[i]) cbTime2[i]->Show();
 			if (cbSort[i]) cbSort[i]->Hide();
 			if (cbGroup[i]) cbGroup[i]->Hide();
 			if (cbSize[i]) cbSize[i]->Show();
+			if (fcAngleColumn[i]) fcAngleColumn[i]->Hide();
+			if (fcSpeedColumn[i]) fcSpeedColumn[i]->Hide();
+		} else if (fosPlotMethod[i]->sGetText() == "<rose>") {
+			if (fcTimeColumn[i]) fcTimeColumn[i]->Show();
+			if (cbTime2[i]) cbTime2[i]->Hide();
+			if (cbSort[i]) cbSort[i]->Show();
+			if (cbGroup[i]) cbGroup[i]->Show();
+			if (cbSize[i]) cbSize[i]->Hide();
+			if (fcAngleColumn[i]) fcAngleColumn[i]->Show();
+			if (fcSpeedColumn[i]) fcSpeedColumn[i]->Show();
 		}
 	}
 
@@ -846,7 +888,13 @@ void LayerOptionsForm::apply() {
 				layerData.setGroupColumn(vsGroupColumnNames[i]);
 			}
 		}
-		if (cbSize[i]) {
+		if (fosPlotMethod[i]->sGetText() == "<rose>") {
+			layerData.setUseSize(true);
+			fcSpeedColumn[i]->StoreData();
+			layerData.setSizeColumn(vsSpeedColumnNames[i]);
+			fcAngleColumn[i]->StoreData();
+			layerData.setSize2Column(vsAngleColumnNames[i]);
+		} else if (cbSize[i]) {
 			cbSize[i]->StoreData();
 			layerData.setUseSize(*vbSize[i]);
 			if (*vbSize[i]) {
