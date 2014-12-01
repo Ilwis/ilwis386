@@ -40,9 +40,20 @@ void SizableDrawer::SetSizeAttribute(const Column & col)
 		properties->scaleMode = PointProperties::sNONE;
 }
 
+void SizableDrawer::SetSize2Attribute(const Column & col)
+{
+	if (col.fValid())
+		colSize2 = col;
+}
+
 const Column & SizableDrawer::getSizeAttribute() const
 {
 	return colSize;
+}
+
+const Column & SizableDrawer::getSize2Attribute() const
+{
+	return colSize2;
 }
 
 const bool SizableDrawer::fGetUseSize() const
@@ -76,6 +87,11 @@ const double SizableDrawer::getSizeValue(Feature * f) const
 		return properties->exaggeration * v;
 	} else
 		return properties->exaggeration;
+}
+
+const double SizableDrawer::getSize2Value(Feature * f) const
+{
+	return colSize2->rValue(f->iValue());
 }
 
 String SizableDrawer::storeSizable(const FileName& fnView, const String& parentSection) const

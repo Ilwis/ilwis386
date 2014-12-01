@@ -12,9 +12,12 @@ public:
 	virtual ~SizableDrawer();
 	void SetSizeStretch(RangeReal * _sizeStretch);
 	void SetSizeAttribute(const Column & col);
+	void SetSize2Attribute(const Column & col);
 	void SetNoSize();
 	const double getSizeValue(Feature * f) const;
+	const double getSize2Value(Feature * f) const;
 	const Column & getSizeAttribute() const;
+	const Column & getSize2Attribute() const;
 	const bool fGetUseSize() const;
 
 protected:
@@ -23,6 +26,7 @@ protected:
 	PointProperties *properties;
 	RangeReal * sizeStretch;
 	Column colSize;
+	Column colSize2;
 };
 
 }
