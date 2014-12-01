@@ -16,6 +16,7 @@ class _export SpaceTimePathDrawer : public SpaceTimeDrawer, public SortableDrawe
 		virtual ~SpaceTimePathDrawer();
 		virtual void prepare(PreparationParameters *parms);
 		const vector<Feature *> & getFeatures() const;
+		virtual void getRaws(GLuint objectID, vector<long> & raws) const;
 		virtual void drawFootprint() const;
 
 	protected:
@@ -26,10 +27,8 @@ class _export SpaceTimePathDrawer : public SpaceTimeDrawer, public SortableDrawe
 		virtual int getNearestEnabledObjectIDIndex(vector<GLuint> & objectIDs) const;
 		virtual vector<GLuint> getEnabledObjectIDs(vector<GLuint> & objectIDs) const;
 		virtual Feature * getFeature(GLuint objectID) const;
-		virtual void getRaws(GLuint objectID, vector<long> & raws) const;
 		vector<Feature *> features;
 		vector<long> *objectStartIndexes;
-	private:
 		const double textureOffset;
 		const double textureRange;
 	};
