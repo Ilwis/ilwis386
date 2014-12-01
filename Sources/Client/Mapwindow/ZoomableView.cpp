@@ -192,44 +192,66 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 			}
 			break;
 		case WM_LBUTTONDBLCLK:
-			if (tools.size() > 0) tools.OnLButtonDblClk(wParam, point);
+			if (tools.size() > 0) {
+				tools.OnLButtonDblClk(wParam, point);
+				return FALSE;
+			}
 			break;
 		case WM_LBUTTONDOWN:
 			if (mcd->rootDrawer->is3D()) {
-				if ( iActiveTool == ID_SELECTFEATURES)
+				if ( iActiveTool == ID_SELECTFEATURES) {
 					tools.OnLButtonDown(wParam, point);
-				else if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
+					return FALSE;
+				} else if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA)) {
 					viewRotate(point,message);
-				else if (tools.size() > 0)
+					return FALSE;
+				} else if (tools.size() > 0) {
 					tools.OnLButtonDown(wParam, point);
+					return FALSE;
+				}
 			} else {
-				if (tools.size() > 0)
+				if (tools.size() > 0) {
 					tools.OnLButtonDown(wParam, point);
+					return FALSE;
+				}
 			}
 			break;
 		case WM_LBUTTONUP:
 			if (mcd->rootDrawer->is3D()) {
-				if (iActiveTool == ID_SELECTFEATURES)
+				if (iActiveTool == ID_SELECTFEATURES) {
 					tools.OnLButtonUp(wParam, point);
-				else if ((mode != cNone) || (iActiveTool == ID_PANAREA))
+					return FALSE;
+				} else if ((mode != cNone) || (iActiveTool == ID_PANAREA)) {
 					viewRotate(point,message);
-				else if (tools.size() > 0)
+					return FALSE;
+				} else if (tools.size() > 0) {
 					tools.OnLButtonUp(wParam, point);
+					return FALSE;
+				}
 			} else {
-				if (tools.size() > 0)
+				if (tools.size() > 0) {
 					tools.OnLButtonUp(wParam, point);
+					return FALSE;
+				}
 			}
 			break;
 		case WM_RBUTTONDBLCLK:
-			if (tools.size() > 0) tools.OnRButtonDblClk(wParam, point);
+			if (tools.size() > 0) {
+				tools.OnRButtonDblClk(wParam, point);
+				return FALSE;
+			}
 			break;
 		case WM_RBUTTONDOWN:
 			if (mcd->rootDrawer->is3D()) {
-				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
+				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA)) {
 					viewTranslate(point, message);
+					return FALSE;
+				}
 			} else {
-				if (tools.size() > 0) 
+				if (tools.size() > 0) {
 					tools.OnRButtonDown(wParam, point);
+					return FALSE;
+				}
 			}
 			break;
 		case WM_RBUTTONUP:
@@ -240,16 +262,21 @@ BOOL ZoomableView::OnWndMsg(UINT message, WPARAM wParam, LPARAM lParam, LRESULT*
 						fTranslated = false;
 						return TRUE; // prevent context-menu if user rotated in 3D!!
 					}
+					return FALSE;
 				}
 			} else {
-				if (tools.size() > 0)
+				if (tools.size() > 0) {
 					tools.OnRButtonUp(wParam, point);
+					return FALSE;
+				}
 			}
 			break;
 		case WM_MBUTTONDOWN:
 			if (mcd->rootDrawer->is3D()) {
-				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA))
+				if ((wParam & MK_CONTROL) || (iActiveTool == ID_PANAREA)) {
 					viewZoom(point, message);
+					return FALSE;
+				}
 			}
 			break;
 		case WM_MBUTTONUP:
