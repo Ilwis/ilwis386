@@ -172,10 +172,6 @@ bool SpatialDataDrawer::useInternalDomain() const {
 	return internalDomain;
 }
 
-void SpatialDataDrawer::setRepresentation(const Representation& rp){
-	throw ErrorObject("To be done");
-}
-
 Table SpatialDataDrawer::getAtttributeTable(int index) const{
 	if ( !attTable.fValid()) {
 		if( getBaseMap(index)->fTblAtt()) {

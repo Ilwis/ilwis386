@@ -23,7 +23,6 @@ class _export SpatialDataDrawer : public ComplexDrawer {
 		BaseMapPtr *getBaseMap(int index = 0) const;
 		IlwisObjectPtr *SpatialDataDrawer::getObject() const;
 		Representation getRepresentation(int index = 0) const;
-		void setRepresentation(const Representation& rp);
 		Table getAtttributeTable(int index = 0) const;
 		void setAttributeTable(const Table& tbl);
 		Column getAtttributeColumn() const;
