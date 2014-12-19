@@ -88,7 +88,10 @@ DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
 	}
 	String base = getEngine()->getContext()->sIlwDir();
 	base += "Resources\\Symbols\\";
-	props = (PointProperties *)dr->getProperties();
+	if (dr->isSet())
+		props = (PointProperties *)dr->getDrawer(0)->getProperties();
+	else
+		props = (PointProperties *)dr->getProperties();
 	name = props->symbol == "" ? DEFAULT_POINT_SYMBOL_TYPE : props->symbol;
 	scale = props->scale / 100.0;
 	//fdSelect = new FieldDataType(root,TR("Symbols"),&name,".ivg",false,0,FileName(base),false);
@@ -108,38 +111,33 @@ void PointSymbolizationForm::apply(){
 	f3d->StoreData();
 	frRot->StoreData();
 
-	SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
-	//String symbol = names[selection];
 	SVGLoader *loader = NewDrawer::getSvgLoader();
 	name = names[selection];
 	SVGLoader::const_iterator cur = loader->find(name);
 	if ( cur == loader->end()) {
 		loader->getSVGSymbol(name);
-
 	}
 
-	if ( setDrw) {
-		for(int i = 0; i < setDrw->getDrawerCount(); ++i) {
-			PointLayerDrawer *psdrw = (PointLayerDrawer *) (setDrw->getDrawer(i));
+	FileName fn(name);
+	props->symbol = fn.sFile;
+	props->threeDOrientation = t3dOr != 0;
+	PreparationParameters pp(NewDrawer::ptRENDER);
+	RepresentationProperties rprop;
+	rprop.symbolSize = props->scale = scale * 100;
+	rprop.symbolType = props->symbol;
+	pp.props = rprop;
+	if (drw->isSet()) {
+		for(int i = 0; i < drw->getDrawerCount(); ++i) {
+			PointLayerDrawer *psdrw = (PointLayerDrawer *) (drw->getDrawer(i));
+			psdrw->setUseRpr(props->symbol == "default");
 			PointProperties *oldprops = (PointProperties *)psdrw->getProperties();
-			props->threeDOrientation = t3dOr != 0;
 			oldprops->set(props);
-			PreparationParameters pp(NewDrawer::ptRENDER);
 			psdrw->prepareChildDrawers(&pp);
 		}
 	} else {
-		FileName fn(name);
-		props->symbol = fn.sFile;
-		props->threeDOrientation = t3dOr != 0;
-		PreparationParameters pp(NewDrawer::ptRENDER, 0);
-		RepresentationProperties rprop;
-		rprop.symbolSize = props->scale = scale * 100;
-		rprop.symbolType = props->symbol;
 		((PointLayerDrawer *)drw)->setUseRpr(props->symbol == "default");
-		pp.props = rprop;
 		drw->prepare(&pp);
 	}
-
 
 	updateMapView();
 }
