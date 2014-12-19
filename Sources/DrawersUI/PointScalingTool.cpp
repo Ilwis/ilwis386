@@ -42,7 +42,10 @@ bool PointScalingTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	PointSymbolizationTool *pst = dynamic_cast<PointSymbolizationTool *>(tool);
 	if ( !pst)
 		return false;
-	SpatialDataDrawer *spdrw = (SpatialDataDrawer *)(drawer->getParentDrawer());
+	SpatialDataDrawer *spdrw = ((ComplexDrawer*)drawer)->isSet() ? 
+		static_cast<SpatialDataDrawer *>(drawer) : 
+		static_cast<SpatialDataDrawer *>(drawer->getParentDrawer());
+
 	BaseMapPtr *bmptr = spdrw->getBaseMap();
 	parentTool = tool;
 	if ( bmptr->dm()->pdv()) {
@@ -83,7 +86,11 @@ String PointScalingTool::getMenuString() const {
 PointScalingForm::PointScalingForm(CWnd *wPar, FeatureLayerDrawer *dr, const Table& _tbl):
 DisplayOptionsForm(dr,wPar,TR("Scaling")), tbl(_tbl), fcColumn(0), rrScale(RangeReal(0.1,10)), fStretch(false), scaleModel(0), stretchModel(0), fDisableCallBacks(true)
 {
-	props = (PointProperties *)dr->getProperties();
+	if (dr->isSet())
+		props = (PointProperties *)dr->getDrawer(0)->getProperties();
+	else
+		props = (PointProperties *)dr->getProperties();
+
 	fStretch = (props->scaleMode != PointProperties::sNONE);
 	stretchModel = (props->scaleMode == PointProperties::sLOGARITHMIC) ? 1 : 0;
 	scaleModel = (props->radiusArea == PointProperties::sAREA) ? 1 : 0;
@@ -155,11 +162,20 @@ void PointScalingForm::apply(){
 		props->radiusArea = PointProperties::sAREA;
 	else
 		props->radiusArea = PointProperties::sRADIUS;
-	PreparationParameters pp(NewDrawer::ptRENDER, 0);
+	PreparationParameters pp(NewDrawer::ptRENDER);
 	RepresentationProperties rprop;
 	rprop.symbolType = props->symbol;
 	pp.props = rprop;
-	drw->prepare(&pp);
+
+	if (drw->isSet()) {
+		for(int i = 0; i < drw->getDrawerCount(); ++i) {
+			PointLayerDrawer *psdrw = (PointLayerDrawer *) (drw->getDrawer(i));
+			PointProperties *oldprops = (PointProperties *)psdrw->getProperties();
+			oldprops->set(props);
+			psdrw->prepare(&pp);
+		}
+	} else
+		drw->prepare(&pp);
 
 	updateMapView();
 }
