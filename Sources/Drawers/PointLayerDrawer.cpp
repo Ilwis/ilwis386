@@ -45,8 +45,8 @@ NewDrawer *PointLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWI
 void PointLayerDrawer::prepare(PreparationParameters *parm){
 	FeatureLayerDrawer::prepare(parm);
 	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
-	BaseMapPtr *bmptr = mapDrawer->getBaseMap();
-	Table tbl = mapDrawer->getAtttributeTable();
+	BaseMapPtr *bmptr = ((BaseMap*)getDataSource())->ptr();
+	Table tbl = bmptr->tblAtt();
 	DomainSort *dmsrt = 0;
 	Column rotColumn;
 	RangeReal rr;
