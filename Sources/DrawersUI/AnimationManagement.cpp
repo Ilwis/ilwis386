@@ -1003,12 +1003,22 @@ int RealTimePage::setTimingMode(Event *ev) {
 		if ( fgTime)
 			fgTime->Show();
 		IlwisObject *source = (IlwisObject *)adrw->getDataSource();
-		MapList mpl((*source)->fnObj);
-		if ( mpl->fTblAtt()) {
-			Column col = mpl->tblAtt()->col(colName);
-			if ( col.fValid()) {
-				propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pProgress);
-			} 
+		MapListPtr * pmpl = dynamic_cast<MapListPtr*>(source->pointer());
+		if (pmpl) {
+			if ( pmpl->fTblAtt()) {
+				Column col = pmpl->tblAtt()->col(colName);
+				if ( col.fValid()) {
+					propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pProgress);
+				} 
+			}
+		} else {
+			ObjectCollectionPtr * poc = dynamic_cast<ObjectCollectionPtr*>(source->pointer());
+			if ( poc->fTblAtt()) {
+				Column col = poc->tblAtt()->col(colName);
+				if ( col.fValid()) {
+					propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pProgress);
+				}
+			}
 		}
 	} else {
 
