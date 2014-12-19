@@ -545,7 +545,7 @@ const BaseMap& RecItemCollectionLayer::map() {
 		if ( maps.size() > 0)
 			_map = BaseMap(FileName(*(maps.begin())));
 		else
-			_map = BaseMap();
+			_map = BaseMap(collection->fnObject(0));
 	}
 	return _map;
 }
