@@ -47,11 +47,16 @@ FeatureTextTool::~FeatureTextTool() {
 
 bool FeatureTextTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
+	ComplexDrawer* cdrw = dynamic_cast<ComplexDrawer*>(drawer);
+	if (!cdrw)
+		return false;
 	PointSymbolizationTool *pst = dynamic_cast<PointSymbolizationTool *>(tool);
 	PolygonSetTool *poltool = dynamic_cast<PolygonSetTool *>(tool);
-	if ( (pst || poltool) == false )
+	SpatialDataDrawer *spdrw = cdrw->isSet() ?
+		dynamic_cast<SpatialDataDrawer *>(drawer) :
+		dynamic_cast<SpatialDataDrawer *>(drawer->getParentDrawer());
+	if ( !(pst || poltool) || !spdrw )
 		return false;
-	SpatialDataDrawer *spdrw = (SpatialDataDrawer *)(drawer->getParentDrawer());
 	BaseMapPtr *bmptr = spdrw->getBaseMap();
 	parentTool = tool;
 	if ( bmptr->fTblAtt()) {
@@ -74,17 +79,30 @@ HTREEITEM FeatureTextTool::configure( HTREEITEM parentItem) {
 }
 
 void FeatureTextTool::makeActive(void *v, HTREEITEM ) {
-	FeatureLayerDrawer *fldrw = dynamic_cast<FeatureLayerDrawer *>(drawer);
-	if ( !fldrw)
-		return;
-	TextLayerDrawer *texts = static_cast<TextLayerDrawer *>(fldrw->getDrawer(223, ComplexDrawer::dtPOST));
-	if ( texts) {
-		bool act = *(bool *)v;
-		texts->setActive(act);
-		tree->GetDocument()->mpvGetView()->Invalidate();
+	if (((ComplexDrawer*)drawer)->isSet()) {
+		for(int i = 0; i < ((ComplexDrawer*)drawer)->getDrawerCount(); ++i) {
+			FeatureLayerDrawer *fldrw = dynamic_cast<FeatureLayerDrawer *>(((ComplexDrawer*)drawer)->getDrawer(i));
+			if ( !fldrw)
+				continue;
+			TextLayerDrawer *texts = static_cast<TextLayerDrawer *>(fldrw->getDrawer(223, ComplexDrawer::dtPOST));
+			if ( texts) {
+				bool act = *(bool *)v;
+				texts->setActive(act);
+			}
+		}
+	} else {
+		FeatureLayerDrawer *fldrw = dynamic_cast<FeatureLayerDrawer *>(drawer);
+		if ( !fldrw)
+			return;
+		TextLayerDrawer *texts = static_cast<TextLayerDrawer *>(fldrw->getDrawer(223, ComplexDrawer::dtPOST));
+		if ( texts) {
+			bool act = *(bool *)v;
+			texts->setActive(act);
+		}
 	}
-
+	tree->GetDocument()->mpvGetView()->Invalidate();
 }
+
 void FeatureTextTool::setScaling() {
 	new FeatureTextToolForm(tree, (FeatureLayerDrawer *)drawer, tbl);
 }
@@ -119,18 +137,34 @@ void FeatureTextToolForm::apply(){
 	fcolumns->StoreData();
 	fcolor->StoreData();
 	cb->StoreData();
-	FeatureLayerDrawer *dr = static_cast<FeatureLayerDrawer *>(drw);
-	if ( cb && useAttrib)
-		dr->setLabelAttribute(colName);
-	else
-		dr->setLabelAttribute("");
 	PreparationParameters pp(NewDrawer::ptRENDER);
-	TextLayerDrawer *texts = static_cast<TextLayerDrawer *>(dr->getDrawer(223, ComplexDrawer::dtPOST));
-	if ( texts) {
-		texts->setFontScale(fscale);
-		texts->getFont()->setColor(clr);
+	if (drw->isSet()) {
+		for(int i = 0; i < drw->getDrawerCount(); ++i) {
+			FeatureLayerDrawer *dr = (FeatureLayerDrawer *) (drw->getDrawer(i));
+			if ( cb && useAttrib)
+				dr->setLabelAttribute(colName);
+			else
+				dr->setLabelAttribute("");
+			TextLayerDrawer *texts = static_cast<TextLayerDrawer *>(dr->getDrawer(223, ComplexDrawer::dtPOST));
+			if ( texts) {
+				texts->setFontScale(fscale);
+				texts->getFont()->setColor(clr);
+			}
+			dr->prepare(&pp);
+		}
+	} else {
+		FeatureLayerDrawer *dr = static_cast<FeatureLayerDrawer *>(drw);
+		if ( cb && useAttrib)
+			dr->setLabelAttribute(colName);
+		else
+			dr->setLabelAttribute("");
+		TextLayerDrawer *texts = static_cast<TextLayerDrawer *>(dr->getDrawer(223, ComplexDrawer::dtPOST));
+		if ( texts) {
+			texts->setFontScale(fscale);
+			texts->getFont()->setColor(clr);
+		}
+		dr->prepare(&pp);
 	}
-	dr->prepare(&pp);
 	updateMapView();
 }
 
