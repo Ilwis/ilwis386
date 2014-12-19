@@ -83,7 +83,7 @@ long PointFeatureDrawer::getRaw() const{
 void PointFeatureDrawer::prepare(PreparationParameters *p){
 
 	FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(parentDrawer);
-	BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
+	BaseMapPtr *bmpptr = ((BaseMap*)fdr->getDataSource())->ptr();
 	if ( p->type & ptGEOMETRY | p->type & ptRESTORE) {
 	    CoordSystem csy = fdr->getCoordSystem();
 		ILWIS::Point *point = (ILWIS::Point *)feature;
@@ -161,7 +161,8 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 				double scale = max(1.0, 1.0 + properties.exaggeration * v);
 				properties.stretchScale = scale;
 			}
-		}
+		} else
+			setActive(true);
 		if ( label) {
 			const CoordBounds& cbZoom = getRootDrawer()->getCoordBoundsZoom();
 			Coord crdLabel = cNorm;
