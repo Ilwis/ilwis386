@@ -115,10 +115,12 @@ void SetDrawer::prepare(PreparationParameters *pp){
 			}
 		} 
 		if ( pp->type && NewDrawer::ptRENDER) {
+			rrMinMax = RangeReal();
 			for(int i = 0; i < oc->iNrObjects(); ++i) {
 				ILWIS::LayerDrawer *sdr = (ILWIS::LayerDrawer *)getDrawer(i);
 				if (!sdr)
 					continue;
+				rrMinMax += sdr->getStretchRangeReal();
 				PreparationParameters prp(*pp);
 				prp.index = i;
 				prp.csy = sdr->getCoordSystem();
