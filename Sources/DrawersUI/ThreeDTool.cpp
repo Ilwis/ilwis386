@@ -8,6 +8,7 @@
 #include "Engine\Drawers\ComplexDrawer.h"
 #include "Drawers\DrawingColor.h" 
 #include "Drawers\LayerDrawer.h"
+#include "Drawers\FeatureLayerDrawer.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Client\Ilwis.h"
 #include "Engine\Representation\Rpr.h"
@@ -160,24 +161,45 @@ void DisplayZDataSourceForm::apply() {
 
 	SetDrawer *setDrawer = dynamic_cast<SetDrawer *>(drw);
 	if ( setDrawer) {
-		setDrawer->getZMaker()->setRange(setDrawer->getStretchRangeReal());
+		RangeReal rrMinMax;
 		for(int i = 0 ; i < setDrawer->getDrawerCount(); ++i) {
-			RasterLayerDrawer *layerDrawer = (RasterLayerDrawer *)setDrawer->getDrawer(i);
+			LayerDrawer *layerDrawer = (LayerDrawer *)setDrawer->getDrawer(i);
 			layerDrawer->getZMaker()->setSourceType((ZValueMaker::SourceType)sourceIndex);
-			MapList mpl;
+			Map mp;
 			if ( sourceIndex == 1) {
-				mpl = *((MapList *)(setDrawer->getDataSource())); 
+				MapList mpl = *((MapList *)(setDrawer->getDataSource())); 
+				mp = mpl[i];
 			} else if ( sourceIndex == 3){
 				updateDrawer(layerDrawer, BaseMap(FileName(mapName)));
 				continue;
 			} else if ( sourceIndex == 4){
-				mpl = MapList(FileName(mapName));
+				MapList mpl = MapList(FileName(mapName));
+				mp = mpl[i];
 			}
-			Map mp = mpl[i];
 			updateDrawer(layerDrawer, mp);
+			rrMinMax += layerDrawer->getZMaker()->getZRange();
+		}
+		setDrawer->getZMaker()->setRange(rrMinMax);
+		for(int i = 0 ; i < setDrawer->getDrawerCount(); ++i) {
+			LayerDrawer *layerDrawer = (LayerDrawer *)setDrawer->getDrawer(i);
+			if ( mapName != "" && sourceIndex <= 4) {
+				PreparationParameters pp(NewDrawer::pt3D | NewDrawer::ptGEOMETRY);
+				layerDrawer->prepare(&pp);
+			} else if ( colName != "" && sourceIndex == 5) {
+				PreparationParameters pp(NewDrawer::pt3D);
+				layerDrawer->prepare(&pp);
+			}
 		}
 	} else {
-		updateDrawer( dynamic_cast<ILWIS::LayerDrawer *>(drw), BaseMap(mapName));
+		LayerDrawer * layerDrawer = dynamic_cast<ILWIS::LayerDrawer *>(drw);
+		updateDrawer( layerDrawer, BaseMap(mapName));
+		if ( mapName != "" && sourceIndex <= 4) {
+			PreparationParameters pp(NewDrawer::pt3D | NewDrawer::ptGEOMETRY);
+			layerDrawer->prepare(&pp);
+		} else if ( colName != "" && sourceIndex == 5) {
+			PreparationParameters pp(NewDrawer::pt3D);
+			layerDrawer->prepare(&pp);
+		}
 	}
 
 	updateMapView();
@@ -188,12 +210,9 @@ void DisplayZDataSourceForm::updateDrawer(LayerDrawer *layerDrawer, const BaseMa
 	if ( mapName != "" && sourceIndex <= 4) {
 		layerDrawer->getZMaker()->setDataSourceMap(basemap);
 		layerDrawer->getZMaker()->setSourceType((ZValueMaker::SourceType)sourceIndex);
-		PreparationParameters pp(NewDrawer::pt3D | NewDrawer::ptGEOMETRY);
-		layerDrawer->prepare(&pp);
 	} else if ( colName != "" && sourceIndex == 5) {
-		layerDrawer->getZMaker()->setTable(attTable,colName);
-		PreparationParameters pp(NewDrawer::pt3D);
-		layerDrawer->prepare(&pp);
+		FeatureLayerDrawer * featureLayerDrawer = (FeatureLayerDrawer*)layerDrawer;
+		layerDrawer->getZMaker()->setTable(((BaseMap*)featureLayerDrawer->getDataSource())->ptr()->tblAtt(),colName);
 	}
 }
 
@@ -207,8 +226,8 @@ sliderOffset(0) {
 	sliderScale->SetCallBack((NotifyProc)&ZDataScaling::settransforms);
 	sliderScale->setContinuous(true);
 
-	if (dr->getZMaker()->getRange().fValid()) { 
-		range = dr->getZMaker()->getRange();
+	if (dr->getZMaker()->getSetZRange().fValid()) { 
+		range = dr->getZMaker()->getSetZRange();
 		zoffset = dr->getZMaker()->getOffset();
 		double rMin = min(-range.rHi(), range.rHi() * 2);
 		double rMax = max(-range.rHi(), range.rHi() * 2);
@@ -251,7 +270,7 @@ void ZDataScaling::apply() {
 	if ( sliderOffset)
 		sliderOffset->StoreData();
 	drw->getZMaker()->setZScale(zscale/100.0);
-	RangeReal rr = drw->getZMaker()->getRange();
+	RangeReal rr = drw->getZMaker()->getSetZRange();
 	drw->getZMaker()->setOffset(zoffset + rr.rLo());
 	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
 	ComplexDrawer * annotations = (ComplexDrawer *)drw->getRootDrawer()->getDrawer(800, ComplexDrawer::dtPOST);
@@ -263,7 +282,7 @@ void ZDataScaling::apply() {
 		}
 	}
 	if ( adrw) {
-		rr = adrw->getZMaker()->getRange();
+		rr = adrw->getZMaker()->getZRange();
 		for(int i = 0 ; i < adrw->getDrawerCount(); ++i) {
 			LayerDrawer *layerDrawer = (LayerDrawer *)adrw->getDrawer(i);
 			layerDrawer->getZMaker()->setRange(rr);
