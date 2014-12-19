@@ -58,9 +58,9 @@ bool LineFeatureDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea)
 
 void LineFeatureDrawer::addDataSource(void *f, int options) {
 	feature = (Feature *)f;
-	SpatialDataDrawer *datadrw = dynamic_cast<SpatialDataDrawer *>(getParentDrawer()->getParentDrawer());
-	if ( datadrw) {
-		dmt = datadrw->getBaseMap()->dm()->dmt();
+	FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(parentDrawer);
+	if ( fdr) {
+		dmt = ((BaseMap*)fdr->getDataSource())->ptr()->dm()->dmt();
 	}
 }
 
@@ -77,7 +77,7 @@ long LineFeatureDrawer::getRaw() const{
 			return r;
 		}
 	}
-	BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
+	BaseMapPtr *bmpptr = ((BaseMap*)fdr->getDataSource())->ptr();
 	if ( bmpptr->dm()->pdsrt())
 		return raw;
 
@@ -141,7 +141,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 			}
 		}
 
-		BaseMapPtr *bmpptr = ((SpatialDataDrawer *)fdr->getParentDrawer())->getBaseMap();
+		BaseMapPtr *bmpptr = ((BaseMap*)fdr->getDataSource())->ptr();
 		if ( bmpptr->fTblAtt()) {
 			setTableSelection(bmpptr->tblAtt()->dm()->fnObj,feature->iValue(), p);
 		}

@@ -76,7 +76,7 @@ bool PolygonFeatureDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbAr
 	if ( label) {
 		Coord c = feature->centroid();
 		PolygonLayerDrawer *polygonLayer = static_cast<PolygonLayerDrawer *>(parentDrawer);
-		BaseMapPtr *bmpptr = ((SpatialDataDrawer *)polygonLayer->getParentDrawer())->getBaseMap();
+		BaseMapPtr *bmpptr = ((BaseMap*)polygonLayer->getDataSource())->ptr();
 	    CoordSystem csy = polygonLayer->getCoordSystem();
 		c = getRootDrawer()->glConv(csy,c);
 		CoordBounds cb = label->getTextExtent();
@@ -153,7 +153,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		}
 	}
 	if (  p->type & ptRESTORE || p->type & RootDrawer::ptRENDER) {
-		BaseMapPtr *bmpptr = ((SpatialDataDrawer *)polygonLayer->getParentDrawer())->getBaseMap();
+		BaseMapPtr *bmpptr = ((BaseMap*)polygonLayer->getDataSource())->ptr();
 		extrTransparency = polygonLayer->getExtrusionTransparency();
 		drawColor = polygonLayer->getDrawingColor()->clrRaw(feature->iValue(), polygonLayer->getDrawMethod());
 		if ( boundary) {
