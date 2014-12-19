@@ -201,7 +201,6 @@ void MapPaneView::OnDestroy()
 void MapPaneView::OnInitialUpdate() 
 {
 	odt->Register(this);
-	//fStarting = true; // prevent too early start (moved to constructor)
 	SimpleMapPaneView::OnInitialUpdate();
 
 	if (0 == mwPar) {
@@ -209,9 +208,7 @@ void MapPaneView::OnInitialUpdate()
 		mwPar = dynamic_cast<MapWindow*>(fw);
 	}
 
-	MapCompositionDoc* mcd = GetDocument();
 	createPixInfoBar();
-	double rSc = mcd->rPrefScale();
 	PostMessage(WM_COMMAND, ID_DEFAULTSCALE, 0);
 
 	AfxGetApp()->PostThreadMessage(ILW_ADDDATAWINDOW, (WPARAM)m_hWnd, 0);
