@@ -18,7 +18,8 @@ public:
 	double scaleValue(double value);
 	void setOffset(double u=rUNDEF, bool useTrueCoords=false);
 	double getOffset() const;
-	RangeReal getRange() const;
+	RangeReal getZRange() const;
+	RangeReal getSetZRange() const;
 	void setRange(const RangeReal& rr);
 	void setThreeDPossible(bool v);
 	bool getThreeDPossible() const;

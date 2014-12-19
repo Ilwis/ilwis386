@@ -153,9 +153,13 @@ void ZValueMaker::setScaleType(ZValueTypeScaling t){
 	scalingType = t;
 }
 
-RangeReal ZValueMaker::getRange() const {
+RangeReal ZValueMaker::getZRange() const {
+	return range;
+}
+
+RangeReal ZValueMaker::getSetZRange() const {
 	if ( isSetDrawer) {
-		return ((ComplexDrawer *)associatedDrawer->getParentDrawer())->getZMaker()->getRange();
+		return ((ComplexDrawer *)associatedDrawer->getParentDrawer())->getZMaker()->getZRange();
 	}
 	return range;
 }
@@ -206,7 +210,7 @@ double ZValueMaker::scaleValue(double value) {
 		return offset;
 	if ( value == rUNDEF)
 		return 0;
-	RangeReal scaleRange = getRange();
+	RangeReal scaleRange = getSetZRange();
 	double scale = (value - scaleRange.rLo()) / scaleRange.rWidth();
 	double zMaxSizeEstimate = (cbLimits.width() + cbLimits.height())/ 2.0;
 	double endvalue = scale * zMaxSizeEstimate * 0.20;
@@ -228,14 +232,15 @@ BaseMapPtr * ZValueMaker::getSourceRasterMap() const { // we return the pointer 
 	} else
 		return 0;
 }
+
 void ZValueMaker::setOffset(double v, bool useTrueCoords){
 	if (useTrueCoords) {
 		offset = v;
 	} else {
-		if ( getRange().rLo() == rUNDEF) {
+		if ( getSetZRange().rLo() == rUNDEF) {
 			v = 0;
 		}
-		double scale = (v - getRange().rLo()) / getRange().rWidth();
+		double scale = (v - getSetZRange().rLo()) / getSetZRange().rWidth();
 		double zMaxSizeEstimate = (cbLimits.width() + cbLimits.height())/ 2.0;
 		offset = scale * zMaxSizeEstimate * 0.25;
 	}
