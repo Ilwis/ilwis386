@@ -42,7 +42,7 @@ bool PointDirectionTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	PointSymbolizationTool *pst = dynamic_cast<PointSymbolizationTool *>(tool);
 	if ( !pst)
 		return false;
-	SpatialDataDrawer *spdrw = (SpatialDataDrawer *)(drawer->getParentDrawer());
+	SpatialDataDrawer *spdrw = ((ComplexDrawer*)drawer)->isSet() ? static_cast<SpatialDataDrawer *>(drawer) : static_cast<SpatialDataDrawer *>(drawer->getParentDrawer());
 	BaseMapPtr *bmptr = spdrw->getBaseMap();
 	parentTool = tool;
 	if ( bmptr->dm()->pdv()) {
@@ -83,9 +83,15 @@ String PointDirectionTool::getMenuString() const {
 PointDirectionForm::PointDirectionForm(CWnd *wPar, PointLayerDrawer *dr, const Table& _tbl):
 DisplayOptionsForm(dr,wPar,TR("Rotation")), tbl(_tbl), fcColumn(0), clockwise(true)
 {
-	SpatialDataDrawer *spdrw = (SpatialDataDrawer *)(dr->getParentDrawer());
+	SpatialDataDrawer *spdrw =  ((ComplexDrawer*)dr)->isSet() ? (SpatialDataDrawer*)dr : (SpatialDataDrawer *)(dr->getParentDrawer());
 	BaseMapPtr *bmptr = spdrw->getBaseMap();
-	props = (PointProperties *)dr->getProperties();
+	if (dr->isSet()) {
+		props = (PointProperties *)dr->getDrawer(0)->getProperties();
+		inf = ((PointLayerDrawer*)dr->getDrawer(0))->getRotationInfo();
+	} else {
+		props = (PointProperties *)dr->getProperties();
+		inf = dr->getRotationInfo();
+	}
 	if ( tbl.fValid() || bmptr->dm()->pdv()) {
 		if ( !props->stretchRange.fValid()) {
 			if ( tbl.fValid()) {
@@ -105,7 +111,6 @@ DisplayOptionsForm(dr,wPar,TR("Rotation")), tbl(_tbl), fcColumn(0), clockwise(tr
 			}else
 				props->stretchRange = bmptr->rrMinMax();
 		}
-		inf = dr->getRotationInfo();
 		if ( tbl.fValid()) {
 			fcColumn = new FieldColumn(root, TR("Attribute Column"), tbl, &(inf.rotationColumn), dmVALUE);
 			fcColumn->SetCallBack((NotifyProc)&PointDirectionForm::ColValCallBack);
@@ -116,7 +121,6 @@ DisplayOptionsForm(dr,wPar,TR("Rotation")), tbl(_tbl), fcColumn(0), clockwise(tr
 
 		frr = new FieldRangeReal(root, TR("Rotation range"), &(inf.rr));
 		cbClockwise = new CheckBox(root,TR("Clockwise"),&(inf.clockwise));
-	
 	}
 
 	create();
@@ -133,13 +137,24 @@ int PointDirectionForm::ColValCallBack(Event*) {
       frr->SetVal(col->rrMinMax());
     }
     return 1;
-  }
+}
+
 void PointDirectionForm::apply(){
 	root->StoreData();
-	PointLayerDrawer *pdr = (PointLayerDrawer *)drw;
-	pdr->setRotationInfo(inf);
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
-	drw->prepare(&pp);
+	if (drw->isSet()) {
+		for(int i = 0; i < drw->getDrawerCount(); ++i) {
+			PointLayerDrawer *psdrw = (PointLayerDrawer *) (drw->getDrawer(i));
+			PointProperties *oldprops = (PointProperties *)psdrw->getProperties();
+			oldprops->set(props);
+			psdrw->setRotationInfo(inf);
+			psdrw->prepare(&pp);
+		}
+	} else {
+		PointLayerDrawer *pdr = (PointLayerDrawer *)drw;
+		pdr->setRotationInfo(inf);
+		drw->prepare(&pp);
+	}
 
 	updateMapView();
 }
