@@ -145,12 +145,12 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 
 void FeatureLayerDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	FeatureDataDrawer *mapDrawer = (FeatureDataDrawer *)parentDrawer;
-	BaseMapPtr *bmp = mapDrawer->getBaseMap();
+	BaseMapPtr *bmp = ((BaseMap*)getDataSource())->ptr();
 	Representation rpr = bmp->dm()->rpr();
 	Table attTbl = bmp->tblAtt();
 	vector<Feature *> features;
-	bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
-	if ( isAnimation ) {
+	bool isSet = mapDrawer->isSet();
+	if ( isSet ) {
 		getFeatures(features);
 	} else {
 		mapDrawer->getFeatures(features, parms->index);
