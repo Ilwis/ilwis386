@@ -15,24 +15,10 @@ public:
 	String getMenuString() const ;
 	void update();
 protected:
-	void setcheckAttributeTable(void *w, HTREEITEM );
 	void setcheckattr(void *value, HTREEITEM item);
-	void displayOptionAttColumn();
 
 	SetChecks *attrCheck;
 	HTREEITEM lasthit;
 };
-
-	class ChooseAttributeColumnForm : public DisplayOptionsForm {
-		public:
-		ChooseAttributeColumnForm(CWnd *wPar, LayerDrawer *dr, DrawerTool *t);
-		void apply(); 
-	private:
-		Table attTable;
-		String attColumn;
-		FieldColumn *fc;
-		DrawerTool *tool;
-	};
-
 
 }
