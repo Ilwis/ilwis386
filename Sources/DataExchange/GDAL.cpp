@@ -1914,19 +1914,18 @@ void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int& rec) {
 void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int& rec, bool isMulti) {
 	try {
 		if ( hGeometry) {
-			long count = funcs.ogrGetSubGeometryCount(hGeometry);
+			long count = funcs.ogrGetSubGeometryCount(hGeometry); // "count" is used for both counting multipolygon subgeometries and ring/hole counts
 			OGRwkbGeometryType tp = funcs.ogrGetGeometryType(hGeometry);
-			if ( tp == wkbPolygon || tp == wkbPolygon25D ){
+			if ( tp == wkbPolygon || tp == wkbPolygon25D )
 				fillPolygon(count, rec, hGeometry);
-				if ( isMulti == false) // for multis de raw remains the same (same record).
-					++rec;
-			}
 			else {
 				for(int i = 0; i < count; ++i) {
 					OGRGeometryH hSubGeometry = funcs.ogrGetSubGeometry(hGeometry, i);
-					fillFeature(hSubGeometry, rec, count > 1);
+					fillFeature(hSubGeometry, rec, (count > 1) || isMulti);
 				}
 			}
+			if (!isMulti) // for multis the raw remains the same (same record) until the last element of the multi.
+				++rec;
 		}
 	} catch ( geos::util::IllegalArgumentException& ) {
 		// we ignore errors during import, polygons are skipped
