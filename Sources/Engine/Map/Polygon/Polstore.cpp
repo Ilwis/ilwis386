@@ -434,6 +434,7 @@ bool PolygonMapStore::removeFeature(FeatureID id, const vector<int>& selectedCoo
 		ILWIS::Polygon *pol = CPOLYGON(*cur);
 		if ( pol->getGuid() == id  ) {
 			if ( selectedCoords.size() == 0 || selectedCoords.size() == geometries->size()) {
+				spatialIndex->remove(pol);
 				delete pol;
 				geometries->erase(cur);
 				return true;
@@ -461,8 +462,30 @@ bool PolygonMapStore::removeFeature(FeatureID id, const vector<int>& selectedCoo
 }
 
 vector<Feature *> PolygonMapStore::getFeatures(const CoordBounds& cb, bool complete) const {
+	vector<Geometry *> pols;
+	vector<Feature *> features;
 
-	return vector<Feature *>();
+	spatialIndex->query(cb,pols);
+	for(int i = 0; i < pols.size(); ++i) {
+		ILWIS::Polygon *p = (ILWIS::Polygon *)pols.at(i);
+		if ( p && p->fValid()) {
+			CoordinateSequence *seq = p->getCoordinates();
+			bool inSide = false;
+			for(int j = 0; j < p->getNumPoints(); ++j) {
+				Coord c = seq->getAt(j);
+				inSide = cb.fContains(c);
+				if ( complete && !inSide)
+					break;
+				if ( !complete && inSide)
+					break;
+			}
+			delete seq;
+			if ( inSide)
+				features.push_back(p);
+		}
+	}
+
+	return features;
 
 }
 

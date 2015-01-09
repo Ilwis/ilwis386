@@ -63,6 +63,7 @@ geos::geom::Polygon(NULL,new vector<Geometry *>(),new GeometryFactory(new Precis
 			addHole(makeRing(pol->getInteriorRingN(island)));
 		}
 	}
+
 }
 
 LinearRing *ILWIS::Polygon::makeRing(const LineString *line) const {
@@ -71,10 +72,12 @@ LinearRing *ILWIS::Polygon::makeRing(const LineString *line) const {
 }
 
 void ILWIS::Polygon::addBoundary(LinearRing *ring) {
-	envelope = computeEnvelopeInternal();
 	if ( shell != NULL)
 		delete shell;
 	shell = ring;
+	envelope = computeEnvelopeInternal();
+	if (spatialIndex)
+		spatialIndex->insert(this);
 }
 
 void ILWIS::Polygon::addHole(LinearRing * ring) {
