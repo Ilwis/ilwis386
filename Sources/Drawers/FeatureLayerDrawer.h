@@ -51,7 +51,7 @@ namespace ILWIS{
 		Color singleColor;
 		BaseMap fbasemap;
 		String labelAttribute; // column;
-		map<long, SimpleDrawer*> featureMap;
+		multimap<long, SimpleDrawer*> featureMap;
 		void *managedDrawers;
 
 

@@ -277,7 +277,7 @@ void FeatureLayerDrawer::select(const CRect& rect, vector<long> & selectedRaws, 
 			if ( dr) {
 				long v = dr->getFeature()->iValue();
 				if ( v != iUNDEF)
-					featureMap[v] = dr;
+					featureMap.insert(pair<long, SimpleDrawer*>(v, dr));
 			}
 		}
 	}
@@ -304,7 +304,9 @@ void FeatureLayerDrawer::select(const CRect& rect, vector<long> & selectedRaws, 
 				if (!f || f->fValid() == false)
 					continue;
 				selectedRaws.push_back(f->iValue());
-				featureMap[f->iValue()]->select(true);
+				pair<multimap<long, SimpleDrawer*>::iterator, multimap<long, SimpleDrawer*>::iterator> range = featureMap.equal_range(f->iValue());
+				for (multimap<long, SimpleDrawer*>::iterator it = range.first; it != range.second; ++it)
+					it->second->select(true);
 			}
 		} else if (selectionMode == SELECTION_ADD) {
 			vector<long> newlySelectedRaws;
@@ -313,7 +315,9 @@ void FeatureLayerDrawer::select(const CRect& rect, vector<long> & selectedRaws, 
 				if (!f || f->fValid() == false)
 					continue;
 				newlySelectedRaws.push_back(f->iValue());
-				featureMap[f->iValue()]->select(true);
+				pair<multimap<long, SimpleDrawer*>::iterator, multimap<long, SimpleDrawer*>::iterator> range = featureMap.equal_range(f->iValue());
+				for (multimap<long, SimpleDrawer*>::iterator it = range.first; it != range.second; ++it)
+					it->second->select(true);
 			}
 			sort(selectedRaws.begin(), selectedRaws.end());
 			sort(newlySelectedRaws.begin(), newlySelectedRaws.end());
@@ -327,7 +331,9 @@ void FeatureLayerDrawer::select(const CRect& rect, vector<long> & selectedRaws, 
 				if (!f || f->fValid() == false)
 					continue;
 				newlySelectedRaws.push_back(f->iValue());
-				featureMap[f->iValue()]->select(false);
+				pair<multimap<long, SimpleDrawer*>::iterator, multimap<long, SimpleDrawer*>::iterator> range = featureMap.equal_range(f->iValue());
+				for (multimap<long, SimpleDrawer*>::iterator it = range.first; it != range.second; ++it)
+					it->second->select(false);
 			}
 			sort(selectedRaws.begin(), selectedRaws.end());
 			sort(newlySelectedRaws.begin(), newlySelectedRaws.end());
