@@ -208,6 +208,8 @@ void PolygonDrawer::select(bool yesno) {
 		specialOptions |= NewDrawer::sdoSELECTED;
 	else
 		specialOptions &= ~NewDrawer::sdoSELECTED;
+	if (boundary)
+		boundary->select(yesno);
 }
 
 //----------------------------------------
