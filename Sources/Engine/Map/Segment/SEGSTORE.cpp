@@ -790,7 +790,6 @@ vector<Feature *> SegmentMapStore::getFeatures(const CoordBounds& cb, bool compl
 	for(int i = 0; i < segs.size(); ++i) {
 		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
 		if ( s && s->fValid()) {
-			CoordinateSequence *seq = s->getCoordinates();
 			bool inSide = false;
 			for(int j = 0; j < s->getNumPoints(); ++j) {
 				Coord c = s->getCoordinateN(j);
