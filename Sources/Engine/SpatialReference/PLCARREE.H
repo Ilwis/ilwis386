@@ -47,7 +47,7 @@
 class DATEXPORT ProjectionPlateCarree: public ProjectionPtr
 {
 public:
-  ProjectionPlateCarree();
+  ProjectionPlateCarree(const Ellipsoid&);
   virtual XY xyConv(const PhiLam&) const;
   virtual PhiLam plConv(const XY&) const;
 };

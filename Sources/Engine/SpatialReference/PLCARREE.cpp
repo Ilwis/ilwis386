@@ -41,8 +41,11 @@
 */
 #include "Engine\SpatialReference\PLCARREE.H"
 
-ProjectionPlateCarree::ProjectionPlateCarree()
-{}
+ProjectionPlateCarree::ProjectionPlateCarree(const Ellipsoid& ell)
+: ProjectionPtr(ell)
+{
+  fEll = true;
+}
 
 XY ProjectionPlateCarree::xyConv(const PhiLam& pl) const
 {

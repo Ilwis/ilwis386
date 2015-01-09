@@ -240,7 +240,7 @@ ProjectionPtr* ProjectionPtr::create(const String& sName, const Ellipsoid& ell)
 //  else if ("Plate Carée" == sName || "Plate Caree" == sName.c_str())
 //    ptr = new ProjectionPlateCaree();
   else if (_stricmp("Plate Carree", sName.c_str()) == 0)
-    ptr = new ProjectionPlateCarree();
+    ptr = new ProjectionPlateCarree(ell);
   else if (_stricmp("Plate Rectangle", sName.c_str()) == 0)
     ptr = new ProjectionPlateRectangle();
   else if (_stricmp("PolyConic", sName.c_str()) == 0)
