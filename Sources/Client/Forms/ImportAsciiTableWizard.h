@@ -194,8 +194,9 @@ public:
 
 	void LoadFromFile(String& s, int iLines = -1);
 	void InitScan(String& sErr);
-	void ReScan(vector<ClmInfo> &vci);
-	void SwitchToNextPage(FormBaseWizardPage *page);	
+	void ReScan(vector<ClmInfo> &vci, bool fUseColInfo);
+	void SwitchToNextPage(FormBaseWizardPage *page);
+	static const ULONGLONG iMaxFullScanFileSize;
 	INT_PTR DoModal();
 
 private:

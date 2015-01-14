@@ -611,7 +611,7 @@ public:
 		m_fHasKey = false;
 		m_piSkip = &m_atw->m_iSkipLines;
 		m_iCols = m_atw->m_iNrCols;
-		fInColCountChange = false;
+		m_fDisableCallbacks = false;
 
 		FormEntry* root = feRoot();
 		(new StaticText(root, TR("Specify the properties of all columns:")))->SetIndependentPos();
@@ -632,6 +632,14 @@ public:
 		String s('x', 60);
 		m_stRemark = new StaticText(root, s);
 		m_stRemark->SetIndependentPos();
+	}
+
+	virtual BOOL OnInitDialog() {
+		m_fDisableCallbacks = true;
+		BOOL fRes = FormBaseWizardPage::OnInitDialog();
+		m_fDisableCallbacks = false;
+		CheckValidColumnInfo();
+		return fRes;
 	}
 
 	LRESULT OnWizardNext()
@@ -701,10 +709,17 @@ public:
 			}
 		}
 		m_atw->SetWizardButtons(dwButtons);
+		if (sRem.length() == 0) {
+			File file(m_atw->m_fnInput);
+			bool fFileTooBig = (file.iSize() > m_atw->iMaxFullScanFileSize);
+			if (fFileTooBig)
+				sRem = String(TR("WARNING: Full scan not done! Manually check Min and Max!"));
+		}
 		m_stRemark->SetVal(sRem);
 	}
     virtual BOOL OnSetActive() 
 	{
+		m_fDisableCallbacks = true;
 		FormBaseWizardPage::OnSetActive();
 		m_fiSkip->SetVal(m_atw->m_iSkipLines);
 		
@@ -720,6 +735,7 @@ public:
 			m_fiSkip->Hide();
 		}
 		m_atw->SetWizardButtons(PSWIZB_BACK | PSWIZB_FINISH);
+		m_fDisableCallbacks = false;
 
 		return TRUE;
 	}
@@ -736,6 +752,8 @@ public:
 	}
 	int ToggleTableDomain(Event*)
 	{
+		if (m_fDisableCallbacks)
+			return 0;
 		m_cbTableDomain->StoreData();
 		if (!m_fHasKey)
 		{
@@ -752,6 +770,8 @@ public:
 	}
 	int ColumnNamesChange(Event*)
 	{
+		if (m_fDisableCallbacks)
+			return 0;
 		m_cbTableDomain->StoreData();
 		// only refill the list of columns that are candidates for the
 		// table domain if the selector is visible
@@ -764,6 +784,8 @@ public:
 	}
 	int KeyColChange(Event*)
 	{
+		if (m_fDisableCallbacks)
+			return 0;
 		int iKey = m_fos->ose->GetCurSel();
 		CString scColName;
 		m_fos->ose->GetWindowText(scColName);
@@ -787,6 +809,8 @@ public:
 	}
 	int ColCountChange(Event*)
 	{
+		if (m_fDisableCallbacks)
+			return 0;
 		m_fiCols->StoreData();
 
 		// SetRowCount() sets the visible rows in the listcontrol to m_iCols
@@ -809,11 +833,14 @@ public:
 	}
 	int SkipLinesChange(Event*)
 	{
-	m_fiSkip->StoreData();
+		if (m_fDisableCallbacks)
+			return 0;
+
+		m_fiSkip->StoreData();
 		m_atw->m_iSkipLines = *m_piSkip;
 
 		m_atw->m_fFullScanExecuted = false;
-		m_atw->ReScan(m_atw->m_colInfo);
+		m_atw->ReScan(m_atw->m_colInfo, false);
 
 		CheckValidColumnInfo();
 
@@ -840,7 +867,7 @@ public:
 			if (fScanNeeded)
 			{
 				vector<ClmInfo> vci;
-				m_atw->ReScan(vci);
+				m_atw->ReScan(vci, true);
 				for (int i = 0; i < fclColumn->iNrCols(); ++i)
 				{
 					ClmInfo& ci = fclColumn->ciColumn(i);
@@ -864,7 +891,7 @@ private:
 
 	FieldInt *m_fiSkip;
 	FieldInt *m_fiCols;
-	bool     fInColCountChange;
+	bool     m_fDisableCallbacks;
 
 	bool     m_fHasKey;
 	int      m_iKey;
@@ -875,7 +902,7 @@ private:
 	AsciiTableWizard *m_atw;
 };
 
-
+const ULONGLONG AsciiTableWizard::iMaxFullScanFileSize = 1024*1024; // 1MB, otherwise the form takes too long
 
 AsciiTableWizard::AsciiTableWizard(CWnd* wnd) : CPropertySheet(TR("Import Table Wizard").c_str(), wnd)  ,
 		m_fFullScanExecuted(false), 
@@ -987,7 +1014,7 @@ void AsciiTableWizard::SetPages() {
 
 INT_PTR AsciiTableWizard::DoModal() {
 	SetPages();
-	ReScan(m_colInfo);
+	ReScan(m_colInfo, false);
 	if ( m_fDataBase) {
 		SetActivePage(ppSelectDBTable);
 		fADO = true;
@@ -1145,7 +1172,7 @@ void AsciiTableWizard::InitScan(String& sErr)
 	}
 }
 
-void AsciiTableWizard::ReScan(vector<ClmInfo> &vci)
+void AsciiTableWizard::ReScan(vector<ClmInfo> &vci, bool fUseColInfo)
 {
 	m_iActiveFormat = GetFormat();
 
@@ -1156,7 +1183,8 @@ void AsciiTableWizard::ReScan(vector<ClmInfo> &vci)
 	fFull = fFull || !m_fFullScanExecuted;
 
 	int iSpecFields = 0;
-	bool fUseColInfo = (vci.size() > 0) && !fFull;
+	if (vci.size() == 0)
+		fUseColInfo = false;
 	switch (m_iActiveFormat)
 	{
 		case TableExternalFormat::ifDBF:
@@ -1169,6 +1197,10 @@ void AsciiTableWizard::ReScan(vector<ClmInfo> &vci)
 		case TableExternalFormat::ifComma:
 		case TableExternalFormat::ifSpace:
 		case TableExternalFormat::ifFixed:
+			File file(m_fnInput);
+			bool fFileTooBig = (file.iSize() > iMaxFullScanFileSize);
+			if (fFileTooBig)
+				fFull = false;
 			TableDelimited::Scan(m_fnInput, m_iSkipLines, m_ifTable, vci, fFull, fUseColInfo);  // scan top of file only
 			break;
 	}
