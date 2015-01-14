@@ -59,6 +59,7 @@ public:
 	~ProgressListWindow();
 	void SetTitle(unsigned short);
 	void SetText(unsigned short);
+	void UpdateText(unsigned short);
 	BOOL OnInitDialog();
 	void OnCancel();
 	BOOL OnEraseBkgnd(CDC *);

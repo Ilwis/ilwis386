@@ -62,6 +62,7 @@ public:
   void _export setHelpItem(const HelpTopic& htp);
   void _export setHelpItem(const String& htp);
   void _export SetText(const String& sText);
+  void _export UpdateText(const String& sText);
 
   bool _export fUpdate(long iVal, long iMax = 0); // return true if stop has been pressed
   bool _export fText(const String& sText); // return true if stop has been pressed

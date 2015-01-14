@@ -12,6 +12,7 @@
 #define ILWREP_TITLE  3
 #define ILWREP_UPDATE 4
 #define ILWREP_TEXT   5
+#define ILWREP_UPDATETEXT   6
 
 // View Settings parameters
 #define LOADSETTINGS   1

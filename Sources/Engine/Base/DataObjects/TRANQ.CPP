@@ -220,6 +220,22 @@ void Tranquilizer::SetText(const String& sText)
 	}
 }
 
+void Tranquilizer::UpdateText(const String& sText)
+{
+  if( fServerMode())
+		return;
+  cs.Lock();
+  if ( reportWindow == 0)
+		Start();
+  sTranqText = sText;
+  cs.Unlock();
+	if (reportWindow != 0 && reportWindow->GetSafeHwnd() != NULL)
+	{
+		int	iMessage = MAKELONG(ILWREP_UPDATETEXT, iProgressID);
+		reportWindow->PostMessage(ID_ILWISREP, iMessage);
+	}
+}
+
 void Tranquilizer::setHelpItem(const HelpTopic& _htp)
 {
   if( fServerMode())

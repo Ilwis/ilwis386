@@ -143,6 +143,9 @@ LONG ProgressListWindow::OnIlwisReportMsg(WPARAM wP, LPARAM lp)
 		case ILWREP_TEXT:
 			SetText(iProgressID);
 			break;
+		case ILWREP_UPDATETEXT:
+			UpdateText(iProgressID);
+			break;
 	}
 	return 1;
 }
@@ -313,6 +316,13 @@ void ProgressListWindow::SetText(unsigned short iProgressId)
 	if ( fDelayedShow())
 		ShowWindow(SW_SHOWNA);
 	rlvTrqList.SetTextOnly(iProgressId);
+}
+
+void ProgressListWindow::UpdateText(unsigned short iProgressId)
+{
+	if ( fDelayedShow())
+		ShowWindow(SW_SHOWNA);
+	rlvTrqList.UpdateText(iProgressId);
 }
 
 UINT ProgressListWindow::UpdateInThread(LPVOID data)
