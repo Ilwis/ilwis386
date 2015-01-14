@@ -54,7 +54,8 @@ ReportListCtrlItem::ReportListCtrlItem() :
 	rlcList(NULL),
 	pcProgress(NULL),
 	iListItem(0),
-	fDrawStaticColumns(true)
+	fDrawStaticColumns(true),
+	iOldVal(iUNDEF)
 {
 	
 }
@@ -143,8 +144,21 @@ void ReportListCtrlItem::Update()
 	long iMax = trq->iMax;
 	trq->cs.Unlock();
 
-	if ( iVal == 0)
-		fDrawStaticColumns = true;
+	if ( iVal != iOldVal) {
+		rlcList->SetItemText(iListItem,2, sNumber.sVal());
+		if ( iVal == 0) // required when the trq object is re-used; caller has set new title and text, and called fUpdate(0, max);
+			fDrawStaticColumns = true;
+		if ((iMax > 0) && (iVal != iUNDEF))
+		{
+			pcProgress->ShowWindow(TRUE);		
+			double rVal = iVal;
+			rVal /= iMax;
+			rVal *= 1000;
+			if ( pcProgress)
+				pcProgress->SetPos(rVal);
+		}
+		iOldVal = iVal;
+	}
 
 	if ( fDrawStaticColumns )
 	{
@@ -153,19 +167,6 @@ void ReportListCtrlItem::Update()
 		rlcList->SetItemText(iListItem,0,trq->sTitle.sVal());
 		fDrawStaticColumns = false;
     }
-	if ( sOldNumber != sNumber)
-		rlcList->SetItemText(iListItem,2, sNumber.sVal());
-	sOldNumber = sNumber;	
-
-	if ((iMax > 0) && (iVal != iUNDEF))
-	{
-		pcProgress->ShowWindow(TRUE);		
-		double rVal = iVal;
-		rVal /= iMax;
-		rVal *= 1000;
-		if ( pcProgress)
-			pcProgress->SetPos(rVal);
-	}
 }
 
 int ReportListCtrlItem::iGetListItemIndex()
@@ -182,6 +183,14 @@ ReportListCtrlItem::~ReportListCtrlItem()
 {
 	delete pcProgress;
 	pcProgress = 0;
+}
+
+void ReportListCtrlItem::UpdateText()
+{
+	trq->cs.Lock();
+	rlcList->SetItemText(iListItem,0,trq->sTitle.sVal());
+	rlcList->SetItemText(iListItem, 3, trq->sTranqText.sVal());
+	trq->cs.Unlock();
 }
 
 void ReportListCtrlItem::SetTextOnly()
@@ -313,6 +322,15 @@ void ReportListCtrl::AddTopItem(Tranquilizer *tr)
 	InsertItem(&item);
 	mpListItems[tr->iGetProgressID()] = new ReportListCtrlItem(this, tr, item.iItem);	
 
+}
+
+void ReportListCtrl::UpdateText(unsigned short iProgressId)
+{
+	map<unsigned short, ReportListCtrlItem *>::iterator where = mpListItems.find(iProgressId);
+	if ( where != mpListItems.end())	
+	{
+		(*where).second->UpdateText();
+	}		
 }
 
 void ReportListCtrl::SetTextOnly(unsigned short iProgressId)

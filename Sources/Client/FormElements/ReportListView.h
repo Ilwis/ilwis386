@@ -54,6 +54,7 @@ public:
 	void SetListItemIndex(int iIndex);
 	int iGetListItemIndex();
 	void SetTextOnly();
+	void UpdateText();
 	void SetTitle();
 	void ShowHelp();
 	void StopOperation();
@@ -66,7 +67,7 @@ private:
 	ReportListCtrl *rlcList;
 	int iListItem;
 	bool fDrawStaticColumns;;
-	String sOldNumber;
+	long iOldVal;
 };
 
 #include <afxcmn.h>
@@ -100,6 +101,7 @@ class ReportListCtrl : public CListCtrl
 		int  iNumberOfItems();
 		unsigned short iGetRelevantProgressID(int iListIndex);
 		void SetTextOnly(unsigned short iProgressId);
+		void UpdateText(unsigned short iProgressId);
 		void SetTitle(unsigned short iProgressId);
 		void ShowHelp();
 		void SaveSettings(IlwisSettings& settings);
