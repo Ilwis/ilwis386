@@ -278,7 +278,7 @@ bool MapDistance::fForwardDistances(long& iChanges, bool fFirstPass)
 		if (iLineChanges != 0)
 		{
 			String s = String(TR("Changes forward %li. Line").c_str(), iChanges);
-			trq.SetText(s);
+			trq.UpdateText(s);
 		}
 		if (trq.fUpdate(iCurLine, iLines()))
 			return false;
@@ -473,7 +473,7 @@ bool MapDistance::fBackwardDistances(long& iChanges)
   for (iCurLine = iLines() - 1; iCurLine >= 0; iCurLine--) {
     if (iLineChanges != 0) {
       String s = String(TR("Changes backward %li. Line").c_str(), iChanges);
-      trq.SetText(s);
+      trq.UpdateText(s);
     }
     if (trq.fUpdate(iCurLine, iLines()))
       return false;
