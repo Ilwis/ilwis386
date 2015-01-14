@@ -482,7 +482,7 @@ RecItemAnimation::RecItemAnimation(RecItem* parent, const MapList& mapl, ILWIS::
 }
 
 RecItemAnimation::RecItemAnimation(RecItem* parent, const ObjectCollection& col,  ILWIS::ComplexDrawer *drawr)
-: RecItemMap(parent, BaseMap(col->fnObject(0))),animationDrawer(drawr), collection(col)
+: RecItemMap(parent, BaseMap(col->fnObject(0))),animationDrawer(drawr), collection(col), activeIndex(0)
 {
 	Table tbl = _map->tblAtt();
 	if (tbl.fValid()) {
