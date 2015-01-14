@@ -190,11 +190,6 @@ TableExternalFormat::InputFormat TableExternalFormat::ifGetFormat(const String& 
 
 void TableExternalFormat::Load()
 {
-	File InputFile(FileIn);
-
-	if ( InputFile.fEof() )
-		throw ErrorObject(String(TR("Could not find %S").c_str(), fnData().sFullPath()));
-
 	int iKeyColumn = iGetKeyColumnIndex();
 	m_pdsTable = 0;
 	if ( iKeyColumn != iUNDEF)
@@ -202,37 +197,60 @@ void TableExternalFormat::Load()
 		m_pdsTable = ptr.dm()->pdsrt();
 		ptr.SetDomain(ptr.dm());
 	}		
-
-	int iFileSz = InputFile.iSize();
-	Tranquilizer trq;
-	if (ifFormat == ifDBF)
-		trq.SetTitle(TR("Importing dBase III/IV table"));
-	else
-		trq.SetTitle(TR("Import ASCII Table"));
-	trq.SetText(TR("Reading File"));
-
 	iTotalRec = colInfo[0].iNrRecs;
-	ProcessHeader(InputFile);
-//	if (iTotalRec > 0)
-//		iRecNew(iTotalRec);  // when possible create records in one go
-
-	int iRec = 0;
-	while( !InputFile.fEof() )
-	{
-
-		if ( trq.fUpdate(InputFile.iLoc(), iFileSz) )
-			return;
-
-		vector<String> line;
-		if ( SplitLine(InputFile, line, iRec))
-		{
-			// if there is a key column add its value to the table domain
-			if ( iKeyColumn != iUNDEF)
-				AddToTableDomain(line, iKeyColumn);
-			else
-				iRec = iNewRecord(iRec);
-
-			PutRow(line, iKeyColumn, iRec );
+	long iRec = 0;
+	Tranquilizer trq;
+	trq.SetText(TR("Reading File"));
+	if (ifFormat == ifDBF) {
+		File InputFile(FileIn);
+		if ( InputFile.fEof() )
+			throw ErrorObject(String(TR("Could not find %S").c_str(), fnData().sFullPath()));
+		ULONGLONG iFileSz = InputFile.iSize();
+		trq.SetTitle(TR("Importing dBase III/IV table"));
+		ProcessHeader(InputFile);
+		while( !InputFile.fEof() ) {
+			if ( trq.fUpdate(InputFile.iLoc(), iFileSz) )
+				return;
+			vector<String> line;
+			if ( SplitLine(InputFile, line, iRec))
+			{
+				// if there is a key column add its value to the table domain
+				if ( iKeyColumn != iUNDEF)
+					AddToTableDomain(line, iKeyColumn);
+				else
+					iRec = iNewRecord(iRec);
+				PutRow(line, iKeyColumn, iRec );
+			}
+		}
+	} else {
+		CStdioFile InputFile (FileIn.sFullPath().c_str(), (UINT)facRO | CFile::typeText);
+		CFileStatus fs;
+		TRY {
+			InputFile.GetStatus(fs);
+		} CATCH (COleException,ex) {
+		}
+		END_CATCH
+		ULONGLONG iFileSz = fs.m_size;
+		bool fEof = (InputFile.GetPosition() == iFileSz);
+		if ( fEof )
+			throw ErrorObject(String(TR("Could not find %S").c_str(), fnData().sFullPath()));
+		trq.SetTitle(TR("Import ASCII Table"));
+		ProcessHeader(InputFile);
+		fEof = (InputFile.GetPosition() == iFileSz);
+		while (!fEof) {
+			if ( trq.fUpdate(100 * InputFile.GetPosition() / iFileSz, 100) )
+				return;
+			vector<String> line;
+			if ( SplitLine(InputFile, line, iRec))
+			{
+				// if there is a key column add its value to the table domain
+				if ( iKeyColumn != iUNDEF)
+					AddToTableDomain(line, iKeyColumn);
+				else
+					iRec = iNewRecord(iRec);
+				PutRow(line, iKeyColumn, iRec );
+			}
+			fEof = (InputFile.GetPosition() == iFileSz);
 		}
 	}
 
@@ -267,7 +285,7 @@ void TableExternalFormat::Load()
 	}
 }
 
-int TableExternalFormat::iNewRecord(int iRec)
+long TableExternalFormat::iNewRecord(long iRec)
 {
 	if (iRec >= iRecs() && ptr.dm()->pdnone() != NULL)
 		return iRecNew();

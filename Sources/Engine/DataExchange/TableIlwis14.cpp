@@ -193,7 +193,7 @@ void TableIlwis14::ScanStrings(FieldValues& sFields, vector<ClmInfo> &scanInfo, 
 	}
 }
 
-bool TableIlwis14::SplitLine(File& InputFile, FieldValues& result, int& iRec)
+bool TableIlwis14::SplitLine(CStdioFile& InputFile, FieldValues& result, long& iRec)
 {
 	bool fReturn = TableDelimited::SplitLine(InputFile, result, iRec);
 	for_each(result.begin(), result.end(), ReplaceUnderScores);

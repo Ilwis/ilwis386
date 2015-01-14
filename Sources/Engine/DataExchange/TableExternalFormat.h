@@ -93,11 +93,13 @@ class TableExternalFormat : public TableStore
   protected:
  		void            PutRow(FieldValues &line, int iKeyColumn, long iRecNr);
 		virtual void    ProcessHeader(File &InpFile) {}
-		virtual bool    SplitLine(File& sIf, FieldValues& result, int& iRec) { return false;};
+		virtual void    ProcessHeader(CStdioFile &InpFile) {}
+		virtual bool    SplitLine(File& sIf, FieldValues& result, long& iRec) { return false;};
+		virtual bool    SplitLine(CStdioFile& sIf, FieldValues& result, long& iRec) { return false;};
 		virtual void    AddToTableDomain(FieldValues &line, int iKeyColumn);
 		virtual void    Load();
 		virtual void    PutExternalField(FieldValues &line, int &iMemoCol, int iRec, int iField) {}
-		virtual int     iNewRecord(int iRec);
+		virtual long    iNewRecord(long iRec);
 
 		int             iGetKeyColumnIndex();
 

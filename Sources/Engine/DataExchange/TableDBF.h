@@ -99,7 +99,7 @@ protected:
 	void             WriteDescriptorField(File* Out, String sName, const Domain& dm, const ClmInfo::ExternalDomainType edtTpe );
 	virtual void     PutExternalField(FieldValues &line, int &iMemoCol, int iRec, int iField);
 	void             AddToTableDomain(FieldValues &line, int iKeyColumn);
-	int              iNewRecord(int iRec);
+	long             iNewRecord(long iRec);
 
 
 #pragma pack(1)

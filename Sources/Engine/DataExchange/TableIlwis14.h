@@ -48,7 +48,7 @@ public:
 	virtual void Store();
 
 protected:
-	virtual bool SplitLine(File& InputFile, FieldValues& result, int& iRec);
+	virtual bool SplitLine(CStdioFile& InputFile, FieldValues& result, long& iRec);
 
 private:
 	static void ReplaceUnderScores(String& sField);

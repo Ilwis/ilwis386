@@ -436,7 +436,7 @@ void TableDBF::AddToTableDomain(FieldValues &line, int iKeyColumn)
 		(*cur).iValues.push_back(iUNDEF);
 }
 
-int TableDBF::iNewRecord(int iRec)
+long TableDBF::iNewRecord(long iRec)
 {
 	for(vector<MemoVector>::iterator cur = memos.begin(); cur != memos.end(); ++cur)
 		(*cur).iValues.push_back(iUNDEF);

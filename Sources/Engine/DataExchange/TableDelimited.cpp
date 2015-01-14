@@ -164,26 +164,24 @@ TableDelimited::TableDelimited(
 {
 }
 
-void TableDelimited::ProcessHeader(File& InputFile)
+void TableDelimited::ProcessHeader(CStdioFile& InputFile)
 {
-	String sDummy;
+	CString sDummy;
 	int iSkip = iSkipLines;
 	for ( iSkip = 0; iSkip< iSkipLines; ++iSkip)
-		InputFile.ReadLnAscii(sDummy);
+		InputFile.ReadString(sDummy);
 }
 
-bool TableDelimited::SplitLine(File& InputFile, FieldValues& result, int& iRec)
+bool TableDelimited::SplitLine(CStdioFile& InputFile, FieldValues& result, long& iRec)
 {
-	String sLine;
-	InputFile.ReadLnAscii(sLine);
-	if (sLine == "") return false;
+	CString sLine;
+	InputFile.ReadString(sLine);
+	if (sLine.GetLength() == 0) return false;
 
 	if ( ifFormat == TableExternalFormat::ifComma || ifFormat == TableExternalFormat::ifSpace )
-		ParseLine(sLine, result, ifFormat);
+		ParseLine(String(sLine), result, ifFormat);
 	else
-	{
-		ParseLine(sLine, result);
-	}
+		ParseLine(String(sLine), result);
 
 	return true;
 }
@@ -375,6 +373,22 @@ void TableDelimited::Scan(FileName fnObj, int &iSkipLines, TableExternalFormat::
 		else
 			ScanLine(line, scanInfo, fHintOnly, iRecs); // collect column info from table
 
+	}
+	// read last line and include it in the scan
+	const long iMaxLineSize = 8196;
+	if (fHintOnly && InputFile.iSize() > iMaxLineSize) {
+		InputFile.Seek(-iMaxLineSize, true);
+		String sLine;
+		++iRecs;
+		while(!InputFile.fEof()) {
+			InputFile.ReadLnAscii(sLine); // find the last line and keep it in sLine
+		}
+		FieldValues line;
+		ParseLine(sLine, line, eDel);
+		if (fUseColInfo)
+			ScanStrings(line, scanInfo,iRecs);  // collect strings for class/id domains
+		else
+			ScanLine(line, scanInfo, fHintOnly, iRecs); // collect column info from table
 	}
 	if (!fUseColInfo)
 	{

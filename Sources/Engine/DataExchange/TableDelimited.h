@@ -92,8 +92,8 @@ public:
 	virtual void Store();
 
 protected:
-	virtual bool SplitLine(File& InputFile, FieldValues& result, int& iRec);
-	virtual void ProcessHeader(File& InputFile);
+	virtual bool SplitLine(CStdioFile& InputFile, FieldValues& result, long& iRec);
+	virtual void ProcessHeader(CStdioFile& InputFile);
 	
 	static void ScanLine(FieldValues& sFields, vector<FldInfo> &scanInfo, bool fHintOnly, int iRecs);
 	static void ScanStrings(FieldValues& sFields, vector<FldInfo> &scanInfo, int iRecs);
