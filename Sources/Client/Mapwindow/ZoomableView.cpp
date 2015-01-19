@@ -522,7 +522,7 @@ void ZoomableView::AreaSelected(CRect rect)
 		CRect rectWindow;
 		GetClientRect(&rectWindow);
 		Coord c1,c2;
-		if ( rect.Width() == 0 || rect.Height() == 0) { // case of clicking on the map in zoom mode
+		if ( rect.Width() < 3 && rect.Height() < 3) { // case of clicking on the map in zoom mode
 			double posx = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine click point
 			double posy = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
 			CoordBounds cb = cbZoom; // == cbView ? cbMap : cbZoom;
@@ -532,7 +532,9 @@ void ZoomableView::AreaSelected(CRect rect)
 			c1.y = posy - h;
 			c2.x = posx + w;
 			c2.y = posy + h;
-		} else {
+		} else if (rect.Width() < 3 || rect.Height() < 3)
+			return;
+		else {
 			c1.x = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine zoom rectangle in GL coordinates
 			c1.y = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
 			c2.x = cbZoom.cMin.x + cbZoom.width() * rect.right / (double)rectWindow.Width();
@@ -1020,17 +1022,22 @@ void ZoomableView::OnZoomOut()
 		noTool(ID_ZOOMOUT);
 		return;
 	}
-	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
-	CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
-	CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
-	double rFactor = min(1.41, max(cbMap.width() / cbZoom.width(), cbMap.height() / cbZoom.height()));
-	cbZoom *= rFactor;
-	RecenterZoomHorz(cbZoom, cbMap);
-	RecenterZoomVert(cbZoom, cbMap);
-	mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
-	setScrollBars();
-	OnDraw(0);
-	
+	noTool();
+	if (HIWORD(AfxGetThreadState()->m_lastSentMsg.wParam) == 1)
+	{
+		zPoint p(dim.width()/2,dim.height()/2);
+		ZoomOutPnt(p);
+		return;
+	}
+	AreaSelector *as;
+	if (fAdjustSize)
+		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::ZoomOutAreaSelected);
+	else 
+		as = new AreaSelector(this, this, (NotifyRectProc)&ZoomableView::ZoomOutAreaSelected, dim);
+	tools[ID_ZOOMOUT] = as;
+	as->SetCursor(zCursor("ZoomOutCursor"));
+	as->setActive(true);
+	iActiveTool = ID_ZOOMOUT;
 }
 
 bool ZoomableView::addTool(MapPaneViewTool *tool, int id) {
@@ -1203,22 +1210,53 @@ void ZoomableView::ShowArea(double rScale, long iX, long iY)
 
 void ZoomableView::ZoomOutAreaSelected(CRect rect)
 {
-  if (rect.Width() < 3 && rect.Height() < 3)
-    ZoomOutPnt(rect.TopLeft());
-  else if (rect.Width() < 3 || rect.Height() < 3)
-    return;
-  else {
-		CRect rct;
-		rct.top = - rect.top;
-		rct.bottom = dim.cy + (dim.cy - rect.bottom);
-		rct.left = - rect.left;
-		rct.right = dim.cx + (dim.cx - rect.right);
-		AreaSelected(rct);
+  	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd) {
+		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
+		CRect rectWindow;
+		GetClientRect(&rectWindow);
+		Coord c1,c2;
+		if ( rect.Width() < 3 && rect.Height() < 3) { // case of clicking on the map in zoom mode
+			double posx = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine click point
+			double posy = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
+			CoordBounds cb = cbZoom; // == cbView ? cbMap : cbZoom;
+			double w = cb.width() * 1.41 / 2.0; // determine new window size
+			double h = cb.height() * 1.41 / 2.0;
+			c1.x = posx - w; // determine new bounds
+			c1.y = posy - h;
+			c2.x = posx + w;
+			c2.y = posy + h;
+		} else if (rect.Width() < 3 || rect.Height() < 3)
+			return;
+		else {
+			rect.top = - rect.top;
+			rect.bottom = dim.cy + (dim.cy - rect.bottom);
+			rect.left = - rect.left;
+			rect.right = dim.cx + (dim.cx - rect.right);
+			c1.x = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine zoom rectangle in GL coordinates
+			c1.y = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
+			c2.x = cbZoom.cMin.x + cbZoom.width() * rect.right / (double)rectWindow.Width();
+			c2.y = cbZoom.cMax.y - cbZoom.height() * rect.bottom / (double)rectWindow.Height();
+		}
+		c1.z = c2.z = 0;
+
+		cbZoom = CoordBounds (c1,c2);
+		if (cbZoom.width() > cbMap.width() || cbZoom.height() > cbMap.height())
+			mcd->rootDrawer->setCoordBoundsView(mcd->rootDrawer->getMapCoordBounds(),true); // same as OnEntireMap()
+		else {
+			RecenterZoomHorz(cbZoom, cbMap);
+			RecenterZoomVert(cbZoom, cbMap);
+			mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
+		}
+
+		setScrollBars();
+		OnDraw(0);
+		bool fZoomedIn = (mcd->rootDrawer->getMapCoordBounds().width() > mcd->rootDrawer->getCoordBoundsZoom().width()) || 
+			(mcd->rootDrawer->getMapCoordBounds().height() > mcd->rootDrawer->getCoordBoundsZoom().height());
+		if (!fZoomedIn && ID_ZOOMOUT == iActiveTool)
+			PostMessage(WM_COMMAND, ID_NORMAL); // noTool() crashes
 	}
-	bool fTooSmall;
-  fTooSmall= scale(iXsize,true) < 5 || scale(iYsize,true) < 5;
-	if (fTooSmall && ID_ZOOMOUT == iActiveTool)
-		noTool();
 }
 
 void ZoomableView::OnReDraw()
