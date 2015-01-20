@@ -80,6 +80,7 @@ Created on: 2007-02-8
 #include "Engine\Drawers\DrawerContext.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
 #include "Client\Mapwindow\PanTool.h"
+#include "Client\Mapwindow\AreaSelector.h"
 #include "Engine\Base\System\RegistrySettings.h"
 
 #ifdef _DEBUG
@@ -487,8 +488,13 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 	if (fValid && !fOutside && mode == cNone) {
 		CoordWithCoordSystem cwcs(c, mcd->rootDrawer->getCoordinateSystem());
 		int state = cmMOUSEMOVE;
-		if ( iActiveTool == ID_ZOOMIN)
-			state |= cmZOOMIN;
+		AreaSelector * selectionTool = (tools.find(ID_ZOOMIN) != tools.end()) ? (AreaSelector*)tools[ID_ZOOMIN] : ((tools.find(ID_ZOOMOUT) != tools.end()) ? (AreaSelector*)tools[ID_ZOOMOUT] : 0);
+		if (selectionTool && selectionTool->selecting()) {
+			if ( iActiveTool == ID_ZOOMIN)
+				state |= cmZOOMIN;
+			else if ( iActiveTool == ID_ZOOMOUT)
+				state |= cmZOOMOUT;
+		}
 		IlwWinApp()->SendUpdateCoordMessages(state, &cwcs);
 	}
 
@@ -523,8 +529,13 @@ void SimpleMapPaneView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	//mcd->mpvGetView()->Invalidate();
 	int state = cmMOUSECLICK;
-	if ( iActiveTool == ID_ZOOMIN)
-			state |= cmZOOMIN;
+	AreaSelector * selectionTool = (tools.find(ID_ZOOMIN) != tools.end()) ? (AreaSelector*)tools[ID_ZOOMIN] : ((tools.find(ID_ZOOMOUT) != tools.end()) ? (AreaSelector*)tools[ID_ZOOMOUT] : 0);
+	if (selectionTool && selectionTool->selecting()) {
+		if ( iActiveTool == ID_ZOOMIN)
+				state |= cmZOOMIN;
+		else if ( iActiveTool == ID_ZOOMOUT)
+				state |= cmZOOMOUT;
+	}
 	IlwWinApp()->SendUpdateCoordMessages(state, &cwcsButtonDown);
 }
 
