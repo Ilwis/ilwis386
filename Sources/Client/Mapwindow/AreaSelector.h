@@ -67,6 +67,7 @@ public:
 	void OnLButtonDown(UINT nFlags, CPoint point);
 	void OnLButtonUp(UINT nFlags, CPoint point);
 	void setKeepDimensions(bool yesno);
+	const bool selecting() const { return fDown; };
 protected:
   CRect rect() const;
 	void DrawRect();
