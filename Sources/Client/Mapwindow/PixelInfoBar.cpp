@@ -118,7 +118,7 @@ LRESULT PixelInfoBar::OnUpdateAnim(WPARAM wParam, LPARAM lParam)
 LRESULT PixelInfoBar::OnUpdate(WPARAM wParam, LPARAM lParam)
 {
 	CoordMessage cm = (CoordMessage) wParam;
-	if ( cm & cmZOOMIN)
+	if ( cm & cmZOOMIN || cm & cmZOOMOUT)
 		return 0;
 	PixelInfoDoc* pid = (PixelInfoDoc*)pixview->GetDocument();
 	continousCheck.SetCheck(pid->fMouseCont ? TRUE : FALSE);

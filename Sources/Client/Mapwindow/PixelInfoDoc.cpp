@@ -264,7 +264,7 @@ LRESULT PixelInfoDoc::OnUpdate(WPARAM wParam, LPARAM lParam)
 	if ( cm & cmMOUSECLICK ) {
 		fUpdate = fMouse;
 	}
-	if ( cm & cmMOUSEMOVE && !(cm & cmZOOMIN)) {
+	if ( cm & cmMOUSEMOVE && !(cm & cmZOOMIN) && !(cm & cmZOOMOUT)) {
 		fUpdate = fMouse && fMouseCont;
 	}
 	if ( cm & cmDIGIMOVE) {
