@@ -130,8 +130,8 @@ ccTool(_ccTool)
 	//names.push_back(band3);
 
 	fm1 = new FieldOneSelectString(root,TR("Red"),&v1,names);
-	fm2 = new FieldOneSelectString(root,TR("Blue"),&v2,names);
-	fm3 = new FieldOneSelectString(root,TR("Green"),&v3, names);
+	fm2 = new FieldOneSelectString(root,TR("Green"),&v2,names);
+	fm3 = new FieldOneSelectString(root,TR("Blue"),&v3, names);
 	fm1->SetComboWidth(120);
 	fm2->SetComboWidth(120);
 	fm3->SetComboWidth(120);
