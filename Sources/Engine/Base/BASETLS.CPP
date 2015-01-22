@@ -47,7 +47,7 @@ double doubleConv(const char* s)
 
 	// skip leading spaces; strtol will return 0 on a string with only spaces
 	// which is not what we want
-	while (isspace(*begin)) ++begin;
+	while (isspace((unsigned char)*begin)) ++begin;
 
 	if (strlen(begin) == 0) return rUNDEF;
 	errno = 0;
@@ -71,7 +71,7 @@ long longConv(const char* s)
 
 	// skip leading spaces; strtol will return 0 on a string with only spaces
 	// which is not what we want
-	while (isspace(*begin)) ++begin;
+	while (isspace((unsigned char)*begin)) ++begin;
 
 	if (strlen(begin) == 0) return iUNDEF;
 	errno = 0;

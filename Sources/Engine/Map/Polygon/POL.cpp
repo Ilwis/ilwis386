@@ -135,7 +135,7 @@ PolygonMap::PolygonMap(const String& sExpression, const String& sPath)
 		fn.Dir(sPath); 
 	MutexFileName mut(fn);
 	if (p && (0 != _strcmpi(p+1, "mpa"))) {
-		if (isalpha(*(p+1)) || ((p<(pMax-1)) && *(p+1) == '\'' && isalpha(*(p+2)))) // attrib column (right side of || checks on quoted column)
+		if (isalpha((unsigned char)*(p+1)) || ((p<(pMax-1)) && *(p+1) == '\'' && isalpha((unsigned char)*(p+2)))) // attrib column (right side of || checks on quoted column)
 			//    SetPointer(new PolygonMapAttribute(FileName(), PolygonMap(fn), p+1));
 			SetPointer(PolygonMapPtr::create(FileName(), String("PolygonMapAttribute(%S,%s)", fn.sFullNameQuoted(), p+1)));
 		else {

@@ -331,7 +331,7 @@ FormEntry* FieldMapListCalc::CheckData()
 			if (sExpr[i] == '@') // digits should follow
 			{
 				int j = i+1;
-				while ((j < sExpr.length()) && isdigit(sExpr[j]))
+				while ((j < sExpr.length()) && isdigit((unsigned char)sExpr[j]))
 					++j;
 				if (j > i+1) // something found
 				{

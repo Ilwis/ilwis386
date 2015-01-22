@@ -449,16 +449,16 @@ TableImport::TableImport(const FileName& fn, const FileName& fnNewDat, const Fil
 		{
 			int iRepeats = iCoordCol == c ? 2 : 1;
 			// skip spaces
-			while (!fEOL && isspace(*sBuf))
+			while (!fEOL && isspace((unsigned char)*sBuf))
 				sBuf++;
 			str = sBuf;
 			while (!fEOL && iRepeats > 0) 
 			{
 				// skip spaces
-				while (isspace(*sBuf))
+				while (isspace((unsigned char)*sBuf))
 					sBuf++;
 				// find non space
-				while (*sBuf && !isspace(*sBuf))
+				while (*sBuf && !isspace((unsigned char)*sBuf))
 					sBuf++;
 				iRepeats--;
 				if (iRepeats == 0)

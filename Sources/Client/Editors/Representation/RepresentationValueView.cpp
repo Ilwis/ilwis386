@@ -229,7 +229,7 @@ BOOL InPlaceValueEdit::PreTranslateMessage(MSG* pMsg)
 			SendMessage(WM_KEYDOWN, pMsg->wParam, pMsg->lParam);
 			return FALSE;
 		}
-		else if ( isalpha(pMsg->wParam) )  
+		else if ( isalpha((unsigned char)pMsg->wParam) )  
 			return TRUE;
 	}
   return CEdit::PreTranslateMessage(pMsg);

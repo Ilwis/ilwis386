@@ -241,7 +241,7 @@ int Import14(CWnd* wPar, const String& sMask)
     MessageBox(0, TR("Unknown Error during importing").c_str(), TR("Error").c_str(), MB_ICONSTOP|MB_OK);
   }
   String sCurDir = sOutDir;
-//  _chdrive(1 + tolower(sCurDir[0]) - 'a');
+//  _chdrive(1 + tolower((unsigned char)sCurDir[0]) - 'a');
 //  if (sCurDir[sCurDir.length()-2] != ':')
 //    sCurDir[sCurDir.length()-1] = 0;
   SetCurrentDirectory(sCurDir.c_str());

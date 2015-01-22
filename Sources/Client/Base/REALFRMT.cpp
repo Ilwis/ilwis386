@@ -76,7 +76,7 @@ RealFormatter::RealFormatter()
 
 bool RealFormatter::fAdd(const char& c)
 {
-  if (isdigit(c)) {
+  if (isdigit((unsigned char)c)) {
     if (iExp > 0) {
       if (i > iExp + 4)
         return false;
@@ -159,20 +159,20 @@ bool RealFormatter::checkChars(String &str, zRange &pos)
   int i = 0;
   int iLen = str.length();
   if (str[i] == '-') i++;
-  while (i < iLen && isdigit(str[i])) i++;
+  while (i < iLen && isdigit((unsigned char)str[i])) i++;
   if (str[i] == '.') i++;
-  while (i < iLen && isdigit(str[i])) i++;
+  while (i < iLen && isdigit((unsigned char)str[i])) i++;
   if (str[i] == 'e') {
-    if (i > 0 && !isdigit(str[i]-1)) {
+    if (i > 0 && !isdigit((unsigned char)str[i]-1)) {
       i++;
       if (str[i] == '-') i++;
       if (i == iLen) {
         pos.lo() = pos.hi() = i;
         return 0;
       }
-      if (i < iLen && isdigit(str[i])) i++;
-      if (i < iLen && isdigit(str[i])) i++;
-      if (i < iLen && isdigit(str[i])) i++;
+      if (i < iLen && isdigit((unsigned char)str[i])) i++;
+      if (i < iLen && isdigit((unsigned char)str[i])) i++;
+      if (i < iLen && isdigit((unsigned char)str[i])) i++;
     }
   }
   if (i < iLen) {

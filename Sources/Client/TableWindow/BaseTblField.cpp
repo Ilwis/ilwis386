@@ -154,14 +154,14 @@ EditFieldBool::EditFieldBool(CWnd* pane, BaseTblField* btf, const DomainBool* db
 {
 	sTrue = db->sValueByRaw(2,0);
 	sFalse = db->sValueByRaw(1,0);
-	cTrue = tolower(sTrue[0]);
-	cFalse = tolower(sFalse[0]);
+	cTrue = tolower((unsigned char)sTrue[0]);
+	cFalse = tolower((unsigned char)sFalse[0]);
 }
 
 void EditFieldBool::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	bool fValue;
-	char ch = tolower(nChar);
+	char ch = tolower((unsigned char)nChar);
 	//    if (ch >= 0x41 && ch <= 0x5A)   // tolower does not seem to work
 	//      ch += 0x20;
 	if (ch == cTrue)

@@ -560,7 +560,7 @@ LRESULT CommandHandler::fExecute(const String& sCmd)
 		if ((sComd[1] == ':') && (sComd.length()==2)) // change drive of the from 'e:'
 			return fExecute("cd " + sComd);
 
-		if (tolower(sComd[0]) == 'c' && tolower(sComd[1]) == 'd' // allow cd without space
+		if (tolower((unsigned char)sComd[0]) == 'c' && tolower(sComd[1]) == 'd' // allow cd without space
 			&& (sComd[2] == '.' || sComd[2] == '\\'))
 			return fExecute("cd " + sComd.substr(2));
 
@@ -1028,7 +1028,7 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 	if (iBracket!=-1) 
 	{
 		char* c = sExpres.sVal();
-		while (isalnum(*c)) ++c;
+		while (isalnum((unsigned char)*c)) ++c;
 		// if non alpha numerical characters are before the bracket
 		// presume a mapcalc statement
 		if (c == sExpres.substr(iBracket)) 

@@ -1008,7 +1008,7 @@ void ExpressionParser::Operand(bool *fLeftAllowed)
     }
   }
   else { // normal identifier
-    if ((s[0] != '\'') && (s[0] != '.') && (s[0] !=  '\\') && (s[0] != '%') && !isalpha(s[0])) {
+    if ((s[0] != '\'') && (s[0] != '.') && (s[0] !=  '\\') && (s[0] != '%') && !isalpha((unsigned char)s[0])) {
       ErrExp(tok, "operand or function");
       GetNextToken();
       return;

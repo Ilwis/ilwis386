@@ -206,7 +206,7 @@ void ParmList::AddFrom(const String& sCmdLine, int *iFixedPos)
 		p1 = &iter()[0];
 		if (*p1 == '@') // response file
 			AddFrom(FileName(p1+1), iFixedPos);
-		else if ((*p1 == '-') && !isdigit(*(p1+1))) { // option or flag
+		else if ((*p1 == '-') && !isdigit((unsigned char)*(p1+1))) { // option or flag
 			char *p2 = strchr(p1, '=');
 			if (0 == p2) {
 				// check last char for flag

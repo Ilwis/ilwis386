@@ -359,7 +359,7 @@ Map::Map(const FileName& fn, const String& sExpression)
 	Split(sHead, arParts, ",");
 	for(unsigned int i=0; i<arParts.size(); ++i)
 	{
-		if (arParts[i][0] == '%' && isdigit(arParts[i][1]))
+		if (arParts[i][0] == '%' && isdigit((unsigned char)arParts[i][1]))
 			throw StopScriptError(String(TR("Missing parameter : %S").c_str(), arParts[i]));
 	}		
   SetPointer(MapPtr::create(fnMap,sExpression));
@@ -459,7 +459,7 @@ Map::Map(const String& sExpression, const String& sPath)
       catch (const ErrorObject&) {
       }
     }
-		if (isalpha(*(p+1)) || ((p<(pMax-1)) && *(p+1) == '\'' && isalpha(*(p+2)))) // attrib column (right side of || checks on quoted column)
+		if (isalpha((unsigned char)*(p+1)) || ((p<(pMax-1)) && *(p+1) == '\'' && isalpha((unsigned char)*(p+2)))) // attrib column (right side of || checks on quoted column)
       SetPointer(MapPtr::create(FileName(), String("MapAttribute(%S,%s)", fn.sFullNameQuoted(), p+1)));
     else {
       fn.sFile = "";
@@ -470,7 +470,7 @@ Map::Map(const String& sExpression, const String& sPath)
   }
   // check syntax for map from maplist   'maplist:bandnr'
   p = sExpr.strrchrQuoted(':');
-  if ((p != 0) && isdigit(*(p+1))) {
+  if ((p != 0) && isdigit((unsigned char)*(p+1))) {
     *p = 0;
     FileName fnMpl(sExpr, ".mpl", true);
     long iBandNr = String(p+1).iVal();
@@ -480,7 +480,7 @@ Map::Map(const String& sExpression, const String& sPath)
     String sMap;
     ObjectInfo::ReadElement("MapList", String("Map%li", iBandNr-1+iOffsetForBands).c_str(), fnMpl, sMap);
     char *p = sMap.strrchrQuoted(':');
-    if ((p != 0) && isdigit(*(p+1))) {
+    if ((p != 0) && isdigit((unsigned char)*(p+1))) {
       fnMpl.sSectionPostFix = String(":%li", iBandNr);
       MutexFileName mut(fnMpl);
       SetPointer(new MapPtr(fnMpl, false, iBandNr));
@@ -722,7 +722,7 @@ MapPtr* MapPtr::create(const FileName& fn, const String& sExpression)
       if (p == 0) {  // no case 2
         // check case 4   'maplist:bandnr'
         p = sExpr.strrchrQuoted(':');
-        if ((p != 0) && isdigit(*(p+1))) {
+        if ((p != 0) && isdigit((unsigned char)*(p+1))) {
 					String sPostFix = p;
           *p = 0;
           FileName fnMpl(sExpr, ".mpl", true);

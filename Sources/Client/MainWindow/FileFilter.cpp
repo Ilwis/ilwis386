@@ -745,7 +745,7 @@ void FileFilter::Next(rsReadState rs)
 	size_t iSz = sFilter.size();
 	if ( iC == iSz ) return;
 	char c = sFilter[iC];
-	while ( iC < iSz && isspace(c) )
+	while ( iC < iSz && isspace((unsigned char)c) )
 		c = sFilter[++iC];
 
 	if ( c == '\"')
@@ -760,16 +760,16 @@ void FileFilter::Next(rsReadState rs)
 	}
 	else if ( rs == rsReadValue )
 	{
-		while ( isspace(c) == 0 && c!= ')' && iC < iSz)
+		while ( isspace((unsigned char)c) == 0 && c!= ')' && iC < iSz)
 		{
 			sToken += c;
 			c = sFilter[++iC];
 		}
 	}
-	else if ( isdigit(c))
+	else if ( isdigit((unsigned char)c))
 	{
 		int iOneComma=0;
-		while ( isdigit(c) && iC < iSz)
+		while ( isdigit((unsigned char)c) && iC < iSz)
 		{
 			sToken += c;
 			c = sFilter[++iC];
@@ -781,9 +781,9 @@ void FileFilter::Next(rsReadState rs)
 			}
 		}
 	}
-	else if ( isalnum(c) )
+	else if ( isalnum((unsigned char)c) )
 	{
-		while(isalnum(c) && iC < iSz )
+		while(isalnum((unsigned char)c) && iC < iSz )
 		{
 			sToken += c;
 			c = sFilter[++iC];
@@ -791,7 +791,7 @@ void FileFilter::Next(rsReadState rs)
 	}
 	else
 	{
-		while ( iC < iSz && isspace(c) == 0 && !isalnum(c) && c != '\"' && c!='*')
+		while ( iC < iSz && isspace((unsigned char)c) == 0 && !isalnum((unsigned char)c) && c != '\"' && c!='*')
 		{
 			sToken += c;
 			c = sFilter[++iC];
@@ -806,13 +806,13 @@ void FileFilter::Previous()
 	iC -= (sToken.size() + 1);
 	if ( iC <= 0 ) return;
 	char c = sFilter[iC];
-	while (iC > 0 && isspace(c))
+	while (iC > 0 && isspace((unsigned char)c))
 	   c = sFilter[--iC];
 	while( iC > 0 )
 	{
 		if ( iC > 1 )
 			c = sFilter[iC];
-		if ( !isalnum(c) )
+		if ( !isalnum((unsigned char)c) )
 			break;
 		--iC;
 	}

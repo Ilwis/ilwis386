@@ -751,7 +751,7 @@ long DomainBit::iRaw(const String& sValue) const
 {
   if (sValue == sUNDEF)
     return iUNDEF;
-  if (!isdigit(sValue[0])) {
+  if (!isdigit((unsigned char)sValue[0])) {
     if ((sValue == "T") || (sValue == "True"))
       return 1;
     return 0;
@@ -916,9 +916,9 @@ long DomainBool::iRaw(const String& sValue) const
 	String s = sValue.sTrimSpaces();
 	if (s.length() == 1)
 	{
-		if (((tolower(s[0]) == tolower(sTrue[0]))) || (s[0] == '1'))
+		if (((tolower((unsigned char)s[0]) == tolower((unsigned char)sTrue[0]))) || (s[0] == '1'))
 			return 2;
-		if (((tolower(s[0]) == tolower(sFalse[0]))) || (s[0] == '0'))
+		if (((tolower((unsigned char)s[0]) == tolower((unsigned char)sFalse[0]))) || (s[0] == '0'))
 			return 1;
 		return 0;
 	} 

@@ -222,7 +222,7 @@ long AutoCadDXF::iGroupValue() {
 String AutoCadDXF::sSegmentCode() {
 	short i = _sSegCode.length() - 1;
   for (; i >= 0; i--)
-    if (!isspace(_sSegCode[i]))
+    if (!isspace((unsigned char)_sSegCode[i]))
       break;
   return _sSegCode.sLeft(i + 1);
 }

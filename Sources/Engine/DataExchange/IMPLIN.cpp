@@ -183,7 +183,7 @@ void ArcInfoLin::MakeColumn(const FieldInfo& fi, Table& tbl) {
   DomainValueRangeStruct dvs(dm, vr);
   String sT = fi.sName;
   for (short i = 0; i < sT.length(); i++) {
-    if (!isalnum(sT[i])) sT[i] = '_';
+    if (!isalnum((unsigned char)sT[i])) sT[i] = '_';
   }
   Column col(tbl, sT, dvs);
 }

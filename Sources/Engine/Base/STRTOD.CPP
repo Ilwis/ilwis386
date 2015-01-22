@@ -148,7 +148,7 @@ double strtodILW(const char *p,char **endp)
         static char infinity[] = "infinity";
         static char nans[] = "nans";
 
-        while (isspace(*p))
+        while (isspace((unsigned char)*p))
             p++;
         sign = 0;                        /* indicating +                        */
         switch (*p)
@@ -207,10 +207,10 @@ double strtodILW(const char *p,char **endp)
             while (1)
             {        int i = *p;
 
-                while (isxdigit(i))
+                while (isxdigit((unsigned char)i))
                 {
                     subject = 1;        /* must have at least 1 digit        */
-                    i = isalpha(i) ? ((i & ~0x20) - ('A' - 10)) : i - '0';
+                    i = isalpha((unsigned char)i) ? ((i & ~0x20) - ('A' - 10)) : i - '0';
                     if (msdec < (0xFFFFFFFF-16)/16)
                         msdec = msdec * 16 + i;
                     else if (msscale < (0xFFFFFFFF-16)/16)
@@ -244,7 +244,7 @@ double strtodILW(const char *p,char **endp)
             while (1)
             {        int i = *p;
 
-                while (isdigit(i))
+                while (isdigit((unsigned char)i))
                 {
                     subject = 1;        /* must have at least 1 digit        */
                     if (msdec < (0x7FFFFFFF-10)/10)
@@ -283,7 +283,7 @@ double strtodILW(const char *p,char **endp)
             }
             subject = 0;
             e = 0;
-            while (isdigit(*p))
+            while (isdigit((unsigned char)*p))
             {
                 if (e < DBL_MAX_EXP*2)                /* prevent integer overflow */
                     e = e * 10 + *p - '0';

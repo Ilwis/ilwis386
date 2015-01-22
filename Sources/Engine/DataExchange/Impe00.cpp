@@ -1412,7 +1412,7 @@ void ArcInfoE00::atiFieldInfo(AttribInfo& ati) {
 		iCurField++;
 		field.sName = sLine.sSub(0, 16).sTrimSpaces();
 		for (short j = 0; j < field.sName.length(); j++) {
-			if (!isalnum(field.sName[j]))
+			if (!isalnum((unsigned char)field.sName[j]))
 				field.sName[j] = '_';
 		}
 		

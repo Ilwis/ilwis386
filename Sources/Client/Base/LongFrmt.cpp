@@ -46,7 +46,7 @@ bool LongFormatter::fAdd(const char& c)
 {
 	if (i >= iWidth)
 		return false;
-  if (isdigit(c))
+  if (isdigit((unsigned char)c))
      return true;
   else if (c == '-') 
   {
@@ -95,7 +95,7 @@ bool LongFormatter::checkChars(String &str, zRange &pos)
   int i = 0;
   int iLen = str.length();
   if (str[i] == '-') i++;
-  while (i < iLen && isdigit(str[i])) i++;
+  while (i < iLen && isdigit((unsigned char)str[i])) i++;
   if (i < iLen) 
   {
     pos.lo() = pos.hi() = i;

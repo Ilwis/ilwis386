@@ -834,13 +834,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 		}
 		int iVal;
 		char c = *s++; 
-		if (isdigit(c))
+		if (isdigit((unsigned char)c))
 			iVal = c - '0';
 		else
 			iVal = c - 'A' + 10;
 		iVal *= 16;
 		c = *s++; 
-		if (isdigit(c))
+		if (isdigit((unsigned char)c))
 			iVal += c - '0';
 		else
 			iVal += c - 'A' + 10;

@@ -631,7 +631,7 @@ FileName FileName::fnUniqueShort(const FileName& fnTemplate)
 		{
 			int j=7;
 			for (; j >= 0; j--)
-				if (!isdigit(fn.sFile[j]))
+				if (!isdigit((unsigned char)fn.sFile[j]))
 					break;
 			iChangeInd = j;
 		}
@@ -689,7 +689,7 @@ FileName FileName::fnUnique(const FileName& fnTemplate)
         fn.sFile &= '0';
     else { // find last non numerical character
       for (int j=7; j >= 0; j--)
-        if (!isdigit(fn.sFile[j]))
+        if (!isdigit((unsigned char)fn.sFile[j]))
           break;
       iChangeInd = j;
     }*/

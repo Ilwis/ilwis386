@@ -2736,11 +2736,11 @@ void Catalog::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void Catalog::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	if (isalnum(nChar)) 
+	if (isalnum((unsigned char)nChar)) 
 	{
 		CListCtrl& lvCtrl = GetListCtrl();
 		int iCurSel = lvCtrl.GetNextItem(-1, LVNI_FOCUSED);
-		nChar = tolower(nChar);
+		nChar = tolower((unsigned char)nChar);
 		int i = iCurSel + 1;
 		while (i != iCurSel) 
 		{
@@ -2751,7 +2751,7 @@ void Catalog::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 				i = 0;
 			}
 			FileName& fn = vfnDisplay[viIndex[i]];
-			if (tolower(fn.sFile[0]) == nChar) {
+			if (tolower((unsigned char)fn.sFile[0]) == nChar) {
 				lvCtrl.SetItemState(iCurSel, 0, 0x000F);
 				lvCtrl.SetItemState(i, LVIS_FOCUSED | LVIS_SELECTED, 0x000F);
 				lvCtrl.EnsureVisible(i, FALSE);

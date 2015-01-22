@@ -712,7 +712,7 @@ FileName WMSFormat::createCollectionName(const String& name, ParmList& pm) {
 		SplitOn(sMap, parts, "/\\");
 		sMap = parts[parts.iSize() - 1];
 		for(string::const_iterator p=sMap.begin() ; p != sMap.end(); ++p) {
-			if(isalpha(*p))
+			if(isalpha((unsigned char)*p))
 				newName += *p;
 			else
 				newName += '_';

@@ -188,9 +188,9 @@ LRESULT OpenIlwisMaps(CWnd *parent, const String& sCmd) {
 bool isCommand(const String& sC) {
 	for(int i=0; i< sC.size(); ++i) {
 		char c = sC.at(i);
-		if ( i == 0 && !isalpha(c))
+		if ( i == 0 && !isalpha((unsigned char)c))
 			return false;
-		if ( !isalnum(c))
+		if ( !isalnum((unsigned char)c))
 			return false;
 	}
 	return true;

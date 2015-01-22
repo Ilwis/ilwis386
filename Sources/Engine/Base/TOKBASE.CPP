@@ -214,7 +214,7 @@ char TokenizerBase::cSkipSpaces()
   }
   else {
 
-    while (isspace(c = inp->cLookForward()))
+    while (isspace((unsigned char)(c = inp->cLookForward())))
       if (c == 0)
         return 0;
       else
@@ -277,13 +277,13 @@ void TokenizerBase::GetNext(String& s, TokenType& tt, short& iLine, short& iPos)
   s = String("%c",c);
   tt = ttUNDEF;
 
-  if (isdigit(c)) { // find constant
+  if (isdigit((unsigned char)c)) { // find constant
     tt = ttINT;
     bool fDecimal = false, fExponent = false;
     bool fCont = true;
     do {
       c = inp->cLookForward();
-      if (isdigit(c))
+      if (isdigit((unsigned char)c))
         s &= inp->cGet();
       else
        switch (c) {
@@ -316,10 +316,10 @@ void TokenizerBase::GetNext(String& s, TokenType& tt, short& iLine, short& iPos)
     if (fExponent || fDecimal)
       tt = ttREAL;
   }
-  /*else if (isalpha(c) || (c == '\\')) { // keyword, identifier, operator
+  /*else if (isalpha((unsigned char)c) || (c == '\\')) { // keyword, identifier, operator
     tt = ttIDENTIFIER;
     c = inp->cLookForward();
-    while (isalnum(c) || (c == '_') || 
+    while (isalnum((unsigned char)c) || (c == '_') || 
           (fColonInIdentifier && (c == ':') && (inp->cLookNextForward() != '=')) ||
           (c == '\\') || (c == '.')) {
       c = inp->cGet();
@@ -341,13 +341,13 @@ void TokenizerBase::GetNext(String& s, TokenType& tt, short& iLine, short& iPos)
       }
       return;
     }
-    else if ((c == '\'') || isalpha(c) || (c == '_') || (c == '\\')) { // identifier
+    else if ((c == '\'') || isalpha((unsigned char)c) || (c == '_') || (c == '\\')) { // identifier
       tt = ttIDENTIFIER;
       bool fInQuotes = c == '\'';
-//      bool fPath = (isalpha(c) && (inp->cLookForward() == ':')) || (c == '\\');
+//      bool fPath = (isalpha((unsigned char)c) && (inp->cLookForward() == ':')) || (c == '\\');
       bool fColon = false;
 
-/*    if (isdigit(inp->cLookNextForward())) {
+/*    if (isdigit((unsigned char)inp->cLookNextForward())) {
         fPath = false;
         fColon = true;
       }*/
@@ -357,7 +357,7 @@ void TokenizerBase::GetNext(String& s, TokenType& tt, short& iLine, short& iPos)
         c = inp->cLookForward();
       }
       while ( c != 0 ) {
-        if (fColon && !isdigit(c))
+        if (fColon && !isdigit((unsigned char)c))
           break;
 /*        if ((c == '\\') ) {
 //          if (!(fPath || fInQuotes))
@@ -380,7 +380,7 @@ void TokenizerBase::GetNext(String& s, TokenType& tt, short& iLine, short& iPos)
            else {
              char cNext = inp->cLookNextForward();
              if (cNext != '\\') {
-               if (!isdigit(cNext) || fColon)
+               if (!isdigit((unsigned char)cNext) || fColon)
                  break;
                else
                  fColon = true;

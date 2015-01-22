@@ -85,11 +85,11 @@ TableTBL::TableTBL(const FileName& fn, TablePtr& p)
         continue;
       if (!fEOL) {
         // skip spaces
-        while (isspace(*sBuf))
+        while (isspace((unsigned char)*sBuf))
           sBuf++;
         str = sBuf;
         // find non space
-        while (*sBuf && !isspace(*sBuf))
+        while (*sBuf && !isspace((unsigned char)*sBuf))
           sBuf++;
         *sBuf++ = '\0';
       }

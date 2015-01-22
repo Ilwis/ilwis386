@@ -153,7 +153,7 @@ void ILWIS::TimeParser::parse(const String& string, int& year, int& month, int& 
 	char *endptr;
 	for (int i = 0; i < iTotal; ++i) {
 		// skip leading spaces; strtol will return 0 on a string with only spaces which is not what we want
-		//while (isspace(*begin)) ++begin;
+		//while (isspace((unsigned char)*begin)) ++begin;
 		//if (strlen(begin) == 0)
 		//	break;
 		errno = 0;

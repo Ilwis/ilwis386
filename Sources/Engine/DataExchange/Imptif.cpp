@@ -558,13 +558,13 @@ bool GeoTiffInfo::fFindUTMInfo(String& sDatum, long& iUTMZone, bool& fNorthHemis
 			sDatum = String();
 
 		String sZone = as[i];
-		char c = toupper(sZone[sZone.length() - 1]);
+		char c = toupper((unsigned char)sZone[sZone.length() - 1]);
 		fNorthHemis = c == 'N';
 		fUTM = fNorthHemis || (c == 'S');
 
 		iUTMZone = 0;
 		int iPos = 0;
-		while (isdigit(sZone[iPos]))
+		while (isdigit((unsigned char)sZone[iPos]))
 			iUTMZone = iUTMZone * 10 + (sZone[iPos++] - 48);
 	}
 

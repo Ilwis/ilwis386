@@ -356,7 +356,7 @@ long DomainSort::iRaw(const String& _s) const
 			if (iRight > 0)
 				iRes = (s.sRight(iRight)).iVal();
 		}
-		else if (isdigit(s[0])) // also the number only is allowed
+		else if (isdigit((unsigned char)s[0])) // also the number only is allowed
 			iRes = s.iVal();
 		if (iRes > 0 && iRes <= iRecs())
 			return iRes;
@@ -861,7 +861,7 @@ void DomainSort::CalcIndex(bool fUpdateRequired)
 void ExtractStringNum(const String& sIn, String& sPre, double& rNum, String& sPost)
 {
 	int i = 0;
-	while (i < sIn.length() && !isdigit(sIn[i]))
+	while (i < sIn.length() && !isdigit((unsigned char)sIn[i]))
 		i++;
 	if (i == sIn.length())
 	{
@@ -873,7 +873,7 @@ void ExtractStringNum(const String& sIn, String& sPre, double& rNum, String& sPo
 	{
 		sPre = sIn.sLeft(i);
 		int iPos = i;
-		while (i < sIn.length() && isdigit(sIn[i]))
+		while (i < sIn.length() && isdigit((unsigned char)sIn[i]))
 			i++;
 		rNum = sIn.sSub(iPos, i - iPos).rVal();
 		sPost = sIn.sSub(i, sIn.length() - i);
@@ -1465,7 +1465,7 @@ static int iHash(const StringIndexDmSort& si)
   int i=0;
   char *ps = const_cast<char *>(si.s.c_str());
   while (*ps)
-    h = (h + (++i) * tolower(*ps++)) % HASHVAL;
+    h = (h + (++i) * tolower((unsigned char)*ps++)) % HASHVAL;
   return (int)h;
 } 
 

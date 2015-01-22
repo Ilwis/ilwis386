@@ -383,7 +383,7 @@ getwidth:
     else {
       if (c == '0')
         flags |= FL0pad;    /* pad with 0s   */
-      while (isdigit(c)) {
+      while (isdigit((unsigned char)c)) {
         width = width * 10 + c - '0';
         c = *format++;
       }
@@ -403,7 +403,7 @@ getwidth:
       else {
         //if (c == '0')
         //  flags |= FL0pad;*/ /* pad with 0s   */
-        while (isdigit(c)) {
+        while (isdigit((unsigned char)c)) {
           precision = precision * 10 + c - '0';
           c = *format++;
         }
@@ -738,7 +738,7 @@ String String::sQuote(bool fAlways /* = false*/, int iLoc /*=iUNDEF*/) const
   if (((*this)[0] == '\'') && ((*this)[length()-1] == '\''))
     return *this;
 
-	if ( isdigit(((*this)[0])))
+	if ( isdigit((unsigned char)((*this)[0])))
 		fQuote=true;
   if (!fQuote) 
 	{

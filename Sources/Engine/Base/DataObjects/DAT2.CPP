@@ -131,12 +131,12 @@ Coord::Coord(const String& crd){
 		sx = sx.sTrimSpaces();
 		String sy = crd.substr(index + 1, crd.size() - index);
 		sy = sy.sTrimSpaces();
-		if(!isdigit(sx[0])) {
+		if(!isdigit((unsigned char)sx[0])) {
 			index = sx.find_first_of("-+.0123456789e");
 			if ( index != string::npos)
 				sx = sx.substr(index, sx.size() - index);
 		}
-		if(!isdigit(sy[sy.size() - 1])) {
+		if(!isdigit((unsigned char)sy[sy.size() - 1])) {
 			index = sy.find_last_of("-+.0123456789e");
 			if ( index != string::npos)
 				sy = sy.substr(0, index);
@@ -480,7 +480,7 @@ double LatLon::rDegree(const String& sDegree)
 		char c = sDegree[i];
 		while ((c == ' ') && (i<sDegree.size()))
 			c = sDegree[++i]; // trim leading spaces and erroneously doubled spaces
-		while ((isdigit(c) || c == '.' || c =='-') && (i<sDegree.size()))
+		while ((isdigit((unsigned char)c) || c == '.' || c =='-') && (i<sDegree.size()))
 		{
 			if (j <= 2) // if j>2 at this point, probably the user is using too difficult syntax
 				arsVals[j] += c;

@@ -953,7 +953,7 @@ String ASTERFormat::sStripAllWhiteSpace(const String& sMetaData)
 	for(int i=0; i<sMetaData.size(); ++i)
 	{
 		char c = sMetaData[i];
-		if ( c > 0 && isspace(c) == 0)
+		if ( c > 0 && isspace((unsigned char)c) == 0)
 		{
 			sNewMetaData += c;
 		}

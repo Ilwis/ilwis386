@@ -318,9 +318,9 @@ void DigAutoForm::Interpret(const char* s)
       _dig->iYPos = 0;
       _dig->iYLen = 0;
       while (i < iLength && iLen <= 1 ) {
-        while (i < iLength && !(isdigit(s[i]) || '.' == s[i])) ++i; 
+        while (i < iLength && !(isdigit((unsigned char)s[i]) || '.' == s[i])) ++i; 
         iStart = i;  
-        while (i < iLength && (isdigit(s[i]) || '.' == s[i])) ++i;
+        while (i < iLength && (isdigit((unsigned char)s[i]) || '.' == s[i])) ++i;
         iLen = i - iStart;
         if (1 == iLen)
           iFlagPos = iStart;
@@ -330,9 +330,9 @@ void DigAutoForm::Interpret(const char* s)
         }  
       }
       while (i < iLength) {
-        while (i < iLength && !(isdigit(s[i]) || '.' == s[i])) ++i;
+        while (i < iLength && !(isdigit((unsigned char)s[i]) || '.' == s[i])) ++i;
         iStart = i;  
-        while (i < iLength && (isdigit(s[i]) || '.' == s[i])) ++i;
+        while (i < iLength && (isdigit((unsigned char)s[i]) || '.' == s[i])) ++i;
         iLen = i - iStart;
         if (1 == iLen)
           iFlagPos = iStart;
