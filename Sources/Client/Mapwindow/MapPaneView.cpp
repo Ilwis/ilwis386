@@ -235,16 +235,96 @@ void MapPaneView::OnMouseMove(UINT nFlags, CPoint point) {
 
 void MapPaneView::OnScaleOneToOne()
 {
-	_rScale = 1;
-	CalcFalseOffsets();
-	setScrollBars();
-	SetDirty();
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd) {
+		if (mcd->rootDrawer->getGeoReference().fValid()) { // rootDrawer is set to a georeference
+			CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+			CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
+			double rFactor = max((double)dim.width() / cbZoom.width(), (double)dim.height() / cbZoom.height());
+			cbZoom *= rFactor;
+			RecenterZoomHorz(cbZoom, cbMap);
+			RecenterZoomVert(cbZoom, cbMap);
+			mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
+			setScrollBars();
+			OnDraw(0);
+		} else {
+			GeoRef gr;
+			for(int i = mcd->rootDrawer->getDrawerCount() - 1; i >= 0; --i) {
+				SpatialDataDrawer *dataDrw = dynamic_cast<SpatialDataDrawer *>(mcd->rootDrawer->getDrawer(i));
+				if ( !dataDrw)
+					continue;
+				IlwisObjectPtr *ptr = dataDrw->getObject();
+				if ( IOTYPE(ptr->fnObj) == IlwisObject::iotRASMAP) {
+					MapPtr * mp = (MapPtr*)ptr;
+					gr = mp->gr();
+					break;
+				} else if ( IOTYPE(ptr->fnObj) == IlwisObject::iotMAPLIST) {
+					MapListPtr * mplp = (MapListPtr*)ptr;
+					gr = mplp->gr();
+					break;
+				}
+			}
+			if (gr.fValid()) {
+				CoordBounds cb = gr->cb();
+				RowCol rcSize = gr->rcSize();
+				double rPixSizeX = 0;
+				double rPixSizeY = 0;
+				if (rcSize.Col != 0)
+					rPixSizeX = cb.width() / (double)rcSize.Col;
+				else
+					rPixSizeX = gr->rPixSize();
+				if (rcSize.Row != 0)
+					rPixSizeY = cb.height() / (double)rcSize.Row;
+				else
+					rPixSizeY = gr->rPixSize();
+
+				double rNewMapWidth = dim.width() * rPixSizeX;
+				double rNewMapHeight = dim.height() * rPixSizeY;
+
+				CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+				CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
+
+				double rFactor = max(rNewMapWidth / cbZoom.width(), rNewMapHeight / cbZoom.height());
+				if (rFactor > 0) {
+					cbZoom *= rFactor;
+
+					RecenterZoomHorz(cbZoom, cbMap);
+					RecenterZoomVert(cbZoom, cbMap);
+					mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
+
+					setScrollBars();
+					OnDraw(0);
+				}
+			}
+		}
+	}
 }
 
 void MapPaneView::OnUpdateScaleOneToOne(CCmdUI* pCmdUI)
 {
-	// only allow when RasterMap or GeoRef specified
-	// with vector data, an automatic georef gives weird results
+	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
+	if ( mcd) {
+		GeoRef gr = mcd->rootDrawer->getGeoReference();
+		if (!gr.fValid()) {
+			for(int i = mcd->rootDrawer->getDrawerCount() - 1; i >= 0; --i) {
+				SpatialDataDrawer *dataDrw = dynamic_cast<SpatialDataDrawer *>(mcd->rootDrawer->getDrawer(i));
+				if ( !dataDrw)
+					continue;
+				IlwisObjectPtr *ptr = dataDrw->getObject();
+				if ( IOTYPE(ptr->fnObj) == IlwisObject::iotRASMAP) {
+					MapPtr * mp = (MapPtr*)ptr;
+					gr = mp->gr();
+					break;
+				} else if ( IOTYPE(ptr->fnObj) == IlwisObject::iotMAPLIST) {
+					MapListPtr * mplp = (MapListPtr*)ptr;
+					gr = mplp->gr();
+					break;
+				}
+			}
+		}
+		pCmdUI->Enable(gr.fValid());
+	} else
+		pCmdUI->Enable(FALSE);
 }
 
 void MapPaneView::GetMinMaxInfo(MINMAXINFO FAR* lpMMI) 
@@ -1354,7 +1434,7 @@ void MapPaneView::OnSaveSelection() {
 				if ( !dataDrw)
 					continue;
 				IlwisObjectPtr *ptr = dataDrw->getObject();
-				if ( IOTYPEFEATUREMAP(ptr->fnObj))
+				if ( IOTYPEFEATUREMAP(ptr->fnObj)) {
 					if ( names.size() == 0) {
 						String input = ptr->fnObj.sFile + ptr->fnObj.sExt;
 						FileName fn = FileName::fnUnique(FileName(input));
@@ -1362,6 +1442,7 @@ void MapPaneView::OnSaveSelection() {
 					}
 					names.push_back(ptr->fnObj.sFile + ptr->fnObj.sExt);
 					drawers.push_back(dataDrw);
+				}
 			}
 			new FieldOneSelectString(root,TR("Layers"),&selected, names);
 			FieldString *fs = new FieldString(root, TR("Output map"),&outname);
