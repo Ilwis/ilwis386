@@ -160,7 +160,7 @@ int GeneralImportForm::OutputSelection(Event *ev) {
 	char title[20];
 	strcpy(title,"Input file");
 	strcpy(path,currentDir.c_str());
-	CFileDialog dlg(FALSE,NULL,fnO.sRelative().c_str(),4|2,String("ILWIS Object(%S)|%S",sExt,sExt).c_str());
+	CFileDialog dlg(FALSE,NULL,fnO.sRelative().c_str(),4|2,String("ILWIS Object(%S)|%S||",sExt,sExt).c_str());
 	dlg.m_ofn.lpstrInitialDir = path;
 	dlg.m_ofn.lpstrTitle = title;
 	if ( dlg.DoModal() == IDOK) {
@@ -277,14 +277,15 @@ int GeneralImportForm::ObjectSelection(Event *ev) {
 
 		}
 	} else
-		sExt = "*." + sExt;
+		sExt = "*." + ((sExt.length() > 0) ? sExt : "*");
 
 	String currentDir = getEngine()->sGetCurDir();
 	char path[255];
 	char title[20];
 	strcpy(title,"Input file");
 	strcpy(path,currentDir.c_str());
-	CFileDialog dlg(TRUE,NULL,NULL,4|2,String("%S(%S)|%S",currentFormat.shortName,sExt,sExt).c_str());
+	String filter ("%S(%S)|%S|%s|",currentFormat.shortName,sExt,sExt,(sExt!="*.*")?"All Files (*.*)|*.*|":"");
+	CFileDialog dlg(TRUE,NULL,NULL,4|2,filter.c_str());
 	dlg.m_ofn.lpstrInitialDir = path;
 	dlg.m_ofn.lpstrTitle = title;
 	if ( dlg.DoModal() == IDOK) {
