@@ -376,7 +376,7 @@ void TrackProfileGraph::OnContextMenu(CWnd* pWnd, CPoint point)
 }
 
 void TrackProfileGraph::saveAsCsv() {
-	char strFilter[] = { "Comma separated Files (*.csv)|All Files (*.*)|*.*||" };
+	char strFilter[] = { "Comma separated Files (*.csv)|*.csv|All Files (*.*)|*.*||" };
 	CFileDialog saveForm(FALSE,".csv",0,0,strFilter);
 	if ( saveForm.DoModal() == IDOK) {
 		FileName fn(saveForm.GetPathName());
