@@ -1164,15 +1164,17 @@ void GDALFormat::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long iNum) con
 			for( i = 0; i< iNum; ++i)
 				buf[i] = ((unsigned int *)buffer)[i];
 			break;
-		break;
 		case GDT_Int32:
 			for( i = 0; i< iNum; ++i)
 				buf[i] = ((int *)buffer)[i];
 			break;
-		break;
 		case GDT_Byte:
 			for( i = 0; i< iNum; ++i)
 				buf[i] = buffer[i];
+			break;
+		case GDT_Float32:
+			for( i = 0; i< iNum; ++i)				
+ 				buf[i] = ((float *)buffer)[i];
 			break;
 		case GDT_Float64:
 			for( i = 0; i< iNum; ++i)				
@@ -1209,12 +1211,10 @@ void GDALFormat::GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum) con
 			for( i = 0; i< iNum; ++i)
 				buf[i] = ((unsigned int *)buffer)[i];
 			break;
-		break;
 		case GDT_Int32:
 			for( i = 0; i< iNum; ++i)
 				buf[i] = ((int *)buffer)[i];
 			break;
-		break;
 		case GDT_Byte:
 			for( i = 0; i< iNum; ++i)
 				buf[i] = buffer[i];
@@ -1289,8 +1289,35 @@ double GDALFormat::rValue(RowCol rc) const
 		int iLineSize = funcs.ySize( dataSet );
 		(const_cast<GDALFormat *>(this))->CreateLineBuffer(iLineSize);
 	}
-	funcs.rasterIO(currentLayer, GF_Read, rc.Col, rc.Row,1,1,(unsigned char *)buffer, 1, 1, GDT_Float64, 0,0);								
-	double rVal =  (double)((float *)buffer)[0];
+	funcs.rasterIO(currentLayer, GF_Read, rc.Col, rc.Row,1,1,(unsigned char *)buffer, 1, 1, dataType, 0,0);
+	double rVal;
+	switch(dataType)
+	{
+		case GDT_Int16:
+			rVal = ((short *)buffer)[0];
+			break;
+		case GDT_UInt16:
+			rVal = (((unsigned short *)buffer)[0]); 
+			break;
+		case GDT_UInt32:
+			rVal = ((unsigned int *)buffer)[0];
+			break;
+		case GDT_Int32:
+			rVal = ((int *)buffer)[0];
+			break;
+		case GDT_Byte:
+			rVal = buffer[0];
+			break;
+		case GDT_Float32:
+			rVal = ((float *)buffer)[0];
+			break;
+		case GDT_Float64:
+			rVal = ((double *)buffer)[0];
+			break;
+		default:
+			rVal = rUNDEF;
+	};
+
 	return rVal;
 }
 
