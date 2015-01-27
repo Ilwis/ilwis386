@@ -235,7 +235,16 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 				}
 				glCallList((*subDisplayLists)[objectID]);
 				glBegin(GL_LINE_STRIP);
-			}
+			} /* else if (i > 0) {
+				ILWIS::Point *pointCurrent = (ILWIS::Point *)(features[i]);
+				ILWIS::Point *pointPrevious = (ILWIS::Point *)(features[i - 1]);
+				const Coordinate * crdPrevious = pointCurrent->getCoordinate();
+				const Coordinate * crdCurrent = pointPrevious->getCoordinate();
+				if ((crdCurrent->x > 0 && crdPrevious->x < 0) || (crdCurrent->x < 0 && crdPrevious->x > 0)) {
+					glEnd();
+					glBegin(GL_LINE_STRIP);
+				}
+			} */
 			ILWIS::Point *point = (ILWIS::Point *)feature;
 			double z = getTimeValue(feature);
 			if (z >= cubeBottom && z <= cubeTop) {
@@ -305,7 +314,15 @@ void SpaceTimePathDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 					}
 					glCallList((*subDisplayLists)[objectID]);
 					fCutPath = true;
-				}
+				} /* else if (i > 0) {
+					ILWIS::Point *pointCurrent = (ILWIS::Point *)(features[i]);
+					ILWIS::Point *pointPrevious = (ILWIS::Point *)(features[i - 1]);
+					const Coordinate * crdPrevious = pointCurrent->getCoordinate();
+					const Coordinate * crdCurrent = pointPrevious->getCoordinate();
+					if ((crdCurrent->x > 0 && crdPrevious->x < 0) || (crdCurrent->x < 0 && crdPrevious->x > 0)) {
+						fCutPath = true;
+					}
+				} */
 				z = getTimeValue(feature);
 				if (z >= cubeBottom && z <= cubeTop)
 				{
