@@ -401,21 +401,7 @@ bool MapGlue::fFreezing()
 				MergeDomainSorts(maps[i]);
 		}  
 		//SetDomainValueRangeStruct(ndvr);	
-
-	unsigned short iStoreBytes = 1;
-	switch (dm()->stNeeded())
-	{
-		case stBYTE  : iStoreBytes = 1; break;
-		case stINT   : iStoreBytes = 2; break;
-		case stFLOAT :
-		case stLONG  : iStoreBytes = 4; break;
-		case stREAL  : iStoreBytes = 8; break;
-	}
-	unsigned short iMaxSize = USHRT_MAX / iStoreBytes;
-	if (fCreateGeoRef)
-		if (iMaxSize < mmMapLimits.width() || iMaxSize < mmMapLimits.height())
-			ThrowIncompatibleGeorefError(TR("Incompatible Georefs.\n Pixel size is too different or \n Distance between maps is too large."), fnObj);
-		
+	
 	bool fResampleNeeded = false;
 	for (i = iFirstMap; i < iNMaps; ++i)
 		fResampleNeeded |= ( grf0 != maps[i]->gr() );
