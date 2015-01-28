@@ -1649,14 +1649,19 @@ static UINT ExportInThread(LPVOID p)
 	IlwWinApp()->SetCurDir(*(wp->sPath));
 	CWnd* wnd = CWnd::FromHandle(wp->handle);
 	
-	try
-	{
-		exprt.Export(wnd, wp->s->c_str());
+	TRY {
+		try
+		{
+			exprt.Export(wnd, wp->s->c_str());
+		}
+		catch(ErrorObject& err)
+		{
+			err.Show();
+		}
+	} CATCH (CException,ex) {
+		ex->ReportError();
 	}
-	catch(ErrorObject& err)
-	{
-		err.Show();
-	}
+	END_CATCH
 	
 	delete wp;
 	
