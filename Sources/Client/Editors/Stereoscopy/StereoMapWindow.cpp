@@ -482,8 +482,12 @@ void StereoMapWindow::RefreshMaps(const String& sLeftMap, const String& sRightMa
 {
 	frmLeft->SetInputImageName(sLeftMap);
 	frmRight->SetInputImageName(sRightMap);
-  docLeft->OnOpenDocument(sLeftMap.c_str(), IlwisDocument::otNOASK);
-  docRight->OnOpenDocument(sRightMap.c_str(), IlwisDocument::otNOASK);
+	docLeft->OnOpenDocument(sLeftMap.c_str(), IlwisDocument::otNOASK);
+	docRight->OnOpenDocument(sRightMap.c_str(), IlwisDocument::otNOASK);
+	Map mpLeft(sLeftMap);
+	Map mpRight(sRightMap);
+	docLeft->rootDrawer->setGeoreference(mpLeft->gr(), true);
+	docRight->rootDrawer->setGeoreference(mpRight->gr(), true);
 	docLeft->UpdateAllViews(0,3); // entiremap to left views
 	docRight->UpdateAllViews(0,3); // entiremap to right views
 }
@@ -497,8 +501,8 @@ void StereoMapWindow::RemoveViews()
 	mkDocRight->SetView(0);
 	mkDocLeft->RemoveView(frmLeft); // mkDocLeft is actually deleted in RemoveView
 	mkDocRight->RemoveView(frmRight);
-  docLeft->RemoveView(vwLeft); // docLeft is actually deleted in RemoveView
-  docRight->RemoveView(vwRight);
+  //docLeft->RemoveView(vwLeft); // docLeft is actually deleted in RemoveView; this crashes and is apparently no longer required as the cleanup happens anyway
+  //docRight->RemoveView(vwRight);
 }
 
 void StereoMapWindow::OnTimer(UINT nIDEvent)
