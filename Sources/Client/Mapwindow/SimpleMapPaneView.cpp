@@ -406,21 +406,21 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 			//RowCol rc((long)floor(1+rRow), (long)floor(1+rCol));
 			//msb->ShowRowCol(rc);
 		//}
-		if (cRowCol != c) {
+		GeoRef grf = mcd->rootDrawer->getGeoReference();
+		if (grf.fValid()) {
 			RowCol rc ((long)floor(1-cRowCol.y), (long)floor(1+cRowCol.x));
 			msb->ShowRowCol(rc);
 		}
 		if (c.fUndef())
-			fValid = false; // fNone = true;  
-		//if (fNone) {
-		//	msb->ShowCoord(TR("No Coordinates"));
-		//	msb->ShowLatLon(LatLon());
-		//}
-		//else if (!fValid) {
-		//	msb->ShowCoord(TR("No Coordinates calculated"));
-		//	msb->ShowLatLon(LatLon());
-		//}
-		else {
+			fValid = false; // fNone = true;
+		bool fNone = grf.fValid() && grf->fGeoRefNone();
+		if (fNone) {
+			msb->ShowCoord(TR("No Coordinates"));
+			msb->ShowLatLon(LatLon());
+		} else if (!fValid) {
+			msb->ShowCoord(TR("No Coordinates calculated"));
+			msb->ShowLatLon(LatLon());
+		} else {
 			String v;
 			if ( csy->pcsLatLon())
 				v =  useMetricCoords ? String("%f, %f", c.y, c.x) : csy->sValue(c); 
