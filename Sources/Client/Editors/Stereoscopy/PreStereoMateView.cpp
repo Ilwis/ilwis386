@@ -45,6 +45,26 @@
 #include "Client\Editors\Utils\SYMBOL.H"
 #include "Headers\constant.h"
 #include "Engine\Base\System\RegistrySettings.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Engine\Drawers\SimpleDrawer.h"
+#include "Engine\Drawers\TextDrawer.h"
+#include "Engine\Drawers\OpenGLText.h"
+
+#include "Client/Editors/Editor.h"
+
+class StereoscopySymbols : public Editor
+{
+public:
+	StereoscopySymbols(MapPaneView * mpv)
+		: Editor(mpv)
+	{
+	};
+	virtual int draw(volatile bool* fDrawStop)
+	{
+		((PreStereoMateView*)mpv)->drawSymbols(fDrawStop);
+		return 0;
+	};
+};
 
 IMPLEMENT_DYNCREATE(PreStereoMateView, MapPaneView)
 
@@ -85,16 +105,15 @@ PreStereoMateView::PreStereoMateView()
 	colPrincPnts = settings.clrValue("PP",colPrincPnts);
 	colScalePnts = settings.clrValue("SP",colScalePnts);
 	colUserPrincPnts = settings.clrValue("UPP",colUserPrincPnts);
+
+	edit = new StereoscopySymbols(this);
 }
 
 PreStereoMateView::~PreStereoMateView()
 {
-}
-
-void PreStereoMateView::OnDraw(CDC* pDC)
-{
-	MapPaneView::OnDraw(pDC);
-	drawAllElements(pDC);
+	Editor * tmp = edit;
+	edit = 0;
+	delete tmp;
 }
 
 void PreStereoMateView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
@@ -147,28 +166,6 @@ void PreStereoMateView::SetDirty(Coord crd)
   InvalidateRect(&rect);
 }
 
-bool PreStereoMateView::fPointElementInCDC(zPoint pnt)
-{
-	Symbol smb;
-  smb.smb = smbPlus;
-	smb.iSize = 15;
-  // zPoint p = pntPos(rc.Row-0.5, rc.Col-0.5);
-  zRect rect(pnt,pnt);
-  rect.top()   -= smb.iSize / 2 + 1;
-  rect.left()  -= smb.iSize / 2 + 1;
-  rect.bottom()+= smb.iSize / 2 + 2;
-  rect.right() += smb.iSize / 2 + 2;
-
-	CClientDC cdc(this);
-  zPoint pntText = smb.pntText(&cdc, pnt);
-  CSize siz = cdc.GetTextExtent("TP", 2); // space of "TPP" to be redrawn; 2 is the size of the string
-  pntText.x += 10 + siz.cx + 1; // (10,5) is the text offset
-  pntText.y += 5 + siz.cy + 1;
-  rect.bottom() = max(rect.bottom(), pntText.y);
-  rect.right() = max(rect.right(), pntText.x);
-	return (0 != cdc.RectVisible(&rect));
-}
-
 void PreStereoMateView::SetEpipolarDocument(MakeEpipolarDocument * d)
 {
 	med = d;
@@ -176,156 +173,191 @@ void PreStereoMateView::SetEpipolarDocument(MakeEpipolarDocument * d)
 
 void PreStereoMateView::OnLButtonDown(UINT nFlags, CPoint point) 
 {
-	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
 	SetFocus();
-	//MapCompositionDoc* mcd = GetDocument();
-	//if (mcd )
-	//{
-	//	CRect rctBounds = rctPos(mcd->mmBounds());
-	//	bool fInside = (0 != rctBounds.PtInRect(point));
-	//	if (fInside)
-	//	{
-	//		RowCol rc = rcPos(point);
-	//		// rc.Row += 1;
-	//		// rc.Col += 1;
-	//		if (med)
-	//		{
-	//			med->SetRowCol(rc);
-	//			int lHint = med->iGetHintFromState();
-	//			med->AdvanceSubState();
+	MapCompositionDoc* mcd = GetDocument();
+	if (mcd )
+	{
+		Coord c = mcd->rootDrawer->screenToOpenGL(RowCol(point.y,point.x));
+		RowCol rc (-c.y, c.x);
+		if (med)
+		{
+			med->SetRowCol(rc);
+			int lHint = med->iGetHintFromState();
+			med->AdvanceSubState();
 
-	//			Coord crdOld (med->crdGetOldRC()); // Erase previous point (if any)
-	//			if (!crdOld.fUndef())
-	//				SetDirty(crdOld);
-	//			if (!rc.fUndef())
-	//				SetDirty(Coord(rc.Row, rc.Col));
+			Coord crdOld (med->crdGetOldRC()); // Erase previous point (if any)
+			if (!crdOld.fUndef())
+				SetDirty(crdOld);
+			if (!rc.fUndef())
+				SetDirty(Coord(rc.Row, rc.Col));
 
-	//			med->UpdateAllEpipolarViews(this, lHint);
-	//		}
-	//	}
-	//}
+			med->UpdateAllEpipolarViews(this, lHint);
+		}
+	}
 }
 
-void PreStereoMateView::drawElement(CDC* cdc, zPoint pnt, Symbol smb, String sDescription)
+void PreStereoMateView::drawSymbols(volatile bool* fDrawStop)
 {
-	cdc->SetTextAlign(TA_LEFT|TA_TOP);
-  cdc->SetBkMode(TRANSPARENT);
-  cdc->SetTextColor(smb.col);
-  cdc->TextOut(pnt.x + 10, pnt.y + 5, sDescription.sVal()); // (10,5) is the text offset
-  smb.drawSmb(cdc, 0, pnt);
-}
+	if (*fDrawStop)
+		return;
+	RootDrawer * rootDrawer = GetDocument()->rootDrawer;
+	ILWIS::DrawerParameters dpLayerDrawer (rootDrawer, 0);
+	ILWIS::TextLayerDrawer *textLayerDrawer = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dpLayerDrawer);	
+	ILWIS::DrawerParameters dpTextDrawer (rootDrawer, textLayerDrawer);
+	ILWIS::TextDrawer *textDrawer = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dpTextDrawer);
+	OpenGLText * font = new OpenGLText (rootDrawer, "arial.ttf", 15, true, 1, -15);
+	textLayerDrawer->setFont(font);
+	const CoordBounds& cbZoom = rootDrawer->getCoordBoundsZoom();
+	double symbolScale = cbZoom.width() / 100;
 
-void PreStereoMateView::drawAllElements(CDC* cdc)
-{
-	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
-	// For the time being, we still need a list of elements.
-	// However, this is retrieved on-the-fly from the MakeEpipolarDocument
-	//list <Element> eList = med->ElementList();
-
-	//for (list <Element>::iterator eIterator = eList.begin(); eIterator != eList.end(); ++eIterator)
-	//{
-	//	//zPoint pnt (pntPos(eIterator->crd.x+0.5, eIterator->crd.y+0.5)); // Screen point for drawing the element
-	//	// zPoint pnt (pntPos(eIterator->rc)); // Screen point for drawing the element
-	//	if (fPointElementInCDC(pnt)) // if not in clipregion, no need to (re-)draw it
-	//	{
-	//		Symbol smb; // Symbol used for drawing the element
-	//		String sDescription = eIterator->sDescription; // Description of the element
-	//		switch (eIterator->iType)
-	//		{
-	//			case 0 : // fiducial
-	//				smb.smb = smbPlus;
-	//				smb.col = colFidMarks;
-	//				break;
-	//			case 1 : // pp
-	//				smb.smb = smbCross;
-	//				smb.col = colPrincPnts;
-	//				smb.iSize = 15;
-	//				break;
-	//			case 2 : // tpp
-	//				smb.smb = smbCross;
-	//				smb.col = colPrincPnts;
-	//				smb.iSize = 15;
-	//				break;
-	//			case 3 : // ofp
-	//				smb.smb = smbPlus;
-	//				smb.col = colScalePnts;
-	//				break;
-	//			case 4 : // upp
-	//				smb.smb = smbCross;
-	//				smb.col = colUserPrincPnts;
-	//				smb.iSize = 15;
-	//				break;
-	//		}
-	//		drawElement(cdc, pnt, smb, sDescription);
-	//	}
-	//}
+	list <Element> & eList = med->ElementList();
+	for (list <Element>::iterator eIterator = eList.begin(); !*fDrawStop && eIterator != eList.end(); ++eIterator)
+	{
+		Coord crd (eIterator->crd.y + 0.5, -eIterator->crd.x - 0.5);
+		Color col;
+		SymbolType smbt;
+		int iSize;
+		switch (eIterator->iType)
+		{
+			case 0 : // fiducial
+				smbt = smbPlus;
+				col = colFidMarks;
+				iSize = 1;
+				break;
+			case 1 : // pp
+				smbt = smbCross;
+				col = colPrincPnts;
+				iSize = 2;
+				break;
+			case 2 : // tpp
+				smbt = smbCross;
+				col = colPrincPnts;
+				iSize = 2;
+				break;
+			case 3 : // ofp
+				smbt = smbPlus;
+				col = colScalePnts;
+				iSize = 1;
+				break;
+			case 4 : // upp
+				smbt = smbCross;
+				col = colUserPrincPnts;
+				iSize = 2;
+				break;
+		}
+		glColor4d(col.redP(), col.greenP(), col.blueP(), 1);
+		glPushMatrix();
+		glTranslated(crd.x,crd.y,0);
+		glScaled(symbolScale *iSize, symbolScale * iSize, 1);
+		glBegin(GL_LINES);
+		switch(smbt) {
+			case smbPlus:
+				glVertex3f(-1, 0, 0);
+				glVertex3f(1, 0, 0);
+				glVertex3f(0, -1, 0);
+				glVertex3f(0, 1, 0);
+				break;
+			case smbCross:
+				glVertex3f(-1, -1, 0);
+				glVertex3f(1, 1, 0);
+				glVertex3f(1, -1, 0);
+				glVertex3f(-1, 1, 0);
+				break;
+		}
+		glEnd();
+		glPopMatrix();
+		textDrawer->addDataSource(&(eIterator->sDescription));
+		textDrawer->setCoord(Coordinate(crd.x + 2 * symbolScale, crd.y - symbolScale, 0));
+		font->setColor(col);
+		textDrawer->draw(ILWIS::NewDrawer::drl2D);
+	}
+	delete textLayerDrawer;
 }
 
 BOOL PreStereoMateView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
-	throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
-	//bool fStop = false;
-	//if (as) // only go to MapPaneView::OnSetCursor if needed (prevents flickering of cursor)
-	//	fStop = (TRUE == MapPaneView::OnSetCursor(pWnd, nHitTest, message)); // translate BOOL to bool
-	//// if MapPaneView::OnSetCursor() returns TRUE,
-	//// we shouldn't replace the cursor with our own (we may be in zoom or pan mode)
-	//MapCompositionDoc* mcd = GetDocument(); // also check if we have a map, otherwise the fiducial cursor would appear
-	//if (!fStop && (HTCLIENT == nHitTest) && (0 != med) && (0 != mcd) && (mcd->mp.fValid()))
-	//{
-	//	MakeEpipolarDocument::iFormStateTP ifsState = med->ifsGetState();
-	//	int iSubState = med->iGetSubState();
-	//	HCURSOR curActive = 0;
-	//	switch (ifsState)
-	//	{
-	//		case MakeEpipolarDocument::ifsFIDUCIALS :
-	//			switch (iSubState)
-	//			{
-	//				case 0 :
-	//					curActive = curSetFiducial01;
-	//					break;
-	//				case 1 :
-	//					curActive = curSetFiducial02;
-	//					break;
-	//				case 2 :
-	//					curActive = curSetFiducial03;
-	//					break;
-	//				case 3 :
-	//					curActive = curSetFiducial04;
-	//					break;
-	//			}
-	//			break;
-	//		case MakeEpipolarDocument::ifsPP :
-	//			curActive = curSetPP;
-	//			break;
-	//		case MakeEpipolarDocument::ifsTPP :
-	//			curActive = curSetTPP;
-	//			break;
-	//		case MakeEpipolarDocument::ifsOFFFLIGHTPTS :
-	//			switch (iSubState)
-	//			{
-	//				case 0 :
-	//					curActive = curSetOFP01;
-	//					break;
-	//				case 1 :
-	//					curActive = curSetOFP02;
-	//					break;
-	//			}
-	//			break;
-	//	}
-	//	if ((HCURSOR)0 != curActive)
-	//	{
-	//		SetCursor(curActive);
-	//		return TRUE;
-	//	}
-	//	else
-	//		return FALSE; // we're not interested in setting a cursor: allow someone else to do so
-	//}
-	//else
-	//{
-	//	if (!as)
-	//		SetCursor(curNormal); // otherwise the custom cursor stays too long (even in context menus etc)
-	//	return fStop?TRUE:FALSE; // translate bool to BOOL
-	//}
+	bool fStop = false;
+	AreaSelector * as = (tools.find(ID_ZOOMIN) != tools.end()) ? (AreaSelector*)tools[ID_ZOOMIN] : ((tools.find(ID_ZOOMOUT) != tools.end()) ? (AreaSelector*)tools[ID_ZOOMOUT] : 0);
+	if (as) // only go to MapPaneView::OnSetCursor if needed (prevents flickering of cursor)
+		fStop = (TRUE == MapPaneView::OnSetCursor(pWnd, nHitTest, message)); // translate BOOL to bool
+	// if MapPaneView::OnSetCursor() returns TRUE,
+	// we shouldn't replace the cursor with our own (we may be in zoom or pan mode)
+	MapCompositionDoc* mcd = GetDocument(); // also check if we have a map, otherwise the fiducial cursor would appear
+	bool fMapValid = false;
+	if (mcd) {
+		for(int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i) {
+			SpatialDataDrawer *dataDrw = dynamic_cast<SpatialDataDrawer *>(mcd->rootDrawer->getDrawer(i));
+			if ( !dataDrw)
+				continue;
+			IlwisObjectPtr *ptr = dataDrw->getObject();
+			if (ptr) {
+				if ( IOTYPE(ptr->fnObj) == IlwisObject::iotRASMAP) {
+					fMapValid = true;
+					break;
+				} else if ( IOTYPE(ptr->fnObj) == IlwisObject::iotMAPLIST) {
+					fMapValid = true;
+					break;
+				}
+			}
+		}
+	}
+
+	if (!fStop && (HTCLIENT == nHitTest) && (0 != med) && (0 != mcd) && fMapValid)
+	{
+		MakeEpipolarDocument::iFormStateTP ifsState = med->ifsGetState();
+		int iSubState = med->iGetSubState();
+		HCURSOR curActive = 0;
+		switch (ifsState)
+		{
+			case MakeEpipolarDocument::ifsFIDUCIALS :
+				switch (iSubState)
+				{
+					case 0 :
+						curActive = curSetFiducial01;
+						break;
+					case 1 :
+						curActive = curSetFiducial02;
+						break;
+					case 2 :
+						curActive = curSetFiducial03;
+						break;
+					case 3 :
+						curActive = curSetFiducial04;
+						break;
+				}
+				break;
+			case MakeEpipolarDocument::ifsPP :
+				curActive = curSetPP;
+				break;
+			case MakeEpipolarDocument::ifsTPP :
+				curActive = curSetTPP;
+				break;
+			case MakeEpipolarDocument::ifsOFFFLIGHTPTS :
+				switch (iSubState)
+				{
+					case 0 :
+						curActive = curSetOFP01;
+						break;
+					case 1 :
+						curActive = curSetOFP02;
+						break;
+				}
+				break;
+		}
+		if ((HCURSOR)0 != curActive)
+		{
+			SetCursor(curActive);
+			return TRUE;
+		}
+		else
+			return FALSE; // we're not interested in setting a cursor: allow someone else to do so
+	}
+	else
+	{
+		if (!as)
+			SetCursor(curNormal); // otherwise the custom cursor stays too long (even in context menus etc)
+		return fStop?TRUE:FALSE; // translate bool to BOOL
+	}
 }
 
 #define sMen(ID) ILWSF("men",ID).c_str()

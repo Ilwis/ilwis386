@@ -69,6 +69,7 @@ class IMPEXP PreStereoMateView : public MapPaneView
 public:
 	void SetEpipolarDocument(MakeEpipolarDocument *);
 	void OnLButtonDown(UINT nFlags, CPoint point);
+	void drawSymbols(volatile bool* fDrawStop);
 	Color colFidMarks; // customizable items are public: "Customize" is implemented in StereoMapWindow
 	Color colPrincPnts;
 	Color colScalePnts;
@@ -77,7 +78,6 @@ public:
 protected:
 	PreStereoMateView();
 	virtual ~PreStereoMateView();
-	virtual void OnDraw(CDC* pDC);
 	virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
 	afx_msg BOOL OnSetCursor( CWnd* pWnd, UINT nHitTest, UINT message );
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
@@ -89,10 +89,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
 	MakeEpipolarDocument * med;
-	void drawElement(CDC* cdc, zPoint pnt, Symbol smb, String sDescription);
-	void drawAllElements(CDC* cdc);
 	void SetDirty(Coord crd);
-	bool fPointElementInCDC(zPoint pnt); // true if any part of element with pnt as point is in clipregion
   zCursor curSetFiducial01, curSetFiducial02, curSetFiducial03, curSetFiducial04, curSetPP,
 		curSetTPP, curSetOFP01, curSetOFP02, curNormal;
 	bool fActive;
