@@ -336,13 +336,14 @@ void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 }
 
 void RootDrawer::setGeoreference(const GeoRef& _gr, bool overruleMapBounds) {
-	if (_gr.fValid() && !_gr->rcSize().fUndef() && (!fUseGeoRef || _gr != gr)) {
+	if (_gr.fValid() && (!fUseGeoRef || _gr != gr)) {
 		clearGeoreference();
 		gr = _gr;
 		cs = gr->cs();
 		fUseGeoRef = true;
 		if (overruleMapBounds) {
-			cbMap = CoordBounds(Coord(0,0), Coord(gr->rcSize().Col, -gr->rcSize().Row));
+			if (!_gr->rcSize().fUndef())
+				cbMap = CoordBounds(Coord(0,0), Coord(gr->rcSize().Col, -gr->rcSize().Row));
 			cbZoom = cbMap;
 			cbView = cbMap;
 		} else {
@@ -358,7 +359,8 @@ void RootDrawer::setGeoreference(const GeoRef& _gr, bool overruleMapBounds) {
 			gr->Coord2RowCol(cbMap.cMax, rRow, rCol);
 			cb += Coord(rCol, -rRow);
 			cbMap = cb;
-			cbMap += CoordBounds(Coord(0,0), Coord(gr->rcSize().Col, -gr->rcSize().Row));
+			if (!_gr->rcSize().fUndef())
+				cbMap += CoordBounds(Coord(0,0), Coord(gr->rcSize().Col, -gr->rcSize().Row));
 
 			cb = CoordBounds();
 			gr->Coord2RowCol(cbZoom.cMin, rRow, rCol);
@@ -422,6 +424,8 @@ void RootDrawer::clearGeoreference() {
 		gr->RowCol2Coord(-cbView.cMax.y, cbView.cMax.x,crd);
 		cb += crd;
 		cbView = cb;
+
+		gr = GeoRef();
 
 		fUseGeoRef = false;
 	}
