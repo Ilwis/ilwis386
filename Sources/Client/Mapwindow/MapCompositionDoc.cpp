@@ -1018,8 +1018,10 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	if ( !cbMap.fValid() && IOTYPE(bmp->fnObj) == IlwisObject::iotRASMAP) { // for csunknown with no boundaries
 		MapPtr *mptr = (MapPtr *)bmp.pointer();
 		cbMap = CoordBounds(Coord(0,0), Coord(mptr->rcSize().Col, -mptr->rcSize().Row)); // none.grf bounds
-	}
-	rootDrawer->addCoordBounds(bmp->cs(), cbMap, fOverruleBounds);
+		rootDrawer->addCoordBounds(bmp->cs(), cbMap, fOverruleBounds);
+		rootDrawer->setGeoreference(GeoRef(FileName("none.grf")), fOverruleBounds);
+	} else
+		rootDrawer->addCoordBounds(bmp->cs(), cbMap, fOverruleBounds);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY);
 	pp.subType = subtype;
 	drawer->prepare(&pp);
@@ -1208,7 +1210,6 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot,int os)
 
 	SetTitle(pm);
 
-	
 	SpatialDataDrawer *drw = (SpatialDataDrawer *)createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38", ot, os);
 
 	if (ot & otEDIT) {
