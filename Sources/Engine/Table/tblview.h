@@ -136,6 +136,7 @@ public:
   String sMean(short iCol) const;
   String sStdDev(short iCol) const;
   String sSum(short iCol) const;
+  String sValueToString(short iCol, double rVal, bool fSum) const;
   bool fEditable(short iCol) const;
   void MakeUsable(short iCol);
   ColumnView& cvKey() { return _cvKey; }

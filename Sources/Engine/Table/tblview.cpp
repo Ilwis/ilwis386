@@ -584,6 +584,20 @@ String TableView::sStdDev(short iCol) const
 	return ac[iCol]->dvrs().sValue(r, iWid, iDec);
 }
 
+String TableView::sValueToString(short iCol, double rVal, bool fSum) const
+{
+	if (ac[iCol].ptr() == NULL)
+		return "?";
+	int iWid = ac[iCol].iWidth;
+	int iDec = ac[iCol].iDec;
+	if (fSum) {
+		if (rVal == rUNDEF)
+			return "";
+		String s("%*.*f", iWid, iDec, rVal);
+		return s;
+	} else
+		return ac[iCol]->dvrs().sValue(rVal, iWid, iDec);
+}
 
 bool TableView::fEditable(short iCol) const
 {
