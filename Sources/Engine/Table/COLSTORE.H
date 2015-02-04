@@ -161,7 +161,7 @@ public:
 	void PutVal(long iKey, const CoordinateSequence *seq, long iSz);
   void PutVal(long iKey, long iVal);
   void _export PutVal(long iKey, double rVal);
-  void PutVal(long iKey, const Coord& cVal);
+  void _export PutVal(long iKey, const Coord& cVal);
   void PutVal(long iKey, const String& sVal);
   void PutBufRaw(const ByteBuf& buf, long iKey=0, long iNr=0);
   void PutBufRaw(const IntBuf& buf, long iKey=0, long iNr=0);
