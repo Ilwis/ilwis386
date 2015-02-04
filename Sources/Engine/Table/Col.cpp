@@ -1178,7 +1178,7 @@ void ColumnPtr::CalcMinMaxSelection(const vector<long>& rows, RangeReal& rrMinMa
 	vector<bool> selection(this->iRecs());
 	std::fill(selection.begin(), selection.end(), false);
 	for(int i = 0; i < rows.size(); ++i)
-		selection[ rows[i] ] = true;
+		selection[ rows[i] - 1] = true;
 
 	if (!fCalculated())
 		Calc();
@@ -1360,7 +1360,7 @@ void ColumnPtr::CalcMinMaxSelection(const vector<long>& rows, RangeReal& rrMinMa
 		avg = stdev = rUNDEF;
 	}
 	if (dm()->pdbool() || dm()->pdbit()) {
-		avg = sum = stdev = rUNDEF;
+		avg = stdev = rUNDEF;
 	}
 }
 
