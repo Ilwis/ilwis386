@@ -1536,7 +1536,7 @@ void ColumnPtr::CalcMinMax()
 		_rMean = _rStdDev = rUNDEF;
 	}
 	if (dm()->pdbool() || dm()->pdbit()) {
-		_rMean = _rSum = _rStdDev = rUNDEF;
+		_rMean = _rStdDev = rUNDEF;
 	}
 }
 
