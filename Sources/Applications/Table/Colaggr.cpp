@@ -502,6 +502,7 @@ bool ColumnAggregate::fFreezing()
 
   bool fValuesColAgg = colAgg->dvrs().fValues();
   bool fStringColAgg = 0 != colAgg->dm()->pds();
+  bool fCoordColAgg = 0 != colAgg->dm()->pdcrd();
   DomainSort *pdsrtKeyColAgg = colAgg->dmKey()->pdsrt();
   bool fDomainNone = 0 != colAgg->dmKey()->pdnone();
   bool fDomainImage = colAgg->dmKey()->pdi() != 0;
@@ -590,6 +591,8 @@ bool ColumnAggregate::fFreezing()
           long iRaw = colGroup->iRaw(j);
           if (fValuesColAgg)
             agf->AddRaw(iRaw, colAgg->rValue(j));
+          else if (fCoordColAgg)
+            agf->AddRaw(iRaw, colAgg->cValue(j));
           else
             agf->AddRaw(iRaw, colAgg->iRaw(j));
         }
@@ -601,6 +604,8 @@ bool ColumnAggregate::fFreezing()
           String sVal = colGroup->sValue(j,0);
           if (fValuesColAgg)
             agf->AddVal(sVal, colAgg->rValue(j));
+          else if (fCoordColAgg)
+            agf->AddVal(sVal, colAgg->cValue(j));
           else
             agf->AddVal(sVal, colAgg->iRaw(j));
         }
@@ -612,6 +617,8 @@ bool ColumnAggregate::fFreezing()
           double rVal = colGroup->rValue(j);
           if (fValuesColAgg)
             agf->AddVal(rVal, colAgg->rValue(j));
+          else if (fCoordColAgg)
+            agf->AddVal(rVal, colAgg->cValue(j));
           else
             agf->AddVal(rVal, colAgg->iRaw(j));
         }
@@ -654,8 +661,38 @@ bool ColumnAggregate::fFreezing()
         for (long j=iOffset(); j < iOffset()+iRecs(); ++j)
           pcs->PutVal(j, rUNDEF);
     }  
-  }
-  else {
+  } else if (dvrs().fCoords()) {
+    if (fUseRaw) {
+      if (colIndex.fValid())
+        for (long j=iOffset(); j < iOffset()+iRecs(); ++j)
+          pcs->PutVal(j, agf->crdResult(colIndex->iRaw(j)));
+      else // if (0 != pdsrt)
+        for (long j=iOffset(); j < iOffset()+iRecs(); ++j)
+          pcs->PutVal(j, agf->crdResult(j/*pdsrt->iKey(j)*/));
+/*      else
+        for (long j=iOffset(); j < iOffset()+iRecs(); ++j)
+          pcs->PutVal(j, rUNDEF);*/
+    }  
+    else if (fUseString) {
+      if (colIndex.fValid())
+        for (long j=iOffset(); j < iOffset()+iRecs(); ++j)
+          pcs->PutVal(j, agf->crdResult(colIndex->sValue(j,0)));
+      else //if (0 != pdsrt)
+        for (long j=iOffset(); j < iOffset()+iRecs(); ++j)
+          pcs->PutVal(j, agf->crdResult(pdsrt->sValueByRaw(j/*pdsrt->iKey(j)*/)));
+/*      else
+        for (long j=iOffset(); j < iOffset()+iRecs(); ++j)
+          pcs->PutVal(j, rUNDEF);*/
+    }    
+    else {
+      if (colIndex.fValid())
+        for (long j=iOffset(); j < iOffset()+iRecs(); ++j)
+          pcs->PutVal(j, agf->crdResult(colIndex->rValue(j)));
+      else
+        for (long j=iOffset(); j < iOffset()+iRecs(); ++j)
+          pcs->PutVal(j, crdUNDEF);
+    }  
+  } else {
     if (fUseRaw) {
       if (colIndex.fValid())
         for (long j=iOffset(); j < iOffset()+iRecs(); ++j)

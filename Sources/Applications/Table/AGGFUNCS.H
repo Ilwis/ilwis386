@@ -217,6 +217,60 @@ struct HashAggSPrdMed {
   RealArray arWeight;
 };
 
+struct HashAggCrdPrdMed {
+  HashAggCrdPrdMed(double rVl) {
+    rVal = rVl;
+    crdRes = crdUNDEF;
+  }
+  HashAggCrdPrdMed(const HashAggCrdPrdMed& hacpm) {
+    rVal = hacpm.rVal;
+    arCrd = hacpm.arCrd;
+    arWeight = hacpm.arWeight;
+    crdRes = hacpm.crdRes;
+  }
+  HashAggCrdPrdMed& operator=(const HashAggCrdPrdMed& hacpm) {
+    rVal = hacpm.rVal;
+    arCrd = hacpm.arCrd;
+    arWeight = hacpm.arWeight;
+    crdRes = hacpm.crdRes;
+    return *this;
+  }
+  bool operator ==(const HashAggCrdPrdMed& hacpm)
+  { return hacpm.rVal == rVal; }  
+  bool fEmpty() const { return arCrd.iSize() == 0; }
+  double rVal;
+  Coord crdRes;
+  Array<Coord> arCrd;
+  RealArray arWeight;
+};
+
+struct HashAggSCrdPrdMed {
+  HashAggSCrdPrdMed(const String& sVl) {
+    sVal = sVl;
+    crdRes = crdUNDEF;
+  }
+  HashAggSCrdPrdMed(const HashAggSCrdPrdMed& hascpm) {
+    sVal = hascpm.sVal;
+    arCrd = hascpm.arCrd;
+    arWeight = hascpm.arWeight;
+    crdRes = hascpm.crdRes;
+  }
+  HashAggSCrdPrdMed& operator=(const HashAggSCrdPrdMed& hascpm) {
+    sVal = hascpm.sVal;
+    arCrd = hascpm.arCrd;
+    arWeight = hascpm.arWeight;
+    crdRes = hascpm.crdRes;
+    return *this;
+  }
+  bool operator ==(const HashAggSCrdPrdMed& hascpm)
+  { return hascpm.sVal == sVal; }  
+  bool fEmpty() const { return arCrd.iSize() == 0; }
+  String sVal;
+  Coord crdRes;
+  Array<Coord> arCrd;
+  RealArray arWeight;
+};
+
 class AggregateFunction
 {
 protected:
@@ -235,6 +289,9 @@ public:
   virtual void AddVal(double rInd, long iRaw) {}
   virtual void AddVal(const String& sInd, long iRaw) {}
   virtual void AddRaw(long iInd, long iRaw) {}
+  virtual void AddVal(double rInd, const Coord & crd) {}
+  virtual void AddVal(const String& sInd, const Coord & crd) {}
+  virtual void AddRaw(long iInd, const Coord & crd) {}
   virtual void AddVal(double rInd, double rVal, double rWeight) {}
   virtual void AddVal(const String& sInd, double rVal, double rWeight) {}
   virtual void AddRaw(long iInd, double rVal, double rWeight) {}
@@ -247,6 +304,9 @@ public:
   virtual long iRawResult(double rInd) { return iUNDEF; }
   virtual long iRawResult(long iInd) { return iUNDEF; }
   virtual long iRawResult(const String& sInd) { return iUNDEF; }
+  virtual Coord crdResult(double rInd) { return crdUNDEF; }
+  virtual Coord crdResult(long iInd) { return crdUNDEF; }
+  virtual Coord crdResult(const String& sInd) { return crdUNDEF; }
 //  virtual String sResult(double rInd) { return sUNDEF; }
 //  virtual String sResult(long iInd) { return sUNDEF; }
 //  virtual String sResult(const String& sInd) { return sUNDEF; }
@@ -415,6 +475,9 @@ public:
   virtual void AddVal(const String& sInd, double rVal);
   virtual void AddRaw(long iInd, double rVal);
   virtual void AddRaw(long iInd, long iRaw);
+  virtual void AddVal(double rInd, const Coord & crd);
+  virtual void AddVal(const String& sInd, const Coord & crd);
+  virtual void AddRaw(long iInd, const Coord & crd);
   virtual void AddVal(double rInd, double rVal, double rWeight);
   virtual void AddVal(const String& sInd, double rVal, double rWeight);
   virtual void AddRaw(long iInd, double rVal, double rWeight);
@@ -424,12 +487,18 @@ public:
   virtual long iRawResult(long iInd);
   virtual long iRawResult(double rInd);
   virtual long iRawResult(const String& sInd);
+  virtual Coord crdResult(double rInd);
+  virtual Coord crdResult(long iInd);
+  virtual Coord crdResult(const String& sInd);
   virtual double rValResult(RealArray& arVal, RealArray& arWeight);
+  virtual Coord crdResult(Array<Coord>& arCrd, RealArray& arWeight);
   virtual bool fValuesNeeded() const
   { return false; }
   virtual bool fWeightPossible() { return true; }
   HashTable<HashAggPrdMed> htpm;
   HashTable<HashAggSPrdMed> htspm;
+  HashTable<HashAggCrdPrdMed> htcpm;
+  HashTable<HashAggSCrdPrdMed> htscpm;
   bool fUnique;
 };
 

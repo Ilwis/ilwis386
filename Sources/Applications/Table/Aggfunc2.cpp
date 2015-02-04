@@ -62,16 +62,38 @@ static int iHash(const HashAggPrdMed& hapm) {
     w ^= *pw;
   return w % 16000;
 }
+
+static int iHash(const HashAggSCrdPrdMed& hascpm) {
+  unsigned long h = 0;
+  int i=0;  
+  char *ps = const_cast<char *>(hascpm.sVal.c_str());
+  while (*ps)
+    h = (h + (i++) * tolower((unsigned char)*ps++)) % 16001;
+  return (int)h;  
+}
+
+static int iHash(const HashAggCrdPrdMed& hacpm) {
+  word *pw = static_cast<word*>((void*)&hacpm.rVal);
+  word w = *pw;
+  ++pw;
+  for (int i = 1; i <= 3; ++i, ++pw)
+    w ^= *pw;
+  return w % 16000;
+}
+
 void AggregatePrd::reset()
 {
   htpm.Resize(1);
 }
 void AggregatePrd::reset(bool fRaw, bool fString)
 { 
-  if (fString)
+  if (fString) {
     htspm.Resize(16000);
-  else
+    htscpm.Resize(16000);
+  } else {
     htpm.Resize(16000);
+    htcpm.Resize(16000);
+  }
 }
 
 void AggregatePrd::AddVal(double rInd, double rVal) {
@@ -102,6 +124,36 @@ void AggregatePrd::AddVal(const String& sInd, double rVal) {
   } 
   else
     haspmHash.arVal &= rVal;
+}
+
+void AggregatePrd::AddVal(double rInd, const Coord & crd) {
+  if (crd == crdUNDEF)
+    return;
+  HashAggCrdPrdMed hacpm(rInd);
+  HashAggCrdPrdMed& hacpmHash = htcpm.get(hacpm);
+  if (hacpmHash.fEmpty()) { // not found
+    hacpm.arCrd &= crd;
+    htcpm.add(hacpm);
+  } 
+  else
+    hacpmHash.arCrd &= crd;
+}
+
+void AggregatePrd::AddVal(const String& sInd, const Coord & crd) {
+  if (crd == crdUNDEF)
+    return;
+  HashAggSCrdPrdMed hascpm(sInd);
+  HashAggSCrdPrdMed& hascpmHash = htscpm.get(hascpm);
+  if (hascpmHash.fEmpty()) { // not found
+    hascpm.arCrd &= crd;
+    htscpm.add(hascpm);
+  } 
+  else
+    hascpmHash.arCrd &= crd;
+}
+
+void AggregatePrd::AddRaw(long iInd, const Coord & crd) {
+  AddVal(doubleConv(iInd), crd);
 }
 
 void AggregatePrd::AddVal(const String& sInd, long iRaw) {
@@ -187,6 +239,29 @@ long AggregatePrd::iRawResult(double rInd)
 long AggregatePrd::iRawResult(const String& sInd)
 { return longConv(rValResult(sInd)); }
 
+Coord AggregatePrd::crdResult(long iInd)
+{ HashAggCrdPrdMed hacpm(doubleConv(iInd));
+  HashAggCrdPrdMed& hacpmHash = htcpm.get(hacpm);
+  if (hacpmHash.crdRes == crdUNDEF)
+    hacpmHash.crdRes = crdResult(hacpmHash.arCrd, hacpmHash.arWeight);
+  return hacpmHash.crdRes;
+}  
+
+Coord AggregatePrd::crdResult(double rInd)
+{ HashAggCrdPrdMed hacpm(rInd);
+  HashAggCrdPrdMed& hacpmHash = htcpm.get(hacpm);
+  if (hacpmHash.crdRes == crdUNDEF)
+    hacpmHash.crdRes = crdResult(hacpmHash.arCrd, hacpmHash.arWeight);
+  return hacpmHash.crdRes;
+}  
+
+Coord AggregatePrd::crdResult(const String& sInd)
+{ HashAggSCrdPrdMed hascpm(sInd);
+  HashAggSCrdPrdMed& hascpmHash = htscpm.get(hascpm);
+  if (hascpmHash.crdRes == crdUNDEF)
+    hascpmHash.crdRes = crdResult(hascpmHash.arCrd, hascpmHash.arWeight);
+  return hascpmHash.crdRes;
+}  
 
 struct RawArrayWeightArray
 {
@@ -203,7 +278,6 @@ struct ValArrayWeightArray
   RealArray* arVal;
   RealArray* arWeight;
 };
-
 
 static bool fLessVal(long i, long j, void* p)
 {
@@ -223,6 +297,35 @@ static void SwapVal(long i, long j, void* p)
   double r = (*arVal)[i]; (*arVal)[i] = (*arVal)[j]; (*arVal)[j] = r;
   if (0 != arWeight) {
     r = (*arWeight)[i]; (*arWeight)[i] = (*arWeight)[j]; (*arWeight)[j] = r;
+  }  
+}
+
+struct CrdArrayWeightArray
+{
+  CrdArrayWeightArray(Array<Coord>* aCrd, RealArray* aW)
+  { arCrd = aCrd; arWeight = aW; }
+  Array<Coord>* arCrd;
+  RealArray* arWeight;
+};
+
+static bool fLessCrd(long i, long j, void* p)
+{
+  Array<Coord>* ar = static_cast<CrdArrayWeightArray*>(p)->arCrd;
+  Coord crdi = (*ar)[i];
+  Coord crdj = (*ar)[j];
+  return (crdi.y < crdj.y) || ((crdi.y == crdj.y) && (crdi.x < crdj.x));
+//  return (*ar)[i] < (*ar)[j];
+}
+
+static void SwapCrd(long i, long j, void* p)
+{
+  Array<Coord>* arCrd = static_cast<CrdArrayWeightArray*>(p)->arCrd;
+  RealArray* arWeight = static_cast<CrdArrayWeightArray*>(p)->arWeight;
+//  double ri = (*arVal)[i];
+//  double rj = (*arVal)[j];
+  Coord crd = (*arCrd)[i]; (*arCrd)[i] = (*arCrd)[j]; (*arCrd)[j] = crd;
+  if (0 != arWeight) {
+    double r = (*arWeight)[i]; (*arWeight)[i] = (*arWeight)[j]; (*arWeight)[j] = r;
   }  
 }
 
@@ -289,6 +392,61 @@ double AggregatePrd::rValResult(RealArray& arVal, RealArray& arWeight)
       rPred = rPrev;
   }
   return rPred;
+}
+
+Coord AggregatePrd::crdResult(Array<Coord>& arCrd, RealArray& arWeight)
+{
+  if (arCrd.iSize() == 0)
+    return crdUNDEF;
+  if (fUnique){
+    if (arCrd.iSize() > 1)
+      return crdUNDEF;
+    return arCrd[0];
+  }
+  if (_fUseWeight)
+    QuickSort(0, arCrd.iSize()-1, fLessCrd, SwapCrd, (void*)&CrdArrayWeightArray(&arCrd, &arWeight));
+  else
+    QuickSort(0, arCrd.iSize()-1, fLessCrd, SwapCrd, (void*)&CrdArrayWeightArray(&arCrd, 0));
+  // find predominant
+  Coord crdPred = arCrd[0];
+  Coord crdPrev = arCrd[0];
+  if (_fUseWeight) {
+    double rWeightSum = arWeight[0];
+    double rWeightPred = arWeight[0];
+    for (unsigned long i=1; i < arCrd.iSize(); ++i) {
+      Coord crd = arCrd[i];
+      if (crd != crdPrev) {
+        if (rWeightSum > rWeightPred) {
+          rWeightPred = rWeightSum;
+          crdPred = crdPrev;
+        }
+        rWeightSum = 0;
+      }  
+      rWeightSum += arWeight[i];
+      crdPrev = crd;
+    }
+    if (rWeightSum > rWeightPred)
+      crdPred = crdPrev;
+  }
+  else {
+    long iCount = 1;
+    long iCountPred = 1;
+    for (unsigned long i=1; i < arCrd.iSize(); ++i) {
+      Coord crd = arCrd[i];
+      if (crd != crdPrev) {
+        if (iCount > iCountPred) {
+          iCountPred = iCount;
+          crdPred = crdPrev;
+        }
+        iCount = 0;
+      }  
+      iCount++;
+      crdPrev = crd;
+    }
+    if (iCount > iCountPred)
+      crdPred = crdPrev;
+  }
+  return crdPred;
 }
 
 double AggregateMed::rValResult(RealArray& arVal, RealArray& arWeight)
