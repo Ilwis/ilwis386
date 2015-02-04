@@ -69,10 +69,12 @@ END_MESSAGE_MAP()
 TableSummaryPaneView::TableSummaryPaneView()
 {
 	fShowHeading = false;
+	selStatistics = new SelectionStatistics();
 }
 
 TableSummaryPaneView::~TableSummaryPaneView()
 {
+	delete selStatistics;
 }
 
 TableDoc* TableSummaryPaneView::GetDocument()
@@ -191,32 +193,20 @@ String TableSummaryPaneView::sField(int iCol, long iRow) const
 	String s;
 	if ( selectedInMainTable.size() > 0) {
 		Table tbl = td->table();
-		double avg, sum, stdev;
-		RangeReal rr;
 		Column col = tbl->col(iCol);
-		col->CalcMinMaxSelection(selectedInMainTable, rr, sum=rUNDEF, stdev=rUNDEF, avg=rUNDEF);
-		if ( col->dvrs().fRealValues()) {
-			switch (iRow) 
-			{
-			case 1: s = rr.fValid() ? String("%f", rr.rLo()) : ""; break;
-			case 2: s = rr.fValid() ? String("%f", rr.rHi()) : ""; break;
-			case 3: s = avg != rUNDEF ?String("%f", avg) : ""; break;
-			case 4: s = stdev != rUNDEF ? String("%f", stdev) : ""; break;
-			case 5: s = sum != rUNDEF ? String("%f", sum) : ""; break;
-			default: s = "";
-			}
-		} else {
-			switch (iRow) 
-			{
-			case 1: s = rr.fValid() ? String("%d", (long)rr.rLo()) : ""; break;
-			case 2: s = rr.fValid() ? String("%d", (long)rr.rHi()) : ""; break;
-			case 3: s = avg != rUNDEF ?String("%f", avg) : ""; break;
-			case 4: s = stdev != rUNDEF ? String("%f", stdev) : ""; break;
-			case 5: s = sum != rUNDEF ? String("%d", (long)sum) : ""; break;
-			default: s = "";
-			}
+		if ((!selStatistics->col.fValid()) || (selStatistics->col != col)) {
+			selStatistics->col = col;
+			col->CalcMinMaxSelection(selectedInMainTable, selStatistics->rr, selStatistics->sum=rUNDEF, selStatistics->stdev=rUNDEF, selStatistics->avg=rUNDEF);
 		}
-
+		switch (iRow) 
+		{
+			case 1: s = td->view()->sValueToString(iCol, selStatistics->rr.rLo(), false); break;
+			case 2: s = td->view()->sValueToString(iCol, selStatistics->rr.rHi(), false); break;
+			case 3: s = td->view()->sValueToString(iCol, selStatistics->avg, false); break;
+			case 4: s = td->view()->sValueToString(iCol, selStatistics->stdev, false); break;
+			case 5: s = td->view()->sValueToString(iCol, selStatistics->sum, true); break;
+			default: s = "";
+		}
 	}
 	else {
 		switch (iRow) 

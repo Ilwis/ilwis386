@@ -45,6 +45,14 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+class SelectionStatistics
+{
+public:
+	double avg, sum, stdev;
+	RangeReal rr;
+	Column col;
+};
+
 class TableSummaryPaneView: public BaseTablePaneView  
 {
 public:
@@ -68,6 +76,8 @@ protected:
 	afx_msg void OnUpdateProp(CCmdUI* pCmdUI);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	//}}AFX_MSG
+private:
+	SelectionStatistics * selStatistics;
 
 	DECLARE_DYNCREATE(TableSummaryPaneView)
 	DECLARE_MESSAGE_MAP()
