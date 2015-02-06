@@ -70,6 +70,7 @@
 #include "Applications\Table\COLumntotime.H"
 #include "Applications\Table\coltimefromcolumns.h"
 #include "Applications\Table\TableNetworkDistance.h"
+#include "Applications\Raster\MAPTOATTRB.H"
 
 
 //extern "C" _export vector<CommandInfo *>* getCommandInfo());
@@ -118,6 +119,7 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createMapMovingSurface,"MapMovingSurface",metadataMapMovingSurface));
 	infos->push_back(CommandMap::newCommandInfo(createMapTrendSurface,"MapTrendSurface",metadataMapTrendSurface));
 	infos->push_back(CommandMap::newCommandInfo(createMapResample,"MapResample",metadataMapResample));
+	infos->push_back(CommandMap::newCommandInfo(createMapToAttribute,"MapToAttribute",metadataMapToAtrribute));
 	infos->push_back(CommandMap::newCommandInfo(createMapApply3D,"MapApply3D"));
 	infos->push_back(CommandMap::newCommandInfo(createMapInterpolContour,"MapInterpolContour",metadataMapInterpolContour));
 	infos->push_back(CommandMap::newCommandInfo(createMapSegmentDensity,"MapSegmentDensity",metadataMapSegmentDensity));
@@ -161,7 +163,7 @@ InfoVector* getCommandInfo() {
 }
 
 extern "C" _export ILWIS::Module *getModuleInfo(const FileName& fnModule) {
-	ILWIS::Module *module = new ILWIS::Module("Rastermap and Table Applications", fnModule,ILWIS::Module::mi38,"1.3");
+	ILWIS::Module *module = new ILWIS::Module("Rastermap and Table Applications", fnModule,ILWIS::Module::mi38,"1.4");
 	module->addMethod(ILWIS::Module::ifgetCommandInfo, (void *)getCommandInfo);  
 
 	return module;
