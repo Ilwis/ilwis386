@@ -400,6 +400,7 @@ Geometry *PolygonMapStore::getTransformedFeature(long iRec, const CoordSystem& c
 	   Coord cnew = ptr.cs()->cConv(csy, cold);
 	   aseq->add(cnew);
    }
+   delete seq;
    pol->addBoundary(new LinearRing(aseq,new GeometryFactory()));
    for(int j = 0; j < p->getNumInteriorRing(); ++j) {
 	   seq = p->getInteriorRingN(j)->getCoordinates();
@@ -412,7 +413,6 @@ Geometry *PolygonMapStore::getTransformedFeature(long iRec, const CoordSystem& c
 	   delete seq;
 	   pol->addHole(new LinearRing(aseq,new GeometryFactory()));
    }
-   delete seq;
    pol->PutVal(p->rValue());
    return pol;
 }
