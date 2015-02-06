@@ -312,10 +312,6 @@ long MapCluster::getFSIndex(long col) {
         double ratio = (val - br.bottom) / (br.top - br.bottom);
         int subindex = (long) (ratio * bMax);
         index += (subindex) << (indexShift * bandNr);
-		if ( index < 0) {
-			int kk = 0;
-			++kk;
-		}
     }
     return index;
 }
