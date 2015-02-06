@@ -65,8 +65,10 @@ FormColumnFromMapList::FormColumnFromMapList(CWnd* mw, const char* sPar)
 					sOutTable = fn.sFullName(false);
 		}
 	}
-	new FieldMapList(root, TR("Input"), &mplName);
-	new FieldTable(root, TR("Table"), &sOutTable);
+	fldmpl = new FieldMapList(root, TR("Input"), &mplName);
+	fldmpl->SetCallBack((NotifyProc)&FormColumnFromMapList::setDefaultTable);
+
+	fldTab = new FieldString(root, TR("Table"), &sOutTable);
 	new FieldString(root, TR("Column name"), &sCol);
 
 	FieldOneSelectString *fs = new FieldOneSelectString(root,TR("Method"),&methodIndex, methods);
@@ -78,6 +80,20 @@ FormColumnFromMapList::FormColumnFromMapList(CWnd* mw, const char* sPar)
 	create();
 }
 
+int FormColumnFromMapList::setDefaultTable(Event *ev) {
+	fldmpl->StoreData();
+	if ( mplName == "")
+		return 1;
+
+	MapList mpl(mplName);
+	if ( mpl.fValid() && mpl->fTblAtt()) {
+		sOutTable = mpl->tblAtt()->sName();
+		fldTab->SetVal(sOutTable);
+	} else
+		sOutTable = mpl->fnObj.sFile + ".tbt";
+
+	return 1;
+}
 
 int FormColumnFromMapList::exec() 
 {
