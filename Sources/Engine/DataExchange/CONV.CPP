@@ -242,7 +242,7 @@ void Export(const FileName& fnObject, const FileName& fnFile, const String& sExt
   }
   catch (ErrorImportExport& err) {
     String sErr = err.sExcError();
-	AfxGetMainWnd()->MessageBox(sErr.c_str(), SCVErrExportError.c_str(), MB_ICONSTOP|MB_OK);
+	//AfxGetMainWnd()->MessageBox(sErr.c_str(), SCVErrExportError.c_str(), MB_ICONSTOP|MB_OK);
   }    
 }
 
