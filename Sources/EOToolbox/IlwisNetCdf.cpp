@@ -84,14 +84,14 @@ void IlwisNetCdf::makeRasterMapEntry(const IlwisObject &obj) {
 
 	try{
 	handleResult(fnc_def_dim(ncid, "level", 1, &val_id));
-	handleResult(fnc_def_dim(ncid, "y", rows, &y_dimid));
-	handleResult(fnc_def_dim(ncid, "x", cols, &x_dimid));
+	handleResult(fnc_def_dim(ncid, "lat", rows, &y_dimid));
+	handleResult(fnc_def_dim(ncid, "lon", cols, &x_dimid));
 
-	handleResult(fnc_def_var(ncid, "y", NC_FLOAT, 1, &y_dimid, &y_varid));
-	handleResult(fnc_def_var(ncid, "x", NC_FLOAT, 1, &x_dimid, &x_varid));
+	handleResult(fnc_def_var(ncid, "lat", NC_FLOAT, 1, &y_dimid, &y_varid));
+	handleResult(fnc_def_var(ncid, "lon", NC_FLOAT, 1, &x_dimid, &x_varid));
 
-	handleResult(fnc_put_att_text(ncid, x_varid, "units" , strlen("meters"), "meters"));
-	handleResult(fnc_put_att_text(ncid, y_varid, "units" , strlen("meters"), "meters"));
+	handleResult(fnc_put_att_text(ncid, x_varid, "units" , strlen("degrees east"), "degrees east"));
+	handleResult(fnc_put_att_text(ncid, y_varid, "units" , strlen("degress north"), "degress north"));
 
 	int dimids[3];
 	dimids[0] = val_id;
