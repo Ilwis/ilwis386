@@ -8,6 +8,9 @@
 #include "Client\FormElements\FieldListView.h"
 #include "client\formelements\objlist.h"
 #include "Client\FormElements\RemoteLister.h"
+#include "Engine\Base\File\Directory.h"
+#include "Client\FormElements\objlist.h"
+#include "Client\FormElements\WPSObjectSelector.h"
 #include "Client\Forms\WPSClient.h"
 #include "Engine\Base\System\Engine.h"
 #include "Engine\Base\File\Zipper.h"
@@ -59,7 +62,8 @@ WPSClient::WPSClient(const String& url) :
 	operationVariant(iUNDEF),
 	fShow(true),
 	remoteCatalog(false),
-	stringChoice(0)
+	stringChoice(0),
+	viewRemote(0)
 
 {
 	//getEngine()->Execute("startserver");
@@ -117,15 +121,15 @@ WPSClient::WPSClient(const String& url) :
 	fldParmInfo->SetWidth(160);
 	fldParmInfo->SetHeight(20); 
 	
-	fldFileParam = new FieldDataType(fg3,TR("Local files"),&stringField,new ObjectExtensionLister(0,".mpr.mpa.mpp.mps.tbt"),true);
-	fldFileParam->SetIndependentPos();
-	fldFileParam->SetCallBack((NotifyProc)&WPSClient::parmChange);
+	FieldGroup *fg6 = new FieldGroup(fg3,true);
+	cbFType = new RadioGroup(fg6,"",&viewRemote,true);
+	new RadioButton(cbFType,TR("Local"));
+	new RadioButton(cbFType,TR("Remote"));
+	cbFType->SetCallBack((NotifyProc)&WPSClient::readRemote);
 
-	//fldRemoteParam = new FieldOneSelectString(fg3,TR("Remote files"),&stringField,remoteFiles,false);
-	fldRemoteParam = new FieldOneSelectString(fg3,TR("Remote files"),&stringChoice,remoteFiles);
-	fldRemoteParam->Align(fldParmInfo, AL_UNDER);
-	fldRemoteParam->SetIndependentPos();
-	fldRemoteParam->SetCallBack((NotifyProc)&WPSClient::parmChange);
+	fldFileParam = new WPSObjectSelector(fg6,TR(""),&stringField,0);
+	fldFileParam->Align(cbFType, AL_AFTER);
+	fldFileParam->SetCallBack((NotifyProc)&WPSClient::parmChange);
 	
 	fldNumericParam = new FieldReal(fg3, TR("Numeric value"), &number); 
 	fldNumericParam->Align(fldParmInfo, AL_UNDER);
@@ -181,6 +185,10 @@ WPSClient::WPSClient(const String& url) :
 	pb6->SetWidth(w);
 
 	fg5->Align(fg3, AL_AFTER,-100);
+
+	char usBuf[500];
+	GetPrivateProfileString("WPS:ServiceContext","SharedData","",usBuf,300,String("%S\\Services\\wpshandlers.ini", getEngine()->getContext()->sIlwDir()).c_str());
+	localDir = String(usBuf);
 	create();
 }
 
@@ -188,6 +196,30 @@ WPSClient::~WPSClient() {
 	IlwisSettings settings("IlwisWPS");
 	settings.SetValue("GetCapabilities",urlString);
 	settings.SetValue("RemoteCatalog", urlCatalog);
+}
+
+int WPSClient::readRemote(Event *ev){
+	cbFType->StoreData();
+	remoteFiles.clear();
+	vector<int> rowIndexes;		
+	fldParameters->getSelectedRowNumbers(rowIndexes);
+	if ( rowIndexes.size() == 0)
+		return 1;
+
+	currentParmIndex = rowIndexes[0];
+	ParameterInfo &pi = parameterValues[operationVariant][currentParmIndex];
+	if ( viewRemote == 1 && remoteCatalog){
+	
+		String url = urlCatalog + "?request=catalog&service=ilwis&version=1.0&filter=" + pi.type +"&catalog=";
+		RemoteLister rm(url);
+		rm.getFiles(remoteFiles);
+		fldFileParam->setRemoteFiles(remoteFiles);
+		pi.isRemote = true;
+	} else if (viewRemote == 0){
+		fldFileParam->setLister(new DatFileLister(pi.ext));
+		pi.isRemote = false;
+	}
+	return 1;
 }
 
 int WPSClient::stringChange2(Event *ev) {
@@ -251,10 +283,10 @@ int WPSClient::stringChange(Event *ev) {
 int WPSClient::execute(Event *ev) {
 	parameterSelection(0); // forces save of unsaved info;
 	fsOut->StoreData();
-	char usBuf[300];
+	char usBuf[500];
 	GetPrivateProfileString("WPS:ServiceContext","ShareServer","",usBuf,300,String("%S\\Services\\wpshandlers.ini", getEngine()->getContext()->sIlwDir()).c_str());
 	String server(usBuf);
-	if ( server == "")
+    if ( server == "")
 		throw ErrorObject(TR("No share server defined in configuration file"));
 	String url = executeProcessURL + String("service=WPS&Request=Execute&version=1.0.0&Identifier=") + operation;
 	for(int i=0; i < parameterValues[operationVariant].size(); ++i) {
@@ -267,7 +299,7 @@ int WPSClient::execute(Event *ev) {
 
 		ParameterInfo pi = parameterValues[operationVariant][i];
 		if ( pi.filetype()) {
-			if ( remoteCatalog) {
+			if ( pi.isRemote) {
 				if ( pi.value == "" && pi.optional)
 					continue;
 				String remoteFileServer  = "file://" + executeProcessURL.sTail("//");
@@ -277,8 +309,9 @@ int WPSClient::execute(Event *ev) {
 			} else {
 				if ( pi.value == "" && pi.optional)
 					continue;
-				ILWIS::Zipper zipper(pi.value);
-				FileName fnZip(pi.value, ".zip");
+				String filename = localDir + "\\" + pi.value;
+				ILWIS::Zipper zipper(filename);
+				FileName fnZip(filename, ".zip");
 				zipper.zip(fnZip);
 				url += String("%S=@xlink:href=%S/wps:shared_data/%S", pi.id, server, fnZip.sFile + fnZip.sExt);
 			}
@@ -323,7 +356,7 @@ int WPSClient::execute(Event *ev) {
 int WPSClient::parmChange(Event *ev) {
 	if ( activeParameterField) {
 		activeParameterField->StoreData();
-		if ( activeParameterField == fldRemoteParam) {
+		if ( activeParameterField == fldFileParam) {
 			if ( stringChoice < remoteFiles.size())
 				stringField = remoteFiles[stringChoice];
 		}
@@ -377,10 +410,10 @@ int WPSClient::parameterSelection(Event *ev) {
 	if ( rowIndexes.size() == 1 && operationVariant >= 0) {
 		if ( activeParameterField) {
 			activeParameterField->StoreData();
-			if ( activeParameterField == fldRemoteParam) {
-				if ( stringChoice < remoteFiles.size())
-					stringField = remoteFiles[stringChoice];
-			}
+			//if ( activeParameterField == fldFileParam) {
+			//	if ( stringChoice < remoteFiles.size())
+			//		stringField = remoteFiles[stringChoice];
+			//}
 			activeParameterField->Hide();
 		}
 		if ( currentParmIndex != iUNDEF) {
@@ -404,22 +437,9 @@ int WPSClient::parameterSelection(Event *ev) {
 			activeParameterField = fldFileParam;
 			stringField = pi.value;
 			cbCatalog->StoreData();
-			if ( !remoteCatalog) {
-				fldFileParam->SetVal(stringField);
-				fldFileParam->SetObjLister(new DatFileLister(pi.ext));
-			}
-			else {
-				fldCatalog->StoreData();
-				remoteFiles.clear();
-				String url = urlCatalog + "?request=catalog&service=ilwis&version=1.0&filter=" + pi.type +"&catalog=";
-				RemoteLister rm(url);
-				rm.getFiles(remoteFiles);
+			fldFileParam->SetVal(stringField);
+			fldFileParam->setLister(new DatFileLister(pi.ext, localDir));
 
-				fldRemoteParam->resetContent(remoteFiles);
-				fldRemoteParam->SetVal(stringField);
-				activeParameterField = fldRemoteParam;
-				activeParameterField->Show();
-			}
 		} else if ( pi.numerictype()) {
 				activeParameterField = fldNumericParam;
 				number = pi.value.rVal();
@@ -510,7 +530,6 @@ int WPSClient::fetchDescribeProcess(Event *ev) {
 	fldNumericParam->Hide();
 	fldStringParam->Hide();
 	fldChoices->Hide();
-	fldRemoteParam->Hide();
 	rg->Hide();
 	fillListView();
 	return 1;

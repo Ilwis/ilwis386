@@ -3,10 +3,11 @@
 class FieldStringList;
 class FieldListView;
 class FieldOneSelectTextOnly;
+class WPSObjectSelector;
 
 struct ParameterInfo{
-	ParameterInfo() { optional = false;}
-	ParameterInfo(const String& _id, const String& n, const String& s, const String& ex) { id = _id; name = n; type = s; ext=ex; optional=false; }
+	ParameterInfo() { optional = false;isRemote=false;}
+	ParameterInfo(const String& _id, const String& n, const String& s, const String& ex) { id = _id; name = n; type = s; ext=ex; optional=false;isRemote=false; }
 	bool filetype();
 	bool stringtype();
 	bool numerictype();
@@ -19,6 +20,7 @@ struct ParameterInfo{
 	String id;
 	String info;
 	bool optional;
+	bool isRemote;
 	vector<String> choices;
 };
 
@@ -42,7 +44,7 @@ private:
 	FieldStringList *fldOperations;
 	FieldListView *fldParameters;
 	FieldStringMulti *fldDescr;
-	FieldDataType *fldFileParam;
+	WPSObjectSelector *fldFileParam;
 	FieldReal *fldNumericParam;
 	FieldString *fldStringParam;
 	FieldOneSelectTextOnly *fldListChoice;
@@ -50,10 +52,11 @@ private:
 	FieldOneSelectString *fldChoices;
 	FieldOneSelectString *fldVariants;
 	FieldStringMulti *fldParmInfo;
-	FieldOneSelectString *fldRemoteParam;
+	//FieldOneSelectString *fldRemoteParam;
 	CheckBox *cbCatalog;
 	RadioGroup *rg;
 	CheckBox *cbShow;
+	RadioGroup *cbFType;
 	String urlString;
 	String operation;
 	String description;
@@ -70,8 +73,10 @@ private:
 	long operationVariant;
 	long choiceValue;
 	bool fShow;
+	int viewRemote;
 	bool remoteCatalog;
 	long stringChoice;
+	String localDir;
 	vector<String> remoteFiles;
 	String parmDescr;
 	vector<String> currentChoices;
@@ -95,6 +100,7 @@ private:
 	int showXMLFormCapR(Event *ev);
 	int showXMLFormExeR(Event *ev);
 	int showXMLFormDescR(Event *ev);
+	int readRemote(Event *ev);
 	String getTypeIcon(const String& type);
 	void parseParameters(const ILWIS::XMLDocument& doc);
 	void parseSimpleParameter(const ILWIS::XMLDocument& doc, const pugi::xml_node& node, list<ExpressionToken>& tokens);
