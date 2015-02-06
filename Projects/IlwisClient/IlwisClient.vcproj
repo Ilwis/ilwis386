@@ -3220,15 +3220,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Client\FormElements\CalendarCtrl.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Sources\Client\FormElements\CalendarListCtrl.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\FormElements\CalendarListCtrl.h"
 					>
 				</File>
 				<File
@@ -3324,19 +3316,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Client\FormElements\FieldRealSlider.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Sources\Client\FormElements\FieldRprListView.cpp"
 					>
 				</File>
 				<File
 					RelativePath="..\..\Sources\Client\FormElements\FieldStringList.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\Sources\Client\FormElements\FieldStringList.h"
 					>
 				</File>
 				<File
@@ -3488,10 +3472,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Client\FormElements\FunctionCreateForm.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Sources\Client\FormElements\itemdraw.cpp"
 					>
 				</File>
@@ -3524,10 +3504,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Client\FormElements\RemoteLister.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Sources\Client\FormElements\ReportListView.cpp"
 					>
 				</File>
@@ -3544,10 +3520,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Client\FormElements\TimeGraphSlider.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Sources\Client\FormElements\TreeSelector.cpp"
 					>
 				</File>
@@ -3558,6 +3530,14 @@
 				<Filter
 					Name="headers"
 					>
+					<File
+						RelativePath="..\..\Sources\Client\FormElements\CalendarCtrl.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\FormElements\CalendarListCtrl.h"
+						>
+					</File>
 					<File
 						RelativePath="..\..\Sources\Client\FormElements\ColumnListCtrl.h"
 						>
@@ -3643,7 +3623,15 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\FormElements\FieldRealSlider.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\FormElements\FieldRprListView.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\FormElements\FieldStringList.h"
 						>
 					</File>
 					<File
@@ -3787,6 +3775,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\FormElements\FunctionCreateForm.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\FormElements\InfoText.h"
 						>
 					</File>
@@ -3823,6 +3815,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\FormElements\RemoteLister.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\FormElements\ReportListView.h"
 						>
 					</File>
@@ -3840,6 +3836,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\FormElements\syscolor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\FormElements\TimeGraphSlider.h"
 						>
 					</File>
 					<File
@@ -5173,10 +5173,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\Sources\Client\TableWindow\TableSelection.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\Sources\Client\TableWindow\TableSummaryPaneView.cpp"
 					>
 				</File>
@@ -5293,6 +5289,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\TableWindow\TablePaneView.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\TableWindow\TableSelection.h"
 						>
 					</File>
 					<File
