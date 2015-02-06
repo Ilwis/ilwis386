@@ -1001,11 +1001,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\esa.ico"
+				RelativePath="..\..\Sources\Client\Resources\esa.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\esa.ico"
+				RelativePath=".\esa.ico"
 				>
 			</File>
 			<File
@@ -1137,11 +1137,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
@@ -3551,6 +3551,10 @@
 					RelativePath="..\..\Sources\Client\FormElements\TreeSelector.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\Sources\Client\FormElements\WPSObjectSelector.cpp"
+					>
+				</File>
 				<Filter
 					Name="headers"
 					>
@@ -3840,6 +3844,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\FormElements\TreeSelector.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\FormElements\WPSObjectSelector.h"
 						>
 					</File>
 				</Filter>
