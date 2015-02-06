@@ -54,7 +54,6 @@ public:
 	InPlaceEdit(int iItem = 0, int iSubItem = 0, const CString& sOriginal = "");
 
 protected:
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnSetFocus(CWnd* pNewWnd);
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg void OnNcDestroy();

@@ -80,18 +80,6 @@ void InPlaceEdit::OnNcDestroy()
 	delete this;
 }
 
-BOOL InPlaceEdit::OnEraseBkgnd(CDC* pDC) 
-{
-	if (::IsWindowVisible(GetSafeHwnd() ) )
-	{
-		SetFocus();
-		SetSel( 0, -1 );  // Select all text
-		return TRUE;
-	}
-
-	return CEdit::OnEraseBkgnd(pDC);
-}
-
 void InPlaceEdit::OnSetFocus(CWnd* pNewWnd)
 {
 	SetFocus();
