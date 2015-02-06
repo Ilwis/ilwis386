@@ -704,7 +704,7 @@ FileName WMSFormat::createCollectionName(const String& name, ParmList& pm) {
 	URL url(name);
 	FileName fnNew = url.toFileName(true);
 
-	FileName fnIOC = FileName::fnUnique(FileName(fnNew, ".ioc")); 
+	FileName fnIOC = FileName(fnNew, ".ioc"); //FileName::fnUnique(FileName(fnNew, ".ioc")); 
 	String sMap = url.getQueryValue("map");
 	if ( sMap != "") {
 		String newName = "";
