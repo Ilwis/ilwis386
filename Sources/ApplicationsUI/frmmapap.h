@@ -72,6 +72,7 @@ LRESULT Cmdresample(CWnd *wnd, const String& s);
 LRESULT Cmdapply3d(CWnd *wnd, const String& s);
 LRESULT Cmdsubras(CWnd *wnd, const String& s);
 LRESULT Cmdpntdensity(CWnd *parent, const String& s) ;
+LRESULT Cmdattribtoras(CWnd *parent, const String& s);
 
 class FormDensifyMap: public FormMapCreate
 {
@@ -248,6 +249,21 @@ private:
   FieldColumn* fldCol;
   StaticText* stColRemark;
   String sMap, sTbl, sCol;
+};
+
+class FormAttributeToMap: public FormMapCreate
+{
+public:
+  _export FormAttributeToMap(CWnd* mw, const char* sPar);
+private:  
+  int exec();
+  int TblCallBack(Event*);
+  FieldMap* fldMap;
+  FieldTable* fldTbl;
+  FieldColumn* fldCol, *fldCol2;
+  StaticText* stColRemark;
+  String sMap, sTbl, sColSource, sColTarget;
+  bool mustLink;
 };
 
 class FormResampleMap: public FormMapCreate

@@ -692,6 +692,92 @@ int FormAttributeMap::ColCallBack(Event*)
   return 0;
 }
 
+//-----------------------------------------------------------------------------
+LRESULT Cmdattribtoras(CWnd *parent, const String& s) {
+	new FormAttributeToMap(parent, s.c_str());
+	return -1;
+}
+
+FormAttributeToMap::FormAttributeToMap(CWnd* mw, const char* sPar)
+: FormMapCreate(mw, TR("Setting attribute of rastermap"))
+{
+	mustLink = true;
+  if (sPar) {
+    TextInput inp(sPar);
+    TokenizerBase tokenizer(&inp);
+    String sVal;
+    for (;;) {
+      Token tok = tokenizer.tokGet();
+      sVal = tok.sVal();
+      if (sVal == "")
+        break;
+      FileName fn(sVal);
+      if (fn.sExt == "" || fn.sExt == ".mpr")
+        if (sMap == "")
+          sMap = fn.sFullNameQuoted(false);
+        else  
+          sOutMap = fn.sFullName(false);
+    }
+  }
+  fldMap = new FieldMap(root, TR("&Raster Map"), &sMap,
+  	                    new MapListerDomainType(".mpr", dmVALUE|dmIMAGE));
+  //fldMap->SetCallBack((NotifyProc)&FormAttributeToMap::MapCallBack);
+  fldTbl = new FieldTable(root, TR("&Table"), &sTbl, ".TBT");
+  fldTbl->SetCallBack((NotifyProc)&FormAttributeToMap::TblCallBack);
+  fldCol = new FieldColumn(root, TR("&Value attribute"), Table(), &sColSource, 
+    dmVALUE|dmIMAGE);
+  //fldCol->SetCallBack((NotifyProc)&FormAttributeToMap::ColCallBack);
+
+  fldCol2 = new FieldColumn(root, TR("&Class/ID attribute"), Table(), &sColTarget, 
+	  dmCLASS | dmIDENT | dmUNIQUEID);
+  //fldCol2->SetCallBack((NotifyProc)&FormAttributeToMap::ColCallBack);
+
+  new CheckBox(root, "Attach table as attribute table", &mustLink);
+
+  //stColRemark = new StaticText(root, String('x',50));
+  //stColRemark->SetIndependentPos();
+  initMapOut(false,false);
+  create();
+}                    
+int FormAttributeToMap::TblCallBack(Event*)
+{
+  fldTbl->StoreData();
+  fldCol->FillWithColumns();
+  fldCol2->FillWithColumns();
+  try {
+    FileName fnTbl(sTbl, ".tbt", false); 
+    fldCol->FillWithColumns(fnTbl);
+	fldCol2->FillWithColumns(fnTbl);
+  }
+  catch (ErrorObject&) {}
+  return 0;
+}
+
+int FormAttributeToMap::exec() 
+{
+  FormMapCreate::exec();
+  String sExpr;
+  bool fShort = false;
+  FileName fn(sOutMap);
+  FileName fnTbl(sTbl);
+  FileName fnMap(sMap); 
+  Map map(fnMap);
+  sMap = fnMap.sRelativeQuoted(false,fn.sPath());
+  sTbl = fnTbl.sRelativeQuoted(false,fn.sPath());
+	if ( fnTbl.sExt != ".tbl")
+		sTbl += fnTbl.sExt;
+	
+  sExpr = String("MapToAttribute(%S,%S, %S, %S, %s)", 
+	  sMap,sTbl, sColSource, sColTarget, mustLink ? "true" : "false");
+  execMapOut(sExpr);  
+  return 0;
+}
+
+
+
+
+//-----------------------------------------------------------------------
+
 LRESULT Cmdslicing(CWnd *parent, const String& s) {
 	new FormMapSlicing(parent, s.c_str());
 	return -1;
