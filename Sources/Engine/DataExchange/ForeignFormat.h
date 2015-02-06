@@ -49,6 +49,18 @@ struct ImportFormat{
 	enum IFType{ifRaster = 1, ifTable = 2, ifSegment = 4, ifPoint = 8,ifPolygon = 16,ifUnknown=32};
 
 	ImportFormat() { buttonText=name=shortName=ext=provider=method="";type=ifUnknown;ui=NULL;useasSuported=false;}
+	ImportFormat(const ImportFormat& ifm) {
+		name = ifm.name;
+		shortName = ifm.shortName;
+		type = ifm.type;
+		ext = ifm.ext;
+		provider = ifm.provider;
+		method = ifm.method;
+		ui = ifm.ui;
+		buttonText = ifm.buttonText;
+		useasSuported = ifm.useasSuported;
+		command.insert(ifm.command.begin(), ifm.command.end());
+	}
 	bool operator<(const ImportFormat& f) { return name < f.name;}
 	String name;
 	String shortName;
