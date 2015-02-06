@@ -39,10 +39,7 @@ public:
 	PGrid(long xsize=0, long ysize=1, long zsize=1);
 	double getd(const PPixel& px);
 	double getd(long x, long y=iUNDEF, long z=iUNDEF);
-	//std::string gets(const PPixel& px);
-	//std::string gets(long x, long y=iUNDEF, long z=iUNDEF);
 	void setd(double v, long x, long y=0, long z=0);
-//	void sets(const PPixel& px, double v);
 	long dimSize(Axis axis) const;
 	void resize(long xsize, long ysize=1, long zsize=1);
 
