@@ -117,7 +117,7 @@ bool ExportCsy2EsriPrj::fInitSucces(const FileName& fnObject, const FileName& fn
 		//don't make an Esri prj file without datum
 			 sDatum = "WGS 1984"; //use WGS 1984 
 		else if (!da && !fCIStrEqual(sEllips,"WGS 84"))
-		 throw ErrorImportExport(TR("Esri doesn't support Spheroids without Datum"));
+		 throw ErrorObject(TR("Esri doesn't support Spheroids without Datum"));
 	}
 	return true;
 }
