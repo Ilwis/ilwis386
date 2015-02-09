@@ -87,7 +87,7 @@ public:
 	BOOL AddFiles(vector<FileName>& afn, bool asAnimation);
 	void ShowRecord(const Ilwis::Record& rec);
 	void ZoomInOn(Coord crd, double rDist);
-	afx_msg void OnEntireMap();
+	virtual void OnEntireMap();
   afx_msg LRESULT OnUpdate(WPARAM, LPARAM);
 protected:
 	void SetDirty();	
