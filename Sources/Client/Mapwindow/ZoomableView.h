@@ -121,25 +121,25 @@ public:
 	afx_msg void OnNoTool();
 	void noTool(int iTool= 0, bool force = false);
 	bool addTool(MapPaneViewTool *tool, int id);
-	void AreaSelected(CRect);
+	virtual void AreaSelected(CRect);
 	void ShowArea(const MinMax& mmWish);
 	void ShowArea(double rScale, long iXpos, long iYpos);
 	bool fShowScrollBars() const;
 	void ShowScrollBars(bool fYesNo);	
 	virtual void SetDirty();
-	void ZoomOutAreaSelected(CRect);
+	virtual void ZoomOutAreaSelected(CRect);
 	void changeStateTool(int id, bool isActive);
 
 	int vertPageMove(int);
 	int vertTop();
 	int vertBottom();
 	int vertThumbPos(int nPos);
-	int vertPixMove(long iDiff, bool fPreScroll=true);
+	virtual int vertPixMove(long iDiff, bool fPreScroll=true);
 	int horzPageMove(int);
 	int horzLeft();
 	int horzRight();
 	int horzThumbPos(int nPos);
-	int horzPixMove(long iDiff, bool fPreScroll=true);
+	virtual int horzPixMove(long iDiff, bool fPreScroll=true);
 
 	void setScrollBars();  // uses iXmin, iXmax, iXpos
 	void CalcFalseOffsets();
@@ -168,7 +168,7 @@ public:
 	void viewTranslate(const CPoint& pnt, UINT message);
 	void viewZoom(const CPoint& pnt, UINT message);
 	void movePoint(const CPoint& pnt, UINT message);
-	void PanMove(CPoint pt);
+	virtual void PanMove(CPoint pt);
 
 
 	long iXpos, iYpos;
