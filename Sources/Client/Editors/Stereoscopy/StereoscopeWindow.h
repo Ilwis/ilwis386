@@ -83,8 +83,8 @@ class IMPEXP StereoscopeWindow : public DataWindow
 {
 public:
 	bool fXoffsetLocked();
-	double rXoffsetDelta();
-	void SetXoffsetDelta(double);
+	int iXoffsetDelta();
+	void SetXoffsetDelta(int);
 	bool fRequestMasterLock();
 	void ReleaseMasterLock();
 	ButtonBar bbStereoscope;
@@ -132,7 +132,7 @@ private:
 	void StereoPairUpdated();
 	void RefreshMaps(const Map& mpLeftMap, const Map& mpRightMap);
 	bool _fXoffsetLocked;
-	double _rXoffsetDelta; // positive value means distance between maps should increase
+	int _iXoffsetDelta; // positive value means distance between maps should increase
 	LONG iWindowMiddle;
 	bool fMasterLocked;
 

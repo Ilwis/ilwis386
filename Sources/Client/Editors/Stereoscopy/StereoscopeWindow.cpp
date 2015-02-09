@@ -93,7 +93,7 @@ END_MESSAGE_MAP()
 
 StereoscopeWindow::StereoscopeWindow()
 : vwLeft(0), vwRight(0), docLeft(0), docRight(0)
-, _fXoffsetLocked(true), _rXoffsetDelta(0), iWindowMiddle(0)
+, _fXoffsetLocked(true), _iXoffsetDelta(0), iWindowMiddle(0)
 , fMasterLocked(false)
 {
 	fStoreToolBars = false; // overrule FrameWindow default: we dont want our toolbars to be remembered
@@ -475,15 +475,15 @@ bool StereoscopeWindow::fXoffsetLocked()
 	return _fXoffsetLocked;
 }
 
-double StereoscopeWindow::rXoffsetDelta()
+int StereoscopeWindow::iXoffsetDelta()
 {
-	return _rXoffsetDelta;
+	return _iXoffsetDelta;
 }
 
-void StereoscopeWindow::SetXoffsetDelta(double delta)
+void StereoscopeWindow::SetXoffsetDelta(int delta)
 {
 	if (!_fXoffsetLocked) // if it is locked, don't set anything
-		_rXoffsetDelta = delta;
+		_iXoffsetDelta = delta;
 }
 
 void StereoscopeWindow::OnLayerManagement()
