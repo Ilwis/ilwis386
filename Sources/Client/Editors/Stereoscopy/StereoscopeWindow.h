@@ -85,8 +85,6 @@ public:
 	bool fXoffsetLocked();
 	int iXoffsetDelta();
 	void SetXoffsetDelta(int);
-	bool fRequestMasterLock();
-	void ReleaseMasterLock();
 	ButtonBar bbStereoscope;
 protected:
 	StereoscopeWindow();
@@ -134,7 +132,6 @@ private:
 	bool _fXoffsetLocked;
 	int _iXoffsetDelta; // positive value means distance between maps should increase
 	LONG iWindowMiddle;
-	bool fMasterLocked;
 
 	DECLARE_DYNCREATE(StereoscopeWindow)
 	DECLARE_MESSAGE_MAP()

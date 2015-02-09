@@ -94,7 +94,6 @@ END_MESSAGE_MAP()
 StereoscopeWindow::StereoscopeWindow()
 : vwLeft(0), vwRight(0), docLeft(0), docRight(0)
 , _fXoffsetLocked(true), _iXoffsetDelta(0), iWindowMiddle(0)
-, fMasterLocked(false)
 {
 	fStoreToolBars = false; // overrule FrameWindow default: we dont want our toolbars to be remembered
   docLeft = new MapCompositionDoc;
@@ -562,22 +561,6 @@ void StereoscopeWindow::OnSizing(UINT nSide, LPRECT lpRect)
 	// The -1 and +1 are to make sure the splitter window can always be divided into two
 	// equal panes (the encapsulating window must have an odd width)
 	DataWindow::OnSizing(nSide, lpRect);
-}
-
-bool StereoscopeWindow::fRequestMasterLock()
-{
-	bool fIAmSender = false;
-	if (!fMasterLocked)
-	{
-		fIAmSender = true;
-		fMasterLocked = true;
-	}
-	return fIAmSender;
-}
-
-void StereoscopeWindow::ReleaseMasterLock()
-{
-	fMasterLocked = false;
 }
 
 LRESULT StereoscopeWindow::OnUpdate(WPARAM wParam, LPARAM lParam)
