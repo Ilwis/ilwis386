@@ -107,7 +107,6 @@ protected:
 	void OnUpdateMeasureDist(CCmdUI* pCmdUI);
 	afx_msg void OnWindowPosChanging( WINDOWPOS* lpwndpos );
 	BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
-	virtual void RequestRedraw();
 	bool volatile fDirty;
 	bool volatile fRedrawing;
 	bool volatile fDrawStop;

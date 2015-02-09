@@ -220,11 +220,6 @@ void SimpleMapPaneView::OnDraw(CDC* cdc)
 			pp.contextMode |= DrawerContext::mSOFTWARERENDERER;
 		mcd->rootDrawer->prepare(&pp);
 	}
-	RequestRedraw();
-}
-
-void SimpleMapPaneView::RequestRedraw()
-{
 	fDrawRequest = true;
 	if (!drawThread)
 		drawThread = AfxBeginThread(SimpleMapPaneView::DrawInThread, (LPVOID)this); 
