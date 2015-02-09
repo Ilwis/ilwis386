@@ -4511,14 +4511,6 @@
 						>
 					</File>
 					<File
-						RelativePath="..\..\Sources\Client\Editors\Stereoscopy\StereoMateView.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\Sources\Client\Editors\Stereoscopy\StereoMateView.h"
-						>
-					</File>
-					<File
 						RelativePath="..\..\Sources\Client\Editors\Stereoscopy\StereoscopePaneView.cpp"
 						>
 					</File>
