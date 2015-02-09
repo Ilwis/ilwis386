@@ -70,8 +70,14 @@ public:
 protected:
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	virtual void OnEntireMap();
 	void OnNcPaint();
-	void RequestRedraw();
+	virtual void OnInitialUpdate();
+	virtual void AreaSelected(CRect);
+	virtual void ZoomOutAreaSelected(CRect);
+	virtual void PanMove(CPoint pt);
+	virtual int vertPixMove(long iDiff, bool fPreScroll=true);
+	virtual int horzPixMove(long iDiff, bool fPreScroll=true);
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
 	afx_msg void OnNoneEdit();
 

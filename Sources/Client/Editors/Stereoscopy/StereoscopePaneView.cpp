@@ -75,6 +75,12 @@ StereoscopePaneView::~StereoscopePaneView()
 
 }
 
+void StereoscopePaneView::OnInitialUpdate()
+{
+	MapPaneView::OnInitialUpdate();
+	ShowScrollBar(SB_BOTH, FALSE);
+}
+
 void StereoscopePaneView::SetSiblingPane(StereoscopePaneView * spv)
 {
 	spvSiblingPane = spv;
@@ -83,63 +89,69 @@ void StereoscopePaneView::SetSiblingPane(StereoscopePaneView * spv)
 
 void StereoscopePaneView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
-	fCoupledScroll = swParent->fXoffsetLocked();
-	MapCompositionDoc* mcd = GetDocument();
-	CoordBounds cbBefore (mcd->rootDrawer->getCoordBoundsZoom()); // sample the position before scroll
+	// The horizontal scrollbar must scroll uncoupled;
+	// We are already duplicating the "scroll" message in this function, since only at this moment we know who initiated the callback
+	fCoupledScroll = false;
 	MapPaneView::OnHScroll(nSBCode, nPos, pScrollBar);
-	CoordBounds cbAfter (mcd->rootDrawer->getCoordBoundsZoom()); // sample the position after scroll
-	// The difference should give the "delta" of the XoffsetDelta.
-	// "photos move away from eachother" results in an increase of the minmax when left, and
-	// a decrease of the minmax in the right pane. Record it as such.
-	if (!fCoupledScroll && swParent)
-		if (fLeft) // we're in left pane
-			swParent->SetXoffsetDelta(swParent->rXoffsetDelta() + cbAfter.cMin.x - cbBefore.cMin.x);
-		else // we're in right pane
-			swParent->SetXoffsetDelta(swParent->rXoffsetDelta() + cbBefore.cMin.x - cbAfter.cMin.x);
-	
 	fCoupledScroll = true;
+	if (pScrollBar && swParent->fXoffsetLocked() && spvSiblingPane)
+		spvSiblingPane->OnHScroll(nSBCode, nPos, 0);
 }
 
 void StereoscopePaneView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
-	// We scroll vertically uncoupled; the CSplitterWnd vertical scrollbar is "shared"
-	// and already scrolls coupled for us
-	// If we don't do this, the vertical scrollbar does not behave correctly when the
-	// left pane is active.
+	// The vertical scrollbar must scroll uncoupled; the CSplitterWnd vertical scrollbar is "shared" and already scrolls both panes
+	// If we don't do this, the vertical scrollbar does not behave correctly and one of the two panes scrolls at twice the speed.
 	fCoupledScroll = false;
-	MapPaneView::OnVScroll(nSBCode, nPos, pScrollBar); // calls SetDirty; scroll uncoupled
+	MapPaneView::OnVScroll(nSBCode, nPos, pScrollBar);
 	fCoupledScroll = true;
 }
 
-void StereoscopePaneView::RequestRedraw()
+void StereoscopePaneView::OnEntireMap()
 {
-	MapPaneView::RequestRedraw(); // call parent implementation
+	MapPaneView::OnEntireMap();
+	if (fActive && spvSiblingPane)
+		spvSiblingPane->OnEntireMap();
+}
 
-	if (swParent)
-	{
-		bool fIAmMaster = swParent->fRequestMasterLock();
-		if (fIAmMaster)
-		{
-			// Check on fCoupledScroll: don't pass "ShowAreaInSlave" when scrolling uncoupled
-			// This would not give a wrong iXoffsetDelta, but would result in incorrect display
-			// Also check for rUNDEF scale to avoid calling ShowArea in the slave when this would be nonsense
-			if (fCoupledScroll && spvSiblingPane)// && spvSiblingPane->rScale()!=rUNDEF)
-			{
-				double rXposDelta = 0;
-				if (fLeft) // we're in left pane
-					rXposDelta = -swParent->rXoffsetDelta();
-				else // we're in right pane
-					rXposDelta = +swParent->rXoffsetDelta();
-				CoordBounds cb (GetDocument()->rootDrawer->getCoordBoundsZoom());
-				cb.cMin += Coord(rXposDelta, 0);
-				cb.cMax += Coord(rXposDelta, 0);
-				spvSiblingPane->GetDocument()->rootDrawer->setCoordBoundsZoom(cb);
-				spvSiblingPane->setScrollBars();
-				spvSiblingPane->RequestRedraw();
-			}
-			swParent->ReleaseMasterLock();
-		}
-	}
+void StereoscopePaneView::AreaSelected(CRect rect)
+{
+	MapPaneView::AreaSelected(rect);
+	if (fActive && spvSiblingPane)
+		spvSiblingPane->AreaSelected(rect);
+}
+
+void StereoscopePaneView::ZoomOutAreaSelected(CRect rect)
+{
+	MapPaneView::ZoomOutAreaSelected(rect);
+	if (fActive && spvSiblingPane)
+		spvSiblingPane->ZoomOutAreaSelected(rect);
+}
+
+void StereoscopePaneView::PanMove(CPoint pt)
+{
+	MapPaneView::PanMove(pt);
+	if (!swParent->fXoffsetLocked())
+		pt.x = 0;
+	if (fActive && spvSiblingPane)
+		spvSiblingPane->PanMove(pt);
+}
+
+int StereoscopePaneView::vertPixMove(long iDiff, bool fPreScroll)
+{
+	MapPaneView::vertPixMove(iDiff, fPreScroll);
+	if (fActive && fCoupledScroll && spvSiblingPane)
+		spvSiblingPane->vertPixMove(iDiff, fPreScroll);
+	return 0;
+	
+}
+
+int StereoscopePaneView::horzPixMove(long iDiff, bool fPreScroll)
+{
+	MapPaneView::horzPixMove(iDiff, fPreScroll);
+	if (fActive && fCoupledScroll && swParent->fXoffsetLocked() && spvSiblingPane)
+		spvSiblingPane->horzPixMove(iDiff, fPreScroll);
+	return 0;
 }
 
 void StereoscopePaneView::SetLeft(bool b)
