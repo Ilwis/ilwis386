@@ -604,13 +604,13 @@ void ZoomableView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
       if (fCtrl)
         vertTop();
       else
-        vertPageMove(-1);
+        vertPageMove(1);
       return;
     case VK_NEXT:      
       if (fCtrl)
         vertBottom();
       else
-        vertPageMove(1);
+        vertPageMove(-1);
       return;
     case VK_HOME:  
       if (fCtrl)
