@@ -93,7 +93,7 @@ END_MESSAGE_MAP()
 
 StereoscopeWindow::StereoscopeWindow()
 : vwLeft(0), vwRight(0), docLeft(0), docRight(0)
-, _fXoffsetLocked(true), _iXoffsetDelta(0), iWindowMiddle(0)
+, _fXoffsetLocked(true), _rXoffsetDelta(0), iWindowMiddle(0)
 {
 	fStoreToolBars = false; // overrule FrameWindow default: we dont want our toolbars to be remembered
   docLeft = new MapCompositionDoc;
@@ -474,15 +474,15 @@ bool StereoscopeWindow::fXoffsetLocked()
 	return _fXoffsetLocked;
 }
 
-int StereoscopeWindow::iXoffsetDelta()
+double StereoscopeWindow::rXoffsetDelta()
 {
-	return _iXoffsetDelta;
+	return _rXoffsetDelta;
 }
 
-void StereoscopeWindow::SetXoffsetDelta(int delta)
+void StereoscopeWindow::SetXoffsetDelta(double delta)
 {
 	if (!_fXoffsetLocked) // if it is locked, don't set anything
-		_iXoffsetDelta = delta;
+		_rXoffsetDelta = delta;
 }
 
 void StereoscopeWindow::OnLayerManagement()
@@ -555,9 +555,9 @@ void StereoscopeWindow::OnMoving(UINT nSide, LPRECT lpRect)
 void StereoscopeWindow::OnSizing(UINT nSide, LPRECT lpRect)
 {
 	if (nSide == WMSZ_BOTTOMLEFT || nSide == WMSZ_LEFT || nSide == WMSZ_TOPLEFT)
-		lpRect->right = lpRect->left + (iWindowMiddle - lpRect->left)*2 + 1;
+		lpRect->right = lpRect->left + (iWindowMiddle - lpRect->left)*2;
 	else if (nSide == WMSZ_BOTTOMRIGHT || nSide == WMSZ_RIGHT || nSide == WMSZ_TOPRIGHT)
-		lpRect->left = lpRect->right - (lpRect->right - iWindowMiddle)*2 - 1;
+		lpRect->left = lpRect->right - (lpRect->right - iWindowMiddle)*2;
 	// The -1 and +1 are to make sure the splitter window can always be divided into two
 	// equal panes (the encapsulating window must have an odd width)
 	DataWindow::OnSizing(nSide, lpRect);
