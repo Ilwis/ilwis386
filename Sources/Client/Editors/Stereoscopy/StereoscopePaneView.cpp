@@ -188,7 +188,8 @@ void StereoscopePaneView::PanMove(CPoint pt)
 		if ( mcd ) {
 			CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
 			PanMoveY(pt.y, cbZoom);
-			SetXPosSibling(cbZoom);
+			if (swParent->fXoffsetLocked())
+				SetXPosSibling(cbZoom);
 			mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
 			spvSiblingPane->setScrollBars();
 			spvSiblingPane->OnDraw(0);
