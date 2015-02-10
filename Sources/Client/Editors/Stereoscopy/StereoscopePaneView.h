@@ -80,11 +80,13 @@ protected:
 	virtual int horzPixMove(long iDiff, bool fPreScroll=true);
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
 	afx_msg void OnNoneEdit();
+	void SetXPosSibling(CoordBounds & cbZoom2);
+	void PanMoveY(int y, CoordBounds & cbZoom2);
 
 private:
 	StereoscopePaneView * spvSiblingPane;
 	StereoscopeWindow * swParent;
-	bool fCoupledScroll;
+	bool fCoupledVertScroll;
 	bool fLeft; // "we" must know this to calculate with the delta
 	bool fActive;
 
