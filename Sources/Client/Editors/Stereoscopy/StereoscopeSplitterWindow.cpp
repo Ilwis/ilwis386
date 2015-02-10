@@ -78,7 +78,7 @@ void StereoscopeSplitterWindow::OnSize(UINT nType, int cx, int cy)
 		 CRect rect;
 		 GetWindowRect(&rect);
 		 // First take care of width
-		 int iWidth = max(0, rect.Width() -22 -2*m_cxBorder); // Til we find a better calculation
+		 int iWidth = max(0, rect.Width() -24 -2*m_cxBorder); // Til we find a better calculation
 		 iWidth /= 2;
 		 SetColumnInfo(0, iWidth, 10);
 		 SetColumnInfo(1, iWidth, 10);
