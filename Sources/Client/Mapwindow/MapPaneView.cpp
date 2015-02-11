@@ -344,7 +344,6 @@ void MapPaneView::OnDefaultScale()
 
 void MapPaneView::OnEntireMap()
 {
-
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
 		mcd->rootDrawer->setCoordBoundsView(mcd->rootDrawer->getMapCoordBounds(),true);
@@ -352,6 +351,8 @@ void MapPaneView::OnEntireMap()
 		fStarting = false;
 		mcd->mpvGetView()->Invalidate();
 	}
+	if (iActiveTool == ID_ZOOMOUT)
+		noTool(ID_ZOOMOUT);
 }
 
 void MapPaneView::OnUpdateEntireMap(CCmdUI* pCmdUI)
