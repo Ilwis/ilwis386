@@ -53,6 +53,11 @@ BEGIN_MESSAGE_MAP(StereoscopePaneView, MapPaneView)
 	ON_WM_VSCROLL()
 	ON_WM_NCPAINT()
 	ON_COMMAND(ID_NONEEDIT, OnNoneEdit)
+	ON_COMMAND(ID_ZOOMIN, OnZoomIn)
+	ON_COMMAND(ID_ZOOMOUT, OnZoomOut)
+	ON_COMMAND(ID_PANAREA, OnPanArea)
+	ON_COMMAND(ID_ENTIREMAP, OnEntireMap)
+	ON_COMMAND(ID_NORMAL, OnNoTool)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -294,4 +299,32 @@ void StereoscopePaneView::OnNoneEdit()
 	UpdateFrame();
 	GetParentFrame()->RecalcLayout();
   GetDocument()->UpdateAllViews(0);
+}
+
+void StereoscopePaneView::OnZoomIn()
+{
+	MapPaneView::OnZoomIn();
+	if (fActive && spvSiblingPane)
+		spvSiblingPane->OnZoomIn();
+}
+
+void StereoscopePaneView::OnZoomOut()
+{
+	MapPaneView::OnZoomOut();
+	if (fActive && spvSiblingPane)
+		spvSiblingPane->OnZoomOut();
+}
+
+void StereoscopePaneView::OnPanArea()
+{
+	MapPaneView::OnPanArea();
+	if (fActive && spvSiblingPane)
+		spvSiblingPane->OnPanArea();
+}
+
+void StereoscopePaneView::OnNoTool()
+{
+	MapPaneView::OnNoTool();
+	if (fActive && spvSiblingPane)
+		spvSiblingPane->OnNoTool();
 }

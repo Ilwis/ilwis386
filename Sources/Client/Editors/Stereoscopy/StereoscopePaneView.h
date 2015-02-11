@@ -70,7 +70,7 @@ public:
 protected:
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
-	virtual void OnEntireMap();
+	void OnEntireMap();
 	void OnNcPaint();
 	virtual void OnInitialUpdate();
 	virtual void AreaSelected(CRect);
@@ -80,6 +80,10 @@ protected:
 	virtual int horzPixMove(long iDiff, bool fPreScroll=true);
 	virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
 	afx_msg void OnNoneEdit();
+	afx_msg void OnZoomIn();
+	afx_msg void OnZoomOut();
+	afx_msg void OnPanArea();
+	afx_msg void OnNoTool();
 	void SetXPosSibling(CoordBounds & cbZoom2);
 	void PanMoveY(int y, CoordBounds & cbZoom2);
 	double rGetXOffsetSibling();
