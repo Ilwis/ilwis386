@@ -142,20 +142,32 @@ void StereoscopePaneView::ZoomOutAreaSelected(CRect rect)
 	}
 }
 
-void StereoscopePaneView::SetXPosSibling(CoordBounds & cbZoom2)
+double StereoscopePaneView::rGetXOffsetSibling()
 {
 	MapCompositionDoc* mcd1 = GetDocument();
 	MapCompositionDoc* mcd2 = spvSiblingPane->GetDocument();
 	if ( mcd1 && mcd2 ) {
 		CoordBounds cbZoom1 = mcd1->rootDrawer->getCoordBoundsZoom();
-		CoordBounds cbMap1 = mcd1->rootDrawer->getMapCoordBounds();
-		double frac1 = (cbZoom1.cMin.x - cbMap1.cMin.x) / cbMap1.width();
-		CoordBounds cbMap2 = mcd2->rootDrawer->getMapCoordBounds();
+		CoordBounds cbZoom2 = mcd2->rootDrawer->getCoordBoundsZoom();
 		CRect rect;
 		spvSiblingPane->GetClientRect(&rect);
-		double width2 = cbZoom2.width();
-		cbZoom2.cMin.x = cbMap2.cMin.x + cbMap2.width() * frac1 + width2 * (fLeft ? swParent->rXoffsetDelta() : -swParent->rXoffsetDelta()) / (double)rect.Width();
-		cbZoom2.cMax.x = cbZoom2.cMin.x + width2;
+		double rOffset = (cbZoom2.cMin.x - cbZoom1.cMin.x) * (double)rect.Width() / cbZoom2.width();
+		return rOffset;
+	} else
+		return 0;
+}
+
+void StereoscopePaneView::SetXPosSibling(CoordBounds & cbZoom2)
+{
+	MapCompositionDoc* mcd1 = GetDocument();
+	MapCompositionDoc* mcd2 = spvSiblingPane->GetDocument();
+	if ( mcd1 && mcd2 ) {
+		CRect rect;
+		spvSiblingPane->GetClientRect(&rect);
+		CoordBounds cbZoom1 = mcd1->rootDrawer->getCoordBoundsZoom();
+		CoordBounds cbMap2 = mcd2->rootDrawer->getMapCoordBounds();
+		cbZoom2.cMin.x = cbZoom1.cMin.x + cbZoom1.width() * (fLeft ? swParent->rXoffsetDelta() : -swParent->rXoffsetDelta()) / (double)rect.Width();
+		cbZoom2.cMax.x = cbZoom2.cMin.x + cbZoom1.width();
 		spvSiblingPane->RecenterZoomHorz(cbZoom2, cbMap2);
 	}
 }
@@ -177,12 +189,8 @@ void StereoscopePaneView::PanMoveY(int y, CoordBounds & cbZoom)
 void StereoscopePaneView::PanMove(CPoint pt)
 {
 	MapPaneView::PanMove(pt);
-	if (!swParent->fXoffsetLocked()) {
-		if (fLeft)
-			swParent->SetXoffsetDelta(swParent->rXoffsetDelta() + pt.x);
-		else
-			swParent->SetXoffsetDelta(swParent->rXoffsetDelta() - pt.x);
-	}
+	if (!swParent->fXoffsetLocked())
+		swParent->SetXoffsetDelta(fLeft ? rGetXOffsetSibling() : -rGetXOffsetSibling());
 	if (fActive && spvSiblingPane) {
 		MapCompositionDoc* mcd = spvSiblingPane->GetDocument();
 		if ( mcd ) {
@@ -211,15 +219,8 @@ int StereoscopePaneView::horzPixMove(long iDiff, bool fPreScroll)
 	CoordBounds cbZoom1 = mcd->rootDrawer->getCoordBoundsZoom();
 	MapPaneView::horzPixMove(iDiff, fPreScroll);
 	CoordBounds cbZoom2 = mcd->rootDrawer->getCoordBoundsZoom();
-	if (!swParent->fXoffsetLocked()) {
-		CRect rect;
-		GetClientRect(&rect);
-		double delta = (cbZoom1.cMin.x - cbZoom2.cMin.x) * (double)rect.Width() / cbZoom1.width();
-		if (fLeft)
-			swParent->SetXoffsetDelta(swParent->rXoffsetDelta() + delta);
-		else
-			swParent->SetXoffsetDelta(swParent->rXoffsetDelta() - delta);
-	}
+	if (!swParent->fXoffsetLocked())
+		swParent->SetXoffsetDelta(fLeft ? rGetXOffsetSibling() : -rGetXOffsetSibling());
 	if (fActive && swParent->fXoffsetLocked() && spvSiblingPane) {
 		MapCompositionDoc* mcd = spvSiblingPane->GetDocument();
 		if ( mcd ) {

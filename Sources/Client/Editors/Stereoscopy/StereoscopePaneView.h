@@ -82,6 +82,7 @@ protected:
 	afx_msg void OnNoneEdit();
 	void SetXPosSibling(CoordBounds & cbZoom2);
 	void PanMoveY(int y, CoordBounds & cbZoom2);
+	double rGetXOffsetSibling();
 
 private:
 	StereoscopePaneView * spvSiblingPane;
