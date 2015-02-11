@@ -154,10 +154,10 @@ StereoscopeWindow::StereoscopeWindow()
 	sHelpKeywords = "Stereo pairs (display)";
 
 	// The +1 is to make sure the splitter window can always be divided into two
-	// equal panes (the encapsulating window must have an odd width)
+	// equal panes (the encapsulating window must have an even width)
 	CRect rect;
 	GetWindowRect(&rect);
-	if (rect.Width() % 2 == 0)
+	if (rect.Width() % 2 == 1)
 		MoveWindow(rect.left, rect.top, rect.Width()+1, rect.Height());
 
 	// Initialize the window middle so that it doesn't occur that one sizes before the middle is set
@@ -558,8 +558,8 @@ void StereoscopeWindow::OnSizing(UINT nSide, LPRECT lpRect)
 		lpRect->right = lpRect->left + (iWindowMiddle - lpRect->left)*2;
 	else if (nSide == WMSZ_BOTTOMRIGHT || nSide == WMSZ_RIGHT || nSide == WMSZ_TOPRIGHT)
 		lpRect->left = lpRect->right - (lpRect->right - iWindowMiddle)*2;
-	// The -1 and +1 are to make sure the splitter window can always be divided into two
-	// equal panes (the encapsulating window must have an odd width)
+	// The computation ensures the splitter window can always be divided into two
+	// equal panes (the encapsulating window must have an even width)
 	DataWindow::OnSizing(nSide, lpRect);
 }
 
