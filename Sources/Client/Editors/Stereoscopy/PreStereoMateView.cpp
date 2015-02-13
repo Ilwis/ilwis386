@@ -366,22 +366,32 @@ void PreStereoMateView::OnContextMenu(CWnd* pWnd, CPoint point)
 {
 	// if (edit && edit->OnContextMenu(pWnd, point))
 	// 	return;
-  CMenu men, menSub;
+	CMenu men, menSub;
 	men.CreatePopupMenu();
 	add(ID_NORMAL);
-  add(ID_ENTIREMAP);
-  add(ID_ZOOMIN);
-  add(ID_ZOOMOUT);
+	add(ID_ENTIREMAP);
+	add(ID_ZOOMIN);
+	add(ID_ZOOMOUT);
 	add(ID_PANAREA);
-  addBreak;
-  add(ID_REDRAW);
+	addBreak;
+	add(ID_REDRAW);
 	addBreak;
 	add(ID_SELECTFIDUCIALS);
 	add(ID_SELECTPPOINT);
-	if (med)
-		men.EnableMenuItem(ID_SELECTPPOINT, (med->iGetNrFiducials()<2)? MF_ENABLED : MF_GRAYED);
 	add(ID_SELECTTPPOINT);
 	add(ID_SELECTSCALINGPTS);
+
+	// grey out options that are not available
+	CCmdUI cmdUIstate;
+	cmdUIstate.m_pMenu = &men;
+	cmdUIstate.m_pSubMenu = 0;
+	cmdUIstate.m_nIndexMax = 12;
+	// loop from ID_NORMAL til ID_SELECTSCALINGPTS
+	for (cmdUIstate.m_nIndex = 0; cmdUIstate.m_nIndex < cmdUIstate.m_nIndexMax; cmdUIstate.m_nIndex++) {
+		cmdUIstate.m_nID = men.GetMenuItemID(cmdUIstate.m_nIndex);
+		cmdUIstate.DoUpdate(this, 0);
+	}
+
 	if (med)
 	{
 		MakeEpipolarDocument::iFormStateTP ifsState = med->ifsGetState();
