@@ -42,6 +42,7 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\Editors\Stereoscopy\MakeEpipolarDocument.h"
 #include "Client\Editors\Stereoscopy\PreStereoMateView.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Engine\SpatialReference\GrEpipolar.h"
 #include "Engine\SpatialReference\Grcornrs.h"
 #include "Engine\SpatialReference\GRNONE.H"
@@ -55,10 +56,21 @@ BEGIN_MESSAGE_MAP(MakeEpipolarDocument, CDocument)
 	ON_COMMAND(ID_SELECTPPOINT, SetStatePPoint)
 	ON_COMMAND(ID_SELECTTPPOINT, SetStateTPPoint)
 	ON_COMMAND(ID_SELECTSCALINGPTS, SetStateScalingPts)
+	ON_COMMAND(ID_REDRAW, OnReDraw)
+	ON_COMMAND(ID_ZOOMIN, OnZoomIn)
+	ON_COMMAND(ID_ZOOMOUT, OnZoomOut)
+	ON_COMMAND(ID_PANAREA, OnPanArea)
+	ON_COMMAND(ID_ENTIREMAP, OnEntireMap)
+	ON_COMMAND(ID_NORMAL, OnNoTool)
 	ON_UPDATE_COMMAND_UI(ID_SELECTFIDUCIALS, OnUpdateFiducials)
 	ON_UPDATE_COMMAND_UI(ID_SELECTPPOINT, OnUpdatePPoint)
 	ON_UPDATE_COMMAND_UI(ID_SELECTTPPOINT, OnUpdateTPPoint)
 	ON_UPDATE_COMMAND_UI(ID_SELECTSCALINGPTS, OnUpdateScalingPts)
+	ON_UPDATE_COMMAND_UI(ID_ZOOMIN, OnUpdateZoomIn)
+	ON_UPDATE_COMMAND_UI(ID_ZOOMOUT, OnUpdateZoomOut)
+	ON_UPDATE_COMMAND_UI(ID_PANAREA, OnUpdatePanArea)
+	ON_UPDATE_COMMAND_UI(ID_ENTIREMAP, OnUpdateEntireMap)
+	ON_UPDATE_COMMAND_UI(ID_NORMAL, OnUpdateNoTool)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -471,6 +483,60 @@ int MakeEpipolarDocument::Compute()
 		return -1; // georef not yet defined ...
 }
 
+void MakeEpipolarDocument::OnReDraw()
+{
+	if (mpv) {
+		mpv->OnReDraw();
+		if (mpv->psmvSiblingPane)
+			mpv->psmvSiblingPane->OnReDraw();
+	}
+}
+
+void MakeEpipolarDocument::OnZoomIn()
+{
+	if (mpv) {
+		mpv->OnZoomIn();
+		if (mpv->psmvSiblingPane)
+			mpv->psmvSiblingPane->OnZoomIn();
+	}
+}
+
+void MakeEpipolarDocument::OnZoomOut()
+{
+	if (mpv) {
+		mpv->OnZoomOut();
+		if (mpv->psmvSiblingPane)
+			mpv->psmvSiblingPane->OnZoomOut();
+	}
+}
+
+void MakeEpipolarDocument::OnPanArea()
+{
+	if (mpv) {
+		mpv->OnPanArea();
+		if (mpv->psmvSiblingPane)
+			mpv->psmvSiblingPane->OnPanArea();
+	}
+}
+
+void MakeEpipolarDocument::OnEntireMap()
+{
+	if (mpv) {
+		mpv->OnEntireMap();
+		if (mpv->psmvSiblingPane)
+			mpv->psmvSiblingPane->OnEntireMap();
+	}
+}
+
+void MakeEpipolarDocument::OnNoTool()
+{
+	if (mpv) {
+		mpv->OnNoTool();
+		if (mpv->psmvSiblingPane)
+			mpv->psmvSiblingPane->OnNoTool();
+	}
+}
+
 void MakeEpipolarDocument::SetStateFiducials()
 {
 	bool fToolActive = false;
@@ -482,6 +548,15 @@ void MakeEpipolarDocument::SetStateFiducials()
 	else
 		AdvanceSubState();
 	UpdateAllEpipolarViews(0, lHint);
+	if (mpv && mpv->psmvSiblingPane && mpv->psmvSiblingPane->med) {
+		fToolActive = 0 != mpv->psmvSiblingPane->iActiveTool;
+		lHint = mpv->psmvSiblingPane->med->iGetHintFromState();
+		if (fToolActive || mpv->psmvSiblingPane->med->iFormState!=ifsFIDUCIALS)
+			mpv->psmvSiblingPane->med->SetState(ifsFIDUCIALS);
+		else
+			mpv->psmvSiblingPane->med->AdvanceSubState();
+		mpv->psmvSiblingPane->med->UpdateAllEpipolarViews(0, lHint);
+	}
 }
 
 void MakeEpipolarDocument::SetStatePPoint()
@@ -489,6 +564,11 @@ void MakeEpipolarDocument::SetStatePPoint()
 	int lHint = iGetHintFromState();
 	SetState(ifsPP);
 	UpdateAllEpipolarViews(0, lHint);
+	if (mpv && mpv->psmvSiblingPane && mpv->psmvSiblingPane->med) {
+		lHint = mpv->psmvSiblingPane->med->iGetHintFromState();
+		mpv->psmvSiblingPane->med->SetState(ifsPP);
+		mpv->psmvSiblingPane->med->UpdateAllEpipolarViews(0, lHint);
+	}
 }
 
 void MakeEpipolarDocument::SetStateTPPoint()
@@ -496,6 +576,11 @@ void MakeEpipolarDocument::SetStateTPPoint()
 	int lHint = iGetHintFromState();
 	SetState(ifsTPP);
 	UpdateAllEpipolarViews(0, lHint);
+	if (mpv && mpv->psmvSiblingPane && mpv->psmvSiblingPane->med) {
+		lHint = mpv->psmvSiblingPane->med->iGetHintFromState();
+		mpv->psmvSiblingPane->med->SetState(ifsTPP);
+		mpv->psmvSiblingPane->med->UpdateAllEpipolarViews(0, lHint);
+	}
 }
 
 void MakeEpipolarDocument::SetStateScalingPts()
@@ -509,6 +594,15 @@ void MakeEpipolarDocument::SetStateScalingPts()
 	else
 		AdvanceSubState();
 	UpdateAllEpipolarViews(0, lHint);
+	if (mpv && mpv->psmvSiblingPane && mpv->psmvSiblingPane->med) {
+		fToolActive = 0 != mpv->psmvSiblingPane->iActiveTool;
+		lHint = mpv->psmvSiblingPane->med->iGetHintFromState();
+		if (fToolActive || mpv->psmvSiblingPane->med->iFormState!=ifsOFFFLIGHTPTS)
+			mpv->psmvSiblingPane->med->SetState(ifsOFFFLIGHTPTS);
+		else
+			mpv->psmvSiblingPane->med->AdvanceSubState();
+		mpv->psmvSiblingPane->med->UpdateAllEpipolarViews(0, lHint);
+	}
 }
 
 void MakeEpipolarDocument::OnUpdateFiducials(CCmdUI* pCmdUI)
@@ -542,4 +636,66 @@ void MakeEpipolarDocument::OnUpdateScalingPts(CCmdUI* pCmdUI)
 	if (mpv)
 		fToolActive = 0 != mpv->iActiveTool;
 	pCmdUI->SetRadio((ifsGetState() == ifsOFFFLIGHTPTS) && !fToolActive);
+}
+
+void MakeEpipolarDocument::OnUpdateZoomIn(CCmdUI* pCmdUI)
+{
+	bool fMapOpen = false;
+	MapCompositionDoc *doc = (MapCompositionDoc *)mpv->GetDocument();
+	if ( !doc->fIsEmpty())			
+		fMapOpen = true;
+	bool fTooSmall = false;
+	pCmdUI->Enable(fMapOpen && !fTooSmall && !doc->rootDrawer->is3D());
+	pCmdUI->SetRadio(ID_ZOOMIN == mpv->iActiveTool);
+}
+
+void MakeEpipolarDocument::OnUpdateZoomOut(CCmdUI* pCmdUI)
+{
+	bool fMapOpen = false;
+	MapCompositionDoc *mcd = (MapCompositionDoc *)mpv->GetDocument();
+	if ( !mcd->fIsEmpty())			
+		fMapOpen = true;
+	bool zoomedIn = (mcd->rootDrawer->getMapCoordBounds().width() > mcd->rootDrawer->getCoordBoundsZoom().width()) || 
+				     (mcd->rootDrawer->getMapCoordBounds().height() > mcd->rootDrawer->getCoordBoundsZoom().height());
+	if (mpv && mpv->psmvSiblingPane) {
+		mcd = mpv->psmvSiblingPane->GetDocument();
+		zoomedIn = zoomedIn || (mcd->rootDrawer->getMapCoordBounds().width() > mcd->rootDrawer->getCoordBoundsZoom().width()) || 
+				     (mcd->rootDrawer->getMapCoordBounds().height() > mcd->rootDrawer->getCoordBoundsZoom().height());
+	}
+	pCmdUI->Enable(fMapOpen && zoomedIn && !mcd->rootDrawer->is3D());
+	if (mpv->tools.size() == 0)
+		mpv->iActiveTool = 0;
+	pCmdUI->SetRadio(ID_ZOOMOUT == mpv->iActiveTool);
+}
+
+void MakeEpipolarDocument::OnUpdatePanArea(CCmdUI* pCmdUI)
+{
+	bool fMapOpen = false;
+	MapCompositionDoc *mcd = (MapCompositionDoc *)mpv->GetDocument();
+	if ( !mcd->fIsEmpty())			
+		fMapOpen = true;
+	bool zoomedIn = (mcd->rootDrawer->getMapCoordBounds().width() > mcd->rootDrawer->getCoordBoundsZoom().width()) || 
+			     (mcd->rootDrawer->getMapCoordBounds().height() > mcd->rootDrawer->getCoordBoundsZoom().height());
+	if (mpv && mpv->psmvSiblingPane) {
+		mcd = mpv->psmvSiblingPane->GetDocument();
+		zoomedIn = zoomedIn || (mcd->rootDrawer->getMapCoordBounds().width() > mcd->rootDrawer->getCoordBoundsZoom().width()) || 
+				     (mcd->rootDrawer->getMapCoordBounds().height() > mcd->rootDrawer->getCoordBoundsZoom().height());
+	}
+	pCmdUI->Enable(fMapOpen && (zoomedIn || mcd->rootDrawer->is3D()));
+	if (mpv->tools.size() == 0)
+		mpv->iActiveTool = 0;
+	pCmdUI->SetRadio(ID_PANAREA == mpv->iActiveTool);
+}
+
+void MakeEpipolarDocument::OnUpdateEntireMap(CCmdUI* pCmdUI)
+{
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	pCmdUI->Enable(mcd->rootDrawer->getDrawerCount() > 0);
+}
+
+void MakeEpipolarDocument::OnUpdateNoTool(CCmdUI* pCmdUI)
+{
+	if (mpv->tools.size() == 0)
+		mpv->iActiveTool = 0;
+	pCmdUI->SetRadio(0 == mpv->iActiveTool);
 }

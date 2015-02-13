@@ -118,10 +118,21 @@ public:
 	void SetStatePPoint();
 	void SetStateTPPoint();
 	void SetStateScalingPts();
+	afx_msg void OnReDraw();
+	afx_msg void OnZoomIn();
+	afx_msg void OnZoomOut();
+	afx_msg void OnPanArea();
+	afx_msg void OnEntireMap();
+	afx_msg void OnNoTool();
 	void OnUpdateFiducials(CCmdUI*);
 	void OnUpdatePPoint(CCmdUI*);
 	void OnUpdateTPPoint(CCmdUI*);
 	void OnUpdateScalingPts(CCmdUI*);
+	void OnUpdateZoomIn(CCmdUI* pCmdUI);
+	void OnUpdateZoomOut(CCmdUI* pCmdUI);
+	void OnUpdatePanArea(CCmdUI* pCmdUI);
+	void OnUpdateEntireMap(CCmdUI* pCmdUI);
+	void OnUpdateNoTool(CCmdUI* pCmdUI);
 
 private:
 	bool fPPDefined;	// we can't do rcPP.fUndef() because we don't know for sure what
