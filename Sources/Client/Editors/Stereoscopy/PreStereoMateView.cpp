@@ -391,35 +391,12 @@ void PreStereoMateView::OnContextMenu(CWnd* pWnd, CPoint point)
 		cmdUIstate.m_nID = men.GetMenuItemID(cmdUIstate.m_nIndex);
 		cmdUIstate.DoUpdate(this, 0);
 	}
-
-	if (med)
-	{
-		MakeEpipolarDocument::iFormStateTP ifsState = med->ifsGetState();
-		int iToCheck = 0;
-		switch (ifsState)
-		{
-			case MakeEpipolarDocument::ifsFIDUCIALS :
-				iToCheck = ID_SELECTFIDUCIALS;
-				break;
-			case MakeEpipolarDocument::ifsPP :
-				iToCheck = ID_SELECTPPOINT;
-				break;
-			case MakeEpipolarDocument::ifsTPP :
-				iToCheck = ID_SELECTTPPOINT;
-				break;
-			case MakeEpipolarDocument::ifsOFFFLIGHTPTS :
-				iToCheck = ID_SELECTSCALINGPTS;
-				break;
-		}
-		if (iToCheck)
-			men.CheckMenuRadioItem(ID_SELECTFIDUCIALS, ID_SELECTSCALINGPTS, iToCheck, MF_BYCOMMAND);
-	}
-  men.AppendMenu(MF_SEPARATOR);
-  menSub.CreateMenu();
+	men.AppendMenu(MF_SEPARATOR);
+	menSub.CreateMenu();
 	GetDocument()->menLayers(menSub, ID_LAYFIRST);
-  men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sMen(ID_LAYEROPTIONS)); 
+	men.AppendMenu(MF_POPUP, (UINT)menSub.GetSafeHmenu(), sMen(ID_LAYEROPTIONS)); 
 	menSub.Detach();    
-  men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
+	men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
 }
 
 BOOL PreStereoMateView::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) 
