@@ -91,7 +91,6 @@ protected:
 private:
 	MakeEpipolarDocument * med;
 	PreStereoMateView * psmvSiblingPane;
-	void SetDirty(Coord crd);
   zCursor curSetFiducial01, curSetFiducial02, curSetFiducial03, curSetFiducial04, curSetPP,
 		curSetTPP, curSetOFP01, curSetOFP02, curNormal;
 	bool fActive;

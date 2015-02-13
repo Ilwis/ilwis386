@@ -127,43 +127,13 @@ void PreStereoMateView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	else if (10000 == lHint)
 	{
 		// refresh all: invalidate all rc's in the element list
-		list <Element> eList = med->ElementList();
-		for (list <Element>::iterator eIterator = eList.begin(); eIterator != eList.end(); ++eIterator)
-			SetDirty(eIterator->crd);
+		SetDirty();
 	}
 	else
 	{
-		Coord crdOld (med->crdGetOldRC()); // Erase previous point (if any)
-		if (!crdOld.fUndef())
-			SetDirty(crdOld);
-		Coord crd (med->crdGetRCFromHint(lHint)); // Draw new point (if any)
-		if (!crd.fUndef())
-			SetDirty(crd);
+		if (!med->crdGetOldRC().fUndef() || !med->crdGetRCFromHint(lHint).fUndef()) // Erase previous point (if any) and draw new point (if any)
+			SetDirty();
 	}
-}
-
-void PreStereoMateView::SetDirty(Coord crd)
-{
-	// Forces a redraw around rc that is just enough for the area needed for a fiducial or a PP
-  Symbol smb;
-  smb.smb = smbPlus;
-	smb.iSize = 15;
-  zPoint p = pntPos(Coord(crd.x+0.5, crd.y+0.5));
-  // zPoint p = pntPos(rc);
-  zRect rect(p,p);
-  rect.top()   -= smb.iSize / 2 + 1;
-  rect.left()  -= smb.iSize / 2 + 1;
-  rect.bottom()+= smb.iSize / 2 + 2;
-  rect.right() += smb.iSize / 2 + 2;
-
-	CClientDC cdc(this);
-  zPoint pntText = smb.pntText(&cdc, p);
-  CSize siz = cdc.GetTextExtent("TP", 2); // space of "TPP" to be redrawn; 2 is the size of the string
-  pntText.x += 10 + siz.cx + 1; // (10,5) is the text offset
-  pntText.y += 5 + siz.cy + 1;
-  rect.bottom() = max(rect.bottom(), pntText.y);
-  rect.right() = max(rect.right(), pntText.x);
-  InvalidateRect(&rect);
 }
 
 void PreStereoMateView::SetEpipolarDocument(MakeEpipolarDocument * d)
@@ -185,11 +155,8 @@ void PreStereoMateView::OnLButtonDown(UINT nFlags, CPoint point)
 			int lHint = med->iGetHintFromState();
 			med->AdvanceSubState();
 
-			Coord crdOld (med->crdGetOldRC()); // Erase previous point (if any)
-			if (!crdOld.fUndef())
-				SetDirty(crdOld);
-			if (!rc.fUndef())
-				SetDirty(Coord(rc.Row, rc.Col));
+			if (!med->crdGetOldRC().fUndef() || !rc.fUndef()) // Erase previous point (if any)
+				SetDirty();
 
 			med->UpdateAllEpipolarViews(this, lHint);
 		}
