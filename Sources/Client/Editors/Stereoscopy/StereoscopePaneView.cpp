@@ -52,6 +52,8 @@ BEGIN_MESSAGE_MAP(StereoscopePaneView, MapPaneView)
 	ON_WM_HSCROLL()
 	ON_WM_VSCROLL()
 	ON_WM_NCPAINT()
+	ON_WM_KEYDOWN()
+	ON_WM_KEYUP()
 	ON_COMMAND(ID_NONEEDIT, OnNoneEdit)
 	ON_COMMAND(ID_ZOOMIN, OnZoomIn)
 	ON_COMMAND(ID_ZOOMOUT, OnZoomOut)
@@ -327,4 +329,20 @@ void StereoscopePaneView::OnNoTool()
 	MapPaneView::OnNoTool();
 	if (fActive && spvSiblingPane)
 		spvSiblingPane->OnNoTool();
+}
+
+
+void StereoscopePaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+	if (VK_SHIFT == nChar) {
+		if (swParent->fXoffsetLocked())
+			swParent->OnUnlockHScroll();
+	}
+	MapPaneView::OnKeyDown(nChar, nRepCnt, nFlags);
+}
+
+void StereoscopePaneView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
+	if (VK_SHIFT == nChar)
+		if (!swParent->fXoffsetLocked())
+			swParent->OnUnlockHScroll();
+	MapPaneView::OnKeyUp(nChar, nRepCnt, nFlags);
 }

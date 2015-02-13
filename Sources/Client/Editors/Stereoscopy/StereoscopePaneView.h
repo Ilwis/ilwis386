@@ -84,6 +84,8 @@ protected:
 	afx_msg void OnZoomOut();
 	afx_msg void OnPanArea();
 	afx_msg void OnNoTool();
+	void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	void SetXPosSibling(CoordBounds & cbZoom2);
 	void PanMoveY(int y, CoordBounds & cbZoom2);
 	double rGetXOffsetSibling();

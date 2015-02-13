@@ -85,6 +85,7 @@ public:
 	bool fXoffsetLocked();
 	double rXoffsetDelta();
 	void SetXoffsetDelta(double);
+	void OnUnlockHScroll();
 	ButtonBar bbStereoscope;
 protected:
 	StereoscopeWindow();
@@ -100,7 +101,6 @@ protected:
 	void OnUpdateStereoscopeBar(CCmdUI* pCmdUI);
 	void OnLeftRightStereoBar();
 	void OnUpdateLeftRightStereoBar(CCmdUI* pCmdUI);
-	void OnUnlockHScroll();
 	void OnUpdateUnlockHScroll(CCmdUI* pCmdUI);
 	void OnActivateLeftView();
 	void OnUpdateActiveLeftView(CCmdUI* pCmdUI);
