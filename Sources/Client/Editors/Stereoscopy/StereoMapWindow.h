@@ -76,6 +76,8 @@ class StereoPair;
 
 class IMPEXP StereoMapWindow: public DataWindow
 {
+public:
+	void UpdateStatusText();
 protected:
 	StereoMapWindow();
 	virtual ~StereoMapWindow();
@@ -102,7 +104,6 @@ protected:
 	void OnInfoWindowBar();
 	void OnUpdateInfoWindowBar(CCmdUI* pCmdUI);
 	void OnConfigure();
-	afx_msg void OnTimer(UINT nIDEvent);
 	CEdit edTxt;
 	CFont fnt;
 	CToolBar bbTxt;
@@ -113,7 +114,6 @@ private:
 	void RefreshMaps(const String& sLeftMap, const String& sRightMap);
 	void RemoveViews();
 	void CopyLeftColorsToRightView();
-	UINT iTimer;
 	bool fInitiallyUpdated;
  
 	DECLARE_DYNCREATE(StereoMapWindow)

@@ -64,7 +64,6 @@ BEGIN_MESSAGE_MAP(StereoMapWindow, DataWindow)
 	ON_COMMAND(ID_EXITSTEREOPAIR, OnClose)
 	ON_COMMAND(ID_STEREO_CUSTOMIZE, OnConfigure)
 	ON_WM_CLOSE()
-	ON_WM_TIMER()
 	ON_COMMAND(ID_EXITSHOWSTEREOPAIR, OnExitShowStereoPair)
 	ON_UPDATE_COMMAND_UI(ID_EXITSHOWSTEREOPAIR, OnUpdateExitShowStereopair)
 	ON_COMMAND(ID_QUITSTEREOPAIR, OnQuit)
@@ -84,7 +83,7 @@ END_MESSAGE_MAP()
 // be accessed and if needed reloaded
 
 StereoMapWindow::StereoMapWindow()
-: vwLeft(0), vwRight(0), docLeft(0), docRight(0), mkDocLeft(0), mkDocRight(0), frmLeft(0), frmRight(0), iTimer(0), fInitiallyUpdated(0)
+: vwLeft(0), vwRight(0), docLeft(0), docRight(0), mkDocLeft(0), mkDocRight(0), frmLeft(0), frmRight(0), fInitiallyUpdated(0)
 {
   Create(NULL, "");
   docLeft = new MapCompositionDoc;
@@ -131,8 +130,6 @@ StereoMapWindow::StereoMapWindow()
 	SetIcon(icon, TRUE);
   help = "ilwis\\epipolar_stereopair_creation_window.htm";
 	sHelpKeywords = "Stereo pairs (create)";
-
-	iTimer = SetTimer(1, 1000, 0); // timer id = 1, trigger every 1 sec, kill while m_hWnd still valid
 }
 
 StereoMapWindow::~StereoMapWindow()
@@ -413,13 +410,7 @@ void StereoMapWindow::OnOpenStereoPair()
 
 void StereoMapWindow::OnClose()
 {
-	if (iTimer) // in case init failed somehow
-	{
-		KillTimer(iTimer);
-		iTimer = 0;
-	}
-
-  RemoveViews();
+	RemoveViews();
 	if (stp.fValid())
 		stp->Updated();
 	DataWindow::OnClose();
@@ -427,12 +418,6 @@ void StereoMapWindow::OnClose()
 
 void StereoMapWindow::OnExitShowStereoPair()
 {
-	if (iTimer) // in case init failed somehow
-	{
-		KillTimer(iTimer);
-		iTimer = 0;
-	}
-
 	if (stp.fValid())
 	{
 		RemoveViews();
@@ -446,11 +431,6 @@ void StereoMapWindow::OnExitShowStereoPair()
 
 void StereoMapWindow::OnQuit()
 {
-	if (iTimer) // in case init failed somehow
-	{
-		KillTimer(iTimer);
-		iTimer = 0;
-	}
 	RemoveViews();
 	DataWindow::OnClose();
 }
@@ -507,23 +487,16 @@ void StereoMapWindow::RemoveViews()
   //docRight->RemoveView(vwRight);
 }
 
-void StereoMapWindow::OnTimer(UINT nIDEvent)
+void StereoMapWindow::UpdateStatusText()
 {
-	if (1 == nIDEvent) // is it for us? our id == 1
-	{
-		String sErr = "";
-		if (stp.fValid())
-		{
-			StereoPairEpiPolar* spepi = dynamic_cast<StereoPairEpiPolar*>(stp->pStereoPairVirtual());
-			if (spepi) // check on cast success!!
-				sErr = spepi->sErrGeorefs();
-		}
-
-		edTxt.SetWindowText(sErr.c_str());
+	String sErr = "";
+	if (stp.fValid()) {
+		StereoPairEpiPolar* spepi = dynamic_cast<StereoPairEpiPolar*>(stp->pStereoPairVirtual());
+		if (spepi)
+			sErr = spepi->sErrGeorefs();
 	}
 
-	// Still call base class
-	DataWindow::OnTimer(nIDEvent);
+	edTxt.SetWindowText(sErr.c_str());
 }
 
 void StereoMapWindow::OnStereoscopyBar()

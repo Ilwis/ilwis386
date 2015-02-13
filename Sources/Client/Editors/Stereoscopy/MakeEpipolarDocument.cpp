@@ -42,6 +42,7 @@
 #include "Client\Headers\formelementspch.h"
 #include "Client\Editors\Stereoscopy\MakeEpipolarDocument.h"
 #include "Client\Editors\Stereoscopy\PreStereoMateView.h"
+#include "Client\Editors\Stereoscopy\StereoMapWindow.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Engine\SpatialReference\GrEpipolar.h"
 #include "Engine\SpatialReference\Grcornrs.h"
@@ -101,6 +102,11 @@ void MakeEpipolarDocument::UpdateAllEpipolarViews(CView* pSender, LPARAM lHint, 
 	if (mpv && pSender != mpv)
 		mpv->OnUpdate(pSender, lHint, pHint);
 	UpdateAllViews(pSender, lHint, pHint);
+	if (mpv) {
+		StereoMapWindow * smw = dynamic_cast<StereoMapWindow*>(mpv->GetTopLevelFrame());
+		if (smw)
+			smw->UpdateStatusText();
+	}
 }
 
 void MakeEpipolarDocument::SetView(PreStereoMateView * mvIn)
