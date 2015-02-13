@@ -277,8 +277,7 @@ void PreStereoMateView::drawSymbols(volatile bool* fDrawStop)
 BOOL PreStereoMateView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 {
 	bool fStop = false;
-	AreaSelector * as = (tools.find(ID_ZOOMIN) != tools.end()) ? (AreaSelector*)tools[ID_ZOOMIN] : ((tools.find(ID_ZOOMOUT) != tools.end()) ? (AreaSelector*)tools[ID_ZOOMOUT] : 0);
-	if (as) // only go to MapPaneView::OnSetCursor if needed (prevents flickering of cursor)
+	if (iActiveTool) // only go to MapPaneView::OnSetCursor if needed (prevents flickering of cursor)
 		fStop = (TRUE == MapPaneView::OnSetCursor(pWnd, nHitTest, message)); // translate BOOL to bool
 	// if MapPaneView::OnSetCursor() returns TRUE,
 	// we shouldn't replace the cursor with our own (we may be in zoom or pan mode)
@@ -354,7 +353,7 @@ BOOL PreStereoMateView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 	}
 	else
 	{
-		if (!as)
+		if (!iActiveTool)
 			SetCursor(curNormal); // otherwise the custom cursor stays too long (even in context menus etc)
 		return fStop?TRUE:FALSE; // translate bool to BOOL
 	}
@@ -365,8 +364,6 @@ BOOL PreStereoMateView::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
 #define addBreak men.AppendMenu(MF_SEPARATOR);
 void PreStereoMateView::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-	if (tools.size() > 0)
-		return;
 	// if (edit && edit->OnContextMenu(pWnd, point))
 	// 	return;
   CMenu men, menSub;
@@ -457,8 +454,15 @@ void PreStereoMateView::OnNcPaint()
 	ReleaseDC(&dc);
 }
 
+void PreStereoMateView::SetSiblingPane(PreStereoMateView * psmv)
+{
+	psmvSiblingPane = psmv;
+	//smwParent = dynamic_cast<StereoMapWindow*>(fwParent());
+}
+
 void PreStereoMateView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView)
 {
 	fActive = (TRUE == bActivate); // translate BOOL to bool
 	GetParent()->Invalidate();
 }
+

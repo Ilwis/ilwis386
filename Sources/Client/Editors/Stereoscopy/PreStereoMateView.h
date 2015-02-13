@@ -70,6 +70,7 @@ public:
 	void SetEpipolarDocument(MakeEpipolarDocument *);
 	void OnLButtonDown(UINT nFlags, CPoint point);
 	void drawSymbols(volatile bool* fDrawStop);
+	void SetSiblingPane(PreStereoMateView*);
 	Color colFidMarks; // customizable items are public: "Customize" is implemented in StereoMapWindow
 	Color colPrincPnts;
 	Color colScalePnts;
@@ -89,6 +90,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 private:
 	MakeEpipolarDocument * med;
+	PreStereoMateView * psmvSiblingPane;
 	void SetDirty(Coord crd);
   zCursor curSetFiducial01, curSetFiducial02, curSetFiducial03, curSetFiducial04, curSetPP,
 		curSetTPP, curSetOFP01, curSetOFP02, curNormal;

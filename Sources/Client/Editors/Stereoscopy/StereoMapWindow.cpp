@@ -296,6 +296,8 @@ BOOL StereoMapWindow::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pConte
 	// Make sure from mapview you can fully reach the corresponding formview and vice versa
 	// frmLeft->SetStereoMateView(vwLeft, frmRight, true); // 2nd parameter points to the other form
 	// frmRight->SetStereoMateView(vwRight, frmLeft, false); // 3rd parameter indicates left or right form
+	vwLeft->SetSiblingPane(vwRight);
+	vwRight->SetSiblingPane(vwLeft);
 	SetActiveView(vwLeft);
 	return TRUE;
 }
