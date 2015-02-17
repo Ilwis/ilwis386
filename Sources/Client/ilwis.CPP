@@ -225,7 +225,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 
 IlwisWinApp TheIlwisApp;
 const CLSID CLSID_ILWIS_CommandLine = {0x524BCEF4,0x4370,0x4021,{0x92,0xD3,0xCE,0xC1,0x62,0x57,0x7C,0x08}};
-const String ILWIS::Version::IlwisVersion="3.8.4.0";
+const String ILWIS::Version::IlwisVersion="3.8.5.0";
 //const String ILWIS::Version::IlwisShortName="Ilwis38";
 
 BEGIN_MESSAGE_MAP( IlwisWinApp, CWinApp )
