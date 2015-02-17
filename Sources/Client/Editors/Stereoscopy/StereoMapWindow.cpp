@@ -52,6 +52,8 @@
 #include "Engine\Applications\objvirt.h"
 #include "Client\ilwis.h"
 #include "Client\FormElements\fldcolor.h"
+#include "Engine\Base\DataObjects\ObjectCollection.h"
+#include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Headers\Htp\Ilwis.htp"
 
@@ -462,6 +464,11 @@ void StereoMapWindow::StereoPairUpdated()
 
 void StereoMapWindow::RefreshMaps(const String& sLeftMap, const String& sRightMap)
 {
+	SetActiveView(0);
+	if (docLeft->pixInfoDoc)
+		docLeft->pixInfoDoc->OnChangedViewList(); // since we don't have a pixelinfo, we have to delete the pixelinfodoc somehow
+	if (docRight->pixInfoDoc)
+		docRight->pixInfoDoc->OnChangedViewList();
 	frmLeft->SetInputImageName(sLeftMap);
 	frmRight->SetInputImageName(sRightMap);
 	docLeft->OnOpenDocument(sLeftMap.c_str(), IlwisDocument::otNOASK);
@@ -477,6 +484,11 @@ void StereoMapWindow::RefreshMaps(const String& sLeftMap, const String& sRightMa
 void StereoMapWindow::RemoveViews()
 {
 	// cleanup views attached, in reverse order
+	SetActiveView(0);
+	if (docLeft->pixInfoDoc)
+		docLeft->pixInfoDoc->OnChangedViewList(); // since we don't have a pixelinfo, we have to delete the pixelinfodoc somehow
+	if (docRight->pixInfoDoc)
+		docRight->pixInfoDoc->OnChangedViewList();
 	vwLeft->SetEpipolarDocument(0);
 	vwRight->SetEpipolarDocument(0);
 	mkDocLeft->SetView(0);

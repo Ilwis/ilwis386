@@ -49,6 +49,8 @@
 #include "Client\Mapwindow\MapStatusBar.h"
 #include "Client\Mapwindow\LayerTreeView.h"
 #include "Client\Mapwindow\OverviewMapPaneView.h"
+#include "Engine\Base\DataObjects\ObjectCollection.h"
+#include "Client\Mapwindow\PixelInfoDoc.h"
 #include "Headers\Hs\Mapwind.hs"
 #include "Headers\Htp\Ilwis.htp"
 #include "Headers\Htp\Ilwismen.htp"
@@ -399,6 +401,11 @@ void StereoscopeWindow::OnUpdateActiveRightView(CCmdUI* pCmdUI)
 
 void StereoscopeWindow::RefreshMaps(const Map& mpLeftMap, const Map& mpRightMap)
 {
+	SetActiveView(0);
+	if (docLeft->pixInfoDoc)
+		docLeft->pixInfoDoc->OnChangedViewList();
+	if (docRight->pixInfoDoc)
+		docRight->pixInfoDoc->OnChangedViewList();
 	docLeft->OnOpenDocument(mpLeftMap->fnObj.sFullName().c_str(), IlwisDocument::otNOASK);
 	docRight->OnOpenDocument(mpRightMap->fnObj.sFullName().c_str(), IlwisDocument::otNOASK);
 	docLeft->rootDrawer->setGeoreference(mpLeftMap->gr(), true);
@@ -418,6 +425,11 @@ void StereoscopeWindow::StereoPairUpdated()
 
 void StereoscopeWindow::OnClose()
 {
+	SetActiveView(0);
+	if (docLeft->pixInfoDoc)
+		docLeft->pixInfoDoc->OnChangedViewList(); // since we don't have a pixelinfo, we have to delete the pixelinfodoc somehow
+	if (docRight->pixInfoDoc)
+		docRight->pixInfoDoc->OnChangedViewList();
 	DataWindow::OnClose();
 }
 
