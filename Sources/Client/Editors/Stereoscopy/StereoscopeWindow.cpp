@@ -410,6 +410,7 @@ void StereoscopeWindow::RefreshMaps(const Map& mpLeftMap, const Map& mpRightMap)
 	docRight->OnOpenDocument(mpRightMap->fnObj.sFullName().c_str(), IlwisDocument::otNOASK);
 	docLeft->rootDrawer->setGeoreference(mpLeftMap->gr(), true);
 	docRight->rootDrawer->setGeoreference(mpRightMap->gr(), true);
+	SetActiveView(vwLeft);
 	docLeft->UpdateAllViews(0,3); // entiremap to left views
 	docRight->UpdateAllViews(0,3); // entiremap to right views
 }

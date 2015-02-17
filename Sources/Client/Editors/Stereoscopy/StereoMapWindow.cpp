@@ -477,6 +477,7 @@ void StereoMapWindow::RefreshMaps(const String& sLeftMap, const String& sRightMa
 	Map mpRight(sRightMap);
 	docLeft->rootDrawer->setGeoreference(mpLeft->gr(), true);
 	docRight->rootDrawer->setGeoreference(mpRight->gr(), true);
+	SetActiveView(vwLeft);
 	docLeft->UpdateAllViews(0,3); // entiremap to left views
 	docRight->UpdateAllViews(0,3); // entiremap to right views
 }
