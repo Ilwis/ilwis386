@@ -99,67 +99,67 @@
 class ErrorTooMuchPoints : public ErrorObject {
 public:
   ErrorTooMuchPoints(const WhereError& where)
-    : ErrorObject(WhatError(SCVErrTooMuchPoints, errTOOMUCH), where) {}
+    : ErrorObject(WhatError(TR("Ilwis polygon contains too many points to export"), errTOOMUCH), where) {}
 };
 
 class ErrorUnrecognizedTag : public ErrorObject {
 public:
   ErrorUnrecognizedTag(const WhereError& where, const String& sTag)
-    : ErrorObject(WhatError(String(SCVErrUnrecognizedTag_S.c_str(), sTag), errUNRECTAG), where) {}
+    : ErrorObject(WhatError(String(TR("Unrecognized E00 tag: %S").c_str(), sTag), errUNRECTAG), where) {}
 };    
 
 class ErrorUnexpectedEOF : public ErrorObject {
 public:
   ErrorUnexpectedEOF(const WhereError& where)
-    : ErrorObject(WhatError(SCVErrUnexpectedEOF, errUNEXEOF), where) {}
+    : ErrorObject(WhatError(TR("Unexpected end of file"), errUNEXEOF), where) {}
 };
 
 class ErrorInFormat : public ErrorObject {
 public:
   ErrorInFormat(const WhereError& where) 
-    : ErrorObject(WhatError(SCVErrFormatViolation, errFORMERROR), where) {}
+    : ErrorObject(WhatError(TR("Error in format"), errFORMERROR), where) {}
 };
 
 class ErrorInternal : public ErrorObject {
 public:
   ErrorInternal(const WhereError& where) 
-    : ErrorObject(WhatError(SCVErrInternalFailure, errINTERNAL), where) {}
+    : ErrorObject(WhatError(TR("Internal conversion error"), errINTERNAL), where) {}
 };
 
 class AbortedByUser : public ErrorObject {
 public:
   AbortedByUser(const WhereError& where)
-    : ErrorObject(WhatError(SCVWarnAbortedByUser, errUSERABORT), where) {}
+    : ErrorObject(WhatError(TR("Aborted by user"), errUSERABORT), where) {}
 };
 
 class PolygonizationFailed : public ErrorObject {
 public:
   PolygonizationFailed(const WhereError& where)
-    : ErrorObject(WhatError(SCVErrPolygonizeFailed, errPOLYGONIZE), where) {}
+    : ErrorObject(WhatError(TR("Polygonization failed"), errPOLYGONIZE), where) {}
 };
 
 class ExpectedCoordinate : public ErrorObject {
 public:
   ExpectedCoordinate(const WhereError& where)
-    : ErrorObject(WhatError(SCVErrCoordExpected, errCOORDEXPECT), where) {}
+    : ErrorObject(WhatError(TR("Coordinate pair expected"), errCOORDEXPECT), where) {}
 };
 
 class FailedCreateColumn : public ErrorObject {
 public:
   FailedCreateColumn(const WhereError& where)
-    : ErrorObject(WhatError(SCVErrCreateColFailed, errCREATECOL), where) {}
+    : ErrorObject(WhatError(TR("Create column failed"), errCREATECOL), where) {}
 };
 
 class ErrorNoNumeric : public ErrorObject {
 public:
   ErrorNoNumeric(const WhereError& where)
-    : ErrorObject(WhatError(SCVErrNoNumeric, errNONUMERIC), where) {}
+    : ErrorObject(WhatError(TR("Numeric values expected"), errNONUMERIC), where) {}
 };
 
 class ErrorExportTooManyClasses : public ErrorObject {
 public:
   ErrorExportTooManyClasses(const WhereError& where)
-    : ErrorObject(WhatError(SCVErrTooManyClasses, errTOOMANYCLASS), where) {}
+    : ErrorObject(WhatError(TR("Export cannot handle more than 255 classes"), errTOOMANYCLASS), where) {}
 };
 
 

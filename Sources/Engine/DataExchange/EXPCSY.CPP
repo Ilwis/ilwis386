@@ -49,7 +49,7 @@ void ImpExp::ExpCsy(const FileName& fnObject, const FileName& fnFile, const Stri
 		ExportEsriPrj(fnObject, FileName(fn,".prj"));
 	else 
 	{
-		throw ErrorImportExport(SCVErrUnknownConversion);
+		throw ErrorImportExport(TR("Unknown conversion format"));
 	}
 }
 

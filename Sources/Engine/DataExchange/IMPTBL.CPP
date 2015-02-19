@@ -103,7 +103,7 @@ void ImportTable(const Array<String>& as)
     String sErrMsg;
     short iTemp,iTemp1;	
     int iNrArg = as.iSize();
-    if (iNrArg < 5) throw ErrorObject(String(SCVImpAsErrNotEnougPar));
+    if (iNrArg < 5) throw ErrorObject(String(TR("Too few parameters")));
     fnIn = as[0];
     fnTbt = as[1];
     fnBinary = fnTbt;
@@ -118,7 +118,7 @@ void ImportTable(const Array<String>& as)
     else if (sInputType =="fixed")
        eInputFormat = eFixed;
     else {
-    sErrMsg = SCVImpAsErrUnknownInpType;
+    sErrMsg = TR("Unknown input type");
     sErrMsg &="   ";
     sErrMsg &= sInputType;
     throw ErrorObject(sErrMsg);
@@ -142,7 +142,7 @@ void ImportTable(const Array<String>& as)
 	    if (eInputFormat==eFixed)  {
 	      iTemp = as[iArgCnt].iVal();
 	      if (iTemp == shUNDEF)
-	         throw ErrorImportTable(SCVImpAsErrNoWidth);
+	         throw ErrorImportTable(TR("Fixed Format: no or invalid column width found"));
 	      aiWidth &= iTemp;
 	      iArgCnt++;
 	    }

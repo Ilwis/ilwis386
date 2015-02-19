@@ -65,7 +65,7 @@ void ImpExp::ExpPnt(const FileName& fnObject, const FileName& fnFile, const Stri
 	}
 	else 
 	{
-		throw ErrorImportExport(SCVErrUnknownConversion);
+		throw ErrorImportExport(TR("Unknown conversion format"));
 	}
 }
 

@@ -173,12 +173,12 @@ void Import(const FileName& fnFile, const FileName& fnObject, const String& sExt
 				}
 		}
 		else
-			throw ErrorObject(String("%S: \"%S\"", SCVErrUnknownConversion, sExtFormat));
+			throw ErrorObject(String("%s: \"%S\"", TR("Unknown conversion format").c_str(), sExtFormat));
 	}
 	catch (ErrorImportExport& err)
 	{
 		String sErr = err.sExcError();
-		getEngine()->Message(sErr.c_str(), SCVErrImportError.c_str(), MB_ICONSTOP|MB_OK);
+		getEngine()->Message(sErr.c_str(), TR("Import Error").c_str(), MB_ICONSTOP|MB_OK);
 	}
 }
 
@@ -262,7 +262,7 @@ void Import(const String& sExpr)
 		FileName fn = FileName(as[1]);
 		Directory dir(fn); 
 		if (!fn.fValid() || !Directory::fIsExistingDir(dir))
-			throw ErrorObject(WhatError(SCVErrInvalidFileName, errNAME), fn);
+			throw ErrorObject(WhatError(TR("Invalid file name"), errNAME), fn);
 
 		if (sFormat.sLeft(7) == "ilwis14")
 		{
@@ -278,7 +278,7 @@ void Import(const String& sExpr)
 	}
 	catch (ErrorObject& err)
 	{
-		err.SetTitle(SCVErrImportError);
+		err.SetTitle(TR("Import Error"));
 		err.Show();
 	}
 	catch (CException* err)
@@ -325,7 +325,7 @@ void Export(const String& sExpr) {
 			FileName fn = FileName(as[2]);
 			Directory dir(fn); 
 			if (!fn.fValid() || !Directory::fIsExistingDir(dir))
-				throw ErrorObject(WhatError(SCVErrInvalidFileName, errNAME), fn);
+				throw ErrorObject(WhatError(TR("Invalid file name"), errNAME), fn);
 			Export(as[1], as[2], sFormat, sMethod);
 		}			
 	}    
@@ -358,7 +358,7 @@ void ExportTo14(const FileName& fn, const FileName& fnOut)
 			sm.Export(fnOut);
 		}
 		else if (fCIStrEqual(".mpa", fn.sExt)) {
-			throw ErrorObject(SCVErrPolExportUnsupported);
+			throw ErrorObject(TR("Polygon export to 1.4 is not supported anymore"));
 //			PolygonMap pm(fn);
 //			pm.Export(fnOut);
 		}

@@ -49,7 +49,7 @@ void ImpExp::ExpMpl(const FileName& fnObject, const FileName& fnFile, const Stri
     ExportLAN(fnObject, FileName(fnFile, ".lan"));
   else
   {
-    throw ErrorImportExport(SCVErrUnknownConversion);
+    throw ErrorImportExport(TR("Unknown conversion format"));
   }
 }
 
