@@ -2186,10 +2186,10 @@ int DomainPropPage::exec()
 		try
 		{
 			FileName fnRpr = IlwisObjectPtr::fnCheckPath(FileName(m_sRprName, ".rpr"));
-			if (fnRpr != dm->rpr()->fnObj)
+			if (!dm->rpr().fValid() || (fnRpr != dm->rpr()->fnObj))
 			{
 				Representation rpr(fnRpr);
-				if (dm->rpr() != rpr)
+				if (!dm->rpr().fValid() || (dm->rpr() != rpr))
 					dm->SetRepresentation(rpr);
 			}
 		}
@@ -2876,10 +2876,10 @@ void ObjectCollectionPropPage::BuildPage()
 
 
 
-		int iMaps = oc->iNrObjects();
-		if (iMaps > 0 || ! oc->fDependent())
+		int iItems = oc->iNrObjects();
+		if (iItems > 0 || ! oc->fDependent())
 		{
-			String sNrMaps(TR("Map List contains %li Raster Maps").c_str(), iMaps);
+			String sNrMaps(TR("Object Collection contains %li items").c_str(), iItems);
 			new InfoText(m_fgPageRoot, sNrMaps);
 		}    
 
