@@ -25,8 +25,10 @@ private:
 	int setGeoReference(Event *ev);
 	FormEntry *CheckData();
 	FieldGeoRefExisting *fldGrf;
+	CheckBox * cbOverrule;
 
 	String name;
+	bool fOverrule;
 };
 
 }

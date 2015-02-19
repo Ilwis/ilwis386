@@ -47,11 +47,13 @@ String GeoReferenceTool::getMenuString() const {
 //---------------------------------------------------
 GeoReferenceForm::GeoReferenceForm(CWnd *wPar, ComplexDrawer *dr) : 
 DisplayOptionsForm(dr,wPar,"GeoReference")
+, fOverrule(true)
 {
 	GeoRef gr = dr->getRootDrawer()->getGeoReference();
 	if (gr.fValid())
 		name = gr->fnObj.sFullPath();
 	fldGrf = new FieldGeoRefExisting(root,TR("GeoReference"),&name);
+	cbOverrule = new CheckBox(root, TR("Overrule Map Boundaries"), &fOverrule);
 	create();
 }
 
@@ -75,11 +77,12 @@ FormEntry *GeoReferenceForm::CheckData() {
 }
 void  GeoReferenceForm::apply() {
 	fldGrf->StoreData();
+	cbOverrule->StoreData();
 	FileName fn(name);
 	GeoRef grf(fn);
 	//bool fConvertPossible = grf->fConvertFrom(drw->getRootDrawer()->getGeoReference());
 	//if ( fConvertPossible) {
-		drw->getRootDrawer()->setGeoreference(grf);
+		drw->getRootDrawer()->setGeoreference(grf, fOverrule);
 		view->ClearTree();
 		PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER | NewDrawer::ptNEWCSY);
 		drw->getRootDrawer()->prepare(&pp);
