@@ -148,7 +148,10 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 			}
 			else {
 				Representation rpr = drw->getRepresentation();
-				cRet = Color(rpr->clrRaw(rVal));
+				if (rpr.fValid())
+					cRet = Color(rpr->clrRaw(rVal));
+				else
+					cRet = iRaw; // shouldn't happen, but prevent crash when the rpr is invalid, and at least show the user that something is wrong
 			}
 			setTransparency(rVal, cRet);
 			setTresholdColors(rVal, cRet);
@@ -302,65 +305,69 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 	case NewDrawer::drmIMAGE:
 		{
 			Representation rpr = drw->getRepresentation();
-			if (dataValues.dm()->pdv()) {
-				if (drw->isStretched()) {
-					switch (drw->getStretchMethod())
-					{
-					case LayerDrawer::smLINEAR: {
-						RangeReal rr = getStretchRangeReal();
+			if (rpr.fValid()) {
+				if (dataValues.dm()->pdv()) {
+					if (drw->isStretched()) {
+						switch (drw->getStretchMethod())
+						{
+						case LayerDrawer::smLINEAR: {
+							RangeReal rr = getStretchRangeReal();
+							DomainValueRangeStruct dvrs = dataValues.dvrs();
+							for (long i = 0; i < iLen; ++i) {
+								double v = dataValues.rValByRaw(buf[i], rangeData);
+								Color clr = rpr->clr(v, rr);
+								setTransparency(v, clr);
+								setTresholdColors(v, clr);
+								bufOut[i] = clr.iVal();
+							}
+													} break;
+						case LayerDrawer::smLOGARITHMIC:
+							{
+								RangeReal rr = getStretchRangeReal();
+								double rMax = 1 + rr.rHi() - rr.rLo();
+								rr = RangeReal(0, log(rMax));
+								DomainValueRangeStruct dvrs = dataValues.dvrs();
+								for (long i = 0; i < iLen; ++i){
+									double v = dataValues.rValByRaw(buf[i]);
+									Color clr = rpr->clr(log(1 + dvrs.rValue(v) - rr.rLo()), rr);
+									setTransparency(v, clr);
+									setTresholdColors(v, clr);
+									bufOut[i] = clr.iVal();
+								}
+							} break;
+						}
+					}
+					else if (NewDrawer::drmIMAGE == drw->getDrawMethod()) {
+						RangeReal rr = RangeReal(0, 255);
 						DomainValueRangeStruct dvrs = dataValues.dvrs();
-						for (long i = 0; i < iLen; ++i) {
-							double v = dataValues.rValByRaw(buf[i], rangeData);
+						for (long i = 0; i < iLen; ++i){
+							long v = dvrs.rValue(buf[i]);
 							Color clr = rpr->clr(v, rr);
 							setTransparency(v, clr);
 							setTresholdColors(v, clr);
 							bufOut[i] = clr.iVal();
 						}
-												} break;
-					case LayerDrawer::smLOGARITHMIC:
-						{
-							RangeReal rr = getStretchRangeReal();
-							double rMax = 1 + rr.rHi() - rr.rLo();
-							rr = RangeReal(0, log(rMax));
-							DomainValueRangeStruct dvrs = dataValues.dvrs();
-							for (long i = 0; i < iLen; ++i){
-								double v = dataValues.rValByRaw(buf[i]);
-								Color clr = rpr->clr(log(1 + dvrs.rValue(v) - rr.rLo()), rr);
-								setTransparency(v, clr);
-								setTresholdColors(v, clr);
-								bufOut[i] = clr.iVal();
-							}
-						} break;
 					}
-				}
-				else if (NewDrawer::drmIMAGE == drw->getDrawMethod()) {
-					RangeReal rr = RangeReal(0, 255);
-					DomainValueRangeStruct dvrs = dataValues.dvrs();
-					for (long i = 0; i < iLen; ++i){
-						long v = dvrs.rValue(buf[i]);
-						Color clr = rpr->clr(v, rr);
-						setTransparency(v, clr);
-						setTresholdColors(v, clr);
-						bufOut[i] = clr.iVal();
+					else {
+						DomainValueRangeStruct dvrs = dataValues.dvrs();
+						for (long i = 0; i < iLen; ++i){
+							double v = dataValues.rValByRaw(buf[i]);
+							Color clr = rpr->clr(v);
+							setTransparency(v, clr);
+							setTresholdColors(v, clr);
+							bufOut[i] = clr.iVal();
+						}
 					}
 				}
 				else {
-					DomainValueRangeStruct dvrs = dataValues.dvrs();
-					for (long i = 0; i < iLen; ++i){
-						double v = dataValues.rValByRaw(buf[i]);
-						Color clr = rpr->clr(v);
-						setTransparency(v, clr);
-						setTresholdColors(v, clr);
+					for (long i = 0; i < iLen; ++i) {
+						long v = buf[i];
+						Color clr = rpr->clrRaw(buf[i]).iVal();
 						bufOut[i] = clr.iVal();
 					}
 				}
-			}
-			else {
-				for (long i = 0; i < iLen; ++i) {
-					long v = buf[i];
-					Color clr = rpr->clrRaw(buf[i]).iVal();
-					bufOut[i] = clr.iVal();
-				}
+			} else {
+				memcpy(bufOut, buf, iLen * sizeof(long)); // shouldn't happen, but prevent crash when the rpr is invalid, and at least show the user that something is wrong
 			}
 		} break;
 	case NewDrawer::drmSINGLE: {
