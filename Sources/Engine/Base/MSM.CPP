@@ -163,22 +163,21 @@ long StringManager::LoadLanguageStrings(const String& sModName)
 			fn.sExt = ".eng";
 			fnLangFile = fnFindLng(fn);
 		}
-		if (fnLangFile == FileName()) {
-			//throw LanguageStringError(String("Fatal: Language module not found"));
-		}
 	}
 
-	try
-	{
-		ReadText(fnLangFile.sFullName(), m_mpMessages);
-		if ( fnLangFile.sExt.toLower() != ".eng") {
-			FileName fnDefault(fnLangFile,".eng");
-			ReadText(fnDefault.sFullName(), m_mpMessages_default);
+	if (fnLangFile != FileName() && fnLangFile.fExist()) {
+		try
+		{
+			ReadText(fnLangFile.sFullName(), m_mpMessages);
+			if ( fnLangFile.sExt.toLower() != ".eng") {
+				FileName fnDefault(fnLangFile,".eng");
+				ReadText(fnDefault.sFullName(), m_mpMessages_default);
+			}
 		}
-	}
-	catch (const FileErrorObject&)
-	{
-		//throw LanguageStringError(String("Fatal: Language module could not be opened"));
+		catch (const FileErrorObject&)
+		{
+			//throw LanguageStringError(String("Fatal: Language module could not be opened"));
+		}
 	}
 	// Add module name/number value in associative array
 	long iMod = (long)m_mpModules.size();
