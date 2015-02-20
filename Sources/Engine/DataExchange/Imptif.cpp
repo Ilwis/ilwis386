@@ -170,6 +170,7 @@
 #include "Engine\Applications\objvirt.h"
 #include "Engine\Applications\ModuleMap.h"
 #include "Engine\Base\System\Engine.h"
+#include "Engine\Base\System\RegistrySettings.h"
 
 #define EPS10 1.e-10
 
@@ -1346,8 +1347,21 @@ Domain TiffImporter::dmDetermine()
 	if (tii().iBitsPerSample == 1)
 		return Domain("bit");
 
-	if (tii().iBitsPerSample == 16)
-		return Domain(fnDom, 0L, 32766L);
+	if (tii().iBitsPerSample == 16) {
+		Domain dm (fnDom, 0L, 32766L);
+		IlwisSettings settings("DefaultSettings");
+		String sDefaultRpr = settings.sValue("value", "");
+		FileName fnRpr;
+		if (sDefaultRpr.length() > 0 && File::fExist(sDefaultRpr))
+			fnRpr = FileName(sDefaultRpr);
+		else
+		{
+			FileName fn = IlwisObjectPtr::fnCheckPath(FileName("value.dom"));
+			ObjectInfo::ReadElement("Domain", "Representation", fn, fnRpr);
+		}
+		dm->SetRepresentation(fnRpr);
+		return dm;
+	}
 
 	if	((tii().iBitsPerSample >= 24) || (tii().iSamplesPerPixel > 1))
 		return Domain("Color");
