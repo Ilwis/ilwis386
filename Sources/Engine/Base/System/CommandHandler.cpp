@@ -1016,6 +1016,16 @@ bool CommandHandler::fCmdCalc(const String& sCmd)
 		sType = "pol";
 	else if (fn.sExt == ".mpp")
 		sType = "pnt";
+	else if (fn.sExt == ".hsp")
+		sType = "hsp";
+	else if (fn.sExt == ".hss")
+		sType = "hss";
+	else if (fn.sExt == ".hsa")
+		sType = "hsa";
+	else if (fn.sExt == ".his")
+		sType = "his";
+	else if (fn.sExt == ".stp")
+		sType = "stp";
 	else if (fn.sExt == ".mat")
 		sType = "mat";
 	else if (fn.sExt == ".ioc")
