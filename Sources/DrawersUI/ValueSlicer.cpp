@@ -205,37 +205,30 @@ void ValueSlicer::OnLButtonUp(UINT nFlags, CPoint point) {
 
 void ValueSlicer::OnLButtonDblClk(UINT nFlags, CPoint point) {
 	Color clr1, clr2;
-	if ( fldslicer->selectedIndex == 0) {
-		clr1 = fldslicer->rprgrad->GetColor(0);
-		clr2 = fldslicer->rprgrad->GetColor(1);
-	} else {
-		clr1 = fldslicer->rprgrad->GetColor(fldslicer->selectedIndex*3 );
-		clr2 = fldslicer->rprgrad->GetColor(fldslicer->selectedIndex*3 + 2);
-	}
+	clr1 = fldslicer->rprgrad->GetColor(fldslicer->selectedIndex*2 );
+	clr2 = fldslicer->rprgrad->GetColor(fldslicer->selectedIndex*2 + 1);
 	bool showForm = !rprBase.fValid() || fldslicer->selectedIndex % 2 == 1;
 	if (!showForm)
 		return;
 
 	double v1 = fldslicer->bounds[fldslicer->selectedIndex];
 	double v2 = fldslicer->bounds[fldslicer->selectedIndex+1];
-	SlicingStepColor frm(this,&clr1, &v1, &clr2, &v2);
+	bool v1ChangeAllowed = fldslicer->selectedIndex > 0;
+	bool v2ChangeAllowed = fldslicer->selectedIndex < fldslicer->bounds.size() - 2;
+	SlicingStepColor frm(this,&clr1, &v1, v1ChangeAllowed, &clr2, &v2, v2ChangeAllowed);
 	if ( frm.fOkClicked()) {
 
-		clr1.transparency() = clr2.transparency();
-		int index = fldslicer->selectedIndex * 3;
-		if ( index == 0) {
-			fldslicer->rprgrad->SetLimitColor(0, clr1);
-			fldslicer->rprgrad->SetLimitColor(1, clr2);
-		} else {
-			fldslicer->rprgrad->SetLimitColor(index , clr1);
-			fldslicer->rprgrad->SetLimitColor(index + 1, clr2);
-			fldslicer->rprgrad->SetLimitColor(index + 2, clr2);
-		}
+		clr2.transparency() = clr1.transparency();
+		int index = fldslicer->selectedIndex * 2;
+		fldslicer->rprgrad->SetLimitColor(index, clr1);
+		fldslicer->rprgrad->SetLimitColor(index + 1, clr2);
 		fldslicer->transparency[fldslicer->selectedIndex] = clr2.transparency();
 		RangeReal rr = fldslicer->valrange->rrMinMax();
-		if ( v1 < v2 && v1 >= rr.rLo() && v2 < rr.rHi() && v2 < fldslicer->bounds[fldslicer->selectedIndex + 2]) {
-			moveValue(fldslicer->selectedIndex, v1);
-			moveValue(fldslicer->selectedIndex + 1, v2);
+		if (v1 < v2) {
+			if (v1 >= rr.rLo())
+				moveValue(fldslicer->selectedIndex, v1);
+			if (v2 <= rr.rHi())
+				moveValue(fldslicer->selectedIndex + 1, v2);
 		}
 		Invalidate();
 		updateRepresentations();
@@ -245,12 +238,16 @@ void ValueSlicer::OnLButtonDblClk(UINT nFlags, CPoint point) {
 
 bool ValueSlicer::moveValue(int index, double v) {
 	const double delta = fldslicer->valrange->rrMinMax().rWidth() * SMALL_FACTOR;
-	if (v > (fldslicer->bounds[index - 1] + 2 * delta) && v < (fldslicer->bounds[index + 1] - 2 * delta)) {
+	if ((index > 0) && (index < fldslicer->bounds.size() - 1) && (v > (fldslicer->bounds[index - 1] + 2 * delta)) && (v < (fldslicer->bounds[index + 1] - 2 * delta))) {
 		fldslicer->bounds[index] = v;
-		if ( index > 0)
-			fldslicer->rprgrad->SetLimitValue(index*3 - 2, v - delta);
-		fldslicer->rprgrad->SetLimitValue(index*3 - 1, v);
-		fldslicer->rprgrad->SetLimitValue(index*3, v + delta);
+		if (index == 0) // first two cases (index == 0 and index == fldslicer->bounds.size() - 1) are blocked by "if" above for now, thus not allowing the user to set the total min/max
+			fldslicer->rprgrad->SetLimitValue(0, v);
+		else if (index == fldslicer->bounds.size() - 1)
+			fldslicer->rprgrad->SetLimitValue(index*2 - 1, v);
+		else {
+			fldslicer->rprgrad->SetLimitValue(index*2 - 1, v);
+			fldslicer->rprgrad->SetLimitValue(index*2, v + delta);
+		}
 		return true;
 	} else
 		return false;
@@ -318,13 +315,13 @@ void ValueSlicerSlider::create()
   CreateChildren();
 }
 
-void ValueSlicerSlider::setValueRange(const ValueRange& rng){
+void ValueSlicerSlider::setValueRange(const ValueRange& rng) {
 	if ( bounds.size() == 0)
 		setNumberOfBounds(2);
 	valrange = rng;
 }
 
-void ValueSlicerSlider::setBound(int index , double v){
+void ValueSlicerSlider::setBound(int index, double v){
 	if ( v > valrange->rrMinMax().rHi() || v  < valrange->rrMinMax().rLo() )
 		return;
 	if ( bounds.size() < index)
@@ -337,8 +334,7 @@ void ValueSlicerSlider::setBound(int index , double v){
 		before = bounds[0];
 	if ( v > before && v < after)
 		bounds[index] = v;
-	init();
-	
+	init();	
 }
 
 void ValueSlicerSlider::LayerDrawer(ILWIS::LayerDrawer *dr) {
@@ -356,18 +352,6 @@ void ValueSlicerSlider::setNumberOfBounds(int n) {
 
 bool ValueSlicerSlider::isValid() const {
 	return valrange.fValid() && drawer!= 0;
-}
-
-void ValueSlicerSlider::setBoundColor(int index, Color c, int tranp) {
-	if ( index < bounds.size() -1) {
-		rprgrad->SetLimitColor(index*3,c);
-		rprgrad->SetLimitColor(index*3 + 1,c);
-		transparency[index] = tranp;
-		if ( valueslicer) {
-			valueslicer->Invalidate();
-			valueslicer->updateRepresentations();
-		}
-	}
 }
 
 void ValueSlicerSlider::init() {
@@ -390,16 +374,13 @@ void ValueSlicerSlider::init() {
 			bounds.push_back(valrange->rrMinMax().rHi());
 			transparency.push_back(0);
 			transparency.push_back(0);
-			Color clr2 = lowColor;
+			Color clrPrev = lowColor;
 			for(int i=1; i < nrBounds; ++i) {
 				double limit = valrange->rrMinMax().rLo() +  i * (valrange->rrMinMax().rWidth() / nrBounds);
-				Color clr1 = nextColor(i);
-				insertLimit(limit, clr2, clr2);
-				clr2 = clr1;
+				Color clrNext = getColor(i);
+				insertLimit(limit, clrPrev, clrNext);
+				clrPrev = clrNext;				
 			}
-			double delta = valrange->rrMinMax().rWidth() * SMALL_FACTOR;
-			rprgrad->insert(valrange->rrMinMax().rHi() - delta, highColor, RepresentationGradual::crLOWER);
-			rprgrad->SetColorMethod(rprgrad->iLimits()-3,RepresentationGradual::crSTRETCH);
 			rprCreated = true;
 			rpr->Store();
 		}
@@ -431,16 +412,13 @@ void ValueSlicerSlider::init() {
 	}
 }
 
-void ValueSlicerSlider::insertLimit(double rValue1, const Color& clr1, const Color& clr2) {
-	int index = rprgrad->insert(rValue1, clr1, RepresentationGradual::crUPPER);
+void ValueSlicerSlider::insertLimit(double rValue, const Color& clrPrev, const Color& clrNext) {
+	int index = rprgrad->insert(rValue, clrPrev, RepresentationGradual::crUPPER);
 	if ( index == iUNDEF)
 		return;
-	rprgrad->SetLimitColor(index - 1, clr2);
-	Color clr3 = rprgrad->GetColor(index + 1);
-	index = insertBound(rValue1);
+	index = insertBound(rValue);
 	double delta = valrange->rrMinMax().rWidth() * SMALL_FACTOR;
-	rprgrad->insert(bounds[index] - delta, clr2, RepresentationGradual::crLOWER);
-	rprgrad->insert(bounds[index] + delta, clr3, RepresentationGradual::crSTRETCH);
+	rprgrad->insert(bounds[index] + delta, clrNext, RepresentationGradual::crSTRETCH);
 }
 
 int ValueSlicerSlider::insertBound(double rValue) {
@@ -461,17 +439,17 @@ int ValueSlicerSlider::insertBound(double rValue) {
 	return index;
 }
 
-Color ValueSlicerSlider::nextColor(int i) {
+Color ValueSlicerSlider::getColor(int i) {
 	if ( highColor == colorUNDEF || lowColor == colorUNDEF)
 		return colorUNDEF;
 	int deltar = highColor.red() - lowColor.red();
 	int deltag = highColor.green() - lowColor.green();
 	int deltab = highColor.blue() - lowColor.blue();
 	int deltat = highColor.transparency() - lowColor.transparency();
-	int rstep = deltar / nrBounds;
-	int gstep = deltag / nrBounds;
-	int bstep = deltab / nrBounds;
-	int tstep = deltat / nrBounds;
+	int rstep = deltar / (nrBounds - 1);
+	int gstep = deltag / (nrBounds - 1);
+	int bstep = deltab / (nrBounds - 1);
+	int tstep = deltat / (nrBounds - 1);
 	return Color(lowColor.red() + rstep * i, lowColor.green() + gstep * i, lowColor.blue() + bstep * i, lowColor.transparency() + tstep * i);
 }
 
@@ -499,17 +477,27 @@ void ValueSlicerSlider::setFileNameRpr(const FileName& fn) {
 }
 
 //----------------------------------------------------------
-SlicingStepColor::SlicingStepColor(CWnd* parent, Color* clrLow, double *v1, Color*clrHigh, double *v2) :
+SlicingStepColor::SlicingStepColor(CWnd* parent, Color* clrLow, double *v1, bool _fv1Enabled, Color*clrHigh, double *v2, bool _fv2Enabled) :
 FormWithDest(parent, TR("Step Color"))
+, fv1Enabled(_fv1Enabled)
+, fv2Enabled(_fv2Enabled)
 {
-	FieldColor *fc1 = new FieldColor(root,TR("Step Color low"), clrLow,false);
-	FieldReal *fr1 = new FieldReal(root,"",v1);
-	fr1->Align(fc1, AL_AFTER);
-	if ( clrHigh != 0) {
-		FieldColor *fc2  = new FieldColor(root,TR("Step Color high"), clrHigh, true);
-		FieldReal *fr2 = new FieldReal(root,"",v2);
-		fr2->Align(fr1, AL_UNDER);
-		fc2->Align(fc1, AL_UNDER);
-	}
+	FieldColor *fc2 = new FieldColor(root,TR("Step Color high"), clrHigh, false);
+	fr2 = new FieldReal(root,"",v2);
+	fr2->Align(fc2, AL_AFTER);
+	FieldColor *fc1 = new FieldColor(root,TR("Step Color low"), clrLow, true);
+	fr1 = new FieldReal(root,"",v1);
+	fr1->Align(fr2, AL_UNDER);
+	fc1->Align(fc2, AL_UNDER);
 	create();
+}
+
+BOOL SlicingStepColor::OnInitDialog()
+{
+	FormWithDest::OnInitDialog();
+	if (!fv1Enabled)
+		fr1->Disable();
+	if (!fv2Enabled)
+		fr2->Disable();
+	return TRUE;
 }

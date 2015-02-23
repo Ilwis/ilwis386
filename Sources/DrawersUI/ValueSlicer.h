@@ -47,16 +47,15 @@ public:
 	bool isValid() const;
 	void setHighColor(Color c);
 	void setLowColor(Color c);
-	void setBoundColor(int index, Color c, int tranp=0);
 	void setRprBase(const Representation& rprB);
 	Representation getRpr() const;
 	void setFileNameRpr(const FileName& fn);
 	
 private:
 	void init();
-	void insertLimit(double rValue1, const Color& clr1, const Color& clr2);
+	void insertLimit(double rValue, const Color& clrPrev, const Color& clrNext);
 	int insertBound(double rValue);
-	Color nextColor(int i);
+	Color getColor(int i);
 	ValueSlicer *valueslicer;
 	ValueRange valrange;
 	ILWIS::LayerDrawer *drawer;
@@ -76,7 +75,11 @@ private:
 //----------------------------
 class SlicingStepColor : public FormWithDest {
 public:
-	SlicingStepColor(CWnd* parent, Color* clrLow, double *v1, Color*clrHigh, double *v2) ;
-
-	//int exec();
+	SlicingStepColor(CWnd* parent, Color* clrLow, double *v1, bool _fv1Enabled, Color*clrHigh, double *v2, bool _fv2Enabled);
+	virtual BOOL OnInitDialog();
+private:
+	FieldReal *fr1;
+	FieldReal *fr2;
+	bool fv1Enabled;
+	bool fv2Enabled;
 };
