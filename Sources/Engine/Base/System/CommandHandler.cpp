@@ -2928,7 +2928,7 @@ void CommandHandler::CreateCsy()
 
 void CommandHandler::CreateFil()
 {
-	ReroutPost("createfilter");
+	ReroutPost("createfil");
 }
 
 void CommandHandler::CreateIsl()
