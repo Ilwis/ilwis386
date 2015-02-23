@@ -312,6 +312,7 @@ void RepresentationGradual::SetColorMethod(int iIndex, ColorRange cm)
 	ISTRUE(fIGreaterEqual, iIndex, 0); // upper lower may not be changed
 	ISTRUE(fILess, iIndex, (int)arLimits.iSize());
 	acr[iIndex] = cm;
+	init();
 }
 
 void RepresentationGradual::SetLimitColor(int iIndex, Color c)
