@@ -618,7 +618,7 @@ void RepresentationValueLB::DrawItem( LPDRAWITEMSTRUCT dis )
 				CRect rctBlock(rct.left, rct.top, rct.left + iOffset, rct.bottom);
 				for(int iBlock = 0; iBlock < iSteps + 1; ++iBlock)
 				{
-					int iIndex = (i - 1) * iSteps + iBlock + 1;
+					int iIndex = rgDoc->iGetColorIndex( i-1 ) + iBlock;
 					Color clrDraw = rgDoc->rpr()->clrRaw(iIndex);
 					CBrush brush(clrDraw);
 					dc.FillRect(rctBlock, &brush);
