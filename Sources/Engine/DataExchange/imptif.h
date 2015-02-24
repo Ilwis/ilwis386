@@ -109,6 +109,14 @@
 #include "Engine\DataExchange\Convloc.h"
 #include "Engine\Representation\Rprclass.h"
 
+class TiffElementMap : public map<string, map<string, String> >
+{
+public:
+	String getValue(const string& sSection, const string& sKey);
+	String getValueEx(const string& sSection, string& sKeyOrSubstring);
+	void Serialize(CArchive&);
+};
+
 #define CSTypeProjected  1
 #define CSTypeGeographic  2
 #define CSTypeGeocentric  3
@@ -269,16 +277,16 @@ protected:
 	void     InitCoordTrans();
 	void     InitProjParam();
 
-	String	    sReadProfileInfo(const DefType dt, const String& sSection, const String& sKey);
+	String	    sReadProfileInfo(const DefType dt, const String& sSection, String& sKey);
 	bool		fFindUTMInfo(String& sDatum, long& iUTMZone, bool& fNorthHemis);
 	bool		fFindDatumInfo(String& sDatum);
 	bool		fFindEllipsoidInfo(String& sEllipsoid);
 
 private:
 	TiffImporter* m_ITC;
-	ElementContainer m_ecDef;
-	ElementContainer m_ecDatum;
-	ElementContainer m_ecEllipsoid;
+	TiffElementMap m_temDef;
+	TiffElementMap m_temDatum;
+	TiffElementMap m_temEllipsoid;
 
 	String   m_sPathGeoDef;  // path of geotiff.def file
 	String   m_sPathDatDef;  // path of datum.def file

@@ -172,6 +172,59 @@
 #include "Engine\Base\System\Engine.h"
 #include "Engine\Base\System\RegistrySettings.h"
 
+String TiffElementMap::getValue(const string& sSection, const string& sKey)
+{
+	map<string, map<string, String> >::iterator section = find(sSection);
+	if (section != end()) {
+		map<string, String>::iterator value = section->second.find(sKey);
+		if (value != section->second.end())
+			return value->second;
+	}
+	return "";
+}
+
+String TiffElementMap::getValueEx(const string& sSection, string& sKeyOrSubstring)
+{
+	map<string, map<string, String> >::iterator section = find(sSection);
+	if (section != end()) {
+		map<string, String>::iterator value = section->second.find(sKeyOrSubstring);
+		if (value != section->second.end())
+			return value->second;
+		for (value = section->second.begin(); value != section->second.end(); ++value) {
+			if (value->second.find(sKeyOrSubstring) != -1) {
+				sKeyOrSubstring = value->first;
+				return value->second;
+			}
+		}
+	}
+	return "";
+}
+
+void TiffElementMap::Serialize(CArchive& ar)
+{
+	if (ar.IsLoading())
+	{
+		String sSection, sEntry, sValue;
+		CString str;
+		while (ar.ReadString(str)) 
+		{
+			if (str == "")
+				continue;
+			if (str[0] == '[') {
+				int i = str.Find(']');
+				sSection = str.Mid(1, i-1);
+			}
+			else {
+				int i = str.Find('=');
+				sEntry = str.Left(i);
+				sValue = str.Mid(i+1);
+				(operator[](sSection))[sEntry] = sValue;
+				//operator()(sSection, sEntry) = sValue;
+			}
+		}
+	}
+}
+
 #define EPS10 1.e-10
 
 // SwappableField
@@ -413,18 +466,15 @@ void GeoTiffInfo::SetOwner(TiffImporter* ITC)
 
 	CFile cfGeotiff(m_sPathGeoDef.c_str(), CFile::modeRead);
 	CArchive ca(&cfGeotiff, CArchive::load);
-	m_ecDef.em = new ElementMap;    // m_ecDef will delete the element map
-	m_ecDef.em->Serialize(ca);
+	m_temDef.Serialize(ca);
 
 	CFile cfDatum(m_sPathDatDef.c_str(), CFile::modeRead);
 	CArchive ca2(&cfDatum, CArchive::load);
-	m_ecDatum.em = new ElementMap;  // m_ecDatum will delete the element map
-	m_ecDatum.em->Serialize(ca2);
+	m_temDatum.Serialize(ca2);
 
 	CFile cfEllipsoid(m_sPathEllDef.c_str(), CFile::modeRead);
 	CArchive ca3(&cfEllipsoid, CArchive::load);
-	m_ecEllipsoid.em = new ElementMap;  // m_ecEllipsoid will delete the element map
-	m_ecEllipsoid.em->Serialize(ca3);
+	m_temEllipsoid.Serialize(ca3);
 }
 
 void GeoTiffInfo::ReadGeoTiffInfo()
@@ -499,10 +549,10 @@ void GeoTiffInfo::ReadGeoTiffInfo()
 
 bool GeoTiffInfo::fFindDatumInfo(String& sDatum)
 {
-	if (fCIStrEqual(m_sProjCS.sHead(" \t"), "PCS"))
-		sDatum = m_sProjCS.sTail(" \t");
-	else if (!fCIStrEqual(m_sGeogCS.sHead(" \t"), "GCSE"))
-		sDatum = m_sGeogCS.sTail(" \t");
+	if (fCIStrEqual(m_sProjCS.sHead(" "), "PCS"))
+		sDatum = m_sProjCS.sTail(" ");
+	else if (!fCIStrEqual(m_sGeogCS.sHead(" "), "GCSE"))
+		sDatum = m_sGeogCS.sTail(" ");
 	else
 		return false;
 
@@ -515,10 +565,10 @@ bool GeoTiffInfo::fFindDatumInfo(String& sDatum)
 
 bool GeoTiffInfo::fFindEllipsoidInfo(String& sEllipsoid)
 {
-	if (!fCIStrEqual(m_sGeogCSE.sHead(" \t"), "GCSE"))
+	if (!fCIStrEqual(m_sGeogCSE.sHead(" "), "GCSE"))
 		return false;
 
-	sEllipsoid = m_sGeogCSE.sTail(" \t");
+	sEllipsoid = m_sGeogCSE.sTail(" ");
 
 	String sEll = sReadProfileInfo(defELLIPSOID, String("Ellipsoids"), sEllipsoid);
 	if (sEll.length() == 0)
@@ -783,22 +833,21 @@ GeoRef GeoTiffInfo::grf(CoordSystem& csy, RowCol rc)
 	return gr;
 }
 
-String GeoTiffInfo::sReadProfileInfo(const DefType dt, const String& sSection, const String& sKey)
+String GeoTiffInfo::sReadProfileInfo(const DefType dt, const String& sSection, String& sKey)
 {
-	ElementMap* em;
 	switch (dt)
 	{
 		case defGEOTIFF:
-			em = m_ecDef.em;
+			return m_temDef.getValue(sSection, sKey);
 			break;
 		case defDATUM:
-			em = m_ecDatum.em;
+			return m_temDatum.getValueEx(sSection, sKey);
 			break;
 		case defELLIPSOID:
-			em = m_ecEllipsoid.em;
+			return m_temEllipsoid.getValueEx(sSection, sKey);
 			break;
 	}
-	return (*em)(sSection, sKey);
+	return "";
 }
 
 String GeoTiffInfo::sCSProj(int iCSProjID)
