@@ -112,8 +112,8 @@ public:
     String _export       sTrimSpaces(bool removeCRLF=false) const; // at begin and end of string!
     String _export       &toLower();
     String _export       &toUpper();
-  	String _export       sTail(const String& sDelim) const;
-  	String _export       sHead(const String& sDelim) const;
+  	String _export       sTail(const String& sSearchString) const;
+  	String _export       sHead(const String& sSearchString) const;
 
     String _export       sQuote(bool fAlways = false, int iLoc = iUNDEF) const; // if false than it puts only quotes if needed, iLoc = from where
     String _export       sUnQuote() const;

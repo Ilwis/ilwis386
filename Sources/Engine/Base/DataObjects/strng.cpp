@@ -714,19 +714,19 @@ void Combine(String& s, const Array<String>& as, char cDelimiter)
 }
 
 
-String String::sHead(const String& sDelim) const
+String String::sHead(const String& sSearchString) const
 {
-  int iPlace=find_first_of(sDelim);
+  int iPlace=find(sSearchString);
   if (iPlace == -1) iPlace=size();
   return substr(0, iPlace);
 }
 
-String String::sTail(const String& sDelim) const
+String String::sTail(const String& sSearchString) const
 {
-  int iPlace=find_first_of(sDelim);
+  int iPlace=find(sSearchString);
   if (iPlace == -1) return "";
-  if (iPlace + sDelim.size() > size()) return "";
-  return substr(iPlace+sDelim.size());
+  if (iPlace + sSearchString.size() > size()) return "";
+  return substr(iPlace+sSearchString.size());
 }
 
 String String::sQuote(bool fAlways /* = false*/, int iLoc /*=iUNDEF*/) const
