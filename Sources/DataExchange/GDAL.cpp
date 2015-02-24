@@ -1613,7 +1613,10 @@ void GDALFormat::getImportFormats(vector<ImportFormat>& formats) {
 			frm.type = ImportFormat::ifRaster;
 			const char *cext = funcs.getMetaDataItem(driv,GDAL_DMD_EXTENSION,NULL);
 			String ext("%s", cext != NULL ? cext : "*");
-			frm.ext = ext;
+			if (ext == "tif")
+				frm.ext = "tif/tiff";
+			else
+				frm.ext = ext;
 			frm.provider = frm.method = "GDAL";
 			frm.useasSuported = true;
 			frm.ui = NULL;
