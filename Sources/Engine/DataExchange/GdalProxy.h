@@ -35,6 +35,9 @@ typedef OGRErr (__stdcall *OSRExportToPrettyWktFunc)(OGRSpatialReferenceH ,char 
 typedef double (*OSRGetProjParmFunc)(OGRSpatialReferenceH,const char *pszName,double dfDefaultValue,OGRErr * 	pnErr);
 typedef int (*VSIFCloseLFunc)( FILE * );
 typedef FILE* (*VSIFileFromMemBufferFunc)( const char *, GByte *, vsi_l_offset ,int  );
+typedef int (__stdcall *GDALGetGCPCountFunc)(GDALDatasetH);
+typedef const char* (__stdcall *GDALGetGCPProjectionFunc)(GDALDatasetH);
+typedef const GDAL_GCP* (__stdcall *GDALGetGCPsFunc)(GDALDatasetH);
 
 typedef  OGRDataSourceH (*OGROpenFunc)(const char *, int, OGRSFDriverH *);
 typedef void (__stdcall *OGRRegisterAllFunc)();
@@ -115,6 +118,9 @@ public:
 	OSRGetProjParmFunc getProjParam;
 	VSIFCloseLFunc vsiClose;
 	VSIFileFromMemBufferFunc vsiFileFromMem;
+	GDALGetGCPCountFunc getGCPCount;
+	GDALGetGCPProjectionFunc getGCPProjection;
+	GDALGetGCPsFunc getGCPs;
 
 	//ogr
 	OGROpenFunc ogrOpen;

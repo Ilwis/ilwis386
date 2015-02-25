@@ -67,6 +67,9 @@ typedef int (__stdcall *GDALGetDriverCountFunc)(void);
 typedef const char* (__stdcall *GDALGetDriverLongNameFunc)(GDALDriverH dr);
 typedef const char* (__stdcall *GDALGetDriverShortNameFunc)(GDALDriverH dr);
 typedef const char* (__stdcall *GDALGetMetadataItemFunc)(GDALMajorObjectH hObject, const char *pszName, const char *pszDomain); 
+typedef int (__stdcall *GDALGetGCPCountFunc)(GDALDatasetH);
+typedef const char* (__stdcall *GDALGetGCPProjectionFunc)(GDALDatasetH);
+typedef const GDAL_GCP* (__stdcall *GDALGetGCPsFunc)(GDALDatasetH);
 
 typedef const char* (__stdcall *CPLGetLastErrorFunc)(void);
 
@@ -135,6 +138,9 @@ struct GDALCFunctions {
 	GDALGetMetadataItemFunc getMetaDataItem;
 	OSRSetWellKnownGeogCSFunc fromCode;
 	OSRImportFromEPSGFunc fromEPSG;
+	GDALGetGCPCountFunc getGCPCount;
+	GDALGetGCPProjectionFunc getGCPProjection;
+	GDALGetGCPsFunc getGCPs;
 
 	CPLGetLastErrorFunc errorMsg;
 

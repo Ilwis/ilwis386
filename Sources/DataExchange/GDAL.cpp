@@ -71,6 +71,7 @@
 #include "Engine\Map\Point\PNT.H"
 #include "Engine\DataExchange\ForeignFormat.h"
 #include "Engine\SpatialReference\Grcornrs.h"
+#include "Engine\SpatialReference\Grctppla.h"
 #include "Engine\Base\File\Directory.h"
 #include "Engine\Map\Raster\Map.h"
 #include "Engine\Map\Raster\MapList\maplist.h"
@@ -471,6 +472,9 @@ void GDALFormat::LoadMethods() {
 				funcs.getDriverLongName = (GDALGetDriverLongNameFunc)GetProcAddress(hm,"_GDALGetDriverLongName@4");
 				funcs.getDriverShortName = (GDALGetDriverShortNameFunc)GetProcAddress(hm,"_GDALGetDriverShortName@4");
 				funcs.getMetaDataItem = (GDALGetMetadataItemFunc)GetProcAddress(hm,"_GDALGetMetadataItem@12");
+				funcs.getGCPCount = (GDALGetGCPCountFunc)GetProcAddress(hm,"_GDALGetGCPCount@4");
+				funcs.getGCPProjection = (GDALGetGCPProjectionFunc)GetProcAddress(hm,"_GDALGetGCPProjection@4");
+				funcs.getGCPs = (GDALGetGCPsFunc)GetProcAddress(hm,"_GDALGetGCPs@4");
 
 				funcs.errorMsg = (CPLGetLastErrorFunc)GetProcAddress(hm, "_CPLGetLastErrorMsg@0");
 
@@ -1084,12 +1088,50 @@ void GDALFormat::GetGeoRef(GeoRef& grf)
 		cs->cb = grf->cs()->cb;
 		cs->Updated();
 		grf->cs()->Updated();
-	}
-	else
-	{
-		grf = GeoRef(rcSize);
-		CoordSystem cs = GetCoordSystem();
-		grf->SetCoordSystem(cs);
+	} else {
+		int iNrTiePoints = funcs.getGCPCount(dataSet);
+		if (iNrTiePoints > 0) {
+			lock.Unlock();
+			const GDAL_GCP* amtp = funcs.getGCPs(dataSet);
+			FileName fnG(fnBaseOutputName, ".grf");
+			FileName fnGeo(FileName::fnUnique(fnG));
+			FileName fnM(fnBaseOutputName, ".mpr");
+			String wkt(funcs.getGCPProjection(dataSet));
+			CoordSystem cs = getEngine()->gdal->getCoordSystem(fnBaseOutputName,wkt);
+			GeoRefCTPplanar* gcp = new GeoRefCTPplanar(fnGeo, cs, rcSize, true);
+			gcp->fnBackgroundMap = fnM;
+			Coord cRowCol;
+			Coord cTie;
+			CoordBounds cbTieLimits;
+			for (int i = 0; i < iNrTiePoints; i++) {
+				cTie.x = amtp[i].dfGCPX;
+				cTie.y = amtp[i].dfGCPY;
+				cRowCol.x = amtp[i].dfGCPLine; // this is the way it is; cRowCol.x = rows = vertical and cRowCol.y = columns = horizontal
+				cRowCol.y = amtp[i].dfGCPPixel;
+				gcp->AddRec(cRowCol, cTie);
+				cbTieLimits += cTie;
+			}
+			if ( cs->pcsLatLon() && abs(cbTieLimits.cMin.y) > 360 && cs != CoordSystem("Unknown")) {
+				cs->fErase = true;
+				collection->Remove(cs->fnObj);
+				cs = CoordSystem("Unknown");
+				gcp->SetCoordSystem(cs); // is 
+			} else {
+				AddNewFiles(cs->fnObj);
+			}
+			grf.SetPointer(gcp);
+			grf->SetDescription(String(TR("GeoReference from %S, using GDAL").c_str(), fnGetForeignFile().sRelative()));
+			cs->cb.cMin = cbTieLimits.cMin;
+			cs->cb.cMax = cbTieLimits.cMax;
+			cs->Updated();
+			grf->cs()->Updated();
+			grf->Updated();
+		} else {
+			lock.Unlock();
+			grf = GeoRef(rcSize);
+			CoordSystem cs = GetCoordSystem();
+			grf->SetCoordSystem(cs);
+		}
 	}
 	grf->Store();
 	//AddedFiles.insert(grf->fnObj.sFullPathQuoted());

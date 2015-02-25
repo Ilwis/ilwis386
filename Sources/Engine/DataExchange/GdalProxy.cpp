@@ -52,6 +52,9 @@ void GdalProxy::loadMethods(const String& ilwDir) {
 				getProjParam = (OSRGetProjParmFunc)GetProcAddress(hm,"OSRGetProjParm");
 				vsiClose = (VSIFCloseLFunc)GetProcAddress(hm,"VSIFCloseL");
 				vsiFileFromMem = (VSIFileFromMemBufferFunc)GetProcAddress(hm,"VSIFileFromMemBuffer");
+				getGCPCount = (GDALGetGCPCountFunc)GetProcAddress(hm,"_GDALGetGCPCount@4");
+				getGCPProjection = (GDALGetGCPProjectionFunc)GetProcAddress(hm,"_GDALGetGCPProjection@4");
+				getGCPs = (GDALGetGCPsFunc)GetProcAddress(hm,"_GDALGetGCPs@4");
 
 				ogrOpen = (OGROpenFunc)GetProcAddress(hm,"OGROpen");
 				ogrRegAll = (OGRRegisterAllFunc)GetProcAddress(hm,"OGRRegisterAll");
