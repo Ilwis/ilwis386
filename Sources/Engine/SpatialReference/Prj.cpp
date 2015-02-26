@@ -72,7 +72,9 @@
 #include "Engine\SpatialReference\CYLEQARE.H"
 #include "Engine\SpatialReference\LPOLEQA.H"
 #include "Engine\SpatialReference\LAEA.H"
-#include "Engine\SpatialReference\lafrance.h "
+#include "Engine\SpatialReference\lafrance.h"
+#include "Engine\SpatialReference\LaBelge08.h"
+#include "Engine\SpatialReference\LaBelge72.h"
 #include "Engine\SpatialReference\MERC.H"
 #include "Engine\SpatialReference\MERCscaled.h"
 #include "Engine\SpatialReference\MILLER.H"
@@ -214,7 +216,11 @@ ProjectionPtr* ProjectionPtr::create(const String& sName, const Ellipsoid& ell)
   else if (_stricmp("Hammer Aitoff", sName.c_str()) == 0)
     ptr = new	ProjectionHammerAitoff(ell);
   else if (_stricmp("Lambert Conform Conic France", sName.c_str()) == 0)
-    ptr = new ProjectionLaFrance(ell);   
+    ptr = new ProjectionLaFrance(ell);
+  else if (_stricmp("Lambert Conform Conic Belgium 2008", sName.c_str()) == 0)
+    ptr = new ProjectionLaBelge2008(ell);
+  else if (_stricmp("Lambert Conform Conic Belgium 1972", sName.c_str()) == 0)
+    ptr = new ProjectionLaBelge1972(ell);
   else if (_stricmp("Lambert Azimuthal EqualArea", sName.c_str()) == 0)
     ptr = new ProjectionLambAzimEqualArea(ell);
   else if (_stricmp("Lambert Conformal Conic", sName.c_str()) == 0)
