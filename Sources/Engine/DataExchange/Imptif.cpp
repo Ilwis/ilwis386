@@ -464,15 +464,15 @@ void GeoTiffInfo::SetOwner(TiffImporter* ITC)
 {
 	m_ITC = ITC;
 
-	CFile cfGeotiff(m_sPathGeoDef.c_str(), CFile::modeRead);
+	CFile cfGeotiff(m_sPathGeoDef.c_str(), CFile::modeRead | CFile::shareDenyWrite);
 	CArchive ca(&cfGeotiff, CArchive::load);
 	m_temDef.Serialize(ca);
 
-	CFile cfDatum(m_sPathDatDef.c_str(), CFile::modeRead);
+	CFile cfDatum(m_sPathDatDef.c_str(), CFile::modeRead | CFile::shareDenyWrite);
 	CArchive ca2(&cfDatum, CArchive::load);
 	m_temDatum.Serialize(ca2);
 
-	CFile cfEllipsoid(m_sPathEllDef.c_str(), CFile::modeRead);
+	CFile cfEllipsoid(m_sPathEllDef.c_str(), CFile::modeRead | CFile::shareDenyWrite);
 	CArchive ca3(&cfEllipsoid, CArchive::load);
 	m_temEllipsoid.Serialize(ca3);
 }
