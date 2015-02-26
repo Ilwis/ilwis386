@@ -111,16 +111,6 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenc
 		//getEngine()->gdal->wktPretty(handle,&wkt,FALSE);
 		if ( dn != "" && dn != sUNDEF)
 			csp->datum = new MolodenskyDatum(dn,"");
-		String projName(getAttribute(handle, "Projection",0));
-		if ( projName == "Oblique_Stereographic")
-			projName = "Stereographic";
-		if ( projName == "Lambert_Conformal_Conic_2SP")
-			projName = "Lambert Conformal Conic";
-		if ( projName == "Polar_Stereographic")
-			projName = "StereoPolar";
-		if ( projName == "Albers_Conic_Equal_Area")
-			projName = "Albers EqualArea Conic";
-		replace(projName.begin(), projName.end(),'_',' ');
 
 		String spheroid = getEngine()->gdal->getAttribute(handle,"SPHEROID",0);
 		try {
@@ -136,8 +126,6 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenc
 				throw ErrorObject(String(TR("Ellipsoid %S could not be found").c_str(),spheroid));
 			csp->ell = Ellipsoid(ma, ifl);
 			//csp->ell.sName = spheroid;
-
-
 		} 
 		OGRErr err = CP_NONE;
 		double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",rUNDEF,&err);
@@ -147,6 +135,21 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenc
 		double lattOfOrigin = getEngine()->gdal->getProjParam(handle, "latitude_of_origin",rUNDEF,&err);
 		double stParal1 = getEngine()->gdal->getProjParam(handle, "standard_parallel_1",rUNDEF,&err);
 		double stParal2 = getEngine()->gdal->getProjParam(handle, "standard_parallel_2",rUNDEF,&err);
+		String projName(getAttribute(handle, "Projection",0));
+		if ( projName == "Oblique_Stereographic")
+			projName = "Stereographic";
+		else if ( projName == "Lambert_Conformal_Conic_2SP")
+			projName = "Lambert Conformal Conic";
+		else if ( projName == "Lambert_Conformal_Conic_1SP") {
+			projName = "Lambert Conformal Conic";
+			stParal1 = lattOfOrigin;
+			stParal2 = lattOfOrigin;
+		}
+		else if ( projName == "Polar_Stereographic")
+			projName = "StereoPolar";
+		else if ( projName == "Albers_Conic_Equal_Area")
+			projName = "Albers EqualArea Conic";
+		replace(projName.begin(), projName.end(),'_',' ');
 		if ( projName == "StereoPolar" && easting == 2000000.) // one of those exceptions
 			projName = "UPS";
 		csp->prj = Projection(projName,csp->ell);
