@@ -103,9 +103,9 @@ void TableStoreIlwis3::load(const FileName& fnODF, const String& prfix){
 	clock_t time1 = clock();
 	int count;
 	ObjectInfo::ReadElement(S(prefix + "Table"),"Columns",fnODF, count);
-	setColCount(count);
+	setColCount(count != shUNDEF ? count : 0);
 	ObjectInfo::ReadElement(S(prefix + "Table"),"Records",fnODF, count);
-	setRowCount(count);
+	setRowCount(count != shUNDEF ? count : 0);
 	ObjectInfo::ReadElement(S(prefix + "TableStore"), "Data", fnODF, fnData);
 	recordSize = 0;
 	bool simpleDataTypes = true;

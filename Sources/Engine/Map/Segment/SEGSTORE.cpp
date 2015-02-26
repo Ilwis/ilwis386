@@ -124,7 +124,8 @@ SegmentMapStore::SegmentMapStore(const FileName& fn, SegmentMapPtr& p, bool fCre
 			int colMinCrd = tbl.index("MinCoords");
 			int colMaxCrd = tbl.index("MaxCoords");
 			int colCoords = tbl.index("Coords");
-			tbl.sharedValue(colCoords,true);
+			if (colCoords != iUNDEF)
+				tbl.sharedValue(colCoords,true);
 			int colDeleted = tbl.index("Deleted");
 			int colValue = tbl.index("SegmentValue");
 			Tranquilizer trq("Loading data");
