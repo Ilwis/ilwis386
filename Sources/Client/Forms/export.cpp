@@ -202,7 +202,7 @@ void FieldExportFormat::create()
 {
   FieldOneSelect::create();
   for (int i = 0; i < aei.iSize(); ++i)
-    ose->AddString(aei[i].sDescr.c_str());
+    ose->AddString(aei[i].sDescription.c_str());
   ose->SetCurSel(0);
 }
 
@@ -242,9 +242,9 @@ private:
 	bool                  fInMethodCallback;
 };
 
-ExportForm::ExportForm(CWnd* wPar, Exporting* export, String* sNam, String* sCmd, String* sOutput)
+ExportForm::ExportForm(CWnd* wPar, Exporting* exporting, String* sNam, String* sCmd, String* sOutput)
 : FormWithDest(wPar, TR("Export")), 
-  exp(export), sName(sNam), sCommand(sCmd), iExportMethod(0), fInMethodCallback(false)
+  exp(exporting), sName(sNam), sCommand(sCmd), iExportMethod(0), fInMethodCallback(false)
 {
 	sObjectName = *sName;
 	sOutputName = sOutput;
@@ -552,6 +552,7 @@ int ExportForm::exec()
 	IlwisSettings settings("ImportExport\\Export");
 
 	String s;
+	String sOutputExt;
 	if (fn.sExt == ".mpr")
 	{
 		ExportItem ei;
@@ -570,7 +571,8 @@ int ExportForm::exec()
 			exp->expRas[iOption];
 		}
 		*sCommand = ei.sCmd;
-		s = ei.sDescr;
+		s = ei.sDescription;
+		sOutputExt = ei.sExt;
 		if (2 == iExportMethod) // GeoGateway
 			settings.SetValue("RasterExportGeoGateway", s.sLeft(s.length() - 5));
 		else if (1 == iExportMethod) // GDAL
@@ -581,42 +583,44 @@ int ExportForm::exec()
 	else if (fn.sExt == ".mps")
 	{
 		*sCommand = exp->expSeg[iOption].sCmd;
-		s = exp->expSeg[iOption].sDescr;
+		s = exp->expSeg[iOption].sDescription;
 		settings.SetValue("SegmentExport", s.sLeft(s.length() - 5));
 	}
 	else if (fn.sExt == ".mpa")
 	{
 		*sCommand = exp->expPol[iOption].sCmd;
-		s =  exp->expPol[iOption].sDescr;
+		s =  exp->expPol[iOption].sDescription;
 		settings.SetValue("PolygonExport", s.sLeft(s.length() - 5));
 	}
 	else if (fn.sExt == ".mpp")
 	{
 		*sCommand = exp->expPnt[iOption].sCmd;
-		s = exp->expPnt[iOption].sDescr;
+		s = exp->expPnt[iOption].sDescription;
 		settings.SetValue("PointExport", s.sLeft(s.length() - 5));
 	}
 	else if (fn.sExt == ".mpl")
 	{
 		*sCommand = exp->expMpl[iOption].sCmd;
-		s = exp->expMpl[iOption].sDescr;
+		s = exp->expMpl[iOption].sDescription;
 		settings.SetValue("MapListExport", s.sLeft(s.length() - 5));
 	}
 	else if (fn.sExt == ".csy")
 	{
 		*sCommand = exp->expCsy[iOption].sCmd;
-		s = exp->expCsy[iOption].sDescr;
+		s = exp->expCsy[iOption].sDescription;
 		settings.SetValue("CoordSystemExport", s.sLeft(s.length() - 5));
 	}
 	else if (fn.sExt == ".tbt" || fn.sExt == ".his" || fn.sExt == ".hsa" || fn.sExt == ".hsp" || fn.sExt == ".hss")
 	{
 		*sCommand = exp->expTbl[iOption].sCmd;
-		s = exp->expTbl[iOption].sDescr;
+		s = exp->expTbl[iOption].sDescription;
 		settings.SetValue("TableExport", s.sLeft(s.length() - 5));
 	}
 	String sExpCmd, sGeo;
 	FileName fnInput(*sName);
 	FileName fnOutput(*sOutputName);
+	if (sOutputExt != "" && fnOutput.sExt == "")
+		fnOutput.sExt = sOutputExt;
 	if (1 == iExportMethod) // GeoGateway
 			sGeo = ",GDAL";
 		
@@ -649,7 +653,11 @@ void Exporting::Fill(const String& s, Array<ExportItem>& eia)
 		tok = tokenizer.tokGet();
 		item.sCmd = tok.sVal();
 		tok = tokenizer.tokGet();
-		item.sDescr = tok.sVal();
+		item.sDescription = tok.sVal();
+		if (!tokenizer.fEnd()) {
+			tok = tokenizer.tokGet();
+			item.sExt = tok.sVal();
+		}
 		eia &= item;
 	}
 	fil.KeepOpen(false);
@@ -687,7 +695,7 @@ void Exporting::FillArrays()
 		//			if ( arParts[6].sTrimSpaces() == "true")
 		//			{
 		//				item.sCmd = arParts[1].sTrimSpaces();
-		//				item.sDescr = arParts[0].sTrimSpaces() + " " + arParts[2].sTrimSpaces() + " .xxx";
+		//				item.sDescription = arParts[0].sTrimSpaces() + " " + arParts[2].sTrimSpaces() + " .xxx";
 		//				expGDBRas.push_back(item);
 		//			}						
 		//		}				

@@ -44,7 +44,8 @@
 struct ExportItem
 {
   String sCmd;
-  String sDescr;
+  String sDescription;
+  String sExt;
 };
 
 inline ExportItem undef(const ExportItem&) { return ExportItem(); }
