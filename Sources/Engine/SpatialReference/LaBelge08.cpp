@@ -88,7 +88,7 @@ PhiLam ProjectionLaBelge2008::plConv(const XY& xy) const
 
 Datum* ProjectionLaBelge2008::datumDefault() const
 {
-  return new MolodenskyDatum("Belgian Datum 2008", "");
+  return new MolodenskyDatum("European Terrestrial Reference System (ETRS 89)", "");
 }
 
 
