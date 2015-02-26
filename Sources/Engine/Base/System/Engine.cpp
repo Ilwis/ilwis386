@@ -106,6 +106,7 @@ void Engine::Init() {
 					  rx REAL, \
 					  ry REAL, \
 					  rz REAL,\
+					  ds REAL,\
 					  description TEXT \
 					  )";
 	  db->executeStatement(stmt);
@@ -197,7 +198,7 @@ void Engine::loadSystemTables(const String& ilwDir) {
 
 	ifstream in(String("%SResources\\def\\datum.csv",ilwDir).c_str());
 	if (!in.is_open()) {
-		throw ErrorObject(TR(String("Cann't open datum.csv %S")).c_str(),ilwDir);
+		throw ErrorObject(TR(String("Can't open datum.csv %S")).c_str(),ilwDir);
 	}
 	bool skip = true;
 	String pp("is open %d, eof %d", (int)in.is_open(), (int)in.eof());
@@ -216,21 +217,19 @@ void Engine::loadSystemTables(const String& ilwDir) {
 		double rx = NORM(7);
 		double ry = NORM(8);
 		double rz = NORM(9);
+		double ds = NORM(10);
 
-		String plist("'%S','%S','%S','%S',%f,%f,%f,%f,%f,%f,'%S'",parts[0],parts[1],parts[2],parts[3],dx,dy,dz,rx,ry,rz,parts[11]);
+		String plist("'%S','%S','%S','%S',%f,%f,%f,%f,%f,%f,%f,'%S'",parts[0],parts[1],parts[2],parts[3],dx,dy,dz,rx,ry,rz,ds,parts[12]);
 		String stmt("INSERT INTO Datums VALUES(%S)", plist);
 		bool res = db->executeStatement(stmt);
-		if ( parts[10] != "") {
+		if ( parts[11] != "") {
 			Array<String> aliassen;
-			Split(parts[10],aliassen,";");
+			Split(parts[11],aliassen,";");
 			for(int j = 0; j < aliassen.size(); ++j) {
 				stmt = String("INSERT INTO DatumAliasses Values('%S','%S')",parts[0],aliassen[j]);
 				db->executeStatement(stmt);
 			}
-			
 		}
-
-
 	}
 	in.close();
 
