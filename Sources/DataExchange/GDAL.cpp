@@ -868,19 +868,14 @@ CoordSystem GDALFormat::getCoordSystemFrom(OGRSpatialReferenceH handle, char *wk
 			} else {
 				csp->datum = new MolodenskyDatum(dn,"");
 			}
-			String projName(funcs.getAttr(handle, "Projection",0));
-			if ( projName == "Oblique_Stereographic")
-				projName = "Stereographic";
-			if ( projName == "Lambert_Conformal_Conic_2SP")
-				projName = "Lambert Conformal Conic";
-			replace(projName.begin(), projName.end(),'_',' ');
 			OGRErr err;
 
 			String spheroid = getEngine()->gdal->getAttribute(handle,"SPHEROID",0);
 			try{
-			Ellipsoid ell(spheroid);
-			csp->ell = ell;
+				Ellipsoid ell(spheroid);
+				csp->ell = ell;
 			} catch (ErrorObject& ) {
+				csp->ell.sName = "User Defined";
 				String majoraxis = getEngine()->gdal->getAttribute(handle,"SPHEROID",1);
 				String invFlattening = getEngine()->gdal->getAttribute(handle,"SPHEROID",2);
 				double ma = majoraxis.rVal();
@@ -888,23 +883,48 @@ CoordSystem GDALFormat::getCoordSystemFrom(OGRSpatialReferenceH handle, char *wk
 				if ( ma == rUNDEF || ifl == rUNDEF)
 					throw ErrorObject(String(TR("Ellipsoid %S could not be found").c_str(),spheroid));
 				csp->ell = Ellipsoid(ma, ifl);
-				csp->ell.sName = spheroid;
-
-
+				//csp->ell.sName = spheroid;
 			} 
-
-
-			double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",0,&err);
-			double northing = getEngine()->gdal->getProjParam(handle, "false_northing",0,&err);
-			double scale = getEngine()->gdal->getProjParam(handle, "scale_factor",0,&err);
-			double centralMeridian = getEngine()->gdal->getProjParam(handle, "central_meridian",0,&err);
-			double lattOfOrigin = getEngine()->gdal->getProjParam(handle, "latitude_of_origin",0,&err);
-			csp->prj = Projection(projName);
-			csp->prj->Param(pvX0,easting);
-			csp->prj->Param(pvY0,northing);
-			csp->prj->Param(pvK0, scale);
-			csp->prj->Param(pvLON0, centralMeridian);
-			csp->prj->Param(pvLAT0, lattOfOrigin);
+			double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",rUNDEF,&err);
+			double northing = getEngine()->gdal->getProjParam(handle, "false_northing",rUNDEF,&err);
+			double scale = getEngine()->gdal->getProjParam(handle, "scale_factor",rUNDEF,&err);
+			double centralMeridian = getEngine()->gdal->getProjParam(handle, "central_meridian",rUNDEF,&err);
+			double lattOfOrigin = getEngine()->gdal->getProjParam(handle, "latitude_of_origin",rUNDEF,&err);
+			double stParal1 = getEngine()->gdal->getProjParam(handle, "standard_parallel_1",rUNDEF,&err);
+			double stParal2 = getEngine()->gdal->getProjParam(handle, "standard_parallel_2",rUNDEF,&err);
+			String projName(funcs.getAttr(handle, "Projection",0));
+			if ( projName == "Oblique_Stereographic")
+				projName = "Stereographic";
+			else if ( projName == "Lambert_Conformal_Conic_2SP")
+				projName = "Lambert Conformal Conic";
+			else if ( projName == "Lambert_Conformal_Conic_1SP") {
+				projName = "Lambert Conformal Conic";
+				stParal1 = lattOfOrigin;
+				stParal2 = lattOfOrigin;
+			}
+			else if ( projName == "Polar_Stereographic")
+				projName = "StereoPolar";
+			else if ( projName == "Albers_Conic_Equal_Area")
+				projName = "Albers EqualArea Conic";
+			replace(projName.begin(), projName.end(),'_',' ');
+			if ( projName == "StereoPolar" && easting == 2000000.) // one of those exceptions
+				projName = "UPS";
+			csp->prj = Projection(projName,csp->ell);
+			if ( easting != rUNDEF)
+				csp->prj->Param(pvX0,easting);
+			if ( northing != rUNDEF)
+				csp->prj->Param(pvY0,northing);
+			if ( scale != rUNDEF)
+				csp->prj->Param(pvK0, scale);
+			if ( centralMeridian != rUNDEF)
+				csp->prj->Param(pvLON0, centralMeridian);
+			if ( lattOfOrigin != rUNDEF)
+				csp->prj->Param(pvLAT0, lattOfOrigin);
+			if ( stParal1 != rUNDEF)
+				csp->prj->Param(pvLAT1, min(stParal2, stParal1));
+			if ( stParal2 != rUNDEF)
+				csp->prj->Param(pvLAT2, max(stParal2, stParal1));
+			csp->prj->Prepare();
 			csv = csp;
 		} catch ( ErrorObject& err) {
 			return CoordSystem("unknown");
