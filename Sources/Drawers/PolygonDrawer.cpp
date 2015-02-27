@@ -92,7 +92,7 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 				glEnd();
 			}
 		}
- 		if ( hatch && backgroundColor != colorUNDEF ) {
+ 		if ( hatch && !backgroundColor.fEqual(colorUNDEF)) {
 			glPolygonStipple(hatchInverse); 
 			double alphaBG = (1.0 - backgroundColor.transparencyP()) * getTransparency() * areaTransparency;
 			glColor4f(backgroundColor.redP(),backgroundColor.greenP(), backgroundColor.blueP(), alphaBG);
