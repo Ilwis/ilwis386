@@ -24,7 +24,7 @@ namespace ILWIS {
 			label = ce.label;
 		}
 		bool isValid() const{
-			return color == colorUNDEF && transparency == rUNDEF && visible == false;
+			return color.fEqual(colorUNDEF) && (transparency == rUNDEF) && !visible;
 		}
 		static CubeElement undefElement;
 		String store(const FileName& fnView, const String& parentSection) const;
