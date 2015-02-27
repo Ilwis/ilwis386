@@ -156,7 +156,7 @@ int SetBandsForm::setExc(Event *ev) {
 	if ( exception) {
 		ColorCompositeDrawer *rdr = (ColorCompositeDrawer *)drw;
 		Color clr = rdr->getExceptionColor();
-		if ( clr == colorUNDEF)
+		if ( clr.fEqual(colorUNDEF))
 			clr = Color(0,0,0);
 		//fi1->SetVal(clr.red());
 		//fi2->SetVal(clr.green());
