@@ -283,16 +283,15 @@ DisplayOptionsForm(dr,wPar,TR("Polygon Representation")),rcl(rc), iRaw(raw)
   StaticText* st = new StaticText(root, sText);
   st->SetIndependentPos();
   new FieldColor(root,"Area Color",&col);
+  FieldIntSliderEx *slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
+  slider->SetCallBack((NotifyProc)&PolRprForm::setTransparency);
+  slider->setContinuous(true);
   hatching = rcl->sHatch(raw);
   if ( hatching == sUNDEF)
 	  hatching = "none";
   new FieldDataType(root,TR("Hatching"),&hatching,".ivh",false,0,FileName(base),false);
   FieldColor *fc = new FieldColor(root,"Hatching Background Color",&col2, true);
   fc->SetBevelStyle(FormEntry::bsLOWERED);
-
-  FieldIntSliderEx *slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
-  slider->SetCallBack((NotifyProc)&PolRprForm::setTransparency);
-  slider->setContinuous(true);
 
   SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_polygon.htm");
   create();
@@ -307,7 +306,7 @@ void  PolRprForm::apply() {
   root->StoreData();
   rcl->PutColor(iRaw, col);
   rcl->PutSecondColor(iRaw, col2);
-  rcl->PutTransparency(iRaw,1.0 - transparency/ 100.0);
+  rcl->PutTransparency(iRaw,transparency/ 100.0);
   if ( hatching != ""){
 	  hatching = hatching.sTrimSpaces();
 	  FileName fn(hatching);
