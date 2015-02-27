@@ -164,20 +164,22 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			setTransparencyArea(polygonLayer->getTransparencyArea() * rprTrans);
 			((LineProperties *)boundary->getProperties())->linestyle = lp->linestyle;
 			((LineProperties *)boundary->getProperties())->thickness = lp->thickness;
-			double fvalue =  getFeature()->rValue();
 			Representation rpr = polygonLayer->getRepresentation();
+			long iRaw = getFeature()->iValue();
 			if ( rpr.fValid() && rpr->dm()->dmt() == dmtCLASS) {
-				String hatchName = rpr->prc()->sHatch(fvalue);
+				long iRaw2 = polygonLayer->useAttributeColumn() ? polygonLayer->getAtttributeColumn()->iRaw(iRaw) : iRaw;
+				drawColor.transparency() = round(255.0 * rpr->prc()->rTransparencyItem(iRaw2));
+				String hatchName = rpr->prc()->sHatch(iRaw2);
 				if ( hatchName != sUNDEF) {
 					const SVGLoader *loader = NewDrawer::getSvgLoader();
-					SVGLoader::const_iterator cur = loader->find(p->props.hatchName);
+					SVGLoader::const_iterator cur = loader->find(hatchName);
 					if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT)
 						return;
 
 					hatch = (*cur).second->getHatch();
 					hatchInverse = (*cur).second->getHatchInverse();
 
-					backgroundColor = rpr->prc()->clrSecondRaw(fvalue);
+					backgroundColor = rpr->prc()->clrSecondRaw(iRaw2);
 					long transparent = Color(-2); // in the old days this was the transparent value
 					if (backgroundColor.iVal() == transparent) 
 						backgroundColor = colorUNDEF;
@@ -186,7 +188,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 
 			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 				int raw = p->filteredRaws[j];
-				if ( fvalue == abs(raw)) {
+				if ( iRaw == abs(raw)) {
 					setActive(raw > 0);
 				}
 			}
