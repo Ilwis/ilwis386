@@ -2,7 +2,6 @@
 
 #include "Engine\Base\DataObjects\XMLDocument.h"
 
-//#define colorUNDEF Color(1,2,3)
 #define colorUSERDEF Color(3,2,1)
 
 namespace ILWIS {
