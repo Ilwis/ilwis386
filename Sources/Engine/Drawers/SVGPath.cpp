@@ -434,5 +434,5 @@ void SVGPath::makeArc(int& index, double theta, double rx, double ry, const Coor
 }
 
 bool SVGPath::isPolygon() const {
-	return points.size() > 2 && points[0] == points.back() && fillColor != colorUNDEF;
+	return points.size() > 2 && points[0] == points.back() && !fillColor.fEqual(colorUNDEF);
 }
