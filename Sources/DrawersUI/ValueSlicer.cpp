@@ -440,7 +440,7 @@ int ValueSlicerSlider::insertBound(double rValue) {
 }
 
 Color ValueSlicerSlider::getColor(int i) {
-	if ( highColor == colorUNDEF || lowColor == colorUNDEF)
+	if ( highColor.fEqual(colorUNDEF) || lowColor.fEqual(colorUNDEF))
 		return colorUNDEF;
 	int deltar = highColor.red() - lowColor.red();
 	int deltag = highColor.green() - lowColor.green();
