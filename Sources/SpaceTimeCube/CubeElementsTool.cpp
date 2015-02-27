@@ -137,7 +137,7 @@ String CubeElementsTool::getMenuString() const {
 CubeElementsForm::CubeElementsForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM htiTr, CubeElement& elem) : 
 DisplayOptionsForm(dr,wPar,elem.label), slider(0), fc(0), element(elem)
 {
-	if ( element.color != colorUNDEF) {
+	if ( !element.color.fEqual(colorUNDEF)) {
 		fc = new FieldColor(root,TR("Color"),&(element.color));
 	}
 	if ( element.transparency != rUNDEF) {
