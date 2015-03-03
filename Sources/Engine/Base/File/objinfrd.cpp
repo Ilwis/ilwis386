@@ -816,6 +816,7 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 	String s;
 	iRet = ReadElement(sSection, sEntry, fnObj, s);
 	sscanf(s.sVal(),"%lx",&col);
+	col.alpha() = 255 - col.alpha(); // on-file = transparency; in-memory = alpha, for backward compatibilty; WriteElement adjusted too
 	return iRet;
 }
 

@@ -245,6 +245,7 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry, 
 							  const FileName& fnObj, Color col)
 {
+	col.alpha() = 255 - col.alpha(); // on-file = transparency; in-memory = alpha, for backward compatibilty; ReadElement adjusted too
 	String sValue("%lx", col.iVal());
 	return WriteElement(sSection, sEntry, fnObj, sValue.c_str());
 }
