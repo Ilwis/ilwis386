@@ -290,10 +290,10 @@ void CubeDrawer::load(const FileName& fnView, const String& currentSection){
 
 //---------------------------------------
 CubeProperties::CubeProperties() : GeneralDrawerProperties() {
-	elements["cube"] = CubeElement("Cube", Color(0,255,0),0.0, true);
-	elements["ticks"] = CubeElement("Ticks", Color(0,255,0),0.0, true);
-	elements["coordinates"] = CubeElement("Coordinates", Color(0,0,0),0.0, true);
-	elements["labels"] = CubeElement("Labels", Color(0,0,0),0.0, true);
+	elements["cube"] = CubeElement("Cube", Color(0,255,0),1.0, true);
+	elements["ticks"] = CubeElement("Ticks", Color(0,255,0),1.0, true);
+	elements["coordinates"] = CubeElement("Coordinates", Color(0,0,0),1.0, true);
+	elements["labels"] = CubeElement("Labels", Color(0,0,0),1.0, true);
 }
 
 CubeProperties::CubeProperties(CubeProperties *lp){
