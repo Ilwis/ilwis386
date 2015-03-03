@@ -140,7 +140,7 @@ DisplayOptionsForm(dr,wPar,elem.label), slider(0), fc(0), element(elem)
 	if ( !element.color.fEqual(colorUNDEF)) {
 		fc = new FieldColor(root,TR("Color"),&(element.color));
 	}
-	if ( element.transparency != rUNDEF) {
+	if ( element.alpha != rUNDEF) {
 		slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
 		slider->SetCallBack((NotifyProc)&CubeElementsForm::setTransparency);
 		slider->setContinuous(true);
@@ -156,7 +156,7 @@ int CubeElementsForm::setTransparency(Event *ev) {
 void  CubeElementsForm::apply() {
 	if ( slider) {
 		slider->StoreData();
-		element.transparency = (double)transparency/100.0;
+		element.alpha = 1.0 - (double)transparency/100.0;
 	}
 	if ( fc)
 		fc->StoreData();
