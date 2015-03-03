@@ -70,9 +70,9 @@ bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	bool is3D = getRootDrawer()->is3D(); 
 	bool is3DPossible = cdrw->getZMaker()->getThreeDPossible() && !isSupportingDrawer;
 	double zscale, zoffset, fakez=0;
-	double transp = getTransparency();
+	double alpha = getAlpha();
 
-	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
+	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),alpha );
 	glLineWidth(lproperties.thickness);
 	if (lproperties.linestyle != 0xFFFF) {
 		glEnable (GL_LINE_STIPPLE);
@@ -94,9 +94,9 @@ bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 		CoordinateSequence *points = lines.at(j);
 		if ( specialOptions & NewDrawer::sdoSELECTED || selectedCoords.size() > 0) {
 			drawSelectedFeature(points, drawLoop, cbZoom, is3D);
-			glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
+			glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),alpha );
 		}
-		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && transp == 1.0) || (drawLoop == drl3DTRANSPARENT && transp != 1.0)) {
+		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0)) {
 			glBegin(GL_LINE_STRIP);
 			for(int i=0; i<points->size(); ++i) {
 				Coordinate c = points->getAt(i);
@@ -121,13 +121,13 @@ bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 			}
 		}
 		if ( is3D ) {
-			if (((specialOptions & NewDrawer::sdoExtrusion) != 0) && ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && extrTransparency == 1.0) || (drawLoop == drl3DTRANSPARENT && extrTransparency != 1.0))) {
+			if (((specialOptions & NewDrawer::sdoExtrusion) != 0) && ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && extrAlpha == 1.0) || (drawLoop == drl3DTRANSPARENT && extrAlpha != 1.0))) {
 				Coord cOld;
 				Coord cStart = points->getAt(0);
 				for(int i=0; i<points->size(); ++i) {
 					Coordinate c = points->getAt(i);
 					if ( !cOld.fUndef()) {
-						glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), extrTransparency);
+						glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), extrAlpha);
 						drawExtrusion(cOld, c, z0 - zoffset, specialOptions);
 					}
 					cOld = c;
@@ -138,6 +138,7 @@ bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if ( is3D) {
 		glPopMatrix();
 	}
+
 	glDisable (GL_LINE_STIPPLE);
 	glLineWidth(1);
 	return true;
