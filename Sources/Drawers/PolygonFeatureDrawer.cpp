@@ -154,21 +154,21 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	}
 	if (  p->type & ptRESTORE || p->type & RootDrawer::ptRENDER) {
 		BaseMapPtr *bmpptr = ((BaseMap*)polygonLayer->getDataSource())->ptr();
-		extrTransparency = polygonLayer->getExtrusionTransparency();
+		extrAlpha = polygonLayer->getExtrusionAlpha();
 		drawColor = polygonLayer->getDrawingColor()->clrRaw(feature->iValue(), polygonLayer->getDrawMethod());
 		if ( boundary) {
 			LineProperties *lp = (LineProperties *)polygonLayer->getProperties();
 			boundariesActive(polygonLayer->getShowBoundaries());
 			areasActive(polygonLayer->getShowAreas());
-			double rprTrans =  p->props.itemTransparency;
-			setTransparencyArea(polygonLayer->getTransparencyArea() * rprTrans);
+			double rprAlpha =  p->props.itemAlpha;
+			setAreaAlpha(polygonLayer->getAreaAlpha() * rprAlpha);
 			((LineProperties *)boundary->getProperties())->linestyle = lp->linestyle;
 			((LineProperties *)boundary->getProperties())->thickness = lp->thickness;
 			Representation rpr = polygonLayer->getRepresentation();
 			long iRaw = getFeature()->iValue();
 			if ( rpr.fValid() && rpr->dm()->dmt() == dmtCLASS) {
 				long iRaw2 = polygonLayer->useAttributeColumn() ? polygonLayer->getAtttributeColumn()->iRaw(iRaw) : iRaw;
-				drawColor.transparency() = round(255.0 * rpr->prc()->rTransparencyItem(iRaw2));
+				drawColor.alpha() = round(255.0 * rpr->prc()->rItemAlpha(iRaw2));
 				String hatchName = rpr->prc()->sHatch(iRaw2);
 				if ( hatchName != sUNDEF) {
 					const SVGLoader *loader = NewDrawer::getSvgLoader();
@@ -183,7 +183,13 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 					long transparent = Color(-2); // in the old days this was the transparent value
 					if (backgroundColor.iVal() == transparent) 
 						backgroundColor = colorUNDEF;
+				} else {
+					hatch = 0;
+					hatchInverse = 0;
 				}
+			} else {
+				hatch = 0;
+				hatchInverse = 0;
 			}
 
 			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
