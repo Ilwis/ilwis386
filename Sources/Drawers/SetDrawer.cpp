@@ -177,7 +177,7 @@ void SetDrawer::prepare(PreparationParameters *pp){
 void SetDrawer::setTransparency(double v) {
 	for(int i = 0; i < getDrawerCount(); ++i) {
 		NewDrawer *drw = getDrawer(i);
-		drw->setTransparency(v);
+		drw->setAlpha(v);
 	}
 }
 
