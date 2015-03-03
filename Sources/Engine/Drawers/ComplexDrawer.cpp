@@ -33,7 +33,7 @@ void ComplexDrawer::init() {
 	editable = true;
 	active = true;
 	info = false;
-	transparency = 1.0;
+	alpha = 1.0;
 	uiCode = NewDrawer::ucALL;
 	zmaker = new ILWIS::ZValueMaker(this);
 	specialOptions = sdoNone;
@@ -414,8 +414,8 @@ NewDrawer *ComplexDrawer::getParentDrawer() const {
 	return parentDrawer;
 }
 
-double ComplexDrawer::getTransparency() const{
-	return transparency;
+double ComplexDrawer::getAlpha() const{
+	return alpha;
 }
 
 int ComplexDrawer::getUICode() const {
@@ -428,11 +428,11 @@ void ComplexDrawer::setUICode(int code) {
 void ComplexDrawer::timedEvent(UINT timerid) {
 }
 
-void ComplexDrawer::setTransparency(double value){
+void ComplexDrawer::setAlpha(double value){
 	if ( (value >= 0.0 && value <= 1.0) || value == rUNDEF)
-		transparency = value;
+		alpha = value;
 	else
-		throw ErrorObject(String("Wrong transparency value %d", value));
+		throw ErrorObject(String("Wrong alpha value %d", value));
 }
 
 void ComplexDrawer::getDrawers(vector<NewDrawer *>& allDrawers) {
@@ -471,7 +471,7 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 	ObjectInfo::WriteElement(parentSection.c_str(),"UiCode",fnView, uiCode);
 	ObjectInfo::WriteElement(parentSection.c_str(),"HasInfo",fnView, info);
 	ObjectInfo::WriteElement(parentSection.c_str(),"DrawMethod",fnView, drm);
-	ObjectInfo::WriteElement(parentSection.c_str(),"Transparency",fnView, transparency);
+	ObjectInfo::WriteElement(parentSection.c_str(),"Alpha",fnView, alpha);
 	ObjectInfo::WriteElement(parentSection.c_str(),"Type",fnView, type);
 	if (subType != "" && subType != "ilwis38")
 		ObjectInfo::WriteElement(parentSection.c_str(),"SubType",fnView, subType);
@@ -530,7 +530,7 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 	int temp;
 	ObjectInfo::ReadElement(parentSection.c_str(),"DrawMethod",fnView, temp);
 	drm = (ILWIS::NewDrawer::DrawMethod)temp;
-	ObjectInfo::ReadElement(parentSection.c_str(),"Transparency",fnView, transparency);
+	ObjectInfo::ReadElement(parentSection.c_str(),"Alpha",fnView, alpha);
 	ObjectInfo::ReadElement(parentSection.c_str(),"Type",fnView, type);
 	ObjectInfo::ReadElement(parentSection.c_str(),"IsActive",fnView, active);
 	ObjectInfo::ReadElement(parentSection.c_str(),"editable",fnView, editable);

@@ -56,8 +56,8 @@ class _export ComplexDrawer : public NewDrawer {
 		void setInfo(bool yesno);
 		//void setActiveMode(void *v,LayerTreeView *tv);
 		NewDrawer *getParentDrawer() const;
-		double getTransparency() const;
-		void setTransparency(double value);
+		double getAlpha() const;
+		void setAlpha(double value);
 		virtual int getUICode() const;
 		virtual void setUICode(int c);
 		//virtual HTREEITEM make3D(bool yeno, LayerTreeView  *tvm);
@@ -102,7 +102,7 @@ class _export ComplexDrawer : public NewDrawer {
 		int uiCode;
 		bool info;
 		DrawMethod drm;
-		double transparency;
+		double alpha;
 		RootDrawer *rootDrawer;
 		NewDrawer *parentDrawer;
 		String type;
