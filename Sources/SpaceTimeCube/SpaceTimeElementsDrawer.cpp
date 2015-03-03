@@ -19,21 +19,42 @@ SpaceTimeElementsDrawer::SpaceTimeElementsDrawer(DrawerParameters *parms)
 : ComplexDrawer(parms,"SpaceTimeElementsDrawer")
 {
 	id = name = "SpaceTimeElementsDrawer";
-	setTransparency(1); // opaque
-	displayList = new GLuint;
-	*displayList = 0;
-	fRefreshDisplayList = new bool;
-	*fRefreshDisplayList = false;
-	fFootprintComputed = new bool;
-	*fFootprintComputed = false;
+	setAlpha(1); // opaque
+	displayListFootprint = new GLuint;
+	*displayListFootprint = 0;
+	fRefreshDisplayListFootprint = new bool;
+	*fRefreshDisplayListFootprint = false;
+	displayListXT = new GLuint;
+	*displayListXT = 0;
+	fRefreshDisplayListXT = new bool;
+	*fRefreshDisplayListXT = false;
+	displayListXY = new GLuint;
+	*displayListXY = 0;
+	fRefreshDisplayListXY = new bool;
+	*fRefreshDisplayListXY = false;
+	displayListYT = new GLuint;
+	*displayListYT = 0;
+	fRefreshDisplayListYT = new bool;
+	*fRefreshDisplayListYT = false;
 }
 
 SpaceTimeElementsDrawer::~SpaceTimeElementsDrawer() {
-	if (*displayList != 0) // which OpenGL context?
-		glDeleteLists(*displayList, 1);
-	delete displayList;
-	delete fRefreshDisplayList;
-	delete fFootprintComputed;
+	if (*displayListFootprint != 0) // which OpenGL context?
+		glDeleteLists(*displayListFootprint, 1);
+	delete displayListFootprint;
+	delete fRefreshDisplayListFootprint;
+	if (*displayListXT != 0)
+		glDeleteLists(*displayListXT, 1);
+	delete displayListXT;
+	delete fRefreshDisplayListXT;
+	if (*displayListXY != 0)
+		glDeleteLists(*displayListXY, 1);
+	delete displayListXY;
+	delete fRefreshDisplayListXY;
+	if (*displayListYT != 0)
+		glDeleteLists(*displayListYT, 1);
+	delete displayListYT;
+	delete fRefreshDisplayListYT;
 }
 
 void SpaceTimeElementsDrawer::SetSpaceTimeDrawer(SpaceTimeDrawer * _spaceTimeDrawer)
@@ -43,14 +64,21 @@ void SpaceTimeElementsDrawer::SetSpaceTimeDrawer(SpaceTimeDrawer * _spaceTimeDra
 
 void SpaceTimeElementsDrawer::prepare(PreparationParameters *parms) {
 	ComplexDrawer::prepare(parms);
-	if ((parms->type & RootDrawer::ptGEOMETRY) || (parms->type & NewDrawer::pt3D) || (parms->type & NewDrawer::ptRESTORE))
-		*fRefreshDisplayList = true;
+	if ((parms->type & RootDrawer::ptGEOMETRY) || (parms->type & NewDrawer::pt3D) || (parms->type & NewDrawer::ptRESTORE)) {
+		*fRefreshDisplayListFootprint = true;
+		*fRefreshDisplayListXT = true;
+		*fRefreshDisplayListXY = true;
+		*fRefreshDisplayListYT = true;
+	}
 	if ( parms->type & NewDrawer::ptRENDER) {
 	}
 }
 
 void SpaceTimeElementsDrawer::RefreshDisplayList() const {
-	*fRefreshDisplayList = true;
+	*fRefreshDisplayListFootprint = true;
+	*fRefreshDisplayListXT = true;
+	*fRefreshDisplayListXY = true;
+	*fRefreshDisplayListYT = true;
 }
 
 GeneralDrawerProperties *SpaceTimeElementsDrawer::getProperties(){
@@ -70,7 +98,7 @@ void SpaceTimeElementsDrawer::load(const FileName& fnView, const String& current
 	properties.load(fnView, drawerSection);
 }
 
-bool SpaceTimeElementsDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
+bool SpaceTimeElementsDrawer::drawFootprint(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
 	if ( !isActive() || !isValid())
 		return false;
 
@@ -81,12 +109,12 @@ bool SpaceTimeElementsDrawer::draw(const DrawLoop drawLoop, const CoordBounds& c
 	if ((drawLoop == drl3DOPAQUE && alpha != 1.0) || (drawLoop == drl3DTRANSPARENT && alpha == 1.0))
 		return false;
 
-	if (*fRefreshDisplayList) {
-		if (*displayList != 0) {
-			glDeleteLists(*displayList, 1);
-			*displayList = 0;
+	if (*fRefreshDisplayListFootprint) {
+		if (*displayListFootprint != 0) {
+			glDeleteLists(*displayListFootprint, 1);
+			*displayListFootprint = 0;
 		}
-		*fRefreshDisplayList = false;
+		*fRefreshDisplayListFootprint = false;
 	}
 
 	drawPreDrawers(drawLoop, cbArea);
@@ -99,12 +127,12 @@ bool SpaceTimeElementsDrawer::draw(const DrawLoop drawLoop, const CoordBounds& c
 	glPushMatrix();
 	bool is3D = getRootDrawer()->is3D();
 	if (is3D) {
-		ZValueMaker *zmaker = getZMaker();
-		double zscale = zmaker->getZScale();
-		double zoffset = zmaker->getOffset();
-		double z0 = getRootDrawer()->getZMaker()->getZ0(is3D); // note that the rootDrawer's zmaker is different than the layer's zmaker
-		glScaled(1,1,zscale);
-		glTranslated(0,0,zoffset + z0);
+		//ZValueMaker *zmaker = getZMaker();
+		//double zscale = zmaker->getZScale();
+		//double zoffset = zmaker->getOffset();
+		//double z0 = getRootDrawer()->getZMaker()->getZ0(is3D); // note that the rootDrawer's zmaker is different than the layer's zmaker
+		//glScaled(1,1,zscale);
+		//glTranslated(0,0,zoffset + z0);
 	} else
 		glScaled(1,1,0);
 
@@ -114,12 +142,12 @@ bool SpaceTimeElementsDrawer::draw(const DrawLoop drawLoop, const CoordBounds& c
 	glColor4f(1, 1, 1, alpha);
 	//glLineWidth(properties->exaggeration);
 
-	if (*displayList != 0)
-		glCallList(*displayList);
+	if (*displayListFootprint != 0)
+		glCallList(*displayListFootprint);
 	else
 	{
-		*displayList = glGenLists(1);
-		glNewList(*displayList, GL_COMPILE_AND_EXECUTE);
+		*displayListFootprint = glGenLists(1);
+		glNewList(*displayListFootprint, GL_COMPILE_AND_EXECUTE);
 
 		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 		CoordBounds cbBaseMap = spaceTimeDrawer->getBasemap()->cb();
@@ -148,7 +176,6 @@ bool SpaceTimeElementsDrawer::draw(const DrawLoop drawLoop, const CoordBounds& c
 			glDisable(GL_CLIP_PLANE3);
 		}
 		glEndList();
-		*fFootprintComputed = true;
 	}
 
 	//glLineWidth(1);
@@ -161,6 +188,205 @@ bool SpaceTimeElementsDrawer::draw(const DrawLoop drawLoop, const CoordBounds& c
 
 	drawPostDrawers(drawLoop, cbArea);
 	return true;
+}
+
+void SpaceTimeElementsDrawer::callFootprintList() const {
+	CoordBounds cbArea;
+	drawPreDrawers(drl3DOPAQUE, cbArea);
+	glPushMatrix();
+	if (!rootDrawer->is3D())
+		glScaled(1,1,0);
+	glMatrixMode(GL_TEXTURE);
+	glPushMatrix();
+	if (*displayListFootprint != 0)
+		glCallList(*displayListFootprint);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	drawPostDrawers(drl3DOPAQUE, cbArea);
+}
+
+bool SpaceTimeElementsDrawer::drawXT(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
+	if ( !isActive() || !isValid())
+		return false;
+	if (!properties["xt"].visible)
+		return false;
+	double alpha = 1.0 - properties["xt"].transparency;
+	if ((drawLoop == drl3DOPAQUE && alpha != 1.0) || (drawLoop == drl3DTRANSPARENT && alpha == 1.0))
+		return false;
+	if (*fRefreshDisplayListXT) {
+		if (*displayListXT != 0) {
+			glDeleteLists(*displayListXT, 1);
+			*displayListXT = 0;
+		}
+		*fRefreshDisplayListXT = false;
+	}
+
+	Color color (properties["xt"].color);
+	//glColor4f(color.redP(), color.greenP(), color.blueP(), alpha);
+	glColor4f(1, 1, 1, alpha);
+
+	if (*displayListXT != 0)
+		glCallList(*displayListXT);
+	else
+	{
+		*displayListXT = glGenLists(1);
+		glNewList(*displayListXT, GL_COMPILE_AND_EXECUTE);
+		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+		CoordBounds cbBaseMap = spaceTimeDrawer->getBasemap()->cb();
+		bool fZoomed = cbBaseMap.MinX() < cbMap.MinX() || cbBaseMap.MinY() < cbMap.MinY() || cbBaseMap.MaxX() > cbMap.MaxX() || cbBaseMap.MaxY() > cbMap.MaxY();
+		if (fZoomed) {
+			double pathScale = 0;
+			double clip_plane0[]={-1.0, 0.0, 0.0, cbMap.cMax.x + pathScale};
+			double clip_plane1[]={1.0, 0.0, 0.0, -cbMap.cMin.x - pathScale};
+			double clip_plane2[]={0.0, -1.0, 0.0, cbMap.cMax.y + pathScale};
+			double clip_plane3[]={0.0, 1.0, 0.0, -cbMap.cMin.y - pathScale};
+			glClipPlane(GL_CLIP_PLANE0,clip_plane0);
+			glClipPlane(GL_CLIP_PLANE1,clip_plane1);
+			glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+			glClipPlane(GL_CLIP_PLANE3,clip_plane3);
+			glEnable(GL_CLIP_PLANE0);
+			glEnable(GL_CLIP_PLANE1);
+			glEnable(GL_CLIP_PLANE2);
+			glEnable(GL_CLIP_PLANE3);
+		}
+		spaceTimeDrawer->drawXT();
+		if (fZoomed) {
+			glDisable(GL_CLIP_PLANE0);
+			glDisable(GL_CLIP_PLANE1);
+			glDisable(GL_CLIP_PLANE2);
+			glDisable(GL_CLIP_PLANE3);
+		}
+		glEndList();
+	}
+	return true;
+}
+
+bool SpaceTimeElementsDrawer::drawXY(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
+	if ( !isActive() || !isValid())
+		return false;
+	if (!properties["xy"].visible)
+		return false;
+	double alpha = 1.0 - properties["xy"].transparency;
+	if ((drawLoop == drl3DOPAQUE && alpha != 1.0) || (drawLoop == drl3DTRANSPARENT && alpha == 1.0))
+		return false;
+	if (*fRefreshDisplayListXY) {
+		if (*displayListXY != 0) {
+			glDeleteLists(*displayListXY, 1);
+			*displayListXY = 0;
+		}
+		*fRefreshDisplayListXY = false;
+	}
+
+	Color color (properties["xy"].color);
+	// glColor4f(color.redP(), color.greenP(), color.blueP(), alpha);
+	glColor4f(1, 1, 1, alpha);
+
+	if (*displayListXY != 0)
+		glCallList(*displayListXY);
+	else
+	{
+		*displayListXY = glGenLists(1);
+		glNewList(*displayListXY, GL_COMPILE_AND_EXECUTE);
+		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+		CoordBounds cbBaseMap = spaceTimeDrawer->getBasemap()->cb();
+		bool fZoomed = cbBaseMap.MinX() < cbMap.MinX() || cbBaseMap.MinY() < cbMap.MinY() || cbBaseMap.MaxX() > cbMap.MaxX() || cbBaseMap.MaxY() > cbMap.MaxY();
+		if (fZoomed) {
+			double pathScale = 0;
+			double clip_plane0[]={-1.0, 0.0, 0.0, cbMap.cMax.x + pathScale};
+			double clip_plane1[]={1.0, 0.0, 0.0, -cbMap.cMin.x - pathScale};
+			double clip_plane2[]={0.0, -1.0, 0.0, cbMap.cMax.y + pathScale};
+			double clip_plane3[]={0.0, 1.0, 0.0, -cbMap.cMin.y - pathScale};
+			glClipPlane(GL_CLIP_PLANE0,clip_plane0);
+			glClipPlane(GL_CLIP_PLANE1,clip_plane1);
+			glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+			glClipPlane(GL_CLIP_PLANE3,clip_plane3);
+			glEnable(GL_CLIP_PLANE0);
+			glEnable(GL_CLIP_PLANE1);
+			glEnable(GL_CLIP_PLANE2);
+			glEnable(GL_CLIP_PLANE3);
+		}
+		spaceTimeDrawer->drawXY();
+		if (fZoomed) {
+			glDisable(GL_CLIP_PLANE0);
+			glDisable(GL_CLIP_PLANE1);
+			glDisable(GL_CLIP_PLANE2);
+			glDisable(GL_CLIP_PLANE3);
+		}
+		glEndList();
+	}
+	return true;
+}
+
+bool SpaceTimeElementsDrawer::drawYT(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
+	if ( !isActive() || !isValid())
+		return false;
+	if (!properties["yt"].visible)
+		return false;
+	double alpha = 1.0 - properties["yt"].transparency;
+	if ((drawLoop == drl3DOPAQUE && alpha != 1.0) || (drawLoop == drl3DTRANSPARENT && alpha == 1.0))
+		return false;
+	if (*fRefreshDisplayListYT) {
+		if (*displayListYT != 0) {
+			glDeleteLists(*displayListYT, 1);
+			*displayListYT = 0;
+		}
+		*fRefreshDisplayListYT = false;
+	}
+
+	Color color (properties["yt"].color);
+	// glColor4f(color.redP(), color.greenP(), color.blueP(), alpha);
+	glColor4f(1, 1, 1, alpha);
+
+	if (*displayListYT != 0)
+		glCallList(*displayListYT);
+	else
+	{
+		*displayListYT = glGenLists(1);
+		glNewList(*displayListYT, GL_COMPILE_AND_EXECUTE);
+		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+		CoordBounds cbBaseMap = spaceTimeDrawer->getBasemap()->cb();
+		bool fZoomed = cbBaseMap.MinX() < cbMap.MinX() || cbBaseMap.MinY() < cbMap.MinY() || cbBaseMap.MaxX() > cbMap.MaxX() || cbBaseMap.MaxY() > cbMap.MaxY();
+		if (fZoomed) {
+			double pathScale = 0;
+			double clip_plane0[]={-1.0, 0.0, 0.0, cbMap.cMax.x + pathScale};
+			double clip_plane1[]={1.0, 0.0, 0.0, -cbMap.cMin.x - pathScale};
+			double clip_plane2[]={0.0, -1.0, 0.0, cbMap.cMax.y + pathScale};
+			double clip_plane3[]={0.0, 1.0, 0.0, -cbMap.cMin.y - pathScale};
+			glClipPlane(GL_CLIP_PLANE0,clip_plane0);
+			glClipPlane(GL_CLIP_PLANE1,clip_plane1);
+			glClipPlane(GL_CLIP_PLANE2,clip_plane2);
+			glClipPlane(GL_CLIP_PLANE3,clip_plane3);
+			glEnable(GL_CLIP_PLANE0);
+			glEnable(GL_CLIP_PLANE1);
+			glEnable(GL_CLIP_PLANE2);
+			glEnable(GL_CLIP_PLANE3);
+		}
+		spaceTimeDrawer->drawYT();
+		if (fZoomed) {
+			glDisable(GL_CLIP_PLANE0);
+			glDisable(GL_CLIP_PLANE1);
+			glDisable(GL_CLIP_PLANE2);
+			glDisable(GL_CLIP_PLANE3);
+		}
+		glEndList();
+	}
+	return true;
+}
+
+void SpaceTimeElementsDrawer::callXTList() const {
+	if (*displayListXT != 0)
+		glCallList(*displayListXT);
+}
+
+void SpaceTimeElementsDrawer::callXYList() const {
+	if (*displayListXY != 0)
+		glCallList(*displayListXY);
+}
+
+void SpaceTimeElementsDrawer::callYTList() const {
+	if (*displayListYT != 0)
+		glCallList(*displayListYT);
 }
 
 // #######################################################################################################

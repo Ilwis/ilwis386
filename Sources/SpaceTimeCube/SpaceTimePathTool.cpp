@@ -68,7 +68,6 @@ HTREEITEM SpaceTimePathTool::configure( HTREEITEM parentItem) {
 	insertItem(TR("Footprint"),"Axis",item,0);
 
 	// implement XT, XY, YT lines first, then uncomment the following
-	/*
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeXT);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setXTVisibility);
@@ -83,7 +82,6 @@ HTREEITEM SpaceTimePathTool::configure( HTREEITEM parentItem) {
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeYT);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setYTVisibility);
 	insertItem(TR("YT Reference Lines"),"Axis",item,0);
-	*/
 
 	return htiNode;
 }
@@ -233,7 +231,7 @@ void  EdgesForm::apply() {
 SpaceTimeElementsForm::SpaceTimeElementsForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM htiTr, PathElement& elem) : 
 DisplayOptionsForm(dr,wPar,elem.label), slider(0), fc(0), element(elem)
 {
-	if ( element.color != colorUNDEF) {
+	if ( !element.color.fEqual(colorUNDEF)) {
 		fc = new FieldColor(root,TR("Color"),&(element.color));
 	}
 	if ( element.transparency != rUNDEF) {

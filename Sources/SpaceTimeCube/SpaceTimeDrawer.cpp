@@ -338,15 +338,21 @@ vector<GLuint> SpaceTimeDrawer::getSelectedObjectIDs(const CRect& rect) const
 
 	bool fSpaceTimeDrawer = true;
 	bool fFootprintDrawer = true;
+	bool fXTDrawer = true;
+	bool fXYDrawer = true;
+	bool fYTDrawer = true;
 	
 	if (spaceTimeElementsDrawer) {
 		fSpaceTimeDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["spacetimepath"].visible;
 		fFootprintDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["footprint"].visible;
+		fXTDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["xt"].visible;
+		fXYDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["xy"].visible;
+		fYTDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["yt"].visible;
 	}
 
 	if (rootDrawer->getDrawerContext()->TakeContext())
 	{
-		if (fSpaceTimeDrawer && *displayList != 0)
+		if (fSpaceTimeDrawer || fFootprintDrawer || fXTDrawer || fXYDrawer || fYTDrawer)
 		{
 			const unsigned int SELECT_BUF_SIZE = 2048;
 			GLuint selectBuf [SELECT_BUF_SIZE];
@@ -377,14 +383,25 @@ vector<GLuint> SpaceTimeDrawer::getSelectedObjectIDs(const CRect& rect) const
 				glScaled(1,1,0);
 			glMatrixMode(GL_TEXTURE);
 			glPushMatrix();
-			glCallList(*displayList);
+			if (*displayList != 0)
+				glCallList(*displayList);
+			if (spaceTimeElementsDrawer) {
+				if (fXTDrawer)
+					spaceTimeElementsDrawer->callXTList();
+				if (fXYDrawer)
+					spaceTimeElementsDrawer->callXYList();
+				if (fYTDrawer)
+					spaceTimeElementsDrawer->callYTList();
+			}
 			glPopMatrix();
 			glMatrixMode(GL_MODELVIEW);
 			glPopMatrix();
+			drawPostDrawers(drl3DOPAQUE, cbArea);
+			if (fFootprintDrawer && spaceTimeElementsDrawer)
+				spaceTimeElementsDrawer->callFootprintList();
 			glMatrixMode(GL_PROJECTION);
 			glPopMatrix();
 			glMatrixMode(GL_MODELVIEW);
-			drawPostDrawers(drl3DOPAQUE, cbArea);
 			int nrObjects = glRenderMode(GL_RENDER);
 			vector<std::pair<GLuint, GLuint>> sortedObjectIDs;
 			for (int i = 0; i < nrObjects; ++i) {
@@ -540,13 +557,19 @@ void SpaceTimeDrawer::SetTimePosVariable(double * _timePos) {
 bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
 	bool fSpaceTimeDrawer = true;
 	bool fFootprintDrawer = true;
+	bool fXTDrawer = true;
+	bool fXYDrawer = true;
+	bool fYTDrawer = true;
 	
 	if (spaceTimeElementsDrawer) {
 		fSpaceTimeDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["spacetimepath"].visible;
 		fFootprintDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["footprint"].visible;
+		fXTDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["xt"].visible;
+		fXYDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["xy"].visible;
+		fYTDrawer = (*((PathElementProperties*)spaceTimeElementsDrawer->getProperties()))["yt"].visible;
 	}
 	if (fSpaceTimeDrawer) {
-		if ((drawLoop == drl3DOPAQUE && transparency != 1.0) || (drawLoop == drl3DTRANSPARENT && transparency == 1.0))
+		if ((drawLoop == drl3DOPAQUE && alpha != 1.0) || (drawLoop == drl3DTRANSPARENT && alpha == 1.0))
 			fSpaceTimeDrawer = false;
 	}
 
@@ -601,7 +624,7 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 
 	//if (drm == drmSINGLE)
 	//	glColor4d(singleColor.redP(), singleColor.greenP(), singleColor.blueP(), transparency);
-	glColor4f(1, 1, 1, transparency);
+	glColor4f(1, 1, 1, alpha);
 	const int steps = nrSteps;
 	const bool fUseLight = is3D && steps > 1;
 	if (fUseLight) {
@@ -832,6 +855,24 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 		glDisable(GL_NORMALIZE);
 	}
 
+	if (spaceTimeElementsDrawer) {
+		if (fXTDrawer) {
+			glPopMatrix(); // reset texture matrix to its original values
+			glPushMatrix(); // in order to re-use it in the following
+			spaceTimeElementsDrawer->drawXT(drawLoop, cbArea);
+		}
+		if (fXYDrawer) {
+			glPopMatrix(); // reset texture matrix to its original values
+			glPushMatrix(); // in order to re-use it in the following
+			spaceTimeElementsDrawer->drawXY(drawLoop, cbArea);
+		}
+		if (fYTDrawer) {
+			glPopMatrix(); // reset texture matrix to its original values
+			glPushMatrix(); // in order to re-use it in the following
+			spaceTimeElementsDrawer->drawYT(drawLoop, cbArea);
+		}
+	}
+
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
 	glDisable(GL_TEXTURE_2D);
@@ -844,7 +885,7 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 	drawPostDrawers(drawLoop, cbArea);
 
 	if (fFootprintDrawer && spaceTimeElementsDrawer)
-		spaceTimeElementsDrawer->draw(drawLoop, cbArea);
+		spaceTimeElementsDrawer->drawFootprint(drawLoop, cbArea);
 
 	csDraw->Unlock();
 

@@ -441,6 +441,8 @@ void SpaceTimePathDrawer::drawFootprint() const
 	double cubeBottom = -0.0000000005; // inaccuracy of time
 	double cubeTop = 0.000000001 + timeBounds->tMax() - timeBounds->tMin();
 	GLuint objectID = 0;
+	glInitNames();
+	glPushName(objectID);
 	glCallList((*subDisplayLists)[objectID]);
 	glBegin(GL_LINE_STRIP);
 	String sLastGroupValue = fUseGroup && (numberOfFeatures > 0) ? getGroupValue(features[0]) : "";
@@ -449,7 +451,7 @@ void SpaceTimePathDrawer::drawFootprint() const
 		if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
 			sLastGroupValue = getGroupValue(feature);
 			glEnd();
-			++objectID;
+			glLoadName(++objectID);
 			glCallList((*subDisplayLists)[objectID]);
 			glBegin(GL_LINE_STRIP);
 		}
@@ -469,6 +471,160 @@ void SpaceTimePathDrawer::drawFootprint() const
 			trq.fUpdate(i, numberOfFeatures); 
 	}
 	glEnd();
+	glPopName();
+}
+
+void SpaceTimePathDrawer::drawXT() const
+{
+	Tranquilizer trq(TR("computing XT lines"));
+	Column attributeColumn;
+	bool fUseAttributeColumn = useAttributeColumn();
+	if (fUseAttributeColumn) {
+		attributeColumn = getAtttributeColumn();
+		if (!attributeColumn.fValid())
+			fUseAttributeColumn = false;
+	}
+	RangeReal rrMinMax = getValueRange(attributeColumn);
+	double width = rrMinMax.rWidth();
+	double minMapVal = rrMinMax.rLo();
+	long numberOfFeatures = features.size();
+	double cubeBottom = -0.0000000005; // inaccuracy of time
+	double cubeTop = 0.000000001 + timeBounds->tMax() - timeBounds->tMin();
+	GLuint objectID = 0;
+	glInitNames();
+	glPushName(objectID);
+	glCallList((*subDisplayLists)[objectID]);
+	glBegin(GL_LINES);
+	String sLastGroupValue = fUseGroup && (numberOfFeatures > 0) ? getGroupValue(features[0]) : "";
+	for(long i = 0; i < numberOfFeatures; ++i) {
+		Feature *feature = features[i];
+		if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
+			sLastGroupValue = getGroupValue(feature);
+			glEnd();
+			glLoadName(++objectID);
+			glCallList((*subDisplayLists)[objectID]);
+			glBegin(GL_LINES);
+		}
+		ILWIS::Point *point = (ILWIS::Point *)feature;
+		double z = getTimeValue(feature);
+		if (z >= cubeBottom && z <= cubeTop) {
+			Coord crd = *(point->getCoordinate());
+			crd.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+			crd = getRootDrawer()->glConv(csy, crd);
+			if (fUseAttributeColumn)
+				glTexCoord2f(textureOffset + textureRange * ((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+			else
+				glTexCoord2f(textureOffset + textureRange * (feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+			glVertex3f(crd.x, cube.cMin.y, crd.z);
+			glVertex3f(crd.x, crd.y, crd.z);
+		}
+		if ( i % 100 == 0)
+			trq.fUpdate(i, numberOfFeatures); 
+	}
+	glEnd();
+	glPopName();
+}
+
+void SpaceTimePathDrawer::drawXY() const
+{
+	Tranquilizer trq(TR("computing XY lines"));
+	Column attributeColumn;
+	bool fUseAttributeColumn = useAttributeColumn();
+	if (fUseAttributeColumn) {
+		attributeColumn = getAtttributeColumn();
+		if (!attributeColumn.fValid())
+			fUseAttributeColumn = false;
+	}
+	RangeReal rrMinMax = getValueRange(attributeColumn);
+	double width = rrMinMax.rWidth();
+	double minMapVal = rrMinMax.rLo();
+	long numberOfFeatures = features.size();
+	double cubeBottom = -0.0000000005; // inaccuracy of time
+	double cubeTop = 0.000000001 + timeBounds->tMax() - timeBounds->tMin();
+	GLuint objectID = 0;
+	glInitNames();
+	glPushName(objectID);
+	glCallList((*subDisplayLists)[objectID]);
+	glBegin(GL_LINES);
+	String sLastGroupValue = fUseGroup && (numberOfFeatures > 0) ? getGroupValue(features[0]) : "";
+	for(long i = 0; i < numberOfFeatures; ++i) {
+		Feature *feature = features[i];
+		if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
+			sLastGroupValue = getGroupValue(feature);
+			glEnd();
+			glLoadName(++objectID);
+			glCallList((*subDisplayLists)[objectID]);
+			glBegin(GL_LINES);
+		}
+		ILWIS::Point *point = (ILWIS::Point *)feature;
+		double z = getTimeValue(feature);
+		if (z >= cubeBottom && z <= cubeTop) {
+			Coord crd = *(point->getCoordinate());
+			crd.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+			crd = getRootDrawer()->glConv(csy, crd);
+			if (fUseAttributeColumn)
+				glTexCoord2f(textureOffset + textureRange * ((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+			else
+				glTexCoord2f(textureOffset + textureRange * (feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+			glVertex3f(crd.x, crd.y, cubeBottom);
+			glVertex3f(crd.x, crd.y, crd.z);
+		}
+		if ( i % 100 == 0)
+			trq.fUpdate(i, numberOfFeatures); 
+	}
+	glEnd();
+	glPopName();
+}
+
+void SpaceTimePathDrawer::drawYT() const
+{
+	Tranquilizer trq(TR("computing YT lines"));
+	Column attributeColumn;
+	bool fUseAttributeColumn = useAttributeColumn();
+	if (fUseAttributeColumn) {
+		attributeColumn = getAtttributeColumn();
+		if (!attributeColumn.fValid())
+			fUseAttributeColumn = false;
+	}
+	RangeReal rrMinMax = getValueRange(attributeColumn);
+	double width = rrMinMax.rWidth();
+	double minMapVal = rrMinMax.rLo();
+	long numberOfFeatures = features.size();
+	double cubeBottom = -0.0000000005; // inaccuracy of time
+	double cubeTop = 0.000000001 + timeBounds->tMax() - timeBounds->tMin();
+	GLuint objectID = 0;
+	glInitNames();
+	glPushName(objectID);
+	glCallList((*subDisplayLists)[objectID]);
+	glBegin(GL_LINES);
+	String sLastGroupValue = fUseGroup && (numberOfFeatures > 0) ? getGroupValue(features[0]) : "";
+	for(long i = 0; i < numberOfFeatures; ++i) {
+		Feature *feature = features[i];
+		if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
+			sLastGroupValue = getGroupValue(feature);
+			glEnd();
+			glLoadName(++objectID);
+			glCallList((*subDisplayLists)[objectID]);
+			glBegin(GL_LINES);
+		}
+		ILWIS::Point *point = (ILWIS::Point *)feature;
+		double z = getTimeValue(feature);
+		if (z >= cubeBottom && z <= cubeTop) {
+			Coord crd = *(point->getCoordinate());
+			crd.z = z * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+			crd = getRootDrawer()->glConv(csy, crd);
+			if (fUseAttributeColumn)
+				glTexCoord2f(textureOffset + textureRange * ((fValueMap ? attributeColumn->rValue(feature->iValue()) : attributeColumn->iRaw(feature->iValue())) - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+			else
+				glTexCoord2f(textureOffset + textureRange * (feature->rValue() - minMapVal) / width, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+			glVertex3f(cube.cMin.x, crd.y, crd.z);
+			glVertex3f(crd.x, crd.y, crd.z);
+		}
+		if ( i % 100 == 0)
+			trq.fUpdate(i, numberOfFeatures); 
+	}
+	glEnd();
+	glPopName();
 }
 
 //-----------------------------------------------------------------

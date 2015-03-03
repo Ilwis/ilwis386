@@ -31,6 +31,9 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		void SetClipTPlus(bool fClip);
 		void SetClipTMinus(bool fClip);
 		virtual void drawFootprint() const = 0;
+		virtual void drawXT() const = 0;
+		virtual void drawXY() const = 0;
+		virtual void drawYT() const = 0;
 
 	protected:
 		String store(const FileName& fnView, const String& parentSection) const;

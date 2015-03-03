@@ -257,6 +257,18 @@ void StationsDrawer::drawFootprint() const
 {
 }
 
+void StationsDrawer::drawXT() const
+{
+}
+
+void StationsDrawer::drawXY() const
+{
+}
+
+void StationsDrawer::drawYT() const
+{
+}
+
 //-----------------------------------------------------------------
 
 

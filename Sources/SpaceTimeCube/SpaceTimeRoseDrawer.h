@@ -15,6 +15,7 @@ class _export SpaceTimeRoseDrawer : public SpaceTimePathDrawer {
 		void executeStcCommand(const String& cmd);
 		virtual ~SpaceTimeRoseDrawer();
 		virtual void prepare(PreparationParameters *parms);
+		virtual void drawXY() const;
 		static const list<SpaceTimeRoseDrawer*> & getSpaceTimeRoseDrawers();
 
 	protected:

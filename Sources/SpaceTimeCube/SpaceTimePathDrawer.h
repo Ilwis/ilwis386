@@ -18,6 +18,9 @@ class _export SpaceTimePathDrawer : public SpaceTimeDrawer, public SortableDrawe
 		const vector<Feature *> & getFeatures() const;
 		virtual void getRaws(GLuint objectID, vector<long> & raws) const;
 		virtual void drawFootprint() const;
+		virtual void drawXT() const;
+		virtual void drawXY() const;
+		virtual void drawYT() const;
 
 	protected:
 		String store(const FileName& fnView, const String& parentSection) const;

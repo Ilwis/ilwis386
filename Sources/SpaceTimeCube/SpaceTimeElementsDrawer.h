@@ -22,7 +22,7 @@ namespace ILWIS {
 			label = ce.label;
 		}
 		bool isValid() const{
-			return color == colorUNDEF && transparency == rUNDEF && visible == false;
+			return color.fEqual(colorUNDEF) && (transparency == rUNDEF) && (!visible);
 		}
 		static PathElement undefElement;
 		String store(const FileName& fnView, const String& parentSection) const;
@@ -52,7 +52,14 @@ namespace ILWIS {
 
 		SpaceTimeElementsDrawer(DrawerParameters *parms);
 		virtual ~SpaceTimeElementsDrawer();
-		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
+		bool drawFootprint(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
+		bool drawXT(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
+		bool drawXY(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
+		bool drawYT(const DrawLoop drawLoop, const CoordBounds& cbArea=CoordBounds()) const;
+		void callFootprintList() const;
+		void callXTList() const;
+		void callXYList() const;
+		void callYTList() const;
 		void prepare(PreparationParameters *parms);
 		void SetSpaceTimeDrawer(SpaceTimeDrawer * _spaceTimeDrawer);
 		void RefreshDisplayList() const;
@@ -60,9 +67,14 @@ namespace ILWIS {
 		String store(const FileName& fnView, const String& parentSection) const;
 		void load(const FileName& fnView, const String& parentSection);
 	protected:
-		bool * fFootprintComputed;
-		GLuint * displayList;
-		bool * fRefreshDisplayList;
+		GLuint * displayListFootprint;
+		bool * fRefreshDisplayListFootprint;
+		GLuint * displayListXT;
+		bool * fRefreshDisplayListXT;
+		GLuint * displayListXY;
+		bool * fRefreshDisplayListXY;
+		GLuint * displayListYT;
+		bool * fRefreshDisplayListYT;
 		SpaceTimeDrawer * spaceTimeDrawer;
 		BaseMapPtr *basemap;
 		PathElementProperties properties;

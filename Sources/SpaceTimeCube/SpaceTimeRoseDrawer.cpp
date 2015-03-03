@@ -151,73 +151,13 @@ void SpaceTimeRoseDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 				if (fCutPath) {
 					fCutPath = false;
 					head = Coord(); // no plotting of connectionCoords in next loop
-				} else
-				{
-					/*
-					if (!headPrevious.fUndef())
-					{
-						// connectionCoords
-						glBegin(GL_TRIANGLE_STRIP);
-						Coord ABprevious = tailPrevious;
-						ABprevious -= headPrevious;
-						Coord AB = tail;
-						AB -= head;
-
-						double f = 0; // the angle
-						glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-						Coord normCircle = projectOnCircle(ABprevious, rHead, f);
-						Coord normal = normalize(normCircle);
-						glNormal3f(normal.x, normal.y, normal.z);
-						normCircle += tailPrevious;
-						glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-						glTexCoord2f(rsHead, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-						normCircle = projectOnCircle(AB, rHead, f);
-						normal = normalize(normCircle);
-						glNormal3f(normal.x, normal.y, normal.z);
-						normCircle += head;
-						glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-						glEnd();
-					}
-					*/
-
+				} else {
 					if (hatch) {
 						*fHatching = true;
 						glEnable(GL_POLYGON_STIPPLE);
 						glPolygonStipple(hatch);
 					} else
 						glDisable(GL_POLYGON_STIPPLE);
-
-					// cylinderCoords
-					glBegin(GL_TRIANGLE_STRIP);
-					Coord AB = tail;
-					AB -= head;
-
-					double rHeadAngle1 = rHeadAngle - M_PI / 32.0;
-					double rHeadAngle2 = rHeadAngle + M_PI / 32.0;
-					double f = rHeadAngle2;
-
-					const double angleStep = (2.0 * M_PI - M_PI / 16.0) / steps;
-					const double rCenter = pathScale * properties->exaggeration / 20.0;
-					for (int step = 0; step < (1 + steps); ++step)
-					{
-						//if (step == steps)
-						//	f = 0; // close the cylinder, choose exactly the same angle as the fist time
-						glTexCoord2f(textureOffset, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-						Coord normCircle = projectOnCircle(AB, rCenter, f);
-						Coord normal = normalize(normCircle);
-						glNormal3f(normal.x, normal.y, normal.z);
-						normCircle += tail;
-						glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-						glTexCoord2f(textureOffset, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
-						normCircle = projectOnCircle(AB, rCenter, f);
-						normal = normalize(normCircle);
-						glNormal3f(normal.x, normal.y, normal.z);
-						normCircle += head;
-						glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-						f += angleStep;
-					}
-
-					glEnd();
 
 					// cylinderCoords
 					if (fTimeSelected(sLastGroupValue, z))
@@ -257,7 +197,7 @@ void SpaceTimeRoseDrawer::drawItem(Coord head, double rHead, double rHeadAngle, 
 	double rTailAngle2 = rTailAngle + M_PI / 32.0;
 	const CoordBounds& cbMap = getRootDrawer()->getMapCoordBounds();
 	double pathScale = cbMap.width() / 50;
-	const double rCenter = pathScale * properties->exaggeration / 20.0;
+	const double rCenter = 0; // pathScale * properties->exaggeration / 20.0;
 
 	if (fFixedColor)
 		glTexCoord2f(rsHead, 0.25f);
@@ -428,6 +368,65 @@ void SpaceTimeRoseDrawer::drawItem(Coord head, double rHead, double rHeadAngle, 
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 
 	glEnd();
+}
+
+void SpaceTimeRoseDrawer::drawXY() const
+{
+	Tranquilizer trq(TR("computing XY lines"));
+	long numberOfFeatures = features.size();
+	double cubeBottom = -0.0000000005; // inaccuracy of "time"
+	double cubeTop = 0.000000001 + timeBounds->tMax() - timeBounds->tMin();
+	GLuint objectID = 0;
+	glInitNames();
+	glPushName(objectID);
+	String sLastGroupValue = fUseGroup && (numberOfFeatures > 0) ? getGroupValue(features[0]) : "";
+	double zMin = cubeTop;
+	double zMax = cubeBottom;
+	Coord crd;
+	for(long i = 0; i < numberOfFeatures; ++i) {
+		Feature *feature = features[i];
+		if (fUseGroup && sLastGroupValue != getGroupValue(feature)) {
+			sLastGroupValue = getGroupValue(feature);
+			glCallList((*subDisplayLists)[objectID]);
+			if (!crd.fUndef()) {
+				zMin = zMin * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+				zMax = zMax * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+				glBegin(GL_LINES);
+				glTexCoord2f(textureOffset, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+				glVertex3f(crd.x, crd.y, zMin);
+				glVertex3f(crd.x, crd.y, zMax);
+				glEnd();
+			}
+			zMin = cubeTop;
+			zMax = cubeBottom;
+			crd = Coord();
+			glLoadName(++objectID);
+		}
+		ILWIS::Point *point = (ILWIS::Point *)feature;
+		double z = getTimeValue(feature);
+		if (z >= cubeBottom && z <= cubeTop) {
+			zMin = min(zMin, z);
+			zMax = max(zMax, z);
+			if (crd.fUndef()) {
+				crd = *(point->getCoordinate());
+				crd.z = 0;
+				crd = getRootDrawer()->glConv(csy, crd);
+			}
+		}
+		if ( i % 100 == 0)
+			trq.fUpdate(i, numberOfFeatures); 
+	}
+	glCallList((*subDisplayLists)[objectID]);
+	if (!crd.fUndef()) {
+		zMin = zMin * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+		zMax = zMax * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+		glBegin(GL_LINES);
+		glTexCoord2f(textureOffset, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
+		glVertex3f(crd.x, crd.y, zMin);
+		glVertex3f(crd.x, crd.y, zMax);
+		glEnd();
+	}
+	glPopName();
 }
 
 void SpaceTimeRoseDrawer::executeStcCommand(const String& cmd)
