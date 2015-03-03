@@ -294,7 +294,7 @@ FieldColor::FieldColor(FormEntry* p, const String& sQuestion,
 				 (NotifyProc)&FieldColor::CreateColor, 
 				 true, false);
   if ( useTransparency) {
-	  transp = color->transparencyP() * 100;
+	  transp = 100 - color->alphaP() * 100;
 	  slider = new FieldIntSliderEx(this,TR("Transparency"),&transp,ValueRangeInt(0,100), true);
 	  slider->Align(st ? (FormEntry *)st : (FormEntry *)fcs, AL_UNDER);
 	  
@@ -319,7 +319,7 @@ void FieldColor::StoreData() {
 	fcs->StoreData();
 	if ( slider) {
 		slider->StoreData();
-		clr->transparency() = 255.0 * transp / 100.0;
+		clr->alpha() = 255.0 - round(255.0 * transp / 100.0);
 	}
 }
 
