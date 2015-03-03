@@ -80,9 +80,9 @@ void SelectableTool::setSelectable(void *v, HTREEITEM) {
 			view->changeStateTool(ID_SELECTFEATURES, true);		
 
 		if (view->fAdjustSize)
-			as = new AreaSelector(view, this, (NotifyRectProc)&SelectableTool::FeatureAreaSelected, Color(0,255,0,0.2));
+			as = new AreaSelector(view, this, (NotifyRectProc)&SelectableTool::FeatureAreaSelected, Color(0,255,0,200));
 		else 
-			as = new AreaSelector(view, this, (NotifyRectProc)&SelectableTool::FeatureAreaSelected, view->dim, Color(0,255,0,0.2));
+			as = new AreaSelector(view, this, (NotifyRectProc)&SelectableTool::FeatureAreaSelected, view->dim, Color(0,255,0,200));
 		as->SetCursor(zCursor("Edit"));
 		as->setActive(true);
 	} else {

@@ -66,7 +66,7 @@ String HighLightTool::getMenuString() const {
 AnimationAreaOfInterest::AnimationAreaOfInterest(CWnd *par, AnimationDrawer *adr) 
 	: DisplayOptionsForm(adr, par, TR("Area of Interest")), boxdrw(0)
 {
-	clr = Color(60,60,60, 120);
+	clr = Color(60,60,60, 135);
 	fb = new FlatIconButton(root, "SelectAoi", TR("Select Area"),(NotifyProc)&AnimationAreaOfInterest::createROIDrawer,FileName());
 	fb->SetIndependentPos();
 	fc = new FieldColor(root, TR("Out area color"), &clr, true);
@@ -118,7 +118,7 @@ int AnimationAreaOfInterest::createROIDrawer(Event*) {
 	if ( boxId == "") {
 		fb->SetText(TR("Unselect Area"));
 		view->GetDocument()->mpvGetView()->selectArea(this,
-			(NotifyRectProc)&AnimationAreaOfInterest::areaOfInterest,"DRAGOK",Color(255,0,0,0.2)); 
+			(NotifyRectProc)&AnimationAreaOfInterest::areaOfInterest,"DRAGOK",Color(255,0,0,200)); 
 	} else {
 		drw->getRootDrawer()->removeDrawer(boxId);
 		fb->SetText(TR("Select Area"));

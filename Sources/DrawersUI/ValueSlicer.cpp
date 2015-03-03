@@ -56,7 +56,7 @@ void ValueSlicer::drawRprBase(LPDRAWITEMSTRUCT lpDIS, const CRect rct) {
 		for(int j=0; j < rpg->iGetStretchSteps(); ++j) {
 			double cv = v1 + j * rStep;
 			Color c = rpg->clr(cv + rStep - delta);
-			Gdiplus::SolidBrush brush(Gdiplus::Color(255 - c.transparency(), c.red(), c.green(), c.blue()));
+			Gdiplus::SolidBrush brush(Gdiplus::Color(c.alpha(), c.red(), c.green(), c.blue()));
 			int yup = rct.bottom - y - yscale;
 			int ydown = rct.bottom - y;
 			Gdiplus::Rect rectangle(rct.left, yup, rct.Width(), ydown - yup);
@@ -218,11 +218,11 @@ void ValueSlicer::OnLButtonDblClk(UINT nFlags, CPoint point) {
 	SlicingStepColor frm(this,&clr1, &v1, v1ChangeAllowed, &clr2, &v2, v2ChangeAllowed);
 	if ( frm.fOkClicked()) {
 
-		clr2.transparency() = clr1.transparency();
+		clr2.alpha() = clr1.alpha();
 		int index = fldslicer->selectedIndex * 2;
 		fldslicer->rprgrad->SetLimitColor(index, clr1);
 		fldslicer->rprgrad->SetLimitColor(index + 1, clr2);
-		fldslicer->transparency[fldslicer->selectedIndex] = clr2.transparency();
+		fldslicer->transparency[fldslicer->selectedIndex] = 255 - clr2.alpha();
 		RangeReal rr = fldslicer->valrange->rrMinMax();
 		if (v1 < v2) {
 			if (v1 >= rr.rLo())
@@ -445,12 +445,12 @@ Color ValueSlicerSlider::getColor(int i) {
 	int deltar = highColor.red() - lowColor.red();
 	int deltag = highColor.green() - lowColor.green();
 	int deltab = highColor.blue() - lowColor.blue();
-	int deltat = highColor.transparency() - lowColor.transparency();
+	int deltat = highColor.alpha() - lowColor.alpha();
 	int rstep = deltar / (nrBounds - 1);
 	int gstep = deltag / (nrBounds - 1);
 	int bstep = deltab / (nrBounds - 1);
 	int tstep = deltat / (nrBounds - 1);
-	return Color(lowColor.red() + rstep * i, lowColor.green() + gstep * i, lowColor.blue() + bstep * i, lowColor.transparency() + tstep * i);
+	return Color(lowColor.red() + rstep * i, lowColor.green() + gstep * i, lowColor.blue() + bstep * i, lowColor.alpha() + tstep * i);
 }
 
 

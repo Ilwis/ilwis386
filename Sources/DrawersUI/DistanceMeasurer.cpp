@@ -101,8 +101,8 @@ bool MeasurerLine::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) cons
 		LineDrawer::draw(drawLoop, cbArea);
 		glDisable(GL_BLEND);
 	}
-	double transp = getTransparency(); 
-	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),transp );
+	double alpha = getAlpha(); 
+	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),alpha );
 	glLineWidth(lproperties.thickness);
 	if (lproperties.linestyle != 0xFFFF) {
 			glEnable (GL_LINE_STIPPLE);

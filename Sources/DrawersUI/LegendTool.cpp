@@ -306,7 +306,7 @@ void  PolRprForm::apply() {
   root->StoreData();
   rcl->PutColor(iRaw, col);
   rcl->PutSecondColor(iRaw, col2);
-  rcl->PutTransparency(iRaw,transparency/ 100.0);
+  rcl->PutAlpha(iRaw,1.0 - transparency/100.0);
   if ( hatching != ""){
 	  hatching = hatching.sTrimSpaces();
 	  FileName fn(hatching);

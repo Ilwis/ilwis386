@@ -89,7 +89,7 @@ HTREEITEM PolygonSetTool::configure( HTREEITEM parentItem) {
 
 	item = new DisplayOptionTreeItem(tree,itemAreas,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&PolygonSetTool::displayOptionTransparencyP);
-	String transp("Transparency (%d)", 100 * pdrw->getTransparencyArea());
+	String transp("Transparency (%d)", 100 - 100 * pdrw->getAreaAlpha());
 	htiTransparency = insertItem(transp,"Transparent", item);
 
 	DrawerTool::configure(parentItem);
@@ -159,7 +159,7 @@ htiTransparent(htiTr)
 			pdrw = (PolygonLayerDrawer *)drw->getDrawer(i, ComplexDrawer::dtPOLYGONLAYER);
 		}
 	}
-	transparency = 100 *(1.0-pdrw->getTransparencyArea());
+	transparency = 100 *(1.0-pdrw->getAreaAlpha());
 	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
 	slider->SetCallBack((NotifyProc)&TransparencyFormP::setTransparency);
 	slider->setContinuous(true);
@@ -181,14 +181,14 @@ void  TransparencyFormP::apply() {
 		for(int i = 0; i < setDrw->getDrawerCount(); ++i) {
 			PolygonLayerDrawer *pdrw = (PolygonLayerDrawer *)drw->getDrawer(i, ComplexDrawer::dtPOLYGONLAYER);
 			if ( pdrw) {
-				pdrw->setTransparencyArea(1.0 - (double)transparency/100.0);
+				pdrw->setAreaAlpha(1.0 - (double)transparency/100.0);
 				pdrw->prepareChildDrawers(&pp);
 			}
 		}
 	}
 	else {
 		PolygonLayerDrawer *pdrw = (PolygonLayerDrawer *)drw;
-		pdrw->setTransparencyArea(1.0 - (double)transparency/100.0);
+		pdrw->setAreaAlpha(1.0 - (double)transparency/100.0);
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		pdrw->prepare(&pp);
 		String transp("Transparency (%d)",transparency);

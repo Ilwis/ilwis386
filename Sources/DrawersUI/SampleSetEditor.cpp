@@ -134,7 +134,7 @@ void SampleSetEditor::setcheckSelectMode(void *value, HTREEITEM item) {
 	}
 	if ( selectState == 1 && changed) {
 		tree->GetDocument()->mpvGetView()->selectArea(this,
-		(NotifyRectProc)&SampleSetEditor::areaOfInterest,"DRAGOK",Color(0,255,0,0.2),false); 
+		(NotifyRectProc)&SampleSetEditor::areaOfInterest,"DRAGOK",Color(0,255,0,200),false); 
 	}
 }
 

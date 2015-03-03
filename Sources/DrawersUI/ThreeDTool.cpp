@@ -303,7 +303,7 @@ DisplayOptionsForm(drw, p, TR("Extrusion options") )
 	if ( animdrw)
 		fdr = ((LayerDrawer *)animdrw->getDrawer(0));
 
-	transparency = 100 *(1.0-fdr->getExtrusionTransparency());
+	transparency = 100 *(1.0-fdr->getExtrusionAlpha());
 	if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoOpen) != 0)
 		line = 0;
 	if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoFilled) != 0)
@@ -325,7 +325,7 @@ DisplayOptionsForm(drw, p, TR("Extrusion options") )
 int ExtrusionOptions::setTransparency(Event *ev) {
 	slider->StoreData();
 	//((LayerDrawer *)drw)->extrTransparency = 1.0 - (double)transparency/100.0;
-	((LayerDrawer *)drw)->setExtrustionTransparency(1.0 - (double)transparency/100.0);
+	((LayerDrawer *)drw)->setExtrustionAlpha(1.0 - (double)transparency/100.0);
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	drw->prepare(&pp);
 	updateMapView();
@@ -367,6 +367,6 @@ void ExtrusionOptions::setFSDOptions(LayerDrawer *fsd) {
 		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, false);
 		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, true);
 	}
-	((LayerDrawer *)drw)->setExtrustionTransparency(1.0 - (double)transparency/100.0);
+	((LayerDrawer *)drw)->setExtrustionAlpha(1.0 - (double)transparency/100.0);
 
 }

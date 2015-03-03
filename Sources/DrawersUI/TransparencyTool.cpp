@@ -58,7 +58,7 @@ HTREEITEM TransparencyTool::configure( HTREEITEM parentItem) {
 		return parentItem;
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&TransparencyTool::displayOptionTransparency);
-	String transp("Transparency (%d)", 100 * drawer->getTransparency());
+	String transp("Transparency (%d)", 100 - 100 * drawer->getAlpha());
 	htiNode = insertItem(transp,"Transparent", item);
 
 	return htiNode;
@@ -75,7 +75,7 @@ String TransparencyTool::getMenuString() const {
 //---------------------------------------------------
 TransparencyForm::TransparencyForm(CWnd *wPar, ComplexDrawer *dr, HTREEITEM htiTr, bool _isDataLayer) : 
 DisplayOptionsForm(dr,wPar,"Transparency"),
-transparency(100 *(1.0-dr->getTransparency())),
+transparency(100 *(1.0-dr->getAlpha())),
 htiTransparent(htiTr), fldTranspValue(0), isDataLayer(_isDataLayer),useTV(false)
 {
 	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
@@ -128,7 +128,7 @@ void  TransparencyForm::apply() {
 		}
 		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
 			LayerDrawer *cdrw = (LayerDrawer *)animDrw->getDrawer(i);
-			cdrw->setTransparency(1.0 - (double)transparency/100.0);
+			cdrw->setAlpha(1.0 - (double)transparency/100.0);
 			cdrw->setTransparentValues(transpValues);
 		}
 		if ( oldRange != transpValues) {
@@ -139,7 +139,7 @@ void  TransparencyForm::apply() {
 	}
 	else {
 		ComplexDrawer *cdrw = (ComplexDrawer *)drw;
-		cdrw->setTransparency(1.0 - (double)transparency/100.0);
+		cdrw->setAlpha(1.0 - (double)transparency/100.0);
 		String transp("Transparency (%d)",transparency);
 		TreeItem titem;
 		view->getItem(htiTransparent,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);
