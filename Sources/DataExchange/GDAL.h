@@ -291,7 +291,7 @@ private:
 	void           CreateLayer(vector<LayerInfo> &li);
 
 	GDALRasterBandH  OpenLayer(int iChannel);
-	void           CreateLineBuffer(long iSize);
+	void           CreateLineBuffer();
 	void		   CreateRasterLayer(int iMaxChannels, bool fBitMap);
 	void           ImportRasterMap(const FileName& fnRasMap, Map& mp ,LayerInfo& li, int iChannel);
 	void		   GetRasterLayer(int iLayerIndex, Map& mp, Array<FileName>& arMaps, GeoRef& grf, 	Domain& dm,  bool fBitMap);

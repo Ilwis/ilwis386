@@ -278,15 +278,12 @@ void GDALFormat::CleanUp()
 		delete trq;
 		trq = NULL;
 	}
-	for(int i = 0; i < 3; ++i)
+	if ( dataSet ) 
 	{
-		if ( dataSet ) 
-		{
-			ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);	 			
-			funcs.close(dataSet );
-			currentLayer = NULL;
-			dataSet = NULL;	
-		}			
+		ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);	 			
+		funcs.close(dataSet );
+		currentLayer = NULL;
+		dataSet = NULL;	
 	}		
 	if ( buffer) delete [] buffer;
 	buffer = NULL;	
@@ -1071,7 +1068,7 @@ void GDALFormat::GetLineRaw(long iLine, ByteBuf& buf, long iFrom, long iNum) con
 {
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);			
 	if ( buffer == NULL)
-		(const_cast<GDALFormat *>(this))->CreateLineBuffer(iNum);
+		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
 	funcs.rasterIO(currentLayer, GF_Read, iFrom, iLine,iNum,1,(unsigned char *)buffer, iNum, 1, GDT_Byte,0,0);								
 	for( int i = 0; i< iNum; ++i)
@@ -1082,7 +1079,7 @@ void GDALFormat::GetLineRaw(long iLine, IntBuf& buf, long iFrom, long iNum) cons
 {
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);				
 	if ( buffer == NULL)
-		(const_cast<GDALFormat *>(this))->CreateLineBuffer(iNum);
+		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
 	funcs.rasterIO(currentLayer, GF_Read, iFrom, iLine,iNum,1,(unsigned char *)buffer, iNum, 1, GDT_Int16, 0,0);								
 
@@ -1094,7 +1091,7 @@ void GDALFormat::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long iNum) con
 {
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);				
 	if ( buffer == NULL)
-		(const_cast<GDALFormat *>(this))->CreateLineBuffer(iNum);
+		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
 	CPLErr ret = funcs.rasterIO (currentLayer, GF_Read, iFrom, iLine,iNum, 1, buffer, iNum, 1, dataType,0, 0);								
 
@@ -1143,7 +1140,7 @@ void GDALFormat::GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum) con
 {
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);				
 	if ( buffer == NULL)
-		(const_cast<GDALFormat *>(this))->CreateLineBuffer(iNum);
+		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
 	int gdalDataType = funcs.getDataType(dataSet);
 	funcs.rasterIO(currentLayer, GF_Read, iFrom, iLine,iNum,1, (unsigned char *)buffer, iNum, 1, dataType, 0,0);								
@@ -1192,10 +1189,11 @@ void GDALFormat::GetLineVal(long iLine, LongBuf& buf, long iFrom, long iNum) con
 	GetLineRaw(iLine, buf, iFrom, iNum);
 }
 
-void GDALFormat::CreateLineBuffer(long iSize)
+void GDALFormat::CreateLineBuffer()
 {
 	if(!currentLayer)
-		currentLayer = OpenLayer(iLayer);
+		currentLayer = OpenLayer(iLayer); // sets the dataType; GDAL requires that all bands in the dataset have the same data type
+	long iSize = funcs.xSize( dataSet ); // this function works on the dataSet; GDAL requires that all bands in the dataset have the same x-size
 	int iDataSize = funcs.dataSize(dataType);
 	buffer = new unsigned char [ iSize * iDataSize/8 ];
 	memset(buffer, 0, iSize * iDataSize/8);
@@ -1206,9 +1204,7 @@ long GDALFormat::iRaw(RowCol rc) const
 {
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);			
 	if ( buffer == NULL )
-	{
-		(const_cast<GDALFormat *>(this))->CreateLineBuffer(1);
-	}
+		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 	funcs.rasterIO(currentLayer, GF_Read, rc.Col, rc.Row, 1,1, (unsigned char *)buffer, 1, 1, GDT_Int32, 0,0);								
 	switch (funcs.getDataType(currentLayer))
 	{
@@ -1241,10 +1237,7 @@ double GDALFormat::rValue(RowCol rc) const
 {
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);					
 	if ( buffer == NULL )
-	{
-		int iLineSize = funcs.ySize( dataSet );
-		(const_cast<GDALFormat *>(this))->CreateLineBuffer(iLineSize);
-	}
+		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 	funcs.rasterIO(currentLayer, GF_Read, rc.Col, rc.Row,1,1,(unsigned char *)buffer, 1, 1, dataType, 0,0);
 	double rVal;
 	switch(dataType)
@@ -1290,7 +1283,7 @@ void GDALFormat::PutLineVal(const FileName& fnMap, long iLine, const RealBuf& bu
 {
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);				
 	if ( buffer == NULL)
-		(const_cast<GDALFormat *>(this))->CreateLineBuffer(iNum);
+		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
 	int iChannel = iLayer;
 	GDALDataType gdalDataType   ;
@@ -1312,7 +1305,7 @@ void GDALFormat::PutLineVal(const FileName& fnMap,long iLine, const LongBuf& buf
 {
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);				
 	if ( buffer == NULL)
-		(const_cast<GDALFormat *>(this))->CreateLineBuffer(iNum);
+		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
 	GDALDataType gdalDataType;
 	int iBands;
@@ -1355,7 +1348,7 @@ void GDALFormat::PutLineRaw(const FileName& fnMap, long iLine, const LongBuf& bu
 {
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);			
 	if ( buffer == NULL)
-		(const_cast<GDALFormat *>(this))->CreateLineBuffer(iNum);
+		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
 	Map mp(fnMap);
 	RangeInt ri = mp->dvrs().riMinMax();
@@ -1447,7 +1440,7 @@ void GDALFormat::PutLineRaw(const FileName& fnMap, long iLine, const IntBuf& buf
 {
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);				
 	if ( buffer == NULL)
-		(const_cast<GDALFormat *>(this))->CreateLineBuffer(iNum);
+		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
 	Map mp(fnMap);
 	for( int i = 0; i< iNum; ++i)
@@ -1461,7 +1454,7 @@ void GDALFormat::PutLineRaw(const FileName& fnMap, long iLine, const ByteBuf& bu
 {
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);				
 	if ( buffer == NULL)
-		(const_cast<GDALFormat *>(this))->CreateLineBuffer(iNum);
+		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
 	int iChannel = iLayer;
 	Map mp(fnMap);
