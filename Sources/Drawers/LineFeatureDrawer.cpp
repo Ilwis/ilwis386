@@ -154,9 +154,9 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		}
 		if ( specialOptions == 0)
 			specialOptions = fdr->getSpecialDrawingOption();
-		double tr = fdr->getTransparency();
-		setTransparency(tr);
-		extrTransparency = fdr->getExtrusionTransparency();
+		double alpha = fdr->getAlpha();
+		setAlpha(alpha);
+		extrAlpha = fdr->getExtrusionAlpha();
 	}
 }
 

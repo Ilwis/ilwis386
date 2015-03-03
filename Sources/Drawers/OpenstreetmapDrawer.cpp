@@ -69,12 +69,12 @@ bool OpenstreetmapDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbAre
 	rastermap->gr()->pgOSM()->setLocatBounds(getRootDrawer()->getCoordinateSystem(), cb);
 	if (!data->init)
 		init();
-	if ((drawLoop == drl2D && transparency != 0.0) || (drawLoop == drl3DOPAQUE && transparency == 1.0) || (drawLoop == drl3DTRANSPARENT && transparency != 1.0 && transparency != 0.0)) { // no palette used, so we dont need to test on Palette's alphaminmax
+	if ((drawLoop == drl2D && alpha != 0.0) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0 && alpha != 0.0)) { // no palette used, so we dont need to test on Palette's alphaminmax
 		if (textureHeap->fValid())
 		{
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA); 
-			glColor4f(1, 1, 1, transparency);
+			glColor4f(1, 1, 1, alpha);
 
 			textureHeap->ClearQueuedTextures();
 

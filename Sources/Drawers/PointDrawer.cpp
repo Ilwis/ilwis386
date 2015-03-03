@@ -152,8 +152,8 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 
 		for(vector<IVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
 
-			double transp = (*cur)->opacity * getTransparency();
-			if ((drawLoop == drl3DOPAQUE && transp != 1.0) || (drawLoop == drl3DTRANSPARENT && transp == 1.0))
+			double alpha = (*cur)->opacity * getAlpha();
+			if ((drawLoop == drl3DOPAQUE && alpha != 1.0) || (drawLoop == drl3DTRANSPARENT && alpha == 1.0))
 				continue;
 
 			GLuint & displayListArea = SVGSymbolDisplayListAreas[*cur];
@@ -179,7 +179,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 							glScaled(rx, ry, 0);
 
 						if (!fcolor.fEqual(colorUNDEF)) {
-							glColor4d(fcolor.redP(), fcolor.greenP(), fcolor.blueP(), transp);
+							glColor4d(fcolor.redP(), fcolor.greenP(), fcolor.blueP(), alpha);
 							if (displayListArea != 0)
 								glCallList(displayListArea);
 							else {
@@ -190,7 +190,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 							}
 						}
 						if (!scolor.fEqual(colorUNDEF)) {
-							glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
+							glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), alpha);
 							if (displayListContour != 0)
 								glCallList(displayListContour);
 							else {
@@ -218,7 +218,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 						glScaled(hw, hh, 0);
 
 						if (!fcolor.fEqual(colorUNDEF)) {
-							glColor4d(fcolor.redP(), fcolor.greenP(), fcolor.blueP(), transp);
+							glColor4d(fcolor.redP(), fcolor.greenP(), fcolor.blueP(), alpha);
 							if (displayListArea != 0)
 								glCallList(displayListArea);
 							else {
@@ -229,7 +229,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 							}
 						}
 						if (!scolor.fEqual(colorUNDEF)) {
-							glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
+							glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), alpha);
 							if (displayListContour != 0)
 								glCallList(displayListContour);
 							else {
@@ -246,7 +246,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 				case IVGAttributes::sPOLYGON:
 					{
 						if (!fcolor.fEqual(colorUNDEF)) {
-							glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
+							glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), alpha);
 							if (displayListArea != 0)
 								glCallList(displayListArea);
 							else {
@@ -257,7 +257,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 							}
 						}
 						if (!scolor.fEqual(colorUNDEF)) {
-							glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), transp);
+							glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), alpha);
 							if (displayListContour != 0)
 								glCallList(displayListContour);
 							else {
@@ -273,7 +273,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 				case IVGAttributes::sPOLYLINE:
 					{
 						if (!scolor.fEqual(colorUNDEF)) {
-							glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), transp);
+							glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), alpha);
 							if (displayListContour != 0)
 								glCallList(displayListContour);
 							else {
@@ -289,7 +289,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 					{
 						if ((*cur)->isPolygon()) {
 							if (!fcolor.fEqual(colorUNDEF)) {
-								glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), transp);
+								glColor4f(fcolor.redP(),fcolor.greenP(), fcolor.blueP(), alpha);
 								if (displayListArea != 0)
 									glCallList(displayListArea);
 								else {
@@ -300,7 +300,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 								}
 							}
 							if (!scolor.fEqual(colorUNDEF)) {
-								glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), transp);
+								glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), alpha);
 								if (displayListContour != 0)
 									glCallList(displayListContour);
 								else {
@@ -313,7 +313,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 							}
 						}
 						else if (!scolor.fEqual(colorUNDEF)) {
-							glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), transp); // was fcolor, but probably wrong
+							glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), alpha); // was fcolor, but probably wrong
 							if (displayListContour != 0)
 								glCallList(displayListContour);
 							else {
@@ -345,8 +345,8 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 
 		if ( is3D) {
 			if ( extrusion) {
-				double transp = getTransparency() * element->at(element->size() - 1)->opacity; // transparency of extrusion is the transparency of the last element
-				if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && transp == 1.0) || (drawLoop == drl3DTRANSPARENT && transp != 1.0)) {
+				double alpha = getAlpha() * element->at(element->size() - 1)->opacity; // transparency of extrusion is the transparency of the last element
+				if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0)) {
 					glBegin(GL_LINE_STRIP) ;
 					glVertex3d(cNorm.x,cNorm.y,0);
 					glVertex3d(cNorm.x, cNorm.y,fz*zvmkr->getZScale());
