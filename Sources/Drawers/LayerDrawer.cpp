@@ -26,13 +26,13 @@ LayerDrawer::LayerDrawer(DrawerParameters *parms, const String& name) :
 	stretched(false),
 	stretchMethod(smLINEAR),
 	drawColor(0),
-	extrTransparency(0.2),
+	extrAlpha(0.2),
 	useAttColumn(false),
 	useRpr(true)
 	
 {
 	setInfo(true);
-	setTransparency(1);
+	setAlpha(1);
 }
 
 LayerDrawer::~LayerDrawer() {
@@ -116,15 +116,15 @@ Representation LayerDrawer::getRepresentation() const { // avoiding copy constru
 	return rpr;
 }
 
-double LayerDrawer::getExtrusionTransparency() const {
-	return extrTransparency;
+double LayerDrawer::getExtrusionAlpha() const {
+	return extrAlpha;
 }
 
-void LayerDrawer::setExtrustionTransparency(double v) {
-	extrTransparency = v;
+void LayerDrawer::setExtrustionAlpha(double v) {
+	extrAlpha = v;
 	for(int i = 0; i < drawers.size(); ++i) {
 		if ( drawers[i]->isSimple())
-			((SimpleDrawer *)drawers[i])->setExtrustionTransparency(v);
+			((SimpleDrawer *)drawers[i])->setExtrustionAlpha(v);
 	}
 }
 
@@ -256,7 +256,7 @@ String LayerDrawer::store(const FileName& fnView, const String& parentSection) c
 	if ( attColumn.fValid())
 		ObjectInfo::WriteElement(parentSection.c_str(),"AttributeColumn",fnView, attColumn->sName());
 	ObjectInfo::WriteElement(parentSection.c_str(),"UseAttributes",fnView, useAttColumn);
-	ObjectInfo::WriteElement(parentSection.c_str(),"ExtrusionTransparency",fnView, extrTransparency);
+	ObjectInfo::WriteElement(parentSection.c_str(),"ExtrusionAlpha",fnView, extrAlpha);
 	ObjectInfo::WriteElement(parentSection.c_str(),"UseRpr",fnView, useRpr);
 	if ( drawColor) {
 		drawColor->store(fnView, parentSection);

@@ -222,7 +222,7 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 }
 
 bool AnnotationLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ((drawLoop == drl3DOPAQUE && transparency != 1.0) || (drawLoop == drl3DTRANSPARENT && transparency == 1.0))
+	if ((drawLoop == drl3DOPAQUE && alpha != 1.0) || (drawLoop == drl3DTRANSPARENT && alpha == 1.0))
 		return true;
 	bool is3D = getRootDrawer()->is3D(); 
 
@@ -249,7 +249,7 @@ bool AnnotationLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	}
 	cbBoxed *= 1.05;
 	if ( useBackground) {
-		glColor4d(bgColor.redP(), bgColor.greenP(), bgColor.blueP(), getTransparency());
+		glColor4d(bgColor.redP(), bgColor.greenP(), bgColor.blueP(), getAlpha());
 		glBegin(GL_POLYGON);
 		Coordinate c(cbBoxed.MinX(), cbBoxed.MinY());
 		glVertex3d( c.x, c.y, z);
@@ -263,7 +263,7 @@ bool AnnotationLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	}
 
 	if ( drawOutsideBox) {
-		glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),getTransparency() );
+		glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),getAlpha());
 		glLineWidth(lproperties.thickness);
 		glBegin(GL_LINE_STRIP);
 		Coordinate c(cbBoxed.MinX(), cbBoxed.MinY());
@@ -622,7 +622,7 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	AnnotationLegendDrawer::draw(drawLoop, cbInner);
 	drawPreDrawers(drawLoop, cbArea);
 
-	double alpha = getTransparency();
+	double alpha = getAlpha();
 
 	//double z0 = cdrw->getZMaker()->getZ0(getRootDrawer()->is3D());
 
@@ -674,7 +674,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 	setText(values,0,Coord(endx + cbInner.width() / 3, starty  + cbInner.height() / 100.0,z));
 	for(int i=0; i < 100; ++i) {
 		Color clr = dc.clrVal(rV);
-		glColor4f(clr.redP(),clr.greenP(), clr.blueP(), getTransparency() );
+		glColor4f(clr.redP(),clr.greenP(), clr.blueP(), getAlpha() );
 		double endy = starty + cbInner.height() / 100.0;
 		glBegin(GL_POLYGON);
 		glVertex3d(startx,starty,z);
@@ -684,7 +684,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 		glEnd();
 		if ( count < values.size()  && values[count].rVal() <= rV) { 
 			setText(values, count, Coord(endx + cbInner.width() / 3, starty,z));
-			glColor4f(0,0, 0, getTransparency() );
+			glColor4f(0,0,0,getAlpha());
 			glBegin(GL_LINE_STRIP);
 			glVertex3d(endx,endy,z);
 			glVertex3d(endx + cbInner.width() / 10.0,endy,z);
@@ -717,7 +717,7 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Ran
 	setText(values,0,Coord(startx, endy - cbBox.height() / shifty,z));
 	for(int i=0; i < 100; ++i) {
 		Color clr = dc.clrVal(rV);
-		glColor4f(clr.redP(),clr.greenP(), clr.blueP(), getTransparency() );
+		glColor4f(clr.redP(),clr.greenP(),clr.blueP(),getAlpha());
 		double endx = startx + cbInner.width() / 100.0;
 		glBegin(GL_POLYGON);
 		glVertex3d(startx,starty,z);
@@ -727,7 +727,7 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Ran
 		glEnd();
 		if ( values[count].rVal() <= rV) { 
 			setText(values, count, Coord( startx, endy - cbBox.height() / shifty,z));
-			glColor4f(0,0, 0, getTransparency() );
+			glColor4f(0,0,0,getAlpha());
 			glBegin(GL_LINE_STRIP);
 			glVertex3d(endx,endy,z);
 			glVertex3d(endx ,endy - cbBox.height() / (shifty + 8),z);
@@ -1105,7 +1105,7 @@ void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
 		if ( !borderBox) {
 			DrawerParameters dp(getRootDrawer(),this);
 			borderBox = new BoxDrawer(&dp);
-			borderBox->setTransparency(1);
+			borderBox->setAlpha(1);
 			borderBox->setDrawColor(Color(255,255,255));
 			addDrawer(borderBox);
 			texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);

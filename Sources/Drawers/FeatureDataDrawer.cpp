@@ -30,7 +30,7 @@ ILWIS::NewDrawer *createFeatureDataDrawer(DrawerParameters *parms) {
 FeatureDataDrawer::FeatureDataDrawer(DrawerParameters *parms) : 
 	SpatialDataDrawer(parms,"FeatureDataDrawer")
 {
-	setTransparency(rUNDEF);
+	setAlpha(1);
 }
 
 FeatureDataDrawer::~FeatureDataDrawer() {

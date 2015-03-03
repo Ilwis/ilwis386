@@ -32,7 +32,7 @@ void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp){
 }
 
 bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb) const{
-	if ((drawLoop == drl3DOPAQUE && transparency != 1.0) || (drawLoop == drl3DTRANSPARENT && transparency == 1.0))
+	if ((drawLoop == drl3DOPAQUE && alpha != 1.0) || (drawLoop == drl3DTRANSPARENT && alpha == 1.0))
 		return false;
 
 	if (!isActive() || !isValid())
@@ -44,10 +44,10 @@ bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 	bool is3D = getRootDrawer()->is3D();
 	if ( is3D) {
-		glColor4d(outside3D.redP(), outside3D.greenP(), outside3D.blueP(),getTransparency());
+		glColor4d(outside3D.redP(), outside3D.greenP(), outside3D.blueP(),getAlpha());
 	}
 	else {
-		glColor4d(outside2D.redP(), outside2D.greenP(), outside2D.blueP(),getTransparency());
+		glColor4d(outside2D.redP(), outside2D.greenP(), outside2D.blueP(),getAlpha());
 	}
 	double z = is3D ? -getRootDrawer()->getFakeZ() : 0;
 	glBegin(GL_QUADS);						
@@ -65,10 +65,10 @@ bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	glEnd();
 
 	if ( is3D) {
-		glColor4d(inside3D.redP(), inside3D.greenP(), inside3D.blueP(),getTransparency());
+		glColor4d(inside3D.redP(), inside3D.greenP(), inside3D.blueP(),getAlpha());
 	}
 	else {
-		glColor4d(inside2D.redP(), inside2D.greenP(), inside2D.blueP(),getTransparency());
+		glColor4d(inside2D.redP(), inside2D.greenP(), inside2D.blueP(),getAlpha());
 	}
 	glBegin(GL_QUADS);						
 		glVertex3f(cbMap.MinX(), cbMap.MinY(),z);				

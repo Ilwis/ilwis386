@@ -32,7 +32,7 @@ namespace ILWIS{
 		void setNumberOfplanes(int n);
 		int getNumberOfPlanes() const;
 		void setTransparencyPlane( double v);
-		double getTransparencyPlane() const;
+		double getAlphaPlane() const;
 		void setBounds(const CoordBounds&);
 
 

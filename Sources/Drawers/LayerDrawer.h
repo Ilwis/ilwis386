@@ -34,8 +34,8 @@ class _export LayerDrawer : public ComplexDrawer {
 		void setAttributeColumn(const Column& col );
 		bool useAttributeColumn() const;
 		void setUseAttributeColumn(bool yesno);
-		double getExtrusionTransparency() const;
-		void setExtrustionTransparency(double v);
+		double getExtrusionAlpha() const;
+		void setExtrustionAlpha(double v);
 		virtual void modifyLineStyleItem(LayerTreeView  *tv, bool remove=false) {}
 		void *getDataSource() { return getParentDrawer()->getDataSource(); }
 		RangeReal getTransparentValues() const;
@@ -62,7 +62,7 @@ class _export LayerDrawer : public ComplexDrawer {
 		RangeReal rrLegendRange;
 		bool stretched;
 		StretchMethod stretchMethod;
-		double extrTransparency;
+		double extrAlpha;
 		vector<long> selectedRaws;
 		bool useRpr;
 	};

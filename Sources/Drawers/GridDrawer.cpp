@@ -61,7 +61,7 @@ bool GridDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 		glTranslated(0,0,z0);
 	}
 	ComplexDrawer::draw(drawLoop, cbArea);
-	if ( mode & mPLANE && ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && transparency == 1.0) || (drawLoop == drl3DTRANSPARENT && transparency != 1.0))) {
+	if ( mode & mPLANE && ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0))) {
 		drawPlane(cbArea);
 	}
 	if ( getRootDrawer()->is3D())
@@ -79,7 +79,7 @@ bool GridDrawer::drawPlane(const CoordBounds& cbArea) const{
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	ZValueMaker *zmaker = cdrw->getZMaker();
 
-	glColor4f(planeColor.redP(),planeColor.greenP(), planeColor.blueP(), getTransparency());
+	glColor4f(planeColor.redP(),planeColor.greenP(), planeColor.blueP(), getAlpha());
 	double zscale = zmaker->getZScale();
 	double zoffset = zmaker->getOffset();
 	glPushMatrix();
@@ -150,7 +150,7 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 			((LineProperties *)ld->getProperties())->drawColor = lproperties.drawColor;
 			((LineProperties *)ld->getProperties())->linestyle = lproperties.linestyle;
 			((LineProperties *)ld->getProperties())->thickness = lproperties.thickness;
-			ld->setTransparency(getTransparency());
+			ld->setAlpha(getAlpha());
 		}
 	}
 }

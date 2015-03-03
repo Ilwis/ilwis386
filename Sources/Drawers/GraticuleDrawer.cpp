@@ -25,7 +25,7 @@ ComplexDrawer(parms,"GraticuleDrawer")
 	id = name = "GraticuleDrawer";
 	rDist = rUNDEF;
 	setActive(false);
-	setTransparency(0.2);
+	setAlpha(0.8);
 	lproperties.thickness = 1;
 	lproperties.drawColor = Color(0,0,0);
 	lproperties.linestyle = 0xFFFF;
@@ -94,7 +94,7 @@ void GraticuleDrawer::prepare(PreparationParameters *pp) {
 			((LineProperties *)ld->getProperties())->drawColor = lproperties.drawColor;
 			((LineProperties *)ld->getProperties())->linestyle = lproperties.linestyle;
 			((LineProperties *)ld->getProperties())->thickness = lproperties.thickness;
-			ld->setTransparency(getTransparency());
+			ld->setAlpha(getAlpha());
 		}
 	}
 }
