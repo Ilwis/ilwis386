@@ -23,7 +23,7 @@ RootDrawer::RootDrawer()
 	}
 	backgroundDrawer = NewDrawer::getDrawer("CanvasBackgroundDrawer", &pp, &dp);
 
-	setTransparency(1.0);
+	setAlpha(1.0);
 	setName("RootDrawer");
 	threeD = false;
 	windowAspectRatio = 0;
