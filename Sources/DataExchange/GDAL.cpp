@@ -832,112 +832,6 @@ CoordSystem GDALFormat::GetCoordSystem()
 {
 	String wkt(funcs.getProjectionRef(dataSet));
 	return getEngine()->gdal->getCoordSystem(fnBaseOutputName,wkt);
-
-	//char wkt[5000];
-	//
-	//strcpy(wkt, cwkt);
-	//char *wkt2 = (char *)wkt;
-	//OGRSpatialReferenceH handle = funcs.newSRS(NULL);
-
-	////OGRErr err = funcs.fromEPSG(handle, 4326);
-
-	//OGRErr err = funcs.srsImportFromWkt(handle, &wkt2);
-	//if ( err == OGRERR_UNSUPPORTED_SRS )
-	//	 	return CoordSystem("unknown");
-	//return getCoordSystemFrom(handle, wkt);
-}
-
-CoordSystem GDALFormat::getCoordSystemFrom(OGRSpatialReferenceH handle, char *wkt) {
-
-
-	String datumName(funcs.getAttr(handle,"Datum",0));
-	//map<String, ProjectionConversionFunctions>::iterator where = mpCsyConvers.find(projectionName);
-
-	FileName fnCsy(FileName::fnUnique(FileName(fnBaseOutputName, ".csy")));
-
-	CoordSystemViaLatLon *csv=NULL;
-	if ( funcs.isProjected(handle)) {
-		try{
-			CoordSystemProjection *csp =  new CoordSystemProjection(fnCsy, 1);
-			String dn = Datum::WKTToILWISName(datumName);
-			if ( dn == "" || dn == "?") {
-				Projection proj = ProjectionPtr::WKTToILWISName(wkt);
-				if ( proj.fValid() == false)
-					throw ErrorObject("Projection can't be transformed to an ILWIS known datum");
-				csp->prj = proj;
-			} else {
-				csp->datum = new MolodenskyDatum(dn,"");
-			}
-			OGRErr err;
-
-			String spheroid = getEngine()->gdal->getAttribute(handle,"SPHEROID",0);
-			try{
-				Ellipsoid ell(spheroid);
-				csp->ell = ell;
-			} catch (ErrorObject& ) {
-				csp->ell.sName = "User Defined";
-				String majoraxis = getEngine()->gdal->getAttribute(handle,"SPHEROID",1);
-				String invFlattening = getEngine()->gdal->getAttribute(handle,"SPHEROID",2);
-				double ma = majoraxis.rVal();
-				double ifl = invFlattening.rVal();
-				if ( ma == rUNDEF || ifl == rUNDEF)
-					throw ErrorObject(String(TR("Ellipsoid %S could not be found").c_str(),spheroid));
-				csp->ell = Ellipsoid(ma, ifl);
-				//csp->ell.sName = spheroid;
-			} 
-			double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",rUNDEF,&err);
-			double northing = getEngine()->gdal->getProjParam(handle, "false_northing",rUNDEF,&err);
-			double scale = getEngine()->gdal->getProjParam(handle, "scale_factor",rUNDEF,&err);
-			double centralMeridian = getEngine()->gdal->getProjParam(handle, "central_meridian",rUNDEF,&err);
-			double lattOfOrigin = getEngine()->gdal->getProjParam(handle, "latitude_of_origin",rUNDEF,&err);
-			double stParal1 = getEngine()->gdal->getProjParam(handle, "standard_parallel_1",rUNDEF,&err);
-			double stParal2 = getEngine()->gdal->getProjParam(handle, "standard_parallel_2",rUNDEF,&err);
-			String projName(funcs.getAttr(handle, "Projection",0));
-			if ( projName == "Oblique_Stereographic")
-				projName = "Stereographic";
-			else if ( projName == "Lambert_Conformal_Conic_2SP")
-				projName = "Lambert Conformal Conic";
-			else if ( projName == "Lambert_Conformal_Conic_1SP") {
-				projName = "Lambert Conformal Conic";
-				stParal1 = lattOfOrigin;
-				stParal2 = lattOfOrigin;
-			}
-			else if ( projName == "Polar_Stereographic")
-				projName = "StereoPolar";
-			else if ( projName == "Albers_Conic_Equal_Area")
-				projName = "Albers EqualArea Conic";
-			replace(projName.begin(), projName.end(),'_',' ');
-			if ( projName == "StereoPolar" && easting == 2000000.) // one of those exceptions
-				projName = "UPS";
-			csp->prj = Projection(projName,csp->ell);
-			if ( easting != rUNDEF)
-				csp->prj->Param(pvX0,easting);
-			if ( northing != rUNDEF)
-				csp->prj->Param(pvY0,northing);
-			if ( scale != rUNDEF)
-				csp->prj->Param(pvK0, scale);
-			if ( centralMeridian != rUNDEF)
-				csp->prj->Param(pvLON0, centralMeridian);
-			if ( lattOfOrigin != rUNDEF)
-				csp->prj->Param(pvLAT0, lattOfOrigin);
-			if ( stParal1 != rUNDEF)
-				csp->prj->Param(pvLAT1, min(stParal2, stParal1));
-			if ( stParal2 != rUNDEF)
-				csp->prj->Param(pvLAT2, max(stParal2, stParal1));
-			csp->prj->Prepare();
-			csv = csp;
-		} catch ( ErrorObject& err) {
-			return CoordSystem("unknown");
-		}
-	} else {
-		csv = new CoordSystemLatLon(fnCsy, 1);
-		csv->datum = new MolodenskyDatum("WGS 1984","");
-	}
-
-	CoordSystem csy;
-	csy.SetPointer(csv);
-
-	return csy;
 }
 
 bool GDALFormat::fReUseExisting(const FileName& fn)
@@ -1727,11 +1621,8 @@ void GDALFormat::ogr(const String& name, const String& source, const String& tar
 				OGRSpatialReferenceH hSRS = funcs.ogrGetSpatialRef(hLayer);
 				CoordSystem csy;
 				if ( hSRS != 0) {
-					char * wkt[30000];
-					char *wkt2 = (char *)wkt;
-					funcs.exportToWkt(hSRS,&wkt2);
-					csy = getCoordSystemFrom(hSRS, wkt2);
-					} else
+					csy = getEngine()->gdal->getCoordSystemFromHandlePtr(fnBaseOutputName,&hSRS);
+				} else
 					csy = CoordSystem("unknown");
 
 				int featureCount = funcs.ogrGetFeatureCount(hLayer,TRUE);

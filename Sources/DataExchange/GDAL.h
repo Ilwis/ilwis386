@@ -314,7 +314,6 @@ private:
 
 	void		   LoadMethods();
 	Feature::FeatureType getFeatureType(OGRLayerH hLayer) const;
-	CoordSystem	getCoordSystemFrom(OGRSpatialReferenceH handle, char *wkt);
 	FileName	createFileName( const String& name, Feature::FeatureType ftype, int layerCount, int layer);
 	BaseMap     createBaseMap(const FileName& fn, Feature::FeatureType ftype, const Domain& dm, const CoordSystem& csy, const CoordBounds& cb);
 	void		createTable(const FileName& fn, const Domain& dm,OGRFeatureDefnH hFeatureDef, OGRLayerH hLayer, Table& tbl);
