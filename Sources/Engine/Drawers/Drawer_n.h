@@ -75,8 +75,8 @@ namespace ILWIS {
 		virtual void setInfo(bool yesno) = 0;
 		virtual String getInfo(const Coord& crd) const = 0;
 		virtual NewDrawer *getParentDrawer() const = 0;
-		virtual double getTransparency() const = 0;
-		virtual void setTransparency(double value) = 0;
+		virtual double getAlpha() const = 0;
+		virtual void setAlpha(double value) = 0;
 		virtual String getId() const = 0;
 		virtual void timedEvent(UINT eventid) = 0;
 		virtual String description() const = 0;
