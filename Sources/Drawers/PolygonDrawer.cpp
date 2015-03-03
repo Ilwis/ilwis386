@@ -21,12 +21,12 @@ PolygonDrawer::PolygonDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"Poly
 	setDrawMethod(NewDrawer::drmRPR);
 	drawColor = Color(100,200,255);
 	backgroundColor = colorUNDEF;
-	areaTransparency = 1;
+	areaAlpha = 1;
 }
 
 PolygonDrawer::PolygonDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), boundary(0), showArea(true), hatch(0), hatchInverse(0) {
 	setDrawMethod(NewDrawer::drmRPR);
-	areaTransparency = 1;
+	areaAlpha = 1;
 }
 
 PolygonDrawer::~PolygonDrawer() {
@@ -45,7 +45,7 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 
 	glShadeModel(GL_FLAT);
 
-	double alpha = (1.0 - drawColor.transparencyP()) * getTransparency() * areaTransparency;
+	double alpha = (drawColor.alphaP()) * getAlpha() * areaAlpha;
 	if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0)) {
 		bool is3D = getRootDrawer()->is3D();
 		ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
@@ -94,7 +94,7 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 		}
  		if ( hatch && !backgroundColor.fEqual(colorUNDEF)) {
 			glPolygonStipple(hatchInverse); 
-			double alphaBG = (1.0 - backgroundColor.transparencyP()) * getTransparency() * areaTransparency;
+			double alphaBG = backgroundColor.alphaP() * getAlpha() * areaAlpha;
 			glColor4f(backgroundColor.redP(),backgroundColor.greenP(), backgroundColor.blueP(), alphaBG);
 			if ( asQuad && showArea) {
 				glBegin(GL_QUADS);
@@ -127,6 +127,7 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 	if ( boundary && showBoundary && (!asQuad || !showArea)) {
 		boundary->draw(drawLoop, cbArea);
 	}
+
 	return true;
 }
 
@@ -181,8 +182,8 @@ void PolygonDrawer::boundariesActive(bool active) {
 	showBoundary = active;
 }
 
-void PolygonDrawer::setTransparencyArea(double v) {
-	areaTransparency = v;
+void PolygonDrawer::setAreaAlpha(double v) {
+	areaAlpha = v;
 }
 
 void PolygonDrawer::setlineStyle(int st){
