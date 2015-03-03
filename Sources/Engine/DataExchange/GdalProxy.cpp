@@ -115,10 +115,16 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenc
 
 			String spheroid = getEngine()->gdal->getAttribute(handle,"SPHEROID",0);
 			try {
-				Ellipsoid ell(spheroid);
-				csp->ell = ell;
+				try {
+					Ellipsoid ell(spheroid);
+					csp->ell = ell;
+				} catch (ErrorNotFound&) {
+					String spheroidIlw = spheroid;
+					replace(spheroidIlw.begin(), spheroidIlw.end(),'_',' ');
+					Ellipsoid ell(spheroidIlw);
+					csp->ell = ell;
+				}
 			} catch (ErrorObject& ) {
-				csp->ell.sName = "User Defined";
 				String majoraxis = getEngine()->gdal->getAttribute(handle,"SPHEROID",1);
 				String invFlattening = getEngine()->gdal->getAttribute(handle,"SPHEROID",2);
 				double ma = majoraxis.rVal();
@@ -126,7 +132,6 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenc
 				if ( ma == rUNDEF || ifl == rUNDEF)
 					throw ErrorObject(String(TR("Ellipsoid %S could not be found").c_str(),spheroid));
 				csp->ell = Ellipsoid(ma, ifl);
-				//csp->ell.sName = spheroid;
 			} 
 			OGRErr err = CP_NONE;
 			double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",rUNDEF,&err);
@@ -143,8 +148,13 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenc
 				projName = "Lambert Conformal Conic";
 			else if ( projName == "Lambert_Conformal_Conic_1SP") {
 				projName = "Lambert Conformal Conic";
-				stParal1 = lattOfOrigin;
-				stParal2 = lattOfOrigin;
+				if (stParal1 == rUNDEF && stParal2 == rUNDEF) {
+					stParal1 = lattOfOrigin;
+					stParal2 = lattOfOrigin;
+				} else if (stParal1 == rUNDEF)
+					stParal1 = stParal2;
+				else if (stParal2 == rUNDEF)
+					stParal2 = stParal1;
 			}
 			else if ( projName == "Polar_Stereographic")
 				projName = "StereoPolar";
@@ -219,4 +229,8 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, int epsg) {
 		throw ErrorObject(String("The epsg %d is not supported", epsg));
 
 	return getCoordSystem(fnBase, handle);
+}
+
+CoordSystem GdalProxy::getCoordSystemFromHandlePtr(const FileName& fnBase, void * phSRS) {
+	return getCoordSystem(fnBase,*(OGRSpatialReferenceH*)phSRS);
 }

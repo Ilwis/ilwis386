@@ -83,6 +83,7 @@ public:
 	void loadMethods(const String& ilwDir);
 	CoordSystem getCoordSystem(const FileName& fnBase, int epsg);
 	CoordSystem getCoordSystem(const FileName& fnBase, const String& wkt);
+	CoordSystem getCoordSystemFromHandlePtr(const FileName& fnBase, void * phSRS);
 
 	GDALCloseFunc close;
 	GDALAllRegisterFunc registerAll;
@@ -160,5 +161,4 @@ public:
 
 private:
 	CoordSystem getCoordSystem(const FileName& fnBase, OGRSpatialReferenceH handle);
-
 };
