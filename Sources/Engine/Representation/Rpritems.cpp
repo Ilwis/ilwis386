@@ -243,11 +243,11 @@ String RepresentationItems::sHatch(long iRaw) const {
   return sUNDEF;
 }
 
-double RepresentationItems::rTransparencyItem(long iRaw) const{
+double RepresentationItems::rItemAlpha(long iRaw) const{
   if (iUNDEF == iRaw)
     return 0;
-  else if (colTransparency.fValid()) {
-    double rT = colTransparency->rValue(iRaw);
+  else if (colAlpha.fValid()) {
+    double rT = colAlpha->rValue(iRaw);
     if (rT != rUNDEF)
       return rT;
   }
@@ -312,7 +312,7 @@ double RepresentationItems::rLineDist(long iRaw) const
 void RepresentationItems::getProperties(long iRaw, RepresentationProperties& props) {
 	props.linewidth = rLineWidth(iRaw);
 	props.lineType = iLine(iRaw); 
-	props.itemTransparency = rTransparencyItem(iRaw);
+	props.itemAlpha = rItemAlpha(iRaw);
 	props.symbolSize = iSymbolSize(iRaw);
 	props.symbolType = sSymbolType(iRaw);
 	props.hatchName = sHatch(iRaw);

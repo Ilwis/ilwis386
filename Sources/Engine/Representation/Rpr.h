@@ -52,7 +52,7 @@ struct _export RepresentationProperties {
 	RepresentationProperties& operator=(const RepresentationProperties& p);
 	double linewidth;
 	int lineType;
-	double itemTransparency;
+	double itemAlpha;
 	String symbolType;
 	double symbolSize;
 	String hatchName;

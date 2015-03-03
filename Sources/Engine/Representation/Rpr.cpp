@@ -53,7 +53,7 @@ IlwisObjectPtrList Representation::listRpr;
 RepresentationProperties::RepresentationProperties() {
 	linewidth = 1;
 	lineType = ILWIS::NewDrawer::ldtSingle;
-	itemTransparency = 1.0;
+	itemAlpha = 1.0;
 	symbolType = DEFAULT_POINT_SYMBOL_TYPE;
 	symbolSize = 100.0;
 }
@@ -61,7 +61,7 @@ RepresentationProperties::RepresentationProperties() {
 RepresentationProperties::RepresentationProperties(const RepresentationProperties& p){
 	linewidth = p.linewidth;
 	lineType = p.lineType;
-	itemTransparency = p.itemTransparency;
+	itemAlpha = p.itemAlpha;
 	symbolType = p.symbolType;
 	symbolSize = p.symbolSize;
 }
@@ -69,7 +69,7 @@ RepresentationProperties::RepresentationProperties(const RepresentationPropertie
 RepresentationProperties& RepresentationProperties::operator=(const RepresentationProperties& p){
 	linewidth = p.linewidth;
 	lineType = p.lineType;
-	itemTransparency = p.itemTransparency;
+	itemAlpha = p.itemAlpha;
 	symbolType = p.symbolType;
 	symbolSize = p.symbolSize;
 
@@ -561,9 +561,9 @@ void Representation::parseFile(const FileName& fn) {
 			Split(tail, parts,",");
 			Color clr;
 			if ( parts.size() == 4) {
-				clr = Color(parts[0].iVal(), parts[1].iVal(),parts[2].iVal(),parts[3].iVal());
+				clr = Color(parts[0].iVal(), parts[1].iVal(),parts[2].iVal(),255-parts[3].iVal());
 			}else {
-				clr = Color(0,0,0,0);
+				clr = Color(0,0,0,255);
 			}
 			colorSets[index].push_back(clr);
 			++i;
