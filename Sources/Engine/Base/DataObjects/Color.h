@@ -42,21 +42,22 @@
 #define ILW_COLORH
 #include "Engine\Base\DataObjects\Buf.h"
 
-#define OPAQUE_VALUE 0
+#define OPAQUE_VALUE 255
 //class structRGB { public: byte r, g, b, transparency; };
 
 enum DrawColors { drcLIGHT, drcNORMAL, drcDARK, drcGREY };
 
-#define colorUNDEF Color(0,0,0,255)
+// colorUNDEF == black transparent
+#define colorUNDEF Color(0,0,0,0)
 
 class _export Color
 {
 public:
 	static Color clrPrimary(int iNr);
 
-	Color() { m_red = m_green = m_blue = 0; m_transparency = OPAQUE_VALUE; }
-	Color(byte rd, byte gr, byte bl, byte transparency = OPAQUE_VALUE)
-	    { m_red = rd; m_green = gr; m_blue = bl; m_transparency = transparency; }
+	Color() { m_red = m_green = m_blue = 0; m_alpha = OPAQUE_VALUE; }
+	Color(byte rd, byte gr, byte bl, byte alpha = OPAQUE_VALUE)
+	    { m_red = rd; m_green = gr; m_blue = bl; m_alpha = alpha; }
 	Color(const Color& c)
 	{ iValue = c.iValue; }
 	Color& operator=(const Color& c)
@@ -67,24 +68,22 @@ public:
 	byte& red()   { return m_red; }
 	byte& green() { return m_green; }
 	byte& blue()  { return m_blue; }
-	byte& transparency() { return m_transparency; }
+	byte& alpha() { return m_alpha; }
 	byte red()   const { return m_red; }
 	byte green() const { return m_green; }
 	byte blue()  const { return m_blue; }
-	byte alpha() const { return 255 - m_transparency; }
-	byte transparency() const { return m_transparency; }
+	byte alpha()  const { return m_alpha; }
 	double redP()   const { return (double)m_red / 255.0; }
 	double greenP() const { return (double)m_green / 255.0; }
 	double blueP()  const { return (double)m_blue / 255.0; }
-	double transparencyP()  const { return (double)m_transparency / 255.0; }
-	double alphaP()  const { return 1.0 - (double)m_transparency / 255.0; }
+	double alphaP()  const { return (double)m_alpha / 255.0; }
 	byte yellow()   const { return 255-m_blue; }
 	byte magenta() const { return 255-m_green; }
 	byte cyan()  const { return 255-m_red; }
 	bool fEqual(const Color& c) const 
-	{ return (m_red==c.red()) && (m_green==c.green()) && (m_blue==c.blue() && m_transparency==c.transparency()); }
+	{ return (m_red==c.red()) && (m_green==c.green()) && (m_blue==c.blue() && m_alpha==c.alpha()); }
 	bool operator==(const Color& c)
-	{ return (m_red==c.red()) && (m_green==c.green()) && (m_blue==c.blue() && m_transparency==c.transparency()); }
+	{ return (m_red==c.red()) && (m_green==c.green()) && (m_blue==c.blue() && m_alpha==c.alpha()); }
 	bool operator!=(const Color& c)
 		{ return !(*this == c); }
 	//operator long() const ; // for COLORREF conversion; so it will ignore the transparency
@@ -100,7 +99,7 @@ public:
 	Color clrDraw(DrawColors drc) const;
 private:
 	union {
-		struct{byte m_red, m_green, m_blue, m_transparency;};
+		struct{byte m_red, m_green, m_blue, m_alpha;};
 		long iValue;
 	};
 };
