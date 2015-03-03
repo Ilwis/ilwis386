@@ -22,7 +22,7 @@ CubeDrawer::CubeDrawer(DrawerParameters *parms)
 , csFont(new CCriticalSection())
 {
 	id = name = "CubeDrawer";
-	setTransparency(1); // opaque
+	setAlpha(1); // opaque
 }
 
 CubeDrawer::~CubeDrawer() {
@@ -119,7 +119,7 @@ bool CubeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 
 	if (properties["cube"].visible) {
 		Color clr = properties["cube"].color;
-		clr.m_transparency = properties["cube"].transparency * 255;
+		clr.alpha() = properties["cube"].alpha * 255;
 		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && clr.alpha() == 255) || (drawLoop == drl3DTRANSPARENT && clr.alpha() != 255)) {
 			glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.alphaP());
 			drawCube();
@@ -127,7 +127,7 @@ bool CubeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	}
 	if (properties["ticks"].visible) {
 		Color clr = properties["ticks"].color;
-		clr.m_transparency = properties["ticks"].transparency * 255;
+		clr.alpha() = properties["ticks"].alpha * 255;
 		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && clr.alpha() == 255) || (drawLoop == drl3DTRANSPARENT && clr.alpha() != 255)) {
 			glColor4f(clr.redP(), clr.greenP(), clr.blueP(), clr.alphaP());
 			drawTicMarks();
@@ -136,13 +136,13 @@ bool CubeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	csFont->Lock();
 	if (properties["labels"].visible) {
 		Color clr = properties["labels"].color;
-		clr.m_transparency = properties["labels"].transparency * 255;
+		clr.alpha() = properties["labels"].alpha * 255;
 		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && clr.alpha() == 255) || (drawLoop == drl3DTRANSPARENT && clr.alpha() != 255))
 			drawLabels(clr);
 	}
 	if (properties["coordinates"].visible) {
 		Color clr = properties["coordinates"].color;
-		clr.m_transparency = properties["coordinates"].transparency * 255;
+		clr.alpha() = properties["coordinates"].alpha * 255;
 		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && clr.alpha() == 255) || (drawLoop == drl3DTRANSPARENT && clr.alpha() != 255)) {
 			drawCoords(clr);
 			drawTimes(clr);
@@ -340,7 +340,7 @@ void CubeProperties::load(const FileName& fnView, const String& parentSection) {
 
 String CubeElement::store(const FileName& fnView, const String& parentSection) const {
 	ObjectInfo::WriteElement(parentSection.c_str(), "Color", fnView, color);
-	ObjectInfo::WriteElement(parentSection.c_str(), "Transparency", fnView, transparency);
+	ObjectInfo::WriteElement(parentSection.c_str(), "Alpha", fnView, alpha);
 	ObjectInfo::WriteElement(parentSection.c_str(), "Visible", fnView, visible);
 	ObjectInfo::WriteElement(parentSection.c_str(), "Label", fnView, label);
 	return parentSection;
@@ -348,7 +348,7 @@ String CubeElement::store(const FileName& fnView, const String& parentSection) c
 
 void CubeElement::load(const FileName& fnView, const String& parentSection) {
 	ObjectInfo::ReadElement(parentSection.c_str(), "Color", fnView, color);
-	ObjectInfo::ReadElement(parentSection.c_str(), "Transparency", fnView, transparency);
+	ObjectInfo::ReadElement(parentSection.c_str(), "Alpha", fnView, alpha);
 	ObjectInfo::ReadElement(parentSection.c_str(), "Visible", fnView, visible);
 	ObjectInfo::ReadElement(parentSection.c_str(), "Label", fnView, label);
 }

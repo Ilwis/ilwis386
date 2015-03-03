@@ -9,29 +9,29 @@ namespace ILWIS {
 	struct _export CubeElement {
 		CubeElement() {
 			color = colorUNDEF;
-			transparency = rUNDEF;
+			alpha = rUNDEF;
 			visible = false;
 			label = sUNDEF;
 		}
-		CubeElement(const String& labl, const Color& clr, double transp, bool vis) : 
-		color(clr), transparency(transp),visible(vis),label(labl){
+		CubeElement(const String& labl, const Color& clr, double alp, bool vis) : 
+		color(clr), alpha(alp),visible(vis),label(labl){
 		}
 
 		CubeElement(const CubeElement& ce) {
 			color = ce.color;
-			transparency = ce.transparency;
+			alpha = ce.alpha;
 			visible = ce.visible;
 			label = ce.label;
 		}
 		bool isValid() const{
-			return color.fEqual(colorUNDEF) && (transparency == rUNDEF) && !visible;
+			return color.fEqual(colorUNDEF) && (alpha == rUNDEF) && !visible;
 		}
 		static CubeElement undefElement;
 		String store(const FileName& fnView, const String& parentSection) const;
 		void load(const FileName& fnView, const String& parentSection);
 
 		Color color;
-		double transparency;
+		double alpha;
 		bool visible;
 		String label;
 	};
