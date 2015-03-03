@@ -26,7 +26,7 @@ PolygonLayerDrawer::PolygonLayerDrawer(DrawerParameters *parms) :
 	FeatureLayerDrawer(parms,"PolygonLayerDrawer"), 
 	showAreas(true), 
 	showBoundaries(true), 
-	areaTransparency(1.0),
+	areaAlpha(1.0),
 	usesTriangleFile(true),
 	triData(0),
 	currentLoc(0),
@@ -134,12 +134,12 @@ void PolygonLayerDrawer::setDrawMethod(DrawMethod method) {
 		drm = method;
 }
 
-double PolygonLayerDrawer::getTransparencyArea() const{
-	return areaTransparency;
+double PolygonLayerDrawer::getAreaAlpha() const{
+	return areaAlpha;
 }
 
-void PolygonLayerDrawer::setTransparencyArea(double v){
-	areaTransparency = v;
+void PolygonLayerDrawer::setAreaAlpha(double v){
+	areaAlpha = v;
 }
 
 void PolygonLayerDrawer::setShowAreas(bool yesno) {
@@ -180,7 +180,7 @@ String PolygonLayerDrawer::store(const FileName& fnView, const String& parentSec
 	FeatureLayerDrawer::store(fnView, currentSection);
 	ObjectInfo::WriteElement(currentSection.c_str(),"ShowAreas",fnView, showAreas);
 	ObjectInfo::WriteElement(currentSection.c_str(),"ShowBoundaries",fnView, showBoundaries);
-	ObjectInfo::WriteElement(currentSection.c_str(),"AreaTransparency",fnView, areaTransparency);
+	ObjectInfo::WriteElement(currentSection.c_str(),"AreaAlpha",fnView, areaAlpha);
 	lp.store(fnView, currentSection);
 
 	return currentSection;
@@ -191,7 +191,7 @@ void PolygonLayerDrawer::load(const FileName& fnView, const String& parentSectio
 	FeatureLayerDrawer::load(fnView, currentSection);
 	ObjectInfo::ReadElement(currentSection.c_str(),"ShowAreas",fnView, showAreas);
 	ObjectInfo::ReadElement(currentSection.c_str(),"ShowBoundaries",fnView, showBoundaries);
-	ObjectInfo::ReadElement(currentSection.c_str(),"AreaTransparency",fnView, areaTransparency);
+	ObjectInfo::ReadElement(currentSection.c_str(),"AreaAlpha",fnView, areaAlpha);
 	lp.load(fnView, currentSection);
 }
 

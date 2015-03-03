@@ -18,8 +18,8 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 		virtual ~PolygonLayerDrawer();
 		virtual void prepare(PreparationParameters *pp);
 		void addDataSource(void *bmap,int options);
-		double getTransparencyArea() const;
-		void setTransparencyArea(double v);
+		double getAreaAlpha() const;
+		void setAreaAlpha(double v);
 		bool getShowAreas() const { return showAreas; }
 		bool getShowBoundaries() const { return showBoundaries; }
 		void setLineStyle(int st);
@@ -40,7 +40,7 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 	
 		bool showAreas;
 		bool showBoundaries;
-		double areaTransparency;
+		double areaAlpha;
 		PolygonProperties lp;
 		bool usesTriangleFile;
 		long *triData;

@@ -38,7 +38,7 @@ RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms)
 , demTriangulator(0)
 , fSetupDone(false)
 {
-	setTransparency(1); // default, opaque
+	setAlpha(1); // default, opaque
 }
 
 RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms, const String& name)
@@ -55,7 +55,7 @@ RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms, const String& name
 , demTriangulator(0)
 , fSetupDone(false)
 {
-	setTransparency(1);
+	setAlpha(1);
 }
 
 RasterLayerDrawer::~RasterLayerDrawer(){
@@ -96,7 +96,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 				rprC->DoNotStore(true);
 				int raw = pp->filteredRaws[j];
 				Color clr = rprC->clrRaw(abs(raw));
-				clr.m_transparency = raw > 0 ? 0 : 255;
+				clr.alpha() = (raw > 0) ? 0 : 255;
 				rprC->PutColor(abs(raw),clr);
 			}
 		}
@@ -252,12 +252,12 @@ bool RasterLayerDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea)
 		// this can be improved if we know beforehand that there are no opaque pixels at all (e.g. when 0.0 < transparency < 1.0), or no transparent pixels at all
 		bool fDraw = true;
 		if (drawLoop == drl2D) {
-			if (transparency == 0.0) // whole image invisible
+			if (alpha == 0.0) // whole image invisible
 				fDraw = false;
 			else if (fUsePalette && (palette->rGetMaxAlpha() == 0.0)) // whole image invisible
 				fDraw = false;
 		} else if (drawLoop == drl3DOPAQUE) {
-			if (transparency < 1.0) // transparency everywhere; draw entire image in transparent pass
+			if (alpha < 1.0) // transparency everywhere; draw entire image in transparent pass
 				fDraw = false;
 			else if (fUsePalette && (palette->rGetMaxAlpha() < 1.0)) // transparency everywhere; draw entire image in transparent pass
 				fDraw = false;
@@ -266,9 +266,9 @@ bool RasterLayerDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea)
 				glEnable(GL_ALPHA_TEST);
 			}
 		} else if (drawLoop == drl3DTRANSPARENT) {
-			if ((transparency == 1.0) && !(fUsePalette && palette->fHasTransparentValues())) // only opaque pixels
+			if ((alpha == 1.0) && !(fUsePalette && palette->fHasTransparentValues())) // only opaque pixels
 				fDraw = false;
-			else if (transparency == 0.0) // whole image invisible
+			else if (alpha == 0.0) // whole image invisible
 				fDraw = false;
 			else if (fUsePalette && (palette->rGetMaxAlpha() == 0.0)) // whole image invisible
 				fDraw = false;
@@ -280,7 +280,7 @@ bool RasterLayerDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea)
 		if (fDraw) {
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-			glColor4f(1, 1, 1, transparency);
+			glColor4f(1, 1, 1, alpha);
 
 			textureHeap->ClearQueuedTextures();
 

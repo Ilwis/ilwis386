@@ -22,7 +22,7 @@ ILWIS::NewDrawer *createRasterDataDrawer(DrawerParameters *parms) {
 RasterDataDrawer::RasterDataDrawer(DrawerParameters *parms) : 
 	SpatialDataDrawer(parms,"RasterDataDrawer")
 {
-	setTransparency(rUNDEF);
+	setAlpha(1);
 }
 
 RasterDataDrawer::~RasterDataDrawer(){
