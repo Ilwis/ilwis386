@@ -90,6 +90,21 @@ String Datum::WKTToILWISName(const String& wkt) {
 	if ( results.size() > 0) {
 		return results.get("name",0);
 	}
+	String wktnew = wkt;
+	replace(wktnew.begin(), wktnew.end(),'_',' ');
+	if (wktnew != wkt) {
+		String query("Select name from Datums where name='%S'", wktnew);
+		getEngine()->pdb()->executeQuery(query, results);
+		if ( results.size() > 0) {
+			return wktnew; // name == ilwis name
+		}
+
+		query = String("Select name from DatumAliasses where alias='%S'",wktnew);
+		getEngine()->pdb()->executeQuery(query, results);
+		if ( results.size() > 0) {
+			return results.get("name",0);
+		}
+	}
 	return sUNDEF;
 }
 //	if (wktToIlwis.size() == 0 ) {
