@@ -33,8 +33,8 @@ namespace ILWIS {
 		bool hasInfo() const;
 		void setInfo(bool yesno);
 		NewDrawer *getParentDrawer() const;
-		double getTransparency() const { return parentDrawer->getTransparency();}
-		void setTransparency(double value) {};
+		double getAlpha() const { return parentDrawer->getAlpha();}
+		void setAlpha(double value) {};
 		virtual RootDrawer *getRootDrawer() const { return rootDrawer; }
 		virtual RootDrawer *getRootDrawer() { return rootDrawer; }
 		virtual HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent) { return parent;}
@@ -54,7 +54,7 @@ namespace ILWIS {
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const {}
 		virtual GeneralDrawerProperties *getProperties() { return 0;}
 		void setSupportingDrawer(bool yesno) { isSupportingDrawer=yesno;};
-		void setExtrustionTransparency(double v);
+		void setExtrustionAlpha(double v);
 		bool isValid() const;
 		void setValid(bool yesno);
 		virtual Feature *getFeature() const {return 0;};
@@ -77,7 +77,7 @@ namespace ILWIS {
 		bool info;
 		bool editable;
 		bool fActive;
-		double extrTransparency;
+		double extrAlpha;
 		int specialOptions;
 		bool isSupportingDrawer;
 		bool valid;

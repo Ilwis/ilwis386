@@ -42,7 +42,7 @@ void SimpleDrawer::init() {
 	editable = true;
 	info = false;
 	parentDrawer = 0;
-	extrTransparency = 0.2;
+	extrAlpha = 0.2;
 	specialOptions = NewDrawer::sdoNone;
 	fActive = true;
 	isSupportingDrawer = false;
@@ -115,7 +115,7 @@ void SimpleDrawer::drawExtrusion(const Coord& c1, const Coord& c2, double z, int
 	c3.z = z;
 	c4.z = z;
 	if ( option & NewDrawer::sdoFilled) {
-		glBegin(GL_QUADS); 			
+		glBegin(GL_QUADS);
 			glVertex3f( c1.x, c1.y, c1.z);	
 			glVertex3f( c2.x, c2.y, c2.z);	
 			glVertex3f( c4.x, c4.y, c4.z);
@@ -155,8 +155,8 @@ int SimpleDrawer::getSpecialDrawingOption(int opt) const {
 		return specialOptions & opt;
 }
 
-void SimpleDrawer::setExtrustionTransparency(double v) {
-	extrTransparency = v;
+void SimpleDrawer::setExtrustionAlpha(double v) {
+	extrAlpha = v;
 }
 
 void SimpleDrawer::setActive(bool yesno) 
