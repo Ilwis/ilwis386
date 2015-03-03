@@ -137,7 +137,7 @@ Color DrawingColor::clrVal(double rVal) const
 Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 {
 	if (iUNDEF == iRaw)
-		return Color(0,0,0,255);
+		return Color(0,0,0,0);
 	Color cRet;
 	switch (drm) {
 	case NewDrawer::drmRPR: 
@@ -201,16 +201,13 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		break;
 	case NewDrawer::drmBOOL:
 		switch (iRaw) {
-	case 0: return Color(0,0,0);
-	case 1: cRet = clr1; break;
-	case 2: cRet = clr2;  break;
+			case 0: return Color(0,0,0);
+			case 1: cRet = clr1; break;
+			case 2: cRet = clr2; break;
 		}
 		break;
 	}
-	if (cRet.iVal() < 0)
-		return Color(0,0,0);
-	else
-		return cRet;//.clrDraw(gamma);
+	return cRet;
 }
 
 void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
@@ -276,7 +273,7 @@ void DrawingColor::clrVal(const double * buf, long * bufOut, long iLen) const
 inline void DrawingColor::setTransparency(double v, Color& clr) const{
 	if ( transpValues.fValid()) {
 		if ( transpValues.fContains(v)) {
-			clr.m_transparency = 255;
+			clr.alpha() = 0;
 		}
 	}
 }
