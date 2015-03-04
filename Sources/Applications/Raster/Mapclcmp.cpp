@@ -83,11 +83,10 @@ MapColorComp* MapColorComp::create(const FileName& fn, MapPtr& p, const String& 
   bool f24Bit = false;
   bool fLinear = false;
   bool fHSI = false;
-  if ( fCIStrEqual(sFunc, "MapColorComp") && iParms == 5) {
+  if ( fCIStrEqual(sFunc, "MapColorComp") && iParms == 5) { // TODO: needs fix and re-test for WPS; iParms can't be 4 and 5 at the same time
 	  f24Bit = strstr(as[1].c_str(), "24") != 0;
 	  fLinear = strstr(as[1].c_str(), "Linear") != 0;
 	  fHSI = strstr(as[1].c_str(), "HSI") != 0;
-
   } else {
 	  if (fCIStrEqual(sFunc, "MapColorCompLinear")   || fCIStrEqual(sFunc, "MapColorComp") ||
 		  fCIStrEqual(sFunc, "MapColorComp24Linear") || fCIStrEqual(sFunc, "MapColorComp24"))
@@ -98,7 +97,7 @@ MapColorComp* MapColorComp::create(const FileName& fn, MapPtr& p, const String& 
 		fHSI = true;
 	  else
 		AppNameError(fn, sFunc);
-	  bool f24Bit = strstr(sFunc.sVal(), "24") != 0;
+	  f24Bit = strstr(sFunc.sVal(), "24") != 0;
   }
   if ((iParms != 1) && (iParms != 4))
     ExpressionError(sExpr, sSyntax());
