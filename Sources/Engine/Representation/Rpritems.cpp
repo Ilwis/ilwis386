@@ -105,8 +105,11 @@ Color RepresentationItems::clrRaw(long iRaw) const
   long iColor = colColor->iRaw(iRaw);  
   if (iUNDEF == iColor) 
     return clrDefault[abs(iRaw) % 16];
-  else
-    return Color(iColor);
+  else {
+	  Color clr (iColor);
+	  clr.alpha() = 255 - clr.alpha();
+	  return clr;
+  }
 }
 
 Color RepresentationItems::clrSecondRaw(long iRaw) const
@@ -117,8 +120,11 @@ Color RepresentationItems::clrSecondRaw(long iRaw) const
   long iColor = colSecondClr->iRaw(iRaw);
   if (iUNDEF == iColor) 
     return colorUNDEF;
-  else
-    return Color(iColor);
+  else {
+	  Color clr (iColor);
+	  clr.alpha() = 255 - clr.alpha();
+	  return clr;
+  }
 }
 
 /*

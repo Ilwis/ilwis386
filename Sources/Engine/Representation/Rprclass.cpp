@@ -138,7 +138,7 @@ RepresentationClass::RepresentationClass(const FileName& fn, const Domain& dom)
 	colColor->SetOwnedByTable(true);
 	colColor->SetDescription("Color");
 	for (long i=tbl->iOffset(); i<tbl->iRecs()+tbl->iOffset(); i++) 
-		colColor->PutRaw(i, clrDefault[i % 16]);
+		colColor->PutRaw(i, (long)clrDefault[i % 16]);
 	tbl->DoNotStore(false);
 }
 
@@ -158,7 +158,7 @@ RepresentationClass::RepresentationClass(const FileName& fn, long iNr)
 	//  Color clr;
 	long iMax = tbl->iRecs();
 	for (long i = 0; i < iMax; ++i)
-		colColor->PutRaw(i, /*clr,*/ clrDefault[i % 16]);
+		colColor->PutRaw(i, /*clr,*/ (long)clrDefault[i % 16]);
 	tbl->DoNotStore(false);
 }
 
@@ -191,6 +191,7 @@ Ilwis::Record RepresentationClass::rec(long iRaw) const
 
 void RepresentationClass::PutColor(long iRaw, Color clr)
 {
+	clr.alpha() = 255 - clr.alpha();
 	colColor->PutRaw(iRaw, clr.iVal());
 	Updated();
 }
@@ -203,8 +204,9 @@ void RepresentationClass::PutSecondColor(long iRaw, Color clr)
 		colSecondClr->SetDescription("Second Color");
 		long iMax = tbl->iRecs()+tbl->iOffset()-1;
 		for (long i = 1; i <= iMax; ++i)
-			colSecondClr->PutRaw(i, Color(255,255,255).iVal());
+			colSecondClr->PutRaw(i, (long)Color(255,255,255));
 	}
+	clr.alpha() = 255 - clr.alpha();
 	colSecondClr->PutRaw(iRaw, clr.iVal());
 	Updated();
 }
