@@ -378,10 +378,6 @@ void RepresentationClassLB::DrawItem(LPDRAWITEMSTRUCT dis)
 				Color clr = _rpr->clrRaw(iRaw);
 				if (clr.iVal() != -2)
 				{
-					if (clr.iVal() == -1)
-						clr = ::GetSysColor(COLOR_WINDOWTEXT); 
-					else if (clr.iVal() == -2)  
-						clr = ::GetSysColor(COLOR_WINDOW);
 					dcLoc.FillSolidRect(rectItem.left + 5, rectItem.top + info->height() + iYShift,
 										rectItem.right - rectItem.left - 10,
 										rectItem.bottom - rectItem.top - 20 - iYShift, clr);

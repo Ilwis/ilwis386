@@ -69,6 +69,8 @@ MapRprEditForm::MapRprEditForm(CWnd* wPar,
   else  
     sText = rcl->dm()->sValueByRaw(raw,0);
   col = rcl->clrRaw(iRaw);
+  if (col.iVal() != -2) // preserve "Transparent"
+    col.alpha() = 0; // change to old-style
   StaticText* st = new StaticText(root, sText);
   st->SetIndependentPos();
   cs = new ColorSelector(root, &col);
@@ -103,6 +105,8 @@ SegmentMapRprEditForm::SegmentMapRprEditForm(CWnd* wPar,
   else  
     sText = rcl->dm()->sValueByRaw(raw,0);
   col = rcl->clrRaw(iRaw);
+  if (col.iVal() != -2) // preserve "Transparent"
+    col.alpha() = 0; // change to old-style
 
   StaticText* st = new StaticText(root, sText);
   st->SetIndependentPos();
@@ -160,6 +164,10 @@ PolygonMapRprEditForm::PolygonMapRprEditForm(CWnd* wPar,
     sText = rcl->dm()->sValueByRaw(raw,0);
   col = rcl->clrRaw(iRaw);
   col2 = rcl->clrSecondRaw(iRaw);
+  if (col.iVal() != -2) // preserve "Transparent"
+    col.alpha() = 0; // change to old-style
+  if (col2.iVal() != -2)
+    col2.alpha() = 0;
   colHBG = col2;
   int iPattern = rcl->iPattern(iRaw);
   short pPat[8];
@@ -336,6 +344,10 @@ PointMapRprEditForm::PointMapRprEditForm(CWnd* wPar,
 : FormBaseDialog(wPar, TR("Edit Repr. Item"), true, fModal, false),
   rcl(rc), iRaw(raw), smb(rc,raw)
 {
+  if (smb.col.iVal() != -2) // preserve "Transparent"
+    smb.col.alpha() = 0; // change to old-style
+  if (smb.fillCol.iVal() != -2)
+    smb.fillCol.alpha() = 0;
   String sText;
   if (rcl->dm()->pdp())
     sText = String("%i", raw);

@@ -108,7 +108,9 @@ LRESULT RepresentationClassWindow::OnSetColor(WPARAM wPar, LPARAM lPar)
 	if (view == NULL) return 0;
   view->ciBar.SetColor(wPar);
 	view->csBar.SelectColor(wPar);
-	view->tabs.rprClassLB.SetColor(wPar);
+	Color col (wPar);
+	col.alpha() = 255; // the source (wPar) was a COLORREF, thus no alpha
+	view->tabs.rprClassLB.SetColor(col);
 	return 0;
 }
 
