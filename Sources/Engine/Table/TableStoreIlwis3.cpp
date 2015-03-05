@@ -97,7 +97,11 @@ void TableStoreIlwis3::readData(char *memblock) {
 void TableStoreIlwis3::load() {
 }
 
-void TableStoreIlwis3::load(const FileName& fnODF, const String& prfix){
+bool TableStoreIlwis3::load(const FileName& fnODF, const String& prfix){
+	ifstream file (fnData.sFullPath().c_str(), ios::in|ios::binary|ios::ate);
+	if (!file.is_open())
+		return false; // no binary file thus no table store or corrupt / not yet calculated
+
 	String prefix = prfix == "" ? "" : prfix + ":";
 
 	clock_t time1 = clock();
@@ -112,9 +116,6 @@ void TableStoreIlwis3::load(const FileName& fnODF, const String& prfix){
 
 	setColumnInfo(fnODF, simpleDataTypes);
 
-	ifstream file (fnData.sFullPath().c_str(), ios::in|ios::binary|ios::ate);
-	if (!file.is_open())
-		return; // throw some error
 	long size = file.tellg();
 	char *memblock = new char [size];
 	file.seekg (0, ios::beg);
@@ -134,6 +135,7 @@ void TableStoreIlwis3::load(const FileName& fnODF, const String& prfix){
 	TRACE(String("loaded %S in %f ms\n", fnODF.sRelative(), ((double)time2-time1)/1000.0).c_str());
 
 	delete[] memblock;
+	return true;
 }
 String *TableStoreIlwis3::readString(char *mem) {
 	char c;

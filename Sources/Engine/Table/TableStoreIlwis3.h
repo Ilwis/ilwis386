@@ -8,7 +8,7 @@ namespace ILWIS {
 	public:
 		TableStoreIlwis3();
 		~TableStoreIlwis3();
-		virtual void load(const FileName& fnODF, const String& prfix);
+		virtual bool load(const FileName& fnODF, const String& prfix);
 		virtual void load();
 		virtual void store();
 		//virtual void getRecord(int row, NewRecord& rc) const;
