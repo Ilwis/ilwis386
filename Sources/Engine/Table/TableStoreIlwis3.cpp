@@ -98,11 +98,11 @@ void TableStoreIlwis3::load() {
 }
 
 bool TableStoreIlwis3::load(const FileName& fnODF, const String& prfix){
+	String prefix = prfix == "" ? "" : prfix + ":";
+	ObjectInfo::ReadElement(S(prefix + "TableStore"), "Data", fnODF, fnData);
 	ifstream file (fnData.sFullPath().c_str(), ios::in|ios::binary|ios::ate);
 	if (!file.is_open())
 		return false; // no binary file thus no table store or corrupt / not yet calculated
-
-	String prefix = prfix == "" ? "" : prfix + ":";
 
 	clock_t time1 = clock();
 	int count;
@@ -110,7 +110,6 @@ bool TableStoreIlwis3::load(const FileName& fnODF, const String& prfix){
 	setColCount(count != shUNDEF ? count : 0);
 	ObjectInfo::ReadElement(S(prefix + "Table"),"Records",fnODF, count);
 	setRowCount(count != shUNDEF ? count : 0);
-	ObjectInfo::ReadElement(S(prefix + "TableStore"), "Data", fnODF, fnData);
 	recordSize = 0;
 	bool simpleDataTypes = true;
 
