@@ -118,39 +118,36 @@ SegmentMapStore::SegmentMapStore(const FileName& fn, SegmentMapPtr& p, bool fCre
 			bool fOldVal = *fDoNotShowError;
 			*fDoNotShowError = true;
 			TableStoreIlwis3 tbl;
-			tbl.load(fn,sSection);
-
-
-			int colMinCrd = tbl.index("MinCoords");
-			int colMaxCrd = tbl.index("MaxCoords");
-			int colCoords = tbl.index("Coords");
-			if (colCoords != iUNDEF)
-				tbl.sharedValue(colCoords,true);
-			int colDeleted = tbl.index("Deleted");
-			int colValue = tbl.index("SegmentValue");
-			Tranquilizer trq("Loading data");
-
-
-			for(int i = 0; i < tbl.getRowCount(); ++i) {
-				ILWIS::Segment *seg;
-				bool fVals = ptr.dvrs().fRealValues();
-				double value;
-				if (fVals){
-					seg  =  new ILWIS::RSegment(spatialIndex);
-				} else {
-					seg = new ILWIS::LSegment(spatialIndex);
+			if (tbl.load(fn,sSection)) {
+				int colMinCrd = tbl.index("MinCoords");
+				int colMaxCrd = tbl.index("MaxCoords");
+				int colCoords = tbl.index("Coords");
+				if (colCoords != iUNDEF)
+					tbl.sharedValue(colCoords,true);
+				int colDeleted = tbl.index("Deleted");
+				int colValue = tbl.index("SegmentValue");
+				Tranquilizer trq("Loading data");
+				for(int i = 0; i < tbl.getRowCount(); ++i) {
+					ILWIS::Segment *seg;
+					bool fVals = ptr.dvrs().fRealValues();
+					double value;
+					if (fVals){
+						seg  =  new ILWIS::RSegment(spatialIndex);
+					} else {
+						seg = new ILWIS::LSegment(spatialIndex);
+					}
+					tbl.get(i,colValue,value);
+					CoordinateSequence *seq = NULL;
+					tbl.get(i, colCoords,&seq);
+					seg->PutCoords(seq);
+					seg->PutVal(value);
+					geometries->push_back(seg);
+					if ( i % 100 == 0) {
+						trq.fUpdate(i,tbl.getRowCount()); 
+					}
+					const Envelope *env =  seg->getEnvelopeInternal();
 				}
-				tbl.get(i,colValue,value);
-				CoordinateSequence *seq = NULL;
-				tbl.get(i, colCoords,&seq);
-				seg->PutCoords(seq);
-				seg->PutVal(value);
-				geometries->push_back(seg);
-				if ( i % 100 == 0) {
-					trq.fUpdate(i,tbl.getRowCount()); 
 				}
-				const Envelope *env =  seg->getEnvelopeInternal();
-			}
 			*fDoNotShowError = fOldVal;
 		}
 	}
