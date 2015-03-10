@@ -40,12 +40,6 @@ september 1996, by Wim Koolhoven
 Last change:  WK   17 Sep 98    2:14 pm
 */
 #include "Client\Headers\AppFormsPCH.h"
-#include "GeonetcastToolboxUI\frmGeonetcast.h"
-#include "GeonetcastToolboxUI\RSS.h"
-#include "GeonetcastToolboxUI\frmExportGTiff.h"
-#include "GeonetcastToolboxUI\frmImportJason2.h"
-#include "GeonetcastToolboxUI\frmImportAVHRR3.h"
-#include "frmMultiImageLayerHdf4.h"
 #include "Engine\Base\DataObjects\XMLDocument.h"
 #include "Engine\Base\System\LOGGER.H"
 #include "Client\Base\BaseCommandHandlerUI.h"
