@@ -138,7 +138,7 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenc
 			double northing = getEngine()->gdal->getProjParam(handle, "false_northing",rUNDEF,&err);
 			double scale = getEngine()->gdal->getProjParam(handle, "scale_factor",rUNDEF,&err);
 			double centralMeridian = getEngine()->gdal->getProjParam(handle, "central_meridian",rUNDEF,&err);
-			double lattOfOrigin = getEngine()->gdal->getProjParam(handle, "latitude_of_origin",rUNDEF,&err);
+			double latOfOrigin = getEngine()->gdal->getProjParam(handle, "latitude_of_origin",rUNDEF,&err);
 			double stParal1 = getEngine()->gdal->getProjParam(handle, "standard_parallel_1",rUNDEF,&err);
 			double stParal2 = getEngine()->gdal->getProjParam(handle, "standard_parallel_2",rUNDEF,&err);
 			String projName(getAttribute(handle, "Projection",0));
@@ -149,13 +149,14 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenc
 			else if ( projName == "Lambert_Conformal_Conic_1SP") {
 				projName = "Lambert Conformal Conic";
 				if (stParal1 == rUNDEF && stParal2 == rUNDEF) {
-					stParal1 = lattOfOrigin;
-					stParal2 = lattOfOrigin;
+					stParal1 = latOfOrigin;
+					stParal2 = latOfOrigin;
 				} else if (stParal1 == rUNDEF)
 					stParal1 = stParal2;
 				else if (stParal2 == rUNDEF)
 					stParal2 = stParal1;
-			}
+			} else if ( projName == "Mercator_1SP")
+				projName = "Mercator";
 			else if ( projName == "Polar_Stereographic")
 				projName = "StereoPolar";
 			else if ( projName == "Albers_Conic_Equal_Area")
@@ -172,8 +173,11 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenc
 				csp->prj->Param(pvK0, scale);
 			if ( centralMeridian != rUNDEF)
 				csp->prj->Param(pvLON0, centralMeridian);
-			if ( lattOfOrigin != rUNDEF)
-				csp->prj->Param(pvLAT0, lattOfOrigin);
+			if ( latOfOrigin != rUNDEF) {
+				csp->prj->Param(pvLAT0, latOfOrigin);
+				if (projName == "Mercator") // for now this is only an exception for mercator; more projections could need this
+					csp->prj->Param(pvLATTS, latOfOrigin);
+			}
 			if ( stParal1 != rUNDEF)
 				csp->prj->Param(pvLAT1, min(stParal2, stParal1));
 			if ( stParal2 != rUNDEF)
