@@ -1712,8 +1712,7 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 			} else if ( type ==  OFTString) {
 				String v("%s",funcs.ogrsVal(hFeature, field));
 				columns[field].strings.push_back(v);
-
-				columns[field].useClass &= v.find(" ") != string::npos ;
+				columns[field].useClass &= v.find(":") == string::npos;
 				if ( v.size() > 0)
 					columns[field].useClass &= !isdigit((unsigned char)(v[0])) ;
 			} else if ( type == OFTDate || type == OFTDateTime) {
@@ -1770,20 +1769,20 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 Domain GDALFormat::createSortDomain(const String& name, const vector<String>& values) {
 	set<String> names;
 	Domain dom;
-	for(int i = 0; i < values.size(); ++i) {
+	for(int i = 0; i < values.size(); ++i)
 		names.insert(values[i]);
-	}
+	vector<String> vnames;
+	for(set<String>::const_iterator cur = names.begin(); cur != names.end(); ++cur)
+		vnames.push_back(*cur);
 	FileName fn(FileName::fnUnique(name),".dom");
 	if ( names.size() < 100) {
-		dom = Domain(fn, names.size(),dmtCLASS);
+		dom = Domain(fn, 0, dmtCLASS);
 	} else {
-		dom = Domain(fn, names.size(), dmtID);
-	}
-	
-	for(set<String>::const_iterator cur = names.begin(); cur != names.end(); ++cur) {
-		dom->pdsrt()->iAdd((*cur), true);
+		dom = Domain(fn, 0, dmtID);
 	}
 
+	dom->pdsrt()->AddValues(vnames);
+	
 	return dom;
 }
 
