@@ -821,10 +821,11 @@ void TableWindow::OnConfusionMatrix()
 
 SimpleCalcResultForm *TableWindow::frmSimpleCalcResults()
 {
-	if (0 == frmSimpleCalc)
-	{
+
+	if (0 != frmSimpleCalc && !IsWindow(frmSimpleCalc->m_hWnd)) // will happen if closed by user; the class has already been destructed
+		frmSimpleCalc = 0;
+	if (0 == frmSimpleCalc) 
 		frmSimpleCalc = new SimpleCalcResultForm(this);
-	}		
 	return frmSimpleCalc;
 }
 
