@@ -380,8 +380,6 @@ void SpaceTimeRoseDrawer::drawXY() const
 	glInitNames();
 	glPushName(objectID);
 	String sLastGroupValue = fUseGroup && (numberOfFeatures > 0) ? getGroupValue(features[0]) : "";
-	double zMin = cubeTop;
-	double zMax = cubeBottom;
 	Coord crd;
 	for(long i = 0; i < numberOfFeatures; ++i) {
 		Feature *feature = features[i];
@@ -389,24 +387,20 @@ void SpaceTimeRoseDrawer::drawXY() const
 			sLastGroupValue = getGroupValue(feature);
 			glCallList((*subDisplayLists)[objectID]);
 			if (!crd.fUndef()) {
-				zMin = zMin * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
-				zMax = zMax * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+				double zMin = cubeBottom * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+				double zMax = cubeTop * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
 				glBegin(GL_LINES);
 				glTexCoord2f(textureOffset, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
 				glVertex3f(crd.x, crd.y, zMin);
 				glVertex3f(crd.x, crd.y, zMax);
 				glEnd();
 			}
-			zMin = cubeTop;
-			zMax = cubeBottom;
 			crd = Coord();
 			glLoadName(++objectID);
 		}
 		ILWIS::Point *point = (ILWIS::Point *)feature;
 		double z = getTimeValue(feature);
 		if (z >= cubeBottom && z <= cubeTop) {
-			zMin = min(zMin, z);
-			zMax = max(zMax, z);
 			if (crd.fUndef()) {
 				crd = *(point->getCoordinate());
 				crd.z = 0;
@@ -418,8 +412,8 @@ void SpaceTimeRoseDrawer::drawXY() const
 	}
 	glCallList((*subDisplayLists)[objectID]);
 	if (!crd.fUndef()) {
-		zMin = zMin * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
-		zMax = zMax * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+		double zMin = cubeBottom * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
+		double zMax = cubeTop * cube.altitude() / (timeBounds->tMax() - timeBounds->tMin());
 		glBegin(GL_LINES);
 		glTexCoord2f(textureOffset, 0.25f); // 0.25 instead of 0.5, so that no interpolation is needed in Y-direction (the value is taken from the center of the first row)
 		glVertex3f(crd.x, crd.y, zMin);
