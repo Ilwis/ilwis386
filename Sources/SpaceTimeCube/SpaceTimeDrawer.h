@@ -65,12 +65,12 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		vector<long> disabledRaws;
 		vector<GLuint> selectedObjectIDs;
 		map<long, GLuint> *subDisplayLists;
+		int nrSteps;
 		bool *fHatching;
 		SpaceTimeElementsDrawer * spaceTimeElementsDrawer;
 	private:
 		Column prevAttColumn;
 		bool prevUseAttColumn;
-		int nrSteps;
 		double * timePos;
 		CCriticalSection * csDraw;
 		PointProperties *ppcopy;
