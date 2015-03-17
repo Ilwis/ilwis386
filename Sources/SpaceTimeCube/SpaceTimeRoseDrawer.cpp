@@ -53,6 +53,8 @@ void SpaceTimeRoseDrawer::prepare(PreparationParameters *parms){
 	if (!isActive())
 		return;
 	SpaceTimePathDrawer::prepare(parms);
+	if (nrSteps < 2)
+		nrSteps = 3;
 }
 
 void SpaceTimeRoseDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc) const
@@ -160,7 +162,7 @@ void SpaceTimeRoseDrawer::drawObjects(const int steps, GetHatchFunc getHatchFunc
 						glDisable(GL_POLYGON_STIPPLE);
 
 					// cylinderCoords
-					if (fTimeSelected(sLastGroupValue, z))
+					if (fTimeSelected(sLastGroupValue, z) && (rHead != 0))
 						drawItem(head, rHead, rHeadAngle, rsHead, tail, rTail, rTailAngle, rsTail);
 				}
 				// continue
@@ -203,25 +205,25 @@ void SpaceTimeRoseDrawer::drawItem(Coord head, double rHead, double rHeadAngle, 
 		glTexCoord2f(rsHead, 0.25f);
 	
 	// left face
-	Coord normCircle = projectOnCircle(AB, rHead, rHeadAngle1 - M_PI / 2.0);
+	Coord normCircle = Coord(rHead * cos(rHeadAngle1 - M_PI / 2.0), rHead * sin(rHeadAngle1 - M_PI / 2.0), 0);
 	Coord normal = normalize(normCircle);
 	glNormal3f(normal.x, normal.y, normal.z);
 	if (!fFixedColor)
 		glTexCoord2f(textureOffset, 0.25f);
-	normCircle = projectOnCircle(AB, rCenter, rHeadAngle1);
+	normCircle = Coord(rCenter * cos(rHeadAngle1), rCenter * sin(rHeadAngle1), 0);
 	normCircle += head;
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 	if (!fFixedColor)
 		glTexCoord2f(rsHead, 0.25f);
-	normCircle = projectOnCircle(AB, rHead, rHeadAngle1);
+	normCircle = Coord(rHead * cos(rHeadAngle1), rHead * sin(rHeadAngle1), 0);
 	normCircle += head;
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 	if (!fFixedColor)
 		glTexCoord2f(textureOffset, 0.25f);
-	normCircle = projectOnCircle(AB, rCenter, rHeadAngle1);
+	normCircle = Coord(rCenter * cos(rHeadAngle1), rCenter * sin(rHeadAngle1), 0);
 	normCircle += tail;
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-	normCircle = projectOnCircle(AB, rHead, rHeadAngle1);
+	normCircle = Coord(rHead * cos(rHeadAngle1), rHead * sin(rHeadAngle1), 0);
 	normCircle += tail;
 	if (!fFixedColor)
 		glTexCoord2f(rsHead, 0.25f);
@@ -250,16 +252,16 @@ void SpaceTimeRoseDrawer::drawItem(Coord head, double rHead, double rHeadAngle, 
 		glEnd();
 		glBegin(GL_TRIANGLE_STRIP);
 		double rEndAngle = min(rHeadAngle2, rTailAngle1);
-		normCircle = projectOnCircle(AB, rCenter, rHeadAngle1);
+		normCircle = Coord(rCenter * cos(rHeadAngle1), rCenter * sin(rHeadAngle1), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-		normCircle = projectOnCircle(AB, rHead, rHeadAngle1);
+		normCircle = Coord(rHead * cos(rHeadAngle1), rHead * sin(rHeadAngle1), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-		normCircle = projectOnCircle(AB, rCenter, rEndAngle);
+		normCircle = Coord(rCenter * cos(rEndAngle), rCenter * sin(rEndAngle), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-		normCircle = projectOnCircle(AB, rHead, rEndAngle);
+		normCircle = Coord(rHead * cos(rEndAngle), rHead * sin(rEndAngle), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 	}
@@ -269,16 +271,16 @@ void SpaceTimeRoseDrawer::drawItem(Coord head, double rHead, double rHeadAngle, 
 		glBegin(GL_TRIANGLE_STRIP);
 		double rBeginAngle = max(rTailAngle1, rHeadAngle1);
 		double rEndAngle = min(rTailAngle2, rHeadAngle2);
-		normCircle = projectOnCircle(AB, rTail, rBeginAngle);
+		normCircle = Coord(rTail * cos(rBeginAngle), rTail * sin(rBeginAngle), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-		normCircle = projectOnCircle(AB, rHead, rBeginAngle);
+		normCircle = Coord(rHead * cos(rBeginAngle), rHead * sin(rBeginAngle), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-		normCircle = projectOnCircle(AB, rTail, rEndAngle);
+		normCircle = Coord(rTail * cos(rEndAngle), rTail * sin(rEndAngle), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-		normCircle = projectOnCircle(AB, rHead, rEndAngle);
+		normCircle = Coord(rHead * cos(rEndAngle), rHead * sin(rEndAngle), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 	}
@@ -287,16 +289,16 @@ void SpaceTimeRoseDrawer::drawItem(Coord head, double rHead, double rHeadAngle, 
 		glEnd();
 		glBegin(GL_TRIANGLE_STRIP);
 		double rBeginAngle = max(rHeadAngle1, rTailAngle2);
-		normCircle = projectOnCircle(AB, rCenter, rBeginAngle);
+		normCircle = Coord(rCenter * cos(rBeginAngle), rCenter * sin(rBeginAngle), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-		normCircle = projectOnCircle(AB, rHead, rBeginAngle);
+		normCircle = Coord(rHead * cos(rBeginAngle), rHead * sin(rBeginAngle), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-		normCircle = projectOnCircle(AB, rCenter, rHeadAngle2);
+		normCircle = Coord(rCenter * cos(rHeadAngle2), rCenter * sin(rHeadAngle2), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-		normCircle = projectOnCircle(AB, rHead, rHeadAngle2);
+		normCircle = Coord(rHead * cos(rHeadAngle2), rHead * sin(rHeadAngle2), 0);
 		normCircle += tail;
 		glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 	}
@@ -305,27 +307,27 @@ void SpaceTimeRoseDrawer::drawItem(Coord head, double rHead, double rHeadAngle, 
 	glBegin(GL_TRIANGLE_STRIP);
 
 	// right face
-	Coord normCircle2 = projectOnCircle(AB, rHead, rHeadAngle2 + M_PI / 2.0);
+	Coord normCircle2 = Coord(rHead * cos(rHeadAngle2 + M_PI / 2.0), rHead * sin(rHeadAngle2 + M_PI / 2.0), 0);
 	normal = normalize(normCircle2);
 	glNormal3f(normal.x, normal.y, normal.z);
 	if (!fFixedColor)
 		glTexCoord2f(textureOffset, 0.25f);
-	normCircle = projectOnCircle(AB, rCenter, rHeadAngle2);
+	normCircle = Coord(rCenter * cos(rHeadAngle2), rCenter * sin(rHeadAngle2), 0);
 	normCircle += tail;
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 	if (!fFixedColor)
 		glTexCoord2f(rsHead, 0.25f);
-	normCircle = projectOnCircle(AB, rHead, rHeadAngle2);
+	normCircle = Coord(rHead * cos(rHeadAngle2), rHead * sin(rHeadAngle2), 0);
 	normCircle += tail;
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 	if (!fFixedColor)
 		glTexCoord2f(textureOffset, 0.25f);
-	normCircle = projectOnCircle(AB, rCenter, rHeadAngle2);
+	normCircle = Coord(rCenter * cos(rHeadAngle2), rCenter * sin(rHeadAngle2), 0);
 	normCircle += head;
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 	if (!fFixedColor)
 		glTexCoord2f(rsHead, 0.25f);
-	normCircle = projectOnCircle(AB, rHead, rHeadAngle2);
+	normCircle = Coord(rHead * cos(rHeadAngle2), rHead * sin(rHeadAngle2), 0);
 	normCircle += head;
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 
@@ -351,19 +353,19 @@ void SpaceTimeRoseDrawer::drawItem(Coord head, double rHead, double rHeadAngle, 
 	*/
 
 	// front face
-	normCircle = projectOnCircle(AB, rHead, rHeadAngle1);
+	normCircle = Coord(rHead * cos(rHeadAngle1), rHead * sin(rHeadAngle1), 0);
 	normCircle += head;
-	normCircle2 = projectOnCircle(AB, rHead, rHeadAngle);
+	normCircle2 = Coord(rHead * cos(rHeadAngle), rHead * sin(rHeadAngle), 0);
 	normal = normalize(normCircle2);
 	glNormal3f(normal.x, normal.y, normal.z);
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-	normCircle = projectOnCircle(AB, rHead, rHeadAngle2);
+	normCircle = Coord(rHead * cos(rHeadAngle2), rHead * sin(rHeadAngle2), 0);
 	normCircle += head;
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-	normCircle = projectOnCircle(AB, rHead, rHeadAngle1);
+	normCircle = Coord(rHead * cos(rHeadAngle1), rHead * sin(rHeadAngle1), 0);
 	normCircle += tail;
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
-	normCircle = projectOnCircle(AB, rHead, rHeadAngle2);
+	normCircle = Coord(rHead * cos(rHeadAngle2), rHead * sin(rHeadAngle2), 0);
 	normCircle += tail;
 	glVertex3f(normCircle.x, normCircle.y, normCircle.z);
 
