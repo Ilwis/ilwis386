@@ -78,7 +78,7 @@ GeneralImportForm::GeneralImportForm(CWnd* parent)
 	FieldGroup *fg = new FieldGroup(root);
 	new StaticText(fg,"Drivers");
 	//new FieldString(fg, &ss, WS_TABSTOP|WS_GROUP|ES_READONLY|WS_BORDER);
-	tree = new TreeSelector(fg, false);
+	tree = new TreeSelector(fg);
 	tree->SetCallBack((NotifyProc)&GeneralImportForm::Fill);
 	tree->SetWidth(120);
 	FieldGroup *fg2 = new FieldGroup(root);

@@ -94,7 +94,7 @@ FormGeneralPreferences::FormGeneralPreferences() :
 		mapPos[i].rcMax.Row = settings2.iValue(String("YSize%d", i), iUNDEF);
 	}
 
-  tree = new TreeSelector(root,1);
+	tree = new TreeSelector(root);
 	tree->SetCallBack((NotifyProc)&FormGeneralPreferences::Fill);
 	pages.push_back(FormGeneralPreferences::Page(TR("Main Window"), new FieldPage(root)));
 	pages.push_back(FormGeneralPreferences::Page(TR("Main Window#Position & Size"), new FieldPage(root)));

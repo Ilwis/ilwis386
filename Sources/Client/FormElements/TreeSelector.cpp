@@ -68,11 +68,9 @@ void Tree::OnItemExpanding(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 //-----------------------------------------------------------------------------------
-TreeSelector::TreeSelector(FormEntry* par, int depth, bool _expandAll)
+TreeSelector::TreeSelector(FormEntry* par)
   : FormEntry(par,0,true),
 	tree(NULL),
-	expandAll(_expandAll),
-	maxExpansionDepth(depth),
 	keepSelection(true)
 {
   psn->iMinWidth = psn->iWidth = FLDNAMEWIDTH + 100;
@@ -119,17 +117,15 @@ void TreeSelector::show(int sw)
     tree->ShowWindow(sw);
 }
 
-void TreeSelector::expand(HTREEITEM hti, int depth) {
-	if ( hti == NULL || depth == maxExpansionDepth)
+void TreeSelector::expand(HTREEITEM hti, int depth, int maxDepth) {
+	if (depth == maxDepth)
 		return;
-	HTREEITEM htNew = tree->GetNextItem(hti, TVGN_CHILD);
-
-	while(htNew) {
-		tree->Expand(htNew,TVE_EXPAND);
-		htNew = tree->GetNextSiblingItem(htNew);
-		expand(htNew,depth + 1);
+	while(hti) {
+		tree->Expand(hti,TVE_EXPAND);
+		HTREEITEM htiChild = tree->GetNextItem(hti, TVGN_CHILD);
+		expand(htiChild, depth + 1, maxDepth);
+		hti = tree->GetNextSiblingItem(hti);
 	}
-
 }
 
 void TreeSelector::SetNotifyExpansion(NotifyProc np, FormEntry* _alternativeHandler) {
@@ -172,18 +168,6 @@ void TreeSelector::Add(const String& sValue, HTREEITEM hti, DWORD data, bool fLe
 	tvi.hItem = it = tree->InsertItem(sValue.sHead("#").c_str(), -1,-1, hti);
 	tree->SetItemData(it, (DWORD) data);
 	Add(sValue.sTail("#"), it, data, fLeaf, depth + 1);
-	/*if ( maxExpansionDepth != 0) {
-	 if ( expandAll) {
-		HTREEITEM hItem;
-
-		hItem= tree->GetFirstVisibleItem();
-		while (hItem != NULL)
-			if ( depth <= maxExpansionDepth) {
-				tree->Expand(hItem,TVE_EXPAND);
-			}
-			hItem= tree->GetNextItem(hItem, TVGN_NEXTVISIBLE);
-	}*/
-
 }
 
 String TreeSelector::sBranchValue(HTREEITEM _it)
@@ -238,6 +222,5 @@ void TreeSelector::SelectNode(const String& path,HTREEITEM hti){
 
 }
 void TreeSelector::ExpandTo(int depth){
-	maxExpansionDepth = depth;
-
+	expand(tree->GetRootItem(), 0, depth);
 }
