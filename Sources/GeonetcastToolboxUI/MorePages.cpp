@@ -960,12 +960,10 @@ void StationOutputPage::set() {
 	new PushButton(this,"Metadata",(NotifyProc)&StationOutputPage::metadata,this);
 	new FieldBlank(this);
 	new PushButton(this,"Import",(NotifyProc)&StationOutputPage::import,this);
-
-
 }
 
 int StationOutputPage::metadata(Event *ev) {
-	String cmd("%SExtensions\\Geonetcast-Toolbox\\toolbox_startscript\\WebMappingService\\gsod\\gsod_readme.txt",getEngine()->getContext()->sIlwDir()); 
+	String cmd("%S%S",getEngine()->getContext()->sIlwDir(),source); 
 	::ShellExecute(mainFrm->m_hWnd,"open",cmd.c_str(),0,0,SW_SHOW);
 
 	return 1;
