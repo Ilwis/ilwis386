@@ -60,12 +60,17 @@ Last change:  WK   17 Sep 98    2:14 pm
 #define MAXLENSEARCHCFG 1000
 
 void parseUIInfo(const String& path, map<String, String>& keys) {
+	String line;
 	FileName configf("config.xml", FileName(path) );
 	ifstream configstr (configf.sFullPath().c_str(), std::ios::in);
-	char buf[MAXLENSEARCHCFG];
-	configstr.read(buf,MAXLENSEARCHCFG);
-	String line(buf);
-	configstr.close();
+	if (configstr.is_open()) {
+		if (configstr.good() && !configstr.eof()) {
+			char buf[MAXLENSEARCHCFG];
+			configstr.read(buf,MAXLENSEARCHCFG);
+			line = String(buf);
+			configstr.close();
+		}
+	}
 	int index = 0;
 	if ( (index = line.find("UIInfo")) !=  string::npos) {
 		index += 7;
@@ -106,8 +111,9 @@ void CmdEoToolbox2(const String& s) {
 	map<String, String> keys;
 
 	parseUIInfo(path, keys);
-
-	new GeonetCastFrm(keys["title"],keys["type"]);
+	String type = keys["type"];
+	if (type.length() > 0)
+		new GeonetCastFrm(keys["title"],type);
 }
 
 extern "C" _export void moduleInitUI(ILWIS::Module *module) {
@@ -137,8 +143,9 @@ extern "C" _export InfoUIVector* getApplicationInfoUI(ILWIS::Module *module) {
 	map<String, String> keys;
 
 	parseUIInfo(path, keys);
-
-	(*infosui).push_back(CommandHandlerUI::createCommandInfo("eotoolbox '" + keys["type"] + "'","",CmdEoToolbox ,keys["menu"],"Toolbox",keys["icon"],"",8072,"Imports"));
+	String type = keys["type"];
+	if (type.length() > 0)
+		(*infosui).push_back(CommandHandlerUI::createCommandInfo("eotoolbox '" + type + "'","",CmdEoToolbox ,keys["menu"],"Toolbox",keys["icon"],"",8072,"Imports"));
 
 	return infosui;
 }
