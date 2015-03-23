@@ -687,6 +687,7 @@ void AVHRRPage::set(){
 	}
 
 	fdtIn = new FieldDataTypeCreate(this, "Input file(Tiff)", &sInput, "", true);
+	fdtIn->SetWidth(EDIT_FIELD_SIZE);
 	PushButton *pbsIn = new PushButton(this, "...", (NotifyProc)&AVHRRPage::BrowseClickIn,this);
 	pbsIn->psn->iPosX = fdtIn->psn->iPosX + fdtIn->psn->iMinWidth;
 	pbsIn->psn->iMinWidth = 18;
@@ -695,6 +696,7 @@ void AVHRRPage::set(){
 	pbsIn->SetIndependentPos();
 	fdtOut = new FieldDataTypeCreate(this, "Output file", &sOutput, "", true);
 	fdtOut->Align(fdtIn, AL_UNDER);
+	fdtOut->SetWidth(EDIT_FIELD_SIZE);
 	PushButton *pbsOut = new PushButton(this, "...", (NotifyProc)&AVHRRPage::BrowseClickOut,this);
 	pbsOut->psn->iPosX = fdtOut->psn->iPosX + fdtOut->psn->iMinWidth;
 	pbsOut->psn->iMinWidth = 18;
@@ -806,7 +808,7 @@ int TimePlusOrbit::import(Event *ev) {
 	String ilwDir,pluginDir,gdalDir, utilDir,inputDrive,inputPath,outputDrive,outputPath;	   
 	InitImport(ilwDir,pluginDir,gdalDir,utilDir,inputDrive,inputPath, outputDrive, outputPath);
 	String batCmd = createCommand(ilwDir,pluginDir,gdalDir,utilDir,inputDrive,inputPath, outputDrive, outputPath);
-	batCmd += String(" %d", orbit);
+	batCmd += String(" %.2d", orbit);
 	IlwWinApp()->Execute("cd " + dirOut);
 	IlwWinApp()->Execute(batCmd);
 	return 1;
@@ -936,7 +938,6 @@ int URLPage::save(Event *ev) {
 
 	return 1;
 }
-
 //-----------------------------------------
 StationOutputPage::StationOutputPage(GeonetCastFrm *frm, FormEntry *parent) : DataPage(frm,parent) {
 }
@@ -1001,11 +1002,11 @@ void StationSearchPage::set() {
 		txt->SetIndependentPos();
 	}
 
-	String s("Date (%S)", getFormat());
+	String s("CODE", getFormat());
 	FieldString *fs = new FieldString(this,s,&time);
 	fs->SetWidth(EDIT_FIELD_SIZE);
-	fbIn = new FieldBrowseDir(this,"Input directory","",&dirIn);
-	fbIn->SetWidth(EDIT_FIELD_SIZE);
+	//fbIn = new FieldBrowseDir(this,"Input directory","",&dirIn);
+	//fbIn->SetWidth(EDIT_FIELD_SIZE);
 	fbOut = new FieldBrowseDir(this,"Output directory","",&dirOut);
 	PushButton *pb = new PushButton(this,"Load code file",(NotifyProc)&StationSearchPage::load,this);
 	fbOut->SetWidth(EDIT_FIELD_SIZE);
@@ -1046,7 +1047,6 @@ int StationSearchPage::load(Event *ev) {
 }
 void StationSearchPage::loadSource() {
 	String dataDir = getEngine()->getContext()->sIlwDir();
-	dataDir += "Extensions\\Geonetcast-Toolbox\\";
 	dataDir += dataSource;
 	ifstream in(dataDir.c_str());
 	searchMaps.resize(infos.size());
@@ -1103,7 +1103,6 @@ int StationSearchPage::setTerm(Event *ev) {
 void StationSearchPage::setSource(const String& s){
 	dataSource = s;
 }
-
 //-------------------------------------------------------------------------------
 FinderPage::FinderPage(GeonetCastFrm *frm, FormEntry *parent) : GNCPage(frm, parent), fos(0) {
 
