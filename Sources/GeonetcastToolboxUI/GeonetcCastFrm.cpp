@@ -217,7 +217,7 @@ void GeonetCastFrm::parseSearchNode(pugi::xml_node node,StationSearchPage* spage
 		if ( nodeName == "Source") {
 			String source = cnode.attribute("location").value();
 			spage->setSource(source);
-			for(pugi::xml_node child = node.first_child(); child; child = child.next_sibling()) {
+			for(pugi::xml_node child = cnode.first_child(); child; child = child.next_sibling()) {
 				pugi::xml_node_type type = child.type();
 				if ( type != pugi::node_element)
 					continue;
