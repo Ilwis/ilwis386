@@ -36,7 +36,7 @@ FormWithDest(IlwWinApp()->GetMainWnd(),title , fbsSHOWALWAYS |  fbsNOOKBUTTON | 
 		IlwisSettings settings("Dummy");
 		workingDir = Directory(settings.sValue("WorkingDirectory"));
 		//
-		tree = new TreeSelector(root, true);   
+		tree = new TreeSelector(root);   
 		tree->SetHeight(450);
 		tree->SetCallBack((NotifyProc)&GeonetCastFrm::Fill);
 		tree->SetNotifyExpansion((NotifyProc)&GeonetCastFrm::dummy);
@@ -67,7 +67,6 @@ void GeonetCastFrm::StartPage() {
 	fp->SetHeight(450);
 	fp->SetBevelStyle(FormEntry::bsRAISED);
 	String ilw("%SExtensions\\%S-Toolbox\\util\\%S.bmp", getEngine()->getContext()->sIlwDir(),formType,formType);
-	tree->ExpandTo(1);
 	tree->SetWidth(120);
 	fp->Load(FileName(ilw));
 	if ( page)
