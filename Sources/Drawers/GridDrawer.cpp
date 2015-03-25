@@ -115,6 +115,8 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 		cMin = getRootDrawer()->glToWorld(cbMap.cMin);
 		cMax = getRootDrawer()->glToWorld(cbMap.cMax);
+		if (cMin.fUndef() || cMax.fUndef() || cMax.x == cMin.x)
+			return;
 		if (cMin.x > cMax.x) { // swap
 			double x = cMin.x;
 			cMin.x = cMax.x;
