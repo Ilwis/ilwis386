@@ -640,10 +640,10 @@ Importing::Importing()
 	}
 }
 
-struct WinAndParm 
+struct WinAndParmImport
 { // struct for parms of import thread
-	WinAndParm(): sParams(0), sPath(0) {}
-	~WinAndParm() 
+	WinAndParmImport(): sParams(0), sPath(0) {}
+	~WinAndParmImport() 
 	{ 
 		delete sParams; 
 		delete sPath;
@@ -654,7 +654,7 @@ struct WinAndParm
 
 static UINT DoImportInThread(LPVOID p)
 {
-	WinAndParm *wp = (WinAndParm*)(p);
+	WinAndParmImport *wp = (WinAndParmImport*)(p);
 	IlwWinApp()->SetCurDir(*(wp->sPath));
 	CWnd* w = IlwWinApp()->GetMainWnd();
 	String sOptions = *(wp->sParams);
@@ -665,7 +665,7 @@ static UINT DoImportInThread(LPVOID p)
 
 	IlwWinApp()->Context()->RemoveThreadLocalVars();
 	
-	//delete wp;  // should be deleted; generates a unexplainable crash atm; will have to investigate later; memory leak is small and not often used
+	delete wp;
 	wp = NULL;
 
 	return FALSE;
@@ -720,7 +720,7 @@ void Importing::AskImport(CWnd* w, const char* sPar)
 	}
 	else
 	{
-		WinAndParm *wp = new WinAndParm;
+		WinAndParmImport *wp = new WinAndParmImport;
 		wp->sParams = new String(sCmd);
 		wp->sPath = new String(IlwWinApp()->sGetCurDir());
 		AfxBeginThread(DoImportInThread, (LPVOID)(wp)); 
