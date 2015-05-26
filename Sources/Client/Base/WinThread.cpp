@@ -97,7 +97,7 @@ WinThread::WinThread(CDocManager* pdm, LPCTSTR lpszFileName, IlwisDocument::Open
 	size_t iStart = sFileExpr.find('(');
 	size_t iEnd = sFileExpr.find(')');
 	size_t iPoint = sFileExpr.find('.');
-	bool fExpr = iStart > 1 && iStart < iEnd && iPoint < iEnd;
+	bool fExpr = iStart != string::npos && iEnd != string::npos && iStart > 1 && iStart < iEnd && (iPoint == string::npos || iPoint < iEnd);
 	if (!fExpr && lpszFileName)
 	{
 		FileName fn = IlwisObjectPtr::fnCheckPath(lpszFileName);
@@ -120,7 +120,7 @@ WinThread::WinThread(IlwisDocTemplate* pdt, LPCTSTR lpszFileName, IlwisDocument:
 	size_t iStart = sFileExpr.find('(');
 	size_t iEnd = sFileExpr.find(')');
 	size_t iPoint = sFileExpr.find('.');
-	bool fExpr = iStart > 1 && iStart < iEnd && iPoint < iEnd;
+	bool fExpr = iStart != string::npos && iEnd != string::npos && iStart > 1 && iStart < iEnd && (iPoint == string::npos || iPoint < iEnd);
 	if (!fExpr && lpszFileName) 
 	{
 		ParmList pm(lpszFileName);
