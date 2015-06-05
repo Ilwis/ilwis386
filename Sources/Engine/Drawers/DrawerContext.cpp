@@ -48,7 +48,7 @@ bool DrawerContext::initOpenGL(HDC hdc, CWnd * wnd, int m) {
 		for (int i = 1; i <= iNr; ++i) {
 			pfd2 = pfd;
 			DescribePixelFormat( hdc, i, sizeof(PIXELFORMATDESCRIPTOR), &pfd2 );
-			if ((pfd2.dwFlags & PFD_GENERIC_FORMAT) && !(pfd.dwFlags & PFD_GENERIC_ACCELERATED) && (pfd2.dwFlags & PFD_SUPPORT_OPENGL) && (pfd2.iPixelType == PFD_TYPE_RGBA) && (pfd2.cColorBits >= 8) && (pfd2.cDepthBits >= 8) && (pfd2.iLayerType == PFD_MAIN_PLANE)) {
+			if ((pfd2.dwFlags & PFD_GENERIC_FORMAT) && !(pfd2.dwFlags & PFD_GENERIC_ACCELERATED) && (pfd2.dwFlags & PFD_SUPPORT_OPENGL) && (pfd2.iPixelType == PFD_TYPE_RGBA) && (pfd2.cColorBits >= 8) && (pfd2.cDepthBits >= 8) && (pfd2.iLayerType == PFD_MAIN_PLANE)) {
 				if (m & mDRAWTOWINDOW) {
 					if (!(pfd2.dwFlags & PFD_DRAW_TO_WINDOW))
 						continue;
@@ -76,7 +76,65 @@ bool DrawerContext::initOpenGL(HDC hdc, CWnd * wnd, int m) {
 		SetPixelFormat( hdc, iFormat, &pfd2 );
 	} else {
 		int iFormat = ChoosePixelFormat( hdc, &pfd );
-		SetPixelFormat( hdc, iFormat, &pfd );
+		if (iFormat > 0)
+			SetPixelFormat( hdc, iFormat, &pfd );
+		else { // manual search; hopefully it will never get here
+			PIXELFORMATDESCRIPTOR pfd2;
+			int iNr = DescribePixelFormat( hdc, 1, sizeof(PIXELFORMATDESCRIPTOR), NULL);
+			int bestColorBits = 0;
+			int bestDepthBits = 0;
+			bool fGeneric = true;
+			bool fGenericAccelerated = false;
+			iFormat = 0;
+			for (int i = 1; i <= iNr; ++i) {
+				DescribePixelFormat( hdc, i, sizeof(PIXELFORMATDESCRIPTOR), &pfd2 );
+				if ((pfd2.dwFlags & PFD_SUPPORT_OPENGL) && (pfd2.iPixelType == PFD_TYPE_RGBA) && (pfd2.cColorBits >= 8) && (pfd2.cDepthBits >= 8) && (pfd2.iLayerType == PFD_MAIN_PLANE)) {
+					if (m & mDRAWTOWINDOW) {
+						if (!(pfd2.dwFlags & PFD_DRAW_TO_WINDOW))
+							continue;
+					}
+					if (m & mUSEDOUBLEBUFFER) {
+						if (!(pfd2.dwFlags & PFD_DOUBLEBUFFER))
+							continue;
+					}
+					if (m & mDRAWTOBITMAP) {
+						if (!(pfd2.dwFlags & PFD_DRAW_TO_BITMAP))
+							continue;
+					}
+					if (iFormat <= 0) {
+						fGeneric = pfd2.dwFlags & PFD_GENERIC_FORMAT;
+						fGenericAccelerated = pfd2.dwFlags & PFD_GENERIC_ACCELERATED;
+						bestColorBits = pfd2.cColorBits;
+						bestDepthBits = pfd2.cDepthBits;
+						iFormat = i;
+					} else if (fGeneric && !(pfd2.dwFlags & PFD_GENERIC_FORMAT)) { // prefer non-generic (ICD acceleration)
+						fGeneric = false;
+						fGenericAccelerated = pfd2.dwFlags & PFD_GENERIC_ACCELERATED;
+						bestColorBits = pfd2.cColorBits;
+						bestDepthBits = pfd2.cDepthBits;
+						iFormat = i;
+						iFormat = i;
+					} else if (fGeneric && !fGenericAccelerated && (pfd2.dwFlags & PFD_GENERIC_ACCELERATED)) { // if generic, prefer accelerated (MCD acceleration)
+						fGenericAccelerated = true;
+						bestColorBits = pfd2.cColorBits;
+						bestDepthBits = pfd2.cDepthBits;
+						iFormat = i;
+						iFormat = i;
+					} else if ((fGeneric == (pfd2.dwFlags & PFD_GENERIC_FORMAT)) && (!fGeneric || (fGenericAccelerated == (pfd2.dwFlags & PFD_GENERIC_ACCELERATED)))) { // if acceleration is the same, prefer the best colors and depth
+						if (pfd2.cColorBits > bestColorBits) {
+							bestColorBits = pfd2.cColorBits;
+							bestDepthBits = pfd2.cDepthBits;
+							iFormat = i;
+						} else if (pfd2.cColorBits == bestColorBits && pfd2.cDepthBits > bestDepthBits) {
+							bestDepthBits = pfd2.cDepthBits;
+							iFormat = i;
+						}
+					}
+				}
+			}
+			DescribePixelFormat( hdc, iFormat, sizeof(PIXELFORMATDESCRIPTOR), &pfd2 );
+			SetPixelFormat( hdc, iFormat, &pfd2 );
+		}
 	}
 
 	m_hdc = hdc;
@@ -92,6 +150,12 @@ bool DrawerContext::initOpenGL(HDC hdc, CWnd * wnd, int m) {
 	glGetIntegerv(GL_MAX_PIXEL_MAP_TABLE, &maxPaletteSize);
 	if (maxPaletteSize > 65536)
 		maxPaletteSize = 65536;
+	if (!(mode & mSOFTWARERENDERER) && (maxPaletteSize > 256)) {
+		String vendor (glGetString(GL_VENDOR));
+		vendor.toLower();
+		if (vendor.iPos(String("intel")) >= 0)
+			maxPaletteSize = 256;
+	}
 	ReleaseContext();
 
 	fGLInitialized = true;
