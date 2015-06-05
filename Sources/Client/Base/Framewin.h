@@ -100,7 +100,6 @@ protected:
 	//{{AFX_VIRTUAL(FrameWindow)
 	protected:
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	//}}AFX_VIRTUAL
 	//{{AFX_MSG(FrameWindow)
 	afx_msg void OnMove(int x, int y);

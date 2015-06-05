@@ -262,12 +262,6 @@ void FrameWindow::OnMove(int x, int y)
 	CFrameWnd::OnMove(x, y);
 }
 
-BOOL FrameWindow::PreCreateWindow(CREATESTRUCT& cs) 
-{
-	// Now includes registration check !!
-	return CFrameWnd::PreCreateWindow(cs); // && RegistrationUtils::fCheckHiddenTwo());
-}
-
 int FrameWindow::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
 	if (CFrameWnd ::OnCreate(lpCreateStruct) == -1)  // this call creates the view
