@@ -198,7 +198,7 @@ void duration_so(StackObject* soRes, const StackObject* so)
 
 void iff_so(StackObject* soRes, const StackObject* so0, const StackObject* so1, const StackObject* so2)
 {
-  bool fUseValues = so1->dvs.fValues();
+  bool fUseValues = so1->dvs.fValues() || so2->dvs.fValues();
   if (fUseValues && (so1->sot == sotRealVal || so2->sot == sotRealVal)) {
     RealBuf buf1, buf2, bufRes;
     LongBuf buf0;
