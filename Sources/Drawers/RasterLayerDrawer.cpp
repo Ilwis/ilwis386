@@ -127,7 +127,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 		isThreaded = false;
 		textureHeapBeforeOffscreen = textureHeap;
 		DrawerContext* drawcontext = getRootDrawer()->getDrawerContext();
-		textureHeap = new TextureHeap();
+		setup();
 		setData();
 		if (fPaletteOwner && fUsePalette) {
 			palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
