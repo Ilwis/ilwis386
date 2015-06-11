@@ -135,7 +135,6 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 
 	// if patch is entirely outside viewport, do not display
 
-	GLfloat feedbackBuffer [2];
 	GLdouble m_modelMatrix[16];
 	GLdouble m_projMatrix[16];
 	GLint m_viewport[4]; // x,y,width,height
@@ -151,31 +150,25 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 	Coord c2 (getRootDrawer()->glConv(csy, b2));
 	Coord c3 (getRootDrawer()->glConv(csy, b3));
 	Coord c4 (getRootDrawer()->glConv(csy, b4));
-	/*
-	if (abs(c1.x - c2.x) < 0.01)
-		c1.x = - c1.x;
-	if (abs (c3.x - c4.x) < 0.01)
-		c4.x = -c4.x;
-	*/
+
 	bool fTryAlternativeComputation = (c1.fUndef() || c2.fUndef() || c3.fUndef() || c4.fUndef());
-	if (!fTryAlternativeComputation) {
-		glFeedbackBuffer(2, GL_2D, feedbackBuffer);
-		glRenderMode(GL_FEEDBACK);
-		glBegin (GL_QUADS);
-		glVertex3d(c1.x, c1.y, 0.0);
-		glVertex3d(c2.x, c2.y, 0.0);
-		glVertex3d(c3.x, c3.y, 0.0);
-		glVertex3d(c4.x, c4.y, 0.0);
-		glEnd();
-		if (0 == glRenderMode(GL_RENDER) && zoomLevel < 18)
-			fTryAlternativeComputation = true;
-	}
 	if (fTryAlternativeComputation) {
-		CoordBounds cbViewport = getRootDrawer()->getCoordBoundsZoom();
-		Coord c4 (cbViewport.cMin);
-		Coord c3 (cbViewport.cMax.x, cbViewport.cMin.y);
-		Coord c2 (cbViewport.cMax);
-		Coord c1 (cbViewport.cMin.x, cbViewport.cMax.y);
+		Coord c1, c2, c3, c4;
+		double posZ;
+		float winZ;
+		glReadPixels( m_viewport[0], m_viewport[1], 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+		gluUnProject( m_viewport[0], m_viewport[1], winZ, m_modelMatrix, m_projMatrix, m_viewport, &c1.x, &c1.y, &posZ);
+		glReadPixels( m_viewport[2], m_viewport[1], 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+		gluUnProject( m_viewport[2], m_viewport[1], winZ, m_modelMatrix, m_projMatrix, m_viewport, &c2.x, &c2.y, &posZ);
+		glReadPixels( m_viewport[2], m_viewport[3], 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+		gluUnProject( m_viewport[2], m_viewport[3], winZ, m_modelMatrix, m_projMatrix, m_viewport, &c3.x, &c3.y, &posZ);
+		glReadPixels( m_viewport[0], m_viewport[3], 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+		gluUnProject( m_viewport[0], m_viewport[3], winZ, m_modelMatrix, m_projMatrix, m_viewport, &c4.x, &c4.y, &posZ);
+		c1.z = 0;
+		c2.z = 0;
+		c3.z = 0;
+		c4.z = 0;
+
 		Coord b1 (getRootDrawer()->glToWorld(csy, c1));
 		Coord b2 (getRootDrawer()->glToWorld(csy, c2));
 		Coord b3 (getRootDrawer()->glToWorld(csy, c3));
@@ -212,6 +205,31 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 	gluProject(c3.x, c3.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
 	gluProject(c4.x, c4.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
 
+	geos::geom::GeometryFactory factory;
+	const vector<geos::geom::Geometry *> holes;
+
+	geos::geom::CoordinateArraySequence * coordsTile = new geos::geom::CoordinateArraySequence();
+	for (int i = 0; i < 4; ++i)
+		coordsTile->add(Coordinate(m_winx[i], m_winy[i]));
+	coordsTile->add(Coordinate(m_winx[0], m_winy[0]));
+	const geos::geom::LinearRing ringTile(coordsTile, &factory);		
+	geos::geom::Polygon * polyTile(factory.createPolygon(ringTile, holes));
+
+	geos::geom::CoordinateArraySequence * coordsViewport = new geos::geom::CoordinateArraySequence();
+	coordsViewport->add(Coordinate(m_viewport[0], m_viewport[1]));
+	coordsViewport->add(Coordinate(m_viewport[2], m_viewport[1]));
+	coordsViewport->add(Coordinate(m_viewport[2], m_viewport[3]));
+	coordsViewport->add(Coordinate(m_viewport[0], m_viewport[3]));
+	coordsViewport->add(Coordinate(m_viewport[0], m_viewport[1]));
+	const geos::geom::LinearRing ringViewport(coordsViewport, &factory);		
+	geos::geom::Polygon * polyViewport(factory.createPolygon(ringViewport, holes));
+
+	bool fContains = !polyViewport->disjoint(polyTile);
+	delete polyTile;
+	delete polyViewport;
+	if (!fContains)
+		return;
+
 	double screenPixelsX1 = sqrt(sqr(m_winx[1]-m_winx[0])+sqr(m_winy[1]-m_winy[0]));
 	double screenPixelsY1 = sqrt(sqr(m_winx[2]-m_winx[1])+sqr(m_winy[2]-m_winy[1]));
 	double screenPixelsX2 = sqrt(sqr(m_winx[3]-m_winx[2])+sqr(m_winy[3]-m_winy[2]));
@@ -220,12 +238,17 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 	// split the visible portion of the image into a number of patches, depending on the accuracy needed
 
 	bool split = false;
-	if (max(screenPixelsX1, screenPixelsX2) > data->maxTextureSize)
+	if (min(screenPixelsX1, screenPixelsX2) > data->maxTextureSize * 2)
 		split = true;
-	if (max(screenPixelsY1, screenPixelsY2) > data->maxTextureSize)
+	if (min(screenPixelsY1, screenPixelsY2) > data->maxTextureSize * 2)
 		split = true;
 	if (zoomLevel >= 18)
 		split = false;
+	bool fOneCornerInsideViewport = false;
+	for (int i = 0; i < 4; ++i)
+		fOneCornerInsideViewport = fOneCornerInsideViewport || (m_winz[i] >= -100 && m_winz[i] <= 100);
+	split = split && fOneCornerInsideViewport;
+
 	if (split)
 	{
 		double sizeX2 = cb.width() / 2.0;
