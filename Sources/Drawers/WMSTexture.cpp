@@ -32,7 +32,8 @@ WMSTexture::WMSTexture(const Map & mp, const DrawingColor * drawColor, const Com
 void WMSTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
 {
 	int textureSize = drawerContext->getMaxTextureSize();
-	if ( mp->gr()->pgOSM())
+	bool fOpenStreetMap = mp->gr()->pgOSM();
+	if (fOpenStreetMap)
 		textureSize = 256;
 	try {
 		texture_data = new char [textureSize * textureSize * 4];
@@ -52,10 +53,17 @@ void WMSTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, vo
 	glGenTextures(1, &texture);
 	glBindTexture( GL_TEXTURE_2D, texture );
 	glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE );
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	if (fOpenStreetMap) {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	} else {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	}
 
 	// The following are shared OpenGL variables .. if ever they need to change from the default of 0, restore them to the original value
 	//glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0);
