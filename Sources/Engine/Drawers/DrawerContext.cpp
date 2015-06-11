@@ -28,11 +28,11 @@ bool DrawerContext::initOpenGL(HDC hdc, CWnd * wnd, int m) {
 	pfd.nVersion = 1;
 	pfd.dwFlags = PFD_SUPPORT_OPENGL;
 	if ( m & mDRAWTOWINDOW )
-		pfd.dwFlags |= PFD_DRAW_TO_WINDOW ;
+		pfd.dwFlags |= PFD_DRAW_TO_WINDOW;
 	if ( m & mUSEDOUBLEBUFFER)
 		pfd.dwFlags |= PFD_DOUBLEBUFFER;
 	if ( m & mDRAWTOBITMAP)
-		pfd.dwFlags |=  PFD_DRAW_TO_BITMAP ;
+		pfd.dwFlags |= PFD_DRAW_TO_BITMAP;
 
 	pfd.iPixelType = PFD_TYPE_RGBA;
 	pfd.cColorBits = 24;
@@ -57,8 +57,8 @@ bool DrawerContext::initOpenGL(HDC hdc, CWnd * wnd, int m) {
 					if (!(pfd2.dwFlags & PFD_DOUBLEBUFFER))
 						continue;
 				}
-				if (m & mDRAWTOBITMAP) {
-					if (!(pfd2.dwFlags & PFD_DRAW_TO_BITMAP))
+				if (m & mDRAWTOBITMAP) { // mutually exclusive with mDRAWTOWINDOW
+					if (!(pfd2.dwFlags & PFD_DRAW_TO_BITMAP) || (pfd2.dwFlags & PFD_DRAW_TO_WINDOW)) // mode should not have both PFD_DRAW_TO_BITMAP and PFD_DRAW_TO_WINDOW, because we do not know how to force it to draw to bitmap (result is black)
 						continue;
 				}
 				if (pfd2.cColorBits > bestColorBits) {
@@ -71,9 +71,16 @@ bool DrawerContext::initOpenGL(HDC hdc, CWnd * wnd, int m) {
 				}
 			}
 		}
-		pfd2 = pfd;
-		DescribePixelFormat( hdc, iFormat, sizeof(PIXELFORMATDESCRIPTOR), &pfd2 );
-		SetPixelFormat( hdc, iFormat, &pfd2 );
+		if (iFormat > 0) {
+			pfd2 = pfd;
+			DescribePixelFormat( hdc, iFormat, sizeof(PIXELFORMATDESCRIPTOR), &pfd2 );
+			SetPixelFormat( hdc, iFormat, &pfd2 );
+		} else { // try the auto-finder anyway
+			pfd.dwFlags |= PFD_GENERIC_FORMAT;
+			iFormat = ChoosePixelFormat( hdc, &pfd );
+			if (iFormat > 0)
+				SetPixelFormat( hdc, iFormat, &pfd );
+		}
 	} else {
 		int iFormat = ChoosePixelFormat( hdc, &pfd );
 		if (iFormat > 0)
@@ -97,8 +104,8 @@ bool DrawerContext::initOpenGL(HDC hdc, CWnd * wnd, int m) {
 						if (!(pfd2.dwFlags & PFD_DOUBLEBUFFER))
 							continue;
 					}
-					if (m & mDRAWTOBITMAP) {
-						if (!(pfd2.dwFlags & PFD_DRAW_TO_BITMAP))
+					if (m & mDRAWTOBITMAP) { // mutually exclusive with mDRAWTOWINDOW
+						if (!(pfd2.dwFlags & PFD_DRAW_TO_BITMAP) || (pfd2.dwFlags & PFD_DRAW_TO_WINDOW)) // mode should not have both PFD_DRAW_TO_BITMAP and PFD_DRAW_TO_WINDOW, because we do not know how to force it to draw to bitmap (result is black)
 							continue;
 					}
 					if (iFormat <= 0) {
@@ -113,12 +120,10 @@ bool DrawerContext::initOpenGL(HDC hdc, CWnd * wnd, int m) {
 						bestColorBits = pfd2.cColorBits;
 						bestDepthBits = pfd2.cDepthBits;
 						iFormat = i;
-						iFormat = i;
 					} else if (fGeneric && !fGenericAccelerated && (pfd2.dwFlags & PFD_GENERIC_ACCELERATED)) { // if generic, prefer accelerated (MCD acceleration)
 						fGenericAccelerated = true;
 						bestColorBits = pfd2.cColorBits;
 						bestDepthBits = pfd2.cDepthBits;
-						iFormat = i;
 						iFormat = i;
 					} else if ((fGeneric == (pfd2.dwFlags & PFD_GENERIC_FORMAT)) && (!fGeneric || (fGenericAccelerated == (pfd2.dwFlags & PFD_GENERIC_ACCELERATED)))) { // if acceleration is the same, prefer the best colors and depth
 						if (pfd2.cColorBits > bestColorBits) {
