@@ -275,9 +275,8 @@ void SegmentMapIntersect::AddAttValues(BaseMap bmap, Table& tbl,Feature *seg, in
 	for(int i = 0; i < tblAtt->iCols(); ++i) {
 		Column col = tblAtt->col(i);
 		Column colAtt = tbl->col( i + start);
-		long iRaw = col->iRaw(seg->iValue());
-		String s = colAtt->dm()->sValueByRaw(iRaw);
-		colAtt->PutRaw(record,iRaw);
+		String s = col->sValue(seg->iValue());
+		colAtt->PutVal(record,s);
 	}
 }
 
