@@ -230,6 +230,7 @@ bool PolygonMapUnion::fFreezing()
 	return true;
 }
 
+/*
 bool PolygonMapUnion::MergePolygons(vector<ILWIS::Polygon *> inputPolygons, vector<Geometry *>& mergedPolygons) {
 	vector<bool> handled(inputPolygons.size(),false);
 	for(long i=0; i < inputPolygons.size(); ++i) {
@@ -242,8 +243,10 @@ bool PolygonMapUnion::MergePolygons(vector<ILWIS::Polygon *> inputPolygons, vect
 			if ( i == j ) continue;
 			if ( handled[j]) continue;
 			ILWIS::Polygon *gInput2 = inputPolygons[j];
-			if ( gInput1->EnvelopeIntersectsWith(gInput2)) {
-				intersects.push_back(gInput2->clone());
+			const geos::geom::Envelope *env1 = gInput1->getEnvelopeInternal();
+			const geos::geom::Envelope *env2 = gInput2->getEnvelopeInternal();
+			if ( env1->intersects(env2)) {
+				intersects.push_back(gInput2->clone()); // clone may crash here, can we avoid it?
 				handled[j] = handled[i] = true;
 			}
 		}
@@ -267,6 +270,27 @@ bool PolygonMapUnion::MergePolygons(vector<ILWIS::Polygon *> inputPolygons, vect
 		handled[i] = true;
 		for(int n=0; n < intersects.size(); ++n)
 			delete intersects[n];
+	}
+	return true;
+}
+*/
+
+bool PolygonMapUnion::MergePolygons(vector<ILWIS::Polygon *> inputPolygons, vector<Geometry *>& mergedPolygons) {
+	
+	if (inputPolygons.size() > 0) {
+		Geometry *gTotal = inputPolygons[0]->clone();
+		for(long i=1; i < inputPolygons.size(); ++i) {
+			if(trq.fUpdate(i,inputPolygons.size()))
+				return false;
+			try {
+				Geometry *gNew = gTotal->Union(inputPolygons[i]);
+				delete gTotal;
+				gTotal = gNew;
+			} catch (geos::util::GEOSException ) {
+			}
+		}
+		if ( gTotal && !gTotal->isEmpty())
+			mergedPolygons.push_back(gTotal);
 	}
 	return true;
 }
