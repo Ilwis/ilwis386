@@ -281,6 +281,7 @@ void TableDelimited::GetFormatType(FileName fnObj, TableExternalFormat::InputFor
 	{
 		String sLine;
 		InputFile.ReadLnAscii(sLine);
+		sLine = sLine.sTrimSpaces();
 		int iNrCF, iNrSF;
 		ScanForStructure(sLine, iNrSF, iNrCF);
 		if (iNrSF > 0)
