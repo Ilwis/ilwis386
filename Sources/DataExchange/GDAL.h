@@ -215,10 +215,10 @@ struct FormatInfo
 
 class GeometryFiller {
 public:
-	virtual void fillFeature(OGRGeometryH hGeom, int& rec, bool isMulti=false);
+	virtual void fillFeature(OGRGeometryH hGeom, const int rec);
 protected:
 	GeometryFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : bmp(_bmp), funcs(_funcs) {}
-	virtual void fillGeometry(OGRGeometryH hGeom, int& rec) {};
+	virtual void fillGeometry(OGRGeometryH hGeom, const int rec) {};
 	BaseMap& bmp;
 	GDALCFunctions& funcs;
 
@@ -228,7 +228,7 @@ class PointFiller : public GeometryFiller {
 public:
 	PointFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : GeometryFiller(_funcs, _bmp) {}
 private:
-	void fillGeometry(OGRGeometryH hGeom, int& rec);
+	void fillGeometry(OGRGeometryH hGeom, const int rec);
 };
 
 class SegmentFiller : public GeometryFiller {
@@ -236,13 +236,13 @@ public:
 	SegmentFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : GeometryFiller(_funcs, _bmp) {}
 
 private:
-	void fillGeometry(OGRGeometryH hGeom, int& rec);
+	void fillGeometry(OGRGeometryH hGeom, const int rec);
 };
 
 class PolygonFiller : public GeometryFiller {
 public:
 	PolygonFiller(GDALCFunctions& _funcs, BaseMap& _bmp) : GeometryFiller(_funcs, _bmp) {}
-	virtual void fillFeature(OGRGeometryH hGeom, int& rec, bool isMulti=false);
+	virtual void fillFeature(OGRGeometryH hGeom, const int rec);
 private:
 	void fillPolygon(int count, int rec, OGRGeometryH hGeometry);
 	LinearRing *getRing(OGRGeometryH hGeom);
@@ -314,6 +314,7 @@ private:
 
 	void		   LoadMethods();
 	Feature::FeatureType getFeatureType(OGRLayerH hLayer) const;
+	Feature::FeatureType getFeatureTypeFromFirstGeometry(OGRLayerH hLayer) const;
 	FileName	createFileName( const String& name, Feature::FeatureType ftype, int layerCount, int layer);
 	BaseMap     createBaseMap(const FileName& fn, Feature::FeatureType ftype, const Domain& dm, const CoordSystem& csy, const CoordBounds& cb);
 	void		createTable(const FileName& fn, const Domain& dm,OGRFeatureDefnH hFeatureDef, OGRLayerH hLayer, Table& tbl);

@@ -1603,8 +1603,11 @@ void GDALFormat::ogr(const String& name, const String& source, const String& tar
 			if ( hLayer) {
 				Feature::FeatureType ftype = getFeatureType(hLayer);
 				if ( ftype == Feature::ftUNKNOWN) {
-					error += String("layer %d", layer);
-					continue;
+					ftype = getFeatureTypeFromFirstGeometry(hLayer); // Do a 2nd attempt, this time get the type of the first geometry (note: this may be a multi-feature-type layer, if so, it will be the first I have seen besides postgres)
+					if (ftype == Feature::ftUNKNOWN) {
+						error += String("layer %d", layer);
+						continue;
+					}
 				}
 				Tranquilizer trq;
 				trq.SetText(String(TR("Importing %S").c_str(), name));
@@ -1648,6 +1651,7 @@ void GDALFormat::ogr(const String& name, const String& source, const String& tar
 						while( (hFeature = funcs.ogrGetNextFeature(hLayer)) != NULL ){
 								OGRGeometryH hGeometry = funcs.ogrGetGeometryRef(hFeature);
 								filler->fillFeature(hGeometry, rec);
+								++rec;
 
 								if ( trq.fUpdate(rec, featureCount)) { 
 									delete filler;
@@ -1774,7 +1778,7 @@ Domain GDALFormat::createSortDomain(const String& name, const vector<String>& va
 	vector<String> vnames;
 	for(set<String>::const_iterator cur = names.begin(); cur != names.end(); ++cur)
 		vnames.push_back(*cur);
-	FileName fn(FileName::fnUnique(name),".dom");
+	FileName fn(FileName::fnUnique(FileName(name,".dom")));
 	if ( names.size() < 100) {
 		dom = Domain(fn, 0, dmtCLASS);
 	} else {
@@ -1798,6 +1802,33 @@ Feature::FeatureType GDALFormat::getFeatureType(OGRLayerH hLayer) const{
 
 	if ( type == wkbLineString || type == wkbMultiLineString || type == wkbLineString25D || type == wkbMultiLineString25D)
 		return Feature::ftSEGMENT;
+
+	return Feature::ftUNKNOWN;
+}
+
+Feature::FeatureType GDALFormat::getFeatureTypeFromFirstGeometry(OGRLayerH hLayer) const{
+
+	funcs.ogrResetReading(hLayer);
+	OGRFeatureH hFeature = funcs.ogrGetNextFeature(hLayer);
+	funcs.ogrResetReading(hLayer); // next time read again starting at the first feature
+	if (hFeature != NULL) {
+		OGRGeometryH hGeometry = funcs.ogrGetGeometryRef(hFeature);
+		if (hGeometry != NULL) {
+			OGRwkbGeometryType type = funcs.ogrGetGeometryType(hGeometry);
+			while((type == wkbGeometryCollection || type == wkbGeometryCollection25D) && (funcs.ogrGetSubGeometryCount(hGeometry) > 0)) {
+				hGeometry = funcs.ogrGetSubGeometry(hGeometry, 0);
+				type = funcs.ogrGetGeometryType(hGeometry);
+			}
+			if ( type == wkbPoint || type == wkbMultiPoint || type == wkbPoint25D || type == wkbMultiPoint25D)
+				return Feature::ftPOINT;
+
+			if ( type == wkbPolygon || type == wkbMultiPolygon || type == wkbPolygon25D || type == wkbMultiPolygon25D)
+				return Feature::ftPOLYGON;
+
+			if ( type == wkbLineString || type == wkbMultiLineString || type == wkbLineString25D || type == wkbMultiLineString25D)
+				return Feature::ftSEGMENT;
+		}
+	}
 
 	return Feature::ftUNKNOWN;
 }
@@ -1847,7 +1878,7 @@ CoordBounds GDALFormat::getLayerCoordBounds(OGRLayerH hLayer) {
 }
 
 //-----------------------------------------------------
-void GeometryFiller::fillFeature(OGRGeometryH hGeometry, int& rec, bool isMulti) {
+void GeometryFiller::fillFeature(OGRGeometryH hGeometry, const int rec) {
 	if ( hGeometry) {
 		fillGeometry(hGeometry, rec);
 		long count = funcs.ogrGetSubGeometryCount(hGeometry);
@@ -1860,17 +1891,17 @@ void GeometryFiller::fillFeature(OGRGeometryH hGeometry, int& rec, bool isMulti)
 	}
 }
 
-void PointFiller::fillGeometry(OGRGeometryH hGeom, int& rec) {
+void PointFiller::fillGeometry(OGRGeometryH hGeom, const int rec) {
 	ILWIS::Point *p = CPOINT(bmp->newFeature());
 	double x,y,z;
 	funcs.ogrGetPoints(hGeom, 0,&x,&y,&z);
 	p->setCoord(Coord(x,y,x));
-	p->PutVal((long)rec++);
+	p->PutVal((long)rec);
 }
 
 
 
-void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int& rec) {
+void SegmentFiller::fillGeometry(OGRGeometryH hGeom, const int rec) {
 	int count = funcs.ogrGetNumberOfPoints(hGeom);
 	if ( count == 0)
 		return;
@@ -1885,10 +1916,10 @@ void SegmentFiller::fillGeometry(OGRGeometryH hGeom, int& rec) {
 		seq->setAt(c, i);
 	}
 	s->PutCoords(seq);
-	s->PutVal((long)rec++);
+	s->PutVal((long)rec);
 }
 
-void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int& rec, bool isMulti) {
+void PolygonFiller::fillFeature(OGRGeometryH hGeometry, const int rec) {
 	try {
 		if ( hGeometry) {
 			long count = funcs.ogrGetSubGeometryCount(hGeometry); // "count" is used for both counting multipolygon subgeometries and ring/hole counts
@@ -1898,11 +1929,9 @@ void PolygonFiller::fillFeature(OGRGeometryH hGeometry, int& rec, bool isMulti) 
 			else {
 				for(int i = 0; i < count; ++i) {
 					OGRGeometryH hSubGeometry = funcs.ogrGetSubGeometry(hGeometry, i);
-					fillFeature(hSubGeometry, rec, (count > 1) || isMulti);
+					fillFeature(hSubGeometry, rec);
 				}
 			}
-			if (!isMulti) // for multis the raw remains the same (same record) until the last element of the multi.
-				++rec;
 		}
 	} catch ( geos::util::IllegalArgumentException& ) {
 		// we ignore errors during import, polygons are skipped
