@@ -42,6 +42,7 @@
 #include "Applications\Raster\MAPITER.H"
 #include "Applications\Raster\MAPCALC.H"
 #include "Applications\Raster\MapColorFromRpr.h"
+#include "Applications\Raster\MapParallaxCorrection.h"
 #include "Applications\Table\COLAGGR.H"
 #include "Applications\Table\COLSVM.H"
 #include "Applications\Table\COLCUM.H"
@@ -134,6 +135,7 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createMapIterator,"MapIterProp"));
 	infos->push_back(CommandMap::newCommandInfo(createMapCalculate,"MapCalculate"));
 	infos->push_back(CommandMap::newCommandInfo(createMapColorFromRpr,"MapColorFromRpr"));
+	infos->push_back(CommandMap::newCommandInfo(createMapParallaxCorrection,"MapParallaxCorrection"));
 	infos->push_back(CommandMap::newCommandInfo(createColumnCalculate,"ColumnCalculate"));
 	infos->push_back(CommandMap::newCommandInfo(createColumnAggregate,"ColumnAggregate___"));
 	infos->push_back(CommandMap::newCommandInfo(createColumnAggregate,"agg___"));

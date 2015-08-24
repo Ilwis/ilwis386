@@ -229,6 +229,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\ApplicationsUI\FormMapParallaxCorrection.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\ApplicationsUI\FormNetworkDistance.cpp"
 				>
 			</File>
@@ -310,6 +314,10 @@
 				</File>
 				<File
 					RelativePath="..\..\Sources\ApplicationsUI\FormMaplistGraph.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\ApplicationsUI\FormMapParallaxCorrection.h"
 					>
 				</File>
 				<File

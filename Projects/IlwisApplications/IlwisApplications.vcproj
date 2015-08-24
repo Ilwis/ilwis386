@@ -331,6 +331,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Applications\Raster\MapParallaxCorrection.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Applications\Raster\Mappntrs.cpp"
 					>
 				</File>
@@ -495,6 +499,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Applications\Raster\MAPNRPNT.H"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Applications\Raster\MapParallaxCorrection.h"
 						>
 					</File>
 					<File

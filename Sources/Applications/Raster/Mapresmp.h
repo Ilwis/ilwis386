@@ -71,7 +71,6 @@ protected:
   static String sResampleMethod(ResampleMethod rm);
   ResampleMethod rm;
   bool fValueRangeChangeable() const;
-private:
   double rBiLinear(const Coord& cOutCoord);
   long iBiLinearColor(const Coord& cOutCoord);
   double rBiCubic(const Coord& cOutCoord);
