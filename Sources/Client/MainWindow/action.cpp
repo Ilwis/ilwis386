@@ -55,7 +55,7 @@
 Action::Action(CommandInfoUI* info) {
 	String s = info->menuString;
 	Array<String> parts;
-	sOption = s.sHead(".");
+	sOption = s.sHead(".").sHead("@");
 	s = s.sTail(".");
 	sMiddleOption = s.sHead(".");
 	s = s.sTail(".");
