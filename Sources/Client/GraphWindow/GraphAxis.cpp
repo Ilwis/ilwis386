@@ -679,7 +679,7 @@ String GraphAxis::sText(double rVal, bool fUseDvrsData) const
 
 double GraphAxis::rShift() const
 {
-  if (gap == gapX && (fDomainNone || 0 != ds))
+  if ((gap == gapX) && (0 != ds))
  		return rGridStep()/2;
 	return 0;
 }
