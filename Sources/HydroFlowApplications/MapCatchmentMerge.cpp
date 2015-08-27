@@ -876,7 +876,7 @@ void MapCatchmentMerge::InitOutletVector()
 	Table tblAtt = mp->tblAtt();
 	Column colStreve = tblAtt->col(String("Shreve"));
 	OutletLocation ol;
-	for (long p = 1; p <= iPoints; p++) {
+	for (long p = 0; p < iPoints; p++) {
 		crd = m_pmpOutlets->cValue(p);
 		if (fTransformCoords)
 			crd = cs()->cConv(m_pmpOutlets->cs(), crd);
@@ -1470,11 +1470,15 @@ void MapCatchmentMerge::ComputeOtherAttributes()
 	vector<long> vDrainageIDs; 
     vDrainageIDs.clear();
 	SplitString(colDrainageID->sValue(i), vDrainageIDs);
+	if (vDrainageIDs.size() <= 0)
+		continue;
 
     //Retrieve lengths per drainage per catchment  
     vector<double> vLenPerDrainage;
     if (m_UseOutlets)
       SplitString(colDrainageLen->sValue(i), vLenPerDrainage);
+	if (vLenPerDrainage.size() <= 0)
+		continue;
     
     long iRaw;
     //Compute the total drainage length per catchment
@@ -1779,7 +1783,7 @@ void MapCatchmentMerge::ExtractUpstreamFlowPath(RowCol rc, long id)
 		}
 	}
 
-    if(m_vOutput[rcUpstream.Row][rcUpstream.Col] == id)
+    if((!rcUpstream.fUndef()) && (m_vOutput[rcUpstream.Row][rcUpstream.Col] == id))
     {
       Coord c1 = mp->gr()->cConv(rc);
 	  Coord c2 = mp->gr()->cConv(rcUpstream);
@@ -1824,7 +1828,7 @@ void MapCatchmentMerge::ComputeCenterPolygon(FileName fn)
 	
 	Coord crd;
 	long iPoint = ptTmpMap->iFeatures();
-	for (long i=1; i <= iPoint; ++i) {
+	for (long i=0; i < iPoint; ++i) {
 		long iRaw = ptTmpMap->iRaw(i); 
 		if (iRaw == iUNDEF)
 			continue;
