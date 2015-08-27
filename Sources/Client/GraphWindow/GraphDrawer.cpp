@@ -247,12 +247,12 @@ void CartesianGraphDrawer::draw(CDC* cdc)
 	gaxX->drawGrid(cdc);
 	gaxYLeft->drawGrid(cdc);
 	gaxYRight->drawGrid(cdc);
-  for (i=0; i < agl.iSize(); i++)
-	  agl[i]->draw(cdc);
-  drawTitle(cdc);
 	gaxX->draw(cdc);
 	gaxYLeft->draw(cdc);
 	gaxYRight->draw(cdc);
+  for (i=0; i < agl.iSize(); i++)
+	  agl[i]->draw(cdc);
+  drawTitle(cdc);
   grleg->draw(cdc);
 }
 
