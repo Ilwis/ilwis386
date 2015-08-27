@@ -344,8 +344,9 @@ bool MapCatchmentExtraction::fFreezing()
 		fnTmpTFPol = FileName::fnUnique(fnTmpTFPol);
 		//String sExprPMT("PolygonMapTransform(%S, %S, %g)", fnPol.sFullPathQuoted(false), String("lamcyl"), 0.000000); 
     CoordSystem csy = csyLamCyl(fnTmpTFPol);
-    String sExprPMT("PolygonMapTransform(%S, %S, %g)", fnPol.sFullPathQuoted(false), csy->sName(), 0.000000); 
+	csy->Store(); // explicit Store(), due to different behavior between Debug and Release build!! (csyLamCyl will auto-store when the internal csy object is destructed (as it is supposed to do) in the debug build, but not in the release build)
     csy->fErase = true;
+    String sExprPMT("PolygonMapTransform(%S, %S, %g)", fnPol.sFullPathQuoted(false), csy->sName(), 0.000000); 
 		PolygonMap polTmpTFMap; 
 		polTmpTFMap = PolygonMap(fnTmpTFPol, sExprPMT);
 		polTmpTFMap->Calc();
@@ -563,7 +564,7 @@ void MapCatchmentExtraction::ComputerCenterPolygon(FileName fn)
 	
 	Coord crd;
 	long iPoint = ptTmpMap->iFeatures();
-  for (long i=1; i <= iPoint; ++i) {
+  for (long i=0; i < iPoint; ++i) {
 		long iRaw = ptTmpMap->iRaw(i); 
 		if (iRaw == iUNDEF)
 			continue;
