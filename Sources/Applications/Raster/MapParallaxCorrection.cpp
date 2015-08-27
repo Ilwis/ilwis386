@@ -46,7 +46,7 @@ IlwisObjectPtr * createMapParallaxCorrection(const FileName& fn, IlwisObjectPtr&
 }
 
 const char* MapParallaxCorrection::sSyntax() {
-  return "MapParallaxCorrection(map,dem)";
+  return "MapParallaxCorrection(map,dem,resamplemethod,fill)\n" "ResampleMethod=NearestNeighbour,BiLinear,BiCubic)";
 }
 
 static const char * sResampleMethods[] = { "NearestNeighbour", "BiLinear", "BiCubic", 0 };
@@ -73,7 +73,7 @@ MapParallaxCorrection* MapParallaxCorrection::create(const FileName& fn, MapPtr&
 {
 	Array<String> as;
 	int iParms = IlwisObjectPtr::iParseParm(sExpr, as);
-	if ((iParms < 3) || (iParms > 3))
+	if ((iParms < 3) || (iParms > 4))
 		ExpressionError(sExpr, sSyntax());
 
 	// See also MapResample (conditions taken over from there)
@@ -89,23 +89,28 @@ MapParallaxCorrection* MapParallaxCorrection::create(const FileName& fn, MapPtr&
 	if (shUNDEF == iRsmMeth)
 		throw ErrorResample(as[2], fn);
 	ResampleMethod rm = ResampleMethod(iRsmMeth);
+	bool fFill = true;
+	if (iParms == 4)
+		fFill = fCIStrEqual(as[3],"fill");
 
-	return new MapParallaxCorrection(fn, p, mp, dem, rm);
+	return new MapParallaxCorrection(fn, p, mp, dem, rm, fFill);
 }
 
 MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p)
 : MapResample(fn, p)
 {
   ReadElement("MapParallaxCorrection", "Dem", dem);
+  ReadElement("MapParallaxCorrection", "Fill", fFillUndef);
   fNeedFreeze = true;
   sFreezeTitle = "MapParallaxCorrection";
   objdep.Remove(gr());
   objdep.Add(dem);
 }
 
-MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p, const Map& mp, const Map & _dem, ResampleMethod rsm)
+MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p, const Map& mp, const Map & _dem, ResampleMethod rsm, bool fFill)
 : MapResample(fn, p, mp, mp->gr(), rsm, true, false)
 , dem(_dem)
+, fFillUndef(fFill)
 {
   sFreezeTitle = "MapParallaxCorrection";
   objdep.Remove(gr());
@@ -117,6 +122,7 @@ void MapParallaxCorrection::Store()
   MapResample::Store();
   WriteElement("MapFromMap", "Type", "MapParallaxCorrection");
   WriteElement("MapParallaxCorrection", "Dem", dem);
+  WriteElement("MapParallaxCorrection", "Fill", fFillUndef);
 }
 
 MapParallaxCorrection::~MapParallaxCorrection()
@@ -156,6 +162,90 @@ void MapParallaxCorrection::ComputeLocation(const double hcloud, const double fc
 	fcloudcorr = atan(ycorr/sqrt(xcorr * xcorr + zcorr * zcorr));
 	fcloudcorr = atan(tan(fcloudcorr)/(rratio * rratio)) * 180.0 / M_PI;
 	lcloudcorr = atan2(xcorr,zcorr) * 180.0 / M_PI;
+}
+
+void MapParallaxCorrection::fillWithNearest(long i, long j, RowCol & fillPixel, Coord * matrix, long iMatrixXSize)
+{
+	if (matrix[i * iMatrixXSize + j] == crdUNDEF) {
+		matrix[i * iMatrixXSize + j].y = fillPixel.Row * iMatrixXSize + fillPixel.Col;
+	} else if (matrix[i * iMatrixXSize + j].x == rUNDEF) {
+		long fillPos = round(matrix[i * iMatrixXSize + j].y);
+		RowCol fillPixelOrig (fillPos / iMatrixXSize, fillPos % iMatrixXSize);
+		double distOrig = (fillPixelOrig.Col - j) * (fillPixelOrig.Col - j) + (fillPixelOrig.Row - i) * (fillPixelOrig.Row - i);
+		double distNew = (fillPixel.Col - j) * (fillPixel.Col - j) + (fillPixel.Row - i) * (fillPixel.Row - i);
+		if (distNew < distOrig)
+			matrix[i * iMatrixXSize + j].y = fillPixel.Row * iMatrixXSize + fillPixel.Col;
+	}
+}
+
+void MapParallaxCorrection::fillUndef(long iRow1, long iCol1, long iRow2, long iCol2, Coord * matrix, long iMatrixXSize)
+{
+	if (abs(iRow2 - iRow1) > abs(iCol2 - iCol1)) { // walk over iRows
+		double slope = (double)(iCol2 - iCol1) / (double)(iRow2 - iRow1);
+		long step = iRow2 - iRow1;
+		RowCol fillPixel (iRow1 - step, (long)(iCol1 - slope * step));
+		if (iRow2 > iRow1) {
+			for (long i = iRow1; i < iRow2; ++i) {
+				long j = iCol1 + slope * (i - iRow1);
+				fillWithNearest(i, j, fillPixel, matrix, iMatrixXSize);
+			}
+		} else {
+			for (long i = iRow2 + 1; i <= iRow1; ++i) {
+				long j = iCol1 + slope * (i - iRow1);
+				fillWithNearest(i, j, fillPixel, matrix, iMatrixXSize);
+			}
+		}	
+	} else { // walk over iCols
+		double slope = (double)(iRow2 - iRow1) / (double)(iCol2 - iCol1);
+		long step = iCol2 - iCol1;
+		RowCol fillPixel ((long)(iRow1 - slope * step), iCol1 - step);
+		if (iCol2 > iCol1) {
+			for (long j = iCol1; j < iCol2; ++j) {
+				long i = iRow1 + slope * (j - iCol1);
+				fillWithNearest(i, j, fillPixel, matrix, iMatrixXSize);
+			}
+		} else {
+			for (long j = iCol2 + 1; j <= iCol1; ++j) {
+				long i = iRow1 + slope * (j - iCol1);
+				fillWithNearest(i, j, fillPixel, matrix, iMatrixXSize);
+			}
+		}
+	}
+}
+
+void MapParallaxCorrection::setUndef(long iRow1, long iCol1, long iRow2, long iCol2, Coord * matrix, long iMatrixXSize)
+{
+	if (abs(iRow2 - iRow1) > abs(iCol2 - iCol1)) { // walk over iRows
+		double slope = (double)(iCol2 - iCol1) / (double)(iRow2 - iRow1);
+		if (iRow2 > iRow1) {
+			for (long i = iRow1; i < iRow2; ++i) {
+				long j = iCol1 + slope * (i - iRow1);
+				if (matrix[i * iMatrixXSize + j] == crdUNDEF)
+					matrix[i * iMatrixXSize + j].y = 0;
+			}
+		} else {
+			for (long i = iRow2 + 1; i <= iRow1; ++i) {
+				long j = iCol1 + slope * (i - iRow1);
+				if (matrix[i * iMatrixXSize + j] == crdUNDEF)
+					matrix[i * iMatrixXSize + j].y = 0;
+			}
+		}	
+	} else { // walk over iCols
+		double slope = (double)(iRow2 - iRow1) / (double)(iCol2 - iCol1);
+		if (iCol2 > iCol1) {
+			for (long j = iCol1; j < iCol2; ++j) {
+				long i = iRow1 + slope * (j - iCol1);
+				if (matrix[i * iMatrixXSize + j] == crdUNDEF)
+					matrix[i * iMatrixXSize + j].y = 0;
+			}
+		} else {
+			for (long j = iCol2 + 1; j <= iCol1; ++j) {
+				long i = iRow1 + slope * (j - iCol1);
+				if (matrix[i * iMatrixXSize + j] == crdUNDEF)
+					matrix[i * iMatrixXSize + j].y = 0;
+			}
+		}
+	}
 }
 
 bool MapParallaxCorrection::fFreezing()
@@ -254,12 +344,16 @@ bool MapParallaxCorrection::fFreezing()
 				double rColDestination;
 				gr()->Coord2RowCol(cNewCoord, rRowDestination, rColDestination);
 				RowCol rcDestination(rRowDestination, rColDestination);
-				if (rcToCoord[rcDestination.Row * iNrCols + rcDestination.Col] != crdUNDEF)
+				if (rcToCoord[rcDestination.Row * iNrCols + rcDestination.Col].x != rUNDEF)
 					continue;
 				double diffY = rRowDestination - (double)rcDestination.Row - 0.5; // between 0 and 1 (pixel)
 				double diffX = rColDestination - (double)rcDestination.Col - 0.5;
 				double rPixSizeY = cOrigCoord.y - gr()->cConv(RowCol(rc.Row + 1, rc.Col)).y;
 				double rPixSizeX = cOrigCoord.x - gr()->cConv(RowCol(rc.Row, rc.Col - 1)).x;
+				if (fFillUndef)
+					fillUndef(i, j, rcDestination.Row, rcDestination.Col, rcToCoord, iNrCols);
+				else
+					setUndef(i, j, rcDestination.Row, rcDestination.Col, rcToCoord, iNrCols);
 				rcToCoord[rcDestination.Row * iNrCols + rcDestination.Col] = Coord(cOrigCoord.x - rPixSizeX * diffX, cOrigCoord.y + rPixSizeY * diffY);
 			}
 		}
@@ -277,10 +371,18 @@ bool MapParallaxCorrection::fFreezing()
 			return false;
 		}
 		for (long j=0; j < iNrCols; ++j, rc.Col++) {
-			if (rcToCoord[i * iNrCols + j] != crdUNDEF)
-				continue;
-			Coord cOrigCoord = gr()->cConv(rc);
-			rcToCoord[i * iNrCols + j] = cOrigCoord;
+			if (rcToCoord[i * iNrCols + j] == crdUNDEF) {
+				Coord cOrigCoord = gr()->cConv(rc);
+				rcToCoord[i * iNrCols + j] = cOrigCoord;
+			} else if (rcToCoord[i * iNrCols + j].x == rUNDEF) {
+				if (fFillUndef) {
+					long fillPos = round(rcToCoord[i * iNrCols + j].y);
+					RowCol fillPixel (fillPos / iNrCols, fillPos % iNrCols);
+					Coord cFillCoord = gr()->cConv(fillPixel);
+					rcToCoord[i * iNrCols + j] = cFillCoord;
+				} else
+					rcToCoord[i * iNrCols + j].y = rUNDEF;
+			}
 		}
 	}
 
@@ -301,6 +403,13 @@ bool MapParallaxCorrection::fFreezing()
 			}
   			for (long j=0; j < iNrCols; ++j, rc.Col++) {
 				Coord cOutCoord = rcToCoord[rc.Row * iNrCols + rc.Col];
+				if (cOutCoord == crdUNDEF) {
+					if (fUseReal)
+						rBuf[j] = rUNDEF;
+					else
+						iBuf[j] = iUNDEF;
+					continue;
+				}
   				Coord crdIn = cOutCoord;
   				if (fTransformCoords)
   					crdIn = csIn->cConv(csOut, cOutCoord);
@@ -334,6 +443,14 @@ bool MapParallaxCorrection::fFreezing()
 			}
   			for (long j=0; j < iNrCols; ++j, rc.Col++) {
 				Coord cOutCoord = rcToCoord[rc.Row * iNrCols + rc.Col];
+				if (cOutCoord == crdUNDEF) {
+					if (fColorDomain)
+						iBuf[j] = colorUNDEF;
+					else
+						rBuf[j] = rUNDEF;
+					continue;
+				}
+
           if (fColorDomain)
           {
     				iBuf[j] = iBiLinearColor(cOutCoord);
@@ -362,6 +479,10 @@ bool MapParallaxCorrection::fFreezing()
 			}
   			for (long j=0; j < iNrCols; ++j, rc.Col++) {
 				Coord cOutCoord = rcToCoord[rc.Row * iNrCols + rc.Col];
+				if (cOutCoord == crdUNDEF) {
+					rBuf[j] = rUNDEF;
+					continue;
+				}
   				rBuf[j] = rBiCubic(cOutCoord);
 				if (((j & 255)==255) && trq.fAborted()) {
 					delete [] rcToCoord;
@@ -383,7 +504,7 @@ bool MapParallaxCorrection::fFreezing()
 
 String MapParallaxCorrection::sExpression() const
 {
-  String s("MapParallaxCorrection(%S,%S,%S)", mp->sNameQuoted(true, fnObj.sPath()), dem->sNameQuoted(true, fnObj.sPath()), sResampleMethod(rm));
+  String s("MapParallaxCorrection(%S,%S,%S,%s)", mp->sNameQuoted(true, fnObj.sPath()), dem->sNameQuoted(true, fnObj.sPath()), sResampleMethod(rm), fFillUndef ? "fill" : "nofill");
   return s;
 }
 

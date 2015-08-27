@@ -18,8 +18,10 @@ private:
   String sMap;
   String sDem;
   int iMeth;
+  bool fFill;
   RadioGroup* rg;
   RadioButton *rbNearest, *rbBiLin, *rbBiCub;
+  CheckBox* cbFill;
   Map mp;
   Map dem;
 };

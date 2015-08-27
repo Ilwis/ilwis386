@@ -53,11 +53,15 @@ public:
   MapParallaxCorrection(const FileName& fn, MapPtr& p);
 protected:
   virtual void Store();
-  MapParallaxCorrection(const FileName& fn, MapPtr& p, const Map& map, const Map & _dem, ResampleMethod rsm);
+  MapParallaxCorrection(const FileName& fn, MapPtr& p, const Map& map, const Map & _dem, ResampleMethod rsm, bool fFill);
   ~MapParallaxCorrection();
 private:
   void ComputeLocation(const double hcloud, const double fcloud, const double lcloud, double & fcloudcorr, double & lcloudcorr);
-  Map dem; 
+  void fillUndef(long iRow1, long iCol1, long iRow2, long iCol2, Coord * matrix, long iMatrixXSize);
+  void setUndef(long iRow1, long iCol1, long iRow2, long iCol2, Coord * matrix, long iMatrixXSize);
+  void fillWithNearest(long i, long j, RowCol & fillPixel, Coord * matrix, long iMatrixXSize);
+  Map dem;
+  bool fFillUndef;
 };
 
 #endif // ILWMAPParallaxCorrection_H

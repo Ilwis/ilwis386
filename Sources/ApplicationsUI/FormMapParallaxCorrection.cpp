@@ -50,6 +50,9 @@ FormCorrectParallaxMap::FormCorrectParallaxMap(CWnd* mw, const char* sPar)
   rbNearest = new RadioButton(rg, TR("&Nearest Neighbour"));
   rbBiLin = new RadioButton(rg, TR("Bi&linear"));
   rbBiCub = new RadioButton(rg, TR("Bi&cubic"));
+
+  fFill = true;
+  cbFill = new CheckBox(root, TR("&Fill Obstructed Pixels"), &fFill);
   initMapOutValRange(false);
 
   SetHelpItem("ilwisapp\\resample_dialog_box.htm");
@@ -77,8 +80,13 @@ int FormCorrectParallaxMap::exec()
     case 1: sMethod = "bilinear"; break;
     case 2: sMethod = "bicubic"; break;
   }
-  sExpr = String("MapParallaxCorrection(%S,%S,%S)", 
-                  sMap,sDem,sMethod);
+  String sFill;
+  if (fFill)
+	  sFill = "fill";
+  else
+	  sFill = "nofill";
+  sExpr = String("MapParallaxCorrection(%S,%S,%S,%S)", 
+                  sMap,sDem,sMethod,sFill);
   if (fOutMapList)
     sExpr = String("MapListApplic(%S,%S)", sMapList, sExpr);
   execMapOut(sExpr);  
@@ -88,9 +96,9 @@ int FormCorrectParallaxMap::exec()
 int FormCorrectParallaxMap::MethodCallBack(Event*)
 {
   rg->StoreData();
-  if (0 == iMeth) {
-    return 0;
-  }
+  //if (0 == iMeth) {
+  //  return 0;
+  //}
   fldMap->StoreData();
   FileName fnMap(sMap);
   if (fnMap.sFile == "") {
