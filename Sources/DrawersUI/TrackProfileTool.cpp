@@ -159,21 +159,21 @@ bool TrackProfileTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 }
 
 HTREEITEM TrackProfileTool::configure( HTREEITEM parentItem) {
-	DrawerParameters dp(drawer->getRootDrawer(), drawer);
-	if ( line)
-		delete line;
-	line = new TrackLine(&dp);
-	line->setActive(false);
-	drawer->getRootDrawer()->addPostDrawer(730,line);
+	if (!line) {
+		DrawerParameters dp(drawer->getRootDrawer(), drawer);
+		line = new TrackLine(&dp);
+		line->setActive(false);
+		drawer->getRootDrawer()->addPostDrawer(730,line);
+	}
 
-	DrawerParameters dp2(drawer->getRootDrawer(), drawer);
-	if ( point)
-		delete point;
-	point = new TrackMarker(&dp2, line);
-	point->setActive(false);
-	PreparationParameters pp(NewDrawer::ptRENDER);
-	point->prepare(&pp);
-	drawer->getRootDrawer()->addPostDrawer(731,point);
+	if (!point) {
+		DrawerParameters dp2(drawer->getRootDrawer(), drawer);
+		point = new TrackMarker(&dp2, line);
+		point->setActive(false);
+		PreparationParameters pp(NewDrawer::ptRENDER);
+		point->prepare(&pp);
+		drawer->getRootDrawer()->addPostDrawer(731,point);
+	}
 
 	checkItem = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	checkItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&TrackProfileTool::displayOptionAddList);
@@ -315,7 +315,8 @@ void TrackProfileTool::OnLButtonUp(UINT nFlags, CPoint pnt)
 	if ( !line->isActive()) {
 		line->setActive(true);
 		point->setActive(false);
-		graphForm->reset();
+		if (graphForm)
+			graphForm->reset();
 		Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(pnt.y, pnt.x));
 		coords.push_back(c1);
 		Coord c2 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(pnt.y, pnt.x));
@@ -335,8 +336,10 @@ void TrackProfileTool::OnLButtonUp(UINT nFlags, CPoint pnt)
 			tree->GetDocument()->rootDrawer->setTopDrawer(0);
 			tree->GetDocument()->mpvGetView()->setBitmapRedraw(false);
 			drawer->getRootDrawer()->addPostDrawer(730,line);
-			graphForm->setTrack(coords);
-			graphForm->ShowWindow(SW_SHOW);
+			if (graphForm) {
+				graphForm->setTrack(coords);
+				graphForm->ShowWindow(SW_SHOW);
+			}
 		}
 	}
 	mpvGetView()->Invalidate();

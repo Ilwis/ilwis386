@@ -109,13 +109,12 @@ bool CrossSectionTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 }
 
 HTREEITEM CrossSectionTool::configure( HTREEITEM parentItem) {
-	DrawerParameters dp(drawer->getRootDrawer(), drawer);
-	if ( markers)
-		delete markers;
-	markers = new ProbeMarkers(&dp);
-	markers->setActive(false);
-	drawer->getRootDrawer()->addPostDrawer(732,markers);
-
+	if (!markers) {
+		DrawerParameters dp(drawer->getRootDrawer(), drawer);
+		markers = new ProbeMarkers(&dp);
+		markers->setActive(false);
+		drawer->getRootDrawer()->addPostDrawer(732,markers);
+	}
 
 	checkItem = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	checkItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&CrossSectionTool::displayOptionAddList);
