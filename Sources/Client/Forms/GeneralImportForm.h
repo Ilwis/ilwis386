@@ -91,6 +91,7 @@ private:
 	CheckBox *cbMatch;
 	PushButton *pbMoreOptions;
 	String driverMessage;
+	const String sPostgresHelp;
 
 	int Fill(Event*);
 	int moreOptions(Event *);

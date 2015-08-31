@@ -72,7 +72,7 @@ void FieldImportPage::create()
 }
 
 GeneralImportForm::GeneralImportForm(CWnd* parent)
-		: curPage(NULL), fInitial(true), fUseAs(false), FormWithDest(parent, "Import"), fMatch(true), isWfs(false)
+		: curPage(NULL), fInitial(true), fUseAs(false), FormWithDest(parent, "Import"), fMatch(true), isWfs(false), sPostgresHelp("http://<server>:<port>/<database>")
 {
 	addModules();
 	FieldGroup *fg = new FieldGroup(root);
@@ -178,6 +178,11 @@ int GeneralImportForm::SetDefaultOutputName(Event *dv) {
 	cbMatch->StoreData();
 
 	String name = fsInput->sVal();
+
+	if (currentFormat.shortName == "Database" && sInput == sPostgresHelp) {
+		name = "";
+	}
+
 	if (URL::isUrl(name)){
 		URL url(name);
 		String path = url.getPath();
@@ -325,6 +330,11 @@ int GeneralImportForm::Fill(Event*)
 		else {
 			fsDriverDetails->SetVal(currentFormat.shortName != "" ? currentFormat.shortName : currentFormat.name);
 		}
+		if (fsInput->sVal().length() == 0 && currentFormat.shortName == "Database") {
+			fsInput->SetVal(sPostgresHelp);
+		} else if (currentFormat.shortName != "Database" && fsInput->sVal() == sPostgresHelp) {
+			fsInput->SetVal("");
+		}
 		fsInput->Show();
 		fsOutput->Show();
 	} else {
@@ -368,6 +378,10 @@ FormEntry *GeneralImportForm::CheckData() {
 	fsInput->StoreData();
 	fsOutput->StoreData();
 
+	if (currentFormat.shortName == "Database" && sInput == sPostgresHelp) {
+		sInput = "";
+	}
+
 	if ( sInput == "")
 		return fsInput;
 	if ( sOutput == "")
@@ -402,6 +416,11 @@ int GeneralImportForm::exec() {
 	FormWithDest::exec();
 
 	String openCmd;
+
+	if (currentFormat.shortName == "Database" && sInput == sPostgresHelp) {
+		sInput = "";
+	}
+
 	if ( currentDriver.driverName== "" || sInput == "" || sOutput == "")
 		return 0;
 
