@@ -177,7 +177,8 @@ String CrossSectionTool::getMenuString() const {
 }
 
 void CrossSectionTool::displayOptionAddList() {
-	new ChooseCrossSectionForm(tree, (LayerDrawer *)drawer, this);
+	if (graphForm)
+		new ChooseCrossSectionForm(graphForm, (LayerDrawer *)drawer, this);
 }
 
 bool CrossSectionTool::isUnique(const FileName& fn) {

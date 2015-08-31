@@ -247,7 +247,8 @@ String TrackProfileTool::getMenuString() const {
 }
 
 void TrackProfileTool::displayOptionAddList() {
-	new ChooseTrackProfileForm(tree, (LayerDrawer *)drawer, this);
+	if (graphForm)
+		new ChooseTrackProfileForm(graphForm, (LayerDrawer *)drawer, this);
 }
 
 bool TrackProfileTool::isUnique(const FileName& fn) {
