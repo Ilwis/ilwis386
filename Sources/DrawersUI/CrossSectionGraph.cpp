@@ -387,8 +387,8 @@ void CrossSectionGraphEntry::create()
 }
 
 void CrossSectionGraphEntry::fillList() {
-	vector<String> dummy;
-	listview->setData(-1, dummy);
+	listview->clear();
+	listview->SetRowCount(0);
 	int count = max(1, crdSelect.size());
 	for(int m =0; m < sources.size(); ++m) {
 		IlwisObject obj = sources[m];
