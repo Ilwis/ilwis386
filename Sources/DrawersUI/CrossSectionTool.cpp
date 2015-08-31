@@ -220,6 +220,7 @@ void CrossSectionTool::OnLButtonDown(UINT nFlags, CPoint pnt) {
 			graphForm->reset();
 		markers->addMarker(c1);
 	}
+	mpvGetView()->Invalidate();
 }
 void CrossSectionTool::OnLButtonUp(UINT nFlags, CPoint point) {
 	if ( mpvGetView()->iActiveTool == ID_ZOOMIN) // during zooming, no message handling
