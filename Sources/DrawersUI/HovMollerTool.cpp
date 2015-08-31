@@ -109,6 +109,9 @@ HovMollerTool::~HovMollerTool() {
 		drawer->getRootDrawer()->removeDrawer(line->getId(), true);
 	if (point)
 		drawer->getRootDrawer()->removeDrawer(point->getId(), true);
+	if ( graphForm && graphForm->m_hWnd != 0 && IsWindow(graphForm->m_hWnd)) {
+		graphForm->wnd()->PostMessage(WM_CLOSE);
+	}
 }
 
 void HovMollerTool::clear() {
@@ -137,10 +140,10 @@ HTREEITEM HovMollerTool::configure( HTREEITEM parentItem) {
 	point->prepare(&pp);
 	drawer->getRootDrawer()->addPostDrawer(731,point);
 
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
-	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&HovMollerTool::displayOptionAddList);
-	item->setCheckAction(this,0, (DTSetCheckFunc)&HovMollerTool::setcheckTool);
-	htiNode = insertItem(TR("HovMoeller Diagram"),"Track",item,0);
+	checkItem = new DisplayOptionTreeItem(tree,parentItem,drawer);
+	checkItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&HovMollerTool::displayOptionAddList);
+	checkItem->setCheckAction(this,0, (DTSetCheckFunc)&HovMollerTool::setcheckTool);
+	htiNode = insertItem(TR("HovMoeller Diagram"),"Track",checkItem,0);
 
 	DrawerTool *dt = DrawerTool::createTool("LineStyleTool", getDocument()->mpvGetView(),tree, line);
 	if ( dt) {
@@ -182,6 +185,23 @@ void HovMollerTool::setcheckTool(void *w, HTREEITEM item) {
 			}
 			mpvGetView()->Invalidate();
 		}
+	}
+}
+
+void HovMollerTool::uncheckTool() {
+	graphForm = 0;
+	if (line && point) {
+		line->setActive(false);
+		point->setActive(false);
+		coords.clear();
+		setCoords();
+	}
+	mpvGetView()->Invalidate();
+	if (htiNode) {
+		if (checkItem)
+			checkItem->SwitchCheckBox(false);
+		CTreeCtrl& tc = tree->GetTreeCtrl();
+		tc.SetCheck(htiNode, false);
 	}
 }
 
@@ -278,8 +298,6 @@ void HovMollerTool::setMarker(const Coord& crd) {
 
 void HovMollerTool::setActiveMode(bool yesno) {
 	DrawerTool::setActiveMode(yesno);
-	setcheckTool(&yesno, 0);
-
 }
 //-------------------------------------------------------------------
 HovMollerDataSource::HovMollerDataSource() {
@@ -320,7 +338,7 @@ int ChooseHovMollerForm::addSource(Event *ev) {
 
 //========================================================================
 HovMollerGraphFrom::HovMollerGraphFrom(CWnd *wPar, LayerDrawer *dr,HovMollerTool *t) :
-DisplayOptionsForm2(dr,wPar,TR("Hovmoller Diagram"),fbsBUTTONSUNDER | fbsNOCANCELBUTTON|fbsHIDEONCLOSE), graph(0), initial(true)
+DisplayOptionsForm2(dr,wPar,TR("Hovmoller Diagram"),fbsBUTTONSUNDER | fbsNOCANCELBUTTON), graph(0), initial(true), tool(t)
 {
 	if ( t->source.getSource().fValid())
 		name = t->source.getSource()->fnObj.sFullPath();
@@ -334,7 +352,6 @@ DisplayOptionsForm2(dr,wPar,TR("Hovmoller Diagram"),fbsBUTTONSUNDER | fbsNOCANCE
 	//fcTime->SetFieldWidth(100);
 	SetCallBack((NotifyProc)&HovMollerGraphFrom::init);
 	create();
-	ShowWindow(SW_HIDE);
 }
 
 int HovMollerGraphFrom::setTimeColumn(Event *ev) {
@@ -397,4 +414,10 @@ void HovMollerGraphFrom::reset() {
 void HovMollerGraphFrom::update() {
 	if ( graph)
 		graph->update();
+}
+
+void HovMollerGraphFrom::shutdown(int iReturn) {
+	if (tool)
+		tool->uncheckTool();
+	DisplayOptionsForm2::shutdown(iReturn);
 }

@@ -35,9 +35,11 @@ private:
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void OnLButtonDown(UINT nFlags, CPoint point);
 		void setMarker(const Coord& crd);
+		void uncheckTool();
 		HovMollerDataSource source;
 	protected:
 		HovMollerGraphFrom *graphForm;
+		DisplayOptionTreeItem *checkItem;
 
 		void displayOptionAddList( );
 		bool isUnique(const FileName& fn);
@@ -87,12 +89,12 @@ private:
 		void reset();
 		void addSource(const MapList& ml) ;
 		void update();
+		virtual void shutdown(int iReturn);
 	private:
 		int setSource(Event *ev);
 		int init(Event *ev);
 		int setTimeColumn(Event *ev);
 		FormEntry *CheckData();
-
 
 		String name;
 		Table tbl;
@@ -101,8 +103,6 @@ private:
 		FieldDataType *fm;
 		FieldColumn *fcTime;
 		bool initial;
-
-
+		HovMollerTool* tool;
 	};
-
 }

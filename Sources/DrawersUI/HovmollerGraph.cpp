@@ -225,24 +225,24 @@ void HovMollerGraph::setCoordText(int index, const Map& mp, CDC *dc) {
 }
 
 void HovMollerGraph::OnLButtonUp(UINT nFlags, CPoint point) {
-
-	CRect rct;
-	GetClientRect(rct);
-	double fractx = (double)(point.x - rctInner.left) / rctInner.Width();
-	double fracty = (double)(rctInner.bottom - point.y)/ rctInner.Height();
-	if ( fractx >= 0 && fractx <= 1.0 && fracty >=0 && fracty <= 1.0) {
-		double dx = track.size() * fractx;
-		double dy = fldGraph->mpl->iSize() * fracty + 1.0;
-		xIndex = dx;
-		yIndex = dy;
-		TRACE("%d %d %f %f\n",xIndex, yIndex, dx, dy);
-		//xIndex = std::max(xIndex, 0);
-		//xIndex = std::min(
-		Invalidate();
-	}
-
-	
+	if (fldGraph->mpl.fValid()) {
+		CRect rct;
+		GetClientRect(rct);
+		double fractx = (double)(point.x - rctInner.left) / rctInner.Width();
+		double fracty = (double)(rctInner.bottom - point.y)/ rctInner.Height();
+		if ( fractx >= 0 && fractx <= 1.0 && fracty >=0 && fracty <= 1.0) {
+			double dx = track.size() * fractx;
+			double dy = fldGraph->mpl->iSize() * fracty + 1.0;
+			xIndex = dx;
+			yIndex = dy;
+			TRACE("%d %d %f %f\n",xIndex, yIndex, dx, dy);
+			//xIndex = std::max(xIndex, 0);
+			//xIndex = std::min(
+			Invalidate();
+		}
+	}	
 }
+
 void HovMollerGraph::PreSubclassWindow() 
 {
 	EnableToolTips();

@@ -48,9 +48,11 @@ private:
 		void setMarker(const Coord& crd);
 		void timedEvent(UINT timerid);
 		void setCoords(const vector<Coord>& crds);
+		void uncheckTool();
 		vector<TrackDataSource *> sources;
 	protected:
 		TrackProfileGraphFrom *graphForm;
+		DisplayOptionTreeItem *checkItem;
 
 		void displayOptionAddList( );
 		bool isUnique(const FileName& fn);
@@ -106,6 +108,7 @@ private:
 		int saveTrack(Event *ev);
 		int loadTrack(Event *ev);
 		int openAsTable(Event *ev);
+		virtual void shutdown(int iReturn);
 	private:
 		TrackProfileGraphEntry *graph;
 		vector<Coord> trackCoords;

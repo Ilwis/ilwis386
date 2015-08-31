@@ -293,7 +293,7 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 void TrackProfileGraph::OnLButtonUp(UINT nFlags, CPoint point) {	
 	CWnd *wnd =  GetParent();
-	if ( wnd) {
+	if ( wnd && values.size() > 0) {
 		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 			int numberOfPoints = track.size();
 			CRect rct;
@@ -383,13 +383,15 @@ void TrackProfileGraph::saveAsCsv() {
 		ofstream out(fn.sFullPath().c_str());
 		if ( out.is_open()) {
 			out<<"map name" << "coordinate index" << "x coordinate" << "y coordinate" << "value" << "\n";
-			for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
-				BaseMap bmp =  fldGraph->tool->sources[m]->getMap();
-				String name = bmp->sName();
-				for(int i=0; i < values[m].size(); ++i) {
-					GraphInfo info= values[m][i];
-					String v = bmp->sValue(info.crd,0);
-					out << name.c_str() << "," << info.index <<"," << info.crd.x << "," << info.crd.y << "," << v.c_str() << "\n";
+			if (values.size() > 0) {
+				for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
+					BaseMap bmp =  fldGraph->tool->sources[m]->getMap();
+					String name = bmp->sName();
+					for(int i=0; i < values[m].size(); ++i) {
+						GraphInfo info= values[m][i];
+						String v = bmp->sValue(info.crd,0);
+						out << name.c_str() << "," << info.index <<"," << info.crd.x << "," << info.crd.y << "," << v.c_str() << "\n";
+					}
 				}
 			}
 			out.close();
@@ -423,18 +425,20 @@ void TrackProfileGraph::saveAsTbl() {
 		dmcrd.SetPointer(new DomainCoord(fldGraph->tool->getDrawer()->getRootDrawer()->getCoordinateSystem()->fnObj));
 		Column colCrd = tbl->colNew("Coordinate", dmcrd, ValueRange());
 		colCrd->SetOwnedByTable();
-		tbl->iRecNew(values[0].size());
-		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
-			BaseMap bmp =  fldGraph->tool->sources[m]->getMap();
-			String name = bmp->sName();
-			Column colValue = tbl->colNew(name.sQuote(), bmp->dvrs());
-			colValue->SetOwnedByTable();
-			for(int i=0; i < values[m].size(); ++i) {
-				GraphInfo info= values[m][i];
-				String v = bmp->sValue(info.crd,0);
-				colIndex->PutVal(i,info.index);
-				colCrd->PutVal(i, info.crd);
-				colValue->PutVal(i, v);
+		if (values.size() > 0) {
+			tbl->iRecNew(values[0].size());
+			for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
+				BaseMap bmp =  fldGraph->tool->sources[m]->getMap();
+				String name = bmp->sName();
+				Column colValue = tbl->colNew(name.sQuote(), bmp->dvrs());
+				colValue->SetOwnedByTable();
+				for(int i=0; i < values[m].size(); ++i) {
+					GraphInfo info= values[m][i];
+					String v = bmp->sValue(info.crd,0);
+					colIndex->PutVal(i,info.index);
+					colCrd->PutVal(i, info.crd);
+					colValue->PutVal(i, v);
+				}
 			}
 		}
 		tbl->Store();

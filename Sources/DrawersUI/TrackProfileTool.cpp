@@ -125,7 +125,7 @@ TrackProfileTool::~TrackProfileTool() {
 	for(int i=0; i < sources.size(); ++i) 
 		delete sources[i];
 	sources.clear();
-	if ( graphForm && graphForm->m_hWnd != 0) {
+	if ( graphForm && graphForm->m_hWnd != 0 && IsWindow(graphForm->m_hWnd)) {
 		graphForm->wnd()->PostMessage(WM_CLOSE);
 	}
 }
@@ -175,10 +175,10 @@ HTREEITEM TrackProfileTool::configure( HTREEITEM parentItem) {
 	point->prepare(&pp);
 	drawer->getRootDrawer()->addPostDrawer(731,point);
 
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
-	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&TrackProfileTool::displayOptionAddList);
-	item->setCheckAction(this,0, (DTSetCheckFunc)&TrackProfileTool::setcheckTool);
-	htiNode = insertItem(TR("Track Profile"),"Track",item,0);
+	checkItem = new DisplayOptionTreeItem(tree,parentItem,drawer);
+	checkItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&TrackProfileTool::displayOptionAddList);
+	checkItem->setCheckAction(this,0, (DTSetCheckFunc)&TrackProfileTool::setcheckTool);
+	htiNode = insertItem(TR("Track Profile"),"Track",checkItem,0);
 
 	DrawerTool *dt = DrawerTool::createTool("LineStyleTool", getDocument()->mpvGetView(),tree, line);
 	if ( dt) {
@@ -222,6 +222,23 @@ void TrackProfileTool::setcheckTool(void *w, HTREEITEM item) {
 			}
 			mpvGetView()->Invalidate();
 		}
+	}
+}
+
+void TrackProfileTool::uncheckTool() {
+	graphForm = 0;
+	if (line && point) {
+		line->setActive(false);
+		point->setActive(false);
+		coords.clear();
+		setCoords();
+	}
+	mpvGetView()->Invalidate();
+	if (htiNode) {
+		if (checkItem)
+			checkItem->SwitchCheckBox(false);
+		CTreeCtrl& tc = tree->GetTreeCtrl();
+		tc.SetCheck(htiNode, false);
 	}
 }
 
@@ -354,8 +371,6 @@ void TrackProfileTool::timedEvent(UINT timerid) {
 
 void TrackProfileTool::setActiveMode(bool yesno) {
 	DrawerTool::setActiveMode(yesno);
-	setcheckTool(&yesno, 0);
-
 }
 //-------------------------------------------------------------------
 TrackDataSource::TrackDataSource(const IlwisObject& obj) {
@@ -458,7 +473,7 @@ int ChooseTrackProfileForm::addSource(Event *ev) {
 
 //========================================================================
 TrackProfileGraphFrom::TrackProfileGraphFrom(CWnd *wPar, LayerDrawer *dr,TrackProfileTool *t) :
-DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON|fbsHIDEONCLOSE), graph(0), tool(t)
+DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON), graph(0), tool(t)
 {
 	vector<FLVColumnInfo> v;
 	v.push_back(FLVColumnInfo("Source", 220));
@@ -476,7 +491,6 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	pb3->Align(pb2, AL_AFTER);
 	grbuttons->SetIndependentPos();
 	create();
-	ShowWindow(SW_HIDE);
 	view->setItemChangedCallback(graph, (NotifyItemChangedProc)&TrackProfileGraphEntry::setOverruleRange); 
 }
 
@@ -599,4 +613,10 @@ void TrackProfileGraphFrom::reset() {
 void TrackProfileGraphFrom::update() {
 	if ( graph)
 		graph->update();
+}
+
+void TrackProfileGraphFrom::shutdown(int iReturn) {
+	if (tool)
+		tool->uncheckTool();
+	DisplayOptionsForm2::shutdown(iReturn);
 }

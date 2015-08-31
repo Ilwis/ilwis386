@@ -65,7 +65,6 @@ CrossSectionTool::CrossSectionTool(ZoomableView* zv, LayerTreeView *view, NewDra
 	DrawerTool("CrossSectionTool",zv, view, drw)
 {
 	active = false;
-	graphForm = false;
 	stay = true;
 	graphForm = 0;
 	working = false;
@@ -73,6 +72,12 @@ CrossSectionTool::CrossSectionTool(ZoomableView* zv, LayerTreeView *view, NewDra
 }
 
 CrossSectionTool::~CrossSectionTool() {
+	if ( markers)
+		drawer->getRootDrawer()->removeDrawer(markers->getId(), true);
+	sources.clear();
+	if ( graphForm && graphForm->m_hWnd != 0 && IsWindow(graphForm->m_hWnd)) {
+		graphForm->wnd()->PostMessage(WM_CLOSE);
+	}
 }
 
 void CrossSectionTool::clear() {
@@ -112,10 +117,10 @@ HTREEITEM CrossSectionTool::configure( HTREEITEM parentItem) {
 	drawer->getRootDrawer()->addPostDrawer(732,markers);
 
 
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
-	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&CrossSectionTool::displayOptionAddList);
-	item->setCheckAction(this,0, (DTSetCheckFunc)&CrossSectionTool::setcheckTool);
-	htiNode = insertItem(TR("Cross section"),"CrossSection",item,0);
+	checkItem = new DisplayOptionTreeItem(tree,parentItem,drawer);
+	checkItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&CrossSectionTool::displayOptionAddList);
+	checkItem->setCheckAction(this,0, (DTSetCheckFunc)&CrossSectionTool::setcheckTool);
+	htiNode = insertItem(TR("Cross section"),"CrossSection",checkItem,0);
 
 	DrawerTool::configure(htiNode);
 
@@ -127,21 +132,44 @@ void CrossSectionTool::setcheckTool(void *w, HTREEITEM item) {
 	if ( working) {
 		tree->GetDocument()->mpvGetView()->addTool(this, getId());
 		if (!graphForm) {
-			graphForm = new CrossSectionGraphFrom(tree, (LayerDrawer *)drawer, sources);
+			graphForm = new CrossSectionGraphFrom(tree, (LayerDrawer *)drawer, sources, this);
+			for(int i = 0; i < sources.size(); ++i) {
+				graphForm->addSourceSet(sources[i]);
+			}
 		} else {
 			graphForm->ShowWindow(SW_SHOW);
 		}
 		if ( sources.size() == 0)
-			new ChooseCrossSectionForm(tree, (LayerDrawer *)drawer, this);
+			displayOptionAddList();
 
-		for(int i = 0; i < sources.size(); ++i) {
+		for(int i = 0; i < sources.size(); ++i)
 			graphForm->addSourceSet(sources[i]);
-		}
 	}
 	else {
 		tree->GetDocument()->mpvGetView()->noTool(getId());
-		if ( graphForm)
+		if ( graphForm) {
 			graphForm->ShowWindow(SW_HIDE);
+			if (markers) {
+				markers->setActive(false);
+				markers->clear();
+				graphForm->reset();
+			}
+		}
+	}
+}
+
+void CrossSectionTool::uncheckTool() {
+	graphForm = 0;
+	if (markers) {
+		markers->setActive(false);
+		markers->clear();
+	}
+	mpvGetView()->Invalidate();
+	if (htiNode) {
+		if (checkItem)
+			checkItem->SwitchCheckBox(false);
+		CTreeCtrl& tc = tree->GetTreeCtrl();
+		tc.SetCheck(htiNode, false);
 	}
 }
 
@@ -200,7 +228,6 @@ void CrossSectionTool::OnLButtonUp(UINT nFlags, CPoint point) {
 	Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
 	if ( graphForm && working) {
 		if ( sources.size() > 0 && working) {
-			graphForm->ShowWindow(SW_SHOW);
 			graphForm->setSelectCoord(c1);
 		}
 	}
@@ -235,8 +262,9 @@ int ChooseCrossSectionForm::exec() {
 }
 
 //========================================================================
-CrossSectionGraphFrom::CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr, vector<IlwisObject>& sources) :
-DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON|fbsHIDEONCLOSE)
+CrossSectionGraphFrom::CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr, vector<IlwisObject>& sources, CrossSectionTool *t) :
+DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON)
+, tool(t)
 {
 	vector<FLVColumnInfo> v;
 	v.push_back(FLVColumnInfo("Source", 200));
@@ -246,13 +274,13 @@ DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	v.push_back(FLVColumnInfo("Selected index", 40));
 	v.push_back(FLVColumnInfo("Value", 60));
 	graph = new CrossSectionGraphEntry(root, sources,dr->getRootDrawer()->getCoordinateSystem());
-	graph->setListView(new FieldListView(root,v));
+	FieldListView * flv = new FieldListView(root,v);
+	graph->setListView(flv);
 	FieldGroup *fg = new FieldGroup(root,true);
 	PushButton *pb1 = new PushButton(fg,TR("Save as Table"), (NotifyProc)&CrossSectionGraphFrom::saveAsTable);
 	PushButton *pb2 = new PushButton(fg,TR("Save as Spectrum"), (NotifyProc)&CrossSectionGraphFrom::saveAsSpectrum);
 	pb2->Align(pb1, AL_AFTER);
 	create();
-	ShowWindow(SW_HIDE);
 }
 
 int CrossSectionGraphFrom::saveAsTable(Event *ev) {
@@ -276,3 +304,10 @@ void CrossSectionGraphFrom::setSelectCoord(const Coord& crd) {
 void CrossSectionGraphFrom::reset() {
 	graph->reset();
 }
+
+void CrossSectionGraphFrom::shutdown(int iReturn) {
+	if (tool)
+		tool->uncheckTool();
+	DisplayOptionsForm2::shutdown(iReturn);
+}
+

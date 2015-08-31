@@ -340,15 +340,17 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 void CrossSectionGraph::OnLButtonUp(UINT nFlags, CPoint point) {	
 	CWnd *wnd =  GetParent();
 	if ( wnd) {
-		for(int m =0; m < fldGraph->sources.size(); ++m) {
-			RangeReal rr = fldGraph->getRange(m);
-			int numberOfMaps = getNumberOfMaps(m);
-			CRect rct;
-			GetClientRect(rct);
-			double xscale = rct.Width() / numberOfMaps;
-			fldGraph->currentIndex = point.x / xscale;
-			if ( fldGraph->currentIndex >= values[m].size())
-				continue;
+		if (values.size() > 0) {
+			for(int m =0; m < fldGraph->sources.size(); ++m) {
+				RangeReal rr = fldGraph->getRange(m);
+				int numberOfMaps = getNumberOfMaps(m);
+				CRect rct;
+				GetClientRect(rct);
+				double xscale = rct.Width() / numberOfMaps;
+				fldGraph->currentIndex = point.x / xscale;
+				if ( fldGraph->currentIndex >= values[m].size())
+					continue;
+			}
 		}
 		fldGraph->fillList();
 	}
@@ -404,7 +406,7 @@ void CrossSectionGraphEntry::fillList() {
 			}
 			RangeReal rr = getRange(m);
 			v.push_back(String("%S", rr.s()));
-			if ( currentIndex != iUNDEF) {
+			if ( currentIndex != iUNDEF && crossSectionGraph->values.size() > 0) {
 				v.push_back(String("%d", currentIndex));
 				v.push_back(String("%g",crossSectionGraph->values[m][i][currentIndex]));
 			}
@@ -437,8 +439,8 @@ void CrossSectionGraphEntry::update() {
 
 void CrossSectionGraphEntry::reset() {
 	crdSelect.clear();
-	vector<String> dummy;
-	listview->setData(-1,dummy);
+	listview->clear();
+	listview->SetRowCount(0);
 }
 //void CrossSectionGraphEntry::addSourceSet(const IlwisObject& obj){
 //	//if ( isUnique(obj->fnObj)) {

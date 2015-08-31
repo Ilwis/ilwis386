@@ -20,8 +20,10 @@ class ProbeMarkers;
 		void setcheckTool(void *w, HTREEITEM);
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void OnLButtonDown(UINT fl, CPoint point);
+		void uncheckTool();
 	protected:
 		CrossSectionGraphFrom *graphForm;
+		DisplayOptionTreeItem *checkItem;
 
 		void displayOptionAddList( );
 		bool isUnique(const FileName& fn);
@@ -44,16 +46,17 @@ class ProbeMarkers;
 
 	class CrossSectionGraphFrom : public DisplayOptionsForm2 {
 	public:
-		CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr, vector<IlwisObject>& sources);
+		CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr, vector<IlwisObject>& sources, CrossSectionTool *t);
 		//void apply(); 
 		void setSelectCoord(const Coord& crd);
 		void addSourceSet(const IlwisObject& obj);
 		void reset();
+		virtual void shutdown(int iReturn);
 		int saveAsTable(Event *ev);
 		int saveAsSpectrum(Event *ev);
 	private:
 		CrossSectionGraphEntry *graph;
-
+		CrossSectionTool *tool;
 	};
 
 	class ProbeMarkers : public ComplexDrawer {
