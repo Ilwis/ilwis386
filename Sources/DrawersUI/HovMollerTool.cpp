@@ -147,7 +147,7 @@ HTREEITEM HovMollerTool::configure( HTREEITEM parentItem) {
 	checkItem = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	checkItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&HovMollerTool::displayOptionAddList);
 	checkItem->setCheckAction(this,0, (DTSetCheckFunc)&HovMollerTool::setcheckTool);
-	htiNode = insertItem(TR("HovMoeller Diagram"),"Track",checkItem,0);
+	htiNode = insertItem(TR("HovMoeller Diagram"),"Track",checkItem,working);
 
 	DrawerTool *dt = DrawerTool::createTool("LineStyleTool", getDocument()->mpvGetView(),tree, line);
 	if ( dt) {

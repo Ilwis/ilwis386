@@ -119,7 +119,7 @@ HTREEITEM CrossSectionTool::configure( HTREEITEM parentItem) {
 	checkItem = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	checkItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&CrossSectionTool::displayOptionAddList);
 	checkItem->setCheckAction(this,0, (DTSetCheckFunc)&CrossSectionTool::setcheckTool);
-	htiNode = insertItem(TR("Cross section"),"CrossSection",checkItem,0);
+	htiNode = insertItem(TR("Cross section"),"CrossSection",checkItem,working);
 
 	DrawerTool::configure(htiNode);
 

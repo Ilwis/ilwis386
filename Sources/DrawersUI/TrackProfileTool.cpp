@@ -178,7 +178,7 @@ HTREEITEM TrackProfileTool::configure( HTREEITEM parentItem) {
 	checkItem = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	checkItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&TrackProfileTool::displayOptionAddList);
 	checkItem->setCheckAction(this,0, (DTSetCheckFunc)&TrackProfileTool::setcheckTool);
-	htiNode = insertItem(TR("Track Profile"),"Track",checkItem,0);
+	htiNode = insertItem(TR("Track Profile"),"Track",checkItem,working);
 
 	DrawerTool *dt = DrawerTool::createTool("LineStyleTool", getDocument()->mpvGetView(),tree, line);
 	if ( dt) {
