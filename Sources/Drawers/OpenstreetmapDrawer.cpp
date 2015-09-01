@@ -152,7 +152,52 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 	Coord c4 (getRootDrawer()->glConv(csy, b4));
 
 	bool fTryAlternativeComputation = (c1.fUndef() || c2.fUndef() || c3.fUndef() || c4.fUndef());
+
+	// 4 x 3 doubles to project onto xy screen coordinates
+	GLdouble m_winx[4];
+	GLdouble m_winy[4];
+	GLdouble m_winz[4];
+
+	geos::geom::GeometryFactory factory;
+	const vector<geos::geom::Geometry *> holes;
+
+	if (!fTryAlternativeComputation) {
+		// project the patch to 2D
+		gluProject(c1.x, c1.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
+		gluProject(c2.x, c2.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
+		gluProject(c3.x, c3.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
+		gluProject(c4.x, c4.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
+		for (int i = 0; i < 4; ++i)
+			fTryAlternativeComputation |= (m_winz[i] < -10 || m_winz[i] > 10);
+	}
+
+	if (!fTryAlternativeComputation) {
+		geos::geom::CoordinateArraySequence * coordsTile = new geos::geom::CoordinateArraySequence();
+		for (int i = 0; i < 4; ++i)
+			coordsTile->add(Coordinate(m_winx[i], m_winy[i]));
+		coordsTile->add(Coordinate(m_winx[0], m_winy[0]));
+		const geos::geom::LinearRing ringTile(coordsTile, &factory);		
+		geos::geom::Polygon * polyTile(factory.createPolygon(ringTile, holes));
+
+		geos::geom::CoordinateArraySequence * coordsViewport = new geos::geom::CoordinateArraySequence();
+		coordsViewport->add(Coordinate(m_viewport[0], m_viewport[1]));
+		coordsViewport->add(Coordinate(m_viewport[2], m_viewport[1]));
+		coordsViewport->add(Coordinate(m_viewport[2], m_viewport[3]));
+		coordsViewport->add(Coordinate(m_viewport[0], m_viewport[3]));
+		coordsViewport->add(Coordinate(m_viewport[0], m_viewport[1]));
+		const geos::geom::LinearRing ringViewport(coordsViewport, &factory);		
+		geos::geom::Polygon * polyViewport(factory.createPolygon(ringViewport, holes));
+
+		bool fContains = !polyViewport->disjoint(polyTile);
+		delete polyTile;
+		delete polyViewport;
+		if (!fContains)
+			fTryAlternativeComputation = true;
+	}
+
 	if (fTryAlternativeComputation) {
+		if (zoomLevel >= 18) // we can only "split" here, and zoomlevel 18 can't be split anymore
+			return;
 		Coord c1, c2, c3, c4;
 		double posZ;
 		float winZ;
@@ -173,62 +218,56 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 		Coord b2 (getRootDrawer()->glToWorld(csy, c2));
 		Coord b3 (getRootDrawer()->glToWorld(csy, c3));
 		Coord b4 (getRootDrawer()->glToWorld(csy, c4));
-		CoordBounds cbView (b1, b2);
+
+		CoordBounds cbView; // intentionally like this: it checks for crdUNDEF on every coord added
+		cbView += b1;
+		cbView += b2;
 		cbView += b3;
 		cbView += b4;
-		if (cb.fContains(cbView)) {
+
+		if (cbView.fUndef() || cbView.width() == 0 || cbView.height() == 0)
+			return;
+
+		if (cb.width() < 1000000 || cb.height() < 1000000) // deadlock protection: if we haven't found it by now with the regular formula, it is a really weird projection
+			return;
+
+		geos::geom::CoordinateArraySequence * coordsView = new geos::geom::CoordinateArraySequence();
+		coordsView->add(cbView.cMin);
+		coordsView->add(Coord(cbView.cMin.x, cbView.cMax.y));
+		coordsView->add(cbView.cMax);
+		coordsView->add(Coord(cbView.cMax.x, cbView.cMin.y));
+		coordsView->add(cbView.cMin);
+		const geos::geom::LinearRing ringView(coordsView, &factory);		
+		geos::geom::Polygon * polyView(factory.createPolygon(ringView, holes));
+
+		geos::geom::CoordinateArraySequence * coordsOSM = new geos::geom::CoordinateArraySequence();
+		coordsOSM->add(cb.cMin);
+		coordsOSM->add(Coord(cb.cMin.x, cb.cMax.y));
+		coordsOSM->add(cb.cMax);
+		coordsOSM->add(Coord(cb.cMax.x, cb.cMin.y));
+		coordsOSM->add(cb.cMin);
+		const geos::geom::LinearRing ringOSM(coordsOSM, &factory);		
+		geos::geom::Polygon * polyOSM(factory.createPolygon(ringOSM, holes));
+
+		bool fOverlaps = !polyOSM->disjoint(polyView);
+		delete polyView;
+		delete polyOSM;
+
+		if (fOverlaps) {
+			unsigned int nextZoomLevel = zoomLevel + 1;
 			double sizeX2 = cb.width() / 2.0;
 			double sizeY2 = cb.height() / 2.0;
-			if (sizeX2 > 1000000 && sizeY2 > 1000000) { // if we haven't found it within 1000 km, then it is a really weird projection
-				unsigned int nextZoomLevel = zoomLevel + 1;
-				// Q1
-				DisplayImagePortion(CoordBounds(cb.cMin, Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2)), nextZoomLevel);
-				// Q2
-				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y), Coord(cb.cMax.x, cb.cMin.y + sizeY2)), nextZoomLevel);
-				// Q3
-				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2), cb.cMax), nextZoomLevel);
-				// Q4
-				DisplayImagePortion(CoordBounds(Coord(cb.cMin.x, cb.cMin.y + sizeY2), Coord(cb.cMin.x + sizeX2, cb.cMax.y)), nextZoomLevel);
-			}
+			// Q1
+			DisplayImagePortion(CoordBounds(cb.cMin, Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2)), nextZoomLevel);
+			// Q2
+			DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y), Coord(cb.cMax.x, cb.cMin.y + sizeY2)), nextZoomLevel);
+			// Q3
+			DisplayImagePortion(CoordBounds(Coord(cb.cMin.x + sizeX2, cb.cMin.y + sizeY2), cb.cMax), nextZoomLevel);
+			// Q4
+			DisplayImagePortion(CoordBounds(Coord(cb.cMin.x, cb.cMin.y + sizeY2), Coord(cb.cMin.x + sizeX2, cb.cMax.y)), nextZoomLevel);
 		}
 		return;
 	}
-
-	// 4 x 3 doubles to project onto xy screen coordinates
-	GLdouble m_winx[4];
-	GLdouble m_winy[4];
-	GLdouble m_winz[4];
-
-	// project the patch to 2D
-	gluProject(c1.x, c1.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[0], &m_winy[0], &m_winz[0]);
-	gluProject(c2.x, c2.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[1], &m_winy[1], &m_winz[1]);
-	gluProject(c3.x, c3.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
-	gluProject(c4.x, c4.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
-
-	geos::geom::GeometryFactory factory;
-	const vector<geos::geom::Geometry *> holes;
-
-	geos::geom::CoordinateArraySequence * coordsTile = new geos::geom::CoordinateArraySequence();
-	for (int i = 0; i < 4; ++i)
-		coordsTile->add(Coordinate(m_winx[i], m_winy[i]));
-	coordsTile->add(Coordinate(m_winx[0], m_winy[0]));
-	const geos::geom::LinearRing ringTile(coordsTile, &factory);		
-	geos::geom::Polygon * polyTile(factory.createPolygon(ringTile, holes));
-
-	geos::geom::CoordinateArraySequence * coordsViewport = new geos::geom::CoordinateArraySequence();
-	coordsViewport->add(Coordinate(m_viewport[0], m_viewport[1]));
-	coordsViewport->add(Coordinate(m_viewport[2], m_viewport[1]));
-	coordsViewport->add(Coordinate(m_viewport[2], m_viewport[3]));
-	coordsViewport->add(Coordinate(m_viewport[0], m_viewport[3]));
-	coordsViewport->add(Coordinate(m_viewport[0], m_viewport[1]));
-	const geos::geom::LinearRing ringViewport(coordsViewport, &factory);		
-	geos::geom::Polygon * polyViewport(factory.createPolygon(ringViewport, holes));
-
-	bool fContains = !polyViewport->disjoint(polyTile);
-	delete polyTile;
-	delete polyViewport;
-	if (!fContains)
-		return;
 
 	double screenPixelsX1 = sqrt(sqr(m_winx[1]-m_winx[0])+sqr(m_winy[1]-m_winy[0]));
 	double screenPixelsY1 = sqrt(sqr(m_winx[2]-m_winx[1])+sqr(m_winy[2]-m_winy[1]));
@@ -244,10 +283,6 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 		split = true;
 	if (zoomLevel >= 18)
 		split = false;
-	bool fOneCornerInsideViewport = false;
-	for (int i = 0; i < 4; ++i)
-		fOneCornerInsideViewport = fOneCornerInsideViewport || (m_winz[i] >= -100 && m_winz[i] <= 100);
-	split = split && fOneCornerInsideViewport;
 
 	if (split)
 	{
