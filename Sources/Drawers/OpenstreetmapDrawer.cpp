@@ -171,6 +171,28 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 			fTryAlternativeComputation |= (m_winz[i] < -10 || m_winz[i] > 10);
 	}
 
+	// convex test on projected openstreetmap tile
+	if (!fTryAlternativeComputation) {
+		bool fFirst = true;
+		bool fPositive = false;
+		bool fConvex = true;
+		for (int i = 0; i < 4; ++i) {
+			double dx1 = m_winx[(i + 1) % 4] - m_winx[i];
+			double dy1 = m_winy[(i + 1) % 4] - m_winy[i];
+			double dx2 = m_winx[(i + 2) % 4] - m_winx[(i + 1) % 4];
+			double dy2 = m_winy[(i + 2) % 4] - m_winy[(i + 1) % 4];
+			double cross = dx1*dy2 - dy1*dx2;
+			if (fFirst) {
+				fFirst = false;
+				fPositive = (cross > 0);
+			} else {
+				fConvex &= (fPositive == (cross > 0));
+			}
+		}
+		if (!fConvex)
+			fTryAlternativeComputation = true;
+	}
+
 	if (!fTryAlternativeComputation) {
 		geos::geom::CoordinateArraySequence * coordsTile = new geos::geom::CoordinateArraySequence();
 		for (int i = 0; i < 4; ++i)
@@ -197,6 +219,8 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 
 	if (fTryAlternativeComputation) {
 		if (zoomLevel >= 18) // we can only "split" here, and zoomlevel 18 can't be split anymore
+			return;
+		if (cb.width() < 1000000 || cb.height() < 1000000) // deadlock, or very-large-computation protection: if we haven't found it by now with the regular formula, it is a really weird projection
 			return;
 		Coord c1, c2, c3, c4;
 		double posZ;
@@ -226,9 +250,6 @@ void OpenstreetmapDrawer::DisplayImagePortion(CoordBounds& cb, unsigned int zoom
 		cbView += b4;
 
 		if (cbView.fUndef() || cbView.width() == 0 || cbView.height() == 0)
-			return;
-
-		if (cb.width() < 1000000 || cb.height() < 1000000) // deadlock protection: if we haven't found it by now with the regular formula, it is a really weird projection
 			return;
 
 		geos::geom::CoordinateArraySequence * coordsView = new geos::geom::CoordinateArraySequence();
