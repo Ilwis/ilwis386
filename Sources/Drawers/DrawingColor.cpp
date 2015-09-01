@@ -73,6 +73,18 @@ tresholdColor(Color(255,0,0)),
 colorSetIndex(0),
 useSingleValueForTreshold(false)
 {
+	IlwisSettings settings("DefaultSettings");
+	Color clr1a = settings.clrValue("NoColor", colorUNDEF);
+	Color clr2a = settings.clrValue("YesColor", colorUNDEF);
+	if (clr1a != colorUNDEF) {
+		clr1 = clr1a;
+		clr1.alpha() = 255 - clr1.alpha();
+	}
+	if (clr2a != colorUNDEF) {
+		clr2 = clr2a;
+		clr2.alpha() = 255 - clr2.alpha();
+	}
+
 	BaseMap bmap;
 	if ( dr->isSet()) {
 		setDrawer = (SetDrawer *)dr;
