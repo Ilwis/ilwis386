@@ -224,8 +224,10 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 					gr.SetPointer(new GeoRefCorners(fnGrf, csy, RowCol(y_pixels, x_pixels), true, cb.cMin, cb.cMax));		
 					inf.cbActual = inf.cbMap = cb;
 					inf.grf = gr;
-				}
-			}
+				} else
+					inf.grf = GeoRef(FileName("none.grf"));
+			} else
+				inf.grf = GeoRef(FileName("none.grf"));
 
 			// Domain
 			int nrBands = String(db.getValue(0, 6)).iVal();
@@ -249,11 +251,11 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 				nodata_value = bands[iBand];
 				bands.clear();
 				Split(out_db_values, bands, ",");
-				out_db = bands[iBand].fVal();
+				out_db = (bands[iBand].size() > 0) ? bands[iBand].fVal() : false;
 			} else {
 				pixel_type = pixel_types;
 				nodata_value = nodata_values;
-				out_db = out_db_values.fVal();
+				out_db = (out_db_values.size() > 0) ? out_db_values.fVal() : false;
 			}
 
 			StoreType stPostgres;
@@ -274,10 +276,11 @@ PostGisMaps::PostGisMaps(const FileName& fn, const FileName & fnDomAttrTable, Pa
 		}
 
 		inf.fnObj = fn;
-		
 		// end GetRasterInfo
 
-		Map map = Map(fn, inf);	
+		Map map = Map(fn, inf);
+		if (!inf.grf.fValid() || inf.grf->rcSize().fUndef())
+			map->SetSize(RowCol(1, 1));
 		if (!pm.fExist("import"))
 			map->SetUseAs(true);
 		else
@@ -487,7 +490,7 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 			}
 		}
 	} else if (tableName != "" && geometryColumn != "") {
-		db.getNTResult(String("SELECT rid FROM %S.%S", schema, tableName).c_str());
+		db.getNTResult(String("SELECT rid FROM %S.%S WHERE rast IS NOT NULL", schema, tableName).c_str());
 		int rows = db.getNumberOf(PostGreSQL::ROW);
 		String name = merge(tableName, geometryColumn, "_");
 		Tranquilizer trq;
