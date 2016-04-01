@@ -202,8 +202,10 @@ CoordSystemPtr::CoordSystemPtr()
 CoordSystemPtr::CoordSystemPtr(const FileName& fn)
 : IlwisObjectPtr(fn),identification(sUNDEF)
 {
-  _iWidth = iReadElement("CoordSystem", "Width");
-  _iDec = iReadElement("CoordSystem", "Decimals");
+  long iWidth = iReadElement("CoordSystem", "Width");
+  long iDec = iReadElement("CoordSystem", "Decimals");
+  _iWidth = (iWidth != iUNDEF) ? iWidth : 28;
+  _iDec = (iDec != iUNDEF) ? iDec : 2;
   ReadElement("CoordSystem", "CoordBounds", cb);
   rUnitSize = 1;
   ReadElement("CoordSystem", "UnitSize", rUnitSize);
