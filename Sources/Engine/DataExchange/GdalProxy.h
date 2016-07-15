@@ -38,6 +38,11 @@ typedef FILE* (*VSIFileFromMemBufferFunc)( const char *, GByte *, vsi_l_offset ,
 typedef int (__stdcall *GDALGetGCPCountFunc)(GDALDatasetH);
 typedef const char* (__stdcall *GDALGetGCPProjectionFunc)(GDALDatasetH);
 typedef const GDAL_GCP* (__stdcall *GDALGetGCPsFunc)(GDALDatasetH);
+typedef	GDALColorInterp (__stdcall *GDALGetRasterColorInterpretationFunc)(GDALRasterBandH);
+typedef GDALColorTableH (__stdcall *GDALGetRasterColorTableFunc)(GDALRasterBandH);
+typedef GDALPaletteInterp (__stdcall *GDALGetPaletteInterpretationFunc)(GDALColorTableH);
+typedef int (__stdcall *GDALGetColorEntryCountFunc)(GDALColorTableH);
+typedef const GDALColorEntry* (__stdcall *GDALGetColorEntryFunc)(GDALColorTableH, int);
 
 typedef  OGRDataSourceH (*OGROpenFunc)(const char *, int, OGRSFDriverH *);
 typedef void (__stdcall *OGRRegisterAllFunc)();
@@ -75,8 +80,6 @@ typedef OGRErr 	(*GetLayerExtentFunc)(OGRLayerH, OGREnvelope *, int);
 typedef const char * (*GetFieldNameFunc)(OGRFieldDefnH);
 typedef const char * (__stdcall *OSRGetAttrValueFunc)( OGRSpatialReferenceH hSRS, const char * pszName, int iChild /* = 0 */ );
 typedef void (*CPLPushFinderLocationFunc)( const char * );
-
-
 
 class _export GdalProxy {
 public:
@@ -122,6 +125,11 @@ public:
 	GDALGetGCPCountFunc getGCPCount;
 	GDALGetGCPProjectionFunc getGCPProjection;
 	GDALGetGCPsFunc getGCPs;
+	GDALGetRasterColorInterpretationFunc getRasterColorInterpretation;
+	GDALGetRasterColorTableFunc getRasterColorTable;
+	GDALGetPaletteInterpretationFunc getPaletteInterpretation;
+	GDALGetColorEntryCountFunc getColorEntryCount;
+	GDALGetColorEntryFunc getColorEntry;
 
 	//ogr
 	OGROpenFunc ogrOpen;

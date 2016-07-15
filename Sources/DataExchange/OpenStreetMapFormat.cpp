@@ -338,22 +338,46 @@ void OpenStreetMapFormat::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long 
 
 	GDALRasterBandH  gdalRasterBand = getEngine()->gdal->getBand( gdalDataSet, 1);
 	GDALDataType tp = getEngine()->gdal->getDataType(gdalRasterBand);
-
-	getEngine()->gdal->rasterIO(gdalRasterBand,GF_Read, iFrom, iLine, iNum, 1, data1, iNum, 1, GDT_Byte, 0, 0);								
-	gdalRasterBand = getEngine()->gdal->getBand( gdalDataSet, 2);
-	if ( gdalRasterBand)
-		getEngine()->gdal->rasterIO(gdalRasterBand,GF_Read, iFrom, iLine, iNum, 1, data2, iNum, 1, GDT_Byte, 0, 0);								
-	gdalRasterBand = getEngine()->gdal->getBand( gdalDataSet, 3);
-	if ( gdalRasterBand)
-		getEngine()->gdal->rasterIO(gdalRasterBand, GF_Read, iFrom, iLine, iNum, 1, data3, iNum, 1, GDT_Byte, 0, 0);
-
-	if ( gdalRasterBand) {
-		for(int j = 0; j < iNum; ++j) {
-			buf[j] = (data1[j]) | (data2[j] << 8) | (data3[j] << 16);
+	getEngine()->gdal->rasterIO(gdalRasterBand,GF_Read, iFrom, iLine, iNum, 1, data1, iNum, 1, GDT_Byte, 0, 0);
+	GDALColorInterp colorInterp = getEngine()->gdal->getRasterColorInterpretation(gdalRasterBand);
+	if (colorInterp == GCI_PaletteIndex) {
+		GDALColorTableH colorTable = getEngine()->gdal->getRasterColorTable(gdalRasterBand);
+		GDALPaletteInterp paletteInterp = getEngine()->gdal->getPaletteInterpretation(colorTable);
+		if (paletteInterp == GPI_RGB) {
+			int count = getEngine()->gdal->getColorEntryCount(colorTable);
+			LongBuf palette (count);
+			for (int i = 0; i < count; ++i) {
+				const GDALColorEntry * colorEntry = getEngine()->gdal->getColorEntry(colorTable, i);
+				if (colorEntry != 0) {
+					long color = colorEntry->c1 | (colorEntry->c2 << 8) | (colorEntry->c3 << 16) | (colorEntry->c4 << 24);
+					palette[i] = color;
+				} else
+					palette[i] = 0;
+			}
+			for(int j = 0; j < iNum; ++j) {
+				unsigned char index = data1[j];
+				buf[j] = (index >= 0 && index < count) ? palette[index] : 0;
+			}
+		} else {
+			for(int j = 0; j < iNum; ++j) {
+				buf[j] = (data1[j]) | (data1[j] << 8) | (data1[j] << 16);
+			}
 		}
 	} else {
-		for(int j = 0; j < iNum; ++j) {
-			buf[j] = data1[j];
+		gdalRasterBand = getEngine()->gdal->getBand( gdalDataSet, 2);
+		if ( gdalRasterBand)
+			getEngine()->gdal->rasterIO(gdalRasterBand,GF_Read, iFrom, iLine, iNum, 1, data2, iNum, 1, GDT_Byte, 0, 0);								
+		gdalRasterBand = getEngine()->gdal->getBand( gdalDataSet, 3);
+		if ( gdalRasterBand)
+			getEngine()->gdal->rasterIO(gdalRasterBand, GF_Read, iFrom, iLine, iNum, 1, data3, iNum, 1, GDT_Byte, 0, 0);
+		if ( gdalRasterBand) {
+			for(int j = 0; j < iNum; ++j) {
+				buf[j] = (data1[j]) | (data2[j] << 8) | (data3[j] << 16);
+			}
+		} else {
+			for(int j = 0; j < iNum; ++j) {
+				buf[j] = (data1[j]) | (data1[j] << 8) | (data1[j] << 16);
+			}
 		}
 	}
 

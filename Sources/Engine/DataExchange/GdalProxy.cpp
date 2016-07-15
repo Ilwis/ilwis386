@@ -55,6 +55,11 @@ void GdalProxy::loadMethods(const String& ilwDir) {
 				getGCPCount = (GDALGetGCPCountFunc)GetProcAddress(hm,"_GDALGetGCPCount@4");
 				getGCPProjection = (GDALGetGCPProjectionFunc)GetProcAddress(hm,"_GDALGetGCPProjection@4");
 				getGCPs = (GDALGetGCPsFunc)GetProcAddress(hm,"_GDALGetGCPs@4");
+				getRasterColorInterpretation = (GDALGetRasterColorInterpretationFunc)GetProcAddress(hm,"_GDALGetRasterColorInterpretation@4");
+				getRasterColorTable = (GDALGetRasterColorTableFunc)GetProcAddress(hm,"_GDALGetRasterColorTable@4");
+				getPaletteInterpretation = (GDALGetPaletteInterpretationFunc)GetProcAddress(hm,"_GDALGetPaletteInterpretation@4");
+				getColorEntryCount = (GDALGetColorEntryCountFunc)GetProcAddress(hm,"_GDALGetColorEntryCount@4");
+				getColorEntry = (GDALGetColorEntryFunc)GetProcAddress(hm,"_GDALGetColorEntry@8");
 
 				ogrOpen = (OGROpenFunc)GetProcAddress(hm,"OGROpen");
 				ogrRegAll = (OGRRegisterAllFunc)GetProcAddress(hm,"OGRRegisterAll");
@@ -90,11 +95,9 @@ void GdalProxy::loadMethods(const String& ilwDir) {
 				ogrGetFeatureCount = (GetFeatureCountFunc)GetProcAddress(hm,"OGR_L_GetFeatureCount");
 				ogrGetLayerExtent = (GetLayerExtentFunc)GetProcAddress(hm,"OGR_L_GetExtent");
 				ogrGetFieldName = (GetFieldNameFunc)GetProcAddress(hm,"OGR_Fld_GetNameRef");
-
-			} 
+			}
 		}
-	}   
-
+	}
 }
 
 CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, OGRSpatialReferenceH handle) {
