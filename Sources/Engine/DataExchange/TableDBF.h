@@ -92,12 +92,12 @@ public:
 	static bool _export fIsDBF(const FileName& fn);		
 
 protected:
-	virtual bool     SplitLine(File &InputFile, FieldValues& line, int& iRec);
+	virtual bool     SplitLine(File &InputFile, FieldValues& line, long& iRec);
 	virtual void     ProcessHeader(File &InpFile);
 	virtual void     StoreAsDBF();
 	void             WriteField(File* Out, String sV, int iWidth,  const Domain& dm);
 	void             WriteDescriptorField(File* Out, String sName, const Domain& dm, const ClmInfo::ExternalDomainType edtTpe );
-	virtual void     PutExternalField(FieldValues &line, int &iMemoCol, int iRec, int iField);
+	virtual void     PutExternalField(FieldValues &line, int &iMemoCol, long iRec, int iField);
 	void             AddToTableDomain(FieldValues &line, int iKeyColumn);
 	long             iNewRecord(long iRec);
 

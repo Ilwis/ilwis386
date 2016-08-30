@@ -400,7 +400,7 @@ void TableDBF::ProcessHeader(File &InputFile)
 	InputFile.Seek(hdrDBF.iHeaderSize);
 }
 
-bool TableDBF::SplitLine(File &InputFile, FieldValues& line, int& iRec)
+bool TableDBF::SplitLine(File &InputFile, FieldValues& line, long& iRec)
 {
 	if ( InputFile.cReadChar() != ' ') // delete records are skipped
 		return false;
@@ -444,7 +444,7 @@ long TableDBF::iNewRecord(long iRec)
 	return TableExternalFormat::iNewRecord(iRec);
 }
 
-void TableDBF::PutExternalField(FieldValues &line, int &iMemoCol, int iRec, int iField)
+void TableDBF::PutExternalField(FieldValues &line, int &iMemoCol, long iRec, int iField)
 {
 	memos[iMemoCol].iValues[iRec - 1 ] = line[iField].iVal();
 //	int iC = memos[iMemoCol][iRec - 1];
