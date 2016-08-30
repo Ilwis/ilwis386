@@ -817,7 +817,7 @@ String ILWIS::Time::toString(bool local, ILWIS::Time::Mode mode) const{
 		else if ( mode == mDATETIME)
 			return String("%04d-%02d-%02dT%02d:%02d:%02d", year, timeinfo.tm_mon + 1, timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
 		else if ( mode == mTIME)
-			return String("T%02d:%02d:%02.02f", timeinfo.tm_hour, timeinfo.tm_min, seconds);
+			return String("%02d:%02d:%02.02f", timeinfo.tm_hour, timeinfo.tm_min, seconds);
 	} else {
 		struct tm timeinfo;
 		gmtime_s(&timeinfo, & t);
@@ -826,7 +826,7 @@ String ILWIS::Time::toString(bool local, ILWIS::Time::Mode mode) const{
 		else if ( mode == mDATETIME)
 			return String("%04d-%02d-%02dT%02d:%02d:%02.02f", year, month, day, hour, minutes, seconds);
 		else if ( mode == mTIME)
-			return String("T%02d:%02d:%02.02f", hour, minutes, seconds);
+			return String("%02d:%02d:%02.02f", hour, minutes, seconds);
 	}
 	return "?";
 }
