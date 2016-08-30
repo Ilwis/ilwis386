@@ -98,7 +98,7 @@ class TableExternalFormat : public TableStore
 		virtual bool    SplitLine(CStdioFile& sIf, FieldValues& result, long& iRec) { return false;};
 		virtual void    AddToTableDomain(FieldValues &line, int iKeyColumn);
 		virtual void    Load();
-		virtual void    PutExternalField(FieldValues &line, int &iMemoCol, int iRec, int iField) {}
+		virtual void    PutExternalField(FieldValues &line, int &iMemoCol, long iRec, int iField) {}
 		virtual long    iNewRecord(long iRec);
 
 		int             iGetKeyColumnIndex();
