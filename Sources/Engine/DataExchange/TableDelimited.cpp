@@ -313,7 +313,10 @@ void TableDelimited::GetFormatType(FileName fnObj, TableExternalFormat::InputFor
 			eDel = TableExternalFormat::ifSpace;
 		else if ( iNumberOfSpaceFields != 0 && iNumberOfCommaFields != 0)
 			eDel = iSpaceHeader < iCommaHeader ? TableExternalFormat::ifSpace : TableExternalFormat::ifComma;
-		else
+		else if ( iNumberOfSpaceFields == 0 && iNumberOfCommaFields == 0) {
+			iNumberOfCommaFields = 1;
+			eDel = TableExternalFormat::ifComma;
+		} else
 			eDel = TableExternalFormat::ifUnknown;
 	}
 	switch (eDel)
