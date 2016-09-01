@@ -119,6 +119,7 @@ DisplayOptionsForm(dr,wPar,TR("Labels")), tbl(_tbl), fscale(1.0), useAttrib(fals
 	if ( texts) {
 		fscale = texts->getFontScale();
 		clr = texts->getFont()->getColor();
+		clr.alpha() = 255 - clr.alpha(); // inverse the alpha, for FieldColor
 	}
 
 	fontScale =  new FieldReal(root,TR("Font Scale"),&fscale,RangeReal(0.01,10.));
@@ -148,6 +149,7 @@ void FeatureTextToolForm::apply(){
 			TextLayerDrawer *texts = static_cast<TextLayerDrawer *>(dr->getDrawer(223, ComplexDrawer::dtPOST));
 			if ( texts) {
 				texts->setFontScale(fscale);
+				clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
 				texts->getFont()->setColor(clr);
 			}
 			dr->prepare(&pp);
@@ -161,6 +163,7 @@ void FeatureTextToolForm::apply(){
 		TextLayerDrawer *texts = static_cast<TextLayerDrawer *>(dr->getDrawer(223, ComplexDrawer::dtPOST));
 		if ( texts) {
 			texts->setFontScale(fscale);
+			clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
 			texts->getFont()->setColor(clr);
 		}
 		dr->prepare(&pp);
