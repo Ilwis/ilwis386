@@ -150,7 +150,7 @@ bool TextDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if (set) {
 		OpenGLText * font = set->getFont();
 		if ( (font != 0) && ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && font->getColor().alpha() == 255) || (drawLoop == drl3DTRANSPARENT && font->getColor().alpha() != 255)))
-			font->renderText(c, text);
+			font->renderText(drawLoop, c, text);
 	}
 	return true;
 }

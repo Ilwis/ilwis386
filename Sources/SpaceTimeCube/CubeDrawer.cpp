@@ -138,14 +138,14 @@ bool CubeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 		Color clr = properties["labels"].color;
 		clr.alpha() = properties["labels"].alpha * 255;
 		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && clr.alpha() == 255) || (drawLoop == drl3DTRANSPARENT && clr.alpha() != 255))
-			drawLabels(clr);
+			drawLabels(drawLoop, clr);
 	}
 	if (properties["coordinates"].visible) {
 		Color clr = properties["coordinates"].color;
 		clr.alpha() = properties["coordinates"].alpha * 255;
 		if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && clr.alpha() == 255) || (drawLoop == drl3DTRANSPARENT && clr.alpha() != 255)) {
-			drawCoords(clr);
-			drawTimes(clr);
+			drawCoords(drawLoop, clr);
+			drawTimes(drawLoop, clr);
 		}
 	}
 	csFont->Unlock();
@@ -234,19 +234,19 @@ void CubeDrawer::drawTicMarks() const {
 	}
 }
 
-void CubeDrawer::drawLabels(const Color & clr) const {
+void CubeDrawer::drawLabels(const DrawLoop drawLoop, const Color & clr) const {
 	font->setColor(clr);
-	renderText(font,Coordinate(0.0, -1.1, -1.1), "X");
-	renderText(font,Coordinate(-1.1, 0.0, -1.1), "Y");
-	renderText(font,Coordinate(-1.1, -1.1, 0.0), "T");
+	renderText(drawLoop, font,Coordinate(0.0, -1.1, -1.1), "X");
+	renderText(drawLoop, font,Coordinate(-1.1, 0.0, -1.1), "Y");
+	renderText(drawLoop, font,Coordinate(-1.1, -1.1, 0.0), "T");
 }
 
-void CubeDrawer::drawCoords(const Color & clr) const {
+void CubeDrawer::drawCoords(const DrawLoop drawLoop, const Color & clr) const {
 	mediumFont->setColor(clr);
-	renderText(mediumFont,Coordinate(-0.9, -1.1, -1.1), sxMin);
-	renderText(mediumFont,Coordinate(0.9, -1.1, -1.1), sxMax);
-	renderText(mediumFont,Coordinate(-1.1, -0.9, -1.1), syMin);
-	renderText(mediumFont,Coordinate(-1.1, 0.9, -1.1), syMax);
+	renderText(drawLoop, mediumFont,Coordinate(-0.9, -1.1, -1.1), sxMin);
+	renderText(drawLoop, mediumFont,Coordinate(0.9, -1.1, -1.1), sxMax);
+	renderText(drawLoop, mediumFont,Coordinate(-1.1, -0.9, -1.1), syMin);
+	renderText(drawLoop, mediumFont,Coordinate(-1.1, 0.9, -1.1), syMax);
 
 	//provisional code for alternative coordinate visualization
 	//renderText(mediumFont,Coordinate(-1.0,-1.0,-1.05), String("(%S, %S)", syMin, sxMin));
@@ -255,20 +255,20 @@ void CubeDrawer::drawCoords(const Color & clr) const {
 	//renderText(mediumFont,Coordinate(-1.0,1.0,-1.05), String("(%S, %S)", syMin, sxMax));
 }
 
-void CubeDrawer::drawTimes(const Color & clr) const {
+void CubeDrawer::drawTimes(const DrawLoop drawLoop, const Color & clr) const {
 	mediumFont->setColor(clr);
-	renderText(mediumFont,Coordinate(-1.1, -1.1, -0.9), stMin);
-	renderText(mediumFont,Coordinate(-1.1, -1.1, 0.9), stMax);
+	renderText(drawLoop, mediumFont,Coordinate(-1.1, -1.1, -0.9), stMin);
+	renderText(drawLoop, mediumFont,Coordinate(-1.1, -1.1, 0.9), stMax);
 
 	if (timePos != 0 && sTimePosText != 0)
-		renderText(mediumFont, Coordinate(-1.1, -1.1, -0.9 + 1.8 * *timePos), *sTimePosText);
+		renderText(drawLoop, mediumFont, Coordinate(-1.1, -1.1, -0.9 + 1.8 * *timePos), *sTimePosText);
 }
 
-void CubeDrawer::renderText(OpenGLText *fnt,const Coordinate & c, const String & text, bool center) const {
+void CubeDrawer::renderText(const DrawLoop drawLoop, OpenGLText *fnt,const Coordinate & c, const String & text, bool center) const {
 	glPushMatrix();
 	glTranslated(c.x, c.y, c.z);
 	glScaled(2.0 / cube.width(), 2.0 / cube.height(), 2.0 / cube.altitude());
-	fnt->renderText(Coordinate(0, 0, 0), text);
+	fnt->renderText(drawLoop, Coordinate(0, 0, 0), text);
 	glPopMatrix();
 }
 

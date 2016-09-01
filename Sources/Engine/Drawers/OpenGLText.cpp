@@ -3,7 +3,6 @@
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\OpenGLText.h"
 
-
 #define LIST_SIZE 96
 
 OpenGLText::OpenGLText(ILWIS::RootDrawer *_rd,const String& _name, int height, bool fixed, double horShift, double verShift, bool orientedToUser)
@@ -62,7 +61,7 @@ void OpenGLText::prepare(ILWIS::PreparationParameters *pp) {
 	}
 }
 
-void OpenGLText::renderText(const Coordinate& c, const String& text) {
+void OpenGLText::renderText(const ILWIS::NewDrawer::DrawLoop drawLoop, const Coordinate& c, const String& text) {
 	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	glPushMatrix();
 	if ( !fixedSize && tempFont == 0) { // tempfont == 0 means we are copying, don't mess with font scaling now. it's ok
@@ -70,8 +69,11 @@ void OpenGLText::renderText(const Coordinate& c, const String& text) {
 	}
 	glScaled(scale, scale, scale); // with this the GL space is temporarily expressed in pixels
 	glColor4d(color.redP(), color.greenP(), color.blueP(), color.alphaP());
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
+	if ((drawLoop == ILWIS::NewDrawer::drl2D && color.alpha() != 255) || (drawLoop == ILWIS::NewDrawer::drl3DTRANSPARENT)) {
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_BLEND);
+	} else
+		glDisable(GL_BLEND);
 	glEnable (GL_POLYGON_SMOOTH);
 	glHint (GL_POLYGON_SMOOTH, GL_NICEST);
 	if (faceUser && rootdrawer->is3D()) {

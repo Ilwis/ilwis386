@@ -60,10 +60,10 @@ namespace ILWIS {
 	protected:
 		void drawCube() const;
 		void drawTicMarks() const;
-		void drawLabels(const Color & clr) const;
-		void drawCoords(const Color & clr) const;
-		void drawTimes(const Color & clr) const;
-		void renderText(OpenGLText *font, const Coordinate & c, const String & text, bool center=false) const;
+		void drawLabels(const DrawLoop drawLoop, const Color & clr) const;
+		void drawCoords(const DrawLoop drawLoop, const Color & clr) const;
+		void drawTimes(const DrawLoop drawLoop, const Color & clr) const;
+		void renderText(const DrawLoop drawLoop, OpenGLText *font, const Coordinate & c, const String & text, bool center=false) const;
 		String store(const FileName& fnView, const String& parentSection) const;
 		void load(const FileName& fnView, const String& currentSection);
 		String sxMin, sxMax, syMin, syMax, stMin, stMax;

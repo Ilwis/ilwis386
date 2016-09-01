@@ -13,7 +13,7 @@ class _export OpenGLText {
 public:
 	OpenGLText(ILWIS::RootDrawer *rootdrawer,const String& name, int height, bool fixed = true, double horShift = 0, double verShift = 0, bool orientedToUser = false);
 	~OpenGLText();
-	void renderText(const Coordinate& c, const String& text);
+	void renderText(const ILWIS::NewDrawer::DrawLoop drawLoop, const Coordinate& c, const String& text);
 	void setColor(const Color & clr);
 	Color getColor() const;
 	double getHeight() const;
