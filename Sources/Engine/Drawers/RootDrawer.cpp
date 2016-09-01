@@ -149,6 +149,7 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 	}
 	else {
 		// Setup
+		glClearColor(skyColor.redP(),skyColor.greenP(),skyColor.blueP(),0.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
 		if (threeD)
 			glEnable(GL_DEPTH_TEST);
@@ -177,7 +178,6 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 		}
 
 		// Draw
-		glClearColor(skyColor.redP(),skyColor.greenP(),skyColor.blueP(),0.0);
 		if (is3D()) {
 			// see http://www.opengl.org/archives/resources/faq/technical/transparency.htm
 			// "When using depth buffering in an application, you need to be careful about the order in which you render primitives. Fully opaque primitives need to be rendered first, followed by partially opaque primitives in back-to-front order. If you don't render primitives in this order, the primitives, which would otherwise be visible through a partially opaque primitive, might lose the depth test entirely."
