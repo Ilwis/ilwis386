@@ -460,11 +460,6 @@ int RecItemMap::Configure(CWnd* win)
 RecItemRasterMap::RecItemRasterMap(RecItem* parent, Map mp)
 : RecItemMap(parent, mp)
 {
-	Table tbl = _map->tblAtt();
-	if (tbl.fValid()) {
-		RecItemTable* rit = AddTable(tbl);
-		rit->ShowRec(false);
-	} 
 	AddGeoRef(mp->gr());
 	cwcs = _map->cs();
 }
