@@ -42,16 +42,23 @@ int HelpSearch::openHelp(Event *ev) {
 }
 
 int HelpSearch::filterContent(Event *ev) {
+	Array<String> strings;
 	fsSearch->StoreData();
-	if ( wrd.size() == 0)
+	if ( wrd.size() == 0) {
+		fsStrings->resetContent(strings); // clear top listbox
+		fTopics->resetContent(strings); // clear bottom listbox
 		return 1;
+	}
+	wrd.toLower();
 	content.clear();
 	IlwWinApp()->getHelpFinder()->find(wrd, content);
 	fsSearch->Enable();
-	if ( content.size() == 0)
+	if ( content.size() == 0) {
+		fsStrings->resetContent(strings); // clear top listbox
+		fTopics->resetContent(strings); // clear bottom listbox
 		return 0;
-	Array<String> strings;
-	fTopics->resetContent(strings); // will clear it
+	}
+	fTopics->resetContent(strings); // clear bottom listbox
 	currentContentIndex = iUNDEF;
 
 	strings.resize(content.size());
@@ -59,8 +66,6 @@ int HelpSearch::filterContent(Event *ev) {
 		strings[i] = String("%S(%d)",content[i].word, content[i].count);
 	}
 	fsStrings->resetContent(strings);
-
-
 	return 1;
 }
 

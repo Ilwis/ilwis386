@@ -272,20 +272,21 @@ void HelpFinder::find(const String& wrd, vector<WordInfo>& result) {
 			return;
 		}
 
-		map<String, WordInfo>::iterator start = startPoints[c];
-		if ( (*start).second.count > 0) {
-			for(map<String, WordInfo>::const_iterator cur = start; cur != indexedWords.end(); ++cur) {
-				WordInfo inf = (*cur).second;
-				if ( inf.word[0] != c)
-					break;
-				else {
-					if ( inf.word.find(wrd) != string::npos)
-						result.push_back(inf);
+		map<char, map<String, WordInfo>::iterator>::iterator found = startPoints.find(c);
+		if (found != startPoints.end()) {
+			map<String, WordInfo>::iterator start = (*found).second;
+			if ((*start).second.count > 0) {
+				for(map<String, WordInfo>::const_iterator cur = start; cur != indexedWords.end(); ++cur) {
+					WordInfo inf = (*cur).second;
+					if ( inf.word[0] != c)
+						break;
+					else {
+						if ( inf.word.find(wrd) != string::npos)
+							result.push_back(inf);
+					}
 				}
-
 			}
 		}
-
 	}
 	oldContent.resize(result.size());
 	copy(result.begin(), result.end(), oldContent.begin());
