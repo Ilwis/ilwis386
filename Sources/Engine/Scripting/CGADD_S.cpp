@@ -219,21 +219,21 @@ void CodeGenerator::AddInstLoad(const String& sVal, bool fNb)
 {
   CalcVariable cv;
   if ( sVal == "%l" || sVal == "%L") {
-    cv.SetPointer(new CalcVarInt("%l"));
+    cv.SetPointer(new CalcVarInt(string("%l")));
     cv->SetDomainValueRangeStruct(DomainValueRangeStruct(1, inst->env.iLines));
     stkCalcVar.push(cv);
     inst->Add(new InstCurrLine(inst));
     return;
   }  
   if ( sVal == "%c" || sVal == "%C") {
-    cv.SetPointer(new CalcVarInt("%c"));
+    cv.SetPointer(new CalcVarInt(string("%c")));
     cv->SetDomainValueRangeStruct(DomainValueRangeStruct(1, inst->env.iCols));
     stkCalcVar.push(cv);
     inst->Add(new InstCurrColumn(inst));
     return;
   }  
   if (tbl.fValid() && ( sVal == "%r" || sVal == "%R")) {
-    cv.SetPointer(new CalcVarInt("%r"));
+    cv.SetPointer(new CalcVarInt(string("%r")));
     cv->SetDomainValueRangeStruct(DomainValueRangeStruct(0, inst->env.iRecs));
     stkCalcVar.push(cv);
     inst->Add(new InstCurrRecord(inst, tbl->dm()));
@@ -241,41 +241,41 @@ void CodeGenerator::AddInstLoad(const String& sVal, bool fNb)
   }
   if (tbl.fValid() && ( sVal == "%k" || sVal == "%K")) {
      if (0 != tbl->dm()->pdnone()) { // key == record nr
-      AddInst("load", "%r");
+      AddInst("load", string("%r"));
       return;
     }
     if (0 != tbl->dm()->pdv()) 
-      cv.SetPointer(new CalcVarInt("%k"));
+      cv.SetPointer(new CalcVarInt(string("%k")));
     else
-      cv.SetPointer(new CalcVarString("%k"));
+      cv.SetPointer(new CalcVarString(string("%k")));
     cv->SetDomainValueRangeStruct(tbl->dm());
     stkCalcVar.push(cv);
     inst->Add(new InstCurrKey(inst, tbl->dm()));
     return;
   }
-  if (fCIStrEqual(sVal,"%x")) {
-    cv.SetPointer(new CalcVarReal("%x"));
+  if (fCIStrEqual(sVal,string("%x"))) {
+    cv.SetPointer(new CalcVarReal(string("%x")));
     cv->SetDomainValueRangeStruct(Domain("value"));
     stkCalcVar.push(cv);
     inst->Add(new InstCurrCoordX(inst));
     return;
   }
-  if (fCIStrEqual(sVal,"%y")) {
-    cv.SetPointer(new CalcVarReal("%y"));
+  if (fCIStrEqual(sVal,string("%y"))) {
+    cv.SetPointer(new CalcVarReal(string("%y")));
     cv->SetDomainValueRangeStruct(Domain("value"));
     stkCalcVar.push(cv);
     inst->Add(new InstCurrCoordY(inst));
     return;
   }
-  if (fCIStrEqual(sVal,"%p") || fCIStrEqual(sVal,"nbpos")) {
-    cv.SetPointer(new CalcVarInt("%p"));
+  if (fCIStrEqual(sVal,string("%p")) || fCIStrEqual(sVal,"nbpos")) {
+    cv.SetPointer(new CalcVarInt(string("%p")));
     cv->SetDomainValueRangeStruct(DomainValueRangeStruct(1, 9));
     stkCalcVar.push(cv);
     inst->Add(new InstNbPos(inst));
     return;
   }
-  if (fCIStrEqual(sVal,"%d") || fCIStrEqual(sVal,"nbdis")) {
-    cv.SetPointer(new CalcVarReal("%d"));
+  if (fCIStrEqual(sVal,string("%d")) || fCIStrEqual(sVal,"nbdis")) {
+    cv.SetPointer(new CalcVarReal(string("%d")));
     Domain dm("distance");
     cv->SetDomainValueRangeStruct(DomainValueRangeStruct(dm));
     stkCalcVar.push(cv);

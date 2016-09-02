@@ -303,8 +303,8 @@ void CodeGenerator::AddInstMapCrd(const String& sFunc,
   Map map(sVal);
   bool fRowCol = fCIStrEqual(sFunc , "mapcrdrc");
   if (!fRowCol) {
-    AddInst("load", "%l");
-    AddInst("load", "%c");
+    AddInst("load", string("%l"));
+    AddInst("load", string("%c"));
   }
   stkCalcVar.pop();  // col
   stkCalcVar.pop();  // row
@@ -322,8 +322,8 @@ void CodeGenerator::AddInstMapColor(const String& sFunc,
   Map map(sVal);
   bool fRowCol = fCIStrEqual(sFunc , "mapcolorrc");
   if (!fRowCol) {
-    AddInst("load", "%l");
-    AddInst("load", "%c");
+    AddInst("load", string("%l"));
+    AddInst("load", string("%c"));
   }
   stkCalcVar.pop();  // col
   stkCalcVar.pop();  // row
