@@ -177,8 +177,18 @@ int GeoRefSimpleView::CallBack(Event*)
 	if (rDet > 1e-13)
 	{
 		double rPixSize = 1 /sqrt(rDet);
-		String s(TR("Pixel Size = %.3f m").c_str(), rPixSize);
-		stRemark->SetVal(s);
+		const CoordSystem & cs = GetDocument()->gr()->cs();
+		bool fLatLon = false;
+		if (cs.fValid())
+			fLatLon = (0 != cs->pcsLatLon());
+		if (fLatLon) {
+			String sPix = LatLon::sDegree(rPixSize);
+			String sPixSize(TR("Pixel Size = %S").c_str(), sPix);
+			stRemark->SetVal(sPixSize);
+		} else {
+			String sPixSize(TR("Pixel Size = %.3f m").c_str(), rPixSize);
+			stRemark->SetVal(sPixSize);
+		}
 		EnableOK(); 
 	}
 	else

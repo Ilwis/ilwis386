@@ -93,8 +93,18 @@ void GeoRefSubMapCoordView::FillDerivedFields(FieldGroup* fgGenerRoot)
 
 	String sGRSize(TR("%li lines and %li columns").c_str(), m_rcSize.Row, m_rcSize.Col);
 	SetSizeString(sGRSize);
-	String sPixSize(TR("Pixel Size = %.3f m").c_str(), m_rParentPixSize);
-	SetPixelSizeString(sPixSize);
+	const CoordSystem & cs = GetDocument()->gr()->cs();
+	bool fLatLon = false;
+	if (cs.fValid())
+		fLatLon = (0 != cs->pcsLatLon());
+	if (fLatLon) {
+		String sPix = LatLon::sDegree(m_rParentPixSize);
+		String sPixSize(TR("Pixel Size = %S").c_str(), sPix);
+		SetPixelSizeString(sPixSize);
+	} else {
+		String sPixSize(TR("Pixel Size = %.3f m").c_str(), m_rParentPixSize);
+		SetPixelSizeString(sPixSize);
+	}
 
 	// Disabled editable Offset and Size fields for now; show R/O only
 	if (1) // GetDocument()->gr()->fReadOnly())
