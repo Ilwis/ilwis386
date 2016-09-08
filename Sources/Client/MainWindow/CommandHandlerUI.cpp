@@ -1880,7 +1880,7 @@ void CommandHandlerUI::addExtraCommands() {
 	addCommand(CommandHandlerUI::createCommandInfo("invisible","",Cmdinvisible,"","","","",0,"Make Ilwis invisible", false));	
 	addCommand(CommandHandlerUI::createCommandInfo("rmdir","",Cmddel,"","Rmdir","","",0,"Remove directory", false));	
 	addCommand(CommandHandlerUI::createCommandInfo("del","delete",Cmddel,"","Del","","",0,"Delete file(s)", false));
-	addCommand(CommandHandlerUI::createCommandInfo("copy","",Cmdcopy,"","Copy","","",0,"Celete file(s)", false));
+	addCommand(CommandHandlerUI::createCommandInfo("copy","",Cmdcopy,"","Copy","","",0,"Copy file(s)", false));
 	addCommand(CommandHandlerUI::createCommandInfo("run","",Cmdrun,"","Run","",".isl",0,"Run", false));
 	addCommand(CommandHandlerUI::createCommandInfo("dir","",Cmddir,"","Dir","",".isl",0,"Change directory", false));
 	addCommand(CommandHandlerUI::createCommandInfo("mkdir","makedir",Cmdmkdir,"","MakeDir","","",0,"Create directory", false));
