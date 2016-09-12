@@ -76,7 +76,7 @@ MapSEBS::MapSEBS(const FileName& fn, MapPtr& p)
 {
 	fNeedFreeze = true;
 	sFreezeTitle = TR("Surface Energy Balance System (SEBS)");
-	//htpFreeze = "ilwisapp\flow_accumulation_algorithm.htm";
+	//htpFreeze = "ilwisapp\\flow_accumulation_algorithm.htm";
 
 	ReadElement("RelativeEvaporationFraction", "LandSurfaceTemperature", m_mpLST);
 	ReadElement("RelativeEvaporationFraction", "Emissivity", m_mpEmis);

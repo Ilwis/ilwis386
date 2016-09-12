@@ -63,7 +63,7 @@ MapETo::MapETo(const FileName& fn, MapPtr& p)
 {
 	fNeedFreeze = true;
 	sFreezeTitle = TR("Reference ETo");
-	//htpFreeze = "ilwisapp\flow_accumulation_algorithm.htm";
+	//htpFreeze = "ilwisapp\\flow_accumulation_algorithm.htm";
 
 	ReadElement("ReferenceETo", "WindSpeed", m_mpU);
 	ReadElement("ReferenceETo", "UseVaporPressure", m_useEa);

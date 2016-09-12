@@ -63,7 +63,7 @@ MapSI2Radiance::MapSI2Radiance(const FileName& fn, MapPtr& p)
 {
 	fNeedFreeze = true;
 	sFreezeTitle = TR("Convert raw to radiance/reflectance (MODIS)");
-	//htpFreeze = "ilwisapp\flow_accumulation_algorithm.htm";
+	//htpFreeze = "ilwisapp\\flow_accumulation_algorithm.htm";
 
 	ReadElement("Radiance", "RawDataMap", m_mpRawData);
 	ReadElement("Radiance", "Scale", m_rScale);
