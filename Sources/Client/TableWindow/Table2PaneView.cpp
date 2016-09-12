@@ -335,7 +335,7 @@ public:
   {
     new FieldVal(root, TR("&New value").c_str(), dvrs, &sVal);
   	new FieldBlank(root);
-//		setHelpItem("ilwismen\table_window_edit_single_column.htm");
+//		setHelpItem("ilwismen\\table_window_edit_single_column.htm");
     create();
   }
 };

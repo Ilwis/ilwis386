@@ -346,7 +346,7 @@ public:
 		new FieldString(root, TR("&Name"), sName, Domain(), false);
 		new FieldString(root, TR("&Code"), sCode, Domain(), true);
 
-		//    setHelpItem("ilwis\domain_class_id_editor_functionality.htm");
+		//    setHelpItem("ilwis\\domain_class_id_editor_functionality.htm");
 		create();
 	}
 };

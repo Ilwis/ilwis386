@@ -290,7 +290,7 @@ void PixelInfoDoc::setAssociatedDrawerTool(ILWIS::DrawerTool *drw, const String&
 void PixelInfoDoc::OnAddMaps()
 {
 	String s;
-	DataObjectForm frm(wndGetActiveView(), TR("Pixel Info - Add Map"), &s, ".mpr.mpa.mps.mpp.mpl", "ilwismen\add_map_to_pixel_information_window.htm");
+	DataObjectForm frm(wndGetActiveView(), TR("Pixel Info - Add Map"), &s, ".mpr.mpa.mps.mpp.mpl", "ilwismen\\add_map_to_pixel_information_window.htm");
 	if (frm.fOkClicked()) {
 		FileName fn = s;
 		if (fn.sExt == ".mpl") {
@@ -307,7 +307,7 @@ void PixelInfoDoc::OnAddMaps()
 void PixelInfoDoc::OnAddCsys()
 {
 	String s;
-	DataObjectForm frm(wndGetActiveView(), TR("Pixel Info - Add Coordinate System"), &s, ".csy", "ilwismen\add_coordinate_system_to_pixel_info_window.htm");
+	DataObjectForm frm(wndGetActiveView(), TR("Pixel Info - Add Coordinate System"), &s, ".csy", "ilwismen\\add_coordinate_system_to_pixel_info_window.htm");
 	if (frm.fOkClicked()) {
 		CoordSystem cs(s);
 		AddCoordSystem(cs);
