@@ -139,7 +139,7 @@ bool SegmentMapTunneling::fValueRangeChangeable() const
 
 void SegmentMapTunneling::Init()
 {
-  htpFreeze = "ilwisapp\tunnel_segments_functionality_algorithm.htm";
+  htpFreeze = "ilwisapp\\tunnel_segments_functionality_algorithm.htm";
   sFreezeTitle = "SegmentMapTunneling";
 }
 

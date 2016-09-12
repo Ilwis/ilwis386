@@ -255,7 +255,7 @@ bool SegmentMapFromRasValueBnd::fDomainChangeable() const
 
 void SegmentMapFromRasValueBnd::Init()
 {
-	htpFreeze = "ilwisapp\raster_to_segments_algorithm.htm";
+	htpFreeze = "ilwisapp\\raster_to_segments_algorithm.htm";
 	sFreezeTitle = "SegmentMapFromRasValueBnd";
 }
 
