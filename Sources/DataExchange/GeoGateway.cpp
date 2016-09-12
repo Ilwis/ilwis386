@@ -409,7 +409,7 @@ void GeoGatewayFormat::Init()
 		trq->SetDelayShow(false);
 		trq->SetNoStopButton(true);
 		trq->SetTitle(SIETitleGeoGateway);
-		trq->setHelpItem("ilwismen\import_geogateway.htm");
+		trq->setHelpItem("ilwismen\\import_geogateway.htm");
 		trq->fText(String(TR("Loading file. Please wait").c_str(), fnForeign.sRelative()));
 		fdp[0] = GDBOpen(fnForeign.sFullPath().c_str(), "r+");
 		if ( fdp[0] == NULL) //  if not, try  again but this time only read access
@@ -812,7 +812,7 @@ void GeoGatewayFormat::ImportRasterMap(const FileName& fnRasMap, Map& mp ,LayerI
 	if (0 == trq)
 		trq = new Tranquilizer();
 	trq->SetTitle(String(TR("Importing raster map %S").c_str(), fnForeign.sShortName()));
-	trq->setHelpItem("ilwismen\import_geogateway.htm");
+	trq->setHelpItem("ilwismen\\import_geogateway.htm");
 
 	iLayer = iChannel;
 	mp = Map(li.fnObj, li.grf, li.grf->rcSize(), li.dvrsMap);
@@ -1479,7 +1479,7 @@ void GeoGatewayFormat::ScanValues(GDBLayer psLayer, vector<LayerInfo>& objects, 
 	if (0 == trq)
 		trq = new Tranquilizer();
 	trq->SetTitle(TR("Scanning values"));
-	trq->setHelpItem("ilwismen\import_geogateway.htm");
+	trq->setHelpItem("ilwismen\\import_geogateway.htm");
 	int iTotalShapes = GDBGetNumShapes(psLayer);
 	ILWISSingleLock lock(&m_CriticalSection, TRUE);	 				
 	bool fPolygon = GDBIsTopoLayer(psLayer) != GDBLUnknown; // || psLayer->iRingStartField != -1;
