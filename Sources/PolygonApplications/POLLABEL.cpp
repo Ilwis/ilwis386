@@ -126,7 +126,7 @@ String PolygonMapLabels::sExpression() const
 
 void PolygonMapLabels::Init()
 {
-  htpFreeze = "ilwisapp\assign_labels_to_polygons_algoritm.htm";
+  htpFreeze = "ilwisapp\\assign_labels_to_polygons_algoritm.htm";
   sFreezeTitle = "PolygonMapLabels";
 }
 

@@ -161,7 +161,7 @@ bool PolygonMapAttribute::fDomainChangeable() const
 
 void PolygonMapAttribute::Init()
 {
-  htpFreeze = "ilwisapp\attribute_map_of_polygon_map_algorithm.htm";
+  htpFreeze = "ilwisapp\\attribute_map_of_polygon_map_algorithm.htm";
   sFreezeTitle = "PolygonMapAttribute";
   DomainSort* pdsrt = colAtt->dmKey()->pdsrt();
   assert(pdsrt);

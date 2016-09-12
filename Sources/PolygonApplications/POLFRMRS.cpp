@@ -163,7 +163,7 @@ bool PolygonMapFromRas::fDomainChangeable() const
 
 void PolygonMapFromRas::Init()
 {
-  htpFreeze = "ilwisapp\raster_to_polygons_algorithm.htm";
+  htpFreeze = "ilwisapp\\raster_to_polygons_algorithm.htm";
   sFreezeTitle = "PolygonMapFromRas";
 }
 

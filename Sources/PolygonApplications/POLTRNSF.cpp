@@ -184,7 +184,7 @@ String PolygonMapTransform::sExpression() const
 
 void PolygonMapTransform::Init()
 {
-  htpFreeze = "ilwisapp\transform_polygon_map_functionality_algorithm.htm";
+  htpFreeze = "ilwisapp\\transform_polygon_map_functionality_algorithm.htm";
   sFreezeTitle = "PolygonMapTransform";
 }
 
