@@ -185,7 +185,6 @@ GDALFormat::GDALFormat()
 	LoadMethods();
 	funcs.registerAll();
 	funcs.ogrRegAll();
-	//OGRDataSourceH p = funcs.ogrOpen("d:\\Data\\ILWIS\\data\\shape\\natural.shp",FALSE,0);
 }
 
 ForeignFormat *CreateQueryObjectGDAL() //create query object
