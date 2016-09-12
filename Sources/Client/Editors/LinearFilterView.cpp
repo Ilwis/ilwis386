@@ -379,7 +379,7 @@ public:
   {
     new FieldInt(root, TR("&Value").c_str(), iVal);
   	new FieldBlank(root);
-//		setHelpItem("ilwismen\table_window_edit_single_column.htm");
+//		setHelpItem("ilwismen\\table_window_edit_single_column.htm");
     create();
   }
 };

@@ -174,7 +174,7 @@ FormMapNearestPoint::FormMapNearestPoint(CWnd* mw, const char* sPar)
 	CheckBox* cb = new CheckBox(root, TR("Use &Spherical Distance"), &fSphericalDistance);
 	cb->SetIndependentPos();
   initMapOutValRange(true);
-  SetAppHelpTopic("	ilwisapp\nearest_point_dialogbox.htm");
+  SetAppHelpTopic("ilwisapp\\nearest_point_dialogbox.htm");
   create();
 }                    
 

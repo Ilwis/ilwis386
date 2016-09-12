@@ -1479,20 +1479,20 @@ DatumWizard::DatumWizard(CWnd* wnd, const char* sPar)
 	SetWizardMode();
 
 	ppSelectPointMaps = new SelectPointMapsPage(this, sPar);
-	ppSelectPointMaps->SetMenHelpTopic("ilwisapp\find_datum_trans_params_inputpage.htm");
+	ppSelectPointMaps->SetMenHelpTopic("ilwisapp\\find_datum_trans_params_inputpage.htm");
 	ppSelectPointMaps->create();
 	AddPage(ppSelectPointMaps);
 
 	// which method to choose
 	ppSelectMethod = new SelectMethodPage(this);
-	ppSelectMethod->SetMenHelpTopic("ilwisapp\find_datum_trans_params_methodpage.htm");
+	ppSelectMethod->SetMenHelpTopic("ilwisapp\\find_datum_trans_params_methodpage.htm");
 	ppSelectMethod->create();
 	AddPage(ppSelectMethod);
 	ppSelectMethod->SetPPDisable();
 
 	// 
 	ppUpdateDatum = new UpdateDatumPage(this);
-	ppUpdateDatum->SetMenHelpTopic("ilwisapp\find_datum_trans_params_outputpage.htm");
+	ppUpdateDatum->SetMenHelpTopic("ilwisapp\\find_datum_trans_params_outputpage.htm");
 	ppUpdateDatum->create();
 	AddPage(ppUpdateDatum);
 	ppUpdateDatum->SetPPDisable();

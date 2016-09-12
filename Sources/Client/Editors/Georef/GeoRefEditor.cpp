@@ -914,7 +914,7 @@ void GeoRefEditor::OnTransformation()
 			new RadioButton(rg, TR("&Full Second Order"));
 			new RadioButton(rg, TR("&Third Order"));
 			new RadioButton(rg, TR("&Projective"));
-			//    setHelpItem("ilwis\georeference_tiepoints_editor.htm");
+			//    setHelpItem("ilwis\\georeference_tiepoints_editor.htm");
 			SetMenHelpTopic("ilwismen\\georeference_tiepoints_editor_transformation.htm");
 			create();
 		}
