@@ -79,7 +79,7 @@ void MapVariableThresholdComputation::Init()
 {
 		fNeedFreeze = true;
 		sFreezeTitle = "MapVariableThresholdComputation";
-		htpFreeze = "ilwisapp\variable_threshold_computation_algorithm.htm";
+		htpFreeze = "ilwisapp\\variable_threshold_computation_algorithm.htm";
 
 		if (!fnObj.fValid())
       objtime = objdep.tmNewest();

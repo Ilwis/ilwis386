@@ -308,7 +308,7 @@ void TblFlowPathLongitudinalProfile::Init()
   objdep.Add(m_mpAttributeMap.ptr());
   fNeedFreeze = true;
   sFreezeTitle = "TblFlowPathLongitudinalProfile";
-  //htpFreeze = "ilwisapp\horton_statistics_algorithm.htm";
+  //htpFreeze = "ilwisapp\\horton_statistics_algorithm.htm";
 }
 
 void TblFlowPathLongitudinalProfile::CreateColumns(vector<LongitudinalProfile> vlp)

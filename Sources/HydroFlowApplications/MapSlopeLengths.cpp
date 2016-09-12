@@ -72,7 +72,7 @@ MapOverlandFlowLength::MapOverlandFlowLength(const FileName& fn, MapPtr& p)
 	init();
 	fNeedFreeze = true;
   sFreezeTitle = "MapOverlandFlowLength";
-	//htpFreeze = "ilwisapp\overland_flow_length_algorithm.htm";
+	//htpFreeze = "ilwisapp\\overland_flow_length_algorithm.htm";
 }
 
 MapOverlandFlowLength::MapOverlandFlowLength(const FileName& fn, 
@@ -125,7 +125,7 @@ void MapOverlandFlowLength::init()
 
 	fNeedFreeze = true;
 	sFreezeTitle = "MapOverlandFlowLength";
-	//htpFreeze = "ilwisapp\overland_flow_length_algorithm.htm";
+	//htpFreeze = "ilwisapp\\overland_flow_length_algorithm.htm";
 
 	objdep.Add(m_mpFlow);
 }

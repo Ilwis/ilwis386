@@ -80,7 +80,7 @@ MapFlowDirection::MapFlowDirection(const FileName& fn, MapPtr& p)
 
 	fNeedFreeze = true;
 	sFreezeTitle = "MapFlowDirection";
-	htpFreeze = "ilwisapp\flow_direction_algorithm.htm";
+	htpFreeze = "ilwisapp\\flow_direction_algorithm.htm";
 }
 
 MapFlowDirection::MapFlowDirection(const FileName& fn, MapPtr& p, const Map& mp, 

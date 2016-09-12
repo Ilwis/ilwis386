@@ -70,7 +70,7 @@ MapTopologicalOptimization::MapTopologicalOptimization(const FileName& fn, MapPt
   
 	fNeedFreeze = true;
   sFreezeTitle = "MapTopologicalOptimization";
-	htpFreeze = "ilwisapp\topological_optimization_algorithm.htm";
+	htpFreeze = "ilwisapp\\topological_optimization_algorithm.htm";
 }
 
 MapTopologicalOptimization::MapTopologicalOptimization(const FileName& fn, 
@@ -87,7 +87,7 @@ MapTopologicalOptimization::MapTopologicalOptimization(const FileName& fn,
 {
 	fNeedFreeze = true;
 	sFreezeTitle = "MapTopologicalOptimization";
-	htpFreeze = "ilwisapp\topological_optimization_algorithm.htm";
+	htpFreeze = "ilwisapp\\topological_optimization_algorithm.htm";
 
 	objdep.Add(m_mpFlow);
 	objdep.Add(m_smStream);

@@ -64,7 +64,7 @@ MapFlowAccumulation::MapFlowAccumulation(const FileName& fn, MapPtr& p)
 {
 		fNeedFreeze = true;
 		sFreezeTitle = "MapFlowAccumulation";
-		htpFreeze = "ilwisapp\flow_accumulation_algorithm.htm";
+		htpFreeze = "ilwisapp\\flow_accumulation_algorithm.htm";
 
 }
 

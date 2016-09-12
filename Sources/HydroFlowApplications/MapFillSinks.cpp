@@ -76,7 +76,7 @@ MapFillSinks::MapFillSinks(const FileName& fn, MapPtr& p)
 	
 	fNeedFreeze = true;
 	sFreezeTitle = "MapFillSinks";
-	htpFreeze = "ilwisapp\fill_sinks_algorithm.htm";
+	htpFreeze = "ilwisapp\\fill_sinks_algorithm.htm";
 }
 
 MapFillSinks::MapFillSinks(const FileName& fn, MapPtr& p, const Map& mp, FillMethod sMethod)
