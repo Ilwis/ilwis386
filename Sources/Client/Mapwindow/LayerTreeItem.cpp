@@ -679,7 +679,17 @@ void DisplayOptionTreeItem::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	if ( dbctool && dbcAction) {
 		(dbctool->*dbcAction)();
-	} 
+	} else {
+		HTREEITEM hItem = htiStart;
+		HTREEITEM hStop= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
+		HTREEITEM hti = ltv->GetTreeCtrl().HitTest(point);
+		ltv->GetTreeCtrl().Expand(hti,TVE_TOGGLE);
+		while (hItem != NULL && hItem != hStop)
+		{
+			ltv->GetTreeCtrl().Expand(hItem,TVE_EXPAND);
+			hItem= ltv->GetTreeCtrl().GetNextItem(hItem, TVGN_NEXTVISIBLE);
+		}
+	}
 	//SwitchCheckBox(true);
 }
 

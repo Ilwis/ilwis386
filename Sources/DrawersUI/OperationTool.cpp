@@ -54,7 +54,6 @@ HTREEITEM OperationTool::configure( HTREEITEM parentItem) {
 	HTREEITEM  hti = tree->GetTreeCtrl().GetParentItem(parentItem);
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,hti,drawer);
 	item->setTool(this);
-	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&OperationTool::doOperation);
 
 	htiNode = insertItem(TR("Operations"),"ExeIcoL", item);
 	htiDummy = insertItem(htiNode, "dummy", ".exe");
