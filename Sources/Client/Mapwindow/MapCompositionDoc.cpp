@@ -305,49 +305,45 @@ NewDrawer *MapCompositionDoc::getDrawerFor(const IlwisObject& ob, const Coord& c
 
 BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, int os) 
 {
-	return OnOpenDocument(lpszPathName, otNORMAL,os);
+	return OnOpenDocument(lpszPathName, otNORMAL, os);
 }
 
 BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPath, ParmList& pm, int os) 
 {
-	try{
-	FileName fn(pm.sGet("output") != "" ? pm.sGet("output") : lpszPath);
-	String sC = pm.sCmd();
-	state = IlwisWinApp::osNormal;
-	if ( fn.fExist() == false && pm.fExist("collection") ) // implicit object
-	{
-		if ( pm.sGet("method") == "") {
-			ForeignCollection fc(pm.sGet("collection"));
-			pm.Add(new Parm("method", fc->sGetMethod()));
+	try {
+		FileName fn(pm.sGet("output") != "" ? pm.sGet("output") : lpszPath);
+		String sC = pm.sCmd();
+		state = IlwisWinApp::osNormal;
+		if ( fn.fExist() == false && pm.fExist("collection") ) // implicit object
+		{
+			if ( pm.sGet("method") == "") {
+				ForeignCollection fc(pm.sGet("collection"));
+				pm.Add(new Parm("method", fc->sGetMethod()));
+			}
+			ForeignCollection::CreateImplicitObject(fn, pm);
 		}
-		ForeignCollection::CreateImplicitObject(fn, pm);
-	}
-	else if ( fn.fExist() && pm.fExist("exitOnClose")) {
-		state |= IlwisWinApp::osExitOnClose;
-
-	}
-	if ( IlwisObject::iotObjectType(fn) > IlwisObject::iotRASMAP && IlwisObject::iotObjectType(fn) < IlwisObject::iotTABLE) 
-	{
-		int ot = pm.sGet("mode").iVal();
-		if ( ot == iUNDEF) ot = 0;
-		if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotPOINTMAP)
-			return OnOpenPointMap(PointMap(fn), (IlwisDocument::OpenType)ot, state);
-		if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotSEGMENTMAP)
-			return OnOpenSegmentMap(SegmentMap(fn), (IlwisDocument::OpenType)ot, state);
-		if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotPOLYGONMAP)
-			return OnOpenPolygonMap(PolygonMap(fn), (IlwisDocument::OpenType)ot, state);
-	}	
-	if (!IlwisDocument::OnOpenDocument(fn.sRelative().c_str()))
-		return FALSE;
-	Map map(fn);
-	} 
-	catch (std::exception& err) {
+		else if ( fn.fExist() && pm.fExist("exitOnClose")) {
+			state |= IlwisWinApp::osExitOnClose;
+		}
+		if ( IlwisObject::iotObjectType(fn) > IlwisObject::iotRASMAP && IlwisObject::iotObjectType(fn) < IlwisObject::iotTABLE) 
+		{
+			int ot = pm.sGet("mode").iVal();
+			if ( ot == iUNDEF) ot = 0;
+			if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotPOINTMAP)
+				return OnOpenPointMap(PointMap(fn), (IlwisDocument::OpenType)ot, state);
+			if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotSEGMENTMAP)
+				return OnOpenSegmentMap(SegmentMap(fn), (IlwisDocument::OpenType)ot, state);
+			if ( IlwisObject::iotObjectType(fn) == IlwisObject::iotPOLYGONMAP)
+				return OnOpenPolygonMap(PolygonMap(fn), (IlwisDocument::OpenType)ot, state);
+		}
+		if (!IlwisDocument::OnOpenDocument(fn.sRelative().c_str()))
+			return FALSE;
+	} catch (std::exception& err) {
 		const char *txt = err.what();
 		String mes("%s, probably invalid or corrupt data", txt);
 		ErrorObject errObj(mes);
 		errObj.Show();
-	}
-	catch (ErrorObject& err) {
+	} catch (ErrorObject& err) {
 		err.Show();
 	}
 	return OnOpenDocument(lpszPath, state);
@@ -537,7 +533,7 @@ void MapCompositionDoc::OnSaveViewAs()
 			new FieldViewCreate(root, TR("&Map View Name"), sName);
 			FieldString *fs = new FieldString(root, TR("&Title"), sTitle);
 			fs->SetWidth(120);
-			//      setHelpItem("ilwismen\save_view_as.htm"Forms);
+			//      setHelpItem("ilwismen\\save_view_as.htm"Forms);
 			SetMenHelpTopic("ilwismen\\save_view_as.htm");
 			create();
 		}
@@ -1013,10 +1009,15 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 
 	bool fOverruleBounds = !(ot & otKEEPBOUNDS);
 	drawer->addDataSource((void *)&bmp, fOverruleBounds ? NewDrawer::dsoEXTENDBOUNDS : NewDrawer::dsoNONE);
-	rootDrawer->setCoordinateSystem(bmp->cs());
+	MapPtr *mptr = 0;
+	if (IOTYPE(bmp->fnObj) == IlwisObject::iotRASMAP)
+		mptr = (MapPtr *)bmp.pointer();
+	if (mptr)
+		rootDrawer->setCoordinateSystem(mptr->gr()->cs());
+	else
+		rootDrawer->setCoordinateSystem(bmp->cs());
 	CoordBounds cbMap = bmp->cb();
-	if ( !cbMap.fValid() && IOTYPE(bmp->fnObj) == IlwisObject::iotRASMAP) { // for csunknown with no boundaries
-		MapPtr *mptr = (MapPtr *)bmp.pointer();
+	if ( !cbMap.fValid() && mptr) { // for csunknown with no boundaries
 		cbMap = CoordBounds(Coord(0,0), Coord(mptr->rcSize().Col, -mptr->rcSize().Row)); // none.grf bounds
 		rootDrawer->addCoordBounds(bmp->cs(), cbMap, fOverruleBounds);
 		rootDrawer->setGeoreference(GeoRef(FileName("none.grf")), fOverruleBounds);
@@ -2253,7 +2254,8 @@ UINT MapCompositionDoc::selectFeaturesInThread(LPVOID pParam) {
 				PreparationParameters pp(NewDrawer::ptRENDER);
 				pp.rowSelect = *inf;
 				doc->rootDrawer->prepare(&pp); // do we need a semaphore on "prepare"? can prepare be called simultaneously from another thread?
-				doc->mpvGetView()->Invalidate();
+				if (IsWindow(doc->mpvGetView()->m_hWnd))
+					doc->mpvGetView()->Invalidate();
 			}
 			delete inf;
 		}
