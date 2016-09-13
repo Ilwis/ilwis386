@@ -1131,8 +1131,7 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot, int o
 		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer);
-	}
-	else  if ( ot & otCOLORCOMP ){
+	} else { // both otNORMAL and otCOLORCOMP
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("RasterDataDrawer", "Ilwis38", &parms);
 		drawer->addDataSource((void *)&maplist);
@@ -1144,7 +1143,6 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot, int o
 		rootDrawer->addDrawer(drawer);
 	}
 
-	
 	return TRUE;
 }
 
