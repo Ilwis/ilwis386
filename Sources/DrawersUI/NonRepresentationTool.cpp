@@ -91,13 +91,16 @@ SetSingleColorForm::SetSingleColorForm(CWnd *wPar, FeatureLayerDrawer *dr) :
 	DisplayOptionsForm(dr, wPar,String("Single draw color for %S",dr->getName())),
 	c(dr->getSingleColor())
 {
+	c.alpha() = 255 - c.alpha(); // inverse the alpha, for FieldColor
 	fc = new FieldColor(root, "Draw color", &c);
 	create();
 }
 
 void  SetSingleColorForm::apply() {
 	fc->StoreData();
-	((FeatureLayerDrawer *)drw)->setSingleColor(c);
+	Color clr (c);
+	clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
+	((FeatureLayerDrawer *)drw)->setSingleColor(clr);
 	LayerDrawer *lyerdrw = dynamic_cast<LayerDrawer *>(drw);
 	if (lyerdrw)
 		lyerdrw->setUseRpr(false);
