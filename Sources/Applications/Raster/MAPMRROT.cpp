@@ -352,9 +352,8 @@ bool MapMirrorRotate::fCompute(MapPtr* ptr, MapPtr* ptrRot, MirrorRotateType mrt
   long iLines = ptr->iLines();
 
   trq->SetText(TR("Rotating"));
-  switch (ptr->st()) {
-    case stREAL:
-	case stFLOAT: {
+  switch (ptrRot->st()) {
+    case stREAL: {
       int iNrBufCol = (32767>>2) / iLines > iCols ? iCols : 32767/iLines;
       RealBuf bufIn(iNrBufCol);
       Array<RealBuf> aBufOut(iNrBufCol);
