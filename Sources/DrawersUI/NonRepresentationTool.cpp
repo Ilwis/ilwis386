@@ -118,9 +118,9 @@ SetMultipleColorForm::SetMultipleColorForm(CWnd *wPar, FeatureLayerDrawer *dr) :
 	colors = ((FeatureLayerDrawer *)drw)->getDrawingColor()->multiColors();
 	fo = new FieldOneSelectString(root, "Color Schemes", &choice, sets);
 	rg = new RadioGroup(root,"Size color set",&colors);
-	new RadioButton(rg,"8");
-	new RadioButton(rg,"16");
-	new RadioButton(rg,"32");
+	new RadioButton(rg,"7");
+	new RadioButton(rg,"15");
+	new RadioButton(rg,"31");
 
 	create();
 }
