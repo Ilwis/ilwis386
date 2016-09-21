@@ -122,9 +122,9 @@ DdeServer::~DdeServer()
   delete tsCoord;
 }
 
-void DdeServer::UpdateCoordinate(CoordWithCoordSystem* cwcs)
+void DdeServer::UpdateCoordinate(const CoordWithCoordSystem& cwcs)
 {
-  tsCoord->Update(*cwcs);
+  tsCoord->Update(cwcs);
 }
 
 TopicServerCalc::TopicServerCalc(zDdeServer* pDS)
@@ -148,7 +148,7 @@ unsigned long TopicServerCalc::request(zRequestDservEvt* Evt)
 
 TopicServerCoord::TopicServerCoord(zDdeServer* pDS)
   : zTopicServer(pDS, "Coord")
-	, cwcs (CoordWithCoordSystem(crdUNDEF))
+  , crd(crdUNDEF)
 {
 }
 
@@ -156,9 +156,14 @@ TopicServerCoord::~TopicServerCoord()
 {
 }
 
-int TopicServerCoord::Update(CoordWithCoordSystem cw)
+int TopicServerCoord::Update(const CoordWithCoordSystem & cw)
 {
-  cwcs = cw;
+  crd = Coord(cw);
+  CoordSystem csy (cw);
+  if (csy.fValid())
+	  fnCsy = csy->fnObj;
+  else
+	  fnCsy = FileName();
   if (links() != 0) {
     zAdviseLink *el;
 	for (zAdviseLinkDlist::iterator trav = links()->begin();trav!=links()->end();++trav)
@@ -170,17 +175,20 @@ int TopicServerCoord::Update(CoordWithCoordSystem cw)
   return 0;
 }
 
-CoordWithCoordSystem TopicServerCoord::cwcsValue() const
-{
-  return cwcs;
+const Coord & TopicServerCoord::crdValue() const {
+  return crd;
 }
-  
+
+const FileName & TopicServerCoord::fnCsyValue() const {
+  return fnCsy;
+}
+
 unsigned long TopicServerCoord::request(zRequestDservEvt* Evt)
 {
   if (Evt->dataFormat() == CF_TEXT) {
     String str = (const char*)(Evt->item());
     StringFromCoord sfc(str);
-    return Evt->respondWith(sfc.sValue(cwcs).sVal());
+    return Evt->respondWith(sfc.sValue(crd, fnCsy).sVal());
   }
   return zDdeNAck;
 }
@@ -196,30 +204,30 @@ unsigned long TopicServerCoord::adviseStart(zAdviseDservEvt* Evt)
 
 StringFromCoord::StringFromCoord(const String& str)
 {
-  eOption = eNONE;
   String sInit = str;
   sInit.toLower();
-  if (".x" == sInit)
+  if (".x" == sInit) {
     eOption = eX;
-  else if (".y" == sInit)
+  } else if (".y" == sInit) {
     eOption = eY;
-  else if (".xy" == sInit)  
+  } else if (".xy" == sInit) {
     eOption = eXY;
-  else {
+  } else {
+    eOption = eNONE;
     try {
-      map = BaseMap(sInit);
-      if (map.fValid()) 
+      BaseMap map (sInit);
+	  if (map.fValid()) {
         eOption = eMAP;
+		fnMap = map->fnObj;
+	  }
     }
     catch (...) {}
   }  
 }
 
-String StringFromCoord::sValue(const CoordWithCoordSystem& cwcs) const
+String StringFromCoord::sValue(Coord crd, const FileName & fnCsy) const
 {
   String sRes;
-	Coord crd (cwcs);
-	CoordSystem cs (cwcs);
   if (crd.fUndef())
     sRes = "?";
   else {  
@@ -234,9 +242,13 @@ String StringFromCoord::sValue(const CoordWithCoordSystem& cwcs) const
         sRes = String("(%.1f,%.1f)", crd.x, crd.y);
         break;
       case eMAP:
-        if (cs.fValid() && map->cs().fValid() && cs != map->cs())
-          crd = map->cs()->cConv(cs, cwcs);
- 				sRes = map->sValue(crd);  
+        BaseMap map (fnMap);
+        if (fnCsy.sFile != "") {
+          CoordSystem cs (fnCsy);
+          if (cs.fValid() && map->cs().fValid() && cs != map->cs())
+            crd = map->cs()->cConv(cs, crd);
+		}
+        sRes = map->sValue(crd);  
         break;
     }
   }  
@@ -254,8 +266,9 @@ unsigned long AdviseLinkCoord::render
   (zRenderDservEvt* Evt)
 {
   if (Evt->dataFormat() == CF_TEXT) {
-    CoordWithCoordSystem cwcs = tsCoord->cwcsValue();
-    String sRes = sfc.sValue(cwcs);
+    const Coord & crd = tsCoord->crdValue();
+	const FileName & fnCsy = tsCoord->fnCsyValue();
+    String sRes = sfc.sValue(crd, fnCsy);
     return Evt->respondWith(sRes.sVal());
   }  
   return 0;

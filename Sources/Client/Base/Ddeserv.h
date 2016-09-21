@@ -77,7 +77,7 @@ class _export DdeServer: public zDdeServer
 public:
   DdeServer();
   ~DdeServer();
-  void UpdateCoordinate(CoordWithCoordSystem*);
+  void UpdateCoordinate(const CoordWithCoordSystem&);
 private:
   TopicServerSystem* tsSystem;
   TopicServerCalc* tsCalc;
@@ -103,20 +103,22 @@ public:
   ~TopicServerCoord();
   virtual unsigned long request(zRequestDservEvt*);
   virtual unsigned long adviseStart(zAdviseDservEvt*);
-  int Update(CoordWithCoordSystem);
-  CoordWithCoordSystem cwcsValue() const;
+  int Update(const CoordWithCoordSystem&);
+  const Coord & crdValue() const;
+  const FileName & fnCsyValue() const;
 private:
-  CoordWithCoordSystem cwcs;
+  Coord crd;
+  FileName fnCsy;
 };
 
 class StringFromCoord
 {
 public:
   StringFromCoord(const String&);
-  String sValue(const CoordWithCoordSystem&) const;
+  String sValue(Coord, const FileName&) const;
 private:  
   enum { eNONE, eX, eY, eXY, eMAP } eOption;
-  BaseMap map;
+  FileName fnMap;
 };
 
 class _export AdviseLinkCoord: public zAdviseLink

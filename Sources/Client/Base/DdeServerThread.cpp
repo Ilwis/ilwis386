@@ -90,6 +90,5 @@ void DdeServerThread::OnUpdate(WPARAM wParam, LPARAM lParam)
 {
 	//CoordMessage cm = (CoordMessage) wParam;
   CoordWithCoordSystem* cwcs = (CoordWithCoordSystem*)(void*) lParam;
-	ddeServer->UpdateCoordinate(cwcs);
-	
+  ddeServer->UpdateCoordinate(*cwcs);
 }
