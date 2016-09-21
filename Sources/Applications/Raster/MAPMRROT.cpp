@@ -353,7 +353,8 @@ bool MapMirrorRotate::fCompute(MapPtr* ptr, MapPtr* ptrRot, MirrorRotateType mrt
 
   trq->SetText(TR("Rotating"));
   switch (ptr->st()) {
-    case stREAL : {
+    case stREAL:
+	case stFLOAT: {
       int iNrBufCol = (32767>>2) / iLines > iCols ? iCols : 32767/iLines;
       RealBuf bufIn(iNrBufCol);
       Array<RealBuf> aBufOut(iNrBufCol);
@@ -370,7 +371,7 @@ bool MapMirrorRotate::fCompute(MapPtr* ptr, MapPtr* ptrRot, MirrorRotateType mrt
           ptr->GetLineVal(iL, bufIn, iFrom, iOpt);
           if (fSwapCols)
             for (int k = 0; k < iOpt; k++)
-              aBufOut[k][j ]= bufIn[iOpt-k-1];
+              aBufOut[k][j] = bufIn[iOpt-k-1];
           else
             for (int k=0; k < iOpt; k++)
               aBufOut[k][j] = bufIn[k];
@@ -399,7 +400,7 @@ bool MapMirrorRotate::fCompute(MapPtr* ptr, MapPtr* ptrRot, MirrorRotateType mrt
           ptr->GetLineRaw(iL, bufIn, iFrom, iOpt);
           if (fSwapCols)
             for (int k = 0; k < iOpt; k++)
-              aBufOut[k][j]=bufIn[iOpt-k-1];
+              aBufOut[k][j] = bufIn[iOpt-k-1];
           else
             for (int k=0; k < iOpt; k++)
               aBufOut[k][j] = bufIn[k];
@@ -411,7 +412,7 @@ bool MapMirrorRotate::fCompute(MapPtr* ptr, MapPtr* ptrRot, MirrorRotateType mrt
       }
     }
     break;
-    case stINT : {
+    case stINT: {
       int iNrBufCol = 32767 / iLines > iCols ? iCols : 32767/iLines;
       IntBuf bufIn(iNrBufCol);
       Array<IntBuf> aBufOut(iNrBufCol);
@@ -428,7 +429,7 @@ bool MapMirrorRotate::fCompute(MapPtr* ptr, MapPtr* ptrRot, MirrorRotateType mrt
           ptr->GetLineRaw(iL, bufIn, iFrom, iOpt);
           if (fSwapCols)
             for (int k = 0; k < iOpt; k++)
-              aBufOut[k][j]=bufIn[iOpt-k-1];
+              aBufOut[k][j] = bufIn[iOpt-k-1];
           else
             for (int k=0; k < iOpt; k++)
               aBufOut[k][j] = bufIn[k];
@@ -459,7 +460,7 @@ bool MapMirrorRotate::fCompute(MapPtr* ptr, MapPtr* ptrRot, MirrorRotateType mrt
           ptr->GetLineRaw(iL, bufIn, iFrom, iOpt);
           if (fSwapCols)
             for (int k = 0; k < iOpt; k++)
-              aBufOut[k][j]=bufIn[iOpt-k-1];
+              aBufOut[k][j] = bufIn[iOpt-k-1];
           else
             for (int k=0; k < iOpt; k++)
               aBufOut[k][j] = bufIn[k];
