@@ -106,7 +106,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 			return false;
 	if ( element != 0 ) {
 		bool extrusion = getSpecialDrawingOption(NewDrawer::sdoExtrusion);
-		bool filledExtr = getSpecialDrawingOption(NewDrawer::sdoFilled);
+		bool filledExtr = getSpecialDrawingOption(NewDrawer::sdoFilledPlain);
 
 		ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 		ZValueMaker *zvmkr = cdrw->getZMaker();

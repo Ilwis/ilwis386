@@ -120,11 +120,11 @@ double LayerDrawer::getExtrusionAlpha() const {
 	return extrAlpha;
 }
 
-void LayerDrawer::setExtrustionAlpha(double v) {
+void LayerDrawer::setExtrusionAlpha(double v) {
 	extrAlpha = v;
 	for(int i = 0; i < drawers.size(); ++i) {
 		if ( drawers[i]->isSimple())
-			((SimpleDrawer *)drawers[i])->setExtrustionAlpha(v);
+			((SimpleDrawer *)drawers[i])->setExtrusionAlpha(v);
 	}
 }
 
