@@ -639,23 +639,29 @@ void GDALFormat::ReadForeignFormat(ForeignCollectionPtr* col)
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG, WP_STOPREADING, 0);
 
 		collection = col;
+		collection->fErase = true;
 		Init();
 
 		ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);	 		
 		int iMaxChannels = funcs.count( dataSet );
 		GDALRasterBandH iBitMapLayer = funcs.getBand(dataSet, 1);
 		lock.Unlock();
+
+		int iNrLayers = 0;
 		
 		if ( iMaxChannels >= 1 || iBitMapLayer != 0)
 		{
-			CreateRasterLayer(iMaxChannels, iBitMapLayer != 0);
+			iNrLayers = iCreateRasterLayer(iMaxChannels, iBitMapLayer != 0);
 		}
 
-		if ( collection->iNrObjects() == 0 )
+		if ( iNrLayers == 0 )
 			throw ErrorObject(TR("No layer recognized (not supported ?)"));
 	
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG, WP_RESUMEREADING, 0);
-		collection->Store();
+		if (collection->iNrObjects() > 0) {
+			collection->fErase = false;
+			collection->Store();
+		}
 		AfxGetApp()->GetMainWnd()->PostMessage(ILW_READCATALOG, 0, 0);
 		String sCommand("*open %S", col->fnObj.sRelativeQuoted());
 		if ( fShowCollection)
@@ -723,26 +729,24 @@ void GDALFormat::GetRasterLayer(int iLayerIndex, Map& mp, Array<FileName>& arMap
 				dm = mp->dm();
 		}
 
-		collection->Add(mp);
-		for( set<String>::iterator cur=AddedFiles.begin(); cur != AddedFiles.end(); ++cur)
-			collection->Add(FileName(*cur));
-
 		grf = li.grf;	
 	
 }
-void GDALFormat::CreateRasterLayer(int iMaxChannels, bool fBitMap)
+int GDALFormat::iCreateRasterLayer(int iMaxChannels, bool fBitMap)
 {
 	GeoRef grf;
 	Domain dm;
-	Array<FileName> arMaps;
+	Array<FileName> arMplMaps;
 	Map mp;
+	Array<FileName> arOcMaps;
 
 	for(int iChannel = 1 ; iChannel <= iMaxChannels; ++iChannel)
 	{
 		try
 		{
 			currentLayer = 0; // reset this else it will continue with the first layer
-			GetRasterLayer(iChannel, mp, arMaps, grf, dm, fBitMap);
+			GetRasterLayer(iChannel, mp, arMplMaps, grf, dm, fBitMap);
+			arOcMaps &= mp->fnObj;
 		}
 		catch(StopConversion&)
 		{
@@ -768,19 +772,31 @@ void GDALFormat::CreateRasterLayer(int iMaxChannels, bool fBitMap)
 				collection->DeleteEntireCollection();
 				collection->fErase = true;
 			}	
-			return;
+			return 0;
 		}
 	}
-	// a maplist will be created if there are more than two raster channels and the domains are
-	// compatible
-	if ( dm.fValid() && arMaps.size() > 2 )
-	{
-		FileName fnM = FileName::fnUnique(FileName(fnBaseOutputName, ".mpl"));
-		MapList mplst(fnM, arMaps);
-		mplst->Store();
-		collection->Add(mplst);
+	// Don't create a collection for only one layer
+	// For two or more layers, create a maplist for the maps that have a compatible domain; add the rest of the maps (if any) to an object collection, including the maplist itself (if any)
+	if (arOcMaps.size() > 1) {
+		bool fMapList = dm.fValid() && (arMplMaps.size() > 1);
+		bool fObjectCollection = !dm.fValid() || (arOcMaps.size() != arMplMaps.size());
+		if (fObjectCollection) {
+			for (vector<FileName>::iterator cur = arOcMaps.begin(); cur != arOcMaps.end(); ++cur)
+				collection->Add(*cur);
+			for (set<String>::iterator cur=AddedFiles.begin(); cur != AddedFiles.end(); ++cur)
+				collection->Add(FileName(*cur));
+		}
+		if (fMapList) {
+			FileName fnM = FileName::fnUnique(FileName(fnBaseOutputName, ".mpl"));
+			MapList mplst(fnM, arMplMaps);
+			mplst->Store();
+			if (fObjectCollection)
+				collection->Add(mplst);
+		}
+		if (fObjectCollection)
+			collection->Updated();
 	}
-	collection->Updated();
+	return arOcMaps.size();
 }
 
 void GDALFormat::ImportRasterMap(const FileName& fnRasMap, Map& mp ,LayerInfo& li, int iChannel)

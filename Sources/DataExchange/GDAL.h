@@ -292,7 +292,7 @@ private:
 
 	GDALRasterBandH  OpenLayer(int iChannel);
 	void           CreateLineBuffer();
-	void		   CreateRasterLayer(int iMaxChannels, bool fBitMap);
+	int			   iCreateRasterLayer(int iMaxChannels, bool fBitMap);
 	void           ImportRasterMap(const FileName& fnRasMap, Map& mp ,LayerInfo& li, int iChannel);
 	void		   GetRasterLayer(int iLayerIndex, Map& mp, Array<FileName>& arMaps, GeoRef& grf, 	Domain& dm,  bool fBitMap);
 	void           GetBitValues(unsigned char * buffer, LongBuf& buf, long iNum) const;
