@@ -69,6 +69,7 @@ public:
 private:
 	void setFSDOptions(LayerDrawer *fsd);
 	int setTransparency(Event *ev);
+	int setExtrusionMode(Event *ev);
 	int line;
 	int transparency;
 	RadioGroup *rg;

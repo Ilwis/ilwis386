@@ -79,7 +79,7 @@ void ThreeDTool::setExtrusion(void *value, HTREEITEM) {
 	bool v = *(bool *)value;
 	int opt = drawer->getSpecialDrawingOption() & NewDrawer::sdoExtrusion;
 	if ( opt == 0 && v)
-		drawer->setSpecialDrawingOptions(NewDrawer::sdoExtrusion | NewDrawer::sdoTOCHILDEREN | NewDrawer::sdoFilled,true);
+		drawer->setSpecialDrawingOptions(NewDrawer::sdoExtrusion | NewDrawer::sdoTOCHILDEREN | NewDrawer::sdoFilledPlain,true);
 	else
 		drawer->setSpecialDrawingOptions(NewDrawer::sdoExtrusion | NewDrawer::sdoTOCHILDEREN, v);
 	drawer->getRootDrawer()->getDrawerContext()->doDraw();
@@ -306,38 +306,57 @@ DisplayOptionsForm(drw, p, TR("Extrusion options") )
 	transparency = 100 *(1.0-fdr->getExtrusionAlpha());
 	if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoOpen) != 0)
 		line = 0;
-	if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoFilled) != 0)
+	else if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoFilledPlain) != 0)
 		line = 1;
-	if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoFootPrint) != 0)
+	else if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoFilledShaded) != 0)
 		line = 2;
+	else if ( (fdr->getSpecialDrawingOption() &  NewDrawer::sdoFootPrint) != 0)
+		line = 3;
 	rg = new RadioGroup(root, TR("Appearence"),&line);
-	new RadioButton(rg, TR("Line"));
+	new RadioButton(rg,TR("Line"));
 	new RadioButton(rg,TR("Filled"));
+	new RadioButton(rg,TR("Filled and Shaded"));
 	new RadioButton(rg,TR("Footprint"));
+	rg->SetCallBack((NotifyProc)&ExtrusionOptions::setExtrusionMode);
 	slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
 	slider->SetCallBack((NotifyProc)&ExtrusionOptions::setTransparency);
 	slider->setContinuous(true);
 
 	create();
-
 }
 
 int ExtrusionOptions::setTransparency(Event *ev) {
 	slider->StoreData();
-	//((LayerDrawer *)drw)->extrTransparency = 1.0 - (double)transparency/100.0;
-	((LayerDrawer *)drw)->setExtrustionAlpha(1.0 - (double)transparency/100.0);
+	((LayerDrawer *)drw)->setExtrusionAlpha(1.0 - (double)transparency/100.0);
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	drw->prepare(&pp);
 	updateMapView();
 	return 1;
 }
+
+int ExtrusionOptions::setExtrusionMode(Event *ev) {
+	rg->StoreData();
+	LayerDrawer *fdr = (LayerDrawer *)drw;
+	SetDrawer *animDrw = dynamic_cast<SetDrawer *>(drw);
+	if ( animDrw) {
+		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
+			LayerDrawer *fdr = (LayerDrawer *)animDrw->getDrawer(i);
+			setFSDOptions(fdr);
+		}
+	}
+	else
+		setFSDOptions(fdr);
+	updateMapView();
+	return 1;
+}
+
 void ExtrusionOptions::apply() {
 	rg->StoreData();
 	slider->StoreData();
 	LayerDrawer *fdr = (LayerDrawer *)drw;
 	SetDrawer *animDrw = dynamic_cast<SetDrawer *>(drw);
 	if ( animDrw) {
-		PreparationParameters pp(NewDrawer::ptRENDER, 0);
+		//PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		for(int i = 0; i < animDrw->getDrawerCount(); ++i) {
 			LayerDrawer *fdr = (LayerDrawer *)animDrw->getDrawer(i);
 			setFSDOptions(fdr);
@@ -346,27 +365,35 @@ void ExtrusionOptions::apply() {
 	else {
 		setFSDOptions(fdr);
 	}
-
+	fdr->setExtrusionAlpha(1.0 - (double)transparency/100.0);
+	PreparationParameters pp(NewDrawer::ptRENDER);
+	drw->prepare(&pp);
 	updateMapView();
-
 }
 
 void ExtrusionOptions::setFSDOptions(LayerDrawer *fsd) {
 	if ( line == 0) {
-		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, true );
-	    ((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, false );
-		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, false);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, true);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilledPlain, false);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilledShaded, false);
+	    ((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, false);
 	}
 	if (line == 1) {
-		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, true);
-	    ((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, false );
-		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, false);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, false);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilledPlain, true);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilledShaded, false);
+	    ((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, false);
 	}
-	if (line == 2){
-	    ((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, false );
-		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilled, false);
-		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, true);
+	if (line == 2) {
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, false);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilledPlain, false);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilledShaded, true);
+	    ((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, false);
 	}
-	((LayerDrawer *)drw)->setExtrustionAlpha(1.0 - (double)transparency/100.0);
-
+	if (line == 3){
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoOpen, false);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilledPlain, false);
+		((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFilledShaded, false);
+	    ((LayerDrawer *)drw)->setSpecialDrawingOptions(NewDrawer::sdoFootPrint, true);
+	}
 }
