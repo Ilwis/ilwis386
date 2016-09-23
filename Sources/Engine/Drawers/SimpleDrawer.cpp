@@ -114,14 +114,43 @@ void SimpleDrawer::drawExtrusion(const Coord& c1, const Coord& c2, double z, int
 	Coord c4 = c2;
 	c3.z = z;
 	c4.z = z;
-	if ( option & NewDrawer::sdoFilled) {
+	if ( option & NewDrawer::sdoFilledShaded) {
+		glEnable(GL_NORMALIZE); // otherwise light intensity changes, gets darker when objects are nearer (zoom-in), which is not logical
+		glEnable(GL_LIGHTING);
+		glEnable(GL_LIGHT0);
+		glEnable(GL_COLOR_MATERIAL);
+		glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+		GLfloat ambient [4] = {0.5f, 0.5f, 0.5f, 0.5f};
+		GLfloat diffuse [4] = {0.3f, 0.3f, 0.3f, 0.3f};
+		GLfloat specular [4] = {1.0f, 1.0f, 1.0f, 1.0f};
+		glLightfv(GL_LIGHT0, GL_AMBIENT, (GLfloat*)&ambient);
+		glLightfv(GL_LIGHT0, GL_DIFFUSE, (GLfloat*)&diffuse);
+		Coord cc1 (c2);
+		cc1 -= c1;
+		Coord cc2 (c4);
+		cc2 -= c2;
+	    double x = cc1.y*cc2.z - cc1.z*cc2.y;
+	    double y = cc2.x*cc1.z - cc2.z*cc1.x;
+		Coord normal (x, y, cc1.x*cc2.y - cc1.y*cc2.x);
 		glBegin(GL_QUADS);
+			glNormal3f(normal.x, normal.y, normal.z);
 			glVertex3f( c1.x, c1.y, c1.z);	
 			glVertex3f( c2.x, c2.y, c2.z);	
 			glVertex3f( c4.x, c4.y, c4.z);
 			glVertex3f( c3.x, c3.y, c3.z);
 		glEnd();
-	} else if ( option & NewDrawer::sdoOpen){
+		glDisable(GL_COLOR_MATERIAL);
+		glDisable(GL_LIGHT0);
+		glDisable(GL_LIGHTING);
+		glDisable(GL_NORMALIZE);
+	} else if (option & NewDrawer::sdoFilledPlain) {
+			glBegin(GL_QUADS);
+				glVertex3f( c1.x, c1.y, c1.z);	
+				glVertex3f( c2.x, c2.y, c2.z);	
+				glVertex3f( c4.x, c4.y, c4.z);
+				glVertex3f( c3.x, c3.y, c3.z);
+			glEnd();
+	} else if ( option & NewDrawer::sdoOpen) {
 		glBegin(GL_LINE_STRIP); 					
 			glVertex3f( c1.x, c1.y, c1.z);	
 			glVertex3f( c2.x, c2.y, c2.z);	
@@ -155,7 +184,7 @@ int SimpleDrawer::getSpecialDrawingOption(int opt) const {
 		return specialOptions & opt;
 }
 
-void SimpleDrawer::setExtrustionAlpha(double v) {
+void SimpleDrawer::setExtrusionAlpha(double v) {
 	extrAlpha = v;
 }
 

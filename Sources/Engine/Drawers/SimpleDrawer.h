@@ -54,7 +54,7 @@ namespace ILWIS {
 		void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const {}
 		virtual GeneralDrawerProperties *getProperties() { return 0;}
 		void setSupportingDrawer(bool yesno) { isSupportingDrawer=yesno;};
-		void setExtrustionAlpha(double v);
+		void setExtrusionAlpha(double v);
 		bool isValid() const;
 		void setValid(bool yesno);
 		virtual Feature *getFeature() const {return 0;};
