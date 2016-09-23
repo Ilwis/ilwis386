@@ -237,6 +237,7 @@ AnimationRun::AnimationRun(AnimationPropertySheet& sheet)
 	fgAvi->SetIndependentPos();
 	fg->Align(fgRest, AL_UNDER);
 	create();
+	fRunning = false; // on some computers it is "true" at this moment
 }
 
 AnimationRun::~AnimationRun() {
@@ -648,7 +649,7 @@ int AnimationProgress::DataChanged(Event*ev) {
 	if ( code == 3) {
 		fcol->FillWithColumns((TablePtr *)0);
 		tbl = Table();
-		if ( form)
+		if ( form && form->m_hWnd && ::IsWindow(form->m_hWnd))
 			form->PostMessage(WM_CLOSE);
 		form = 0;
 		graphSlider->setSourceTable(tbl);
@@ -729,6 +730,7 @@ DisplayOptionsForm(_props->drawer, wPar, TR("Thresholds")), col(_col), graph(sli
 	calcMad(col);
 	view = props->mdoc->ltvGetView();
 	color = ((LayerDrawer *)props->drawer->getDrawer(0))->getDrawingColor()->getTresholdColor();
+	color.alpha() = 255 - color.alpha(); // inverse the alpha, for FieldColor
 	RadioGroup *rg = new RadioGroup(root, TR("Threshold type"),&type);
 	RadioButton *rb = new RadioButton(rg,TR("Above threshold"));
 	frr = new FieldReal(rb, "",&gtThreshold);
@@ -780,9 +782,11 @@ void GraphPropertyForm::apply() {
 			rr = RangeReal(-1e307,ltThreshold); 
 		}
 	//	if ( rr != oldRange) {
+		Color clr (color);
+		clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
 			for(int i=0; i < props->drawer->getDrawerCount(); ++i) {
 				LayerDrawer *ldr = (LayerDrawer *)props->drawer->getDrawer(i);
-				ldr->getDrawingColor()->setTresholdColor(color);
+				ldr->getDrawingColor()->setTresholdColor(clr);
 				ldr->getDrawingColor()->setTresholdRange(rr);
 			}
 			PreparationParameters pp(NewDrawer::ptRENDER, 0);
