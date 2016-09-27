@@ -161,7 +161,10 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 		if ( threeD) {
 			double zNear = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y)) / 2.0;
 			double zFar = max(cbZoom.width(), cbZoom.height()) * 4.0;
-			gluPerspective(30.0, windowAspectRatio, zNear, zFar);
+			if (zoom3D < 1.0) // use Field Of View to zoom-in, and scale to zoom out (FOV distorts when zooming out)
+				gluPerspective(30.0 * zoom3D, windowAspectRatio, zNear, zFar);
+			else
+				gluPerspective(30.0, windowAspectRatio, zNear, zFar);
 		} else {
 			glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1);
 		}
@@ -169,11 +172,15 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 		glLoadIdentity();
 		if (threeD) {
 			gluLookAt(viewPoint.x, viewPoint.y, cbZoom.width() * 1.5, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
-			glTranslatef(translateX, translateY, translateZ);
+			if (zoom3D < 1.0)
+				glTranslatef(translateX * zoom3D, translateY * zoom3D, translateZ * zoom3D);
+			else
+				glTranslatef(translateX, translateY, translateZ);
 			glTranslatef(viewPoint.x,viewPoint.y, viewPoint.z);
 			glRotatef(rotY,-1,0,0);				// Rotate on y
 			glRotatef(rotX,0,0,-1);				// Rotate on x
-			glScalef(1.0 / zoom3D, 1.0 / zoom3D, 1.0 / zoom3D);
+			if (zoom3D > 1.0)
+				glScalef(1.0 / zoom3D, 1.0 / zoom3D, 1.0 / zoom3D);
 			glTranslatef(-viewPoint.x,-viewPoint.y, -viewPoint.z);
 		}
 
