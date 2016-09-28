@@ -34,6 +34,7 @@ namespace ILWIS {
 		~DEMTriangulator(void);
 		void PlotTriangles();
 		bool fValid();
+		const RangeReal & rrGetMinMax() const;
 
 	private:
 		bool fDoTriangulate();

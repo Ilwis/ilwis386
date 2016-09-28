@@ -956,3 +956,8 @@ bool DEMTriangulator::fValid()
 {
 	return valid;
 }
+
+const RangeReal & DEMTriangulator::rrGetMinMax() const
+{
+	return rrMinMax;
+}

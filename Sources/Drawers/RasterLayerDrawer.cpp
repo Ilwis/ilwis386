@@ -350,10 +350,53 @@ void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned 
 	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
 	glRenderMode(GL_FEEDBACK);
 	glBegin (GL_QUADS);
-	glVertex3d(c1.x, c1.y, 0.0);
-	glVertex3d(c2.x, c2.y, 0.0);
-	glVertex3d(c3.x, c3.y, 0.0);
-	glVertex3d(c4.x, c4.y, 0.0);
+	if (getRootDrawer()->is3D() && demTriangulator) {
+		const RangeReal & rrMinMaxHeights = demTriangulator->rrGetMinMax();
+		ZValueMaker * zmaker = getZMaker();
+		const double rHMin = zmaker->scaleValue(rrMinMaxHeights.rLo());
+		const double rHMax = zmaker->scaleValue(rrMinMaxHeights.rHi());
+
+		// Front Face
+		glVertex3d(c1.x, c1.y, rHMin);
+		glVertex3d(c2.x, c2.y, rHMin);
+		glVertex3d(c2.x, c2.y, rHMax);
+		glVertex3d(c1.x, c1.y, rHMax);
+
+		// Back Face
+		glVertex3d(c4.x, c4.y, rHMin);
+		glVertex3d(c3.x, c3.y, rHMin);
+		glVertex3d(c3.x, c3.y, rHMax);
+		glVertex3d(c4.x, c4.y, rHMax);
+
+		// Top Face
+		glVertex3d(c1.x, c1.y, rHMax);
+		glVertex3d(c2.x, c2.y, rHMax);
+		glVertex3d(c3.x, c3.y, rHMax);
+		glVertex3d(c4.x, c4.y, rHMax);
+
+		// Bottom Face
+		glVertex3d(c1.x, c1.y, rHMin);
+		glVertex3d(c2.x, c2.y, rHMin);
+		glVertex3d(c3.x, c3.y, rHMin);
+		glVertex3d(c4.x, c4.y, rHMin);
+
+		// Right Face
+		glVertex3d(c2.x, c2.y, rHMin);
+		glVertex3d(c3.x, c3.y, rHMin);
+		glVertex3d(c3.x, c3.y, rHMax);
+		glVertex3d(c2.x, c2.y, rHMax);
+
+		// Left Face
+		glVertex3d(c1.x, c1.y, rHMin);
+		glVertex3d(c4.x, c4.y, rHMin);
+		glVertex3d(c4.x, c4.y, rHMax);
+		glVertex3d(c1.x, c1.y, rHMax);
+	} else {
+		glVertex3d(c1.x, c1.y, 0.0);
+		glVertex3d(c2.x, c2.y, 0.0);
+		glVertex3d(c3.x, c3.y, 0.0);
+		glVertex3d(c4.x, c4.y, 0.0);
+	}
 	glEnd();
 	if (0 == glRenderMode(GL_RENDER))
 		return;
