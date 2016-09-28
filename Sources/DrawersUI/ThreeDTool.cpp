@@ -47,7 +47,6 @@ bool ThreeDTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 		return false;
 	parentTool = tool;
 	return true;
-
 }
 
 HTREEITEM ThreeDTool::configure( HTREEITEM parentItem) {
@@ -72,7 +71,6 @@ HTREEITEM ThreeDTool::configure( HTREEITEM parentItem) {
 
 void ThreeDTool::displayZOption3D() {
 	new DisplayZDataSourceForm(tree, (ComplexDrawer *)drawer);
-
 }
 
 void ThreeDTool::setExtrusion(void *value, HTREEITEM) {
@@ -83,7 +81,6 @@ void ThreeDTool::setExtrusion(void *value, HTREEITEM) {
 	else
 		drawer->setSpecialDrawingOptions(NewDrawer::sdoExtrusion | NewDrawer::sdoTOCHILDEREN, v);
 	drawer->getRootDrawer()->getDrawerContext()->doDraw();
-
 }
 
 void ThreeDTool::extrusionOptions() {
@@ -131,9 +128,7 @@ DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0)
 
 	rg->SetIndependentPos();
 
-
-	create();
-	
+	create();	
 }
 
 int DisplayZDataSourceForm::initForm(Event *ev) {
@@ -170,36 +165,37 @@ void DisplayZDataSourceForm::apply() {
 				MapList mpl = *((MapList *)(setDrawer->getDataSource())); 
 				mp = mpl[i];
 			} else if ( sourceIndex == 3){
-				updateDrawer(layerDrawer, BaseMap(FileName(mapName)));
+				if (i == 0)
+					updateDrawer(layerDrawer, BaseMap(FileName(mapName)));
+				else
+					layerDrawer->getZMaker()->addRange(BaseMap(FileName(mapName)));
 				continue;
 			} else if ( sourceIndex == 4){
 				MapList mpl = MapList(FileName(mapName));
 				mp = mpl[i];
 			}
-			updateDrawer(layerDrawer, mp);
+			if (i == 0)
+				updateDrawer(layerDrawer, mp);
+			else
+				layerDrawer->getZMaker()->addRange(mp);
 			rrMinMax += layerDrawer->getZMaker()->getZRange();
 		}
 		setDrawer->getZMaker()->setRange(rrMinMax);
 		for(int i = 0 ; i < setDrawer->getDrawerCount(); ++i) {
 			LayerDrawer *layerDrawer = (LayerDrawer *)setDrawer->getDrawer(i);
-			if ( mapName != "" && sourceIndex <= 4) {
-				PreparationParameters pp(NewDrawer::pt3D | NewDrawer::ptGEOMETRY);
-				layerDrawer->prepare(&pp);
-			} else if ( colName != "" && sourceIndex == 5) {
-				PreparationParameters pp(NewDrawer::pt3D);
-				layerDrawer->prepare(&pp);
-			}
-		}
-	} else {
-		LayerDrawer * layerDrawer = dynamic_cast<ILWIS::LayerDrawer *>(drw);
-		updateDrawer( layerDrawer, BaseMap(mapName));
-		if ( mapName != "" && sourceIndex <= 4) {
-			PreparationParameters pp(NewDrawer::pt3D | NewDrawer::ptGEOMETRY);
-			layerDrawer->prepare(&pp);
-		} else if ( colName != "" && sourceIndex == 5) {
 			PreparationParameters pp(NewDrawer::pt3D);
 			layerDrawer->prepare(&pp);
 		}
+	} else {
+		LayerDrawer * layerDrawer = dynamic_cast<ILWIS::LayerDrawer *>(drw);
+		if (sourceIndex >= 0 && sourceIndex <= 2)
+			updateDrawer( layerDrawer, bmp);
+		else if (sourceIndex >= 3 && sourceIndex <= 4)
+			updateDrawer( layerDrawer, BaseMap(mapName));
+		else if (sourceIndex == 5)
+			updateDrawer( layerDrawer, bmp);
+		PreparationParameters pp(NewDrawer::pt3D);
+		layerDrawer->prepare(&pp);
 	}
 
 	updateMapView();
@@ -207,9 +203,8 @@ void DisplayZDataSourceForm::apply() {
 
 void DisplayZDataSourceForm::updateDrawer(LayerDrawer *layerDrawer, const BaseMap& basemap) {
 	layerDrawer->getZMaker()->setSourceType((ZValueMaker::SourceType)sourceIndex);
-	if ( mapName != "" && sourceIndex <= 4) {
+	if (sourceIndex >= 1 && sourceIndex <= 4) {
 		layerDrawer->getZMaker()->setDataSourceMap(basemap);
-		layerDrawer->getZMaker()->setSourceType((ZValueMaker::SourceType)sourceIndex);
 	} else if ( colName != "" && sourceIndex == 5) {
 		FeatureLayerDrawer * featureLayerDrawer = (FeatureLayerDrawer*)layerDrawer;
 		layerDrawer->getZMaker()->setTable(((BaseMap*)featureLayerDrawer->getDataSource())->ptr()->tblAtt(),colName);

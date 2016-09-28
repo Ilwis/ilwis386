@@ -16,14 +16,13 @@ ZValueMaker::ZValueMaker(NewDrawer *drw)  : scalingType(zvsNONE),threeDPossible(
 	isSetDrawer = false;
 	sourceType = styNONE;
 	NewDrawer *parentDrw = associatedDrawer->getParentDrawer();
-	spatialSource = true;
 	if (parentDrw && !associatedDrawer->isSimple() && ((ComplexDrawer *)parentDrw)->isSet())
 		isSetDrawer = true;
 }
 void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	threeDPossible =  mp->dm()->pdv() || mp->dm()->pdi();
 	datasourcemap = mp;
-	addRange(mp);
+	setRange(mp);
 	table = Table();
 
 	type = IlwisObject::iotObjectType(datasourcemap->fnObj);
@@ -44,6 +43,21 @@ void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 	zscale = DEFAULT_SCALE;
 }
 
+void ZValueMaker::setRange(const BaseMap& mp) {
+	if ( !mp.fValid())
+		return;
+
+	range = mp->rrMinMax(BaseMapPtr::mmmCALCULATE);
+	if ( !range.fValid() && cbLimits.fValid()) {
+		range = RangeReal(0,min(cbLimits.width(), cbLimits.height()));
+	}
+	if ( isSetDrawer ) {
+		NewDrawer *parentDrw = associatedDrawer->getParentDrawer();
+		if ( parentDrw)
+			((ComplexDrawer *)parentDrw)->getZMaker()->setRange(mp);
+	}
+}
+
 void ZValueMaker::addRange(const BaseMap& mp) {
 	if ( !mp.fValid())
 		return;
@@ -51,14 +65,8 @@ void ZValueMaker::addRange(const BaseMap& mp) {
 	RangeReal tempRange = mp->rrMinMax(BaseMapPtr::mmmCALCULATE);
 	if ( !tempRange.fValid() && cbLimits.fValid()) {
 		range = RangeReal(0,min(cbLimits.width(), cbLimits.height()));
-		spatialSource = true;
 	} else {
-		if ( spatialSource) {
-			range = tempRange;
-			spatialSource = false;
-		}
-		else
-			range += tempRange;
+		range += tempRange;
 	}
 	if ( isSetDrawer ) {
 		NewDrawer *parentDrw = associatedDrawer->getParentDrawer();

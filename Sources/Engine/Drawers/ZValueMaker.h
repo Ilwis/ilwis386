@@ -33,6 +33,7 @@ public:
 	void setBounds(const CoordBounds& bnd);
 	BaseMapPtr * getSourceRasterMap() const;
 	BaseMap getSpatialSourceMap() const;
+	void setRange(const BaseMap& mp);
 	void addRange(const BaseMap& mp);
 	SourceType getSourceType() const;
 	void setSourceType(SourceType s);
@@ -40,15 +41,15 @@ public:
 	CoordBounds getBounds() const;
 
 private:
-	BaseMap spatialsourcemap;
-	BaseMap datasourcemap;
-	bool isSameCsy;
+	BaseMap spatialsourcemap; // the map itself that is being drawn with this z-maker
+	BaseMap datasourcemap; // the map selected for providing the z-values (can be the same as spatialsourcemap)
+	bool isSameCsy; // whether spatialsourcemap and datasourcemap have the same coordinatesystem
 	Table table;
 	vector<Column> columns;
 	ZValueTypeScaling scalingType;
 	double offset;
 	RangeReal range;
-	IlwisObject::iotIlwisObjectType type;
+	IlwisObject::iotIlwisObjectType type; // the type of the datasourcemap
 	bool threeDPossible;
 	double zscale;
 	CoordBounds cbLimits;
@@ -56,9 +57,6 @@ private:
 	double fakeZ; // the faze z value for objects at heigh 0 for the user of this z-maker
 	NewDrawer *associatedDrawer;
 	bool isSetDrawer;
-	SourceType sourceType;
-	bool spatialSource;
-
-
+	SourceType sourceType; // The way of providing the Z-value. This can be one of: [none, by feature value, by z coordinate (real 3d data), by basemap (can be raster or vector), by map list, by attribute column]
 };
 }
