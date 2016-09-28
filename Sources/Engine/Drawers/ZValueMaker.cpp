@@ -34,7 +34,6 @@ void ZValueMaker::setDataSourceMap(const BaseMap& mp){
 
 	if ( sourceType == styNONE) // first set the source type before being able to make changes here
 	{
-		IlwisObject::iotIlwisObjectType type = IOTYPE(mp->fnObj);
 		if ( type == IlwisObject::iotRASMAP || type == IlwisObject::iotMAPLIST )
 			sourceType = styMAP;
 		else 
