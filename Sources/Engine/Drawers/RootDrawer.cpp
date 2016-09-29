@@ -192,10 +192,12 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 			// We work around the lack of a "back to front order" (which is too costly to compute) by disabling depth-buffer-writing in the transparent stage (so transparent items will never obstruct eachother).
 			// In theory the performance impact should be minimal, as almost all draw() calls only react to one of the two calls below, making the two calls complementary (with currently only one exception, which is when drawing a raster with both opaque and transparent pixels).
 			const_cast<RootDrawer *>(this)->setZIndex(0);
+			glDepthRange(0.01, 1.0); // for backgroundDrawer
 			backgroundDrawer->draw(drl3DOPAQUE, cb);
 			ComplexDrawer::draw(drl3DOPAQUE, cb);
 			const_cast<RootDrawer *>(this)->setZIndex(0);
 			glDepthMask(GL_FALSE);
+			glDepthRange(0.01, 1.0); // for backgroundDrawer
 			backgroundDrawer->draw(drl3DTRANSPARENT, cb);
 			ComplexDrawer::draw(drl3DTRANSPARENT, cb);
 			glDepthMask(GL_TRUE);
@@ -579,6 +581,7 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 		setEyePoint();
 	} 
 	fakeZ = cbView.width() * 0.0005;
+	fakeZ = 0;
 	if ( is3D()) {
 		if ( !initRestore) { // restore set rotX, etc. But the OnEntireMap would destroy these false; so for once  the init of values is skipped
 			rotX = 0;

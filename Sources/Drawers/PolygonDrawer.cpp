@@ -125,7 +125,9 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 	}
 
 	if ( boundary && showBoundary && (!asQuad || !showArea)) {
+		glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
 		boundary->draw(drawLoop, cbArea);
+		glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
 	}
 
 	return true;

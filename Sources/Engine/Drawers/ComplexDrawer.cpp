@@ -134,14 +134,12 @@ bool ComplexDrawer::drawPreDrawers(const DrawLoop drawLoop, const CoordBounds& c
 
 
 bool ComplexDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb) const{
+	getRootDrawer()->setZIndex(1 + getRootDrawer()->getZIndex());
 	if (!isActive())
 		return false;
-	getRootDrawer()->setZIndex(1 + getRootDrawer()->getZIndex());
+	glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
 	drawPreDrawers(drawLoop, cb);
-	
 
-	//double total = 0;
-	//clock_t start = clock();
 	for(int i=0; i < drawers.size(); ++i) {
 		NewDrawer *drw = drawers[i];
 		if (  drw && drw->isActive()) {
@@ -150,10 +148,6 @@ bool ComplexDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb) const{
 	}
 
 	drawPostDrawers(drawLoop, cb);
-
-/*	clock_t end = clock();
-		total =  1000 *(double)(end - start) / CLOCKS_PER_SEC;
-		TRACE(String("drawn %S in %2.2f milliseconds;\n", getName(), total).c_str());*/
 
 	return true;
 }
