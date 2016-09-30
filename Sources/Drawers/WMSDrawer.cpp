@@ -87,10 +87,9 @@ bool WMSDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
 				ZValueMaker *zmaker = getZMaker();
 				double zscale = zmaker->getZScale();
 				double zoffset = zmaker->getOffset();
-				double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
 				glPushMatrix();
 				glScaled(1,1,zscale);
-				glTranslated(0,0,zoffset + z0);
+				glTranslated(0,0,zoffset);
 			}
 			glEnable(GL_TEXTURE_2D);
 			glMatrixMode(GL_TEXTURE);

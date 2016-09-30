@@ -50,9 +50,9 @@ bool BoxDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 		return false;
 	if (boxes.size() == 0)
 		return false;
-	bool is3D = getRootDrawer()->is3D() ;
-	double z0 = ((ComplexDrawer *)parentDrawer)->getZMaker()->getZ0(getRootDrawer()->is3D());
-	double z = is3D ? z0 : 0;
+	bool is3D = getRootDrawer()->is3D();
+	if (is3D) // draw this box always at level 1 (this box is used in HighlightTool.cpp and AnnotationDrawers.cpp)
+		glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
@@ -61,11 +61,11 @@ bool BoxDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 		Coord c1 = boxes[i].cMin;
 		Coord c2 = boxes[i].cMax;
 		glBegin(GL_QUADS);
-		glVertex3d(c1.x, c1.y,z);
-		glVertex3d(c1.x, c2.y,z);
-		glVertex3d(c2.x, c2.y,z);
-		glVertex3d(c2.x, c1.y,z);
-		glVertex3d(c1.x, c1.y,z);
+		glVertex3d(c1.x, c1.y,0);
+		glVertex3d(c1.x, c2.y,0);
+		glVertex3d(c2.x, c2.y,0);
+		glVertex3d(c2.x, c1.y,0);
+		glVertex3d(c1.x, c1.y,0);
 		glEnd();
 	}
 	glDisable(GL_BLEND);
@@ -76,7 +76,7 @@ bool BoxDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 
 void BoxDrawer::prepare(PreparationParameters *p){
 	SimpleDrawer::prepare(p);
-	((ComplexDrawer *)parentDrawer)->getZMaker()->setZOrder(getRootDrawer()->getZIndex(),getRootDrawer()->getFakeZ());
+	((ComplexDrawer *)parentDrawer)->getZMaker()->setZOrder(getRootDrawer()->getZIndex());
 }
 
 void BoxDrawer::setDrawColor(const Color& col) {

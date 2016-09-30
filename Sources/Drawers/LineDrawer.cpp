@@ -69,7 +69,7 @@ bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 	bool is3D = getRootDrawer()->is3D(); 
 	bool is3DPossible = cdrw->getZMaker()->getThreeDPossible();
-	double zscale, zoffset, fakez=0;
+	double zscale, zoffset;
 	double alpha = getAlpha();
 
 	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),alpha );
@@ -78,7 +78,6 @@ bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 		glEnable (GL_LINE_STIPPLE);
 		glLineStipple(1,lproperties.linestyle);
 	}
-	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
 
 	if ( is3D) {
 		zscale = cdrw->getZMaker()->getZScale();
@@ -97,7 +96,7 @@ bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 			glBegin(GL_LINE_STRIP);
 			for(int i=0; i<points->size(); ++i) {
 				Coordinate c = points->getAt(i);
-				double z = is3D && is3DPossible ? c.z : z0;
+				double z = is3D && is3DPossible ? c.z : 0;
 				glVertex3d( c.x, c.y, z);
 			}
 			glEnd();
@@ -105,7 +104,7 @@ bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 				double symbolScale = cbZoom.width() / 250;
 				for(int i=0; i<points->size(); ++i) {
 					Coordinate c = points->getAt(i);
-					double z = is3D && is3DPossible ? c.z : z0;
+					double z = is3D && is3DPossible ? c.z : 0;
 					glBegin(GL_LINE_STRIP);						
 					glVertex3f( c.x - symbolScale, c.y - symbolScale,z);	
 					glVertex3f( c.x - symbolScale, c.y + symbolScale,z);	
@@ -125,7 +124,7 @@ bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 					Coordinate c = points->getAt(i);
 					if ( !cOld.fUndef()) {
 						glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(), extrAlpha);
-						drawExtrusion(cOld, c, z0 - zoffset, specialOptions);
+						drawExtrusion(cOld, c, -zoffset, specialOptions);
 					}
 					cOld = c;
 				}

@@ -221,24 +221,22 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 
 }
 
-bool AnnotationLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
+bool AnnotationLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
+	getRootDrawer()->setZIndex(1 + getRootDrawer()->getZIndex());
 	if ((drawLoop == drl3DOPAQUE && alpha != 1.0) || (drawLoop == drl3DTRANSPARENT && alpha == 1.0))
 		return true;
-	bool is3D = getRootDrawer()->is3D(); 
+	bool is3D = getRootDrawer()->is3D();
 
-	//double z0 = cdrw->getZMaker()->getZ0(getRootDrawer()->is3D());
-	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
-	if (is3D) // supporting drawers need to be slightly above the level of the "main" drawer. OpenGL won't draw them correct if they are in the same plane
-		z0 +=  z0;
-
-	double z = is3D ? z0 : 0;
 	CoordBounds cbInner = cbArea;
 	CoordBounds cbFar;
+
 	if ( includeName) {
+		if (is3D) // texts and lines at level 2
+			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 2) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 2) * 0.0005);
 		TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(101,ComplexDrawer::dtPOST);
 		if ( txtdr) {
 			double h = txtdr->getHeight();
-			txtdr->setCoord(Coord(cbInner.MinX(),cbInner.MaxY() + h * 0.8, z));
+			txtdr->setCoord(Coord(cbInner.MinX(),cbInner.MaxY() + h * 0.8, 0));
 			cbFar += txtdr->getTextExtent();
 		}
 	}
@@ -249,33 +247,37 @@ bool AnnotationLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	}
 	cbBoxed *= 1.05;
 	if ( useBackground) {
+		if (is3D) // background at level 0
+			glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
 		glColor4d(bgColor.redP(), bgColor.greenP(), bgColor.blueP(), getAlpha());
 		glBegin(GL_POLYGON);
 		Coordinate c(cbBoxed.MinX(), cbBoxed.MinY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		c = Coordinate(cbBoxed.MinX(), cbBoxed.MaxY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		c = Coordinate(cbBoxed.MaxX(), cbBoxed.MaxY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		c = Coordinate(cbBoxed.MaxX(), cbBoxed.MinY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		glEnd();
 	}
 
 	if ( drawOutsideBox) {
+		if (is3D) // texts and lines at level 2
+			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 2) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 2) * 0.0005);
 		glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),getAlpha());
 		glLineWidth(lproperties.thickness);
 		glBegin(GL_LINE_STRIP);
 		Coordinate c(cbBoxed.MinX(), cbBoxed.MinY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		c = Coordinate(cbBoxed.MinX(), cbBoxed.MaxY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		c = Coordinate(cbBoxed.MaxX(), cbBoxed.MaxY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		c = Coordinate(cbBoxed.MaxX(), cbBoxed.MinY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		c = Coordinate(cbBoxed.MinX(), cbBoxed.MinY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		glEnd();
 	}
 	return true;
@@ -372,7 +374,6 @@ AnnotationClassLegendDrawer::AnnotationClassLegendDrawer(DrawerParameters *parms
 {
 }
 
-
 void AnnotationClassLegendDrawer::setActiveClasses(const vector<int>& rws) {
 	raws.clear();
 	DrawingColor dc(dataDrawer);
@@ -455,20 +456,17 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 		return false;
 
 	bool is3D = getRootDrawer()->is3D(); 
-	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
-	if (is3D) // supporting drawers need to be slightly above the level of the "main" drawer. OpenGL won't draw them correct if they are in the same plane
-		z0 +=  z0;
-
-	double z = is3D ? z0 : 0;
 
 	glPushMatrix();
-	glTranslated(cbBox.MinX(), cbBox.MinY(), z);
+	glTranslated(cbBox.MinX(), cbBox.MinY(), 0);
 	glScaled(scale, scale, 1);
 
 	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBox.width(), cbBox.height()));
 	AnnotationLegendDrawer::draw(drawLoop, cbInner);
 	drawPreDrawers(drawLoop, cbInner);
 	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block
+		if (is3D) // colored legend elements at level 1
+			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
 		double yy = cbBox.height() / (raws.size() * 1.1);
 		double hh = cbBox.height();
 		yy *= (double)columns;
@@ -479,36 +477,45 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 			glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
 			if ( objType == IlwisObject::iotRASMAP || objType == IlwisObject::iotPOLYGONMAP) {
 				glBegin(GL_POLYGON);
-				glVertex3d(cbCell.MinX(), cbCell.MinY(), z);
-				glVertex3d(cbCell.MinX(), cbCell.MaxY(), z);
-				glVertex3d(cbCell.MaxX(), cbCell.MaxY(), z);
-				glVertex3d(cbCell.MaxX(), cbCell.MinY(), z);
+				glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
+				glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
+				glVertex3d(cbCell.MaxX(), cbCell.MaxY(), 0);
+				glVertex3d(cbCell.MaxX(), cbCell.MinY(), 0);
 			} else if ( objType == IlwisObject::iotSEGMENTMAP) {
 				glBegin(GL_LINES);
-				glVertex3d(cbCell.MinX(), cbCell.MinY(), z);
-				glVertex3d(cbCell.MaxX(), cbCell.MaxY(), z);
+				glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
+				glVertex3d(cbCell.MaxX(), cbCell.MaxY(), 0);
 			} else {
 				glBegin(GL_POLYGON);
 				double delta = cbCell.width() / 4;
-				glVertex3d(cbCell.MinX() + delta, cbCell.MinY() + delta, z);
-				glVertex3d(cbCell.MinX() + delta, cbCell.MaxY() - delta, z);
-				glVertex3d(cbCell.MaxX() - delta, cbCell.MaxY() - delta, z);
-				glVertex3d(cbCell.MaxX() - delta, cbCell.MinY() + delta, z);
-
+				glVertex3d(cbCell.MinX() + delta, cbCell.MinY() + delta, 0);
+				glVertex3d(cbCell.MinX() + delta, cbCell.MaxY() - delta, 0);
+				glVertex3d(cbCell.MaxX() - delta, cbCell.MaxY() - delta, 0);
+				glVertex3d(cbCell.MaxX() - delta, cbCell.MinY() + delta, 0);
 			}
-
-			TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
-			//txtdr->setCoord(Coord(cbBox.MinX() + cbBox.width() / 4.8, cbCell.MinY() + cbCell.height() / 3.0,z));
-			txtdr->setCoord(Coord(cbCell.MinX() + cellWidth * 1.1, cbCell.MinY() + cbCell.height() / 3.0,z));
-
 			glEnd();
+			TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
+			txtdr->setCoord(Coord(cbCell.MinX() + cellWidth * 1.1, cbCell.MinY() + cbCell.height() / 3.0,0));
+			cbCell.MinY() += shifty;
+			cbCell.MaxY() += shifty;
+			if ( (i) % split == 0) {
+				cbCell.MinY() = 0;
+				cbCell.MaxY() = yy;
+				cbCell.MinX() += cellWidth + maxw;
+				cbCell.MaxX() += cellWidth + maxw;
+			}
+		}
+		if (is3D) // texts and lines at level 2
+			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 2) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 2) * 0.0005);
+		cbCell = CoordBounds (Coord(0,0),Coord(cellWidth, yy));
+		for(int i=raws.size() - 1 ; i>=0; --i) {
 			glColor3d(0,0,0);
 			glBegin(GL_LINE_STRIP);
-				glVertex3d(cbCell.MinX(), cbCell.MinY(), z);
-				glVertex3d(cbCell.MinX(), cbCell.MaxY(), z);
-				glVertex3d(cbCell.MaxX(), cbCell.MaxY(), z);
-				glVertex3d(cbCell.MaxX(), cbCell.MinY(), z);
-				glVertex3d(cbCell.MinX(), cbCell.MinY(), z);
+				glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
+				glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
+				glVertex3d(cbCell.MaxX(), cbCell.MaxY(), 0);
+				glVertex3d(cbCell.MaxX(), cbCell.MinY(), 0);
+				glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
 			glEnd();
 			cbCell.MinY() += shifty;
 			cbCell.MaxY() += shifty;
@@ -521,15 +528,18 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 		}
 	}
 
-	drawPostDrawers(drawLoop, cbArea);
+	drawPostDrawers(drawLoop, cbArea); // the text elements
 
 	glPopMatrix();
+	if (is3D) // reset to level 0
+		glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
+
+	getRootDrawer()->setZIndex(2 + getRootDrawer()->getZIndex()); // add two levels that this legend used
 
 	return true;
 }
 
-String AnnotationClassLegendDrawer::store(const FileName& fnView, const String& parentSection) const{
-	
+String AnnotationClassLegendDrawer::store(const FileName& fnView, const String& parentSection) const {
 	String currentSection = "AnnotationClassLegendDrawer::" + parentSection;
 	AnnotationLegendDrawer::store(fnView, currentSection);
 	ObjectInfo::WriteElement(currentSection.c_str(),"CellWidth",fnView, cellWidth);
@@ -543,11 +553,10 @@ String AnnotationClassLegendDrawer::store(const FileName& fnView, const String& 
 	}
 	ObjectInfo::WriteElement(currentSection.c_str(),"Raws",fnView, seq);
 
-
 	return currentSection;
 }
 
-void AnnotationClassLegendDrawer::load(const FileName& fnView, const String& parentSection){
+void AnnotationClassLegendDrawer::load(const FileName& fnView, const String& parentSection) {
 	String currentSection = parentSection;
 	AnnotationLegendDrawer::load(fnView, currentSection);
 	ObjectInfo::ReadElement(currentSection.c_str(),"CellWidth",fnView, cellWidth);
@@ -606,14 +615,9 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 		return false;
 
 	bool is3D = getRootDrawer()->is3D(); 
-	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
-	if (is3D) // supporting drawers need to be slightly above the level of the "main" drawer. OpenGL won't draw them correct if they are in the same plane
-		z0 +=  z0;
-
-	double z = is3D ? z0 : 0;
 
 	glPushMatrix();
-	glTranslated(cbBox.MinX(), cbBox.MinY(), z);
+	glTranslated(cbBox.MinX(), cbBox.MinY(), 0);
 	glScaled(scale, scale, 1);
 
 	double w = cbBox.width();
@@ -624,38 +628,42 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 
 	double alpha = getAlpha();
 
-	//double z0 = cdrw->getZMaker()->getZ0(getRootDrawer()->is3D());
-
 	if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0)) {
+		if (is3D) // colored legend elements at level 1
+			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
 		double noOfRect = 100.0;
 		vector<String> values = makeRange();
 		RangeReal rr(values[0].rVal(), values[values.size()- 1].rVal());
 		if ( vertical) {
-			drawVertical(cbInner, rr, z, values);
+			drawVertical(cbInner, rr, 0, values);
 		} else {
-			drawHorizontal(cbInner, rr, z, values);
+			drawHorizontal(cbInner, rr, 0, values);
 		}
-	
+		if (is3D) // texts and lines at level 2
+			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 2) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 2) * 0.0005);
 		glColor4f(0,0, 0, alpha );
 		glBegin(GL_LINE_STRIP);
 		Coordinate c(cbInner.MinX(), cbInner.MinY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		c = Coordinate(cbInner.MinX(), cbInner.MaxY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		c = Coordinate(cbInner.MaxX(), cbInner.MaxY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		c = Coordinate(cbInner.MaxX(), cbInner.MinY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		c = Coordinate(cbInner.MinX(), cbInner.MinY());
-		glVertex3d( c.x, c.y, z);
+		glVertex3d( c.x, c.y, 0);
 		glEnd();
 	}
 
-	drawPostDrawers(drawLoop, cbArea);
+	drawPostDrawers(drawLoop, cbArea); // the text elements
 	glPopMatrix();
+	if (is3D) // reset to level 0
+		glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
+
+	getRootDrawer()->setZIndex(2 + getRootDrawer()->getZIndex()); // add two levels that this legend used
 
 	return true;
-
 }
 
 void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const{
@@ -840,18 +848,17 @@ borderBox(0), xborder(0.06), yborder(0.03), neatLine(true), step(1), numDigits(2
 }
 
 AnnotationBorderDrawer::~AnnotationBorderDrawer() {
-	//delete borderBox;
+	delete borderBox;
 }
 
 bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() && !isValid())
+	if ( !isActive() || !isValid())
 		return false;
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
 	bool is3D = getRootDrawer()->is3D();// && zvmkr->getThreeDPossible();
-	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
 	
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
@@ -877,30 +884,30 @@ bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 
 	const_cast<AnnotationBorderDrawer *>(this)->cbCorner = cbTemp;
 
-
 	borderBox->setBox(cbZoom, CoordBounds(cbCorner.cMin, cbCorner.cMax));
+	borderBox->draw(drawLoop, cbArea);
 
 	if ( hasText[0] ) {
-		setText(cbCorner.cMin.x,AnnotationBorderDrawer::sLEFT, z0);
+		setText(cbCorner.cMin.x,AnnotationBorderDrawer::sLEFT, 0);
 	}
 	if ( hasText[1] ) {
-		setText(cbCorner.cMax.x,AnnotationBorderDrawer::sRIGHT, z0);
+		setText(cbCorner.cMax.x,AnnotationBorderDrawer::sRIGHT, 0);
 	}
 	if ( hasText[2] ) {
-		setText(cbCorner.cMax.y,AnnotationBorderDrawer::sTOP, z0);
+		setText(cbCorner.cMax.y,AnnotationBorderDrawer::sTOP, 0);
 	}
 	if ( hasText[3] ) {
-		setText(cbCorner.cMin.y,AnnotationBorderDrawer::sBOTTOM, z0);
+		setText(cbCorner.cMin.y,AnnotationBorderDrawer::sBOTTOM, 0);
 	}
 	AnnotationDrawer::draw(drawLoop, cbArea);
 
 	if ( (drawLoop != drl3DTRANSPARENT) && neatLine) {
 		glBegin(GL_LINE_STRIP);
-		glVertex3d(cbCorner.MinX(), cbCorner.MinY(),z0);
-		glVertex3d(cbCorner.MinX(), cbCorner.MaxY(),z0);
-		glVertex3d(cbCorner.MaxX(), cbCorner.MaxY(),z0);
-		glVertex3d(cbCorner.MaxX(), cbCorner.MinY(),z0);
-		glVertex3d(cbCorner.MinX(), cbCorner.MinY(),z0);
+		glVertex3d(cbCorner.MinX(), cbCorner.MinY(),0);
+		glVertex3d(cbCorner.MinX(), cbCorner.MaxY(),0);
+		glVertex3d(cbCorner.MaxX(), cbCorner.MaxY(),0);
+		glVertex3d(cbCorner.MaxX(), cbCorner.MinY(),0);
+		glVertex3d(cbCorner.MinX(), cbCorner.MinY(),0);
 		glEnd();
 	}
 
@@ -1107,7 +1114,7 @@ void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
 			borderBox = new BoxDrawer(&dp);
 			borderBox->setAlpha(1);
 			borderBox->setDrawColor(Color(255,255,255));
-			addDrawer(borderBox);
+			//addDrawer(borderBox);
 			texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
 			texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12,false));
 			addDrawer(texts);
@@ -1123,8 +1130,6 @@ void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
 			TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
 			texts->addDrawer(txtdr);
 		}
-
-
 	}
 	if ( pp->type & NewDrawer::ptOFFSCREENSTART || pp->type & NewDrawer::ptOFFSCREENEND) {
 		texts->prepare(pp);
@@ -1142,7 +1147,6 @@ TextDrawer *AnnotationBorderDrawer::getTextDrawer(int index, Side side) {
 	if ( offset + index < texts->getDrawerCount())
 		return (TextDrawer *)texts->getDrawer(offset + index);
 	return 0;
-
 }
 
 void AnnotationBorderDrawer::calcLocations() {
@@ -1235,29 +1239,26 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 	if ( !isActive() && !isValid())
 		return false;
 
-	bool is3D = getRootDrawer()->is3D(); 
-	double z0 = getRootDrawer()->getZMaker()->getZ0(is3D);
-	if (is3D)
-		z0 +=  z0;
+	AnnotationDrawer::draw(drawLoop, cbArea);
 
-	double z = is3D ? z0 : 0;
+	bool is3D = getRootDrawer()->is3D(); 
 	glColor3d(0,0, 0);
 	double start = 0;
 	double totSize = ticks * size;
 
 	glPushMatrix();
-	glTranslated(begin.x, begin.y, z);
+	glTranslated(begin.x, begin.y, 0);
 
 	drawPreDrawers(drawLoop, cbArea);
 
 	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block
 
 		glBegin(GL_LINES);
-			glVertex3d(0, 0, z);
-			glVertex3d(totSize, 0, z);
+			glVertex3d(0, 0, 0);
+			glVertex3d(totSize, 0, 0);
 			for(int i = 0; i <= ticks; ++i) {
-				glVertex3d(start,0, z);
-				glVertex3d(start, -height,z);
+				glVertex3d(start,0, 0);
+				glVertex3d(start, -height,0);
 				start += size;
 				TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
 				if ( txtdr) {

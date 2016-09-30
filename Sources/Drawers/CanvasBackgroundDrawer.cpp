@@ -49,19 +49,18 @@ bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	else {
 		glColor4d(outside2D.redP(), outside2D.greenP(), outside2D.blueP(),getAlpha());
 	}
-	double z = is3D ? -getRootDrawer()->getFakeZ() : 0;
 	glBegin(GL_QUADS);						
-		glVertex3f(cbView.MinX(), cbView.MinY(),z);				
-		glVertex3f(cbView.MinX(), cbView.MaxY(),z);				
-		glVertex3f(cbMap.MinX(), cbView.MaxY(),z);				
-		glVertex3f(cbMap.MinX(), cbView.MinY(),z);
+		glVertex3f(cbView.MinX(), cbView.MinY(),0);				
+		glVertex3f(cbView.MinX(), cbView.MaxY(),0);				
+		glVertex3f(cbMap.MinX(), cbView.MaxY(),0);				
+		glVertex3f(cbMap.MinX(), cbView.MinY(),0);
 	glEnd();
 
 	glBegin(GL_QUADS);						
-		glVertex3f(cbMap.MaxX(), cbView.MinY(),z);				
-		glVertex3f(cbMap.MaxX(), cbView.MaxY(),z);				
-		glVertex3f(cbView.MaxX(), cbView.MaxY(),z);				
-		glVertex3f(cbView.MaxX(), cbView.MinY(),z);
+		glVertex3f(cbMap.MaxX(), cbView.MinY(),0);				
+		glVertex3f(cbMap.MaxX(), cbView.MaxY(),0);				
+		glVertex3f(cbView.MaxX(), cbView.MaxY(),0);				
+		glVertex3f(cbView.MaxX(), cbView.MinY(),0);
 	glEnd();
 
 	if ( is3D) {
@@ -71,10 +70,10 @@ bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 		glColor4d(inside2D.redP(), inside2D.greenP(), inside2D.blueP(),getAlpha());
 	}
 	glBegin(GL_QUADS);						
-		glVertex3f(cbMap.MinX(), cbMap.MinY(),z);				
-		glVertex3f(cbMap.MinX(), cbMap.MaxY(),z);				
-		glVertex3f(cbMap.MaxX(), cbMap.MaxY(),z);				
-		glVertex3f(cbMap.MaxX(), cbMap.MinY(),z);
+		glVertex3f(cbMap.MinX(), cbMap.MinY(),0);				
+		glVertex3f(cbMap.MinX(), cbMap.MaxY(),0);				
+		glVertex3f(cbMap.MaxX(), cbMap.MaxY(),0);				
+		glVertex3f(cbMap.MaxX(), cbMap.MinY(),0);
 	glEnd();
 
 

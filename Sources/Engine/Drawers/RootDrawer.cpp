@@ -215,7 +215,7 @@ int RootDrawer::getZIndex() const {
 }
 
 void RootDrawer::setZIndex(int n) {
-	getZMaker()->setZOrder(n, fakeZ);
+	getZMaker()->setZOrder(n);
 }
 
 void RootDrawer::addDataSource(void *) {
@@ -580,8 +580,6 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 		setViewPoint(cbView.middle());
 		setEyePoint();
 	} 
-	fakeZ = cbView.width() * 0.0005;
-	fakeZ = 0;
 	if ( is3D()) {
 		if ( !initRestore) { // restore set rotX, etc. But the OnEntireMap would destroy these false; so for once  the init of values is skipped
 			rotX = 0;
@@ -657,11 +655,8 @@ Coord RootDrawer::screenToOpenGL(const RowCol& rc) {
 
 	drawercontext->ReleaseContext();
 
-	double z = 0;
-	if ( is3D()) {
-		z = abs(posZ) < fakeZ ? fakeZ : posZ;
-	}
-	return Coord(posX, posY, z ); 
+	double z = is3D() ? posZ : 0;
+	return Coord(posX, posY, z); 
 }
 
 Coord RootDrawer::screenToWorld(const RowCol& rc) {
@@ -739,10 +734,6 @@ Coord RootDrawer::getViewPoint() const{
 }
 Coord RootDrawer::getEyePoint() const{
 	return eyePoint;
-}
-
-double RootDrawer::getFakeZ() const {
-	return fakeZ;
 }
 
 void RootDrawer::debug() {

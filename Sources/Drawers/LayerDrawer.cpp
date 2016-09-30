@@ -87,7 +87,7 @@ bool LayerDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 	//if ( getRootDrawer()->is3D() ) {
 	//	getRootDrawer()->init3D();
 	//}
-	getZMaker()->setZOrder(getRootDrawer()->getZIndex(),getRootDrawer()->getFakeZ());
+	getZMaker()->setZOrder(getRootDrawer()->getZIndex());
 	ComplexDrawer::draw(drawLoop, cbArea);
 	glDisable(GL_BLEND);
 	return true;

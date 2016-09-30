@@ -27,9 +27,8 @@ public:
 	void setZScale(double v);
 	void store(const FileName& fn, const String& section);
 	void load(const FileName& fn, const String& section);
-	void setZOrder(int index, double base);
+	void setZOrder(int index);
 	int getZOrder() const;
-	double getZ0(bool is3D) const;
 	void setBounds(const CoordBounds& bnd);
 	BaseMapPtr * getSourceRasterMap() const;
 	BaseMap getSpatialSourceMap() const;
@@ -54,7 +53,6 @@ private:
 	double zscale;
 	CoordBounds cbLimits;
 	int zOrder; // because OpenGL limitations, each set drawer must be drawn for height=0 at a different level.
-	double fakeZ; // the faze z value for objects at heigh 0 for the user of this z-maker
 	NewDrawer *associatedDrawer;
 	bool isSetDrawer;
 	SourceType sourceType; // The way of providing the Z-value. This can be one of: [none, by feature value, by z coordinate (real 3d data), by basemap (can be raster or vector), by map list, by attribute column]

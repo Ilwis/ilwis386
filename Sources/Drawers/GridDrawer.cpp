@@ -49,23 +49,10 @@ bool GridDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	ILWISSingleLock lock(csDraw, TRUE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-
-	if ( bounds.fValid()) {
-		//double clipPlane[] = { bounds.MinX(), bounds.MinY(), bounds.MaxX(), bounds.MaxY
-		//glClipPlane(GL_CLIP_PLANE0,
-	}
-
-	if ( getRootDrawer()->is3D()) {
-		glPushMatrix();
-		double z0 = getRootDrawer()->getZMaker()->getZ0(true);
-		glTranslated(0,0,z0);
-	}
 	ComplexDrawer::draw(drawLoop, cbArea);
 	if ( mode & mPLANE && ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0))) {
 		drawPlane(cbArea);
 	}
-	if ( getRootDrawer()->is3D())
-		glPopMatrix();
 	glDisable(GL_BLEND);
 	return true;
 }
@@ -110,8 +97,6 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 		Coord c, cMin, cMax;
 		Color clr;
 		clear();
-	/*	getZMaker()->setThreeDPossible(true);
-		getZMaker()->setZOrder(100, getZMaker()->getZ0(true));*/
 		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 		cMin = getRootDrawer()->glToWorld(cbMap.cMin);
 		cMax = getRootDrawer()->glToWorld(cbMap.cMax);
@@ -163,21 +148,21 @@ void GridDrawer::prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin)
 	double maxz = planeDistances[planeDistances.size() - 1];
 	Coord c1, c2, oldc2,startc2;
 	c1 = cMin;
-	c1.z  = getZMaker()->getZ0(true);;
+	c1.z  = 0;
 	c2 = c1;
 	c2.z = maxz;
 	startc2 = oldc2 = c2;
 	AddGridLine(c1,c2);
 	c1.x = cMin.x;
 	c1.y = cMax.y;
-	c1.z  = getZMaker()->getZ0(true);;
+	c1.z  = 0;
 	c2 = c1;
 	c2.z = maxz;
 	AddGridLine(oldc2,c2);
 	oldc2 = c2;
 	AddGridLine(c1,c2);
 	c1 = cMax;
-	c1.z  = getZMaker()->getZ0(true);;
+	c1.z  = 0;
 	c2 = c1;
 	c2.z = maxz;
 	AddGridLine(oldc2,c2);
@@ -185,7 +170,7 @@ void GridDrawer::prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin)
 	AddGridLine(c1,c2);
 	c1.x = cMax.x;
 	c1.y = cMin.y;
-	c1.z  = getZMaker()->getZ0(true);;
+	c1.z  = 0;
 	c2 = c1;
 	c2.z = maxz;
 	AddGridLine(oldc2,c2);
@@ -210,7 +195,7 @@ void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& c
 		{
 			c1.x = x;
 			c1.y = y;
-			c1.z =  getZMaker()->getZ0(true);;
+			c1.z =  0;
 			c2.x = x;
 			c2.y = y;
 			c2.z = maxz;
@@ -263,7 +248,7 @@ void GridDrawer::getLayerDistances(vector<double>& dist) {
 
 void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMin ) {
 	Coord c1, c2;
-	double z = 	getZMaker()->getZ0(true);
+	double z = 0;
 	planeDistances.clear();
 	getLayerDistances(planeDistances);
 	if ( planeDistances.size() == 0)
@@ -281,8 +266,7 @@ void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMi
 		planeQuads[i][3] = getRootDrawer()->glConv(Coord(cMax.x,cMin.y,z));
 	
 		z  = planeDistances[i];
-	}
-	
+	}	
 }
 
 void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin ) {
@@ -290,11 +274,10 @@ void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin 
 	if ( planeDistances.size() == 0)
 		return;
 
-	double z = 	getZMaker()->getZ0(true);;
 	double maxz = planeDistances[planeDistances.size() - 1];
 
 	c1 = cMin;
-	c1.z = c2.z = z;
+	c1.z = c2.z = 0;
 	c2.x = cMin.x;
 	c2.y = cMax.y;
 	AddGridLine(c1, c2);
@@ -328,19 +311,19 @@ void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin 
 	c2.y = cMin.y;
 	AddGridLine(c1, c2);
 	c1 = c2 = cMin;
-	c1.z = z;
+	c1.z = 0;
 	c2.z = maxz;
 	AddGridLine(c1, c2);
 	c1 = c2 = Coord(cMin.x, cMax.y);
-	c1.z = z;
+	c1.z = 0;
 	c2.z = maxz;
 	AddGridLine(c1, c2);
 	c1 = c2 = Coord(cMax.x, cMax.y);
-	c1.z = z;
+	c1.z = 0;
 	c2.z = maxz;
 	AddGridLine(c1, c2);
 	c1 = c2 = Coord(cMax.x, cMin.y);
-	c1.z = z;
+	c1.z = 0;
 	c2.z = maxz;
 	AddGridLine(c1, c2);
 }

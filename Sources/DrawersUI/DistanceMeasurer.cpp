@@ -116,12 +116,10 @@ bool MeasurerLine::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) cons
 		double lcx = center.x;
 		double lcy = center.y;
 		bool is3D = getRootDrawer()->is3D();// && zvmkr->getThreeDPossible();
-		double z0 = rootDrawer->getZMaker()->getZ0(is3D) ;
-		z0 += z0; // supprting drawer, lies on top of the actual layerdrawer
 		glBegin(GL_LINE_LOOP);
 		for(int i = 0; i <= sections;i++) { // make $section number of circles
 			Coord crd = rootDrawer->glConv(Coord(lcx + rx * cos(i *  twoPi / sections), lcy + ry* sin(i * twoPi / sections)));
-			glVertex3d(crd.x, crd.y, z0);
+			glVertex3d(crd.x, crd.y, 0);
 		}
 		glEnd();
 	}
@@ -148,8 +146,6 @@ bool MeasurerLine::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) cons
 		const double twoPi =  2.0 * M_PI;
 		const int sections = 50;
 		bool is3D = getRootDrawer()->is3D();// && zvmkr->getThreeDPossible();
-		double z0 = rootDrawer->getZMaker()->getZ0(is3D) ;
-		z0 += z0; // supprting drawer, lies on top of the actual layerdrawer
 
 		CoordSystemProjection * csys = rootDrawer->getCoordinateSystem()->pcsProjection();
 
@@ -168,7 +164,7 @@ bool MeasurerLine::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) cons
 					Coord crdStereoRadiusCurve (rParamStep*crdEnd.x , rParamStep*crdEnd.y);
 					LatLon llReprojRadiusCurve = dm->csprStereographic->llConv(crdStereoRadiusCurve);
 					Coord crdLonLatRadiusCurve = rootDrawer->glConv(Coord(llReprojRadiusCurve.Lon, llReprojRadiusCurve.Lat));
-					glVertex3d(crdLonLatRadiusCurve.x, crdLonLatRadiusCurve.y, z0);
+					glVertex3d(crdLonLatRadiusCurve.x, crdLonLatRadiusCurve.y, 0);
 				}
 			}
 
@@ -179,7 +175,7 @@ bool MeasurerLine::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) cons
 					LatLon llReprojRadiusCurve = dm->csprStereographic->llConv(crdStereoRadiusCurve);
 					Coord crdActualProjRadiusCurve = csys->cConv(llReprojRadiusCurve);
 					crdActualProjRadiusCurve = rootDrawer->glConv(crdActualProjRadiusCurve);
-					glVertex3d(crdActualProjRadiusCurve.x, crdActualProjRadiusCurve.y, z0);
+					glVertex3d(crdActualProjRadiusCurve.x, crdActualProjRadiusCurve.y, 0);
 				}
 			}
 			glEnd();
@@ -197,7 +193,7 @@ bool MeasurerLine::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) cons
 					Coord crdStereo = Coord(rRadius * cos(rParamAngle), rRadius * sin(rParamAngle));
 					LatLon llReproj = dm->csprStereographic->llConv(crdStereo);
 					Coord crdLonLat = rootDrawer->glConv(Coord(llReproj.Lon, llReproj.Lat));
-					glVertex3d(crdLonLat.x, crdLonLat.y, z0);
+					glVertex3d(crdLonLat.x, crdLonLat.y, 0);
 				}
 			}
 
@@ -208,7 +204,7 @@ bool MeasurerLine::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) cons
 					LatLon llReproj = dm->csprStereographic->llConv(crdStereo);
 					Coord crdActualProj = csys->cConv(llReproj);
 					crdActualProj = rootDrawer->glConv(crdActualProj);
-					glVertex3d(crdActualProj.x, crdActualProj.y, z0);
+					glVertex3d(crdActualProj.x, crdActualProj.y, 0);
 				}
 			}
 			glEnd();

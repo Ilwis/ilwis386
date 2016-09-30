@@ -12,7 +12,7 @@ using namespace ILWIS;
 
 #define DEFAULT_SCALE 1.0
 
-ZValueMaker::ZValueMaker(NewDrawer *drw)  : scalingType(zvsNONE),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE), zOrder(0), fakeZ(0), isSameCsy(true), associatedDrawer(drw){
+ZValueMaker::ZValueMaker(NewDrawer *drw)  : scalingType(zvsNONE),threeDPossible(false),offset(0), zscale(DEFAULT_SCALE), zOrder(0), isSameCsy(true), associatedDrawer(drw){
 	isSetDrawer = false;
 	sourceType = styNONE;
 	NewDrawer *parentDrw = associatedDrawer->getParentDrawer();
@@ -282,17 +282,12 @@ void ZValueMaker::setZScale(double v){
 	zscale = v;
 }
 
-void ZValueMaker::setZOrder(int index, double base) {
+void ZValueMaker::setZOrder(int index) {
 	zOrder = index;
-	fakeZ = (zOrder+1.0) * base;
 }
 
 int ZValueMaker::getZOrder() const{
 	return zOrder;
-}
-
-double ZValueMaker::getZ0(bool is3D) const{
-	return is3D ? fakeZ : 0;
 }
 
 void ZValueMaker::setBounds(const CoordBounds& bnd) {

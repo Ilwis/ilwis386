@@ -766,8 +766,7 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 	if (fSpaceTimeDrawer) {
 		if (fClipTPlus) {
 			bool is3D = getRootDrawer()->is3D(); 
-			double z0 = getRootDrawer()->getZMaker()->getZ0(is3D) + getRootDrawer()->getFakeZ(); // one more step, so that it is visible
-			double clip_plane4[]={0.0, 0.0, -1.0, z0 + cube.altitude() * *timePos};
+			double clip_plane4[]={0.0, 0.0, -1.0, cube.altitude() * *timePos};
 			glClipPlane(GL_CLIP_PLANE4,clip_plane4);
 			glEnable(GL_CLIP_PLANE4);
 		}

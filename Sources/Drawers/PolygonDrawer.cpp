@@ -51,7 +51,6 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 		ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
 		double zscale = cdrw->getZMaker()->getZScale();
 		double zoffset = cdrw->getZMaker()->getOffset();
-		double z0 = cdrw->getZMaker()->getZ0(is3D);
 
  		if ( hatch) {
 			glEnable(GL_POLYGON_STIPPLE);          	// Enable POLYGON STIPPLE
@@ -69,7 +68,7 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 			//double xshift = cbZoom.width() / 250.0;
 			//double yshift = cbZoom.height() / 250.0;
 			//c += Coord(xshift,yshift);
-			c.z = z0;
+			c.z = 0;
 			label->setCoord(c);
 		}
 		glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), alpha);
@@ -86,7 +85,7 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 				//glBegin(GL_LINE_STRIP);
 				for(int j=0; j < triangleStrips[i].second.size(); ++j) {
 					Coord c = triangleStrips[i].second[j];
-					double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : z0;
+					double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : 0;
 					glVertex3d(c.x,c.y,z);
 				}
 				glEnd();
@@ -109,7 +108,7 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 					//glBegin(GL_LINE_STRIP);
 					for(int j=0; j < triangleStrips[i].second.size(); ++j) {
 						Coord c = triangleStrips[i].second[j];
-						double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : z0;
+						double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : 0;
 						glVertex3d(c.x,c.y,z);
 					}
 					glEnd();

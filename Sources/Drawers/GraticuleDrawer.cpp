@@ -41,14 +41,7 @@ bool GraticuleDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 		return false;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	if ( getRootDrawer()->is3D()) {
-		glPushMatrix();
-		double z0 = getRootDrawer()->getZMaker()->getZ0(true);
-		glTranslated(0,0,z0);
-	}
 	ComplexDrawer::draw(drawLoop, cbArea);
-	if ( getRootDrawer()->is3D())
-		glPopMatrix();
 	glDisable(GL_BLEND);
 	return true;
 }
@@ -158,7 +151,6 @@ void GraticuleDrawer::AddGraticuleLine(const CoordSystem &csy, const LatLon& llB
 	ILWIS::DrawerParameters dp(getRootDrawer(), this);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	GraticuleLine *line = (GraticuleLine *)NewDrawer::getDrawer("LineDrawer", &pp, &dp);
-	double z = 	getZMaker()->getZ0(true);
 	vector<Coord> coords;
 	int steps = 250;
 	if ( llBoundary1.Lon == llBoundary1.Lon) {
@@ -166,7 +158,7 @@ void GraticuleDrawer::AddGraticuleLine(const CoordSystem &csy, const LatLon& llB
 		LatLon ll1 = llBoundary2;
 		Coord c1 = csy->cConv(ll1);
 		c1 = getRootDrawer()->glConv(c1);
-		c1.z = z;
+		c1.z = 0;
 		coords.push_back(c1);
 		for(int i=0; i < steps; ++i) {
 			LatLon ll2 = ll1;
@@ -174,7 +166,7 @@ void GraticuleDrawer::AddGraticuleLine(const CoordSystem &csy, const LatLon& llB
 			Coord c2 = csy->cConv(ll2);
 			c2 = getRootDrawer()->glConv(c2);
 			if ( c1.y != c2.y) {
-				c2.z = z;
+				c2.z = 0;
 				coords.push_back(c2);
 			}
 			ll1 = ll2;
@@ -191,7 +183,7 @@ void GraticuleDrawer::AddGraticuleLine(const CoordSystem &csy, const LatLon& llB
 			Coord c2 = csy->cConv(ll2);
 			c2 = getRootDrawer()->glConv(c2);
 			if ( c1.x != c2.x) {
-				c2.z = z;
+				c2.z = 0;
 				coords.push_back(c2);
 			}
 			ll1 = ll2;

@@ -71,7 +71,6 @@ namespace ILWIS {
 		void setEyePoint(const Coord& c);
 		Coord getViewPoint() const;
 		Coord getEyePoint() const;
-		double getFakeZ() const;
 		void setRotationAngles(double rx, double ry, double rz);
 		void getRotationAngles(double& rx, double& ry, double& rz);
 		void setTranslate(double tx, double ty, double tz);
@@ -104,7 +103,6 @@ namespace ILWIS {
 		bool threeD;
 		Coordinate eyePoint;
 		Coordinate viewPoint;
-		double fakeZ;
 		double windowAspectRatio;
 		double mapAspectRatio;
 		double rotX, rotY, rotZ;
