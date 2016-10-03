@@ -13,6 +13,7 @@ public:
 	String getMenuString() const;
 protected:
 	void displayOptionTransparencyP();
+	void displayOptionSimplify();
 	void setActiveAreas(void *w, HTREEITEM hti);
 	void setActiveBoundaries(void *w, HTREEITEM hti);
 
@@ -31,6 +32,15 @@ private:
 	int transparency;
 	FieldIntSliderEx *slider;
 	HTREEITEM htiTransparent;
+};
+
+class PolygonSimplificationForm : public DisplayOptionsForm {
+	public:
+	PolygonSimplificationForm(CWnd *wPar, ComplexDrawer *dr);
+	void apply(); 
+private:
+	bool simplify;
+	bool boundaries;
 };
 
 }

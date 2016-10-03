@@ -17,14 +17,30 @@ ILWIS::NewDrawer *createPolygonDrawer(DrawerParameters *parms) {
 	return new PolygonDrawer(parms);
 }
 
-PolygonDrawer::PolygonDrawer(DrawerParameters *parms) : SimpleDrawer(parms,"PolygonDrawer"), boundary(0), showArea(0), hatch(0), hatchInverse(0) {
+PolygonDrawer::PolygonDrawer(DrawerParameters *parms)
+: SimpleDrawer(parms,"PolygonDrawer")
+, boundary(0)
+, showArea(false)
+, showAreasAsQuads(false)
+, showBoundariesWhenQuads(true)
+, hatch(0)
+, hatchInverse(0)
+{
 	setDrawMethod(NewDrawer::drmRPR);
 	drawColor = Color(100,200,255);
 	backgroundColor = colorUNDEF;
 	areaAlpha = 1;
 }
 
-PolygonDrawer::PolygonDrawer(DrawerParameters *parms, const String& name) : SimpleDrawer(parms,name), boundary(0), showArea(true), hatch(0), hatchInverse(0) {
+PolygonDrawer::PolygonDrawer(DrawerParameters *parms, const String& name)
+: SimpleDrawer(parms,name)
+, boundary(0)
+, showArea(true)
+, showAreasAsQuads(false)
+, showBoundariesWhenQuads(true)
+, hatch(0)
+, hatchInverse(0)
+{
 	setDrawMethod(NewDrawer::drmRPR);
 	areaAlpha = 1;
 }
@@ -39,9 +55,30 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	if ( !cbZoom.fContains(cb))
 			return false;
-    bool asQuad =  cbZoom.getArea() * 0.00001 > const_cast<PolygonDrawer *>(this)->cb.getArea() ? true : false;
-	if ( !cbZoom.fValid())
-		asQuad = false;
+
+	bool asQuad = false;
+	if (showAreasAsQuads) {
+		GLint viewport[4];
+		double modelview[16];
+		double projection[16];
+		glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
+		glGetDoublev( GL_PROJECTION_MATRIX, projection );
+		glGetIntegerv( GL_VIEWPORT, viewport );
+		double posX1, posY1, posZ1;
+		double posX2, posY2, posZ2;
+		double posX3, posY3, posZ3;
+		double posX4, posY4, posZ4;
+		gluProject(cb.cMin.x, cb.cMin.y, 0.0, modelview, projection, viewport, &posX1, &posY1, &posZ1);
+		gluProject(cb.cMin.x, cb.cMax.y, 0.0, modelview, projection, viewport, &posX2, &posY2, &posZ2);
+		gluProject(cb.cMax.x, cb.cMax.y, 0.0, modelview, projection, viewport, &posX3, &posY3, &posZ3);
+		gluProject(cb.cMax.x, cb.cMin.y, 0.0, modelview, projection, viewport, &posX4, &posY4, &posZ4);
+		double posXMin = min(posX1, min(posX2, min(posX3, posX4)));
+		double posXMax = max(posX1, max(posX2, max(posX3, posX4)));
+		double posYMin = min(posY1, min(posY2, min(posY3, posY4)));
+		double posYMax = max(posY1, max(posY2, max(posY3, posY4)));
+		//bool asQuad = 9.0 > (sqr(posXMax - posXMin) + sqr(posYMax - posYMin));
+		asQuad = 9.0 > ((posXMax - posXMin) * (posYMax - posYMin));
+	}
 
 	glShadeModel(GL_FLAT);
 
@@ -72,23 +109,25 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 			label->setCoord(c);
 		}
 		glColor4f(drawColor.redP(),drawColor.greenP(), drawColor.blueP(), alpha);
-		if ( asQuad && showArea) {
-			glBegin(GL_QUADS);
-			glVertex3d(cb.cMin.x, cb.cMin.y, 0);
-			glVertex3d(cb.cMin.x, cb.cMax.y, 0);
-			glVertex3d(cb.cMax.x, cb.cMax.y, 0);
-			glVertex3d(cb.cMax.x, cb.cMin.y, 0);
-			glEnd();
-		} else {
-		for(int i=0; i < triangleStrips.size() && showArea; ++i){
-				glBegin(triangleStrips[i].first);
-				//glBegin(GL_LINE_STRIP);
-				for(int j=0; j < triangleStrips[i].second.size(); ++j) {
-					Coord c = triangleStrips[i].second[j];
-					double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : 0;
-					glVertex3d(c.x,c.y,z);
-				}
+		if (showArea) {
+			if (asQuad) {
+				glBegin(GL_QUADS);
+				glVertex3d(cb.cMin.x, cb.cMin.y, 0);
+				glVertex3d(cb.cMin.x, cb.cMax.y, 0);
+				glVertex3d(cb.cMax.x, cb.cMax.y, 0);
+				glVertex3d(cb.cMax.x, cb.cMin.y, 0);
 				glEnd();
+			} else {
+				for(int i=0; i < triangleStrips.size(); ++i) {
+					glBegin(triangleStrips[i].first);
+					//glBegin(GL_LINE_STRIP);
+					for(int j=0; j < triangleStrips[i].second.size(); ++j) {
+						Coord c = triangleStrips[i].second[j];
+						double z = cdrw->getZMaker()->getThreeDPossible() & is3D ? c.z : 0;
+						glVertex3d(c.x,c.y,z);
+					}
+					glEnd();
+				}
 			}
 		}
  		if ( hatch && !backgroundColor.fEqual(colorUNDEF)) {
@@ -103,7 +142,7 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 				glVertex3d(cb.cMax.x, cb.cMin.y, 0);
 				glEnd();
 			} else {
-			for(int i=0; i < triangleStrips.size() && showArea; ++i){
+				for(int i=0; i < triangleStrips.size() && showArea; ++i) {
 					glBegin(triangleStrips[i].first);
 					//glBegin(GL_LINE_STRIP);
 					for(int j=0; j < triangleStrips[i].second.size(); ++j) {
@@ -125,9 +164,48 @@ bool PolygonDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) con
 
 	glShadeModel(GL_SMOOTH);
 
-	if ( boundary && showBoundary && (!asQuad || !showArea)) {
+	if ( boundary && showBoundary) {
 		glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
-		boundary->draw(drawLoop, cbArea);
+		if (!asQuad || !showArea)
+			boundary->draw(drawLoop, cbArea);
+		else if (asQuad && showBoundariesWhenQuads) {
+			ComplexDrawer *cdrw = (ComplexDrawer *)getParentDrawer();
+			bool is3D = getRootDrawer()->is3D(); 
+			bool is3DPossible = cdrw->getZMaker()->getThreeDPossible();
+			double zscale, zoffset;
+			double alpha = boundary->getAlpha();
+
+			glColor4f(((LineProperties*)boundary->getProperties())->drawColor.redP(),((LineProperties*)boundary->getProperties())->drawColor.greenP(), ((LineProperties*)boundary->getProperties())->drawColor.blueP(),alpha );
+			glLineWidth(((LineProperties*)boundary->getProperties())->thickness);
+			if (((LineProperties*)boundary->getProperties())->linestyle != 0xFFFF) {
+				glEnable (GL_LINE_STIPPLE);
+				glLineStipple(1,((LineProperties*)boundary->getProperties())->linestyle);
+			}
+
+			if ( is3D) {
+				zscale = cdrw->getZMaker()->getZScale();
+				zoffset = cdrw->getZMaker()->getOffset();
+				glPushMatrix();
+				glScaled(1,1,zscale);
+				glTranslated(0,0,zoffset);
+			}
+			if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0)) {
+				glBegin(GL_LINE_STRIP);
+				glVertex3d(cb.cMin.x, cb.cMin.y, 0);
+				glVertex3d(cb.cMin.x, cb.cMax.y, 0);
+				glVertex3d(cb.cMax.x, cb.cMax.y, 0);
+				glVertex3d(cb.cMax.x, cb.cMin.y, 0);
+				glVertex3d(cb.cMin.x, cb.cMin.y, 0);
+				glEnd();
+			}
+			if ( is3D) {
+				glPopMatrix();
+			}
+
+			glDisable (GL_LINE_STIPPLE);
+			glLineWidth(1);
+
+		}
 		glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
 	}
 
@@ -183,6 +261,14 @@ void PolygonDrawer::areasActive(bool yesno) {
 
 void PolygonDrawer::boundariesActive(bool active) {
 	showBoundary = active;
+}
+
+void PolygonDrawer::setAsQuads(bool yesno) {
+	showAreasAsQuads = yesno;
+}
+
+void PolygonDrawer::setAsQuadsBoundaries(bool yesno) {
+	showBoundariesWhenQuads = yesno;
 }
 
 void PolygonDrawer::setAreaAlpha(double v) {

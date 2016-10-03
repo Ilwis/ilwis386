@@ -25,7 +25,9 @@ ILWIS::NewDrawer *createPolygonLayerDrawer(DrawerParameters *parms) {
 PolygonLayerDrawer::PolygonLayerDrawer(DrawerParameters *parms) : 
 	FeatureLayerDrawer(parms,"PolygonLayerDrawer"), 
 	showAreas(true), 
-	showBoundaries(true), 
+	showBoundaries(true),
+	showAreasAsQuads(false),
+	showBoundariesWhenQuads(true),
 	areaAlpha(1.0),
 	usesTriangleFile(true),
 	triData(0),
@@ -148,6 +150,14 @@ void PolygonLayerDrawer::setShowAreas(bool yesno) {
 
 void PolygonLayerDrawer::setShowBoundaries(bool yesno){
 	showBoundaries = yesno;
+}
+
+void PolygonLayerDrawer::setAsQuads(bool yesno) {
+	showAreasAsQuads = yesno;
+}
+
+void PolygonLayerDrawer::setAsQuadsBoundaries(bool yesno) {
+	showBoundariesWhenQuads = yesno;
 }
 
 void PolygonLayerDrawer::setLineStyle(int st) {

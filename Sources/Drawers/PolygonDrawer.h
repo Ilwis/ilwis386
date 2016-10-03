@@ -26,6 +26,8 @@ class _export PolygonDrawer : public SimpleDrawer {
 		void setBoundaryDrawer(LineDrawer * _boundary);
 		void areasActive(bool yesno);
 		void boundariesActive(bool active);
+		void setAsQuads(bool yesno);
+		void setAsQuadsBoundaries(bool yesno);
 		void setAreaAlpha(double v);
 		void setlineStyle(int st);
 		void setlineThickness(double th);
@@ -46,6 +48,8 @@ class _export PolygonDrawer : public SimpleDrawer {
 		CoordBounds cb;
 		bool showArea;
 		bool showBoundary;
+		bool showAreasAsQuads;
+		bool showBoundariesWhenQuads;
 		double areaAlpha;
 		PolygonProperties properties;
 		const byte *hatch;

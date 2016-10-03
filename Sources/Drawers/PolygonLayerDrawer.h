@@ -27,6 +27,11 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 		void setLineColor(const Color& clr);
 		void setShowBoundaries(bool yesno);
 		void setShowAreas(bool yesno);
+		bool asQuads() const { return showAreasAsQuads; }
+		bool asQuadsBoundaries() const { return showBoundariesWhenQuads; }
+		void setAsQuads(bool yesno);
+		void setAsQuadsBoundaries(bool yesno);
+
 		void setHatch(const String& name);
 		String getHatchName() const;
 		bool getTriangleData(long **data,long** loc);
@@ -40,6 +45,8 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 	
 		bool showAreas;
 		bool showBoundaries;
+		bool showAreasAsQuads;
+		bool showBoundariesWhenQuads;
 		double areaAlpha;
 		PolygonProperties lp;
 		bool usesTriangleFile;
@@ -47,6 +54,6 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 		long currentLoc;
 		int triaFileSize;
 		PolygonProperties properties;
-		GLUtesselator * tesselator;		
+		GLUtesselator * tesselator;
 	};
 }

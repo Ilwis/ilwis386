@@ -92,6 +92,10 @@ HTREEITEM PolygonSetTool::configure( HTREEITEM parentItem) {
 	String transp("Transparency (%d)", 100 - 100 * pdrw->getAreaAlpha());
 	htiTransparency = insertItem(transp,"Transparent", item);
 
+	item = new DisplayOptionTreeItem(tree,itemAreas,drawer);
+	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&PolygonSetTool::displayOptionSimplify);
+	insertItem("Simplification",".mpa", item);
+
 	DrawerTool::configure(parentItem);
 	isConfigured = true;
 
@@ -142,6 +146,10 @@ void PolygonSetTool::setActiveBoundaries(void *v, HTREEITEM hti) {
 
 void PolygonSetTool::displayOptionTransparencyP() {
 	new TransparencyFormP(tree, (ComplexDrawer *)drawer, htiTransparency);
+}
+
+void PolygonSetTool::displayOptionSimplify() {
+	new PolygonSimplificationForm(tree, (ComplexDrawer *)drawer);
 }
 
 String PolygonSetTool::getMenuString() const {
@@ -199,8 +207,50 @@ void  TransparencyFormP::apply() {
 		view->GetTreeCtrl().SetItem(&titem.item);
 	}
 
+	updateMapView();
+}
+
+//------------------------------------------------
+PolygonSimplificationForm::PolygonSimplificationForm(CWnd *wPar, ComplexDrawer *dr) : 
+DisplayOptionsForm(dr,wPar,"Simplification")
+{
+	PolygonLayerDrawer *pdrw = dynamic_cast<PolygonLayerDrawer *>(dr);
+	if ( !pdrw) {
+		SetDrawer *drw = (SetDrawer *)(dr);
+		for(int i=0; i < drw->getDrawerCount() && pdrw == 0; ++i) {
+			pdrw = (PolygonLayerDrawer *)drw->getDrawer(i, ComplexDrawer::dtPOLYGONLAYER);
+		}
+	}
+	simplify = pdrw->asQuads();
+	boundaries = pdrw->asQuadsBoundaries();
+	CheckBox * cbSimplify = new CheckBox(root, TR("Simplify polygons that are too small"),&simplify);
+	CheckBox * cbBoundaries = new CheckBox(cbSimplify, TR("Draw boundaries of simplified polygons"),&boundaries);
+	cbBoundaries->Align(cbSimplify, AL_UNDER);
+	create();
+}
+
+void PolygonSimplificationForm::apply() {
+	if ( initial) return;
+	root->StoreData();
+	SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
+	if ( setDrw) {
+		PreparationParameters pp(NewDrawer::ptRENDER, 0);
+		for(int i = 0; i < setDrw->getDrawerCount(); ++i) {
+			PolygonLayerDrawer *pdrw = (PolygonLayerDrawer *)drw->getDrawer(i, ComplexDrawer::dtPOLYGONLAYER);
+			if ( pdrw) {
+				pdrw->setAsQuads(simplify);
+				pdrw->setAsQuadsBoundaries(boundaries);
+				pdrw->prepareChildDrawers(&pp);
+			}
+		}
+	} else {
+		PolygonLayerDrawer *pdrw = (PolygonLayerDrawer *)drw;
+		pdrw->setAsQuads(simplify);
+		pdrw->setAsQuadsBoundaries(boundaries);
+		PreparationParameters pp(NewDrawer::ptRENDER, 0);
+		pdrw->prepare(&pp);
+	}
 
 	updateMapView();
-
 }
 

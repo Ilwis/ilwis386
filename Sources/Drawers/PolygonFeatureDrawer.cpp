@@ -160,6 +160,9 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			LineProperties *lp = (LineProperties *)polygonLayer->getProperties();
 			boundariesActive(polygonLayer->getShowBoundaries());
 			areasActive(polygonLayer->getShowAreas());
+			setAsQuads(polygonLayer->asQuads());
+			setAsQuadsBoundaries(polygonLayer->asQuadsBoundaries());
+
 			double rprAlpha =  p->props.itemAlpha;
 			setAreaAlpha(polygonLayer->getAreaAlpha() * rprAlpha);
 			((LineProperties *)boundary->getProperties())->linestyle = lp->linestyle;
