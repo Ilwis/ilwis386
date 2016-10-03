@@ -38,6 +38,10 @@ Cursor3DDrawer::~Cursor3DDrawer() {
 bool Cursor3DDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
+	if (cNorm.z == 0) {
+		getRootDrawer()->setZIndex(1 + getRootDrawer()->getZIndex());
+		glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
+	}
 	PointDrawer::draw(drawLoop, cbArea);
 	glDisable(GL_BLEND);
 
