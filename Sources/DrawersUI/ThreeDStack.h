@@ -20,7 +20,10 @@ namespace ILWIS {
 		bool isToolUseableFor(ILWIS::DrawerTool *drw);
 		HTREEITEM configure( HTREEITEM parentItem);
 		virtual ~ThreeDStack();
+		virtual void OnLButtonDown(UINT nFlags, CPoint point);
 		virtual void OnLButtonUp(UINT nFlags, CPoint point);
+		virtual void OnMouseMove(UINT nFlags, CPoint point);
+		virtual void Stop();
 	protected:
 		void changeDistances();
 		void setthreeDStackMarker(void *v, HTREEITEM);
@@ -33,8 +36,8 @@ namespace ILWIS {
 		double offset;
 		Cursor3DDrawer *cursor;
 		Coord mouseCrd;
-
-
+		bool fMouseDown;
+		HTREEITEM htiNodeCursor;
 	};
 
 	class Cursor3DDrawer : public PointDrawer {

@@ -55,7 +55,7 @@ DrawerTool *createThreeDStack(ZoomableView* zv, LayerTreeView *view, NewDrawer *
 }
 
 ThreeDStack::ThreeDStack(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-DrawerTool("ThreeDStack",zv, view, drw),cursor(0),offset(0),distance(0)
+DrawerTool("ThreeDStack",zv, view, drw),cursor(0),offset(0),distance(0),fMouseDown(false),htiNodeCursor(0)
 {
 	stay = true;
 }
@@ -75,7 +75,8 @@ bool ThreeDStack::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	return ok;
 }
 
-void ThreeDStack::OnLButtonUp(UINT nFlags, CPoint point) {
+void ThreeDStack::OnLButtonDown(UINT nFlags, CPoint point) {
+	fMouseDown = true;
 	if ( nFlags & MK_CONTROL)
 		return;
 
@@ -96,8 +97,61 @@ void ThreeDStack::OnLButtonUp(UINT nFlags, CPoint point) {
 			}
 			mouseCrd.z = offset * 1.05; // slightly above the top map
 			cursor->setCoord(mouseCrd);	
-			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
-			cursor->prepare(&pp);
+			drawer->getRootDrawer()->getDrawerContext()->doDraw();
+		}
+	}
+}
+
+void ThreeDStack::OnLButtonUp(UINT nFlags, CPoint point) {
+	fMouseDown = false;
+	if ( nFlags & MK_CONTROL)
+		return;
+
+	mouseCrd = drawer->getRootDrawer()->screenToWorld(RowCol(point.y, point.x));
+	if ( drawer->getRootDrawer()->getMapCoordBounds().fContains(mouseCrd)) {
+		if(cursor) {
+			double offset = rUNDEF;
+			for(int i = 0; i < drawer->getRootDrawer()->getDrawerCount(); ++i) {
+				ComplexDrawer *cdr  = dynamic_cast<ComplexDrawer *>(drawer->getRootDrawer()->getDrawer(i));
+				if ( !cdr)
+					continue;
+				for(int j = 0; j < cdr->getDrawerCount(); ++j ){
+					ComplexDrawer *cdr2 = dynamic_cast<ComplexDrawer *>(cdr->getDrawer(j));
+					if (!cdr2)
+						continue;
+					offset = max(offset, cdr2->getZMaker()->getOffset());
+				}
+			}
+			mouseCrd.z = offset * 1.05; // slightly above the top map
+			cursor->setCoord(mouseCrd);	
+			drawer->getRootDrawer()->getDrawerContext()->doDraw();
+		}
+	}
+}
+
+void ThreeDStack::OnMouseMove(UINT nFlags, CPoint point) {
+	if ( nFlags & MK_CONTROL)
+		return;
+	if (!fMouseDown)
+		return;
+
+	mouseCrd = drawer->getRootDrawer()->screenToWorld(RowCol(point.y, point.x));
+	if ( drawer->getRootDrawer()->getMapCoordBounds().fContains(mouseCrd)) {
+		if(cursor) {
+			double offset = rUNDEF;
+			for(int i = 0; i < drawer->getRootDrawer()->getDrawerCount(); ++i) {
+				ComplexDrawer *cdr  = dynamic_cast<ComplexDrawer *>(drawer->getRootDrawer()->getDrawer(i));
+				if ( !cdr)
+					continue;
+				for(int j = 0; j < cdr->getDrawerCount(); ++j ){
+					ComplexDrawer *cdr2 = dynamic_cast<ComplexDrawer *>(cdr->getDrawer(j));
+					if (!cdr2)
+						continue;
+					offset = max(offset, cdr2->getZMaker()->getOffset());
+				}
+			}
+			mouseCrd.z = offset * 1.05; // slightly above the top map
+			cursor->setCoord(mouseCrd);	
 			drawer->getRootDrawer()->getDrawerContext()->doDraw();
 		}
 	}
@@ -113,7 +167,6 @@ HTREEITEM ThreeDStack::configure( HTREEITEM parentItem) {
 	CoordBounds cbLimits = drawer->getRootDrawer()->getCoordBoundsView();
 	distance = 0.5 * (cbLimits.width() + cbLimits.height())/ (2.0 * drawer->getRootDrawer()->getDrawerCount());
 
-
 	return htiNode;
 }
 
@@ -123,21 +176,41 @@ void ThreeDStack::changeDistances() {
 }
 
 void ThreeDStack::setthreeDStackMarker(void *v, HTREEITEM) {
-	bool use = *(bool *)v;
-	if ( use) {
-		if ( cursor && cursor->isActive())
-			cursor->setActive(true);
-		else {
+	bool yesno = *(bool *)v;
+	setActive(yesno); // noone else will set us active/inactive
+	MapPaneView *view = tree->GetDocument()->mpvGetView();
+	if (yesno) {
+		view->noTool();
+		if (!view->addTool(this, getId()))
+			view->changeStateTool(getId(), true);
+		if (cursor) {
+			if (!cursor->isActive())
+				cursor->setActive(true);
+		} else {
 			DrawerParameters dp(drawer->getRootDrawer(), drawer);
 			cursor = new Cursor3DDrawer(&dp);
-			drawer->getRootDrawer()->addPostDrawer(728,cursor); 
-			cursor->setCoord(mouseCrd);	
+			cursor->setCoord(mouseCrd);
+			((PointProperties*)cursor->getProperties())->drawColor = Color(0,0,0);
+			PreparationParameters pp(NewDrawer::ptRENDER);
+			cursor->prepare(&pp);
+			drawer->getRootDrawer()->addPostDrawer(728,cursor);
 		}
-		tree->GetDocument()->mpvGetView()->addTool(this, getId());
+		drawer->getRootDrawer()->getZMaker()->setThreeDPossible(true);
 	} else {
+		drawer->getRootDrawer()->getZMaker()->setThreeDPossible(false);
 		cursor->setActive(false);
-		tree->GetDocument()->mpvGetView()->noTool(getId());
+		view->changeStateTool(getId(), false);
 	}
+}
+
+void ThreeDStack::Stop()
+{
+	if ( cursor->isActive()) {
+		cursor->setActive(false);
+	}
+
+	if (tree->m_hWnd && htiNodeCursor)
+		tree->GetTreeCtrl().SetCheck(htiNodeCursor, false);
 }
 
 void ThreeDStack::update() {
@@ -151,7 +224,7 @@ void ThreeDStack::update() {
 	DisplayOptionTreeItem *item;
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&ThreeDStack::setthreeDStackMarker);
-	insertItem(TR("3D Cursor"),"info",item,0);
+	htiNodeCursor = insertItem(TR("3D Cursor"),"info",item,0);
 
 	for(int i = 0 ; i < rootDrawer->getDrawerCount(); ++i) {
 		NewDrawer *drw = rootDrawer->getDrawer(i);
@@ -176,7 +249,6 @@ void ThreeDStack::update() {
 		}
 		item->setCheckAction(this,0,(DTSetCheckFunc)&ThreeDStack::setIndividualStatckItem);
 		stackStatus.push_back(StackInfo(it, true));
-
 	}
 }
 
