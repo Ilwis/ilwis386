@@ -371,7 +371,11 @@ vector<GLuint> SpaceTimeDrawer::getSelectedObjectIDs(const CRect& rect) const
 				double windowAspectRatio = (double)viewport[2] / (double)viewport[3]; // (double)(rc.Col) / (double)(rc.Row)
 				double zNear = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y)) / 2.0;
 				double zFar = max(cbZoom.width(), cbZoom.height()) * 4.0;
-				gluPerspective(30.0, windowAspectRatio, zNear, zFar);
+				double zoom3D = rootDrawer->getZoom3D();
+				if (zoom3D < 1.0) // use Field Of View to zoom-in, and scale to zoom out (FOV distorts when zooming out)
+					gluPerspective(30.0 * zoom3D, windowAspectRatio, zNear, zFar);
+				else
+					gluPerspective(30.0, windowAspectRatio, zNear, zFar);
 			} else {
 				glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1);
 			}
