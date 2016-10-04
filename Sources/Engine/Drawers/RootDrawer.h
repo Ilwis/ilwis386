@@ -68,9 +68,7 @@ namespace ILWIS {
 		void set3D(bool yeno);
 		bool is3D() const;
 		void setViewPoint(const Coord& c);
-		void setEyePoint(const Coord& c);
 		Coord getViewPoint() const;
-		Coord getEyePoint() const;
 		void setRotationAngles(double rx, double ry, double rz);
 		void getRotationAngles(double& rx, double& ry, double& rz);
 		void setTranslate(double tx, double ty, double tz);
@@ -80,17 +78,15 @@ namespace ILWIS {
 		void SetSkyColor(Color & clr);
 
 	private:
-		void setEyePoint();
 		void modifyCBZoomView(double dv, double dz, double f);
 		void calcCanvas();
 		void addDataSource(void *);
 		void SetthreeD(void *v, LayerTreeView *tv);
 		void debug();
 		void initLight();
-			void SetAmbientColor();
-
-	void SetDiffuseColor();
-	void SetSpecularColor();
+		void SetAmbientColor();
+		void SetDiffuseColor();
+		void SetSpecularColor();
 
 		CoordBounds cbView;
 		CoordBounds cbZoom;
@@ -101,7 +97,6 @@ namespace ILWIS {
 		bool fUseGeoRef;
 		RowCol pixArea;
 		bool threeD;
-		Coordinate eyePoint;
 		Coordinate viewPoint;
 		double windowAspectRatio;
 		double mapAspectRatio;

@@ -159,7 +159,7 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		if ( threeD) {
-			double zNear = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y)) / 2.0;
+			double zNear = cbZoom.height() * 3.0 / 4.0;
 			double zFar = max(cbZoom.width(), cbZoom.height()) * 4.0;
 			if (zoom3D < 1.0) // use Field Of View to zoom-in, and scale to zoom out (FOV distorts when zooming out)
 				gluPerspective(30.0 * zoom3D, windowAspectRatio, zNear, zFar);
@@ -233,7 +233,6 @@ String RootDrawer::store(const FileName& fnView, const String parenSection) cons
 	ObjectInfo::WriteElement("RootDrawer","CoordBoundsView",fnView, getCoordBoundsView());
 	ObjectInfo::WriteElement("RootDrawer","CoordBoundsMap",fnView, getMapCoordBounds());
 	//ObjectInfo::WriteElement("RootDrawer","AspectRatio",fnView, getAspectRatio());
-	ObjectInfo::WriteElement("RootDrawer","EyePoint",fnView, getEyePoint());
 	ObjectInfo::WriteElement("RootDrawer","ViewPoint",fnView, getViewPoint());
 	ObjectInfo::WriteElement("RootDrawer","ViewPort",fnView, pixArea);
 	ObjectInfo::WriteElement("RootDrawer","XRotation",fnView, rotX);
@@ -259,8 +258,7 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 	ObjectInfo::ReadElement("RootDrawer","CoordBoundsMap",fnView, cbM);
 	/*double aspect;
 	ObjectInfo::ReadElement("RootDrawer","AspectRatio",fnView, aspect);*/
-	Coord eyePoint,viewPoint;
-	ObjectInfo::ReadElement("RootDrawer","EyePoint",fnView, eyePoint);
+	Coord viewPoint;
 	ObjectInfo::ReadElement("RootDrawer","ViewPoint",fnView, viewPoint);
 	RowCol viewPort;
 	ObjectInfo::ReadElement("RootDrawer","ViewPort",fnView, viewPort);
@@ -282,7 +280,6 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 	ObjectInfo::ReadElement("RootDrawer","ZTranslation",fnView, translateZ);
 	ObjectInfo::ReadElement("RootDrawer","Zoom3D",fnView, zoom3D);
 
-	setEyePoint(eyePoint);
 	setViewPoint(viewPoint);
 	set3D(threeD);
 	initRestore = true;
@@ -577,8 +574,7 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 
 		}
 		cbZoom = cbView;
-		setViewPoint(cbView.middle());
-		setEyePoint();
+		setViewPoint(cbZoom.middle());
 	} 
 	if ( is3D()) {
 		if ( !initRestore) { // restore set rotX, etc. But the OnEntireMap would destroy these false; so for once  the init of values is skipped
@@ -611,13 +607,6 @@ void RootDrawer::setCoordBoundsZoom(const CoordBounds& cbIn) {
 
 	cbZoom = cb;
 	setViewPoint(cbZoom.middle());
-	setEyePoint();
-}
-
-void RootDrawer::setEyePoint() {
-	eyePoint.x = viewPoint.x;;// - cbZoom.width() ;
-	eyePoint.y = viewPoint.y - cbZoom.height() * 1.5;
-	eyePoint.z = cbZoom.width() ;
 }
 
 void RootDrawer::setCoordBoundsMap(const CoordBounds& cb) {
@@ -716,7 +705,6 @@ CoordBounds RootDrawer::getCoordBoundsZoom() const  {
 void RootDrawer::set3D(bool yesno) {
 	if ( yesno != threeD) {
 		threeD = yesno;
-		setEyePoint();
 	}
 }
 bool RootDrawer::is3D() const {
@@ -726,14 +714,8 @@ bool RootDrawer::is3D() const {
 void RootDrawer::setViewPoint(const Coord& c){
 	viewPoint = c;
 }
-void RootDrawer::setEyePoint(const Coord& c){
-	eyePoint = c;
-}
 Coord RootDrawer::getViewPoint() const{
 	return viewPoint;
-}
-Coord RootDrawer::getEyePoint() const{
-	return eyePoint;
 }
 
 void RootDrawer::debug() {
@@ -808,8 +790,8 @@ void RootDrawer::initLight() {
 	glClearDepth(1.0);
 
 	//GLfloat light0Position[] = {0.0f, 0.0f, 0.0f, 1.0f};
-	GLfloat light0Position[] = {eyePoint.x, eyePoint.y, eyePoint.z, 1.0f};
-	glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
+	//GLfloat light0Position[] = {eyePoint.x, eyePoint.y, eyePoint.z, 1.0f};
+	//glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
 	glEnable(GL_COLOR_MATERIAL);
 
 	glEnable(GL_LIGHT0);

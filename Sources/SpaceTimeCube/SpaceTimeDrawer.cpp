@@ -366,10 +366,8 @@ vector<GLuint> SpaceTimeDrawer::getSelectedObjectIDs(const CRect& rect) const
 			gluPickMatrix(rect.CenterPoint().x, rect.CenterPoint().y, max(1, rect.Width()), max(1, rect.Height()), viewport);
 			CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom();
 			if (rootDrawer->is3D()) {
-				Coord eyePoint = rootDrawer->getEyePoint();
-				Coord viewPoint = rootDrawer->getViewPoint();
 				double windowAspectRatio = (double)viewport[2] / (double)viewport[3]; // (double)(rc.Col) / (double)(rc.Row)
-				double zNear = max(abs(eyePoint.x - viewPoint.x), abs(eyePoint.y - viewPoint.y)) / 2.0;
+				double zNear = cbZoom.height() * 3.0 / 4.0;
 				double zFar = max(cbZoom.width(), cbZoom.height()) * 4.0;
 				double zoom3D = rootDrawer->getZoom3D();
 				if (zoom3D < 1.0) // use Field Of View to zoom-in, and scale to zoom out (FOV distorts when zooming out)
