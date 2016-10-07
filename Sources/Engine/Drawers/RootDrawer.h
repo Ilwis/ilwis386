@@ -73,8 +73,10 @@ namespace ILWIS {
 		void getRotationAngles(double& rx, double& ry, double& rz);
 		void setTranslate(double tx, double ty, double tz);
 		void getTranslate(double& tx, double& ty, double& tz);
+		void deltaTranslate(double deltax, double deltay, double deltaz);
 		double getZoom3D() const;
 		void setZoom3D(double v);
+		void deltaZoom3D(double deltav);
 		void SetSkyColor(Color & clr);
 
 	private:

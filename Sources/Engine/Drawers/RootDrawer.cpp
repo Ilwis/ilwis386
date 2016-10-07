@@ -8,6 +8,8 @@
 
 using namespace ILWIS;
 
+#define ROTATIONSWITCH 0.4
+
 RootDrawer::RootDrawer()
 : ComplexDrawer(0,"RootDrawer")
 , fUseGeoRef(false)
@@ -122,22 +124,6 @@ void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, b
 	setCoordBoundsView(cbMap, overrule);
 }
 
-		// Experimental ::draw code for moving the center of rotation
-		//glTranslatef(translateX, translateY, translateZ);
-		//glTranslatef(viewPoint.x,viewPoint.y, 0);
-		//glTranslatef(-translateX, -translateY, -translateZ);
-		//glRotatef(rotY,-1,0,0);				// Rotate on y
-		//glRotatef(rotX,0,0,-1);				// Rotate on x
-		//glTranslatef(-viewPoint.x,-viewPoint.y, 0);
-		//glTranslatef(-translateX, -translateY, -translateZ);
-		//glTranslatef(translateX, translateY, translateZ);
-		//glTranslatef(translateX, translateY, translateZ);
-		//glRotatef(-rotX,0,0,-1);				// Rotate on x
-		//glRotatef(-rotY,-1,0,0);				// Rotate on y
-		//glTranslatef(translateX, translateY, translateZ);
-		//glRotatef(rotY,-1,0,0);				// Rotate on y
-		//glRotatef(rotX,0,0,-1);				// Rotate on x
-
 /*
 Note: calls to RootDrawer::draw are meaningless without an OpenGL context in the current thread.
 Therefore all calls to RootDrawer::draw must be preceded by a call to DrawerContext::TakeContext and followed by a call to ReleaseContext
@@ -171,17 +157,16 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		if (threeD) {
-			gluLookAt(viewPoint.x, viewPoint.y, cbZoom.width() * 1.5, viewPoint.x, viewPoint.y, viewPoint.z, 0, 1.0, 0 );
-			if (zoom3D < 1.0)
-				glTranslatef(translateX * zoom3D, translateY * zoom3D, translateZ * zoom3D);
-			else
+			gluLookAt(0, 0, cbZoom.width() * 1.5, 0, 0, 0, 0, 1.0, 0 );
+			if (zoom3D >= ROTATIONSWITCH)
 				glTranslatef(translateX, translateY, translateZ);
-			glTranslatef(viewPoint.x,viewPoint.y, viewPoint.z);
 			glRotatef(rotY,-1,0,0);				// Rotate on y
 			glRotatef(rotX,0,0,-1);				// Rotate on x
+			if (zoom3D < ROTATIONSWITCH)
+				glTranslatef(translateX, translateY, translateZ);
 			if (zoom3D > 1.0)
 				glScalef(1.0 / zoom3D, 1.0 / zoom3D, 1.0 / zoom3D);
-			glTranslatef(-viewPoint.x,-viewPoint.y, -viewPoint.z);
+			glTranslatef(-viewPoint.x, -viewPoint.y, -viewPoint.z);
 		}
 
 		// Draw
@@ -762,12 +747,83 @@ void RootDrawer::getTranslate(double& tx, double& ty, double& tz){
 	tz = translateZ;
 }
 
+void RootDrawer::deltaTranslate(double deltax, double deltay, double deltaz){
+	if (zoom3D < ROTATIONSWITCH) {
+		// http://stackoverflow.com/questions/14607640/rotating-a-vector-in-3d-space
+		// rotation around x-axis
+		double shX = deltax;
+		double shY = deltay * cos(rotY * M_PI / 180.0) - deltaz * sin(rotY * M_PI / 180.0);
+		double shZ = deltay * sin(rotY * M_PI / 180.0) + deltaz * cos(rotY * M_PI / 180.0);
+
+		deltax = shX;
+		deltay = shY;
+		deltaz = shZ;
+
+		// rotation around z-axis (concatenate)
+		shX = deltax * cos(rotX * M_PI / 180.0) - deltay * sin(rotX * M_PI / 180.0);
+		shY = deltax * sin(rotX * M_PI / 180.0) + deltay * cos(rotX * M_PI / 180.0);
+		shZ = deltaz;
+
+		deltax = shX;
+		deltay = shY;
+		deltaz = shZ;
+	}
+	if (zoom3D < 1.0) { // FOV zoom
+		translateX += deltax * zoom3D;
+		translateY += deltay * zoom3D;
+		translateZ += deltaz * zoom3D;
+	} else {
+		translateX += deltax;
+		translateY += deltay;
+		translateZ += deltaz;
+	}
+}
+
 double RootDrawer::getZoom3D() const{
 	return zoom3D;
 }
 
 void RootDrawer::setZoom3D(double v){
 	zoom3D = v;
+}
+
+void RootDrawer::deltaZoom3D(double deltav){
+	if ((zoom3D < ROTATIONSWITCH) && ((zoom3D * deltav) >= ROTATIONSWITCH)) { // PostTranslate to PreTranslate
+		// rotation around z-axis
+		double shX = translateX * cos(-rotX * M_PI / 180.0) - translateY * sin(-rotX * M_PI / 180.0);
+		double shY = translateX * sin(-rotX * M_PI / 180.0) + translateY * cos(-rotX * M_PI / 180.0);
+		double shZ = translateZ;
+
+		translateX = shX;
+		translateY = shY;
+		translateZ = shZ;
+		// rotation around x-axis (concatenate)
+		shX = translateX;
+		shY = translateY * cos(-rotY * M_PI / 180.0) - translateZ * sin(-rotY * M_PI / 180.0);
+		shZ = translateY * sin(-rotY * M_PI / 180.0) + translateZ * cos(-rotY * M_PI / 180.0);
+
+		translateX = shX;
+		translateY = shY;
+		translateZ = shZ;
+	} else if ((zoom3D >= ROTATIONSWITCH) && ((zoom3D * deltav) < ROTATIONSWITCH)) { // PreTranslate to PostTranslate
+		// rotation around x-axis
+		double shX = translateX;
+		double shY = translateY * cos(rotY * M_PI / 180.0) - translateZ * sin(rotY * M_PI / 180.0);
+		double shZ = translateY * sin(rotY * M_PI / 180.0) + translateZ * cos(rotY * M_PI / 180.0);
+
+		translateX = shX;
+		translateY = shY;
+		translateZ = shZ;
+
+		// rotation around z-axis (concatenate)
+		shX = translateX * cos(rotX * M_PI / 180.0) - translateY * sin(rotX * M_PI / 180.0);
+		shY = translateX * sin(rotX * M_PI / 180.0) + translateY * cos(rotX * M_PI / 180.0);
+		shZ = translateZ;
+		translateX = shX;
+		translateY = shY;
+		translateZ = shZ;
+	}
+	zoom3D *= deltav;
 }
 
 void RootDrawer::SetSkyColor(Color & clr) {

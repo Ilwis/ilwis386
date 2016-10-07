@@ -354,13 +354,7 @@ void ZoomableView::viewTranslate(const CPoint& pnt, UINT message) {
 		CoordBounds cb = doc->rootDrawer->getCoordBoundsZoom();
 		double shiftx = cb.width() * deltax;
 		double shifty = cb.height() * deltay;
-		double tx,ty,tz;
-		doc->rootDrawer->getTranslate(tx,ty,tz);
-		tx -= shiftx;
-		ty += shifty;
-		tz += shifty; // intentionally use shifty twice, the resulting interactvity "feels" more natural
-		doc->rootDrawer->setTranslate(tx,ty,tz);
-		
+		doc->rootDrawer->deltaTranslate(-shiftx, shifty, 0.0);
 		beginMovePoint = pnt;
 		Invalidate();
 	}
@@ -381,14 +375,10 @@ void ZoomableView::viewZoom(const CPoint& pnt, UINT message) {
 		double deltay = beginMovePoint.y - pnt.y;
 		if ( deltay == 0)
 			return;
-
-		double zoom3D = doc->rootDrawer->getZoom3D();
 		if (deltay > 0)
-			zoom3D *= (1.0 + deltay / 100.0);
+			doc->rootDrawer->deltaZoom3D(1.0 + deltay / 100.0);
 		else
-			zoom3D /= (1.0 - deltay / 100.0);
-		doc->rootDrawer->setZoom3D(zoom3D);
-
+			doc->rootDrawer->deltaZoom3D(1.0 / (1.0 - deltay / 100.0));
 		beginMovePoint = pnt;
 		Invalidate();
 	}
@@ -934,21 +924,15 @@ void ZoomableView::OnUpdateZoomOut(CCmdUI* pCmdUI)
 
 void ZoomableView::ZoomInPnt(zPoint p)
 {
-
 	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
-	double zoom3D = mcd->rootDrawer->getZoom3D();
-	zoom3D /= 1.1;
-	mcd->rootDrawer->setZoom3D(zoom3D);
+	mcd->rootDrawer->deltaZoom3D(1.0/1.1);
 	mcd->mpvGetView()->Invalidate();
-
 }
 
 void ZoomableView::ZoomOutPnt(zPoint p)
 {
 	MapCompositionDoc *mcd = (MapCompositionDoc *)GetDocument();
-	double zoom3D = mcd->rootDrawer->getZoom3D();
-	zoom3D *= 1.1;
-	mcd->rootDrawer->setZoom3D(zoom3D);
+	mcd->rootDrawer->deltaZoom3D(1.1);
 	mcd->mpvGetView()->Invalidate();
 }
 
