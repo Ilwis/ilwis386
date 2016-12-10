@@ -221,17 +221,17 @@ void InPlaceValueEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 //------------------------------------------------------------------------------------------------- 
 BOOL InPlaceValueEdit::PreTranslateMessage(MSG* pMsg)
 {
-	CString str;
+  CString str;
   if (pMsg->message == WM_KEYDOWN )
-	{
-		if ( pMsg->wParam == VK_DELETE )
-		{
-			SendMessage(WM_KEYDOWN, pMsg->wParam, pMsg->lParam);
-			return FALSE;
-		}
-		else if ( isalpha((unsigned char)pMsg->wParam) )  
-			return TRUE;
-	}
+  {
+    if ( pMsg->wParam == VK_DELETE )
+    {
+      SendMessage(WM_KEYDOWN, pMsg->wParam, pMsg->lParam);
+      return FALSE;
+    }
+    else if ( isalpha((unsigned char)pMsg->wParam) )  
+      return TRUE;
+  }
   return CEdit::PreTranslateMessage(pMsg);
 }
 
@@ -385,25 +385,25 @@ class LimitRow : public FieldGroup
 class MultiLimitForm : public FormWithDest
 {
 public:
-	MultiLimitForm(CWnd* par, vector<BandInfo> &info) 
-	:	FormWithDest(par, TR("Insert Multiple Limits")),
-    iLimits(2),
-		arBInf(info)
+    MultiLimitForm(CWnd* par, vector<BandInfo> &info) 
+    : FormWithDest(par, TR("Insert Multiple Limits"))
+    , iLimits(2)
+    , arBInf(info)
 	{
-    FormEntry *fe, *fe1;
-		fes.resize(6);
+        FormEntry *fe, *fe1;
+	    fes.resize(6);
 		arBInfTemp.resize(6);
-	  fe = fi = new FieldInt(root, TR("&Number of Limits"), &iLimits, ValueRange(1,6), true);
-		fi->SetCallBack((NotifyProc)&MultiLimitForm::ChangeNoOfLimits);
-		for(int i=0; i < 6; ++i)
-		{
- 			fes[i] = fe1 = new LimitRow(root, arBInfTemp[i], i);
-			fe1->Align(fe, AL_UNDER);
-      fe = fe1;
-		}
-		SetMenHelpTopic("");		
- 		create();
-	}
+        fe = fi = new FieldInt(root, TR("&Number of Limits"), &iLimits, ValueRange(1,6), true);
+        fi->SetCallBack((NotifyProc)&MultiLimitForm::ChangeNoOfLimits);
+        for(int i=0; i < 6; ++i)
+        {
+            fes[i] = fe1 = new LimitRow(root, arBInfTemp[i], i);
+            fe1->Align(fe, AL_UNDER);
+            fe = fe1;
+        }
+        SetMenHelpTopic("");		
+        create();
+    }
 
 	int ChangeNoOfLimits(Event *)
 	{
@@ -599,12 +599,14 @@ void RepresentationValueLB::DrawItem( LPDRAWITEMSTRUCT dis )
 			case RepresentationGradual::crUPPER:
 			{
 				Color clr = rgDoc->GetColor( i );
+				clr.alpha() = 255 - clr.alpha();
 				CBrush brush(clr);
 				dc.FillRect(rct, &brush);					
 			}	break;			
 			case RepresentationGradual::crLOWER:
 			{
 				Color clr = rgDoc->GetColor( i-1 );
+				clr.alpha() = 255 - clr.alpha();
 				CBrush brush(clr);
 				dc.FillRect(rct, &brush);				
 				
@@ -620,23 +622,23 @@ void RepresentationValueLB::DrawItem( LPDRAWITEMSTRUCT dis )
 				{
 					int iIndex = rgDoc->iGetColorIndex( i-1 ) + iBlock;
 					Color clrDraw = rgDoc->rpr()->clrRaw(iIndex);
+					clrDraw.alpha() = 255 - clrDraw.alpha();
 					CBrush brush(clrDraw);
 					dc.FillRect(rctBlock, &brush);
 					if ( iBlock != iSteps - 1 )
 						rctBlock = CRect(rctBlock.right, rctBlock.top, rctBlock.right + iXShift + (iRest-- != 0 ? 1 : 0), rctBlock.bottom);
 					else
 						rctBlock = CRect(rctBlock.right, rctBlock.top, rct.right, rctBlock.bottom);
-				}					
-				
+				}
 			}
 		}			
 	}
 	else
 	{
 		Color clr = rgDoc->GetColor( i );
+		clr.alpha() = 255 - clr.alpha();
 		CBrush brush(clr);
-		dc.FillRect(rct, &brush);		
-		
+		dc.FillRect(rct, &brush);			
 	}		
 	
 	value.Invalidate();
@@ -669,7 +671,7 @@ void RepresentationValueLB::OnContextMenu( CWnd* pWnd, CPoint point )
 	GetItemRect(1, &rct2);
 	ScreenToClient(&point);
 	double rFrac = (double)rct1.Height() / (rct1.Height() + rct2.Height());
-  double rIndex = (double)point.y / (rct1.Height() + rct2.Height());
+	double rIndex = (double)point.y / (rct1.Height() + rct2.Height());
 	int iIndex = (rIndex - (int)rIndex > rFrac) ? 2*(int)rIndex + 1  : 2*(int)rIndex ;
 	ClientToScreen(&point);
 
@@ -732,7 +734,7 @@ void RepresentationValueLB::OnKeyUp( UINT nChar, UINT nRepCnt, UINT nFlags )
 			break;
 		case VK_RETURN:
 			if ( value.fIgnoreReturn)
-      {
+			{
 				// hack to prevent returns from the value edit to go to the LB.
 				value.fIgnoreReturn=false;
 				break;
@@ -741,8 +743,7 @@ void RepresentationValueLB::OnKeyUp( UINT nChar, UINT nRepCnt, UINT nFlags )
    	case VK_F2:
 		   view->OnEdit();
 			break;
-	}
-		
+	}		
 }
 
 void RepresentationValueLB::OnLButtonUp(UINT nFlags, CPoint point )
@@ -758,7 +759,6 @@ void RepresentationValueLB::OnLButtonUp(UINT nFlags, CPoint point )
 	GetItemRect(iSel, itemRect);
 	if ( point.x < iLEFTEDGE )
 	{
-
 		value.SetEditId(id);
 		if ( iSel % 2 == 0)
 		{
@@ -821,7 +821,6 @@ RepresentationValueView::~RepresentationValueView()
 
 BOOL RepresentationValueView::PreCreateWindow(CREATESTRUCT& cs)
 {
-
 	return RepresentationView::PreCreateWindow(cs);
 }
 
@@ -836,6 +835,7 @@ void RepresentationValueView::OnMultSteps()
 		{
 			double rVal = vc[i].rMax;
 			Color col = vc[i].clrMax;
+			col.alpha() = 255 - col.alpha();
 			if (! rgDoc->fRepresentationValue())
 				rVal /= 100;
 			rgDoc->Insert(rVal, col);
@@ -924,7 +924,6 @@ RepresentationValueDoc* RepresentationValueView::GetDocument()
 	return dynamic_cast<RepresentationValueDoc *>(m_pDocument);
 }
 
-
 void RepresentationValueView::OnFileSave()
 {
 }
@@ -942,12 +941,14 @@ void RepresentationValueView::OnInsert()
   double rVal = rUNDEF;
 	int iIndex = rgDoc->iNoColors() - max(lb.GetCurSel(), 0)/2 - 1;
 	Color col = GetDocument()->GetColor(iIndex);
+	col.alpha() = 255 - col.alpha();
   //Color col(128,128,128);
   LimitForm frm(this, TR("Insert Limit"), 
     &rVal, rgDoc->dm(), &col, rgDoc->fUsesGradual(), "ilwismen\\representation_value_gradual_editor_insert_limit.htm");
   if (frm.fOkClicked()) {
     if (! rgDoc->fRepresentationValue())
       rVal /= 100;
+	col.alpha() = 255 - col.alpha();
     rgDoc->Insert(rVal, col);
     init();
     rprBar.Invalidate();
@@ -956,7 +957,7 @@ void RepresentationValueView::OnInsert()
 
 void RepresentationValueView::SetColorMethod(int iLBIndex, RepresentationGradual::ColorRange method)
 {
-	int id = 	GetDocument()->iNoColors() - iLBIndex/2 - 2;
+	int id = GetDocument()->iNoColors() - iLBIndex/2 - 2;
 	CRect rct;
 	GetDocument()->Edit(id, method);
 	lb.GetItemRect(iLBIndex, rct);
@@ -1063,14 +1064,14 @@ void RepresentationValueView::OnEdit()
     if ( ! rgDoc->fRepresentationValue())
       rVal *= 100;
     Color col = rgDoc->GetColor(id);
+	col.alpha() = 255 - col.alpha();
 		
     LimitForm frm(this, TR("Edit Limit"), &rVal, rgDoc->dm(), &col, rgDoc->fUsesGradual(), "ilwismen\\representation_value_gradual_editor_edit_limit.htm");
-    if (frm.fOkClicked()) 
-		{
+    if (frm.fOkClicked()) {
       if ( ! rgDoc->fRepresentationValue())
         rVal /= 100;
-
-			rgDoc->Edit(id, fValChange ? rVal : rgDoc->rGetLimitValue(id), col);
+	  col.alpha() = 255 - col.alpha();
+      rgDoc->Edit(id, fValChange ? rVal : rgDoc->rGetLimitValue(id), col);
     }
   }
 	init();
@@ -1082,7 +1083,6 @@ void RepresentationValueView::OnEdit()
 
 void RepresentationValueView::OnRepresentationBar()
 {
-
 	if ( rprBar.GetSafeHwnd())
 	{
 		if (rprBar.IsWindowVisible())
@@ -1098,7 +1098,7 @@ void RepresentationValueView::OnRepresentationBar()
 	}
 }
 
-void	RepresentationValueView::OnUpdateRepresentationBar(CCmdUI *cmd)
+void RepresentationValueView::OnUpdateRepresentationBar(CCmdUI *cmd)
 {
 	if (rprBar.IsWindowVisible())
 		cmd->SetCheck(1);
@@ -1146,7 +1146,7 @@ void RepresentationValueView::OnSize( UINT nType, int cx, int cy )
 		lb.MoveWindow(0,0,cx,cy);
 }
 
-void	RepresentationValueView::OnUpdateRprButtonBar(CCmdUI *cmd)
+void RepresentationValueView::OnUpdateRprButtonBar(CCmdUI *cmd)
 {
 	GetParentFrame()->OnUpdateControlBarMenu(cmd);
 }
