@@ -96,7 +96,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 				rprC->DoNotStore(true);
 				int raw = pp->filteredRaws[j];
 				Color clr = rprC->clrRaw(abs(raw));
-				clr.alpha() = (raw > 0) ? 0 : 255;
+				clr.alpha() = (raw < 0) ? 0 : 255;
 				rprC->PutColor(abs(raw),clr);
 			}
 		}
