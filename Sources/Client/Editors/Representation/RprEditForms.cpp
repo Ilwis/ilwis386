@@ -90,6 +90,7 @@ int MapRprEditForm::CustomColor(Event *)
 int MapRprEditForm::exec() {
   root->StoreData();
   Color clr = col;
+  clr.alpha() = 255 - clr.alpha();
   rcl->PutColor(iRaw,clr);
   return 0;
 }
@@ -134,6 +135,7 @@ int SegmentMapRprEditForm::CustomColor(Event*)
 int SegmentMapRprEditForm::exec() {
   root->StoreData();
 	line.ResizeSymbol(RepresentationClass::iSIZE_FACTOR);
+	col.alpha() = 255 - col.alpha();
   line.clrLine() = col;
   line.Store(rcl, iRaw);
   return 0;
@@ -310,6 +312,7 @@ int PolygonMapRprEditForm::InverseColors(Event*)
 int PolygonMapRprEditForm::exec() {
   root->StoreData();
   Color clr = col;
+  clr.alpha() = 255 - clr.alpha();
   rcl->PutColor(iRaw,clr);
   switch (iType) {
     case 0: // solid
@@ -320,11 +323,13 @@ int PolygonMapRprEditForm::exec() {
       if (fInverse) {
         iHatch |= 0x20;
         Color clr2 = col2;
+		clr2.alpha() = 255 - clr2.alpha();
         rcl->PutSecondColor(iRaw,clr2);
       }
       else if (colHBG.iVal() != -2) {
         iHatch |= 0x10;
         Color clr2 = colHBG;
+		clr2.alpha() = 255 - clr2.alpha();
         rcl->PutSecondColor(iRaw,clr2);
       }
       rcl->PutPattern(iRaw, iHatch);
@@ -333,6 +338,7 @@ int PolygonMapRprEditForm::exec() {
       if ((short*)-1 != (short*)pPattern)
         rcl->PutPatternData(iRaw,(short*)pPattern);
       Color clr2 = col2;
+	  clr2.alpha() = 255 - clr2.alpha();
       rcl->PutSecondColor(iRaw,clr2);
       break;
   }
@@ -374,8 +380,10 @@ int PointMapRprEditForm::exec() {
   rcl->PutSymbolSize(iRaw,smb.iSize);
   rcl->PutSymbolWidth(iRaw,smb.iWidth);
   Color clr = smb.col;
+  clr.alpha() = 255 - clr.alpha();
   rcl->PutSymbolColor(iRaw,clr);
   clr = smb.fillCol;
+  clr.alpha() = 255 - clr.alpha();
   rcl->PutSymbolFill(iRaw,clr);
   rcl->PutSymbolRotation(iRaw,smb.rRotation);
   return 0;
