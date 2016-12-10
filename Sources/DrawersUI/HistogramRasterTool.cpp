@@ -44,10 +44,6 @@ HTREEITEM HistogramRasterTool::configure( HTREEITEM parentItem){
 	if ( isConfigured)
 		return htiNode;
 
-
-	HistogramGraphView *hview = tree->GetDocument()->getHistoView(get()->fnObj);
-
-
 	//SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drawer->getParentDrawer();
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&HistogramRasterTool::displayOptionHisto);
@@ -78,8 +74,10 @@ BaseMapPtr *HistogramRasterTool::get(int i) const{
 void HistogramRasterTool::displayOptionHisto() {
 	MapCompositionDoc *mdoc = tree->GetDocument();
 	BaseMapPtr *bm = get();
-	if ( !bm)
-		return ;
+	if (!bm)
+		return;
+	if (!mdoc->getHistoView(bm->fnObj))
+		return;
 
 	new HistogramRasterToolForm(tree, drawer);
 }
@@ -177,6 +175,7 @@ HistogramRasterToolForm::HistogramRasterToolForm(CWnd *wPar, NewDrawer *dr) :
 	MapCompositionDoc *mdoc = view->GetDocument();
 	HistogramGraphView *hview = mdoc->getHistoView(bm->fnObj);
 	color = hview->getTresholdColor();
+	color.alpha() = 255 - color.alpha();
 	spread = hview->getSpread() * 100;
 
 
@@ -204,9 +203,11 @@ void  HistogramRasterToolForm::apply() {
 
 	MapCompositionDoc *mdoc = view->GetDocument();
 	HistogramGraphView *hview = mdoc->getHistoView(bm->fnObj);
-	hview->setTresholdColor(color);
+	Color clr (color);
+	clr.alpha() = 255 - clr.alpha();
+	hview->setTresholdColor(clr);
 	hview->setSpread(spread / 100.0);
-	datadrw->setTresholdColor(color);
+	datadrw->setTresholdColor(clr);
 	hview->setThresholdRange();
 	
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
