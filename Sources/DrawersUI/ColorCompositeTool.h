@@ -51,6 +51,7 @@ namespace ILWIS {
 
 		FieldRealSliderEx *sliderLow;
 		FieldRealSliderEx *sliderHigh;
+		const RangeReal rrAllowedRange;
 		double low, high;
 		int index;
 

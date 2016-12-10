@@ -189,11 +189,11 @@ void  SetBandsForm::apply() {
 }
 
 //------------------------------------
-SetStretchCCForm::SetStretchCCForm(CWnd *wPar, ColorCompositeDrawer *dr,int _index) :
-	index(_index),
-	DisplayOptionsForm2((ComplexDrawer *)dr,wPar,"Set stretch")
-{
-	RangeReal rrAllowedRange = dr->getMapList()[dr->getColorCompositeBand(index)]->rrMinMax();
+SetStretchCCForm::SetStretchCCForm(CWnd *wPar, ColorCompositeDrawer *dr,int _index)
+	: index(_index)
+	, DisplayOptionsForm2((ComplexDrawer *)dr,wPar,"Set stretch")
+	, rrAllowedRange (dr->getMapList()[dr->getColorCompositeBand(_index)]->rrMinMax())
+{	
 	RangeReal rrCurrentLoHi = dr->getColorCompositeRange(index);
 	if (!rrCurrentLoHi.fValid())
 		rrCurrentLoHi = rrAllowedRange;
@@ -211,9 +211,9 @@ SetStretchCCForm::SetStretchCCForm(CWnd *wPar, ColorCompositeDrawer *dr,int _ind
 FormEntry *SetStretchCCForm::CheckData() {
 	sliderLow->StoreData();
 	sliderHigh->StoreData();
-	if ( low < 0)
+	if ( low < rrAllowedRange.rLo())
 		return sliderLow;
-	if ( high > 255)
+	if ( high > rrAllowedRange.rHi())
 		return sliderHigh;
 	if ( high < low)
 		return sliderHigh;
