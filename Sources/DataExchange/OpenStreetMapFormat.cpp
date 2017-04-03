@@ -221,7 +221,13 @@ String OpenStreetMapFormat::getMapRequest(const CoordBounds& cb2, const RowCol r
 	double y = (cb.middle().y + cb.MinY())/2.0;
 	int ytile = lat2tiley(y, zoom);
 	url = url.substr(0,index1) + n + url.substr(index2+1);
-	url += String("%d/%d/%d.png",zoom,xtile,ytile);
+	String query_string = "";
+	index1 = url.find("?");
+	if (index1 > 0) {
+		query_string = url.substr(index1);
+		url = url.substr(0, index1);
+	}
+	url += String("%d/%d/%d.png",zoom,xtile,ytile) + query_string;
 	TRACE(String("[ %d,%d ]\n", xtile, ytile).c_str());
 
 	return url;
