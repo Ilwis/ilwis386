@@ -172,14 +172,16 @@ bool SpatialDataDrawer::useInternalDomain() const {
 	return internalDomain;
 }
 
+// try to deprecate getAttributeTable(), bad api
 Table SpatialDataDrawer::getAtttributeTable(int index) const{
 	if ( !attTable.fValid()) {
 		if( getBaseMap(index)->fTblAtt()) {
-			(const_cast<SpatialDataDrawer *>(this))->attTable = getBaseMap()->tblAtt();
+			(const_cast<SpatialDataDrawer *>(this))->attTable = getBaseMap(index)->tblAtt();
 		}
 	}
 	return attTable;
 }
+
 void SpatialDataDrawer::setAttributeTable(const Table& tbl){
 	attTable = tbl;
 }
@@ -189,10 +191,11 @@ Column SpatialDataDrawer::getAtttributeColumn() const{
 		return attColumn;
 	return "";
 }
+
 void SpatialDataDrawer::setAttributeColumn(const String& name){
 	Table tbl = getAtttributeTable();
 	if ( tbl.fValid()) {
-		attColumn = getAtttributeTable()->col(name);
+		attColumn = tbl->col(name);
 	}
 }
 
