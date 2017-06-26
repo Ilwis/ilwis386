@@ -113,8 +113,7 @@
 
 void PhiLam::AdjustLon()
 {
-  while (Lam >  M_PI) Lam -= 2 * M_PI;  
-  while (Lam < -M_PI) Lam += 2 * M_PI;  
+  Lam = std::fmod(Lam + M_PI, 2 * M_PI) - M_PI;
 }
 
 IlwisObjectPtrList Projection::listPrj;
