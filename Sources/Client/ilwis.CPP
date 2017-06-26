@@ -472,35 +472,35 @@ BOOL IlwisWinApp::InitInstance()
 			String sV("!REGKEY:%S", sDocName);
 			IlwisSettings settings(String("%S\\%S", MainWindow::sBaseRegKey(), sDocName));
 			String sName = settings.sValue("DocName");
-			IlwisObject::iotIlwisObjectType iotType = IlwisObject::iotObjectType(FileName(sName));
-			try
-			{
-				switch(iotType)
+			if (sName.length() > 0) {
+				IlwisObject::iotIlwisObjectType iotType = IlwisObject::iotObjectType(FileName(sName));
+				try
 				{
-				case IlwisObject::iotOBJECTCOLLECTION :
-					doc = dynamic_cast<CatalogDocument*>(m_pDocManager->OpenDocumentFile(sName.c_str()));
-					break;
-				case  IlwisObject::iotMAPLIST:
-					doc = dynamic_cast<CatalogDocument*>(dtMapList->OpenDocumentFile(sV.c_str()));
-					break;
-				default:
-					doc = dynamic_cast<CatalogDocument*>(OpenNewDirectory(sV.c_str())); 
+					switch(iotType)
+					{
+					case IlwisObject::iotOBJECTCOLLECTION :
+						doc = dynamic_cast<CatalogDocument*>(m_pDocManager->OpenDocumentFile(sName.c_str()));
+						break;
+					case  IlwisObject::iotMAPLIST:
+						doc = dynamic_cast<CatalogDocument*>(dtMapList->OpenDocumentFile(sV.c_str()));
+						break;
+					default:
+						doc = dynamic_cast<CatalogDocument*>(OpenNewDirectory(sV.c_str())); 
+					}
+					if (!doc) // catalog could not be opened; skip it.
+					{
+						settings.SetValue("DocName", "");
+					} else {
+						doc->SetRegistryName(sDocName);
+						if (dirdoc == NULL)
+							SetCatalogDocument(doc);
+					}
 				}
-				if (!doc) // next time start clean, this time failed
+				catch (ErrorObject& err) 
 				{
-					settingsdocs.SetValue("NrDocs", 0);
-					String sMsg = "ILWIS could not properly open one or more Catalogs.\r\nThe Catalog list is now cleared.\r\nPlease restart ILWIS after it has closed.";
-					m_pActiveWnd->MessageBox(sMsg.sVal(), "ILWIS Error", MB_OK|MB_ICONSTOP|MB_TASKMODAL|MB_TOPMOST);
-					return FALSE;
+					err.Show();
+					settings.SetValue("DocName", "");
 				}
-
-				doc->SetRegistryName(sDocName);
-				if (dirdoc == NULL)
-					SetCatalogDocument(doc);
-			}
-			catch (ErrorObject& err) 
-			{
-				err.Show();
 			}
 		}
 
@@ -2573,7 +2573,10 @@ void IlwisWinApp::showHelp(const String& helpfile) {
 	if ( help == "")
 		return;
 	String file;
-	string defaultFile = String("%S\\help\\eng\\%S",getEngine()->getContext()->sIlwDir(),help);
+	String ilwDir = getEngine()->getContext()->sIlwDir();
+	if (ilwDir.length() > 0 && ilwDir[ilwDir.length() - 1] != '\\')
+		ilwDir += '\\';
+	string defaultFile = String("%Shelp\\eng\\%S",ilwDir,help);
 	if ( helpfile[1] != ':') {
 		String language = getEngine()->getContext()->getLanguageExtension();
 		language = language.substr(1,language.size() - 1);
@@ -2581,7 +2584,7 @@ void IlwisWinApp::showHelp(const String& helpfile) {
 			file = String("%S\\%S",getEngine()->getContext()->sIlwDir(),help);
 		}
 		else {
-			file = String("%S\\help\\%S\\%S",getEngine()->getContext()->sIlwDir(),language,help);
+			file = String("%Shelp\\%S\\%S",ilwDir,language,help);
 		}
 	} else
 		file = helpfile;
@@ -2589,10 +2592,9 @@ void IlwisWinApp::showHelp(const String& helpfile) {
 	if ( !FileName(file).fExist())
 		file = defaultFile;
 	if ( FileName(file).fExist())
-
 		ShellExecute(GetMainWnd()->m_hWnd,"open",file.c_str(),0,0,SW_SHOW);
 	else
-		throw ErrorObject(String("Help file %S.%S doenst exist",fn1.sFile, fn1.sExt));
+		throw ErrorObject(String("Help file %S%S doenst exist",fn1.sFile, fn1.sExt));
 }
 
 void IlwisWinApp::SendUpdateTableSelection(const vector<long>& raws, const FileName& fnObj, long self){
