@@ -520,27 +520,31 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 			String cname(db.getValue(i, "column_name"));
 			PostGreSQL db2(sConnectionString.c_str());
 			String query = String("Select distinct(ST_GeometryType(%S)) from %S.%S",cname, schema, tname);
-			db2.getNTResult(query.c_str());
-			if (db2.getNumberOf(PostGreSQL::ROW) > 0) {
-				for(int j = 0; j < db2.getNumberOf(PostGreSQL::ROW); ++j) {
-					String type = String(db2.getValue(j,0)).toLower();
-					String name = merge(tname, cname, "_");
-					name.sTrimSpaces();
-					if (name != "") {
-						FileName fnMap;
-						if (type == "st_point" || type == "st_multipoint") 
-							fnMap = FileName("'" + name + "'", ".mpp");
-						else if (type == "st_linestring" || type == "st_multilinestring")
-							fnMap = FileName("'" + name + "'", ".mps");
-						else if (type == "st_polygon" || type == "st_multipolygon")
-							fnMap = FileName("'" + name + "'", ".mpa");
-						lfnCurrent.push_back(fnMap);
-						if (!collection->fObjectAlreadyInCollection(fnMap)) {
-							collection->Add(fnMap);
-							fChanged = true;
+			try {
+				db2.getNTResult(query.c_str());
+				if (db2.getNumberOf(PostGreSQL::ROW) > 0) {
+					for(int j = 0; j < db2.getNumberOf(PostGreSQL::ROW); ++j) {
+						String type = String(db2.getValue(j,0)).toLower();
+						String name = merge(tname, cname, "_");
+						name.sTrimSpaces();
+						if (name != "") {
+							FileName fnMap;
+							if (type == "st_point" || type == "st_multipoint") 
+								fnMap = FileName("'" + name + "'", ".mpp");
+							else if (type == "st_linestring" || type == "st_multilinestring")
+								fnMap = FileName("'" + name + "'", ".mps");
+							else if (type == "st_polygon" || type == "st_multipolygon")
+								fnMap = FileName("'" + name + "'", ".mpa");
+							lfnCurrent.push_back(fnMap);
+							if (!collection->fObjectAlreadyInCollection(fnMap)) {
+								collection->Add(fnMap);
+								fChanged = true;
+							}
 						}
 					}
 				}
+			} catch (ErrorObject& err) {
+				err.Show();
 			}
 		}
 		std::vector<std::pair<String, String>> rasters;
@@ -561,15 +565,13 @@ void PostGisMaps::PutDataInCollection(ForeignCollectionPtr* collection, ParmList
 			name.sTrimSpaces();
 			if (name != "") {
 				//String query("Select same_alignment,regular_blocking from raster_columns where r_table_schema='%S' and r_table_name='%S' and r_raster_column='%S'", schema, tname, cname);
-	   			String query = String("Select scale_x, scale_y, blocksize_x, blocksize_y, extent from raster_columns where r_table_schema='%S' and r_table_name='%S' and r_raster_column='%S'", schema, tname, cname);
+	   			//String query = String("Select scale_x, scale_y, blocksize_x, blocksize_y, extent from raster_columns where r_table_schema='%S' and r_table_name='%S' and r_raster_column='%S'", schema, tname, cname);
+				// Probe whether we're dealing with a single-raster-table or a multiraster table whereby each record is one raster; Note that for performance reasons we only check the first 100 records.
+				String query = "WITH refrast AS (SELECT " + cname + " AS rast FROM " + schema + "." + tname + " WHERE " + cname + " IS NOT NULL AND ST_ScaleX(" + cname + ") != 0 AND ST_ScaleY(" + cname + ") != 0 LIMIT 1), crossrast AS (SELECT " + cname + " AS rast FROM " + schema + "." + tname + " WHERE " + cname + " IS NOT NULL AND ST_ScaleX(" + cname + ") != 0 AND ST_ScaleY(" + cname + ") != 0 OFFSET 1 LIMIT 100), conditions AS (SELECT ST_SameAlignment(crossrast.rast,refrast.rast) AS same, (ST_UpperLeftX(refrast.rast) / ST_ScaleX(refrast.rast) - ST_UpperLeftX(crossrast.rast) / ST_ScaleX(crossrast.rast))::integer % ST_Width(refrast.rast) AS modX, (ST_UpperLeftY(refrast.rast) / ST_ScaleY(refrast.rast) - ST_UpperLeftY(crossrast.rast) / ST_ScaleY(crossrast.rast))::integer % ST_Height(refrast.rast) AS modY, ST_Touches(ST_Envelope(crossrast.rast), ST_Envelope(refrast.rast)) OR NOT ST_Intersects(ST_Envelope(crossrast.rast), ST_Envelope(refrast.rast)) AS disjoint FROM crossrast, refrast GROUP BY same, modX, modY, disjoint) SELECT same AND modX=0 AND modY=0 AND disjoint AS singleraster FROM conditions GROUP BY singleraster ORDER BY singleraster";
 				db.getNTResult(query.c_str());
 				if(db.getNumberOf(PostGreSQL::ROW) > 0) {
-					bool fOk = String(db.getValue(0, 0)) != "";
-					fOk = fOk && (String(db.getValue(0, 1)) != "");
-					fOk = fOk && (String(db.getValue(0, 2)) != "");
-					fOk = fOk && (String(db.getValue(0, 3)) != "");
-					fOk = fOk && (String(db.getValue(0, 4)) != "");
-					if (fOk /* same_alignment && regular_blocking */) { // currently (postgis 2.x / AddRasterConstraints) same_alignment has a random value and regular_blocking is always false, we rely on same_alignment
+					bool fSingleRaster = String(db.getValue(0, 0)).fVal();
+					if (fSingleRaster) { // Officially we should test on same_alignment and regular_blocking, however currently (postgis 2.x / AddRasterConstraints may not have been called) the result of above query is more reliable than "SELECT scale_x, scale_y, blocksize_x, blocksize_y, extent FROM raster_columns WHERE r_table_schema='schema' AND r_table_name='tablename' AND r_raster_column='columnname'"
 						FileName fnMap ("'" + name + "'", ".mpr");
 						lfnCurrent.push_back(fnMap);
 						if (!collection->fObjectAlreadyInCollection(fnMap)) {
