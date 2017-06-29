@@ -72,7 +72,16 @@ HTREEITEM FeatureTextTool::configure( HTREEITEM parentItem) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&FeatureTextTool::setScaling);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&FeatureTextTool::makeActive);
-	htiNode = insertItem(TR("Labels"),".atx",item, 0);
+	bool active = false;
+	FeatureLayerDrawer *fldrw = dynamic_cast<FeatureLayerDrawer *>(((ComplexDrawer*)drawer));
+	if ( fldrw){
+		TextLayerDrawer *texts = static_cast<TextLayerDrawer *>(fldrw->getDrawer(223, ComplexDrawer::dtPOST));
+		if ( texts) {
+			active = texts->isActive();
+		}
+	}
+
+	htiNode = insertItem(TR("Labels"),".atx",item, active);
 	DrawerTool::configure(htiNode);
 
 	return htiNode;
