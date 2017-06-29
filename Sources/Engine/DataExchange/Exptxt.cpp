@@ -56,6 +56,7 @@ public:
   ~TableToDelim();
   void SetupRecord(long);
   void WriteRecord();
+  void WriteHeader();
   long iMinRec, iMaxRec;
 private:
   void SetupStructure();
@@ -206,6 +207,18 @@ void TableToDelim::SetupRecord(long iRec) {
   }
 }
 
+void TableToDelim::WriteHeader(){
+	String line;
+
+	for(int c=0; c < _tbl->iCols(); ++c){
+		if ( line != "")
+			line += ",";
+		line += "\"" + _tbl->col(c)->sName() + "\"";
+	}
+	AnsiToOem(line.c_str(), pcOem);
+	filOut->Write(line.length(), pcOem);
+	filOut->Write(2, "\r\n");
+}
 void TableToDelim::WriteRecord() {
   AnsiToOem(sRecord.c_str(), pcOem);
   filOut->Write(sRecord.length(), pcOem);
@@ -216,6 +229,7 @@ void ImpExp::ExportDelim(const FileName& fnObject, const FileName& fnFile) {
   trq.SetTitle(TR("Export table to delimited text"));
   trq.SetText(TR("Processing..."));
   TableToDelim Delim(fnObject, fnFile);
+  Delim.WriteHeader();
   for (long iRec = Delim.iMinRec; iRec <= Delim.iMaxRec; iRec++ ) {
     Delim.SetupRecord(iRec);
     Delim.WriteRecord();
