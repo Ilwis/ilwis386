@@ -101,7 +101,9 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 		if ( prop) {
 			properties.set(prop);
 		}
-		properties.drawColor = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
+		Color clr = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
+		setActive(clr != colorUNDEF);
+		properties.drawColor = clr;
 		extrAlpha = fdr->getExtrusionAlpha();
 		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 			int raw = p->filteredRaws[j];

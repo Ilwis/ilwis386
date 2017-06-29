@@ -127,8 +127,11 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		if (( isDmSort && feature->rValue() == 0) || feature->rValue() == rUNDEF) // 0 == undef for classes
 			lproperties.linestyle = 0xF0F0;
 
-		if ( fdr->useRaw())
-			lproperties.drawColor = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
+		if ( fdr->useRaw()){
+			Color clr = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
+			setActive(clr != colorUNDEF);
+			lproperties.drawColor = clr;
+		}
 		else
 			lproperties.drawColor = (fdr->getDrawingColor()->clrVal(feature->rValue()));
 

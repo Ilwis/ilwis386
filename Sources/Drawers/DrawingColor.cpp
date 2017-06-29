@@ -155,6 +155,9 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 	case NewDrawer::drmRPR: 
 		{
 			double rVal = dataValues.rValByRaw(iRaw);
+			if ( rVal == rUNDEF || rVal == iUNDEF || rVal == shUNDEF)
+				return colorUNDEF;
+
 			if (dataValues.dm()->pdv()) {
 				cRet =  clrVal(rVal);
 			}
