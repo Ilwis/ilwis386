@@ -452,7 +452,7 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 }
 
 bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() && !isValid())
+	if ( !isActive() || !isValid())
 		return false;
 
 	bool is3D = getRootDrawer()->is3D(); 
@@ -1236,7 +1236,7 @@ void AnnotationScaleBarDrawer::prepare(PreparationParameters *pp){
 }
 
 bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() && !isValid())
+	if ( !isActive() || !isValid())
 		return false;
 
 	AnnotationDrawer::draw(drawLoop, cbArea);
