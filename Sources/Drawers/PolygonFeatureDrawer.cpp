@@ -156,13 +156,13 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		BaseMapPtr *bmpptr = ((BaseMap*)polygonLayer->getDataSource())->ptr();
 		extrAlpha = polygonLayer->getExtrusionAlpha();
 		drawColor = polygonLayer->getDrawingColor()->clrRaw(feature->iValue(), polygonLayer->getDrawMethod());
+		setActive(drawColor != colorUNDEF);
 		if ( boundary) {
 			LineProperties *lp = (LineProperties *)polygonLayer->getProperties();
 			boundariesActive(polygonLayer->getShowBoundaries());
 			areasActive(polygonLayer->getShowAreas());
 			setAsQuads(polygonLayer->asQuads());
 			setAsQuadsBoundaries(polygonLayer->asQuadsBoundaries());
-
 			double rprAlpha =  p->props.itemAlpha;
 			setAreaAlpha(polygonLayer->getAreaAlpha() * rprAlpha);
 			((LineProperties *)boundary->getProperties())->linestyle = lp->linestyle;
@@ -201,6 +201,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 					setActive(raw > 0);
 				}
 			}
+			p->props.lineType = LineDrawer::ilwisLineStyle(((LineProperties *)boundary->getProperties())->linestyle);
 			boundary->prepare(p);
 			boundary->setSupportingDrawer(true);
 
