@@ -88,6 +88,7 @@ public:
 	void ShowRecord(const Ilwis::Record& rec);
 	void ZoomInOn(Coord crd, double rDist);
 	void OnEntireMap();
+	void OnShowPixelInfo();
   afx_msg LRESULT OnUpdate(WPARAM, LPARAM);
 protected:
 	void SetDirty();	
@@ -126,6 +127,7 @@ protected:
 	afx_msg void OnCreateSubMap();
 	afx_msg void OnCopyCoord();
 	afx_msg void OnUpdateEntireMap(CCmdUI* pCmdUI);
+	afx_msg void OnUpdatePixelInfo(CCmdUI* pCmdUI);
 	afx_msg void OnTimer(UINT timerID);
 	afx_msg void OnMetricCoord() ;
 	afx_msg void OnUpdateMetricCoord(CCmdUI* pCmdUI);

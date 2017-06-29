@@ -88,6 +88,7 @@ public:
 	afx_msg void OnInitMenu(CMenu* pMenu);
   afx_msg LRESULT OnUpdate(WPARAM, LPARAM);
 	afx_msg void OnLayerManagement();
+	afx_msg void OnShowPixelInfo();
 	afx_msg void OnUpdateLayerManagement(CCmdUI* pCmdUI);
 	afx_msg void OnOverviewWindow();
 	afx_msg void OnUpdateOverviewWindow(CCmdUI* pCmdUI);

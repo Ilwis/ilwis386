@@ -86,6 +86,7 @@ Created on: 2007-02-8
 #include "Client\Editors\Georef\GeoRefEditor.h"
 #include "Client\Editors\CoordSystem\CoordSysEditor.h"
 #include "Client\FormElements\syscolor.h"
+#include "Client\Mapwindow\PixelInfoBar.h"
 #include "Engine\Table\Rec.h"
 #include "Client\TableWindow\RecordView.h"
 #include "Client\Editors\Utils\Smbext.h"
@@ -141,6 +142,8 @@ BEGIN_MESSAGE_MAP(MapPaneView, SimpleMapPaneView)
 	ON_UPDATE_COMMAND_UI(ID_ADJUSTSIZE, OnUpdateAdjustSize)
 	ON_COMMAND(ID_ENTIREMAP, OnEntireMap)
 	ON_UPDATE_COMMAND_UI(ID_ENTIREMAP, OnUpdateEntireMap)
+	ON_COMMAND(ID_OPENPIXELINFO, OnShowPixelInfo)
+	ON_UPDATE_COMMAND_UI(ID_OPENPIXELINFO, OnUpdatePixelInfo)
 	ON_COMMAND(ID_DEFAULTSCALE, OnDefaultScale)
 	ON_COMMAND(ID_SCALE1, OnScaleOneToOne)
 	ON_UPDATE_COMMAND_UI(ID_SCALE1, OnUpdateScaleOneToOne)
@@ -341,6 +344,15 @@ void MapPaneView::OnDefaultScale()
 	SetDirty();
 }
 
+void MapPaneView::OnShowPixelInfo()
+{
+	if (pib) {
+		if (pib->IsWindowVisible())
+			getFrameWindow()->ShowControlBar(pib,FALSE,FALSE);
+		else
+			getFrameWindow()->ShowControlBar(pib,TRUE,FALSE);
+	}
+}
 
 void MapPaneView::OnEntireMap()
 {
@@ -359,6 +371,12 @@ void MapPaneView::OnUpdateEntireMap(CCmdUI* pCmdUI)
 {
 	MapCompositionDoc* mcd = GetDocument();
 	pCmdUI->Enable(mcd->rootDrawer->getDrawerCount() > 0);
+}
+
+void MapPaneView::OnUpdatePixelInfo(CCmdUI* pCmdUI)
+{
+	bool fCheck = (pib != 0) && (pib->IsWindowVisible() != 0);
+	pCmdUI->SetCheck(fCheck);
 }
 
 void MapPaneView::ZoomInOn(Coord crd, double rDist)
