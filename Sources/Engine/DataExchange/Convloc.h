@@ -135,8 +135,8 @@ public:
   void ExpPol(const FileName& fnObject, const FileName& fnFile, const String& sExtPormat);
   void ExpTbl(const FileName& fnObject, const FileName& fnFile, const String& sExtPormat);
   void ExpPnt(const FileName& fnObject, const FileName& fnFile, const String& sExtPormat);
-  void ExpMpl(const FileName& fnObject, const FileName& fnFile, const String& sExtPormat);
-	void ExpCsy(const FileName& fnObject, const FileName& fnFile, const String& sExtPormat);
+  void ExpMpl(const FileName& fnObject, const FileName& fnFile, const String& sExtPormat, const String& sMethod="" );
+  void ExpCsy(const FileName& fnObject, const FileName& fnFile, const String& sExtPormat);
 
 // import on package
   void ImportIlwis14(const FileName& fnFile, const FileName& fnObject);

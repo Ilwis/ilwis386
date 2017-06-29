@@ -228,7 +228,7 @@ private:
 	PushButton            *pbs;
 	RadioGroup            *rgExportMethod;
 	RadioButton           *rbILWIS, *rbGDAL, *rbGDB;
-	FieldExportFormat     *fefRas, *fefRasGDAL, *fefRasGDB, *fefSeg, *fefPol, *fefPnt, *fefTbl, *fefMpl, *fefCsy;
+	FieldExportFormat     *fefRas, *fefRasGDAL, *fefRasGDB, *fefSeg, *fefPol, *fefPnt, *fefTbl, *fefMpl, *fefCsy, *feGdalMulti;
 	map<String, String>   mssPrevExport;
 	FieldString           *fsOutName;
 	StaticText            *stRemark;
@@ -286,6 +286,9 @@ ExportForm::ExportForm(CWnd* wPar, Exporting* exporting, String* sNam, String* s
 	fefMpl->Align(st, AL_UNDER);
 	fefCsy = new FieldExportFormat(root, &iOption, exp->expCsy);
 	fefCsy->Align(st, AL_UNDER);
+	feGdalMulti = new FieldExportFormat(root, &iOption, exp->expGDALRasMulti);
+	feGdalMulti->Align(st, AL_UNDER);
+	feGdalMulti->SetWidth(130);
 	FieldBlank* fb = new FieldBlank(root);
 	fb->Align(fefTbl, AL_UNDER);
 	fsOutName = new FieldString(root, TR("&Output Filename"), sOutputName);
@@ -315,6 +318,8 @@ void ExportForm::LoadSettings()
 	if (sKey.length() > 0) mssPrevExport[".mprgeo"] = sKey;
 	sKey = settings.sValue("RasterExportGDAL", String());
 	if (sKey.length() > 0) mssPrevExport[".mprgdal"] = sKey;
+	sKey = settings.sValue("RasterExportGDALMulti", String());
+	if (sKey.length() > 0) mssPrevExport[".mprgdalmulti"] = sKey;
 	sKey = settings.sValue("PolygonExport", String());
 	if (sKey.length() > 0) mssPrevExport[".mpa"] = sKey;
 	sKey = settings.sValue("SegmentExport", String());
@@ -362,7 +367,7 @@ int ExportForm::CallBackExportMethod(Event*)
 	}
 	else if (1 == iExportMethod) // GDAL
 	{
-		fdtl->SetExt(".mpr");
+		fdtl->SetExt(".mpr.mpl");
 		iOption = fefRasGDAL->ose->SelectString(0, mssPrevExport[".mprgdal"].c_str());
 	}
 	else // ILWIS native Export
@@ -430,6 +435,8 @@ int ExportForm::CallBack(Event*)
 	fefTbl->Hide();
 	fefMpl->Hide();
 	fefCsy->Hide();
+	rbILWIS->Enable();
+	feGdalMulti->Hide();
 	stMethod->Hide();
 	rgExportMethod->Hide();
 	
@@ -461,8 +468,21 @@ int ExportForm::CallBack(Event*)
 	}
 	else if (fn.sExt == ".mpl")
 	{
-		iOption = fefMpl->ose->SelectString(0, mssPrevExport[".mpl"].c_str());
-		fefMpl->Show();
+		fInMethodCallback = true;  // disable callback of RadioGroup
+		stMethod->Show();
+		rgExportMethod->Show();
+		fInMethodCallback = false;
+
+		if (1 == iExportMethod) // GDAL
+		{
+			iOption = feGdalMulti->ose->SelectString(0, mssPrevExport[".mprgdalmulti"].c_str());
+			feGdalMulti->Show();
+		}
+		else // ILWIS native raster export
+		{
+			iOption = fefMpl->ose->SelectString(0, mssPrevExport[".mpl"].c_str());
+			fefMpl->Show();
+		}
 	}
 	else if (fn.sExt == ".csy")
 	{
@@ -531,7 +551,12 @@ bool ExportForm::fIsExportToIlwis()
 	else if (fn.sExt == ".mpp")
 		sExCmd = sGetCommand(exp->expPnt, iOption);
 	else if (fn.sExt == ".mpl")
-		sExCmd = sGetCommand(exp->expMpl, iOption);
+	{
+		if (1 == iExportMethod) // GDAL
+			sExCmd = sGetCommand(exp->expGDALRasMulti, iOption);
+		else
+			sExCmd = sGetCommand(exp->expMpl, iOption);
+	}
 	else if (fn.sExt == ".csy")
 		sExCmd = sGetCommand(exp->expCsy, iOption);
 	else if (fn.sExt == ".tbt" || fn.sExt == ".his" || fn.sExt == ".hsa" || fn.sExt == ".hsp" || fn.sExt == ".hss")
@@ -600,9 +625,25 @@ int ExportForm::exec()
 	}
 	else if (fn.sExt == ".mpl")
 	{
-		*sCommand = exp->expMpl[iOption].sCmd;
-		s = exp->expMpl[iOption].sDescription;
-		settings.SetValue("MapListExport", s.sLeft(s.length() - 5));
+		ExportItem ei;
+		switch(iExportMethod)
+		{
+		case 0: // ILWIS native raster export
+			ei = exp->expMpl[iOption];
+			break;
+		case 1: // GDAL
+			ei = exp->expGDALRasMulti[iOption];
+			break;
+		default:
+			ei = exp->expGDALRasMulti[iOption];
+		}
+		*sCommand = ei.sCmd;
+		s = ei.sDescription;
+		sOutputExt = ei.sExt;
+		if (0 == iExportMethod) // ILWIS native maplist export
+			settings.SetValue("MapListExport", s.sLeft(s.length() - 5));
+		else // GDAL
+			settings.SetValue("RasterExportGDALMulti", s.sLeft(s.length() - 5));
 	}
 	else if (fn.sExt == ".csy")
 	{
@@ -677,6 +718,7 @@ void Exporting::FillArrays()
 		Fill("expmpl.def", expMpl);
 		Fill("expcsy.def", expCsy);
 		Fill("expgdal.def", expGDALRas);
+		Fill("expgdalmulti.def", expGDALRasMulti);
 		
 		String sPath = IlwWinApp()->Context()->sIlwDir() + "System";
 //		File FormatDef(sPath + "Resources\Def\\GDBFormatInfo.def");

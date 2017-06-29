@@ -65,8 +65,9 @@ private:
   Array<ExportItem> expTbl;
   Array<ExportItem> expMpl;
   Array<ExportItem> expCsy;
-	Array<ExportItem> expGDALRas;
-	Array<ExportItem> expGDBRas;
+  Array<ExportItem> expGDALRas;
+  Array<ExportItem> expGDBRas;
+  Array<ExportItem>	expGDALRasMulti;
 
   void FillArrays();
   void Fill(const String&, Array<ExportItem>&);

@@ -42,10 +42,19 @@
 
 #include "Headers\toolspch.h"
 #include "Engine\Base\Msm.h"
+#include "Engine\Base\System\Engine.h"
 #include "Engine\DataExchange\Convloc.h"
 
-void ImpExp::ExpMpl(const FileName& fnObject, const FileName& fnFile, const String& sExtFormat ) {
-  if (fCIStrEqual(sExtFormat, "ErdasLAN"))
+void ImpExp::ExpMpl(const FileName& fnObject, const FileName& fnFile, const String& sExtFormat, const String& _sMethod ) {
+  String sMethod = _sMethod.sTrimSpaces();
+
+  if (fCIStrEqual(_sMethod, "gdal")) {
+    String ilwDir = getEngine()->getContext()->sIlwDir();
+    String gdal = ilwDir + "\\gdal_translate.exe";
+    String sCmd("!%S -of %S %S %S", gdal, sExtFormat, fnObject.sFullPath(), fnFile.sFullPath());
+    getEngine()->Execute(sCmd);
+  }
+  else if (fCIStrEqual(sExtFormat, "ErdasLAN"))
     ExportLAN(fnObject, FileName(fnFile, ".lan"));
   else
   {

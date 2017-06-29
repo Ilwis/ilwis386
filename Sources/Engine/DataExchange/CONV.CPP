@@ -234,8 +234,8 @@ void Export(const FileName& fnObject, const FileName& fnFile, const String& sExt
     else if (sTemp == ".mpp")
       impexp.ExpPnt(fnObject, fnFile, sExtFormat);
     else if (sTemp == ".mpl")
-      impexp.ExpMpl(fnObject, fnFile, sExtFormat);
-		else if (sTemp == ".csy")
+      impexp.ExpMpl(fnObject, fnFile, sExtFormat, sMethod);
+    else if (sTemp == ".csy")
       impexp.ExpCsy(fnObject, fnFile, sExtFormat);
     else //if (sTemp == ".tbt")
       impexp.ExpTbl(fnObject, fnFile, sExtFormat);
