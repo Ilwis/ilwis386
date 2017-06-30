@@ -53,7 +53,7 @@ AnnotationLegendDrawerTool::~AnnotationLegendDrawerTool() {
 
 void AnnotationLegendDrawerTool::clear() {
 	ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
-	if ( annotations)
+	if ( annotations && legend)
 		annotations->removeDrawer(legend->getId());
 
 }
