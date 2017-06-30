@@ -83,7 +83,8 @@ void AnnotationBorderTool::makeActive(void *v, HTREEITEM ) {
 }
 
 void AnnotationBorderTool::displayOptionAnnotationBorder() {
-	new AnnotationBorderForm(tree, border);
+	if ( border)
+		new AnnotationBorderForm(tree, border);
 }
 
 String AnnotationBorderTool::getMenuString() const {
@@ -94,6 +95,8 @@ String AnnotationBorderTool::getMenuString() const {
 AnnotationBorderForm::AnnotationBorderForm(CWnd *wPar, AnnotationBorderDrawer *dr) : 
 DisplayOptionsForm(dr,wPar,"Borders")
 {
+	if (!dr)
+		throw ErrorObject(TR("Invalid drawer in annotation border"));
 	step = dr->getStep();
 	num = dr->getNumberOfDigits();
 	neatline = dr->hasNeatLine();
