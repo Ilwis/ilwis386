@@ -236,6 +236,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\AnnotationNorthArrowTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\AnnotationScaleBarDrawerTool.cpp"
 				>
 			</File>
@@ -490,6 +494,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\AnnotationLegendDrawerTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\AnnotationNorthArrowTool.h"
 				>
 			</File>
 			<File

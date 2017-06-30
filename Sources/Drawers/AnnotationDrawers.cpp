@@ -17,6 +17,7 @@
 #include "Drawers\LayerDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 #include "drawers\linedrawer.h"
+#include "drawers\pointdrawer.h"
 #include "Engine\Drawers\OpenGLText.h"
 #include "Engine\Drawers\TextDrawer.h"
 #include "Drawers\AnnotationDrawers.h"
@@ -1336,4 +1337,117 @@ void AnnotationScaleBarDrawer::setTicks(int t){
 	if ( t > 1) {
 		ticks = t;
 	}
+}
+
+//------------------------------------------------
+ILWIS::NewDrawer *createAnnotationNorthArrowDrawer(DrawerParameters *parms) {
+	return new AnnotationNorthArrowDrawer(parms);
+}
+
+Coord AnnotationNorthArrowDrawer::getBegin(){
+	return begin;
+}
+void AnnotationNorthArrowDrawer::setBegin(const Coord& b){
+	begin = b;
+	if ( arrow)
+		arrow->setCoord(b);
+}
+
+void AnnotationNorthArrowDrawer::setScale(double s){
+	scale = s;
+	if ( arrow) {
+		PointProperties *prop = (PointProperties *)arrow->getProperties();
+		prop->scale = scale;
+	}
+}
+void AnnotationNorthArrowDrawer::setArrowType(const String& type){
+	northArrowType = type;
+
+	DrawerParameters dp(this->getRootDrawer(), this);
+	arrow = new PointDrawer(&dp);
+	PointProperties *prop = (PointProperties *)arrow->getProperties();
+	prop->symbol = type;
+	prop->drawColor = Color(0,0,0);
+	arrow->setCoord(begin);
+	PreparationParameters pp(NewDrawer::ptRENDER);
+	pp.props.symbolType = type;
+	arrow->prepare(&pp);
+	addPostDrawer(100,arrow);
+}
+
+String AnnotationNorthArrowDrawer::getArrowType() const{
+	return northArrowType;
+}
+
+String AnnotationNorthArrowDrawer::store(const FileName& fnView, const String& parentSection) const{
+	String currentSection = "AnnotationNorthArrowDrawer::" + parentSection;
+	AnnotationDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Begin",fnView, begin);
+
+	return currentSection;
+}
+
+void AnnotationNorthArrowDrawer::load(const FileName& fnView, const String& parentSection){
+		String currentSection = parentSection;
+		AnnotationDrawer::load(fnView, parentSection);
+		ObjectInfo::ReadElement(currentSection.c_str(),"Begin",fnView, begin);
+}
+
+AnnotationNorthArrowDrawer::AnnotationNorthArrowDrawer(DrawerParameters *parms) : 
+AnnotationDrawer(parms, "AnnotationNorthArrowDrawer"),
+texts(0),arrow(0)
+{
+	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
+
+	Coord middle = cb.middle();
+	middle.y = cb.MaxY() - cb.height() / 10.0;
+	begin = middle;
+	begin.x = cb.MaxX() - cb.width() / 10.0;
+	scale = 2.5;
+}
+
+void AnnotationNorthArrowDrawer::prepare(PreparationParameters *pp){
+	AnnotationDrawer::prepare(pp);
+	if (  pp->type & RootDrawer::ptGEOMETRY || pp->type & RootDrawer::ptRESTORE){
+		if (!arrow) {
+			DrawerParameters dp(getRootDrawer(),this);
+			arrow = (ILWIS::PointDrawer *)NewDrawer::getDrawer("PointDrawer", "ilwis38",&dp);
+			PointProperties *prop = (PointProperties *)arrow->getProperties();
+			prop->symbol = "Arrow";
+			prop->drawColor = Color(0,0,0);
+			prop->scale = scale;
+			arrow->setCoord(begin);
+			PreparationParameters pp(NewDrawer::ptRENDER);
+			pp.props.symbolType = "Arrow";
+			pp.props.symbolSize = scale * 100;
+			arrow->prepare(&pp);
+			addPostDrawer(100,arrow);
+		}
+	}
+}
+
+bool AnnotationNorthArrowDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
+	if ( !isActive() || !isValid())
+		return false;
+	GeoRef gr = getRootDrawer()->getGeoReference();
+	double angle = 0;
+	if ( gr.fValid() && !gr->fNorthOriented()) {
+		RowCol rc = gr->rcSize();
+		rc.Row /= 2;
+		rc.Col /= 2;
+		Coord c1 = gr->cConv(rc);
+		rc.Row += 1;
+		Coord c2 = gr->cConv(rc);
+		double rDX = c2.x - c1.x;
+		double rDY = c2.y - c1.y;
+		double at = atan2(rDX, -rDY);
+		if (at == 0 && rDY < 0)
+			at = M_PI_2;
+		angle = at * 180.0 / M_PI;
+	}
+	PointProperties *prop = (PointProperties *)arrow->getProperties();
+	prop->angle = angle;
+	ComplexDrawer::draw(drawLoop, cbArea);
+
+	return true;
 }

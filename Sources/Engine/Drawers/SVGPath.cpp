@@ -87,6 +87,7 @@ void SVGPath::doExtCBezier(int& index, PathElement::PositionType ptype, const ve
 	PathElement pe;
 	pe.type = PathElement::eQBEZIER;
 	pe.start = index;
+	pe.ptype = ptype;
 	Coord c1 = cPen;
 	Coord c2 = getCoord(index, ptype, commands[0]);
 	Coord c3 =  Coord (2 * cPen.x - cpt.x, 2 * cPen.y - cpt.y);
@@ -106,6 +107,7 @@ void SVGPath::doExtQBezier(int& index, PathElement::PositionType ptype, const ve
 	PathElement pe;
 	pe.type = PathElement::eQBEZIER;
 	pe.start = index;
+	pe.ptype = ptype;
 	Coord c1 = cPen;
 	Coord c2 = Coord(2 * cPen.x - cpt.x, 2 * cPen.y - cpt.y);
 	Coord c3 = getCoord(index, ptype, commands[0]);
@@ -131,6 +133,7 @@ void SVGPath::doCBezier(int& index, PathElement::PositionType ptype, const vecto
 	PathElement pe;
 	pe.type = PathElement::eQBEZIER;
 	pe.start = index;
+	pe.ptype = ptype;
 	Coord c1 = cPen;
 	Coord c2 = getCoord(index, ptype, commands[0]);
 	Coord c3 = getCoord(index, ptype, commands[1]);
@@ -177,6 +180,7 @@ void SVGPath::doQBezier(int& index, PathElement::PositionType ptype, const vecto
 	PathElement pe;
 	pe.type = PathElement::eQBEZIER;
 	pe.start = index;
+	pe.ptype = ptype;
 	Coord c1 = cPen;
 	Coord c2 = getCoord(index, ptype, commands[0]);
 	Coord c3 = getCoord(index, ptype, commands[1]);
@@ -234,6 +238,7 @@ void SVGPath::doVLine(int& index, PathElement::PositionType ptype, const vector<
 	PathElement pe = PathElement();
 	pe.type = PathElement::eVLINE;
 	pe.start = index;
+	pe.ptype = ptype;
 	String command = commands[0];
 	String n = command.sSub(1, command.size() - 1);
 	double shift = n.rVal();
@@ -253,6 +258,7 @@ void SVGPath::doHLine(int& index, PathElement::PositionType ptype, const vector<
 	PathElement pe;
 	pe.type = PathElement::eHLINE;
 	pe.start = index;
+	pe.ptype = ptype;
 	String command = commands[0];
 	String n = command.sSub(1, command.size() - 1);
 	double shift = n.rVal();

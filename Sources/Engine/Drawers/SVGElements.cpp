@@ -72,9 +72,11 @@ void IVGElement::parse(const pugi::xml_node& node) {
 				type = IVGElement::ivgPOINT;
 			if ( typ == "Hatch")
 				type = IVGElement::ivgHATCH;
+			if ( typ == "NorthArrow")
+				type = IVGElement::ivgNORTHARROW;
 		}
 	}
-	if ( type == IVGElement::ivgPOINT) {
+	if ( type == IVGElement::ivgPOINT || type == IVGElement::ivgNORTHARROW) {
 		for(pugi::xml_node child = node.first_child(); child;  child = child.next_sibling()) {
 			if ( child.attributes_begin() == child.attributes_end())
 				continue;

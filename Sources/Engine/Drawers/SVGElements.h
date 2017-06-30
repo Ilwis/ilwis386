@@ -42,7 +42,7 @@ namespace ILWIS {
 
 	class _export IVGElement : public vector<IVGAttributes *> {
 	public:
-		enum Type{ivgPOINT, ivgHATCH};
+		enum Type{ivgPOINT, ivgHATCH, ivgNORTHARROW};
 
 		IVGElement(const String& _id);
 		IVGElement(IVGAttributes::ShapeType t, const String& _id);

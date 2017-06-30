@@ -30,6 +30,7 @@
 #include "Drawers\GridDrawer.h"
 #include "drawers\pointdrawer.h"
 #include "drawers\Boxdrawer.h"
+#include "drawers\AnnotationDrawers.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Mapwindow\Drawers\DrawerTool.h"
 #include "LayerDrawerTool.h"
@@ -88,6 +89,7 @@
 #include "AnnotationBorderTool.h"
 #include "DrawersUI\GlobalAnnotationTool.h"
 #include "DrawersUI\AnnotationScaleBarDrawerTool.h"
+#include "DrawersUI\AnnotationNorthArrowTool.h"
 #include "SelectableTool.h"
 #include "DrawersUI\HistogramRasterTool.h"
 #include "FeatureTextTool.h"
@@ -144,6 +146,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("GlobalOperationTool",createGlobalOperationTool));
 	infos->push_back(new DrawerToolInfo("GlobalAnnotationTool",createGlobalAnnotationTool));
 	infos->push_back(new DrawerToolInfo("AnnotationScaleBarDrawerTool",createAnnotationScaleBarDrawerTool));
+	infos->push_back(new DrawerToolInfo("AnnotationNorthArrowTool",createAnnotationNorthArrowTool));
 	infos->push_back(new DrawerToolInfo("AnnotationBorderTool",createAnnotationBorderTool));
 	infos->push_back(new DrawerToolInfo("SelectableTool",createSelectableTool));
 	infos->push_back(new DrawerToolInfo("HistogramRasterTool",createHistogramRasterTool));

@@ -5,12 +5,14 @@ ILWIS::NewDrawer *createAnnotationClassLegendDrawer(ILWIS::DrawerParameters *par
 ILWIS::NewDrawer *createAnnotationBorderDrawer(ILWIS::DrawerParameters *parms);
 ILWIS::NewDrawer *createAnnotationDrawers(ILWIS::DrawerParameters *parms);
 ILWIS::NewDrawer *createAnnotationScaleBarDrawer(ILWIS::DrawerParameters *parms);
+ILWIS::NewDrawer *createAnnotationNorthArrowDrawer(ILWIS::DrawerParameters *parms);
 
 namespace ILWIS {
 	class TextLayerDrawer;
 	class BoxDrawer;
 	struct LineProperties;
 	class TextDrawer;
+	class PointDrawer;
 
 class _export AnnotationDrawers : public ComplexDrawer {
 public:
@@ -26,7 +28,7 @@ class _export AnnotationDrawer : public ComplexDrawer{
 public:
 	AnnotationDrawer(DrawerParameters *parms, const String& name);
 	double getScale() const;
-	void setScale(double s);
+	virtual void setScale(double s);
 	void setTitle(const String& t);
 	String getTitle() const;
 	FileName associaltedFile() const;
@@ -187,5 +189,26 @@ private:
 	int ticks;
 	TextLayerDrawer *texts;
 	String unit;
+};
+
+class _export AnnotationNorthArrowDrawer : public AnnotationDrawer {
+public:
+	AnnotationNorthArrowDrawer(DrawerParameters *parms);
+	void prepare(PreparationParameters *pp) ;
+	Coord getBegin();
+	void setBegin(const Coord& begin);
+	void setArrowType(const String& type);
+	String getArrowType() const;
+	void setScale(double s);
+	
+private:
+	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
+	String store(const FileName& fnView, const String& parenSection) const;
+	void load(const FileName& fnView, const String& parenSection);
+	Coord begin;
+	double rotation;
+	String northArrowType;
+	TextLayerDrawer *texts;
+	PointDrawer *arrow;
 };
 }

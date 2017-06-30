@@ -44,7 +44,7 @@ void SVGLoader::load(const String& folder) {
 		else {
 			FileName fnSvg(finder.GetFilePath());
 			String ext = fnSvg.sExt;
-			if ( ext.toLower() == ".ivg" || ext.toLower() == ".ivh")
+			if ( ext.toLower() == ".ivg" || ext.toLower() == ".ivh" || ext.toLower() == ".ivn")
 				parseFile(fnSvg);
 		}
 	}
