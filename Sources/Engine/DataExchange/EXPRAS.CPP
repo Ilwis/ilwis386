@@ -111,7 +111,7 @@ void ImpExp::ExpRas(const FileName& fnObject, const FileName& fnFile, const Stri
 	else if (fCIStrEqual(_sMethod, "gdal")) {
 		String ilwDir = getEngine()->getContext()->sIlwDir();
 		String gdal = ilwDir + "\\gdal_translate.exe";
-		String sCmd("!%S -of %S %S %S", gdal, sExtFormat, fnObject.sFullPath(), fnFile.sFullPath());
+		String sCmd("!%S -of %S \"%S\" \"%S\"", gdal, sExtFormat, fnObject.sFullPath(), fnFile.sFullPath());
 		getEngine()->Execute(sCmd);
 	}
 	else
