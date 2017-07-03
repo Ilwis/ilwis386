@@ -214,7 +214,7 @@ bool MapListCalculate::fFreezing()
 						sLeft = sExpr.sLeft(ind1);
 						sRight = &sExpr[ind2 + 1];
 						int indMap = i + m_iFirstBand + val;
-						sM = String("%S_%i", keepOriginalNames ? fnObj.sFile + "_" + sMap : fnObj.sFile, indMap + 1);
+						sM = String("%S_%0*i", keepOriginalNames ? fnObj.sFile + "_" + sMap : fnObj.sFile, (int)floor(1 + log10((double)iMaps)), indMap + 1);
 						if ( indMap < 0) {
 							int ind = sRight.find_first_of("+-/*");
 							if ( ind != string::npos)
@@ -236,7 +236,7 @@ bool MapListCalculate::fFreezing()
 					sExpr = String("%S%S%S", sLeft, sMap, sRight);
 				}
 			}
-			String sMapName("%S_%i", keepOriginalNames ? fnObj.sFile + "_" + m_vml[0]->map(i)->sName()  : fnObj.sFile, i+1);
+			String sMapName("%S_%0*i", keepOriginalNames ? fnObj.sFile + "_" + m_vml[0]->map(i)->sName()  : fnObj.sFile, (int)floor(1 + log10((double)iMaps)), i+1);
 			FileName fnMap(sMapName);
 			map(i) = Map(fnMap,sExpr);
 

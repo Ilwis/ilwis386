@@ -126,7 +126,8 @@ bool MapListApplic::fFreezing()
         String sRight = &sExpr[iPos+2];
         sExpr = String("%S%S%S", sLeft, sMap, sRight);
       }
-      String sMapName("%S_%i", fnObj.sFile, i+1);
+
+      String sMapName("%S_%0*i", fnObj.sFile, (int)floor(1 + log10((double)iMaps)), i+1);
       FileName fnMap(sMapName);
       map(i) = Map(fnMap,sExpr);
       if (dvrsMaps.dm().fValid())
