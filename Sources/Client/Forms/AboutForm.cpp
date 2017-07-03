@@ -19,7 +19,7 @@ AboutForm::AboutForm(CWnd* parent) : FormWithDest(parent,TR("About ILWIS"),fbsSH
 	persons.push_back("Community leader : Rob Lemmens");
 	persons.push_back("Developers: ");
 	persons.push_back("Martin Schouwenburg (main)");
-	persons.push_back("Base Retsios");
+	persons.push_back("Bas Retsios");
 	persons.push_back("SEBS & Hydroflow : Lichun Wang");
 	persons.push_back(" ");
 	persons.push_back("Past Developers:");
