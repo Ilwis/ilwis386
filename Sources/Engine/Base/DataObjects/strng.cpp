@@ -366,6 +366,9 @@ void String::VarFormat(const char *format,va_list pargs)
         case '#':
           flags |= FLhash; /* alternate form   */
           break;
+        case '0':
+          flags |= FL0pad; /* pad with 0s   */
+          break;
         default:
           goto getwidth;
       }
@@ -381,8 +384,6 @@ getwidth:
       c = *format++;
     }
     else {
-      if (c == '0')
-        flags |= FL0pad;    /* pad with 0s   */
       while (isdigit((unsigned char)c)) {
         width = width * 10 + c - '0';
         c = *format++;
