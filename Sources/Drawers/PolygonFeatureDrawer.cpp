@@ -155,8 +155,13 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 	if (  p->type & ptRESTORE || p->type & RootDrawer::ptRENDER) {
 		BaseMapPtr *bmpptr = ((BaseMap*)polygonLayer->getDataSource())->ptr();
 		extrAlpha = polygonLayer->getExtrusionAlpha();
-		drawColor = polygonLayer->getDrawingColor()->clrRaw(feature->iValue(), polygonLayer->getDrawMethod());
-		setActive(drawColor != colorUNDEF);
+		if ( polygonLayer->useRaw()){
+			Color clr = (polygonLayer->getDrawingColor()->clrRaw(feature->iValue(), polygonLayer->getDrawMethod()));
+			setActive(clr != colorUNDEF);
+			drawColor = clr;
+		}
+		else
+			drawColor = (polygonLayer->getDrawingColor()->clrVal(feature->rValue()));
 		if ( boundary) {
 			LineProperties *lp = (LineProperties *)polygonLayer->getProperties();
 			boundariesActive(polygonLayer->getShowBoundaries());
