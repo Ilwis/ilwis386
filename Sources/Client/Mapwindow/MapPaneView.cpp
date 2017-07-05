@@ -1624,12 +1624,26 @@ LRESULT MapPaneView::OnSendUpdateAnimMessages(WPARAM p1, LPARAM p2) {
 
 	FileName fn = *(FileName *)(void *)(p1);
 	MapCompositionDoc *doc = GetDocument();
-	MapList mpl(fn);
-	if (!mpl.fValid())
-		return 1;
-
-	Map mp = mpl[p2];
-	Map mpCurrent = mpl[p2 == 0 ? mpl->iSize() - 1 : p2-1];
+	Map mp;
+	Map mpCurrent;
+	if ( IOTYPE(fn) == IlwisObject::iotMAPLIST) {
+		MapList mpl(fn);
+		if (!mpl.fValid())
+			return 1;
+		mp = mpl[p2];
+		mpCurrent = mpl[p2 == 0 ? mpl->iSize() - 1 : p2-1];
+	} else if (IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION) {
+		ObjectCollection oc(fn);
+		if (!oc.fValid())
+			return 1;
+		FileName fnp2 = oc->fnObject(p2);
+		FileName fnp2curr = oc->fnObject(p2 == 0 ? oc->iNrObjects() - 1 : p2-1);
+		if (IOTYPE(fnp2) == IlwisObject::iotRASMAP && IOTYPE(fnp2curr) == IlwisObject::iotRASMAP) {
+			mp = Map(fnp2);
+			mpCurrent = Map(fnp2curr);
+		} else
+			return 0;
+	}
 	HistogramGraphView *hview = doc->getHistoView(mpCurrent->fnObj);
 	if ( !hview)
 		return 1;
