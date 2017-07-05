@@ -42,6 +42,7 @@ private:
 	String colName;
 	Table  attTable;
 	String mapName;
+	String mapListName;
 	int sourceIndex;
 	BaseMap bmp;
 };

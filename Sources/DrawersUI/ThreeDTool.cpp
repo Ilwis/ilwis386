@@ -102,11 +102,11 @@ DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0)
 {
 	root->SetCallBack((NotifyProc)&DisplayZDataSourceForm::initForm);
 	LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(drw);
-	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
-	if ( adrw) {
-		layerDrawer = (LayerDrawer *)adrw->getDrawer(0);
-		SpatialDataDrawer *absdrw = (SpatialDataDrawer *)layerDrawer->getParentDrawer();
-		bmp.SetPointer(absdrw->getBaseMap());
+	SetDrawer *setdrw = dynamic_cast<SetDrawer *>(drw);
+	if ( setdrw) {
+		layerDrawer = (LayerDrawer *)setdrw->getDrawer(0);
+		SpatialDataDrawer *setbasedrw = (SpatialDataDrawer *)layerDrawer->getParentDrawer();
+		bmp.SetPointer(setbasedrw->getBaseMap());
 	} else {
 		SpatialDataDrawer *fdrw = (SpatialDataDrawer *)layerDrawer->getParentDrawer();
 		bmp.SetPointer(fdrw->getBaseMap());
@@ -117,12 +117,18 @@ DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0)
 	sourceIndex = (int)layerDrawer->getZMaker()->getSourceType();
 	rg = new RadioGroup(root,TR("Data Source"),&sourceIndex);
 	new RadioButton(rg,TR("None"));
-	rfeature = new RadioButton(rg,TR("Feature value"));
+	RasterLayerDrawer *rldrw = dynamic_cast<RasterLayerDrawer *>(layerDrawer);
+	if (setdrw)
+		rfeature = new RadioButton(rg,TR("Band value"));
+	else if (rldrw)
+		rfeature = new RadioButton(rg,TR("Map value"));
+	else
+		rfeature = new RadioButton(rg,TR("Feature value"));
 	zCoord = new RadioButton(rg,TR("Z coordinate"));
 	RadioButton *rbMap = new RadioButton(rg,TR("Raster Map"));
 	fmap = new FieldMap(rbMap,"",&mapName, new MapListerDomainType(dmVALUE|dmIMAGE));
 	rbMaplist = new RadioButton(rg,TR("Maplist"));
-	fmaplist = new FieldMapList(rbMaplist, "", &mapName,new MapListerDomainType(dmVALUE|dmIMAGE)); 
+	fmaplist = new FieldMapList(rbMaplist, "", &mapListName,new MapListerDomainType(dmVALUE|dmIMAGE)); 
 	rbTable = new RadioButton(rg,TR("Attribute column"));
 	FieldColumn *fcol = new FieldColumn(rbTable,"",attTable,&colName,dmVALUE | dmIMAGE);
 
@@ -136,13 +142,10 @@ int DisplayZDataSourceForm::initForm(Event *ev) {
 		zCoord->Disable();
 		if ( !attTable.fValid())
 			rbTable->Disable();
-		LayerDrawer *layerDrawer = dynamic_cast<LayerDrawer *>(drw);
-		RasterLayerDrawer *rldrw = dynamic_cast<RasterLayerDrawer *>(layerDrawer);
-		if ( rldrw) {
+		if (!(bmp->dm()->pdv() || bmp->dm()->pdi()))
 			rfeature->Disable();
-		}
-		SetDrawer *adrw = dynamic_cast<SetDrawer *>(drw);
-		if ( !adrw) {
+		SetDrawer *setdrw = dynamic_cast<SetDrawer *>(drw);
+		if ( !setdrw) {
 			rbMaplist->Disable();
 		}
 		if ( bmp.fValid() && bmp->use3DCoordinates())
@@ -160,24 +163,18 @@ void DisplayZDataSourceForm::apply() {
 		for(int i = 0 ; i < setDrawer->getDrawerCount(); ++i) {
 			LayerDrawer *layerDrawer = (LayerDrawer *)setDrawer->getDrawer(i);
 			layerDrawer->getZMaker()->setSourceType((ZValueMaker::SourceType)sourceIndex);
-			Map mp;
+			BaseMap bmp;
 			if ( sourceIndex == 1) {
-				MapList mpl = *((MapList *)(setDrawer->getDataSource())); 
-				mp = mpl[i];
+				SpatialDataDrawer *setbasedrw = (SpatialDataDrawer *)layerDrawer->getParentDrawer();
+				bmp.SetPointer(setbasedrw->getBaseMap());
 			} else if ( sourceIndex == 3){
-				if (i == 0)
-					updateDrawer(layerDrawer, BaseMap(FileName(mapName)));
-				else
-					layerDrawer->getZMaker()->addRange(BaseMap(FileName(mapName)));
-				continue;
+				bmp = BaseMap(FileName(mapName));
 			} else if ( sourceIndex == 4){
-				MapList mpl = MapList(FileName(mapName));
-				mp = mpl[i];
+				MapList mpl = MapList(FileName(mapListName));
+				bmp = mpl[i % mpl->iSize()];
 			}
-			if (i == 0)
-				updateDrawer(layerDrawer, mp);
-			else
-				layerDrawer->getZMaker()->addRange(mp);
+			updateDrawer(layerDrawer, bmp);
+			layerDrawer->getZMaker()->addRange(bmp);
 			rrMinMax += layerDrawer->getZMaker()->getZRange();
 		}
 		setDrawer->getZMaker()->setRange(rrMinMax);
@@ -190,7 +187,7 @@ void DisplayZDataSourceForm::apply() {
 		LayerDrawer * layerDrawer = dynamic_cast<ILWIS::LayerDrawer *>(drw);
 		if (sourceIndex >= 0 && sourceIndex <= 2)
 			updateDrawer( layerDrawer, bmp);
-		else if (sourceIndex >= 3 && sourceIndex <= 4)
+		else if (sourceIndex >= 3 && sourceIndex < 4) // 4 (MapList) is not an option when we are not having a setDrawer
 			updateDrawer( layerDrawer, BaseMap(mapName));
 		else if (sourceIndex == 5)
 			updateDrawer( layerDrawer, bmp);

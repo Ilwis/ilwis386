@@ -26,7 +26,7 @@ DEMTriangulator::DEMTriangulator(ZValueMaker * zMaker, BaseMapPtr * drapeMapPtr,
 , fSelfDrape(true)
 {
 	ZValueMaker::SourceType sourceType = zMaker->getSourceType();
-	if (zMaker != 0 && !( sourceType == ZValueMaker::styNONE || sourceType == ZValueMaker::styMAPLIST))
+	if (zMaker != 0 && !( sourceType == ZValueMaker::styNONE ))
 	{
 		if ( sourceType == ZValueMaker::styTABLE) {
 			String name = zMaker->getColumnName(0);
