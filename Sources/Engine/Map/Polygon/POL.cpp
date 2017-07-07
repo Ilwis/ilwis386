@@ -412,14 +412,12 @@ vector<String> PolygonMapPtr::vsValue(const Coord& crd, short iWidth, short iDec
 	vector<String> values;
 	for(int i = 0; i < v.size(); ++i) {
 		ILWIS::Polygon *p = v[i];
-		if (!p->fValid())
+		if (!p || !p->fValid())
 			values.push_back(sUNDEF);
-		else if ( dvrs().fValues())
-			values.push_back(dvrs().sValue(p->rValue(), iWidth, iDec));
-		else if ( dvrs().fRawAvailable())
-			values.push_back(dvrs().sValueByRaw(p->iValue(), iWidth, iDec));
-		else
-			values.push_back(dvrs().sValue(p->iValue(), iWidth, iDec));
+		else {
+			String s = p->sValue(dvrs(), iWidth, iDec);
+			values.push_back(s);
+		}
 	}
 	return values;
 }
