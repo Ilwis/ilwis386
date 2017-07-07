@@ -335,9 +335,24 @@ bool PolygonMapFromSegment::fFreezing()
 	for(long i = 0; i < polygons->size(); ++i) {
 		geos::geom::Polygon *gpol = polygons->at(i);
 		ILWIS::Polygon *pol = CPOLYGON(pms->newFeature(gpol));
-		pol->PutVal(dm()->pdsrt()->iKey(i+1));
+		if (pmapLbl.fValid()) {
+			vector<Feature *> points = pmapLbl->getFeatures(pol->cbBounds());
+			for (vector<Feature *>::iterator pntit = points.begin(); pntit != points.end(); ++pntit) {
+				ILWIS::Point * pnt = CPOINT(*pntit);
+				if (pol->contains(pnt)) {
+					if (dvrs().fRealValues()) {
+						double rV = pnt->rValue();
+						pol->PutVal(rV);
+					} else{
+						long iRaw = pnt->iValue();
+						pol->PutVal(iRaw);
+					}
+					break;
+				}
+			}
+		} else
+			pol->PutVal(dm()->pdsrt()->iKey(i+1));
 	}
-
 
 	return true;
 }
