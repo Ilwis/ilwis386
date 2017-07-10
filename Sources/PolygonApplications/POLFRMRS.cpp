@@ -92,6 +92,7 @@ PolygonMapFromRas* PolygonMapFromRas::create(const FileName& fn, PolygonMapPtr& 
 
 PolygonMapFromRas::PolygonMapFromRas(const FileName& fn, PolygonMapPtr& p)
 : PolygonMapVirtual(fn, p)
+, fact(0)
 {
   fNeedFreeze = true;
   String sColName;
@@ -111,6 +112,7 @@ PolygonMapFromRas::PolygonMapFromRas(const FileName& fn, PolygonMapPtr& p)
 PolygonMapFromRas::PolygonMapFromRas(const FileName& fn, PolygonMapPtr& p, const Map& mp, 
                                 bool fEightCn, bool fSmth)
 : PolygonMapVirtual(fn, p, mp->cs(),mp->cb(),mp->dvrs()), map(mp), fEightCon(fEightCn), fSmooth(fSmth)
+, fact(0)
 {
   fNeedFreeze = true;
   if (map->gr()->fGeoRefNone())
@@ -183,9 +185,9 @@ bool PolygonMapFromRas::fSetPolygonLabels(const Map& mpAreas)
 	}
 	Column colAtt(tblArnAtt, sColMap);
 	assert(colAtt.fValid());
-	DomainSort * pdsrtArn = mpAreas->dm()->pdsrt();
-	assert(pdsrtArn);
-	iNrPol = pdsrtArn->iSize();
+	//DomainSort * pdsrtArn = mpAreas->dm()->pdsrt();
+	//assert(pdsrtArn);
+	iNrPol = pms->iPol(); // pdsrtArn->iSize();
 	for (long i = 0; i < iNrPol; i++)
 	{
 		if (trq.fUpdate(i, iNrPol))
@@ -204,15 +206,9 @@ bool PolygonMapFromRas::fSetPolygonLabels(const Map& mpAreas)
 			double rV = colAtt->rValue(iKey);
 			if ( rV != rUNDEF)
 				pol->PutVal(rV);
-		}
-		else if (dvrs().fValues()) {
-			long iV = colAtt->iValue(iKey);
-			if ( iV != iUNDEF)
-				pol->PutVal(iV);
-		}
-		else{
+		} else {
 			long v = colAtt->iRaw(iKey);
-			pol->PutVal( v == iUNDEF + 1 ? iUNDEF : v); // area numbering makes undefs, undefs + 1 (logic of that applic)
+			pol->PutVal( v == iUNDEF + 1 ? iUNDEF : v); // area numbering changes iUNDEF to iUNDEF + 1 (it is the current logic of that application)
 		}
 	}
 	for (long i = 0; i < iNrPol; i++) {
@@ -399,14 +395,8 @@ bool PolygonMapFromRas::fFreezing()
 	vector<geos::geom::Polygon *> *polygons = polygonizer.getPolygons();
 	// fouten afhandleing, maar eerst testen;
 	for(long i = 0; i < polygons->size(); ++i) {
-		ILWIS::Polygon *pol = CPOLYGON(pms->newFeature());
-		if (!pol)
-			continue;
 		geos::geom::Polygon *gpol = polygons->at(i);
-		pol->addBoundary(new LinearRing(gpol->getExteriorRing()->getCoordinates(), new GeometryFactory()));
-		for(int j = 0; j < gpol->getNumInteriorRing(); ++j) {
-			pol->addHole(new LinearRing(gpol->getInteriorRingN(j)->getCoordinates(), new GeometryFactory()));
-		}
+		ILWIS::Polygon *pol = CPOLYGON(pms->newFeature(gpol));
 //		pol->PutVal(dm()->pdsrt()->iKey(i+1));
 	}
 
@@ -1017,7 +1007,8 @@ void PolygonMapFromRas::StoreSegm(const SegBound& sb, CoordBuf& cBuf, long& iCrd
 	// long iRaw = pdsrt->iAdd(sVal);
 	// pol->PutVal(iRaw);
  // }
-  GeometryFactory *fact = new GeometryFactory();
+  if (fact == 0)
+	fact = new GeometryFactory();
   polygonizer.add( (Geometry *)(fact->createLineString(cBufTemp.clone())));
   for ( long j=0; j < iCrd; ++j)
 	  cBuf[j] = cBufTemp[j];

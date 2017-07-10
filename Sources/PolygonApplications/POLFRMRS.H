@@ -131,6 +131,7 @@ private:
   long iNrPol, iNrSeg;
   LongArrayLarge aiFwl, aiBwl;
   geos::operation::polygonize::Polygonizer polygonizer;
+  GeometryFactory *fact;
 };
 
 
