@@ -41,6 +41,8 @@ public:
 	int multiColors() const;
 	void setColorSet(int index);
 	int colorSet() const;
+	void color1(const Color& clr);
+	void color2(const Color& clr);
 
 private:
 	void InitClrRandom();

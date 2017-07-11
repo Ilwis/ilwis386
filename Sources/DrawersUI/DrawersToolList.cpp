@@ -94,6 +94,7 @@
 #include "DrawersUI\HistogramRasterTool.h"
 #include "FeatureTextTool.h"
 #include "WhiteSpaceTool.h"
+#include "DrawersUI\BooleanColorsTool.h"
 
 using namespace ILWIS;
 
@@ -152,6 +153,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("HistogramRasterTool",createHistogramRasterTool));
 	infos->push_back(new DrawerToolInfo("FeatureTextTool",createFeatureTextTool));
 	infos->push_back(new DrawerToolInfo("WhiteSpaceTool",createwhitespacetool));
+	infos->push_back(new DrawerToolInfo("BooleanColorsTool",createBooleanColorsTool));
 
 	return infos;
 }

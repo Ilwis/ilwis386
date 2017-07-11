@@ -111,6 +111,13 @@ void DrawingColor::setDataColumn(const Column& c) {
 RangeReal DrawingColor::getStretchRangeReal() const {
 	return setDrawer ? setDrawer->getStretchRangeReal() : drw->getStretchRangeReal();
 }
+void DrawingColor::color1(const Color& clr){
+	clr1 = clr;
+}
+
+void DrawingColor::color2(const Color& clr){
+	clr2 = clr;
+}
 
 Color DrawingColor::clrVal(double rVal) const
 {

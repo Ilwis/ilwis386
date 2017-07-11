@@ -252,6 +252,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\Sources\DrawersUI\BooleanColorsTool.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\DrawersUI\CollectionTool.cpp"
 				>
 			</File>
@@ -510,6 +514,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\BackgroundTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\BooleanColorsTool.h"
 				>
 			</File>
 			<File
