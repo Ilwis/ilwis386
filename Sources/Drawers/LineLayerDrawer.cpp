@@ -39,12 +39,18 @@ NewDrawer *LineLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWIS
 }
 
 void LineLayerDrawer::setDrawMethod(DrawMethod method) {
-	if ( method == drmINIT) {
-		if ( useInternalDomain() || !rpr.fValid())
+	if ( method == drmINIT || method == drmNOTSET) {
+		if (useInternalDomain())
 			setDrawMethod(drmSINGLE);
-		else 
+		else if (rpr.fValid())
 			setDrawMethod(drmRPR);
-
+		else {
+			BaseMapPtr *bmptr = ((BaseMap*)getDataSource())->ptr();
+			if (bmptr->dm()->pdbool())
+				setDrawMethod(drmBOOL);
+			else
+				setDrawMethod(drmSINGLE);
+		}
 	} else
 		drm = method;
 }

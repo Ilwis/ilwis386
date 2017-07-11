@@ -143,16 +143,20 @@ void PointLayerDrawer::load(const FileName& fnView, const String& parentSection)
 }
 
 void PointLayerDrawer::setDrawMethod(DrawMethod method) {
-	if ( method == drmINIT) { 
-		if ( useInternalDomain() || !rpr.fValid()) {
+	if ( method == drmINIT || method == drmNOTSET) {
+		if (useInternalDomain())
 			setDrawMethod(drmSINGLE);
-		}
-		else if ( rpr.fValid()) {
+		else if (rpr.fValid())
 			setDrawMethod(drmRPR);
+		else {
+			BaseMapPtr *bmptr = ((BaseMap*)getDataSource())->ptr();
+			if (bmptr->dm()->pdbool())
+				setDrawMethod(drmBOOL);
+			else
+				setDrawMethod(drmSINGLE);
 		}
-	}
-	else
-		drm = method; 
+	} else
+		drm = method;
 }
 
 void PointLayerDrawer::getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers) {

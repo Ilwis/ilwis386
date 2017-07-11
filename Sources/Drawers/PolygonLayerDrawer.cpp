@@ -127,11 +127,17 @@ void PolygonLayerDrawer::prepare(PreparationParameters *parms) {
 
 void PolygonLayerDrawer::setDrawMethod(DrawMethod method) {
 	if ( method == drmINIT || method == drmNOTSET) {
-		if ( useInternalDomain() || !rpr.fValid())
+		if (useInternalDomain())
 			setDrawMethod(drmMULTIPLE);
-		else 
+		else if (rpr.fValid())
 			setDrawMethod(drmRPR);
-
+		else {
+			BaseMapPtr *bmptr = ((BaseMap*)getDataSource())->ptr();
+			if (bmptr->dm()->pdbool())
+				setDrawMethod(drmBOOL);
+			else
+				setDrawMethod(drmMULTIPLE);
+		}
 	} else
 		drm = method;
 }
