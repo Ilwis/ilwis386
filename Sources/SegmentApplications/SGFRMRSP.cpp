@@ -262,25 +262,26 @@ bool SegmentMapFromRasAreaBnd::fFreezing()
   DomainSort* pdsrt = dm()->pdsrt();
   pdsrt->Resize(0); // clean up domain
   if (fSingleName)
-    pdsrt->iAdd("Boundaries");
-	else {
-		if (!tblAtt.fValid()) {
-			FileName fnAtt(fnObj, ".tbt", true);
-  		tblAtt = Table(fnAtt, dm());
-			SetAttributeTable(tblAtt);
-		}
-		else
-			tblAtt->CheckNrRecs();
-		col1 = tblAtt->col("Area1");
-		if (!col1.fValid())
-			col1 = Column(tblAtt, "Area1", map->dvrs());
-		col2 = tblAtt->col("Area2");
-		if (!col2.fValid())
-			col2 = Column(tblAtt, "Area2", map->dvrs());
-		colLength = tblAtt->col("Length");
-		if (!colLength.fValid())
-			colLength = tblAtt->colNew("Length",DomainValueRangeStruct(0, 1e307, 0.001));	
-	}
+	  pdsrt->iAdd("Boundaries");
+  else {
+	  if (!tblAtt.fValid()) {
+		  FileName fnAtt(fnObj, ".tbt", true);
+		  fnAtt = FileName::fnUnique(fnAtt);
+		  tblAtt = Table(fnAtt, dm());
+		  SetAttributeTable(tblAtt);
+	  }
+	  else
+		  tblAtt->CheckNrRecs();
+	  col1 = tblAtt->col("Area1");
+	  if (!col1.fValid())
+		  col1 = Column(tblAtt, "Area1", map->dvrs());
+	  col2 = tblAtt->col("Area2");
+	  if (!col2.fValid())
+		  col2 = Column(tblAtt, "Area2", map->dvrs());
+	  colLength = tblAtt->col("Length");
+	  if (!colLength.fValid())
+		  colLength = tblAtt->colNew("Length",DomainValueRangeStruct(0, 1e307, 0.001));	
+  }
 
   cleanupList.clear();
   long i, j;
