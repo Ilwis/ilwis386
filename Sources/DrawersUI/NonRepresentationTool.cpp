@@ -42,6 +42,8 @@ bool NonRepresentationToolTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	bool isAcceptable = true;
 	if ( rpr.fValid()) {
 		isAcceptable = !(rpr->prv() || rpr->prg());
+	} else {
+		isAcceptable = sdrw->useAttributeColumn() ? !sdrw->getAtttributeColumn()->dm()->pdbool() : !(*(BaseMap*)sdrw->getDataSource())->dm()->pdbool();
 	}
 	if ( isAcceptable)
 		parentTool = tool;
