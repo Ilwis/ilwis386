@@ -144,6 +144,7 @@ void LayerDrawer::setRepresentation( const Representation& rp){
 		} else if ( dm->pdbool()) {
 			setDrawMethod(NewDrawer::drmBOOL);
 		}
+		rpr = rp; // set the representation to the "invalid" one to prevent the wrong tools from appearing (based on the old representation)
 		return;
 	}
 
