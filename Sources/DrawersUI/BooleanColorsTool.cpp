@@ -38,11 +38,9 @@ bool BooleanColorsTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());
 	if (!ldrw)
 		return false;
-	BaseMap *bmp = (BaseMap *)ldrw->getDataSource();
-	if ( !(*bmp)->dm()->pdbool())
-		return false;
+	bool isAcceptable = ldrw->useAttributeColumn() ? ldrw->getAtttributeColumn()->dm()->pdbool() : (*(BaseMap*)ldrw->getDataSource())->dm()->pdbool();
 
-	return true;
+	return isAcceptable;
 }
 
 HTREEITEM BooleanColorsTool::configure( HTREEITEM parentItem) {
@@ -76,7 +74,7 @@ String BooleanColorsTool::getMenuString() const {
 //------------------------------------------------
 SetColorFormTrue::SetColorFormTrue(CWnd *wPar, LayerDrawer *dr) : 
 	DisplayOptionsForm(dr, wPar,String("draw color for %S",dr->getName())),
-		c(dr->getDrawingColor()->clrRaw(2,NewDrawer::drmBOOL))
+		c(dr->getDrawingColor()->getColor2())
 {
 	c.alpha() = 255 - c.alpha(); // inverse the alpha, for FieldColor
 	fc = new FieldColor(root, "Draw color", &c);
@@ -100,7 +98,7 @@ void  SetColorFormTrue::apply() {
 //----------------------------------------------------------
 SetColorFormFalse::SetColorFormFalse(CWnd *wPar, LayerDrawer *dr) : 
 	DisplayOptionsForm(dr, wPar,String("draw color for %S",dr->getName())),
-		c(dr->getDrawingColor()->clrRaw(1,NewDrawer::drmBOOL))
+		c(dr->getDrawingColor()->getColor1())
 {
 	c.alpha() = 255 - c.alpha(); // inverse the alpha, for FieldColor
 	fc = new FieldColor(root, "Draw color", &c);
