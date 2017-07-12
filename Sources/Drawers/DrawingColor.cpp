@@ -422,7 +422,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 	case 2: iStep = 31; break;
 			}
 			for (long i = 0; i < iLen; ++i)
-				bufOut[i] = clrPrimary(1 + dataValues.iRawAttr(buf[i]) % iStep).iVal();
+				bufOut[i] = clrPrimary(1 + dataValues.iRawAttr(buf[i]) % iStep, colorSetIndex).iVal();
 		}  
 		break;
 		/*case NewDrawer::drmIMAGE: {
