@@ -62,6 +62,13 @@ double IlwisData::rValByRaw(int raw, const RangeReal& range) const{
 	return bmap->dvrs().rValue(raw);
 }
 
+long IlwisData::iRawAttr(long iRaw) const {
+	if (col.fValid())
+		return col->iRaw(iRaw);
+	else
+		return iRaw;
+}
+
 DrawingColor::DrawingColor(ComplexDrawer *dr, int ind) : 
 clr1(168,168,168), // False
 clr2(0,176,20), // True
@@ -188,7 +195,8 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 				cRet = fdr->getSingleColor();
 		}
 		break;
-	case NewDrawer::drmMULTIPLE: 
+	case NewDrawer::drmMULTIPLE:
+		iRaw = dataValues.iRawAttr(iRaw);
 		if (3 == iMultColors)
 			cRet = clrRandom(iRaw);
 		else {
@@ -222,7 +230,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		cRet = Color(iRaw);
 		break;
 	case NewDrawer::drmBOOL:
-		switch (iRaw) {
+		switch (dataValues.iRawAttr(iRaw)) {
 			case 0: return Color(0,0,0);
 			case 1: cRet = clr1; break;
 			case 2: cRet = clr2; break;
@@ -404,7 +412,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 	case NewDrawer::drmMULTIPLE: 
 		if (3 == iMultColors) {
 			for (long i = 0; i < iLen; ++i)
-				bufOut[i] = clrRandom(buf[i]).iVal();
+				bufOut[i] = clrRandom(dataValues.iRawAttr(buf[i])).iVal();
 		}
 		else {
 			int iStep = 7;
@@ -414,7 +422,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 	case 2: iStep = 31; break;
 			}
 			for (long i = 0; i < iLen; ++i)
-				bufOut[i] = clrPrimary(1 + buf[i] % iStep).iVal();
+				bufOut[i] = clrPrimary(1 + dataValues.iRawAttr(buf[i]) % iStep).iVal();
 		}  
 		break;
 		/*case NewDrawer::drmIMAGE: {
@@ -440,7 +448,7 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 		break;
 	case NewDrawer::drmBOOL: 
 		for (long i = 0; i < iLen; ++i) {
-			long iRaw = buf[i];
+			long iRaw = dataValues.iRawAttr(buf[i]);			
 			bufOut[i] = (iRaw == 1)?clr1.iVal():((iRaw == 2)?clr2.iVal():Color(0,0,0).iVal());
 		}
 		break;

@@ -15,6 +15,7 @@ namespace ILWIS {
 		DomainValueRangeStruct dvrs() const;
 		Domain dm() const;
 		double rValByRaw(int raw, const RangeReal& range = RangeReal()) const;
+		long iRawAttr(long iRaw) const;
 	private:
 		BaseMap bmap;
 		Column col;
