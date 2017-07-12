@@ -35,7 +35,7 @@ bool NonRepresentationToolTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if ( dynamic_cast<ColorTool *>(tool) == 0)
 		return false;
 
-	FeatureLayerDrawer *sdrw = dynamic_cast<FeatureLayerDrawer *>(tool->getDrawer());
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());
 	if (!sdrw)
 		return false;
 	Representation rpr = sdrw->getRepresentation();
@@ -51,16 +51,18 @@ bool NonRepresentationToolTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 HTREEITEM NonRepresentationToolTool::configure( HTREEITEM parentItem) {
 	int iImgLeg = IlwWinApp()->iImage("Picture");
 	htiNode = tree->GetTreeCtrl().InsertItem(TR("Fixed Colors").c_str(), iImgLeg, iImgLeg, parentItem);
-	FeatureLayerDrawer *sdrw = dynamic_cast<FeatureLayerDrawer *>(drawer);
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
 	BaseMap *bmp = (BaseMap *)sdrw->getDataSource();
 	ColorTool *ctool = (ColorTool *)parentTool;
 	bool useSingleColor = sdrw->getDrawMethod() == NewDrawer::drmSINGLE;
 	bool useRpr = sdrw->getDrawMethod() == NewDrawer::drmRPR;
-	DisplayOptionRadioButtonItem *colorItem = new DisplayOptionRadioButtonItem("Single color", tree,htiNode,drawer);
-	colorItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&NonRepresentationToolTool::displayOptionSingleColor);
-	colorItem->setCheckAction(ctool,ctool->getColorCheck(), (DTSetCheckFunc)&ColorTool::setcheckRpr);
-	colorItem->setState(useSingleColor);
-	HTREEITEM singleColorItem = insertItem("Single Color","SingleColor",colorItem, -1);
+	if (dynamic_cast<FeatureLayerDrawer *>(drawer)) {
+		DisplayOptionRadioButtonItem *colorItem = new DisplayOptionRadioButtonItem("Single color", tree,htiNode,drawer);
+		colorItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&NonRepresentationToolTool::displayOptionSingleColor);
+		colorItem->setCheckAction(ctool,ctool->getColorCheck(), (DTSetCheckFunc)&ColorTool::setcheckRpr);
+		colorItem->setState(useSingleColor);
+		HTREEITEM singleColorItem = insertItem("Single Color","SingleColor",colorItem, -1);
+	}
 	if ( (*bmp)->dm()->pdid() || (*bmp)->dm()->pdUniqueID()) {
 		DisplayOptionRadioButtonItem *item = new DisplayOptionRadioButtonItem("Multiple Colors", tree,htiNode,drawer);	
 		item->setCheckAction(ctool,ctool->getColorCheck(), (DTSetCheckFunc)&ColorTool::setcheckRpr);
@@ -69,14 +71,13 @@ HTREEITEM NonRepresentationToolTool::configure( HTREEITEM parentItem) {
 		HTREEITEM multiColorItem = insertItem("Multiple Colors","MultipleColors",item, -1);
 	}
 
-
 	DrawerTool::configure(htiNode);
 
 	return htiNode;
 }
 
 void NonRepresentationToolTool::displayOptionMultiColor() {
-	new SetMultipleColorForm(tree, (FeatureLayerDrawer *)drawer);
+	new SetMultipleColorForm(tree, (LayerDrawer *)drawer);
 }
 
 void NonRepresentationToolTool::displayOptionSingleColor() {
@@ -109,13 +110,13 @@ void  SetSingleColorForm::apply() {
 	updateMapView();
 }
 //-------------------------------------------------------------
-SetMultipleColorForm::SetMultipleColorForm(CWnd *wPar, FeatureLayerDrawer *dr) : 
+SetMultipleColorForm::SetMultipleColorForm(CWnd *wPar, LayerDrawer *dr) : 
 	DisplayOptionsForm(dr, wPar,String("Color Scheme")),
 	choice(1)
 {
 	loadColorSets("");
-	choice = ((FeatureLayerDrawer *)drw)->getDrawingColor()->colorSet();
-	colors = ((FeatureLayerDrawer *)drw)->getDrawingColor()->multiColors();
+	choice = ((LayerDrawer *)drw)->getDrawingColor()->colorSet();
+	colors = ((LayerDrawer *)drw)->getDrawingColor()->multiColors();
 	fo = new FieldOneSelectString(root, "Color Schemes", &choice, sets);
 	rg = new RadioGroup(root,"Size color set",&colors);
 	new RadioButton(rg,"7");
@@ -169,8 +170,8 @@ void SetMultipleColorForm::loadColorSets(const String& folder) {
 void  SetMultipleColorForm::apply() {
 	fo->StoreData();
 	rg->StoreData();
-	((FeatureLayerDrawer *)drw)->getDrawingColor()->setColorSet(choice);
-	((FeatureLayerDrawer *)drw)->getDrawingColor()->setMultiColors(colors);
+	((LayerDrawer *)drw)->getDrawingColor()->setColorSet(choice);
+	((LayerDrawer *)drw)->getDrawingColor()->setMultiColors(colors);
 	LayerDrawer *lyerdrw = dynamic_cast<LayerDrawer *>(drw);
 	if (lyerdrw)
 		lyerdrw->setUseRpr(false);

@@ -32,7 +32,7 @@ private:
 
 class SetMultipleColorForm : public DisplayOptionsForm {
 public:
-	SetMultipleColorForm(CWnd *wPar, FeatureLayerDrawer *dr);
+	SetMultipleColorForm(CWnd *wPar, LayerDrawer *dr);
 	void apply();
 private:
 	void loadColorSets(const String& folder);
