@@ -145,20 +145,21 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 			childTool->configure(colorTool->getTreeItem());
 		}
 	}
-	if ( attColumn.fValid()) {
-		if (!stretchTool && attColumn->dm()->pdv()) {
-			stretchTool = new StretchTool(mpvGetView(),tree,drawer);
-		}
-		if ( stretchTool && hit != lasthit) {
-			if ( lasthit) {
-				stretchTool->removeTool(0); // all
-				stretchTool->clear();
+	if ( hit != lasthit) {
+		if (stretchTool) {
+			stretchTool->removeTool(0); // all
+			stretchTool->clear();
+			if (lasthit)
 				tree->DeleteAllItems(lasthit,true);
-			}
-			lasthit = hit;
+		}
+		if ( attColumn.fValid() && attColumn->dm()->pdv()) {
+			if (!stretchTool)
+				stretchTool = new StretchTool(mpvGetView(),tree,drawer);
 			parentTool->addTool(stretchTool);
 			stretchTool->configure(item);
-		}
+		} else if (stretchTool)
+			parentTool->removeTool(stretchTool); // will delete stretchTool
+		lasthit = hit;
 	}
 
 	tree->Invalidate();
