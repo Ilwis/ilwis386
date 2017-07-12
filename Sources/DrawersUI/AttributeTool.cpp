@@ -152,7 +152,7 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 			if (lasthit)
 				tree->DeleteAllItems(lasthit,true);
 		}
-		if ( attColumn.fValid() && attColumn->dm()->pdv()) {
+		if ( attColumn.fValid() && attColumn->dm()->pdv() && !attColumn->dm()->pdbool()) {
 			if (!stretchTool)
 				stretchTool = new StretchTool(mpvGetView(),tree,drawer);
 			parentTool->addTool(stretchTool);
