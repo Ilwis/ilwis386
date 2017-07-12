@@ -126,6 +126,14 @@ void DrawingColor::color2(const Color& clr){
 	clr2 = clr;
 }
 
+Color DrawingColor::getColor1() const {
+	return clr1;
+}
+
+Color DrawingColor::getColor2() const {
+	return clr2;
+}
+
 Color DrawingColor::clrVal(double rVal) const
 {
 	Color cRet;

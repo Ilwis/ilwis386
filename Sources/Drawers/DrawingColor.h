@@ -44,6 +44,8 @@ public:
 	int colorSet() const;
 	void color1(const Color& clr);
 	void color2(const Color& clr);
+	Color getColor1() const;
+	Color getColor2() const;
 
 private:
 	void InitClrRandom();
