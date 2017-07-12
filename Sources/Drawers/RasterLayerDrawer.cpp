@@ -640,8 +640,20 @@ String RasterLayerDrawer::getInfo(const Coord& c) const {
 		return "";
 	DomainValue* dv = rastermap->dm()->pdv();
 	if (0 != dv && dv->fUnit())
-		s = String("%S %S", s, dv->sUnit());
-	
+		s &= String(" %S", dv->sUnit());
+	else if (useAttributeColumn() && attColumn.fValid()) {
+		long iRaw = rastermap->iRaw(crd);
+		if (iRaw != iUNDEF) {
+			String sAtt = attColumn->sValue(iRaw);
+			for (int iLen = sAtt.length(); iLen && sAtt[iLen-1] == ' '; --iLen) // trim spaces on the right
+				sAtt[iLen-1] = 0;
+			s &= ": ";
+			s &= sAtt;
+			DomainValue* dv = attColumn->dm()->pdv();
+			if (0 != dv && dv->fUnit())
+				s &= String(" %S", dv->sUnit());
+		}
+	}	
 	return s;
 }
 

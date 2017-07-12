@@ -19,6 +19,7 @@
 #include "Engine\Drawers\OpenGLText.h"
 #include "Engine\Drawers\TextDrawer.h"
 #include "Engine\Drawers\DrawerContext.h"
+#include "Engine\Domain\Dmvalue.h"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;
@@ -230,18 +231,24 @@ String FeatureLayerDrawer::getInfo(const Coord& c) const {
 	{
 		crd = bmptr->cs()->cConv(rootDrawer->getCoordinateSystem(), c);
 	}
-	vector<String> infos;
-	if (!useAttColumn)
-		infos = bmptr->vsValue(crd);
-	else {
+	vector<String> infos = bmptr->vsValue(crd);
+	if (useAttColumn) {
+		int idx = 0;
 		vector<Geometry *> geoms = bmptr->getFeatures(crd);
-		for(int i=0; i < geoms.size(); ++i) {
+		for(int i=0; i < geoms.size() && idx < infos.size(); ++i) {
 			Feature *f = CFEATURE(geoms[i]);
 			if ( f) {
 				long raw = f->iValue();
 				if ( getAtttributeColumn().fValid() && raw != iUNDEF) {
 					String v = getAtttributeColumn()->sValue(raw);
-					infos.push_back(v);
+					for (int iLen = v.length(); iLen && v[iLen-1] == ' '; --iLen) // trim spaces on the right
+						v[iLen-1] = 0;
+					infos[idx] &= ": ";
+					infos[idx] &= v;
+					DomainValue* dv = getAtttributeColumn()->dm()->pdv();
+					if (0 != dv && dv->fUnit())
+						infos[idx] &= String(" %S", dv->sUnit());
+					++idx;
 				}
 			}
 		}
@@ -254,6 +261,8 @@ String FeatureLayerDrawer::getInfo(const Coord& c) const {
 		if ( s == "?")
 			continue;
 		info += count == 0 ? s : ";" + s;
+		if (0 != dv && dv->fUnit())
+			info &= String(" %S", dv->sUnit());
 		++count;
 	}
 	return info;
