@@ -120,6 +120,9 @@ void PolygonMapStore::StoreRing(File& binaryFile, const LineString *ls) {
 
 void PolygonMapStore::Store()
 {
+	FileName fnTriangle(ptr.fnObj,".tri#"); // delete the triangulation file at every Store(), otherwise artifacts will be displayed if the geometries have actually changed.
+	if (fnTriangle.fExist())
+		fnTriangle.fDelete();
 	FileName fnData(ptr.fnObj,".mpz#");
 	File  binaryFile(fnData,facCRT);
 	long correct = 0;
@@ -163,6 +166,12 @@ void PolygonMapStore::UnStore(const FileName& fn)
     _unlink(fnData.sFullName(true).c_str()); // delete data file if it's still there
   if (ObjectInfo::ReadElement("PolygonMapStore", "DataPolCode", fn, fnData))
     _unlink(fnData.sFullName(true).c_str()); // delete data file if it's still there
+  FileName fnTriangle(fn,".tri#"); // also delete the triangulation files (both new and old extension)
+  if (fnTriangle.fExist())
+    fnTriangle.fDelete();
+  fnTriangle = FileName(fn,".tria#");
+  if (fnTriangle.fExist())
+    fnTriangle.fDelete();
   ObjectInfo::WriteElement("PolygonMapStore", (char*)0, fn, (char*)0);
 }  
 
