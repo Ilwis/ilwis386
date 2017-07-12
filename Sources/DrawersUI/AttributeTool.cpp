@@ -138,7 +138,7 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 		colorTool->removeTool(0); // all
 		colorTool->clear();
 		tree->DeleteAllItems(colorTool->getTreeItem(),true);
-		parentTool->addChildTools(colorTool);
+		colorTool->addChildTools(colorTool);
 		DrawerTool *childTool = 0;
 		int count = 0;
 		while((childTool = colorTool->getTool(count++))) {
@@ -162,6 +162,7 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 		lasthit = hit;
 	}
 
+	tree->collectStructure();
 	tree->Invalidate();
 
 	drawer->getRootDrawer()->getDrawerContext()->doDraw();
