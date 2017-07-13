@@ -46,7 +46,7 @@ IlwisObjectPtr * createMapParallaxCorrection(const FileName& fn, IlwisObjectPtr&
 }
 
 const char* MapParallaxCorrection::sSyntax() {
-  return "MapParallaxCorrection(map,dem,resamplemethod,fill)\n" "ResampleMethod=NearestNeighbour,BiLinear,BiCubic)";
+  return "MapParallaxCorrection(map,dem,resamplemethod,satlat,satlon,fill)\n" "ResampleMethod=NearestNeighbour,BiLinear,BiCubic)";
 }
 
 static const char * sResampleMethods[] = { "NearestNeighbour", "BiLinear", "BiCubic", 0 };
@@ -73,7 +73,7 @@ MapParallaxCorrection* MapParallaxCorrection::create(const FileName& fn, MapPtr&
 {
 	Array<String> as;
 	int iParms = IlwisObjectPtr::iParseParm(sExpr, as);
-	if ((iParms < 3) || (iParms > 4))
+	if ((iParms < 3) || (iParms > 6))
 		ExpressionError(sExpr, sSyntax());
 
 	// See also MapResample (conditions taken over from there)
@@ -90,16 +90,28 @@ MapParallaxCorrection* MapParallaxCorrection::create(const FileName& fn, MapPtr&
 		throw ErrorResample(as[2], fn);
 	ResampleMethod rm = ResampleMethod(iRsmMeth);
 	bool fFill = true;
+	double rLatSat = 0;
+	double rLonSat = 0;
 	if (iParms == 4)
 		fFill = fCIStrEqual(as[3],"fill");
+	else if (iParms >= 5) {
+		rLatSat = as[3].rVal();
+		rLonSat = as[4].rVal();
+		if (iParms == 6)
+			fFill = fCIStrEqual(as[5],"fill");
+	}
 
-	return new MapParallaxCorrection(fn, p, mp, dem, rm, fFill);
+	return new MapParallaxCorrection(fn, p, mp, dem, rm, rLatSat, rLonSat, fFill);
 }
 
 MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p)
 : MapResample(fn, p)
 {
   ReadElement("MapParallaxCorrection", "Dem", dem);
+  if (!ReadElement("MapParallaxCorrection", "SatelliteLatitude", rLatSatellite))
+	  rLatSatellite = 0;
+  if (!ReadElement("MapParallaxCorrection", "SatelliteLongitude", rLonSatellite))
+	  rLonSatellite = 0;
   ReadElement("MapParallaxCorrection", "Fill", fFillUndef);
   fNeedFreeze = true;
   sFreezeTitle = "MapParallaxCorrection";
@@ -107,9 +119,11 @@ MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p)
   objdep.Add(dem);
 }
 
-MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p, const Map& mp, const Map & _dem, ResampleMethod rsm, bool fFill)
+MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p, const Map& mp, const Map & _dem, ResampleMethod rsm, double _rLatSat, double _rLonSat, bool fFill)
 : MapResample(fn, p, mp, mp->gr(), rsm, true, false)
 , dem(_dem)
+, rLatSatellite(_rLatSat)
+, rLonSatellite(_rLonSat)
 , fFillUndef(fFill)
 {
   sFreezeTitle = "MapParallaxCorrection";
@@ -122,6 +136,8 @@ void MapParallaxCorrection::Store()
   MapResample::Store();
   WriteElement("MapFromMap", "Type", "MapParallaxCorrection");
   WriteElement("MapParallaxCorrection", "Dem", dem);
+  WriteElement("MapParallaxCorrection", "SatelliteLatitude", rLatSatellite);
+  WriteElement("MapParallaxCorrection", "SatelliteLongitude", rLonSatellite);
   WriteElement("MapParallaxCorrection", "Fill", fFillUndef);
 }
 
@@ -131,8 +147,8 @@ MapParallaxCorrection::~MapParallaxCorrection()
 
 void MapParallaxCorrection::ComputeLocation(const double hcloud, const double fcloud, const double lcloud, double & fcloudcorr, double & lcloudcorr) {
 	const double hsat = 42165.39;
-	const double fsat = 0 * M_PI / 180.0;
-	const double lsat = 0 * M_PI / 180.0;;
+	const double fsat = rLatSatellite * M_PI / 180.0;
+	const double lsat = rLonSatellite * M_PI / 180.0;
 	const double requ = 6378.077;
 	const double rpole = 6356.577;
 	const double rmean = (requ + rpole) / 2.0;
@@ -336,7 +352,7 @@ bool MapParallaxCorrection::fFreezing()
 		for (long j=0; j < iNrCols; ++j, rc.Col++) {
 			Coord cOrigCoord = gr()->cConv(rc); // this does rc.Row + 0.5, rc.Col + 0.5
 			double h = dem->rValue(dem->gr()->rcConv(cOrigCoord));
-			if (h != rUNDEF) {
+			if (h != rUNDEF && (h==h)) { // h==h comparison to temporarily solve the "NaN" problem with the gdal-msg driver filling NaN on pixels outside earth.
 				Coord crdLatLon = csLatLon->cConv(csOut, cOrigCoord);
 				ComputeLocation(h / 1000.0, crdLatLon.y, crdLatLon.x, crdLatLon.y, crdLatLon.x);
 				Coord cNewCoord = csOut->cConv(csLatLon, crdLatLon);
@@ -504,7 +520,7 @@ bool MapParallaxCorrection::fFreezing()
 
 String MapParallaxCorrection::sExpression() const
 {
-  String s("MapParallaxCorrection(%S,%S,%S,%s)", mp->sNameQuoted(true, fnObj.sPath()), dem->sNameQuoted(true, fnObj.sPath()), sResampleMethod(rm), fFillUndef ? "fill" : "nofill");
+  String s("MapParallaxCorrection(%S,%S,%S,%lg,%lg,%s)", mp->sNameQuoted(true, fnObj.sPath()), dem->sNameQuoted(true, fnObj.sPath()), sResampleMethod(rm), rLatSatellite, rLonSatellite, fFillUndef ? "fill" : "nofill");
   return s;
 }
 

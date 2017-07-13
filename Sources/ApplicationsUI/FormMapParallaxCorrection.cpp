@@ -4,6 +4,8 @@
 #include "ApplicationsUI\FormMapParallaxCorrection.h"
 #include "Headers\messages.h"
 #include "Client\ilwis.h"
+#include "Engine\SpatialReference\Csproj.h"
+#include "Engine\SpatialReference\prj.h"
 #include "Headers\constant.h"
 
 LRESULT Cmdcorrectparallax(CWnd *wnd, const String& s)
@@ -51,6 +53,10 @@ FormCorrectParallaxMap::FormCorrectParallaxMap(CWnd* mw, const char* sPar)
   rbBiLin = new RadioButton(rg, TR("Bi&linear"));
   rbBiCub = new RadioButton(rg, TR("Bi&cubic"));
 
+  rLatSat = 0;
+  rLonSat = 0;
+  frLonSat = new FieldReal(root, TR("&Satellite Longitude"), &rLonSat);
+
   fFill = true;
   cbFill = new CheckBox(root, TR("&Fill Obstructed Pixels"), &fFill);
   initMapOutValRange(false);
@@ -85,8 +91,8 @@ int FormCorrectParallaxMap::exec()
 	  sFill = "fill";
   else
 	  sFill = "nofill";
-  sExpr = String("MapParallaxCorrection(%S,%S,%S,%S)", 
-                  sMap,sDem,sMethod,sFill);
+  sExpr = String("MapParallaxCorrection(%S,%S,%S,%lg,%lg,%S)", 
+                  sMap,sDem,sMethod,rLatSat,rLonSat,sFill);
   if (fOutMapList)
     sExpr = String("MapListApplic(%S,%S)", sMapList, sExpr);
   execMapOut(sExpr);  
@@ -149,7 +155,19 @@ int FormCorrectParallaxMap::MapCallBack(Event*)
     else 
       mp = Map(fnMap);
 		
-		m_gr = mp->gr();
+		GeoRef gr = mp->gr();
+		if (gr.fValid()) {
+			CoordSystem cs = gr->cs();
+			if (cs.fValid()) {
+				CoordSystemProjection * pcs = cs->pcsProjection();
+				if (pcs) {
+					Projection prj = pcs->prj;
+					if (prj.fValid()) {
+						frLonSat->SetVal(prj->rParam(pvLON0));
+					}
+				}
+			}
+		}
 		
 		Domain dm = mp->dm();
 		if (!dm.fValid())

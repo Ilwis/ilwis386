@@ -18,9 +18,12 @@ private:
   String sMap;
   String sDem;
   int iMeth;
+  double rLatSat;
+  double rLonSat;
   bool fFill;
   RadioGroup* rg;
   RadioButton *rbNearest, *rbBiLin, *rbBiCub;
+  FieldReal *frLonSat;
   CheckBox* cbFill;
   Map mp;
   Map dem;
