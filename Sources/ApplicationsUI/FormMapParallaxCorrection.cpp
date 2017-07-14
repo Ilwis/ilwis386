@@ -57,6 +57,9 @@ FormCorrectParallaxMap::FormCorrectParallaxMap(CWnd* mw, const char* sPar)
   rLonSat = 0;
   frLonSat = new FieldReal(root, TR("&Satellite Longitude"), &rLonSat);
 
+  fStoreDisplacements = false;
+  cbStoreDisplacements = new CheckBox(root, TR("&Store Displacement Matrix as two Maps"), &fStoreDisplacements);
+
   fFill = true;
   cbFill = new CheckBox(root, TR("&Fill Obstructed Pixels"), &fFill);
   initMapOutValRange(false);
@@ -86,13 +89,18 @@ int FormCorrectParallaxMap::exec()
     case 1: sMethod = "bilinear"; break;
     case 2: sMethod = "bicubic"; break;
   }
+  String sStoreDisplacements;
+  if (fStoreDisplacements)
+	  sStoreDisplacements = "store";
+  else
+	  sStoreDisplacements = "nostore";
   String sFill;
   if (fFill)
 	  sFill = "fill";
   else
 	  sFill = "nofill";
-  sExpr = String("MapParallaxCorrection(%S,%S,%S,%lg,%lg,%S)", 
-                  sMap,sDem,sMethod,rLatSat,rLonSat,sFill);
+  sExpr = String("MapParallaxCorrection(%S,%S,%S,%lg,%lg,%S,%S)", 
+                  sMap,sDem,sMethod,rLatSat,rLonSat,sStoreDisplacements,sFill);
   if (fOutMapList)
     sExpr = String("MapListApplic(%S,%S)", sMapList, sExpr);
   execMapOut(sExpr);  

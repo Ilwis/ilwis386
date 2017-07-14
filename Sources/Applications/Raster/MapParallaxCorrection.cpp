@@ -46,7 +46,7 @@ IlwisObjectPtr * createMapParallaxCorrection(const FileName& fn, IlwisObjectPtr&
 }
 
 const char* MapParallaxCorrection::sSyntax() {
-  return "MapParallaxCorrection(map,dem,resamplemethod,satlat,satlon,fill)\n" "ResampleMethod=NearestNeighbour,BiLinear,BiCubic)";
+  return "MapParallaxCorrection(map,dem,resamplemethod,satlat,satlon,store,fill)\n" "ResampleMethod=NearestNeighbour,BiLinear,BiCubic)";
 }
 
 static const char * sResampleMethods[] = { "NearestNeighbour", "BiLinear", "BiCubic", 0 };
@@ -73,7 +73,7 @@ MapParallaxCorrection* MapParallaxCorrection::create(const FileName& fn, MapPtr&
 {
 	Array<String> as;
 	int iParms = IlwisObjectPtr::iParseParm(sExpr, as);
-	if ((iParms < 3) || (iParms > 6))
+	if ((iParms < 3) || (iParms > 7))
 		ExpressionError(sExpr, sSyntax());
 
 	// See also MapResample (conditions taken over from there)
@@ -90,18 +90,20 @@ MapParallaxCorrection* MapParallaxCorrection::create(const FileName& fn, MapPtr&
 		throw ErrorResample(as[2], fn);
 	ResampleMethod rm = ResampleMethod(iRsmMeth);
 	bool fFill = true;
+	bool fStoreDisplacements = false;
 	double rLatSat = 0;
 	double rLonSat = 0;
-	if (iParms == 4)
+	if (iParms == 4) // options: old-version: 3-4 parameters (map,dem,method,fill), new-version (2017-07-13): 6-7 parameters (map,dem,method,lat,lon,store,fill)
 		fFill = fCIStrEqual(as[3],"fill");
-	else if (iParms >= 5) {
+	else if (iParms >= 6) {
 		rLatSat = as[3].rVal();
 		rLonSat = as[4].rVal();
-		if (iParms == 6)
-			fFill = fCIStrEqual(as[5],"fill");
+		fStoreDisplacements = fCIStrEqual(as[5],"store");
+		if (iParms == 7)
+			fFill = fCIStrEqual(as[6],"fill");
 	}
 
-	return new MapParallaxCorrection(fn, p, mp, dem, rm, rLatSat, rLonSat, fFill);
+	return new MapParallaxCorrection(fn, p, mp, dem, rm, rLatSat, rLonSat, fStoreDisplacements, fFill);
 }
 
 MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p)
@@ -112,6 +114,7 @@ MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p)
 	  rLatSatellite = 0;
   if (!ReadElement("MapParallaxCorrection", "SatelliteLongitude", rLonSatellite))
 	  rLonSatellite = 0;
+  ReadElement("MapParallaxCorrection", "StoreDisplacements", fStoreDisplacements);
   ReadElement("MapParallaxCorrection", "Fill", fFillUndef);
   fNeedFreeze = true;
   sFreezeTitle = "MapParallaxCorrection";
@@ -119,11 +122,12 @@ MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p)
   objdep.Add(dem);
 }
 
-MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p, const Map& mp, const Map & _dem, ResampleMethod rsm, double _rLatSat, double _rLonSat, bool fFill)
+MapParallaxCorrection::MapParallaxCorrection(const FileName& fn, MapPtr& p, const Map& mp, const Map & _dem, ResampleMethod rsm, double _rLatSat, double _rLonSat, bool _fStoreDisplacements, bool fFill)
 : MapResample(fn, p, mp, mp->gr(), rsm, true, false)
 , dem(_dem)
 , rLatSatellite(_rLatSat)
 , rLonSatellite(_rLonSat)
+, fStoreDisplacements(_fStoreDisplacements)
 , fFillUndef(fFill)
 {
   sFreezeTitle = "MapParallaxCorrection";
@@ -138,6 +142,7 @@ void MapParallaxCorrection::Store()
   WriteElement("MapParallaxCorrection", "Dem", dem);
   WriteElement("MapParallaxCorrection", "SatelliteLatitude", rLatSatellite);
   WriteElement("MapParallaxCorrection", "SatelliteLongitude", rLonSatellite);
+  WriteElement("MapParallaxCorrection", "StoreDisplacements", fStoreDisplacements);
   WriteElement("MapParallaxCorrection", "Fill", fFillUndef);
 }
 
@@ -341,8 +346,24 @@ bool MapParallaxCorrection::fFreezing()
 			rcToCoord[i * iNrCols + j] = crdUNDEF;
 		}
 	}
+	Map mpDirection;
+	Map mpDistance;
+	if (fStoreDisplacements) {
+		DomainValueRangeStruct dv (-999999999,999999999,0);
+		FileName fnDirection(fnObj);
+		fnDirection.sFile += "_direction";
+		mpDirection = Map(fnDirection, gr(), rcSize(), dv);
+		mpDirection->fErase = true; // delete if user cancels; at the end this is set back to false
+		FileName fnDist(fnObj);
+		fnDist.sFile += "_distance";
+		mpDistance = Map(fnDist, gr(), rcSize(), dv);
+		mpDistance->fErase = true;
+	}
+
 	trq.SetText(String(TR("Computing displacement using '%S'").c_str(), dem->sName(true, dem->fnObj.sPath())));
 	clock_t start2 = clock();
+	RealBuf rBufDirection(iCols());
+	RealBuf rBufDistance(iCols());
 	for (long i=0; i < iNrLines; ++i) {
 		RowCol rc(i, 0L);
 		if (trq.fUpdate(i, iNrLines)) {
@@ -356,6 +377,12 @@ bool MapParallaxCorrection::fFreezing()
 				Coord crdLatLon = csLatLon->cConv(csOut, cOrigCoord);
 				ComputeLocation(h / 1000.0, crdLatLon.y, crdLatLon.x, crdLatLon.y, crdLatLon.x);
 				Coord cNewCoord = csOut->cConv(csLatLon, crdLatLon);
+				if (fStoreDisplacements) {
+					double angle = atan2(cNewCoord.x - cOrigCoord.x, cNewCoord.y - cOrigCoord.y) * 180.0 / M_PI;
+					double distance = rDist(cOrigCoord,cNewCoord);
+					rBufDirection[j] = angle;
+					rBufDistance[j] = distance;
+				}
 				double rRowDestination;
 				double rColDestination;
 				gr()->Coord2RowCol(cNewCoord, rRowDestination, rColDestination);
@@ -371,7 +398,14 @@ bool MapParallaxCorrection::fFreezing()
 				else
 					setUndef(i, j, rcDestination.Row, rcDestination.Col, rcToCoord, iNrCols);
 				rcToCoord[rcDestination.Row * iNrCols + rcDestination.Col] = Coord(cOrigCoord.x - rPixSizeX * diffX, cOrigCoord.y + rPixSizeY * diffY);
+			} else if (fStoreDisplacements) {
+				rBufDirection[j] = rUNDEF;
+				rBufDistance[j] = rUNDEF;
 			}
+		}
+		if (fStoreDisplacements) {			
+			mpDirection->PutLineVal(i, rBufDirection);
+			mpDistance->PutLineVal(i, rBufDistance);
 		}
 	}
 	clock_t end2 = clock();
@@ -515,13 +549,19 @@ bool MapParallaxCorrection::fFreezing()
 	double total = (double)(end - start) / CLOCKS_PER_SEC;
 	String s("calc old in %2.2f seconds;\n", total);
 	TRACE(s.c_str());
+	if (fStoreDisplacements) {
+		if (mpDistance.fValid())
+			mpDistance->fErase = false;
+		if (mpDirection.fValid())
+			mpDirection->fErase = false;
+	}
 	return true;
 }
 
 String MapParallaxCorrection::sExpression() const
 {
-  String s("MapParallaxCorrection(%S,%S,%S,%lg,%lg,%s)", mp->sNameQuoted(true, fnObj.sPath()), dem->sNameQuoted(true, fnObj.sPath()), sResampleMethod(rm), rLatSatellite, rLonSatellite, fFillUndef ? "fill" : "nofill");
-  return s;
+	String s("MapParallaxCorrection(%S,%S,%S,%lg,%lg,%s,%s)", mp->sNameQuoted(true, fnObj.sPath()), dem->sNameQuoted(true, fnObj.sPath()), sResampleMethod(rm), rLatSatellite, rLonSatellite, fStoreDisplacements ? "store" : "nostore", fFillUndef ? "fill" : "nofill");
+	return s;
 }
 
 

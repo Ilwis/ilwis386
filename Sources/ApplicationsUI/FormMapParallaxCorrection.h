@@ -20,10 +20,12 @@ private:
   int iMeth;
   double rLatSat;
   double rLonSat;
+  bool fStoreDisplacements;
   bool fFill;
   RadioGroup* rg;
   RadioButton *rbNearest, *rbBiLin, *rbBiCub;
   FieldReal *frLonSat;
+  CheckBox* cbStoreDisplacements;
   CheckBox* cbFill;
   Map mp;
   Map dem;
