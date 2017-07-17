@@ -72,12 +72,36 @@ void GraticuleDrawer::prepare(PreparationParameters *pp) {
 				llMin.Lat = llMax.Lat;
 				llMax.Lat = lat;
 			}
-			if ((rDist == rUNDEF) || (pp->type & NewDrawer::ptNEWCSY))
-				rDist = rRound((llMax.Lat - llMin.Lat) / 7);
+			if ((rDist == rUNDEF) || (pp->type & NewDrawer::ptNEWCSY)) {
+				rDist = (llMax.Lat - llMin.Lat) / 7;
+				if (rDist > 30)
+					rDist = 30;
+				else if (rDist > 0.9)
+					rDist = rRound(rDist);
+				else {
+					rDist *= 60;  // work in minutes
+					if (rDist > 0.25)   // if larger than 15 seconds
+						rDist = rRound(rDist);
+					else {
+						rDist *= 60;  // work in seconds
+						if (rDist > 0.2)
+							rDist = rRound(rDist);
+						else
+							rDist = 1;
+						rDist /= 60;
+					}  
+					rDist /= 60;
+				}  
+			}
+
+			llMin.Lat -= rDist;
+			llMin.Lon -= rDist;
+			llMax.Lat += rDist;
+			llMax.Lon += rDist;
 
 			Coord c1, c2;
 		
-			prepareGrid(csy,rDist,llMax, llMin);
+			prepareGrid(csy,rDist,llMin, llMax);
 			getZMaker()->setThreeDPossible(true);
 		}
 	}
@@ -95,26 +119,22 @@ void GraticuleDrawer::prepare(PreparationParameters *pp) {
 
 
 
-void GraticuleDrawer::prepareGrid(const CoordSystem &csy, double rDist, const LatLon& llMax, const LatLon& llMin ) {
+void GraticuleDrawer::prepareGrid(const CoordSystem &csy, double rDist, const LatLon& llMin, const LatLon& llMax ) {
 	LatLon ll1, ll2;
-	ll1 = llMin;
-	ll2 = llMin;
-	ll2.Lat = llMax.Lat;
+	ll1.Lat = ceil(llMin.Lat / rDist) * rDist;
+	ll2.Lat = floor(llMax.Lat / rDist) * rDist;
 	for (double lon = ceil(llMin.Lon / rDist) * rDist; lon < llMax.Lon ; lon += rDist)
 	{
 		Coord c1,c2;
-		ll1.Lon = lon;
-		ll2.Lon = lon;
-		AddGraticuleLine(csy,ll1, ll2);
+		ll1.Lon = ll2.Lon = lon;
+		AddGraticuleLine(csy,ll1, ll2); // meridians
 	}
-
-	ll1 = llMin;
-	ll2 = llMin;
-	ll2.Lon = llMax.Lon;
+	ll1.Lon = ceil(llMin.Lon / rDist) * rDist;	
+	ll2.Lon = floor(llMax.Lon / rDist) * rDist;
 	for (double lat = ceil(llMin.Lat / rDist) * rDist; lat < llMax.Lat ; lat += rDist)
 	{
 		ll1.Lat = ll2.Lat = lat;
-		AddGraticuleLine(csy,ll1, ll2);
+		AddGraticuleLine(csy,ll1, ll2); // parallels
 	}
 }
 
@@ -153,40 +173,47 @@ void GraticuleDrawer::AddGraticuleLine(const CoordSystem &csy, const LatLon& llB
 	GraticuleLine *line = (GraticuleLine *)NewDrawer::getDrawer("LineDrawer", &pp, &dp);
 	vector<Coord> coords;
 	int steps = 250;
-	if ( llBoundary1.Lon == llBoundary1.Lon) {
-		double rShift = (llBoundary1.Lat - llBoundary2.Lat) / steps;
-		LatLon ll1 = llBoundary2;
+	if ( llBoundary1.Lon == llBoundary2.Lon) { // meridian
+		double rShift = (llBoundary2.Lat - llBoundary1.Lat) / steps;
+		LatLon ll1 = llBoundary1;
 		Coord c1 = csy->cConv(ll1);
-		c1 = getRootDrawer()->glConv(c1);
-		c1.z = 0;
-		coords.push_back(c1);
-		for(int i=0; i < steps; ++i) {
-			LatLon ll2 = ll1;
-			ll2.Lat = ll1.Lat + rShift;
-			Coord c2 = csy->cConv(ll2);
-			c2 = getRootDrawer()->glConv(c2);
-			if ( c1.y != c2.y) {
-				c2.z = 0;
-				coords.push_back(c2);
-			}
-			ll1 = ll2;
+		if (!c1.fUndef()) {
+			c1 = getRootDrawer()->glConv(c1);
+			c1.z = 0;
+			coords.push_back(c1);
 		}
-	}
-	if ( llBoundary1.Lat == llBoundary1.Lat) {
-		double rShift = (llBoundary1.Lon - llBoundary2.Lon) / steps;
-		LatLon ll1 = llBoundary2;
-		Coord c1 = csy->cConv(ll1);
-		c1 = getRootDrawer()->glConv(c1);
 		for(int i=0; i < steps; ++i) {
-			LatLon ll2 = ll1;
-			ll2.Lon = ll1.Lon + rShift;
-			Coord c2 = csy->cConv(ll2);
-			c2 = getRootDrawer()->glConv(c2);
-			if ( c1.x != c2.x) {
-				c2.z = 0;
-				coords.push_back(c2);
+			ll1.Lat += rShift;
+			Coord c2 = csy->cConv(ll1);
+			if (!c2.fUndef()) {
+				c2 = getRootDrawer()->glConv(c2);
+				if (c1.y != c2.y) {
+					c2.z = 0;
+					coords.push_back(c2);
+					c1 = c2;
+				}
 			}
-			ll1 = ll2;
+		}
+	} else if ( llBoundary1.Lat == llBoundary2.Lat) { // parallel
+		double rShift = (llBoundary2.Lon - llBoundary1.Lon) / steps;
+		LatLon ll1 = llBoundary1;
+		Coord c1 = csy->cConv(ll1);
+		if (!c1.fUndef()) {
+			c1 = getRootDrawer()->glConv(c1);
+			c1.z = 0;
+			coords.push_back(c1);
+		}
+		for(int i=0; i < steps; ++i) {
+			ll1.Lon += rShift;
+			Coord c2 = csy->cConv(ll1);
+			if (!c2.fUndef()) {
+				c2 = getRootDrawer()->glConv(c2);
+				if ( c1.x != c2.x) {
+					c2.z = 0;
+					coords.push_back(c2);
+					c1 = c2;
+				}
+			}
 		}
 	}
 	line->addCoords(coords);
