@@ -17,6 +17,7 @@
 #include "Drawers\GraticuleDrawer.h"
 #include "DrawersUI\GraticuleTool.h"
 #include "DrawersUI\GlobalTool.h"
+#include "Client\FormElements\fentdms.h"
 
 using namespace std;
 
@@ -80,14 +81,12 @@ GraticuleForm::GraticuleForm(CWnd *par, GraticuleDrawer *gdr)
 	: DisplayOptionsForm(gdr, par, TR("Graticule Properties")), rDist(gdr->getGridSpacing())
 	
 {
-	fr = new FieldReal(root, TR("Graticule spacing"), &rDist, ValueRange(0.0,1e10,0.001));
-
-
-  create();
+	fdms = new FieldDMS(root, TR("Graticule &Distance"), &rDist);
+	create();
 }
 
 void  GraticuleForm::apply() {
-	fr->StoreData();
+	fdms->StoreData();
 	GraticuleDrawer *grd = (GraticuleDrawer *)drw;
 	grd->setGridSpacing(rDist);
 	PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);

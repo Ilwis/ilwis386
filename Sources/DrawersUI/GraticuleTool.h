@@ -2,6 +2,8 @@
 
 ILWIS::DrawerTool *createGraticuleTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
+class FieldDMS;
+
 namespace ILWIS {
 
 	class GraticuleDrawer;
@@ -18,8 +20,6 @@ namespace ILWIS {
 		void graticuleActive(void *v, HTREEITEM);
 		void GraticuleOptions();
 		bool hasGraticule;
-
-
 	};
 
 	class GraticuleForm: public DisplayOptionsForm
@@ -28,7 +28,7 @@ namespace ILWIS {
 		GraticuleForm(CWnd *par, GraticuleDrawer *gdr);
 		void apply();
 	private:
-		FieldReal *fr;
+		FieldDMS *fdms;
 		GraticuleDrawer *gd;
 		double rDist;
 		int dummy;
