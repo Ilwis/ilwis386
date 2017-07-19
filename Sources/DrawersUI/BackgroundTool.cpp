@@ -79,22 +79,22 @@ void BackgroundTool::makeActive(void *v, HTREEITEM) {
 
 void BackgroundTool::displayOptionOutsideColor() {
 	CanvasBackgroundDrawer *cbdr = (CanvasBackgroundDrawer *)drawer;
-	Color &clr = cbdr->getRootDrawer()->is3D() ? cbdr->getColor(CanvasBackgroundDrawer::clOUTSIDE3D) :  
-		                                  cbdr->getColor(CanvasBackgroundDrawer::clOUTSIDE2D);
-	new SetColorForm("Outside map", tree, (CanvasBackgroundDrawer *)drawer,  clr);
+	CanvasBackgroundDrawer::ColorLocation loc = cbdr->getRootDrawer()->is3D() ? CanvasBackgroundDrawer::clOUTSIDE3D : CanvasBackgroundDrawer::clOUTSIDE2D;
+	Color& clr = cbdr->getColor(loc);
+	new SetColorForm("Outside map", tree, (CanvasBackgroundDrawer *)drawer, clr, loc);
 }
 
 void BackgroundTool::displayOptionInsideColor() {
 	CanvasBackgroundDrawer *cbdr = (CanvasBackgroundDrawer *)drawer;
-	Color& clr = cbdr->getRootDrawer()->is3D() ? cbdr->getColor(CanvasBackgroundDrawer::clINSIDE3D) :  
-		                                  cbdr->getColor(CanvasBackgroundDrawer::clINSIDE2D);
-	new SetColorForm("Inside map", tree, (CanvasBackgroundDrawer *)drawer, clr);
+	CanvasBackgroundDrawer::ColorLocation loc = cbdr->getRootDrawer()->is3D() ? CanvasBackgroundDrawer::clINSIDE3D : CanvasBackgroundDrawer::clINSIDE2D;
+	Color& clr = cbdr->getColor(loc);
+	new SetColorForm("Inside map", tree, (CanvasBackgroundDrawer *)drawer, clr, loc);
 }
 
 void BackgroundTool::displayOptionSkyColor() {
 	CanvasBackgroundDrawer *cbdr = (CanvasBackgroundDrawer *)drawer;
 	Color& clr = cbdr->getColor(CanvasBackgroundDrawer::clSKY3D);
-	new SetColorForm("3D Sky color", tree, (CanvasBackgroundDrawer *)drawer, clr);
+	new SetColorForm("3D Sky color", tree, (CanvasBackgroundDrawer *)drawer, clr, CanvasBackgroundDrawer::clSKY3D);
 }
 
 String BackgroundTool::getMenuString() const {
@@ -102,8 +102,8 @@ String BackgroundTool::getMenuString() const {
 }
 
 //------------------------------------------------
-SetColorForm::SetColorForm(const String& title, CWnd *wPar, CanvasBackgroundDrawer *dr, Color& color) : 
-	DisplayOptionsForm(dr, wPar,title),clr(color), c(color)
+SetColorForm::SetColorForm(const String& title, CWnd *wPar, CanvasBackgroundDrawer *dr, Color& color, CanvasBackgroundDrawer::ColorLocation l)
+: DisplayOptionsForm(dr, wPar,title),clr(color), c(color), loc(l)
 {
 	fc = new FieldColor(root, "Draw color", &c);
 	create();
@@ -112,7 +112,8 @@ SetColorForm::SetColorForm(const String& title, CWnd *wPar, CanvasBackgroundDraw
 void  SetColorForm::apply() {
 	fc->StoreData();
 	clr = c;
-	drw->getRootDrawer()->SetSkyColor(c);
+	if (loc == CanvasBackgroundDrawer::clSKY3D)
+		drw->getRootDrawer()->SetSkyColor(c);
 	updateMapView();
 }
 

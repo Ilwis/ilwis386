@@ -20,12 +20,12 @@ namespace ILWIS {
 
 	class SetColorForm : public DisplayOptionsForm {
 	public:
-		SetColorForm(const String& title, CWnd *wPar, CanvasBackgroundDrawer *dr, Color& color);
+		SetColorForm(const String& title, CWnd *wPar, CanvasBackgroundDrawer *dr, Color& color, CanvasBackgroundDrawer::ColorLocation l);
 		void apply();
 	private:
 		FieldColor *fc;
 		Color c;
 		Color& clr;
-
+		CanvasBackgroundDrawer::ColorLocation loc;
 	};
 }
