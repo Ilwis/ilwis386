@@ -13,6 +13,7 @@ public:
 	virtual void prepare(PreparationParameters *pp);
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cb=CoordBounds()) const;
 	Color& getColor(ColorLocation cl);
+	virtual void select(bool yesno); // function is misused to notify partial draw in 2D
 private:
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
@@ -21,6 +22,7 @@ private:
 	Color inside3D;
 	Color outside3D;
 	Color sky3D;
+	bool fDrawSides;
 };
 
 

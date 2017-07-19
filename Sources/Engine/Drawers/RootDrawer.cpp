@@ -188,8 +188,11 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 			glDepthMask(GL_TRUE);
 		} else {
 			const_cast<RootDrawer *>(this)->setZIndex(0);
+			backgroundDrawer->select(false); // CanvasBackgroundDrawer::select misused; draw only map background
 			backgroundDrawer->draw(drl2D, cb);
 			ComplexDrawer::draw(drl2D, cb);
+			backgroundDrawer->select(true); // CanvasBackgroundDrawer::select misused; draw only map sides
+			backgroundDrawer->draw(drl2D, cb);
 		}
 	}
 	return true;

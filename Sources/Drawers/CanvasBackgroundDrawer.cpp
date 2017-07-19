@@ -15,7 +15,9 @@ ILWIS::NewDrawer *createCanvasBackgroundDrawer(DrawerParameters *parms) {
 	return new CanvasBackgroundDrawer(parms);
 }
 
-CanvasBackgroundDrawer::CanvasBackgroundDrawer(DrawerParameters *parms) : ComplexDrawer(parms,"CanvasBackgroundDrawer"){
+CanvasBackgroundDrawer::CanvasBackgroundDrawer(DrawerParameters *parms)
+: ComplexDrawer(parms,"CanvasBackgroundDrawer")
+, fDrawSides(false) {
 	id = name = "CanvasBackgroundDrawer";
 	outside2D = Color(179,179,179);
 	inside2D = Color(255,255,255);
@@ -49,19 +51,21 @@ bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	else {
 		glColor4d(outside2D.redP(), outside2D.greenP(), outside2D.blueP(),getAlpha());
 	}
-	glBegin(GL_QUADS);						
-		glVertex3f(cbView.MinX(), cbView.MinY(),0);				
-		glVertex3f(cbView.MinX(), cbView.MaxY(),0);				
-		glVertex3f(cbMap.MinX(), cbView.MaxY(),0);				
-		glVertex3f(cbMap.MinX(), cbView.MinY(),0);
-	glEnd();
+	if (is3D || fDrawSides) {
+		glBegin(GL_QUADS);						
+			glVertex3f(cbView.MinX(), cbView.MinY(),0);				
+			glVertex3f(cbView.MinX(), cbView.MaxY(),0);				
+			glVertex3f(cbMap.MinX(), cbView.MaxY(),0);				
+			glVertex3f(cbMap.MinX(), cbView.MinY(),0);
+		glEnd();
 
-	glBegin(GL_QUADS);						
-		glVertex3f(cbMap.MaxX(), cbView.MinY(),0);				
-		glVertex3f(cbMap.MaxX(), cbView.MaxY(),0);				
-		glVertex3f(cbView.MaxX(), cbView.MaxY(),0);				
-		glVertex3f(cbView.MaxX(), cbView.MinY(),0);
-	glEnd();
+		glBegin(GL_QUADS);						
+			glVertex3f(cbMap.MaxX(), cbView.MinY(),0);				
+			glVertex3f(cbMap.MaxX(), cbView.MaxY(),0);				
+			glVertex3f(cbView.MaxX(), cbView.MaxY(),0);				
+			glVertex3f(cbView.MaxX(), cbView.MinY(),0);
+		glEnd();
+	}
 
 	if ( is3D) {
 		glColor4d(inside3D.redP(), inside3D.greenP(), inside3D.blueP(),getAlpha());
@@ -69,12 +73,14 @@ bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	else {
 		glColor4d(inside2D.redP(), inside2D.greenP(), inside2D.blueP(),getAlpha());
 	}
-	glBegin(GL_QUADS);						
-		glVertex3f(cbMap.MinX(), cbMap.MinY(),0);				
-		glVertex3f(cbMap.MinX(), cbMap.MaxY(),0);				
-		glVertex3f(cbMap.MaxX(), cbMap.MaxY(),0);				
-		glVertex3f(cbMap.MaxX(), cbMap.MinY(),0);
-	glEnd();
+	if (is3D || !fDrawSides) {
+		glBegin(GL_QUADS);						
+			glVertex3f(cbMap.MinX(), cbMap.MinY(),0);				
+			glVertex3f(cbMap.MinX(), cbMap.MaxY(),0);				
+			glVertex3f(cbMap.MaxX(), cbMap.MaxY(),0);				
+			glVertex3f(cbMap.MaxX(), cbMap.MinY(),0);
+		glEnd();
+	}
 
 	glDisable(GL_BLEND);
 	return true;
@@ -116,5 +122,7 @@ Color& CanvasBackgroundDrawer::getColor(ColorLocation cl) {
 	return inside2D;
 }
 
-
-
+// function "select" is misused to notify partial draw in 2D; this had the least number of side-effects, to avoid RootDrawer (Engine) from being dependent on a plugin (Drawers)
+void CanvasBackgroundDrawer::select(bool yesno) {
+	fDrawSides = yesno;
+}
