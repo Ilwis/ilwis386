@@ -37,20 +37,22 @@ namespace ILWIS{
 
 
 	protected:
-		void AddGridLine(Coord c1, Coord c2);
+		void AddLinearGridLine(Coord c1, Coord c2);
+		void AddCurvedGridLine(Coord c1, Coord c2);
 		void gridOptions(CWnd *parent);
 		void displayOptionGrid3D(CWnd *parent);
-		void prepareGrid( double rDist, const Coord& cMax, const Coord& cMin );
-		void prepareVerticals( double rDist,const Coord& cMax, const Coord& cMin);
+		void prepareGrid( double rDist, const Coord& cMin, const Coord& cMax, bool fLinear );
+		void prepareVerticals( double rDist,const Coord& cMin, const Coord& cMax);
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 		bool drawPlane(const CoordBounds& cbArea) const;
 		void resizeQuadsVector(int planes);
-		void prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin);
-		void preparePlanes(double rDist, const Coord& cMax, const Coord& cMin );
-		void prepareCube(double rDist, const Coord& cMax, const Coord& cMin );
+		void prepareVAxis(double rDist,const Coord& cMin, const Coord& cMax, bool fLinear);
+		void preparePlanes(double rDist, const Coord& cMin, const Coord& cMax );
+		void prepareCube(double rDist, const Coord& cMin, const Coord& cMax, bool fLinear );
 		void prepareChildDrawers(PreparationParameters *parms);
-		void getLayerDistances(vector<double>& dist) ;
+		void getLayerDistances(vector<double>& dist);
+		void calcBounds(const GeoRef& grf, const CoordBounds& cbMap, Coord& cMin, Coord& cMax);
 
 		double          rDist;
 		LineProperties	lproperties;

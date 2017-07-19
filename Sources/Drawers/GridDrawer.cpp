@@ -10,6 +10,7 @@
 #include "Drawers\LineDrawer.h"
 #include "Drawers\GridDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
+#include "Engine\SpatialReference\GR3D.H"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;
@@ -98,8 +99,17 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 		Color clr;
 		clear();
 		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
-		cMin = getRootDrawer()->glToWorld(cbMap.cMin);
-		cMax = getRootDrawer()->glToWorld(cbMap.cMax);
+		bool fLinear;
+		GeoRef gr = getRootDrawer()->getGeoReference();		
+		if (gr.fValid()) {
+			fLinear = gr->fLinear();
+
+			calcBounds(gr, cbMap, cMin, cMax);
+		} else {
+			fLinear = true;			
+			cMin = getRootDrawer()->glToWorld(cbMap.cMin);
+			cMax = getRootDrawer()->glToWorld(cbMap.cMax);
+		}
 		if (cMin.fUndef() || cMax.fUndef() || cMax.x == cMin.x)
 			return;
 		if (cMin.x > cMax.x) { // swap
@@ -115,19 +125,17 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 		if ((rDist == rUNDEF) || (pp->type & NewDrawer::ptNEWCSY))
 			rDist = rRound((cMax.x - cMin.x) / 7);
 
-		Coord c1, c2;
-	
 		if ( (mode & GridDrawer::mGRID) || (mode & GridDrawer::mGROUNDLEVEL))
-			prepareGrid(rDist,cMax, cMin);
+			prepareGrid(rDist,cMin, cMax, fLinear);
 		if ( threeDGrid) {
 			if ( mode & GridDrawer::mPLANE)
-				preparePlanes(rDist,cMax, cMin);
+				preparePlanes(rDist,cMin, cMax);
 			if (mode & GridDrawer::mAXIS)
-				prepareVAxis(rDist,cMax, cMin);
+				prepareVAxis(rDist,cMin, cMax, fLinear);
 			if ( mode & GridDrawer::mVERTICALS)
-				prepareVerticals(rDist, cMax, cMin);
+				prepareVerticals(rDist, cMin, cMax);
 			if ( mode & GridDrawer::mCUBE)
-				prepareCube(rDist, cMax, cMin);
+				prepareCube(rDist, cMin, cMax, fLinear);
 		}
 		getZMaker()->setThreeDPossible(true);
 	}
@@ -142,7 +150,7 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 	}
 }
 
-void GridDrawer::prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin) {
+void GridDrawer::prepareVAxis(double rDist,const Coord& cMin, const Coord& cMax, bool fLinear) {
 	if ( planeDistances.size() == 0)
 		return;
 	double maxz = planeDistances[planeDistances.size() - 1];
@@ -152,38 +160,50 @@ void GridDrawer::prepareVAxis(double rDist,const Coord& cMax, const Coord& cMin)
 	c2 = c1;
 	c2.z = maxz;
 	startc2 = oldc2 = c2;
-	AddGridLine(c1,c2);
+	AddLinearGridLine(c1,c2); // vertical
 	c1.x = cMin.x;
 	c1.y = cMax.y;
 	c1.z  = 0;
 	c2 = c1;
 	c2.z = maxz;
-	AddGridLine(oldc2,c2);
+	if (fLinear)
+		AddLinearGridLine(oldc2,c2); // horizontal
+	else
+		AddCurvedGridLine(oldc2,c2); // horizontal
 	oldc2 = c2;
-	AddGridLine(c1,c2);
+	AddLinearGridLine(c1,c2); // vertical
 	c1 = cMax;
 	c1.z  = 0;
 	c2 = c1;
 	c2.z = maxz;
-	AddGridLine(oldc2,c2);
+	if (fLinear)
+		AddLinearGridLine(oldc2,c2); // horizontal
+	else
+		AddCurvedGridLine(oldc2,c2); // horizontal
 	oldc2 = c2;
-	AddGridLine(c1,c2);
+	AddLinearGridLine(c1,c2); // vertical
 	c1.x = cMax.x;
 	c1.y = cMin.y;
 	c1.z  = 0;
 	c2 = c1;
 	c2.z = maxz;
-	AddGridLine(oldc2,c2);
+	if (fLinear)
+		AddLinearGridLine(oldc2,c2); // horizontal
+	else
+		AddCurvedGridLine(oldc2,c2); // horizontal
 	oldc2 = c2;
-	AddGridLine(c1,c2);
-	AddGridLine(oldc2, startc2);
+	AddLinearGridLine(c1,c2); // vertical
+	if (fLinear)
+		AddLinearGridLine(oldc2, startc2); // horizontal
+	else
+		AddCurvedGridLine(oldc2, startc2); // horizontal
 	double z = maxz;
 
 
 	
 
 }
-void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& cMin) {
+void GridDrawer::prepareVerticals(double rDist,const Coord& cMin, const Coord& cMax) {
 	Coord c1, c2;
 	if ( planeDistances.size() == 0)
 		return;
@@ -199,7 +219,7 @@ void GridDrawer::prepareVerticals(double rDist,const Coord& cMax, const Coord& c
 			c2.x = x;
 			c2.y = y;
 			c2.z = maxz;
-			AddGridLine(c1, c2);
+			AddLinearGridLine(c1, c2);
 		}
 	}
 }
@@ -246,7 +266,7 @@ void GridDrawer::getLayerDistances(vector<double>& dist) {
 	}
 }
 
-void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMin ) {
+void GridDrawer::preparePlanes(double rDist, const Coord& cMin, const Coord& cMax ) {
 	Coord c1, c2;
 	double z = 0;
 	planeDistances.clear();
@@ -269,7 +289,7 @@ void GridDrawer::preparePlanes(double rDist, const Coord& cMax, const Coord& cMi
 	}	
 }
 
-void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin ) {
+void GridDrawer::prepareCube(double rDist, const Coord& cMin, const Coord& cMax, bool fLinear ) {
 	Coord c1, c2;
 	if ( planeDistances.size() == 0)
 		return;
@@ -280,55 +300,79 @@ void GridDrawer::prepareCube(double rDist, const Coord& cMax, const Coord& cMin 
 	c1.z = c2.z = 0;
 	c2.x = cMin.x;
 	c2.y = cMax.y;
-	AddGridLine(c1, c2);
+	if (fLinear)
+		AddLinearGridLine(c1, c2); // horizontal
+	else
+		AddCurvedGridLine(c1, c2); // horizontal
 	c1 = c2;
 	c2.x = cMax.x;
 	c2.y = cMax.y;
-	AddGridLine(c1, c2);
+	if (fLinear)
+		AddLinearGridLine(c1, c2); // horizontal
+	else
+		AddCurvedGridLine(c1, c2); // horizontal
 	c1 = c2;
 	c2.x = cMax.x;
 	c2.y = cMin.y;
-	AddGridLine(c1, c2);
+	if (fLinear)
+		AddLinearGridLine(c1, c2); // horizontal
+	else
+		AddCurvedGridLine(c1, c2); // horizontal
 	c1 = c2;
 	c2.x = cMin.x;
 	c2.y = cMin.y;
-	AddGridLine(c1, c2);
+	if (fLinear)
+		AddLinearGridLine(c1, c2); // horizontal
+	else
+		AddCurvedGridLine(c1, c2); // horizontal
 	c1 = cMin;
 	c1.z = c2.z = maxz;
 	c2.x = cMin.x;
 	c2.y = cMax.y;
-	AddGridLine(c1, c2);
+	if (fLinear)
+		AddLinearGridLine(c1, c2); // horizontal
+	else
+		AddCurvedGridLine(c1, c2); // horizontal
 	c1 = c2;
 	c2.x = cMax.x;
 	c2.y = cMax.y;
-	AddGridLine(c1, c2);
+	if (fLinear)
+		AddLinearGridLine(c1, c2); // horizontal
+	else
+		AddCurvedGridLine(c1, c2); // horizontal
 	c1 = c2;
 	c2.x = cMax.x;
 	c2.y = cMin.y;
-	AddGridLine(c1, c2);
+	if (fLinear)
+		AddLinearGridLine(c1, c2); // horizontal
+	else
+		AddCurvedGridLine(c1, c2); // horizontal
 	c1 = c2;
 	c2.x = cMin.x;
 	c2.y = cMin.y;
-	AddGridLine(c1, c2);
+	if (fLinear)
+		AddLinearGridLine(c1, c2); // horizontal
+	else
+		AddCurvedGridLine(c1, c2); // horizontal
 	c1 = c2 = cMin;
 	c1.z = 0;
 	c2.z = maxz;
-	AddGridLine(c1, c2);
+	AddLinearGridLine(c1, c2); // vertical
 	c1 = c2 = Coord(cMin.x, cMax.y);
 	c1.z = 0;
 	c2.z = maxz;
-	AddGridLine(c1, c2);
+	AddLinearGridLine(c1, c2); // vertical
 	c1 = c2 = Coord(cMax.x, cMax.y);
 	c1.z = 0;
 	c2.z = maxz;
-	AddGridLine(c1, c2);
+	AddLinearGridLine(c1, c2); // vertical
 	c1 = c2 = Coord(cMax.x, cMin.y);
 	c1.z = 0;
 	c2.z = maxz;
-	AddGridLine(c1, c2);
+	AddLinearGridLine(c1, c2); // vertical
 }
 
-void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin ) {
+void GridDrawer::prepareGrid(double rDist, const Coord& cMin, const Coord& cMax, bool fLinear ) {
 	Coord c1, c2;
 	planeDistances.clear();
 	getLayerDistances(planeDistances);
@@ -341,8 +385,8 @@ void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin 
 	for(int i=0; i <= nPlanes; ++i) {
 		double z = planeDistances[i];
 		c1.z = c2.z = z;
-		c1.y = cMin.y;
-		c2.y = cMax.y;
+		c1.y = floor(cMin.y / rDist) * rDist;
+		c2.y = ceil(cMax.y / rDist) * rDist;
 		double d = abs(cMin.x - cMax.x);
 		if ( d / rDist > 100) {
 			rDist = d / 100;
@@ -350,11 +394,13 @@ void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin 
 		for (double x = ceil(cMin.x / rDist) * rDist; x < cMax.x ; x += rDist)
 		{
 			c1.x = c2.x = x;
-			AddGridLine(c1, c2);
+			if (fLinear)
+				AddLinearGridLine(c1, c2);
+			else
+				AddCurvedGridLine(c1, c2);
 		}
-
-		c1.x = cMin.x;
-		c2.x = cMax.x;
+		c1.x = floor(cMin.x / rDist) * rDist;
+		c2.x = ceil(cMax.x / rDist) * rDist;
 		d = abs(cMin.y - cMax.y);
 		if ( d / rDist > 100) {
 			rDist = d / 100;
@@ -362,13 +408,23 @@ void GridDrawer::prepareGrid(double rDist, const Coord& cMax, const Coord& cMin 
 		for (double y = ceil(cMin.y / rDist) * rDist; y < cMax.y ; y += rDist)
 		{
 			c1.y = c2.y = y;
-			AddGridLine(c1, c2);
+			if (fLinear)
+				AddLinearGridLine(c1, c2);
+			else
+				AddCurvedGridLine(c1, c2);
 		}
 		if ( threeDGrid && (mode & GridDrawer::mGRID)) {
-			AddGridLine(Coord(cMin.x,cMin.y,z), Coord(cMin.x, cMax.y,z));
-			AddGridLine(Coord(cMin.x,cMax.y,z), Coord(cMax.x, cMax.y,z));
-			AddGridLine(Coord(cMax.x,cMax.y,z), Coord(cMax.x, cMin.y,z));
-			AddGridLine(Coord(cMax.x,cMin.y,z), Coord(cMin.x, cMin.y,z));
+			if (fLinear) {
+				AddLinearGridLine(Coord(cMin.x,cMin.y,z), Coord(cMin.x, cMax.y,z));
+				AddLinearGridLine(Coord(cMin.x,cMax.y,z), Coord(cMax.x, cMax.y,z));
+				AddLinearGridLine(Coord(cMax.x,cMax.y,z), Coord(cMax.x, cMin.y,z));
+				AddLinearGridLine(Coord(cMax.x,cMin.y,z), Coord(cMin.x, cMin.y,z));
+			} else {
+				AddCurvedGridLine(Coord(cMin.x,cMin.y,z), Coord(cMin.x, cMax.y,z));
+				AddCurvedGridLine(Coord(cMin.x,cMax.y,z), Coord(cMax.x, cMax.y,z));
+				AddCurvedGridLine(Coord(cMax.x,cMax.y,z), Coord(cMax.x, cMin.y,z));
+				AddCurvedGridLine(Coord(cMax.x,cMin.y,z), Coord(cMin.x, cMin.y,z));
+			}
 		}
 		z = planeDistances[i];
 	}
@@ -387,7 +443,7 @@ void GridDrawer::resizeQuadsVector(int planes) {
 	}
 }
 
-void GridDrawer::AddGridLine(Coord c1, Coord c2)
+void GridDrawer::AddLinearGridLine(Coord c1, Coord c2)
 {
 	ILWIS::DrawerParameters dp(getRootDrawer(), this);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
@@ -398,6 +454,106 @@ void GridDrawer::AddGridLine(Coord c1, Coord c2)
 	line->addDataSource(&c2);
 	((LineProperties *)line->getProperties())->drawColor = lproperties.drawColor;
 	addDrawer(line);
+}
+
+void GridDrawer::AddCurvedGridLine(Coord c1, Coord c2)
+{
+	int steps = 250;
+	ILWIS::DrawerParameters dp(getRootDrawer(), this);
+	PreparationParameters pp(NewDrawer::ptGEOMETRY);
+	GridLine *line = (GridLine *)NewDrawer::getDrawer("GridLine", &pp, &dp);
+	double rXStep = (c2.x - c1.x) / steps;
+	double rYStep = (c2.y - c1.y) / steps;
+	for (int i = 0; i < steps; ++i) {
+		Coord c (c1.x + rXStep * i, c1.y + rYStep * i, 0);
+		c = getRootDrawer()->glConv(c);
+		line->addDataSource(&c);
+	}
+	((LineProperties *)line->getProperties())->drawColor = lproperties.drawColor;
+	addDrawer(line);
+}
+
+void GridDrawer::calcBounds(const GeoRef& grf, const CoordBounds& cbMap, Coord& cMin, Coord& cMax)
+{
+	const int iSTEP = 25;
+	CoordBounds cb;
+	double rRow, rCol;
+	if (0 != grf->pg3d()) {
+		GeoRef gr = grf->pg3d()->mapDTM->gr();
+		MinMax mmGr = MinMax(RowCol(0.0,0.0), gr->rcSize());
+		long dR = mmGr.height() / iSTEP;
+		long dC = mmGr.width() / iSTEP;
+		Coord c;
+		rCol = mmGr.MinCol();
+		rRow = mmGr.MinRow();
+		gr->RowCol2Coord(rRow, rCol, c);
+		cb += c;
+		rCol = mmGr.MaxCol();
+		rRow = mmGr.MaxRow();
+		gr->RowCol2Coord(rRow, rCol, c);
+		cb += c;
+
+		if (dR < 1)
+			dR = 1;
+		if (dC < 1)
+			dC = 1;
+
+		for (rRow = mmGr.MinRow();; rRow += dR) 
+		{
+			bool fBreak = false;
+			if (rRow > mmGr.MaxRow()) {
+				rRow = mmGr.MaxRow();
+				fBreak = true;
+			}
+			for (rCol = mmGr.MinCol();; rCol += dC)
+			{
+				bool fBreak = false;
+				if (rCol > mmGr.MaxCol()) {
+					rCol = mmGr.MaxCol();
+					fBreak = true;
+				}
+				gr->RowCol2Coord(rRow, rCol, c);
+				cb += c;
+				if (fBreak)
+					break;
+			}          
+			if (fBreak)
+				break;
+		}    
+	}
+	else {
+		long dR = cbMap.height() / iSTEP;
+		long dC = cbMap.width() / iSTEP;
+		cb += getRootDrawer()->glToWorld(cbMap.cMin);
+		cb += getRootDrawer()->glToWorld(cbMap.cMax);
+		if (dR < 1)
+			dR = 1;
+		if (dC < 1)
+			dC = 1;
+		for (rRow = cbMap.cMin.y;; rRow += dR) 
+		{
+			bool fBreak = false;
+			if (rRow > cbMap.cMax.y) {
+				rRow = cbMap.cMax.y;
+				fBreak = true;
+			}
+			for (rCol = cbMap.cMin.x;; rCol += dC)
+			{
+				bool fBreak = false;
+				if (rCol > cbMap.cMax.x) {
+					rCol = cbMap.cMax.x;
+					fBreak = true;
+				}
+				cb += getRootDrawer()->glToWorld(Coord(rCol,rRow));
+				if (fBreak)
+					break;
+			}          
+			if (fBreak)
+				break;
+		}    
+	}
+	cMin = cb.cMin;
+	cMax = cb.cMax;
 }
 
 void GridDrawer::prepareChildDrawers(PreparationParameters *parms) {
