@@ -81,7 +81,6 @@ namespace ILWIS {
 
 	private:
 		void modifyCBZoomView(double dv, double dz, double f);
-		void calcCanvas();
 		void addDataSource(void *);
 		void SetthreeD(void *v, LayerTreeView *tv);
 		void debug();

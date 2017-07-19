@@ -26,9 +26,9 @@ CanvasBackgroundDrawer::CanvasBackgroundDrawer(DrawerParameters *parms) : Comple
 
 CanvasBackgroundDrawer::~CanvasBackgroundDrawer() {
 }
-void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp){
-	ComplexDrawer::prepare(pp);
 
+void  CanvasBackgroundDrawer::prepare(PreparationParameters *pp) {
+	ComplexDrawer::prepare(pp);
 }
 
 bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb) const{
@@ -76,12 +76,11 @@ bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 		glVertex3f(cbMap.MaxX(), cbMap.MinY(),0);
 	glEnd();
 
-
 	glDisable(GL_BLEND);
 	return true;
 }
 
-String CanvasBackgroundDrawer::store(const FileName& fnView, const String& parentSection) const{
+String CanvasBackgroundDrawer::store(const FileName& fnView, const String& parentSection) const {
 	ComplexDrawer::store(fnView, getType());
 	ObjectInfo::WriteElement(getType().c_str(),"InSideColor2D",fnView, inside2D);
 	ObjectInfo::WriteElement(getType().c_str(),"InSideColor3D",fnView, inside3D);
@@ -91,7 +90,7 @@ String CanvasBackgroundDrawer::store(const FileName& fnView, const String& paren
 	return getType();
 }
 
-void CanvasBackgroundDrawer::load(const FileName& fnView, const String& parentSection){
+void CanvasBackgroundDrawer::load(const FileName& fnView, const String& parentSection) {
 	ComplexDrawer::load(fnView, getType());
 	ObjectInfo::ReadElement(getType().c_str(),"InSideColor2D",fnView, inside2D);
 	ObjectInfo::ReadElement(getType().c_str(),"InSideColor3D",fnView, inside3D);
@@ -101,7 +100,7 @@ void CanvasBackgroundDrawer::load(const FileName& fnView, const String& parentSe
 		getRootDrawer()->SetSkyColor(sky3D);
 }
 
-Color& CanvasBackgroundDrawer::getColor(ColorLocation cl){
+Color& CanvasBackgroundDrawer::getColor(ColorLocation cl) {
 	switch (cl) {
 		case clINSIDE2D:
 			return inside2D;
