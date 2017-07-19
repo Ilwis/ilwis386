@@ -21,7 +21,6 @@ namespace ILWIS{
 		double getGridSpacing() const{ return rDist;}
 		GeneralDrawerProperties *getProperties();
 
-
 	protected:
 		void AddGraticuleLine(const CoordSystem &csy, const LatLon& ll1, const LatLon& ll2);
 		void displayOptionSetLineStyle(CWnd *parent);
@@ -32,9 +31,7 @@ namespace ILWIS{
 		String store(const FileName& fnView, const String& parenSection) const;
 		void load(const FileName& fnView, const String& parenSection);
 		void prepareChildDrawers(PreparationParameters *parms);
-		void calcBounds(const CoordBounds& cbMap, const CoordSystem& cs,  LatLon& llMin, LatLon& llMax);
-
-
+		void calcBounds(const GeoRef& grf, const CoordBounds& cbMap, const CoordSystem& cs, LatLon& llMin, LatLon& llMax);
 		double          rDist;
 		LineProperties	lproperties;
 	};
@@ -48,17 +45,4 @@ namespace ILWIS{
 		void addDataSource(void *c, int options = 0);
 	private:
 	};
-
-	//class GraticuleLineStyleForm: public DisplayOptionsForm
-	//{
-	//public:
-	//	GraticuleLineStyleForm(CWnd *par, GraticuleDrawer *gdr);
-	//	void apply();
-	//private:
-	//	FieldReal *fi;
-	//	FieldLineType *flt;
-	//	FieldColor *fc;
-	//};
-
-	
 }

@@ -10,6 +10,7 @@
 #include "Drawers\LineDrawer.h"
 #include "Drawers\GraticuleDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
+#include "Engine\SpatialReference\GR3D.H"
 #include "Headers\Hs\Drwforms.hs"
 
 using namespace ILWIS;
@@ -35,7 +36,6 @@ ComplexDrawer(parms,"GraticuleDrawer")
 GraticuleDrawer::~GraticuleDrawer() {
 }
 
-
 bool GraticuleDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 	if ( !isActive() || !isValid())
 		return false;
@@ -55,9 +55,8 @@ void GraticuleDrawer::prepare(PreparationParameters *pp) {
 		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 		CoordSystem csy =  getRootDrawer()->getCoordinateSystem();
 		if ( csy->fLatLon2Coord()) {
-
 			LatLon llMin, llMax;
-			calcBounds(cbMap, csy,llMin, llMax);
+			calcBounds(getRootDrawer()->getGeoReference(), cbMap, csy, llMin, llMax);
 			if ( llMin.fUndef() || llMax.fUndef()) {
 				setValid(false);
 				return;
@@ -116,9 +115,6 @@ void GraticuleDrawer::prepare(PreparationParameters *pp) {
 	}
 }
 
-
-
-
 void GraticuleDrawer::prepareGrid(const CoordSystem &csy, double rDist, const LatLon& llMin, const LatLon& llMax ) {
 	LatLon ll1, ll2;
 	ll1.Lat = ceil(llMin.Lat / rDist) * rDist;
@@ -140,32 +136,82 @@ void GraticuleDrawer::prepareGrid(const CoordSystem &csy, double rDist, const La
 
 #define STEP  25
 
-void GraticuleDrawer::calcBounds(const CoordBounds& cbMap, const CoordSystem& cs,  LatLon& llMin, LatLon& llMax)
+void GraticuleDrawer::calcBounds(const GeoRef& grf, const CoordBounds& cbMap, const CoordSystem& cs, LatLon& llMin, LatLon& llMax)
 {
-  Coord cMin = getRootDrawer()->glToWorld(cbMap.cMin);
-  Coord cMax = getRootDrawer()->glToWorld(cbMap.cMax);
-  llMin = LatLon(100,200);
-  llMax = LatLon(-100,-200);
-  int i, j;	
-  Coord c;
-  double rDX = (cMax.x - cMin.x) / STEP;
-  double rDY = (cMax.y - cMin.y) / STEP;
-  for (i = 0, c.y = cMin.y; i <= STEP; c.y += rDY, ++i) {
-	  for (j = 0, c.x = cMin.x; j <= STEP; c.x += rDX, ++j) {
-      LatLon ll = cs->llConv(c);
-      if (ll.fUndef())
-        continue;
-      if (ll.Lat < llMin.Lat)
-        llMin.Lat = ll.Lat;
-      if (ll.Lon < llMin.Lon)
-        llMin.Lon = ll.Lon;
-      if (ll.Lat > llMax.Lat)
-        llMax.Lat = ll.Lat;
-      if (ll.Lon > llMax.Lon)
-        llMax.Lon = ll.Lon;
-    }  
-  }  
+	llMin = LatLon(100,200);
+	llMax = LatLon(-100,-200);
+	if (grf.fValid() && 0 != grf->pg3d()) {
+		GeoRef gr = grf->pg3d()->mapDTM->gr();
+		MinMax mmGr = MinMax(RowCol(0.0,0.0), gr->rcSize());
+
+		long dR = mmGr.height() / STEP;
+		long dC = mmGr.width() / STEP;
+		if (dR <= 0 || dC <= 0)
+			return;
+		CoordSystem cs = gr->cs();
+		RowCol rc;
+		int i, j;				 
+		for (i = 0, rc.Row = mmGr.MinRow(); i <= STEP; rc.Row += dR, ++i) {
+			for (j = 0, rc.Col = mmGr.MinCol(); j <= STEP; rc.Col += dC, ++j) {
+				Coord crd = gr->cConv(rc);
+				if (crd.fUndef())
+					continue;
+				LatLon ll = cs->llConv(crd);
+				if (ll.fUndef())
+					continue;
+				if (ll.Lat < llMin.Lat)
+					llMin.Lat = ll.Lat;
+				if (ll.Lon < llMin.Lon)
+					llMin.Lon = ll.Lon;
+				if (ll.Lat > llMax.Lat)
+					llMax.Lat = ll.Lat;
+				if (ll.Lon > llMax.Lon)
+					llMax.Lon = ll.Lon;
+			}  
+		}  
+	} else {
+		long dR = cbMap.height() / STEP;
+		long dC = cbMap.width() / STEP;
+		if (dR <= 0 || dC <= 0)
+			return;
+		double rRow, rCol;
+		for (rRow = cbMap.cMin.y;; rRow += dR)
+		{
+			bool fBreak = false;
+			if (rRow > cbMap.cMax.y) {
+				rRow = cbMap.cMax.y;
+				fBreak = true;
+			}
+			for (rCol = cbMap.cMin.x;; rCol += dC)
+			{
+				bool fBreak = false;
+				if (rCol > cbMap.cMax.x) {
+					rCol = cbMap.cMax.x;
+					fBreak = true;
+				}
+				Coord crd = getRootDrawer()->glToWorld(Coord(rCol,rRow));
+				if (!crd.fUndef()) {
+					LatLon ll = cs->llConv(crd);
+					if (!ll.fUndef()) {
+						if (ll.Lat < llMin.Lat)
+							llMin.Lat = ll.Lat;
+						if (ll.Lon < llMin.Lon)
+							llMin.Lon = ll.Lon;
+						if (ll.Lat > llMax.Lat)
+							llMax.Lat = ll.Lat;
+						if (ll.Lon > llMax.Lon)
+							llMax.Lon = ll.Lon;
+					}
+				}
+				if (fBreak)
+					break;
+			}          
+			if (fBreak)
+				break;
+		}    
+	}
 }
+
 void GraticuleDrawer::AddGraticuleLine(const CoordSystem &csy, const LatLon& llBoundary1, const LatLon& llBoundary2)
 {
 	ILWIS::DrawerParameters dp(getRootDrawer(), this);
@@ -221,34 +267,6 @@ void GraticuleDrawer::AddGraticuleLine(const CoordSystem &csy, const LatLon& llB
 	addDrawer(line); 
 }
 
-//void GraticuleDrawer::DrawCurvedLine(Coord c1, Coord c2)
-//{
-//	Coord cStep, crd;
-//	int iSteps = 500;
-//	cStep.x = (c2.x - c1.x) / iSteps;
-//	cStep.y = (c2.y - c1.y) / iSteps;
-//	p = psn->pntPos(c1);
-//	if (p.x == shUNDEF || p.y == shUNDEF)
-//		fPointOk = false;
-//	else {
-//		fPointOk = true;
-//		cdc->MoveTo(p);
-//	}
-//	crd = c1;
-//	for (int i = 0; i < iSteps; ++i) {
-//		crd += cStep;
-//		p = psn->pntPos(crd);
-//		if (p.x == shUNDEF || p.y == shUNDEF)
-//			fPointOk = false;
-//		else if (fPointOk) 
-//			cdc->LineTo(p);
-//		else {
-//			fPointOk = true;
-//			cdc->MoveTo(p);
-//		}
-//	}
-//}
-
 String GraticuleDrawer::store(const FileName& fnView, const String& parentSection) const{
 	ComplexDrawer::store(fnView, getType());
 	ObjectInfo::WriteElement(getType().c_str(),"Distance",fnView, rDist);
@@ -261,7 +279,6 @@ void GraticuleDrawer::load(const FileName& fnView, const String& parenSection){
 	ObjectInfo::ReadElement(getType().c_str(),"Distance",fnView, rDist);
 	lproperties.load(fnView,getType());
 }
-
 
 void GraticuleDrawer::setGridSpacing(double d){
 	rDist = d;
@@ -303,7 +320,6 @@ void GraticuleLine::prepare(PreparationParameters *pp){
 	LineDrawer::prepare(pp);
 	if ( pp->type & NewDrawer::ptGEOMETRY)
 		clear();
-
 }
 
 void GraticuleLine::addDataSource(void *crd, int options) {
