@@ -100,10 +100,9 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 		clear();
 		CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
 		bool fLinear;
-		GeoRef gr = getRootDrawer()->getGeoReference();		
+		GeoRef gr = getRootDrawer()->getGeoReference();
 		if (gr.fValid()) {
 			fLinear = gr->fLinear();
-
 			calcBounds(gr, cbMap, cMin, cMax);
 		} else {
 			fLinear = true;			
