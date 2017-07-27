@@ -32,7 +32,7 @@ void PolygonMapStoreFormat30::Load()
 		vector<LinearRing*> rings;
 		if (getRings(colTopStart->iValue(i), tblTopology, tblPolygon, rings)) {
 			ILWIS::Polygon *polygon;
-			if ( ptr.dvrs().fValues()) {
+			if ( ptr.dvrs().fUseReals()) {
 				polygon = new ILWIS::RPolygon(spatialIndex);	
 			} else{
 				polygon = new ILWIS::LPolygon(spatialIndex);
