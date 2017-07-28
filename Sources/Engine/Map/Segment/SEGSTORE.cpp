@@ -228,6 +228,7 @@ void SegmentMapStore::UnStore(const FileName& fn)
 {
 	//Table tbl(fn); 
 	//tbl->pts->UnStore(fn);
+	ObjectInfo::WriteElement("SegmentMapStore", (char*)0, fn, (char*)0);
 }  
 
 SegmentMapStore::~SegmentMapStore() {            // automatic close the map
