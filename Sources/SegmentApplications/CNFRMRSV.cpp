@@ -514,7 +514,7 @@ else
 void SegmentMapFromRasValueBnd::NewNode(long iLine, long iCol, byte b, int iCurrentIsoNr)
 {
 	Array<bool> fSegExist(dbRIGHT+1);
-	Array<bool> fBeginSeg(dbRIGHT+1);
+	Array<BOOL> fBeginSeg(dbRIGHT+1); // Was Array<bool>: std::vector<bool> is a bitwise object, the individual elements cannot be passed by-reference.
 	Array<SegBound*> sbSeg(dbRIGHT+1);
 	fSegExist[dbRIGHT] = b & 1;
 	fSegExist[dbUP   ] = (b & 2)!=0;
@@ -522,21 +522,21 @@ void SegmentMapFromRasValueBnd::NewNode(long iLine, long iCol, byte b, int iCurr
 	fSegExist[dbDOWN ] = (b & 8)!=0;
 	if (fSegExist[dbRIGHT]) {// new segment to the right 
 		//    GetSegm(pt_segm[RIGHT]);
-		sbSeg[dbRIGHT] = sbNewWithOneEnd(iLine, iCol, true, (bool &)fBeginSeg[dbRIGHT]);
+		sbSeg[dbRIGHT] = sbNewWithOneEnd(iLine, iCol, true, fBeginSeg[dbRIGHT]);
 		sbHoriz[iCurrentIsoNr][iCol] = sbSeg[dbRIGHT];
 	}
 	else
 		sbHoriz[iCurrentIsoNr][iCol] = 0;
 	if (fSegExist[dbUP]) { // end of segment up 
 		sbSeg[dbUP] = sbVert[iCurrentIsoNr][iCol];
-		EndOfSegment(iLine, iCol, *sbSeg[dbUP], true, (bool &)fBeginSeg[dbUP], iCurrentIsoNr);
+		EndOfSegment(iLine, iCol, *sbSeg[dbUP], true, fBeginSeg[dbUP], iCurrentIsoNr);
 	}
 	if (fSegExist[dbLEFT]) { //end of segment to the left 
 		sbSeg[dbLEFT] = sbHoriz[iCurrentIsoNr][iCol - 1];
-		EndOfSegment(iLine, iCol, *sbSeg[dbLEFT], false, (bool &)fBeginSeg[dbLEFT], iCurrentIsoNr);
+		EndOfSegment(iLine, iCol, *sbSeg[dbLEFT], false, fBeginSeg[dbLEFT], iCurrentIsoNr);
 	}
 	if (fSegExist[dbDOWN]) { // new segment down }
-		sbSeg[dbDOWN] = sbNewWithOneEnd(iLine, iCol, false, (bool &)fBeginSeg[dbDOWN]);
+		sbSeg[dbDOWN] = sbNewWithOneEnd(iLine, iCol, false, fBeginSeg[dbDOWN]);
 		sbVert[iCurrentIsoNr][iCol] = sbSeg[dbDOWN];
 	}
 	else
@@ -731,7 +731,7 @@ SegBound* SegmentMapFromRasValueBnd::sbNewInBetween(long iCol)
 	return sb;
 }
 
-SegBound* SegmentMapFromRasValueBnd::sbNewWithOneEnd(long iLine, long iCol, bool fRight, bool& fBegin)
+SegBound* SegmentMapFromRasValueBnd::sbNewWithOneEnd(long iLine, long iCol, bool fRight, BOOL& fBegin)
 // Creates new segment with a node at one end.                 
 // If fRightSeg==true : it has to be a segment to the right of node,
 // else a segment under the node.                                 
@@ -791,7 +791,7 @@ SegBound* SegmentMapFromRasValueBnd::sbNewWithOneEnd(long iLine, long iCol, bool
 	return sb;
 }
 
-void SegmentMapFromRasValueBnd::EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, bool& fBegin, int iCurrentIsoNr)
+void SegmentMapFromRasValueBnd::EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, BOOL& fBegin, int iCurrentIsoNr)
 {
 	if ((fUp && (dbBufPrev[iCurrentIsoNr][iCol] == dbUP)) ||
 		(!fUp && (dbBufCurr[iCol-1] == dbLEFT))) { // begin of segment

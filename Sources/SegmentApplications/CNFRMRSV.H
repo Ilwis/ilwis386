@@ -67,8 +67,8 @@ private:
   void AppendUp(long iLine, long iCol, byte bt, int iCurrentIsoNr);
   void AppendLeft(long iLine, long iCol, byte bt, int iCurrentIsoNr);
   SegBound* sbNewInBetween(long iCol);
-  SegBound* sbNewWithOneEnd(long iLine, long iCol, bool fRight, bool &fBegin);
-  void EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, bool& fBegin, int iCurrentIsoNr);
+  SegBound* sbNewWithOneEnd(long iLine, long iCol, bool fRight, BOOL &fBegin);
+  void EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, BOOL& fBegin, int iCurrentIsoNr);
   void StoreSegm(const SegBound& sb, int& iCurrentIsoNr);
   void StoreSegm(CoordBuf& cBuf, long& iCrd, double& rVal);
 	int iComparePixels(const double& rFirst, const double& rSecond, const double& rCurrentIsoVal);

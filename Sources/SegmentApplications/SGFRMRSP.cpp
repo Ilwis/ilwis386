@@ -182,36 +182,45 @@ SegmentMapFromRasAreaBnd::SegmentMapFromRasAreaBnd(const FileName& fn, SegmentMa
   String sNaming;
   ReadElement("SegmentMapPolBoundaries", "Naming", sNaming);
   fSingleName = ("single" == sNaming);
+  if (!fSingleName) {
+    try {
+      ReadElement("SegmentMapFromRasAreaBnd", "AttrTable", tblAtt);
+    } catch (const ErrorObject& err) {
+      err.Show();
+    }
+  }
+
   Init();
   objdep.Add(map.ptr());
 }
 
 SegmentMapFromRasAreaBnd::SegmentMapFromRasAreaBnd(const FileName& fn, SegmentMapPtr& p, const Map& mp, 
-                                              bool f8Con, bool fSmth, bool fSingle)
-: SegmentMapVirtual(fn, p, mp->cs(),mp->cb(),mp->dvrs()),
-  map(mp), fEightCon(f8Con), fSmooth(fSmth), fSingleName(fSingle)
+												   bool f8Con, bool fSmth, bool fSingle)
+												   : SegmentMapVirtual(fn, p, mp->cs(),mp->cb(),mp->dvrs()),
+												   map(mp), fEightCon(f8Con), fSmooth(fSmth), fSingleName(fSingle)
 {
-  if (map->gr()->fGeoRefNone())
-    throw ErrorGeoRefNone(map->gr()->fnObj, errSegmentMapFromRasAreaBnd+1);
+	if (map->gr()->fGeoRefNone())
+		throw ErrorGeoRefNone(map->gr()->fnObj, errSegmentMapFromRasAreaBnd+1);
 
-  DomainType dmt = fSingleName ? dmtCLASS : dmtUNIQUEID;
+	DomainType dmt = fSingleName ? dmtCLASS : dmtUNIQUEID;
 	Domain dom(fnObj, 0, dmt, "Boundary");
-  SetDomainValueRangeStruct(dom);
+	SetDomainValueRangeStruct(dom);
 	if (!fSingleName) {
-	  FileName fnAtt(fnObj, ".tbt", true);
+		FileName fnAtt(fnObj, ".tbt", true);
+		fnAtt = FileName::fnUnique(fnAtt);
 		tblAtt = Table(fnAtt, dom);
 		col1 = Column(tblAtt, "Area1", map->dvrs());
 		col2 = Column(tblAtt, "Area2", map->dvrs());
 		SetAttributeTable(tblAtt);
 	}
-  SetDomainValueRangeStruct(dom);
-  fNeedFreeze = true;
-  ptr.SetAlfa(cb());
-  Init();
-  objdep.Add(map.ptr());
-  if (!fnObj.fValid()) // 'inline' object
-    objtime = objdep.tmNewest();
-  //fEightCon = true; 21/7/97 Wim: Why was this line ever added ?????
+	SetDomainValueRangeStruct(dom);
+	fNeedFreeze = true;
+	ptr.SetAlfa(cb());
+	Init();
+	objdep.Add(map.ptr());
+	if (!fnObj.fValid()) // 'inline' object
+		objtime = objdep.tmNewest();
+	//fEightCon = true; 21/7/97 Wim: Why was this line ever added ?????
 }
 
 void SegmentMapFromRasAreaBnd::Store()
@@ -222,6 +231,8 @@ void SegmentMapFromRasAreaBnd::Store()
   WriteElement("SegmentMapFromRasAreaBnd", "EightCon", fEightCon);
   WriteElement("SegmentMapFromRasAreaBnd", "Smoothing", fSmooth);
   WriteElement("SegmentMapPolBoundaries", "Naming", fSingleName ? "single" : "unique");
+  if (!fSingleName)
+	  WriteElement("SegmentMapFromRasAreaBnd", "AttrTable", tblAtt);
 }
 
 SegmentMapFromRasAreaBnd::~SegmentMapFromRasAreaBnd()
@@ -455,7 +466,7 @@ void SegmentMapFromRasAreaBnd::DetLink(DirBound db1, DirBound db2, DirBound db3)
 void SegmentMapFromRasAreaBnd::NewNode(long iLine, long iCol, byte b)
 {
   Array<bool> fSegExist(dbRIGHT+1);
-  Array<bool> fBeginSeg(dbRIGHT+1);
+  Array<BOOL> fBeginSeg(dbRIGHT+1); // Was Array<bool>: std::vector<bool> is a bitwise object, the individual elements cannot be passed by-reference.
   Array<SegBound*> sbSeg(dbRIGHT+1);
   fSegExist[dbRIGHT] = b & 1;
   fSegExist[dbUP   ] = (b & 2)!=0;
@@ -463,21 +474,21 @@ void SegmentMapFromRasAreaBnd::NewNode(long iLine, long iCol, byte b)
   fSegExist[dbDOWN ] = (b & 8)!=0;
   if (fSegExist[dbRIGHT]) {// new segment to the right 
 //    GetSegm(pt_segm[RIGHT]);
-    sbSeg[dbRIGHT] = sbNewWithOneEnd(iLine, iCol, true, (bool &)fBeginSeg[dbRIGHT]);
+    sbSeg[dbRIGHT] = sbNewWithOneEnd(iLine, iCol, true, fBeginSeg[dbRIGHT]);
     sbHoriz[iCol] = sbSeg[dbRIGHT];
   }
   else
     sbHoriz[iCol] = 0;
   if (fSegExist[dbUP]) { // end of segment up 
     sbSeg[dbUP] = sbVert[iCol];
-    EndOfSegment(iLine, iCol, *sbSeg[dbUP], true, (bool &)fBeginSeg[dbUP]);
+    EndOfSegment(iLine, iCol, *sbSeg[dbUP], true, fBeginSeg[dbUP]);
   }
   if (fSegExist[dbLEFT]) { //end of segment to the left 
     sbSeg[dbLEFT] = sbHoriz[iCol - 1];
-    EndOfSegment(iLine, iCol, *sbSeg[dbLEFT], false, (bool &)fBeginSeg[dbLEFT]);
+    EndOfSegment(iLine, iCol, *sbSeg[dbLEFT], false, fBeginSeg[dbLEFT]);
   }
   if (fSegExist[dbDOWN]) { // new segment down }
-    sbSeg[dbDOWN] = sbNewWithOneEnd(iLine, iCol, false, (bool &)fBeginSeg[dbDOWN]);
+    sbSeg[dbDOWN] = sbNewWithOneEnd(iLine, iCol, false, fBeginSeg[dbDOWN]);
     sbVert[iCol] = sbSeg[dbDOWN];
   }
   else
@@ -672,7 +683,7 @@ SegBound* SegmentMapFromRasAreaBnd::sbNewInBetween(long iCol)
   return sb;
 }
 
-SegBound* SegmentMapFromRasAreaBnd::sbNewWithOneEnd(long iLine, long iCol, bool fRight, bool& fBegin)
+SegBound* SegmentMapFromRasAreaBnd::sbNewWithOneEnd(long iLine, long iCol, bool fRight, BOOL & fBegin)
 // Creates new segment with a node at one end.                 
 // If fRightSeg==true : it has to be a segment to the right of node,
 // else a segment under the node.                                 
@@ -733,7 +744,7 @@ SegBound* SegmentMapFromRasAreaBnd::sbNewWithOneEnd(long iLine, long iCol, bool 
   return sb;
 }
 
-void SegmentMapFromRasAreaBnd::EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, bool& fBegin)
+void SegmentMapFromRasAreaBnd::EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, BOOL & fBegin)
 {
   if ((fUp && (dbBufPrev[iCol] == dbUP)) ||
       (!fUp && (dbBufCurr[iCol-1] == dbLEFT))) { // begin of segment

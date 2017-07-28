@@ -91,8 +91,8 @@ private:
   void AppendUp(long iLine, long iCol, byte bt);
   void AppendLeft(long iLine, long iCol, byte bt);
   SegBound* sbNewInBetween(long iCol);
-  SegBound* sbNewWithOneEnd(long iLine, long iCol, bool fRight, bool &fBegin);
-  void EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, bool& fBegin);
+  SegBound* sbNewWithOneEnd(long iLine, long iCol, bool fRight, BOOL & fBegin);
+  void EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, BOOL & fBegin);
   void StoreSegm(const SegBound& sb);
   void StoreSegm(const SegBound& sb, CoordBuf& cBuf, long& iCrd);
 //  long iNewSegNr();
