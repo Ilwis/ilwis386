@@ -23,6 +23,7 @@ class _export PolygonFeatureDrawer : public PolygonDrawer {
 
 		Feature *feature;
 		MapPolygonTriangulator *tri;
-
+		bool fRawEnabled;
+		bool fColorVisible;
 	};
 }

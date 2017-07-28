@@ -34,14 +34,29 @@ ILWIS::NewDrawer *createPointFeatureDrawer(ILWIS::DrawerParameters *parms) {
 	return new PointFeatureDrawer(parms);
 }
 
-PointFeatureDrawer::PointFeatureDrawer() : PointDrawer(0,"PointFeatureDrawer") {
+PointFeatureDrawer::PointFeatureDrawer()
+: PointDrawer(0,"PointFeatureDrawer")
+, fRawEnabled(true)
+, fColorVisible(true)
+, fContainedInStretchRange(true)
+{
 }
 
-PointFeatureDrawer::PointFeatureDrawer(DrawerParameters *parms) : PointDrawer(parms,"PointFeatureDrawer") {
+PointFeatureDrawer::PointFeatureDrawer(DrawerParameters *parms)
+: PointDrawer(parms,"PointFeatureDrawer")
+, fRawEnabled(true)
+, fColorVisible(true)
+, fContainedInStretchRange(true)
+{
 
 }
 
-PointFeatureDrawer::PointFeatureDrawer(DrawerParameters *parms, const String& name) : PointDrawer(parms,name) {
+PointFeatureDrawer::PointFeatureDrawer(DrawerParameters *parms, const String& name)
+: PointDrawer(parms,name)
+, fRawEnabled(true)
+, fColorVisible(true)
+, fContainedInStretchRange(true)
+{
 }
 
 void PointFeatureDrawer::addDataSource(void *f, int options) {
@@ -102,17 +117,18 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			properties.set(prop);
 		}
 		if ( fdr->useRaw()){
-			Color clr = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
-			setActive(clr != colorUNDEF);
+			Color clr = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
+			fColorVisible = clr != colorUNDEF;
 			properties.drawColor = clr;
-		}
-		else
+		} else {
+			fColorVisible = true;
 			properties.drawColor = (fdr->getDrawingColor()->clrVal(feature->rValue()));
+		}
 		extrAlpha = fdr->getExtrusionAlpha();
 		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 			int raw = p->filteredRaws[j];
 			if ( getFeature()->rValue() == abs(raw)) {
-				setActive(raw > 0);
+				fRawEnabled = raw > 0;
 			}
 		}
 		double v = feature->rValue();
@@ -146,9 +162,9 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 					v = bmpptr->dvrs().rValue(feature->rValue());
 				}
 				if ( properties.stretchRange.fValid()) {
-					setActive(properties.stretchRange.fContains(v));
+					fContainedInStretchRange = properties.stretchRange.fContains(v);
 				} else {
-					setActive(true);
+					fContainedInStretchRange = true;
 				}
 
 				if (properties.scaleMode == PointProperties::sLOGARITHMIC) {
@@ -168,7 +184,8 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 				properties.stretchScale = scale;
 			}
 		} else
-			setActive(true);
+			fContainedInStretchRange = true;
+		setActive(fRawEnabled && fColorVisible && fContainedInStretchRange);
 		if ( label) {
 			const CoordBounds& cbZoom = getRootDrawer()->getCoordBoundsZoom();
 			Coord crdLabel = cNorm;

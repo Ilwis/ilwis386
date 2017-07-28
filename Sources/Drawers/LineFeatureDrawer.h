@@ -22,7 +22,7 @@ class _export LineFeatureDrawer : public LineDrawer {
 		LineFeatureDrawer(DrawerParameters *parms, const String& name);
 		Feature *feature;
 		DomainType dmt;
-
+		bool fRawEnabled;
+		bool fColorVisible;
 	};
-
 }

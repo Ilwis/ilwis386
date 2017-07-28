@@ -43,18 +43,31 @@ ILWIS::NewDrawer *createPolygonFeatureDrawer(DrawerParameters *parms) {
 	return new PolygonFeatureDrawer(parms);
 }
 
-PolygonFeatureDrawer::PolygonFeatureDrawer() : PolygonDrawer(0,"PolygonFeatureDrawer"), tri(0) {
+PolygonFeatureDrawer::PolygonFeatureDrawer()
+: PolygonDrawer(0,"PolygonFeatureDrawer")
+, tri(0)
+, fColorVisible(true)
+, fRawEnabled(true)
+{
 	setDrawMethod(NewDrawer::drmRPR);
 }
 
-PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms) : PolygonDrawer(parms,"PolygonFeatureDrawer") {
+PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms)
+: PolygonDrawer(parms,"PolygonFeatureDrawer")
+, fColorVisible(true)
+, fRawEnabled(true)
+{
 	setDrawMethod(NewDrawer::drmRPR);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
 	boundary = (LineDrawer *)NewDrawer::getDrawer("LineFeatureDrawer", &pp, parms);
 	tri = new MapPolygonTriangulator(static_cast<PolygonLayerDrawer *>(parentDrawer)->getTesselator());
 }
 
-PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms, const String& name) : PolygonDrawer(parms,name) {
+PolygonFeatureDrawer::PolygonFeatureDrawer(DrawerParameters *parms, const String& name)
+: PolygonDrawer(parms,name)
+, fColorVisible(true)
+, fRawEnabled(true)
+{
 	setDrawMethod(NewDrawer::drmRPR);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER , 0);
 	boundary = (LineDrawer *)NewDrawer::getDrawer("LineFeatureDrawer", &pp, parms);
@@ -156,12 +169,13 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		BaseMapPtr *bmpptr = ((BaseMap*)polygonLayer->getDataSource())->ptr();
 		extrAlpha = polygonLayer->getExtrusionAlpha();
 		if ( polygonLayer->useRaw()){
-			Color clr = (polygonLayer->getDrawingColor()->clrRaw(feature->iValue(), polygonLayer->getDrawMethod()));
-			setActive(clr != colorUNDEF);
+			Color clr = polygonLayer->getDrawingColor()->clrRaw(feature->iValue(), polygonLayer->getDrawMethod());
+			fColorVisible = clr != colorUNDEF;
 			drawColor = clr;
+		} else {
+			fColorVisible = true;
+			drawColor = polygonLayer->getDrawingColor()->clrVal(feature->rValue());
 		}
-		else
-			drawColor = (polygonLayer->getDrawingColor()->clrVal(feature->rValue()));
 		if ( boundary) {
 			LineProperties *lp = (LineProperties *)polygonLayer->getProperties();
 			boundariesActive(polygonLayer->getShowBoundaries());
@@ -203,7 +217,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 				int raw = p->filteredRaws[j];
 				if ( iRaw == abs(raw)) {
-					setActive(raw > 0);
+					fRawEnabled = raw > 0;
 				}
 			}
 			p->props.lineType = LineDrawer::ilwisLineStyle(((LineProperties *)boundary->getProperties())->linestyle);
@@ -215,6 +229,7 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		if ( bmpptr->fTblAtt()) {
 			setTableSelection(bmpptr->tblAtt()->dm()->fnObj,feature->iValue(), p);
 		}
+		setActive(fColorVisible && fRawEnabled);
 	}
 }
 

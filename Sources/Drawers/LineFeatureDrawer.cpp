@@ -32,19 +32,29 @@ ILWIS::NewDrawer *createLineFeatureDrawer(DrawerParameters *parms) {
 	return new LineFeatureDrawer(parms);
 }
 
-LineFeatureDrawer::LineFeatureDrawer() : LineDrawer(0,"LineFeatureDrawer"), feature(0) {
+LineFeatureDrawer::LineFeatureDrawer()
+: LineDrawer(0,"LineFeatureDrawer")
+, feature(0)
+, fColorVisible(true)
+, fRawEnabled(true)
+{
 	lproperties.drawColor = Color(0,167,18);
 }
 
-LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms) : 
-	LineDrawer(parms,"LineFeatureDrawer"), feature(0)
+LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms)
+: LineDrawer(parms,"LineFeatureDrawer")
+, feature(0)
+, fColorVisible(true)
+, fRawEnabled(true)
 {
 	lproperties.drawColor = Color(0,167,18);
 
 }
 
-LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms, const String& name) : 
-	LineDrawer(parms,name),feature(0)
+LineFeatureDrawer::LineFeatureDrawer(DrawerParameters *parms, const String& name)
+: LineDrawer(parms,name),feature(0)
+, fColorVisible(true)
+, fRawEnabled(true)
 {
 	lproperties.drawColor = Color(0,167,18);
 }
@@ -128,12 +138,13 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 			lproperties.linestyle = 0xF0F0;
 
 		if ( fdr->useRaw()){
-			Color clr = (fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod()));
-			setActive(clr != colorUNDEF);
+			Color clr = fdr->getDrawingColor()->clrRaw(feature->iValue(), fdr->getDrawMethod());
+			fColorVisible = clr != colorUNDEF;
 			lproperties.drawColor = clr;
+		} else {
+			fColorVisible = true;
+			lproperties.drawColor = fdr->getDrawingColor()->clrVal(feature->rValue());
 		}
-		else
-			lproperties.drawColor = (fdr->getDrawingColor()->clrVal(feature->rValue()));
 
 		Representation rpr = fdr->getRepresentation();
 		if ( rpr->prc()) {
@@ -152,7 +163,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
 			int raw = p->filteredRaws[j];
 			if ( getFeature()->rValue() == abs(raw)) {
-				setActive(raw > 0);
+				fRawEnabled = raw > 0;
 			}
 		}
 		if ( specialOptions == 0)
@@ -160,6 +171,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		double alpha = fdr->getAlpha();
 		setAlpha(alpha);
 		extrAlpha = fdr->getExtrusionAlpha();
+		setActive(fColorVisible && fRawEnabled);
 	}
 }
 

@@ -18,5 +18,8 @@ class _export PointFeatureDrawer : public PointDrawer {
 		Feature *feature;
 		long getRaw() const;
 		CoordBounds cb;
+		bool fRawEnabled;
+		bool fColorVisible;
+		bool fContainedInStretchRange;
 	};
 }
