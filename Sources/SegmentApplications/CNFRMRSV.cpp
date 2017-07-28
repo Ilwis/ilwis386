@@ -86,10 +86,9 @@ SegmentMapFromRasValueBnd* SegmentMapFromRasValueBnd::create(const FileName& fn,
 			ExpressionError(sExpr, sSyntax());
 		else
 			fSmooth = fCIStrEqual(sSmooth, "smooth");
-		double fragmentsz = as[6].fVal();
-
-		return new SegmentMapFromRasValueBnd(fn, p, map, rIsoStartVal, rIsoEndVal, rIsoStepVal, f8Con,fSmooth, fragmentsz);
-	} else if ( iParms == 4) {
+		double fragments = as[6].fVal();
+		return new SegmentMapFromRasValueBnd(fn, p, map, rIsoStartVal, rIsoEndVal, rIsoStepVal, f8Con,fSmooth, fragments);
+	} else if ( iParms == 5) {
 		Map map(as[0], fn.sPath());
 		set<double> sequence;
 		parseSequence(as[1], sequence);
@@ -106,9 +105,8 @@ SegmentMapFromRasValueBnd* SegmentMapFromRasValueBnd::create(const FileName& fn,
 			ExpressionError(sExpr, sSyntax());
 		else
 			fSmooth = fCIStrEqual(sSmooth, "smooth");
-		double fragmentsz = as[4].fVal();
-		return new SegmentMapFromRasValueBnd(fn, p, map, sequence, f8Con, fSmooth, fragmentsz);
-
+		double fragments = as[4].fVal();
+		return new SegmentMapFromRasValueBnd(fn, p, map, sequence, f8Con, fSmooth, fragments);
 	}
 	return 0;
 }
