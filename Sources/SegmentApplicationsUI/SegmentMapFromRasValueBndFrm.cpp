@@ -31,15 +31,24 @@ SegmentMapFromRasValueBndFrm::SegmentMapFromRasValueBndFrm(CWnd* mw, const char*
 				sOutMap = fn.sFullName(true);
 		}
 	}
-	FieldMap *fmMap = new FieldMap(root, TR("Raster Map"), &sInMap1, new MapListerDomainType(dmVALUE, false));
+	FieldMap *fmMap = new FieldMap(root, TR("Raster Map"), &sInMap1, new MapListerDomainType(dmVALUE|dmIMAGE, false));
 	fmMap->SetCallBack((NotifyProc)&SegmentMapFromRasValueBndFrm::setValueRange);
 	FieldGroup *fg = new FieldGroup(root);
-	RadioGroup *rg = new RadioGroup(fg,TR("Iso line Intervals"), &intervalType);
+	RadioGroup *rg = new RadioGroup(fg,TR("Iso Line Intervals"), &intervalType);
 	RadioButton *rb1 = new RadioButton(rg,TR("Linear"));
 	fldVr = new FieldValueRange(rb1,"",&vr,0,ValueRange(-1e9,1e9,100000),true);
+	if (fldVr->childlist().size() > 1) {
+		FormEntry * feFieldReal = fldVr->childlist()[1];
+		if (feFieldReal->childlist().size() > 0) {
+			StaticTextSimple * st = dynamic_cast<StaticTextSimple*>(feFieldReal->childlist()[0]);
+			if (st)
+				st->SetVal(TR("Interval"));
+		}
+	}
 	fldVr->SetIndependentPos();
-	RadioButton *rb2 = new RadioButton(rg,TR("Intervals"));
-	new FieldString(rb2,"", &sequence);
+	RadioButton *rb2 = new RadioButton(rg,TR("Comma-separated heights"));
+	FieldString * fs = new FieldString(rb2,"", &sequence);
+
 	rb2->Align(rb1, AL_UNDER);
 	fg->SetIndependentPos();
 
