@@ -41,7 +41,6 @@
 */                                                                      
 #define ILWPOLFRMRAS_C
 
-#include "geos/operation/polygonize/Polygonizer.h"
 #include "PolygonApplications\POLFRMRS.H"
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Domain\dmsort.h"
@@ -92,7 +91,6 @@ PolygonMapFromRas* PolygonMapFromRas::create(const FileName& fn, PolygonMapPtr& 
 
 PolygonMapFromRas::PolygonMapFromRas(const FileName& fn, PolygonMapPtr& p)
 : PolygonMapVirtual(fn, p)
-, fact(0)
 {
   fNeedFreeze = true;
   String sColName;
@@ -112,7 +110,6 @@ PolygonMapFromRas::PolygonMapFromRas(const FileName& fn, PolygonMapPtr& p)
 PolygonMapFromRas::PolygonMapFromRas(const FileName& fn, PolygonMapPtr& p, const Map& mp, 
                                 bool fEightCn, bool fSmth)
 : PolygonMapVirtual(fn, p, mp->cs(),mp->cb(),mp->dvrs()), map(mp), fEightCon(fEightCn), fSmooth(fSmth)
-, fact(0)
 {
   fNeedFreeze = true;
   if (map->gr()->fGeoRefNone())
@@ -167,59 +164,6 @@ void PolygonMapFromRas::Init()
 {
   htpFreeze = "ilwisapp\\raster_to_polygons_algorithm.htm";
   sFreezeTitle = "PolygonMapFromRas";
-}
-
-bool PolygonMapFromRas::fSetPolygonLabels(const Map& mpAreas)
-{
-	trq.SetText(TR("Initialize polygons"));
-	Table tblArnAtt = mpAreas->tblAtt();
-	assert(tblArnAtt.fValid());
-	tblArnAtt->fErase = true;
-	String sColMap = map->fnObj.sFile;
-	if (sColMap.length() == 0)  // attribute input map
-	{
-		// sName() returns the expression: map.col, but ColNew() has renamed
-		// this to map_col, so do the same here, before accessing the Column
-		sColMap = map->sName();
-		replace(sColMap.begin(), sColMap.end(), '.', '_');
-	}
-	Column colAtt(tblArnAtt, sColMap);
-	assert(colAtt.fValid());
-	//DomainSort * pdsrtArn = mpAreas->dm()->pdsrt();
-	//assert(pdsrtArn);
-	iNrPol = pms->iPol(); // pdsrtArn->iSize();
-	for (long i = 0; i < iNrPol; i++)
-	{
-		if (trq.fUpdate(i, iNrPol))
-			return false;
-
-		ILWIS::Polygon *pol = pms->pol(i);
-		if (!pol || pol->fValid() == false)
-			continue;
-		Coord c =  pol->crdFindPointInPol();
-		long raw = mpAreas->iRaw(c);
-		long iKey = mpAreas->dm()->pdsrt()->iKey(mpAreas->dm()->pdsrt()->iOrd(raw));
-		String sV = mpAreas->dm()->sValueByRaw(raw);
-		String sV2 = colAtt->sValue(iKey);
-		double r = pol->rArea();
-		if (dvrs().fRealValues()) {
-			double rV = colAtt->rValue(iKey);
-			if ( rV != rUNDEF)
-				pol->PutVal(rV);
-		} else {
-			long v = colAtt->iRaw(iKey);
-			pol->PutVal( v == iUNDEF + 1 ? iUNDEF : v); // area numbering changes iUNDEF to iUNDEF + 1 (it is the current logic of that application)
-		}
-	}
-	for (long i = 0; i < iNrPol; i++) {
-		ILWIS::Polygon *pol = pms->pol(i);
-		if (!pol || pol->fValid() == false)
-			continue;
-		if ( pol->rValue() == rUNDEF) {
-			pol->Delete(true);
-		}
-	}
-	return true;
 }
 
 bool PolygonMapFromRas::fFindBoundaries(const Map& mpAreas)
@@ -392,27 +336,243 @@ bool PolygonMapFromRas::fFreezing()
 	if (!fFindBoundaries(mapArn)) 
 		return false;
 
-	vector<geos::geom::Polygon *> *polygons = polygonizer.getPolygons();
-	// fouten afhandleing, maar eerst testen;
-	for(long i = 0; i < polygons->size(); ++i) {
-		geos::geom::Polygon *gpol = polygons->at(i);
-		ILWIS::Polygon *pol = CPOLYGON(pms->newFeature(gpol));
-//		pol->PutVal(dm()->pdsrt()->iKey(i+1));
+	DomainSort * pdsrtArn = mapArn->dm()->pdsrt();
+	assert(pdsrtArn);
+	iNrPol = pdsrtArn->iSize();
+
+	// link islands to polygons
+
+	long i;
+	ArrayLarge<bool> afFwl(aiFwl.iSize()), afBwl(aiFwl.iSize());	
+	for (i=1; i < afFwl.iSize(); i++) {
+		afFwl[i] = false;
+		afBwl[i] = false;
+	}
+	trq.SetText(SPOLTextCheckIslands);
+	for (i=1; i <= iNrPol; i++) {
+		if (trq.fUpdate(i, iNrPol))
+			return false;
+		long iTopStart = topStarts[i];
+		long iTopCurr = iTopStart;
+		do {
+			if (iTopCurr > 0)
+				afFwl[iTopCurr] = true;
+			else
+				afBwl[-iTopCurr] = true;
+			iTopCurr = (iTopCurr > 0) ? aiFwl[iTopCurr] : aiBwl[-iTopCurr];
+		} while (iTopCurr != iTopStart);
+	}
+	trq.SetText(SPOLTextLinkIslands);
+	for (i=1; i<=afBwl.iSize(); ++i) {
+		if (trq.fUpdate(i, afBwl.iSize()))
+			return false;
+		if (!afBwl[i]) {
+			long pol = topology[i].second; // iRightRaw
+			if (pol > 0) {
+				// topology should be linked in polygon
+				long iTopStart = topStarts[pol];
+				long iTopCurr;
+				long iTopNext = iTopStart;
+				do {
+					iTopCurr = iTopNext;
+					iTopNext = (iTopCurr > 0) ? aiFwl[iTopCurr] : aiBwl[-iTopCurr];
+				} while (iTopNext != iTopStart);
+				// topCurr is segment that links to ts (last segment of pol)
+				// let fwl or bwl point to island
+				if (iTopCurr > 0) {
+					aiFwl[iTopCurr] = -i;
+				} else {
+					aiBwl[-iTopCurr] =-i;
+				}
+				// let island bwl point to ts
+				if (iTopStart > 0) {
+					aiBwl[i] = iTopStart;
+				} else {
+					aiBwl[i] = -iTopStart;
+				}
+			}
+		}
+		if (!afFwl[i]) {
+			long pol = topology[i].first; // iLeftRaw
+			if (pol > 0) {
+				// topology should be linked in polygon
+				long iTopStart = topStarts[pol];
+				long iTopCurr;
+				long iTopNext = iTopStart;
+				do {
+					iTopCurr = iTopNext;
+					iTopNext = (iTopCurr > 0) ? aiFwl[iTopCurr] : aiBwl[-iTopCurr];
+				} while (iTopNext != iTopStart);
+				// topCurr is segment that links to ts (last segment of pol)
+				// let fwl or bwl point to island
+				if (iTopCurr > 0) {
+					aiFwl[iTopCurr] = i;
+				} else {
+					aiBwl[-iTopCurr] = i;
+				}
+				// let island fwl point to ts
+				if (iTopStart > 0) {
+					aiFwl[i] = iTopStart;
+				} else {
+					aiFwl[i] = -iTopStart;
+				}
+			}
+		}
 	}
 
-	if (!fSetPolygonLabels(mapArn))  // Give all polygons a label (which is a number)
-		return false;    // tranquilizer: cancel is clicked in the function
+	Table tblArnAtt = mapArn->tblAtt();
+	assert(tblArnAtt.fValid());
+	tblArnAtt->fErase = true;
+	String sColMap = map->fnObj.sFile;
+	if (sColMap.length() == 0)  // attribute input map
+	{
+		// sName() returns the expression: map.col, but ColNew() has renamed
+		// this to map_col, so do the same here, before accessing the Column
+		sColMap = map->sName();
+		replace(sColMap.begin(), sColMap.end(), '.', '_');
+	}
+	Column colAtt(tblArnAtt, sColMap);
+	assert(colAtt.fValid());
 
-	//trq.SetTitle(sFreezeTitle);
-	//trq.SetText(TR("Extract topologies"));
+	trq.SetText(TR("Creating Polygons"));
+	GeometryFactory * fact = new GeometryFactory();
+	i = 0;
+	for (std::map<long, long>::iterator topIter = topStarts.begin(); topIter != topStarts.end(); ++topIter) {
+		std::vector<geos::geom::CoordinateSequence*> coords;
+		long iRaw = topIter->first;
+		long iTopStart = topIter->second;
+		long iTopCurr = iTopStart;
+		if (trq.fUpdate(i, iNrPol))
+			return false;
+		do {
+			if (coords.size() == 0 || !appendCoords(coords[coords.size() - 1], topologySegments[abs(iTopCurr)], iTopCurr > 0)) {
+				geos::geom::CoordinateSequence* seg = topologySegments[abs(iTopCurr)].clone();
+				if (iTopCurr < 0)
+					geos::geom::CoordinateSequence::reverse(seg);
+				coords.push_back(seg);
+			}
+			iTopCurr = (iTopCurr > 0) ? aiFwl[iTopCurr] : aiBwl[-iTopCurr];
+		} while (iTopCurr != iTopStart);
 
-	//return fFindBoundaries(mapArn); // if false then tranquilizer:cancel is clicked in the function
+		autocorrectCoords(coords);
+
+		std::vector<std::pair<geos::geom::LinearRing *, std::vector<geos::geom::Geometry *> *>> polys = makePolys(coords, fact);
+		for (std::vector<std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *>>::iterator poly = polys.begin(); poly != polys.end(); ++poly) {
+			geos::geom::LinearRing * ring = poly->first;
+			std::vector<geos::geom::Geometry *> * holes = poly->second;
+			geos::geom::Polygon * gpol(fact->createPolygon(ring, holes)); // takes ownership of both ring and holes pointers
+			ILWIS::Polygon *pol = CPOLYGON(pms->newFeature(gpol));
+			if (dvrs().fRealValues()) {
+				double r = colAtt->rValue(iRaw);
+				pol->PutVal(r);
+				//if (r == rUNDEF)
+				//	pol->Delete(true);
+			} else {
+				long v = colAtt->iRaw(iRaw);
+				if (v == iUNDEF + 1) // area numbering changes iUNDEF to iUNDEF + 1 (it is the current logic of that application)
+					v = iUNDEF;
+				pol->PutVal(v);
+				//if (v == iUNDEF)
+				//	pol->Delete(true);
+			}
+		}
+		++i;
+	}
+
 	return true;
+}
 
+bool PolygonMapFromRas::appendCoords(geos::geom::CoordinateSequence* & coordsA, geos::geom::CoordinateSequence & coordsB, bool fForward) const
+{
+	if (fForward ? (coordsA->back() == coordsB.front()) : (coordsA->back() == coordsB.back())) {
+		coordsA->add(&coordsB, false, fForward);
+		return true;
+	} else
+		return false;
+}
+
+void PolygonMapFromRas::autocorrectCoords(std::vector<geos::geom::CoordinateSequence*> & coords) const
+{
+	bool fChanged;
+	std::vector<long> openCoords;
+	for (long i = 0; i < coords.size(); ++i) { // mark all open coordinatesequences (back != front)
+		if (coords[i]->back() != coords[i]->front())
+			openCoords.push_back(i);
+	}
+	do { // link all possible backs to fronts, creating closed coordinatesequences that can become polygons
+		fChanged = false;
+		for (long i = 0; i < openCoords.size(); ++i) {
+			for (long j = i + 1; j < openCoords.size(); ++j) {
+				if (appendCoords(coords[openCoords[i]], *coords[openCoords[j]], true)) {
+					delete coords[openCoords[j]];
+					coords.erase(coords.begin() + openCoords[j]);
+					openCoords.erase(openCoords.begin() + j);
+					for (long k = j; k < openCoords.size(); ++k) // shift all indexes
+						openCoords[k] = openCoords[k] - 1;
+					j = j - 1;
+					fChanged = true;
+				}
+			}
+			if (coords[openCoords[i]]->back() == coords[openCoords[i]]->front()) {
+				openCoords.erase(openCoords.begin() + i);
+				i = i - 1;
+			}
+		}
+	} while (fChanged);
+	for (long i = 0; i < openCoords.size(); ++i) { // delete all remaining open coordinatesequences
+		delete coords[openCoords[i]];
+		coords.erase(coords.begin() + openCoords[i]);
+		for (long k = i; k < openCoords.size(); ++k) // shift all indexes
+			openCoords[k] = openCoords[k] - 1;
+	}
+}
+
+std::vector<std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *>> PolygonMapFromRas::makePolys(std::vector<geos::geom::CoordinateSequence*> & coords, GeometryFactory * fact) const
+{
+	std::vector<std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *>> result;
+
+	// CoordSequence to Polygons
+	std::vector<geos::geom::Polygon*> rings;
+	for (std::vector<geos::geom::CoordinateSequence*>::iterator coordsN = coords.begin(); coordsN != coords.end(); ++coordsN)
+		rings.push_back(fact->createPolygon(new geos::geom::LinearRing(*coordsN, fact), 0));
+
+	std::multimap<long, geos::geom::Polygon*> levels;
+	long iMaxDepth = 0;
+	
+	// find the winding level of each ring
+	for (long i = 0; i < rings.size(); ++i) {
+		geos::geom::Polygon * ringI = rings[i];
+		long iDepth = 0;
+		for (long j = 0; j < rings.size(); ++j) {
+			if (j == i) // test against every other ring, except itself
+				continue;
+			geos::geom::Polygon * ringJ = rings[j];
+			if (ringI->within(ringJ))
+				++iDepth;
+		}
+		levels.insert(std::pair<long, geos::geom::Polygon*>(iDepth, ringI));
+		iMaxDepth = max(iMaxDepth, iDepth);
+	}
+
+	// go through all exterior rings and collect their holes; EVEN depths become exterior, ODD depths become holes, each hole is added only to its closest exterior ring
+	for (long iDepth = 0; iDepth <= iMaxDepth; iDepth += 2) {
+		pair<multimap<long, geos::geom::Polygon *>::iterator, multimap<long, geos::geom::Polygon *>::iterator> exteriors = levels.equal_range(iDepth);
+		pair<multimap<long, geos::geom::Polygon *>::iterator, multimap<long, geos::geom::Polygon *>::iterator> holes = levels.equal_range(iDepth + 1);
+		for (multimap<long, geos::geom::Polygon *>::iterator exteriorIt = exteriors.first; exteriorIt != exteriors.second; ++exteriorIt) {
+			std::vector<geos::geom::Geometry*> * ringHoles = new std::vector<geos::geom::Geometry*>();
+			for (multimap<long, geos::geom::Polygon *>::iterator holeIt = holes.first; holeIt != holes.second; ++holeIt) {
+				if (holeIt->second->within(exteriorIt->second))
+					ringHoles->push_back((Geometry*)holeIt->second->getExteriorRing());
+			}
+			result.push_back(std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *>((LinearRing*)exteriorIt->second->getExteriorRing(), ringHoles));
+		}
+	}
+
+	return result;
 }
 
 void PolygonMapFromRas::DetLink(DirBound db1, DirBound db2, DirBound db3, 
-                        const Array<bool>& fSegExist, const Array<bool>& fBeginSeg,
+                        const Array<BOOL>& fSegExist, const Array<BOOL>& fBeginSeg,
                         const Array<SegBound*>& sbSeg)
 {
   long iSegNr;
@@ -436,29 +596,29 @@ void PolygonMapFromRas::DetLink(DirBound db1, DirBound db2, DirBound db3,
 
 void PolygonMapFromRas::NewNode(long iLine, long iCol, byte b)
 {
-  Array<bool> fSegExist(dbRIGHT+1);
-  Array<bool> fBeginSeg(dbRIGHT+1);
+  Array<BOOL> fSegExist(dbRIGHT+1);
+  Array<BOOL> fBeginSeg(dbRIGHT+1);
   Array<SegBound*> sbSeg(dbRIGHT+1);
   fSegExist[dbRIGHT] = b & 1;
   fSegExist[dbUP   ] = ( b & 2 ) != 0;
   fSegExist[dbLEFT ] = ( b & 4 ) != 0 ;
   fSegExist[dbDOWN ] = ( b & 8 ) != 0 ;
   if (fSegExist[dbRIGHT]) {// new segment to the right 
-    sbSeg[dbRIGHT] = sbNewWithOneEnd(iLine, iCol, true, (bool &)fBeginSeg[dbRIGHT]);
+    sbSeg[dbRIGHT] = sbNewWithOneEnd(iLine, iCol, true, fBeginSeg[dbRIGHT]);
     sbHoriz[iCol] = sbSeg[dbRIGHT];
   }
   else
     sbHoriz[iCol] = 0;
   if (fSegExist[dbUP]) { // end of segment up 
     sbSeg[dbUP] = sbVert[iCol];
-    EndOfSegment(iLine, iCol, *sbSeg[dbUP], true, (bool &)fBeginSeg[dbUP]);
+    EndOfSegment(iLine, iCol, *sbSeg[dbUP], true, fBeginSeg[dbUP]);
   }
   if (fSegExist[dbLEFT]) { //end of segment to the left 
     sbSeg[dbLEFT] = sbHoriz[iCol - 1];
-    EndOfSegment(iLine, iCol, *sbSeg[dbLEFT], false, (bool &)fBeginSeg[dbLEFT]);
+    EndOfSegment(iLine, iCol, *sbSeg[dbLEFT], false, fBeginSeg[dbLEFT]);
   }
   if (fSegExist[dbDOWN]) { // new segment down }
-    sbSeg[dbDOWN] = sbNewWithOneEnd(iLine, iCol, false, (bool &)fBeginSeg[dbDOWN]);
+    sbSeg[dbDOWN] = sbNewWithOneEnd(iLine, iCol, false, fBeginSeg[dbDOWN]);
     sbVert[iCol] = sbSeg[dbDOWN];
   }
   else
@@ -681,7 +841,7 @@ SegBound* PolygonMapFromRas::sbNewInBetween(long iCol)
   SegBound* sb = new SegBound;
 //  sb->iForw = sb->iBackw = 0;
   sb->iSegNr = iNewSegNr();
-  if (sb->iSegNr >= (int)aiFwl.iSize()) {
+  if (sb->iSegNr >= (long)aiFwl.iSize()) {
     aiFwl.Resize(sb->iSegNr+1);
     aiBwl.Resize(sb->iSegNr+1);
   } 
@@ -707,7 +867,7 @@ SegBound* PolygonMapFromRas::sbNewInBetween(long iCol)
   return sb;
 }
 
-SegBound* PolygonMapFromRas::sbNewWithOneEnd(long iLine, long iCol, bool fRight, bool& fBegin)
+SegBound* PolygonMapFromRas::sbNewWithOneEnd(long iLine, long iCol, bool fRight, BOOL& fBegin)
 // Creates new segment with a node at one end.                 
 // If fRightSeg==true : it has to be a segment to the right of node,
 // else a segment under the node.                                 
@@ -720,7 +880,7 @@ SegBound* PolygonMapFromRas::sbNewWithOneEnd(long iLine, long iCol, bool fRight,
   SegBound* sb = new SegBound;
 //  sb->iForw = sb->iBackw = 0;
   sb->iSegNr = iNewSegNr();
-  if (sb->iSegNr >= (int)aiFwl.iSize()) {
+  if (sb->iSegNr >= (long)aiFwl.iSize()) {
     aiFwl.Resize(sb->iSegNr+1);
     aiBwl.Resize(sb->iSegNr+1);
   }  
@@ -772,7 +932,7 @@ SegBound* PolygonMapFromRas::sbNewWithOneEnd(long iLine, long iCol, bool fRight,
   return sb;
 }
 
-void PolygonMapFromRas::EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, bool& fBegin)
+void PolygonMapFromRas::EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, BOOL& fBegin)
 {
   if ((fUp && (dbBufPrev[iCol] == dbUP)) ||
       (!fUp && (dbBufCurr[iCol-1] == dbLEFT))) { // begin of segment
@@ -841,178 +1001,156 @@ void PolygonMapFromRas::StoreSegm(const SegBound& sb)
 
 void PolygonMapFromRas::StoreSegm(SegBound& sb)
 {
-  if (!sb.fBeginSeg || !sb.fEndSeg)
-    return;
-  CoordBuf cBuf;
-  long iCrd = 0;
-  bool fIsland = false; // sb.crdFrom == sb.crdTo;
-  if (fSmooth) {
+	if (!sb.fBeginSeg || !sb.fEndSeg)
+		return;
+	CoordBuf cBuf;
+	long iCrd = 0;
+	bool fIsland = sb.crdFrom == sb.crdTo;
+	if (fSmooth) {
+		// calculate coordinates
+		Coord crdFrom = sb.crdFrom;
+		Coord crdTo = sb.crdTo;
+		ArrayLarge<ChainRec> acr;
+		for (DLIter<ChainRec> iter(&const_cast<SegBound&>(sb).dlChain); iter.fValid(); iter++) 
+			acr &= iter();
+		cBuf.Size(acr.iSize()*2); // should be sufficient
+		double x, y, dx, dy;
+		x = crdFrom.x;
+		y = crdFrom.y;
+		long iPrevStep, iCurrStep, iNextStep;
+		if ( fIsland ) {
+			ChainRec crLast = acr[acr.iSize()-1];
+			iPrevStep = crLast.iLength;
+			if ((crLast.dbCode == dbUP) || (crLast.dbCode == dbLEFT))
+				iPrevStep = -iPrevStep;
+		}
+		else {
+			iPrevStep = 0;
+			cBuf[iCrd++] = crdFrom;
+		}
+		iCurrStep = acr[0].iLength;
+		if ((acr[0].dbCode == dbUP) || (acr[0].dbCode == dbLEFT))
+			iCurrStep = -iCurrStep;
+		Coord cFirst = Coord(crdFrom.x, crdFrom.y);
+		for (unsigned long i=0; i < acr.iSize(); ++i) {
+			if ( i != acr.iSize() - 1 ) {
+				iNextStep = acr[i+1].iLength;
+				if ((acr[i+1].dbCode == dbUP) || (acr[i+1].dbCode == dbLEFT))
+					iNextStep = -iNextStep;
+			}
+			else {
+				if ( fIsland ) {
+					iNextStep = acr[0].iLength;
+					if ((acr[0].dbCode == dbUP) || (acr[0].dbCode == dbLEFT))
+						iNextStep = -iNextStep;
+				}
+				else
+					iNextStep = 0;
+			}
+			switch ( acr[i].dbCode )
+			{
+			case dbRIGHT: case dbLEFT : {
+				dx = iCurrStep; dy = 0;
+						  }
+						  break;
+			case dbUP: case dbDOWN :  {
+				dx = 0; dy = iCurrStep;
+					   }
+					   break;
 
-    // calculate coordinates
-    Coord crdFrom = sb.crdFrom;
-    Coord crdTo = sb.crdTo;
-    ArrayLarge<ChainRec> acr;
-    for (DLIter<ChainRec> iter(&const_cast<SegBound&>(sb).dlChain); iter.fValid(); iter++) 
-      acr &= iter();
-    cBuf.Size(acr.iSize()*2); // should be sufficient
-    double x, y, dx, dy;
-    x = crdFrom.x;
-    y = crdFrom.y;
-    long iPrevStep, iCurrStep, iNextStep;
-    if ( fIsland ) {
-      ChainRec crLast = acr[acr.iSize()-1];
-      iPrevStep = crLast.iLength;
-      if ((crLast.dbCode == dbUP) || (crLast.dbCode == dbLEFT))
-        iPrevStep = -iPrevStep;
-    }
-    else {
-      iPrevStep = 0;
-      cBuf[iCrd++] = crdFrom;
-    }
-    iCurrStep = acr[0].iLength;
-    if ((acr[0].dbCode == dbUP) || (acr[0].dbCode == dbLEFT))
-      iCurrStep = -iCurrStep;
-    Coord cFirst = Coord(crdFrom.x, crdFrom.y);
-    for (unsigned long i=0; i < acr.iSize(); ++i) {
-      if ( i != acr.iSize() - 1 ) {
-        iNextStep = acr[i+1].iLength;
-        if ((acr[i+1].dbCode == dbUP) || (acr[i+1].dbCode == dbLEFT))
-          iNextStep = -iNextStep;
-      }
-      else {
-        if ( fIsland ) {
-          iNextStep = acr[0].iLength;
-          if ((acr[0].dbCode == dbUP) || (acr[0].dbCode == dbLEFT))
-            iNextStep = -iNextStep;
-        }
-        else
-          iNextStep = 0;
-      }
-      switch ( acr[i].dbCode )
-      {
-        case dbRIGHT: case dbLEFT : {
-            dx = iCurrStep; dy = 0;
-          }
-          break;
-        case dbUP: case dbDOWN :  {
-            dx = 0; dy = iCurrStep;
-          }
-          break;
+			default :
+				assert(0==1);
+				break;
+			}
+			long iNewCrd=0;
+			if (abs(iCurrStep) == 1) {
+				if ( iPrevStep != iNextStep ) {
+					cBuf[iCrd++] = Coord(x + dx / 2, y + dy / 2);
+					iNewCrd++;
+				}
+				if ( !fIsland && (iNextStep == 0 ) ) {
+					cBuf[iCrd++] = Coord(x + dx, y + dy);
+					iNewCrd++;
+				}
+			}
+			else {
+				if ( (abs(iPrevStep) == 1) || (iNextStep == 1) ) {
+					cBuf[iCrd++] = Coord(x + dx / 2, y + dy / 2);
+					iNewCrd++;
+				}
+				if ( abs(iNextStep) != 1 ) {
+					cBuf[iCrd++] = Coord(x + dx, y + dy);
+					iNewCrd++;
+				}
+			}
+			if (fIsland && (iCrd == iNewCrd))
+				cFirst = cBuf[0];
+			x += dx;
+			y += dy;
+			iPrevStep = iCurrStep;
+			iCurrStep = iNextStep;
+		}
+		if (fIsland) {
+			if (cBuf[0] != cBuf[iCrd-1])
+				cBuf[iCrd++] = cBuf[0];
+		}  
+		StoreSegm(sb, cBuf, iCrd);
+		//  aiSegNr &= sb.iSegNr;
+	}
+	else {
+		// count chains
+		int iChains= 0;
+		for (DLIter<ChainRec> iter1(&const_cast<SegBound&>(sb).dlChain); iter1.fValid(); iter1++) 
+			iChains++;
+		cBuf.Size(iChains+1);
+		// calculate coordinates
+		Coord crdCurr = sb.crdFrom;
+		cBuf[iCrd++] = crdCurr;
+		for (DLIter<ChainRec> iter(&const_cast<SegBound&>(sb).dlChain); iter.fValid(); iter++) {
+			DirBound db = iter().dbCode;
+			switch (db)  {
+		case dbRIGHT : {
+			crdCurr.x += iter().iLength;
+					   }
+					   break;
+		case dbUP : {
+			crdCurr.y -= iter().iLength;
+					}
+					break;
+		case dbLEFT : {
+			crdCurr.x -= iter().iLength;
+					  }
+					  break;
+		case dbDOWN : {
+			crdCurr.y += iter().iLength;
+					  }
+					  break;
+		default : assert(0==1);
+			break;
+			}
+			cBuf[iCrd++] = crdCurr;
+		}
+	}
 
-        default :
-          assert(0==1);
-          break;
-      }
-      long iNewCrd=0;
-      if (abs(iCurrStep) == 1) {
-        if ( iPrevStep != iNextStep ) {
-          cBuf[iCrd++] = Coord(x + dx / 2, y + dy / 2);
-          iNewCrd++;
-        }
-        if ( !fIsland && (iNextStep == 0 ) ) {
-          cBuf[iCrd++] = Coord(x + dx, y + dy);
-          iNewCrd++;
-        }
-      }
-      else {
-        if ( (abs(iPrevStep) == 1) || (iNextStep == 1) ) {
-          cBuf[iCrd++] = Coord(x + dx / 2, y + dy / 2);
-          iNewCrd++;
-        }
-        if ( abs(iNextStep) != 1 ) {
-          cBuf[iCrd++] = Coord(x + dx, y + dy);
-          iNewCrd++;
-        }
-      }
-      if (fIsland && (iCrd == iNewCrd))
-        cFirst = cBuf[0];
-      x += dx;
-      y += dy;
-      iPrevStep = iCurrStep;
-      iCurrStep = iNextStep;
-    }
-    if (fIsland) {
-      if (cBuf[0] != cBuf[iCrd-1])
-        cBuf[iCrd++] = cBuf[0];
-    }  
-	StoreSegm(sb, cBuf, iCrd, fIsland);
-  //  aiSegNr &= sb.iSegNr;
-  }
-  else {
-    // count chains
-    int iChains= 0;
-    for (DLIter<ChainRec> iter1(&const_cast<SegBound&>(sb).dlChain); iter1.fValid(); iter1++) 
-      iChains++;
-    cBuf.Size(iChains+1);
-    // calculate coordinates
-    Coord crdCurr = sb.crdFrom;
-    cBuf[iCrd++] = crdCurr;
-    for (DLIter<ChainRec> iter(&const_cast<SegBound&>(sb).dlChain); iter.fValid(); iter++) {
-      DirBound db = iter().dbCode;
-      switch (db)  {
-        case dbRIGHT : {
-               crdCurr.x += iter().iLength;
-             }
-             break;
-        case dbUP : {
-               crdCurr.y -= iter().iLength;
-             }
-             break;
-        case dbLEFT : {
-               crdCurr.x -= iter().iLength;
-             }
-             break;
-        case dbDOWN : {
-               crdCurr.y += iter().iLength;
-             }
-             break;
-        default : assert(0==1);
-          break;
-      }
-     cBuf[iCrd++] = crdCurr;
-    }
-  }
-	CoordBuf cBuf2(iCrd);
-	for(int ic=0; ic < iCrd; ++ic)
-		cBuf2[ic] = cBuf[ic];
-	
-  StoreSegm(sb, cBuf, iCrd, fIsland);
+	StoreSegm(sb, cBuf, iCrd);
 }
 
-void PolygonMapFromRas::StoreSegm(const SegBound& sb, CoordBuf& cBuf, long& iCrd, bool fIsland)
+void PolygonMapFromRas::StoreSegm(const SegBound& sb, CoordBuf& cBuf, long& iCrd)
 {
-  if (iCrd == 0)
-    return;
+	if (iCrd == 0)
+		return;
 
-  trq.fAborted();
-  CoordBuf cBufTemp(iCrd);
-  for ( long j=0; j < iCrd; ++j)
-    map->gr()->RowCol2Coord(cBuf[j].y, cBuf[j].x, cBufTemp[j]);
-
-  //geos::operation::polygonize::Polygonizer polygonizer;
- // ILWIS::Polygon *pol;
- // if ( sb.iSegNr > pms->iPol())
-	//pol = pms->newFeature();
- // else
-	//pol = pms->pol(sb.iSegNr);
- // if ( !pol)
-	//  throw ErrorObject(String("Couldn't find polygon nr %d",sb.iSegNr));
- // if(fIsland) {
-	//  pol->addHole(new LinearRing(cBufTemp.clone(), new GeometryFactory()));
- // }
- // else{
-	// pol->addBoundary(new LinearRing(cBufTemp.clone(), new GeometryFactory()));
-	// DomainSort* pdsrt = dm()->pdsrt();
-	// String sVal("%S | %S", map->dm()->sValueByRaw(sb.iLeftRaw,0), map->dm()->sValueByRaw(sb.iRightRaw,0));
-	// long iRaw = pdsrt->iAdd(sVal);
-	// pol->PutVal(iRaw);
- // }
-  if (fact == 0)
-	fact = new GeometryFactory();
-  polygonizer.add( (Geometry *)(fact->createLineString(cBufTemp.clone())));
-  for ( long j=0; j < iCrd; ++j)
-	  cBuf[j] = cBufTemp[j];
-  iCrd = 0;
+	trq.fAborted();
+	for ( long j=0; j < iCrd; ++j)
+		map->gr()->RowCol2Coord(cBuf[j].y, cBuf[j].x, cBuf[j]);
+	topologySegments[sb.iSegNr] = CoordBuf(iCrd); // for speed optimization in ilwis 2.x the cBuf.size() didn't correspond to iCrd; iCrd is the actual size
+	CoordBuf & cBufTemp = topologySegments[sb.iSegNr];
+	for ( long j=0; j < iCrd; ++j)
+		cBufTemp[j] = cBuf[j];	
+	topology[sb.iSegNr] = std::pair<long,long>(sb.iLeftRaw, sb.iRightRaw);
+	if (sb.iLeftRaw > 0)
+		topStarts[sb.iLeftRaw] = sb.iSegNr;
+	iCrd = 0;
 }
 
 long PolygonMapFromRas::iNewSegNr()
@@ -1025,8 +1163,3 @@ long PolygonMapFromRas::iNewSegNr()
   }  
   return ++iNrSeg;
 }
-
-
-
-
-

@@ -104,18 +104,20 @@ private:
   void AppendUp(long iLine, long iCol, byte bt);
   void AppendLeft(long iLine, long iCol, byte bt);
   SegBound* sbNewInBetween(long iCol);
-  SegBound* sbNewWithOneEnd(long iLine, long iCol, bool fRight, bool &fBegin);
-  void EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, bool& fBegin);
+  SegBound* sbNewWithOneEnd(long iLine, long iCol, bool fRight, BOOL &fBegin);
+  void EndOfSegment(long iLine, long iCol, SegBound& sb, bool fUp, BOOL& fBegin);
   void StoreSegm(SegBound& sb);
-  void StoreSegm(const SegBound& sb, CoordBuf& cBuf, long& iCrd, bool fIsland);
+  void StoreSegm(const SegBound& sb, CoordBuf& cBuf, long& iCrd);
   long iNewSegNr();
-  void  DetLink(DirBound db1, DirBound db2, DirBound db3, 
-                const Array<bool>& fSegExist, const Array<bool>& fBeginSeg,
+  void DetLink(DirBound db1, DirBound db2, DirBound db3, 
+                const Array<BOOL>& fSegExist, const Array<BOOL>& fBeginSeg,
                 const Array<SegBound*>& sbSeg);
 
-  bool fSetPolygonLabels(const Map& mpAreas);
   bool fFindBoundaries(const Map& mpAreas);
   bool fInitPolygonMap();
+  bool appendCoords(geos::geom::CoordinateSequence* & coordsA, geos::geom::CoordinateSequence & coordsB, bool fForward) const;
+  void autocorrectCoords(std::vector<geos::geom::CoordinateSequence*> & coords) const;
+  std::vector<std::pair<geos::geom::LinearRing *, std::vector<geos::geom::Geometry *> *>> makePolys(std::vector<geos::geom::CoordinateSequence*> & coords, GeometryFactory * fact) const;
 
   Map map;
   LongBufExt iBufInp;     // rasvec 1.4 var: line
@@ -130,10 +132,10 @@ private:
   LongArrayLarge aiSegNr;
   long iNrPol, iNrSeg;
   LongArrayLarge aiFwl, aiBwl;
-  geos::operation::polygonize::Polygonizer polygonizer;
-  GeometryFactory *fact;
+  std::map<long, CoordBuf> topologySegments;
+  std::map<long, std::pair<long,long>> topology;
+  std::map<long, long> topStarts;
 };
-
 
 #endif
 
