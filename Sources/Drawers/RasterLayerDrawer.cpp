@@ -635,7 +635,7 @@ String RasterLayerDrawer::getInfo(const Coord& c) const {
 	}
 	String infos = rastermap->sValue(crd);
 	String info;
-	String s = infos.sTrimSpaces();
+	String s = infos.sTrimSpaces(true);
 	if ( s == "?")
 		return "";
 	DomainValue* dv = rastermap->dm()->pdv();

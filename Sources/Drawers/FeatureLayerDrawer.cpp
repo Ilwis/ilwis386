@@ -257,7 +257,7 @@ String FeatureLayerDrawer::getInfo(const Coord& c) const {
 	DomainValue* dv = bmptr->dm()->pdv();
 	int count = 0;
 	for(int i = 0; i < infos.size(); ++i) {
-		String s = infos[i].sTrimSpaces();
+		String s = infos[i].sTrimSpaces(true);
 		if ( s == "?")
 			continue;
 		info += count == 0 ? s : ";" + s;
