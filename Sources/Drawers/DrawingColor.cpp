@@ -526,6 +526,8 @@ String DrawingColor::store(const FileName& fnView, const String& parentSection) 
 	ObjectInfo::WriteElement(parentSection.c_str(),"TransparencyValues",fnView, transpValues);
 	ObjectInfo::WriteElement(parentSection.c_str(),"IdColorSet",fnView, colorSetIndex);
 	ObjectInfo::WriteElement(parentSection.c_str(),"IdColorNumbers",fnView, iMultColors);
+	ObjectInfo::WriteElement(parentSection.c_str(),"color1",fnView, clr1);
+	ObjectInfo::WriteElement(parentSection.c_str(),"color2",fnView, clr2);
 	return parentSection;
 }
 
@@ -533,6 +535,8 @@ void DrawingColor::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(parentSection.c_str(),"TransparencyValues",fnView, transpValues);
 	ObjectInfo::ReadElement(parentSection.c_str(),"IdColorSet",fnView, colorSetIndex);
 	ObjectInfo::ReadElement(parentSection.c_str(),"IdColorNumbers",fnView, iMultColors);
+	ObjectInfo::ReadElement(parentSection.c_str(),"color1",fnView, clr1);
+	ObjectInfo::ReadElement(parentSection.c_str(),"color2",fnView, clr2);
 }
 
 void DrawingColor::setMultiColors(int index){
