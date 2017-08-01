@@ -127,7 +127,8 @@ void ActionTreeCtrl::Create(ActionTabs *tabs, CWnd* pWnd)
 		if ("" ==	 sAction) {
 			iImgExe = IlwWinApp()->iImage(act->sIcon());
 			continue;
-		}
+		} else if ("run" == act->sAction())
+			continue;
 		sTop = act->sMenOpt();
 		if (sLastTop != sTop) {
 			if ("" == sTop)
