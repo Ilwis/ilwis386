@@ -12,6 +12,7 @@
 #include "Engine\Drawers\ZValueMaker.h"
 #include "Drawers\RasterLayerDrawer.h"
 #include "drawers\DrawingColor.h"
+#include "Engine\Domain\dmsort.h"
 
 using namespace ILWIS;
 
@@ -57,10 +58,13 @@ void RasterDataDrawer::prepare(PreparationParameters *pp){
 					if (rrMinMax.rLo() > rrMinMax.rHi())
 						rrMinMax = basemap->vr()->rrMinMax();
 				} else {
-					if (  rsd->useAttributeColumn() && rsd->getAtttributeColumn()->dm()->pdv()) {
-
-						rrMinMax = rsd->getAtttributeColumn()->vr()->rrMinMax();
-					}
+					if ( rsd->useAttributeColumn()) {
+						if (rsd->getAtttributeColumn()->dm()->pdv())
+							rrMinMax = rsd->getAtttributeColumn()->vr()->rrMinMax();
+						else if (rsd->getAtttributeColumn()->dm()->pdsrt())
+							rrMinMax = RangeReal(1, rsd->getAtttributeColumn()->dm()->pdsrt()->iSize());
+					} else if (dm->pdsrt())
+						rrMinMax = RangeReal(1, dm->pdsrt()->iSize());
 				}
 				rsd->setMinMax(rrMinMax);
 				rsd->SetPaletteOwner(); // this set has the only available palette
@@ -83,10 +87,13 @@ void RasterDataDrawer::prepare(PreparationParameters *pp){
 				if (rrMinMax.rLo() > rrMinMax.rHi())
 					rrMinMax = basemap->vr()->rrMinMax();
 			} else {
-				if (  rsd->useAttributeColumn() && rsd->getAtttributeColumn()->dm()->pdv()) {
-
-					rrMinMax = rsd->getAtttributeColumn()->vr()->rrMinMax();
-				}
+				if ( rsd->useAttributeColumn()) {
+					if (rsd->getAtttributeColumn()->dm()->pdv())
+						rrMinMax = rsd->getAtttributeColumn()->vr()->rrMinMax();
+					else if (rsd->getAtttributeColumn()->dm()->pdsrt())
+						rrMinMax = RangeReal(1, rsd->getAtttributeColumn()->dm()->pdsrt()->iSize());
+				} else if (dm->pdsrt())
+					rrMinMax = RangeReal(1, dm->pdsrt()->iSize());
 			}
 			rsd->setMinMax(rrMinMax);
 			rsd->SetPaletteOwner(); // this set has the only available palette
