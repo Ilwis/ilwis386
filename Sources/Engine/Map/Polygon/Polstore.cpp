@@ -305,16 +305,7 @@ ILWIS::Polygon *PolygonMapStore::polLast() const
 
 vector<ILWIS::Polygon *> PolygonMapStore::pol(const Coord& crd) const // Point in polygon
 {
-	vector<ILWIS::Polygon *> polygons;
-	for(int i = 0; i < geometries->size(); ++i) {
-		ILWIS::Polygon *pol = (ILWIS::Polygon *)geometries->at(i);
-		if ( pol->fValid()) {
-			if ( geos::algorithm::locate::SimplePointInAreaLocator::containsPointInPolygon(crd, pol))
-				polygons.push_back(pol);
-
-		}
-	}
-	return polygons;
+	return getFeatures(crd);
 }
 
 //void PolygonMapStore::AddLastPol(long id)
@@ -468,6 +459,23 @@ bool PolygonMapStore::removeFeature(FeatureID id, const vector<int>& selectedCoo
 		} 
 	}
 	return false;
+}
+
+vector<ILWIS::Polygon *> PolygonMapStore::getFeatures(const Coord& crd, bool complete) const {
+	vector<Geometry *> pols;
+	vector<ILWIS::Polygon *> features;
+
+	spatialIndex->query(crd,pols);
+	for(int i = 0; i < pols.size(); ++i) {
+		ILWIS::Polygon *p = (ILWIS::Polygon *)pols.at(i);
+		if ( p && p->fValid()) {
+			if ( geos::algorithm::locate::SimplePointInAreaLocator::containsPointInPolygon(crd, p))
+				features.push_back(p);
+
+		}
+	}
+	return features;
+
 }
 
 vector<Feature *> PolygonMapStore::getFeatures(const CoordBounds& cb, bool complete) const {

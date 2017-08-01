@@ -43,6 +43,7 @@ class QuadTreeNode
 	  bool hasItems() const;
 	  bool hasChildren() const;
       bool isPrunable() const;
+	  bool contains(const CoordBounds& cbOuter,const CoordBounds& cbInner) const;
 
       void partition();
 

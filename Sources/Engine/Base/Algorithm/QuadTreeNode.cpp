@@ -40,6 +40,15 @@ QuadTreeNode::canBeInsertedInChild(Geometry* item)
 	return false;
 }
 
+bool QuadTreeNode::contains(const CoordBounds& cbOuter,const CoordBounds& cbInner) const{
+	bool ok = cbOuter.cMin.x <= cbInner.cMin.x && 
+		cbOuter.cMax.x >= cbInner.cMax.x &&
+		cbOuter.cMin.y <= cbInner.cMin.y &&
+		cbOuter.cMax.y >= cbInner.cMax.y;
+
+	return ok;
+}
+
 bool
 QuadTreeNode::insertInChild(Geometry* item)
 {
@@ -50,7 +59,8 @@ QuadTreeNode::insertInChild(Geometry* item)
 	{
 		const Envelope *env = item->getEnvelopeInternal();
 		CoordBounds cb(Coord(env->getMinX(), env->getMinY()), Coord(env->getMaxX(), env->getMaxY()));
-		if (nodes[i]->getArea().fContains(cb))
+		CoordBounds cbArea = nodes[i]->getArea();
+		if ( contains(cbArea, cb))
 		{
 			nodes[i]->insert(item);
 			return true;

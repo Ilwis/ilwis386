@@ -100,6 +100,7 @@ public:
 	void					addPolygon(ILWIS::Polygon *pol);
 	virtual void			Load() {};
 	 vector<Feature *> getFeatures(const CoordBounds& cb, bool complete=true) const;
+	 vector<ILWIS::Polygon *> getFeatures(const Coord& crd, bool complete=true) const;
 	
 protected:
 	PolygonMapStore(PolygonMapPtr& p,  const FileName& fn);
