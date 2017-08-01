@@ -396,9 +396,13 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 				}
 				else {
 					for (long i = 0; i < iLen; ++i) {
-						long v = buf[i];
-						Color clr = rpr->clrRaw(buf[i]).iVal();
-						bufOut[i] = clr.iVal();
+						double rVal = dataValues.rValByRaw(buf[i]);
+						if ( rVal == rUNDEF || rVal == iUNDEF || rVal == shUNDEF)
+							bufOut[i] = colorUNDEF.iVal();
+						else {
+							Color clr = rpr->clrRaw(rVal).iVal();
+							bufOut[i] = clr.iVal();
+						}
 					}
 				}
 			} else {
