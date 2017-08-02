@@ -256,9 +256,10 @@ bool PolygonMapNumbering::fFreezing()
 		if (fUseReals) 
 		{
 			rVal = pol->rValue();
-			if (rVal == rUNDEF)
+			if (rVal == rUNDEF){
 				delete polNew;
-			else 
+				polNew = 0;
+			}else 
 			{
 				iNrNewPol++;
 				polNew->PutVal(iNrNewPol);
@@ -268,18 +269,21 @@ bool PolygonMapNumbering::fFreezing()
 		else 
 		{
 			iRaw = pol->iValue();
-			if (iRaw == iUNDEF)
+			if (iRaw == iUNDEF){
 				delete polNew;
-			else 
+				polNew = 0;
+			} else 
 			{
 				iNrNewPol++;
 				polNew->PutVal(iNrNewPol);
 				col->PutRaw(iNrNewPol, iRaw);
 			}
 		}
-		if ( !polNew->fDeleted() )
-			colArea->PutVal(iNrNewPol, pol->rArea());
-		pms->addPolygon(polNew);
+		if ( polNew) {
+			if ( !polNew->fDeleted() )
+				colArea->PutVal(iNrNewPol, pol->rArea());
+			pms->addPolygon(polNew);
+		}
 
 	}
 	col->SetReadOnly(true);
