@@ -180,7 +180,7 @@ bool PointMapNumbering::fFreezing()
 	trq.SetText(TR("Check points"));
 	long iNewPnt = 0;
 	Coord crd;
-	for (long i=1; i <= pmp->iFeatures(); ++i ) {
+	for (long i=0; i < pmp->iFeatures(); ++i ) {
 		if (trq.fUpdate(i, pmp->iFeatures()))
 			return false; 
 		crd = pmp->cValue(i);
@@ -223,7 +223,7 @@ bool PointMapNumbering::fFreezing()
 	double rVal;
 	long iRaw;
 	bool fUseReals = pmp->dvrs().fUseReals();
-	for (long i=1; i <= pmp->iFeatures(); ++i ) {
+	for (long i=0; i < pmp->iFeatures(); ++i ) {
 		if (trq.fUpdate(i, pmp->iFeatures()))
 			return false; 
 		crd = pmp->cValue(i);
