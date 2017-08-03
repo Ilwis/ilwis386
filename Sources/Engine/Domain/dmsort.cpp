@@ -1201,10 +1201,12 @@ void DomainSort::SortRawValues()
 
 bool DomainSort::fEqual(const IlwisObjectPtr& ptr) const
 {
-	// DomainUniqueID by definition is not equal to any another domain (object)
+	// "DomainUniqueID by definition is not equal to any another domain (object)"
+	// Bas Retsios 14-7-2017: reverted this decision; two DomainUniqueIDs are equal when their nr of elements are the same.
+	// Strictly spoken they are indeed not equal, but this is very inconvenient, because user can't Join columns when he knows it should be possible.
 	const DomainUniqueID* pdu = dynamic_cast<const DomainUniqueID*>(&ptr);
 	if (pdu != 0)
-		 return false;
+		return pdu->fEqual(*this);
 
 	const DomainSort* pds = dynamic_cast<const DomainSort*>(&ptr);
 	if (0 == pds)

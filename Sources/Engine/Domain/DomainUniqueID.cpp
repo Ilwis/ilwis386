@@ -84,7 +84,13 @@ void DomainUniqueID::Merge(const DomainSort* pdsrt, Tranquilizer* trq)
 }
 
 // DomainUniqueID by definition is not equal to any another domain (object)
+// Bas Retsios 14-7-2017: reverted this decision; two DomainUniqueIDs are equal when their nr of elements are the same.
+// Strictly spoken they are indeed not equal, but this is very inconvenient, because user can't Join columns when he knows it should be possible.
 bool DomainUniqueID::fEqual(const IlwisObjectPtr& ptr) const
 {
-    return false;
+	const DomainUniqueID* pdu = dynamic_cast<const DomainUniqueID*>(&ptr);
+	if (pdu != 0)
+		 return iNr == pdu->iNr;
+	else
+		return false;
 }
