@@ -75,6 +75,11 @@ MapAggregateMapList* MapAggregateMapList::create(const FileName& fn, MapPtr& p, 
     throw ErrorObject(WhatError("MapList expected",0), WhereError(as[0]));
   String method = as[1].toLower();
   Map mp = ml[ ml->iLower()];
+  if ( method == "sum"){
+	  RangeReal rr = ml->getRange();
+	  ValueRangeReal range(rr.rLo() * ml->iSize(), rr.rHi() * ml->iSize(),mp->dvrs().rStep());
+	  return new MapAggregateMapList(fn,p,ml,method,mp->gr(), mp->rcSize(),DomainValueRangeStruct(Domain("value"), range));
+  }
   return new MapAggregateMapList(fn,p,ml,method,mp->gr(), mp->rcSize(),mp->dvrs());
 }
 
@@ -114,7 +119,7 @@ bool MapAggregateMapList::fFreezing()
     trq.SetText(TR("Constructing"));
 	Map mp = ml[ ml->iLower()];
 	RowCol size = mp->rcSize();
-	int storeType = mp->st();
+	storeType = mp->st();
 	switch(storeType) {
 		case stBYTE:
 			byteSize = 1; break;
@@ -148,7 +153,9 @@ bool MapAggregateMapList::fFreezing()
 		offset += blockSize;
 		fclose(fp);
 	}
-	if ( storeType == stBYTE) {
+	if ( method == "sum"){
+		calcSum(size, blockSize, mapBlock);
+	} else if ( storeType == stBYTE) {
 		calcByte(size, blockSize, mapBlock);
 	} else if ( storeType == stINT) {
 		calcInt(size, blockSize, mapBlock);
@@ -170,6 +177,25 @@ bool MapAggregateMapList::fFreezing()
   }
   return true;
 }
+
+void MapAggregateMapList::calcSum(const RowCol& size, long blockSize,unsigned char *mapBlock) {
+	RealBuf bufb(size.Col);
+	//double *col = new double[ml->iSize()];
+	vector<double> col(ml->iSize());
+	for(int r = 0 ; r < size.Row;++r) {
+		trq.fUpdate(r, size.Row);
+		for(int c = 0; c < size.Col; ++c) {
+			getColumn(mapBlock,blockSize,size.Col, r,c,col);
+			double v = calcValue(col, ml->iSize());
+			if ( storeType != stREAL){
+				v = dvrs().rValue(v);
+			}
+			bufb[c] = v;
+		}
+		pms->PutLineVal(r,bufb);
+	}
+}
+
 void MapAggregateMapList::calcInt(const RowCol& size, long blockSize,unsigned char *mapBlock) {
 	IntBuf bufi(size.Col);
 	//double *col = new double[ml->iSize()];
@@ -194,6 +220,8 @@ void MapAggregateMapList::calcByte(const RowCol& size, long blockSize,unsigned c
 		for(int c = 0; c < size.Col; ++c) {
 			getColumn(mapBlock,blockSize,size.Col, r,c,col);
 			double v = calcValue(col, ml->iSize());
+			if ( v > 255)
+				v = 255;
 			bufb[c] = v;
 		}
 		pms->PutLineRaw(r,bufb);
@@ -224,6 +252,8 @@ void MapAggregateMapList::calcLong(const RowCol& size, long blockSize,unsigned c
 		for(int c = 0; c < size.Col; ++c) {
 			getColumn(mapBlock,blockSize,size.Col, r,c,col);
 			double v = calcValue(col, ml->iSize());
+			if ( v >= 2147483648)
+				v = iUNDEF;
 			bufb[c] = v;
 		}
 		pms->PutLineRaw(r,bufb);
@@ -282,6 +312,18 @@ double MapAggregateMapList::calcValue(vector<double>& column, int sz) {
 				++count;
 			}
 		}
+
+	}else 	if ( method == "sum") {
+		double sum = 0;
+		for(int i=0; i < sz; ++i) {
+			double v = column[i];
+			if ( v == iUNDEF || v == rUNDEF || v == shUNDEF)
+				continue;
+				
+			sum += v;
+		}
+		return sum;
+		
 	}
 			
 	return rUNDEF;

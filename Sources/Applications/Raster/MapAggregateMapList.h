@@ -65,9 +65,11 @@ private:
   void calcByte(const RowCol& size, long blockSize,unsigned char *mapBlock);
   void calcReal(const RowCol& size, long blockSize,unsigned char *mapBlock);
   void calcLong(const RowCol& size, long blockSize,unsigned char *mapBlock);
+  void calcSum(const RowCol& size, long blockSize,unsigned char *mapBlock);
   MapList ml;
   String method;
   int byteSize;
+  int storeType;
 };
 
 
