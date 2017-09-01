@@ -104,7 +104,7 @@ void avgcol_so(StackObject* soRes, const StackObject* so)
     rAvg /= n;
   else
     rAvg = rUNDEF;
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = rAvg;
   soRes->PutVal(bufRes);
 }
@@ -125,7 +125,7 @@ void sumcol_so(StackObject* soRes, const StackObject* so)
   }
   if (n == 0)
     rSum = rUNDEF;
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = rSum;
   soRes->PutVal(bufRes);
 }
@@ -157,7 +157,7 @@ void cntcol_so(StackObject* soRes, const StackObject* so)
 	    ++n;
 	  }
 	}
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = n;
   soRes->PutVal(bufRes);
 }
@@ -188,7 +188,7 @@ void stdevcol_so(StackObject* soRes, const StackObject* so)
   }
   else
     rStd = rUNDEF;
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = rStd;
   soRes->PutVal(bufRes);
 }
@@ -213,7 +213,7 @@ void varcol_so(StackObject* soRes, const StackObject* so)
     rVar = (n * rSum2 - sqr(rSum)) / n / (n-1);
   else
     rVar = rUNDEF;
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = rVar;
   soRes->PutVal(bufRes);
 }
@@ -238,7 +238,7 @@ void stderrcol_so(StackObject* soRes, const StackObject* so)
     rStdErr = sqrt((n * rSum2 - sqr(rSum)) / (n-1) / n / n);
   else
     rStdErr = rUNDEF;
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = rStdErr;
   soRes->PutVal(bufRes);
 }
@@ -269,7 +269,7 @@ void ttestcol_so(StackObject* soRes, const StackObject* soMu, const StackObject*
   }
   else
     rT = rUNDEF;
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = rT;
   soRes->PutVal(bufRes);
 }
@@ -297,7 +297,7 @@ void chisquarecol_so(StackObject* soRes, const StackObject* soObs, const StackOb
   }
   if (!fFound)
     rChi2 = rUNDEF;
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = rChi2;
   soRes->PutVal(bufRes);
 }
@@ -325,7 +325,7 @@ void covarcol_so(StackObject* soRes, const StackObject* so0, const StackObject* 
     rVarXY = (n * rSumXY - rSumX * rSumY) / n / (n - 1);
   else
     rVarXY = rUNDEF;
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = rVarXY;
   soRes->PutVal(bufRes);
 }
@@ -363,7 +363,7 @@ void corrcol_so(StackObject* soRes, const StackObject* so0, const StackObject* s
   }
   else
     rCorr = rUNDEF;
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = rCorr;
   soRes->PutVal(bufRes);
 }
@@ -383,7 +383,7 @@ void mincol_so(StackObject* soRes, const StackObject* so)
   }
   if (rMin == DBL_MAX)
     rMin = rUNDEF;
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = rMin;
   soRes->PutVal(bufRes);
 }
@@ -415,7 +415,7 @@ void ndvi_so(StackObject* soRes, const StackObject* so0, const StackObject* so1)
     so0->GetVal(buf0);
     so1->GetVal(buf1);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++)
+    for (int i=0; i<soRes->iSize(); i++)
       if ((buf0[i] == rUNDEF) ||(buf1[i] == rUNDEF))
         bufRes[i] = rUNDEF;
       else
@@ -428,7 +428,7 @@ void ndvi_so(StackObject* soRes, const StackObject* so0, const StackObject* so1)
     so0->GetVal(buf0);
     so1->GetVal(buf1);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++)
+    for (int i=0; i<soRes->iSize(); i++)
       if ((buf0[i] == iUNDEF) ||(buf1[i] == iUNDEF))
         bufRes[i] = rUNDEF;
       else
@@ -551,7 +551,7 @@ void value_so(StackObject* soRes, const StackObject* so)
   RealBuf bufRes;
   so->GetVal(buf);
   bufRes.Size(soRes->iSize());
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     if (buf[i] == sUNDEF)
       bufRes[i] = rUNDEF;
     else

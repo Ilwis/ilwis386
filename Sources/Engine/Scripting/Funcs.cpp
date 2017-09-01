@@ -176,7 +176,7 @@ static void funcname ## 2_so (StackObject* soRes, const StackObject* so0, const 
     so0->GetVal(buf0);\
     so1->GetVal(buf1);\
     bufRes.Size(soRes->iSize());\
-    for (short i=0; i<soRes->iSize(); i++)\
+    for (int i=0; i<soRes->iSize(); i++)\
       bufRes[i] = funcname##_r(buf0[i], buf1[i]);\
     soRes->PutVal(bufRes);\
   }\
@@ -185,7 +185,7 @@ static void funcname ## 2_so (StackObject* soRes, const StackObject* so0, const 
     so0->GetVal(buf0);\
     so1->GetVal(buf1);\
     bufRes.Size(soRes->iSize());\
-    for (short i=0; i<soRes->iSize(); i++)\
+    for (int i=0; i<soRes->iSize(); i++)\
       bufRes[i] = funcname##_l(buf0[i], buf1[i]);\
     soRes->PutVal(bufRes);\
   }\
@@ -199,7 +199,7 @@ static void add2_so (StackObject* soRes, const StackObject* so0, const StackObje
     so0->GetVal(buf0);
     so1->GetVal(buf1);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++)
+    for (int i=0; i<soRes->iSize(); i++)
       bufRes[i] = add_r(buf0[i], buf1[i]);
     soRes->PutVal(bufRes);
 	//soRes->dvs.SetDomain(Domain("d:\\Data\\ILWIS\\at2.dom"));
@@ -210,7 +210,7 @@ static void add2_so (StackObject* soRes, const StackObject* so0, const StackObje
     so0->GetVal(buf0);
     so1->GetVal(buf1);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++)
+    for (int i=0; i<soRes->iSize(); i++)
       bufRes[i] = add_l(buf0[i], buf1[i]);
     soRes->PutVal(bufRes);
   }
@@ -224,7 +224,7 @@ static void sub2_so (StackObject* soRes, const StackObject* so0, const StackObje
     so0->GetVal(buf0);
     so1->GetVal(buf1);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++)
+    for (int i=0; i<soRes->iSize(); i++)
       bufRes[i] = sub_r(buf0[i], buf1[i]);
     soRes->PutVal(bufRes);
   }
@@ -234,7 +234,7 @@ static void sub2_so (StackObject* soRes, const StackObject* so0, const StackObje
     so0->GetVal(buf0);
     so1->GetVal(buf1);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++)
+    for (int i=0; i<soRes->iSize(); i++)
       bufRes[i] = sub_l(buf0[i], buf1[i]);
     soRes->PutVal(bufRes);
   }
@@ -248,7 +248,7 @@ static void times2_so (StackObject* soRes, const StackObject* so0, const StackOb
     so0->GetVal(buf0);
     so1->GetVal(buf1);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++)
+    for (int i=0; i<soRes->iSize(); i++)
       bufRes[i] = times_r(buf0[i], buf1[i]);
     soRes->PutVal(bufRes);
   }
@@ -258,7 +258,7 @@ static void times2_so (StackObject* soRes, const StackObject* so0, const StackOb
     so0->GetVal(buf0);
     so1->GetVal(buf1);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++)
+    for (int i=0; i<soRes->iSize(); i++)
       bufRes[i] = times_l(buf0[i], buf1[i]);
     soRes->PutVal(bufRes);
   }
@@ -373,7 +373,7 @@ static void funcname ## _so (StackObject* soRes, const StackObject* so0, const S
     so0->GetVal(buf0);\
     so1->GetVal(buf1);\
     bufRes.Size(soRes->iSize());\
-    for (short i=0; i<soRes->iSize(); i++)\
+    for (int i=0; i<soRes->iSize(); i++)\
       bufRes[i] = funcname##_r(buf0[i], buf1[i]);\
     soRes->PutVal(bufRes);\
   }\
@@ -382,7 +382,7 @@ static void funcname ## _so (StackObject* soRes, const StackObject* so0, const S
     so0->GetVal(buf0);\
     so1->GetVal(buf1);\
     bufRes.Size(soRes->iSize());\
-    for (short i=0; i<soRes->iSize(); i++)\
+    for (int i=0; i<soRes->iSize(); i++)\
       bufRes[i] = funcname##_l(buf0[i], buf1[i]);\
     soRes->PutVal(bufRes);\
   }\
@@ -401,7 +401,7 @@ static void addstrval(StackObject* soRes, const StackObject* so0, const StackObj
   so0->GetVal(buf0);
   so1->GetVal(buf1);
   bufRes.Size(soRes->iSize());
-  for (short i=0; i<soRes->iSize(); i++) {
+  for (int i=0; i<soRes->iSize(); i++) {
     if ((buf0[i] == sUNDEF) || (buf1[i] == sUNDEF))
       bufRes[i] = sUNDEF;
     else {
@@ -419,7 +419,7 @@ static void divideval(StackObject* soRes, const StackObject* so0, const StackObj
     so0->GetVal(buf0);
     so1->GetVal(buf1);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++) {
+    for (int i=0; i<soRes->iSize(); i++) {
       if ((buf0[i] == rUNDEF) || (buf1[i] == rUNDEF) || (buf1[i] == 0))
         bufRes[i] = rUNDEF;
       else
@@ -433,7 +433,7 @@ static void divideval(StackObject* soRes, const StackObject* so0, const StackObj
     so0->GetVal(buf0);
     so1->GetVal(buf1);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++) {
+    for (int i=0; i<soRes->iSize(); i++) {
       if ((buf0[i] == iUNDEF) || (buf1[i] == iUNDEF) || (buf1[i] == 0))
         bufRes[i] = rUNDEF;
       else
@@ -450,7 +450,7 @@ static void div_so(StackObject* soRes, const StackObject* so0, const StackObject
   so0->GetVal(buf0);
   so1->GetVal(buf1);
   bufRes.Size(soRes->iSize());
-  for (short i=0; i<soRes->iSize(); i++) {
+  for (int i=0; i<soRes->iSize(); i++) {
     if ((buf0[i] == iUNDEF) || (buf1[i] == iUNDEF) || (buf1[i] == 0))
       bufRes[i] = iUNDEF;
     else
@@ -466,7 +466,7 @@ static void mod_so(StackObject* soRes, const StackObject* so0, const StackObject
   so0->GetVal(buf0);
   so1->GetVal(buf1);
   bufRes.Size(soRes->iSize());
-  for (short i=0; i<soRes->iSize(); i++) {
+  for (int i=0; i<soRes->iSize(); i++) {
     if ((buf0[i] == iUNDEF) || (buf1[i] == iUNDEF) || (buf1[i] == 0))
       bufRes[i] = iUNDEF;
     else
@@ -483,7 +483,7 @@ static void funcname ## raw_so (StackObject* soRes, const StackObject* so0, cons
     so0->GetRaw(buf0);\
     so1->GetRaw(buf1);\
     bufRes.Size(soRes->iSize());\
-    for (short i=0; i<soRes->iSize(); i++)\
+    for (int i=0; i<soRes->iSize(); i++)\
       bufRes[i] = funcname##_l(buf0[i], buf1[i]);\
     soRes->PutVal(bufRes);\
   }\
@@ -493,7 +493,7 @@ static void funcname ## raw_so (StackObject* soRes, const StackObject* so0, cons
     so0->GetVal(buf0);\
     so1->GetVal(buf1);\
     bufRes.Size(soRes->iSize());\
-    for (short i=0; i<soRes->iSize(); i++)\
+    for (int i=0; i<soRes->iSize(); i++)\
       bufRes[i] = funcname##_s(buf0[i], buf1[i]);\
     soRes->PutVal(bufRes);\
   }\
@@ -501,7 +501,7 @@ static void funcname ## raw_so (StackObject* soRes, const StackObject* so0, cons
 
 #define defcomparerawfnc(funcname) \
 static void funcname ## raw_so (StackObject* soRes, const StackObject* so0, const StackObject* so1) \
-{ short i;\
+{ int i;\
   if (so0->sot == sotLongRaw && so1->sot == sotLongRaw) {\
     LongBuf buf0, buf1;\
     LongBuf bufRes;\
@@ -530,7 +530,7 @@ static void funcname ## raw_so (StackObject* soRes, const StackObject* so0, cons
     so0->GetVal(buf0);\
     so1->GetVal(buf1);\
     bufRes.Size(soRes->iSize());\
-    for (short i=0; i<soRes->iSize(); i++)\
+    for (int i=0; i<soRes->iSize(); i++)\
       bufRes[i] = funcname##_s(buf0[i], buf1[i]);\
     soRes->PutVal(bufRes);\
   }\
@@ -580,7 +580,7 @@ static void not_so (StackObject* soRes, const StackObject* so)
 { LongBuf buf, bufRes;
   so->GetVal(buf);
   bufRes.Size(soRes->iSize());
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     if (buf[i] == iUNDEF)
       bufRes[i] = iUNDEF;
     else
@@ -594,7 +594,7 @@ static void funcname ## _so (StackObject* soRes, const StackObject* so0, const S
   so0->GetVal(buf0);                   \
   so1->GetVal(buf1);                   \
   bufRes.Size(soRes->iSize());       \
-  for (short i=0; i<soRes->iSize(); i++) \
+  for (int i=0; i<soRes->iSize(); i++) \
     bufRes[i] = funcname(buf0[i],buf1[i]); \
   soRes->PutVal(bufRes);  \
 }
@@ -615,7 +615,7 @@ static void sgn_so (StackObject* soRes, const StackObject* so)
     LongBuf buf, bufRes;
     so->GetVal(buf);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++)
+    for (int i=0; i<soRes->iSize(); i++)
       if (buf[i] == iUNDEF)
         bufRes[i] = iUNDEF;
       else
@@ -627,7 +627,7 @@ static void sgn_so (StackObject* soRes, const StackObject* so)
     LongBuf bufRes;
     so->GetVal(buf);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++)
+    for (int i=0; i<soRes->iSize(); i++)
       if (buf[i] == rUNDEF)
         bufRes[i] = iUNDEF;
       else
@@ -638,7 +638,7 @@ static void sgn_so (StackObject* soRes, const StackObject* so)
 
 /*
 void leraw_so (StackObject* soRes, const StackObject* so0, const StackObject* so1)
-{ short i;
+{ int i;
   if (so0->sot == sotLongRaw && so1->sot == sotLongRaw) {
     LongBuf buf0, buf1;
     LongBuf bufRes;
@@ -667,7 +667,7 @@ void leraw_so (StackObject* soRes, const StackObject* so0, const StackObject* so
     so0->GetVal(buf0);
     so1->GetVal(buf1);
     bufRes.Size(soRes->iSize());
-    for (short i=0; i<soRes->iSize(); i++)
+    for (int i=0; i<soRes->iSize(); i++)
       bufRes[i] = le_s(buf0[i], buf1[i]);
     soRes->PutVal(bufRes);
   }

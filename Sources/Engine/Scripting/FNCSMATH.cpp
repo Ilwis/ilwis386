@@ -71,7 +71,7 @@ void rnd0_so(StackObject* soRes)
 {
   RealBuf bufRes;
   bufRes.Size(soRes->iSize());
-  for (short i=0; i<soRes->iSize(); i++)
+  for (int i=0; i<soRes->iSize(); i++)
     bufRes[i] = random();
   soRes->PutVal(bufRes);
 }
@@ -154,7 +154,7 @@ void funcname ## _so (StackObject* soRes, const StackObject* so) \
 { RealBuf buf, bufRes;               \
   so->GetVal(buf);                   \
   bufRes.Size(soRes->iSize());       \
-  for (short i=0; i<soRes->iSize(); i++) \
+  for (int i=0; i<soRes->iSize(); i++) \
     if (buf[i] != rUNDEF) \
       bufRes[i] = funcname##_(buf[i]); \
     else  \
@@ -264,7 +264,7 @@ void funcname ## 2_so (StackObject* soRes, const StackObject* so0, const StackOb
     so0->GetVal(buf0);\
     so1->GetVal(buf1);\
     bufRes.Size(soRes->iSize());\
-    for (short i=0; i<soRes->iSize(); i++)\
+    for (int i=0; i<soRes->iSize(); i++)\
       bufRes[i] = funcname##_r(buf0[i], buf1[i]);\
     soRes->PutVal(bufRes);\
   }\
@@ -274,7 +274,7 @@ void funcname ## 2_so (StackObject* soRes, const StackObject* so0, const StackOb
     so0->GetVal(buf0);\
     so1->GetVal(buf1);\
     bufRes.Size(soRes->iSize());\
-    for (short i=0; i<soRes->iSize(); i++)\
+    for (int i=0; i<soRes->iSize(); i++)\
       bufRes[i] = funcname##_l(buf0[i], buf1[i]);\
     soRes->PutVal(bufRes);\
   }\
@@ -283,7 +283,7 @@ void funcname ## 2_so (StackObject* soRes, const StackObject* so0, const StackOb
     so0->GetVal(buf0);\
     so1->GetVal(buf1);\
     bufRes.Size(soRes->iSize());\
-    for (short i=0; i<soRes->iSize(); i++)\
+    for (int i=0; i<soRes->iSize(); i++)\
       bufRes[i] = longConv(funcname##_l(buf0[i], buf1[i]));\
     soRes->PutVal(bufRes);\
   }\
