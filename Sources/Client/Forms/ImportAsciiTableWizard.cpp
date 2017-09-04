@@ -703,8 +703,20 @@ public:
 				if (ci.iColumnWidth == iUNDEF)
 				{
 					dwButtons &= ~PSWIZB_FINISH;
-					sRem = String(TR("Column width must be larger than 0 for column %S").c_str(), ci.sColumnName);
+					sRem = String(TR("Column width must be larger than 0 for column: %S").c_str(), ci.sColumnName);
 					break;
+				}
+			}
+			for (int j = 0; j < m_iCols; j++)
+			{
+				ClmInfo& ciAll = fclColumn->ciColumn(j);
+				if ( j != i){
+					if ( ciAll.sColumnName == ci.sColumnName){
+						dwButtons &= ~PSWIZB_FINISH;
+						sRem = String(TR("Duplicate column names are not allowed: %S").c_str(), ci.sColumnName);
+						i = m_iCols + 1;
+						break;
+					}
 				}
 			}
 		}
