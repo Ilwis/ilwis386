@@ -243,7 +243,7 @@ GDALFormat::GDALFormat(const FileName& fn, ParmList& pm, ForeignFormat::mtMapTyp
 					fnBaseOutputName.sFile = fn.sFile;
 			}
 			else
-				fnBaseOutputName = fn;
+				fnBaseOutputName = fnOutput;
 
 			fAbsolute = true;
 		}

@@ -430,7 +430,7 @@ int GeneralImportForm::exec() {
 	BOOL b = finder.FindFile(sInput.c_str());
 	while(b) {
 		b = finder.FindNextFile();
-		String inFile = finder.GetFileName();
+		String inFile = finder.GetFilePath();
 		String outFile = sOutput;
 		if ( outFile == "[Output name matches input]") {
 			FileName fnOut(inFile);

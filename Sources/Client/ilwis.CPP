@@ -1727,12 +1727,13 @@ CDocument *IlwisWinApp::OpenDocumentFile(const String& sFO, ParmList& pm)
 	if ( fCollection ) 
 	{
 		FileName fnFO(sFO);
-		Directory dirOut(fnFO.sPath());
 		FileName fnIOC(fnFO);
 		if ( pm.fExist("output")) {
-			fnIOC = FileName(pm.sGet("output"));	
+			fnIOC = FileName(pm.sGet("output"));
+		} else {
+			Directory dirOut(fnFO.sPath());
+			fnIOC.Dir(dirOut.sFullPath());
 		}
-		fnIOC.Dir(dirOut.sFullPath());
 		if (!pm.fExist("refresh"))
 			fnIOC = FileName::fnUnique(FileName(fnIOC.sFullPathQuoted(), ".ioc"));
 
