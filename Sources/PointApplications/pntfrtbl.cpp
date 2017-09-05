@@ -147,7 +147,7 @@ PointMapFromTable* PointMapFromTable::create(const FileName& fn, PointMapPtr& p,
   if (2 == iParms || (4 == iParms && !colCoord.fValid())) {
     if (0 != tbl->dm()->pdnone())
       sPrefix = "pnt";
-    else if (0 != tbl->dm()->pdid())
+	else if (0 != tbl->dm()->pdsrt())
       dvrs = tbl->dm();
     else
       TableNeedsIdentifierDomainError(fnTbl);
@@ -341,7 +341,7 @@ void PointMapFromTable::InitFreeze()
 long PointMapFromTable::iRaw(long iRec) const
 {
   if (colAttrib.fValid())
-    return colAttrib->iRaw(iRec + 1) + 1;
+    return colAttrib->iRaw(iRec + 1);
   else
     return iRec + 1;
 }

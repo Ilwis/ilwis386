@@ -348,7 +348,7 @@ int FormPointMapFromTable::TblCallBack(Event*)
 
 		Domain dm;
 		ObjectInfo::ReadElement("Table", "Domain", fnTbl, dm);
-		if (0 != dm->pdid()) {
+		if (0 != dm->pdsrt()) {
 			rg->Show();
 			rgDmNone->Hide();
 		}
