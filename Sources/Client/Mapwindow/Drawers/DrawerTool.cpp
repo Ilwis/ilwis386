@@ -238,12 +238,20 @@ void DrawerTool::setActiveMode(bool yesno) {
 	if ( !yesno) {
 		isConfigured = false; // the configuration becomes invalid at a false
 		tree->DeleteAllItems(htiNode);
+		resetChildHtiNodes(tools);
 		htiNode = 0;
 	} else {
 		if ( parentTool) {
 			HTREEITEM parentNode = getParentTool()->getTreeItem();
 			configure(parentNode);
 		}
+	}
+}
+
+void DrawerTool::resetChildHtiNodes(DrawerTools & tools) {
+	for(int i = 0; i < tools.size(); ++i) {
+		resetChildHtiNodes(tools[i]->tools);
+		tools[i]->htiNode = 0;
 	}
 }
 

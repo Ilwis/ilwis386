@@ -57,6 +57,7 @@ protected:
 	HTREEITEM findTreeItemByName(HTREEITEM parent, const String& name) const;
 	//virtual void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const {}
 	virtual HTREEITEM make3D(bool yeno) {return 0;}
+	void resetChildHtiNodes(DrawerTools & tools);
 
 	NewDrawer *drawer;
 	LayerTreeView *tree;
