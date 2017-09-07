@@ -120,6 +120,15 @@ fontScale(1)
 void AnnotationLegendDrawer::setOrientation(bool yesno) {
 	vertical = yesno;
 	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
 	if (vertical) {
 		if ( !cbBox.fValid() ) {
 			cbBox.MinX() = cb.MinX() + cb.width()/ 50;
