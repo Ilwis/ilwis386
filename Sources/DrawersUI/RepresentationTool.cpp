@@ -64,10 +64,10 @@ HTREEITEM RepresentationTool::configure( HTREEITEM parentItem){
 	item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&RepresentationTool::displayOptionSubRpr);
 	ColorTool *ctool = (ColorTool *)parentTool;
 	item->setCheckAction(ctool,ctool->getColorCheck(), (DTSetCheckFunc)&ColorTool::setcheckRpr);
-	HTREEITEM rprItem = insertItem("Representation", ".rpr", item, -1);
-	DrawerTool::configure(rprItem);
+	htiNode = insertItem("Representation", ".rpr", item, -1);
+	DrawerTool::configure(htiNode);
 	
-	return rprItem;
+	return htiNode;
 }
 
 bool RepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
