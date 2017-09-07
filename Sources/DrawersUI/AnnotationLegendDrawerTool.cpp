@@ -23,6 +23,7 @@
 #include "Drawers\LayerDrawer.h"
 #include "Drawers\AnnotationDrawers.h"
 #include "DrawersUI\AnnotationLegendDrawerTool.h"
+#include "DrawersUI\AnnotationDrawerTool.h"
 
 using namespace ILWIS;
 
@@ -48,19 +49,19 @@ AnnotationLegendDrawerTool::AnnotationLegendDrawerTool(ZoomableView* zv, LayerTr
 }
 
 AnnotationLegendDrawerTool::~AnnotationLegendDrawerTool() {
-	clear();
 }
 
 void AnnotationLegendDrawerTool::clear() {
 	ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
-	if ( annotations && legend)
+	if ( annotations && legend) {
 		annotations->removeDrawer(legend->getId());
-
+		legend = 0;
+	}
 }
 
 bool AnnotationLegendDrawerTool::isToolUseableFor(ILWIS::DrawerTool *drw) { 
 
-	return false;
+	return dynamic_cast<AnnotationDrawerTool *>(drw) != 0;
 }
 
 HTREEITEM AnnotationLegendDrawerTool::configure( HTREEITEM parentItem) {
@@ -117,10 +118,8 @@ void AnnotationLegendDrawerTool::makeActive(void *v, HTREEITEM ) {
 	else {
 		if ( act) {
 			legend = dynamic_cast<AnnotationLegendDrawer *>(findAnnotation());
-			if ( legend) {
-
+			if ( legend)
 				return;
-			}
 
 			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
 			LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(drawer);
@@ -158,6 +157,15 @@ LegendPosition::LegendPosition(CWnd *wPar, AnnotationLegendDrawer *dr) :
 {
 	orientation = dr->getOrientation() ? 1 : 0;
 	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoom();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	if (cbMap.MinX() > cbZoom.MinX())
+		cbZoom.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cbZoom.MaxX())
+		cbZoom.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cbZoom.MinY())
+		cbZoom.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cbZoom.MaxY())
+		cbZoom.MaxY() = cbMap.MaxY();
 	CoordBounds cbBox = dr->getBox();
 	cols = dr->noOfColumns();
 	x = 100.0 * ( cbBox.MinX() - cbZoom.MinX() ) / cbZoom.width();
@@ -207,6 +215,15 @@ int LegendPosition::setPosition(Event *ev) {
 	}
 	CoordBounds cbBox = ld->getBox();
 	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoom();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	if (cbMap.MinX() > cbZoom.MinX())
+		cbZoom.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cbZoom.MaxX())
+		cbZoom.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cbZoom.MinY())
+		cbZoom.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cbZoom.MaxY())
+		cbZoom.MaxY() = cbMap.MaxY();
 	double newx = cbZoom.width() * x / 100.0 + cbZoom.MinX();
 	double newy = cbZoom.height() * y / 100.0 + cbZoom.MinY();
 	double w = cbBox.width();

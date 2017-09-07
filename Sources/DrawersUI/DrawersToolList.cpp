@@ -154,6 +154,7 @@ DrawerToolInfoVector *createDrawerTool() {
 	infos->push_back(new DrawerToolInfo("FeatureTextTool",createFeatureTextTool));
 	infos->push_back(new DrawerToolInfo("WhiteSpaceTool",createwhitespacetool));
 	infos->push_back(new DrawerToolInfo("BooleanColorsTool",createBooleanColorsTool));
+	infos->push_back(new DrawerToolInfo("AnnotationLegendDrawerTool",createAnnotationLegendDrawerTool));
 
 	return infos;
 }
