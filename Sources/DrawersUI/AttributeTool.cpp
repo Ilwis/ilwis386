@@ -20,6 +20,7 @@
 #include "Engine\Drawers\DrawerContext.h"
 #include "DrawersUI\AttributeTool.h"
 #include "DrawersUI\StretchTool.h"
+#include "DrawersUI\AnnotationDrawerTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
 #include "Drawers\SetDrawer.h"
 
@@ -94,6 +95,7 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 	DrawerTool *parentTool = getParentTool();
 	DrawerTool *colorTool = parentTool->findChildToolByType("ColorTool");
 	DrawerTool *stretchTool = parentTool->findChildToolByType("StretchTool");
+	DrawerTool *annotationDrawerTool = parentTool->findChildToolByType("AnnotationDrawerTool");
 	PreparationParameters pp(NewDrawer::ptRENDER, 0,10);
 	ComplexDrawer * cdrw = (ComplexDrawer*)drawer;
 	Column attColumn;
@@ -146,6 +148,7 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 		}
 	}
 	if ( hit != lasthit) {
+		// refresh stretchTool
 		if (stretchTool) {
 			stretchTool->removeTool(0); // all
 			stretchTool->clear();
@@ -159,6 +162,33 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 			stretchTool->configure(item);
 		} else if (stretchTool)
 			parentTool->removeTool(stretchTool); // will delete stretchTool
+		// refresh annotationDrawerTool
+		if (annotationDrawerTool) {
+			annotationDrawerTool->clear(); // removes old legend drawer
+			if (annotationDrawerTool->isActive()) {
+				annotationDrawerTool->setActiveMode(false); // removes the item from the tree (it is re-added later on, if the selected attribute is class or value)
+				annotationDrawerTool->setActive(true); // remembers the active state
+			}
+		}
+		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(drawer);
+		SetDrawer *sdr = dynamic_cast<SetDrawer *>(drawer);
+		Domain dm;
+		if ( ldr) {
+			SpatialDataDrawer *spdr = (SpatialDataDrawer *)(drawer->getParentDrawer());
+			dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() : spdr->getBaseMap()->dm();
+		} else if ( sdr) {
+			dm = sdr->useAttributeTable() ? sdr->getAtttributeColumn()->dm() :   sdr->getBaseMap()->dm();
+		}
+		if (dm->pdv() || dm->pdc()) {
+			if (!annotationDrawerTool)
+				annotationDrawerTool = new AnnotationDrawerTool(mpvGetView(),tree,drawer);
+			parentTool->addTool(annotationDrawerTool);
+			if (annotationDrawerTool->isActive()) // in the case of annotationDrawerTool isActive() and isActiveMode() would be the same (isActiveMode() is a function that does not exist, it would be symmetric to setActiveMode(bool)).
+				annotationDrawerTool->setActiveMode(true); // add items to the tree, and force refresh of the legend drawer
+		} else if (annotationDrawerTool) {
+			annotationDrawerTool->setActive(false);
+			parentTool->removeTool(annotationDrawerTool); // will delete annotationDrawerTool
+		}
 		lasthit = hit;
 	}
 
