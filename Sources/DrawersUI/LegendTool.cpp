@@ -51,7 +51,7 @@ LegendTool::~LegendTool(){
 
 HTREEITEM LegendTool::configure( HTREEITEM parentItem){
 
-	String sName = TR("Legend");
+	String sName = TR("Representation Legend");
 	int iImgLeg = IlwWinApp()->iImage("legend");
 	//htiNode = tree->GetTreeCtrl().InsertItem(sName.c_str(), iImgLeg, iImgLeg, parentItem);
 
@@ -200,7 +200,7 @@ bool LegendTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 }
 
 String LegendTool::getMenuString() const {
-	return TR("Legend");
+	return TR("Representation Legend");
 }
 
 //---------------------------------------------------
