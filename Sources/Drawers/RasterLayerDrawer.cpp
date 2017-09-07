@@ -657,6 +657,10 @@ String RasterLayerDrawer::getInfo(const Coord& c) const {
 	return s;
 }
 
+void *RasterLayerDrawer::getDataSource() const{
+	return (void *)&rastermap;
+}
+
 
 
 

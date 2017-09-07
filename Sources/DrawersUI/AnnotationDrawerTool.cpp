@@ -35,13 +35,18 @@ AnnotationDrawerTool::~AnnotationDrawerTool() {
 }
 
 void AnnotationDrawerTool::clear() {
+	DrawerTool::clear();
 }
 
 bool AnnotationDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tool) { 
 
 	LayerDrawerTool *layerDrawerTool = dynamic_cast<LayerDrawerTool *>(tool);
 	SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
+	
 	if (!layerDrawerTool && !setDrawerTool)
+		return false;
+	BaseMap *bmp = (BaseMap *)tool->getDrawer()->getDataSource();
+	if ( (*bmp)->dm()->pdc() == 0 && (*bmp)->dm()->pdv() == 0)
 		return false;
 	parentTool = tool;
 	return true;
@@ -49,17 +54,7 @@ bool AnnotationDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 
 HTREEITEM AnnotationDrawerTool::configure( HTREEITEM parentItem) {
 	htiNode = insertItem(parentItem, TR("Annotations"),"Annotation");
-	DrawerTool *dt = new AnnotationLegendDrawerTool(mpv,tree,drawer);
-	if ( dt) {
-		addTool(dt);
-	}
-	//dt = new AnnotationBorderTool(mpv,tree,drawer);
-	//if ( dt) {
-	//	addTool(dt);
-	//}
 	DrawerTool::configure(htiNode);
-
-
 	return htiNode;
 }
 
