@@ -273,7 +273,7 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	if ( n * rStep < totDist - rStep)
 		n++;
 
-	if ( fldGraph->tool->sources[0]->getMap()->cs()->pcsProjection()) {
+	if ( (track.size() > 0) && fldGraph->tool->sources[0]->getMap(track[0].crd)->cs()->pcsProjection()) {
 		for(int i = 0; i < n; ++i) {
 			dc->MoveTo(rx,rct.bottom);
 			dc->LineTo(rx,rct.bottom + 3);
