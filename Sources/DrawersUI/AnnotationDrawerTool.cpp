@@ -45,9 +45,19 @@ bool AnnotationDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	
 	if (!layerDrawerTool && !setDrawerTool)
 		return false;
-	BaseMap *bmp = (BaseMap *)tool->getDrawer()->getDataSource();
-	if ( (*bmp)->dm()->pdc() == 0 && (*bmp)->dm()->pdv() == 0)
-		return false;
+	ComplexDrawer * cdrw = (ComplexDrawer*)drawer;
+	if (cdrw->isSet()) {
+		if (cdrw->getDrawerCount() > 0) {
+			BaseMap *bmp = (BaseMap *)(cdrw->getDrawer(0)->getDataSource());
+			if ( (*bmp)->dm()->pdc() == 0 && (*bmp)->dm()->pdv() == 0)
+				return false;
+		} else
+			return false; // empty maplist/objectcollection: no legend needed
+	} else {
+		BaseMap *bmp = (BaseMap *)tool->getDrawer()->getDataSource();
+		if ( (*bmp)->dm()->pdc() == 0 && (*bmp)->dm()->pdv() == 0)
+			return false;
+	}
 	parentTool = tool;
 	return true;
 }
