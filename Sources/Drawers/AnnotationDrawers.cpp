@@ -458,7 +458,9 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 
 	}
 
-	//}
+	if ( pp->type & NewDrawer::ptOFFSCREENSTART || pp->type & NewDrawer::ptOFFSCREENEND) {
+		texts->prepare(pp);
+	}
 }
 
 bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
@@ -473,7 +475,7 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 
 	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBox.width(), cbBox.height()));
 	AnnotationLegendDrawer::draw(drawLoop, cbInner);
-	drawPreDrawers(drawLoop, cbInner);
+	drawPreDrawers(drawLoop, cbArea);
 	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block
 		if (is3D) // colored legend elements at level 1
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
