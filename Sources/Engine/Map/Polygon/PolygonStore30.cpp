@@ -68,28 +68,31 @@ bool PolygonMapStoreFormat30::getRings(long startIndex, const Table& tblTopology
 		//long iFwl = colFwl->iRaw(abs(index));
 		//long iBwl = colBwl->iRaw(abs(index));
 		//debug.push_back(String("(%d 2.10%f,%2.10f) (%2.10f,%2.10f)  [%d/%d]",abs(index),line->front().x,line->front().y,line->back().x,line->back().y,iFwl,iBwl));
-		if( seq->size() == 0 || seq->back() == line->front()){
-			seq->add(line,false,true);
+		if (line->size() > 0) {
+			if( seq->size() == 0 || seq->back() == line->front()){
+				seq->add(line,false,true);
+				delete line;
+			} else if ( seq->back() == line->back()) {
+				seq->add(line, false, false);
+				delete line;
+			} else if ( seq->front() == line->front()) {
+				CoordinateSequence::reverse(line);
+				line->add(seq,false,true);
+				delete seq;
+				seq = line;
+			} else if ( seq->front() == line->back()) {
+				line->add(seq,false,true);
+				delete seq;
+				seq = line;
+			}
+		
+			if (seq->size() > 3 && seq->front() == seq->back()) {
+				LinearRing *ring = new LinearRing(seq, new GeometryFactory());
+				rings.push_back(ring);			
+				seq = new CoordinateArraySequence();
+			}
+		} else
 			delete line;
-		} else if ( seq->back() == line->back()) {
-			seq->add(line, false, false);
-			delete line;
-		} else if ( seq->front() == line->front()) {
-			CoordinateSequence::reverse(line);
-			line->add(seq,false,true);
-			delete seq;
-			seq = line;
-		} else if ( seq->front() == line->back()) {
-			line->add(seq,false,true);
-			delete seq;
-			seq = line;
-		}
-	
-		if ( seq->front() == seq->back() && seq->size() > 3) {
-			LinearRing *ring = new LinearRing(seq, new GeometryFactory());
-			rings.push_back(ring);			
-			seq = new CoordinateArraySequence();
-		}
 		int oldIndex = index;
 		index = forward ?  colFwl->iRaw(abs(index)): colBwl->iRaw(abs(index));
 		if ( oldIndex == index && index != startIndex) // this would indicate infintite loop. corrupt data
@@ -111,10 +114,12 @@ bool PolygonMapStoreFormat30::isForwardStartDirection(const Column& colFwl,const
 	CoordinateSequence *lineStart = colCrdBuf->iGetValue(abs(index));
 	CoordinateSequence *lineFWL = colCrdBuf->iGetValue(abs(iFwl));
 	bool forward = false;
-	if ( iFwl > 0)
-		forward =  lineStart->back() == lineFWL->front();
-	else 
-		forward = lineStart->back() == lineFWL->back();
+	if (lineStart->size() > 0 && lineFWL->size() > 0) {
+		if ( iFwl > 0)
+			forward =  lineStart->back() == lineFWL->front();
+		else 
+			forward = lineStart->back() == lineFWL->back();
+	}
 	delete lineFWL;
 	delete lineStart;
 
