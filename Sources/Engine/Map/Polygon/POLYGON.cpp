@@ -89,6 +89,17 @@ void ILWIS::Polygon::addHole(LinearRing * ring) {
 	holes->push_back(ring);
 }
 
+void ILWIS::Polygon::addBoundarySimple(LinearRing *ring) {
+	if ( shell != NULL)
+		delete shell;
+	shell = ring;
+}
+
+void ILWIS::Polygon::computeEnvelope() {
+	envelope = computeEnvelopeInternal();
+	if (spatialIndex)
+		spatialIndex->insert(this);
+}
 
 Coord ILWIS::Polygon::centroid() const {
 	Coord c;

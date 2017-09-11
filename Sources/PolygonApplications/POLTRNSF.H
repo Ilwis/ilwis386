@@ -65,6 +65,7 @@ public:
 private:
 	void Densify(const double rDistance, const LineString *line, CoordBuf& crdBufOut) const;
 	ILWIS::Polygon *DensifyPolygon(const double rDistance, ILWIS::Polygon *pol);
+	ILWIS::Polygon *CopyPolygon(ILWIS::Polygon *pol);
 	PolygonMap pmp;
 	CoordSystem csy;
 	double rDistance;

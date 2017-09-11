@@ -215,6 +215,7 @@ bool PolygonMapTransform::fFreezing()
 	trq.SetText(String(TR("Transforming segments for '%S'").c_str(), sName(true, fnObj.sPath())));
 	Coord crd;
 	CoordSystem csOld = pmp->cs();
+	CoordinateTransformer filter(csOld,csy);
 	for (long i = 0; i < iPol; ++i) {
 		if (trq.fUpdate(i, iPol))
 			return false;
@@ -227,25 +228,36 @@ bool PolygonMapTransform::fFreezing()
 		if (fDensify) 
 			newPol = DensifyPolygon(rDistance, pol);
 		else 
-			newPol = (ILWIS::Polygon *)pol->clone();
-
-		CoordinateTransformer filter(csOld,csy);
-		newPol->apply_rw(&filter);
-		pms->addPolygon(newPol);
+			newPol = CopyPolygon(pol);
+		newPol->apply_rw(&filter); // first apply the transformation
+		newPol->computeEnvelope(); // then compute the envelopes and add to spatial index
 	}
 
 	trq.fUpdate(iPol, iPol);
 	return true;
 }
 
-  
+ILWIS::Polygon *PolygonMapTransform::CopyPolygon(ILWIS::Polygon *pol) {
+	
+	ILWIS::Polygon *polNew = CPOLYGON(pms->newFeature());
+	polNew->addBoundarySimple(new LinearRing(pol->getExteriorRing()->getCoordinates(), new GeometryFactory()));
+	for(int i=0; i < pol->getNumInteriorRing(); ++i) {
+		polNew->addHole(new LinearRing(pol->getInteriorRingN(i)->getCoordinates(), new GeometryFactory()));
+	}
+	if (dvrs().fValues()) {
+		polNew->PutVal(pol->rValue());
+	}else {
+		polNew->PutVal(pol->iValue());
+	}
+	return polNew;	
+}
 
 ILWIS::Polygon *PolygonMapTransform::DensifyPolygon(const double rDistance, ILWIS::Polygon *pol) {
 	
 	ILWIS::Polygon *polNew = CPOLYGON(pms->newFeature());
 	CoordBuf cbOut;
 	Densify(rDistance,pol->getExteriorRing(), cbOut);
-	polNew->addBoundary(new LinearRing(cbOut.clone(), new GeometryFactory()));
+	polNew->addBoundarySimple(new LinearRing(cbOut.clone(), new GeometryFactory()));
 	for(int i=0; i < pol->getNumInteriorRing(); ++i) {
 		CoordBuf cbHole;
 		Densify(rDistance, pol->getInteriorRingN(i), cbHole);
@@ -256,9 +268,9 @@ ILWIS::Polygon *PolygonMapTransform::DensifyPolygon(const double rDistance, ILWI
 	}else {
 		polNew->PutVal(pol->iValue());
 	}
-	return polNew;
-	
+	return polNew;	
 }
+
 void PolygonMapTransform::Densify(const double rDistance, const LineString *line, CoordBuf& crdBufOut) const
 {
 	long iCrdIn, iNrInCrds;                

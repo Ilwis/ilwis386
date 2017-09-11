@@ -59,6 +59,8 @@ public:
 	Polygon(QuadTree *tree, geos::geom::Polygon *pol);
 	void				addBoundary(LinearRing *ring);
 	void				addHole(LinearRing * ring);
+	void				addBoundarySimple(LinearRing *ring); // split the process of addBoundary() into two functions: addBoundarySimple() and computeEnvelope(), for correct behavior in PolygonMapTransform().
+	void                computeEnvelope();
 	//CoordBounds			cbBounds() const; // bounding rectangle
 	Coord				crdGravity() const; // center of gravity
 	bool				fValid() const;
