@@ -49,7 +49,7 @@ bool PolygonSetTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 		SetDrawer *drw = (SetDrawer *)(setdrw->getDrawer());
 		for(int i=0; i < drw->getDrawerCount(); ++i) {
 			if ( drw->getDrawer(i)->getType() == "PolygonLayerDrawer") {
-				ndrw = drawer = drw->getDrawer(i);
+				ndrw = drw->getDrawer(i);
 				break;
 			}
 		}
