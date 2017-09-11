@@ -55,6 +55,7 @@ namespace ILWIS {
 		MapList getMapList() const;
 		void setDrawMethod(DrawMethod method) ;
 		String getInfo(const Coord& c) const;
+		virtual void *getDataSource() const;
 		
 	protected:
 		String store(const FileName& fnView, const String& parentSection) const;
@@ -63,8 +64,5 @@ namespace ILWIS {
 		virtual void setData() const;
 		virtual GeoRef gr() const;
 		MapList mpl;
-
-
-
 	};
 }

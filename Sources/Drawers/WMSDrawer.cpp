@@ -371,3 +371,7 @@ void WMSDrawer::DisplayTexture3D(CoordBounds & cb) const
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 }
+
+void *WMSDrawer::getDataSource() const{
+	return 0; // no annotation-legend for colorcomposite
+}

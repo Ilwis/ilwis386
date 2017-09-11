@@ -202,6 +202,9 @@ void ColorCompositeDrawer::load(const FileName& fnView, const String& parentSect
 	}
 }
 
+void *ColorCompositeDrawer::getDataSource() const{
+	return 0; // no annotation-legend for colorcomposite
+}
 
 
 

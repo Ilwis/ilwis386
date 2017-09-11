@@ -21,6 +21,7 @@ namespace ILWIS {
 		virtual void setData() const;
 		virtual void init() const;
 		virtual void setup();
+		virtual void *getDataSource() const;
 		WMSData * wmsData;
 	};
 }
