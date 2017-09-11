@@ -55,36 +55,8 @@ bool CollectionTool::isToolUseableFor(ILWIS::NewDrawer *drw) {
 HTREEITEM CollectionTool::configure( HTREEITEM parentItem) {
 	DisplayOptionTree *item = new DisplayOptionTree(tree,parentItem,drawer, this);
 	htiNode = insertItem(parentItem, TR("Display Tools"), ".mpv",(LayerTreeItem *)item);
-	ObjectCollection *oc = (ObjectCollection *)drawer->getDataSource();
-	type = IOTYPE((*oc)->fnObject(0));
-	if (!oc)
-		return parentItem;
-	if ( type == IlwisObject::iotPOINTMAP) {
-		createNode(htiNode,"PointSymbolizationTool");
-	}
-	if ( type == IlwisObject::iotSEGMENTMAP) {
-		createNode(htiNode,"LineSetTool");
-	}
-	if ( type == IlwisObject::iotPOLYGONMAP) {
-		createNode(htiNode,"PolygonSetTool");
-	}
-	if ( type == IlwisObject::iotRASMAP) {
-		createNode(htiNode, "StretchTool");
-		createNode(htiNode, "InteractiveRepresentationTool");
-	}
-	createNode(htiNode, "ColorTool");
-	createNode(htiNode, "3DTool");
-
+	DrawerTool::configure(htiNode);
 	return parentItem;
-}
-
-void CollectionTool::createNode(HTREEITEM hti, const String& name) {
-	DrawerTool *dt = DrawerTool::createTool(name, getDocument()->mpvGetView(),tree,drawer);
-	if (dt->isToolUseableFor(this)) {
-		addTool(dt);
-		dt->configure(hti);
-	} else
-		delete dt;
 }
 
 void CollectionTool::setcheckLayer(void *w, HTREEITEM item) {

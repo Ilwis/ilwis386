@@ -13,7 +13,6 @@ namespace ILWIS {
 		String getMenuString() const;
 		void clear();
 	protected:
-		void createNode(HTREEITEM hti, const String& name);
 		void setcheckLayer(void *w, HTREEITEM item);
 		IlwisObject::iotIlwisObjectType type;
 	};
