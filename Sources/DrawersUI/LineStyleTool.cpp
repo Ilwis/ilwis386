@@ -146,22 +146,27 @@ void  LineStyleForm::apply() {
 	if ( fc)
 		fc->StoreData();
 	PreparationParameters pp(NewDrawer::ptRENDER);
-	if ( line != 0) {
+	if ( line == 0) {
 		SetDrawer *setDrw = dynamic_cast<SetDrawer *>(drw);
 		if ( setDrw) {
 			for(int i = 0; i < setDrw->getDrawerCount(); ++i) {
 				ComplexDrawer *ndr = (ComplexDrawer *)setDrw->getDrawer(i, (int)drawerType);
 				if ( !ndr)
 					continue;
+				pp.props.lineType = style;
 				LineProperties *oldprops = (LineProperties *)ndr->getProperties();
 				oldprops->drawColor = lprops->drawColor;
 				oldprops->linestyle = LineDrawer::openGLLineStyle(style);
 				oldprops->thickness = lprops->thickness;
+				LayerDrawer *lyerdrw = dynamic_cast<LayerDrawer *>(ndr);
+				if (lyerdrw)
+					lyerdrw->setUseRpr(false);
 				ndr->prepareChildDrawers(&pp);
 			}
 		} else {
 			if ( !lprops->ignoreColor)
 				fc->StoreData();
+			pp.props.lineType = style;
 			lprops->linestyle = LineDrawer::openGLLineStyle(style);
 			LayerDrawer *lyerdrw = dynamic_cast<LayerDrawer *>(drw);
 			if (lyerdrw)
@@ -169,6 +174,7 @@ void  LineStyleForm::apply() {
 			drw->prepareChildDrawers(&pp);
 		}
 	} else {
+		pp.props.lineType = style;
 		lprops->linestyle = LineDrawer::openGLLineStyle(style);
 		LayerDrawer *lyerdrw = dynamic_cast<LayerDrawer *>(drw);
 		if (lyerdrw)
