@@ -252,7 +252,7 @@ QuadTreeNode::getItems(const CoordBounds& bnd, std::vector<Geometry*>&  containe
 
 		if (isPartitioned)
 			for (int i = 0; i < nodes.size(); i++)
-				nodes[i]->getItems(bounds, container);
+				nodes[i]->getItems(bnd, container);
 	}
 }
 

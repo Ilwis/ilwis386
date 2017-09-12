@@ -37,7 +37,7 @@ QuadTree::query(const Coord& crd, std::vector<Geometry*>&  container)
 void
 QuadTree::query(const CoordBounds& cb, std::vector<Geometry*>&  container)
 {
-	root->getItems(bounds, container);
+	root->getItems(cb, container);
 }
 
 void
