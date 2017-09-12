@@ -296,6 +296,8 @@ DisplayOptionsForm(dr,wPar,TR("Appearance of Legend")) , layer(lyr), fview(0),fm
 		}
 		vector<int> raws;
 		((AnnotationClassLegendDrawer *)dr)->getActiveClasses(raws);
+		for (int i = 0; i < raws.size(); ++i)
+			--raws[i]; // raw to row
 		fview->setSelectedRows(raws);
 
 	}
