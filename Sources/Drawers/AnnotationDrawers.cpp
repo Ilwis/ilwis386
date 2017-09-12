@@ -6,6 +6,7 @@
 #include "Engine\Drawers\SpatialDataDrawer.h" 
 #include "Drawers\SetDrawer.h" 
 #include "Engine\Representation\Rpr.h"
+#include "Engine\Representation\rprclass.h"
 #include "Engine\Spatialreference\gr.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Map\Raster\Map.h"
@@ -456,6 +457,40 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 			Coord(cbBox.MinX() +  (cellWidth + maxw) * columns, 
 				   cbBox.MinY() + raws.size() * cb.height() / (40 * columns)));
 
+		if ( objType == IlwisObject::iotPOLYGONMAP) {
+			SpatialDataDrawer *spdr = dataDrawer->isSet() ? static_cast<SpatialDataDrawer *>(dataDrawer) : static_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer());
+			LayerDrawer *ldr = dataDrawer->isSet() ? dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : dynamic_cast<LayerDrawer *>(dataDrawer);
+			Representation rpr = ldr->getRepresentation();
+			if ( rpr.fValid() && rpr->dm()->dmt() == dmtCLASS) {
+				hatches.clear();
+				for(int i = 0 ; i < dm->pdc()->iSize() ; ++i) {
+					long iRaw = dm->pdc()->iKey(i+1);
+					if ( iRaw == iUNDEF)
+						continue;
+					long iRaw2 = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->iRaw(iRaw) : iRaw;
+					double alpha = round(255.0 * rpr->prc()->rItemAlpha(iRaw2));
+					String hatchName = rpr->prc()->sHatch(iRaw);
+					if ( hatchName != sUNDEF) {
+						const SVGLoader *loader = NewDrawer::getSvgLoader();
+						SVGLoader::const_iterator cur = loader->find(hatchName);
+						if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT)
+							return;
+						const byte * hatch = (*cur).second->getHatch();
+						const byte * hatchInverse = (*cur).second->getHatchInverse();
+						Color backgroundColor = rpr->prc()->clrSecondRaw(iRaw2);
+						long transparent = Color(-2); // in the old days this was the transparent value
+						if (backgroundColor.iVal() == transparent) 
+							backgroundColor = colorUNDEF;
+						AnnotationClassAttributes attribs;
+						attribs.alpha = alpha;
+						attribs.hatch = hatch;
+						attribs.hatchInverse = hatchInverse;
+						attribs.backgroundColor = backgroundColor;
+						hatches[iRaw] = attribs;
+					}
+				}
+			}
+		}
 	}
 
 	if ( pp->type & NewDrawer::ptOFFSCREENSTART || pp->type & NewDrawer::ptOFFSCREENEND) {
@@ -476,7 +511,7 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBox.width(), cbBox.height()));
 	AnnotationLegendDrawer::draw(drawLoop, cbInner);
 	drawPreDrawers(drawLoop, cbArea);
-	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block
+	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block; if a legend overlaps with layers, it should be drawn on-top, even if it contains transparent items
 		if (is3D) // colored legend elements at level 1
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
 		double yy = cbBox.height() / (raws.size() * 1.1);
@@ -486,26 +521,76 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 		double shifty = columns * cbBox.height() / raws.size();
 		int split = raws.size() / columns;
 		for(int i=raws.size() - 1 ; i>=0; --i) {
-			glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
-			if ( objType == IlwisObject::iotRASMAP || objType == IlwisObject::iotPOLYGONMAP) {
+			if (objType == IlwisObject::iotRASMAP) {
+				glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
 				glBegin(GL_POLYGON);
 				glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
 				glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
 				glVertex3d(cbCell.MaxX(), cbCell.MaxY(), 0);
 				glVertex3d(cbCell.MaxX(), cbCell.MinY(), 0);
+				glEnd();
+			} else if (objType == IlwisObject::iotPOLYGONMAP) {
+				std::map<int, AnnotationClassAttributes>::const_iterator iter = hatches.find(raws[i].raw);
+				if ( iter != hatches.end()){
+					AnnotationClassAttributes attrib = (*iter).second;
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glEnable(GL_BLEND);
+					glColor3d(1,1,1);
+					glBegin(GL_POLYGON);
+					glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
+					glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
+					glVertex3d(cbCell.MaxX(), cbCell.MaxY(), 0);
+					glVertex3d(cbCell.MaxX(), cbCell.MinY(), 0);
+					glEnd();
+					if (is3D) // hatched legend elements at level 1.5
+						glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1.5) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1.5) * 0.0005);
+					glEnable(GL_POLYGON_STIPPLE);
+					glPolygonStipple(attrib.hatch);
+					glColor4d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP(), attrib.alpha * attrib.alpha / 65025.0);
+					glBegin(GL_POLYGON);
+					glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
+					glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
+					glVertex3d(cbCell.MaxX(), cbCell.MaxY(), 0);
+					glVertex3d(cbCell.MaxX(), cbCell.MinY(), 0);
+					glEnd();
+					glPolygonStipple(attrib.hatchInverse);
+					Color backgroundColor = attrib.backgroundColor;
+					glColor4f(backgroundColor.redP(), backgroundColor.greenP(), backgroundColor.blueP(), backgroundColor.alphaP() * attrib.alpha / 255.0);
+					glBegin(GL_POLYGON);
+					glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
+					glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
+					glVertex3d(cbCell.MaxX(), cbCell.MaxY(), 0);
+					glVertex3d(cbCell.MaxX(), cbCell.MinY(), 0);
+					glEnd();
+					glDisable(GL_POLYGON_STIPPLE);
+					if (is3D) // reset to level 1
+						glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
+					glDisable(GL_BLEND);
+				} else {
+					glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
+					glBegin(GL_POLYGON);
+					glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
+					glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
+					glVertex3d(cbCell.MaxX(), cbCell.MaxY(), 0);
+					glVertex3d(cbCell.MaxX(), cbCell.MinY(), 0);
+					glEnd();
+				}
 			} else if ( objType == IlwisObject::iotSEGMENTMAP) {
+				glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
 				glBegin(GL_LINES);
 				glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
 				glVertex3d(cbCell.MaxX(), cbCell.MaxY(), 0);
+				glEnd();
 			} else {
+				glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
 				glBegin(GL_POLYGON);
 				double delta = cbCell.width() / 4;
 				glVertex3d(cbCell.MinX() + delta, cbCell.MinY() + delta, 0);
 				glVertex3d(cbCell.MinX() + delta, cbCell.MaxY() - delta, 0);
 				glVertex3d(cbCell.MaxX() - delta, cbCell.MaxY() - delta, 0);
 				glVertex3d(cbCell.MaxX() - delta, cbCell.MinY() + delta, 0);
+				glEnd();
 			}
-			glEnd();
 			TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
 			txtdr->setCoord(Coord(cbCell.MinX() + cellWidth * 1.1, cbCell.MinY() + cbCell.height() / 3.0,0));
 			cbCell.MinY() += shifty;
@@ -1254,7 +1339,7 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 	AnnotationDrawer::draw(drawLoop, cbArea);
 
 	bool is3D = getRootDrawer()->is3D(); 
-	glColor3d(0,0, 0);
+	glColor3d(0,0,0);
 	double start = 0;
 	double totSize = ticks * size;
 

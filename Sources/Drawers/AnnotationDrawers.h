@@ -91,6 +91,14 @@ struct RawInfo {
 	Color clr;
 };
 
+class AnnotationClassAttributes {
+public:
+	double alpha;
+	const byte * hatch;
+	const byte * hatchInverse;
+	Color backgroundColor;
+};
+
 class _export AnnotationClassLegendDrawer : public AnnotationLegendDrawer
 {
 public:
@@ -103,9 +111,9 @@ protected:
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
 	vector<RawInfo> raws;
-	double maxw ;
+	double maxw;
 	double cellWidth;
-
+	std::map<int, AnnotationClassAttributes> hatches;
 };
 
 class _export AnnotationValueLegendDrawer : public AnnotationLegendDrawer{
