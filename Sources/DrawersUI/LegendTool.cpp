@@ -292,6 +292,13 @@ DisplayOptionsForm(dr,wPar,TR("Polygon Representation")),rcl(rc), iRaw(raw)
   new FieldDataType(root,TR("Hatching"),&hatching,".ivh",false,0,FileName(base),false);
   FieldColor *fc = new FieldColor(root,"Hatching Background Color",&col2, true);
   fc->SetBevelStyle(FormEntry::bsLOWERED);
+  if (fc->childlist().size() >= 4) {
+	FieldIntSliderEx * fcSlider = dynamic_cast<FieldIntSliderEx*>(fc->childlist()[3]);
+	if (fcSlider) {
+		fcSlider->SetCallBack((NotifyProc)&PolRprForm::setTransparency);
+		fcSlider->setContinuous(true);
+	}
+  }
 
   SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_polygon.htm");
   create();
