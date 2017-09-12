@@ -406,7 +406,7 @@ void TableDelimited::Scan(FileName fnObj, int &iSkipLines, TableExternalFormat::
 		ClmInfo& ci = columnInfo[i];
 		ci.iNrRecs = iRecs;
 		if (iSkipLines > 0)
-			ci.sColumnName = header[i];
+			ci.sColumnName = header[i].sTrimSpaces();
 		if (fUseColInfo && i < scanInfo.size())
 			ci.Strings = scanInfo[i].Strings;
 		ci.vcStrings.resize(ci.Strings.size());
@@ -422,6 +422,8 @@ void TableDelimited::ScanLine(FieldValues& sFields, vector<FldInfo> &scanInfo, b
 	for(FieldValues::iterator cur = sFields.begin(); cur != sFields.end(); ++cur)
 	{
 		String sField = *cur;
+		if (sField.length() == 0 || sField == sUNDEF)
+			continue; // ignore this in the "Domain" decision
 		double rV = sField.rVal();
 		FldInfo& fi = scanInfo[iField];
 		if ( rV != rUNDEF)
