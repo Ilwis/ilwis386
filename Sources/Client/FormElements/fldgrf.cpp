@@ -191,6 +191,10 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 		r /= 800;
 		rPixSize = rRound(r);
 		rPixSizeDMS = rRoundDMS(r);
+		if (fFromLatLon) {
+			llMin = LatLon(crdMin.y, crdMin.x);
+			llMax = LatLon(crdMax.y, crdMax.x);
+		}
 	}
 	ValueRange vrrPixSize(0.001, 1e6, 0.001);
 	
