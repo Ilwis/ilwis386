@@ -40,16 +40,16 @@ namespace ILWIS {
 		void setCoordBoundsMap(const CoordBounds& cb);
 		void setZoom(const CRect& rct);
 		void setViewPort(const RowCol& rc);
-		Coord screenToOpenGL(const RowCol& rc);
-		Coord screenToWorld(const RowCol& rc);
-		RowCol OpenGLToScreen(const Coord& crd);
-		RowCol WorldToScreen(const Coord& crd);
+		Coord screenToOpenGL(const RowCol& rc); // rc is a screen position; it will be converted to the RootDrawer's grf/cs for OpenGL use
+		Coord screenToWorld(const RowCol& rc); // rc is a screen position; it will be converted to the RootDrawer's cs
+		RowCol OpenGLToScreen(const Coord& crd); // crd is an OpenGL coordinate expressed in the RootDrawer's grf/cs; it will be converted to a screen position
+		RowCol WorldToScreen(const Coord& crd); // crd is a coordinate expressed in the RootDrawer's cs; it will be converted to a screen position
 		bool fConvNeeded(const CoordSystem& _cs) const;
-		Coord glConv(const CoordSystem& _cs, const Coord& _crd) const;
-		Coord glConv(const Coord& _crd) const;
+		Coord glConv(const CoordSystem& _cs, const Coord& _crd) const; // _crd is expressed in _cs (given by map); it will be converted to the RootDrawer's grf/cs for OpenGL use
+		Coord glConv(const Coord& _crd) const; // _crd is expressed in the RootDrawer's cs; it will be converted to the RootDrawer's grf/cs for OpenGL use
 		vector<Coord> glConv(const CoordSystem& _cs, const vector<Coord> & _crds) const;
 		vector<Coord> glConv(const vector<Coord> & _crds) const;
-		Coord glToWorld(const CoordSystem& _cs, const Coord& _crd) const;
+		Coord glToWorld(const CoordSystem& _cs, const Coord& _crd) const; // _crd is an OpenGL coordinate expressed in the RootDrawer's grf/cs; it will be converted to _cs (a map's)
 		Coord glToWorld(const Coord& _crd) const;
 		double getAspectRatio() const;
 		DrawerContext *getDrawerContext() { return drawercontext; }
