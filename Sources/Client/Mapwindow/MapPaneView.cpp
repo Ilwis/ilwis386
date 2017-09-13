@@ -269,6 +269,8 @@ void MapPaneView::OnScaleOneToOne()
 			}
 			if (gr.fValid()) {
 				CoordBounds cb = gr->cb();
+				if (gr->cs().fValid() && mcd->rootDrawer->fConvNeeded(gr->cs()))
+					cb = mcd->rootDrawer->getCoordinateSystem()->cbConv(gr->cs(), cb);
 				RowCol rcSize = gr->rcSize();
 				double rPixSizeX = 0;
 				double rPixSizeY = 0;
