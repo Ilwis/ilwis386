@@ -418,7 +418,7 @@ void SimpleMapPaneView::OnMouseMove(UINT nFlags, CPoint point)
 		} else {
 			String v;
 			if ( csy->pcsLatLon())
-				v =  useMetricCoords ? String("%f, %f", c.y, c.x) : csy->sValue(c); 
+				v =  useMetricCoords ? String("%f, %f", c.x, c.y) : csy->sValue(c); 
 			else
 				v = csy->sValue(c);
 			msb->ShowCoord(v);
