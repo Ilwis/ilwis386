@@ -150,9 +150,10 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 	RadioButton* rbOrthoPhoto = 0;
 	RadioButton* rbParallProj = 0;
 	RadioButton* rb3D = 0;
-	if (fOnlyCorners)
+	if (fOnlyCorners) {
 		fgCorn = new FieldGroup(root, true);
-	else {
+		fCoC = false; // because the incoming cb is "corners"
+	} else {
 		rg = new RadioGroup(root, "", &iOption);
 		rg->SetCallBack((NotifyProc)&FormCreateGeoRef::GeoRefTypeChange);
 		rbCorners = new RadioButton(rg, TR("GeoRef &Corners"));
@@ -163,9 +164,9 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 		rb3D = new RadioButton(rg, TR("GeoRef &3-D display"));
 		fgCorn = new FieldGroup(rbCorners, true);
 		fgCorn->Align(rb3D, AL_UNDER);
+		fCoC = true; // here there was no incoming "cb"; leave it "true" as this was the default for many years
 	}
-  
-	fCoC = true;
+	
 	fcsc = new FieldCoordSystemC(fgCorn, TR("&Coordinate System"), &sCoordSys);
 	fcsc->SetCallBack((NotifyProc)&FormCreateGeoRef::CSysCallBack);
   
@@ -810,7 +811,7 @@ FormCreateGeoRefRC::FormCreateGeoRefRC(CWnd* wPar, String* sGrf,
   RadioButton* rbParallProj = new RadioButton(rg, TR("GeoRef &Parallel Projective"));
 
   if (rbCorners) {
-    fCoC = true;
+    fCoC = false; // because the incoming cb is "corners"
     fgCorners = new FieldGroup(rbCorners, true);
     fgCorners->Align(rg, AL_UNDER);
     fcsc = new FieldCoordSystemC(fgCorners, TR("&Coordinate System"), &sCoordSys);
