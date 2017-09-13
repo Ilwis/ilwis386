@@ -220,6 +220,7 @@ $Header: /ILWIS 3.0/Main/ilwis.CPP 329   10-06-05 15:09 Retsios $
 #include "MainWindow\Catalog\WMSCollectionDoc.h"
 #include "Client\Mapwindow\MapPaneViewTool.h"
 #include "Client\Help\HelpSearch.h"
+#include "Client\Editors\FallbackView.h"
 #include <gdiplus.h>
 #include "Headers\Hs\Mainwind.hs"
 
@@ -809,6 +810,15 @@ void IlwisWinApp::RegisterDocTemplates()
 	AddDocTemplate(dtScriptWindow);
 
 	// GeoReferences
+	idt = new IlwisDocTemplate(
+		".grf", 
+		"GeoRefNone",
+		"ILWIS Georeferences",
+		RUNTIME_CLASS(IlwisDocument),
+		RUNTIME_CLASS(DataFormWindow),
+		RUNTIME_CLASS(FallbackView));
+	AddDocTemplate(idt); 
+
 	idt = new IlwisDocTemplate(
 		".grf", 
 		"GeoRefCorners",

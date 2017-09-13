@@ -1001,11 +1001,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\esa.ico"
+				RelativePath="..\..\Sources\Client\Resources\esa.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\esa.ico"
+				RelativePath=".\esa.ico"
 				>
 			</File>
 			<File
@@ -1137,11 +1137,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
@@ -3864,6 +3864,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Client\Editors\FallbackView.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Client\Editors\FilterDoc.cpp"
 					>
 				</File>
@@ -4969,6 +4973,10 @@
 					>
 					<File
 						RelativePath="..\..\Sources\Client\Editors\Editor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\FallbackView.h"
 						>
 					</File>
 					<File
