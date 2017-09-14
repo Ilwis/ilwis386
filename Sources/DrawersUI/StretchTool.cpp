@@ -130,7 +130,9 @@ SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeR
 	LayerDrawer::StretchMethod method = ldrw->getStretchMethod();
 	logStretch = method ==LayerDrawer::smLINEAR ? false : true;
 	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rr,rStep),true);
+	sliderLow->setContinuous(true);
 	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rr,rStep),true);
+	sliderHigh->setContinuous(true);
 	sliderHigh->Align(sliderLow, AL_UNDER);
 	cb  = new CheckBox(root,TR("Logarithmic stretching"),&logStretch);
 	cb->SetCallBack((NotifyProc)&SetStretchValueForm::logStretching);
