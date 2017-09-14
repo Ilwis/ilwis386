@@ -1143,7 +1143,7 @@ void TablePaneView::OnSelectFeaturesByColumn() {
 	if (frm.fOkClicked()) {
 		Column col = GetDocument()->table()->col(colName);
 		vector<long> raws;
-		for(int i=1; i < iRows(); ++i) {
+		for(int i=1; i <= iRows(); ++i) {
 			if (col->iValue(i) != 0)
 				raws.push_back(i);
 		}
