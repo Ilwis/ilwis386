@@ -107,8 +107,8 @@ String RootDrawer::addDrawer(NewDrawer *drw, bool overrule) {
 	return ComplexDrawer::addDrawer(drw);
 }
 
-void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool overrule){
-	if ( overrule || cbMap.fUndef()) {
+void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool extend){
+	if ( extend || cbMap.fUndef()) {
 		CoordBounds ncb = (!cs.fValid() || !_cs.fValid() || cs.fEqual(_cs) || cs->fUnknown() || _cs->fUnknown()) ? cb : cs->cbConv(_cs, cb);
 		if (fUseGeoRef) {
 			double rRow;
@@ -118,10 +118,9 @@ void RootDrawer::addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, b
 			gr->Coord2RowCol(ncb.cMax, rRow, rCol);
 			ncb.cMax = Coord(rCol, -rRow);
 		}
-		//ncb += cbMap;
 		cbMap += ncb;
 	}
-	setCoordBoundsView(cbMap, overrule);
+	setCoordBoundsView(cbMap, extend);
 }
 
 /*
