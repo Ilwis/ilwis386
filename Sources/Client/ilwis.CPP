@@ -821,6 +821,15 @@ void IlwisWinApp::RegisterDocTemplates()
 
 	idt = new IlwisDocTemplate(
 		".grf", 
+		"GeoRefScaleRotate",
+		"ILWIS Georeferences",
+		RUNTIME_CLASS(IlwisDocument),
+		RUNTIME_CLASS(DataFormWindow),
+		RUNTIME_CLASS(FallbackView));
+	AddDocTemplate(idt); 
+
+	idt = new IlwisDocTemplate(
+		".grf", 
 		"GeoRefCorners",
 		"ILWIS Georeferences",
 		RUNTIME_CLASS(GeoRefDoc),
