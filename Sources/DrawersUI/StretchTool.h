@@ -28,6 +28,7 @@ private:
 	CheckBox *cb;
 	double low, high;
 	bool inRace;
+	bool fStarting;
 	bool logStretch;
 
 	int check(Event *);

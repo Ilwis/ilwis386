@@ -119,7 +119,8 @@ SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeR
 	rr(_baserr),
 	low(_currentrr.rLo()),
 	high(_currentrr.rHi()),
-	inRace(false)
+	inRace(false),
+	fStarting(true)
 {
 	LayerDrawer *ldrw = (LayerDrawer *)dr; // needs not be a valid cast
 	SetDrawer *setdrw = dynamic_cast<SetDrawer *>(drw);
@@ -137,8 +138,11 @@ SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeR
 	sliderLow->SetCallBack((NotifyProc)&SetStretchValueForm::check);
 	sliderHigh->SetCallBack((NotifyProc)&SetStretchValueForm::check);
 	create();
+	fStarting = false;
 }
 int SetStretchValueForm::logStretching(Event *) {
+	if (fStarting)
+		return 1;
 	cb->StoreData();
 	SetDrawer *setdrw = dynamic_cast<SetDrawer *>(drw);
 	LayerDrawer::StretchMethod method = logStretch ? LayerDrawer::smLOGARITHMIC : LayerDrawer::smLINEAR;
@@ -162,6 +166,8 @@ int SetStretchValueForm::logStretching(Event *) {
 	return 1;
 }
 int  SetStretchValueForm::check(Event *) {
+	if (fStarting)
+		return 1;
 	sliderLow->StoreData();
 	sliderHigh->StoreData();
 	cb->StoreData();
@@ -198,6 +204,5 @@ int  SetStretchValueForm::check(Event *) {
 
 void  SetStretchValueForm::apply() {
 	check(0);
-
 }
 
