@@ -996,19 +996,17 @@ void MapCompositionDoc::OnUpdatePropLayer(CCmdUI* pCmdUI)
 	//}
 }
 
-
-
-
 ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, const String& type, const String& subtype, OpenType ot, int os) {
 
 	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(type, subtype, &parms);
 	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom(); // backup cbZoom
+	CoordBounds cbMapRootDrawer = rootDrawer->getMapCoordBounds(); // backup cbMap
 	if (!drawer)
 		return 0;
 
-	bool fOverruleBounds = !(ot & otKEEPBOUNDS);
-	drawer->addDataSource((void *)&bmp, fOverruleBounds ? NewDrawer::dsoEXTENDBOUNDS : NewDrawer::dsoNONE);
+	bool fExtendBounds = !(ot & otKEEPBOUNDS);
+	drawer->addDataSource((void *)&bmp, fExtendBounds ? NewDrawer::dsoEXTENDBOUNDS : NewDrawer::dsoNONE);
 	MapPtr *mptr = 0;
 	if (IOTYPE(bmp->fnObj) == IlwisObject::iotRASMAP)
 		mptr = (MapPtr *)bmp.pointer();
@@ -1017,18 +1015,23 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	else
 		rootDrawer->setCoordinateSystem(bmp->cs());
 	CoordBounds cbMap = bmp->cb();
-	if ( !cbMap.fValid() && mptr) { // for csunknown with no boundaries
+	if (mptr && (!cbMap.fValid() || mptr->gr()->fGeoRefNone())) { // for NONE.grf or csunknown with no boundaries
+		if (cbMap.fValid()) { // fGeoRefNone case; the rootDrawer's cb was already altered (by addDataSource above); restore the backup
+			rootDrawer->setCoordBoundsMap(cbMapRootDrawer);
+			if (cbMapRootDrawer.fValid()) // also restore cbView to what it was before addDataSource
+				rootDrawer->setCoordBoundsView(cbMapRootDrawer, true);
+		}
 		cbMap = CoordBounds(Coord(0,0), Coord(mptr->rcSize().Col, -mptr->rcSize().Row)); // none.grf bounds
-		rootDrawer->addCoordBounds(bmp->cs(), cbMap, fOverruleBounds);
-		rootDrawer->setGeoreference(GeoRef(FileName("none.grf")), fOverruleBounds);
+		rootDrawer->addCoordBounds(bmp->cs(), cbMap, fExtendBounds);
+		rootDrawer->setGeoreference(GeoRef(FileName("none.grf")), fExtendBounds);
 	} else
-		rootDrawer->addCoordBounds(bmp->cs(), cbMap, fOverruleBounds);
+		rootDrawer->addCoordBounds(bmp->cs(), cbMap, fExtendBounds);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY);
 	pp.subType = subtype;
 	drawer->prepare(&pp);
 	pp.type = RootDrawer::ptRENDER;
 	drawer->prepare(&pp);
-	rootDrawer->addDrawer(drawer, fOverruleBounds);
+	rootDrawer->addDrawer(drawer, fExtendBounds);
 	addToPixelInfo(bmp, (ComplexDrawer *)drawer);
 	MapPaneView * mpv = mpvGetView();
 	if (mpv) {
@@ -1042,9 +1045,8 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	}
 	String sysFile = bmp->fnObj.sFullName();
 	sysFile.toLower();
-	if ( fOverruleBounds && cbZoom.fValid() && (sysFile.find("ilwis3\\system\\basemaps") != string::npos)) // restore cbZoom if we added a system background map
+	if ( fExtendBounds && cbZoom.fValid() && (sysFile.find("ilwis3\\system\\basemaps") != string::npos)) // restore cbZoom if we added a system background map
 		rootDrawer->setCoordBoundsZoom(cbZoom);
-
 
 	return drawer;
 }
