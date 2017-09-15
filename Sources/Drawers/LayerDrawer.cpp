@@ -131,14 +131,14 @@ void LayerDrawer::setExtrusionAlpha(double v) {
 void LayerDrawer::setRepresentation( const Representation& rp){
 	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
 	if ( !rp.fValid()) { 
-		// domains id and bool have no rpr
+		// domains id, string and bool have no rpr
 		Domain dm;
 		if (useAttributeColumn() && getAtttributeColumn().fValid()) {
 			dm.SetPointer(getAtttributeColumn()->dm().ptr());
 		} else {
 			dm.SetPointer(mapDrawer->getBaseMap()->dm().ptr());
 		}
-		if ( dm->pdid()) {
+		if ( dm->pdid() || dm->pds()) {
 			bool fUseMultiple = (getType() == "PolygonLayerDrawer" || getType() == "RasterLayerDrawer");
 			setDrawMethod(fUseMultiple ? NewDrawer::drmMULTIPLE : NewDrawer::drmSINGLE);
 		} else if ( dm->pdbool()) {
