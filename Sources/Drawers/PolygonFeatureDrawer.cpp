@@ -187,9 +187,9 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			((LineProperties *)boundary->getProperties())->linestyle = lp->linestyle;
 			((LineProperties *)boundary->getProperties())->thickness = lp->thickness;
 			long iRaw = getFeature()->iValue();
-			if (polygonLayer->getDrawMethod() == drmRPR) {
+			if (polygonLayer->useRepresentation()) {
 				Representation rpr = polygonLayer->getRepresentation();
-				if ( rpr.fValid() && rpr->dm()->dmt() == dmtCLASS) {
+				if ( rpr.fValid() && rpr->prc()) {
 					long iRaw2 = polygonLayer->useAttributeColumn() ? polygonLayer->getAtttributeColumn()->iRaw(iRaw) : iRaw;
 					drawColor.alpha() = round(255.0 * rpr->prc()->rItemAlpha(iRaw2));
 					String hatchName = rpr->prc()->sHatch(iRaw2);
