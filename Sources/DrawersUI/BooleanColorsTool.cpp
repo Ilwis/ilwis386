@@ -38,7 +38,14 @@ bool BooleanColorsTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());
 	if (!ldrw)
 		return false;
-	bool isAcceptable = ldrw->useAttributeColumn() ? ldrw->getAtttributeColumn()->dm()->pdbool() : (*(BaseMap*)ldrw->getDataSource())->dm()->pdbool();
+	bool isAcceptable = false;
+	if (ldrw->useAttributeColumn())
+		isAcceptable = ldrw->getAtttributeColumn()->dm()->pdbool() != 0;
+	else {
+		BaseMap *bmp = (BaseMap *)tool->getDrawer()->getDataSource();
+		if (bmp)
+			isAcceptable = (*bmp)->dm()->pdbool() != 0;
+	}
 
 	return isAcceptable;
 }
