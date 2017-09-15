@@ -147,7 +147,7 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		}
 
 		Representation rpr = fdr->getRepresentation();
-		if ( rpr->prc()) {
+		if (rpr.fValid() && rpr->prc()) {
 			if ( fdr->useRepresentation()) {
 				lproperties.thickness = rpr->prc()->rLineWidth(getRaw());
 				lproperties.linestyle = LineDrawer::openGLLineStyle(rpr->prc()->iLine(feature->iValue()));

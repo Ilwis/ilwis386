@@ -138,7 +138,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 				setTableSelection(bmpptr->tblAtt()->dm()->fnObj,v, p);
 		}
 		Representation rpr = fdr->getRepresentation();
-		if ( rpr->prc()) {
+		if (rpr.fValid() && rpr->prc()) {
 			if ( fdr->useRepresentation()) {
 				properties.scale = rpr->prc()->iSymbolSize(getRaw());
 				properties.symbol = rpr->prc()->sSymbolType(getRaw());
