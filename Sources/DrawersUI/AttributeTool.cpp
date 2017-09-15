@@ -123,7 +123,7 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 		BaseMap bmp (((BaseMap*)featureLayerDrawer->getDataSource())->ptr()->fnObj);
 		Table attTable = bmp->tblAtt();
 		attColumn = attTable->col(String(txt));
-		if ( attColumn.fValid()) {
+		if ( attColumn.fValid() && !attColumn->dm()->pds()) {
 			featureLayerDrawer->setAttributeColumn(attColumn);
 			featureLayerDrawer->setUseAttributeColumn(true);
 			featureLayerDrawer->setRepresentation(attColumn->dm()->rpr());
