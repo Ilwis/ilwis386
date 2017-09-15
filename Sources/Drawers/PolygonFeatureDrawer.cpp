@@ -186,25 +186,30 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			setAreaAlpha(polygonLayer->getAreaAlpha() * rprAlpha);
 			((LineProperties *)boundary->getProperties())->linestyle = lp->linestyle;
 			((LineProperties *)boundary->getProperties())->thickness = lp->thickness;
-			Representation rpr = polygonLayer->getRepresentation();
 			long iRaw = getFeature()->iValue();
-			if ( rpr.fValid() && rpr->dm()->dmt() == dmtCLASS) {
-				long iRaw2 = polygonLayer->useAttributeColumn() ? polygonLayer->getAtttributeColumn()->iRaw(iRaw) : iRaw;
-				drawColor.alpha() = round(255.0 * rpr->prc()->rItemAlpha(iRaw2));
-				String hatchName = rpr->prc()->sHatch(iRaw2);
-				if ( hatchName != sUNDEF) {
-					const SVGLoader *loader = NewDrawer::getSvgLoader();
-					SVGLoader::const_iterator cur = loader->find(hatchName);
-					if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT)
-						return;
+			if (polygonLayer->getDrawMethod() == drmRPR) {
+				Representation rpr = polygonLayer->getRepresentation();
+				if ( rpr.fValid() && rpr->dm()->dmt() == dmtCLASS) {
+					long iRaw2 = polygonLayer->useAttributeColumn() ? polygonLayer->getAtttributeColumn()->iRaw(iRaw) : iRaw;
+					drawColor.alpha() = round(255.0 * rpr->prc()->rItemAlpha(iRaw2));
+					String hatchName = rpr->prc()->sHatch(iRaw2);
+					if ( hatchName != sUNDEF) {
+						const SVGLoader *loader = NewDrawer::getSvgLoader();
+						SVGLoader::const_iterator cur = loader->find(hatchName);
+						if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT)
+							return;
 
-					hatch = (*cur).second->getHatch();
-					hatchInverse = (*cur).second->getHatchInverse();
+						hatch = (*cur).second->getHatch();
+						hatchInverse = (*cur).second->getHatchInverse();
 
-					backgroundColor = rpr->prc()->clrSecondRaw(iRaw2);
-					long transparent = Color(-2); // in the old days this was the transparent value
-					if (backgroundColor.iVal() == transparent) 
-						backgroundColor = colorUNDEF;
+						backgroundColor = rpr->prc()->clrSecondRaw(iRaw2);
+						long transparent = Color(-2); // in the old days this was the transparent value
+						if (backgroundColor.iVal() == transparent) 
+							backgroundColor = colorUNDEF;
+					} else {
+						hatch = 0;
+						hatchInverse = 0;
+					}
 				} else {
 					hatch = 0;
 					hatchInverse = 0;
