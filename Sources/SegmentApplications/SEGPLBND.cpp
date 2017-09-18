@@ -171,9 +171,12 @@ SegmentMapPolBoundaries::SegmentMapPolBoundaries(const FileName& fn, SegmentMapP
 : SegmentMapVirtual(fn, p, pm->cs(),pm->cb(),pm->dvrs()),
   pmp(pm), fSingleName(fSingle)
 {
-  DomainType dmt = dmtUNIQUEID;
-	Domain dom(fnObj, 0, dmt, "Boundary");
-  SetDomainValueRangeStruct(dom);
+  if (fSingleName) {
+    DomainType dmt = dmtUNIQUEID;
+    Domain dom(fnObj, 0, dmt, "Boundary");
+    SetDomainValueRangeStruct(dom);
+  } else if (pmp->fTblAttSelf())
+    SetAttributeTable(pmp->tblAtt());
   mask.SetMask(sMask);
   fNeedFreeze = true;
   Init();
@@ -189,7 +192,7 @@ void SegmentMapPolBoundaries::Store()
   WriteElement("SegmentMapVirtual", "Type", "SegmentMapPolBoundaries");
   WriteElement("SegmentMapPolBoundaries", "PolygonMap", pmp);
   WriteElement("SegmentMapPolBoundaries", "Mask", mask.sMask());
-  WriteElement("SegmentMapPolBoundaries", "Naming", "unique");
+  WriteElement("SegmentMapPolBoundaries", "Naming", fSingleName ? "single":"unique");
 }
 
 SegmentMapPolBoundaries::~SegmentMapPolBoundaries()
@@ -216,13 +219,13 @@ void SegmentMapPolBoundaries::Init()
 
 bool SegmentMapPolBoundaries::fFreezing()
 {
-	DomainSort* pdsrt = dm()->pdsrt();
 	if (fSingleName) {
+	  DomainSort* pdsrt = dm()->pdsrt();
 	  pdsrt->Resize(0); // clean up domain
 	  pdsrt->iAdd("Boundary");
 	}
-	else
-		pdsrt->Resize( pmp->iFeatures()); 
+	//else
+	//	pdsrt->Resize( pmp->iFeatures()); 
 
 	for(int i=0; i < pmp->iFeatures(); ++i) {
 		ILWIS::Polygon *pol = (ILWIS::Polygon *)pmp->getFeature(i);
@@ -236,7 +239,7 @@ bool SegmentMapPolBoundaries::fFreezing()
 			ILWIS::Segment *seg = CSEGMENT(pms->newFeature());
 			CoordinateSequence *seq = g->getCoordinates();
 			seg->PutCoords(seq);
-			seg->PutVal(fSingleName ? 1L : i);
+			seg->PutVal(fSingleName ? 1L : pol->rValue());
 		}
 	}
  // trq.SetText(TR("Extract segments"));
