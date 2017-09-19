@@ -181,7 +181,7 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 		} else if ( sdr) {
 			dm = sdr->useAttributeTable() ? sdr->getAtttributeColumn()->dm() :   sdr->getBaseMap()->dm();
 		}
-		if (dm->pdv() || dm->pdc()) {
+		if ((dm->pdv() && !dm->pdbool()) || dm->pdc()) {
 			if (!annotationDrawerTool)
 				annotationDrawerTool = new AnnotationDrawerTool(mpvGetView(),tree,drawer);
 			parentTool->addTool(annotationDrawerTool);
