@@ -876,6 +876,10 @@ MapPropPage::MapPropPage(const IlwisObject& obj)
 void MapPropPage::SetCoordSystemField()
 {
 	MapPtr* pmp = dynamic_cast<MapPtr*>(m_bm.ptr()); // can not fail, current object is a Map for sure
+	if (!pmp) {
+		new InfoText(m_fgPageRoot, TR("Corrupt file: this is not an ILWIS RasterMap!"));
+		return;
+	}
 	Map mp;
 	mp.SetPointer(pmp);
 
@@ -1373,6 +1377,10 @@ SegmentMapPropPage::SegmentMapPropPage(const IlwisObject& obj)
 void SegmentMapPropPage::SetMapDetails()
 {
 	SegmentMapPtr* psm = dynamic_cast<SegmentMapPtr*>(m_bm.ptr()); // can not fail, current object is a SegmentMap for sure
+	if (!psm) {
+		new InfoText(m_fgPageRoot, TR("Corrupt file: this is not an ILWIS SegmentMap!"));
+		return;
+	}
 
 	BaseMapPropPage::SetMapDetails();
 
@@ -1394,6 +1402,10 @@ PointMapPropPage::PointMapPropPage(const IlwisObject& obj)
 void PointMapPropPage::SetMapDetails()
 {
 	PointMapPtr* ppm = dynamic_cast<PointMapPtr*>(m_bm.ptr()); // can not fail, current object is a PointMap for sure
+	if (!ppm) {
+		new InfoText(m_fgPageRoot, TR("Corrupt file: this is not an ILWIS PointMap!"));
+		return;
+	}
 
 	BaseMapPropPage::SetMapDetails();
 
@@ -1413,6 +1425,10 @@ PolygonMapPropPage::PolygonMapPropPage(const IlwisObject& obj)
 void PolygonMapPropPage::SetMapDetails()
 {
 	PolygonMapPtr* ppm = dynamic_cast<PolygonMapPtr*>(m_bm.ptr()); // can not fail, current object is a PolygonMap for sure
+	if (!ppm) {
+		new InfoText(m_fgPageRoot, TR("Corrupt file: this is not an ILWIS PolygonMap!"));
+		return;
+	}
 
 	BaseMapPropPage::SetMapDetails();
 
