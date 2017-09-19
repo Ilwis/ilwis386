@@ -219,10 +219,14 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 				hatchInverse = 0;
 			}
 
-			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
-				int raw = p->filteredRaws[j];
-				if ( iRaw == abs(raw)) {
-					fRawEnabled = raw > 0;
+			if (p->filteredRaws.size() == 1 && p->filteredRaws[0] == iUNDEF) {
+				fRawEnabled = true;
+			} else {
+				for(int j =0 ; j < p->filteredRaws.size(); ++j) {
+					int raw = p->filteredRaws[j];
+					if ( iRaw == abs(raw)) {
+						fRawEnabled = raw > 0;
+					}
 				}
 			}
 			p->props.lineType = LineDrawer::ilwisLineStyle(((LineProperties *)boundary->getProperties())->linestyle);

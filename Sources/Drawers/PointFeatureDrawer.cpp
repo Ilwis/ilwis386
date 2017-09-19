@@ -125,10 +125,14 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			properties.drawColor = (fdr->getDrawingColor()->clrVal(feature->rValue()));
 		}
 		extrAlpha = fdr->getExtrusionAlpha();
-		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
-			int raw = p->filteredRaws[j];
-			if ( getFeature()->rValue() == abs(raw)) {
-				fRawEnabled = raw > 0;
+		if (p->filteredRaws.size() == 1 && p->filteredRaws[0] == iUNDEF) {
+			fRawEnabled = true;
+		} else {
+			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
+				int raw = p->filteredRaws[j];
+				if ( getFeature()->rValue() == abs(raw)) {
+					fRawEnabled = raw > 0;
+				}
 			}
 		}
 		double v = feature->rValue();

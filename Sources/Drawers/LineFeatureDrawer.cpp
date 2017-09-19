@@ -159,11 +159,14 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 		if ( bmpptr->fTblAtt()) {
 			setTableSelection(bmpptr->tblAtt()->dm()->fnObj,feature->iValue(), p);
 		}
-
-		for(int j =0 ; j < p->filteredRaws.size(); ++j) {
-			int raw = p->filteredRaws[j];
-			if ( getFeature()->rValue() == abs(raw)) {
-				fRawEnabled = raw > 0;
+		if (p->filteredRaws.size() == 1 && p->filteredRaws[0] == iUNDEF) {
+			fRawEnabled = true;
+		} else {
+			for(int j =0 ; j < p->filteredRaws.size(); ++j) {
+				int raw = p->filteredRaws[j];
+				if ( getFeature()->rValue() == abs(raw)) {
+					fRawEnabled = raw > 0;
+				}
 			}
 		}
 		if ( specialOptions == 0)

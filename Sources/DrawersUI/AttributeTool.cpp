@@ -97,6 +97,8 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 	DrawerTool *stretchTool = parentTool->findChildToolByType("StretchTool");
 	DrawerTool *annotationDrawerTool = parentTool->findChildToolByType("AnnotationDrawerTool");
 	PreparationParameters pp(NewDrawer::ptRENDER, 0,10);
+	if ( hit != lasthit)
+		pp.filteredRaws.push_back(iUNDEF); // enable all when switching
 	ComplexDrawer * cdrw = (ComplexDrawer*)drawer;
 	Column attColumn;
 	if (cdrw->isSet()) {
