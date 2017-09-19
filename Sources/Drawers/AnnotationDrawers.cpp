@@ -387,7 +387,10 @@ AnnotationClassLegendDrawer::AnnotationClassLegendDrawer(DrawerParameters *parms
 
 void AnnotationClassLegendDrawer::setActiveClasses(const vector<int>& rws) {
 	raws.clear();
-	DrawingColor dc(dataDrawer);
+	LayerDrawer *ldr = dataDrawer->isSet() ? 
+		dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) :
+		dynamic_cast<LayerDrawer *>(dataDrawer);
+	DrawingColor dc(ldr);
 	for(int i=0; i < texts->getDrawerCount(); ++i) {
 		texts->getDrawer(i)->setActive(false);
 	}
@@ -395,7 +398,7 @@ void AnnotationClassLegendDrawer::setActiveClasses(const vector<int>& rws) {
 		long iRaw = rws[i]; //dm->pdc()->iKey(i+1);
 		if ( iRaw == iUNDEF)
 			continue;
-		Color clr =dc.clrRaw(iRaw,NewDrawer::drmRPR);
+		Color clr =dc.clrRaw(iRaw,ldr->getDrawMethod());
 		raws.push_back(RawInfo(iRaw, clr));
 		String txt = dm->pdc()->sValueByRaw(iRaw);
 		texts->getDrawer(i)->setActive(true);
@@ -421,7 +424,7 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 		DrawingColor dc(ldr);
 		DrawerParameters dp(getRootDrawer(), texts);
 		for(int i=0; i < raws.size(); ++i) {
-			raws[i].clr = dc.clrRaw(raws[i].raw,NewDrawer::drmRPR);
+			raws[i].clr = dc.clrRaw(raws[i].raw,ldr->getDrawMethod());
 			String txt = dm->pdc()->sValueByRaw(raws[i].raw);
 			TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
 			txtdr->setText(txt);
@@ -439,7 +442,7 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 			long iRaw = dm->pdc()->iKey(i+1);
 			if ( iRaw == iUNDEF)
 				continue;
-			Color clr =dc.clrRaw(iRaw,NewDrawer::drmRPR);
+			Color clr =dc.clrRaw(iRaw,ldr->getDrawMethod());
 			String txt = dm->pdc()->sValueByRaw(iRaw);
 			raws.push_back(RawInfo(iRaw,clr));
 			TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
@@ -458,35 +461,37 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 				   cbBox.MinY() + raws.size() * cb.height() / (40 * columns)));
 
 		if ( objType == IlwisObject::iotPOLYGONMAP) {
+			hatches.clear();
 			SpatialDataDrawer *spdr = dataDrawer->isSet() ? static_cast<SpatialDataDrawer *>(dataDrawer) : static_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer());
 			LayerDrawer *ldr = dataDrawer->isSet() ? dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : dynamic_cast<LayerDrawer *>(dataDrawer);
-			Representation rpr = ldr->getRepresentation();
-			if ( rpr.fValid() && rpr->dm()->dmt() == dmtCLASS) {
-				hatches.clear();
-				for(int i = 0 ; i < dm->pdc()->iSize() ; ++i) {
-					long iRaw = dm->pdc()->iKey(i+1);
-					if ( iRaw == iUNDEF)
-						continue;
-					long iRaw2 = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->iRaw(iRaw) : iRaw;
-					double alpha = round(255.0 * rpr->prc()->rItemAlpha(iRaw2));
-					String hatchName = rpr->prc()->sHatch(iRaw);
-					if ( hatchName != sUNDEF) {
-						const SVGLoader *loader = NewDrawer::getSvgLoader();
-						SVGLoader::const_iterator cur = loader->find(hatchName);
-						if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT)
-							return;
-						const byte * hatch = (*cur).second->getHatch();
-						const byte * hatchInverse = (*cur).second->getHatchInverse();
-						Color backgroundColor = rpr->prc()->clrSecondRaw(iRaw2);
-						long transparent = Color(-2); // in the old days this was the transparent value
-						if (backgroundColor.iVal() == transparent) 
-							backgroundColor = colorUNDEF;
-						AnnotationClassAttributes attribs;
-						attribs.alpha = alpha;
-						attribs.hatch = hatch;
-						attribs.hatchInverse = hatchInverse;
-						attribs.backgroundColor = backgroundColor;
-						hatches[iRaw] = attribs;
+			if (ldr->useRepresentation()) {
+				Representation rpr = ldr->getRepresentation();
+				if ( rpr.fValid() && rpr->prc()) {
+					for(int i = 0 ; i < dm->pdc()->iSize() ; ++i) {
+						long iRaw = dm->pdc()->iKey(i+1);
+						if ( iRaw == iUNDEF)
+							continue;
+						long iRaw2 = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->iRaw(iRaw) : iRaw;
+						double alpha = round(255.0 * rpr->prc()->rItemAlpha(iRaw2));
+						String hatchName = rpr->prc()->sHatch(iRaw);
+						if ( hatchName != sUNDEF) {
+							const SVGLoader *loader = NewDrawer::getSvgLoader();
+							SVGLoader::const_iterator cur = loader->find(hatchName);
+							if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT)
+								return;
+							const byte * hatch = (*cur).second->getHatch();
+							const byte * hatchInverse = (*cur).second->getHatchInverse();
+							Color backgroundColor = rpr->prc()->clrSecondRaw(iRaw2);
+							long transparent = Color(-2); // in the old days this was the transparent value
+							if (backgroundColor.iVal() == transparent) 
+								backgroundColor = colorUNDEF;
+							AnnotationClassAttributes attribs;
+							attribs.alpha = alpha;
+							attribs.hatch = hatch;
+							attribs.hatchInverse = hatchInverse;
+							attribs.backgroundColor = backgroundColor;
+							hatches[iRaw] = attribs;
+						}
 					}
 				}
 			}
