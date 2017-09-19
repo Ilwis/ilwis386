@@ -73,7 +73,6 @@ DrawingColor::DrawingColor(ComplexDrawer *dr, int ind) :
 clr1(168,168,168), // False
 clr2(0,176,20), // True
 iMultColors(0),
-gamma(0),
 mcd(0),
 index(ind),
 tresholdColor(Color(255,0,0)),
@@ -165,7 +164,7 @@ Color DrawingColor::clrVal(double rVal) const
 	setTransparency(rVal, cRet);
 	setTresholdColors(rVal, cRet);
 
-	return cRet; //.clrDraw(gamma);
+	return cRet;
 }
 
 Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const

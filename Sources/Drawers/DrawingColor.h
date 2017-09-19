@@ -61,7 +61,6 @@ private:
 	Color clr2;
 	int iMultColors;
 	int colorSetIndex;
-	double gamma;
 	IlwisData dataValues;
 	int index;
 	IlwisObject::iotIlwisObjectType type;
