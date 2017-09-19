@@ -307,13 +307,13 @@ void LayerDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
 	//		clr = getDrawingColor()->clrRaw(dvs.iRaw(rVal), getDrawMethod());
 	}
 	else {
-		if ( useAttributeColumn() && getAtttributeColumn().fValid()) {
+		if ((getDrawMethod() == NewDrawer::drmRPR) && useAttributeColumn() && getAtttributeColumn().fValid()) {
 			clr = getRepresentation()->clrRaw((long)rVal);
 		} else {
-			clr = getDrawingColor()->clrRaw((long)rVal, getDrawMethod());
+			DrawingColor dc(const_cast<LayerDrawer*>(this));
+			clr = dc.clrRaw((long)rVal, getDrawMethod());
 		}
-	}
-	
+	}	
 
 	CBrush brushColor(clr);
 	CBrush *br = dc->SelectObject(&brushColor);
