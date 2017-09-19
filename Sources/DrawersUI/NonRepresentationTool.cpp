@@ -71,7 +71,7 @@ HTREEITEM NonRepresentationToolTool::configure( HTREEITEM parentItem) {
 		colorItem->setState(useSingleColor);
 		HTREEITEM singleColorItem = insertItem("Single Color","SingleColor",colorItem, -1);
 	}
-	if ( (*bmp)->dm()->pdid() || (*bmp)->dm()->pdUniqueID()) {
+	if (!sdrw->getRepresentation().fValid() || (sdrw->getRepresentation().fValid() && !sdrw->getRepresentation()->prv())) {
 		DisplayOptionRadioButtonItem *item = new DisplayOptionRadioButtonItem("Multiple Colors", tree,htiNode,drawer);	
 		item->setCheckAction(ctool,ctool->getColorCheck(), (DTSetCheckFunc)&ColorTool::setcheckRpr);
 		item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&NonRepresentationToolTool::displayOptionMultiColor);
