@@ -403,8 +403,10 @@ void AnnotationClassLegendDrawer::setActiveClasses(const vector<int>& rws) {
 		dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) :
 		dynamic_cast<LayerDrawer *>(dataDrawer);
 	DrawingColor dc(ldr);
-	dc.setMultiColors(ldr->getDrawingColor()->multiColors());
+	dc.setMultiColors(ldr->getDrawingColor()->multiColors(), false);
 	dc.setColorSet(ldr->getDrawingColor()->colorSet());
+	if (ldr->getDrawingColor()->multiColors() == 3)
+		dc.copyClrRandomFrom(*(ldr->getDrawingColor()));
 	for(int i=0; i < texts->getDrawerCount(); ++i) {
 		texts->getDrawer(i)->setActive(false);
 	}
@@ -435,8 +437,10 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 			dynamic_cast<LayerDrawer *>(dataDrawer);
 	if ( pp->type & NewDrawer::ptRESTORE) {
 		DrawingColor dc(ldr);
-		dc.setMultiColors(ldr->getDrawingColor()->multiColors());
+		dc.setMultiColors(ldr->getDrawingColor()->multiColors(), false);
 		dc.setColorSet(ldr->getDrawingColor()->colorSet());
+		if (ldr->getDrawingColor()->multiColors() == 3)
+			dc.copyClrRandomFrom(*(ldr->getDrawingColor()));
 		DrawerParameters dp(getRootDrawer(), texts);
 		for(int i=0; i < raws.size(); ++i) {
 			raws[i].clr = dc.clrRaw(raws[i].raw,ldr->getDrawMethod());
@@ -451,8 +455,10 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 		maxw = 0;
 		cellWidth = 0;
 		DrawingColor dc(ldr);
-		dc.setMultiColors(ldr->getDrawingColor()->multiColors());
+		dc.setMultiColors(ldr->getDrawingColor()->multiColors(), false);
 		dc.setColorSet(ldr->getDrawingColor()->colorSet());
+		if (ldr->getDrawingColor()->multiColors() == 3)
+			dc.copyClrRandomFrom(*(ldr->getDrawingColor()));
 		DrawerParameters dp(getRootDrawer(), texts);
 		raws.clear();
 		for(int i = 0 ; i < dm->pdc()->iSize() ; ++i) {

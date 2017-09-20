@@ -38,7 +38,7 @@ public:
 	RangeReal getTransparentValues() const;
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
-	void setMultiColors(int index) ;
+	void setMultiColors(int index, bool fInitRandom = true) ;
 	int multiColors() const;
 	void setColorSet(int index);
 	int colorSet() const;
@@ -46,6 +46,7 @@ public:
 	void color2(const Color& clr);
 	Color getColor1() const;
 	Color getColor2() const;
+	void copyClrRandomFrom(DrawingColor & dcOther);
 
 private:
 	void InitClrRandom();

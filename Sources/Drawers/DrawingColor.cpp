@@ -477,7 +477,15 @@ Color DrawingColor::clrRandom(int iRaw) const
 void DrawingColor::InitClrRandom()
 { 
 	m_clrRandom.clear();
-	DomainSort* ds = drw->getRepresentation()->dm()->pdsrt();
+	DomainSort* ds = 0;
+	if (drw->useAttributeColumn())
+		ds = drw->getAtttributeColumn()->dm()->pdsrt();
+	else {
+		BaseMap *bmp = (BaseMap *)drw->getDataSource();
+		if (bmp)
+			ds = (*bmp)->dm()->pdsrt();
+	}
+
 	int iSize = 1000;
 	if (ds)
 		iSize = 1 + ds->iSize();
@@ -542,9 +550,14 @@ void DrawingColor::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(parentSection.c_str(),"color2",fnView, clr2);
 }
 
-void DrawingColor::setMultiColors(int index){
-	if ( index < 3)
+void DrawingColor::setMultiColors(int index, bool fInitRandom){
+	if ( index <= 3) {
 		iMultColors = index;
+		if (fInitRandom && (index == 3))
+			InitClrRandom();
+		else
+			m_clrRandom.clear();
+	}
 }
 int DrawingColor::multiColors() const{
 	return iMultColors;
@@ -554,4 +567,8 @@ void DrawingColor::setColorSet(int index){
 }
 int DrawingColor::colorSet() const{
 	return colorSetIndex;
+}
+
+void DrawingColor::copyClrRandomFrom(DrawingColor & dcOther) {
+	m_clrRandom = dcOther.m_clrRandom;
 }
