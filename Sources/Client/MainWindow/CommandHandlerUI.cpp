@@ -1625,7 +1625,7 @@ LRESULT Cmdsample(CWnd *parent, const String& s)
 	return -1;
 }
 
-LRESULT CmdeditDefinition(const String& sObj)
+LRESULT CmdeditDefinition(CWnd* parent, const String& sObj)
 {
 	ParmList p(sObj);
 	String sCmd = p.sGet(0);
@@ -1890,6 +1890,7 @@ void CommandHandlerUI::addExtraCommands() {
 	addCommand(CommandHandlerUI::createCommandInfo("map","",Cmdmap,"","Open Map","",".mpr",0,"Opens a raster map", false));
 	addCommand(CommandHandlerUI::createCommandInfo("pnt","",Cmdpnt,"","Open Pointmap","",".mpp",0,"Opens a Pointmap", false));
 	addCommand(CommandHandlerUI::createCommandInfo("prop","properties",Cmdpropobject,"","Object Properties","","",0,"Shows the properties of an object",false));
+	addCommand(CommandHandlerUI::createCommandInfo("editdef","",CmdeditDefinition,"","","","",0,"Edits the definition of a dependent raster map",false));
 //    addCommand(CommandHandlerUI::createCommandInfo("pixelinfo","",Cmdpixelinfo,"..","Pixel Info","info","",7004,"Open or activate the pixel information window"));
 	addCommand(CommandHandlerUI::createCommandInfo("showdefform","", Cmdshowdefform,"..","","","",-1,"", false));
 	addCommand(CommandHandlerUI::createCommandInfo("deleteobjects","",Cmddeleteobjects,"","",".",".",0000,"", false));
