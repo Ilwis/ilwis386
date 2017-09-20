@@ -36,6 +36,7 @@ public:
 	void apply();
 private:
 	void loadColorSets(const String& folder);
+	int CallBackColorSet(Event*);
 	FieldOneSelectString *fo;
 	RadioGroup *rg;
 	int colors;

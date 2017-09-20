@@ -130,12 +130,15 @@ SetMultipleColorForm::SetMultipleColorForm(CWnd *wPar, LayerDrawer *dr) :
 	colors = ((LayerDrawer *)drw)->getDrawingColor()->multiColors();
 	fo = new FieldOneSelectString(root, "Color Schemes", &choice, sets);
 	rg = new RadioGroup(root,"Size color set",&colors);
+	rg->SetCallBack((NotifyProc)&SetMultipleColorForm::CallBackColorSet);
 	new RadioButton(rg,"7");
 	new RadioButton(rg,"15");
 	new RadioButton(rg,"31");
+	new RadioButton(rg,"Random");
 
 	create();
 }
+
 void SetMultipleColorForm::loadColorSets(const String& folder) {
 	String pathToColorSet;
 	if ( folder == "") {
@@ -176,8 +179,17 @@ void SetMultipleColorForm::loadColorSets(const String& folder) {
 			file.close();
 		}
 	}
-
 }
+
+int SetMultipleColorForm::CallBackColorSet(Event*)
+{
+	if (rg->iVal() == 3)
+		fo->Hide();
+	else
+		fo->Show();
+	return 0;
+}
+
 void  SetMultipleColorForm::apply() {
 	fo->StoreData();
 	rg->StoreData();
