@@ -186,5 +186,7 @@ void  SetMultipleColorForm::apply() {
 	PreparationParameters parm(NewDrawer::ptRENDER, 0);
 	drw->prepareChildDrawers(&parm);
 	updateMapView();
+	par->Invalidate(); // update the Representation Legend in the TreeView
+	par->UpdateWindow();
 }
 
