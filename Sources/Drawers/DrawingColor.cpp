@@ -548,6 +548,8 @@ void DrawingColor::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(parentSection.c_str(),"IdColorNumbers",fnView, iMultColors);
 	ObjectInfo::ReadElement(parentSection.c_str(),"color1",fnView, clr1);
 	ObjectInfo::ReadElement(parentSection.c_str(),"color2",fnView, clr2);
+	if (iMultColors == 3)
+		InitClrRandom();
 }
 
 void DrawingColor::setMultiColors(int index, bool fInitRandom){
