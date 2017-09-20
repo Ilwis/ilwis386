@@ -125,9 +125,9 @@ public:
 protected:
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 	void prepare(PreparationParameters *pp);
-	vector<String> makeRange() const;
-	void drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const;
-	void drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const;
+	vector<String> makeRange(const DomainValueRangeStruct & dvs) const;
+	void drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const;
+	void drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const;
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
 

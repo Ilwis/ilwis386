@@ -751,12 +751,25 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 		if (is3D) // colored legend elements at level 1
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
 		double noOfRect = 100.0;
-		vector<String> values = makeRange();
-		RangeReal rr(values[0].rVal(), values[values.size()- 1].rVal());
+		DomainValueRangeStruct dvs;
+		SpatialDataDrawer *spdr = dataDrawer->isSet() ? 
+			static_cast<SpatialDataDrawer *>(dataDrawer) : 
+			static_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer());
+
+		LayerDrawer *ldr = dataDrawer->isSet() ? 
+			dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : 
+			dynamic_cast<LayerDrawer *>(dataDrawer);
+
+		dvs = spdr->getBaseMap()->dvrs();
+		if ( ldr && ldr->useAttributeColumn() && ldr->getAtttributeColumn().fValid()) {
+			dvs = ldr->getAtttributeColumn()->dvrs();
+		}
+		vector<String> values = makeRange(dvs);
+		RangeReal rr(dvs.rValue(values[0]), dvs.rValue(values[values.size()- 1]));
 		if ( vertical) {
-			drawVertical(cbInner, rr, 0, values);
+			drawVertical(cbInner, rr, 0, values, dvs);
 		} else {
-			drawHorizontal(cbInner, rr, 0, values);
+			drawHorizontal(cbInner, rr, 0, values, dvs);
 		}
 		if (is3D) // texts and lines at level 2
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 2) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 2) * 0.0005);
@@ -785,7 +798,7 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	return true;
 }
 
-void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const{
+void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const{
 	int count = 1;
 	DrawingColor dc(dataDrawer);
 	cbInner.MaxX() = cbInner.MinX() + cbInner.width() / 3;
@@ -809,7 +822,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 		glVertex3d(endx,endy,z);
 		glVertex3d(endx,starty,z);
 		glEnd();
-		if ( count < values.size()  && values[count].rVal() <= rV) { 
+		if ( count < values.size() && dvs.rValue(values[count]) <= rV) { 
 			setText(values, count, Coord(endx + cbInner.width() / 3, starty,z));
 			glColor4f(0,0,0,getAlpha());
 			glBegin(GL_LINE_STRIP);
@@ -826,7 +839,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 	setText(values,values.size()-1,Coord(endx + cbInner.width() / 3, cbInner.height () - h/2.0,z));
 }
 
-void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values) const{
+void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const{
 	int count = 1;
 	double shifty = 5.0;
 	DrawingColor dc(dataDrawer);
@@ -852,7 +865,7 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Ran
 		glVertex3d(endx,endy,z);
 		glVertex3d(endx,starty,z);
 		glEnd();
-		if ( values[count].rVal() <= rV) { 
+		if ( dvs.rValue(values[count]) <= rV) { 
 			setText(values, count, Coord( startx, endy - cbBox.height() / shifty,z));
 			glColor4f(0,0,0,getAlpha());
 			glBegin(GL_LINE_STRIP);
@@ -871,21 +884,8 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Ran
 	setText(values,values.size()-1,Coord(cbInner.MaxX() - cbTxt.width() / 2.0, cbInner.MaxY( ) - cbInner.height() - cbBox.height() / shifty,z));
 }
 
-vector<String> AnnotationValueLegendDrawer::makeRange() const{
+vector<String> AnnotationValueLegendDrawer::makeRange(const DomainValueRangeStruct & dvs) const{
 	vector<String> values;
-	DomainValueRangeStruct dvs;
-	SpatialDataDrawer *spdr = dataDrawer->isSet() ? 
-		static_cast<SpatialDataDrawer *>(dataDrawer) : 
-		static_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer());
-
-	LayerDrawer *ldr = dataDrawer->isSet() ? 
-		dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : 
-		dynamic_cast<LayerDrawer *>(dataDrawer);
-
-	dvs = spdr->getBaseMap()->dvrs();
-	if ( ldr && ldr->useAttributeColumn() && ldr->getAtttributeColumn().fValid()) {
-		dvs = ldr->getAtttributeColumn()->dvrs();
-	}
 	RangeReal rmd;
 	double step = 1.0;
 	bool fImage = dvs.dm()->pdi() || (( vrr.rLo() == 0 || vrr.rLo() == 1) && vrr.rHi() == 255);
