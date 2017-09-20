@@ -112,6 +112,10 @@ double niceOne(double v) {
 RangeReal roundRange(double rmin, double rmax, double& step) {
 	double tickLimits []  = {0,0.1,0.2,0.25,0.5,1.0};
 	double range = rmax - rmin;
+	if (range == 0) {
+		step = 1;
+		return RangeReal(rmin,rmin);
+	}
 	//long d =  abs(log10(range)) + 1;
 	long d =  log10(range) + 1;
 	step = range / pow(10.0,abs(d));
@@ -129,8 +133,6 @@ RangeReal roundRange(double rmin, double rmax, double& step) {
 	double r = modf (rmax / step , &intpart);
 	double upper = step * round(r ==0 ? intpart : 1 + intpart );
 	return RangeReal(lower, upper);
-
-
 }
 
 
