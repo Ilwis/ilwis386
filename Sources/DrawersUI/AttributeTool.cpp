@@ -117,6 +117,13 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 				featureLayerDrawer->getDrawingColor()->setDataColumn(Column());
 				featureLayerDrawer->setRepresentation(bmp->dm()->rpr());
 			}
+			if (featureLayerDrawer->getRepresentation().fValid()) {
+				featureLayerDrawer->setUseRpr(true);
+				featureLayerDrawer->setDrawMethod(NewDrawer::drmRPR);
+			} else {
+				featureLayerDrawer->setUseRpr(false);
+				featureLayerDrawer->setDrawMethod(NewDrawer::drmMULTIPLE);
+			}
 			featureLayerDrawer->prepareChildDrawers(&pp);
 		}
 		cdrw->prepare(&pp);
@@ -134,6 +141,13 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 			featureLayerDrawer->setUseAttributeColumn(false);
 			featureLayerDrawer->getDrawingColor()->setDataColumn(Column());
 			featureLayerDrawer->setRepresentation(bmp->dm()->rpr());
+		}
+		if (featureLayerDrawer->getRepresentation().fValid()) {
+			featureLayerDrawer->setUseRpr(true);
+			featureLayerDrawer->setDrawMethod(NewDrawer::drmRPR);
+		} else {
+			featureLayerDrawer->setUseRpr(false);
+			featureLayerDrawer->setDrawMethod(NewDrawer::drmMULTIPLE);
 		}
 		featureLayerDrawer->prepareChildDrawers(&pp);
 	}
