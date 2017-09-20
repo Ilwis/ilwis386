@@ -18,10 +18,9 @@ class _export AnnotationDrawers : public ComplexDrawer {
 public:
 	AnnotationDrawers(DrawerParameters *parms);
 	void prepare(PreparationParameters *pp);
-
+	void refreshClassLegends();
 
 protected:
-
 };
 
 class _export AnnotationDrawer : public ComplexDrawer{

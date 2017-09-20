@@ -14,10 +14,9 @@
 #include "Drawers\SetDrawer.h"
 #include "DrawersUI\LayerDrawerTool.h"
 #include "DrawersUI\SetDrawerTool.h"
-
-
-//#include "Drawers\RepresentationTool.h"
-//#include "Drawers\StretchTool.h"
+#include "Engine\Drawers\SimpleDrawer.h"
+#include "Drawers\LineDrawer.h"
+#include "Drawers\AnnotationDrawers.h"
 
 DrawerTool *createColorTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
 	return new ColorTool(zv, view, drw);
@@ -97,6 +96,10 @@ void ColorTool::setcheckRpr(void *value, HTREEITEM item) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		sdrw->prepareChildDrawers(&pp);
 	}
+	AnnotationDrawers *annotations = (AnnotationDrawers *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
+	if (annotations)
+		annotations->refreshClassLegends();
+
 	drawer->getRootDrawer()->getDrawerContext()->doDraw();
 }
 

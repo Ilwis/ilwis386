@@ -15,6 +15,9 @@
 #include "Client\Mapwindow\LayerTreeItem.h" 
 #include "Engine\Drawers\DrawerContext.h"
 #include "DrawersUI\NonRepresentationTool.h"
+#include "Engine\Drawers\SimpleDrawer.h"
+#include "Drawers\LineDrawer.h"
+#include "Drawers\AnnotationDrawers.h"
 
 DrawerTool *createNonRepresentationToolTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
 	return new NonRepresentationToolTool(zv, view, drw);
@@ -185,6 +188,9 @@ void  SetMultipleColorForm::apply() {
 		lyerdrw->setUseRpr(false);
 	PreparationParameters parm(NewDrawer::ptRENDER, 0);
 	drw->prepareChildDrawers(&parm);
+	AnnotationDrawers *annotations = (AnnotationDrawers *)(drw->getRootDrawer()->getDrawer("AnnotationDrawers"));
+	if (annotations)
+		annotations->refreshClassLegends();
 	updateMapView();
 	par->Invalidate(); // update the Representation Legend in the TreeView
 	par->UpdateWindow();

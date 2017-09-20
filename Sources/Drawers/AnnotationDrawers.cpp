@@ -50,6 +50,18 @@ void AnnotationDrawers::prepare(PreparationParameters *pp) {
 	}
 }
 
+void AnnotationDrawers::refreshClassLegends() {
+	vector<NewDrawer *> allDrawers;
+	getDrawers(allDrawers);
+	PreparationParameters pp(NewDrawer::ptRENDER|NewDrawer::ptRESTORE, 0);
+	for(int i = 0; i < allDrawers.size(); ++i) {
+		AnnotationDrawer *adrw = dynamic_cast<AnnotationClassLegendDrawer *>(allDrawers[i]);
+		if ( adrw) {
+			adrw->prepare(&pp);
+		}
+	}
+}
+
 //---------------------------------------------------------
 AnnotationDrawer::AnnotationDrawer(DrawerParameters *parms, const String& name) : ComplexDrawer(parms,name), scale(1.0), dataDrawer(0) 
 {
