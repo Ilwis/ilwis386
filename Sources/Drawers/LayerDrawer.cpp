@@ -311,6 +311,8 @@ void LayerDrawer::drawLegendItem(CDC *dc, const CRect& rct, double rVal) const{
 			clr = getRepresentation()->clrRaw((long)rVal);
 		} else {
 			DrawingColor dc(const_cast<LayerDrawer*>(this));
+			dc.setMultiColors(drawColor->multiColors());
+			dc.setColorSet(drawColor->colorSet());
 			clr = dc.clrRaw((long)rVal, getDrawMethod());
 		}
 	}	
