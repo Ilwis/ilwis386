@@ -910,6 +910,8 @@ void FormCreateGeoRefRC::ShowHide(bool fLatLon, bool fHideAll)
 {
 	if (m_fInShowHide)
 		return;
+	if (fOnlyTiepoints)
+		return;
 	m_fInShowHide = true;
 	fgCsyMeters->Hide();
 	fgCsyLatLons->Hide();
