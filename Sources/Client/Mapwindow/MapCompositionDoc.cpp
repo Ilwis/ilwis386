@@ -1118,6 +1118,8 @@ BOOL MapCompositionDoc::OnOpenObjectCollection(const ObjectCollection& list, Ope
 
 BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot, int os)
 {
+	if (maplist->iSize() <= 0)
+		return FALSE;
 	Map mp = maplist[maplist->iLower()];
 	if (!mp.fValid())
 		return FALSE;
