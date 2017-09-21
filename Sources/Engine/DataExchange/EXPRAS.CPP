@@ -122,7 +122,7 @@ void ImpExp::ExpRas(const FileName& fnObject, const FileName& fnFile, const Stri
 				if (mp.fValid()) {
 					gr = mp->gr();
 					if (gr.fValid()) {
-						if (!gr->pgc() && gr->fDependent() && gr->fNorthOriented() && gr->fLinear()) { // the gdal ILWIS driver can only handle plain GeoRefCorners
+						if ((gr->pgc() && (gr->fnObj.sFileExt() != gr->fnObj.sFileExtQuoted())) || (!gr->pgc() && gr->fDependent() && gr->fNorthOriented() && gr->fLinear())) { // the gdal ILWIS driver can only handle plain GeoRefCorners
 							FileName fnShort = gr->fnObj;
 							fnShort.sFile = "georef"; // the gdal ILWIS driver can't handle quoted names for the georeference
 							fnTempGrf = FileName::fnUnique(fnShort);
