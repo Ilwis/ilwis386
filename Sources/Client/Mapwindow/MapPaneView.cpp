@@ -1312,44 +1312,46 @@ void MapPaneView::OnCreateRasMap()
 
 void MapPaneView::OnCreateGeoRef()
 {
-	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
-	//String sGrf;
-	//bool fOk;
-	//MapCompositionDoc* mcd = GetDocument();
-	//Map mp = mcd->mp;
-	//GeoRef georef = mcd->georef;
-	//if (!mp.fValid())
-	//	return;
-	//{
-	//	FormCreateGeoRefRC frm(this, &sGrf, mp, georef->cs(), georef->cb(), true);
-	//	fOk = frm.fOkClicked();
-	//}  
-	//if (fOk) {
-	//	FileName fn(sGrf);
-	//	fn.sExt = ".grf";
-	//	GeoRef grf(fn);
+	String sGrf;
+	bool fOk;
+	MapCompositionDoc* mcd = GetDocument();
+	Map mp;
+	MapList mpl;
+	for (int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i) {
+		NewDrawer* drw = mcd->rootDrawer->getDrawer(i);
+		SpatialDataDrawer* bmd = dynamic_cast<SpatialDataDrawer*>(drw);
+		BaseMapPtr* bmp = bmd->getBaseMap();
+		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(bmp->fnObj);
+		if ( otype == IlwisObject::iotRASMAP) {
+			MapPtr * mpptr = dynamic_cast<MapPtr*>(bmp);
+			if (mpptr) {
+				mp.SetPointer(mpptr);
+				IlwisObjectPtr * ioptr = bmd->getObject();
+				MapListPtr * mplptr = dynamic_cast<MapListPtr*>(ioptr);
+				if (mplptr)
+					mpl.SetPointer(mplptr);
+				break;
+			}
+		}
+	}
+	if (!mp.fValid())
+		return;
+	GeoRef georef = mp->gr();
+	{
+		FormCreateGeoRefRC frm(this, &sGrf, mp, georef->cs(), georef->cb(), true);
+		fOk = frm.fOkClicked();
+	}  
+	if (fOk) {
+		FileName fn(sGrf);
+		fn.sExt = ".grf";
+		GeoRef grf(fn);
 
-	//	mp->SetGeoRef(grf);
-		//mcd->SetGeoRef(grf);
-
-		//for (list<Drawer*>::iterator iter = mcd->dl.begin(); iter != mcd->dl.end(); ++iter) 
-		//{
-		//	Drawer* drw = *iter;
-		//    MapDrawer* md = dynamic_cast<MapDrawer*>(drw);
-		//    if (md) {
-		//      MapList ml;
-		//      MapListColorCompDrawer* mlcd = dynamic_cast<MapListColorCompDrawer*>(drw);
-		//      MapListDrawer* mld = dynamic_cast<MapListDrawer*>(drw);
-		//      if (mlcd)
-		//        ml = mlcd->ml();
-		//      else if (mld)
-		//        ml = mld->ml();
-		//      if (ml.fValid())
-		//        ml->SetGeoRef(grf);
-		//    }
-		//  }
-		//OnGeoRefEdit();
-	//}  
+		mp->SetGeoRef(grf);
+		mcd->rootDrawer->setGeoreference(grf, true);
+		if (mpl.fValid())
+			mpl->SetGeoRef(grf);
+		OnGeoRefEdit();
+	}
 }
 
 void MapPaneView::OnCreateCoordSys()
@@ -1364,8 +1366,8 @@ void MapPaneView::OnCreateCoordSys()
 		mcd->rootDrawer->setCoordinateSystem(csy, true);
 		CoordSystemTiePoints* cstp = csy->pcsTiePoints();
 
-			for (int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i) 
-			{
+		for (int i = 0; i < mcd->rootDrawer->getDrawerCount(); ++i) 
+		{
 			NewDrawer* drw = mcd->rootDrawer->getDrawer(i);
 			SpatialDataDrawer* bmd = dynamic_cast<SpatialDataDrawer*>(drw);
 			if (bmd) {
