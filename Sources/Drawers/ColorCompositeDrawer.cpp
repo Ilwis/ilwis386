@@ -94,6 +94,10 @@ void ColorCompositeDrawer::addDataSource(void *bmap, int options){
 	IlwisObject *obj = (IlwisObject *)bmap;
 	if (IOTYPE((*(obj))->fnObj) == IlwisObject::iotMAPLIST) {
 		mpl.SetPointer(obj->pointer());
+		long iMaxIndex = mpl->iSize() - 1;
+		for (int i = 0; i < 3; ++i) {
+			data->ccMaps[i].index = min(data->ccMaps[i].index, iMaxIndex);
+		}
 	}
 }
 
