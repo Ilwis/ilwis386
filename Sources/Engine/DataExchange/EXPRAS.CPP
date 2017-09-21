@@ -128,8 +128,11 @@ void ImpExp::ExpRas(const FileName& fnObject, const FileName& fnFile, const Stri
 							fnTempGrf = FileName::fnUnique(fnShort);
 							fnTempMap = FileName::fnUnique(object->fnObj);
 							GeoRef grfTemp (fnTempGrf, String("GeoRefCorners(%li,%li,1,%g,%g,%g,%g)", gr->rcSize().Row, gr->rcSize().Col, gr->cb().cMin.x, gr->cb().cMin.y, gr->cb().cMax.x, gr->cb().cMax.y)); // cb() results by definition in a corners-of-corners GeoRef
-							grfTemp->SetCoordSystem(gr->cs()); // actually the CoordinateSystem filename should also be "not quoted" for the gdal ILWIS driver (TODO)
+							grfTemp->SetCoordSystem(gr->cs());
 							grfTemp->Store();
+							FileName fnCsy;
+							ObjectInfo::ReadElement("GeoRef", "CoordSystem", grfTemp->fnObj, fnCsy);
+							ObjectInfo::WriteElement("GeoRef", "CoordSystem", grfTemp->fnObj, fnCsy.sRelative()); // unquote the coordinatesystem's filename, for compatibility with the gdal ILWIS driver
 							MoveFileEx(object->fnObj.sFullPath().c_str(), fnTempMap.sFullPath().c_str(), MOVEFILE_REPLACE_EXISTING);
 							mp->SetGeoRef(grfTemp);
 							mp->Store();
@@ -147,8 +150,7 @@ void ImpExp::ExpRas(const FileName& fnObject, const FileName& fnFile, const Stri
 		getEngine()->Execute(sCmd);
 		if (fRestoreGrf) {
 			MoveFileEx(fnTempMap.sFullPath().c_str(), object->fnObj.sFullPath().c_str(), MOVEFILE_REPLACE_EXISTING);
-			GeoRef grfTemp(fnTempGrf);
-			grfTemp->fErase = true;
+			DeleteFile(fnTempGrf.sFullPath().c_str());
 		}
 	}
 	else
