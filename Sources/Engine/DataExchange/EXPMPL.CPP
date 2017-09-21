@@ -44,22 +44,61 @@
 #include "Engine\Base\Msm.h"
 #include "Engine\Base\System\Engine.h"
 #include "Engine\DataExchange\Convloc.h"
+#include "Engine\Map\Raster\MapList\maplist.h"
+#include "Engine\SpatialReference\Gr.h"
 
 void ImpExp::ExpMpl(const FileName& fnObject, const FileName& fnFile, const String& sExtFormat, const String& _sMethod ) {
-  String sMethod = _sMethod.sTrimSpaces();
 
-  if (fCIStrEqual(_sMethod, "gdal")) {
-    String ilwDir = getEngine()->getContext()->sIlwDir();
-    String gdal = ilwDir + "\\gdal_translate.exe";
-    String sCmd("!%S -of %S %S %S", gdal, sExtFormat, fnObject.sFullPath(), fnFile.sFullPath());
-    getEngine()->Execute(sCmd);
-  }
-  else if (fCIStrEqual(sExtFormat, "ErdasLAN"))
-    ExportLAN(fnObject, FileName(fnFile, ".lan"));
-  else
-  {
-    throw ErrorImportExport(TR("Unknown conversion format"));
-  }
+	IlwisObject object = IlwisObject::obj(fnObject);
+	if (!object->fCalculated())
+		object->Calc();
+
+	String sMethod = _sMethod.sTrimSpaces();
+
+	if (fCIStrEqual(_sMethod, "gdal")) {
+		GeoRef gr;
+		FileName fnTemp;
+		bool fRestoreGrf = false;
+		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(object->fnObj);
+		if ( otype == IlwisObject::iotMAPLIST) {
+			MapList mpl = MapList(object->fnObj);
+			if (mpl.fValid()) {
+				gr = mpl->gr();
+				if (gr.fValid()) {
+					if (!gr->pgc() && gr->fDependent() && gr->fNorthOriented() && gr->fLinear()) { // the gdal ILWIS driver can only handle plain GeoRefCorners
+						FileName fnShort = gr->fnObj;
+						fnShort.sFile = "georef"; // the gdal ILWIS driver can't handle quoted names for the georeference
+						fnTemp = FileName::fnUnique(fnShort);
+						GeoRef grfTemp (fnTemp, String("GeoRefCorners(%li,%li,1,%g,%g,%g,%g)", gr->rcSize().Row, gr->rcSize().Col, gr->cb().cMin.x, gr->cb().cMin.y, gr->cb().cMax.x, gr->cb().cMax.y)); // cb() results by definition in a corners-of-corners GeoRef
+						grfTemp->SetCoordSystem(gr->cs()); // actually the CoordinateSystem filename should also be "not quoted" for the gdal ILWIS driver (TODO)
+						grfTemp->Store();
+						mpl->SetGeoRef(grfTemp);
+						mpl->Store(); // the individual map filenames should also be "not quoted" for the gdal ILWIS driver (TODO)
+						fRestoreGrf = true;
+					}
+				}
+			}
+		}
+
+		String ilwDir = getEngine()->getContext()->sIlwDir();
+		String gdal = ilwDir + "\\gdal_translate.exe";
+		String sCmd("!%S -of %S \"%S\" \"%S\"", gdal, sExtFormat, fnObject.sFullPath(), fnFile.sFullPath());
+		getEngine()->Execute(sCmd);
+
+		if (fRestoreGrf) {
+			MapList mpl = MapList(object->fnObj);
+			mpl->SetGeoRef(gr);
+			mpl->Store();
+			GeoRef grfTemp(fnTemp);
+			grfTemp->fErase = true;
+		}
+	}
+	else if (fCIStrEqual(sExtFormat, "ErdasLAN"))
+		ExportLAN(fnObject, FileName(fnFile, ".lan"));
+	else
+	{
+		throw ErrorImportExport(TR("Unknown conversion format"));
+	}
 }
 
 
