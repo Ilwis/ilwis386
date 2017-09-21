@@ -62,24 +62,29 @@ void ImpExp::ExpMpl(const FileName& fnObject, const FileName& fnFile, const Stri
 		bool fRestoreGrf = false;
 		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(object->fnObj);
 		if ( otype == IlwisObject::iotMAPLIST) {
-			MapList mpl = MapList(object->fnObj);
-			if (mpl.fValid()) {
-				gr = mpl->gr();
-				if (gr.fValid()) {
-					if (!gr->pgc() && gr->fDependent() && gr->fNorthOriented() && gr->fLinear()) { // the gdal ILWIS driver can only handle plain GeoRefCorners
-						FileName fnShort = gr->fnObj;
-						fnShort.sFile = "georef"; // the gdal ILWIS driver can't handle quoted names for the georeference
-						fnTempGrf = FileName::fnUnique(fnShort);
-						fnTempMpl = FileName::fnUnique(object->fnObj);
-						GeoRef grfTemp (fnTempGrf, String("GeoRefCorners(%li,%li,1,%g,%g,%g,%g)", gr->rcSize().Row, gr->rcSize().Col, gr->cb().cMin.x, gr->cb().cMin.y, gr->cb().cMax.x, gr->cb().cMax.y)); // cb() results by definition in a corners-of-corners GeoRef
-						grfTemp->SetCoordSystem(gr->cs()); // actually the CoordinateSystem filename should also be "not quoted" for the gdal ILWIS driver (TODO)
-						grfTemp->Store();
-						MoveFileEx(object->fnObj.sFullPath().c_str(), fnTempMpl.sFullPath().c_str(), MOVEFILE_REPLACE_EXISTING);
-						mpl->SetGeoRef(grfTemp);
-						mpl->Store(); // the individual map filenames should also be "not quoted" for the gdal ILWIS driver (TODO)
-						fRestoreGrf = true;
+			try { // it could fail, e.g. if we are exporting a file from a readonly location
+				MapList mpl = MapList(object->fnObj);
+				if (mpl.fValid()) {
+					gr = mpl->gr();
+					if (gr.fValid()) {
+						if (!gr->pgc() && gr->fDependent() && gr->fNorthOriented() && gr->fLinear()) { // the gdal ILWIS driver can only handle plain GeoRefCorners
+							FileName fnShort = gr->fnObj;
+							fnShort.sFile = "georef"; // the gdal ILWIS driver can't handle quoted names for the georeference
+							fnTempGrf = FileName::fnUnique(fnShort);
+							fnTempMpl = FileName::fnUnique(object->fnObj);
+							GeoRef grfTemp (fnTempGrf, String("GeoRefCorners(%li,%li,1,%g,%g,%g,%g)", gr->rcSize().Row, gr->rcSize().Col, gr->cb().cMin.x, gr->cb().cMin.y, gr->cb().cMax.x, gr->cb().cMax.y)); // cb() results by definition in a corners-of-corners GeoRef
+							grfTemp->SetCoordSystem(gr->cs()); // actually the CoordinateSystem filename should also be "not quoted" for the gdal ILWIS driver (TODO)
+							grfTemp->Store();
+							for (int i = 0; i < mpl->iSize(); ++i)
+								mpl->map(i)->DoNotStore(true); // prevent the rastermaps from storing the georef change (Store() has more consequences like losing the minmax information)
+							MoveFileEx(object->fnObj.sFullPath().c_str(), fnTempMpl.sFullPath().c_str(), MOVEFILE_REPLACE_EXISTING);
+							mpl->SetGeoRef(grfTemp);
+							mpl->Store(); // the individual map filenames should also be "not quoted" for the gdal ILWIS driver (TODO)
+							fRestoreGrf = true;
+						}
 					}
 				}
+			} catch (...) {
 			}
 		}
 
