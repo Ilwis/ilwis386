@@ -112,7 +112,8 @@ void ImpExp::ExpRas(const FileName& fnObject, const FileName& fnFile, const Stri
 		ExportNAS(fnObject, FileName(fnFile, ".asc"));
 	else if (fCIStrEqual(_sMethod, "gdal")) {
 		GeoRef gr;
-		FileName fnTemp;
+		FileName fnTempGrf;
+		FileName fnTempMap;
 		bool fRestoreGrf = false;
 		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(object->fnObj);
 		if ( otype == IlwisObject::iotRASMAP) {
@@ -123,10 +124,12 @@ void ImpExp::ExpRas(const FileName& fnObject, const FileName& fnFile, const Stri
 					if (!gr->pgc() && gr->fDependent() && gr->fNorthOriented() && gr->fLinear()) { // the gdal ILWIS driver can only handle plain GeoRefCorners
 						FileName fnShort = gr->fnObj;
 						fnShort.sFile = "georef"; // the gdal ILWIS driver can't handle quoted names for the georeference
-						fnTemp = FileName::fnUnique(fnShort);
-						GeoRef grfTemp (fnTemp, String("GeoRefCorners(%li,%li,1,%g,%g,%g,%g)", gr->rcSize().Row, gr->rcSize().Col, gr->cb().cMin.x, gr->cb().cMin.y, gr->cb().cMax.x, gr->cb().cMax.y)); // cb() results by definition in a corners-of-corners GeoRef
+						fnTempGrf = FileName::fnUnique(fnShort);
+						fnTempMap = FileName::fnUnique(object->fnObj);
+						GeoRef grfTemp (fnTempGrf, String("GeoRefCorners(%li,%li,1,%g,%g,%g,%g)", gr->rcSize().Row, gr->rcSize().Col, gr->cb().cMin.x, gr->cb().cMin.y, gr->cb().cMax.x, gr->cb().cMax.y)); // cb() results by definition in a corners-of-corners GeoRef
 						grfTemp->SetCoordSystem(gr->cs()); // actually the CoordinateSystem filename should also be "not quoted" for the gdal ILWIS driver (TODO)
 						grfTemp->Store();
+						MoveFileEx(object->fnObj.sFullPath().c_str(), fnTempMap.sFullPath().c_str(), MOVEFILE_REPLACE_EXISTING);
 						mp->SetGeoRef(grfTemp);
 						mp->Store();
 						fRestoreGrf = true;
@@ -140,10 +143,8 @@ void ImpExp::ExpRas(const FileName& fnObject, const FileName& fnFile, const Stri
 		String sCmd("!%S -of %S \"%S\" \"%S\"", gdal, sExtFormat, fnObject.sFullPath(), fnFile.sFullPath());
 		getEngine()->Execute(sCmd);
 		if (fRestoreGrf) {
-			Map mp = Map(object->fnObj);
-			mp->SetGeoRef(gr);
-			mp->Store();
-			GeoRef grfTemp(fnTemp);
+			MoveFileEx(fnTempMap.sFullPath().c_str(), object->fnObj.sFullPath().c_str(), MOVEFILE_REPLACE_EXISTING);
+			GeoRef grfTemp(fnTempGrf);
 			grfTemp->fErase = true;
 		}
 	}
