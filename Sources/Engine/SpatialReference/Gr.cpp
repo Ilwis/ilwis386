@@ -588,6 +588,17 @@ bool GeoRefPtr::fNorthOriented() const
   return false;
 }
 
+void GeoRefPtr::BreakDependency()
+{
+	if (fLinear() && fNorthOriented()) {
+		FileName fnTemp = FileName::fnUnique(fnObj);
+		GeoRef grfNew (fnTemp, String("GeoRefCorners(%li,%li,1,%g,%g,%g,%g)", rcSize().Row, rcSize().Col, cb().cMin.x, cb().cMin.y, cb().cMax.x, cb().cMax.y)); // cb() results by definition in a corners-of-corners GeoRef
+		grfNew->SetCoordSystem(cs());
+		grfNew->Store();
+		MoveFileEx(fnTemp.sFullPath().c_str(), fnObj.sFullPath().c_str(), MOVEFILE_REPLACE_EXISTING);
+	}
+}
+
 void GeoRefPtr::Rename(const FileName& fnNew)
 {
 }
@@ -607,7 +618,6 @@ String GeoRefPtr::sObjectSection() const
 void GeoRefPtr::DoNotUpdate()
 {
 	IlwisObjectPtr::DoNotUpdate();
-	
 }
 
 void GeoRefPtr::GetObjectStructure(ObjectStructure& os)
@@ -616,8 +626,7 @@ void GeoRefPtr::GetObjectStructure(ObjectStructure& os)
 	if ( os.fGetAssociatedFiles() )
 	{
 		os.AddFile(fnObj, "GeoRef", "CoordSystem");		
-	}		
-	
+	}	
 }
 
 

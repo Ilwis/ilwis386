@@ -139,6 +139,7 @@ public:
   virtual void _export GetObjectDependencies(Array<FileName>& afnObjDep);
   virtual bool _export fDependent() const;
   virtual bool _export fNorthOriented() const;
+  virtual void _export BreakDependency();
   GeoRefCorners _export *pgc() const;
   GeoRef3D _export *pg3d() const;
   GeoRefCTP _export *pgCTP() const;

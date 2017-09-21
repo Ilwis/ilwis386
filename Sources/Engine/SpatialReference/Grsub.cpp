@@ -212,17 +212,6 @@ bool GeoRefSubMap::fGeoRefNone() const
    return gr->fGeoRefNone();
 }
 
-void GeoRefSubMap::BreakDependency()
-{
-	if (gr->pgc()) {
-		FileName fnTemp = FileName::fnUnique(fnObj);
-		GeoRef grfNew (fnTemp, String("GeoRefCorners(%li,%li,1,%g,%g,%g,%g)", rcSize().Row, rcSize().Col, cb().cMin.x, cb().cMin.y, cb().cMax.x, cb().cMax.y)); // cb() results by definition in a corners-of-corners GeoRef
-		grfNew->SetCoordSystem(gr->cs());
-		grfNew->Store();
-		MoveFileEx(fnTemp.sFullPath().c_str(), fnObj.sFullPath().c_str(), MOVEFILE_REPLACE_EXISTING);
-	}
-}
-
 //-------------------------------------------------------------------------
 
 GeoRefSubMapCorners::GeoRefSubMapCorners(const FileName& fn)
