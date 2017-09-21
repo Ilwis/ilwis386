@@ -83,13 +83,16 @@ public:
   void DrawItem(Event* ev);
   void SelectExact(const String& sSearch);
   void useBaseMaps(bool yesno);
-   void Fill();
+  void Fill();
 
-private:
+protected:
   String sDir;
   bool fromBaseMaps;
-  Array<String*> asExt;
   String sName, *_psName;              // local storage and destination
+  OwnerDrawListBox* lbObject;
+
+private:
+  Array<String*> asExt;
   void FillDir();
   void FillDrive();
   int DblClkObject(void *);
@@ -97,7 +100,6 @@ private:
   int CloseDrive(void *);
   ItemDrawer idw;
   CStatic* st;
-  OwnerDrawListBox* lbObject;
   OwnerDrawListBox* lbDir;
   OwnerDrawCB* cbDrive;
   bool fIcons, fOnlyEditable, fAlsoSystemDir;

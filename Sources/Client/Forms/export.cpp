@@ -206,6 +206,47 @@ void FieldExportFormat::create()
   ose->SetCurSel(0);
 }
 
+class FieldDataTypeLargeEx : public FieldDataTypeLarge
+{
+public:
+  FieldDataTypeLargeEx(FormEntry*, String *psName, const String& sExt);
+  void StoreData();
+};
+
+// Overrule StoreData() so that it preserves the case of the filename (FieldDataTypeLarge::StoreData() converts it toLower)
+FieldDataTypeLargeEx::FieldDataTypeLargeEx(FormEntry* par, String *psName, const String& sExt)
+: FieldDataTypeLarge(par,psName,sExt)
+{
+}
+
+void FieldDataTypeLargeEx::StoreData() {
+  FileName fn = "nul";
+  if (lbObject) {
+    int id = lbObject->GetCurSel();
+    if (id < 0) 
+		{
+			sName = String();
+			*_psName = sName;
+			return;
+		}
+    CString s;
+    lbObject->GetText(id, s);
+    fn = String(s);
+  }
+  if ( !fromBaseMaps)
+	fn.Dir(sDir);
+  else {
+		String sStdDir = IlwWinApp()->Context()->sStdDir() + "\\Basemaps\\";
+		fn.Dir(sStdDir);
+
+  }
+
+  sName = fn.sFullPath(true);
+  // sName.toLower();
+  *_psName = sName;
+  FormEntry::StoreData();
+}
+
 class ExportForm: public FormWithDest
 {
 public:
@@ -224,7 +265,7 @@ private:
 	
 	Exporting* exp;
 
-	FieldDataTypeLarge    *fdtl;
+	FieldDataTypeLargeEx  *fdtl;
 	PushButton            *pbs;
 	RadioGroup            *rgExportMethod;
 	RadioButton           *rbILWIS, *rbGDAL, *rbGDB;
@@ -251,7 +292,7 @@ ExportForm::ExportForm(CWnd* wPar, Exporting* exporting, String* sNam, String* s
 
 	LoadSettings();
 
-	fdtl = new FieldDataTypeLarge(root, &sObjectName, ".mpr.mpa.mps.mpp.tbt.his.hsp.hsa.hss.mpl.csy");
+	fdtl = new FieldDataTypeLargeEx(root, &sObjectName, ".mpr.mpa.mps.mpp.tbt.his.hsp.hsa.hss.mpl.csy");
 	fdtl->SetNoSystemDir();
 	fdtl->SetCallBack((NotifyProc)&ExportForm::CallBack);
 	stMethod = new StaticText(root, TR("&Method"));
