@@ -1330,13 +1330,21 @@ AnnotationDrawer(parms, "AnnotationScaleBarDrawer"),
 size(rUNDEF), ticks(3), texts(0),unit("meters")
 {
 	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
+
 	size = rRound(cb.width() * 0.2 / ticks);
 	double totSize = size * ticks;
 	height = cb.height() * 0.01;
-	Coord middle = cb.middle();
-	middle.y = cb.MaxY() - cb.height() / 20.0;
-	begin = middle;
-	begin.x = middle.x - totSize / 2.0;
+	begin.y = cb.MaxY() - cb.height() / 20.0;
+	begin.x = cb.middle().x - totSize / 2.0;
 }
 
 void AnnotationScaleBarDrawer::prepare(PreparationParameters *pp){
@@ -1364,8 +1372,6 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 	if ( !isActive() || !isValid())
 		return false;
 
-	AnnotationDrawer::draw(drawLoop, cbArea);
-
 	bool is3D = getRootDrawer()->is3D(); 
 	glColor3d(0,0,0);
 	double start = 0;
@@ -1377,29 +1383,27 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 	drawPreDrawers(drawLoop, cbArea);
 
 	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block
-
 		glBegin(GL_LINES);
-			glVertex3d(0, 0, 0);
-			glVertex3d(totSize, 0, 0);
-			for(int i = 0; i <= ticks; ++i) {
-				glVertex3d(start,0, 0);
-				glVertex3d(start, -height,0);
-				start += size;
-				TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
-				if ( txtdr) {
-					String s = String("%d",(long)size * i);
-					txtdr->setText(s);
-					double h = txtdr->getHeight();
-					h += height;
-					double xShift = h * s.size() / 6.0;
-					double x = i * size - xShift;
-					if ( i == ticks)
-						s += " " + unit;
-					txtdr->setText(s);
-					txtdr->setCoord(Coord(x, -h,0));
-				}
-
+		glVertex3d(0, 0, 0);
+		glVertex3d(totSize, 0, 0);
+		for(int i = 0; i <= ticks; ++i) {
+			glVertex3d(start,0, 0);
+			glVertex3d(start, -height,0);
+			start += size;
+			TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
+			if ( txtdr) {
+				String s = String("%d",(long)size * i);
+				txtdr->setText(s);
+				double h = txtdr->getHeight();
+				h += height;
+				double xShift = h * s.size() / 6.0;
+				double x = i * size - xShift;
+				if ( i == ticks)
+					s += " " + unit;
+				txtdr->setText(s);
+				txtdr->setCoord(Coord(x, -h,0));
 			}
+		}
 		glEnd();
 	}
 
@@ -1413,12 +1417,15 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 Coord AnnotationScaleBarDrawer::getBegin(){
 	return begin;
 }
+
 void AnnotationScaleBarDrawer::setBegin(const Coord& b){
 	begin = b;
 }
+
 double AnnotationScaleBarDrawer::getSize() const{
 	return size;
 }
+
 void AnnotationScaleBarDrawer::setSize(double w){
 	size = w;
 }
@@ -1431,18 +1438,17 @@ String AnnotationScaleBarDrawer::store(const FileName& fnView, const String& par
 	ObjectInfo::WriteElement(currentSection.c_str(),"Height",fnView, height);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Ticks",fnView, ticks);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Unit",fnView, unit);
-
 	return currentSection;
 }
 
 void AnnotationScaleBarDrawer::load(const FileName& fnView, const String& parentSection){
-		String currentSection = parentSection;
-		AnnotationDrawer::load(fnView, parentSection);
-		ObjectInfo::ReadElement(currentSection.c_str(),"Size",fnView, size);
-		ObjectInfo::ReadElement(currentSection.c_str(),"Begin",fnView, begin);
-		ObjectInfo::ReadElement(currentSection.c_str(),"Height",fnView, height);
-		ObjectInfo::ReadElement(currentSection.c_str(),"Ticks",fnView, ticks);
-		ObjectInfo::ReadElement(currentSection.c_str(),"Unit",fnView, unit);
+	String currentSection = parentSection;
+	AnnotationDrawer::load(fnView, parentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Size",fnView, size);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Begin",fnView, begin);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Height",fnView, height);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Ticks",fnView, ticks);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Unit",fnView, unit);
 }
 
 String AnnotationScaleBarDrawer::getUnit() const{
@@ -1486,17 +1492,13 @@ void AnnotationNorthArrowDrawer::setScale(double s){
 }
 void AnnotationNorthArrowDrawer::setArrowType(const String& type){
 	northArrowType = type;
-
-	DrawerParameters dp(this->getRootDrawer(), this);
-	arrow = new PointDrawer(&dp);
-	PointProperties *prop = (PointProperties *)arrow->getProperties();
-	prop->symbol = type;
-	prop->drawColor = Color(0,0,0);
-	arrow->setCoord(begin);
-	PreparationParameters pp(NewDrawer::ptRENDER);
-	pp.props.symbolType = type;
-	arrow->prepare(&pp);
-	addPostDrawer(100,arrow);
+	if (arrow) {
+		PointProperties *prop = (PointProperties *)arrow->getProperties();
+		prop->symbol = type;
+		PreparationParameters pp(NewDrawer::ptRENDER);
+		pp.props.symbolType = type;
+		arrow->prepare(&pp);
+	}
 }
 
 String AnnotationNorthArrowDrawer::getArrowType() const{
@@ -1517,9 +1519,9 @@ void AnnotationNorthArrowDrawer::load(const FileName& fnView, const String& pare
 		ObjectInfo::ReadElement(currentSection.c_str(),"Begin",fnView, begin);
 }
 
-AnnotationNorthArrowDrawer::AnnotationNorthArrowDrawer(DrawerParameters *parms) : 
-AnnotationDrawer(parms, "AnnotationNorthArrowDrawer"),
-texts(0),arrow(0)
+AnnotationNorthArrowDrawer::AnnotationNorthArrowDrawer(DrawerParameters *parms)
+: AnnotationDrawer(parms, "AnnotationNorthArrowDrawer")
+, arrow(0)
 {
 	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
@@ -1536,12 +1538,18 @@ texts(0),arrow(0)
 	scale = 2.5;
 }
 
+AnnotationNorthArrowDrawer::~AnnotationNorthArrowDrawer()
+{
+	if (arrow)
+		delete arrow;
+}
+
 void AnnotationNorthArrowDrawer::prepare(PreparationParameters *pp){
 	AnnotationDrawer::prepare(pp);
 	if (  pp->type & RootDrawer::ptGEOMETRY || pp->type & RootDrawer::ptRESTORE){
 		if (!arrow) {
 			DrawerParameters dp(getRootDrawer(),this);
-			arrow = (ILWIS::PointDrawer *)NewDrawer::getDrawer("PointDrawer", "ilwis38",&dp);
+			arrow = new PointDrawer(&dp);
 			PointProperties *prop = (PointProperties *)arrow->getProperties();
 			prop->symbol = "Arrow";
 			prop->drawColor = Color(0,0,0);
@@ -1551,7 +1559,6 @@ void AnnotationNorthArrowDrawer::prepare(PreparationParameters *pp){
 			pp.props.symbolType = "Arrow";
 			pp.props.symbolSize = scale * 100;
 			arrow->prepare(&pp);
-			addPostDrawer(100,arrow);
 		}
 	}
 }
@@ -1575,9 +1582,11 @@ bool AnnotationNorthArrowDrawer::draw(const DrawLoop drawLoop, const CoordBounds
 			at = M_PI_2;
 		angle = at * 180.0 / M_PI;
 	}
-	PointProperties *prop = (PointProperties *)arrow->getProperties();
-	prop->angle = angle;
-	ComplexDrawer::draw(drawLoop, cbArea);
+	if (arrow) {
+		PointProperties *prop = (PointProperties *)arrow->getProperties();
+		prop->angle = angle;
+		arrow->draw(drawLoop, cbArea);
+	}
 
 	return true;
 }

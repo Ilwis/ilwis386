@@ -17,7 +17,6 @@ namespace ILWIS {
 		void clear();
 	protected:
 		void setPosition();
-		void setAppearance();
 		void makeActive(void *v, HTREEITEM );
 		AnnotationScaleBarDrawer *scaleDrawer;
 	};
@@ -39,19 +38,4 @@ namespace ILWIS {
 		double sz;
 		String unit;
 	};
-
-	class ScaleBarAppearance : public DisplayOptionsForm {
-	public:
-		ScaleBarAppearance(CWnd *wPar, AnnotationScaleBarDrawer *dr);
-	private:
-		void apply();
-		bool useBgColor;
-		Color bgColor;
-		bool drawBoundary;
-		double scale;
-		String title;
-
-		//vector<long> raws;
-	};
-
 }

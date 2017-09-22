@@ -201,6 +201,7 @@ private:
 class _export AnnotationNorthArrowDrawer : public AnnotationDrawer {
 public:
 	AnnotationNorthArrowDrawer(DrawerParameters *parms);
+	~AnnotationNorthArrowDrawer();
 	void prepare(PreparationParameters *pp) ;
 	Coord getBegin();
 	void setBegin(const Coord& begin);
@@ -213,9 +214,7 @@ private:
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
 	Coord begin;
-	double rotation;
 	String northArrowType;
-	TextLayerDrawer *texts;
 	PointDrawer *arrow;
 };
 }

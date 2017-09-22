@@ -60,12 +60,6 @@ HTREEITEM AnnotationScaleBarDrawerTool::configure( HTREEITEM parentItem) {
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&AnnotationScaleBarDrawerTool::makeActive);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&AnnotationScaleBarDrawerTool::setPosition);
 	htiNode = insertItem(TR("ScaleBar"),"ScaleBar",item, scaleDrawer && scaleDrawer->isActive());
-	//item = new DisplayOptionTreeItem(tree, htiNode, drawer);
-	//item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&AnnotationScaleBarDrawerTool::setPosition);
-	//insertItem(TR("Size & Position"),"Position",item);
-	//item = new DisplayOptionTreeItem(tree, htiNode, drawer);
-	//item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&AnnotationScaleBarDrawerTool::setAppearance);
-	//insertItem(TR("Appearance"),"Appearance",item);
 
 	DrawerTool::configure(htiNode);
 	return htiNode;
@@ -79,12 +73,6 @@ void AnnotationScaleBarDrawerTool::setPosition() {
 	if ( scaleDrawer)
 		new ScaleBarPosition(tree,scaleDrawer);
 }
-
-void AnnotationScaleBarDrawerTool::setAppearance() {
-	if ( scaleDrawer)
-		new ScaleBarAppearance(tree, scaleDrawer);
-}
-
 
 void AnnotationScaleBarDrawerTool::makeActive(void *v, HTREEITEM ) {
 	bool act = *(bool *)v;
@@ -113,14 +101,22 @@ void AnnotationScaleBarDrawerTool::makeActive(void *v, HTREEITEM ) {
 ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr) : 
 	DisplayOptionsForm(dr,wPar,TR("Properties of the ScaleBar"))
 {
-	//orientation = dr->getOrientation() ? 1 : 0;
-	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoom();
+	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoom();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
 	Coord begin = dr->getBegin();
 	unit = dr->getUnit();
 	ticks = dr->getTicks();
 	sz = dr->getSize();
-	x = 100 * ( begin.x - cbZoom.MinX() ) / cbZoom.width();
-	y = 100 * ( begin.y - cbZoom.MinY()) / cbZoom.height();
+	x = round(100.0 * ( begin.x - cb.MinX() ) / cb.width());
+	y = round(100.0 * ( begin.y - cb.MinY()) / cb.height());
 	sliderH = new FieldIntSliderEx(root,TR("X position"), &x,ValueRange(0,100),true);
 	sliderV = new FieldIntSliderEx(root,TR("Y position"), &y,ValueRange(0,100),true);
 	sliderV->Align(sliderH, AL_UNDER);
@@ -138,10 +134,18 @@ int ScaleBarPosition::setPosition(Event *ev) {
 	sliderV->StoreData();
 	sliderH->StoreData();
 	AnnotationScaleBarDrawer *scaleDrw = (AnnotationScaleBarDrawer *)drw;
-	Coord begin = scaleDrw->getBegin();
-	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoom();
-	double newx = cbZoom.width() * x / 100.0 + cbZoom.MinX();
-	double newy = cbZoom.height() * y / 100.0 + cbZoom.MinY();
+	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoom();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
+	double newx = cb.width() * x / 100.0 + cb.MinX();
+	double newy = cb.height() * y / 100.0 + cb.MinY();
 	scaleDrw->setBegin(Coord(newx,newy));
 	updateMapView();
 
@@ -149,6 +153,7 @@ int ScaleBarPosition::setPosition(Event *ev) {
 }
 
 void ScaleBarPosition::apply() {
+	setPosition(0);
 	fldUnit->StoreData();
 	fldSize->StoreData();
 	fldTicks->StoreData();
@@ -160,14 +165,3 @@ void ScaleBarPosition::apply() {
 	scaleDrw->prepare(&pp);
 	updateMapView();
 }
-
-//-------------------------------------------------------------------------------
-ScaleBarAppearance::ScaleBarAppearance(CWnd *wPar, AnnotationScaleBarDrawer *dr) : DisplayOptionsForm(dr,wPar,TR("Appearance of ScaleBar"))
-{
-}
-
-void ScaleBarAppearance::apply() {
-	updateMapView();
-
-}
-
