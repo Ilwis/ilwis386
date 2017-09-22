@@ -82,9 +82,7 @@ GridForm::GridForm(CWnd *par, GridDrawer *gdr)
 	
 {
 	fr = new FieldReal(root, TR("Grid spacing"), &rDist, ValueRange(0.0,1e10,0.001));
-
-
-  create();
+	create();
 }
 
 void  GridForm::apply() {
@@ -93,8 +91,11 @@ void  GridForm::apply() {
 	grd->setGridSpacing(rDist);
 	PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);
 	drw->prepare(&pp);
-	NewDrawer *borderDrw = drw->getRootDrawer()->getDrawer("AnnotationBorderDrawer");
-	if ( borderDrw)
-		borderDrw->prepare(&pp);
+	ComplexDrawer *annotations = (ComplexDrawer *)(drw->getRootDrawer()->getDrawer("AnnotationDrawers"));
+	if (annotations) {
+		NewDrawer *borderDrw = annotations->getDrawer("AnnotationBorderDrawer");
+		if ( borderDrw)
+			borderDrw->prepare(&pp);
+	}
 	updateMapView();
 }
