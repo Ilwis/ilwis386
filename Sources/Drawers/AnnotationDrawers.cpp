@@ -1522,10 +1522,16 @@ AnnotationDrawer(parms, "AnnotationNorthArrowDrawer"),
 texts(0),arrow(0)
 {
 	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
-
-	Coord middle = cb.middle();
-	middle.y = cb.MaxY() - cb.height() / 10.0;
-	begin = middle;
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
+	begin.y = cb.MaxY() - cb.height() / 10.0;
 	begin.x = cb.MaxX() - cb.width() / 10.0;
 	scale = 2.5;
 }

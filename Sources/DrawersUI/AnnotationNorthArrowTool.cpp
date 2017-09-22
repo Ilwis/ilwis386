@@ -61,7 +61,6 @@ HTREEITEM AnnotationNorthArrowTool::configure( HTREEITEM parentItem) {
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&AnnotationNorthArrowTool::setPosition);
 	htiNode = insertItem(TR("North Arrow"),"NorthArrow",item, northDrawer && northDrawer->isActive());
 
-
 	DrawerTool::configure(htiNode);
 	return htiNode;
 }
@@ -122,17 +121,25 @@ DisplayOptionsForm(dr,wPar,TR("Properties of the North Arrow")), scale(40 * dr->
 	}
 	arrowType = new FieldOneSelectString(root,TR("North Arrows"),&selection, names);
 	arrowType->SetCallBack((NotifyProc)&NorthArrowPosition::setArrow);
-	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoom();
-	Coord middle = cbZoom.middle();
-	middle.y = cbZoom.MaxY() - cbZoom.height() / 10.0;
+	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoom();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
+
 	Coord begin = dr->getBegin();
 	if (begin.fUndef()) {
-		begin = middle;
-		begin.x = cbZoom.MaxX() - cbZoom.width() / 10.0;
+		begin.y = cb.MaxY() - cb.height() / 10.0;
+		begin.x = cb.MaxX() - cb.width() / 10.0;
 		dr->setBegin(begin);
 	}
-	x = 100 * ( begin.x - cbZoom.MinX() ) / cbZoom.width();
-	y = 100 * ( begin.y - cbZoom.MinY()) / cbZoom.height();
+	x = round(100.0 * ( begin.x - cb.MinX() ) / cb.width());
+	y = round(100.0 * ( begin.y - cb.MinY()) / cb.height());
 	sliderScale = new FieldIntSliderEx(root,TR("Scale(%)"), &scale,ValueRange(10,500),true);
 	sliderH = new FieldIntSliderEx(root,TR("X position"), &x,ValueRange(0,100),true);
 	sliderV = new FieldIntSliderEx(root,TR("Y position"), &y,ValueRange(0,100),true);
@@ -145,6 +152,7 @@ DisplayOptionsForm(dr,wPar,TR("Properties of the North Arrow")), scale(40 * dr->
 	sliderScale->setContinuous(true);
 	create();
 }
+
 int NorthArrowPosition::setArrow(Event *ev) {
 	arrowType->StoreData();
 	if ( selection >= 0) {
@@ -160,10 +168,19 @@ int NorthArrowPosition::setPosition(Event *ev) {
 	sliderV->StoreData();
 	sliderH->StoreData();
 	AnnotationNorthArrowDrawer *northDrw = (AnnotationNorthArrowDrawer *)drw;
-	Coord begin = northDrw->getBegin();
-	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoom();
-	double newx = cbZoom.width() * x / 100.0 + cbZoom.MinX();
-	double newy = cbZoom.height() * y / 100.0 + cbZoom.MinY();
+	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoom();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
+
+	double newx = cb.width() * x / 100.0 + cb.MinX();
+	double newy = cb.height() * y / 100.0 + cb.MinY();
 	northDrw->setBegin(Coord(newx,newy));
 	updateMapView();
 
@@ -180,6 +197,9 @@ int NorthArrowPosition::setScale(Event *ev) {
 }
 
 void NorthArrowPosition::apply() {
+	setArrow(0);
+	setPosition(0);
+	setScale(0);
 	updateMapView();
 }
 
