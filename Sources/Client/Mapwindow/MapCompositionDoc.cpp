@@ -1125,27 +1125,34 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot, int o
 		return FALSE;
 	SetTitle(maplist);
 
-	if (ot & otANIMATION) {
-		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
-		drawer->addDataSource((void *)&maplist);
-		rootDrawer->setCoordinateSystem(mp->cs());
-		rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
-		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
-		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
-		drawer->prepare(&pp);
-		rootDrawer->addDrawer(drawer);
-	} else { // both otNORMAL and otCOLORCOMP
-		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
-		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("RasterDataDrawer", "Ilwis38", &parms);
-		drawer->addDataSource((void *)&maplist);
-		rootDrawer->setCoordinateSystem(mp->cs());
-		rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
-		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
-		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
-		drawer->prepare(&pp);
-		rootDrawer->addDrawer(drawer);
-	}
+	ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
+	ILWIS::NewDrawer *drawer;
+	if (ot & otANIMATION)
+		drawer = NewDrawer::getDrawer("AnimationDrawer", "Ilwis38", &parms);
+	else // both otNORMAL and otCOLORCOMP
+		drawer = NewDrawer::getDrawer("RasterDataDrawer", "Ilwis38", &parms);
+
+	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom(); // backup cbZoom
+	CoordBounds cbMapRootDrawer = rootDrawer->getMapCoordBounds(); // backup cbMap
+	bool fExtendBounds = !(ot & otKEEPBOUNDS);
+	drawer->addDataSource((void *)&maplist, fExtendBounds ? NewDrawer::dsoEXTENDBOUNDS : NewDrawer::dsoNONE);
+	rootDrawer->setCoordinateSystem(maplist->gr()->cs());
+	CoordBounds cbMap = mp->cb();
+	if (!cbMap.fValid() || mp->gr()->fGeoRefNone()) { // for NONE.grf or csunknown with no boundaries
+		if (cbMap.fValid()) { // fGeoRefNone case; the rootDrawer's cb was already altered (by addDataSource above); restore the backup
+			rootDrawer->setCoordBoundsMap(cbMapRootDrawer);
+			if (cbMapRootDrawer.fValid()) // also restore cbView to what it was before addDataSource
+				rootDrawer->setCoordBoundsView(cbMapRootDrawer, true);
+		}
+		cbMap = CoordBounds(Coord(0,0), Coord(mp->rcSize().Col, -mp->rcSize().Row)); // none.grf bounds
+		rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
+		rootDrawer->setGeoreference(GeoRef(FileName("none.grf")), fExtendBounds);
+	} else
+		rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
+	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
+	drawer->prepare(&pp);
+	rootDrawer->addDrawer(drawer, fExtendBounds);
+	addToPixelInfo(maplist, (ComplexDrawer *)drawer);
 
 	return TRUE;
 }
@@ -1739,14 +1746,28 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::Ope
 	if ( op & IlwisDocument::otANIMATION) {
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("AnimationDrawer", subtype, &parms);
-		drawer->addDataSource((void *)&maplist);
+		CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom(); // backup cbZoom
+		CoordBounds cbMapRootDrawer = rootDrawer->getMapCoordBounds(); // backup cbMap
+		bool fExtendBounds = !(op & otKEEPBOUNDS);
+		drawer->addDataSource((void *)&maplist, fExtendBounds ? NewDrawer::dsoEXTENDBOUNDS : NewDrawer::dsoNONE);
+		rootDrawer->setCoordinateSystem(maplist->gr()->cs());
 		Map mp = maplist[maplist->iLower()];
-		rootDrawer->setCoordinateSystem(mp->cs());
-		rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
-		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
+		CoordBounds cbMap = mp->cb();
+		if (!cbMap.fValid() || mp->gr()->fGeoRefNone()) { // for NONE.grf or csunknown with no boundaries
+			if (cbMap.fValid()) { // fGeoRefNone case; the rootDrawer's cb was already altered (by addDataSource above); restore the backup
+				rootDrawer->setCoordBoundsMap(cbMapRootDrawer);
+				if (cbMapRootDrawer.fValid()) // also restore cbView to what it was before addDataSource
+					rootDrawer->setCoordBoundsView(cbMapRootDrawer, true);
+			}
+			cbMap = CoordBounds(Coord(0,0), Coord(mp->rcSize().Col, -mp->rcSize().Row)); // none.grf bounds
+			rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
+			rootDrawer->setGeoreference(GeoRef(FileName("none.grf")), fExtendBounds);
+		} else
+			rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
 		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
 		drawer->prepare(&pp);
-		rootDrawer->addDrawer(drawer);
+		rootDrawer->addDrawer(drawer, fExtendBounds);
+		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
 		ChangeState();
 		UpdateAllViews(0,3);
 		mpvGetView()->Invalidate();
@@ -1754,14 +1775,28 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::Ope
 	} else if ( op & otCOLORCOMP ){
 		ILWIS::DrawerParameters parms(rootDrawer, rootDrawer);
 		ILWIS::NewDrawer *drawer = NewDrawer::getDrawer("RasterDataDrawer", subtype, &parms);
-		drawer->addDataSource((void *)&maplist);
+		CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom(); // backup cbZoom
+		CoordBounds cbMapRootDrawer = rootDrawer->getMapCoordBounds(); // backup cbMap
+		bool fExtendBounds = !(op & otKEEPBOUNDS);
+		drawer->addDataSource((void *)&maplist, fExtendBounds ? NewDrawer::dsoEXTENDBOUNDS : NewDrawer::dsoNONE);
+		rootDrawer->setCoordinateSystem(maplist->gr()->cs());
 		Map mp = maplist[maplist->iLower()];
-		rootDrawer->setCoordinateSystem(mp->cs());
-		rootDrawer->addCoordBounds(mp->cs(), mp->cb(), false);
+		CoordBounds cbMap = mp->cb();
+		if (!cbMap.fValid() || mp->gr()->fGeoRefNone()) { // for NONE.grf or csunknown with no boundaries
+			if (cbMap.fValid()) { // fGeoRefNone case; the rootDrawer's cb was already altered (by addDataSource above); restore the backup
+				rootDrawer->setCoordBoundsMap(cbMapRootDrawer);
+				if (cbMapRootDrawer.fValid()) // also restore cbView to what it was before addDataSource
+					rootDrawer->setCoordBoundsView(cbMapRootDrawer, true);
+			}
+			cbMap = CoordBounds(Coord(0,0), Coord(mp->rcSize().Col, -mp->rcSize().Row)); // none.grf bounds
+			rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
+			rootDrawer->setGeoreference(GeoRef(FileName("none.grf")), fExtendBounds);
+		} else
+			rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
 		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
-		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
 		drawer->prepare(&pp);
-		rootDrawer->addDrawer(drawer);
+		rootDrawer->addDrawer(drawer, fExtendBounds);
+		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
 	} else {
 		for(int i = 0; i < maplist->iSize(); ++i) {
 			drAppend(maplist[i]->fnObj);
@@ -1769,7 +1804,6 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::Ope
 	}
 	return 0;
 }
-
 
 NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType op, int os, const String& subtype)
 {
