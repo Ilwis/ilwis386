@@ -983,65 +983,53 @@ bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
-	bool is3D = getRootDrawer()->is3D();// && zvmkr->getThreeDPossible();
+	bool is3D = getRootDrawer()->is3D();
 	
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
-	CoordBounds cbTemp = cbCorner;
-	cbTemp.cMin.x = cbZoom.cMin.x + cbZoom.width() * xborder;
-	if ( cbMap.cMin.x > cbTemp.cMin.x)
-		cbTemp.cMin.x = cbMap.cMin.x;
-	cbTemp.cMax.x = cbZoom.cMax.x - cbZoom.width() * xborder;
-	if ( cbMap.cMax.x < cbTemp.cMax.x)
-		cbTemp.cMax.x = cbMap.cMax.x;
-	cbTemp.cMin.y = cbZoom.cMin.y + cbZoom.height() * yborder;
-	if ( cbMap.cMin.y > cbTemp.cMin.y)
-		cbTemp.cMin.y = cbMap.cMin.y;
-	cbTemp.cMax.y = cbZoom.cMax.y - cbZoom.height() * yborder;
-	if ( cbMap.cMax.y < cbTemp.cMax.y )
-		cbTemp.cMax.y = cbMap.cMax.y;
-
+	CoordBounds cb = cbZoom;
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
 	Extension ext = getRootDrawer()->extension();
-	cbTemp.MinX() += cbTemp.width() * ext.left / 100;
-	cbTemp.MaxX() -= cbTemp.width() * ext.right / 100;
-	cbTemp.MinY() += cbTemp.height() * ext.top / 100;
-	cbTemp.MaxY() -= cbTemp.height() * ext.bottom / 100;
+	cb.cMin.x = cb.cMin.x + cbZoom.width() * xborder + cbZoom.width() * ext.left / 100;
+	cb.cMax.x = cb.cMax.x - cbZoom.width() * xborder - cbZoom.width() * ext.right / 100;
+	cb.cMin.y = cb.cMin.y + cbZoom.height() * yborder + cbZoom.height() * ext.top / 100;
+	cb.cMax.y = cb.cMax.y - cbZoom.height() * yborder - cbZoom.height() * ext.bottom / 100;
 
-	const_cast<AnnotationBorderDrawer *>(this)->cbCorner = cbTemp;
-
-	borderBox->setBox(cbZoom, CoordBounds(cbCorner.cMin, cbCorner.cMax));
+	borderBox->setBox(cbZoom, CoordBounds(cb.cMin, cb.cMax));
 	borderBox->draw(drawLoop, cbArea);
 
 	if ( hasText[0] ) {
-		setText(cbCorner.cMin.x,AnnotationBorderDrawer::sLEFT, 0);
+		setText(cb,AnnotationBorderDrawer::sLEFT, 0);
 	}
 	if ( hasText[1] ) {
-		setText(cbCorner.cMax.x,AnnotationBorderDrawer::sRIGHT, 0);
+		setText(cb,AnnotationBorderDrawer::sRIGHT, 0);
 	}
 	if ( hasText[2] ) {
-		setText(cbCorner.cMax.y,AnnotationBorderDrawer::sTOP, 0);
+		setText(cb,AnnotationBorderDrawer::sTOP, 0);
 	}
 	if ( hasText[3] ) {
-		setText(cbCorner.cMin.y,AnnotationBorderDrawer::sBOTTOM, 0);
+		setText(cb,AnnotationBorderDrawer::sBOTTOM, 0);
 	}
 	AnnotationDrawer::draw(drawLoop, cbArea);
 
 	if ( (drawLoop != drl3DTRANSPARENT) && neatLine) {
 		glBegin(GL_LINE_STRIP);
-		glVertex3d(cbCorner.MinX(), cbCorner.MinY(),0);
-		glVertex3d(cbCorner.MinX(), cbCorner.MaxY(),0);
-		glVertex3d(cbCorner.MaxX(), cbCorner.MaxY(),0);
-		glVertex3d(cbCorner.MaxX(), cbCorner.MinY(),0);
-		glVertex3d(cbCorner.MinX(), cbCorner.MinY(),0);
+		glVertex3d(cb.MinX(), cb.MinY(),0);
+		glVertex3d(cb.MinX(), cb.MaxY(),0);
+		glVertex3d(cb.MaxX(), cb.MaxY(),0);
+		glVertex3d(cb.MaxX(), cb.MinY(),0);
+		glVertex3d(cb.MinX(), cb.MinY(),0);
 		glEnd();
 	}
 
 	glDisable(GL_BLEND);
-
-	GridDrawer *gdr = (GridDrawer *)getRootDrawer()->getDrawer("GridDrawer");
-	if ( gdr) {
-		gdr->setBounds(cbCorner);
-	}
 
 	return true;
 }
@@ -1161,20 +1149,22 @@ Coordinate ptBorderY(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side,
 	return crdUNDEF;
 }
 
-void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side side, double z) const{
+void AnnotationBorderDrawer::setText(const CoordBounds & cb, AnnotationBorderDrawer::Side side, double z) const{
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	if ( side == sLEFT || side == sRIGHT) {
 		for(int i = 0; i < ypos.size(); ++i) {
 			TextDrawer *txtdrw = const_cast<AnnotationBorderDrawer *>(this)->getTextDrawer(i,side);
 			String txt =  isLatLon ? String("%.*f",numDigits, ypos[i]) : String("%d", (long)ypos[i]);
 			txtdrw->setText(txt);
-			double offset = cbZoom.width() * 0.01;
-			CoordBounds cb = txtdrw->getTextExtent();
-			if ( side == sLEFT) {
-				offset = - cb.width() - cbZoom.width() * 0.01;
-			}
-			Coord crd(border + offset, ptBorderY(getRootDrawer(), side, ypos[i]).y - cb.height() / 2, z);			
-			txtdrw->setCoord(crd);
+			CoordBounds cbText = txtdrw->getTextExtent();
+			double x;
+			if (side == sLEFT)
+				x = cb.cMin.x - cbText.width() - cbZoom.width() * 0.01;
+			else // sRIGHT
+				x = cb.cMax.x + cbZoom.width() * 0.01;
+			double y = ptBorderY(getRootDrawer(), side, ypos[i]).y;			
+			txtdrw->setCoord(Coord(x, y - cbText.height() / 2, z));
+			txtdrw->setActive(cb.MaxY() >= y && y >= cb.MinY());
 		}
 	} else {
 		if ( side == sTOP || side == sBOTTOM) {
@@ -1182,13 +1172,15 @@ void AnnotationBorderDrawer::setText(double border, AnnotationBorderDrawer::Side
 				TextDrawer *txtdrw = const_cast<AnnotationBorderDrawer *>(this)->getTextDrawer(i,side);
 				String txt =  isLatLon ? String("%.*f",numDigits, xpos[i]) : String("%d", (long)xpos[i]);
 				txtdrw->setText(txt);
-				double offset = cbZoom.height() * 0.01;
-				CoordBounds cb = txtdrw->getTextExtent();
-				if ( side == sBOTTOM) {
-					offset = - cb.height() - cbZoom.height() * 0.01;
-				}
-				Coord crd(ptBorderX(getRootDrawer(), side, xpos[i]).x - cb.width() / 2, border + offset, z);
-				txtdrw->setCoord(crd);
+				CoordBounds cbText = txtdrw->getTextExtent();
+				double y;
+				if (side == sTOP)
+					y = cb.cMax.y + cbZoom.height() * 0.01;
+				else // sBOTTOM
+					y = cb.cMin.y - cbText.height() - cbZoom.height() * 0.01;
+				double x = ptBorderX(getRootDrawer(), side, xpos[i]).x;
+				txtdrw->setCoord(Coord(x - cbText.width() / 2, y, z));
+				txtdrw->setActive(cb.MaxX() >= x && x >= cb.MinX());
 			}
 		}
 	}

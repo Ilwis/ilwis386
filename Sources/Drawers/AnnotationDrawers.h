@@ -155,7 +155,7 @@ private:
 	void load(const FileName& fnView, const String& parenSection);
 	void calcLocations();
 	TextDrawer *getTextDrawer(int index, AnnotationBorderDrawer::Side side);
-	void setText(double border, AnnotationBorderDrawer::Side side, double z) const;
+	void setText(const CoordBounds & cb, AnnotationBorderDrawer::Side side, double z) const;
 
 	double xborder; // percent;
 	double yborder; // percent;
@@ -163,7 +163,6 @@ private:
 	vector<double> xpos;
 	vector<bool> hasText;
 	BoxDrawer *borderBox;
-	CoordBounds cbCorner;
 	TextLayerDrawer *texts;
 	bool isLatLon;
 	bool neatLine;
