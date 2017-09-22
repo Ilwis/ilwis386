@@ -79,11 +79,46 @@ void ColorCompositeDrawer::prepare(PreparationParameters *pp){
 		textureHeap->ReGenerateAllTextures();
 }
 
+void ColorCompositeDrawer::init() const
+{
+	// fetch the image's coordinate bounds
+	DrawerContext* drawcontext = (getRootDrawer())->getDrawerContext();
+	data->maxTextureSize = drawcontext->getMaxTextureSize();
+	int iXScreen = GetSystemMetrics(SM_CXFULLSCREEN); // maximum X size of client area (regardless of current viewport)
+	int iYScreen = GetSystemMetrics(SM_CYFULLSCREEN); // maximum Y size of client area
+	if (iXScreen < data->maxTextureSize) // prevent making textures that are larger than the screen, it is totally unnecessary and a big performance and memory hit
+		data->maxTextureSize = iXScreen;
+	if (iYScreen < data->maxTextureSize)
+		data->maxTextureSize = iYScreen;
+	if ( !gr()->rcSize().fUndef()) {
+		data->imageWidth = gr()->rcSize().Col;
+		data->imageHeight = gr()->rcSize().Row;
+	} else if ( mpl.fValid()) {
+		data->imageWidth = mpl->rcSize().Col;
+		data->imageHeight = mpl->rcSize().Row;
+	}
+
+	double log2width = log((double)data->imageWidth)/log(2.0);
+	log2width = max(6, ceil(log2width)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
+	data->width = pow(2, log2width);
+	double log2height = log((double)data->imageHeight)/log(2.0);
+	log2height = max(6, ceil(log2height)); // 2^6 = 64 = the minimum texture size that OpenGL/TexImage2D supports
+	data->height = pow(2, log2height);
+
+	setData();
+
+	if (fPaletteOwner && fUsePalette) {
+		palette->SetData(rastermap, this, drawcontext->getMaxPaletteSize(), rrMinMax);
+		palette->Refresh();
+		getRootDrawer()->getDrawerContext()->setActivePalette(0);
+	}
+	data->init = true;
+}
+
 void ColorCompositeDrawer::setData() const{
 	DrawerContext* drawcontext = getRootDrawer()->getDrawerContext();
 	textureHeap->SetData(mpl, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
 }
-
 
 GeoRef ColorCompositeDrawer::gr() const {
 	return mpl[0]->gr();
@@ -104,8 +139,6 @@ void ColorCompositeDrawer::addDataSource(void *bmap, int options){
 void ColorCompositeDrawer::setDrawMethod(DrawMethod method) {
 	drm = drmCOLOR;
 }
-
-
 
 bool ColorCompositeDrawer::isColorComposite() const {
 	return mpl.fValid() && mpl->iSize() >= 3;

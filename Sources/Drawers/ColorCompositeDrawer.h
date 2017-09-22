@@ -62,6 +62,7 @@ namespace ILWIS {
 		void load(const FileName& fnView, const String& parentSection);
 
 		virtual void setData() const;
+		virtual void init() const;
 		virtual GeoRef gr() const;
 		MapList mpl;
 	};
