@@ -1003,22 +1003,20 @@ bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	cb.cMax.y = cb.cMax.y - cbZoom.height() * yborder - cbZoom.height() * ext.bottom / 100;
 
 	borderBox->setBox(cbZoom, CoordBounds(cb.cMin, cb.cMax));
-	borderBox->draw(drawLoop, cbArea);
-
-	if ( hasText[0] ) {
+	if ( hasText[0] )
 		setText(cb,AnnotationBorderDrawer::sLEFT, 0);
-	}
-	if ( hasText[1] ) {
+	if ( hasText[1] )
 		setText(cb,AnnotationBorderDrawer::sRIGHT, 0);
-	}
-	if ( hasText[2] ) {
+	if ( hasText[2] )
 		setText(cb,AnnotationBorderDrawer::sTOP, 0);
-	}
-	if ( hasText[3] ) {
+	if ( hasText[3] )
 		setText(cb,AnnotationBorderDrawer::sBOTTOM, 0);
-	}
-	AnnotationDrawer::draw(drawLoop, cbArea);
 
+	// draw white space around
+	borderBox->draw(drawLoop, cbArea);
+	// draw texts
+	AnnotationDrawer::draw(drawLoop, cbArea);
+	// draw neat line
 	if ( (drawLoop != drl3DTRANSPARENT) && neatLine) {
 		glBegin(GL_LINE_STRIP);
 		glVertex3d(cb.MinX(), cb.MinY(),0);
@@ -1154,8 +1152,6 @@ void AnnotationBorderDrawer::setText(const CoordBounds & cb, AnnotationBorderDra
 	if ( side == sLEFT || side == sRIGHT) {
 		for(int i = 0; i < ypos.size(); ++i) {
 			TextDrawer *txtdrw = const_cast<AnnotationBorderDrawer *>(this)->getTextDrawer(i,side);
-			String txt =  isLatLon ? String("%.*f",numDigits, ypos[i]) : String("%d", (long)ypos[i]);
-			txtdrw->setText(txt);
 			CoordBounds cbText = txtdrw->getTextExtent();
 			double x;
 			if (side == sLEFT)
@@ -1170,8 +1166,6 @@ void AnnotationBorderDrawer::setText(const CoordBounds & cb, AnnotationBorderDra
 		if ( side == sTOP || side == sBOTTOM) {
 			for(int i = 0; i < xpos.size(); ++i) {
 				TextDrawer *txtdrw = const_cast<AnnotationBorderDrawer *>(this)->getTextDrawer(i,side);
-				String txt =  isLatLon ? String("%.*f",numDigits, xpos[i]) : String("%d", (long)xpos[i]);
-				txtdrw->setText(txt);
 				CoordBounds cbText = txtdrw->getTextExtent();
 				double y;
 				if (side == sTOP)
@@ -1188,6 +1182,7 @@ void AnnotationBorderDrawer::setText(const CoordBounds & cb, AnnotationBorderDra
 int AnnotationBorderDrawer::getNumberOfDigits() const{
 	return numDigits;
 }
+
 void AnnotationBorderDrawer::setNumberOfDigits(int num){
 	numDigits = num;
 }
@@ -1231,7 +1226,6 @@ void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
 			borderBox = new BoxDrawer(&dp);
 			borderBox->setAlpha(1);
 			borderBox->setDrawColor(Color(255,255,255));
-			//addDrawer(borderBox);
 			texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
 			texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12,false));
 			addDrawer(texts);
@@ -1246,6 +1240,22 @@ void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
 		for(int i = 0 ; i < ypos.size() * 2; ++i) { 
 			TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
 			texts->addDrawer(txtdr);
+		}
+
+		for(int i = 0; i < ypos.size(); ++i) {
+			String txt =  isLatLon ? String("%.*f",numDigits, ypos[i]) : String("%d", (long)ypos[i]);
+			TextDrawer *txtdrw = getTextDrawer(i,sLEFT);
+			txtdrw->setText(txt);
+			txtdrw = getTextDrawer(i,sRIGHT);
+			txtdrw->setText(txt);
+		}
+
+		for(int i = 0; i < xpos.size(); ++i) {
+			String txt =  isLatLon ? String("%.*f",numDigits, xpos[i]) : String("%d", (long)xpos[i]);
+			TextDrawer *txtdrw = getTextDrawer(i,sTOP);
+			txtdrw->setText(txt);
+			txtdrw = getTextDrawer(i,sBOTTOM);
+			txtdrw->setText(txt);
 		}
 	}
 	if ( pp->type & NewDrawer::ptOFFSCREENSTART || pp->type & NewDrawer::ptOFFSCREENEND) {
