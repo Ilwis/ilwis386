@@ -155,7 +155,7 @@ private:
 	void load(const FileName& fnView, const String& parenSection);
 	void calcLocations();
 	TextDrawer *getTextDrawer(int index, AnnotationBorderDrawer::Side side);
-	void setText(const CoordBounds & cb, AnnotationBorderDrawer::Side side, double z) const;
+	void setText(const CoordBounds & cb, const CoordBounds & cbArea, AnnotationBorderDrawer::Side side, double z) const;
 
 	double xborder; // percent;
 	double yborder; // percent;

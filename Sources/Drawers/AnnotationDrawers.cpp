@@ -736,7 +736,7 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	if ( !isActive() || !isValid())
 		return false;
 
-	if ( !getRootDrawer()->getCoordBoundsZoom().fContains(cbBox))
+	if ( !cbArea.fContains(cbBox))
 		return false;
 
 	bool is3D = getRootDrawer()->is3D(); 
@@ -985,9 +985,8 @@ bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 
 	bool is3D = getRootDrawer()->is3D();
 	
-	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
-	CoordBounds cb = cbZoom;
+	CoordBounds cb = cbArea;
 	if (cbMap.MinX() > cb.MinX())
 		cb.MinX() = cbMap.MinX();
 	if (cbMap.MaxX() < cb.MaxX())
@@ -997,20 +996,20 @@ bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	if (cbMap.MaxY() < cb.MaxY())
 		cb.MaxY() = cbMap.MaxY();
 	Extension ext = getRootDrawer()->extension();
-	cb.cMin.x = cb.cMin.x + cbZoom.width() * xborder + cbZoom.width() * ext.left / 100;
-	cb.cMax.x = cb.cMax.x - cbZoom.width() * xborder - cbZoom.width() * ext.right / 100;
-	cb.cMin.y = cb.cMin.y + cbZoom.height() * yborder + cbZoom.height() * ext.top / 100;
-	cb.cMax.y = cb.cMax.y - cbZoom.height() * yborder - cbZoom.height() * ext.bottom / 100;
+	cb.cMin.x = cb.cMin.x + cbArea.width() * xborder + cbArea.width() * ext.left / 100;
+	cb.cMax.x = cb.cMax.x - cbArea.width() * xborder - cbArea.width() * ext.right / 100;
+	cb.cMin.y = cb.cMin.y + cbArea.height() * yborder + cbArea.height() * ext.top / 100;
+	cb.cMax.y = cb.cMax.y - cbArea.height() * yborder - cbArea.height() * ext.bottom / 100;
 
-	borderBox->setBox(cbZoom, CoordBounds(cb.cMin, cb.cMax));
+	borderBox->setBox(cbArea, CoordBounds(cb.cMin, cb.cMax));
 	if ( hasText[0] )
-		setText(cb,AnnotationBorderDrawer::sLEFT, 0);
+		setText(cb,cbArea,AnnotationBorderDrawer::sLEFT, 0);
 	if ( hasText[1] )
-		setText(cb,AnnotationBorderDrawer::sRIGHT, 0);
+		setText(cb,cbArea,AnnotationBorderDrawer::sRIGHT, 0);
 	if ( hasText[2] )
-		setText(cb,AnnotationBorderDrawer::sTOP, 0);
+		setText(cb,cbArea,AnnotationBorderDrawer::sTOP, 0);
 	if ( hasText[3] )
-		setText(cb,AnnotationBorderDrawer::sBOTTOM, 0);
+		setText(cb,cbArea,AnnotationBorderDrawer::sBOTTOM, 0);
 
 	// draw white space around
 	borderBox->draw(drawLoop, cbArea);
@@ -1018,6 +1017,7 @@ bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	AnnotationDrawer::draw(drawLoop, cbArea);
 	// draw neat line
 	if ( (drawLoop != drl3DTRANSPARENT) && neatLine) {
+		glColor3d(0,0,0);
 		glBegin(GL_LINE_STRIP);
 		glVertex3d(cb.MinX(), cb.MinY(),0);
 		glVertex3d(cb.MinX(), cb.MaxY(),0);
@@ -1147,17 +1147,16 @@ Coordinate ptBorderY(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side,
 	return crdUNDEF;
 }
 
-void AnnotationBorderDrawer::setText(const CoordBounds & cb, AnnotationBorderDrawer::Side side, double z) const{
-	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
+void AnnotationBorderDrawer::setText(const CoordBounds & cb, const CoordBounds & cbArea, AnnotationBorderDrawer::Side side, double z) const{
 	if ( side == sLEFT || side == sRIGHT) {
 		for(int i = 0; i < ypos.size(); ++i) {
 			TextDrawer *txtdrw = const_cast<AnnotationBorderDrawer *>(this)->getTextDrawer(i,side);
 			CoordBounds cbText = txtdrw->getTextExtent();
 			double x;
 			if (side == sLEFT)
-				x = cb.cMin.x - cbText.width() - cbZoom.width() * 0.01;
+				x = cb.cMin.x - cbText.width() - cbArea.width() * 0.01;
 			else // sRIGHT
-				x = cb.cMax.x + cbZoom.width() * 0.01;
+				x = cb.cMax.x + cbArea.width() * 0.01;
 			double y = ptBorderY(getRootDrawer(), side, ypos[i]).y;			
 			txtdrw->setCoord(Coord(x, y - cbText.height() / 2, z));
 			txtdrw->setActive(cb.MaxY() >= y && y >= cb.MinY());
@@ -1169,9 +1168,9 @@ void AnnotationBorderDrawer::setText(const CoordBounds & cb, AnnotationBorderDra
 				CoordBounds cbText = txtdrw->getTextExtent();
 				double y;
 				if (side == sTOP)
-					y = cb.cMax.y + cbZoom.height() * 0.01;
+					y = cb.cMax.y + cbArea.height() * 0.01;
 				else // sBOTTOM
-					y = cb.cMin.y - cbText.height() - cbZoom.height() * 0.01;
+					y = cb.cMin.y - cbText.height() - cbArea.height() * 0.01;
 				double x = ptBorderX(getRootDrawer(), side, xpos[i]).x;
 				txtdrw->setCoord(Coord(x - cbText.width() / 2, y, z));
 				txtdrw->setActive(cb.MaxX() >= x && x >= cb.MinX());
