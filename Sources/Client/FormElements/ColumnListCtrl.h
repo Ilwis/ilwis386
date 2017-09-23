@@ -102,6 +102,8 @@ private:
 	afx_msg void OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDoubleClick(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 
 	DECLARE_MESSAGE_MAP();
 };

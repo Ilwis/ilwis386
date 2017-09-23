@@ -160,6 +160,8 @@ BEGIN_MESSAGE_MAP(ColumnListCtrl, CListCtrl)
 	ON_NOTIFY_REFLECT(LVN_ENDLABELEDIT,	  OnEndLabelEdit)
 	ON_NOTIFY_REFLECT(NM_CLICK,           OnClick)
 	ON_NOTIFY_REFLECT(NM_DBLCLK,          OnDoubleClick)
+	ON_WM_KEYDOWN()
+	ON_WM_KEYUP()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -326,6 +328,41 @@ void ColumnListCtrl::OnClick(NMHDR* pNMHDR, LRESULT* pResult)
 
 	m_iSubItem = pNMLV->iSubItem;
 	m_iItem = pNMLV->iItem;
+}
+
+void ColumnListCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	CListCtrl::OnKeyDown(nChar, nRepCnt, nFlags);
+	switch ( nChar)
+	{
+		case VK_LEFT:
+			m_iSubItem = m_iSubItem - nRepCnt;
+			if (m_iSubItem < 0)
+				m_iSubItem = 0;
+			break;
+		case VK_RIGHT:
+			m_iSubItem = m_iSubItem + nRepCnt;
+			if (m_iSubItem >= m_fclParent->iNrCols())
+				m_iSubItem = m_fclParent->iNrCols() - 1;
+			break;
+	}
+}
+
+void ColumnListCtrl::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	CListCtrl::OnKeyUp(nChar, nRepCnt, nFlags);
+	switch ( nChar)
+	{
+		case VK_INSERT:
+	   	case VK_F2:
+			int iSelected = GetSelectionMark();
+			if (iSelected >= 0) {
+				m_iItem = iSelected;
+				LRESULT pResult;
+				OnBeginLabelEdit(0, &pResult);
+			}
+			break;
+	}		
 }
 
 void ColumnListCtrl::ToggleAsKey(int iItem)
