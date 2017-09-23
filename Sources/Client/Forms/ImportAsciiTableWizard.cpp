@@ -629,7 +629,7 @@ public:
 		m_fiCols->SetCallBack((NotifyProc)&SpecifyColumnsDetailsPage::ColCountChange);
 		m_fiSkip = new FieldInt(root, TR("Nr. of &Header lines"), m_piSkip, ValueRange(0, 9999), true);  // use with spin control
 		m_fiSkip->SetCallBack((NotifyProc)&SpecifyColumnsDetailsPage::SkipLinesChange);
-		String s('x', 60);
+		String s('x', 80);
 		m_stRemark = new StaticText(root, s);
 		m_stRemark->SetIndependentPos();
 	}
@@ -696,6 +696,13 @@ public:
 			{
 				dwButtons &= ~PSWIZB_FINISH;
 				sRem = String(TR("Domain name of column %S is missing").c_str(), ci.sColumnName);
+				break;
+			}
+			if (ci.sColumnName.find("-") != string::npos || ci.sColumnName.find("+") != string::npos || ci.sColumnName.find("(") != string::npos ||
+			  ci.sColumnName.find(")") != string::npos || ci.sColumnName.find("=") != string::npos || ci.sColumnName.find("/") != string::npos)
+			{
+				dwButtons &= ~PSWIZB_FINISH;
+				sRem = String(TR("Column name with +-/=() can not be used in ILWIS: %S").c_str(), ci.sColumnName);
 				break;
 			}
 			if (m_atw->GetFormat() == TableExternalFormat::ifFixed)
