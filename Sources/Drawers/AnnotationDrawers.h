@@ -144,8 +144,10 @@ public:
 	~AnnotationBorderDrawer();
 	void prepare(PreparationParameters *pp) ;
 	bool hasNeatLine() const;
+	bool hasTicks() const;
 	int getStep() const;
 	void setHasNeatLine(bool yesno);
+	void setHasTicks(bool yesno);
 	void setStep(int st);
 	int getNumberOfDigits() const;
 	void setNumberOfDigits(int num);
@@ -156,6 +158,7 @@ private:
 	void calcLocations();
 	TextDrawer *getTextDrawer(int index, AnnotationBorderDrawer::Side side);
 	void setText(const CoordBounds & cb, const CoordBounds & cbArea, AnnotationBorderDrawer::Side side, double z) const;
+	void drawTicks(const CoordBounds & cb, const CoordBounds & cbArea, AnnotationBorderDrawer::Side side, double z) const;
 
 	double xborder; // percent;
 	double yborder; // percent;
@@ -166,6 +169,7 @@ private:
 	TextLayerDrawer *texts;
 	bool isLatLon;
 	bool neatLine;
+	bool ticks;
 	int step;
 	int numDigits;
 

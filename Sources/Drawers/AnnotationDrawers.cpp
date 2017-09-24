@@ -37,7 +37,6 @@ ILWIS::NewDrawer *createAnnotationDrawers(DrawerParameters *parms) {
 
 AnnotationDrawers::AnnotationDrawers(DrawerParameters *parms) : ComplexDrawer(parms, "AnnotationDrawers"){
 	id = "AnnotationDrawers";
-
 }
 
 void AnnotationDrawers::prepare(PreparationParameters *pp) {
@@ -966,7 +965,7 @@ ILWIS::NewDrawer *createAnnotationBorderDrawer(DrawerParameters *parms) {
 
 AnnotationBorderDrawer::AnnotationBorderDrawer(DrawerParameters *parms) : 
 AnnotationDrawer(parms, "AnnotationBorderDrawer"),
-borderBox(0), xborder(0.06), yborder(0.03), neatLine(true), step(1), numDigits(2){
+borderBox(0), xborder(0.06), yborder(0.03), neatLine(true), ticks(true), step(1), numDigits(2){
 	for(int i=0; i < 4; ++i)
 		hasText.push_back(true);
 	id = "AnnotationBorderDrawer";
@@ -1015,17 +1014,30 @@ bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	borderBox->draw(drawLoop, cbArea);
 	// draw texts
 	AnnotationDrawer::draw(drawLoop, cbArea);
-	// draw neat line
-	if ( (drawLoop != drl3DTRANSPARENT) && neatLine) {
-		glColor3d(0,0,0);
-		glBegin(GL_LINE_STRIP);
-		glVertex3d(cb.MinX(), cb.MinY(),0);
-		glVertex3d(cb.MinX(), cb.MaxY(),0);
-		glVertex3d(cb.MaxX(), cb.MaxY(),0);
-		glVertex3d(cb.MaxX(), cb.MinY(),0);
-		glVertex3d(cb.MinX(), cb.MinY(),0);
-		glEnd();
-	}
+	if (drawLoop != drl3DTRANSPARENT) {
+		if (neatLine) {
+			// draw neat line
+			glColor3d(0,0,0);
+			glBegin(GL_LINE_STRIP);
+			glVertex3d(cb.MinX(), cb.MinY(),0);
+			glVertex3d(cb.MinX(), cb.MaxY(),0);
+			glVertex3d(cb.MaxX(), cb.MaxY(),0);
+			glVertex3d(cb.MaxX(), cb.MinY(),0);
+			glVertex3d(cb.MinX(), cb.MinY(),0);
+			glEnd();
+		}
+		if (ticks) {
+			// draw ticks
+			if ( hasText[0] )
+				drawTicks(cb,cbArea,AnnotationBorderDrawer::sLEFT, 0);
+			if ( hasText[1] )
+				drawTicks(cb,cbArea,AnnotationBorderDrawer::sRIGHT, 0);
+			if ( hasText[2] )
+				drawTicks(cb,cbArea,AnnotationBorderDrawer::sTOP, 0);
+			if ( hasText[3] )
+				drawTicks(cb,cbArea,AnnotationBorderDrawer::sBOTTOM, 0);
+		}
+	} 
 
 	glDisable(GL_BLEND);
 
@@ -1178,6 +1190,49 @@ void AnnotationBorderDrawer::setText(const CoordBounds & cb, const CoordBounds &
 		}
 	}
 }
+
+void AnnotationBorderDrawer::drawTicks(const CoordBounds & cb, const CoordBounds & cbArea, AnnotationBorderDrawer::Side side, double z) const{
+	if (side == sLEFT || side == sRIGHT) {
+		for(int i = 0; i < ypos.size(); ++i) {
+			double y = ptBorderY(getRootDrawer(), side, ypos[i]).y;
+			if (cb.MaxY() >= y && y >= cb.MinY()) {
+				double x;
+				double x1;
+				if (side == sLEFT) {
+					x = cb.cMin.x;
+					x1 = x - cbArea.width() * 0.005;
+				} else { // sRIGHT
+					x = cb.cMax.x;
+					x1 = x + cbArea.width() * 0.005;
+				}
+				glBegin(GL_LINE_STRIP);
+				glVertex3d(x, y, z);
+				glVertex3d(x1, y, z);
+				glEnd();
+			}
+		}
+	} else if (side == sTOP || side == sBOTTOM) {
+		for(int i = 0; i < xpos.size(); ++i) {
+			double x = ptBorderX(getRootDrawer(), side, xpos[i]).x;
+			if (cb.MaxX() >= x && x >= cb.MinX()) {
+				double y;
+				double y1;
+				if (side == sTOP) {
+					y = cb.cMax.y;
+					y1 = y + cbArea.height() * 0.005;
+				} else { // sBOTTOM
+					y = cb.cMin.y;
+					y1 = y - cbArea.height() * 0.005;
+				}
+				glBegin(GL_LINE_STRIP);
+				glVertex3d(x, y, z);
+				glVertex3d(x, y1, z);
+				glEnd();
+			}
+		}
+	}
+}
+
 int AnnotationBorderDrawer::getNumberOfDigits() const{
 	return numDigits;
 }
@@ -1191,6 +1246,7 @@ String AnnotationBorderDrawer::store(const FileName& fnView, const String& paren
 	AnnotationDrawer::store(fnView, currentSection);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Steps",fnView, step);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Neatline",fnView, neatLine);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Ticks",fnView, ticks);
 	ObjectInfo::WriteElement(currentSection.c_str(),"digits",fnView, numDigits);
 
 	return currentSection;
@@ -1212,6 +1268,7 @@ void AnnotationBorderDrawer::load(const FileName& fnView, const String& parentSe
 
 		ObjectInfo::ReadElement(currentSection.c_str(),"Steps",fnView, step);
 		ObjectInfo::ReadElement(currentSection.c_str(),"Neatline",fnView, neatLine);
+		ObjectInfo::ReadElement(currentSection.c_str(),"Ticks",fnView, ticks);
 		ObjectInfo::ReadElement(currentSection.c_str(),"digits",fnView, numDigits);	
 }
 
@@ -1304,17 +1361,26 @@ void AnnotationBorderDrawer::calcLocations() {
 		if ( count % step == 0)
 			ypos.push_back(y);
 	}
-
 }
+
 bool AnnotationBorderDrawer::hasNeatLine() const{
 	return neatLine;
+}
+
+bool AnnotationBorderDrawer::hasTicks() const{
+	return ticks;
 }
 
 int AnnotationBorderDrawer::getStep() const{
 	return step;
 }
+
 void AnnotationBorderDrawer::setHasNeatLine(bool yesno){
 	neatLine = yesno;
+}
+
+void AnnotationBorderDrawer::setHasTicks(bool yesno){
+	ticks = yesno;
 }
 
 void AnnotationBorderDrawer::setStep(int st){

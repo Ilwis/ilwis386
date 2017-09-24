@@ -67,7 +67,6 @@ void AnnotationBorderTool::makeActive(void *v, HTREEITEM ) {
 	}
 	else {
 		if ( act) {
-
 			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
 			ILWIS::DrawerParameters dp(drawer->getRootDrawer(), drawer);
 			border = (AnnotationBorderDrawer *)NewDrawer::getDrawer("AnnotationBorderDrawer","ilwis38",&dp);
@@ -100,9 +99,11 @@ DisplayOptionsForm(dr,wPar,"Borders")
 	step = dr->getStep();
 	num = dr->getNumberOfDigits();
 	neatline = dr->hasNeatLine();
+	ticks = dr->hasTicks();
 	new FieldInt(root,TR("Step"),&step);
 	new FieldInt(root,TR("Significant numbers"), &num);
 	new CheckBox(root, TR("Neat line"),&neatline);
+	new CheckBox(root, TR("Ticks"),&ticks);
 	create();
 }
 
@@ -111,6 +112,7 @@ void  AnnotationBorderForm::apply() {
 	root->StoreData();
 	AnnotationBorderDrawer *borderDrw = (AnnotationBorderDrawer *)drw;
 	borderDrw->setHasNeatLine(neatline);
+	borderDrw->setHasTicks(ticks);
 	borderDrw->setStep(step);
 	borderDrw->setNumberOfDigits(num);
 	

@@ -31,8 +31,7 @@ private:
 	int step;
 	int num;
 	bool neatline;
-	
-	
+	bool ticks;	
 };
 
 }
