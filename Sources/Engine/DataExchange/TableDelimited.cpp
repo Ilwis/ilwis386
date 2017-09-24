@@ -422,8 +422,10 @@ void TableDelimited::ScanLine(FieldValues& sFields, vector<FldInfo> &scanInfo, b
 	for(FieldValues::iterator cur = sFields.begin(); cur != sFields.end(); ++cur)
 	{
 		String sField = *cur;
-		if (sField.length() == 0 || sField == sUNDEF)
+		if (sField.length() == 0 || sField == sUNDEF) {
+			++iField;
 			continue; // ignore this in the "Domain" decision
+		}
 		double rV = sField.rVal();
 		FldInfo& fi = scanInfo[iField];
 		if ( rV != rUNDEF)
