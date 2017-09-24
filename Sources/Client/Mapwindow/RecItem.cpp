@@ -422,7 +422,7 @@ const String& RecItemMap::sValue(int iWidth)   // meaning
 				iVal = iUNDEF;
 				sVal = String("%-*S", 45, TR("? impossible coordinate"));
 			}
-			else if (!map()->cb().fContains(cwcs.c())) {
+			else if (map()->cb().fValid() && !map()->cb().fContains(cwcs.c())) {
 				fResValid = true;
 				fStrValid = true;
 				iVal = iUNDEF;
