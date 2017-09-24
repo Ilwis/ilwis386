@@ -244,3 +244,8 @@ void FieldColumnLister::CallChangeCallback()
 	if (_npChanged)
 		(_cb->*_npChanged)(0);
 }
+
+void FieldColumnLister::SelectColumn(int iCol)
+{
+	m_clctrl.SelectColumn(iCol);
+}

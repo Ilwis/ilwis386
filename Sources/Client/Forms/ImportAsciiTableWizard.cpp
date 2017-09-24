@@ -690,12 +690,14 @@ public:
 			{
 				dwButtons &= ~PSWIZB_FINISH;
 				sRem = String(TR("Column name of column %d is missing").c_str(), i + 1);
+				fclColumn->SelectColumn(i);
 				break;
 			}
 			if (!ci.fnDomain.fValid())
 			{
 				dwButtons &= ~PSWIZB_FINISH;
 				sRem = String(TR("Domain name of column %S is missing").c_str(), ci.sColumnName);
+				fclColumn->SelectColumn(i);
 				break;
 			}
 			if (ci.sColumnName.find("-") != string::npos || ci.sColumnName.find("+") != string::npos || ci.sColumnName.find("(") != string::npos ||
@@ -703,6 +705,7 @@ public:
 			{
 				dwButtons &= ~PSWIZB_FINISH;
 				sRem = String(TR("Column name with +-/=() can not be used in ILWIS: %S").c_str(), ci.sColumnName);
+				fclColumn->SelectColumn(i);
 				break;
 			}
 			if (m_atw->GetFormat() == TableExternalFormat::ifFixed)
@@ -711,6 +714,7 @@ public:
 				{
 					dwButtons &= ~PSWIZB_FINISH;
 					sRem = String(TR("Column width must be larger than 0 for column: %S").c_str(), ci.sColumnName);
+					fclColumn->SelectColumn(i);
 					break;
 				}
 			}
@@ -721,6 +725,7 @@ public:
 					if ( ciAll.sColumnName == ci.sColumnName){
 						dwButtons &= ~PSWIZB_FINISH;
 						sRem = String(TR("Duplicate column names are not allowed: %S").c_str(), ci.sColumnName);
+						fclColumn->SelectColumn(j);
 						i = m_iCols + 1;
 						break;
 					}

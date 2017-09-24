@@ -626,3 +626,11 @@ void ColumnListCtrl::OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
+void ColumnListCtrl::SelectColumn(int iCol)
+{
+	SetItemState(m_iItem, ~LVIS_SELECTED, LVIS_SELECTED);
+	SetItemState(iCol, LVIS_SELECTED, LVIS_SELECTED);
+	SetSelectionMark(iCol);
+	EnsureVisible(iCol, FALSE);
+}
+

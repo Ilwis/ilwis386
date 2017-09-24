@@ -85,6 +85,7 @@ public:
 	void ToggleSelectedAsKey();
 
 	void CallChangeCallback();
+	void SelectColumn(int iCol);
 
 protected:
 	void Fill();

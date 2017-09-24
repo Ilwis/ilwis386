@@ -83,6 +83,7 @@ public:
 	void SetParentField(FieldColumnLister*);
 	void ToggleAsKey(int iItem);
 	void ToggleSelectedAsKey();
+	void SelectColumn(int iCol);
 
 private:
 	NameEdit* m_ne;
