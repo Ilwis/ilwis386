@@ -209,12 +209,19 @@ void ForeignCatalog::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult)
 		return;
 	iItem = viIndex[iItem];
 	FileName& fn = vfn[iItem];
-	String s;
-	ForeignCollectionDoc *doc = GetDocument();
-	String sDBName = doc->obj()->fnObj.sRelative();
 	String sCmd;
-
-	sCmd = String("open %S\\%S", sDBName.sQuote(), fn.sRelativeQuoted());
+	if (fn.fExist()) // try with the file's path
+		sCmd = String("open %S", fn.sFullPathQuoted());
+	else {
+		ForeignCollectionDoc *doc = GetDocument();
+		FileName fndb (fn.sFileExt(), doc->obj()->fnObj); // if not, try with the collection file's path
+		if (fndb.fExist())
+			sCmd = String("open %S", fn.sFullPathQuoted());
+		else { // the original method for opening ForeignFormat (GDAL) files (thus not WMS or Postgres). This opens in WinThread. Note that IlwisMDIDocTemplate items (e.g. maplist) will not open in WinThread.
+			String sDBName = doc->obj()->fnObj.sRelative();
+			sCmd = String("open %S\\%S", sDBName.sQuote(), fn.sRelativeQuoted());
+		}
+	}
 	
 	char* str = sCmd.sVal();
 	IlwWinApp()->GetMainWnd()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)str);	
