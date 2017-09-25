@@ -678,9 +678,9 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 			RangeReal rrMinMax = getValueRange(attributeColumnColors);
 			double width = rrMinMax.rWidth();
 			double minMapVal = rrMinMax.rLo();
-			const DrawingColor * drawColor = getDrawingColor();
 
 			if (fValueMap) {
+				const DrawingColor * drawColor = getDrawingColor();
 				double * buf = new double [iTextureSize];
 				for (int i = 0; i < iTextureSize; ++i)
 					buf[i] = minMapVal + i * width / iTextureSize;
@@ -693,10 +693,16 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 				}
 				delete [] buf;
 			} else {
+				DrawingColor dc(const_cast<SpaceTimeDrawer*>(this));
+				dc.setMultiColors(drawColor->multiColors(), false);
+				dc.setColorSet(drawColor->colorSet());
+				if (drawColor->multiColors() == 3)
+					dc.copyClrRandomFrom(*drawColor);
+
 				long * buf = new long [iTextureSize];
 				for (int i = 0; i < iTextureSize; ++i)
 					buf[i] = minMapVal + round(i * width / iTextureSize);
-				drawColor->clrRaw(buf, texture_data, iTextureSize, drm);
+				dc.clrRaw(buf, texture_data, iTextureSize, drm);
 				if (useAttributeColumn() && disabledRaws.size() > 0) {
 					for (int i = 0; i < iTextureSize; ++i) {
 						if (find(disabledRaws.begin(), disabledRaws.end(), buf[i]) != disabledRaws.end())
