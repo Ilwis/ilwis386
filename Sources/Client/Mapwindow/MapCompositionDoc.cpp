@@ -593,7 +593,6 @@ void MapCompositionDoc::SetTitle(const IlwisObject& obj)
 	CDocument::SetTitle(s.sVal());
 }
 
-
 void MapCompositionDoc::OnExtPerc()
 {
 	class ExtendForm: public FormWithDest
@@ -697,6 +696,19 @@ void MapCompositionDoc::OnExtPerc()
 		}
 		cb = CoordBounds(Coord(lx,ty), Coord(rx,by));
 		rootDrawer->addCoordBounds(rootDrawer->getCoordinateSystem(),cb);
+		ComplexDrawer *annotations = (ComplexDrawer *)(rootDrawer->getDrawer("AnnotationDrawers"));
+		if (annotations) {
+			PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);
+			NewDrawer *borderDrw = annotations->getDrawer("AnnotationBorderDrawer");
+			if ( borderDrw)
+				borderDrw->prepare(&pp);
+			NewDrawer *gridDrw = annotations->getDrawer("GridDrawer");
+			if ( gridDrw)
+				gridDrw->prepare(&pp);
+			NewDrawer *graticuleDrw = annotations->getDrawer("GraticuleDrawer");
+			if ( graticuleDrw)
+				graticuleDrw->prepare(&pp);
+		}
 		rootDrawer->getDrawerContext()->doDraw();
 	}
 }
@@ -726,6 +738,19 @@ void MapCompositionDoc::OnExtCoord()
 	if (frm.fOkClicked()) 
 	{
 		rootDrawer->setCoordBoundsMap(cb);
+		ComplexDrawer *annotations = (ComplexDrawer *)(rootDrawer->getDrawer("AnnotationDrawers"));
+		if (annotations) {
+			PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);
+			NewDrawer *borderDrw = annotations->getDrawer("AnnotationBorderDrawer");
+			if ( borderDrw)
+				borderDrw->prepare(&pp);
+			NewDrawer *gridDrw = annotations->getDrawer("GridDrawer");
+			if ( gridDrw)
+				gridDrw->prepare(&pp);
+			NewDrawer *graticuleDrw = annotations->getDrawer("GraticuleDrawer");
+			if ( graticuleDrw)
+				graticuleDrw->prepare(&pp);
+		}
 		rootDrawer->getDrawerContext()->doDraw();
 	}
 }
