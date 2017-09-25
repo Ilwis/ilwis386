@@ -392,14 +392,14 @@ MapListPtr::MapListPtr(const FileName& fn)
 	ReadElement("MapList", "Size", _rcSize);
 	if (iSize() == 0)
 		return;
+	if (_rcSize == rcUNDEF)
+		_rcSize = map(iLower())->rcSize();
 	try {
 		CheckGeoRefs();
 	}
 	catch (const ErrorObject& err) {
 		err.Show();
 	}
-	if (_rcSize == rcUNDEF)
-		_rcSize = map(iLower())->rcSize();
 	if (0 == ReadElement("MultiBandStat", "CalcStatTime", tmCalcStat))
 		tmCalcStat = 0;
 	if (tmCalcStat != 0) {
