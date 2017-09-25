@@ -604,7 +604,10 @@ bool WMSFormat::retrieveImage() {
 	rxo->getRequest(sExpr);
 	MemoryStruct *image;
 	image = rxo->get();
-	if(image->memory[0] == '<' && image->memory[1] == '?' && image->memory[2] == 'x' && image->memory[3]== 'm') {
+	if (image == NULL)
+		throw ErrorObject("GetMap request failed: couldn't connect to server");
+	if((image->memory[0] == '<' && image->memory[1] == '?' && image->memory[2] == 'x' && image->memory[3]== 'm') || // <?xml
+		(image->memory[0] == '<' && image->memory[1] == '!' && image->memory[2] == 'D' && image->memory[3]== 'O')) { // <!DOCTYPE
 		String error(image->memory);
 		HandleError(error);
 	}
