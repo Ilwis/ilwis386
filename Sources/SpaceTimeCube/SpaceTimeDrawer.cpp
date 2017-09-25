@@ -137,7 +137,9 @@ void SpaceTimeDrawer::prepare(PreparationParameters *parms){
 		PreparationParameters pp(parms);
 		pp.type = pp.type & ~NewDrawer::ptGEOMETRY;
 
-		if (useAttColumn && parms->filteredRaws.size() > 0) {
+		if (parms->filteredRaws.size() == 1 && parms->filteredRaws[0] == iUNDEF)
+			disabledRaws.clear();
+		else if (useAttColumn && parms->filteredRaws.size() > 0) {
 			long iRaw = attColumn->iRaw(abs(parms->filteredRaws[0]));
 			bool fOn = parms->filteredRaws[0] >= 0;
 			if (fOn)
