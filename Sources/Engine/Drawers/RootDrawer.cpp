@@ -61,7 +61,7 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 				CRect rct;
 				wnd->GetClientRect(&rct);
 				RowCol rc(rct.Height(), rct.Width());
-				setViewPort(rc);
+				setViewPort(rc, true);
 			}
 		}
 	}
@@ -251,7 +251,7 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 	ObjectInfo::ReadElement("RootDrawer","ViewPort",fnView, viewPort);
 	ObjectInfo::ReadElement("RootDrawer","Is3D",fnView, threeD);
 	setCoordinateSystem(csy, true);
-	setViewPort(viewPort);
+	setViewPort(viewPort, false); // false, just "assign" to pixArea and windowAspectRatio
 	setCoordBoundsMap(cbM);
 	setCoordBoundsView(cbV, true);
 	//setCoordBoundsZoom(cbZ);
@@ -272,45 +272,75 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 	initRestore = true;
 }
 
-void RootDrawer::modifyCBZoomView(double dv, double dz, double f) {
-	double deltaview = dv * f;
-	double deltazoom = dz * f;
-	Coord cMiddle = cbZoom.middle();
-	if ( mapAspectRatio <= 1.0) {
-		cbView.cMin.x = cMiddle.x - deltaview / 2.0;
-		cbView.cMax.x = cMiddle.x + deltaview / 2.0;
-		cbZoom.cMin.x = cMiddle.x - deltazoom / 2.0;
-		cbZoom.cMax.x = cMiddle.x + deltazoom / 2.0;
+void RootDrawer::RecenterZoomHorz(CoordBounds & cbZoom, const CoordBounds & cbMap)
+{
+	double zwidth = cbZoom.width();
+	if (zwidth > cbMap.width()) {
+		double delta = (zwidth - cbMap.width()) / 2.0;
+		cbZoom.cMin.x = cbMap.cMin.x - delta;
+		cbZoom.cMax.x = cbMap.cMax.x + delta;
 	} else {
-		cbView.cMin.y = cMiddle.y - deltaview / 2.0;
-		cbView.cMax.y = cMiddle.y + deltaview / 2.0;
-		cbZoom.cMin.y = cMiddle.y - deltazoom / 2.0;
-		cbZoom.cMax.y = cMiddle.y + deltazoom / 2.0;
+		if ( cbZoom.cMax.x > cbMap.cMax.x) {
+			cbZoom.cMax.x = cbMap.cMax.x;
+			cbZoom.cMin.x = cbZoom.cMax.x - zwidth;
+		}
+		if ( cbZoom.cMin.x < cbMap.cMin.x) {
+			cbZoom.cMin.x = cbMap.cMin.x;
+			cbZoom.cMax.x = cbZoom.cMin.x + zwidth;
+		}
 	}
 }
 
-void RootDrawer::setViewPort(const RowCol& rc) {
-	windowAspectRatio = (double)(rc.Col) / (double)(rc.Row);
-	if (  mapAspectRatio  != 0.0 && pixArea.Col != iUNDEF) {
-		// this code adapts the cbZoom if the window size changes
-		if ( mapAspectRatio <= 1.0) { // y > x
-			if ( rc.Col != pixArea.Col){ // make sure the zoomsize is changed if the cols changes
-				modifyCBZoomView(cbView.width(), cbZoom.width(),(double)rc.Col / pixArea.Col); 
-			}
-			if ( rc.Row != pixArea.Row) { // make sure the zoomsize is changed if the cols change
-				//modifyCBZoomView(cbView.width(), cbZoom.width(),(double)pixArea.Col / rc.Col); 
-				modifyCBZoomView(cbView.width(), cbZoom.width(), (double)pixArea.Row / (double)rc.Row ); 
-			}
-
-		} else { // x < y
-			if ( rc.Row != pixArea.Row){
-				modifyCBZoomView(cbView.height(), cbZoom.height(),(double)rc.Row / pixArea.Row ); 
-
-			}
-			if ( rc.Col != pixArea.Col) {
-				modifyCBZoomView(cbView.height(), cbZoom.height(),(double)pixArea.Col / rc.Col ); 
-			}
+void RootDrawer::RecenterZoomVert(CoordBounds & cbZoom, const CoordBounds & cbMap)
+{
+	double zheight = cbZoom.height();
+	if (zheight > cbMap.height()) {
+		double delta = (zheight - cbMap.height()) / 2.0;
+		cbZoom.cMin.y = cbMap.cMin.y - delta;
+		cbZoom.cMax.y = cbMap.cMax.y + delta;
+	} else {
+		if ( cbZoom.cMax.y > cbMap.cMax.y) {
+			cbZoom.cMax.y = cbMap.cMax.y;
+			cbZoom.cMin.y = cbZoom.cMax.y - zheight;
 		}
+		if ( cbZoom.cMin.y < cbMap.cMin.y) {
+			cbZoom.cMin.y = cbMap.cMin.y;
+			cbZoom.cMax.y = cbZoom.cMin.y + zheight;
+		}
+	}
+}
+
+void RootDrawer::modifyZoomX(double rFactor) {
+	double deltazoom = cbZoom.width() * rFactor;
+	Coord cMiddle = cbZoom.middle();
+	cbZoom.cMin.x = cMiddle.x - deltazoom / 2.0;
+	cbZoom.cMax.x = cMiddle.x + deltazoom / 2.0;
+	RecenterZoomHorz(cbZoom, cbMap);
+	if (cbZoom.width() >= cbMap.width()) {
+		cbView.cMin.x = cbZoom.cMin.x;
+		cbView.cMax.x = cbZoom.cMax.x;
+	}
+}
+
+void RootDrawer::modifyZoomY(double rFactor) {
+	double deltazoom = cbZoom.height() * rFactor;
+	Coord cMiddle = cbZoom.middle();
+	cbZoom.cMin.y = cMiddle.y - deltazoom / 2.0;
+	cbZoom.cMax.y = cMiddle.y + deltazoom / 2.0;
+	RecenterZoomVert(cbZoom, cbMap);
+	if (cbZoom.height() >= cbMap.height()) {
+		cbView.cMin.y = cbZoom.cMin.y;
+		cbView.cMax.y = cbZoom.cMax.y;
+	}
+}
+
+void RootDrawer::setViewPort(const RowCol& rc, bool fNoZoom) {
+	windowAspectRatio = (double)(rc.Col) / (double)(rc.Row);
+	if (fNoZoom && (pixArea.Col != iUNDEF)) {
+		if (rc.Col != pixArea.Col)
+			modifyZoomX((double)rc.Col / pixArea.Col);
+		if (rc.Row != pixArea.Row)
+			modifyZoomY((double)rc.Row / pixArea.Row);
 	}
 	pixArea = rc;
 }

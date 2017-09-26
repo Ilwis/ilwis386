@@ -39,7 +39,7 @@ namespace ILWIS {
 		void setCoordBoundsZoom(const CoordBounds& _cb);
 		void setCoordBoundsMap(const CoordBounds& cb);
 		void setZoom(const CRect& rct);
-		void setViewPort(const RowCol& rc);
+		void setViewPort(const RowCol& rc, bool fNoZoom); // noZoom preserves the zoomfactor when resizing the window; set to "false" for Edit/Copy
 		Coord screenToOpenGL(const RowCol& rc); // rc is a screen position; it will be converted to the RootDrawer's grf/cs for OpenGL use
 		Coord screenToWorld(const RowCol& rc); // rc is a screen position; it will be converted to the RootDrawer's cs
 		RowCol OpenGLToScreen(const Coord& crd); // crd is an OpenGL coordinate expressed in the RootDrawer's grf/cs; it will be converted to a screen position
@@ -80,7 +80,10 @@ namespace ILWIS {
 		void SetSkyColor(Color & clr);
 
 	private:
-		void modifyCBZoomView(double dv, double dz, double f);
+		void modifyZoomX(double rFactor);
+		void modifyZoomY(double rFactor);
+		void RecenterZoomHorz(CoordBounds & cbZoom, const CoordBounds & cbMap);
+		void RecenterZoomVert(CoordBounds & cbZoom, const CoordBounds & cbMap);
 		void addDataSource(void *);
 		void SetthreeD(void *v, LayerTreeView *tv);
 		void debug();

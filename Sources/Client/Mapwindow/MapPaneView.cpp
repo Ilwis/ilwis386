@@ -1038,7 +1038,7 @@ BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac)
 		contextMode |= DrawerContext::mSOFTWARERENDERER;
 	contextMem->initOpenGL(hMemDC, 0, contextMode);
 	GetDocument()->rootDrawer->setDrawerContext(contextMem);
-	GetDocument()->rootDrawer->setViewPort(RowCol(nYRes,nXRes));
+	GetDocument()->rootDrawer->setViewPort(RowCol(nYRes,nXRes), false); // false: autozoom to the given pixelsize
 
 	PreparationParameters ppEDITCOPY (ILWIS::NewDrawer::ptOFFSCREENSTART);
 	vector<NewDrawer*> drawerList;
@@ -1077,7 +1077,7 @@ BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac)
 
 	// Restore original context and viewport
 	GetDocument()->rootDrawer->setDrawerContext(context);
-	GetDocument()->rootDrawer->setViewPort(viewportOld);
+	GetDocument()->rootDrawer->setViewPort(viewportOld, false); // false: just re-assign the original values
 
 	PreparationParameters ppEDITCOPYDONE (ILWIS::NewDrawer::ptOFFSCREENEND);
 	for (vector<NewDrawer*>::iterator it = drawerList.begin(); it != drawerList.end(); ++it)
