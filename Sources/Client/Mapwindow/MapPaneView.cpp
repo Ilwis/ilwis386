@@ -241,13 +241,19 @@ void MapPaneView::OnScaleOneToOne()
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
 		if (mcd->rootDrawer->getGeoReference().fValid()) { // rootDrawer is set to a georeference
-			CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
 			CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
-			double rFactor = max((double)dim.width() / cbZoom.width(), (double)dim.height() / cbZoom.height());
-			cbZoom *= rFactor;
-			RecenterZoomHorz(cbZoom, cbMap);
-			RecenterZoomVert(cbZoom, cbMap);
-			mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
+			double rFactor = min((double)dim.width() / cbMap.width(), (double)dim.height() / cbMap.height()); // set cbView to cbMap * rFactor to get 1:1 pixels
+			if (rFactor > 1.0) { // grow cbView (temporarily zooms out to an impossible zoomlevel; the user couldn't zoom out to this with the zoom-buttons)
+				cbMap *= rFactor;
+				mcd->rootDrawer->setCoordBoundsView(cbMap, true);
+			} else { // shrink: we can't shrink cbView any more than cbMap; alter cbZoom, without panning
+				CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom(); // recalculate the factor based on cbZoom
+				rFactor = min((double)dim.width() / cbZoom.width(), (double)dim.height() / cbZoom.height());
+				cbZoom *= rFactor;
+				RecenterZoomHorz(cbZoom, cbMap);
+				RecenterZoomVert(cbZoom, cbMap);
+				mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
+			}
 			setScrollBars();
 			OnDraw(0);
 		} else {
@@ -286,20 +292,22 @@ void MapPaneView::OnScaleOneToOne()
 				double rNewMapWidth = dim.width() * rPixSizeX;
 				double rNewMapHeight = dim.height() * rPixSizeY;
 
-				CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
 				CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
-
-				double rFactor = max(rNewMapWidth / cbZoom.width(), rNewMapHeight / cbZoom.height());
-				if (rFactor > 0) {
+				double rFactor = min(rNewMapWidth / cbMap.width(), rNewMapHeight / cbMap.height()); // set cbView to cbMap * rFactor to get 1:1 pixels
+				if (rFactor > 1.0) { // grow cbView (temporarily zooms out to an impossible zoomlevel; the user couldn't zoom out to this with the zoom-buttons)
+					cbMap *= rFactor;
+					mcd->rootDrawer->setCoordBoundsView(cbMap, true);
+				} else if (rFactor > 0) { // shrink: we can't shrink cbView any more than cbMap; alter cbZoom, without panning
+					CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom(); // recalculate the factor based on cbZoom
+					rFactor = min(rNewMapWidth / cbZoom.width(), rNewMapHeight / cbZoom.height());
 					cbZoom *= rFactor;
-
 					RecenterZoomHorz(cbZoom, cbMap);
 					RecenterZoomVert(cbZoom, cbMap);
 					mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
-
-					setScrollBars();
-					OnDraw(0);
 				}
+
+				setScrollBars();
+				OnDraw(0);
 			}
 		}
 	}
