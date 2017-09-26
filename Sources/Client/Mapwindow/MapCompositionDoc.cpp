@@ -695,7 +695,10 @@ void MapCompositionDoc::OnExtPerc()
 			by = cb.MaxY() + dby;
 		}
 		cb = CoordBounds(Coord(lx,ty), Coord(rx,by));
-		rootDrawer->addCoordBounds(rootDrawer->getCoordinateSystem(),cb);
+		CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom(); // backup zoom
+		rootDrawer->setCoordBoundsMap(cb); // set new bounds
+		rootDrawer->setCoordBoundsView(cb, true); // set new view
+		rootDrawer->setCoordBoundsZoom(cbZoom); // restore zoom
 		ComplexDrawer *annotations = (ComplexDrawer *)(rootDrawer->getDrawer("AnnotationDrawers"));
 		if (annotations) {
 			PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);
@@ -709,7 +712,11 @@ void MapCompositionDoc::OnExtPerc()
 			if ( graticuleDrw)
 				graticuleDrw->prepare(&pp);
 		}
-		rootDrawer->getDrawerContext()->doDraw();
+		MapPaneView * mpv = mpvGetView();
+		if (mpv) {
+			mpv->setScrollBars();
+			mpv->Invalidate();
+		}
 	}
 }
 
@@ -737,7 +744,10 @@ void MapCompositionDoc::OnExtCoord()
 	BoundsForm frm(0,&cb.cMin,&cb.cMax);
 	if (frm.fOkClicked()) 
 	{
-		rootDrawer->setCoordBoundsMap(cb);
+		CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom(); // backup zoom
+		rootDrawer->setCoordBoundsMap(cb); // set new bounds
+		rootDrawer->setCoordBoundsView(cb, true); // set new view
+		rootDrawer->setCoordBoundsZoom(cbZoom); // restore zoom
 		ComplexDrawer *annotations = (ComplexDrawer *)(rootDrawer->getDrawer("AnnotationDrawers"));
 		if (annotations) {
 			PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);
@@ -751,7 +761,11 @@ void MapCompositionDoc::OnExtCoord()
 			if ( graticuleDrw)
 				graticuleDrw->prepare(&pp);
 		}
-		rootDrawer->getDrawerContext()->doDraw();
+		MapPaneView * mpv = mpvGetView();
+		if (mpv) {
+			mpv->setScrollBars();
+			mpv->Invalidate();
+		}
 	}
 }
 
