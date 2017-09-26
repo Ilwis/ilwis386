@@ -130,15 +130,17 @@ void AreaSelector::OnLButtonDown(UINT nFlags, CPoint point)
 
 void AreaSelector::OnLButtonUp(UINT nFlags, CPoint point) 
 {
-    pEnd = point;
-	DrawRect();
-	fDown = false;
+	if (fDown) {
+		pEnd = point;
+		DrawRect();
+		fDown = false;
 
-	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
-	mcd->rootDrawer->setTopDrawer(0);
-	mcd->mpvGetView()->setBitmapRedraw(false);
+		MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(mpv->GetDocument());
+		mcd->rootDrawer->setTopDrawer(0);
+		mcd->mpvGetView()->setBitmapRedraw(false);
 
-	(cmt->*np)(rect());
+		(cmt->*np)(rect());
+	}
 	ReleaseCapture();
 }
 
