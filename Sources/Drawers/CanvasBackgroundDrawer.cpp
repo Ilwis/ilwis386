@@ -52,19 +52,41 @@ bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 		glColor4d(outside2D.redP(), outside2D.greenP(), outside2D.blueP(),getAlpha());
 	}
 	if (is3D || fDrawSides) {
-		glBegin(GL_QUADS);						
-			glVertex3f(cbView.MinX(), cbView.MinY(),0);				
-			glVertex3f(cbView.MinX(), cbView.MaxY(),0);				
-			glVertex3f(cbMap.MinX(), cbView.MaxY(),0);				
-			glVertex3f(cbMap.MinX(), cbView.MinY(),0);
-		glEnd();
+		if (cbView.MinX() < cbMap.MinX()) {
+			glBegin(GL_QUADS);
+				glVertex3f(cbView.MinX(), cbView.MinY(),0);				
+				glVertex3f(cbView.MinX(), cbView.MaxY(),0);				
+				glVertex3f(cbMap.MinX(), cbView.MaxY(),0);				
+				glVertex3f(cbMap.MinX(), cbView.MinY(),0);
+			glEnd();
+		}
 
-		glBegin(GL_QUADS);						
-			glVertex3f(cbMap.MaxX(), cbView.MinY(),0);				
-			glVertex3f(cbMap.MaxX(), cbView.MaxY(),0);				
-			glVertex3f(cbView.MaxX(), cbView.MaxY(),0);				
-			glVertex3f(cbView.MaxX(), cbView.MinY(),0);
-		glEnd();
+		if (cbView.MaxX() > cbMap.MaxX()) {
+			glBegin(GL_QUADS);
+				glVertex3f(cbMap.MaxX(), cbView.MinY(),0);				
+				glVertex3f(cbMap.MaxX(), cbView.MaxY(),0);				
+				glVertex3f(cbView.MaxX(), cbView.MaxY(),0);				
+				glVertex3f(cbView.MaxX(), cbView.MinY(),0);
+			glEnd();
+		}
+
+		if (cbView.MinY() < cbMap.MinY()) {
+			glBegin(GL_QUADS);
+				glVertex3f(cbView.MinX(), cbView.MinY(),0);				
+				glVertex3f(cbView.MaxX(), cbView.MinY(),0);				
+				glVertex3f(cbView.MaxX(), cbMap.MinY(),0);				
+				glVertex3f(cbView.MinX(), cbMap.MinY(),0);
+			glEnd();
+		}
+
+		if (cbView.MaxY() > cbMap.MaxY()) {
+			glBegin(GL_QUADS);
+				glVertex3f(cbView.MinX(), cbMap.MaxY(),0);				
+				glVertex3f(cbView.MaxX(), cbMap.MaxY(),0);				
+				glVertex3f(cbView.MaxX(), cbView.MaxY(),0);				
+				glVertex3f(cbView.MinX(), cbView.MaxY(),0);
+			glEnd();
+		}
 	}
 
 	if ( is3D) {
