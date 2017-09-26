@@ -213,14 +213,16 @@ String OpenStreetMapFormat::getMapRequest(const CoordBounds& cb2, const RowCol r
 	String url = urlOpenStreetMap.sVal();
 	int index1 = url.find("[");
 	int index2 = url.find("]");
-	String serverIds = url.sSub(index1 + 1, index2 - index1 - 1);
-	int ind = rand() % serverIds.size();
-	String n = serverIds[ind];
+	if (index1 >= 0) {
+		String serverIds = url.sSub(index1 + 1, index2 - index1 - 1);
+		int ind = rand() % serverIds.size();
+		String n = serverIds[ind];
+		url = url.substr(0,index1) + n + url.substr(index2+1);
+	}
 	double x = (cb.middle().x + cb.MinX()) / 2.0;
 	int xtile = long2tilex(x, zoom);
 	double y = (cb.middle().y + cb.MinY())/2.0;
 	int ytile = lat2tiley(y, zoom);
-	url = url.substr(0,index1) + n + url.substr(index2+1);
 	String query_string = "";
 	index1 = url.find("?");
 	if (index1 > 0) {
