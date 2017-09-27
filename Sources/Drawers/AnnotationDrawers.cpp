@@ -965,7 +965,7 @@ ILWIS::NewDrawer *createAnnotationBorderDrawer(DrawerParameters *parms) {
 
 AnnotationBorderDrawer::AnnotationBorderDrawer(DrawerParameters *parms) : 
 AnnotationDrawer(parms, "AnnotationBorderDrawer"),
-borderBox(0), xborder(0.1), yborder(0.03), neatLine(true), ticks(true), step(1), numDigits(2){
+borderBox(0), xborder(0.14), yborder(0.03), neatLine(true), ticks(true), step(1), numDigits(2){
 	for(int i=0; i < 4; ++i)
 		hasText.push_back(true);
 	id = "AnnotationBorderDrawer";
@@ -1107,9 +1107,8 @@ double rFindNull(ValFinder& vf, double rDflt)
 	}
 }
 
-Coordinate ptBorderX(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side, double rX)
+Coordinate ptBorderX(const CoordBounds & cb, RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side, double rX)
 {
-	CoordBounds cb (rootDrawer->getMapCoordBounds());
 	double centerX = cb.MinX() + cb.width() / 2.0;
 	double centerY = cb.MinY() + cb.height() / 2.0;
 	Coord crdCenter = rootDrawer->glToWorld(Coord(centerX, centerY));
@@ -1119,11 +1118,11 @@ Coordinate ptBorderX(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side,
 	switch (side)
 	{
 		case AnnotationBorderDrawer::sTOP: 
-			r = rFindNull(ValFinder(rootDrawer,crdCenter,false,false,cb.MinY()), crdCenter.y);
-			return Coordinate(r, cb.MinY());
-		case AnnotationBorderDrawer::sBOTTOM:
 			r = rFindNull(ValFinder(rootDrawer,crdCenter,false,false,cb.MaxY()), crdCenter.y);
 			return Coordinate(r, cb.MaxY());
+		case AnnotationBorderDrawer::sBOTTOM:
+			r = rFindNull(ValFinder(rootDrawer,crdCenter,false,false,cb.MinY()), crdCenter.y);
+			return Coordinate(r, cb.MinY());
 		case AnnotationBorderDrawer::sLEFT:
 			r = rFindNull(ValFinder(rootDrawer,crdCenter,false,true,cb.MinX()), crdCenter.y);
 			return Coordinate(cb.MinX(), r);
@@ -1134,9 +1133,8 @@ Coordinate ptBorderX(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side,
 	return crdUNDEF;
 }
 
-Coordinate ptBorderY(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side, double rY)
+Coordinate ptBorderY(const CoordBounds & cb, RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side, double rY)
 {
-	CoordBounds cb (rootDrawer->getMapCoordBounds());
 	double centerX = cb.MinX() + cb.width() / 2.0;
 	double centerY = cb.MinY() + cb.height() / 2.0;
 	Coord crdCenter = rootDrawer->glToWorld(Coord(centerX, centerY));
@@ -1146,11 +1144,11 @@ Coordinate ptBorderY(RootDrawer * rootDrawer, AnnotationBorderDrawer::Side side,
 	switch (side)
 	{
 		case AnnotationBorderDrawer::sTOP: 
-			r = rFindNull(ValFinder(rootDrawer,crdCenter,true,false,cb.MinY()), crdCenter.x);
-			return Coordinate(r, cb.MinY());
-		case AnnotationBorderDrawer::sBOTTOM:
 			r = rFindNull(ValFinder(rootDrawer,crdCenter,true,false,cb.MaxY()), crdCenter.x);
 			return Coordinate(r, cb.MaxY());
+		case AnnotationBorderDrawer::sBOTTOM:
+			r = rFindNull(ValFinder(rootDrawer,crdCenter,true,false,cb.MinY()), crdCenter.x);
+			return Coordinate(r, cb.MinY());
 		case AnnotationBorderDrawer::sLEFT:
 			r = rFindNull(ValFinder(rootDrawer,crdCenter,true,true,cb.MinX()), crdCenter.x);
 			return Coordinate(cb.MinX(), r);
@@ -1171,7 +1169,7 @@ void AnnotationBorderDrawer::setText(const CoordBounds & cb, const CoordBounds &
 				x = cb.cMin.x - cbText.width() - cbArea.width() * 0.01;
 			else // sRIGHT
 				x = cb.cMax.x + cbArea.width() * 0.01;
-			double y = ptBorderY(getRootDrawer(), side, ypos[i]).y;			
+			double y = ptBorderY(cb, getRootDrawer(), side, ypos[i]).y;			
 			txtdrw->setCoord(Coord(x, y - cbText.height() / 2, z));
 			txtdrw->setActive(cb.MaxY() >= y && y >= cb.MinY());
 		}
@@ -1185,7 +1183,7 @@ void AnnotationBorderDrawer::setText(const CoordBounds & cb, const CoordBounds &
 					y = cb.cMax.y + cbArea.height() * 0.01;
 				else // sBOTTOM
 					y = cb.cMin.y - cbText.height() - cbArea.height() * 0.01;
-				double x = ptBorderX(getRootDrawer(), side, xpos[i]).x;
+				double x = ptBorderX(cb, getRootDrawer(), side, xpos[i]).x;
 				txtdrw->setCoord(Coord(x - cbText.width() / 2, y, z));
 				txtdrw->setActive(cb.MaxX() >= x && x >= cb.MinX());
 			}
@@ -1196,7 +1194,7 @@ void AnnotationBorderDrawer::setText(const CoordBounds & cb, const CoordBounds &
 void AnnotationBorderDrawer::drawTicks(const CoordBounds & cb, const CoordBounds & cbArea, AnnotationBorderDrawer::Side side, double z) const{
 	if (side == sLEFT || side == sRIGHT) {
 		for(int i = 0; i < ypos.size(); ++i) {
-			double y = ptBorderY(getRootDrawer(), side, ypos[i]).y;
+			double y = ptBorderY(cb, getRootDrawer(), side, ypos[i]).y;
 			if (cb.MaxY() >= y && y >= cb.MinY()) {
 				double x;
 				double x1;
@@ -1215,7 +1213,7 @@ void AnnotationBorderDrawer::drawTicks(const CoordBounds & cb, const CoordBounds
 		}
 	} else if (side == sTOP || side == sBOTTOM) {
 		for(int i = 0; i < xpos.size(); ++i) {
-			double x = ptBorderX(getRootDrawer(), side, xpos[i]).x;
+			double x = ptBorderX(cb, getRootDrawer(), side, xpos[i]).x;
 			if (cb.MaxX() >= x && x >= cb.MinX()) {
 				double y;
 				double y1;
