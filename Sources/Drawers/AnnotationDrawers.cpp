@@ -965,7 +965,7 @@ ILWIS::NewDrawer *createAnnotationBorderDrawer(DrawerParameters *parms) {
 
 AnnotationBorderDrawer::AnnotationBorderDrawer(DrawerParameters *parms) : 
 AnnotationDrawer(parms, "AnnotationBorderDrawer"),
-borderBox(0), xborder(0.06), yborder(0.03), neatLine(true), ticks(true), step(1), numDigits(2){
+borderBox(0), xborder(0.1), yborder(0.03), neatLine(true), ticks(true), step(1), numDigits(2){
 	for(int i=0; i < 4; ++i)
 		hasText.push_back(true);
 	id = "AnnotationBorderDrawer";
@@ -985,8 +985,8 @@ bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	bool is3D = getRootDrawer()->is3D();
 	
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
-	CoordBounds cb = cbArea;
-	if (cbMap.MinX() > cb.MinX())
+	CoordBounds cb = cbArea; // cbArea is cbZoom
+	if (cbMap.MinX() > cb.MinX()) // limit cbArea by cbMap
 		cb.MinX() = cbMap.MinX();
 	if (cbMap.MaxX() < cb.MaxX())
 		cb.MaxX() = cbMap.MaxX();
@@ -994,11 +994,13 @@ bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 		cb.MinY() = cbMap.MinY();
 	if (cbMap.MaxY() < cb.MaxY())
 		cb.MaxY() = cbMap.MaxY();
-	Extension ext = getRootDrawer()->extension();
-	cb.cMin.x = cb.cMin.x + cbArea.width() * xborder + cbArea.width() * ext.left / 100;
-	cb.cMax.x = cb.cMax.x - cbArea.width() * xborder - cbArea.width() * ext.right / 100;
-	cb.cMin.y = cb.cMin.y + cbArea.height() * yborder + cbArea.height() * ext.bottom / 100;
-	cb.cMax.y = cb.cMax.y - cbArea.height() * yborder - cbArea.height() * ext.top / 100;
+	Extension ext = getRootDrawer()->extension(); // additional whitespace chosen by user (Whitespace tool)
+	double cbwidth = cb.width(); // proportional to visible map
+	double cbheight = cb.height();
+	cb.cMin.x = cb.cMin.x + cbwidth * xborder + cbwidth * ext.left / 100;
+	cb.cMax.x = cb.cMax.x - cbwidth * xborder - cbwidth * ext.right / 100;
+	cb.cMin.y = cb.cMin.y + cbheight * yborder + cbheight * ext.bottom / 100;
+	cb.cMax.y = cb.cMax.y - cbheight * yborder - cbheight * ext.top / 100;
 
 	borderBox->setBox(cbArea, CoordBounds(cb.cMin, cb.cMax));
 	if ( hasText[0] )
