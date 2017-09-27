@@ -79,8 +79,6 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 	vector<Feature *> features;
 	if ( parms->type & RootDrawer::ptGEOMETRY || parms->type & NewDrawer::ptRESTORE){
 		bool isAnimation = mapDrawer->getType() == "AnimationDrawer";
-	
-
 
 		TextLayerDrawer *textLayer = dynamic_cast<TextLayerDrawer *>(getDrawer(223, dtPOST));
 		if ( parms->type & RootDrawer::ptGEOMETRY || textLayer == 0) {
@@ -94,7 +92,6 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 			}
 		}
 		textLayer->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12 * textLayer->getFontScale() ,false));
-
 
 		if ( isAnimation ) {
 			getFeatures(features);
@@ -132,13 +129,19 @@ void FeatureLayerDrawer::prepare(PreparationParameters *parms){
 				}
 			}
 		}
-
-	} if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::pt3D || parms->type & NewDrawer::ptRESTORE) {
+	}
+	if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::pt3D || parms->type & NewDrawer::ptRESTORE) {
 			PreparationParameters pp(parms);
 			pp.type = pp.type & ~NewDrawer::ptGEOMETRY;
 			selectedRaws = parms->rowSelect.raws;
 			prepareChildDrawers(&pp);
 	}
+	if ( parms->type & NewDrawer::ptOFFSCREENSTART || parms->type & NewDrawer::ptOFFSCREENEND) {
+		TextLayerDrawer *textLayer = dynamic_cast<TextLayerDrawer *>(getDrawer(223, dtPOST));
+		if (textLayer)
+			textLayer->prepare(parms);
+	}
+
 	clock_t end = clock();
 	double duration = 1000.0 * (double)(end - start) / CLOCKS_PER_SEC;
 	TRACE("Prepared in %2.2f seconds;\n", duration/1000);
