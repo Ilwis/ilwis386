@@ -1071,7 +1071,7 @@ BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac)
 	}
 
 	contextMem->TakeContext();
-	GetDocument()->rootDrawer->draw();
+	GetDocument()->rootDrawer->draw(GetDocument()->rootDrawer->getCoordBoundsZoom());
 	glFinish();	// Finish all OpenGL commands
 	contextMem->ReleaseContext();
 
