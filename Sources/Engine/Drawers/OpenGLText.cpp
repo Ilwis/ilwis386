@@ -39,10 +39,12 @@ OpenGLText::~OpenGLText() {
 }
 
 void OpenGLText::calcScale() {
-	if (rootdrawer->getCoordBoundsZoom().height() > rootdrawer->getCoordBoundsZoom().width())
-		scale = rootdrawer->getCoordBoundsZoom().height() / (double)rootdrawer->getViewPort().Row; // result is the meters/pixel or the degrees/pixel of the current zoom level
+	double h = rootdrawer->getCoordBoundsZoom().height();
+	double w = rootdrawer->getCoordBoundsZoom().width();
+	if (h > w)
+		scale = h / (double)rootdrawer->getViewPort().Row; // result is the meters/pixel or the degrees/pixel of the current zoom level
 	else
-		scale = rootdrawer->getCoordBoundsZoom().width() / (double)rootdrawer->getViewPort().Col; // result is the meters/pixel or the degrees/pixel of the current zoom level
+		scale = w / (double)rootdrawer->getViewPort().Col; // result is the meters/pixel or the degrees/pixel of the current zoom level
 }
 
 void OpenGLText::prepare(ILWIS::PreparationParameters *pp) {
@@ -64,9 +66,8 @@ void OpenGLText::prepare(ILWIS::PreparationParameters *pp) {
 void OpenGLText::renderText(const ILWIS::NewDrawer::DrawLoop drawLoop, const Coordinate& c, const String& text) {
 	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	glPushMatrix();
-	if ( !fixedSize && tempFont == 0) { // tempfont == 0 means we are copying, don't mess with font scaling now. it's ok
+	if ( !fixedSize && tempFont == 0) // tempfont != 0 means we are doing Edit/Copy and we want to keep the value of scale unaltered (otherwise the font that is Edit/Copied is too small / doesn't match the one that is seen on the screen)
 		calcScale();
-	}
 	glScaled(scale, scale, scale); // with this the GL space is temporarily expressed in pixels
 	glColor4d(color.redP(), color.greenP(), color.blueP(), color.alphaP());
 	if ((drawLoop == ILWIS::NewDrawer::drl2D && color.alpha() != 255) || (drawLoop == ILWIS::NewDrawer::drl3DTRANSPARENT)) {
@@ -108,8 +109,11 @@ Color OpenGLText::getColor() const {
 }
 
 double OpenGLText::getHeight() const{
-	if ( fontHeight != iUNDEF)
+	if ( fontHeight != iUNDEF) {
+		if ( !fixedSize && tempFont == 0) // tempfont != 0 means we are doing Edit/Copy and we want to keep the value of scale unaltered (otherwise the font that is Edit/Copied is too small / doesn't match the one that is seen on the screen)
+			const_cast<OpenGLText*>(this)->calcScale(); // compute the newest scale, before using it
 		return fontHeight * scale;
+	}
 	return 0;
 }
 
@@ -117,7 +121,6 @@ void OpenGLText::setHeight(int h){
 	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	fontHeight = h ;
 	font->FaceSize(fontHeight);
-
 }
 
 CoordBounds OpenGLText::getTextExtent(const String& txt) const {
@@ -133,7 +136,8 @@ CoordBounds OpenGLText::getTextExtent(const String& txt) const {
 		double z1 = box.Lower().Z();
 		double z2 = box.Upper().Z();
 
-
+		if ( !fixedSize && tempFont == 0) // tempfont != 0 means we are doing Edit/Copy and we want to keep the value of scale unaltered (otherwise the font that is Edit/Copied is too small / doesn't match the one that is seen on the screen)
+			const_cast<OpenGLText*>(this)->calcScale(); // compute the newest scale, before using it
 		return CoordBounds(Coord(x1*scale, y1*scale, z1*scale), Coord(x2 * scale, y2 * scale, z2 * scale));
 	}
 	return CoordBounds();
