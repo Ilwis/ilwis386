@@ -216,8 +216,8 @@ CoordSystem GdalProxy::getCoordSystem(const FileName& fnBase, const String& wkt)
 	strcpy(wktRaw, wkt.c_str());
 	char *wkt2 = (char *)wktRaw;
 	OGRErr err = srsImportFromWkt(handle, &wkt2);
-	if ( err == OGRERR_UNSUPPORTED_SRS )
-		 	return CoordSystem("unknown");
+	if ( err == OGRERR_UNSUPPORTED_SRS || err == OGRERR_CORRUPT_DATA)
+		 return CoordSystem("unknown");
 
 	return getCoordSystem(fnBase, handle);
 
