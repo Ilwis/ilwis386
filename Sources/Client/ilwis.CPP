@@ -821,6 +821,15 @@ void IlwisWinApp::RegisterDocTemplates()
 
 	idt = new IlwisDocTemplate(
 		".grf", 
+		"GeoRefStereoMate",
+		"ILWIS Georeferences",
+		RUNTIME_CLASS(IlwisDocument),
+		RUNTIME_CLASS(DataFormWindow),
+		RUNTIME_CLASS(FallbackView));
+	AddDocTemplate(idt); 
+
+	idt = new IlwisDocTemplate(
+		".grf", 
 		"GeoRefScaleRotate",
 		"ILWIS Georeferences",
 		RUNTIME_CLASS(IlwisDocument),
@@ -831,6 +840,24 @@ void IlwisWinApp::RegisterDocTemplates()
 	idt = new IlwisDocTemplate(
 		".grf", 
 		"GeoRefCorners",
+		"ILWIS Georeferences",
+		RUNTIME_CLASS(GeoRefDoc),
+		RUNTIME_CLASS(DataFormWindow),
+		RUNTIME_CLASS(GeoRefCornersView));
+	AddDocTemplate(idt); 
+
+	idt = new IlwisDocTemplate(
+		".grf", 
+		"GeoRefCornersWMS",
+		"ILWIS Georeferences",
+		RUNTIME_CLASS(GeoRefDoc),
+		RUNTIME_CLASS(DataFormWindow),
+		RUNTIME_CLASS(GeoRefCornersView));
+	AddDocTemplate(idt); 
+
+	idt = new IlwisDocTemplate(
+		".grf", 
+		"GeoRefOSM",
 		"ILWIS Georeferences",
 		RUNTIME_CLASS(GeoRefDoc),
 		RUNTIME_CLASS(DataFormWindow),
