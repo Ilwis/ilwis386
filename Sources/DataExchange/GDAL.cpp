@@ -1055,8 +1055,6 @@ void GDALFormat::GetGeoRef(GeoRef& grf)
 		} else {
 			lock.Unlock();
 			grf = GeoRef(rcSize);
-			CoordSystem cs = GetCoordSystem();
-			grf->SetCoordSystem(cs);
 		}
 	}
 	grf->Store();
