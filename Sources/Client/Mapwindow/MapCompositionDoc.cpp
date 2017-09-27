@@ -608,6 +608,7 @@ void MapCompositionDoc::OnExtPerc()
 			values.push_back(TR("Left top"));
 			values.push_back(TR("Right bottom"));
 			values.push_back(TR("Left bottom"));
+			choice = 0;
 			ValueRange vrr(-99, 1000, 1);
 			frTop = new FieldReal(root, TR("Percentage at &Top"), rTop, vrr);
 			frBot = new FieldReal(root, TR("Percentage at &Bottom"), rBottom, vrr);
