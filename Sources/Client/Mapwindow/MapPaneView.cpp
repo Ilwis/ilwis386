@@ -967,12 +967,35 @@ void MapPaneView::OnCopy()
 	double fac = iDPI/72.;		// 72 DPI (screen) --> <user selected> DPI (clipboard)
 	int nXRes = int(mRect.right * fac); // initial values, proposed to the user
 	int nYRes = int(mRect.bottom * fac);
+	CoordBounds cbZoom = GetDocument()->rootDrawer->getCoordBoundsZoom();
+	CoordBounds cbMap = GetDocument()->rootDrawer->getMapCoordBounds();
+	CoordBounds cbClip; // default: cbUNDEF; if required, cbClip will be cbMap intersected with cbZoom (thus cbZoom without the gray "outside" areas)
+	if (!GetDocument()->rootDrawer->is3D() && (cbZoom.MinX() < cbMap.MinX() || cbZoom.MaxX() > cbMap.MaxX() || cbZoom.MinY() < cbMap.MinY() || cbZoom.MaxY() > cbMap.MaxY())) {
+		// use cbMap and cbZoom to compute cbClip
+		cbClip = cbMap;
+		// compute intersection with cbZoom
+		if (cbClip.MinX() < cbZoom.MinX())
+			cbClip.MinX() = cbZoom.MinX();
+		if (cbClip.MaxX() > cbZoom.MaxX())
+			cbClip.MaxX() = cbZoom.MaxX();
+		if (cbClip.MinY() < cbZoom.MinY())
+			cbClip.MinY() = cbZoom.MinY();
+		if (cbClip.MaxY() > cbZoom.MaxY())
+			cbClip.MaxY() = cbZoom.MaxY();
+		if (cbClip.width() != 0 && cbClip.height() != 0) {
+			if (cbClip.width() > cbClip.height()) // horizontal dimension more accurate
+				nYRes = round(nXRes * cbClip.height() / cbClip.width());
+			else // vertical dimension more accurate
+				nXRes = round(nYRes * cbClip.width() / cbClip.height());
+		} else
+			cbClip = CoordBounds();
+	}
 	ClipboardCopyForm frm (0, &iDPI, &nXRes, &nYRes);
 	if (frm.fOkClicked()) {
 		BeginWaitCursor();
 		SetRedraw(FALSE);
 		fac = iDPI/72.;
-		while (!EditCopy(nXRes, nYRes, fac))
+		while (!EditCopy(nXRes, nYRes, fac, cbClip))
 		{
 			// retry again with reduced resolution
 			++nReduceResCount;
@@ -987,7 +1010,7 @@ void MapPaneView::OnCopy()
 	}
 }
 
-BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac)
+BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac, CoordBounds & cbClip)
 {
 	HDC		hMemDC, hTmpDC;
 	BITMAPINFO	bitmapInfo;
@@ -1037,8 +1060,15 @@ BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac)
 	if (fSoftwareRendering)
 		contextMode |= DrawerContext::mSOFTWARERENDERER;
 	contextMem->initOpenGL(hMemDC, 0, contextMode);
+	CoordBounds cbZoom = GetDocument()->rootDrawer->getCoordBoundsZoom();
+	CoordBounds cbMap = GetDocument()->rootDrawer->getMapCoordBounds();
+	CoordBounds cbView = GetDocument()->rootDrawer->getCoordBoundsView();
 	GetDocument()->rootDrawer->setDrawerContext(contextMem);
 	GetDocument()->rootDrawer->setViewPort(RowCol(nYRes,nXRes), false); // false: autozoom to the given pixelsize
+	if (cbClip.fValid()) {
+		GetDocument()->rootDrawer->setCoordBoundsView(cbMap, true); // set new aspect ratio
+		GetDocument()->rootDrawer->setCoordBoundsZoom(cbClip); // set the cbZoom to cbClip, for correct clipping
+	}
 
 	PreparationParameters ppEDITCOPY (ILWIS::NewDrawer::ptOFFSCREENSTART);
 	vector<NewDrawer*> drawerList;
@@ -1061,8 +1091,7 @@ BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac)
 					drawer->prepare(&ppEDITCOPY);
 				}
 			}
-		}
-		else {
+		} else {
 			if ( drw->getId() != "CanvasBackgroundDrawer") {
 				drawerList.push_back(drw);
 				drw->prepare(&ppEDITCOPY);
@@ -1071,13 +1100,21 @@ BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac)
 	}
 
 	contextMem->TakeContext();
-	GetDocument()->rootDrawer->draw(GetDocument()->rootDrawer->getCoordBoundsZoom());
+	GetDocument()->rootDrawer->draw(cbClip.fValid() ? cbClip : cbZoom);
 	glFinish();	// Finish all OpenGL commands
 	contextMem->ReleaseContext();
 
 	// Restore original context and viewport
 	GetDocument()->rootDrawer->setDrawerContext(context);
 	GetDocument()->rootDrawer->setViewPort(viewportOld, false); // false: just re-assign the original values
+	if (cbClip.fValid()) {
+		if (cbMap.width() < cbView.width() && cbMap.height() < cbView.height()) { // we need to oversize cbView; there was "gray" on all 4 sides
+			double rFactor = min(cbView.width() / cbMap.width(), cbView.height() / cbMap.height()); // the minimum factor required to "fill" the cbView
+			cbMap *= rFactor;
+		}
+		GetDocument()->rootDrawer->setCoordBoundsView(cbMap, true); // restore aspect ratio and view size
+		GetDocument()->rootDrawer->setCoordBoundsZoom(cbZoom); // restore zoom position
+	}
 
 	PreparationParameters ppEDITCOPYDONE (ILWIS::NewDrawer::ptOFFSCREENEND);
 	for (vector<NewDrawer*>::iterator it = drawerList.begin(); it != drawerList.end(); ++it)

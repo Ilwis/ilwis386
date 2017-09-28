@@ -145,7 +145,7 @@ private:
 
 	enum DoubleClickAction { dcaRECORD, dcaRPR, dcaACTION };
 	DoubleClickAction dca;
-	BOOL EditCopy(int nXRes, int nYRes, double fac);
+	BOOL EditCopy(int nXRes, int nYRes, double fac, CoordBounds & cbClip);
 	MapWindow* mwPar;
 	RecordBar* recBar;
 	COleDropTarget* odt;
