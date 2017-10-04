@@ -1065,17 +1065,12 @@ BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac, CoordBounds & cbCli
 	CoordBounds cbView = GetDocument()->rootDrawer->getCoordBoundsView();
 	GetDocument()->rootDrawer->setDrawerContext(contextMem);
 	GetDocument()->rootDrawer->setViewPort(RowCol(nYRes,nXRes), false); // false: autozoom to the given pixelsize
-	if (cbClip.fValid()) {
-		GetDocument()->rootDrawer->setCoordBoundsView(cbMap, true); // set new aspect ratio
-		GetDocument()->rootDrawer->setCoordBoundsZoom(cbClip); // set the cbZoom to cbClip, for correct clipping
-	}
 
 	PreparationParameters ppEDITCOPY (ILWIS::NewDrawer::ptOFFSCREENSTART);
 	vector<NewDrawer*> drawerList;
 	vector<NewDrawer *> allDrawers;
 	GetDocument()->rootDrawer->getDrawers(allDrawers);
 	int count = allDrawers.size();
-
 	count = allDrawers.size();
 	for (int i = 0; i < count; ++i)	{
 		ILWIS::NewDrawer *drw = allDrawers[i];
@@ -1097,6 +1092,11 @@ BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac, CoordBounds & cbCli
 				drw->prepare(&ppEDITCOPY);
 			}
 		} 
+	}
+
+	if (cbClip.fValid()) {
+		GetDocument()->rootDrawer->setCoordBoundsView(cbMap, true); // set new aspect ratio
+		GetDocument()->rootDrawer->setCoordBoundsZoom(cbClip); // set the cbZoom to cbClip, for correct clipping
 	}
 
 	contextMem->TakeContext();
