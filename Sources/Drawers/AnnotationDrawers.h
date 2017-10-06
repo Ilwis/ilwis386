@@ -170,7 +170,6 @@ private:
 	bool ticks;
 	int step;
 	int numDigits;
-
 };
 
 class _export AnnotationScaleBarDrawer : public AnnotationDrawer {
@@ -185,6 +184,8 @@ public:
 	void setUnit(const String& unit);
 	int getTicks() const;
 	void setTicks(int t);
+	bool getKm() const;
+	void setKm(bool k);
 
 private:
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
@@ -197,6 +198,7 @@ private:
 	int ticks;
 	TextLayerDrawer *texts;
 	String unit;
+	bool km;
 };
 
 class _export AnnotationNorthArrowDrawer : public AnnotationDrawer {

@@ -25,7 +25,8 @@ namespace ILWIS {
 		public:
 		ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr);
 	private:
-		int setPosition(Event *ev) ;
+		int setPosition(Event *ev);
+		int UseKilometersChanged(Event *);
 		void apply();
 		
 		FieldIntSliderEx *sliderV;
@@ -33,9 +34,11 @@ namespace ILWIS {
 		FieldReal *fldSize;
 		FieldString *fldUnit;
 		FieldInt *fldTicks;
+		CheckBox *cbUseKilometers;
 		int ticks;
 		int x,y;
 		double sz;
 		String unit;
+		bool km;
 	};
 }

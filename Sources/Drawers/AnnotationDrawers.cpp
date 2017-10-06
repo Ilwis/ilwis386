@@ -920,7 +920,6 @@ vector<String> AnnotationValueLegendDrawer::makeRange(const DomainValueRangeStru
 			sName = "255";
 		}
 		values.push_back(sName.sTrimSpaces());
-
 	}	
 	return values;
 }
@@ -1399,8 +1398,11 @@ ILWIS::NewDrawer *createAnnotationScaleBarDrawer(DrawerParameters *parms) {
 
 AnnotationScaleBarDrawer::AnnotationScaleBarDrawer(DrawerParameters *parms) : 
 AnnotationDrawer(parms, "AnnotationScaleBarDrawer"),
-size(rUNDEF), ticks(3), texts(0),unit("meters")
+size(rUNDEF), ticks(3), texts(0), unit("meters"), km(false)
 {
+	CoordSystem csy = getRootDrawer()->getCoordinateSystem();
+	if (csy.fValid() && csy->pcsLatLon())
+		unit = "degrees";
 	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
 	if (cbMap.MinX() > cb.MinX())
@@ -1412,11 +1414,13 @@ size(rUNDEF), ticks(3), texts(0),unit("meters")
 	if (cbMap.MaxY() < cb.MaxY())
 		cb.MaxY() = cbMap.MaxY();
 
-	size = rRound(cb.width() * 0.2 / ticks);
-	double totSize = size * ticks;
-	height = cb.height() * 0.01;
-	begin.y = cb.MaxY() - cb.height() / 20.0;
-	begin.x = cb.middle().x - totSize / 2.0;
+	CoordBounds cbProject (getRootDrawer()->glToWorld(cb.cMin), getRootDrawer()->glToWorld(cb.cMax));
+
+	size = max(1.0, rRound(cbProject.width() * 0.2 / ticks));
+	double totSize = ticks * size / cbProject.width();
+	height = 0.01;
+	begin.y = 0.95;
+	begin.x = 0.5 - totSize / 2.0;
 }
 
 void AnnotationScaleBarDrawer::prepare(PreparationParameters *pp){
@@ -1447,10 +1451,30 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 	bool is3D = getRootDrawer()->is3D(); 
 	glColor3d(0,0,0);
 	double start = 0;
-	double totSize = ticks * size;
+
+	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
+	CoordBounds cbProject (getRootDrawer()->glToWorld(cb.cMin), getRootDrawer()->glToWorld(cb.cMax));
+	Coord crd (cb.MinX() + cb.width() * begin.x, cb.MinY() + cb.height() * begin.y);
+
+	double tickSize = size * cb.width() / cbProject.width();
+	double totSize = ticks * tickSize;
+	if (totSize > cb.width() / 2.0 || totSize < cb.width() / 15.0) { // too big or too small: recompute size
+		const_cast<AnnotationScaleBarDrawer*>(this)->size = max(1.0, rRound(cbProject.width() * 0.2 / ticks));
+		tickSize = size * cb.width() / cbProject.width();
+		totSize = ticks * tickSize;
+	}
 
 	glPushMatrix();
-	glTranslated(begin.x, begin.y, 0);
+	glTranslated(crd.x, crd.y, 0);
 
 	drawPreDrawers(drawLoop, cbArea);
 
@@ -1460,16 +1484,16 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 		glVertex3d(totSize, 0, 0);
 		for(int i = 0; i <= ticks; ++i) {
 			glVertex3d(start,0, 0);
-			glVertex3d(start, -height,0);
-			start += size;
+			glVertex3d(start, -height * cb.height(),0);
+			start += tickSize;
 			TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
 			if ( txtdr) {
-				String s = String("%d",(long)size * i);
+				String s = km ? String("%d",(long)(i * size / 1000.0)) : String("%d",(long)size * i);
 				txtdr->setText(s);
 				double h = txtdr->getHeight();
-				h += height;
+				h += height * cb.height();
 				double xShift = h * s.size() / 6.0;
-				double x = i * size - xShift;
+				double x = i * tickSize - xShift;
 				if ( i == ticks)
 					s += " " + unit;
 				txtdr->setText(s);
@@ -1510,6 +1534,7 @@ String AnnotationScaleBarDrawer::store(const FileName& fnView, const String& par
 	ObjectInfo::WriteElement(currentSection.c_str(),"Height",fnView, height);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Ticks",fnView, ticks);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Unit",fnView, unit);
+	ObjectInfo::WriteElement(currentSection.c_str(),"UseKm",fnView, km);
 	return currentSection;
 }
 
@@ -1521,6 +1546,7 @@ void AnnotationScaleBarDrawer::load(const FileName& fnView, const String& parent
 	ObjectInfo::ReadElement(currentSection.c_str(),"Height",fnView, height);
 	ObjectInfo::ReadElement(currentSection.c_str(),"Ticks",fnView, ticks);
 	ObjectInfo::ReadElement(currentSection.c_str(),"Unit",fnView, unit);
+	ObjectInfo::ReadElement(currentSection.c_str(),"UseKm",fnView, km);
 }
 
 String AnnotationScaleBarDrawer::getUnit() const{
@@ -1539,6 +1565,14 @@ void AnnotationScaleBarDrawer::setTicks(int t){
 	if ( t > 1) {
 		ticks = t;
 	}
+}
+
+bool AnnotationScaleBarDrawer::getKm() const{
+	return km;
+}
+
+void AnnotationScaleBarDrawer::setKm(bool k){
+	km = k;
 }
 
 //------------------------------------------------
@@ -1605,8 +1639,8 @@ AnnotationNorthArrowDrawer::AnnotationNorthArrowDrawer(DrawerParameters *parms)
 		cb.MinY() = cbMap.MinY();
 	if (cbMap.MaxY() < cb.MaxY())
 		cb.MaxY() = cbMap.MaxY();
-	begin.y = cb.MaxY() - cb.height() / 10.0;
-	begin.x = cb.MaxX() - cb.width() / 10.0;
+	begin.y = 0.9;
+	begin.x = 0.9;
 	scale = 2.5;
 }
 
@@ -1626,7 +1660,6 @@ void AnnotationNorthArrowDrawer::prepare(PreparationParameters *pp){
 			prop->symbol = "Arrow";
 			prop->drawColor = Color(0,0,0);
 			prop->scale = scale;
-			arrow->setCoord(begin);
 			PreparationParameters pp(NewDrawer::ptRENDER);
 			pp.props.symbolType = "Arrow";
 			pp.props.symbolSize = scale * 100;
@@ -1657,6 +1690,18 @@ bool AnnotationNorthArrowDrawer::draw(const DrawLoop drawLoop, const CoordBounds
 	if (arrow) {
 		PointProperties *prop = (PointProperties *)arrow->getProperties();
 		prop->angle = angle;
+		CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
+		CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
+		if (cbMap.MinX() > cb.MinX())
+			cb.MinX() = cbMap.MinX();
+		if (cbMap.MaxX() < cb.MaxX())
+			cb.MaxX() = cbMap.MaxX();
+		if (cbMap.MinY() > cb.MinY())
+			cb.MinY() = cbMap.MinY();
+		if (cbMap.MaxY() < cb.MaxY())
+			cb.MaxY() = cbMap.MaxY();
+		Coord crd (cb.MinX() + cb.width() * begin.x, cb.MinY() + cb.height() * begin.y);
+		arrow->setCoord(crd);
 		arrow->draw(drawLoop, getRootDrawer()->getCoordBoundsZoomExt());
 	}
 

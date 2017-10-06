@@ -98,25 +98,17 @@ void AnnotationScaleBarDrawerTool::makeActive(void *v, HTREEITEM ) {
 }
 
 //--------------------------------------------------------
-ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr) : 
-	DisplayOptionsForm(dr,wPar,TR("Properties of the ScaleBar"))
+ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr)
+: DisplayOptionsForm(dr,wPar,TR("Properties of the ScaleBar"))
+, cbUseKilometers(0)
 {
-	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoomExt();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
-	if (cbMap.MinX() > cb.MinX())
-		cb.MinX() = cbMap.MinX();
-	if (cbMap.MaxX() < cb.MaxX())
-		cb.MaxX() = cbMap.MaxX();
-	if (cbMap.MinY() > cb.MinY())
-		cb.MinY() = cbMap.MinY();
-	if (cbMap.MaxY() < cb.MaxY())
-		cb.MaxY() = cbMap.MaxY();
 	Coord begin = dr->getBegin();
 	unit = dr->getUnit();
+	km = dr->getKm();
 	ticks = dr->getTicks();
 	sz = dr->getSize();
-	x = round(100.0 * ( begin.x - cb.MinX() ) / cb.width());
-	y = round(100.0 * ( begin.y - cb.MinY()) / cb.height());
+	x = round(100.0 * begin.x);
+	y = round(100.0 * begin.y);
 	sliderH = new FieldIntSliderEx(root,TR("X position"), &x,ValueRange(0,100),true);
 	sliderV = new FieldIntSliderEx(root,TR("Y position"), &y,ValueRange(0,100),true);
 	sliderV->Align(sliderH, AL_UNDER);
@@ -127,6 +119,11 @@ ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr) :
 	fldSize = new FieldReal(root, TR("Tick Size"),&sz);
 	fldTicks = new FieldInt(root, TR("Number of ticks"),&ticks);
 	fldUnit = new FieldString(root, TR("Unit"),&unit);
+	CoordSystem csy = dr->getRootDrawer()->getCoordinateSystem();
+	if (csy.fValid() && !csy->pcsLatLon()) {
+		cbUseKilometers = new CheckBox(root, TR("Use Kilometers"), &km);
+		cbUseKilometers->SetCallBack((NotifyProc)&ScaleBarPosition::UseKilometersChanged);
+	}
 	create();
 }
 
@@ -134,22 +131,21 @@ int ScaleBarPosition::setPosition(Event *ev) {
 	sliderV->StoreData();
 	sliderH->StoreData();
 	AnnotationScaleBarDrawer *scaleDrw = (AnnotationScaleBarDrawer *)drw;
-	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoomExt();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
-	if (cbMap.MinX() > cb.MinX())
-		cb.MinX() = cbMap.MinX();
-	if (cbMap.MaxX() < cb.MaxX())
-		cb.MaxX() = cbMap.MaxX();
-	if (cbMap.MinY() > cb.MinY())
-		cb.MinY() = cbMap.MinY();
-	if (cbMap.MaxY() < cb.MaxY())
-		cb.MaxY() = cbMap.MaxY();
-	double newx = cb.width() * x / 100.0 + cb.MinX();
-	double newy = cb.height() * y / 100.0 + cb.MinY();
+	double newx = x / 100.0;
+	double newy = y / 100.0;
 	scaleDrw->setBegin(Coord(newx,newy));
 	updateMapView();
 
 	return 1;
+}
+
+int ScaleBarPosition::UseKilometersChanged(Event *)
+{
+	if (cbUseKilometers->fVal())
+		fldUnit->SetVal("km");
+	else
+		fldUnit->SetVal("meters");
+  return 0;  
 }
 
 void ScaleBarPosition::apply() {
@@ -157,10 +153,13 @@ void ScaleBarPosition::apply() {
 	fldUnit->StoreData();
 	fldSize->StoreData();
 	fldTicks->StoreData();
+	if (cbUseKilometers)
+		cbUseKilometers->StoreData();
 	AnnotationScaleBarDrawer *scaleDrw = (AnnotationScaleBarDrawer *)drw;
 	scaleDrw->setUnit(unit);
 	scaleDrw->setSize(sz);
 	scaleDrw->setTicks(ticks);
+	scaleDrw->setKm(km);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	scaleDrw->prepare(&pp);
 	updateMapView();

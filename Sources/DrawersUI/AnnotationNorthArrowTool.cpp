@@ -121,25 +121,15 @@ DisplayOptionsForm(dr,wPar,TR("Properties of the North Arrow")), scale(40 * dr->
 	}
 	arrowType = new FieldOneSelectString(root,TR("North Arrows"),&selection, names);
 	arrowType->SetCallBack((NotifyProc)&NorthArrowPosition::setArrow);
-	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoomExt();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
-	if (cbMap.MinX() > cb.MinX())
-		cb.MinX() = cbMap.MinX();
-	if (cbMap.MaxX() < cb.MaxX())
-		cb.MaxX() = cbMap.MaxX();
-	if (cbMap.MinY() > cb.MinY())
-		cb.MinY() = cbMap.MinY();
-	if (cbMap.MaxY() < cb.MaxY())
-		cb.MaxY() = cbMap.MaxY();
 
 	Coord begin = dr->getBegin();
 	if (begin.fUndef()) {
-		begin.y = cb.MaxY() - cb.height() / 10.0;
-		begin.x = cb.MaxX() - cb.width() / 10.0;
+		begin.x = 0.9;
+		begin.y = 0.9;
 		dr->setBegin(begin);
 	}
-	x = round(100.0 * ( begin.x - cb.MinX() ) / cb.width());
-	y = round(100.0 * ( begin.y - cb.MinY()) / cb.height());
+	x = round(100.0 * begin.x);
+	y = round(100.0 * begin.y);
 	sliderScale = new FieldIntSliderEx(root,TR("Scale(%)"), &scale,ValueRange(10,500),true);
 	sliderH = new FieldIntSliderEx(root,TR("X position"), &x,ValueRange(0,100),true);
 	sliderV = new FieldIntSliderEx(root,TR("Y position"), &y,ValueRange(0,100),true);
@@ -168,19 +158,9 @@ int NorthArrowPosition::setPosition(Event *ev) {
 	sliderV->StoreData();
 	sliderH->StoreData();
 	AnnotationNorthArrowDrawer *northDrw = (AnnotationNorthArrowDrawer *)drw;
-	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoomExt();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
-	if (cbMap.MinX() > cb.MinX())
-		cb.MinX() = cbMap.MinX();
-	if (cbMap.MaxX() < cb.MaxX())
-		cb.MaxX() = cbMap.MaxX();
-	if (cbMap.MinY() > cb.MinY())
-		cb.MinY() = cbMap.MinY();
-	if (cbMap.MaxY() < cb.MaxY())
-		cb.MaxY() = cbMap.MaxY();
 
-	double newx = cb.width() * x / 100.0 + cb.MinX();
-	double newy = cb.height() * y / 100.0 + cb.MinY();
+	double newx = x / 100.0;
+	double newy = y / 100.0;
 	northDrw->setBegin(Coord(newx,newy));
 	updateMapView();
 
@@ -210,6 +190,5 @@ NorthArrowAppearance::NorthArrowAppearance(CWnd *wPar, AnnotationNorthArrowDrawe
 
 void NorthArrowAppearance::apply() {
 	updateMapView();
-
 }
 
