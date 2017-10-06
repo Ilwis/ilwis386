@@ -84,7 +84,6 @@ String AnnotationDrawer::store(const FileName& fnView, const String& currentSect
 	ObjectInfo::WriteElement(currentSection.c_str(),"Scale",fnView, scale);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Title",fnView, title);
 
-
 	return currentSection;
 }
 
@@ -114,7 +113,6 @@ void AnnotationDrawer::setParent(NewDrawer *drw){
 	parentDrawer = drw;
 }
 
-
 //-------------------------------------------------------
 AnnotationLegendDrawer::AnnotationLegendDrawer(DrawerParameters *parms, const String& name) : 
 AnnotationDrawer(parms, name),
@@ -131,8 +129,8 @@ fontScale(1)
 
 void AnnotationLegendDrawer::setOrientation(bool yesno) {
 	vertical = yesno;
-	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
-	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
 	if (cbMap.MinX() > cb.MinX())
 		cb.MinX() = cbMap.MinX();
 	if (cbMap.MaxX() < cb.MaxX())
@@ -320,7 +318,6 @@ void AnnotationLegendDrawer::setText(const vector<String>& v, int count, const C
 	}
 }
 
-
 String AnnotationLegendDrawer::store(const FileName& fnView, const String& currentSection) const{
 	AnnotationDrawer::store(fnView, currentSection);
 	if ( dataDrawer) {
@@ -427,7 +424,6 @@ void AnnotationClassLegendDrawer::getActiveClasses(vector<int>& rws) const {
 		rws.push_back(raws[i].raw);
 	}
 }
-
 
 void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 	AnnotationLegendDrawer::prepare(pp);
@@ -735,7 +731,8 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	if ( !isActive() || !isValid())
 		return false;
 
-	if ( !cbArea.fContains(cbBox))
+	CoordBounds cbZoomExt = getRootDrawer()->getCoordBoundsZoomExt();
+	if ( !cbZoomExt.fContains(cbBox))
 		return false;
 
 	bool is3D = getRootDrawer()->is3D(); 
@@ -965,7 +962,7 @@ ILWIS::NewDrawer *createAnnotationBorderDrawer(DrawerParameters *parms) {
 
 AnnotationBorderDrawer::AnnotationBorderDrawer(DrawerParameters *parms) : 
 AnnotationDrawer(parms, "AnnotationBorderDrawer"),
-borderBox(0), xborder(0.14), yborder(0.03), neatLine(true), ticks(true), step(1), numDigits(2){
+borderBox(0), neatLine(true), ticks(true), step(1), numDigits(2){
 	for(int i=0; i < 4; ++i)
 		hasText.push_back(true);
 	id = "AnnotationBorderDrawer";
@@ -976,7 +973,12 @@ AnnotationBorderDrawer::~AnnotationBorderDrawer() {
 }
 
 bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() || !isValid())
+	if (!isValid())
+		return false;
+	bool fBorderActive = isActive();
+	bool fWhitespaceActive = getRootDrawer()->fWhitespace();
+	bool fActive = fBorderActive || fWhitespaceActive;
+	if (!fActive)
 		return false;
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -985,61 +987,67 @@ bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	bool is3D = getRootDrawer()->is3D();
 	
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
-	CoordBounds cb = cbArea; // cbArea is cbZoom
-	if (cbMap.MinX() > cb.MinX()) // limit cbArea by cbMap
-		cb.MinX() = cbMap.MinX();
-	if (cbMap.MaxX() < cb.MaxX())
-		cb.MaxX() = cbMap.MaxX();
-	if (cbMap.MinY() > cb.MinY())
-		cb.MinY() = cbMap.MinY();
-	if (cbMap.MaxY() < cb.MaxY())
-		cb.MaxY() = cbMap.MaxY();
-	Extension ext = getRootDrawer()->extension(); // additional whitespace chosen by user (Whitespace tool)
-	double cbwidth = cb.width(); // proportional to visible map
-	double cbheight = cb.height();
-	cb.cMin.x = cb.cMin.x + cbwidth * xborder + cbwidth * ext.left / 100;
-	cb.cMax.x = cb.cMax.x - cbwidth * xborder - cbwidth * ext.right / 100;
-	cb.cMin.y = cb.cMin.y + cbheight * yborder + cbheight * ext.bottom / 100;
-	cb.cMax.y = cb.cMax.y - cbheight * yborder - cbheight * ext.top / 100;
+	CoordBounds cbInner = cbArea; // cbArea is cbZoom
+	if (cbMap.MinX() > cbInner.MinX()) // limit cbArea by cbMap
+		cbInner.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cbInner.MaxX())
+		cbInner.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cbInner.MinY())
+		cbInner.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cbInner.MaxY())
+		cbInner.MaxY() = cbMap.MaxY();
 
-	borderBox->setBox(cbArea, CoordBounds(cb.cMin, cb.cMax));
-	if ( hasText[0] )
-		setText(cb,cbArea,AnnotationBorderDrawer::sLEFT, 0);
-	if ( hasText[1] )
-		setText(cb,cbArea,AnnotationBorderDrawer::sRIGHT, 0);
-	if ( hasText[2] )
-		setText(cb,cbArea,AnnotationBorderDrawer::sTOP, 0);
-	if ( hasText[3] )
-		setText(cb,cbArea,AnnotationBorderDrawer::sBOTTOM, 0);
+	CoordBounds cbMapExt = getRootDrawer()->getMapCoordBoundsExt();
+	CoordBounds cbOuter = getRootDrawer()->getCoordBoundsZoomExt();
+	if (cbMapExt.MinX() > cbOuter.MinX()) // limit cbArea by cbMapExt
+		cbOuter.MinX() = cbMapExt.MinX();
+	if (cbMapExt.MaxX() < cbOuter.MaxX())
+		cbOuter.MaxX() = cbMapExt.MaxX();
+	if (cbMapExt.MinY() > cbOuter.MinY())
+		cbOuter.MinY() = cbMapExt.MinY();
+	if (cbMapExt.MaxY() < cbOuter.MaxY())
+		cbOuter.MaxY() = cbMapExt.MaxY();
 
+	borderBox->setBox(cbOuter, cbInner);
 	// draw white space around
 	borderBox->draw(drawLoop, cbArea);
-	// draw texts
-	AnnotationDrawer::draw(drawLoop, cbArea);
-	if (drawLoop != drl3DTRANSPARENT) {
-		if (neatLine) {
-			// draw neat line
-			glColor3d(0,0,0);
-			glBegin(GL_LINE_STRIP);
-			glVertex3d(cb.MinX(), cb.MinY(),0);
-			glVertex3d(cb.MinX(), cb.MaxY(),0);
-			glVertex3d(cb.MaxX(), cb.MaxY(),0);
-			glVertex3d(cb.MaxX(), cb.MinY(),0);
-			glVertex3d(cb.MinX(), cb.MinY(),0);
-			glEnd();
-		}
-		if (ticks) {
-			// draw ticks
-			if ( hasText[0] )
-				drawTicks(cb,cbArea,AnnotationBorderDrawer::sLEFT, 0);
-			if ( hasText[1] )
-				drawTicks(cb,cbArea,AnnotationBorderDrawer::sRIGHT, 0);
-			if ( hasText[2] )
-				drawTicks(cb,cbArea,AnnotationBorderDrawer::sTOP, 0);
-			if ( hasText[3] )
-				drawTicks(cb,cbArea,AnnotationBorderDrawer::sBOTTOM, 0);
-		}
-	} 
+
+	if (fBorderActive) {
+		if ( hasText[0] )
+			setText(cbInner,cbInner,AnnotationBorderDrawer::sLEFT, 0);
+		if ( hasText[1] )
+			setText(cbInner,cbInner,AnnotationBorderDrawer::sRIGHT, 0);
+		if ( hasText[2] )
+			setText(cbInner,cbInner,AnnotationBorderDrawer::sTOP, 0);
+		if ( hasText[3] )
+			setText(cbInner,cbInner,AnnotationBorderDrawer::sBOTTOM, 0);
+		// draw texts
+		AnnotationDrawer::draw(drawLoop, cbArea);
+		if (drawLoop != drl3DTRANSPARENT) {
+			if (neatLine) {
+				// draw neat line
+				glColor3d(0,0,0);
+				glBegin(GL_LINE_STRIP);
+				glVertex3d(cbInner.MinX(), cbInner.MinY(),0);
+				glVertex3d(cbInner.MinX(), cbInner.MaxY(),0);
+				glVertex3d(cbInner.MaxX(), cbInner.MaxY(),0);
+				glVertex3d(cbInner.MaxX(), cbInner.MinY(),0);
+				glVertex3d(cbInner.MinX(), cbInner.MinY(),0);
+				glEnd();
+			}
+			if (ticks) {
+				// draw ticks
+				if ( hasText[0] )
+					drawTicks(cbInner,cbInner,AnnotationBorderDrawer::sLEFT, 0);
+				if ( hasText[1] )
+					drawTicks(cbInner,cbInner,AnnotationBorderDrawer::sRIGHT, 0);
+				if ( hasText[2] )
+					drawTicks(cbInner,cbInner,AnnotationBorderDrawer::sTOP, 0);
+				if ( hasText[3] )
+					drawTicks(cbInner,cbInner,AnnotationBorderDrawer::sBOTTOM, 0);
+			}
+		} 
+	}
 
 	glDisable(GL_BLEND);
 
@@ -1283,7 +1291,9 @@ void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
 			borderBox->setAlpha(1);
 			borderBox->setDrawColor(Color(255,255,255));
 			texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
-			texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12,false));
+			OpenGLText * font = new OpenGLText(getRootDrawer(),"arial.ttf",12,false);
+			texts->setFont(font);
+			getRootDrawer()->setAnnotationFont(font);
 			addDrawer(texts);
 		}
 		texts->clear();
@@ -1335,12 +1345,7 @@ TextDrawer *AnnotationBorderDrawer::getTextDrawer(int index, Side side) {
 void AnnotationBorderDrawer::calcLocations() {
 	ypos.clear();
 	xpos.clear();
-	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
-	Extension ext = getRootDrawer()->extension();
-	cbMap.MinX() += cbMap.width() * ext.left /100;
-	cbMap.MaxX() -= cbMap.width() * ext.right /100;
-	cbMap.MinY() += cbMap.height() *ext.bottom /100;
-	cbMap.MaxY() -= cbMap.height() *ext.top /100;
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
 	Coord cMin = getRootDrawer()->glToWorld(cbMap.cMin);
 	Coord cMax = getRootDrawer()->glToWorld(cbMap.cMax);
 	GridDrawer *gdr = dynamic_cast<GridDrawer *>(dataDrawer);
@@ -1396,8 +1401,8 @@ AnnotationScaleBarDrawer::AnnotationScaleBarDrawer(DrawerParameters *parms) :
 AnnotationDrawer(parms, "AnnotationScaleBarDrawer"),
 size(rUNDEF), ticks(3), texts(0),unit("meters")
 {
-	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
-	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
 	if (cbMap.MinX() > cb.MinX())
 		cb.MinX() = cbMap.MinX();
 	if (cbMap.MaxX() < cb.MaxX())
@@ -1590,8 +1595,8 @@ AnnotationNorthArrowDrawer::AnnotationNorthArrowDrawer(DrawerParameters *parms)
 : AnnotationDrawer(parms, "AnnotationNorthArrowDrawer")
 , arrow(0)
 {
-	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
-	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
 	if (cbMap.MinX() > cb.MinX())
 		cb.MinX() = cbMap.MinX();
 	if (cbMap.MaxX() < cb.MaxX())
@@ -1652,7 +1657,7 @@ bool AnnotationNorthArrowDrawer::draw(const DrawLoop drawLoop, const CoordBounds
 	if (arrow) {
 		PointProperties *prop = (PointProperties *)arrow->getProperties();
 		prop->angle = angle;
-		arrow->draw(drawLoop, cbArea);
+		arrow->draw(drawLoop, getRootDrawer()->getCoordBoundsZoomExt());
 	}
 
 	return true;

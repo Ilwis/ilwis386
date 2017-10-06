@@ -42,8 +42,8 @@ bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	CoordBounds cbView = getRootDrawer()->getCoordBoundsView();
-	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	CoordBounds cbView = getRootDrawer()->getCoordBoundsViewExt();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
 	bool is3D = getRootDrawer()->is3D();
 	if ( is3D) {
 		glColor4d(outside3D.redP(), outside3D.greenP(), outside3D.blueP(),getAlpha());

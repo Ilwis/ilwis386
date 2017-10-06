@@ -156,8 +156,8 @@ LegendPosition::LegendPosition(CWnd *wPar, AnnotationLegendDrawer *dr) :
 	DisplayOptionsForm2(dr,wPar,TR("Position of Legend")), rg(0), fiColumns(0)
 {
 	orientation = dr->getOrientation() ? 1 : 0;
-	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoom();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
 	if (cbMap.MinX() > cbZoom.MinX())
 		cbZoom.MinX() = cbMap.MinX();
 	if (cbMap.MaxX() < cbZoom.MaxX())
@@ -214,8 +214,8 @@ int LegendPosition::setPosition(Event *ev) {
 
 	}
 	CoordBounds cbBox = ld->getBox();
-	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoom();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
 	if (cbMap.MinX() > cbZoom.MinX())
 		cbZoom.MinX() = cbMap.MinX();
 	if (cbMap.MaxX() < cbZoom.MaxX())
@@ -299,7 +299,6 @@ DisplayOptionsForm(dr,wPar,TR("Appearance of Legend")) , layer(lyr), fview(0),fm
 		for (int i = 0; i < raws.size(); ++i)
 			--raws[i]; // raw to row
 		fview->setSelectedRows(raws);
-
 	}
 }
 
@@ -341,10 +340,7 @@ void LegendAppearance::apply() {
 		vdr->setStep(rstep);
 	}
 
-
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	andrw->prepare(&pp);
 	updateMapView();
-
 }
-

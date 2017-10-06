@@ -5,6 +5,7 @@
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
+#include "Engine\Drawers\OpenGLText.h"
 
 using namespace ILWIS;
 
@@ -13,6 +14,9 @@ using namespace ILWIS;
 RootDrawer::RootDrawer()
 : ComplexDrawer(0,"RootDrawer")
 , fUseGeoRef(false)
+, fAnnotationWhitespace(false)
+, fAnnotationBorder(false)
+, annotationFont(0)
 {
 	drawercontext = new ILWIS::DrawerContext();
 	ILWIS::DrawerParameters dp(this, this);
@@ -80,7 +84,6 @@ void  RootDrawer::prepare(PreparationParameters *pp){
 			(*cur).second->prepare(pp);
 		}
 	}
-
 }
 
 String RootDrawer::addDrawer(NewDrawer *drw, bool overrule) {
@@ -151,7 +154,7 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 			else
 				gluPerspective(30.0, windowAspectRatio, zNear, zFar);
 		} else {
-			glOrtho(cbZoom.cMin.x,cbZoom.cMax.x,cbZoom.cMin.y,cbZoom.cMax.y,-1,1);
+			glOrtho(cbZoomExt.cMin.x,cbZoomExt.cMax.x,cbZoomExt.cMin.y,cbZoomExt.cMax.y,-1,1);
 		}
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
@@ -256,6 +259,7 @@ void RootDrawer::load(const FileName& fnView, const String parenSection){
 	setCoordBoundsView(cbV, true);
 	//setCoordBoundsZoom(cbZ);
 	cbZoom = cbZ;
+	RecomputeAnnotationBorder();
 
 	ComplexDrawer::load(fnView,"RootDrawer");
 
@@ -341,6 +345,7 @@ void RootDrawer::setViewPort(const RowCol& rc, bool fNoZoom) {
 			modifyZoomX((double)rc.Col / pixArea.Col);
 		if (rc.Row != pixArea.Row)
 			modifyZoomY((double)rc.Row / pixArea.Row);
+		RecomputeAnnotationBorder();
 	}
 	pixArea = rc;
 }
@@ -353,6 +358,7 @@ void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 			cbMap = _cs->cbConv(cs, cbMap);
 			cbZoom = _cs->cbConv(cs, cbZoom);
 			cbView = _cs->cbConv(cs, cbView);
+			RecomputeAnnotationBorder();
 		}
 		cs = _cs;
 	}
@@ -369,6 +375,7 @@ void RootDrawer::setGeoreference(const GeoRef& _gr, bool overruleMapBounds) {
 				cbMap = CoordBounds(Coord(0,0), Coord(gr->rcSize().Col, -gr->rcSize().Row));
 			cbZoom = cbMap;
 			cbView = cbMap;
+			RecomputeAnnotationBorder();
 		} else {
 			CoordBounds cb;
 			double rRow;
@@ -449,6 +456,8 @@ void RootDrawer::clearGeoreference() {
 		cbView = cb;
 
 		gr = GeoRef();
+
+		RecomputeAnnotationBorder();
 
 		fUseGeoRef = false;
 	}
@@ -574,7 +583,7 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 			double fracofWidth = 1.0 - (pixArea.Col - pixwidth) / pixArea.Col;
 			double crdWidth = w / fracofWidth;
 			double delta = (crdWidth - w) / 2.0;
-			cbView =  CoordBounds(Coord(cb.MinX() - delta,cb.MinY() - deltay /2.0,0), 
+			cbView = CoordBounds(Coord(cb.MinX() - delta,cb.MinY() - deltay /2.0,0), 
 				Coord(cb.MaxX() + delta,cb.MaxY() + deltay/ 2.0,0));
 		} else {
 			double pixheight = (double)pixArea.Col / mapAspectRatio;
@@ -586,13 +595,14 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 			double fracofHeight = 1.0 - abs(pixArea.Row - pixheight) / (double)pixArea.Row;
 			double crdHeight = h / fracofHeight;
 			double delta = (crdHeight - h) / 2.0;
-			cbView =  CoordBounds(Coord(cb.MinX() - deltax /2.0,cb.MinY()  - delta,0), 
+			cbView = CoordBounds(Coord(cb.MinX() - deltax /2.0,cb.MinY()  - delta,0), 
 				Coord(cb.MaxX() + deltax /2.0,cb.MaxY()  + delta,0));
 
 		}
 		cbZoom = cbView;
 		setViewPoint(cbZoom.middle());
-	} 
+	}
+	RecomputeAnnotationBorder();
 	if ( is3D()) {
 		if ( !initRestore) { // restore set rotX, etc. But the OnEntireMap would destroy these false; so for once  the init of values is skipped
 			rotX = 0;
@@ -624,11 +634,14 @@ void RootDrawer::setCoordBoundsZoom(const CoordBounds& cbIn) {
 
 	cbZoom = cb;
 	setViewPoint(cbZoom.middle());
+	RecomputeAnnotationBorder();
 }
 
 void RootDrawer::setCoordBoundsMap(const CoordBounds& cb) {
 	cbMap = cb;
+	RecomputeAnnotationBorder();
 }
+
 CoordBounds RootDrawer::getMapCoordBounds() const{
 	return cbMap;
 }
@@ -947,12 +960,106 @@ Extension RootDrawer::extension() const{
 
 void RootDrawer::setExtension(const Extension& _ext){
 	ext = _ext;
+	fAnnotationWhitespace = ext.left != 0 || ext.right != 0 || ext.bottom != 0 || ext.top != 0;
+	RecomputeAnnotationBorder();
 }
 
+void RootDrawer::setAnnotationFont(OpenGLText *f){
+	annotationFont = f;
+	RecomputeAnnotationBorder();
+}
 
+CoordBounds RootDrawer::getCoordBoundsZoomExt() const{
+	return cbZoomExt;
+}
 
+CoordBounds RootDrawer::getCoordBoundsViewExt() const{
+	return cbViewExt;
+}
 
+CoordBounds RootDrawer::getMapCoordBoundsExt() const{
+	return cbMapExt;
+}
 
+void RootDrawer::setCoordBoundsViewExt(CoordBounds & _cb)
+{
+	cbViewExt = _cb;
+}
 
+void RootDrawer::setCoordBoundsZoomExt(CoordBounds & _cb)
+{
+	cbZoomExt = _cb;
+}
 
+void RootDrawer::setAnnotationWhitespace(bool fWhitespace)
+{
+	fAnnotationWhitespace = fWhitespace;
+	RecomputeAnnotationBorder();
+}
 
+void RootDrawer::setAnnotationBorder(bool fBorder)
+{
+	fAnnotationBorder = fBorder;
+	RecomputeAnnotationBorder();
+}
+
+bool RootDrawer::fWhitespace() const
+{
+	return fAnnotationWhitespace;
+}
+
+void RootDrawer::RecomputeAnnotationBorder(){
+	if (fAnnotationWhitespace || fAnnotationBorder) {
+		double rLeft = 0;
+		double rRight = 0;
+		double rTop = 0;
+		double rBottom = 0;
+		if (fAnnotationWhitespace) {
+			rLeft = cbZoom.width() * ext.left / 100.0;
+			rRight = cbZoom.width() * ext.right / 100.0;
+			rTop = cbZoom.height() * ext.top / 100.0;
+			rBottom = cbZoom.height() * ext.bottom / 100;
+		}
+		if (fAnnotationBorder && annotationFont != 0) {
+			CoordBounds cbTextExtent = annotationFont->getTextExtent("XXXXXXX");
+			double width = cbTextExtent.width() + cbZoom.width() * 0.02; // textsize + space around (0.01 on each side) for centering the text
+			double height = cbTextExtent.height() + cbZoom.height() * 0.02;
+			rLeft += width;
+			rRight += width;
+			rTop += height;
+			rBottom += height;
+		}
+
+		cbMapExt = CoordBounds(cbMap.MinX() - rLeft, cbMap.MinY() - rBottom, cbMap.MaxX() + rRight, cbMap.MaxY() + rTop);
+		cbZoomExt.cMin.x = min(cbZoom.cMin.x, max(cbMapExt.cMin.x, cbZoom.cMin.x - rLeft));
+		cbZoomExt.cMax.x = max(cbZoom.cMax.x, min(cbMapExt.cMax.x, cbZoom.cMax.x + rRight));
+		cbZoomExt.cMin.y = min(cbZoom.cMin.y, max(cbMapExt.cMin.y, cbZoom.cMin.y - rBottom));
+		cbZoomExt.cMax.y = max(cbZoom.cMax.y, min(cbMapExt.cMax.y, cbZoom.cMax.y + rTop));
+		// compensate cbZoom x/y aspect ratio
+		if (cbZoomExt.width() / cbZoomExt.height() > windowAspectRatio) { // too wide: increase height
+			double delta = cbZoomExt.width() / windowAspectRatio - cbZoomExt.height();
+			cbZoomExt.cMin.y -= delta / 2.0;
+			cbZoomExt.cMax.y += delta / 2.0;
+			cbMapExt.cMin.y = min(cbMapExt.cMin.y, cbZoomExt.cMin.y); // fill cbMap accordingly
+			cbMapExt.cMax.y = max(cbMapExt.cMax.y, cbZoomExt.cMax.y);
+		} else { // too high: increase width
+			double delta = cbZoomExt.height() * windowAspectRatio - cbZoomExt.width();
+			cbZoomExt.cMin.x -= delta / 2.0;
+			cbZoomExt.cMax.x += delta / 2.0;
+			cbMapExt.cMin.x = min(cbMapExt.cMin.x, cbZoomExt.cMin.x); // fill cbMap accordingly
+			cbMapExt.cMax.x = max(cbMapExt.cMax.x, cbZoomExt.cMax.x);
+		}
+		// recenter, otherwise gray area may appear asymmetrically
+		RecenterZoomHorz(cbZoomExt, cbMapExt);
+		RecenterZoomVert(cbZoomExt, cbMapExt);
+		
+		cbViewExt.cMin.x = min(cbMapExt.cMin.x, cbZoomExt.cMin.x);
+		cbViewExt.cMax.x = max(cbMapExt.cMax.x, cbZoomExt.cMax.x);
+		cbViewExt.cMin.y = min(cbMapExt.cMin.y, cbZoomExt.cMin.y);
+		cbViewExt.cMax.y = max(cbMapExt.cMax.y, cbZoomExt.cMax.y);
+	} else {
+		cbZoomExt = cbZoom;
+		cbMapExt = cbMap;
+		cbViewExt = cbView;
+	}
+}

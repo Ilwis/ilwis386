@@ -101,8 +101,8 @@ void AnnotationScaleBarDrawerTool::makeActive(void *v, HTREEITEM ) {
 ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr) : 
 	DisplayOptionsForm(dr,wPar,TR("Properties of the ScaleBar"))
 {
-	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoom();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
 	if (cbMap.MinX() > cb.MinX())
 		cb.MinX() = cbMap.MinX();
 	if (cbMap.MaxX() < cb.MaxX())
@@ -134,8 +134,8 @@ int ScaleBarPosition::setPosition(Event *ev) {
 	sliderV->StoreData();
 	sliderH->StoreData();
 	AnnotationScaleBarDrawer *scaleDrw = (AnnotationScaleBarDrawer *)drw;
-	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoom();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
 	if (cbMap.MinX() > cb.MinX())
 		cb.MinX() = cbMap.MinX();
 	if (cbMap.MaxX() < cb.MaxX())

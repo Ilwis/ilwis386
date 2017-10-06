@@ -121,8 +121,8 @@ DisplayOptionsForm(dr,wPar,TR("Properties of the North Arrow")), scale(40 * dr->
 	}
 	arrowType = new FieldOneSelectString(root,TR("North Arrows"),&selection, names);
 	arrowType->SetCallBack((NotifyProc)&NorthArrowPosition::setArrow);
-	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoom();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
 	if (cbMap.MinX() > cb.MinX())
 		cb.MinX() = cbMap.MinX();
 	if (cbMap.MaxX() < cb.MaxX())
@@ -168,8 +168,8 @@ int NorthArrowPosition::setPosition(Event *ev) {
 	sliderV->StoreData();
 	sliderH->StoreData();
 	AnnotationNorthArrowDrawer *northDrw = (AnnotationNorthArrowDrawer *)drw;
-	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoom();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBounds();
+	CoordBounds cb = drw->getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
 	if (cbMap.MinX() > cb.MinX())
 		cb.MinX() = cbMap.MinX();
 	if (cbMap.MaxX() < cb.MaxX())

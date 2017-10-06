@@ -4,7 +4,7 @@
 #include "Engine\SpatialReference\Gr.h"
 
 class MapCompositionDoc;
-
+class OpenGLText;
 
 namespace ILWIS {
 	struct Extension{
@@ -29,6 +29,9 @@ namespace ILWIS {
 		CoordBounds getCoordBoundsView() const { return cbView; }
 		CoordBounds getCoordBoundsZoom() const; 
 		CoordBounds getMapCoordBounds() const;
+		CoordBounds getCoordBoundsViewExt() const;
+		CoordBounds getCoordBoundsZoomExt() const; 
+		CoordBounds getMapCoordBoundsExt() const;
 		CoordSystem getCoordinateSystem() const { return cs;}
 		GeoRef getGeoReference() const { return gr; }
 		RowCol getViewPort() const { return pixArea; }
@@ -38,6 +41,8 @@ namespace ILWIS {
 		void setCoordBoundsView(const CoordBounds& _cb, bool overrule=false); 
 		void setCoordBoundsZoom(const CoordBounds& _cb);
 		void setCoordBoundsMap(const CoordBounds& cb);
+		void setCoordBoundsViewExt(CoordBounds & _cb); // for Edit/Copy to temporarily override and suppress gray areas
+		void setCoordBoundsZoomExt(CoordBounds & _cb); // for Edit/Copy to temporarily override and suppress gray areas
 		void setZoom(const CRect& rct);
 		void setViewPort(const RowCol& rc, bool fNoZoom); // noZoom preserves the zoomfactor when resizing the window; set to "false" for Edit/Copy
 		Coord screenToOpenGL(const RowCol& rc); // rc is a screen position; it will be converted to the RootDrawer's grf/cs for OpenGL use
@@ -62,7 +67,10 @@ namespace ILWIS {
 		NewDrawer *getBackgroundDrawer() const { return backgroundDrawer; }
 		Extension extension() const;
 		void setExtension(const Extension& ext);
-		
+		void setAnnotationFont(OpenGLText *f);
+		void setAnnotationWhitespace(bool fWhitespace);
+		void setAnnotationBorder(bool fBorder);
+		bool fWhitespace() const;
 
 		//void clear();
 		void set3D(bool yeno);
@@ -91,10 +99,17 @@ namespace ILWIS {
 		void SetAmbientColor();
 		void SetDiffuseColor();
 		void SetSpecularColor();
+		void RecomputeAnnotationBorder();
 
-		CoordBounds cbView;
-		CoordBounds cbZoom;
-		CoordBounds cbMap;
+		CoordBounds cbView; // Meant for computing scrollbars, cbView == max(cbMap,cbZoom), considering the x and y direction independently. Its x/y aspect ratio is not directly related to the one of cbZoom or cbMap.
+		CoordBounds cbZoom; // The bbox coordinates visible in the current MapWindow, from bottomleft to topright. Its x/y aspect ratio is always the same as the one of the MapWindow.
+		CoordBounds cbMap; // The bbox coordinates of the current map-composition.
+		CoordBounds cbViewExt;
+		CoordBounds cbZoomExt;
+		CoordBounds cbMapExt;
+		bool fAnnotationWhitespace;
+		bool fAnnotationBorder;
+		OpenGLText *annotationFont;
 		Extension ext;
 		CoordSystem cs;
 		GeoRef gr;

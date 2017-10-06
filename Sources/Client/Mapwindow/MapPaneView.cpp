@@ -967,8 +967,8 @@ void MapPaneView::OnCopy()
 	double fac = iDPI/72.;		// 72 DPI (screen) --> <user selected> DPI (clipboard)
 	int nXRes = int(mRect.right * fac); // initial values, proposed to the user
 	int nYRes = int(mRect.bottom * fac);
-	CoordBounds cbZoom = GetDocument()->rootDrawer->getCoordBoundsZoom();
-	CoordBounds cbMap = GetDocument()->rootDrawer->getMapCoordBounds();
+	CoordBounds cbZoom = GetDocument()->rootDrawer->getCoordBoundsZoomExt();
+	CoordBounds cbMap = GetDocument()->rootDrawer->getMapCoordBoundsExt();
 	CoordBounds cbClip; // default: cbUNDEF; if required, cbClip will be cbMap intersected with cbZoom (thus cbZoom without the gray "outside" areas)
 	if (!GetDocument()->rootDrawer->is3D() && (cbZoom.MinX() < cbMap.MinX() || cbZoom.MaxX() > cbMap.MaxX() || cbZoom.MinY() < cbMap.MinY() || cbZoom.MaxY() > cbMap.MaxY())) {
 		// use cbMap and cbZoom to compute cbClip
@@ -1060,9 +1060,8 @@ BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac, CoordBounds & cbCli
 	if (fSoftwareRendering)
 		contextMode |= DrawerContext::mSOFTWARERENDERER;
 	contextMem->initOpenGL(hMemDC, 0, contextMode);
-	CoordBounds cbZoom = GetDocument()->rootDrawer->getCoordBoundsZoom();
-	CoordBounds cbMap = GetDocument()->rootDrawer->getMapCoordBounds();
-	CoordBounds cbView = GetDocument()->rootDrawer->getCoordBoundsView();
+	CoordBounds cbZoomExt = GetDocument()->rootDrawer->getCoordBoundsZoomExt();
+	CoordBounds cbViewExt = GetDocument()->rootDrawer->getCoordBoundsViewExt();
 	GetDocument()->rootDrawer->setDrawerContext(contextMem);
 	GetDocument()->rootDrawer->setViewPort(RowCol(nYRes,nXRes), false); // false: autozoom to the given pixelsize
 
@@ -1095,12 +1094,12 @@ BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac, CoordBounds & cbCli
 	}
 
 	if (cbClip.fValid()) {
-		GetDocument()->rootDrawer->setCoordBoundsView(cbMap, true); // set new aspect ratio
-		GetDocument()->rootDrawer->setCoordBoundsZoom(cbClip); // set the cbZoom to cbClip, for correct clipping
+		GetDocument()->rootDrawer->setCoordBoundsViewExt(cbClip);
+		GetDocument()->rootDrawer->setCoordBoundsZoomExt(cbClip);
 	}
 
 	contextMem->TakeContext();
-	GetDocument()->rootDrawer->draw(cbClip.fValid() ? cbClip : cbZoom);
+	GetDocument()->rootDrawer->draw(GetDocument()->rootDrawer->getCoordBoundsZoom());
 	glFinish();	// Finish all OpenGL commands
 	contextMem->ReleaseContext();
 
@@ -1108,12 +1107,8 @@ BOOL MapPaneView::EditCopy(int nXRes, int nYRes, double fac, CoordBounds & cbCli
 	GetDocument()->rootDrawer->setDrawerContext(context);
 	GetDocument()->rootDrawer->setViewPort(viewportOld, false); // false: just re-assign the original values
 	if (cbClip.fValid()) {
-		if (cbMap.width() < cbView.width() && cbMap.height() < cbView.height()) { // we need to oversize cbView; there was "gray" on all 4 sides
-			double rFactor = min(cbView.width() / cbMap.width(), cbView.height() / cbMap.height()); // the minimum factor required to "fill" the cbView
-			cbMap *= rFactor;
-		}
-		GetDocument()->rootDrawer->setCoordBoundsView(cbMap, true); // restore aspect ratio and view size
-		GetDocument()->rootDrawer->setCoordBoundsZoom(cbZoom); // restore zoom position
+		GetDocument()->rootDrawer->setCoordBoundsViewExt(cbViewExt); // restore viewext and zoomext
+		GetDocument()->rootDrawer->setCoordBoundsZoomExt(cbZoomExt);
 	}
 
 	PreparationParameters ppEDITCOPYDONE (ILWIS::NewDrawer::ptOFFSCREENEND);

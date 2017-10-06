@@ -72,8 +72,6 @@ DisplayOptionsForm(dr,wPar,"White Space")
 	create();
 }
 
-
-
 void  WhiteSpaceForm::apply() {
 	
 	frTop->StoreData();
@@ -82,6 +80,26 @@ void  WhiteSpaceForm::apply() {
 	frRight->StoreData();
 
 	drw->getRootDrawer()->setExtension(ext);
+	bool act = ext.left != 0 || ext.right != 0 || ext.bottom != 0 || ext.top != 0;
+	drw->getRootDrawer()->setAnnotationWhitespace(act);
+
+	if ( act) {
+		ComplexDrawer *annotations = (ComplexDrawer *)(drw->getRootDrawer()->getDrawer("AnnotationDrawers"));
+		if (annotations) {
+			NewDrawer * border = annotations->getDrawer("AnnotationBorderDrawer");
+			if (!border) {
+				NewDrawer * gridDrawer = annotations->getDrawer("GridDrawer");
+				if (gridDrawer) {
+					ILWIS::DrawerParameters dp(drw->getRootDrawer(), gridDrawer);
+					border = NewDrawer::getDrawer("AnnotationBorderDrawer","ilwis38",&dp);
+					border->setActive(false);
+					PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
+					border->prepare(&pp);
+					annotations->addPostDrawer(380, border);
+				}
+			}
+		}
+	}
 
 	updateMapView();
 

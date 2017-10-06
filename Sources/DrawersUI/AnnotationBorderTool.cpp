@@ -64,20 +64,25 @@ void AnnotationBorderTool::makeActive(void *v, HTREEITEM ) {
 		border->setActive(act);
 		PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
 		border->prepare(&pp);
-	}
-	else {
+	} else {
 		if ( act) {
-			PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
-			ILWIS::DrawerParameters dp(drawer->getRootDrawer(), drawer);
-			border = (AnnotationBorderDrawer *)NewDrawer::getDrawer("AnnotationBorderDrawer","ilwis38",&dp);
-			if ( border) {
-				border->prepare(&pp);
-				ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
-				if ( annotations)
+			ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
+			if (annotations) {
+				border = (AnnotationBorderDrawer *)annotations->getDrawer("AnnotationBorderDrawer");
+				if (!border) {
+					ILWIS::DrawerParameters dp(drawer->getRootDrawer(), drawer);
+					border = (AnnotationBorderDrawer *)NewDrawer::getDrawer("AnnotationBorderDrawer","ilwis38",&dp);
 					annotations->addPostDrawer(380, border);
+				}
+				if ( border) {
+					border->setActive(act);
+					PreparationParameters pp(NewDrawer::ptGEOMETRY | NewDrawer::ptRENDER);
+					border->prepare(&pp);
+				}
 			}
 		}
 	}
+	drawer->getRootDrawer()->setAnnotationBorder(act);
 	mpvGetView()->Invalidate();
 }
 

@@ -160,8 +160,6 @@ private:
 	void setText(const CoordBounds & cb, const CoordBounds & cbArea, AnnotationBorderDrawer::Side side, double z) const;
 	void drawTicks(const CoordBounds & cb, const CoordBounds & cbArea, AnnotationBorderDrawer::Side side, double z) const;
 
-	double xborder; // percent;
-	double yborder; // percent;
 	vector<double> ypos;
 	vector<double> xpos;
 	vector<bool> hasText;

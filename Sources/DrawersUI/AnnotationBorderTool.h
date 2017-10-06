@@ -19,8 +19,6 @@ namespace ILWIS {
 		void displayOptionAnnotationBorder();
 
 		AnnotationBorderDrawer *border;
-
-
 	};
 
 class AnnotationBorderForm : public DisplayOptionsForm {

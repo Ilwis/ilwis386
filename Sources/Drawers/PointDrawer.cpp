@@ -101,7 +101,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 
 	if ( cNorm.fUndef())
 		return false;
-	const CoordBounds& cbZoom = getRootDrawer()->getCoordBoundsZoom();
+	const CoordBounds& cbZoom = cbArea;
 	if ( !cbZoom.fContains(cNorm))
 			return false;
 	if ( element != 0 ) {
