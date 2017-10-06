@@ -127,5 +127,7 @@ namespace ILWIS {
 		NewDrawer *backgroundDrawer; 
 		bool initRestore;
 		Color skyColor;
+		bool fDrawing;
+		bool fRequestAnnotationRecompute;
 	};
 }

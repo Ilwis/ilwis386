@@ -17,6 +17,8 @@ RootDrawer::RootDrawer()
 , fAnnotationWhitespace(false)
 , fAnnotationBorder(false)
 , annotationFont(0)
+, fDrawing(false)
+, fRequestAnnotationRecompute(false)
 {
 	drawercontext = new ILWIS::DrawerContext();
 	ILWIS::DrawerParameters dp(this, this);
@@ -136,6 +138,7 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 		topDrawer->draw(drl2D);
 	}
 	else {
+		const_cast<RootDrawer*>(this)->fDrawing = true;
 		// Setup
 		glClearColor(skyColor.redP(),skyColor.greenP(),skyColor.blueP(),0.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);		// Clear The Screen And The Depth Buffer
@@ -195,6 +198,11 @@ bool RootDrawer::draw(const CoordBounds& cb) const{
 			ComplexDrawer::draw(drl2D, cb);
 			backgroundDrawer->select(true); // CanvasBackgroundDrawer::select misused; draw only map sides
 			backgroundDrawer->draw(drl2D, cb);
+		}
+		const_cast<RootDrawer*>(this)->fDrawing = false;
+		if (fRequestAnnotationRecompute) {
+			const_cast<RootDrawer*>(this)->RecomputeAnnotationBorder();
+			const_cast<RootDrawer*>(this)->fRequestAnnotationRecompute = false;
 		}
 	}
 	return true;
@@ -1009,6 +1017,10 @@ bool RootDrawer::fWhitespace() const
 }
 
 void RootDrawer::RecomputeAnnotationBorder(){
+	if (fDrawing) { // keep "Ext" values the same during the entire "draw"
+		fRequestAnnotationRecompute = true;
+		return;
+	}
 	if (fAnnotationWhitespace || fAnnotationBorder) {
 		double rLeft = 0;
 		double rRight = 0;
