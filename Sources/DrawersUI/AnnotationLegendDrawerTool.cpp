@@ -156,20 +156,10 @@ LegendPosition::LegendPosition(CWnd *wPar, AnnotationLegendDrawer *dr) :
 	DisplayOptionsForm2(dr,wPar,TR("Position of Legend")), rg(0), fiColumns(0)
 {
 	orientation = dr->getOrientation() ? 1 : 0;
-	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoomExt();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
-	if (cbMap.MinX() > cbZoom.MinX())
-		cbZoom.MinX() = cbMap.MinX();
-	if (cbMap.MaxX() < cbZoom.MaxX())
-		cbZoom.MaxX() = cbMap.MaxX();
-	if (cbMap.MinY() > cbZoom.MinY())
-		cbZoom.MinY() = cbMap.MinY();
-	if (cbMap.MaxY() < cbZoom.MaxY())
-		cbZoom.MaxY() = cbMap.MaxY();
 	CoordBounds cbBox = dr->getBox();
 	cols = dr->noOfColumns();
-	x = 100.0 * ( cbBox.MinX() - cbZoom.MinX() ) / cbZoom.width();
-	y = 100.0 * ( cbBox.MinY() - cbZoom.MinY()) / cbZoom.height();
+	x = 100.0 * cbBox.MinX();
+	y = 100.0 * cbBox.MinY();
 	sliderH = new FieldRealSliderEx(root,TR("X position"), &x,ValueRange(0,100),true);
 	sliderV = new FieldRealSliderEx(root,TR("Y position"), &y,ValueRange(0,100),true);
 	sliderV->Align(sliderH, AL_UNDER);
@@ -214,18 +204,8 @@ int LegendPosition::setPosition(Event *ev) {
 
 	}
 	CoordBounds cbBox = ld->getBox();
-	CoordBounds cbZoom = drw->getRootDrawer()->getCoordBoundsZoomExt();
-	CoordBounds cbMap = drw->getRootDrawer()->getMapCoordBoundsExt();
-	if (cbMap.MinX() > cbZoom.MinX())
-		cbZoom.MinX() = cbMap.MinX();
-	if (cbMap.MaxX() < cbZoom.MaxX())
-		cbZoom.MaxX() = cbMap.MaxX();
-	if (cbMap.MinY() > cbZoom.MinY())
-		cbZoom.MinY() = cbMap.MinY();
-	if (cbMap.MaxY() < cbZoom.MaxY())
-		cbZoom.MaxY() = cbMap.MaxY();
-	double newx = cbZoom.width() * x / 100.0 + cbZoom.MinX();
-	double newy = cbZoom.height() * y / 100.0 + cbZoom.MinY();
+	double newx = x / 100.0;
+	double newy = y / 100.0;
 	double w = cbBox.width();
 	double h = cbBox.height();
 	cbBox.MinX() = newx;

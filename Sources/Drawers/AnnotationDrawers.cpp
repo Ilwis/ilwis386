@@ -129,34 +129,20 @@ fontScale(1)
 
 void AnnotationLegendDrawer::setOrientation(bool yesno) {
 	vertical = yesno;
-	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
-	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
-	if (cbMap.MinX() > cb.MinX())
-		cb.MinX() = cbMap.MinX();
-	if (cbMap.MaxX() < cb.MaxX())
-		cb.MaxX() = cbMap.MaxX();
-	if (cbMap.MinY() > cb.MinY())
-		cb.MinY() = cbMap.MinY();
-	if (cbMap.MaxY() < cb.MaxY())
-		cb.MaxY() = cbMap.MaxY();
 	if (vertical) {
 		if ( !cbBox.fValid() ) {
-			cbBox.MinX() = cb.MinX() + cb.width()/ 50;
-			cbBox.MinY() = cb.MinY() + cb.height()/ 50;
+			cbBox.MinX() = 0.02;
+			cbBox.MinY() = 0.02;
 		}
-		double w = cb.width() / 10.0;
-		double h = cb.height() / 3.0;
-		cbBox.MaxX() = cbBox.MinX() + w * columns;
-		cbBox.MaxY() = cbBox.MinY() + h / columns;
+		cbBox.MaxX() = cbBox.MinX() + columns / 10.0;
+		cbBox.MaxY() = cbBox.MinY() + columns / 3.0;
 	} else {
 		if ( !cbBox.fValid() ) {
-			cbBox.MinX() = cb.MinX() + cb.width()/ 50;
-			cbBox.MinY() = cb.MinY() + cb.height()/ 40;
+			cbBox.MinX() = 0.02;
+			cbBox.MinY() = 0.025;
 		}
-		double w = cb.width() / 3.0;
-		double h = cb.height() / 10.0;
-		cbBox.MaxX() = cbBox.MinX() + w;
-		cbBox.MaxY() = cbBox.MinY() + h;
+		cbBox.MaxX() = cbBox.MinX() + 1.0 / 3.0; // 0.3333
+		cbBox.MaxY() = cbBox.MinY() + 0.1;
 	}
 }
 
@@ -215,7 +201,7 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 			removeDrawer(texts->getId(), true);
 		}
 		texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
-		texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12 * fontScale,true));
+		texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12 * fontScale,false));
 		addPostDrawer(100,texts);
 		SpatialDataDrawer *spdr = dataDrawer->isSet() ? static_cast<SpatialDataDrawer *>(dataDrawer) : static_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer());
 		LayerDrawer *ldr = dataDrawer->isSet() ? dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : dynamic_cast<LayerDrawer *>(dataDrawer);
@@ -238,7 +224,6 @@ void AnnotationLegendDrawer::prepare(PreparationParameters *pp) {
 			title = fnName.sFile;
 		txtdr->setText(title);
 	}
-
 }
 
 bool AnnotationLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
@@ -351,7 +336,6 @@ void AnnotationLegendDrawer::load(const FileName& fnView, const String& parentSe
 					LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(spdr->getDrawer(0));
 					if ( ldr)
 						dataDrawer = ldr;
-
 				}
 			}
 		}
@@ -388,8 +372,7 @@ ILWIS::NewDrawer *createAnnotationClassLegendDrawer(DrawerParameters *parms) {
 	return new AnnotationClassLegendDrawer(parms);
 }
 
-
-AnnotationClassLegendDrawer::AnnotationClassLegendDrawer(DrawerParameters *parms) : AnnotationLegendDrawer(parms,"AnnotationClassLegendDrawer"),maxw(0), cellWidth(0)
+AnnotationClassLegendDrawer::AnnotationClassLegendDrawer(DrawerParameters *parms) : AnnotationLegendDrawer(parms,"AnnotationClassLegendDrawer")
 {
 }
 
@@ -447,8 +430,6 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 	}
 	if ( pp->type & NewDrawer::ptGEOMETRY) {
 		columns = 1;
-		maxw = 0;
-		cellWidth = 0;
 		DrawingColor dc(ldr);
 		dc.setMultiColors(ldr->getDrawingColor()->multiColors(), false);
 		dc.setColorSet(ldr->getDrawingColor()->colorSet());
@@ -466,18 +447,9 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 			TextDrawer *txtdr =(ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
 			txtdr->setText(txt);
 			texts->addDrawer(txtdr);
-			double h = txtdr->getHeight() * 0.5;
-			maxw = max(maxw, h * txt.size());
 		}
-
-		cellWidth = cbBox.width() / 3;
 	}
 	if ( pp->type & NewDrawer::ptRENDER) {
-		CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
-		cbBox = CoordBounds(cbBox.cMin, 
-			Coord(cbBox.MinX() +  (cellWidth + maxw) * columns, 
-				   cbBox.MinY() + raws.size() * cb.height() / (40 * columns)));
-
 		if ( objType == IlwisObject::iotPOLYGONMAP) {
 			hatches.clear();
 			SpatialDataDrawer *spdr = dataDrawer->isSet() ? static_cast<SpatialDataDrawer *>(dataDrawer) : static_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer());
@@ -525,23 +497,45 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	if ( !isActive() || !isValid())
 		return false;
 
-	bool is3D = getRootDrawer()->is3D(); 
+	bool is3D = getRootDrawer()->is3D();
+
+	double maxw = 0;
+	for(int i=0; i < raws.size(); ++i) {
+		TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
+		double h = txtdr->getHeight() * 0.5;
+		maxw = max(maxw, h * txtdr->getText().size());
+	}
+
+	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
+
+	double cellWidth = cb.width() * cbBox.width() / 3;
+
+	CoordBounds cbBoxRender (Coord(cb.cMin.x + cb.width() * cbBox.cMin.x, cb.cMin.y + cb.height() * cbBox.cMin.y),
+		Coord(cb.cMin.x + cb.width() * cbBox.MinX() + (cellWidth + maxw) * columns, cb.cMin.y + cb.height() * cbBox.MinY() + raws.size() * cb.height() / (40 * columns)));
 
 	glPushMatrix();
-	glTranslated(cbBox.MinX(), cbBox.MinY(), 0);
+	glTranslated(cbBoxRender.MinX(), cbBoxRender.MinY(), 0);
 	glScaled(scale, scale, 1);
 
-	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBox.width(), cbBox.height()));
+	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBoxRender.width(), cbBoxRender.height()));
 	AnnotationLegendDrawer::draw(drawLoop, cbInner);
 	drawPreDrawers(drawLoop, cbArea);
 	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block; if a legend overlaps with layers, it should be drawn on-top, even if it contains transparent items
 		if (is3D) // colored legend elements at level 1
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
-		double yy = cbBox.height() / (raws.size() * 1.1);
-		double hh = cbBox.height();
+		double yy = cbBoxRender.height() / (raws.size() * 1.1);
 		yy *= (double)columns;
 		CoordBounds cbCell(Coord(0,0),Coord(cellWidth, yy));
-		double shifty = columns * cbBox.height() / raws.size();
+		double shifty = columns * cbBoxRender.height() / raws.size();
 		int split = raws.size() / columns;
 		for(int i=raws.size() - 1 ; i>=0; --i) {
 			if (objType == IlwisObject::iotRASMAP) {
@@ -662,8 +656,6 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 String AnnotationClassLegendDrawer::store(const FileName& fnView, const String& parentSection) const {
 	String currentSection = "AnnotationClassLegendDrawer::" + parentSection;
 	AnnotationLegendDrawer::store(fnView, currentSection);
-	ObjectInfo::WriteElement(currentSection.c_str(),"CellWidth",fnView, cellWidth);
-	ObjectInfo::WriteElement(currentSection.c_str(),"MaxWidth",fnView, maxw);
 	String seq;
 	for(int i=0; i<raws.size(); ++i) {
 		if ( seq =="") {
@@ -679,8 +671,6 @@ String AnnotationClassLegendDrawer::store(const FileName& fnView, const String& 
 void AnnotationClassLegendDrawer::load(const FileName& fnView, const String& parentSection) {
 	String currentSection = parentSection;
 	AnnotationLegendDrawer::load(fnView, currentSection);
-	ObjectInfo::ReadElement(currentSection.c_str(),"CellWidth",fnView, cellWidth);
-	ObjectInfo::ReadElement(currentSection.c_str(),"MaxWidth",fnView, maxw);
 	String seq;
 	ObjectInfo::ReadElement(currentSection.c_str(),"Raws",fnView, seq);
 	Array<String> parts;
@@ -731,18 +721,32 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	if ( !isActive() || !isValid())
 		return false;
 
-	CoordBounds cbZoomExt = getRootDrawer()->getCoordBoundsZoomExt();
-	if ( !cbZoomExt.fContains(cbBox))
-		return false;
+	// CoordBounds cbZoomExt = getRootDrawer()->getCoordBoundsZoomExt();
+	//if ( !cbZoomExt.fContains(cbBox))
+	//	return false;
 
-	bool is3D = getRootDrawer()->is3D(); 
+	bool is3D = getRootDrawer()->is3D();
+
+	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
+
+	CoordBounds cbBoxRender (Coord(cb.cMin.x + cb.width() * cbBox.cMin.x, cb.cMin.y + cb.height() * cbBox.cMin.y),
+		Coord(cb.cMin.x + cb.width() * cbBox.MinX() + cb.width() * cbBox.width(), cb.cMin.y + cb.height() * cbBox.MinY() + cb.height() * cbBox.height()));
 
 	glPushMatrix();
-	glTranslated(cbBox.MinX(), cbBox.MinY(), 0);
+	glTranslated(cbBoxRender.MinX(), cbBoxRender.MinY(), 0);
 	glScaled(scale, scale, 1);
 
-	double w = cbBox.width();
-	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBox.width(), cbBox.height()));
+	double w = cbBoxRender.width();
+	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBoxRender.width(), cbBoxRender.height()));
 
 	AnnotationLegendDrawer::draw(drawLoop, cbInner);
 	drawPreDrawers(drawLoop, cbArea);
@@ -771,7 +775,7 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 		if ( vertical) {
 			drawVertical(cbInner, rr, 0, values, dvs);
 		} else {
-			drawHorizontal(cbInner, rr, 0, values, dvs);
+			drawHorizontal(cbInner, cbBoxRender, rr, 0, values, dvs);
 		}
 		if (is3D) // texts and lines at level 2
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 2) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 2) * 0.0005);
@@ -841,11 +845,11 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 	setText(values,values.size()-1,Coord(endx + cbInner.width() / 3, cbInner.height () - h/2.0,z));
 }
 
-void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const{
+void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const CoordBounds & cbBoxRender, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const{
 	int count = 1;
 	double shifty = 5.0;
 	DrawingColor dc(dataDrawer);
-	cbInner.MinY() = cbInner.MaxY() - cbBox.height() / 2;
+	cbInner.MinY() = cbInner.MaxY() - cbBoxRender.height() / 2;
 	double startx = cbInner.MinX();
 	double starty = cbInner.MaxY();
 	double endy = starty - cbInner.height();
@@ -856,7 +860,7 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Ran
 		if ( texts->getDrawer(i))
 			texts->getDrawer(i)->setActive(false);
 	}
-	setText(values,0,Coord(startx, endy - cbBox.height() / shifty,z));
+	setText(values,0,Coord(startx, endy - cbBoxRender.height() / shifty,z));
 	for(int i=0; i < 100; ++i) {
 		Color clr = dc.clrVal(rV);
 		glColor4f(clr.redP(),clr.greenP(),clr.blueP(),getAlpha());
@@ -868,11 +872,11 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Ran
 		glVertex3d(endx,starty,z);
 		glEnd();
 		if ( dvs.rValue(values[count]) <= rV) { 
-			setText(values, count, Coord( startx, endy - cbBox.height() / shifty,z));
+			setText(values, count, Coord( startx, endy - cbBoxRender.height() / shifty,z));
 			glColor4f(0,0,0,getAlpha());
 			glBegin(GL_LINE_STRIP);
 			glVertex3d(endx,endy,z);
-			glVertex3d(endx ,endy - cbBox.height() / (shifty + 8),z);
+			glVertex3d(endx ,endy - cbBoxRender.height() / (shifty + 8),z);
 			glEnd();
 			++count;
 		}
@@ -883,7 +887,7 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Ran
 	//double h = txt->getHeight() * 0.9;
 	//String s(values[values.size()-1]);
 	CoordBounds cbTxt = txt->getTextExtent();
-	setText(values,values.size()-1,Coord(cbInner.MaxX() - cbTxt.width() / 2.0, cbInner.MaxY( ) - cbInner.height() - cbBox.height() / shifty,z));
+	setText(values,values.size()-1,Coord(cbInner.MaxX() - cbTxt.width() / 2.0, cbInner.MaxY( ) - cbInner.height() - cbBoxRender.height() / shifty,z));
 }
 
 vector<String> AnnotationValueLegendDrawer::makeRange(const DomainValueRangeStruct & dvs) const{

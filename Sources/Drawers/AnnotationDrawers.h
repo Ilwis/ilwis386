@@ -110,8 +110,6 @@ protected:
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
 	vector<RawInfo> raws;
-	double maxw;
-	double cellWidth;
 	std::map<int, AnnotationClassAttributes> hatches;
 };
 
@@ -127,7 +125,7 @@ protected:
 	void prepare(PreparationParameters *pp);
 	vector<String> makeRange(const DomainValueRangeStruct & dvs) const;
 	void drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const;
-	void drawHorizontal(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const;
+	void drawHorizontal(CoordBounds& cbInner, const CoordBounds & cbBoxRender, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const;
 	String store(const FileName& fnView, const String& parenSection) const;
 	void load(const FileName& fnView, const String& parenSection);
 
