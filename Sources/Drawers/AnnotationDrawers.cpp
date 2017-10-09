@@ -517,11 +517,12 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	if (cbMap.MaxY() < cb.MaxY())
 		cb.MaxY() = cbMap.MaxY();
 
-	double cellWidth = cb.width() * cbBox.width() / 3;
-	const int size_y_factor = 40;
+	const int y_cells = 40;
+	double cellHeight = cb.height() / (y_cells * 1.1);
+	double cellWidth = cellHeight * 1.5;
 	int rows = ceil(raws.size() / (double)columns);
 	CoordBounds cbBoxRender (Coord(cb.cMin.x + cb.width() * cbBox.cMin.x, cb.cMin.y + cb.height() * cbBox.cMin.y),
-		Coord(cb.cMin.x + cb.width() * cbBox.MinX() + (cellWidth + maxw) * columns, cb.cMin.y + cb.height() * cbBox.MinY() + rows * cb.height() / size_y_factor));
+		Coord(cb.cMin.x + cb.width() * cbBox.MinX() + (cellWidth + maxw) * columns, cb.cMin.y + cb.height() * cbBox.MinY() + rows * cb.height() / y_cells));
 
 	glPushMatrix();
 	glTranslated(cbBoxRender.MinX(), cbBoxRender.MinY(), 0);
@@ -533,8 +534,7 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block; if a legend overlaps with layers, it should be drawn on-top, even if it contains transparent items
 		if (is3D) // colored legend elements at level 1
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
-		double cellHeight = cb.height() / (size_y_factor * 1.1);
-		double shifty = cb.height() / size_y_factor;
+		double shifty = cb.height() / y_cells;
 		CoordBounds cbCell(Coord(0, cbBoxRender.height() - cellHeight),Coord(cellWidth, cbBoxRender.height()));
 		for(int i=0; i < raws.size(); ++i) {
 			if (objType == IlwisObject::iotRASMAP) {
@@ -737,8 +737,11 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	if (cbMap.MaxY() < cb.MaxY())
 		cb.MaxY() = cbMap.MaxY();
 
+	double frameWidth = vertical ? cbBox.width() * cb.height(): cbBox.width() * cb.width();
+	double frameHeight = vertical ? cbBox.height() * cb.height() : cbBox.height() * cb.width();
+
 	CoordBounds cbBoxRender (Coord(cb.cMin.x + cb.width() * cbBox.cMin.x, cb.cMin.y + cb.height() * cbBox.cMin.y),
-		Coord(cb.cMin.x + cb.width() * cbBox.MinX() + cb.width() * cbBox.width(), cb.cMin.y + cb.height() * cbBox.MinY() + cb.height() * cbBox.height()));
+		Coord(cb.cMin.x + cb.width() * cbBox.MinX() + frameWidth, cb.cMin.y + cb.height() * cbBox.MinY() + frameHeight));
 
 	glPushMatrix();
 	glTranslated(cbBoxRender.MinX(), cbBoxRender.MinY(), 0);
