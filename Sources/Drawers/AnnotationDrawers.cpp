@@ -518,9 +518,10 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 		cb.MaxY() = cbMap.MaxY();
 
 	double cellWidth = cb.width() * cbBox.width() / 3;
-
+	const int size_y_factor = 40;
+	int rows = ceil(raws.size() / (double)columns);
 	CoordBounds cbBoxRender (Coord(cb.cMin.x + cb.width() * cbBox.cMin.x, cb.cMin.y + cb.height() * cbBox.cMin.y),
-		Coord(cb.cMin.x + cb.width() * cbBox.MinX() + (cellWidth + maxw) * columns, cb.cMin.y + cb.height() * cbBox.MinY() + raws.size() * cb.height() / (40 * columns)));
+		Coord(cb.cMin.x + cb.width() * cbBox.MinX() + (cellWidth + maxw) * columns, cb.cMin.y + cb.height() * cbBox.MinY() + rows * cb.height() / size_y_factor));
 
 	glPushMatrix();
 	glTranslated(cbBoxRender.MinX(), cbBoxRender.MinY(), 0);
@@ -532,12 +533,10 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block; if a legend overlaps with layers, it should be drawn on-top, even if it contains transparent items
 		if (is3D) // colored legend elements at level 1
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
-		double yy = cbBoxRender.height() / (raws.size() * 1.1);
-		yy *= (double)columns;
-		CoordBounds cbCell(Coord(0,0),Coord(cellWidth, yy));
-		double shifty = columns * cbBoxRender.height() / raws.size();
-		int split = raws.size() / columns;
-		for(int i=raws.size() - 1 ; i>=0; --i) {
+		double cellHeight = cb.height() / (size_y_factor * 1.1);
+		double shifty = cb.height() / size_y_factor;
+		CoordBounds cbCell(Coord(0, cbBoxRender.height() - cellHeight),Coord(cellWidth, cbBoxRender.height()));
+		for(int i=0; i < raws.size(); ++i) {
 			if (objType == IlwisObject::iotRASMAP) {
 				glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
 				glBegin(GL_POLYGON);
@@ -610,19 +609,19 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 			}
 			TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
 			txtdr->setCoord(Coord(cbCell.MinX() + cellWidth * 1.1, cbCell.MinY() + cbCell.height() / 3.0,0));
-			cbCell.MinY() += shifty;
-			cbCell.MaxY() += shifty;
-			if ( (i) % split == 0) {
-				cbCell.MinY() = 0;
-				cbCell.MaxY() = yy;
+			cbCell.MinY() -= shifty;
+			cbCell.MaxY() -= shifty;
+			if ((i + 1) % rows == 0) {
+				cbCell.MinY() = cbBoxRender.height() - cellHeight;
+				cbCell.MaxY() = cbBoxRender.height();
 				cbCell.MinX() += cellWidth + maxw;
 				cbCell.MaxX() += cellWidth + maxw;
 			}
 		}
 		if (is3D) // texts and lines at level 2
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 2) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 2) * 0.0005);
-		cbCell = CoordBounds (Coord(0,0),Coord(cellWidth, yy));
-		for(int i=raws.size() - 1 ; i>=0; --i) {
+		cbCell = CoordBounds (Coord(0, cbBoxRender.height() - cellHeight),Coord(cellWidth, cbBoxRender.height()));
+		for(int i=0; i < raws.size(); ++i) {
 			glColor3d(0,0,0);
 			glBegin(GL_LINE_STRIP);
 				glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
@@ -631,11 +630,11 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 				glVertex3d(cbCell.MaxX(), cbCell.MinY(), 0);
 				glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
 			glEnd();
-			cbCell.MinY() += shifty;
-			cbCell.MaxY() += shifty;
-			if ( (i) % split == 0) {
-				cbCell.MinY() = 0;
-				cbCell.MaxY() = yy;
+			cbCell.MinY() -= shifty;
+			cbCell.MaxY() -= shifty;
+			if ((i + 1) % rows == 0) {
+				cbCell.MinY() = cbBoxRender.height() - cellHeight;
+				cbCell.MaxY() = cbBoxRender.height();
 				cbCell.MinX() += cellWidth + maxw;
 				cbCell.MaxX() += cellWidth + maxw;
 			}
