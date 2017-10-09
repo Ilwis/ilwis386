@@ -383,7 +383,6 @@ void RootDrawer::setGeoreference(const GeoRef& _gr, bool overruleMapBounds) {
 				cbMap = CoordBounds(Coord(0,0,cbMap.cMin.z), Coord(gr->rcSize().Col, -gr->rcSize().Row, cbMap.cMax.z));
 			cbZoom = cbMap;
 			cbView = cbMap;
-			RecomputeAnnotationBorder();
 		} else {
 			CoordBounds cb;
 			double rRow;
@@ -465,9 +464,8 @@ void RootDrawer::clearGeoreference() {
 
 		gr = GeoRef();
 
-		RecomputeAnnotationBorder();
-
 		fUseGeoRef = false;
+		setCoordBoundsView(cbMap, true);
 	}
 }
 
