@@ -901,7 +901,8 @@ vector<String> AnnotationValueLegendDrawer::makeRange(const DomainValueRangeStru
 			rmd = RangeReal(0,255);
 			fImage = true;
 		} else {
-			fImage = false; // we overruled the defaults so nio assumptions anymore
+			step = rstep;
+			rmd = RangeReal(vrr.rLo(), vrr.rHi());
 		}
 	} else{
 		if ( rstep == rUNDEF)
@@ -919,10 +920,11 @@ vector<String> AnnotationValueLegendDrawer::makeRange(const DomainValueRangeStru
 		step = rmd.rWidth() / 10;
 	}
 	for (double v = rmd.rLo(); v <= rmd.rHi(); v += step) {
-		String sName = dvs.sValue(v, -1, dec);
+		String sName;
 		if ( fImage && v + step > 255) {
 			sName = "255";
-		}
+		} else
+			sName = dvs.sValue(v, -1, dec);
 		values.push_back(sName.sTrimSpaces());
 	}	
 	return values;
