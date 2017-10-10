@@ -1352,9 +1352,14 @@ TextDrawer *AnnotationBorderDrawer::getTextDrawer(int index, Side side) {
 void AnnotationBorderDrawer::calcLocations() {
 	ypos.clear();
 	xpos.clear();
-	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
-	Coord cMin = getRootDrawer()->glToWorld(cbMap.cMin);
-	Coord cMax = getRootDrawer()->glToWorld(cbMap.cMax);
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBounds();
+	CoordBounds cbMapWorld;
+	cbMapWorld += getRootDrawer()->glToWorld(cbMap.cMin);
+	cbMapWorld += getRootDrawer()->glToWorld(cbMap.cMax);
+	cbMapWorld += getRootDrawer()->glToWorld(Coord(cbMap.cMin.x, cbMap.cMax.y));
+	cbMapWorld += getRootDrawer()->glToWorld(Coord(cbMap.cMax.x, cbMap.cMin.y));
+	Coord cMin = cbMapWorld.cMin;
+	Coord cMax = cbMapWorld.cMax;
 	GridDrawer *gdr = dynamic_cast<GridDrawer *>(dataDrawer);
 	if ( !gdr)
 		return;
