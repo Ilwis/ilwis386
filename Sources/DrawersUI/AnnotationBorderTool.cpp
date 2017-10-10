@@ -50,6 +50,9 @@ bool AnnotationBorderTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 HTREEITEM AnnotationBorderTool::configure( HTREEITEM parentItem) {
 	if ( !active)
 		return parentItem;
+	ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
+	if (annotations)
+		border = (AnnotationBorderDrawer *)annotations->getDrawer("AnnotationBorderDrawer");
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&AnnotationBorderTool::displayOptionAnnotationBorder);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&AnnotationBorderTool::makeActive);
