@@ -287,7 +287,7 @@ fOnlySelected(false)
 		dw->bbDataWindow.LoadButtons("segedit.but");
 		dw->RecalcLayout();
 	}
-	htpTopic = htpSegmentEditor;
+	help = "ilwismen\\edit_segment_map.htm";
 	sHelpKeywords = "Segment editor";
 }
 
@@ -325,6 +325,7 @@ bool SegmentEditor::OnContextMenu(CWnd* pWnd, CPoint point)
 	switch (mode) {
 		case modeSELECT: {
 			add(ID_EDIT);
+			add(ID_EDIT_COPY);
 			BOOL fEdit = segList.iSize() != 0;
 			men.EnableMenuItem(ID_EDIT, fEdit ? MF_ENABLED : MF_GRAYED);
 			add(ID_CLEAR);
@@ -337,6 +338,7 @@ bool SegmentEditor::OnContextMenu(CWnd* pWnd, CPoint point)
 						 }	break;
 		case modeADD:
 			add(ID_SETVAL);
+			add(ID_EDIT_PASTE);
 			men.AppendMenu(MF_SEPARATOR);
 			break;
 	}
@@ -843,7 +845,7 @@ bool SegmentEditor::OnLButtonUp(UINT nFlags, CPoint point)
     {
 			new FieldReal(root, SEDUiX, &crd->x);
 			new FieldReal(root, SEDUiY, &crd->y);
-//      SetMenHelpTopic(htpPntEditAdd);
+//      SetHelpItem("ilwismen\\point_editor_add_point.htm");
       create();
     }
   };
@@ -960,7 +962,7 @@ int SegmentEditor::Edit(const Coord& c)
 		else if (c.fUndef()) 
 		{
 AskID:      
-			if (AskValue("", htpSegEditorAskValue)) 
+			if (AskValue("", "ilwismen\\segment_editor_edit_selection.htm")) 
 			{
 				if (dm()->pdid()) 
 				{
@@ -990,7 +992,7 @@ AskID:
 		else {
 			long iSel = segList.iSize();
 			String sRemark(SEDRemSegSel_i.sVal(), iSel);
-			if (AskValue(sRemark, htpSegEditorAskValue)) {
+			if (AskValue(sRemark, "ilwismen\\segment_editor_edit_selection.htm")) {
 				for (; iter.fValid(); ++iter) {
 					iter()->PutVal(sm->dvrs(), sValue);
 					sm->Updated();
@@ -1111,6 +1113,7 @@ void SegmentEditor::OnCopy()
 		*s++ = '\r';
 		*s++ = '\n';
 	}
+
 	iLen = (1+iSize) * sizeof(IlwisPoint);
 	HANDLE hnd = GlobalAlloc(GMEM_MOVEABLE,iLen);
 	void* pv = GlobalLock(hnd);
@@ -1128,13 +1131,14 @@ void SegmentEditor::OnCopy()
 	SetClipboardData(iFmtDom, hnd);
 	delete id;
 
+
 	*s = '\0';
 	hnd = GlobalAlloc(GMEM_FIXED, strlen(sBuf)+2);
 	char* pc = (char*)GlobalLock(hnd);
 	strcpy(pc,sBuf);
 	GlobalUnlock(hnd);
 	SetClipboardData(CF_TEXT,hnd);
-	delete ip;
+	delete [] ip;
 	delete sBuf;
 
 	MapCompositionDoc* mcd = mpv->GetDocument();
@@ -1535,7 +1539,7 @@ void SegmentEditor::OnUpdateSetVal(CCmdUI* pCmdUI)
 
 void SegmentEditor::OnSetVal()
 {
-  AskValue(SEDRemValForSeg, htpSegEditorAskInsertCode);
+  AskValue(SEDRemValForSeg, "ilwismen\\segment_editor_insert_code.htm");
 }
 
 void SegmentEditor::OnCut()
@@ -1797,7 +1801,7 @@ int SegmentEditor::EndSegment(Coord c)
 		}
 		else {
 AskID:      
-			AskValue(SEDRemEnterID, htpSegEditorAskValueNewSeg);
+			AskValue(SEDRemEnterID, "ilwismen\\segment_editor_insert_new_segment.htm");
 			if (_dm->iRaw(sValue) == iUNDEF) {
 				DomainSort* pds = _dm->pdsrt();
 				pds->iAdd(sValue);
@@ -1817,12 +1821,12 @@ AskID:
 		}
 	}
 	else if (_dm->pdv()) {
-		AskValue(SEDRemEnterValue, htpSegEditorAskValueNewSeg);
+		AskValue(SEDRemEnterValue, "ilwismen\\segment_editor_insert_new_segment.htm");
 	}
 	else {
 		if (_dm->iRaw(sValue) == iUNDEF) {
 			MessageBeep(MB_ICONEXCLAMATION);
-			AskValue(SEDRemNoValueSpecified, htpSegEditorAskValueNewSeg);
+			AskValue(SEDRemNoValueSpecified, "ilwismen\\segment_editor_insert_new_segment.htm");
 			if (_dm->iRaw(sValue) == iUNDEF)
 				sValue = _dm->sValueByRaw(1);
 		}
@@ -2551,7 +2555,7 @@ int SegmentEditor::SnapSplitSegmentAccept(Coord c)
         new RadioButton(rg, SEDUiSegDomain);
       new RadioButton(rg, SEDUiPrimCol);
 //      SetHelpTopic(htpSegmentEditor);
-      SetMenHelpTopic(htpSegEditCnf);
+      SetHelpItem("ilwismen\\segment_editor_customize.htm");
       create();
     }
   };
@@ -2666,7 +2670,7 @@ public:
     String sFill('*', 40);
     stRemark = new StaticText(root, sFill);
     stRemark->SetIndependentPos();
-    SetMenHelpTopic(htpSegEditPolMapFromSeg);
+    SetHelpItem("ilwismen\\segment_editor_polygonize.htm");
 		HideOnOk(true);
     create();
   }
@@ -3262,7 +3266,7 @@ class AskStartSegForm: public FormWithDest
 {
 public:
   AskStartSegForm(CWnd* wnd, const String& sRemark,
-                  String* sMsk, long iMax, long* iStartSeg, long htp)
+                  String* sMsk, long iMax, long* iStartSeg, const String& htp)
   : FormWithDest(wnd, SEDMsgCheckSegments),
     iStart(iStartSeg), sMask(sMsk)
   {
@@ -3282,7 +3286,7 @@ public:
     RadioButton* rb = new RadioButton(rg, SEDUiStartSegNum);
     RangeInt ri(1, iMax);
     new FieldInt(rb, "", iStart, ri, true);
-    SetMenHelpTopic(htp);
+    SetHelpItem(htp);
     create();
   }
 private:
@@ -3306,7 +3310,7 @@ void SegmentEditor::OnCheckSelf()
 {
   long iStart = 0;
   AskStartSegForm frm(mpv, SEDMsgSelfCheck, &sMask, sm->iFeatures()-1, &iStart,
-                      htpSegEditCheckSelf);
+                      "ilwismen\\check_segments_self_overlap.htm");
   if (frm.fOkClicked()) {
 //    YieldActive ya;
     Tranquilizer trq(SEDMsgCheckSegments);
@@ -3319,7 +3323,7 @@ void SegmentEditor::OnCheckConnected()
 {
   long iStart = 0;
   AskStartSegForm frm(mpv, SEDMsgConnectCheck, &sMask, sm->iFeatures()-1, &iStart,
-                      htpSegEditCheckConnected);
+                      "ilwismen\\check_segments_dead_ends.htm");
   if (frm.fOkClicked()) {
   //  YieldActive ya;
     Tranquilizer trq(SEDMsgCheckSegments);
@@ -3332,7 +3336,7 @@ void SegmentEditor::OnCheckIntersects()
 {
   long iStart = 0;
   AskStartSegForm frm(mpv, SEDMsgIntersectCheck, &sMask, sm->iFeatures()-1, &iStart,
-                      htpSegEditCheckIntersects);
+                      "ilwismen\\check_segments_intersections.htm");
   if (frm.fOkClicked()) {
   //  YieldActive ya;
     Tranquilizer trq(SEDMsgCheckSegments);
@@ -3345,7 +3349,7 @@ void SegmentEditor::OnCheckCodeConsistency()
 {
   long iStart = 0;
   AskStartSegForm frm(mpv, SEDMsgCheckCodeConsistency, &sMask, sm->iFeatures()-1, &iStart,
-                      htpSegEditCheckCodeConsistency);
+                      "ilwismen\\check_segments_code_consistency.htm");
   if (frm.fOkClicked()) {
   //  YieldActive ya;
     Tranquilizer trq(SEDMsgCheckSegments);
@@ -3358,7 +3362,7 @@ void SegmentEditor::OnCheckClosedSegments()
 {
   long iStart = 0;
   AskStartSegForm frm(mpv, SEDMsgCheckClosedSegments, &sMask, sm->iFeatures()-1, &iStart,
-                      htpSegEditCheckClosedSegments);
+                      "ilwismen\\check_segments_closed_segments.htm");
   if (frm.fOkClicked()) {
   //  YieldActive ya;
     Tranquilizer trq(SEDMsgCheckSegments);
@@ -3453,7 +3457,7 @@ public:
     fcMax = new FieldCoord(root, SCSUiMaxXY, &cb->cMax);
     new PushButton(root, SEDUiDefault, (NotifyProc)&EditBoundsForm::DefaultButton);
     new CheckBox(root, SEDUiAdaptWindow, fAdaptWindow);
-    SetMenHelpTopic(htpSegEditSetBoundaries);
+    SetHelpItem("ilwismen\\segment_editor_bounds_of_map.htm");
     create();
   }
 private:
