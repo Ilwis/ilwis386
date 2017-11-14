@@ -153,7 +153,7 @@ char *TableStoreIlwis3::readCoordList(char *mem, long& count) {
 	for(int i=0; i < noCoords; ++i) {
 		double x = *(double *)(mem + 4 + i * sizeof(double) * 2);
 		double y = *(double *)(mem + 4 + sizeof(double) * (i * 2 + 1));
-		seq->setAt(Coordinate(x,y), i);
+		seq->setAt(Coordinate(x,y,0), i);
 	}
 	//*(long *)block = count;
 	//memcpy(block+4,mem+4,count);
