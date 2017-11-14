@@ -180,9 +180,9 @@ public:
 	virtual RangeReal getZRange(bool force=false) ;	
 	
 	//long            iNode(Coord) const; //3.0
-	//Coord    crdNode(Coord) const; // 3.0
-	Coord    crdCoord(Coord, ILWIS::Segment** seg, long& iNr) const; //3.0
-	Coord    crdPoint(Coord, ILWIS::Segment** seg, long& iAft, double rPrx) const; //3.0
+	Coord    crdNode(Coord) const; // 3.0
+	Coord    crdCoord(Coord, ILWIS::Segment** seg, long& iNr, double rPrx, bool fAcceptDeleted = false) const; //3.0
+	Coord    crdPoint(Coord, ILWIS::Segment** seg, long& iAft, double rPrx, bool fAcceptDeleted = false) const; //3.0
 	bool            fSegExist(const ILWIS::Segment& segNew, Tranquilizer* trq=0);
 	bool            fSegExist(long iCrdNew, const CoordBuf& crdBufNew, const CoordBounds& mmBoundsNew, Tranquilizer* trq=0); //3.0
 	

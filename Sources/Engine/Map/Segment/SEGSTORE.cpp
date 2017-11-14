@@ -506,31 +506,64 @@ Feature* SegmentMapStore::newFeature(geos::geom::Geometry *line)        // creat
 	return seg;
 }
 
-
-
 bool fOk(const SegmentMapStore* sm, bool& fFirst, ILWIS::Segment* s)
-  {
-    if (s->fValid())
-      return true;
-    if (!fFirst)
-      return false;
+{
+	if (s->fValid())
+		return true;
+	if (!fFirst)
+		return false;
 	long index;
-    s = sm->segFirst(index);
-    fFirst = false;
-    return s->fValid();
-  }
+	s = sm->segFirst(index);
+	fFirst = false;
+	return s->fValid();
+}
 
-Coord SegmentMapStore::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr) const // existing coordinate
+Coord SegmentMapStore::crdNode(Coord crd) const
+{
+	Coord crdRes, crdTmp;
+	double rTmp;
+	double rDist = HUGE_VAL;
+	int  segIndex = 0;
+	for (;segIndex < geometries->size(); ++segIndex) {
+		ILWIS::Segment *seg = (ILWIS::Segment *)geometries->at(segIndex);
+		if ( !seg->fValid())
+			continue;
+		crdTmp = seg->crdBegin();
+		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
+			continue;
+		rTmp = rDist2(crdTmp, crd);
+		if (rTmp < rDist) {
+			rDist = rTmp;
+			crdRes = crdTmp;
+		}
+		crdTmp = seg->crdEnd();
+		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
+			continue;
+		rTmp = rDist2(crdTmp, crd);
+		if (rTmp < rDist) {
+			rDist = rTmp;
+			crdRes = crdTmp;
+		}
+		if (rDist == 0) break;
+	}
+	if ( segIndex <= geometries->size())
+		return crdRes;
+	return Coord();
+}
+
+Coord SegmentMapStore::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr, double rPrx, bool fAcceptDeleted) const // existing coordinate
 {
 	ILWIS::LPoint pnt(0,crd, 1,0);
 	double minDist = -1.0;
 	ILWIS::Segment *closestSeg = NULL;
 	vector<Geometry *> segs;
-	CoordBounds bounds(crd.x - ptr.rProximity(), crd.y - ptr.rProximity(), crd.x + ptr.rProximity(), crd.y + ptr.rProximity());
+	if ( rPrx == rUNDEF)
+		rPrx = ptr.rProximity();
+	CoordBounds bounds(crd.x - rPrx, crd.y - rPrx, crd.x + rPrx, crd.y + rPrx);
 	spatialIndex->query(bounds,segs);
 	for(int i = 0; i < segs.size(); ++i) {
 		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
-		if ( !s || s->fValid()==false)
+		if ( !s || !(fAcceptDeleted || s->fValid()))
 			continue;
 		geos::operation::distance::DistanceOp dop(s,&pnt);
 		double dist = dop.distance();
@@ -565,59 +598,54 @@ Coord SegmentMapStore::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr) cons
 	return Coord();
 }
 
-Coord SegmentMapStore::crdPoint(Coord crd, ILWIS::Segment** seg, long& iNr,
-                           double rPrx) const // somewhere on a segment
+Coord SegmentMapStore::crdPoint(Coord crd, ILWIS::Segment** seg, long& iAft, double rPrx, bool fAcceptDeleted) const // somewhere on a segment, can be between two segment nodes; returns the projected coordinate, and returns the segment found in "seg" and the node after which "crd" is closest to the segment in "iAft".
 {
-	ILWIS::LPoint pnt(0,crd, 1,0);
-	double minDist = -1.0;
 	ILWIS::Segment *closestSeg = NULL;
-	vector<Geometry *> segs;
-	if ( rPrx == rUNDEF)
-		rPrx = ptr.rProximity();
-	CoordBounds bounds(crd.x - rPrx, crd.y - rPrx, crd.x + rPrx, crd.y + rPrx);
-	spatialIndex->query(bounds,segs);
-	for(int i = 0; i < segs.size(); ++i) {
-		ILWIS::Segment *s = (ILWIS::Segment *)segs.at(i);
-		if ( !s || s->fValid()==false)
-			continue;
-		geos::operation::distance::DistanceOp dop(s,&pnt);
-		double dist = dop.distance();
-		if ( dist <= minDist || minDist == -1.0) {
-			minDist = dist;
-			closestSeg = s;
-		}
-		if ( dist == 0.0)
-			break;
-	}
-	double minDistInternal = rPrx;
-	Coord cSearch;
+	Coord crdRes = crdCoord(crd,&closestSeg,iAft,rPrx,fAcceptDeleted);
+	ILWIS::LPoint pnt(0,crd, 1,0);
+	ILWIS::LPoint pntLine(0,crdRes,1,0);
+	geos::operation::distance::DistanceOp dop(&pntLine,&pnt);
+	double minDist = dop.distance();
+	iAft = iUNDEF;
 	if ( closestSeg != NULL) {
-		double dist;
-		iNr = closestSeg->nearSection(crd, minDistInternal,dist);
-		if ( iNr != iUNDEF) {
-			*seg = closestSeg;
-			return closestSeg->getCoordinateN(iNr);
+		double minDist2 = sqr(minDist) + 1;
+		CoordinateSequence *buf = closestSeg->getCoordinates();
+		for (int i = 0; i < buf->size()-1; ++i) {
+			CoordBounds cb(buf->getAt(i),buf->getAt(i+1));
+			if (!cb.fNear(crd,minDist)) continue;
+			double dxAB, dyAB, dxAC, dyAC, d2, u, v;
+			Coord crdA = buf->getAt(i);
+			Coord crdB = buf->getAt(i+1);
+			dxAB = crdB.x - crdA.x;
+			dyAB = crdB.y - crdA.y;
+			dxAC = crd.x  - crdA.x;
+			dyAC = crd.y  - crdA.y;
+			d2 = dxAB * dxAB + dyAB * dyAB;
+			if (d2 < 0.1) continue; // should never happen
+			v = (dxAC * dyAB - dyAC * dxAB) / d2;
+			if (abs(dxAB) > abs(dyAB))
+				u = (dxAC + v * dyAB) / dxAB;
+			else
+				u = (dyAC - v * dxAB) / dyAB;
+			if (u >= 0 && u <= 1) {
+				Coord crdTmp;
+				crdTmp.x = crdA.x + u * dxAB;
+				crdTmp.y = crdA.y + u * dyAB;
+				double rD2 = rDist2(crdTmp,crd);
+				if (rD2 < minDist2) {
+					crdRes = crdTmp;
+					if ( seg != NULL)
+						*seg = closestSeg;
+					iAft = i;
+					minDist2 = rD2;
+					minDist = sqrt(minDist2);
+				}
+			}
 		}
-		//CoordinateSequence *seq = closestSeg->getCoordinates();
-		//for(int j = 0; j < seq->size(); ++j) {
-		//	ILWIS::LPoint pntLine(0,seq->getAt(j),1);
-		//	geos::operation::distance::DistanceOp dop(&pntLine,&pnt);
-		//	double dist = dop.distance();
-		//	if ( dist < minDistInternal ) {
-		//		minDistInternal = dist;
-		//		iNr = j;
-		//		cSearch = seq->getAt(j);
-		//	}
-		//}
-		//if ( seg != NULL)
-		//	*seg = closestSeg;
-		//delete seq;
-		//return cSearch;
-	}
-	*seg = 0;
-	return Coord();
-
-
+		delete buf;
+	} else if (seg != NULL)
+		*seg = 0;
+	return crdRes;
 }
 
 

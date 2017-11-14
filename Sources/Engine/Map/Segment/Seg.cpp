@@ -469,7 +469,7 @@ ILWIS::Segment *SegmentMapPtr::seg(const Coord& crd, double rPrx) const
   ILWISSingleLock sl(const_cast<CCriticalSection*>(&csAccess), TRUE, SOURCE_LOCATION);
   ILWIS::Segment *sg = NULL;
   long dummy;
-  Coord crdFound = crdPoint(crd,&sg,dummy, rPrx);
+  Coord crdFound = crdPoint(crd,&sg,dummy,rPrx);
   if ( sg == 0)
 	  return 0;
 
@@ -741,26 +741,26 @@ Geometry *SegmentMapPtr::getTransformedFeature(long iRec, const CoordSystem& csy
 //    return pms->iNode(crd);
 //  return iUNDEF;
 //}
-//
-//Coord SegmentMapPtr::crdNode(Coord crd) const
-//{
-//  if (0 != pms)
-//    return pms->crdNode(crd);
-//  return crdUNDEF;	
-//}
-//
-Coord SegmentMapPtr::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr) const
+
+Coord SegmentMapPtr::crdNode(Coord crd) const
 {
   if (0 != pms)
-    return pms->crdCoord(crd, seg, iNr);
-
-	return Coord();
+    return pms->crdNode(crd);
+  return crdUNDEF;	
 }
-//
-Coord SegmentMapPtr::crdPoint(Coord crd, ILWIS::Segment** seg, long& nr, double rPrx) const
+
+Coord SegmentMapPtr::crdCoord(Coord crd, ILWIS::Segment** seg, long& iNr, double rPrx, bool fAcceptDeleted) const
+{
+  if (0 != pms)
+    return pms->crdCoord(crd, seg, iNr, rPrx, fAcceptDeleted);
+
+  return Coord();
+}
+
+Coord SegmentMapPtr::crdPoint(Coord crd, ILWIS::Segment** seg, long& nr, double rPrx, bool fAcceptDeleted) const
 {
 	if ( 0 != pms )
-		return pms->crdPoint(crd, seg, nr, rPrx);
+		return pms->crdPoint(crd, seg, nr, rPrx, fAcceptDeleted);
 
   return crdUNDEF;
 }

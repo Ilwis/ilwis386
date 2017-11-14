@@ -78,9 +78,9 @@ public:
 	Geometry			*getFeatureById(FeatureID id) const;
 
 	//long                 iNode(Coord) const; // 3.0
-	//Coord                crdNode(Coord) const;
-	Coord                crdCoord(Coord, ILWIS::Segment**, long&) const; //3.0
-	Coord                crdPoint(Coord, ILWIS::Segment**, long& iAft, double rPrx) const;  // 3.0
+	Coord                crdNode(Coord) const;
+	Coord                crdCoord(Coord, ILWIS::Segment**, long& iNr, double rPrx, bool fAcceptDeleted) const; //3.0
+	Coord                crdPoint(Coord, ILWIS::Segment**, long& iAft, double rPrx, bool fAcceptDeleted) const;  // 3.0
 
 	bool                 fSegExist(const ILWIS::Segment& segNew, Tranquilizer* trq=0) const;
 	bool                 fSegExist(const CoordinateSequence *crdBufNew, 
