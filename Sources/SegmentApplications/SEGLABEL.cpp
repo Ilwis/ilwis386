@@ -204,7 +204,7 @@ bool SegmentMapLabels::fFreezing()
 	long index=iUNDEF;
     ILWIS::Segment *seg = pms->segFirst(index);
     long dummy;
-    pms->crdPoint(crd,&seg,dummy,0);
+    pms->crdPoint(crd,&seg,dummy,rUNDEF,false);
     if (seg && seg->fValid()) {
       if (fUseReal)
         seg->PutVal(pmp->rValue(i));
