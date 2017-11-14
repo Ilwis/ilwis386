@@ -70,6 +70,7 @@ Created on: 2007-02-8
 #include "Engine\Map\Point\PNT.H"
 #include "Client\Editors\Utils\SYMBOL.H"
 #include "Engine\Map\Segment\Seg.h"
+#include "Client\Editors\Map\SegmentEditor.h"
 #include "Engine\Map\Polygon\POL.H"
 #include "Client\Base\IlwisDocument.h"
 #include "Client\TableWindow\TableDoc.h"
@@ -532,6 +533,8 @@ void MapPaneView::ShowRecord(const Ilwis::Record& rec)
 
 void MapPaneView::OnLButtonDblClk(UINT nFlags, CPoint point) 
 {
+	if (edit && edit->OnLButtonDblClk(nFlags, point)) 
+		return;
 	CView::OnLButtonDblClk(nFlags, point);
 }
 
@@ -543,7 +546,42 @@ void MapPaneView::EditNamedLayer(const FileName& fn)
 	}
 	delete edit;
 	edit = 0;
-
+	/*if (".sms" == fn.sExt) {
+		SampleSet smp(fn);
+		if (smp->fInitStat())
+			edit = new SampleSetEditor(this, smp);
+	}
+	else if (".mpr" == fn.sExt) {
+		Map mp(fn);
+		edit = new PixelEditor(this, mp);
+	}
+	else if (".mpp" == fn.sExt) {
+		PointMap mp(fn);
+		edit = new PointEditor(this, mp);
+	}
+	else */if (".mps" == fn.sExt) {
+		SegmentMap mp(fn);
+		edit = new SegmentEditor(this, mp);
+	}/*
+	else if (".mpa" == fn.sExt) {
+		PolygonMap mp(fn);
+		edit = new PolygonEditor(this, mp);
+	}
+	else if (".atx" == fn.sExt) {
+		AnnotationText at(fn);
+		edit = new AnnotationTextEditor(this, at);
+	}*/
+	if (edit && !edit->fOk) {
+		delete edit;
+		edit = 0;
+	}
+	if (edit)	{
+		SetDirty();
+	}
+	UpdateFrame();
+	MapWindow* mw = mwParent();
+	if (mw)
+		mw->SetAcceleratorTable();
 }
 
 void MapPaneView::UpdateFrame()
