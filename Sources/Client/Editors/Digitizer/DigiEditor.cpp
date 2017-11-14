@@ -51,6 +51,7 @@
 #include "Client\ilwis.h"
 #include "Engine\Base\System\RegistrySettings.h"
 #include "Headers\constant.h"
+#include "Client\Mapwindow\MapCompositionDoc.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -65,12 +66,9 @@ BEGIN_MESSAGE_MAP(DigiEditor, Editor)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-
-const int iSize = 11;
-
-
 DigiEditor::DigiEditor(MapPaneView* mv, const CoordBounds& crdbnd)
 : Editor(mv)
+, fDigitizerCursor(false)
 {
 	cb = crdbnd;
   double rGrid = max(cb.width(), cb.height());
@@ -97,13 +95,6 @@ DigiEditor::DigiEditor(MapPaneView* mv, const CoordBounds& crdbnd)
   info = new DigitizerInfoWindow();
 	info->Create(mpv);
   info->ShowWindow(fActDigitizer ? SW_SHOW : SW_HIDE);
-
-	CClientDC cdc(mpv);
-	CBitmap bm;
-	bm.CreateCompatibleBitmap(&cdc,iSize,iSize);
-	dcBG.CreateCompatibleDC(&cdc);
-	dcBG.SelectObject(&bm);
-	bm.Detach();
 
   dc = dcCROSS;
   SetDigiFunc("", (DigiFunc)&DigiEditor::MoveCursor,
@@ -133,45 +124,52 @@ void DigiEditor::drawDigCursor()
   if (!fActDigitizer || crdDig.fUndef() ||
       fGreyDigitizer || !fFocus)
     return;
-  int iShft = iSize / 2;
+  
+  	glColor4d(colDig.redP(), colDig.greenP(), colDig.blueP(), 1);
+	glLineWidth(1.0);
+	Coord c = crdDig;
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+	double delta = cbZoom.width() / 400.0;
 
-  zPoint pnt = mpv->pntPos(crdDig);
-  zRect rect;
-  mpv->GetClientRect(&rect);
-  if (!rect.PtInRect(pnt))
-    return;
-
-	CClientDC cdc(mpv);
-
-	dcBG.BitBlt(0,0,iSize,iSize,&cdc,pnt.x-iShft,pnt.y-iShft,SRCCOPY);
-
-	CPen pen(PS_SOLID,0,colDig);
-	CPen* penOld = cdc.SelectObject(&pen);
-	CGdiObject* brOld;
   switch (dc) {
     case dcCROSS:
-      cdc.MoveTo(pnt.x-iShft,pnt.y-iShft);
-      cdc.LineTo(pnt.x+iShft+1,pnt.y+iShft+1);
-      cdc.MoveTo(pnt.x-iShft,pnt.y+iShft);
-      cdc.LineTo(pnt.x+iShft+1,pnt.y-iShft-1);
+      glBegin(GL_LINES);
+      glVertex3f(c.x - delta, c.y - delta, 0);
+      glVertex3f(c.x + delta, c.y + delta, 0);
+      glVertex3f(c.x + delta, c.y - delta, 0);
+      glVertex3f(c.x - delta, c.y + delta, 0);
+      glEnd();
       break;
     case dcPLUS:
-      cdc.MoveTo(pnt.x-iShft,pnt.y);
-      cdc.LineTo(pnt.x+iShft+1,pnt.y);
-      cdc.MoveTo(pnt.x,pnt.y-iShft);
-      cdc.LineTo(pnt.x,pnt.y+iShft+1);
+      glBegin(GL_LINES);
+      glVertex3f(c.x - delta, c.y, 0);
+      glVertex3f(c.x + delta, c.y, 0);
+      glVertex3f(c.x, c.y - delta, 0);
+      glVertex3f(c.x, c.y + delta, 0);
+      glEnd();
       break;
     case dcBOX:
-      iShft -= 2;
-			brOld = cdc.SelectStockObject(HOLLOW_BRUSH);
-      cdc.Rectangle(pnt.x-iShft,pnt.y-iShft,
-		     pnt.x+iShft+1,pnt.y+iShft+1);
-			cdc.SelectObject(brOld);
-      cdc.MoveTo(pnt.x,pnt.y);
-      cdc.LineTo(pnt.x,pnt.y+1);
+      glBegin(GL_LINE_LOOP);
+      glVertex3f(c.x - delta, c.y - delta, 0);
+      glVertex3f(c.x + delta, c.y - delta, 0);
+      glVertex3f(c.x + delta, c.y + delta, 0);
+      glVertex3f(c.x - delta, c.y + delta, 0);
+      glEnd();
+      glBegin(GL_LINES);
+      glVertex3f(c.x, c.y - delta / 6.0, 0);
+      glVertex3f(c.x, c.y + delta / 6.0, 0);
+      glEnd();
       break;
   }
-	cdc.SelectObject(penOld);
+}
+
+void DigiEditor::addDigCursor()
+{
+  if (!fActDigitizer || crdDig.fUndef() || 
+      fGreyDigitizer || !fFocus)
+    return;
+  fDigitizerCursor = true;
 }
 
 void DigiEditor::removeDigCursor()
@@ -179,16 +177,7 @@ void DigiEditor::removeDigCursor()
   if (!fActDigitizer || crdDig.fUndef() || 
       fGreyDigitizer || !fFocus)
     return;
-
-	CClientDC cdc(mpv);
-  zPoint pnt = mpv->pntPos(crdDig);
-  zRect rect;
-  mpv->GetClientRect(&rect);
-  if (!rect.PtInRect(pnt))
-    return;
-
-  int iShft = iSize / 2;
-	cdc.BitBlt(pnt.x-iShft,pnt.y-iShft,iSize,iSize,&dcBG,0,0,SRCCOPY);
+  fDigitizerCursor = false;
 }
 
 int DigiEditor::MoveCursor(Coord crd)
@@ -253,28 +242,7 @@ int DigiEditor::ChangeWindowEntireMap(Coord c)
 
 int DigiEditor::ChangeWindowMove(Coord c)
 {
-
-  zPoint pLast = mpv->pntPos(cLast);
-  zPoint p = mpv->pntPos(c);
-  if (pLast != p) {	
-		CClientDC dc(mpv);
-		CGdiObject* brOld = dc.SelectStockObject(HOLLOW_BRUSH);
-		dc.SetROP2(R2_NOT);
-    zPoint pPivot = mpv->pntPos(cPivot);
-    if (pPivot != pLast) {
-			CRect rect(pPivot, pLast);
-			dc.Rectangle(&rect);
-		}
-    pLast = p;
-    cLast = c;
-    if (pPivot != pLast) {
-			CRect rect(pPivot, pLast);
-			dc.Rectangle(&rect);
-		}
-		dc.SetROP2(R2_COPYPEN);
-		dc.SelectObject(brOld);
-  }
-
+  cLast = c;
   return MoveCursor(c);
 }
 
@@ -322,7 +290,7 @@ int DigiEditor::iDigiFunc(int iButton, Coord crd)
   if (df[iButton]) {
     removeDigCursor();
     iRet = (this->*df[iButton])(crd);
-    drawDigCursor();
+    addDigCursor();
   }
   return iRet;
 };

@@ -55,11 +55,13 @@ public:
   virtual RangeReal rrStretchRange() const;
   virtual Color clrRaw(long iRaw) const;
   virtual Color clrVal(double rVal) const;
+  virtual int draw(volatile bool* fDrawStop);
   virtual int draw(CDC*, zRect, Positioner*, volatile bool* fDrawStop);
 	virtual bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual bool OnLButtonDown(UINT nFlags, CPoint point);
 	virtual bool OnLButtonUp(UINT nFlags, CPoint point);
 	virtual bool OnLButtonDblClk(UINT nFlags, CPoint point);
+	virtual bool OnRButtonDown(UINT nFlags, CPoint point);
 	virtual bool OnMouseMove(UINT nFlags, CPoint point);
 	virtual bool OnContextMenu(CWnd* pWnd, CPoint point);
   virtual int Edit(const Coord&);
@@ -107,11 +109,13 @@ private:
   void AskMerge(Coord crdNode);
   int AskSplit(ILWIS::Segment *, long iAfter, Coord crdAt); // splitted: 0, cancelled: 1
   void SetActNode(Coord);
+  void drawActNode();
+  void drawSegment(ILWIS::Segment *, bool fExact);
+  int drawCoords(Color clr);
   void drawActNode(CDC* cdc);
   void drawSegment(CDC* cdc, ILWIS::Segment *, bool fExact);
   int drawCoords(CDC* cdc, Color clr);
   int TunnelSegment();
-  void SetDirty(ILWIS::Segment*);
   bool fCheckSelf(Tranquilizer&, long iStartSeg=0); // returns true if ok
   bool fCheckConnected(Tranquilizer&, long iStartSeg=0); // returns true if ok
   bool fCheckIntersects(Tranquilizer&, long iStartSeg=0); // returns true if ok
@@ -125,7 +129,6 @@ private:
   ILWIS::Segment *currentSeg;
   long iActCrd;
   vector<Coord> coords;
-  long iNrCoords;
   bool fDigBusy;
   bool fRetouching, fUndelete, fFindUndefs;
   zCursor curEdit, curSegEdit, curSegMove, curSegMoving,

@@ -59,6 +59,7 @@ protected:
   virtual void EndBusy();
 	virtual LRESULT OnUpdate(WPARAM, LPARAM);
   void drawDigCursor();
+  void addDigCursor();
   void removeDigCursor();
   bool fActDigitizer;
   Coord crdDig;
@@ -78,14 +79,13 @@ protected:
   Color colDig;
 private:
 //int DigitizerConfig();
-  bool fGreyDigitizer, fFocus;
+  bool fGreyDigitizer, fFocus, fDigitizerCursor;
   int ChangeWindowFirstPoint(Coord);
   int ChangeWindowEntireMap(Coord);
   int ChangeWindowMove(Coord);
   int ChangeWindowQuit(Coord);
   int ChangeWindowExec(Coord);
   DigitizerInfoWindow* info;
-	CDC dcBG;
   DigiFunc df[5];
   Coord cLastInfo;
 	//{{AFX_VIRTUAL(DigiEditor)

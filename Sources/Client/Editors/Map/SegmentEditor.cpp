@@ -44,14 +44,13 @@
 #include "Engine\Map\Polygon\POL.H"
 #include "Engine\Map\Point\PNT.H"
 #include "Client\Mapwindow\Positioner.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
-#include "Client\Mapwindow\Drawers\Drawer.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Editors\Editor.h"
 #include "Client\Editors\Digitizer\DigiEditor.h"
 #include "Client\Base\ButtonBar.h"
 #include "Client\Editors\Map\SegmentEditor.h"
 #include "Client\Editors\Utils\SYMBOL.H"
-#include "Headers\Hs\Editor.hs"
 #include "Client\FormElements\syscolor.h"
 #include "Client\Mapwindow\AreaSelector.h"
 #include "Client\Mapwindow\IlwisClipboardFormat.h"
@@ -63,7 +62,6 @@
 #include "Engine\Domain\dmident.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Engine\Base\Algorithm\Tunnel.h"
-#include "Headers\Hs\Appforms.hs"
 #include "Client\FormElements\flddom.h"
 #include "PolygonApplications\POLFRMSG.H"
 #include "Client\ilwis.h"
@@ -72,7 +70,6 @@
 #include "Client\Mapwindow\MapWindow.h"
 #include "Engine\Domain\DomainUniqueID.h"
 #include "Engine\Table\Rec.h"
-#include "Headers\Hs\Coordsys.hs"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -130,7 +127,7 @@ END_MESSAGE_MAP()
 
 const int iMAXCOORDS = 20000;
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define add(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
@@ -151,7 +148,6 @@ fOnlySelected(false)
 	dvs = mp->dvrs();
 	_rpr = dvs.dm()->rpr();
 	coords.clear();
-	iNrCoords = 0;
 	fDigBusy = false;
 	fRetouching = false;
 	fUndelete = false;
@@ -159,23 +155,34 @@ fOnlySelected(false)
 	drw = drwNORMAL;
 	sm = mp;
 	if (sm->fDependent() || sm->fDataReadOnly() || !sm->dm()->fValidDomain()) {
-		mpv->MessageBox(SEDErrNotEditableSegMap.sVal(),SEDErrSegEditor.sVal(),MB_OK|MB_ICONSTOP);
+		mpv->MessageBox(TR("Not an editable Segment Map").c_str(),TR("Segment Editor").c_str(),MB_OK|MB_ICONSTOP);
 		fOk = false;
 		return;
 	}
 	sm->KeepOpen(true);
 
 	MapCompositionDoc* mcd = mpv->GetDocument();
-	for (list<Drawer*>::iterator iter = mcd->dl.begin(); iter != mcd->dl.end(); ++iter) 
-	{
-		Drawer* dr = *iter;
-		if (dr->obj() == sm) {
-			Editor::drw = dr;
-			break;
+	vector<NewDrawer *> allDrawers;
+	mcd->rootDrawer->getDrawers(allDrawers);
+	for(int i = 0; i < allDrawers.size(); ++i) {
+		SpatialDataDrawer *dr = dynamic_cast<SpatialDataDrawer *>(allDrawers.at(i));
+		if ( dr) {
+			if ( dr->getBaseMap()->fnObj == sm->fnObj) {
+				Editor::drw = dr->getDrawer(0);
+				fDrawerActive = Editor::drw->isActive();
+				Editor::drw->setActive(false);
+				break;
+			}
 		}
 	}
+
 	if (0 == Editor::drw) {
-		Editor::drw = mcd->drAppend(sm);
+		SpatialDataDrawer *dr = dynamic_cast<SpatialDataDrawer *>(mcd->drAppend(sm, IlwisDocument::otEDIT));
+		if (dr) {
+			Editor::drw = dr->getDrawer(0);
+			fDrawerActive = Editor::drw->isActive();
+			Editor::drw->setActive(false);
+		}
 		mcd->UpdateAllViews(mpv,2);
 	}
 
@@ -308,7 +315,12 @@ SegmentEditor::~SegmentEditor()
     }
 */
     sm->KeepOpen(false);
-  }    
+  }
+  if (Editor::drw) {
+	  PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);
+	  Editor::drw->prepare(&pp);
+	  Editor::drw->setActive(fDrawerActive);
+  }
 }
 
 bool SegmentEditor::OnContextMenu(CWnd* pWnd, CPoint point)
@@ -325,9 +337,14 @@ bool SegmentEditor::OnContextMenu(CWnd* pWnd, CPoint point)
 	switch (mode) {
 		case modeSELECT: {
 			add(ID_EDIT);
-			add(ID_EDIT_COPY);
 			BOOL fEdit = segList.iSize() != 0;
 			men.EnableMenuItem(ID_EDIT, fEdit ? MF_ENABLED : MF_GRAYED);
+			add(ID_EDIT_CUT);
+			men.EnableMenuItem(ID_EDIT_CUT, fCopyOk() ? MF_ENABLED : MF_GRAYED);
+			add(ID_EDIT_COPY);
+			men.EnableMenuItem(ID_EDIT_COPY, fCopyOk() ? MF_ENABLED : MF_GRAYED);
+			add(ID_EDIT_PASTE);
+			men.EnableMenuItem(ID_EDIT_PASTE, fPasteOk() ? MF_ENABLED : MF_GRAYED);
 			add(ID_CLEAR);
 			men.EnableMenuItem(ID_CLEAR, fEdit ? MF_ENABLED : MF_GRAYED);
 			add(ID_UNDELSEG);
@@ -374,7 +391,7 @@ Color SegmentEditor::clrRaw(long iRaw) const
 	case drwNORMAL:
 		return col;
 	case drwPRIMARY:
-		return clrPrimary(1+iRaw%31);
+		return Color::clrPrimary(1+iRaw%31);
 	case drwDOMAIN:
 		if (iRaw != iUNDEF) {
 			if (dvrs().fValues()) {
@@ -387,7 +404,7 @@ Color SegmentEditor::clrRaw(long iRaw) const
 					return clr;
 				}
 			}
-			clr = clrPrimary(1+iRaw%16);
+			clr = Color::clrPrimary(1+iRaw%16);
 		}
 		break;
 	}
@@ -412,6 +429,287 @@ Color SegmentEditor::clrVal(double rVal) const
   return cRet;
 }
 
+int SegmentEditor::draw(volatile bool* fDrawStop)
+{
+	MapCompositionDoc* mcd = mpv->GetDocument();
+
+	/*
+	-- naar DigiEditor::PreDraw ?? remove cursor?
+	zRect r;
+	mappane->getInterior(r);
+	if (r == rect)
+	crdDig = Coord();
+	*/
+
+	CoordBounds cbIntern;
+	CoordBounds cb = mcd->rootDrawer->getMapCoordBounds();
+	bool fBoundCheck = !cb.fUndef();
+	if (fBoundCheck) {
+		double rW10 = cb.width() / 10;
+		double rH10 = cb.height() /10;
+		cb.MinX() -= rW10;
+		cb.MaxX() += rW10;
+		cb.MinY() -= rH10;
+		cb.MaxY() += rH10;
+		cbIntern += cb.cMin;
+		cbIntern += cb.cMax;
+		bool fConvNeeded = mcd->rootDrawer->fConvNeeded(sm->cs());
+		if (fConvNeeded) {
+			double dX = cb.width() / 10;
+			double dY = cb.height() / 10;
+			Coord c;
+			int i, j;
+			cbIntern = CoordBounds(); // reset
+			for (i = 0, c.x = cb.MinX(); i < 10; c.x += dX, ++i)
+				for (j = 0, c.y = cb.MinY(); j < 10; c.y += dY, ++j) {
+					Coord crd = mcd->rootDrawer->glToWorld(sm->cs(), c);
+					if (!crd.fUndef())
+						cbIntern += crd;
+				}  
+		}      
+	}  
+
+	Color c;
+	if ((long)col == -1)
+		c = SysColor(COLOR_WINDOWTEXT);
+	else
+		c = col;
+	glColor4d(c.redP(), c.greenP(), c.blueP(), 1);
+	glLineWidth(1.0);
+
+	if (segList.iSize()) {
+		Color cFgBr = SysColor(COLOR_HIGHLIGHT);
+		if (!fOnlySelected) {
+			glColor4d(cFgBr.redP(), cFgBr.greenP(), cFgBr.blueP(), 1);
+			glLineWidth(3.0);
+		}
+		for (SLIter<ILWIS::Segment *> iter(&segList); iter.fValid(); ++iter) {
+			if (cbIntern.fContains(iter()->cbBounds())) 
+				drawSegment(iter(),true);
+		}	
+		if (!fOnlySelected) {
+			glColor4d(c.redP(), c.greenP(), c.blueP(), 1);
+			glLineWidth(1.0);
+		}
+	}
+	if (fOnlySelected) 
+		return 0;
+
+	for (int i = 0; i < sm->iFeatures(); ++i) {
+		ILWIS::Segment *s = (ILWIS::Segment *)sm->getFeature(i);
+		if ( !(s && s->fValid()))
+			continue;
+		if (cbIntern.fContains(s->cbBounds()))
+			drawSegment(s,false);
+	}
+	if (fUndelete) {
+		glColor4d(colDeleted.redP(), colDeleted.greenP(), colDeleted.blueP(), 1);
+		glLineWidth(1.0);
+		for (int i = 0; i < sm->iFeatures(); ++i) {
+			ILWIS::Segment *s = (ILWIS::Segment *)sm->getFeature(i);
+			if (!s)
+				continue;
+			if (s->fDeleted() && cbIntern.fContains(s->cbBounds()))
+				drawSegment(s,true);
+		}	
+	}
+	if (fFindUndefs) {
+		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+		double delta = cbZoom.width() / 400.0;
+		glColor4d(colFindUndef.redP(), colFindUndef.greenP(), colFindUndef.blueP(), 1);
+		glLineWidth(1.0);
+		for (int i = 0; i < sm->iFeatures(); ++i) {
+			ILWIS::Segment *s = (ILWIS::Segment *)sm->getFeature(i);
+			if ( !(s && s->fValid()))
+				continue;
+			if (iUNDEF != s->iValue())
+				continue;
+			CoordBounds cb = s->cbBounds();
+			if (!cbIntern.fContains(cb))
+				continue;
+			drawSegment(s,true);
+			// if too small draw a rectangle
+			if (cb.height() + cb.width() < delta) {
+				Coord c = cb.middle();
+				c = mcd->rootDrawer->glConv(sm->cs(), c);
+				glBegin(GL_LINE_LOOP);
+				glVertex3f(c.x - delta, c.y - delta, 0);
+				glVertex3f(c.x + delta, c.y - delta, 0);
+				glVertex3f(c.x + delta, c.y + delta, 0);
+				glVertex3f(c.x - delta, c.y + delta, 0);
+				glEnd();
+			}
+		}
+	}
+	glLineWidth(1.0);
+	if (fRetouching && coords.size() > 0) {
+		glColor4d(colRetouch.redP(), colRetouch.greenP(), colRetouch.blueP(), 1);
+		drawSegment(currentSeg,true);
+		if (iActCrd >= 0 && iActCrd < coords.size() && currentSeg != 0) {
+			CoordinateSequence *crdBuf = currentSeg->getCoordinates();
+			glColor4d(0, 0, 0, 1);
+			glLogicOp(GL_OR_REVERSE);
+			glEnable(GL_COLOR_LOGIC_OP);
+			glBegin(GL_LINE_STRIP);
+			for (int i = max(0, iActCrd - 1); i <= min(coords.size() - 1, iActCrd + 1); ++i) {
+				Coord crd = mcd->rootDrawer->glConv(sm->cs(), crdBuf->getAt(i));
+				glVertex3f(crd.x, crd.y, 0);
+			}
+			glEnd();
+			glDisable(GL_COLOR_LOGIC_OP);
+			delete crdBuf;
+		}
+	}
+	glColor4d(0, 0, 0, 1);
+	drawCoords(col);
+	drawActNode();
+	drawDigCursor();
+	return 0;
+}
+
+void SegmentEditor::drawSegment(ILWIS::Segment *s, bool fExact)
+{
+	if (s == 0)
+		return;
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	if (!fExact) {
+		long iRaw = s->iValue();
+		Color clr = clrRaw(iRaw);
+		if ((long)clr == iUNDEF)
+			fExact = true;
+		else {
+			glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
+			glLineWidth(1.0);
+		}
+	}
+	long iNr, iTot;
+	iTot = -1;
+	CoordinateSequence *crdBuf = s->getCoordinates();
+	iNr = crdBuf->size();
+	glBegin(GL_LINE_STRIP);
+	for (int i = 0; i < iNr; ++i) {
+		Coord c = crdBuf->getAt(i); // skip duplicates?
+		c = mcd->rootDrawer->glConv(sm->cs(), c);
+		glVertex3f(c.x, c.y, 0);
+	}
+	glEnd();
+	CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+	double delta = cbZoom.width() / 400.0;
+	if (fRetouching || fShowNodes) {
+		Coord c = crdBuf->getAt(0);
+		c = mcd->rootDrawer->glConv(sm->cs(), c);
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(c.x - delta, c.y - delta, 0);
+		glVertex3f(c.x + delta, c.y - delta, 0);
+		glVertex3f(c.x + delta, c.y + delta, 0);
+		glVertex3f(c.x - delta, c.y + delta, 0);
+		glEnd();
+		c = crdBuf->getAt(iNr - 1);
+		c = mcd->rootDrawer->glConv(sm->cs(), c);
+		glBegin(GL_LINE_LOOP);
+		glVertex3f(c.x - delta, c.y - delta, 0);
+		glVertex3f(c.x + delta, c.y - delta, 0);
+		glVertex3f(c.x + delta, c.y + delta, 0);
+		glVertex3f(c.x - delta, c.y + delta, 0);
+		glEnd();
+	}
+	if (fRetouching) {  
+		for (int i = 1; i < iNr - 1; ++i) {
+			Coord c = crdBuf->getAt(i);
+			c = mcd->rootDrawer->glConv(sm->cs(), c);
+			glBegin(GL_LINES);
+			glVertex3f(c.x - delta, c.y - delta, 0);
+			glVertex3f(c.x + delta, c.y + delta, 0);
+			glVertex3f(c.x + delta, c.y - delta, 0);
+			glVertex3f(c.x - delta, c.y + delta, 0);
+			glEnd();
+		}
+	}
+	delete crdBuf;
+}
+
+int SegmentEditor::drawCoords(Color clr)
+{
+  if (coords.size()) {
+    Color c;
+    if ((long)clr == -1)
+      c = SysColor(COLOR_WINDOWTEXT);
+    else
+      c = clr;
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	glColor4d(c.redP(), c.greenP(), c.blueP(), 1);
+	glLineWidth(1.0);
+
+	bool fRetouchLine = fRetouching && iActCrd >= 0 && iActCrd < coords.size();
+
+	if (!fRetouchLine) {
+		glBegin(GL_LINE_STRIP);
+		for (int i = 0; i < coords.size(); ++i) {
+			Coord crd = coords[i];
+			crd = mcd->rootDrawer->glConv(sm->cs(), crd);
+			glVertex3f(crd.x, crd.y, 0);
+		}
+		glEnd();
+	}
+
+	glColor4d(0, 0, 0, 1);
+	glLineWidth(1.0);
+	if (!cLast.fUndef()) {
+		if (cPivot != cLast) {
+			glLogicOp(GL_OR_REVERSE);
+			glEnable(GL_COLOR_LOGIC_OP);
+			glBegin(GL_LINE_STRIP);
+			Coord crd = mcd->rootDrawer->glConv(sm->cs(), cPivot);
+			glVertex3f(crd.x, crd.y, 0);
+			crd = mcd->rootDrawer->glConv(sm->cs(), cLast);
+			glVertex3f(crd.x, crd.y, 0);
+			glEnd();
+			glDisable(GL_COLOR_LOGIC_OP);
+		}
+	}
+	if (fRetouchLine) {
+		glLogicOp(GL_OR_REVERSE);
+		glEnable(GL_COLOR_LOGIC_OP);
+		glBegin(GL_LINE_STRIP);
+		if (iActCrd != 0) {
+			Coord crd = mcd->rootDrawer->glConv(sm->cs(), coords[iActCrd - 1]);
+			glVertex3f(crd.x, crd.y, 0);
+		}
+		Coord crd = mcd->rootDrawer->glConv(sm->cs(), coords[iActCrd]);
+		glVertex3f(crd.x, crd.y, 0);
+		if (iActCrd != coords.size() - 1) {
+			Coord crd = mcd->rootDrawer->glConv(sm->cs(), coords[iActCrd + 1]);
+			glVertex3f(crd.x, crd.y, 0);
+		}
+		glEnd();
+		glDisable(GL_COLOR_LOGIC_OP);
+	}
+  }
+  return 0;
+}
+
+void SegmentEditor::drawActNode()
+{
+	if (crdActNode.fUndef())
+		return;
+	glColor4d(colRetouch.redP(), colRetouch.greenP(), colRetouch.blueP(), 1);
+	glLineWidth(1.0);
+
+	Coord c = crdActNode;
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+	double delta = cbZoom.width() / 400.0;
+	c = mcd->rootDrawer->glConv(sm->cs(), c);
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(c.x - delta, c.y - delta, 0);
+	glVertex3f(c.x + delta, c.y - delta, 0);
+	glVertex3f(c.x + delta, c.y + delta, 0);
+	glVertex3f(c.x - delta, c.y + delta, 0);
+	glEnd();
+
+	glColor4d(0, 0, 0, 1);
+}
+
 int SegmentEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDrawStop)
 {
 	MapCompositionDoc* mcd = mpv->GetDocument();
@@ -425,7 +723,7 @@ int SegmentEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fD
 	*/
 
 	CoordBounds cbIntern;
-	CoordBounds cb = cbRect(psn);
+	CoordBounds cb = mcd->rootDrawer->getMapCoordBounds();
 	bool fBoundCheck = !cb.fUndef();
 	if (fBoundCheck) {
 		double rW10 = cb.width() / 10;
@@ -436,15 +734,16 @@ int SegmentEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fD
 		cb.MaxY() += rH10;
 		cbIntern += cb.cMin;
 		cbIntern += cb.cMax;
-		bool fSameCsy = sm->cs() == mcd->georef->cs();
-		if (!fSameCsy) {
+		bool fConvNeeded = mcd->rootDrawer->fConvNeeded(sm->cs());
+		if (fConvNeeded) {
 			double dX = cb.width() / 10;
 			double dY = cb.height() / 10;
 			Coord c;
 			int i, j;
+			cbIntern = CoordBounds(); // reset
 			for (i = 0, c.x = cb.MinX(); i < 10; c.x += dX, ++i)
 				for (j = 0, c.y = cb.MinY(); j < 10; c.y += dY, ++j) {
-					Coord crd = sm->cs()->cConv(mcd->georef->cs(), c);
+					Coord crd = mcd->rootDrawer->glToWorld(sm->cs(), c);
 					if (!crd.fUndef())
 						cbIntern += crd;
 				}  
@@ -495,7 +794,7 @@ int SegmentEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fD
 		CPen* penO = cdc->SelectObject(&penDel);
 		for (int i = 0; i < sm->iFeatures(); ++i) {
 			ILWIS::Segment *s = (ILWIS::Segment *)sm->getFeature(i);
-			if ( !(s && s->fValid()))
+			if (!s)
 				continue;
 			if (s->fDeleted() && cbIntern.fContains(s->cbBounds()))
 				drawSegment(cdc,s,true);
@@ -596,7 +895,7 @@ void SegmentEditor::drawSegment(CDC* cdc, ILWIS::Segment *s, bool fExact)
 
 int SegmentEditor::drawCoords(CDC* cdc, Color clr)
 {
-  if (iNrCoords) {
+  if (coords.size()) {
     zPoint p;
     int i;
     Color c;
@@ -608,7 +907,7 @@ int SegmentEditor::drawCoords(CDC* cdc, Color clr)
 		CPen* penOld = cdc->SelectObject(&pen);
     p = mpv->pntPos(coords[0]);
     cdc->MoveTo(p);
-    for (i = 1; i < iNrCoords; ++i) {
+	for (i = 1; i < coords.size(); ++i) {
       p = mpv->pntPos(coords[i]);
       cdc->LineTo(p);
     }
@@ -654,43 +953,27 @@ bool SegmentEditor::OnLButtonDown(UINT nFlags, CPoint point)
 	if (!cb.fUndef() && !cb.fContains(crd)) {
 		MessageBeep(-1);
 		return true;
-	}  
+	}
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	crd = mcd->rootDrawer->glToWorld(sm->cs(), crd);
 	iLastButton = 0;
 	bool fShift = MK_SHIFT & nFlags ? true : false;
 	bool fCtrl = MK_CONTROL & nFlags ? true : false;
 	switch (mode) {
 	case modeSELECT:
 		{
-			CClientDC cdc(mpv);
 			if (!fShift && !fCtrl && segList.iSize()) {
-				/*	  
-				zColor cWin = SysColor(COLOR_WINDOW);
-				dsp->pushPen(new zPen(cWin,Solid,3));
-				for (SLIter<Segment> iter(&segList); iter.fValid(); ++iter)
-				drawSegment(iter(),true);
-				delete dsp->popPen();
-				zColor c;
-				if ((long)col == -1)
-				c = SysColor(COLOR_WINDOWTEXT);
-				else
-				c = col;
-				*/	    
-				//dsp->pushPen(new zPen(c,Solid,1));
 				for (SLIter<ILWIS::Segment *> iter(&segList); iter.fValid(); iter.first()) {
-					SetDirty(iter());
-					//drawSegment(iter(),false);
 					iter.remove();
 				}
-				//delete dsp->popPen();
 			}
 			long iAft;
-			long index = 0;
 			ILWIS::Segment *seg = NULL;
 			Coord crd1 = crd;
-			crd1 = sm->crdPoint(crd1, &seg, iAft, fUndelete && !fShift && !fCtrl);
+			crd1 = sm->crdPoint(crd1, &seg, iAft, rUNDEF, fUndelete && !fShift && !fCtrl);
 			Coord cFnd = crd1;
-			zPoint p = mpv->pntPos(crd);
-			zPoint pFnd = mpv->pntPos(cFnd);
+			zPoint p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),crd));
+			zPoint pFnd = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cFnd));
 			zPoint pTst = pFnd - p;
 			if (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels))
 				MessageBeep(MB_ICONASTERISK);
@@ -699,47 +982,22 @@ bool SegmentEditor::OnLButtonDown(UINT nFlags, CPoint point)
 				if (fShift) {
 					fAppend = !fCtrl;
 					SLIter<ILWIS::Segment *> iter(&segList);
-					for (int count=0; iter.fValid(); ++iter,++count)
-						if (count == index) {
+					for (; iter.fValid(); ++iter)
+						if (iter() == seg) {
 							iter.remove();
 							fAppend = false;
-							Color cWin = SysColor(COLOR_WINDOW);
-							CPen pen3(PS_SOLID,3,cWin);
-							CPen* penOld = cdc.SelectObject(&pen3);
-							drawSegment(&cdc,seg,true);
-							Color c;
-							if ((long)col == -1)
-								c = SysColor(COLOR_WINDOWTEXT);
-							else
-								c = col;
-							cdc.SelectObject(penOld);
-							CPen pen(PS_SOLID,1,c);
-							penOld = cdc.SelectObject(&pen);
-							drawSegment(&cdc,seg,false);
-							cdc.SelectObject(penOld);
 							break;
 						}
 				}
 				if (fAppend) {
-					if (seg->fDeleted())
-						seg->Delete(false);
-					segList.append(seg);
-					Color cFgBr = SysColor(COLOR_HIGHLIGHT);
-					CPen penFg(PS_SOLID,3,cFgBr);
-					CPen* penOld = cdc.SelectObject(&penFg);
-					drawSegment(&cdc,seg,true);
-					cdc.SelectObject(penOld);
-					Color c;
-					if ((long)col == -1)
-						c = SysColor(COLOR_WINDOWTEXT);
-					else
-						c = col;
-					CPen pen(PS_SOLID,1,c);
-					penOld = cdc.SelectObject(&pen);
-					drawSegment(&cdc,seg,false);
-					cdc.SelectObject(penOld);
+					if (seg) {
+						if (seg->fDeleted())
+							seg->Delete(false);
+						segList.append(seg);
+					}
 				}
 			}
+			mpv->Invalidate();
 		}
 		break;
 	case modeMOVE:
@@ -762,7 +1020,7 @@ bool SegmentEditor::OnLButtonDown(UINT nFlags, CPoint point)
 			SnapPointMouse(crd);
 		else
 			NewPosPointMouse(crd);
-		if (coords.size() > 0)
+		if (coords.size() == 0)
 			Mode(modeMOVE);
 		break;
 	case modeADD:
@@ -781,7 +1039,7 @@ bool SegmentEditor::OnLButtonDown(UINT nFlags, CPoint point)
 			EnterPoints(crd);
 		else if (MK_RBUTTON & nFlags) {
 			DeleteLastPoint(crd);
-			if (coords.size() > 0)
+			if (coords.size() == 0)
 				Mode(modeADD);
 		}
 		break;
@@ -799,7 +1057,9 @@ bool SegmentEditor::OnLButtonUp(UINT nFlags, CPoint point)
   if (!cb.fUndef() && !cb.fContains(crd)) {
     MessageBeep(-1);
     return true;
-  }  
+  }
+  MapCompositionDoc* mcd = mpv->GetDocument();
+  crd = mcd->rootDrawer->glToWorld(sm->cs(), crd);
 	bool fShift = MK_SHIFT & nFlags ? true : false;
 	bool fCtrl = MK_CONTROL & nFlags ? true : false;
   switch (mode) {
@@ -814,14 +1074,14 @@ bool SegmentEditor::OnLButtonUp(UINT nFlags, CPoint point)
       if (fShift)
 				SnapPointMouse(crd);
       else {
-        zPoint pOrig = mpv->pntPos(cPivot);
-        zPoint pNewPos = mpv->pntPos(crd);
+        zPoint pOrig = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(), cPivot));
+        zPoint pNewPos = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(), crd));
         zPoint pTst = pOrig - pNewPos;
         if (sqr((double)pTst.x) + sqr((double)pTst.y) <= sqr(min(3, iSnapPixels)))
           return true; // just accept release of mouse button
-				NewPosPointMouse(crd);
+		NewPosPointMouse(crd);
       }
-      if (coords.size() > 0)
+      if (coords.size() == 0)
 				Mode(modeMOVE);
       break;
     case modeENTERING:
@@ -837,14 +1097,25 @@ bool SegmentEditor::OnLButtonUp(UINT nFlags, CPoint point)
   return true;
 }
 
+bool SegmentEditor::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	if (mode == modeENTERING) {
+		DeleteLastPoint(cPivot);
+		if (coords.size() == 0)
+			Mode(modeADD);
+		return true;
+	}
+	return false;
+}
+
   class PointCoordForm: public FormWithDest
   {
   public:
     PointCoordForm(CWnd* parent, const char* sTitle, Coord* crd)
     : FormWithDest(parent, sTitle)
     {
-			new FieldReal(root, SEDUiX, &crd->x);
-			new FieldReal(root, SEDUiY, &crd->y);
+			new FieldReal(root, "&X", &crd->x);
+			new FieldReal(root, "&Y", &crd->y);
 //      SetHelpItem("ilwismen\\point_editor_add_point.htm");
       create();
     }
@@ -858,7 +1129,9 @@ bool SegmentEditor::OnLButtonDblClk(UINT nFlags, CPoint point)
   }
   if (!cb.fUndef() && !cb.fContains(crd)) {
     return true;
-  }  
+  }
+  MapCompositionDoc* mcd = mpv->GetDocument();
+  crd = mcd->rootDrawer->glToWorld(sm->cs(), crd);
   switch (mode) {
 		case modeSELECT:
 			Edit(crd);
@@ -873,12 +1146,14 @@ bool SegmentEditor::OnLButtonDblClk(UINT nFlags, CPoint point)
 			MovePoints(Coord());			
 			TakePointMouse(crd);
 		  fDigBusy = false;
-      if (coords.size() > 0)
+      if (coords.size() == 0)
 				return true;
 			crd = cPivot;
-			PointCoordForm frm(mpv, SEDTitleEditPoint.scVal(), &crd);
+			PointCoordForm frm(mpv, TR("Edit Point").c_str(), &crd);
 			if (frm.fOkClicked())
 				NewPosPoint(crd);
+			else
+				MovePoints(Coord());
 			Mode(modeMOVE);
 		} return true;
 	}
@@ -889,6 +1164,8 @@ bool SegmentEditor::OnLButtonDblClk(UINT nFlags, CPoint point)
 bool SegmentEditor::OnMouseMove(UINT nFlags, CPoint point)
 {
 	Coord crd = mpv->crdPnt(point);
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	crd = mcd->rootDrawer->glToWorld(sm->cs(), crd);
   switch (mode) {
     case modeMOVING:
       if (!cb.fUndef() && !cb.fContains(crd)) 
@@ -902,10 +1179,10 @@ bool SegmentEditor::OnMouseMove(UINT nFlags, CPoint point)
       }  
       if (MK_RBUTTON & nFlags) {
 				DeleteLastPoint(crd);
-				if (coords.size() > 0)
+				if (coords.size() == 0)
 					Mode(modeADD);
 			}
-			else if ((MK_LBUTTON & nFlags) && 0 == mpv->as)
+			else if ((MK_LBUTTON & nFlags) && 0 == mpv->tools.size())
 				EnterPoints(crd);
       else
 				MovePivot(crd);
@@ -969,7 +1246,7 @@ AskID:
 					ILWIS::Segment *seg = (ILWIS::Segment *)sm->getFeature(sValue);
 					if (seg->fValid()) {
 						MessageBeep(MB_ICONEXCLAMATION);
-						int iRet = mpv->MessageBox(SEDMsgValInUse.sVal(), SEDMsgSegEditor.sVal(),
+						int iRet = mpv->MessageBox(TR("Value already in use. Use anyway?").c_str(), TR("Segment Editor").c_str(),
 							MB_YESNO|MB_DEFBUTTON2|MB_ICONASTERISK);
 						if (IDYES != iRet) 
 							goto AskID;
@@ -977,9 +1254,9 @@ AskID:
 				}  
 				for (; iter.fValid(); ++iter) {
 					iter()->PutVal(sm->dvrs(), sValue);
-					SetDirty(iter());
 				}
 				sm->Updated();
+				mpv->Invalidate();
 			}
 		}
 		else
@@ -987,17 +1264,17 @@ AskID:
 	}
 	else {
 		if (dm()->pdid()) {
-			mpv->MessageBox(SEDMsgSegEdOnlyIndiv.sVal(), SEDMsgSegEditor.sVal());
+			mpv->MessageBox(TR("Segments only individually editable").c_str(), TR("Segment Editor").c_str());
 		}
 		else {
 			long iSel = segList.iSize();
-			String sRemark(SEDRemSegSel_i.sVal(), iSel);
+			String sRemark(TR("%ld segments selected").c_str(), iSel);
 			if (AskValue(sRemark, "ilwismen\\segment_editor_edit_selection.htm")) {
 				for (; iter.fValid(); ++iter) {
 					iter()->PutVal(sm->dvrs(), sValue);
 					sm->Updated();
-					SetDirty(iter());
 				}
+				mpv->Invalidate();
 			}
 		}
 	}
@@ -1010,7 +1287,7 @@ void SegmentEditor::EditFieldOK(Coord crd, const String& s)
     ILWIS::Segment *seg = (ILWIS::Segment *)sm->getFeature(s);
     if (seg->fValid()) {
       MessageBeep(MB_ICONEXCLAMATION);
-      int iRet = mpv->MessageBox(SEDMsgValInUse.sVal(), SEDMsgSegEditor.sVal(),
+      int iRet = mpv->MessageBox(TR("Value already in use. Use anyway?").c_str(), TR("Segment Editor").c_str(),
                    MB_YESNO|MB_DEFBUTTON2|MB_ICONASTERISK);
       if (IDYES != iRet) {
         EditFieldStart(crd, s);
@@ -1022,9 +1299,9 @@ void SegmentEditor::EditFieldOK(Coord crd, const String& s)
     SLIter<ILWIS::Segment *> iter(&segList);
 	iter()->PutVal(sm->dvrs(), s);
     sm->Updated();
-    SetDirty(iter());
 	int iRaw = iter()->iValue();
 	EditAttrib(iRaw);
+	mpv->Invalidate();
   }
 }
 
@@ -1145,7 +1422,7 @@ void SegmentEditor::OnCopy()
 	zRect rect;
 	mpv->GetClientRect(rect);
 	MinMax mm = mpv->mmRect(rect);
-	MetafilePositioner psnMf(mm,mcd->georef); 
+	MetafilePositioner psnMf(mm,GeoRef());
 	zRect rectMFD = psnMf.rectSize();
 	CClientDC cdc(mpv);
 	CMetaFileDC mfd;
@@ -1200,7 +1477,7 @@ void SegmentEditor::OnPaste()
     dmCb = id.dm();
     if (dmMap->pdv()) {
       if (0 == dmCb->pdv()) {
-        mpv->MessageBox(SEDErrNotValueInClipboard.sVal(),SEDErrSegEditor.sVal(),MB_OK|MB_ICONSTOP);
+		  mpv->MessageBox(TR("Data in Clipboard does not have a Value Domain.\nPasting is not possible.").c_str(),TR("Segment Editor").c_str(),MB_OK|MB_ICONSTOP);
  				CloseClipboard();
         return;
       }
@@ -1212,7 +1489,7 @@ void SegmentEditor::OnPaste()
     }
     else if (dmMap->pdc()) {
       if (0 == dmCb->pdc()) {
-        mpv->MessageBox(SEDErrNotClassInClipboard.sVal(),SEDErrSegEditor.sVal(),MB_OK|MB_ICONSTOP);
+        mpv->MessageBox(TR("Data in Clipboard does not have a Class Domain.\nPasting is not possible.").c_str(),TR("Segment Editor").c_str(),MB_OK|MB_ICONSTOP);
  				CloseClipboard();
         return;
       }
@@ -1249,8 +1526,6 @@ void SegmentEditor::OnPaste()
         else
 			seg->PutVal(iRaw);
         sm->Updated();
-		CClientDC cdc(mpv);
-        drawSegment(&cdc,seg,false);
       }  
       j = 0;
       continue;
@@ -1277,8 +1552,8 @@ void SegmentEditor::OnPaste()
             }
             iRaw = dmMap->iRaw(sVal);
             if (iUNDEF == iRaw) {
-              String sMsg(SEDMsgNotInDomain_SS.sVal(), sVal, dmMap->sName());
-              int iRet = mpv->MessageBox(sMsg.sVal(),SEDMsgSegEditor.sVal(),MB_YESNOCANCEL|MB_ICONASTERISK);
+              String sMsg(TR("'%S' is not in the domain %S\nAdd this item to the domain?").c_str(), sVal, dmMap->sName());
+              int iRet = mpv->MessageBox(sMsg.sVal(),TR("Segment Editor").c_str(),MB_YESNOCANCEL|MB_ICONASTERISK);
               if (IDYES == iRet)
                 try {
                   iRaw = dmMap->pdsrt()->iAdd(sVal);
@@ -1306,10 +1581,9 @@ void SegmentEditor::OnPaste()
     else
       seg->PutVal(iRaw);
     sm->Updated();
-	CClientDC cdc(mpv);
-    drawSegment(&cdc,seg,false);
   }  
 	CloseClipboard();
+	mpv->Invalidate();
 }
 
 void SegmentEditor::OnSelectMode()
@@ -1380,7 +1654,7 @@ void SegmentEditor::OnUpdateMode(CCmdUI* pCmdUI)
 			pCmdUI->SetCheck(fFindUndefs);
 			return;
 	}
-	if (0 != mpv->as)
+	if (0 != mpv->tools.size())
 		fCheck = false;
 	pCmdUI->SetRadio(fCheck);
   pCmdUI->Enable(fEnable);
@@ -1408,9 +1682,9 @@ void SegmentEditor::Mode(enumMode Mode)
 	}
 	if (segList.iSize()) {
 		for (SLIter<ILWIS::Segment *> iter(&segList); iter.fValid(); iter.first()) {
-			SetDirty(iter());
 			iter.remove();
-		}  
+		}
+		mpv->Invalidate();
 	}
 	mode = Mode;
 	switch (mode) {
@@ -1444,21 +1718,6 @@ void SegmentEditor::Mode(enumMode Mode)
 		break;
 	}
 	OnSetCursor();
-}
-
-void SegmentEditor::SetDirty(ILWIS::Segment *s)
-{
-  CoordBounds cb = s->cbBounds();
-  zPoint p1 = mpv->pntPos(cb.cMin);
-  zPoint p2 = mpv->pntPos(cb.cMax);
-  zPoint p3 = mpv->pntPos(Coord(cb.MinX(), cb.MaxY()));
-  zPoint p4 = mpv->pntPos(Coord(cb.MaxX(), cb.MinY()));
-  zRect rect;
-  rect.left() = min(min(p1.x,p2.x),min(p3.x,p4.x)) - 4;
-  rect.right() = max(max(p1.x,p2.x),max(p3.x,p4.x)) + 5;
-  rect.top() = min(min(p1.y,p2.y),min(p3.y,p4.y)) - 4;
-  rect.bottom() = max(max(p1.y,p2.y),max(p3.y,p4.y)) + 5;
-  mpv->InvalidateRect(&rect);
 }
 
 bool SegmentEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -1539,7 +1798,7 @@ void SegmentEditor::OnUpdateSetVal(CCmdUI* pCmdUI)
 
 void SegmentEditor::OnSetVal()
 {
-  AskValue(SEDRemValForSeg, "ilwismen\\segment_editor_insert_code.htm");
+  AskValue(TR("Code for new Segments"), "ilwismen\\segment_editor_insert_code.htm");
 }
 
 void SegmentEditor::OnCut()
@@ -1553,23 +1812,22 @@ void SegmentEditor::OnClear()
 	switch (mode) {
 	case modeENTERING:
 		DeleteLastPoint(cPivot);
-		if (coords.size() > 0)
+		if (coords.size() == 0)
 			Mode(modeADD);
 		break;
 	case modeSELECT:
 		if (segList.iSize()) {
 			for (SLIter<ILWIS::Segment *> iter(&segList); iter.fValid(); iter.first()) {
-				SetDirty(iter());
+				//SetDirty(iter());
 				iter()->Delete(true);
 				iter.remove();
 				sm->Updated();
 			}
+			mpv->Invalidate();
 		}
 		break;
 	}
 }
-
-
 
 int SegmentEditor::AddSegments(Coord crd)
 {
@@ -1588,11 +1846,11 @@ int SegmentEditor::AddSegments(Coord crd)
     dc = dcCROSS;
     MoveCursor(crd);
     ChangeWindowBasis = (DigiFunc)&SegmentEditor::AddSegments;
-    return SetDigiFunc(SEDDigAddSegments, (DigiFunc)&DigiEditor::MoveCursor,
-		     (DigiFunc)&SegmentEditor::BeginSegment, SEDDigBeginSegment,
-		     (DigiFunc)&SegmentEditor::SnapSegment, SEDDigSnapSegment,
-		     (DigiFunc)&DigiEditor::ChangeWindow, SEDDigChangeWindow,
-		     (DigiFunc)&SegmentEditor::MovePoints, SEDDigMovePoints);
+    return SetDigiFunc(TR("Add Segments"), (DigiFunc)&DigiEditor::MoveCursor,
+		     (DigiFunc)&SegmentEditor::BeginSegment, TR("Begin Segment"),
+		     (DigiFunc)&SegmentEditor::SnapSegment, TR("Snap Segment"),
+		     (DigiFunc)&DigiEditor::ChangeWindow, TR("Change Window"),
+		     (DigiFunc)&SegmentEditor::MovePoints, TR("Move Points"));
 //  }		     
 }
 
@@ -1604,7 +1862,6 @@ int SegmentEditor::BeginSegment(Coord c)
   fDigBusy = true;
   coords.clear();
   coords.push_back(c);
-  iNrCoords = 1;
   cPivot = cLast = c;
   return StartEnteringPoints(c);
 }
@@ -1620,20 +1877,20 @@ int SegmentEditor::SnapSegment(Coord c)
   if (!crdSnap.fUndef() && (rSnapDist < sm->rSnapDist)) {
     SetActNode(crdSnap);
     cLast = cSnap;
-    return SetDigiFunc(SEDDigSnapSegment, (DigiFunc)&DigiEditor::MoveCursor,
-		(DigiFunc)&SegmentEditor::SnapSegmentAccept, SEDDigAccept,
-		(DigiFunc)&SegmentEditor::SnapSegment, SEDDigSnapOther,
-		(DigiFunc)&SegmentEditor::SnapSplitSegment, SEDDigSnapSplit,
-		(DigiFunc)&SegmentEditor::AddSegments, SEDDigNoSnap);
+    return SetDigiFunc(TR("Snap Segment"), (DigiFunc)&DigiEditor::MoveCursor,
+		(DigiFunc)&SegmentEditor::SnapSegmentAccept, TR("Accept"),
+		(DigiFunc)&SegmentEditor::SnapSegment, TR("Snap Other"),
+		(DigiFunc)&SegmentEditor::SnapSplitSegment, TR("Snap Split"),
+		(DigiFunc)&SegmentEditor::AddSegments, TR("No Snapping"));
   }
   else {
     MessageBeep(MB_ICONASTERISK);
-    return SetDigiFunc(SEDDigSnapSegment,
+    return SetDigiFunc(TR("Snap Segment"),
                 (DigiFunc)&DigiEditor::MoveCursor,
 		NULL, "",
-		(DigiFunc)&SegmentEditor::SnapSegment, SEDDigSnapOther,
-		(DigiFunc)&SegmentEditor::SnapSplitSegment, SEDDigSnapSplit,
-		(DigiFunc)&SegmentEditor::AddSegments, SEDDigNoSnap);
+		(DigiFunc)&SegmentEditor::SnapSegment, TR("Snap Other"),
+		(DigiFunc)&SegmentEditor::SnapSplitSegment, TR("Snap Split"),
+		(DigiFunc)&SegmentEditor::AddSegments, TR("No Snapping"));
   }
 /*
   if (rDist2(c, cSnap) > sqr(sm->rSnapDist))
@@ -1653,18 +1910,19 @@ int SegmentEditor::BeginSegmentMouse(Coord c)
   if (fAutoSnap) {
     Coord crdSnap = sm->crdNode(c);
     Coord cSnap = crdSnap;
-    zPoint p = mpv->pntPos(c);
-    zPoint pSnap = mpv->pntPos(cSnap);
+	MapCompositionDoc* mcd = mpv->GetDocument();
+    zPoint p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),c));
+    zPoint pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cSnap));
     zPoint pTst = pSnap - p;
     if (!crdSnap.fUndef() && (sqr((double)pTst.x) + sqr((double)pTst.y) <= sqr(iSnapPixels)))
       return BeginSegment(cSnap);
     else {
       long iAft;
-      crdSnap = sm->crdPoint(c,NULL,iAft);
+      crdSnap = sm->crdPoint(c,&currentSeg,iAft,rUNDEF);
       cSnap = crdSnap;
-      zPoint pSnap = mpv->pntPos(cSnap);
+	  zPoint pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cSnap));
       zPoint pTst = pSnap - p;
-      if (!crdSnap.fUndef() && (sqr((double)pTst.x) + sqr((double)pTst.y) <= sqr(iSnapPixels))) {
+      if (!crdSnap.fUndef() && (sqr((double)pTst.x) + sqr((double)pTst.y) <= sqr(iSnapPixels)) && (currentSeg != 0) && (iAft != iUNDEF)) {
         if (0 == AskSplit(currentSeg, iAft, crdSnap))
           return BeginSegment(cSnap);
         else
@@ -1679,8 +1937,9 @@ int SegmentEditor::SnapSegmentMouse(Coord c)
 {
   Coord crdSnap = sm->crdNode(c);
   Coord cSnap = crdSnap;
-  zPoint p = mpv->pntPos(c);
-  zPoint pSnap = mpv->pntPos(cSnap);
+  MapCompositionDoc* mcd = mpv->GetDocument();
+  zPoint p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(), c));
+  zPoint pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(), cSnap));
   zPoint pTst = pSnap - p;
   if (crdSnap.fUndef() || (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels))) {
     MessageBeep(MB_ICONASTERISK);
@@ -1692,12 +1951,13 @@ int SegmentEditor::SnapSegmentMouse(Coord c)
 int SegmentEditor::SnapSplitSegmentMouse(Coord c)
 {
   long iAft;
-  Coord crdSnap = sm->crdPoint(c,NULL,iAft);
+  Coord crdSnap = sm->crdPoint(c,&currentSeg,iAft,rUNDEF);
   Coord cSnap = crdSnap;
-  zPoint p = mpv->pntPos(c);
-  zPoint pSnap = mpv->pntPos(cSnap);
+  MapCompositionDoc* mcd = mpv->GetDocument();
+  zPoint p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),c));
+  zPoint pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cSnap));
   zPoint pTst = pSnap - p;
-  if (crdSnap.fUndef() || (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels))) {
+  if (crdSnap.fUndef() || (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels)) || (iAft == iUNDEF) || (currentSeg == 0)) {
     MessageBeep(MB_ICONASTERISK);
     return 0;
   }
@@ -1709,57 +1969,26 @@ int SegmentEditor::SnapSplitSegmentMouse(Coord c)
 
 int SegmentEditor::MovePivot(Coord c)
 {
-  zPoint pLast = mpv->pntPos(cLast);
-  zPoint p = mpv->pntPos(c);
   cLast = c; // always even if point in windows remains the same
-  if (pLast != p) {
-		CClientDC cdc(mpv);
-		cdc.SetROP2(R2_NOT);
-    zPoint pPivot = mpv->pntPos(cPivot);
-    if (pPivot != pLast) {
-      cdc.MoveTo(pPivot);
-      cdc.LineTo(pLast);
-    }
-    pLast = p;
-    cLast = c;
-    if (pPivot != pLast) {
-      cdc.MoveTo(pPivot);
-      cdc.LineTo(pLast);
-    }
-		cdc.SetROP2(R2_COPYPEN);
-  }
   MoveCursor(c);
+  mpv->Invalidate();
   return 0;
 }
 
 int SegmentEditor::EnterPoints(Coord c)
 {
   MovePivot(c);
-  if (iNrCoords >= iMAXCOORDS) {
+  if (coords.size() >= iMAXCOORDS) {
     MessageBeep(MB_ICONASTERISK);
     TunnelSegment();
     return 0;
   }
-  iNrCoords++;
+  if (coords.size() > 0 && coords.back() == c) // workaround weird windows messaging, whereby a OnLButtonDown is immediately followed by a MouseMove, which would enter the point twice
+	  return 0;
   cLast = c;
   coords.push_back(c);
-  zPoint pLast = mpv->pntPos(cLast);
-  zPoint pPivot = mpv->pntPos(cPivot);
   cPivot = cLast;
-  if (pPivot != pLast) {
-    Color c;
-    if ((long)col == -1)
-      c = SysColor(COLOR_WINDOWTEXT);
-    else
-      c = col;
-		CClientDC cdc(mpv);
-		CPen pen(PS_SOLID,1,c);
-		CPen* penOld = cdc.SelectObject(&pen);
-    cdc.MoveTo(pPivot);
-    cdc.LineTo(pLast);
-    cdc.SelectObject(penOld);
-    pPivot = pLast;
-  }
+  mpv->Invalidate();
   return 0;
 }
 
@@ -1767,9 +1996,10 @@ int SegmentEditor::EndSegment(Coord c)
 {
 	EnterPoints(c);
 	TunnelSegment();
-	if (!fDigBusy && iNrCoords == 2) {
-		zPoint p1 = mpv->pntPos(coords[0]);
-		zPoint p2 = mpv->pntPos(coords[1]);
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	if (!fDigBusy && coords.size() == 2) {
+		zPoint p1 = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),coords[0]));
+		zPoint p2 = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),coords[1]));
 		zPoint pTst = p1 - p2;
 		unsigned long iDist = (unsigned long)(sqr((double)pTst.x) + sqr((double)pTst.y));
 		if (iDist < sqr(iSnapPixels)) {
@@ -1782,11 +2012,11 @@ int SegmentEditor::EndSegment(Coord c)
 
 	currentSeg = CSEGMENT(sm->newFeature());
 
-	CoordBuf crdBuf(iNrCoords);
-	for(int i=0; i< iNrCoords; ++i)
+	CoordBuf crdBuf(coords.size());
+	for(int i=0; i< coords.size(); ++i)
 		crdBuf[i] = coords[i];
 
-	currentSeg->PutCoords(iNrCoords,crdBuf);
+	currentSeg->PutCoords(coords.size(),crdBuf);
 	sm->Updated();
 	Domain _dm = dm();
 	if (_dm->pdid()) {
@@ -1801,7 +2031,7 @@ int SegmentEditor::EndSegment(Coord c)
 		}
 		else {
 AskID:      
-			AskValue(SEDRemEnterID, "ilwismen\\segment_editor_insert_new_segment.htm");
+			AskValue(TR("Enter Identifier"), "ilwismen\\segment_editor_insert_new_segment.htm");
 			if (_dm->iRaw(sValue) == iUNDEF) {
 				DomainSort* pds = _dm->pdsrt();
 				pds->iAdd(sValue);
@@ -1812,7 +2042,7 @@ AskID:
 				if (seg && seg->fValid()) 
 				{
 					MessageBeep(MB_ICONEXCLAMATION);
-					int iRet = mpv->MessageBox(SEDMsgValInUse.sVal(), SEDMsgSegEditor.sVal(),
+					int iRet = mpv->MessageBox(TR("Value already in use. Use anyway?").c_str(), TR("Segment Editor").c_str(),
 						MB_YESNO|MB_DEFBUTTON2|MB_ICONASTERISK);
 					if (IDYES != iRet) 
 						goto AskID;
@@ -1821,12 +2051,12 @@ AskID:
 		}
 	}
 	else if (_dm->pdv()) {
-		AskValue(SEDRemEnterValue, "ilwismen\\segment_editor_insert_new_segment.htm");
+		AskValue(TR("Enter Value"), "ilwismen\\segment_editor_insert_new_segment.htm");
 	}
 	else {
 		if (_dm->iRaw(sValue) == iUNDEF) {
 			MessageBeep(MB_ICONEXCLAMATION);
-			AskValue(SEDRemNoValueSpecified, "ilwismen\\segment_editor_insert_new_segment.htm");
+			AskValue(TR("No value specified yet"), "ilwismen\\segment_editor_insert_new_segment.htm");
 			if (_dm->iRaw(sValue) == iUNDEF)
 				sValue = _dm->sValueByRaw(1);
 		}
@@ -1834,18 +2064,12 @@ AskID:
 	currentSeg->PutVal(dvs, sValue);
 	sm->Updated();
 
-	// remove old drawing
-	Color clr = SysColor(COLOR_WINDOW);
-	CClientDC cdc(mpv);
-	drawCoords(&cdc,clr);
-
-	iNrCoords = 0;
 	coords.clear();
-	drawSegment(&cdc,currentSeg,false);
 	if (_dm->pdid()) {
 		int iRaw = currentSeg->iValue();
 		EditAttrib(iRaw);
 	}
+	mpv->Invalidate();
 	return AddSegments(Coord());
 }
 
@@ -1853,11 +2077,12 @@ int SegmentEditor::SnapEndSegmentMouse(Coord c)
 {
   Coord crdSnap = sm->crdNode(c);
   Coord cSnap = crdSnap;
-  zPoint p = mpv->pntPos(c);
-  zPoint pSnap = mpv->pntPos(cSnap);
+  MapCompositionDoc* mcd = mpv->GetDocument();
+  zPoint p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),c));
+  zPoint pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cSnap));
   zPoint pTst = pSnap - p;
   unsigned long iSnapDist = (unsigned long)(sqr((double)pTst.x) + sqr((double)pTst.y));
-  zPoint pStart = mpv->pntPos(coords[0]);
+  zPoint pStart = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),coords[0]));
   pTst = pStart - p;
   unsigned long iOwnDist = (unsigned long)(sqr((double)pTst.x) + sqr((double)pTst.y));
 	if (!crdSnap.fUndef())
@@ -1886,12 +2111,13 @@ int SegmentEditor::SnapSplitEndSegmentMouse(Coord c)
 {
   currentSeg = sm->segFirst();
   long iAft = 0;
-  Coord crdSnap = sm->crdPoint(c,NULL,iAft);
+  Coord crdSnap = sm->crdPoint(c,&currentSeg,iAft,rUNDEF);
   Coord cSnap = crdSnap;
-  zPoint p = mpv->pntPos(c);
-  zPoint pSnap = mpv->pntPos(cSnap);
+  MapCompositionDoc* mcd = mpv->GetDocument();
+  zPoint p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),c));
+  zPoint pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cSnap));
   zPoint pTst = pSnap - p;
-  if (crdSnap.fUndef() || (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels))) {
+  if (crdSnap.fUndef() || (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels)) || (iAft == iUNDEF) || (currentSeg == 0)) {
     MessageBeep(MB_ICONASTERISK);
     return 1;
   }
@@ -1909,18 +2135,19 @@ int SegmentEditor::AutoEndSegmentMouse(Coord c)
 {
   Coord crdSnap = sm->crdNode(c);
   Coord cSnap =crdSnap;
-  zPoint p = mpv->pntPos(c);
-  zPoint pSnap = mpv->pntPos(cSnap);
+  MapCompositionDoc* mcd = mpv->GetDocument();
+  zPoint p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),c));
+  zPoint pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cSnap));
   zPoint pTst = pSnap - p;
   unsigned long iSnapDist = (unsigned long)(sqr((double)pTst.x) + sqr((double)pTst.y));
-  zPoint pStart = mpv->pntPos(coords[0]);
+  zPoint pStart = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),coords[0]));
   pTst = pStart - p;
   unsigned long iOwnDist = (unsigned long)(sqr((double)pTst.x) + sqr((double)pTst.y));
 	if (!crdSnap.fUndef())
 	{
 		if (iSnapDist < iOwnDist) {
 			if (iSnapDist < sqr(iSnapPixels)) {
-				if (iNrCoords > 2) {
+				if (coords.size() > 2) {
 					EndSegment(cSnap);
 					Mode(modeADD);
 				}  
@@ -1929,7 +2156,7 @@ int SegmentEditor::AutoEndSegmentMouse(Coord c)
 		}
 		else {
 			if (iOwnDist < sqr(iSnapPixels)) {
-				if (iNrCoords > 2) {
+				if (coords.size() > 2) {
 					MovePivot(coords[0]);
 					EndSegment(coords[0]);
 					Mode(modeADD);
@@ -1940,12 +2167,12 @@ int SegmentEditor::AutoEndSegmentMouse(Coord c)
 	}
   currentSeg = sm->segFirst();
   long iAft = 0;
-  crdSnap = sm->crdPoint(c,&currentSeg,iAft);
+  crdSnap = sm->crdPoint(c,&currentSeg,iAft,rUNDEF);
   cSnap = crdSnap;
-  p = mpv->pntPos(c);
-  pSnap = mpv->pntPos(cSnap);
+  p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),c));
+  pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cSnap));
   pTst = pSnap - p;
-  if (crdSnap.fUndef() || (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels)))
+  if (crdSnap.fUndef() || (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels)) || (iAft == iUNDEF) || (currentSeg == 0))
     return 1;
   if (0 == AskSplit(currentSeg, iAft, crdSnap)) {
     MovePivot(cSnap);
@@ -1980,21 +2207,21 @@ int SegmentEditor::SnapEndSegment(Coord c)
 		}
 	}
 	if (fAcceptPossible) {
-		return SetDigiFunc(SEDDigEndSegment, (DigiFunc)&DigiEditor::MoveCursor,
-			(DigiFunc)&SegmentEditor::SnapAccept, SEDDigAccept,
-			(DigiFunc)&SegmentEditor::SnapEndSegment, SEDDigSnapOther,
-			(DigiFunc)&SegmentEditor::SnapSplit, SEDDigSnapSplit,
-			(DigiFunc)&SegmentEditor::StartEnteringPoints, SEDDigNoSnap);
+		return SetDigiFunc(TR("End Segment"), (DigiFunc)&DigiEditor::MoveCursor,
+			(DigiFunc)&SegmentEditor::SnapAccept, TR("Accept"),
+			(DigiFunc)&SegmentEditor::SnapEndSegment, TR("Snap Other"),
+			(DigiFunc)&SegmentEditor::SnapSplit, TR("Snap Split"),
+			(DigiFunc)&SegmentEditor::StartEnteringPoints, TR("No Snapping"));
 	}
 	else {
 		MessageBeep(MB_ICONASTERISK);
-		return SetDigiFunc(SEDDigEndSegment, 
+		return SetDigiFunc(TR("End Segment"), 
 			//(DigiFunc)&DigiEditor::MoveCursor,
 			(DigiFunc)&SegmentEditor::MovePivot,
 			NULL, "",
-			(DigiFunc)&SegmentEditor::SnapEndSegment, SEDDigSnapOther,
-			(DigiFunc)&SegmentEditor::SnapSplit, SEDDigSnapSplit,
-			(DigiFunc)&SegmentEditor::StartEnteringPoints, SEDDigNoSnap);
+			(DigiFunc)&SegmentEditor::SnapEndSegment, TR("Snap Other"),
+			(DigiFunc)&SegmentEditor::SnapSplit, TR("Snap Split"),
+			(DigiFunc)&SegmentEditor::StartEnteringPoints, TR("No Snapping"));
 	}
 }
 
@@ -2005,11 +2232,12 @@ int SegmentEditor::SnapAccept(Coord)
 		// Solution taken from SnapSplitPointAccept
 		ILWIS::Segment *seg = NULL;
 		long iAft = 0;
-		Coord crdSnap = sm->crdPoint(crdActNode,&seg,iAft);
+		Coord crdSnap = sm->crdPoint(crdActNode,&seg,iAft,rUNDEF);
 		// crdSnap is identical to crdActNode coz in ::SnapSplit crdActNode is set to this
 		// The only reason for doing the above line is to recalculate the iAft that is needed
 		// below to split the segment.
-		seg->segSplit(iAft, crdSnap);
+		if (seg && (iAft != iUNDEF))
+			seg->segSplit(iAft, crdSnap);
 		return EndSegment(crdSnap); // Not cLast; in case cLast != crdSnap; We mean crdSnap
 	}
 	return EndSegment(cLast);
@@ -2021,7 +2249,7 @@ int SegmentEditor::SnapSplit(Coord c)
 		return 1;
 	currentSeg = sm->segFirst();
 	long iAft = 0;
-	Coord crdSnap = sm->crdPoint(c,NULL,iAft);
+	Coord crdSnap = sm->crdPoint(c,&currentSeg,iAft,rUNDEF);
 	Coord cSnap = crdSnap;
 	double rD2 = rDist2(c, cSnap);
 	if (rD2 == rUNDEF || rD2 > sqr(sm->rSnapDist)) { 
@@ -2032,24 +2260,24 @@ int SegmentEditor::SnapSplit(Coord c)
 	// this would actually split the segment when choosing a snap point; split moved to ::SnapAccept
 	SetActNode(crdSnap);
 	MovePivot(cSnap);
-	return SetDigiFunc(SEDDigEndSegment, 
+	return SetDigiFunc(TR("End Segment"), 
 		(DigiFunc)&DigiEditor::MoveCursor,
-		(DigiFunc)&SegmentEditor::SnapAccept, SEDDigAccept,
-		(DigiFunc)&SegmentEditor::SnapEndSegment, SEDDigSnapOther,
-		(DigiFunc)&SegmentEditor::SnapSplit, SEDDigSnapSplit,
-		(DigiFunc)&SegmentEditor::StartEnteringPoints, SEDDigNoSnap);
+		(DigiFunc)&SegmentEditor::SnapAccept, TR("Accept"),
+		(DigiFunc)&SegmentEditor::SnapEndSegment, TR("Snap Other"),
+		(DigiFunc)&SegmentEditor::SnapSplit, TR("Snap Split"),
+		(DigiFunc)&SegmentEditor::StartEnteringPoints, TR("No Snapping"));
 }
 
 int SegmentEditor::StartEnteringPoints(Coord c)
 {
 	SetActNode(Coord()); // to clear the previously set active node (at SnapSplit)
 	iLastTick = GetTickCount();
-	return SetDigiFunc(SEDDigDigSegment,
+	return SetDigiFunc(TR("Digitize Segment"),
 		(DigiFunc)&SegmentEditor::MovePivot,
-		(DigiFunc)&SegmentEditor::EnterPoints, SEDDigEnterPoint,
-		(DigiFunc)&SegmentEditor::SnapEndSegment, SEDDigSnapEndSegment,
-		(DigiFunc)&SegmentEditor::EndSegment, SEDDigEndSegment,
-		(DigiFunc)&SegmentEditor::DeleteLastPoint, SEDDigDeleteLastPoint);
+		(DigiFunc)&SegmentEditor::EnterPoints, TR("Enter Point"),
+		(DigiFunc)&SegmentEditor::SnapEndSegment, TR("Snap End Segment"),
+		(DigiFunc)&SegmentEditor::EndSegment, TR("End Segment"),
+		(DigiFunc)&SegmentEditor::DeleteLastPoint, TR("Delete Last Point"));
 }
 
 int SegmentEditor::DeleteLastPoint(Coord crd)
@@ -2059,39 +2287,30 @@ int SegmentEditor::DeleteLastPoint(Coord crd)
 		return 1;
 	iLastTick = iTick;
 	MovePivot(cPivot);
-	iNrCoords -= 1;
-	if (iNrCoords == 0) {
-		coords.clear();
+	if (coords.size() > 0)
+		coords.pop_back();
+	if (coords.size() == 0) {
 		iLastButton = 0;
 		return AddSegments(crd);
 	}
-	if (iNrCoords < 0) {  // impossible, but just to be sure
-		iNrCoords = 0;
-		return 1;
-	}
-	cPivot = coords[iNrCoords-1];
-	zPoint pPivot = mpv->pntPos(cPivot);
-	zPoint pLast = mpv->pntPos(cLast);
-	CClientDC cdc(mpv);
-	Color c = SysColor(COLOR_WINDOW);
-	CPen pen(PS_SOLID,1,c);
-	CPen* penOld = cdc.SelectObject(&pen);
-	cdc.MoveTo(pPivot);
-	cdc.LineTo(pLast);
-	cdc.SelectObject(penOld);
+	cPivot = coords.back();
 	cLast = cPivot;
+	mpv->Invalidate();
 	return MovePivot(crd);
 }
 
 int SegmentEditor::TunnelSegment()
 {
   // remove old drawing
+  /*
   Color c = SysColor(COLOR_WINDOW);
 	CClientDC cdc(mpv);
   drawCoords(&cdc,c);
+  */
 
   // tunneling
   double rT2 = sqr(sm->rTunnelWidth);
+  long iNrCoords = coords.size();
   while (iNrCoords > 2) {
     int iLst = iNrCoords - 1;
     iNrCoords = 1;
@@ -2109,7 +2328,9 @@ int SegmentEditor::TunnelSegment()
       break;
   }
 
-  drawCoords(&cdc,col);
+  coords.resize(iNrCoords);
+
+  mpv->Invalidate();
   return 0;
 }
 
@@ -2124,11 +2345,10 @@ int SegmentEditor::MovePoints(Coord crd)
   SetActNode(Coord()); // to clear the previously set active node (at SnapSplit)
 //  else {
     fDigBusy = false;
-	/*if ( coords.size() > 0 ) {
+	if ( coords.size() > 0 ) {
 		MoveCursorPoint(Coord());
 		coords.clear();
-		iNrCoords = 0;
-	}*/
+	}
     dc = dcBOX;
     MoveCursor(crd);
     if (!fRetouching) {
@@ -2136,22 +2356,22 @@ int SegmentEditor::MovePoints(Coord crd)
       mpv->Invalidate();
     }
     ChangeWindowBasis = (DigiFunc)&SegmentEditor::MovePoints;
-    return SetDigiFunc(SEDDigMovePoints, (DigiFunc)&DigiEditor::MoveCursor,
+    return SetDigiFunc(TR("Move Points"), (DigiFunc)&DigiEditor::MoveCursor,
 		     NULL, "",
-		     (DigiFunc)&SegmentEditor::TakePoint, SEDDigTakePoint,
-		     (DigiFunc)&DigiEditor::ChangeWindow, SEDDigChangeWindow,
-		     (DigiFunc)&SegmentEditor::AddSegments, SEDDigReturn);
+		     (DigiFunc)&SegmentEditor::TakePoint, TR("Take Point"),
+		     (DigiFunc)&DigiEditor::ChangeWindow, TR("Change Window"),
+		     (DigiFunc)&SegmentEditor::AddSegments, TR("Return"));
 //  }		     
 }
 
 int SegmentEditor::TakePointMouse(Coord crd)
 {
-  ILWIS::Segment *seg = NULL;
   long iAft;
-  Coord crdSnap = sm->crdPoint(crd,NULL,iAft);
+  Coord crdSnap = sm->crdPoint(crd,NULL,iAft,rUNDEF);
   Coord cSnap = crdSnap;
-  zPoint p = mpv->pntPos(crd);
-  zPoint pSnap = mpv->pntPos(cSnap);
+  MapCompositionDoc* mcd = mpv->GetDocument();
+  zPoint p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),crd));
+  zPoint pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cSnap));
   zPoint pTst = pSnap - p;
   if (crdSnap.fUndef() || (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels))) {
     MessageBeep(MB_ICONASTERISK);
@@ -2167,77 +2387,42 @@ int SegmentEditor::TakePoint(Coord crd)
 	fDigBusy = true;
 	if (coords.size() > 0) {
 		MoveCursorPoint(Coord());
-		CClientDC cdc(mpv);
-		CPen pen(PS_SOLID,1,col);
-		CPen* penOld = cdc.SelectObject(&pen);
-		drawSegment(&cdc,currentSeg,false);
-		cdc.SelectObject(penOld);
 	}
 	Coord crd2 = crd;
-	crd2 = sm->crdCoord(crd, &currentSeg, iActCrd);
+	crd2 = sm->crdCoord(crd, &currentSeg, iActCrd, rUNDEF);
 	Coord cSnap = crd2;
 	if (rDist2(crd, cSnap) > sqr(sm->rSnapDist)) { 
 		MessageBeep(MB_ICONASTERISK);
 		if (coords.size() > 0) {
 			coords.clear();
-			iNrCoords = 0;
 			return MovePoints(crd);
 		}
 		return 0;
 	}
-	CoordinateSequence *buf = currentSeg->getCoordinates();
-	iNrCoords = buf->size();
 	coords.clear();
-	for (int i = 0; i < iNrCoords; ++i)
-		coords.push_back(buf->getAt(i));
+	if (currentSeg != 0) {
+		CoordinateSequence *buf = currentSeg->getCoordinates();
+		long iNrCoords = buf->size();	
+		for (int i = 0; i < iNrCoords; ++i)
+			coords.push_back(buf->getAt(i));
+		delete buf;
+	}
 	MoveCursorPoint(Coord());
-	CClientDC cdc(mpv);
-	CPen pen(PS_SOLID,1,colRetouch);
-	CPen* penOld = cdc.SelectObject(&pen);
-	MinMax mm;
-	drawSegment(&cdc,currentSeg,true);
-	cdc.SelectObject(penOld);
 	cLast = Coord();
 	cPivot = cSnap; // to allow mouse button up very close to here
-	return SetDigiFunc(SEDDigRetouchePoint, (DigiFunc)&SegmentEditor::MoveCursorPoint,
-		(DigiFunc)&SegmentEditor::NewPosPoint, SEDDigNewPosition,
-		(DigiFunc)&SegmentEditor::TakePoint, SEDDigTakePoint,
-		(DigiFunc)&SegmentEditor::SnapPoint, SEDDigSnap,
-		(DigiFunc)&SegmentEditor::MovePoints, SEDDigReturn);
-	delete buf;
+	return SetDigiFunc(TR("Retouch Point"), (DigiFunc)&SegmentEditor::MoveCursorPoint,
+		(DigiFunc)&SegmentEditor::NewPosPoint, TR("New Position"),
+		(DigiFunc)&SegmentEditor::TakePoint, TR("Take Point"),
+		(DigiFunc)&SegmentEditor::SnapPoint, TR("Snap"),
+		(DigiFunc)&SegmentEditor::MovePoints, TR("Return"));
 }
 
 int SegmentEditor::MoveCursorPoint(Coord crd)
 {
-	zPoint pCurr = mpv->pntPos(coords[iActCrd]);
 	bool fNew = !crd.fUndef();
 	if (fNew)
 		coords[iActCrd] = crd;
-	zPoint pNew = mpv->pntPos(crd);
-	zPoint pBef, pAft;
-	if (pCurr != pNew) {
-		CClientDC cdc(mpv);
-		cdc.SetROP2(R2_NOT);
-		if (iActCrd != 0) {
-			pBef = mpv->pntPos(coords[iActCrd - 1]);
-			cdc.MoveTo(pBef);
-			cdc.LineTo(pCurr);
-			if (fNew) {
-				cdc.MoveTo(pBef);
-				cdc.LineTo(pNew);
-			}
-		}
-		if (iActCrd != iNrCoords - 1) {
-			pAft = mpv->pntPos(coords[iActCrd + 1]);
-			cdc.MoveTo(pCurr);
-			cdc.LineTo(pAft);
-			if (fNew) {
-				cdc.MoveTo(pNew);
-				cdc.LineTo(pAft);
-			}
-		}
-		cdc.SetROP2(R2_COPYPEN);
-	}
+	mpv->Invalidate();
 	MoveCursor(crd);
 	return 0;
 }
@@ -2247,8 +2432,9 @@ int SegmentEditor::NewPosPointMouse(Coord crd)
   if (fAutoSnap) {
     Coord crdSnap = sm->crdNode(crd);
     Coord cSnap = crdSnap;
-    zPoint p = mpv->pntPos(crd);
-    zPoint pSnap = mpv->pntPos(cSnap);
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	zPoint p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),crd));
+	zPoint pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cSnap));
     zPoint pTst = pSnap - p;
     if (!crdSnap.fUndef() && (sqr((double)pTst.x) + sqr((double)pTst.y) <= sqr(iSnapPixels))) {
       return NewPosPoint(cSnap);
@@ -2261,23 +2447,15 @@ int SegmentEditor::NewPosPoint(Coord crd)
 {
   MoveCursorPoint(crd);
   removeDigCursor();
-	CClientDC cdc(mpv);
-  Color c = SysColor(COLOR_WINDOW);
-	CPen pen(PS_SOLID,1,c);
-	CPen* penOld = cdc.SelectObject(&pen);
-  drawSegment(&cdc,currentSeg,true);
-  cdc.SelectObject(penOld);
   coords[iActCrd] = crd;
-  CoordBuf buf(iNrCoords);
-  for (int i = 0; i < iNrCoords; ++i)
-    buf[i] = coords[i];
-  currentSeg->PutCoords(iNrCoords,buf);
+  if (currentSeg != 0) {
+	CoordBuf buf(coords.size());
+	for (int i = 0; i < coords.size(); ++i)
+		buf[i] = coords[i];
+	currentSeg->PutCoords(coords.size(),buf);
+  }
   sm->Updated();
-	CPen penCol(PS_SOLID,1,col);
-	penOld = cdc.SelectObject(&penCol);
-
-  drawSegment(&cdc,currentSeg,false);
-	cdc.SelectObject(penOld);
+  mpv->Invalidate();
   return MovePoints(Coord());
 }
 
@@ -2285,18 +2463,19 @@ int SegmentEditor::SnapPointMouse(Coord crd)
 {
   Coord crdSnap = sm->crdNode(crd);
   Coord cSnap = crdSnap;
-  zPoint p = mpv->pntPos(crd);
-  zPoint pSnap = mpv->pntPos(cSnap);
+  MapCompositionDoc* mcd = mpv->GetDocument();
+  zPoint p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),crd));
+  zPoint pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cSnap));
   zPoint pTst = pSnap - p;
   if (crdSnap.fUndef() || (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels))) {
     MessageBeep(MB_ICONASTERISK);
     ILWIS::Segment *seg = NULL;
     long iAft;
-    crdSnap = sm->crdPoint(crd,NULL,iAft);
+    crdSnap = sm->crdPoint(crd,&seg,iAft,rUNDEF);
     cSnap = crdSnap;
-    pSnap = mpv->pntPos(cSnap);
+	pSnap = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cSnap));
     pTst = pSnap - p;
-    if (crdSnap.fUndef() || (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels)))
+    if (crdSnap.fUndef() || (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels)) || (iAft == iUNDEF) || (seg == 0))
       return 0;
     if (0 != AskSplit(seg, iAft, crdSnap))
       return 0;
@@ -2312,38 +2491,39 @@ int SegmentEditor::SnapPoint(Coord crd)
     MessageBeep(MB_ICONASTERISK);
     return SnapSplitPoint(crd);
   }
-  if (iActCrd == 0 || iActCrd == iNrCoords - 1)
+  if (iActCrd == 0 || iActCrd == coords.size() - 1)
     return NewPosPoint(cSnap);
   NewPosPoint(cSnap);
-  currentSeg->segSplit(iActCrd, crdSnap);
+  if (currentSeg)
+	currentSeg->segSplit(iActCrd, crdSnap);
   return MovePoints(Coord());
 }
 
 int SegmentEditor::SnapSplitPoint(Coord crd)
 {
-  ILWIS::Segment *seg = NULL;
   long iAft;
-  Coord crdSnap = sm->crdPoint(crd,NULL,iAft);
+  Coord crdSnap = sm->crdPoint(crd,NULL,iAft,rUNDEF);
   Coord cSnap = crdSnap;
   if (rDist2(crd, cSnap) > sqr(sm->rSnapDist)) {
     MessageBeep(MB_ICONASTERISK);
     return MoveCursorPoint(crd);
   }
   SetActNode(crdSnap);
-  return SetDigiFunc(SEDDigRetouchePoint, (DigiFunc)&SegmentEditor::MoveCursorPoint,
-		     (DigiFunc)&SegmentEditor::SnapSplitPointAccept, SEDDigAccept,
-		     (DigiFunc)&SegmentEditor::SnapPoint, SEDDigSnap,
-		     (DigiFunc)&SegmentEditor::SnapSplitPoint, SEDDigSnapSplit,
-		     (DigiFunc)&SegmentEditor::MovePoints, SEDDigNoSnap);
+  return SetDigiFunc(TR("Retouch Point"), (DigiFunc)&SegmentEditor::MoveCursorPoint,
+		     (DigiFunc)&SegmentEditor::SnapSplitPointAccept, TR("Accept"),
+		     (DigiFunc)&SegmentEditor::SnapPoint, TR("Snap"),
+		     (DigiFunc)&SegmentEditor::SnapSplitPoint, TR("Snap Split"),
+		     (DigiFunc)&SegmentEditor::MovePoints, TR("No Snapping"));
 }
 
 int SegmentEditor::SnapSplitPointAccept(Coord)
 {
   ILWIS::Segment *seg = NULL;
   long iAft;
-  Coord crdSnap = sm->crdPoint(crdActNode,NULL,iAft);
+  Coord crdSnap = sm->crdPoint(crdActNode,&seg,iAft,rUNDEF);
   Coord cSnap = crdSnap;
-  seg->segSplit(iAft, crdSnap);
+  if (seg && (iAft != iUNDEF))
+    seg->segSplit(iAft, crdSnap);
   return SnapPoint(cSnap);
 }
 
@@ -2356,8 +2536,9 @@ int SegmentEditor::MergeSplit(Coord crd)
   Coord crd2 = crd;
   Coord crdNode = sm->crdNode(crd2);
   Coord cNode = crdNode;
-  zPoint p = mpv->pntPos(crd);
-  zPoint pFnd = mpv->pntPos(cNode);
+  MapCompositionDoc* mcd = mpv->GetDocument();
+  zPoint p = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),crd));
+  zPoint pFnd = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cNode));
   zPoint pTst = pFnd - p;
   if (!crdNode.fUndef() && (sqr((double)pTst.x) + sqr((double)pTst.y) <= sqr(iSnapPixels))) {
     AskMerge(crdNode);
@@ -2365,11 +2546,11 @@ int SegmentEditor::MergeSplit(Coord crd)
   else {
     long iAft;
 	ILWIS::Segment *seg = sm->segFirst();
-    crd2 = sm->crdPoint(crd, NULL, iAft);
+    crd2 = sm->crdPoint(crd, &seg, iAft, rUNDEF);
     Coord cFnd = crd2;
-    pFnd = mpv->pntPos(cFnd);
+	pFnd = mpv->pntPos(mcd->rootDrawer->glConv(sm->cs(),cFnd));
     pTst = pFnd - p;
-    if (sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels))
+    if ((sqr((double)pTst.x) + sqr((double)pTst.y) > sqr(iSnapPixels)) || (iAft == iUNDEF) || (seg == 0))
       MessageBeep(MB_ICONASTERISK);
     else
       iRet = AskSplit(seg, iAft, crd2);
@@ -2392,7 +2573,7 @@ void SegmentEditor::AskMerge(Coord crdNode)
 	  bool fEnd = seg->crdEnd() == crdNode;
 	  if (fBegin && fEnd) {
 		  MessageBeep(MB_ICONEXCLAMATION);
-		  mpv->MessageBox(SEDMsgNodeInCircSegNoRem.sVal(), SEDMsgSegEditor.sVal(), MB_ICONEXCLAMATION|MB_OK);
+		  mpv->MessageBox(TR("Cannot remove node in circular segment").c_str(), TR("Segment Editor").c_str(), MB_ICONEXCLAMATION|MB_OK);
 		  SetActNode(Coord());
 		  return;
 	  }
@@ -2406,7 +2587,7 @@ void SegmentEditor::AskMerge(Coord crdNode)
 			break;
 		default:
 			MessageBeep(MB_ICONEXCLAMATION);
-			mpv->MessageBox(SEDMsgMoreThan2SegNoRem.sVal(), SEDMsgSegEditor.sVal(), MB_ICONEXCLAMATION|MB_OK);
+			mpv->MessageBox(TR("Cannot remove node which is part of more than two segments").c_str(), TR("Segment Editor").c_str(), MB_ICONEXCLAMATION|MB_OK);
 			SetActNode(Coord());
 			return;
 		  }
@@ -2420,7 +2601,7 @@ void SegmentEditor::AskMerge(Coord crdNode)
       return;
     case 1:
       MessageBeep(MB_ICONEXCLAMATION);
-      mpv->MessageBox(SEDMsgDeadEndNoRem.sVal(), SEDMsgSegEditor.sVal(), MB_ICONEXCLAMATION|MB_OK);
+      mpv->MessageBox(TR("Cannot remove node which is only part of one segment").c_str(), TR("Segment Editor").c_str(), MB_ICONEXCLAMATION|MB_OK);
       SetActNode(Coord());
       return;
   }
@@ -2435,15 +2616,15 @@ void SegmentEditor::AskMerge(Coord crdNode)
 /*
   if (iNr1 + iNr2 > 1002) {
     MessageBeep(MB_ICONEXCLAMATION);
-    mpv->MessageBox(SEDMsgTogetherTooLongNoMerge.sVal(), SEDMsgSegEditor.sVal(), MB_ICONEXCLAMATION|MB_OK);
+    mpv->MessageBox(TR("The two segments have together more than 1000 points,\nthey cannot be merged").c_str(), TR("Segment Editor").c_str(), MB_ICONEXCLAMATION|MB_OK);
     SetActNode(Coord());
     return;
   }
 */
   sVal1 = seg1->sValue(sm->dvrs());
   sVal2 = seg2->sValue(sm->dvrs());
-  String sMsg(SEDMsgMergeSeg_SS.sVal(), sVal1, sVal2);
-  int iRet = mpv->MessageBox(sMsg.sVal(), SEDMsgSegEditor.sVal(), MB_ICONQUESTION|MB_YESNO);
+  String sMsg(TR("Merge Segment '%S' with '%S'?").c_str(), sVal1.sTrimSpaces(), sVal2.sTrimSpaces());
+  int iRet = mpv->MessageBox(sMsg.sVal(), TR("Segment Editor").c_str(), MB_ICONQUESTION|MB_YESNO);
   if (IDYES == iRet) {
     int i, j;
 		int iSize = iNr1 + iNr2;
@@ -2461,7 +2642,7 @@ void SegmentEditor::AskMerge(Coord crdNode)
       for (i = iNr2 - 2; i >= 0; --i, ++j)
 		  buf[j] = buf2->getAt(i);
     seg1->PutCoords(j, buf);
-    seg2->Delete();
+    seg2->Delete(true);
   }
   delete buf1;
   delete buf2;
@@ -2474,8 +2655,8 @@ int SegmentEditor::AskSplit(ILWIS::Segment *seg, long iAfter, Coord crdAt)
   SetActNode(crdAt);
 
   String sVal = seg->sValue(sm->dvrs());
-  String sMsg(SEDMsgSplitSeg_S.sVal(), sVal);
-  int iMsg = mpv->MessageBox(sMsg.sVal(), SEDMsgSegEditor.sVal(), MB_ICONQUESTION|MB_YESNO);
+  String sMsg(TR("Split Segment '%S'?").c_str(), sVal.sTrimSpaces());
+  int iMsg = mpv->MessageBox(sMsg.sVal(), TR("Segment Editor").c_str(), MB_ICONQUESTION|MB_YESNO);
   if (IDYES == iMsg) {
 	  ILWIS::Segment *s = CSEGMENT(sm->newFeature());
     seg->segSplit(iAfter, crdAt, &s);
@@ -2488,47 +2669,35 @@ int SegmentEditor::AskSplit(ILWIS::Segment *seg, long iAfter, Coord crdAt)
 
 void SegmentEditor::SetActNode(Coord crd)
 {
-	if (!crdActNode.fUndef())
-	{
-		zPoint pnt = mpv->pntPos(crdActNode);
-		zPoint p1(pnt.x-3, pnt.y-3);
-		zPoint p2(pnt.x+4, pnt.y+4);
-		zRect rect(p1, p2);
-		mpv->InvalidateRect(&rect);
-	}
   crdActNode = crd;
-  if (!crdActNode.fUndef())
-	{
-		CClientDC cdc(mpv);
-    drawActNode(&cdc);
-  }
+  mpv->Invalidate();
 }
 
 int SegmentEditor::SnapSplitSegment(Coord c)
 {
-  ILWIS::Segment *seg = NULL;
   long iAft;
-  Coord crdSnap = sm->crdPoint(c,NULL,iAft);
+  Coord crdSnap = sm->crdPoint(c,NULL,iAft,rUNDEF);
   Coord cSnap = crdSnap;
   if (rDist2(c, cSnap) > sqr(sm->rSnapDist)) {
     MessageBeep(MB_ICONASTERISK);
     return 0;
   }
   SetActNode(crdSnap);
-  return SetDigiFunc(SEDDigSplitSegment, (DigiFunc)&DigiEditor::MoveCursor,
-        	     (DigiFunc)&SegmentEditor::SnapSplitSegmentAccept, SEDDigAccept,
-		     (DigiFunc)&SegmentEditor::SnapSegment, SEDDigSnapSegment,
-		     (DigiFunc)&SegmentEditor::SnapSplitSegment, SEDDigSnapSplit,
-		     (DigiFunc)&SegmentEditor::AddSegments, SEDDigReturn);
+  return SetDigiFunc(TR("Split Segment"), (DigiFunc)&DigiEditor::MoveCursor,
+        	     (DigiFunc)&SegmentEditor::SnapSplitSegmentAccept, TR("Accept"),
+		     (DigiFunc)&SegmentEditor::SnapSegment, TR("Snap Segment"),
+		     (DigiFunc)&SegmentEditor::SnapSplitSegment, TR("Snap Split"),
+		     (DigiFunc)&SegmentEditor::AddSegments, TR("Return"));
 }
 
 int SegmentEditor::SnapSplitSegmentAccept(Coord c)
 {
   ILWIS::Segment *seg = NULL;
   long iAft;
-  Coord crdSnap = sm->crdPoint(crdActNode,NULL,iAft);
+  Coord crdSnap = sm->crdPoint(crdActNode,&seg,iAft,rUNDEF);
   Coord cSnap =crdSnap;
-  seg->segSplit(iAft, crdSnap);
+  if (seg && (iAft != iUNDEF))
+    seg->segSplit(iAft, crdSnap);
   return BeginSegment(cSnap);
 }
 
@@ -2537,23 +2706,23 @@ int SegmentEditor::SnapSplitSegmentAccept(Coord c)
   {
   public:
     SegConfigForm(CWnd* wPar, SegmentEditor* edit, int* iDrw, bool fDom)
-    : FormWithDest(wPar, SEDTitleCnfSegEdit)
+    : FormWithDest(wPar, TR("Customize Segment Editor"))
     {
-      new FieldColor(root, SEDUiCursorColor, &edit->colDig);
-      new CheckBox(root, SEDUiAutoSnap, &edit->fAutoSnap);
-      new CheckBox(root, SEDUiShowNodes, &edit->fShowNodes);
-      new FieldReal(root, SEDUiSnapTolerance, &edit->sm->rSnapDist);
-      new FieldInt(root, SEDUiSnapPixels, &edit->iSnapPixels, ValueRange(2,30), true);
-      new FieldReal(root, SEDUiTunnelTolerance, &edit->sm->rTunnelWidth);
-      new FieldColor(root, SEDUiNormalColor, &edit->col);
-      new FieldColor(root, SEDUiRetoucheColor, &edit->colRetouch);
-      new FieldColor(root, SEDUiDeletedColor, &edit->colDeleted);
-			new FieldColor(root, SEDUiFindUndefColor, &edit->colFindUndef);
-      RadioGroup* rg = new RadioGroup(root, SEDUiSegmentColors, iDrw);
-      new RadioButton(rg, SEDUiNormal);
+      new FieldColor(root, TR("&Color Digitizer Cursor"), &edit->colDig);
+      new CheckBox(root, TR("&Auto Snap"), &edit->fAutoSnap);
+      new CheckBox(root, TR("Show &Nodes"), &edit->fShowNodes);
+      new FieldReal(root, TR("&Snap tolerance (m)"), &edit->sm->rSnapDist);
+      new FieldInt(root, TR("&Snap tolerance (pixels)"), &edit->iSnapPixels, ValueRange(2,30), true);
+      new FieldReal(root, TR("&Tunnel tolerance (m)"), &edit->sm->rTunnelWidth);
+      new FieldColor(root, TR("&Normal color"), &edit->col);
+      new FieldColor(root, TR("&Retouch color"), &edit->colRetouch);
+      new FieldColor(root, TR("&Deleted color"), &edit->colDeleted);
+      new FieldColor(root, TR("Find &Undef color"), &edit->colFindUndef);
+      RadioGroup* rg = new RadioGroup(root, TR("Segment colors"), iDrw);
+      new RadioButton(rg, TR("&Normal"));
       if (fDom)
-        new RadioButton(rg, SEDUiSegDomain);
-      new RadioButton(rg, SEDUiPrimCol);
+        new RadioButton(rg, TR("&Domain"));
+      new RadioButton(rg, TR("&Primary Colors"));
 //      SetHelpTopic(htpSegmentEditor);
       SetHelpItem("ilwismen\\segment_editor_customize.htm");
       create();
@@ -2613,54 +2782,54 @@ class CreatePolForm: public FormWithDest
 {
 public:
   CreatePolForm(CWnd* wnd, const String& sDfltMap, const String& sMsk)
-  : FormWithDest(wnd, SAFTitlePolMapFromSeg),
+  : FormWithDest(wnd, TR("Polygonize Segment Map")),
     sOutMap(sDfltMap), sMask(sMsk)
   {									
 		iImg = IlwWinApp()->iImage("ExePol16Ico");
     fMask = sMask.length() > 0;
 		fTopology = true;
 		iOption = 0;
-    CheckBox* cbMask = new CheckBox(root, SAFUiMask, &fMask);
+    CheckBox* cbMask = new CheckBox(root, TR("&Mask"), &fMask);
     new FieldString(cbMask, "", &sMask);
 
-		cbTopology = new CheckBox(root, SAFUiTopology, &fTopology);
+		cbTopology = new CheckBox(root, TR("&Topology"), &fTopology);
 		cbTopology->Align(cbMask, AL_UNDER);
 		cbTopology->SetCallBack((NotifyProc)&CreatePolForm::CallBack);
 
 		fgTop = new FieldGroup(root);
 		fgTop->Align(cbTopology, AL_UNDER);
 
-    RadioGroup* rg = new RadioGroup(fgTop, SAFUiPolCodes, &iOption);
+    RadioGroup* rg = new RadioGroup(fgTop, TR("Polygon &Codes:"), &iOption);
 		rg->SetCallBack((NotifyProc)&CreatePolForm::CallBackOption);
-    RadioButton* rbDom = new RadioButton(rg, SAFUiDomain);
+    RadioButton* rbDom = new RadioButton(rg, TR("&Domain"));
     new FieldDomainC(rbDom, "", &sDomain, dmCLASS|dmIDENT|dmVALUE|dmBOOL);
-    RadioButton* rbLbl = new RadioButton(rg, SAFUiLabelPnts);
+    RadioButton* rbLbl = new RadioButton(rg, TR("&Label Points"));
     new FieldPointMap(rbLbl, "", &sPointMap);
-    new RadioButton(rg, SAFUiPolAutoIdent);
+    new RadioButton(rg, TR("&Unique Identifiers"));
 
 		fgNonTop = new FieldGroup(root);
 		fgNonTop->Align(cbTopology, AL_UNDER);
 
-    rg = new RadioGroup(fgNonTop, SAFUiPolCodes, &iOption);
+    rg = new RadioGroup(fgNonTop, TR("Polygon &Codes:"), &iOption);
 		rg->SetCallBack((NotifyProc)&CreatePolForm::CallBackOption);
-	  rbDom = new RadioButton(rg, SAFUiDomain);
+	  rbDom = new RadioButton(rg, TR("&Domain"));
     new FieldDomainC(rbDom, "", &sDomain, dmCLASS|dmIDENT|dmVALUE|dmBOOL);
-		new RadioButton(rg, SAFUiUseSegCode);
-    rbLbl = new RadioButton(rg, SAFUiLabelPnts);
+		new RadioButton(rg, TR("&Segment Codes"));
+    rbLbl = new RadioButton(rg, TR("&Label Points"));
     new FieldPointMap(rbLbl, "", &sPointMap);
-    new RadioButton(rg, SAFUiPolAutoIdent);
+    new RadioButton(rg, TR("&Unique Identifiers"));
 
-    fmc = new FieldPolygonMapCreate(root, SAFUiOutPolMap, &sOutMap);
+    fmc = new FieldPolygonMapCreate(root, TR("&Output Polygon Map"), &sOutMap);
     fmc->SetCallBack((NotifyProc)&CreatePolForm::CallBackName);
 
     fStartEdit = true;
     fShow = true;
-    cbEdit = new CheckBox(root, SAFUiEdit, &fStartEdit);
+    cbEdit = new CheckBox(root, TR("&Edit"), &fStartEdit);
     cbEdit->Align(fmc, AL_AFTER);
-    cbShow = new CheckBox(root, SAFUiShow, &fShow);
+    cbShow = new CheckBox(root, TR("&Show"), &fShow);
     cbShow->Align(fmc, AL_AFTER);
 
-    StaticText* st = new StaticText(root, SAFUiDescription);
+    StaticText* st = new StaticText(root, TR("&Description:"));
     st->Align(fmc, AL_UNDER);
     st->psn->SetBound(0,0,0,0);
     FieldString* fs = new FieldString(root, "", &sDescr);
@@ -2681,9 +2850,9 @@ public:
     fn.sExt = ".mpa";
     bool fOk = false;
     if (!fn.fValid())
-      stRemark->SetVal(SAFRemNotValidMapName);
+      stRemark->SetVal(TR("Not a valid map name"));
     else if(File::fExist(fn))
-      stRemark->SetVal(SAFRemMapExists);
+      stRemark->SetVal(TR("Map already exists"));
     else {
       fOk = true;
       stRemark->SetVal("");
@@ -2749,14 +2918,14 @@ void SegmentEditor::OnPolygonize()
   FileName fn(frm.sOutMap);
   fn.sExt = ".mpa";
   if (fn.fExist()) {
-    String sErr(SAFMsgAlreadyExistsOverwrite_S.sVal(), fn.sFullPath(true));
-    int iRet = mpv->MessageBox(sErr.sVal(), SAFMsgAlreadyExists.sVal(), MB_YESNO|MB_ICONEXCLAMATION);
+    String sErr(TR("File \"%S\" already exists.\nOverwrite?").c_str(), fn.sFullPath(true));
+    int iRet = mpv->MessageBox(sErr.sVal(), TR("File already exists").c_str(), MB_YESNO|MB_ICONEXCLAMATION);
     if (IDYES != iRet)
       return;
   }
 
 //  YieldActive ya;
-  Tranquilizer trq(SEDMsgCheckSegments);
+  Tranquilizer trq(TR("Check Segments"));
 
 	if (frm.fTopology) {
 	// Check Individual segments
@@ -2847,7 +3016,7 @@ void SegmentEditor::OnPolygonize()
 				// remove SegmentDrawer before editor Polygon Map
 				if (Editor::drw) {
 					MapCompositionDoc* mcd = mpv->GetDocument();
-					//mcd->RemoveDrawer(Editor::drw);
+					mcd->RemoveDrawer(Editor::drw);
 					Editor::drw = 0;
 				}
 				mpv->SetFocus();
@@ -2864,7 +3033,7 @@ void SegmentEditor::OnPolygonize()
 bool SegmentEditor::fCheckSelf(Tranquilizer& trq, long iStartSeg) // returns true if ok
 {
 	SetActNode(Coord());
-	trq.SetText(SEDMsgSelfCheck);
+	trq.SetText(TR("Self Overlap Check"));
 	Mask mask(sm->dm(), sMask);
 	bool fMask = sMask.length() > 0;
 	if (trq.fUpdate(iStartSeg, sm->iFeatures()))
@@ -2885,9 +3054,9 @@ bool SegmentEditor::fCheckSelf(Tranquilizer& trq, long iStartSeg) // returns tru
 			MessageBeep(MB_ICONEXCLAMATION);
 			String sVal = String("%S (nr %i)", seg->sValue(sm->dvrs()), j);
 			if (-1 == iFirst) { // self overlay
-				String sMsg(SEDMsgSegSelfOverlay_S.sVal(), sVal);
-				String str("%S\n%S", sMsg, SEDMsgZoomInOnError);
-				int iRet = mpv->MessageBox(str.sVal(), SEDMsgCheckSegments.sVal(), MB_ICONEXCLAMATION|MB_YESNO);
+				String sMsg(TR("Segment %S overlays itself").c_str(), sVal);
+				String str("%S\n%S", sMsg, TR("Zoom in on error?"));
+				int iRet = mpv->MessageBox(str.sVal(), TR("Check Segments").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 				if (IDYES == iRet)
 					ZoomInOnError();
 				Mode(modeMOVE);
@@ -2895,11 +3064,11 @@ bool SegmentEditor::fCheckSelf(Tranquilizer& trq, long iStartSeg) // returns tru
 				return false;
 			}
 			else { // self cross
-				int iRet = mpv->MessageBox(SEDMsgZoomInOnError.sVal(), SEDMsgCheckSegments.sVal(), MB_ICONEXCLAMATION|MB_YESNO);
+				int iRet = mpv->MessageBox(TR("Zoom in on error?").c_str(), TR("Check Segments").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 				if (IDYES == iRet)
 					ZoomInOnError();
-				String sMsg(SEDMsgSegSelfCrossRemFalsePol_S.sVal(), sVal);
-				iRet = mpv->MessageBox(sMsg.sVal(), SEDMsgCheckSegments.sVal(), MB_ICONEXCLAMATION|MB_YESNOCANCEL);
+				String sMsg(TR("Segment %S crosses itself\nRemove false polygon?").c_str(), sVal);
+				iRet = mpv->MessageBox(sMsg.sVal(), TR("Check Segments").c_str(), MB_ICONEXCLAMATION|MB_YESNOCANCEL);
 				if (IDYES == iRet) {
 					seg->segSplit(iSecond, crdAt);
 					ILWIS::Segment *s = CSEGMENT(sm->newFeature());
@@ -2909,9 +3078,9 @@ bool SegmentEditor::fCheckSelf(Tranquilizer& trq, long iStartSeg) // returns tru
 						s = seg;
 						seg = sTmp;
 					}
-					SetDirty(s);
-					s->Delete();
+					s->Delete(true);
 					trq.Start();
+					mpv->Invalidate();
 					continue;
 				}
 				else if (IDNO == iRet) {
@@ -2937,7 +3106,7 @@ bool SegmentEditor::fCheckSelf(Tranquilizer& trq, long iStartSeg) // returns tru
 bool SegmentEditor::fCheckConnected(Tranquilizer& trq, long iStartSeg) // returns true if ok
 {
 	SetActNode(Coord());
-	trq.SetText(SEDMsgConnectCheck);
+	trq.SetText(TR("Check Dead Ends"));
 	Mask mask(sm->dm(), sMask);
 	bool fMask = sMask.length() > 0;
 	if (trq.fUpdate(iStartSeg, sm->iFeatures()))
@@ -2979,9 +3148,9 @@ bool SegmentEditor::fCheckConnected(Tranquilizer& trq, long iStartSeg) // return
 				SetActNode(crdBegin);
 				MessageBeep(MB_ICONEXCLAMATION);
 				String sVal = String("%S (nr %i)", seg->sValue(sm->dvrs()), j);
-				String sMsg(SEDMsgSegSelfOverlay_S.sVal(), sVal);
-				String str("%S\n%S", sMsg, SEDMsgZoomInOnError);
-				int iRet = mpv->MessageBox(str.sVal(), SEDMsgCheckSegments.sVal(), MB_ICONEXCLAMATION|MB_YESNO);
+				String sMsg(TR("Segment %S overlays itself").c_str(), sVal);
+				String str("%S\n%S", sMsg, TR("Zoom in on error?"));
+				int iRet = mpv->MessageBox(str.sVal(), TR("Check Segments").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 				if (IDYES == iRet)
 					ZoomInOnError();
 				Mode(modeMOVE);
@@ -3034,9 +3203,9 @@ bool SegmentEditor::fCheckConnected(Tranquilizer& trq, long iStartSeg) // return
 				trq.Stop();
 				MessageBeep(MB_ICONEXCLAMATION);
 				String sVal = String("%S (nr %i)", seg->sValue(sm->dvrs()), i);
-				String sMsg(SEDMsgSegOverlayAtNode_S.sVal(), sVal);
-				String str("%S\n%S", sMsg, SEDMsgZoomInOnError);
-				int iRet = mpv->MessageBox(str.sVal(), SEDMsgCheckSegments.sVal(), MB_ICONEXCLAMATION|MB_YESNO);
+				String sMsg(TR("Segment %S overlays at node").c_str(), sVal);
+				String str("%S\n%S", sMsg, TR("Zoom in on error?"));
+				int iRet = mpv->MessageBox(str.sVal(), TR("Check Segments").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 				if (IDYES == iRet)
 					ZoomInOnError();
 				Mode(modeMOVE);
@@ -3055,9 +3224,9 @@ bool SegmentEditor::fCheckConnected(Tranquilizer& trq, long iStartSeg) // return
 			trq.Stop();
 			MessageBeep(MB_ICONEXCLAMATION);
 			String sVal = String("%S (nr %i)", seg->sValue(sm->dvrs()), j);
-			String sMsg(SEDMsgSegDeadEnd_S.sVal(), sVal);
-			String str("%S\n%S", sMsg, SEDMsgZoomInOnError);
-			int iRet = mpv->MessageBox(str.sVal(), SEDMsgCheckSegments.sVal(), MB_ICONEXCLAMATION|MB_YESNO);
+			String sMsg(TR("Dead end in Segment %S").c_str(), sVal);
+			String str("%S\n%S", sMsg, TR("Zoom in on error?"));
+			int iRet = mpv->MessageBox(str.sVal(), TR("Check Segments").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 			if (IDYES == iRet)
 				ZoomInOnError();
 			Mode(modeMOVE);
@@ -3078,7 +3247,7 @@ bool SegmentEditor::fCheckConnected(Tranquilizer& trq, long iStartSeg) // return
 bool SegmentEditor::fCheckIntersects(Tranquilizer& trq, long iStartSeg) // returns true if ok
 {
 	SetActNode(Coord());
-	trq.SetText(SEDMsgIntersectCheck);
+	trq.SetText(TR("Check Intersections"));
 	Mask mask(sm->dm(), sMask);
 	bool fMask = sMask.length() > 0;
 	if (trq.fUpdate(iStartSeg, sm->iFeatures()))
@@ -3128,9 +3297,9 @@ bool SegmentEditor::fCheckIntersects(Tranquilizer& trq, long iStartSeg) // retur
 					MessageBeep(MB_ICONEXCLAMATION);
 					String sVal = String("%S (nr %i)", seg->sValue(sm->dvrs()), i);
 					if (fOverlay) {
-						String sMsg(SEDMsgSegOverlayingSeg_S.sVal(), sVal);
-						String str("%S\n%S", sMsg, SEDMsgZoomInOnError);
-						int iRet = mpv->MessageBox(str.sVal(), SEDMsgCheckSegments.sVal(), MB_ICONEXCLAMATION|MB_YESNO);
+						String sMsg(TR("Segment %S overlays another segment").c_str(), sVal);
+						String str("%S\n%S", sMsg, TR("Zoom in on error?"));
+						int iRet = mpv->MessageBox(str.sVal(), TR("Check Segments").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 						if (IDYES == iRet)
 							ZoomInOnError();
 						Mode(modeMOVE);
@@ -3138,11 +3307,11 @@ bool SegmentEditor::fCheckIntersects(Tranquilizer& trq, long iStartSeg) // retur
 						return false;
 					}
 					else {
-						int iRet = mpv->MessageBox(SEDMsgZoomInOnError.sVal(), SEDMsgCheckSegments.sVal(), MB_ICONEXCLAMATION|MB_YESNO);
+						int iRet = mpv->MessageBox(TR("Zoom in on error?").c_str(), TR("Check Segments").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 						if (IDYES == iRet)
 							ZoomInOnError();
-						String sMsg(SEDMsgSegIntersectWithoutNodeSplitSeg_S.sVal(), sVal);
-						iRet = mpv->MessageBox(sMsg.sVal(), SEDMsgCheckSegments.sVal(), MB_ICONEXCLAMATION|MB_YESNO);
+						String sMsg(TR("Intersection without node in Segment %S\nSplit segments?").c_str(), sVal);
+						iRet = mpv->MessageBox(sMsg.sVal(), TR("Check Segments").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 						if (IDYES == iRet) {
 							seg->segSplit(iAft, crdAt);
 							s2->segSplit(iAft2, crdAt);
@@ -3170,7 +3339,7 @@ bool SegmentEditor::fCheckIntersects(Tranquilizer& trq, long iStartSeg) // retur
 bool SegmentEditor::fCheckCodeConsistency(Tranquilizer& trq, long iStartSeg)
 {
 	SetActNode(Coord());
-	trq.SetText(SEDMsgCheckCodeConsistency);
+	trq.SetText(TR("Check Code Consistency"));
 	Mask mask(sm->dm(), sMask);
 	bool fMask = sMask.length() > 0;
 	if (trq.fUpdate(iStartSeg, sm->iFeatures()))
@@ -3207,9 +3376,9 @@ bool SegmentEditor::fCheckCodeConsistency(Tranquilizer& trq, long iStartSeg)
 					else
 						SetActNode(crdEnd);
 					MessageBeep(MB_ICONEXCLAMATION);
-					String sMsg(SEDMsgDifferentCodes_SS.sVal(), sVal, s->sValue(sm->dvrs()));
-					String str("%S\n%S", sMsg, SEDMsgZoomInOnError);
-					int iRet = mpv->MessageBox(str.sVal(), SEDMsgCheckSegments.sVal(), MB_ICONEXCLAMATION|MB_YESNO);
+					String sMsg(TR("Different codes '%S' and '%S' at node").c_str(), sVal, s->sValue(sm->dvrs()));
+					String str("%S\n%S", sMsg, TR("Zoom in on error?"));
+					int iRet = mpv->MessageBox(str.sVal(), TR("Check Segments").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 					if (IDYES == iRet)
 						ZoomInOnError();
 					Mode(modeSELECT);
@@ -3230,7 +3399,7 @@ bool SegmentEditor::fCheckCodeConsistency(Tranquilizer& trq, long iStartSeg)
 bool SegmentEditor::fCheckClosedSegments(Tranquilizer& trq, long iStartSeg)
 {
 	SetActNode(Coord());
-	trq.SetText(SEDMsgCheckClosedSegments);
+	trq.SetText(TR("Check for non-topological polygonization"));
 	Mask mask(sm->dm(), sMask);
 	bool fMask = sMask.length() > 0;
 	if (trq.fUpdate(iStartSeg, sm->iFeatures()))
@@ -3249,9 +3418,9 @@ bool SegmentEditor::fCheckClosedSegments(Tranquilizer& trq, long iStartSeg)
 			trq.Stop();
 			SetActNode(crdEnd);
 			MessageBeep(MB_ICONEXCLAMATION);
-			String sMsg(SEDMsgSegNotClosed_S.scVal(), String("%S (nr %i)", seg->sValue(sm->dvrs()), j));
-			String str("%S\n%S", sMsg, SEDMsgZoomInOnError);
-			int iRet = mpv->MessageBox(str.sVal(), SEDMsgCheckSegments.sVal(), MB_ICONEXCLAMATION|MB_YESNO);
+			String sMsg(TR("Segment %S is not closed").c_str(), String("%S (nr %i)", seg->sValue(sm->dvrs()), j));
+			String str("%S\n%S", sMsg, TR("Zoom in on error?"));
+			int iRet = mpv->MessageBox(str.sVal(), TR("Check Segments").c_str(), MB_ICONEXCLAMATION|MB_YESNO);
 			if (IDYES == iRet)
 				ZoomInOnError();
 			return false;
@@ -3267,13 +3436,13 @@ class AskStartSegForm: public FormWithDest
 public:
   AskStartSegForm(CWnd* wnd, const String& sRemark,
                   String* sMsk, long iMax, long* iStartSeg, const String& htp)
-  : FormWithDest(wnd, SEDMsgCheckSegments),
+  : FormWithDest(wnd, TR("Check Segments")),
     iStart(iStartSeg), sMask(sMsk)
   {
     StaticText* st = new StaticText(root, sRemark);
     st->SetIndependentPos();
     fMask = sMask->length() > 0;
-    CheckBox* cbMask = new CheckBox(root, SAFUiMask, &fMask);
+    CheckBox* cbMask = new CheckBox(root, TR("&Mask"), &fMask);
     new FieldString(cbMask, "", sMask);
     iOption = 0;
     if (*iStartSeg < 0)
@@ -3282,8 +3451,8 @@ public:
 //      iOption = 1;
     RadioGroup* rg = new RadioGroup(root, "", &iOption);
     rg->Align(cbMask, AL_UNDER);
-    new RadioButton(rg, SEDUiStartBegin);
-    RadioButton* rb = new RadioButton(rg, SEDUiStartSegNum);
+    new RadioButton(rg, TR("Start at &Begin"));
+    RadioButton* rb = new RadioButton(rg, TR("Start at &Number"));
     RangeInt ri(1, iMax);
     new FieldInt(rb, "", iStart, ri, true);
     SetHelpItem(htp);
@@ -3309,77 +3478,77 @@ private:
 void SegmentEditor::OnCheckSelf()
 {
   long iStart = 0;
-  AskStartSegForm frm(mpv, SEDMsgSelfCheck, &sMask, sm->iFeatures()-1, &iStart,
+  AskStartSegForm frm(mpv, TR("Self Overlap Check"), &sMask, sm->iFeatures()-1, &iStart,
                       "ilwismen\\check_segments_self_overlap.htm");
   if (frm.fOkClicked()) {
 //    YieldActive ya;
-    Tranquilizer trq(SEDMsgCheckSegments);
+    Tranquilizer trq(TR("Check Segments"));
 		if (fCheckSelf(trq, iStart))
-	    mpv->MessageBox(SEDMsgOkSelfCheck.scVal(),SEDErrSegEditor.sVal(),MB_OK|MB_ICONINFORMATION);
+			mpv->MessageBox(TR("OK: Segments are not overlapping themselves").c_str(),TR("Segment Editor").c_str(),MB_OK|MB_ICONINFORMATION);
   }
 }
 
 void SegmentEditor::OnCheckConnected()
 {
   long iStart = 0;
-  AskStartSegForm frm(mpv, SEDMsgConnectCheck, &sMask, sm->iFeatures()-1, &iStart,
+  AskStartSegForm frm(mpv, TR("Check Dead Ends"), &sMask, sm->iFeatures()-1, &iStart,
                       "ilwismen\\check_segments_dead_ends.htm");
   if (frm.fOkClicked()) {
   //  YieldActive ya;
-    Tranquilizer trq(SEDMsgCheckSegments);
+    Tranquilizer trq(TR("Check Segments"));
     if (fCheckConnected(trq, iStart))
-	    mpv->MessageBox(SEDMsgOkCheckConnected.scVal(),SEDErrSegEditor.sVal(),MB_OK|MB_ICONINFORMATION);
+	    mpv->MessageBox(TR("OK: No segments found with dead ends").c_str(),TR("Segment Editor").c_str(),MB_OK|MB_ICONINFORMATION);
   }
 }
 
 void SegmentEditor::OnCheckIntersects()
 {
   long iStart = 0;
-  AskStartSegForm frm(mpv, SEDMsgIntersectCheck, &sMask, sm->iFeatures()-1, &iStart,
+  AskStartSegForm frm(mpv, TR("Check Intersections"), &sMask, sm->iFeatures()-1, &iStart,
                       "ilwismen\\check_segments_intersections.htm");
   if (frm.fOkClicked()) {
   //  YieldActive ya;
-    Tranquilizer trq(SEDMsgCheckSegments);
+    Tranquilizer trq(TR("Check Segments"));
     if (fCheckIntersects(trq, iStart))
-	    mpv->MessageBox(SEDMsgOkIntersects.scVal(),SEDErrSegEditor.sVal(),MB_OK|MB_ICONINFORMATION);
+	    mpv->MessageBox(TR("OK: No intersections found without nodes").c_str(),TR("Segment Editor").c_str(),MB_OK|MB_ICONINFORMATION);
   }
 }
 
 void SegmentEditor::OnCheckCodeConsistency()
 {
   long iStart = 0;
-  AskStartSegForm frm(mpv, SEDMsgCheckCodeConsistency, &sMask, sm->iFeatures()-1, &iStart,
+  AskStartSegForm frm(mpv, TR("Check Code Consistency"), &sMask, sm->iFeatures()-1, &iStart,
                       "ilwismen\\check_segments_code_consistency.htm");
   if (frm.fOkClicked()) {
   //  YieldActive ya;
-    Tranquilizer trq(SEDMsgCheckSegments);
+    Tranquilizer trq(TR("Check Segments"));
     if (fCheckCodeConsistency(trq, iStart))
-	    mpv->MessageBox(SEDMsgOkCodeConsistency.scVal(),SEDErrSegEditor.sVal(),MB_OK|MB_ICONINFORMATION);
+	    mpv->MessageBox(TR("OK: Codes are consistent at all nodes").c_str(),TR("Segment Editor").c_str(),MB_OK|MB_ICONINFORMATION);
   }
 }
 
 void SegmentEditor::OnCheckClosedSegments()
 {
   long iStart = 0;
-  AskStartSegForm frm(mpv, SEDMsgCheckClosedSegments, &sMask, sm->iFeatures()-1, &iStart,
+  AskStartSegForm frm(mpv, TR("Check for non-topological polygonization"), &sMask, sm->iFeatures()-1, &iStart,
                       "ilwismen\\check_segments_closed_segments.htm");
   if (frm.fOkClicked()) {
   //  YieldActive ya;
-    Tranquilizer trq(SEDMsgCheckSegments);
+    Tranquilizer trq(TR("Check Segments"));
     if (fCheckClosedSegments(trq, iStart))
-	    mpv->MessageBox(SEDMsgOkClosedSegments.scVal(),SEDErrSegEditor.sVal(),MB_OK|MB_ICONINFORMATION);
+	    mpv->MessageBox(TR("OK: All segments are closed").c_str(),TR("Segment Editor").c_str(),MB_OK|MB_ICONINFORMATION);
   }
 }
 
 void SegmentEditor::OnRemoveRedundantNodes()
 {
-  int iRet = mpv->MessageBox(SEDMsgRemoveRedundantNodes.sVal(),
-        SEDMsgSegEditor.sVal(), MB_ICONQUESTION|MB_OKCANCEL);
+  int iRet = mpv->MessageBox(TR("Remove Redundant Nodes?").c_str(),
+        TR("Segment Editor").c_str(), MB_ICONQUESTION|MB_OKCANCEL);
   if (IDOK == iRet) {
     for (SLIter<ILWIS::Segment *> iter(&segList); iter.fValid(); iter.first())
       iter.remove();
 		CWaitCursor curWait;
-    Tranquilizer trq(SEDMsgSegEditor);
+    Tranquilizer trq(TR("Segment Editor"));
     sm->RemoveRedundantNodes(trq);
     mpv->Invalidate();
   }
@@ -3392,14 +3561,14 @@ zIcon SegmentEditor::icon() const
 
 String SegmentEditor::sTitle() const
 {
-  String s(SEDTitleSegEditor_s.sVal(), sm->sName());
+  String s(TR("Segment Editor: %S").c_str(), sm->sName());
 	return s;
 }
 
 void SegmentEditor::OnUndoAllChanges()
 {
-	int iRet = mpv->MessageBox( SEDMsgSegMapUndoAll.sVal(),
-				SEDMsgSegEditor.sVal(), MB_ICONQUESTION|MB_OKCANCEL|MB_DEFBUTTON2);
+	int iRet = mpv->MessageBox( TR("Undo all changes in Segment Map,\nContinue?").c_str(),
+				TR("Segment Editor").c_str(), MB_ICONQUESTION|MB_OKCANCEL|MB_DEFBUTTON2);
 	if (IDOK == iRet) {
     for (SLIter<ILWIS::Segment *> iter(&segList); iter.fValid(); iter.first())
       iter.remove();
@@ -3446,17 +3615,17 @@ class EditBoundsForm: public FormWithDest
 {
 public:
   EditBoundsForm(CWnd* wPar, SegmentMap segmap, CoordBounds* cb, bool* fAdaptWindow)
-  : FormWithDest(wPar, SCSTitleBoundaries)
+  : FormWithDest(wPar, TR("Boundaries"))
   , sm(segmap)
   , cbRef(cb)
   , fDefaultCalculated(false)
   {
 		iImg = IlwWinApp()->iImage(".mps");
 
-    fcMin = new FieldCoord(root, SCSUiMinXY, &cb->cMin);
-    fcMax = new FieldCoord(root, SCSUiMaxXY, &cb->cMax);
-    new PushButton(root, SEDUiDefault, (NotifyProc)&EditBoundsForm::DefaultButton);
-    new CheckBox(root, SEDUiAdaptWindow, fAdaptWindow);
+    fcMin = new FieldCoord(root, TR("&Min X, Y"), &cb->cMin);
+    fcMax = new FieldCoord(root, TR("&Max X, Y"), &cb->cMax);
+    new PushButton(root, TR("&Default"), (NotifyProc)&EditBoundsForm::DefaultButton);
+    new CheckBox(root, TR("&Adapt Window"), fAdaptWindow);
     SetHelpItem("ilwismen\\segment_editor_bounds_of_map.htm");
     create();
   }
@@ -3509,7 +3678,7 @@ void SegmentEditor::OnSetBoundaries()
 		sm->SetCoordBounds(cb);
 		if (fAdaptWindow) 
 		{
-			pane()->GetDocument()->SetBounds(cb);
+			pane()->GetDocument()->rootDrawer->setCoordBoundsMap(cb); // TODO: cConv / cbConv
 			pane()->OnEntireMap();
 		}
 	}

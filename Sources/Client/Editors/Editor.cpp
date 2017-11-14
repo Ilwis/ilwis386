@@ -50,7 +50,6 @@
 #include "Client\Editors\Map\EditField.h"
 #include "Engine\Domain\Dmvalue.h"
 #include "Engine\Domain\dmsort.h"
-#include "Headers\Hs\Editor.hs"
 #include "Client\FormElements\fldval.h"
 #include "Client\Base\datawind.h"
 #include "Client\Mapwindow\MapWindow.h"
@@ -80,6 +79,7 @@ END_MESSAGE_MAP()
 Editor::Editor(MapPaneView* mappaneview)
 : mpv(mappaneview)
 , wEditField(0)
+, fDrawerActive(false)
 {
 	fOk = true;
 	hmenFile = 0;
@@ -156,6 +156,11 @@ bool Editor::OnLButtonDblClk(UINT nFlags, CPoint point)
 	return true;
 }
 
+bool Editor::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	return false;
+}
+
 bool Editor::OnMouseMove(UINT nFlags, CPoint point)
 {
 	return false;
@@ -204,13 +209,13 @@ void Editor::EndBusy()
 {
 }  
 
-int Editor::AskValue(const String& sRemark, unsigned int htp)
+int Editor::AskValue(const String& sRemark, const String& htp)
 {
   class AskValueForm: public FormWithDest
   {
   public:
     AskValueForm(CWnd* parent, const String& sRemark, const String& sQuestion, 
-                 DomainValueRangeStruct& dvrs, String* sVal, unsigned int htp)
+                 DomainValueRangeStruct& dvrs, String* sVal, String htp)
     : FormWithDest(parent, TR("Edit"))
     {
       StaticText* st = new StaticText(root, sRemark);
@@ -218,8 +223,8 @@ int Editor::AskValue(const String& sRemark, unsigned int htp)
       FieldVal* fv = new FieldVal(root, sQuestion, dvrs, sVal, true);
       if (dvrs.dm()->iWidth() > 12)
         fv->SetWidth(75);
-      if (htp)  
-        SetMenHelpTopic(help);
+      if (htp.size() != 0)
+        SetHelpItem(htp);
       create();
     }
   };

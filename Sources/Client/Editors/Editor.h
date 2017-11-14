@@ -61,6 +61,7 @@ public:
 	virtual bool OnLButtonDown(UINT nFlags, CPoint point);
 	virtual bool OnLButtonUp(UINT nFlags, CPoint point);
 	virtual bool OnLButtonDblClk(UINT nFlags, CPoint point);
+	virtual bool OnRButtonDown(UINT nFlags, CPoint point);
 	virtual bool OnMouseMove(UINT nFlags, CPoint point);
 	virtual bool OnContextMenu(CWnd* pWnd, CPoint point);
 	virtual LRESULT OnUpdate(WPARAM, LPARAM);
@@ -75,19 +76,20 @@ public:
 	virtual void EditFieldOK(Coord, const String&);
 	void UpdateMenu();
 	NewDrawer* dr() const { return drw; }
-	HelpTopic htp() const { return htpTopic; }
+	String htp() const { return help; }
 	void ClearEditFieldPointer() { wEditField = 0; }
 protected:
 	void EditFieldStart(Coord, const String&);
-	int AskValue(const String& sRemark, unsigned int htp=0);
+	int AskValue(const String& sRemark, const String& htp="");
 	MapPaneView* mpv;
 	NewDrawer* drw;
+	bool fDrawerActive;
 	zCursor curActive;
 	DomainValueRangeStruct dvs;
 	Representation _rpr;
 	String sValue;
 	HMENU hmenFile, hmenEdit;
-	HelpTopic htpTopic;
+	String help;
 	String sHelpKeywords;
 	//{{AFX_VIRTUAL(Editor)
 	//}}AFX_VIRTUAL
@@ -96,7 +98,6 @@ protected:
 	afx_msg void OnExit();
 	afx_msg void OnHelp();
 	afx_msg void OnRelatedTopics();
-	String help;
 	//}}AFX_MSG
 private:
 	CWnd* wEditField;
