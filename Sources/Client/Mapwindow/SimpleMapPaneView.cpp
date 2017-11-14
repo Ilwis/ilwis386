@@ -101,6 +101,7 @@ BEGIN_MESSAGE_MAP(SimpleMapPaneView, ZoomableView)
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+	ON_WM_RBUTTONDOWN()
 	ON_WM_SETCURSOR()
 	ON_WM_WINDOWPOSCHANGING()
 	ON_COMMAND(ID_MEASUREDIST, OnMeasureDist)
@@ -167,31 +168,17 @@ void SimpleMapPaneView::OnInitialUpdate()
 
 Coord SimpleMapPaneView::crdPnt(zPoint pnt)
 {
-	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
-	//Coord crd;
-	//double rRow, rCol;
-	//Pnt2RowCol(pnt, rRow, rCol);
-	//try {
-	//	GetDocument()->georef->RowCol2Coord(rRow,rCol,crd);
-	//}
-	//catch (...) {
-	//	crd = Coord();
-	//}  
-	return Coord();
+	MapCompositionDoc* mcd = GetDocument();
+	Coord crd = mcd->rootDrawer->screenToWorld(RowCol(pnt.y, pnt.x));
+	return crd;
 }
 
 zPoint SimpleMapPaneView::pntPos(Coord crd)
 {
-	//throw ErrorObject(String("To Be Done %d %s", __LINE__, __FILE__));
-	//try {
-	//	double rRow, rCol;
-	//	GetDocument()->georef->Coord2RowCol(crd, rRow, rCol);
-	//	return pntPos(rRow, rCol);
-	//}
-	//catch (...) {
-	//	return zPoint(shUNDEF, shUNDEF);
-	//} 
-	return zPoint();
+	MapCompositionDoc* mcd = GetDocument();
+	RowCol rc = mcd->rootDrawer->WorldToScreen(crd);
+	zPoint pnt (rc.Col, mcd->rootDrawer->getViewPort().Row - rc.Row);
+	return pnt;
 }
 
 BOOL SimpleMapPaneView::OnEraseBkgnd(CDC* cdc)
@@ -320,14 +307,15 @@ void SimpleMapPaneView::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) {
 
 void SimpleMapPaneView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	if ( VK_ESCAPE == nChar) {
-		if (tools.size() > 0)
-			tools.OnEscape();
-		((MapWindow *)getFrameWindow())->OnKeyDown(nChar, nRepCnt, nFlags);
-		return;
+	if (tools.size() > 0 && VK_ESCAPE == nChar) { // route VK_ESCAPE first to tools, then to edit, then to restore-fullscreen
+		tools.OnEscape();
 	}
 	if (edit && edit->OnKeyDown(nChar, nRepCnt, nFlags))
 		return;
+	if ( VK_ESCAPE == nChar) {
+		((MapWindow *)getFrameWindow())->OnKeyDown(nChar, nRepCnt, nFlags);
+		return;
+	}
 	if (tools.OnKeyDown(nChar, nRepCnt, nFlags))
 		return;
 	bool fCtrl = GetKeyState(VK_CONTROL) & 0x8000 ? true : false;
@@ -548,6 +536,14 @@ void SimpleMapPaneView::OnLButtonUp(UINT nFlags, CPoint point)
 		return;
 	}
 	mcd->mpvGetView()->Invalidate();
+}
+
+void SimpleMapPaneView::OnRButtonDown(UINT nFlags, CPoint point) 
+{
+	if (mode != cNone)
+		return;
+	if (edit)
+		edit->OnRButtonDown(nFlags, point);
 }
 
 BOOL SimpleMapPaneView::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) 
