@@ -124,6 +124,14 @@ private:
 	void EditAttrib(int iRec);
   void UndoAll();
 	void ZoomInOnError();
+	static UINT DeleteAllPointsInThread(LPVOID pParam);
+	static UINT DeleteLastPointInThread(LPVOID pParam);
+	void DeleteLastPointInThread(Coord);
+	CWinThread * deleteAllPointsThread;
+	CWinThread * deleteLastPointThread;
+	CCriticalSection csThread;
+	bool fStopThread;
+	vector<Coord> deleteLastPoints;
   FileName fnSave;
   SegmentMap sm;
   ILWIS::Segment *currentSeg;
@@ -142,7 +150,6 @@ private:
   bool fOnlySelected;
   Coord crdActNode;
   String sMask;
-	long iLastTick;
 	//{{AFX_VIRTUAL(SegmentEditor)
 	//}}AFX_VIRTUAL
 	//{{AFX_MSG(SegmentEditor)

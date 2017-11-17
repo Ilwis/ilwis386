@@ -140,7 +140,10 @@ curSegMove("EditPntMoveCursor"),
 curSegMoving("EditPntMovingCursor"),
 curSegSplit("EditSplitCursor"),
 curSegSplitting("EditSplittingCursor"),
-fOnlySelected(false)
+fOnlySelected(false),
+deleteAllPointsThread(0),
+deleteLastPointThread(0),
+fStopThread(false)
 {
 	iFmtPnt = RegisterClipboardFormat("IlwisPoints");
 	iFmtDom = RegisterClipboardFormat("IlwisDomain");
@@ -300,6 +303,13 @@ fOnlySelected(false)
 
 SegmentEditor::~SegmentEditor()
 {
+	if (deleteAllPointsThread != 0 || deleteLastPointThread !=0)
+	{
+		fStopThread = true;
+		csThread.Lock(); // wait here til thread exits
+		csThread.Unlock();
+	}
+
   if (sm.fValid()) {
 //    bool fDel = true;
     if (sm->fChanged) {
@@ -1037,11 +1047,6 @@ bool SegmentEditor::OnLButtonDown(UINT nFlags, CPoint point)
 	case modeENTERING:
 		if (MK_LBUTTON & nFlags)
 			EnterPoints(crd);
-		else if (MK_RBUTTON & nFlags) {
-			DeleteLastPoint(crd);
-			if (coords.size() == 0)
-				Mode(modeADD);
-		}
 		break;
 	case modeSPLIT:
 		MergeSplit(crd);
@@ -1100,7 +1105,10 @@ bool SegmentEditor::OnLButtonUp(UINT nFlags, CPoint point)
 bool SegmentEditor::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	if (mode == modeENTERING) {
-		DeleteLastPoint(cPivot);
+		Coord crd = mpv->crdPnt(point);
+		MapCompositionDoc* mcd = mpv->GetDocument();
+		crd = mcd->rootDrawer->glToWorld(sm->cs(), crd);
+		DeleteLastPoint(crd);
 		if (coords.size() == 0)
 			Mode(modeADD);
 		return true;
@@ -1178,13 +1186,11 @@ bool SegmentEditor::OnMouseMove(UINT nFlags, CPoint point)
         return true;
       }  
       if (MK_RBUTTON & nFlags) {
-				DeleteLastPoint(crd);
-				if (coords.size() == 0)
-					Mode(modeADD);
+				DeleteLastPointInThread(crd);
 			}
 			else if ((MK_LBUTTON & nFlags) && 0 == mpv->tools.size())
 				EnterPoints(crd);
-      else
+			else if (!deleteAllPointsThread)
 				MovePivot(crd);
       return true;
     default:  
@@ -1670,8 +1676,11 @@ void SegmentEditor::Mode(enumMode Mode)
 		AddSegments(Coord());
 	}  
 	if (modeENTERING == mode)
-		while (coords.size() > 0)
-			DeleteLastPoint(cPivot);
+		if (coords.size() > 0) {
+			if (deleteAllPointsThread == 0)
+				deleteAllPointsThread = AfxBeginThread(DeleteAllPointsInThread, this);
+			return;
+		}
 	if (fUndelete) {
 		fUndelete = false;
 		mpv->Invalidate();
@@ -1718,6 +1727,58 @@ void SegmentEditor::Mode(enumMode Mode)
 		break;
 	}
 	OnSetCursor();
+}
+
+UINT SegmentEditor::DeleteAllPointsInThread(LPVOID pParam)
+{
+	SegmentEditor * pObject = (SegmentEditor*)pParam;
+	if (pObject == NULL)
+	{
+		return 1;
+	}
+	pObject->csThread.Lock();
+
+	while (!pObject->fStopThread && pObject->coords.size() > 0) {
+		pObject->DeleteLastPoint(pObject->cPivot);
+		Sleep(100);
+	}
+	pObject->Mode(modeADD);
+
+	pObject->deleteAllPointsThread = 0;
+	pObject->csThread.Unlock();
+	return 0;
+}
+
+void SegmentEditor::DeleteLastPointInThread(Coord crd)
+{
+	deleteLastPoints.push_back(crd);
+	if (deleteLastPointThread == 0)
+		deleteLastPointThread = AfxBeginThread(DeleteLastPointInThread, this);
+}
+
+UINT SegmentEditor::DeleteLastPointInThread(LPVOID pParam)
+{
+	SegmentEditor * pObject = (SegmentEditor*)pParam;
+	if (pObject == NULL)
+	{
+		return 1;
+	}
+	pObject->csThread.Lock();
+
+	while (!pObject->fStopThread && pObject->coords.size() > 0 && pObject->deleteLastPoints.size() > 0) {
+		pObject->DeleteLastPoint(pObject->deleteLastPoints.back());
+		pObject->deleteLastPoints.clear();
+		Sleep(100);
+	}
+
+	if (pObject->coords.size() == 0) {
+		pObject->deleteLastPoints.clear();
+		pObject->Mode(modeADD);
+	}
+
+	pObject->deleteLastPointThread = 0;
+	pObject->csThread.Unlock();
+	return 0;
 }
 
 bool SegmentEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -2271,7 +2332,6 @@ int SegmentEditor::SnapSplit(Coord c)
 int SegmentEditor::StartEnteringPoints(Coord c)
 {
 	SetActNode(Coord()); // to clear the previously set active node (at SnapSplit)
-	iLastTick = GetTickCount();
 	return SetDigiFunc(TR("Digitize Segment"),
 		(DigiFunc)&SegmentEditor::MovePivot,
 		(DigiFunc)&SegmentEditor::EnterPoints, TR("Enter Point"),
@@ -2282,15 +2342,12 @@ int SegmentEditor::StartEnteringPoints(Coord c)
 
 int SegmentEditor::DeleteLastPoint(Coord crd)
 {
-	long iTick = GetTickCount();
-	if (iTick < iLastTick + 100)
-		return 1;
-	iLastTick = iTick;
 	MovePivot(cPivot);
 	if (coords.size() > 0)
 		coords.pop_back();
 	if (coords.size() == 0) {
 		iLastButton = 0;
+		mpv->Invalidate();
 		return AddSegments(crd);
 	}
 	cPivot = coords.back();
