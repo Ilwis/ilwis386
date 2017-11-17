@@ -133,6 +133,7 @@ private:
 	CCriticalSection csThread;
 	bool fStopThread;
 	vector<Coord> deleteLastPoints;
+	bool fSkipContextMenu;
   FileName fnSave;
   SegmentMap sm;
   ILWIS::Segment *currentSeg;

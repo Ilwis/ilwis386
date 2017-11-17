@@ -143,7 +143,8 @@ curSegSplitting("EditSplittingCursor"),
 fOnlySelected(false),
 deleteAllPointsThread(0),
 deleteLastPointThread(0),
-fStopThread(false)
+fStopThread(false),
+fSkipContextMenu(false)
 {
 	iFmtPnt = RegisterClipboardFormat("IlwisPoints");
 	iFmtDom = RegisterClipboardFormat("IlwisDomain");
@@ -337,6 +338,10 @@ bool SegmentEditor::OnContextMenu(CWnd* pWnd, CPoint point)
 {
 	if (modeENTERING == mode)
 		return true;
+	if (fSkipContextMenu) {
+		fSkipContextMenu = false;
+		return true;
+	}
 	CMenu men;
 	men.CreatePopupMenu();
 	add(ID_NORMAL);
@@ -1109,8 +1114,10 @@ bool SegmentEditor::OnRButtonDown(UINT nFlags, CPoint point)
 		MapCompositionDoc* mcd = mpv->GetDocument();
 		crd = mcd->rootDrawer->glToWorld(sm->cs(), crd);
 		DeleteLastPoint(crd);
-		if (coords.size() == 0)
+		if (coords.size() == 0) {
 			Mode(modeADD);
+			fSkipContextMenu = true;
+		}
 		return true;
 	}
 	return false;
@@ -1123,8 +1130,10 @@ bool SegmentEditor::OnRButtonDblClk(UINT nFlags, CPoint point)
 		MapCompositionDoc* mcd = mpv->GetDocument();
 		crd = mcd->rootDrawer->glToWorld(sm->cs(), crd);
 		DeleteLastPoint(crd);
-		if (coords.size() == 0)
+		if (coords.size() == 0) {
 			Mode(modeADD);
+			fSkipContextMenu = true;
+		}
 		return true;
 	}
 	return false;
