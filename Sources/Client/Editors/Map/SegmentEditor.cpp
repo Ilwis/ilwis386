@@ -1679,6 +1679,12 @@ void SegmentEditor::Mode(enumMode Mode)
 		if (coords.size() > 0) {
 			if (deleteAllPointsThread == 0)
 				deleteAllPointsThread = AfxBeginThread(DeleteAllPointsInThread, this);
+			else { // cancel delete
+				fStopThread = true;
+				csThread.Lock(); // wait here til thread exits
+				csThread.Unlock();
+				fStopThread = false;
+			}
 			return;
 		}
 	if (fUndelete) {
@@ -2038,6 +2044,13 @@ int SegmentEditor::MovePivot(Coord c)
 
 int SegmentEditor::EnterPoints(Coord c)
 {
+  if (deleteAllPointsThread) {
+	fStopThread = true;
+	csThread.Lock(); // wait here til thread exits
+	csThread.Unlock();
+	fStopThread = false;
+  }
+
   MovePivot(c);
   if (coords.size() >= iMAXCOORDS) {
     MessageBeep(MB_ICONASTERISK);
