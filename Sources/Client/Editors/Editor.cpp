@@ -161,6 +161,11 @@ bool Editor::OnRButtonDown(UINT nFlags, CPoint point)
 	return false;
 }
 
+bool Editor::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	return false;
+}
+
 bool Editor::OnMouseMove(UINT nFlags, CPoint point)
 {
 	return false;

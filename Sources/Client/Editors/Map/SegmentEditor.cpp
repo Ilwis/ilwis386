@@ -1116,6 +1116,20 @@ bool SegmentEditor::OnRButtonDown(UINT nFlags, CPoint point)
 	return false;
 }
 
+bool SegmentEditor::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	if (mode == modeENTERING) {
+		Coord crd = mpv->crdPnt(point);
+		MapCompositionDoc* mcd = mpv->GetDocument();
+		crd = mcd->rootDrawer->glToWorld(sm->cs(), crd);
+		DeleteLastPoint(crd);
+		if (coords.size() == 0)
+			Mode(modeADD);
+		return true;
+	}
+	return false;
+}
+
   class PointCoordForm: public FormWithDest
   {
   public:

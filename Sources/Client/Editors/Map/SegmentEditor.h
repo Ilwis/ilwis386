@@ -62,6 +62,7 @@ public:
 	virtual bool OnLButtonUp(UINT nFlags, CPoint point);
 	virtual bool OnLButtonDblClk(UINT nFlags, CPoint point);
 	virtual bool OnRButtonDown(UINT nFlags, CPoint point);
+	virtual bool OnRButtonDblClk(UINT nFlags, CPoint point);
 	virtual bool OnMouseMove(UINT nFlags, CPoint point);
 	virtual bool OnContextMenu(CWnd* pWnd, CPoint point);
   virtual int Edit(const Coord&);
