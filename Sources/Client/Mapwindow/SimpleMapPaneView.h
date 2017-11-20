@@ -104,6 +104,7 @@ protected:
 	void OnMouseMove(UINT nFlags, CPoint point);
 	void OnLButtonDown(UINT nFlags, CPoint point);
 	void OnRButtonDown(UINT nFlags, CPoint point);
+	void OnRButtonDblClk(UINT nFlags, CPoint point);
 	void OnMeasureDist();
 	void OnUpdateMeasureDist(CCmdUI* pCmdUI);
 	afx_msg void OnWindowPosChanging( WINDOWPOS* lpwndpos );

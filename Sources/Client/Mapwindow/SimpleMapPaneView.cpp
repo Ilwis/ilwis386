@@ -102,6 +102,7 @@ BEGIN_MESSAGE_MAP(SimpleMapPaneView, ZoomableView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_RBUTTONDOWN()
+	ON_WM_RBUTTONDBLCLK()
 	ON_WM_SETCURSOR()
 	ON_WM_WINDOWPOSCHANGING()
 	ON_COMMAND(ID_MEASUREDIST, OnMeasureDist)
@@ -544,6 +545,14 @@ void SimpleMapPaneView::OnRButtonDown(UINT nFlags, CPoint point)
 		return;
 	if (edit)
 		edit->OnRButtonDown(nFlags, point);
+}
+
+void SimpleMapPaneView::OnRButtonDblClk(UINT nFlags, CPoint point) 
+{
+	if (mode != cNone)
+		return;
+	if (edit)
+		edit->OnRButtonDblClk(nFlags, point);
 }
 
 BOOL SimpleMapPaneView::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo) 
