@@ -2658,9 +2658,24 @@ void SegmentEditor::AskMerge(Coord crdNode)
   SetActNode(crdNode);
   ILWIS::Segment *seg1, *seg2;
   int iFound = 0;
+  bool fCtrlMerge = (mode == modeMOVING) && (currentSeg != 0) && (coords.size() > 0) && (iActCrd == 0 || iActCrd == coords.size() - 1);
+  if (fCtrlMerge) {
+	  bool fBegin = (currentSeg->crdBegin() == crdNode) || (iActCrd == 0);
+	  bool fEnd = (currentSeg->crdEnd() == crdNode) || (iActCrd == coords.size() - 1);
+	  if (fBegin && fEnd) {
+		  MessageBeep(MB_ICONEXCLAMATION);
+		  mpv->MessageBox(TR("Cannot remove node in circular segment").c_str(), TR("Segment Editor").c_str(), MB_ICONEXCLAMATION|MB_OK);
+		  SetActNode(Coord());
+		  return;
+	  }
+	  seg1 = currentSeg;
+	  ++iFound;
+  }
   for (int i = 0; i < sm->iFeatures(); ++i) {
 	  ILWIS::Segment *seg = (ILWIS::Segment *)sm->getFeature(i);
 	  if ( !(seg && seg->fValid()))
+		  continue;
+	  if (fCtrlMerge && (seg == seg1))
 		  continue;
 	  bool fBegin = seg->crdBegin() == crdNode;
 	  bool fEnd = seg->crdEnd() == crdNode;
@@ -2706,6 +2721,8 @@ void SegmentEditor::AskMerge(Coord crdNode)
   iNr1 = buf1->size();
   buf2 = seg2->getCoordinates();
   iNr2 = buf2->size();
+  if (fCtrlMerge)
+    buf1->setAt(crdNode, iActCrd);
 /*
   if (iNr1 + iNr2 > 1002) {
     MessageBeep(MB_ICONEXCLAMATION);
