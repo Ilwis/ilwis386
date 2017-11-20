@@ -2735,7 +2735,11 @@ void SegmentEditor::AskMerge(Coord crdNode)
       for (i = iNr2 - 2; i >= 0; --i, ++j)
 		  buf[j] = buf2->getAt(i);
     seg1->PutCoords(j, buf);
+	currentSeg = seg1;
+	coords.clear();
 	sm->removeFeature(seg2->getGuid(), vector<int>(0));
+	if (mode == modeMOVING)
+		Mode(modeMOVE);
   }
   delete buf1;
   delete buf2;
