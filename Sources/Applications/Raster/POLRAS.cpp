@@ -265,7 +265,7 @@ long MapRasterizePolygon::FindValue(long row, long col) const {
 	Coord crdPol = pm->cs()->cConv(ptr.gr()->cs(), crdRas);
 	const vector<Geometry *> pols = pm->getFeatures(crdPol);
 	if (pols.size() > 0)
-		return ((ILWIS::Polygon *)pols[0])->iValue();
+		return ((ILWIS::Polygon *)pols[pols.size() - 1])->iValue();
 	return iUNDEF;
 }
 
