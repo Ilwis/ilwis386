@@ -358,22 +358,29 @@ BOOL IlwisWinApp::InitApplication()
 	ilwapp = getEngine()->getContext();
 
 	String sParms(m_lpCmdLine);
-	short ipos2 = sParms.iPos(String("-D"));
-	short ipos = sParms.iPos(String("-C"));
+	short iposDebug = sParms.iPos(String("-D"));
+	short iposC;
+	short iposCR = sParms.iPos(String("-CR"));
+	if (iposCR != shUNDEF) // the original logic was to handle -CR after setDebugMode(true);
+		iposC = shUNDEF;
+	else
+		iposC = sParms.iPos(String("-C"));
 
-	if ( ipos2 != shUNDEF) {
-		if ( (ipos2 < ipos && ipos!=shUNDEF) || ipos == shUNDEF)
+	if ( iposDebug != shUNDEF) {
+		if ( (iposDebug < iposC && iposC != shUNDEF) || iposC == shUNDEF)
 		getEngine()->setDebugMode(true);
 		lockILWIS.setIdentity(SOURCE_LOCATION);
 	}
-	if ( ipos == shUNDEF) {
-		ipos = sParms.iPos(String("-CR"));
+	if ( iposC == shUNDEF) {
+		iposC = iposCR;
 	} else
 		getEngine()->setStayResident(false);
 
 
-	if ( ipos != shUNDEF){
-		m_sCommand = sParms.substr(ipos + getEngine()->fStayResident() ? 4 : 3);
+	if ( iposC != shUNDEF){
+		iposC += (getEngine()->fStayResident() ? 4 : 3); // skip -C / -CR
+		if (iposC < sParms.size())
+			m_sCommand = sParms.substr(iposC);
 		sParms = " -NoLogo " + sParms;
 		// -C mode will not give messageboxes anymore
 		getEngine()->getContext()->SetThreadLocalVar(IlwisAppContext::tlvSERVERMODE, new bool(true));
