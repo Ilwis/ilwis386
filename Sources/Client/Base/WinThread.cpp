@@ -74,15 +74,19 @@ WinThread::WinThread(CDocManager *pdm, const String& fn, const ParmList& pl) :
 {
 	 String sCom = const_cast<ParmList &>(pl).sCmd();
 	 parms.Fill(sCom);
-	 String rest = const_cast<ParmList&>(pl).sGet("extras");
-	 Array<String> parts;
-	 Split(rest,parts, ",");
-	 String fullname = FileName(fn).sFile;
-	 for(unsigned int i = 0; i < parts.size(); ++i) {
-		FileName fnextra(parts[i]);
-		fullname += "+" + parts[i];
+	 if ( const_cast<ParmList &>(pl).fExist("extras")) {
+		String rest = const_cast<ParmList&>(pl).sGet("extras");
+		Array<String> parts;
+		Split(rest,parts, ",");
+		String fullname = FileName(fn).sFile;
+		for(unsigned int i = 0; i < parts.size(); ++i) {
+			FileName fnextra(parts[i]);
+			fullname += "+" + parts[i];
+		}
+		strFileName = fullname + FileName(fn).sExt;
+	 } else {
+		strFileName = IlwisObjectPtr::fnCheckPath(fn).sFullPathQuoted();
 	 }
-	 strFileName = fullname + FileName(fn).sExt;
 }	
 
 WinThread::WinThread(CDocManager* pdm, LPCTSTR lpszFileName, IlwisDocument::OpenType opentype)           
