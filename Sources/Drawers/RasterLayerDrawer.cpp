@@ -95,6 +95,8 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 			for(int j =0 ; j < pp->filteredRaws.size(); ++j) {
 				rprC->DoNotStore(true);
 				int raw = pp->filteredRaws[j];
+				if (useAttributeColumn() && attColumn.fValid())
+					raw = ((raw < 0) ? -1 : 1) * attColumn->iRaw(abs(raw));
 				Color clr = rprC->clrRaw(abs(raw));
 				clr.alpha() = (raw < 0) ? 0 : 255;
 				rprC->PutColor(abs(raw),clr);
