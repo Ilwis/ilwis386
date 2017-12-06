@@ -420,21 +420,43 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 		for (long i = 0; i < iLen; ++i)
 			bufOut[i] = col.iVal(); // you asked for it (!)
 							   } break;
-	case NewDrawer::drmMULTIPLE: 
-		if (3 == iMultColors) {
-			for (long i = 0; i < iLen; ++i)
-				bufOut[i] = clrRandom(dataValues.iRawAttr(buf[i])).iVal();
-		}
-		else {
-			int iStep = 7;
-			switch (iMultColors) {
-	case 0: iStep = 7; break;
-	case 1: iStep = 15; break;
-	case 2: iStep = 31; break;
+	case NewDrawer::drmMULTIPLE:
+		{
+			Representation rpr = drw->getRepresentation();
+			bool rprValid = rpr.fValid();
+			if (3 == iMultColors) {
+				if (rprValid) {
+					for (long i = 0; i < iLen; ++i) {
+						long iRaw = dataValues.iRawAttr(buf[i]);
+						Color clr = clrRandom(iRaw);
+						clr.alpha() = rpr->clrRaw(iRaw).alpha();
+						bufOut[i] = clr.iVal();
+					}
+				} else {
+					for (long i = 0; i < iLen; ++i) {
+						bufOut[i] = clrRandom(dataValues.iRawAttr(buf[i])).iVal();
+					}
+				}
+			} else {
+				int iStep = 7;
+				switch (iMultColors) {
+				case 0: iStep = 7; break;
+				case 1: iStep = 15; break;
+				case 2: iStep = 31; break;
+				}
+				if (rprValid) {
+					for (long i = 0; i < iLen; ++i) {
+						long iRaw = dataValues.iRawAttr(buf[i]);
+						Color clr = clrPrimary(1 + dataValues.iRawAttr(buf[i]) % iStep, colorSetIndex);
+						clr.alpha() = rpr->clrRaw(iRaw).alpha();
+						bufOut[i] = clr.iVal();
+					}
+				} else {
+					for (long i = 0; i < iLen; ++i)
+						bufOut[i] = clrPrimary(1 + dataValues.iRawAttr(buf[i]) % iStep, colorSetIndex).iVal();
+				}
 			}
-			for (long i = 0; i < iLen; ++i)
-				bufOut[i] = clrPrimary(1 + dataValues.iRawAttr(buf[i]) % iStep, colorSetIndex).iVal();
-		}  
+		}
 		break;
 		/*case NewDrawer::drmIMAGE: {
 		RangeInt riStretch = drw->getStretchRangeInt();
