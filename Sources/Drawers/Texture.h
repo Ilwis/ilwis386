@@ -60,7 +60,6 @@ namespace ILWIS {
 		const unsigned int iPaletteSize;
 		const RangeReal rrMinMaxMap;
 		bool fValue;
-		bool fAttTable;
 		const Palette * palette;
 		bool fRepresentationChanged;
 		bool valid;

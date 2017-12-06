@@ -37,7 +37,6 @@ CCTexture::~CCTexture()
 void CCTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
 {
 	fValue = 0 != mpl[0]->dm()->pdvi() || 0 != mpl[0]->dm()->pdvr();
-	fAttTable = false;
 	texture_data = new char [(sizeX / zoomFactor) * (sizeY / zoomFactor) * 4];
 	this->valid = DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 
@@ -125,7 +124,6 @@ void CCTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, vol
 void CCTexture::ReCreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
 {
 	fValue = 0 != mpl[0]->dm()->pdvi() || 0 != mpl[0]->dm()->pdvr();
-	fAttTable = false;
 	this->dirty = !DrawTexture(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 
 	if (dirty)
@@ -295,7 +293,7 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 				if (*fDrawStop) {
 					return false;
 				}
-				if (fValue && !fAttTable) {
+				if (fValue) {
 					mpl[data->ccMaps[0].index]->GetLineVal(iDataInYPos + offsetY, bufIn1, offsetX, sizeX);
 					mpl[data->ccMaps[1].index]->GetLineVal(iDataInYPos + offsetY, bufIn2, offsetX, sizeX);
 					mpl[data->ccMaps[2].index]->GetLineVal(iDataInYPos + offsetY, bufIn3, offsetX, sizeX);
@@ -384,7 +382,7 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 				if (*fDrawStop) {
 					return false;
 				}
-				if (fValue && !fAttTable) {
+				if (fValue) {
 					mpl[data->ccMaps[0].index]->GetLineVal(iDataInYPos + offsetY, bufIn1, offsetX, sizeX, iPyrLayer);
 					mpl[data->ccMaps[1].index]->GetLineVal(iDataInYPos + offsetY, bufIn2, offsetX, sizeX, iPyrLayer);
 					mpl[data->ccMaps[2].index]->GetLineVal(iDataInYPos + offsetY, bufIn3, offsetX, sizeX, iPyrLayer);

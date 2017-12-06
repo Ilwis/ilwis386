@@ -54,7 +54,6 @@ Texture::~Texture()
 void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
 {
 	fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
-	fAttTable = false;
 	if (palette) {
 	try {
 		texture_data = new char [(sizeX / zoomFactor) * (sizeY / zoomFactor) * 2];
@@ -118,7 +117,6 @@ void Texture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volat
 void Texture::ReCreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
 {
 	fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
-	fAttTable = false;
 	if (palette) {
 		this->dirty = !DrawTexturePaletted(offsetX, offsetY, sizeX, sizeY, zoomFactor, texture_data, fDrawStop);
 	} else {
@@ -322,7 +320,7 @@ bool Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 					mp->KeepOpen(false);
 					return false;
 				}
-				if (fValue && !fAttTable)
+				if (fValue)
 					mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX);
 				else
 					mp->GetLineRaw(iDataInYPos + offsetY, bufIn, offsetX, sizeX);
@@ -390,7 +388,7 @@ bool Texture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texSiz
 					mp->KeepOpen(false);
 					return false;
 				}
-				if (fValue && !fAttTable)
+				if (fValue)
 					mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
 				else
 					mp->GetLineRaw(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
@@ -533,7 +531,7 @@ bool Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, lon
 					mp->KeepOpen(false);
 					return false;
 				}
-				if (fValue && !fAttTable)
+				if (fValue)
 					mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX);
 				else
 					mp->GetLineRaw(iDataInYPos + offsetY, bufIn, offsetX, sizeX);
@@ -601,7 +599,7 @@ bool Texture::DrawTexturePaletted(long offsetX, long offsetY, long texSizeX, lon
 					mp->KeepOpen(false);
 					return false;
 				}
-				if (fValue && !fAttTable)
+				if (fValue)
 					mp->GetLineVal(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
 				else
 					mp->GetLineRaw(iDataInYPos + offsetY, bufIn, offsetX, sizeX, iPyrLayer);
