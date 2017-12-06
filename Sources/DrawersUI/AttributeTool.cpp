@@ -122,7 +122,10 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 				featureLayerDrawer->setDrawMethod(NewDrawer::drmRPR);
 			} else {
 				featureLayerDrawer->setUseRpr(false);
-				featureLayerDrawer->setDrawMethod(NewDrawer::drmMULTIPLE);
+				if (attColumn.fValid() && attColumn->dm()->pdbool())
+					featureLayerDrawer->setDrawMethod(NewDrawer::drmBOOL);
+				else
+					featureLayerDrawer->setDrawMethod(NewDrawer::drmMULTIPLE);
 			}
 			featureLayerDrawer->prepareChildDrawers(&pp);
 		}
@@ -147,7 +150,10 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 			featureLayerDrawer->setDrawMethod(NewDrawer::drmRPR);
 		} else {
 			featureLayerDrawer->setUseRpr(false);
-			featureLayerDrawer->setDrawMethod(NewDrawer::drmMULTIPLE);
+			if (attColumn.fValid() && attColumn->dm()->pdbool())
+				featureLayerDrawer->setDrawMethod(NewDrawer::drmBOOL);
+			else
+				featureLayerDrawer->setDrawMethod(NewDrawer::drmMULTIPLE);
 		}
 		featureLayerDrawer->prepareChildDrawers(&pp);
 	}
