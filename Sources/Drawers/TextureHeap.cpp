@@ -39,6 +39,7 @@ Palette::Palette()
 , palette_alphas(0)
 , rMaxAlpha(0)
 , fHasTransparent(false)
+, fUseValues(true)
 {
 }
 
@@ -59,10 +60,14 @@ void Palette::SetData(const BaseMap & mp, const LayerDrawer * rsd, const unsigne
 	ValueRange vr = mp->vr();
 	if (mp->dm()->pdbool())
 		vr = ValueRange();
+	bool fValue = 0 != mp->dm()->pdvi() || 0 != mp->dm()->pdvr();
+	bool fRealMap;
 	if (vr.fValid()) // when integers are not good enough to represent the map treat it as a real map
 		fRealMap = (vr->rStep() < 1) || (vr->stUsed() == stREAL);
 	else
 		fRealMap = false;
+	fUseValues = fRealMap || fValue; // This may not be "final" and could be simplified. The goal is to have the logic identical to the one where in Texture::DrawTexture() the values are read by GetLineVal() or GetLineRaw(); if there "val" is read, here "val" must be written; same for "raw".
+	// in summary, double/float/int go through "val", and image/class/id/color/bool go through "raw".
 	
 	this->rsd = rsd;
 	this->rrMinMaxMap.rLo() = rrMinMaxMap.rLo();
@@ -110,7 +115,7 @@ void Palette::Refresh()
 		const DrawingColor * drawColor = rsd->getDrawingColor();
 		long * bufColor = new long [nrMapValues];
 
-		if (fRealMap) {
+		if (fUseValues) {
 			double * buf = new double [nrMapValues];
 			for (int i = 0; i < nrMapValues; ++i)
 				buf[i] = minMapVal + i * width / (nrMapValues - 1);

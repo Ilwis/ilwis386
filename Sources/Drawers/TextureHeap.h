@@ -37,7 +37,7 @@ namespace ILWIS {
 		float * palette_greens;
 		float * palette_blues;
 		float * palette_alphas;
-		bool fRealMap;
+		bool fUseValues;
 		unsigned int iPaletteSize;
 		RangeReal rrMinMaxMap;
 		const LayerDrawer * rsd;
