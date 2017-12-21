@@ -1122,61 +1122,55 @@ void FormSegmentMapGlue::SegmentMap_iCallBack(int iCurMap)
 	fg2->StoreData();
 	fg3->StoreData();
 	fg4->StoreData();
-  stCsy->SetVal("");
   try {
     FileName fnMap(asMaps[iCurMap]); 
     SegmentMap map;
 		if (fnMap.fValid())
 			map = SegmentMap(fnMap);
-		if (map.fValid()) 
-		{
-			cbClip->Show();
-			CoordBounds cb = map->cb();
-			CoordSystem csInput = map->cs();
-			if (csInput.fValid()) {
-				cMin = cb.cMin;
-				cMax = cb.cMax;
-				stCsy->SetVal(map->cs()->sTypeName());
-				fFromLatLon = ( 0 !=map->cs()->pcsLatLon());
-				if (!fFromLatLon)
-				{
-					fldCrdMin->SetVal(cb.cMin);
-					fldCrdMax->SetVal(cb.cMax);
-				}
-					else
-				{
-					llMin.Lat = cMin.y; 
-					llMax.Lat = cMax.y;
-					llMin.Lon = cMin.x; 
-					llMax.Lon = cMax.x;
-					fldMinLat->SetVal(llMin.Lat);
-					fldMaxLat->SetVal(llMax.Lat);
-					fldMinLon->SetVal(llMin.Lon);
-					fldMaxLon->SetVal(llMax.Lon);
-				}
-				if (fClipBoundary) {
+		if (iCurMap == 0) {
+			if (map.fValid()) 
+			{
+				cbClip->Show();
+				CoordBounds cb = map->cb();
+				CoordSystem csInput = map->cs();
+				if (csInput.fValid()) {
+					cMin = cb.cMin;
+					cMax = cb.cMax;
+					stCsy->SetVal(map->cs()->sTypeName());
+					fFromLatLon = ( 0 !=map->cs()->pcsLatLon());
 					if (!fFromLatLon)
-						ShowCoords();
-					else
-						ShowLatLons();
+					{
+						fldCrdMin->SetVal(cb.cMin);
+						fldCrdMax->SetVal(cb.cMax);
+					}
+						else
+					{
+						llMin.Lat = cMin.y; 
+						llMax.Lat = cMax.y;
+						llMin.Lon = cMin.x; 
+						llMax.Lon = cMax.x;
+						fldMinLat->SetVal(llMin.Lat);
+						fldMaxLat->SetVal(llMax.Lat);
+						fldMinLon->SetVal(llMin.Lon);
+						fldMaxLon->SetVal(llMax.Lon);
+					}
+					CallBackClipBoundary(0);
+					if (map->dm()->pdsrt())
+						cbDom->Show();
+					else {
+						cbDom->Hide();
+						fNewDom = false;
+						stRemark->SetVal("");
+						DomCallBack(0);
+						EnableOK();
+					}
 				}
-				else 
-					HideCoordsAndLatLon();
-				if (map->dm()->pdsrt())
-					cbDom->Show();
-				else {
-					cbDom->Hide();
-					fNewDom = false;
-					stRemark->SetVal("");
-					DomCallBack(0);
-					EnableOK();
-				}
+				else
+						stCsy->SetVal("");
 			}
 			else
-					stCsy->SetVal("");
+				cbClip->Hide();
 		}
-		else
-			cbClip->Hide();
 		MapsCallBack(0);
   }
   catch (ErrorObject&) {}
@@ -1204,7 +1198,6 @@ int FormSegmentMapGlue::MapsCallBack(Event*)
   }
 	Array<SegmentMap> aMaps;
 	aMaps.Resize(iMaps);
-	HideCoordsAndLatLon();
 
 	for (int i = 0; i < iMaps ; i++) {
 		FileName fnMap(asMaps[i]); 
