@@ -364,13 +364,13 @@ void PostGisMaps::SetStoreType(String pixel_type, LayerInfo & inf, StoreType & s
 		inf.dvrsMap = DomainValueRangeStruct(-SHRT_MAX + 2, SHRT_MAX -2 );
 		stPostgres = stINT;
 	} else if (pixel_type == "16BUI") {
-		inf.dvrsMap = DomainValueRangeStruct(0, 65535 - 2);
+		inf.dvrsMap = DomainValueRangeStruct(0, USHRT_MAX - 2);
 		stPostgres = stINT;
 	} else if (pixel_type == "32BSI") {
 		inf.dvrsMap = DomainValueRangeStruct(-LONG_MAX + 2, LONG_MAX -2 );
 		stPostgres = stLONG;
 	} else if (pixel_type == "32BUI") {
-		inf.dvrsMap = DomainValueRangeStruct(0, LONG_MAX -2 );
+		inf.dvrsMap = DomainValueRangeStruct(0, ULONG_MAX -2 );
 		stPostgres = stLONG;
 	} else if (pixel_type == "32BF") {
 		inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0); // preferrably float instead of double

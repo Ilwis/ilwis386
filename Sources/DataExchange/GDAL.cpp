@@ -960,10 +960,10 @@ void GDALFormat::GetRasterInfo(LayerInfo& inf, int iChannel, bool fBitMap)
 				inf.dvrsMap = DomainValueRangeStruct(-SHRT_MAX + 2, SHRT_MAX -2 );
 				break;
 			case GDT_UInt16:
-				inf.dvrsMap = DomainValueRangeStruct(0, SHRT_MAX-1);
+				inf.dvrsMap = DomainValueRangeStruct(0, USHRT_MAX-1);
 				break;
 			case GDT_UInt32:
-				inf.dvrsMap = DomainValueRangeStruct(0, LONG_MAX -2 );
+				inf.dvrsMap = DomainValueRangeStruct(0, ULONG_MAX -2 );
 				break;
 			case GDT_Int32:
 				inf.dvrsMap = DomainValueRangeStruct(-LONG_MAX+2, LONG_MAX -2 );
