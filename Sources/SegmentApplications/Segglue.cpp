@@ -461,7 +461,7 @@ bool SegmentMapGlue::fFreezing()
 			CoordBounds cbs = asmp[iMapNr]->cb();
 			if (fTransformCoords)
 				cbs = cs()->cbConv(csOld, cbs);
-			if (cb().fContains(cbs))    // asmp[iMapNr] will be (partly) glued
+			if (cb().fContains(cbs))    // asmp[iMapNr] will be (partly) glued; see comment at fContains(): returns true also on partial overlap
 			{
 				SegmentMap smp = asmp[iMapNr];
 				String sMask = asMask[iMapNr];
@@ -469,7 +469,7 @@ bool SegmentMapGlue::fFreezing()
 				Mask mask(smp->dm(), sMask);
 				long iSeg = smp->iFeatures();
 
-				if (cb().fContains(smp->cb().cMin) && cb().fContains(smp->cb().cMax))
+				if (cb().fContains(cbs.cMin) && cb().fContains(cbs.cMax))
 				{                            // no clipping needed, smp completely inside clipbox
 					for (int i=0; i < smp->iFeatures(); ++i )  {
 						ILWIS::Segment *seg = (ILWIS::Segment *)smp->getFeature(i);
@@ -515,15 +515,19 @@ bool SegmentMapGlue::fFreezing()
 							return false;
 						if (!seg->fInMask(pms->dvrs(),mask))
 							continue;
-						seg->Clip(cb(),acrdBuf);
+						CoordinateSequence *seq = seg->getCoordinates();
+						CoordBuf crdBuf;
+						crdBuf.Size((long)seq->size());
+						for (int i=0; i < seq->size(); ++i ) 
+							crdBuf[i] = fTransformCoords ? cs()->cConv(csOld, seq->getAt(i)) : seq->getAt(i);
+						ILWIS::Segment *segNew = CSEGMENT(pms->newFeature());
+						segNew->PutCoords(crdBuf.clone());
+						segNew->Clip(cb(),acrdBuf); // Clip may result into cutting a Segment into multiple Segments
 						for ( unsigned long j = 0; j < acrdBuf.iSize(); j++ ) // treat all buffers in array
 						{
 							iCrdOut = acrdBuf[j].iSize();
-							ILWIS::Segment *segNew = CSEGMENT(pms->newFeature());
-							if (fTransformCoords)
-								for (int i=0; i < iCrdOut; ++i ) 
-									acrdBuf[j][i] = cs()->cConv(csOld, acrdBuf[j][i]);
-							//segNew.WorldCoors2InternalCoors(acrdBuf[j], rcBuf, iCrdOut);
+							if (j > 0)
+								segNew = CSEGMENT(pms->newFeature());
 							segNew->PutCoords(iCrdOut, acrdBuf[j]);
 							long iRaw = seg->iValue();
 							if (0 != pdsrt) {
