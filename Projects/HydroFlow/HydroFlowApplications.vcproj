@@ -214,6 +214,10 @@
 			Filter="h;hpp"
 			>
 			<File
+				RelativePath="..\..\Sources\HydroFlowApplications\LargeVector.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Sources\HydroFlowApplications\MapCatchmentExtraction.h"
 				>
 			</File>
@@ -280,6 +284,10 @@
 			>
 			<File
 				RelativePath="..\..\Sources\HydroFlowApplications\Apps.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\HydroFlowApplications\LargeVector.cpp"
 				>
 			</File>
 			<File

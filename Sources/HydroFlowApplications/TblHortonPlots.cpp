@@ -186,9 +186,9 @@ bool TableHortonPlots::fFreezing()
 
   long iLines = m_mpCatchment->iLines();
   long iCols = m_mpCatchment->iCols();
-  m_vCatchment.resize(iLines);  
-  m_vMergedCatchment.resize(iLines);  
-  m_vDrainage.resize(iLines);
+  m_vCatchment.Open(iLines, iCols);
+  m_vMergedCatchment.Open(iLines, iCols);
+  m_vDrainage.Open(iLines, iCols);
 
   //Reading input maps
   for (long iRow = 0; iRow< iLines; iRow++ )
@@ -256,9 +256,9 @@ bool TableHortonPlots::fFreezing()
     if (trq.fUpdate(i, iSize)) return false;
   }
   ptr.dm()->pdsrt()->Resize(iMaxOrderNumber);  
-  m_vCatchment.resize(0);
-  m_vMergedCatchment.resize(0);
-  m_vDrainage.resize(0);
+  m_vCatchment.Close();
+  m_vMergedCatchment.Close();
+  m_vDrainage.Close();
   return true;
 }
 void TableHortonPlots::Init()

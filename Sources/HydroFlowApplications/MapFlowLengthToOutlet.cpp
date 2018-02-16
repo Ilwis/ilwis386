@@ -219,9 +219,9 @@ bool MapFlowLength2Outlet::fFreezing()
 	trq.SetText(TR("Initialize map"));
 	trq.Start();
 
-	m_vDrainageMap.resize(iLines());  
-	m_vFlowDir.resize(iLines());  
-	m_vOutput_s.resize(iLines());
+	m_vDrainageMap.Open(iLines(), iCols());
+	m_vFlowDir.Open(iLines(), iCols());
+	m_vOutput_s.Open(iLines(), iCols());
 	
 	//Reading input maps
 	for (long iRow = 0; iRow< iLines(); iRow++ )
@@ -291,9 +291,9 @@ bool MapFlowLength2Outlet::fFreezing()
 	trq.fUpdate(iLines(), iLines());
 
 	//Clean up
-	m_vDrainageMap.resize(0);
-	m_vFlowDir.resize(0);
-	m_vOutput_s.resize(0);
+	m_vDrainageMap.Close();
+	m_vFlowDir.Close();
+	m_vOutput_s.Close();
 	m_vReceiveNum.resize(0);
 	return true;
 }

@@ -43,6 +43,7 @@
 
 //#include "RasterApplication\mapfmap.h"
 #include "Engine\Applications\MAPFMAP.H"
+#include "LargeVector.h"
 
 IlwisObjectPtr * createMapFlowDirection(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
 
@@ -61,13 +62,13 @@ protected:
 	enum FlowMethod {fmSlope , fmHeight };
 	virtual void Store();
 	MapFlowDirection(const FileName& fn, MapPtr& p, const Map& map, FlowMethod sMethod, bool);
-  ~MapFlowDirection();
+	~MapFlowDirection();
 private:
 	FlowMethod m_fmMethods;
 	bool       m_fParallel;
-	vector<RealBuf> m_vDem;  //vector for the input DEM 
-	vector<ByteBuf> m_vFlow;
-	vector<LongBuf> m_vFlag;	//flag for the flat areas 
+	LargeVector<RealBuf> m_vDem;  //vector for the input DEM 
+	LargeVector<ByteBuf> m_vFlow;
+	LargeVector<LongBuf> m_vFlag;	//flag for the flat areas 
 	vector<RowCol> m_vFlat;	//store a continuous flat area  	
 	vector<byte> m_vDirection; 
 	vector<byte> m_vFlowSelf; 

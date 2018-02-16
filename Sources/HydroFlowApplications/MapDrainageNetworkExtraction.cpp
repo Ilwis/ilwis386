@@ -232,14 +232,14 @@ bool MapDrainageNetworkExtraction::fGeoRefChangeable() const
 
 bool MapDrainageNetworkExtraction::fFreezing()
 {
-	m_vFacc.resize(iLines());  //allocate memory for the input Flow Accumulation  
+	m_vFacc.Open(iLines(), iCols()); //allocate memory for the input Flow Accumulation  
 	if (m_tmMethods == tmMap)
-		m_vThreshold.resize(iLines());  //allocate memory for the threshold
+		m_vThreshold.Open(iLines(), iCols()); //allocate memory for the threshold
 	
 	if (m_tmMethods == tmMap )
-		m_vFlow.resize(iLines());
+		m_vFlow.Open(iLines(), iCols());
 
-	m_vOutput.resize(iLines());  //allocate memory for the output map  
+	m_vOutput.Open(iLines(), iCols()); //allocate memory for the output map
 
 	trq.SetTitle(sFreezeTitle);
 	trq.SetText(TR("Calculating Drainage Network Extraction"));
@@ -298,8 +298,8 @@ bool MapDrainageNetworkExtraction::fFreezing()
 	}
 	trq.fUpdate(iRow, iLines());
 	
-	m_vFacc.resize(0);
-	m_vThreshold.resize(0);
+	m_vFacc.Close();
+	m_vThreshold.Close();
 
 	//Construct dead-end drainage lines, if stream threshold map is used
 	if (m_tmMethods == tmMap )
@@ -331,7 +331,8 @@ bool MapDrainageNetworkExtraction::fFreezing()
 	}
 
 	//final clean up
-	m_vOutput.resize(0); 
+	m_vFlow.Close();
+	m_vOutput.Close(); 
 	return true;
 }
 

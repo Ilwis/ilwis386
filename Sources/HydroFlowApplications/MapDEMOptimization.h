@@ -49,6 +49,7 @@
 #include "Engine\Table\Col.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Polygon\POL.H"
+#include "LargeVector.h"
 
 IlwisObjectPtr * createMapDEMOptimization(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
 
@@ -87,7 +88,7 @@ protected:
 	SegmentMap m_sm;
 	PolygonMap m_pm; 
 private:
-	bool WriteData(vector<RealBuf>&);
+	bool WriteData(LargeVector<RealBuf>&);
 	void Init();
 	DrainageMapType   m_DrainageMapType;
 	String m_sbm;

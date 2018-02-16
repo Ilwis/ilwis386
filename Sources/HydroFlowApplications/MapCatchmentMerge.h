@@ -50,6 +50,7 @@
 #include "Engine\Map\Polygon\POL.H"
 #include "Engine\Table\Col.h"
 #include "Engine\Map\Point\PNT.H"
+#include "LargeVector.h"
 
 #define sStrahler  "Strahler"
 #define	sStreve  "Streve"
@@ -148,11 +149,10 @@ protected:
   ~MapCatchmentMerge();
 	
 private:
-	vector<LongBuf>   m_vStreamMap;   
-	vector<ByteBuf>   m_vFlowDir;      //vector for input flow direction 
-	vector<LongBuf>	  m_vOutput;
-	vector<LongBuf>   m_vFAcc;
-	vector<LongBuf>   m_vDEM;
+	LargeVector<LongBuf>   m_vStreamMap;   
+	LargeVector<ByteBuf>   m_vFlowDir;      //vector for input flow direction 
+	LargeVector<LongBuf>	  m_vOutput;
+	LargeVector<LongBuf>   m_vFAcc;
 	vector<OutletLocation> m_vOutlet;
 	Table m_tbl;  //attribute table associated with the output map
 	Domain m_dm;

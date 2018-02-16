@@ -3,6 +3,7 @@
 
 //#include "RasterApplication\mapfmap.h"
 #include "Engine\Applications\MAPFMAP.H"
+#include "LargeVector.h"
 
 class Cell {
 public:
@@ -31,8 +32,8 @@ private:
 	byte flag;
 	FlowDirectionAlgorithm::Method method;
 	byte Location[8];
-	vector<RealBuf> dem;
-	vector<ByteBuf> flowdir;
+	LargeVector<RealBuf> & dem;
+	LargeVector<ByteBuf> & flowdir;
 	long lines, columns;
 	byte increment;
 
@@ -60,8 +61,8 @@ private:
 
 public:
 	static int noflow;
-	FlowDirectionAlgorithm(Tranquilizer*);
-	vector<ByteBuf> calculate(const vector<RealBuf>& dem, String method);
+	FlowDirectionAlgorithm(LargeVector<RealBuf>& demIn, LargeVector<ByteBuf> & flowdirIn, Tranquilizer*);
+	void calculate(String method, long iLines, long iCols);
 };
 
 #endif ILWMAPFLOWDIRECTIONALG_H

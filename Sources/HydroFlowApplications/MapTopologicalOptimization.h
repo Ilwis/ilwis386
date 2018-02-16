@@ -46,6 +46,7 @@
 #include "Engine\SpatialReference\Coordsys.h"
 #include "Engine\SpatialReference\Ellips.h"
 #include "Engine\SpatialReference\csviall.h"
+#include "LargeVector.h"
 
 IlwisObjectPtr * createMapTopologicalOptimization(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
 
@@ -70,19 +71,19 @@ protected:
   ~MapTopologicalOptimization();
 	
 private:
-	vector<ByteBuf>   m_vDrainageMap;  //vector for the input drainage map 
-	vector<ByteBuf>   m_vFlowDir;  //vector for input flow direction 
-  vector<LongBuf>   m_vStream;
-  Map m_mpFlow;
-  Map m_mpDrainage;
-  SegmentMap m_smStream;
-  String m_sModifiedflowMap;
+	LargeVector<ByteBuf>   m_vDrainageMap;  //vector for the input drainage map 
+	LargeVector<ByteBuf>   m_vFlowDir;  //vector for input flow direction 
+	LargeVector<LongBuf>   m_vStream;
+	Map m_mpFlow;
+	Map m_mpDrainage;
+	SegmentMap m_smStream;
+	String m_sModifiedflowMap;
 	bool IsEdgeCell(long iRow, long iCol);
-  Map RasterizeStream();
-  void ReadInputMaps(Map);
-  void AddStreams(RowCol, RowCol, long);
-  bool ReLocateInOutCell(RowCol&);
-  void InitPars(vector<int>&, vector<int>&);
+	Map RasterizeStream();
+	void ReadInputMaps(Map);
+	void AddStreams(RowCol, RowCol, long);
+	bool ReLocateInOutCell(RowCol&);
+	void InitPars(vector<int>&, vector<int>&);
 };
 
 #endif // ILWMAMTOPOLOGICALOPTIMIZATION_H

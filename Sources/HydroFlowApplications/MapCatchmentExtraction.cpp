@@ -246,9 +246,9 @@ bool MapCatchmentExtraction::fFreezing()
 	trq.SetText(TR("Initialize map"));
 	trq.Start();
 
-	m_vDrainageMap.resize(iLines());  
-	m_vFlowDir.resize(iLines());  
-	m_vFlag.resize(iLines());
+	m_vDrainageMap.Open(iLines(), iCols());
+	m_vFlowDir.Open(iLines(), iCols());
+	m_vFlag.Open(iLines(), iCols());
 
   for (long iRow = 0; iRow< iLines(); iRow++ )
 	{
@@ -311,14 +311,14 @@ bool MapCatchmentExtraction::fFreezing()
 	trq.fUpdate(iLines(), iLines());
 
 	//Cleanup
-	m_vDrainageMap.resize(0);
-	m_vFlag.resize(0);
+	m_vDrainageMap.Close();
+	m_vFlag.Close();
 	m_vRecords.resize(0);
 
 	//Create attibute table associated with catchment map
 	FileName fnTbl(fnObj, ".tbt");
 	m_tbl = Table(fnTbl, mp->dm());
-  SetAttributeTable(m_tbl);
+	SetAttributeTable(m_tbl);
 
 	//Vectorize the raster catchment map 
 	trq.SetText(TR("Create catchment polygon map"));
@@ -370,7 +370,7 @@ bool MapCatchmentExtraction::fFreezing()
 	ComputeCatchmentAttributes();
 	ComputerCenterPolygon(fnPol);
 	ComputeCenterDrainage();
-	m_vFlowDir.resize(0);
+	m_vFlowDir.Close();
 	return true;
 }
 

@@ -45,6 +45,7 @@
 #define ILWMAPFLOWACCUMULATION_H
 
 #include "Engine\Applications\MAPFMAP.H"
+#include "LargeVector.h"
 
 IlwisObjectPtr * createMapFlowAccumulation(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
 
@@ -64,8 +65,8 @@ protected:
 	MapFlowAccumulation(const FileName& fn, MapPtr& p, const Map& map);
   ~MapFlowAccumulation();
 private:
-	vector<ByteBuf> m_vFlowDirection;  //vector for input flow direction 
-	vector<LongBuf> m_vFlowAcc; //vector for output flow accumulation 
+	LargeVector<ByteBuf> m_vFlowDirection;  //vector for input flow direction 
+	LargeVector<LongBuf> m_vFlowAcc; //vector for output flow accumulation 
 	long iFlowAcc(long iRow, long iCol); //accumulated flow value for each cell 
 };
 

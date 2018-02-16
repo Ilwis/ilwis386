@@ -43,6 +43,7 @@
 
 //#include "MAPFMAP.H"
 #include "Engine\Applications\MAPFMAP.H"
+#include "LargeVector.h"
 
 IlwisObjectPtr * createMapFillSinks(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
 
@@ -64,8 +65,8 @@ protected:
   ~MapFillSinks();
 private:
 	FillMethod m_fmMethods;
-	vector<RealBuf> m_vDEM;  //vector for input/output DEM 
-	vector<LongBuf> m_vFlag;
+	LargeVector<RealBuf> m_vDEM;  //vector for input/output DEM 
+	LargeVector<LongBuf> m_vFlag;
 	vector<RowCol> m_vSinks;
 	long m_sinkPixels;
 	long m_sinkPixelsThreshold;

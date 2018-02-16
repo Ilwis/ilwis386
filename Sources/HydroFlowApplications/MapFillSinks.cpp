@@ -169,7 +169,7 @@ bool MapFillSinks::fGeoRefChangeable() const
 bool MapFillSinks::fFreezing()
 {
 
-	m_sinkPixelsThreshold = 2; //TO initiallize!!!
+		m_sinkPixelsThreshold = 2; //TO initiallize!!!
 		/*Two vector m_vSinksFilled and m_vSinksFlagged are needed
 		m_vDEM -- 1. stores the input DEM, 
 											2. modified by depression filling algorithm,
@@ -180,8 +180,8 @@ bool MapFillSinks::fFreezing()
 										     when the the depres. area are defined;
 											3. Elements in flat area flagged to -1*/
 		
-		m_vDEM.resize(iLines());  //allocate memory for vectors 
-		m_vFlag.resize(iLines());
+		m_vDEM.Open(iLines(), iCols()); //allocate memory for vectors
+		m_vFlag.Open(iLines(), iCols());
 		m_vSinks.resize(0);
 		trq.SetTitle(sFreezeTitle);
 		trq.SetText(TR("Reading DEM"));
@@ -264,8 +264,8 @@ bool MapFillSinks::fFreezing()
 		}
 		trq.fUpdate(iLines(), iLines());
 		//Final clean up
-		m_vDEM.resize(0);
-		m_vFlag.resize(0);
+		m_vDEM.Close();
+		m_vFlag.Close();
 		m_vSinks.resize(0);
 		return true;
 }
@@ -528,7 +528,7 @@ void MapFillSinks::FlagAdjaCell(RowCol rcStartCell, vector<RowCol>& vAdj)
 class RowColValueLessClass //compare two elements for min_element algorithm
 {
 public:
-	RowColValueLessClass(vector<RealBuf>& m_vSFd) :
+	RowColValueLessClass(LargeVector<RealBuf>& m_vSFd) :
 		m_vDEM(m_vSFd)
 	{
 	}
@@ -537,7 +537,7 @@ public:
 		return m_vDEM[rc1.Row][rc1.Col] < m_vDEM[rc2.Row][rc2.Col];
 	}
 private:
-		vector<RealBuf>& m_vDEM;
+		LargeVector<RealBuf>& m_vDEM;
 };
 
 bool MapFillSinks::fIdentifyOutletCell(RowCol rcSink, RowCol& rcOutlet)
@@ -654,11 +654,9 @@ void MapFillSinks::CutTerrain(RowCol rcOutlet)
 void MapFillSinks::FlatAreaFlag(RowCol rcOutlet)
 {
 		//flag the cells in an existing flat area
-
-		double rHeight = m_vDEM[rcOutlet.Row][rcOutlet.Col];
 		vector<RowCol>::iterator pos;
 		for (pos = m_vSinks.begin(); pos < m_vSinks.end(); ++pos)
 		{
-					 m_vFlag[(*pos).Row][(*pos).Col] = -1; 
+				m_vFlag[(*pos).Row][(*pos).Col] = -1; 
 		}
 }

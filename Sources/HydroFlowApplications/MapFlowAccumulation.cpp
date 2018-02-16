@@ -129,8 +129,8 @@ bool MapFlowAccumulation::fGeoRefChangeable() const
 
 bool MapFlowAccumulation::fFreezing()
 {
-	m_vFlowDirection.resize(iLines());  //allocate memory for input flow direction 
-	m_vFlowAcc.resize(iLines()); //allocate memory for output flow acc. 
+	m_vFlowDirection.Open(iLines(), iCols());  //allocate memory for input flow direction 
+	m_vFlowAcc.Open(iLines(), iCols()); //allocate memory for output flow acc. 
 	trq.SetTitle(sFreezeTitle);
 	trq.SetText(TR("Reading Flow Direction Map"));
 	trq.Start();
@@ -175,8 +175,8 @@ bool MapFlowAccumulation::fFreezing()
 		if (trq.fUpdate(iRow, iLines())) return false;
 	}
 	trq.fUpdate(iLines(), iLines());
-	m_vFlowDirection.resize(0); 
-	m_vFlowAcc.resize(0); 
+	m_vFlowDirection.Close(); 
+	m_vFlowAcc.Close();
 	return true;
 }
 long MapFlowAccumulation::iFlowAcc(long iRow, long iCol)

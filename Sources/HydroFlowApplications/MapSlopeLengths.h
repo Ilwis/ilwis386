@@ -50,6 +50,7 @@
 #include "Engine\Map\Polygon\POL.H"
 #include "Engine\Table\Col.h"
 #include "Engine\Map\Point\PNT.H"
+#include "LargeVector.h"
 
 #define	sDownstreamCoord  "DownstreamCoord"
 #define	sUpstreamCoord  "UpstreamCoord"
@@ -76,10 +77,10 @@ protected:
 	 ~MapOverlandFlowLength();
 	
 private:
-	vector<LongBuf>   m_vDrainageMap;   
-	vector<ByteBuf>   m_vFlowDir;      //vector for input flow direction 
-	vector<RealBuf>		m_vOutput_s;    //for lengths to stream output
-	vector<RealBuf>		m_vOutput_d;    //for lengths to divide output
+	LargeVector<LongBuf>   m_vDrainageMap;   
+	LargeVector<ByteBuf>   m_vFlowDir;      //vector for input flow direction 
+	LargeVector<RealBuf>		m_vOutput_s;    //for lengths to stream output
+	LargeVector<RealBuf>		m_vOutput_d;    //for lengths to divide output
 	vector<RowCol> m_vCellsOnDivide;  //Hold the rowcol locations of cells on divide
 	RowCol m_rcUpstream;
 	vector<byte> m_vFlowNum;

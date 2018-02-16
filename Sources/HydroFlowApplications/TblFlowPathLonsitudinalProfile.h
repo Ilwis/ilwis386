@@ -48,6 +48,7 @@
 #include "Engine\SpatialReference\Coordsys.h"
 #include "Engine\SpatialReference\Ellips.h"
 #include "Engine\SpatialReference\csviall.h"
+#include "LargeVector.h"
 
 struct LongitudinalProfile
 {
@@ -90,7 +91,7 @@ class DATEXPORT TblFlowPathLongitudinalProfile: public TableVirtual
         Map                       m_mpAttributeMap;
 		long                      m_iSegmentID;
 		double                    m_rDist;
-		vector<RealBuf>           m_vAttributeMap;
+		LargeVector<RealBuf>           m_vAttributeMap;
 };
 
 #endif 

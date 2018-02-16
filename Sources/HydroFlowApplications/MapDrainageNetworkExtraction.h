@@ -42,6 +42,7 @@
 #define ILWDRAINAGENETWOREXTRACTION_H
 
 #include "Engine\Applications\MAPFMAP.H"
+#include "LargeVector.h"
 
 IlwisObjectPtr * createMapDrainageNetworkExtraction(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
 
@@ -77,10 +78,10 @@ protected:
 private:
 	void Init();
 	ThresholdMethod m_tmMethods;
-	vector<LongBuf> m_vFacc;  //vector for the input flow accumulation map 
-	vector<ByteBuf> m_vOutput;
-	vector<LongBuf> m_vThreshold;	//the minimum contributing area per cell
-	vector<ByteBuf> m_vFlow;
+	LargeVector<LongBuf> m_vFacc;  //vector for the input flow accumulation map 
+	LargeVector<ByteBuf> m_vOutput;
+	LargeVector<LongBuf> m_vThreshold;	//the minimum contributing area per cell
+	LargeVector<ByteBuf> m_vFlow;
 	String m_sFlowMap;
 	Map m_mpFlowDir;
 	bool IsEdgeCell(long iRow, long iCol);

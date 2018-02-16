@@ -42,6 +42,7 @@
 #define ILWVARIABLETHRESHOLDCOMPUTATION_H
 
 #include "Engine\Applications\MAPFMAP.H"
+#include "LargeVector.h"
 
 struct ThresholdValues
 {
@@ -65,23 +66,23 @@ public:
 protected:
 	virtual void Store();
 	MapVariableThresholdComputation(const FileName& fn, MapPtr& p, 
-                                  const Map& map, 
-															    int     iFilterSize,	
-															    int     iClasses,
-															    String  sThreshold,
-                                  bool  fReliefMap);
+									const Map& map, 
+									int     iFilterSize,	
+									int     iClasses,
+									String  sThreshold,
+									bool  fReliefMap);
 	~MapVariableThresholdComputation();
-  String m_sThreshold;
-  int m_iFilterSize;
-  int m_iClasses;
-  bool m_fReliefMap;
+	String m_sThreshold;
+	int m_iFilterSize;
+	int m_iClasses;
+	bool m_fReliefMap;
 private:
 	void Init();
-  vector<RealBuf> m_vDem;  
-	vector<RealBuf> m_vOutput;
+	LargeVector<RealBuf> m_vDem;  
+	LargeVector<RealBuf> m_vOutput;
 	bool IsEdgeCell(long iRow, long iCol);
-  void ComputeInternalRelief();
-  void ReClassify(vector<ThresholdValues>);
+	void ComputeInternalRelief();
+	void ReClassify(vector<ThresholdValues>);
 };
 
 #endif // ILWVARIABLETHRESHOLDCOMPUTATION_H

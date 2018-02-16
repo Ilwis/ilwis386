@@ -46,6 +46,7 @@
 #include "Engine\SpatialReference\Coordsys.h"
 #include "Engine\SpatialReference\Ellips.h"
 #include "Engine\SpatialReference\csviall.h"
+#include "LargeVector.h"
 
 IlwisObjectPtr * createMapDrainageNetworkOrdering(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
 
@@ -90,9 +91,9 @@ protected:
   ~MapDrainageNetworkOrdering();
 	
 private:
-	vector<RealBuf>   m_vDem;
-	vector<LongBuf>   m_vDrainageMap;  //vector for the input drainage map 
-	vector<ByteBuf>   m_vFlowDir;  //vector for input flow direction 
+	LargeVector<RealBuf>   m_vDem;
+	LargeVector<LongBuf>   m_vDrainageMap;  //vector for the input drainage map 
+	LargeVector<ByteBuf>   m_vFlowDir;  //vector for input flow direction 
 	vector<RowCol>    m_vStreamLink;	//store the location of cells in a link  	
 	vector<RowCol>    m_vJunction;	//store the location of junctions in the network   	
 	RecordObj         m_rec;

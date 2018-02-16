@@ -181,8 +181,8 @@ bool MapFlowDirection::fGeoRefChangeable() const
 
 bool MapFlowDirection::fFreezing()
 {
-	m_vDem.resize(iLines());  //allocate memory for the input DEM 
-	m_vFlow.resize(iLines());  //allocate memory for the output flows 
+	m_vDem.Open(iLines(), iCols());  //allocate memory for the input DEM 
+	m_vFlow.Open(iLines(), iCols());  //allocate memory for the output flows 
 	InitPars();
 	trq.SetTitle(sFreezeTitle);
 	trq.SetText(TR("Reading DEM"));
@@ -193,11 +193,6 @@ bool MapFlowDirection::fFreezing()
 		m_vDem[iRow].Size(iCols()); 
 		mp->GetLineVal(iRow, m_vDem[iRow]);
 		m_vFlow[iRow].Size(iCols());
-
-		for (long iCol = 0; iCol < iCols(); iCol++)
-		{
-			m_vFlow[iRow][iCol] = 0;
-		}
 		if (trq.fUpdate(iRow, iLines())) return false;	
 	}
 	trq.fUpdate(iLines(), iLines());
@@ -205,11 +200,11 @@ bool MapFlowDirection::fFreezing()
 	trq.SetText(TR("Calculating Flow Direction"));
 
 	if (m_fParallel) {
-		FlowDirectionAlgorithm fda(&trq);
+		FlowDirectionAlgorithm fda(m_vDem, m_vFlow, &trq);
 		String method = "height";
-		if (m_fmMethods == FlowMethod::fmSlope)
+		if (m_fmMethods == fmSlope)
 			method = "slope";
-		m_vFlow = fda.calculate(m_vDem, method);
+		fda.calculate(method, iLines(), iCols());
 	} else {
 		double rMax;
 		int iCout=0;
@@ -253,10 +248,9 @@ bool MapFlowDirection::fFreezing()
 		
 		//Ste flows to the flat areas
 		TreatFlatAreas();
-		
-		m_vDem.resize(0);
-		m_vFlag.resize(0);
+		m_vFlag.Close();
 	}
+	m_vDem.Close();
 	//write the computed flow direction for the output map  
 	for (long iRow = 0; iRow < iLines(); ++iRow)
 	{
@@ -270,12 +264,12 @@ bool MapFlowDirection::fFreezing()
 	}
 
 	//final clean up
-	m_vFlow.resize(0); 
+	m_vDem.Close();
+	m_vFlow.Close();
 	return true;
 }
 
-void MapFlowDirection::FillArray(long iRow, long iCol, 
-																 vector<double>& vValue)
+void MapFlowDirection::FillArray(long iRow, long iCol, vector<double>& vValue)
 {
 	//For the specified cell[iRow, iCol], compute the slope/dh values among its 8-neighbors
 	//return the calculated slope/dh in vector vValue
@@ -359,9 +353,7 @@ void MapFlowDirection::FillArray(long iRow, long iCol,
 	}
 }
 
-double MapFlowDirection::rComputeSlope(double rCurH, 
-																			 double rNbH, 
-																			 int iPos)
+double MapFlowDirection::rComputeSlope(double rCurH, double rNbH, int iPos)
 {
 		//The slope is calculated by subscribing the neighbor's value from the center
 		//distance 1.14 is concerned for diagonal cells 
@@ -411,9 +403,7 @@ double MapFlowDirection::rFindMaxLocation(vector<double>& vValue, vector<int>& v
 		return rMax;
 }
 
-long MapFlowDirection::iLookUp(double rMax, 
-															 int iCout,
-															 vector<int>& vPos)
+long MapFlowDirection::iLookUp(double rMax, int iCout, vector<int>& vPos)
 {
 		//rMax - max. value in slope / height diff.
 		//iCout - number of positions with max. elements in vPos
@@ -450,15 +440,13 @@ bool MapFlowDirection::isInOneEdge(int iPos1, int iPos2, int iPos3, vector<int>&
 		bool fCondition1 = find(vPos.begin(),vPos.end(),iPos1) != vPos.end();
 		bool fCondition2 = find(vPos.begin(),vPos.end(),iPos2) != vPos.end();
 		bool fCondition3 = find(vPos.begin(),vPos.end(),iPos3) != vPos.end();
-
 		return fCondition1 && fCondition2 && fCondition3;
-
 }
 
 void MapFlowDirection::TreatFlatAreas()
 {
 		trq.SetText(TR("Treatment of Flat Area"));		
-		m_vFlag.resize(iLines());
+		m_vFlag.Open(iLines(), iCols());
 
 		//m_vFlag is initialized to zero, first
 		for (long iRow = 0; iRow < iLines(); iRow++)

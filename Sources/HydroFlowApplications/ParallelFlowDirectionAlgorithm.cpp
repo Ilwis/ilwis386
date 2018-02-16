@@ -3,10 +3,13 @@
 
 int FlowDirectionAlgorithm::noflow = 0;
 
-FlowDirectionAlgorithm::FlowDirectionAlgorithm(Tranquilizer* trq) :
-	m_trq(trq),
-		flatcell(9), flag(10), 
-		increment(1)
+FlowDirectionAlgorithm::FlowDirectionAlgorithm(LargeVector<RealBuf>& demIn, LargeVector<ByteBuf> & flowdirIn, Tranquilizer* trq)
+: dem(demIn)
+, flowdir(flowdirIn)
+, m_trq(trq)
+, flatcell(9)
+, flag(10)
+, increment(1)
 {
 	//	Location number				Order in m_vDirection
 	//	-------						-------	 looping order of the neighbors 	
@@ -31,9 +34,9 @@ FlowDirectionAlgorithm::FlowDirectionAlgorithm(Tranquilizer* trq) :
 
 FlowDirectionAlgorithm::Method FlowDirectionAlgorithm::methodValueOf(String val) {
 	if (fCIStrEqual(val, "slope")) {
-		return FlowDirectionAlgorithm::Method::slope;
+		return FlowDirectionAlgorithm::slope;
 	}
-	return FlowDirectionAlgorithm::Method::height;
+	return FlowDirectionAlgorithm::height;
 }
 
 /**
@@ -44,18 +47,13 @@ FlowDirectionAlgorithm::Method FlowDirectionAlgorithm::methodValueOf(String val)
  * @param method a string parameter "slope" or "height" to indicate how flow direction should be calculated; slope calculates flow direction as the run off to a neighbor pixel according to steepest downhill slope; height calculates flow direction as the run off to the neighbor pixel which has the lowest height.
  * @return Two dimensional array with flow directions    
  */
-vector<ByteBuf> FlowDirectionAlgorithm::calculate(const vector<RealBuf>& demInput, String methodInput) {
+void FlowDirectionAlgorithm::calculate(String methodInput, long iLines, long iCols) {
 		String sl = methodInput.toLower();
-		dem = demInput;
 		method = methodValueOf(sl);
 		
 		FlowDirection fd;
-		lines = dem.size();
-		columns = dem[0].iSize();
-		flowdir.resize(lines);
-		for (int row = 0; row < lines; ++row) {
-			flowdir[row].Size(columns);
-		}
+		lines = iLines;
+		columns = iCols;
 		double max;
 		m_trq->SetText("Flow direction assignment");
 		for (long row=0; row<lines; row++){
@@ -133,7 +131,6 @@ vector<ByteBuf> FlowDirectionAlgorithm::calculate(const vector<RealBuf>& demInpu
 			}
 		}
 		m_trq->Stop();
-		return flowdir;
 	}
 	
 	bool FlowDirectionAlgorithm::isEven(int elem)
@@ -269,28 +266,28 @@ vector<ByteBuf> FlowDirectionAlgorithm::calculate(const vector<RealBuf>& demInpu
 			int index = 0;
 			while(index < 2){
 				FlowDirection fd = listPos[index];
-				if ((fd == FlowDirection::E) || (fd == FlowDirection::S) || 
-					(fd == FlowDirection::W) || (fd == FlowDirection::N)){
+				if ((fd == FlowDirectionAlgorithm::E) || (fd == FlowDirectionAlgorithm::S) || 
+					(fd == FlowDirectionAlgorithm::W) || (fd == FlowDirectionAlgorithm::N)){
 					return fd;
 				}
 				index++;
 			}
 		}
 		else{
-			if (isInOneEdge(listPos, FlowDirection::SW, FlowDirection::S, FlowDirection::SE))
-				return FlowDirection::S;
-			else if (isInOneEdge(listPos, FlowDirection::NW, FlowDirection::W, FlowDirection::SW))
-				return FlowDirection::W;
-			else if (isInOneEdge(listPos, FlowDirection::NW, FlowDirection::N, FlowDirection::NE))
-				return FlowDirection::N;
-			else if (isInOneEdge(listPos, FlowDirection::NE, FlowDirection::E, FlowDirection::SE))
-				return FlowDirection::E;
+			if (isInOneEdge(listPos, FlowDirectionAlgorithm::SW, FlowDirectionAlgorithm::S, FlowDirectionAlgorithm::SE))
+				return FlowDirectionAlgorithm::S;
+			else if (isInOneEdge(listPos, FlowDirectionAlgorithm::NW, FlowDirectionAlgorithm::W, FlowDirectionAlgorithm::SW))
+				return FlowDirectionAlgorithm::W;
+			else if (isInOneEdge(listPos, FlowDirectionAlgorithm::NW, FlowDirectionAlgorithm::N, FlowDirectionAlgorithm::NE))
+				return FlowDirectionAlgorithm::N;
+			else if (isInOneEdge(listPos, FlowDirectionAlgorithm::NE, FlowDirectionAlgorithm::E, FlowDirectionAlgorithm::SE))
+				return FlowDirectionAlgorithm::E;
 			else{
 				int index = 0;
 				while(index < listPos.size()){
 					FlowDirection fd = listPos[index];
-					if (fd == FlowDirection::E || fd == FlowDirection::S || 
-						fd == FlowDirection::W || fd == FlowDirection::N){
+					if (fd == FlowDirectionAlgorithm::E || fd == FlowDirectionAlgorithm::S || 
+						fd == FlowDirectionAlgorithm::W || fd == FlowDirectionAlgorithm::N){
 						return fd;
 					}
 					index++;
@@ -319,23 +316,23 @@ vector<ByteBuf> FlowDirectionAlgorithm::calculate(const vector<RealBuf>& demInpu
 //		pos - the flow location number as defined in ILWIS
 //	Returns - flow direction 	
 	FlowDirectionAlgorithm::FlowDirection FlowDirectionAlgorithm::mapFlowLocation(int pos){
-		FlowDirection result = FlowDirection::E; 
+		FlowDirection result = FlowDirectionAlgorithm::E; 
 		switch (pos){
-			case 0: result = FlowDirection::NW; 
+			case 0: result = FlowDirectionAlgorithm::NW; 
 			  		break;
-			case 1: result = FlowDirection::N;
+			case 1: result = FlowDirectionAlgorithm::N;
 					break;
-			case 2:	result = FlowDirection::NE;
+			case 2:	result = FlowDirectionAlgorithm::NE;
 					break;
-			case 3: result = FlowDirection::W;
+			case 3: result = FlowDirectionAlgorithm::W;
 					break;	
-			case 4: result = FlowDirection::E;
+			case 4: result = FlowDirectionAlgorithm::E;
 					break;
-			case 5: result = FlowDirection::SW;
+			case 5: result = FlowDirectionAlgorithm::SW;
 					break;
-			case 6: result = FlowDirection::S;
+			case 6: result = FlowDirectionAlgorithm::S;
 					break;	
-			case 7: result = FlowDirection::SE;
+			case 7: result = FlowDirectionAlgorithm::SE;
 					break;
 		}
 		return result;

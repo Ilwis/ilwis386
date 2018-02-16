@@ -448,8 +448,8 @@ bool MapDEMOptimization::fFreezing()
 					break;
 		}
 		
-		vector<RealBuf> vDem;  //vector for the output DEM
-		vDem.resize(iLines());
+		LargeVector<RealBuf> vDem;  //vector for the output DEM
+		vDem.Open(iLines(), iCols());
 		trq.SetText(TR("Calculating Optimized DEM"));
 		RangeReal rrInput  = m_mp->rrMinMax();
 		double rMax = rrInput.rHi();
@@ -519,11 +519,11 @@ bool MapDEMOptimization::fFreezing()
 		CreateMapStore();
 		trq.fUpdate(iRow, iLines());
 		WriteData(vDem);
-		vDem.resize(0);
+		vDem.Close();
 		return true;
 }
 
-bool MapDEMOptimization::WriteData(vector<RealBuf>& vData)
+bool MapDEMOptimization::WriteData(LargeVector<RealBuf>& vData)
 {
 	//write DEM to disk 
 	trq.SetText(TR("Write output map"));

@@ -187,11 +187,11 @@ bool MapVariableThresholdComputation::fGeoRefChangeable() const
 
 bool MapVariableThresholdComputation::fFreezing()
 {
-	m_vDem.resize(iLines());  
-	m_vOutput.resize(iLines());  
+	m_vDem.Open(iLines(), iCols());
+	m_vOutput.Open(iLines(), iCols());
 
-  vector<ThresholdValues> vThreshold;
-  SplitString(m_sThreshold, vThreshold);
+	vector<ThresholdValues> vThreshold;
+	SplitString(m_sThreshold, vThreshold);
   
 	trq.SetTitle(sFreezeTitle);
 	trq.SetText(TR("Initialize map"));
@@ -228,7 +228,7 @@ bool MapVariableThresholdComputation::fFreezing()
 	  }
   }
   ReClassify(vThreshold);
-	m_vDem.resize(0);
+	m_vDem.Close();
 
   //returns the position of the first element with max/min.
 	//ValueRange vrOutput = ValueRange(-9999999.9,9999999.9,mp->dvrs().rStep());
@@ -243,7 +243,7 @@ bool MapVariableThresholdComputation::fFreezing()
 	}
 
 	//final clean up
-	m_vOutput.resize(0); 
+	m_vOutput.Close(); 
 	return true;
 }
 

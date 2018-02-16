@@ -50,6 +50,7 @@
 #include "Engine\Map\Polygon\POL.H"
 #include "Engine\Table\Col.h"
 #include "Engine\Map\Point\PNT.H"
+#include "LargeVector.h"
 
 #define	sDownstreamCoord  "DownstreamCoord"
 #define	sUpstreamCoord  "UpstreamCoord"
@@ -76,9 +77,9 @@ protected:
 	 ~MapFlowLength2Outlet();
 	
 private:
-	vector<LongBuf>   m_vDrainageMap;   
-	vector<ByteBuf>   m_vFlowDir;      //vector for input flow direction 
-	vector<RealBuf>		m_vOutput_s;    //for lengths to stream output
+	LargeVector<LongBuf>   m_vDrainageMap;   
+	LargeVector<ByteBuf>   m_vFlowDir;      //vector for input flow direction 
+	LargeVector<RealBuf>	m_vOutput_s;    //for lengths to stream output
 	RowCol m_rcUpstream;
 	vector<byte> m_vFlowNum;
 	vector<byte> m_vReceiveNum;

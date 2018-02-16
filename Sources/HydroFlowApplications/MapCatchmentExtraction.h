@@ -49,6 +49,7 @@
 #include "Engine\Map\Polygon\POL.H"
 #include "Engine\Table\Col.h"
 #include "Engine\Map\Point\PNT.H"
+#include "LargeVector.h"
 
 #define sUpstreamLink  "UpstreamLinkID"
 #define	sDownstreamLink  "DownstreamLinkID"
@@ -91,9 +92,9 @@ protected:
   ~MapCatchmentExtraction();
 	
 private:
-	vector<LongBuf>   m_vDrainageMap;  //vector for the input drainage map 
-	vector<ByteBuf>   m_vFlowDir;      //vector for input flow direction 
-	vector<LongBuf>		m_vFlag;         //Flag the identified catchment 
+	LargeVector<LongBuf>   m_vDrainageMap;  //vector for the input drainage map 
+	LargeVector<ByteBuf>   m_vFlowDir;      //vector for input flow direction 
+	LargeVector<LongBuf>		m_vFlag;         //Flag the identified catchment 
 	vector<AttCols> m_vRecords;
 	vector<AttUpstreamLink> m_vvUpstreamLinks;	
 	Column m_cArea;

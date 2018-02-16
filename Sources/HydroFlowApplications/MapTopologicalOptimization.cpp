@@ -219,9 +219,9 @@ bool MapTopologicalOptimization::fFreezing()
 		if (trq.fUpdate(iRow, iLines())) return false;
 	}
 	trq.fUpdate(iLines(), iLines());
-	m_vDrainageMap.resize(0);
-	m_vFlowDir.resize(0);
-	m_vStream.resize(0);
+	m_vDrainageMap.Close();
+	m_vFlowDir.Close();
+	m_vStream.Close();
 	return true;
 }
 
@@ -251,9 +251,9 @@ Map MapTopologicalOptimization::RasterizeStream()
 
 void MapTopologicalOptimization::ReadInputMaps(Map mpTmp)
 {
-  m_vDrainageMap.resize(iLines());  
-	m_vFlowDir.resize(iLines());  
-	m_vStream.resize(iLines());
+	m_vDrainageMap.Open(iLines(), iCols());
+	m_vFlowDir.Open(iLines(), iCols());
+	m_vStream.Open(iLines(), iCols());
 	for (long iRow = 0; iRow< iLines(); iRow++ )
 	{
 		//Reading input drainage map

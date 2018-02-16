@@ -372,8 +372,8 @@ bool MapDrainageNetworkOrdering::fFreezing()
 	//Cleanup
 	m_vJunction.resize(0);
 	m_vStreamLink.resize(0);
-	m_vDem.resize(0);
-	m_vFlowDir.resize(0);
+	m_vDem.Close();
+	m_vFlowDir.Close();
 	
 	//Write drainage map
 	m_dm->pdsrt()->Resize(m_iLinkNumber);
@@ -386,7 +386,7 @@ bool MapDrainageNetworkOrdering::fFreezing()
 		if (trq.fUpdate(iRow, iLines())) return false;
 	}
 	trq.fUpdate(iLines(), iLines());
-	m_vDrainageMap.resize(0);
+	m_vDrainageMap.Close();
 
 	
 	//Read DEM map
@@ -410,9 +410,9 @@ bool MapDrainageNetworkOrdering::fFreezing()
 
 void MapDrainageNetworkOrdering::IniParms()
 {
-	m_vDrainageMap.resize(iLines());  //allocate memory for the input drainage map 
-	m_vFlowDir.resize(iLines());  //allocate memory for the input flow direction map 
-  m_vDem.resize(iLines()); 
+	m_vDrainageMap.Open(iLines(), iCols());  //allocate memory for the input drainage map 
+	m_vFlowDir.Open(iLines(), iCols());  //allocate memory for the input flow direction map 
+	m_vDem.Open(iLines(), iCols()); 
 	m_iLinkNumber = 0; 
 	m_iStrahler = 1;
 	m_iStreve = 1;

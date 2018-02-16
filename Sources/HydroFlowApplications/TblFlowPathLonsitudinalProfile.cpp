@@ -209,7 +209,7 @@ bool TblFlowPathLongitudinalProfile::fFreezing()
   bool fTransformCoords = m_mpAttributeMap->cs() != m_segmpFlowPath->cs();
   long iLines = m_mpAttributeMap->iLines();
   long iCols = m_mpAttributeMap->iCols();
-  m_vAttributeMap.resize(iLines);  
+  m_vAttributeMap.Open(iLines, iCols);
   
   //Reading input attribute map
   for (long iRow = 0; iRow< iLines; iRow++ )
@@ -295,7 +295,7 @@ bool TblFlowPathLongitudinalProfile::fFreezing()
   }
   //Create columns in the output table
   CreateColumns(vlp);
-  m_vAttributeMap.resize(0);
+  m_vAttributeMap.Close();
   vpoints.resize(0);
   vlp.resize(0);
   return true;

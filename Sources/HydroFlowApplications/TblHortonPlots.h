@@ -43,6 +43,7 @@
 
 #include "Engine\Applications\TBLVIRT.H"
 #include "Engine\Map\Raster\Map.h"
+#include "LargeVector.h"
 
 IlwisObjectPtr * createTableHortonPlots(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms );
 
@@ -95,9 +96,9 @@ class DATEXPORT TableHortonPlots: public TableVirtual
         Map                       m_mpCatchment;
         Map                       m_mpDrainage;
         Map                       m_mpMergedCatchment;
-        vector<LongBuf>           m_vCatchment;   
-	      vector<LongBuf>		        m_vDrainage;        
-        vector<LongBuf>           m_vMergedCatchment;
+        LargeVector<LongBuf>     m_vCatchment;   
+	    LargeVector<LongBuf>     m_vDrainage;        
+        LargeVector<LongBuf>     m_vMergedCatchment;
         Table                     m_tbl_ratio;
 };
 

@@ -526,9 +526,9 @@ void MapCatchmentMerge::InitInOutMaps()
   
 	trq.SetText(TR("Initialize map"));
 	trq.Start();
-	m_vStreamMap.resize(iLines());  
-	m_vFlowDir.resize(iLines());  
-	m_vOutput.resize(iLines());
+	m_vStreamMap.Open(iLines(), iCols());
+	m_vFlowDir.Open(iLines(), iCols());
+	m_vOutput.Open(iLines(), iCols());
 
 	for (long iRow = 0; iRow< iLines(); iRow++ )
 	{
@@ -719,7 +719,7 @@ bool MapCatchmentMerge::fFreezing()
 	}
 	
 	//Clean up
-	m_vStreamMap.resize(0);
+	m_vStreamMap.Close();
 	m_vUpCatchmentIDs.resize(0);
 	m_dm->pdsrt()->Resize(id);
 	
@@ -755,10 +755,10 @@ bool MapCatchmentMerge::fFreezing()
 	ComputeOtherAttributes();
 	ComputeCenterPolygon(fnPol);
 
-	m_vOutput.resize(0);
+	m_vOutput.Close();
 	m_vOutlet.resize(0);
-	m_vFlowDir.resize(0);
-	m_vFAcc.resize(0);
+	m_vFlowDir.Close();
+	m_vFAcc.Close();
 	m_vStream.resize(0);
 	m_vStreamCoord.resize(0);
 	m_vDrainageAtt.resize(0);
@@ -801,7 +801,7 @@ SegmentMap MapCatchmentMerge::ExtractSegments()
 void MapCatchmentMerge::ReadFlowAccumulation()
 {
   trq.SetText(TR("Reading Flow Accumulation Map"));
-	m_vFAcc.resize(iLines());  
+	m_vFAcc.Open(iLines(), iCols());
 	for (long iRow = 0; iRow< iLines(); iRow++ )
 	{
 		m_vFAcc[iRow].Size(iCols()); 
