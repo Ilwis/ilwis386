@@ -1298,7 +1298,7 @@ RangeReal MapListPtr::getRange() {
 		Tranquilizer trq;
 		trq.SetText(TR("Calculating histograms"));
 		trq.Start();
-		for(int i=0; i < ma.size(); ++i) {
+		for(int i = iLower(); i <= iUpper(); ++i) {
 			if ( trq.fUpdate(i, ma.size()))
 				return RangeReal();
 			if ( ma[i]->dm()->pdv()) {
@@ -1313,21 +1313,21 @@ RangeReal MapListPtr::getRange() {
 
 Domain MapListPtr::dm() const {
 	if ( ma.size() > 0)
-		return ma[0]->dm();
+		return ma[iLower()]->dm();
 	return Domain();
 }
 
 double MapListPtr::getStep() const{
 	if ( ma.size() > 0)
-		return ma[0]->dvrs().rStep();
+		return ma[iLower()]->dvrs().rStep();
 	return 1;
 }
 
 void MapListPtr::rValue(const Coord& crd, vector<double>& values){
-	if ( values.size() != ma.size())
-		values.resize(ma.size());
+	if ( values.size() != ma.size() - iLower())
+		values.resize(ma.size() - iLower());
 
-	for(int i =0; i < ma.size(); ++i) {
-		values[i] = ma.at(i)->rValue(crd);
+	for(int i = iLower(); i <= iUpper(); ++i) {
+		values[i - iLower()] = ma.at(i)->rValue(crd);
 	}
 }
