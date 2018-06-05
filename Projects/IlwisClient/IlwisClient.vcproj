@@ -193,6 +193,7 @@
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile=""
 				SubSystem="2"
+				LargeAddressAware="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				ImportLibrary="$(SolutionDir)libraries\$(ConfigurationName)\$(InputName).lib"
@@ -4884,6 +4885,14 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Editors\Map\EditField.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\Map\PointEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\Map\PointEditor.h"
 						>
 					</File>
 					<File
