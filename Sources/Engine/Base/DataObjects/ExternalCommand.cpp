@@ -49,7 +49,7 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-#define BUFSIZE 4096
+#define BUFSIZE 16384
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
