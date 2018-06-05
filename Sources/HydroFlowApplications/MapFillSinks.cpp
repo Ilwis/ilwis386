@@ -423,15 +423,15 @@ bool MapFillSinks::fLocateInitialSink(RowCol& rc)
 void MapFillSinks::FindSinkContArea(RowCol rcInitSink)
 {
 		//*define the extent of sink contributing area		
-		vector<RowCol> vStartCells;
+		deque<RowCol> vStartCells;
 		FlagAdjaCell(rcInitSink, vStartCells);
 		
 		/*identify the outward adjacent cells for each of starting cells
 		 *put the located cells in vrcOutwardCells
 		 *flag the located cells in vSinkFlagged*/
 
-		vector<RowCol>::iterator pos;
-		vector<RowCol> vAdjaCells;
+		deque<RowCol>::iterator pos;
+		deque<RowCol> vAdjaCells;
 		m_vFlag[rcInitSink.Row][rcInitSink.Col] = m_iFlag;
 		m_vSinks.resize(0);
 		m_vSinks.push_back(rcInitSink);
@@ -441,7 +441,7 @@ void MapFillSinks::FindSinkContArea(RowCol rcInitSink)
 			vAdjaCells.resize(0); /*stores all located outward adjacent cells
 													to each of starting cell*/
 			
-			for (pos = vStartCells.begin(); pos < vStartCells.end(); ++pos)
+			for (pos = vStartCells.begin(); pos != vStartCells.end(); ++pos)
 			{
 					RowCol rc (*pos);
 					m_vSinks.push_back(rc);
@@ -454,7 +454,7 @@ void MapFillSinks::FindSinkContArea(RowCol rcInitSink)
 void MapFillSinks::FindSinkContArea2(RowCol rcInitSink)
 {
 		//*define the extent of sink contributing area		
-		vector<RowCol> vStartCells;
+		deque<RowCol> vStartCells;
 		m_sinkPixels = 1;
 		FlagAdjaCell(rcInitSink, vStartCells);
 		
@@ -462,8 +462,8 @@ void MapFillSinks::FindSinkContArea2(RowCol rcInitSink)
 		 *put the located cells in vrcOutwardCells
 		 *flag the located cells in vSinkFlagged*/
 
-		vector<RowCol>::iterator pos;
-		vector<RowCol> vAdjaCells;
+		deque<RowCol>::iterator pos;
+		deque<RowCol> vAdjaCells;
 		m_vFlag[rcInitSink.Row][rcInitSink.Col] = m_iFlag;
 		m_vSinks.resize(0);
 		m_vSinks.push_back(rcInitSink);
@@ -473,7 +473,7 @@ void MapFillSinks::FindSinkContArea2(RowCol rcInitSink)
 			vAdjaCells.resize(0); /*stores all located outward adjacent cells
 													to each of starting cell*/
 			
-			for (pos = vStartCells.begin(); pos < vStartCells.end(); ++pos)
+			for (pos = vStartCells.begin(); pos != vStartCells.end(); ++pos)
 			{
 					RowCol rc (*pos);
 					m_vSinks.push_back(rc);
@@ -495,7 +495,7 @@ bool MapFillSinks::IsEdgeCell(long iRow, long iCol)
 				return false;
 }
 
-void MapFillSinks::FlagAdjaCell(RowCol rcStartCell, vector<RowCol>& vAdj)
+void MapFillSinks::FlagAdjaCell(RowCol rcStartCell, deque<RowCol>& vAdj)
 {
 	/*check and skip if a cell 
   	*is undefined or  
@@ -543,11 +543,11 @@ private:
 bool MapFillSinks::fIdentifyOutletCell(RowCol rcSink, RowCol& rcOutlet)
 {
 		//Find outlet cell in the rim of the sink contributing area
-		vector<RowCol> vOutlets; //potential outlets
+		deque<RowCol> vOutlets; //potential outlets
 		vOutlets.resize(0);
 		
-		vector<RowCol>::iterator pos = m_vSinks.begin();
-		for (; pos < m_vSinks.end(); ++pos)
+		deque<RowCol>::iterator pos = m_vSinks.begin();
+		for (; pos != m_vSinks.end(); ++pos)
 		//for (vector<RowCol>::iterator pos = m_vSinks.begin(); pos < m_vSinks.end(); ++pos)
 		{		
 				long iRow = pos->Row;
@@ -620,8 +620,8 @@ void MapFillSinks::DepresFill(RowCol rcOutlet)
 		/*for each cell in the sink cont. area, if it is lower than the 
 		 *elevation of the outlet, raise iis elevation to that of outlet.*/
 		double rHeight = m_vDEM[rcOutlet.Row][rcOutlet.Col];
-		vector<RowCol>::iterator pos;
-		for (pos = m_vSinks.begin(); pos < m_vSinks.end(); ++pos)
+		deque<RowCol>::iterator pos;
+		for (pos = m_vSinks.begin(); pos != m_vSinks.end(); ++pos)
 		{		
 				long iRow = pos->Row;
 				long iCol = pos->Col;
@@ -639,8 +639,8 @@ void MapFillSinks::CutTerrain(RowCol rcOutlet)
 		//breaching and filling in this case
 		double cutValue = getCutValue(rcOutlet);
 		double rHeight = m_vDEM[rcOutlet.Row][rcOutlet.Col];
-		vector<RowCol>::iterator pos;
-		for (pos = m_vSinks.begin(); pos < m_vSinks.end(); ++pos)
+		deque<RowCol>::iterator pos;
+		for (pos = m_vSinks.begin(); pos != m_vSinks.end(); ++pos)
 		{		
 				long iRow = pos->Row;
 				long iCol = pos->Col;
@@ -654,8 +654,8 @@ void MapFillSinks::CutTerrain(RowCol rcOutlet)
 void MapFillSinks::FlatAreaFlag(RowCol rcOutlet)
 {
 		//flag the cells in an existing flat area
-		vector<RowCol>::iterator pos;
-		for (pos = m_vSinks.begin(); pos < m_vSinks.end(); ++pos)
+		deque<RowCol>::iterator pos;
+		for (pos = m_vSinks.begin(); pos != m_vSinks.end(); ++pos)
 		{
 				m_vFlag[(*pos).Row][(*pos).Col] = -1; 
 		}

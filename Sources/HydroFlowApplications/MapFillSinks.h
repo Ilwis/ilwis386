@@ -67,7 +67,7 @@ private:
 	FillMethod m_fmMethods;
 	LargeVector<RealBuf> m_vDEM;  //vector for input/output DEM 
 	LargeVector<LongBuf> m_vFlag;
-	vector<RowCol> m_vSinks;
+	deque<RowCol> m_vSinks;
 	long m_sinkPixels;
 	long m_sinkPixelsThreshold;
     double m_sinkHeight;
@@ -80,7 +80,7 @@ private:
 	void FindSinkContArea(RowCol rc);
 	void FindSinkContArea2(RowCol rcInitSink);
 	bool IsEdgeCell(long iRow, long iCol);
-	void FlagAdjaCell(RowCol rc, vector<RowCol>&);
+	void FlagAdjaCell(RowCol rc, deque<RowCol>&);
 	bool fIdentifyOutletCell(RowCol rcInitSink, RowCol& rcOutlet);
 	bool IsPotentialOutlet(long iRow, long iCol);
 	void DepresFill(RowCol rcOutlet);
