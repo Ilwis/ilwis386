@@ -185,7 +185,7 @@ void ColumnInfo::Read(const FileName& fnTbl, const String& sColName, const Strin
 	if (_dminf.dmt() == dmtCOORD) {
 		String _sCsy;
 		ObjectInfo::ReadElement(sSection.c_str(), "Domain", _fnTbl, _sCsy);	
-		_dvrs = DomainValueRangeStruct(Domain(FileName(_sCsy)));
+		_dvrs = DomainValueRangeStruct(Domain(FileName(_sCsy, _fnTbl)));
 	} else {
 		pdv = dm()->pdv();
 		_dvrs = DomainValueRangeStruct(Domain(fnDom()), _dminf.vr());
