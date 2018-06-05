@@ -193,7 +193,7 @@ void TableStoreIlwis3::get(int row, int column, Coord& c) const {
 	char *p = moveTo(row, column, field);
 	c.x = *(double *)p;
 	c.y = *(double *)(p + sizeof(double));
-	c.z =  st == stCRD3D ? *(double *)(p + sizeof(double)*2) : rUNDEF;
+	c.z =  st == stCRD3D ? *(double *)(p + sizeof(double)*2) : 0;
 }
 
 void TableStoreIlwis3::get(int row, int column, String& s) const {
