@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="PointApplications"
 	ProjectGUID="{84A04E1D-6972-4BA9-B8D1-C0943F0540C8}"
 	RootNamespace="PointApplications"
@@ -177,6 +177,7 @@
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile="$(SolutionDir)\temp\$(ConfigurationName)\$(ProjectName)\$(TargetName).pdb"
 				SubSystem="2"
+				LargeAddressAware="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				ImportLibrary="$(SolutionDir)libraries\$(ConfigurationName)\Ilwis$(ProjectName).lib"

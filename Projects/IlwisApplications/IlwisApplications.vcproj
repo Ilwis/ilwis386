@@ -180,6 +180,7 @@
 				GenerateDebugInformation="false"
 				ProgramDatabaseFile="$(SolutionDir)\temp\$(ConfigurationName)\$(ProjectName)\$(TargetName).pdb"
 				SubSystem="2"
+				LargeAddressAware="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				ImportLibrary="$(SolutionDir)libraries\$(ConfigurationName)\$(InputName).lib"
