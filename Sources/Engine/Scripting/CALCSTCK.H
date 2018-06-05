@@ -71,7 +71,7 @@ public:
   void Resize(LongBuf& buf)
   { buf.Size(iBuf->iSize()); }
   void Resize(CoordBuf& buf)
-  {  buf.Size(iBuf->iSize()); }
+  {  buf.Size(cBuf->iSize()); }
   void PutVal(const StringBuf&);
   void PutVal(const RealBuf&);
   void PutVal(const LongBuf&);
