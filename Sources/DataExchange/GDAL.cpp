@@ -1610,73 +1610,80 @@ void GDALFormat::ogr(const String& name, const String& source, const String& tar
 	//OGRDataSourceH hDS = funcs.ogrOpen( "WFS:http://www.cartociudad.es/wfs-vial/services", FALSE, NULL );	
 	if ( hDS) {
 		String error;
-		int layerCount = funcs.ogrGetLayerCount(hDS);
-		for(int layer = 0; layer < layerCount ; ++layer) {
-			OGRLayerH hLayer = funcs.ogrGetLayer(hDS, layer);
-			if ( hLayer) {
-				Feature::FeatureType ftype = getFeatureType(hLayer);
-				if ( ftype == Feature::ftUNKNOWN) {
-					ftype = getFeatureTypeFromFirstGeometry(hLayer); // Do a 2nd attempt, this time get the type of the first geometry (note: this may be a multi-feature-type layer, if so, it will be the first I have seen besides postgres)
-					if (ftype == Feature::ftUNKNOWN) {
-						error += String("layer %d", layer);
-						continue;
-					}
-				}
-				Tranquilizer trq;
-				trq.SetText(String(TR("Importing %S").c_str(), name));
-
-				fnBaseOutputName = createFileName(target,ftype,layerCount, layer);
-
-				OGRSpatialReferenceH hSRS = funcs.ogrGetSpatialRef(hLayer);
-				CoordSystem csy;
-				if ( hSRS != 0) {
-					csy = getEngine()->gdal->getCoordSystemFromHandlePtr(fnBaseOutputName,&hSRS);
-				} else
-					csy = CoordSystem("unknown");
-
-				int featureCount = funcs.ogrGetFeatureCount(hLayer,TRUE);
-				Domain dm(fnBaseOutputName, featureCount, dmtID, "feature");
-				CoordBounds cb = getLayerCoordBounds(hLayer);
-				csy->cb = cb;
-				BaseMap bmp = createBaseMap(fnBaseOutputName, ftype, dm, csy, cb);
-				bmp->fErase = true;
-
-				GeometryFiller *filler = 0;
-				if ( ftype ==  Feature::ftPOINT)
-					filler = new PointFiller(funcs, bmp);
-				else if ( ftype == Feature::ftSEGMENT)
-					filler = new SegmentFiller(funcs, bmp);
-				else if ( ftype == Feature::ftPOLYGON)
-					filler = new PolygonFiller(funcs, bmp);
-				
-				if ( bmp.fValid()) {
-					OGRFeatureDefnH hFeatureDef = funcs.ogrGetLayerDefintion(hLayer);
-					if ( hFeatureDef) {
-						Table tbl;
-						createTable(fnBaseOutputName, dm, hFeatureDef, hLayer, tbl);
-						if ( tbl.fValid()) {
-							bmp->SetAttributeTable(tbl);
+		try {
+			int layerCount = funcs.ogrGetLayerCount(hDS);
+			for(int layer = 0; layer < layerCount ; ++layer) {
+				OGRLayerH hLayer = funcs.ogrGetLayer(hDS, layer);
+				if ( hLayer) {
+					Feature::FeatureType ftype = getFeatureType(hLayer);
+					if ( ftype == Feature::ftUNKNOWN) {
+						ftype = getFeatureTypeFromFirstGeometry(hLayer); // Do a 2nd attempt, this time get the type of the first geometry (note: this may be a multi-feature-type layer, if so, it will be the first I have seen besides postgres)
+						if (ftype == Feature::ftUNKNOWN) {
+							error += String("layer %d", layer);
+							continue;
 						}
-						OGRFeatureH hFeature;
-						int rec = 1;
-						funcs.ogrResetReading(hLayer);
-						trq.Start();
-						while( (hFeature = funcs.ogrGetNextFeature(hLayer)) != NULL ){
-								OGRGeometryH hGeometry = funcs.ogrGetGeometryRef(hFeature);
-								filler->fillFeature(hGeometry, rec);
-								++rec;
-
-								if ( trq.fUpdate(rec, featureCount)) { 
-									delete filler;
-									return;
-								}
-						}
-						bmp->Store();
-						bmp->fErase = false;
 					}
+					Tranquilizer trq;
+					trq.SetText(String(TR("Importing %S").c_str(), name));
+
+					fnBaseOutputName = createFileName(target,ftype,layerCount, layer);
+
+					OGRSpatialReferenceH hSRS = funcs.ogrGetSpatialRef(hLayer);
+					CoordSystem csy;
+					if ( hSRS != 0) {
+						csy = getEngine()->gdal->getCoordSystemFromHandlePtr(fnBaseOutputName,&hSRS);
+					} else
+						csy = CoordSystem("unknown");
+
+					int featureCount = funcs.ogrGetFeatureCount(hLayer,TRUE);
+					Domain dm(fnBaseOutputName, featureCount, dmtID, "feature");
+					CoordBounds cb = getLayerCoordBounds(hLayer);
+					csy->cb = cb;
+					BaseMap bmp = createBaseMap(fnBaseOutputName, ftype, dm, csy, cb);
+					bmp->fErase = true;
+
+					GeometryFiller *filler = 0;
+					if ( ftype ==  Feature::ftPOINT)
+						filler = new PointFiller(funcs, bmp);
+					else if ( ftype == Feature::ftSEGMENT)
+						filler = new SegmentFiller(funcs, bmp);
+					else if ( ftype == Feature::ftPOLYGON)
+						filler = new PolygonFiller(funcs, bmp);
+					
+					if ( bmp.fValid()) {
+						OGRFeatureDefnH hFeatureDef = funcs.ogrGetLayerDefintion(hLayer);
+						if ( hFeatureDef) {
+							Table tbl;
+							createTable(fnBaseOutputName, dm, hFeatureDef, hLayer, tbl);
+							if ( tbl.fValid()) {
+								bmp->SetAttributeTable(tbl);
+							}
+							OGRFeatureH hFeature;
+							int rec = 1;
+							funcs.ogrResetReading(hLayer);
+							trq.Start();
+							while( (hFeature = funcs.ogrGetNextFeature(hLayer)) != NULL ){
+									OGRGeometryH hGeometry = funcs.ogrGetGeometryRef(hFeature);
+									filler->fillFeature(hGeometry, rec);
+									++rec;
+
+									if ( trq.fUpdate(rec, featureCount)) { 
+										delete filler;
+										return;
+									}
+							}
+							bmp->Store();
+							bmp->fErase = false;
+						}
+					}
+					delete filler;
 				}
-				delete filler;
 			}
+		} catch ( CException *err) { // translate CException to ErrorObject
+			char msg[512];
+			err->GetErrorMessage(msg, sizeof(msg));
+			err->Delete();
+			throw ErrorObject(String("%s", msg));
 		}
 		if ( error.size() != 0) {
 			throw ErrorObject(String(TR("Errors in %S").c_str(), error));
