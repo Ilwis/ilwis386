@@ -224,7 +224,7 @@ const int LargeVector<ByteBuf>::iElementSize() const
 template <class T>
 void LargeVector<T>::Open(long rows, long columns)
 {
-	const unsigned long long iMaxByteSize = 300 * 1024 * 1024; // Max allowed: 300MB. Typically a hydroflow application will allocate 3 to 4 of these blocks
+	const unsigned long long iMaxByteSize = 600 * 1024 * 1024; // Max allowed: 600MB. Typically a hydroflow application will allocate 3 to 4 of these blocks
 	if ((long long)rows * columns * iElementSize() > iMaxByteSize) {
 		m_storeMethod = smHashMap;
 		FileName fn ("hydroflow_application.tmp");
