@@ -526,7 +526,7 @@ Coord SegmentMapStore::crdNode(Coord crd) const
 	int  segIndex = 0;
 	for (;segIndex < geometries->size(); ++segIndex) {
 		ILWIS::Segment *seg = (ILWIS::Segment *)geometries->at(segIndex);
-		if ( !seg->fValid())
+		if ( !seg->fValid() || seg->isEmpty())
 			continue;
 		crdTmp = seg->crdBegin();
 		if (crdTmp.fUndef()) // did never happen in version 2, and should never happen
