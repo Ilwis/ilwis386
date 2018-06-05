@@ -47,9 +47,9 @@ void PageType1::set() {
 		if ( noinput == false) {
 			fbIn = new FieldBrowseDir(this,"Input directory","",&dirIn);
 			fbIn->SetWidth(EDIT_FIELD_SIZE);
-			
-		}
-		fe = fs;
+			fe = fbIn;
+		} else
+			fe = fs;
 	}
 	if ( nooutput == false) {
 		fbOut = new FieldBrowseDir(this,"Output directory","",&dirOut);
