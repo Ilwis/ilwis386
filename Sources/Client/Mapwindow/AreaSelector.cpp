@@ -69,6 +69,7 @@ AreaSelector::AreaSelector(ZoomableView* mappaneview, CCmdTarget* cmdTarget, Not
 , np(notProc)
 , fDown(false)
 , fKeepDimensions(false)
+, selectionDrawer(0)
 , clr(_clr)
 {
 	SetCursor(zCursor("AreaSelCursor"));
