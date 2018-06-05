@@ -95,6 +95,7 @@ public:
 protected:
 	void			Split(long iAfter, Coord crdAt, CoordBuf& crdBufBefore, CoordBuf& crdBufAfter);
 	bool			fAcceptDeleted;
+	static          geos::geom::GeometryFactory * factory;
 };
 
 	class LSegment : public ILWIS::Segment {

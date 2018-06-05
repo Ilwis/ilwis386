@@ -54,8 +54,10 @@
 
 using namespace ILWIS;
 
+geos::geom::GeometryFactory * ILWIS::Segment::factory = new GeometryFactory(new PrecisionModel());
+
 ILWIS::Segment::Segment(QuadTree *tree, geos::geom::LineString *line) :
-	geos::geom::LineString(NULL, new GeometryFactory(new PrecisionModel())), Feature(tree)
+	geos::geom::LineString(NULL, factory), Feature(tree)
 {
   if ( line != NULL)
 	  PutCoords(line->getCoordinates());
