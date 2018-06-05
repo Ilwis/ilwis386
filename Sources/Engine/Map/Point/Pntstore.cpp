@@ -317,7 +317,7 @@ long PointMapStore::iValue(long iRec) const
 
 	long value = iUNDEF;
 	if ( iRec < geometries->size() && geometries->at(iRec) != NULL)	{
-		ILWIS::LPoint *pnt = (ILWIS::LPoint *)geometries->at(iRec - 1);
+		ILWIS::LPoint *pnt = (ILWIS::LPoint *)geometries->at(iRec);
 		value  = pnt->iValue();
 		value = ptr.dvrs().iValue(value);
 	}
@@ -435,10 +435,10 @@ void PointMapStore::PutVal(long iRec, const String& sVal)
 	if(!ptr.dvrs().fValues())
 		return;
 	if ( ptr.dvrs().fUseReals()) {
-		((ILWIS::Point *)geometries->at(iRec - 1))->PutVal(sVal.rVal());	
+		((ILWIS::Point *)geometries->at(iRec))->PutVal(sVal.rVal());	
 	} else {
 		long iRaw = ptr.dvrs().iRaw(sVal);
-		((ILWIS::Point *)geometries->at(iRec - 1))->PutVal(iRaw);
+		((ILWIS::Point *)geometries->at(iRec))->PutVal(iRaw);
 	}
 	Updated();
 }
@@ -555,7 +555,7 @@ bool PointMapStore::fConvertTo(const DomainValueRangeStruct& _dvrsTo, const Colu
 		else if (dvrsTo.fValues()) {
 			long iRaw = iUNDEF;
 			double r;
-			for (long i=1; i <= iPnt(); i++) {
+			for (long i=0; i < iPnt(); i++) {
 				if (trq.fUpdate(i, iPnt()))
 					return false;
 				if (col.fValid())
@@ -573,7 +573,7 @@ bool PointMapStore::fConvertTo(const DomainValueRangeStruct& _dvrsTo, const Colu
 		trq.Start();
 		// read long raws and use them as record nr. in column col
 		String s;
-		for (long i=1; i <= iPnt(); i++) {
+		for (long i=0; i < iPnt(); i++) {
 			if (trq.fUpdate(i, iPnt()))
 				return false;
 			s = col->sValue(iRaw(i));
@@ -671,9 +671,6 @@ vector<Feature *> PointMapStore::getFeatures(const CoordBounds& cb, bool complet
 		if ( isIn) {
 			features.push_back(CFEATURE(g));
 		}
-
 	}
-
 	return features;
-
 }
