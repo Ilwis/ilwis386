@@ -549,7 +549,7 @@ void GDALFormat::Init()
 	}
 	else {
 		const char *txt = funcs.errorMsg();
-		if ( txt) {
+		if ( txt && strlen(txt) > 0) {
 			throw ErrorObject(String(txt));
 		}else
 			throw ErrorObject(TR("File format is not recognized by GDAL"));
