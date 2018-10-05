@@ -67,6 +67,7 @@ private:
 	static bool fReadFileBytes(HANDLE hFile, LPVOID lpBuffer, DWORD dwSize);
 	static String sFindFullPathToFile(String sFile);
 	String sCommandLine();
+	bool fToolbox();
 	String m_sArguments;
 	String m_sExecutable;
 };

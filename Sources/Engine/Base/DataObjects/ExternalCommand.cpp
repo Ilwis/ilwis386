@@ -78,6 +78,12 @@ String ExternalCommand::sCommandLine()
 		return m_sExecutable;
 }
 
+bool ExternalCommand::fToolbox()
+{
+	String sFilePath = sFindFullPathToFile(m_sExecutable);
+	return sFilePath.toLower().find("toolbox") >= 0;
+}
+
 String ExternalCommand::sFindFullPathToFile(String sFile)
 {
 	// Helper function for fIsConsoleApplication
@@ -315,9 +321,18 @@ void ExternalCommand::Execute(bool fBlockWhileExecuting)
 										 // With this we prevent seeing two consoles, of which one is not used.
 	}
 
-	String path = getEngine()->getContext()->sIlwDir();
-	path += "Resources\\gdal_data";
-	SetEnvironmentVariable("GDAL_DATA", path.c_str());
+	if (fToolbox()) {
+		String path = getEngine()->getContext()->sIlwDir();
+		String dataPath = path + "Resources\\gdal_data";
+		SetEnvironmentVariable("GDAL_DATA", dataPath.c_str());
+		path += "Extensions\\Geonetcast-Toolbox\\GDAL\\bin";
+		String driverPath = path + "\\gdalplugins";
+		SetEnvironmentVariable("GDAL_DRIVER_PATH", driverPath.c_str());
+		char cBuffer [BUFSIZE];
+		GetEnvironmentVariable("PATH", cBuffer, BUFSIZE);
+		path += ";" + String(cBuffer); // prepend the ILWIS GDAL before any other GDAL that may be in the path.
+		SetEnvironmentVariable("PATH", path.c_str());
+	}
 	PROCESS_INFORMATION pi; // output of CreateProcess
 	ZeroMemory( &pi, sizeof(pi) );
 
