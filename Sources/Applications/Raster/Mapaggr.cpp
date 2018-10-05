@@ -144,7 +144,7 @@ MapAggregate* MapAggregate::create(const FileName& fn, MapPtr& p, const String& 
 	long iGrpFac = as[1 + parmOffset].iVal();
 	if (iGrpFac <= 1)
 		GroupFactorError(true, fn);
-	if (iGrpFac >= m)
+	if (iGrpFac > m)
 		GroupFactorError(false, fn);
 	bool fGrpPix = true;
 	if (fCIStrEqual(as[2 + parmOffset] , "NoGroup"))
@@ -180,7 +180,7 @@ MapAggregate::MapAggregate(const FileName& fn, MapPtr& p)
 	long h = mp->iLines();
 	long w = mp->iCols();
 	long m = min(h,w);
-	if (iGrpFac >= m)
+	if (iGrpFac > m)
 		GroupFactorError(false, fnObj);
 	fGrpPixels = true;
 	ReadElement("MapAggregate", "GroupPixels", fGrpPixels);
