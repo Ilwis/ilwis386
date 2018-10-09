@@ -90,12 +90,12 @@ InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("intersectseg","",Cmdsegmentmapintersect,TR("&Segment Operations..&Intersection"),TR("Intersection of Segments"),"ExeSeg16IcoL",".mpa.mps",0,TR("Create a new Segment map by intersecting two Segment maps")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("unionseg","",Cmdsegmentmapunion,TR("&Segment Operations..&Union"),TR("Segment Union"),"ExeSeg16IcoL",".mpa.mps",0,TR("Create a new Segment map by Union of the Segments of two Segment maps")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("diffseg","",Cmdsegmentmapdifference,TR("&Segment Operations..&Difference"),TR("Difference of Segments"),"ExeSeg16IcoL",".mpa.mps",0,TR("Create a new Segment map by difference of the Segments of two Segment maps")));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("voronoi","",Cmdsegmentmapvoronoi,TR("&Segment Operations..&Voronoi map"),TR("Voronoi map of a point map"),"ExeSeg16IcoL",".mpp",0,TR("Create a Voronoi map from a pointmap")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("voronoi","",Cmdsegmentmapvoronoi,TR("P&oint Operations..&Voronoi map"),TR("Voronoi map of a point map"),"ExeSeg16IcoL",".mpp",0,TR("Create a Voronoi map from a pointmap")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("symdiffseg","",Cmdsegmentmapsymetricdifference,TR("&Segment Operations..&Symetric Difference"),TR("Symetric Difference of Segments"),"ExeSeg16IcoL",".mpa.mps",0,TR("Create a new Segment map by the symetric difference of the Segments of two Segment maps")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("relateseg","",Cmdsegmentmaprelate,TR("&Segment Operations..&Relate"),TR("Spatial Relation"),"ExeSeg16IcoL",".mps",0,TR("Create a segment map out of spatial relation(s) with other feature maps")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("tin","",Cmdsegmentmaptin,TR("&Segment Operations..&TIN"),TR("Triangulated Irregular Network(TIN)"),"ExeSeg16IcoL",".mps",0,TR("Create a Triangulated Irregular Network from a pointmap")));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("isolines","",Cmdsegmentisoline,TR("&Segment Operations..&Iso Lines"),TR("Iso lines"),"ExeSeg16IcoL",".mpr",0,TR("Creates Iso lines from a value raster map")));
-(*infosui).push_back(CommandHandlerUI::createCommandInfo("pointtosegment","",CmdSegmentMapFromPointFrm,TR("&Segment Operations..&Point to Segment"),TR("Point to segment"),"ExeSeg16IcoL",".mpp",0,TR("Creates a segment map from ordered points")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("isolines","",Cmdsegmentisoline,TR("V&ectorize..&Iso Lines"),TR("Iso lines"),"ExeSeg16IcoL",".mpr",0,TR("Creates Iso lines from a value raster map")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("pointtosegment","",CmdSegmentMapFromPointFrm,TR("P&oint Operations..&Point to Segment"),TR("Point to segment"),"ExeSeg16IcoL",".mpp",0,TR("Creates a segment map from ordered points")));
 
 return infosui;
 }
