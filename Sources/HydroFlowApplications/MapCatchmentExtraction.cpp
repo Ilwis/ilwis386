@@ -616,6 +616,10 @@ double MapCatchmentExtraction::GetDistance(RowCol& rc)
 						rc2.Row = rc.Row-1;
 						rc2.Col = rc.Col+1;
 						break;
+				default:
+						rc2.Row = rc.Row;
+						rc2.Col = rc.Col;
+						break;
 	}
 
 	Coord c1 = mp->gr()->cConv(rc);
@@ -686,7 +690,10 @@ void MapCatchmentExtraction::ComputeCenterDrainage()
 		double rDistance = 0;
 		while (rDistance < rLength )
 		{
-			rDistance = rDistance + GetDistance(rc);
+			double rDist = GetDistance(rc);
+			if (rDist == 0)
+				break;
+			rDistance = rDistance + rDist;
 		}
 		rc.Row -= 1;
 		rc.Col -= 1;
