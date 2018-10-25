@@ -81,7 +81,24 @@ String ExternalCommand::sCommandLine()
 bool ExternalCommand::fToolbox()
 {
 	String sFilePath = sFindFullPathToFile(m_sExecutable);
-	return sFilePath.toLower().find("toolbox") >= 0;
+	int iPos = sFilePath.toLower().find("toolbox");
+	return iPos >= 0;
+}
+
+String ExternalCommand::sToolboxName()
+{
+	String sFilePath = sFindFullPathToFile(m_sExecutable);
+	String sFilePathLower = sFilePath;
+	sFilePathLower.toLower();
+	int iPos = sFilePathLower.toLower().find("toolbox");
+	if (iPos >= 0) {
+		int iPosStart = sFilePath.find_last_of("\\", iPos);
+		if (iPosStart >= 0) {
+			String sToolboxName = sFilePath.substr(iPosStart + 1, iPos + 6 - iPosStart);
+			return sToolboxName;
+		}
+	}
+	return "";
 }
 
 String ExternalCommand::sFindFullPathToFile(String sFile)
@@ -324,10 +341,17 @@ void ExternalCommand::Execute(bool fBlockWhileExecuting)
 	if (fToolbox()) {
 		String path = getEngine()->getContext()->sIlwDir();
 		String dataPath = path + "Resources\\gdal_data";
-		SetEnvironmentVariable("GDAL_DATA", dataPath.c_str());
-		path += "Extensions\\Geonetcast-Toolbox\\GDAL\\bin";
+		path += "Extensions\\" + sToolboxName() + "\\GDAL\\bin";
+		String gdaldataPath = path + "\\gdal-data";
+		if (FileName(gdaldataPath).fExist())
+			SetEnvironmentVariable("GDAL_DATA", gdaldataPath.c_str());
+		else
+			SetEnvironmentVariable("GDAL_DATA", dataPath.c_str());
 		String driverPath = path + "\\gdalplugins";
-		SetEnvironmentVariable("GDAL_DRIVER_PATH", driverPath.c_str());
+		if (FileName(driverPath).fExist())
+			SetEnvironmentVariable("GDAL_DRIVER_PATH", driverPath.c_str());
+		else
+			SetEnvironmentVariable("GDAL_DRIVER_PATH", NULL);
 		char cBuffer [BUFSIZE];
 		GetEnvironmentVariable("PATH", cBuffer, BUFSIZE);
 		path += ";" + String(cBuffer); // prepend the ILWIS GDAL before any other GDAL that may be in the path.

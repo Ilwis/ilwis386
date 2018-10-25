@@ -68,6 +68,7 @@ private:
 	static String sFindFullPathToFile(String sFile);
 	String sCommandLine();
 	bool fToolbox();
+	String sToolboxName();
 	String m_sArguments;
 	String m_sExecutable;
 };
