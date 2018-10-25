@@ -1,4 +1,5 @@
 #include "Client\Headers\formelementspch.h"
+#include "Client\FormElements\FieldIntSlider.h"
 #include "Client\FormElements\fldcolor.h"
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\ComplexDrawer.h"
@@ -84,11 +85,23 @@ SetColorFormTrue::SetColorFormTrue(CWnd *wPar, LayerDrawer *dr) :
 		c(dr->getDrawingColor()->getColor2())
 {
 	c.alpha() = 255 - c.alpha(); // inverse the alpha, for FieldColor
-	fc = new FieldColor(root, "Draw color", &c);
+	fc = new FieldColor(root, "Draw color", &c, true);
+	if (fc->childlist().size() >= 4) {
+		FieldIntSliderEx * fcSlider = dynamic_cast<FieldIntSliderEx*>(fc->childlist()[3]);
+		if (fcSlider) {
+			fcSlider->SetCallBack((NotifyProc)&SetColorFormTrue::setTransparency);
+			fcSlider->setContinuous(true);
+		}
+	}
 	create();
 }
 
-void  SetColorFormTrue::apply() {
+int SetColorFormTrue::setTransparency(Event *ev) {
+	apply();
+	return 1;
+}
+
+void SetColorFormTrue::apply() {
 	fc->StoreData();
 	Color clr (c);
 	clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
@@ -108,8 +121,20 @@ SetColorFormFalse::SetColorFormFalse(CWnd *wPar, LayerDrawer *dr) :
 		c(dr->getDrawingColor()->getColor1())
 {
 	c.alpha() = 255 - c.alpha(); // inverse the alpha, for FieldColor
-	fc = new FieldColor(root, "Draw color", &c);
+	fc = new FieldColor(root, "Draw color", &c, true);
+	if (fc->childlist().size() >= 4) {
+		FieldIntSliderEx * fcSlider = dynamic_cast<FieldIntSliderEx*>(fc->childlist()[3]);
+		if (fcSlider) {
+			fcSlider->SetCallBack((NotifyProc)&SetColorFormFalse::setTransparency);
+			fcSlider->setContinuous(true);
+		}
+	}
 	create();
+}
+
+int SetColorFormFalse::setTransparency(Event *ev) {
+	apply();
+	return 1;
 }
 
 void  SetColorFormFalse::apply() {

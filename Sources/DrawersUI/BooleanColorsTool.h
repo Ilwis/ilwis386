@@ -22,6 +22,7 @@ public:
 	SetColorFormTrue(CWnd *wPar, LayerDrawer *dr);
 	void apply();
 private:
+	int setTransparency(Event *ev);
 	FieldColor *fc;
 	Color c;
 
@@ -32,6 +33,7 @@ public:
 	SetColorFormFalse(CWnd *wPar, LayerDrawer *dr);
 	void apply();
 private:
+	int setTransparency(Event *ev);
 	FieldColor *fc;
 	Color c;
 
