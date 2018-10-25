@@ -141,7 +141,7 @@ PointMapCross::~PointMapCross()
 
 String PointMapCross::sExpression() const
 {
-	return String("PointMapCross(%S)",  maps->fnObj.sRelativeQuoted(false));
+	return String("PointMapCross(%S,%S)", pointmap->fnObj.sRelativeQuoted(false), maps->fnObj.sRelativeQuoted(false));
 }
 
 bool PointMapCross::fDomainChangeable() const
