@@ -867,9 +867,9 @@ void MapDrainageNetworkOrdering::CreateTable()
 
 	Column cLength = tbl->colNew(String("Length"), Domain("value"));
 	Column cStraightLength = tbl->colNew(String("StraightLength"), Domain("value"));
-	Column cSlopAlongDrainage = tbl->colNew(String("SlopeAlongDrainage%"), Domain("value"), ValueRange(0,1e10,0.01));
+	Column cSlopAlongDrainage = tbl->colNew(String("SlopeAlongDrainagePerc"), Domain("value"), ValueRange(0,1e10,0.01));
 	Column cSlopAlongDrainageDegree = tbl->colNew(String("SlopeAlongDrainageDegree"), Domain("value"), ValueRange(0,1e10,0.001));
-	Column cSlopDrainageStraight = tbl->colNew(String("SlopeDrainageStraight%"), Domain("value"), ValueRange(0,1e10,0.01));
+	Column cSlopDrainageStraight = tbl->colNew(String("SlopeDrainageStraightPerc"), Domain("value"), ValueRange(0,1e10,0.01));
 	Column cSlopDrainageStraightDegree = tbl->colNew(String("SlopeDrainageStraightDegree"), Domain("value"), ValueRange(0,1e10,0.001));
 	Column cSinuosity = tbl->colNew(String("Sinuosity"), Domain("value"), ValueRange(0,1e10,0.001));
 	Column cTotalUpstreamLength = tbl->colNew(String("TotalUpstreamAlongDrainageLength"), Domain("value"));

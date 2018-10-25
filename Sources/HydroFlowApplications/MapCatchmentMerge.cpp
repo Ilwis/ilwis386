@@ -637,8 +637,9 @@ void MapCatchmentMerge::GeneratePolygonStatistics(FileName fnPol, Table& tblHsa)
 		fnTmpTFPol = FileName::fnUnique(fnTmpTFPol);
 		//String sExprPMT("PolygonMapTransform(%S, %S, %g)", fnPol.sFullPathQuoted(false), String("lamcyl"), 0.000000); 
     CoordSystem csy = csyLamCyl(fnTmpTFPol);
-		String sExprPMT("PolygonMapTransform(%S, %S, %g)", fnPol.sFullPathQuoted(false), csy->sName(), 0.000000); 
+	csy->Store(); // explicit Store(), due to different behavior between Debug and Release build!! (csyLamCyl will auto-store when the internal csy object is destructed (as it is supposed to do) in the debug build, but not in the release build)
     csy->fErase = true;
+		String sExprPMT("PolygonMapTransform(%S, %S, %g)", fnPol.sFullPathQuoted(false), csy->sName(), 0.000000); 
 		PolygonMap polTmpTFMap; 
 		polTmpTFMap = PolygonMap(fnTmpTFPol, sExprPMT);
 		polTmpTFMap->Calc();
@@ -2148,18 +2149,26 @@ void MapCatchmentMerge::CleanSegment(SegmentMap smpTo, SegmentMap smpFrom)
 	  }
   }
 
+  std::map<long, long> mapSrcDstIDs; // keep track of the mapping of the source-segment-ids to the destination-segment-ids
   for (int i =0; i < smpFrom->iFeatures(); ++i)
   {
 	  ILWIS::Segment *segFrom = (ILWIS::Segment *)smpFrom->getFeature(i);
 	  if ( !segFrom || !segFrom->fValid())
 		  continue;
-	  AddDomainItem(smpTo->dm(), segFrom->iValue());
+	  long iSegVal = segFrom->iValue(); // some iSegVals will be duplicates; only add an item to the domain if its not a duplicate
+	  long iDestSegVal;
+	  map<long, long>::iterator item = mapSrcDstIDs.find(iSegVal);
+	  if (item == mapSrcDstIDs.end()) {
+		  iDestSegVal = mapSrcDstIDs.size() + 1;
+		  mapSrcDstIDs[iSegVal] = iDestSegVal;
+		  AddDomainItem(smpTo->dm(), iDestSegVal);
+	  } else {
+		  iDestSegVal = item->second;
+	  }	  
 	  long iNumC2 = 1;
 	  CoordinateSequence *crdbufFrom;
       crdbufFrom = segFrom->getCoordinates();
 	  ILWIS::Segment * segTo = CSEGMENT(smpTo->newFeature());
-
-	  long iSegVal = segFrom->iValue();
 	  vector<long>::iterator pos = find(vOutletID.begin(), vOutletID.end(), iSegVal);
 	  if (pos != vOutletID.end())
 	  {
@@ -2181,7 +2190,7 @@ void MapCatchmentMerge::CleanSegment(SegmentMap smpTo, SegmentMap smpFrom)
 	  else 
 		  iNumC2 = crdbufFrom->size();
 	  segTo->PutCoords(iNumC2, CoordBuf(crdbufFrom));
-	  segTo->PutVal((long)i);
+	  segTo->PutVal(iDestSegVal);
 	  trq.fUpdate(i, smpFrom->iFeatures());
 	  delete crdbufFrom;
   }
@@ -2214,9 +2223,9 @@ void MapCatchmentMerge::CreateTableSegmentsExtracted(SegmentMap sm)
   Column cStreveSrc = tblSource->col(String("Shreve"));
   Column cLengthSrc = tblSource->col(String("Length"));
   Column cStraightLengthSrc = tblSource->col(String("StraightLength"));
-  Column cSlopAlongDrainageSrc = tblSource->col(String("SlopeAlongDrainage%"));
+  Column cSlopAlongDrainageSrc = tblSource->col(String("SlopeAlongDrainagePerc"));
   Column cSlopAlongDrainageDegreeSrc = tblSource->col(String("SlopeAlongDrainageDegree"));
-  Column cSlopDrainageStraightSrc = tblSource->col(String("SlopeDrainageStraight%"));
+  Column cSlopDrainageStraightSrc = tblSource->col(String("SlopeDrainageStraightPerc"));
   Column cSlopDrainageStraightDegreeSrc = tblSource->col(String("SlopeDrainageStraightDegree"));
   Column cSinuositySrc = tblSource->col(String("Sinuosity"));
   Column cTotalUpstreamLengthSrc = tblSource->col(String("TotalUpstreamAlongDrainageLength"));
@@ -2237,9 +2246,9 @@ void MapCatchmentMerge::CreateTableSegmentsExtracted(SegmentMap sm)
 
 	Column cLength = tbl->colNew(String("Length"), Domain("value"));
 	Column cStraightLength = tbl->colNew(String("StraightLength"), Domain("value"));
-	Column cSlopAlongDrainage = tbl->colNew(String("SlopeAlongDrainage%"), Domain("value"), ValueRange(0,1e10,0.01));
+	Column cSlopAlongDrainage = tbl->colNew(String("SlopeAlongDrainagePerc"), Domain("value"), ValueRange(0,1e10,0.01));
 	Column cSlopAlongDrainageDegree = tbl->colNew(String("SlopeAlongDrainageDegree"), Domain("value"), ValueRange(0,1e10,0.001));
-	Column cSlopDrainageStraight = tbl->colNew(String("SlopeDrainageStraight%"), Domain("value"), ValueRange(0,1e10,0.01));
+	Column cSlopDrainageStraight = tbl->colNew(String("SlopeDrainageStraightPerc"), Domain("value"), ValueRange(0,1e10,0.01));
 	Column cSlopDrainageStraightDegree = tbl->colNew(String("SlopeDrainageStraightDegree"), Domain("value"), ValueRange(0,1e10,0.001));
 	Column cSinuosity = tbl->colNew(String("Sinuosity"), Domain("value"), ValueRange(0,1e10,0.001));
 	Column cTotalUpstreamLength = tbl->colNew(String("TotalUpstreamAlongDrainageLength"), Domain("value"));
