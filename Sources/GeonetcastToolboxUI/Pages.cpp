@@ -4,6 +4,7 @@
 #include "Client\FormElements\FieldBrowseDir.h"
 #include "Client\FormElements\TreeSelector.h"
 #include "Client\FormElements\fldlist.h"
+#include "Client\FormElements\objlist.h"
 #include <set>
 #include "Engine\Base\DataObjects\XMLDocument.h"
 #include "GeonetCastToolboxUI\GeonetcCastFrm.h"
@@ -207,15 +208,25 @@ PageType4::PageType4(GeonetCastFrm *frm, FormEntry *parent) : DataPage(frm,paren
 
 void PageType4::set() {
 	setFolders(folderId);
-	new StaticText(this,getName(),true);
+	StaticText* txt = new StaticText(this,getName(),true);
 	if ( getComment() != "") {
-		StaticText *txt = new StaticText(this, getComment());
+		txt = new StaticText(this, getComment());
 		txt->SetIndependentPos();
+	}
+	FormEntry * alignField = txt;
+	if (useRegion && regionMap) {
+		cbRegion = new CheckBox(this, TR("Region"), useRegion);
+		cbRegion->SetCallBack((NotifyProc)&DataPage::RegionChanged);
+		cbRegion->SetIndependentPos();
+		fmRegion = new FieldPolygonMap(cbRegion, "", regionMap);//, new MapListerDomainType(dmVALUE, false));
+		fmRegion->SetCallBack((NotifyProc)&DataPage::RegionChanged);
+		alignField = cbRegion;
 	}
 	if ( nooutput == false) {
 		fbOut = new FieldBrowseDir(this,"Output directory","",&dirOut);
 		fbOut->SetWidth(EDIT_FIELD_SIZE);
 		fbOut->SetIndependentPos();
+		fbOut->Align(alignField, AL_UNDER);
 	}
 	new FieldBlank(this);
 	new PushButton(this,"Import",(NotifyProc)&PageType4::import,this);

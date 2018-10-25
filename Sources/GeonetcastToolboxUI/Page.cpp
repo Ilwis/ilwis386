@@ -37,7 +37,7 @@ void GNCPage::setHidden(bool yesno){
 	hidden = yesno;
 }
 
-DataPage::DataPage(GeonetCastFrm *frm, FormEntry *parent) : GNCPage(frm,parent), fbIn(0),fbOut(0),fsIn(0),choice(iUNDEF) {
+DataPage::DataPage(GeonetCastFrm *frm, FormEntry *parent) : GNCPage(frm,parent), fbIn(0),fbOut(0),fsIn(0),choice(iUNDEF),useRegion(0),regionMap(0),cbRegion(0),fmRegion(0) {
 	this->SetBevelStyle(FormEntry::bsLOWERED);
 	nooutput = noinput = false;
 };
@@ -124,6 +124,10 @@ String DataPage::createCommand(const String& ilwDir, const String& pluginDir, co
 					ilwdir,
 					utilDir
 					);
+	if (useRegion && regionMap && *useRegion && *regionMap != "")
+		SetEnvironmentVariable("ILWIS_TOOLBOX_REGION", FileName(*regionMap).sFullPathQuoted().c_str());
+	else
+		SetEnvironmentVariable("ILWIS_TOOLBOX_REGION", NULL);
 	return batCmd;
 }
 void DataPage::setFolderId(const String& s)
@@ -139,6 +143,11 @@ String DataPage::getFolderId() const {
 
 void DataPage::setComment(const String& _comment) {
 	comment = _comment;
+}
+
+void DataPage::setRegionMap(bool * _useRegion, String * _regionMap) {
+	useRegion = _useRegion;
+	regionMap = _regionMap;
 }
 
 String DataPage::getComment(){
@@ -160,5 +169,24 @@ void DataPage::setBranch(const String& b){
 	branch = b;
 }
 
+int DataPage::RegionChanged(Event* ev)
+{
+	if (cbRegion && fmRegion) {
+		cbRegion->StoreData();
+		fmRegion->StoreData();
+	}
+	return 1;
+}
 
-
+void DataPage::show(int sw)
+{
+	GNCPage::show(sw);
+	if ((sw == SW_SHOW) && cbRegion && fmRegion) {
+		cbRegion->SetVal(*useRegion);
+		fmRegion->SetVal(*regionMap);
+		if (*useRegion)
+			cbRegion->ShowChildren();
+		else
+			cbRegion->HideChildren();
+	}
+}

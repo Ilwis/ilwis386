@@ -4,6 +4,7 @@
 #include "Client\FormElements\FieldBrowseDir.h"
 #include "Client\FormElements\TreeSelector.h"
 #include "Client\FormElements\fldlist.h"
+#include "Client\FormElements\objlist.h"
 #include <set>
 #include "Engine\Base\DataObjects\XMLDocument.h"
 #include  "GeonetCastToolboxUI\Page.h"
@@ -827,10 +828,19 @@ void ImportMomentNoInput::set() {
 		txt = new StaticText(this, getComment());
 		txt->SetIndependentPos();
 	}
-
+	FormEntry * alignField = txt;
+	if (useRegion && regionMap) {
+		cbRegion = new CheckBox(this, TR("Region"), useRegion);
+		cbRegion->SetCallBack((NotifyProc)&DataPage::RegionChanged);
+		cbRegion->SetIndependentPos();
+		fmRegion = new FieldPolygonMap(cbRegion, "", regionMap);//, new MapListerDomainType(dmVALUE, false));
+		fmRegion->SetCallBack((NotifyProc)&DataPage::RegionChanged);
+		alignField = cbRegion;
+	}
 	String s("Date (%S)", getFormat());
 	FieldString *fs = new FieldString(this,s,&time);
 	fs->SetWidth(EDIT_FIELD_SIZE);
+	fs->Align(alignField, AL_UNDER);
 	fbOut = new FieldBrowseDir(this,"Output directory","",&dirOut);
 	fbOut->SetWidth(EDIT_FIELD_SIZE);
 	new FieldBlank(this);

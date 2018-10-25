@@ -45,7 +45,8 @@ protected:
 	GNCPage					 *curPage;
 	Directory				 workingDir;
 	String					xmlVersion;
-	String rootpath, iniFile;
+	String rootpath, iniFile, regionMap;
+	bool useRegion;
 
 	int Fill(Event*);
 	int dummy(Event *ev);

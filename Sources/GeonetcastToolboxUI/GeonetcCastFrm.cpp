@@ -30,7 +30,8 @@ FormWithDest(IlwWinApp()->GetMainWnd(),title , fbsSHOWALWAYS |  fbsNOOKBUTTON | 
 	fInitial(true),
 	curPage(NULL),
 	formType(type),
-	useRemote(false)
+	useRemote(false),
+	useRegion(false)
 {
 	try{
 		IlwisSettings settings("Dummy");
@@ -145,7 +146,9 @@ void GeonetCastFrm::ReadConfigFile(FileName fnConfig) {
 	String pluginDir = ilwDir + "Extensions\\" + formType + "-Toolbox";
 	IniFile inifile;
 	String tempName = formType;
-	inifile.Open(pluginDir+ "\\" + tempName.toLower() + ".ini");
+	if (iniFile.length() == 0) // if at this stage the iniFile is not yet specified, set it
+		iniFile = formType.toLower() + ".ini";
+	inifile.Open(pluginDir+ "\\" + iniFile);
 	for(set<String>::iterator cur = folders.begin(); cur != folders.end(); ++cur) {
 		String folderId = (*cur);
 		if ( folderId == "") 
@@ -253,7 +256,8 @@ void GeonetCastFrm::build(pugi::xml_node node,  String current, String idPath, c
 		}
 		if ( nodeName == "Path" ) {
 			rootpath = node.attribute("value").value();
-			iniFile = node.attribute("inifile").value();
+			if (iniFile.length() == 0) // prevent inconsistent inifile-names (depending on the order in the xml, the inifile may have been set earlier)
+				iniFile = node.attribute("inifile").value();
 		}
 		String path  = current;
 
@@ -262,9 +266,12 @@ void GeonetCastFrm::build(pugi::xml_node node,  String current, String idPath, c
 			path = current + "#"+ name;
 		String id = idPath == "" ? node.attribute("id").value() : String("%S:%s", idPath, node.attribute("id").value());
 		if ( nodeName == "Product") {
+			if (iniFile.length() == 0) // if at the first use of a Product node the iniFile is not yet specified, set it
+				iniFile = formType.toLower() + ".ini";
 			PageTypes type = getType(node.attribute("type").value());
 			String folderid=node.attribute("folderid").value();
 			String comment=node.attribute("comment").value();
+			bool useRegionMap = node.attribute("roi").as_bool();
 			folders.insert(folderid);
 			GNCPage *page = pageFactory(type);
 			page->setRootPath(rootpath, iniFile);
@@ -277,6 +284,8 @@ void GeonetCastFrm::build(pugi::xml_node node,  String current, String idPath, c
 				pImport->setBranch(current + "#" + name);
 				pImport->setFolderId(folderid);
 				pImport->setComment(comment);
+				if (useRegionMap)
+					pImport->setRegionMap(&useRegion, &regionMap);
 				if ( type == ptStationSearchPage) {
 					parseSearchNode(node, (StationSearchPage *)pImport);
 				}
