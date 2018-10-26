@@ -21,6 +21,7 @@
 #include "PointApplications\PointMapFromSeg.H"
 #include "Engine\Map\Raster\MapList\maplist.h"
 #include "PointApplications\PointMapCross.H"
+#include "PointApplications\PointMapTripleCollocation.H"
 
 
 //extern "C" _export vector<CommandInfo *>* getCommandInfo());
@@ -49,6 +50,7 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createPointMapRelate,"PointMapRelate"));
 	infos->push_back(CommandMap::newCommandInfo(createPointMapFromSeg,"PointMapFromSeg"));
 	infos->push_back(CommandMap::newCommandInfo(createPointMapCross,"PointMapCross"));
+	infos->push_back(CommandMap::newCommandInfo(createPointMapTripleCollocation,"PointMapTripleCollocation"));
 
 	return infos;
 }

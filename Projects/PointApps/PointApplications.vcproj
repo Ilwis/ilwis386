@@ -287,6 +287,10 @@
 				RelativePath="..\..\Sources\PointApplications\PointMapFromSeg.H"
 				>
 			</File>
+			<File
+				RelativePath="..\..\Sources\PointApplications\PointMapTripleCollocation.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -366,6 +370,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\PointApplications\PointMapFromSeg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\PointApplications\PointMapTripleCollocation.cpp"
 				>
 			</File>
 		</Filter>

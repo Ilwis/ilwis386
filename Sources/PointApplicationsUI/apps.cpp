@@ -53,6 +53,7 @@ Last change:  WK   17 Sep 98    2:14 pm
 #include "PointApplicationsUI\frmPointInSegment.h"
 #include "PointApplicationsUI\frmpointrelate.h"
 #include "PointApplicationsUI\FormPointMapCross.h"
+#include "PointApplicationsUI\FormPointMapTripleCollocation.h"
 #include "Client\ilwis.h"
 #include "Headers\Hs\Applications.hs"
 
@@ -78,6 +79,7 @@ extern "C" _export InfoUIVector* getCommandInfoUI(ILWIS::Module *module) {
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("segmiddlepnt","",Cmdpointinsegment,TR("P&oint Operations..&Point in Segment"),TR("Find a point in a segment"),"ExePnt16IcoL",".mps",0,TR("Create a pointmap with points that are in the middle of segments")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("relatepnt","",Cmdpointmaprelate,TR("P&oint Operations..&Relate"),TR("Spatial Relation"),"ExePnt16IcoL",".mpp",0,TR("Create a point map out of spatial relation(s) with other feature maps")));
 (*infosui).push_back(CommandHandlerUI::createCommandInfo("pointcross","",Cmdpointmapcross,TR("P&oint Operations..&Cross"),TR("Pointmap Cross"),"ExePnt16IcoL",".mpp",0,TR("Adds the values of positions of the points in the maplists to the attribute table")));
+(*infosui).push_back(CommandHandlerUI::createCommandInfo("pointtriplecollocation","",Cmdpointmaptriplecollocation,TR("P&oint Operations..&Triple Collocation"),TR("Pointmap Triple Collocation"),"ExePnt16IcoL",".mpp",0,TR("Performs Triple Collocation on two maplists and a pointmap (originating from 3 different sensors)")));
 
 	return infosui;
 }
