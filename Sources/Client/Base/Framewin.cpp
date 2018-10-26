@@ -307,7 +307,12 @@ void FrameWindow::UpdateFrameTitleForDocument(LPCTSTR lpszDocName)
 		// get name of currently active view
 		if (lpszDocName != NULL)
 		{
-			lstrcpy(szText, lpszDocName);
+			std::string s1(lpszDocName);
+			if ( s1.size() > 75) {
+				s1 = s1.substr(0,75);
+				s1 += "...";
+			}
+			lstrcpy(szText, s1.c_str());
 			lstrcat(szText, _T(" - "));
 		}
 		std::string s(m_strTitle);
@@ -320,18 +325,17 @@ void FrameWindow::UpdateFrameTitleForDocument(LPCTSTR lpszDocName)
 	else
 	{
 		// get name of currently active view
-		lstrcpy(szText, m_strTitle);
+		std::string s (m_strTitle);
+		if (s.size() > 75)
+			s = s.substr(0, 75) + "...";
+		lstrcpy(szText, s.c_str());
 		if (lpszDocName != NULL)
 		{
 			lstrcat(szText, _T(" - "));
-			std::string s(szText);
 			std::string s1(lpszDocName);
-			if ( s1.size() > 75) {
-				s1 = s.substr(0,75);
-				s1 += "...";
-				s += s1;
-			}
-			lstrcat(szText, s.c_str());
+			if (s1.size() > 75)
+				s1 = s1.substr(0, 75) + "...";
+			lstrcat(szText, s1.c_str());
 		}
 	}
 
