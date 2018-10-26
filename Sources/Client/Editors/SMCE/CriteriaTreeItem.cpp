@@ -1374,7 +1374,7 @@ void EffectGroup::GenerateItem(int iCol, bool fCalc, bool fShow)
 						mp->SetDomainValueRangeStruct(dm);
 					String sAlternativeDescr ("");
 					if (GetDocument()->iGetNrAlternatives() > 1)
-						sAlternativeDescr = String(TR("of Alternative '%s'").c_str(), GetDocument()->sAlternative(iCol));
+						sAlternativeDescr = " " + String(TR("of Alternative '%s'").c_str(), GetDocument()->sAlternative(iCol));
 					if (GetParent()) // we're intermediate
 						mp->SetDescription(String(TR("Intermediate map for '%S'%S").c_str(), sName(), sAlternativeDescr));
 					else
