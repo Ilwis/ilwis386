@@ -97,9 +97,10 @@ BOOL CPicture::Load(LPCTSTR pszPathName)
 	char* lpBuffer = reinterpret_cast<char*> ( ::GlobalLock(hGlobal) );
 	DWORD dwBytesRead = 0;
 
-	while ( ::ReadFile(hFile, lpBuffer, 4096, &dwBytesRead, NULL) )
+	while ( ::ReadFile(hFile, lpBuffer, min(4096,len), &dwBytesRead, NULL) )
 	{
 		lpBuffer += dwBytesRead;
+		len -= dwBytesRead;
 		if (dwBytesRead == 0)
 			break;
 		dwBytesRead = 0;
