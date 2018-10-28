@@ -63,12 +63,12 @@ int GeonetCastFrm::dummy(Event *ev) {
 
 void GeonetCastFrm::StartPage() {
 	GNCPage *page = GetPage(formType);
-	FieldPicture *fp = new FieldPicture(page, NULL);
+	FieldPicture *fp = new FieldPicture(page, NULL, NULL, true);
 	fp->SetWidth(350);
 	fp->SetHeight(450);
 	fp->SetBevelStyle(FormEntry::bsRAISED);
 	String ilw("%SExtensions\\%S-Toolbox\\util\\%S.bmp", getEngine()->getContext()->sIlwDir(),formType,formType);
-	tree->SetWidth(120);
+	tree->SetWidth(180);
 	fp->Load(FileName(ilw));
 	if ( page)
 		page->Show();
