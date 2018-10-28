@@ -63,6 +63,11 @@ void FieldPicture::show(int v) {
 
 bool FieldPicture::Load(unsigned char *buf, int len) {
 	bool ret =  picture.Load(buf,len) == TRUE;
+	if ( ret && keepSize) {
+		CSize sz = picture.GetImageSize();
+		psn->iMinWidth = psn->iWidth = sz.cx;
+		psn->iMinHeight = psn->iHeight = sz.cy;
+	}
 	if ( pb)
 		pb->Invalidate();
 	return ret;
@@ -70,6 +75,11 @@ bool FieldPicture::Load(unsigned char *buf, int len) {
 
 bool FieldPicture::Load(const FileName& fnPicture) {
 	bool ret =  picture.Load(fnPicture.sFullPath().c_str()) == TRUE;
+	if ( ret && keepSize) {
+		CSize sz = picture.GetImageSize();
+		psn->iMinWidth = psn->iWidth = sz.cx;
+		psn->iMinHeight = psn->iHeight = sz.cy;
+	}
 	if ( pb)
 		pb->Invalidate();
 	return ret;
@@ -112,9 +122,8 @@ void FieldPicture::DrawItem(Event* ev)
 		CSize sz = picture.GetImageSize(dis->hDC);
 		CRect rct(0,0,sz.cx,sz.cy);
 		picture.Render(dis->hDC,&rct);
-	}
-
-	picture.Render(dis->hDC, &(dis->rcItem));
+	} else
+		picture.Render(dis->hDC, &(dis->rcItem));
 }
 
 void FieldPicture::ClearData() {
