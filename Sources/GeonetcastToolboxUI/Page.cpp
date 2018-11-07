@@ -40,6 +40,7 @@ void GNCPage::setHidden(bool yesno){
 DataPage::DataPage(GeonetCastFrm *frm, FormEntry *parent) : GNCPage(frm,parent), fbIn(0),fbOut(0),fsIn(0),choice(iUNDEF),useRegion(0),regionMap(0),cbRegion(0),fmRegion(0) {
 	this->SetBevelStyle(FormEntry::bsLOWERED);
 	nooutput = noinput = false;
+	buttonText = "Import";
 };
 
 String DataPage::getName(){
@@ -160,6 +161,10 @@ void DataPage::setId(const String& iid){
 
 String DataPage::getId() const {
 	return id;
+}
+
+void DataPage::setButtonText(const String& txt) {
+	buttonText = txt;
 }
 
 String DataPage::getBranch() const {

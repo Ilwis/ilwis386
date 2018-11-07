@@ -46,6 +46,7 @@ public:
 	String getId() const;
 	String getBranch() const;
 	void setBranch(const String& b);
+	void setButtonText(const String& txt);
 	int RegionChanged(Event* ev);
 	virtual void show(int sw);
 protected:
@@ -56,6 +57,7 @@ protected:
 	String folderId;
 	String comment;
 	String id;
+	String buttonText;
 	bool * useRegion;
 	String * regionMap;
 	long choice;

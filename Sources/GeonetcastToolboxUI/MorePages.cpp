@@ -598,7 +598,7 @@ void Jason2Page::set(){
 	pbsOut->SetIndependentPos();
 	FieldBlank *fb = new FieldBlank(this);
 	fb->Align(fdtOut, AL_UNDER);
-	new PushButton(this, "Import", (NotifyProc)&Jason2Page::import,this);
+	new PushButton(this, buttonText, (NotifyProc)&Jason2Page::import,this);
 }
 
 FileName Jason2Page::GetPath(FieldDataTypeCreate *fdt) {
@@ -706,7 +706,7 @@ void AVHRRPage::set(){
 	pbsOut->SetIndependentPos();
 	FieldBlank *fb = new FieldBlank(this);
 	fb->Align(fdtOut, AL_UNDER);
-	new PushButton(this, "Import", (NotifyProc)&AVHRRPage::import,this);
+	new PushButton(this, buttonText, (NotifyProc)&AVHRRPage::import,this);
 }
 
 FileName AVHRRPage::GetPath(FieldDataTypeCreate *fdt) {
@@ -801,7 +801,7 @@ void TimePlusOrbit::set() {
 	fbOut = new FieldBrowseDir(this,"Output directory","",&dirOut);
 	fbOut->SetWidth(EDIT_FIELD_SIZE);
 	new FieldBlank(this);
-	PushButton *pb = new PushButton(this,"Import",(NotifyProc)&TimePlusOrbit::import,this);
+	PushButton *pb = new PushButton(this,buttonText,(NotifyProc)&TimePlusOrbit::import,this);
 }
 
 int TimePlusOrbit::import(Event *ev) {
@@ -844,7 +844,7 @@ void ImportMomentNoInput::set() {
 	fbOut = new FieldBrowseDir(this,"Output directory","",&dirOut);
 	fbOut->SetWidth(EDIT_FIELD_SIZE);
 	new FieldBlank(this);
-	PushButton *pb = new PushButton(this,"Import",(NotifyProc)&ImportMomentNoInput::import,this);
+	PushButton *pb = new PushButton(this,buttonText,(NotifyProc)&ImportMomentNoInput::import,this);
 }
 
 int ImportMomentNoInput::import(Event *ev) {
@@ -970,7 +970,7 @@ void StationOutputPage::set() {
 	fbOut->SetWidth(EDIT_FIELD_SIZE);
 	new PushButton(this,"Metadata",(NotifyProc)&StationOutputPage::metadata,this);
 	new FieldBlank(this);
-	new PushButton(this,"Import",(NotifyProc)&StationOutputPage::import,this);
+	new PushButton(this,buttonText,(NotifyProc)&StationOutputPage::import,this);
 }
 
 int StationOutputPage::metadata(Event *ev) {
@@ -1038,7 +1038,7 @@ void StationSearchPage::set() {
 	//lister->lbox()->SetFont(fnt);
 		
 	new FieldBlank(this);
-	new PushButton(this,"Import",(NotifyProc)&PageType1::import,this);
+	new PushButton(this,buttonText,(NotifyProc)&PageType1::import,this);
 
 }
 

@@ -272,6 +272,7 @@ void GeonetCastFrm::build(pugi::xml_node node,  String current, String idPath, c
 			String folderid=node.attribute("folderid").value();
 			String comment=node.attribute("comment").value();
 			bool useRegionMap = node.attribute("roi").as_bool();
+			String buttonText = node.attribute("buttonText").value();
 			folders.insert(folderid);
 			GNCPage *page = pageFactory(type);
 			page->setRootPath(rootpath, iniFile);
@@ -284,6 +285,8 @@ void GeonetCastFrm::build(pugi::xml_node node,  String current, String idPath, c
 				pImport->setBranch(current + "#" + name);
 				pImport->setFolderId(folderid);
 				pImport->setComment(comment);
+				if (buttonText != "")
+					pImport->setButtonText(buttonText);
 				if (useRegionMap)
 					pImport->setRegionMap(&useRegion, &regionMap);
 				if ( type == ptStationSearchPage) {

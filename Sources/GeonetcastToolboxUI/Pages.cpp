@@ -59,7 +59,7 @@ void PageType1::set() {
 	}
 
 	new FieldBlank(this);
-	PushButton *pb = new PushButton(this,"Import",(NotifyProc)&PageType1::import,this);
+	PushButton *pb = new PushButton(this,buttonText,(NotifyProc)&PageType1::import,this);
 }
 
 int PageType1::queryServer(Event *) {
@@ -135,7 +135,7 @@ void PageType2::set() {
 		fbOut->SetWidth(EDIT_FIELD_SIZE);
 	}
 	new FieldBlank(this);
-	new PushButton(this,"Import",(NotifyProc)&PageType2::import,this);
+	new PushButton(this,buttonText,(NotifyProc)&PageType2::import,this);
 
 
 }
@@ -172,7 +172,7 @@ void PageType3::set() {
 		fbOut->SetWidth(EDIT_FIELD_SIZE);
 	}
 	new FieldBlank(this);
-	new PushButton(this,"Import",(NotifyProc)&PageType3::import,this);
+	new PushButton(this,buttonText,(NotifyProc)&PageType3::import,this);
 
 
 }
@@ -229,7 +229,7 @@ void PageType4::set() {
 		fbOut->Align(alignField, AL_UNDER);
 	}
 	new FieldBlank(this);
-	new PushButton(this,"Import",(NotifyProc)&PageType4::import,this);
+	new PushButton(this,buttonText,(NotifyProc)&PageType4::import,this);
 }
 int PageType4::import(Event *ev) {
 	StoreData();
@@ -271,7 +271,7 @@ void PageType5::set() {
 		fbOut->SetWidth(EDIT_FIELD_SIZE);
 	}
 	new FieldBlank(this);
-	new PushButton(this,"Import",(NotifyProc)&PageType5::import,this);
+	new PushButton(this,buttonText,(NotifyProc)&PageType5::import,this);
 }
 
 int PageType5::import(Event *ev) {
@@ -631,7 +631,7 @@ void LLCornerPage::set() {
 		fbOut->SetWidth(EDIT_FIELD_SIZE);
 	}
 	new FieldBlank(this);
-	PushButton *pb = new PushButton(this,"Import",(NotifyProc)&LLCornerPage::import,this);
+	PushButton *pb = new PushButton(this,buttonText,(NotifyProc)&LLCornerPage::import,this);
 }
 
 
