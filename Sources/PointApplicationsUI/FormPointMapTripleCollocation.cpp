@@ -55,13 +55,13 @@ FormPointMapTripleCollocation::FormPointMapTripleCollocation(CWnd* mw, const cha
 		for (;;) {
 			Token tok = tokenizer.tokGet();
 			sVal = tok.sVal();
-			if (sVal == "")
+			if (sVal == "" || sVal == "-")
 				break;
 			FileName fn(sVal);
-			if (sInPntMap == "")
+			if (sInPntMap == "" && fn.fExist())
 				sInPntMap = fn.sFullNameQuoted(true);
-			else  
-				sOutMap = fn.sFullName(true);
+			else if (sOutMap == "")
+				sOutMap = fn.sRelative(true);
 		}
 	}
 	new FieldDataType(root, TR("Maplist Sensor 1"), &sInMapl1, ".mpl", true);
