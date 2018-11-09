@@ -363,7 +363,7 @@ void TableDelimited::Scan(FileName fnObj, int &iSkipLines, TableExternalFormat::
 		iLine++;
 		if ( iSkip > 0 )
 		{
-			if (iLine == 1) {
+			if (iSkip == 1) { // use last line to skip as "header"
 				ParseLine(sLine, header, eDel);
 			}
 			iSkip--;
@@ -405,7 +405,7 @@ void TableDelimited::Scan(FileName fnObj, int &iSkipLines, TableExternalFormat::
 	{
 		ClmInfo& ci = columnInfo[i];
 		ci.iNrRecs = iRecs;
-		if (iSkipLines > 0)
+		if (iSkipLines > 0 && i < header.size())
 			ci.sColumnName = header[i].sTrimSpaces();
 		if (fUseColInfo && i < scanInfo.size())
 			ci.Strings = scanInfo[i].Strings;
