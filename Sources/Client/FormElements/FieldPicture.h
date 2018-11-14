@@ -44,7 +44,7 @@ public:
   void show(int);
   virtual void StoreData() {};
   void setDirty() { }
-  bool Load(const FileName& fnPicture);
+  bool Load(const FileName& fnPicture, const bool fResampleBicubic);
   bool LoadResource(const String& resID);
   bool Load(unsigned char *buf, int len);
   bool fValid();

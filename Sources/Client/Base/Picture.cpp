@@ -1,7 +1,7 @@
 
 #include "Client\Headers\formelementspch.h"
 #include "Picture.h"
-
+#include <gdiplus.h>
 
 #define HIMETRIC_INCH   2540    // HIMETRIC units per inch
 
@@ -11,6 +11,7 @@
 //
 
 CPicture::CPicture()
+: fResampleBicubic(false)
 {
 }
 
@@ -29,7 +30,6 @@ BOOL CPicture::Load(HINSTANCE hInst, String name)
 	//BOOL ok = bm.Attach(hb);
 	
 	return TRUE;
-
 }
 
 //////////////////
@@ -49,10 +49,8 @@ BOOL CPicture::Load(unsigned char *buf, int len) {
 	{
 		lpBuffer[i] = buf[i];
 	}
-
 	
 	::GlobalUnlock(hGlobal);
-
 
 	// don't delete memory on object's release
 	IStream* pStream = NULL;
@@ -71,8 +69,9 @@ BOOL CPicture::Load(unsigned char *buf, int len) {
 
 }
 
-BOOL CPicture::Load(LPCTSTR pszPathName)     
+BOOL CPicture::Load(LPCTSTR pszPathName, bool _fResampleBicubic)
 {
+	fResampleBicubic = _fResampleBicubic;
 	HANDLE hFile = ::CreateFile(pszPathName, 
 								FILE_READ_DATA,
 								FILE_SHARE_READ,
@@ -107,10 +106,8 @@ BOOL CPicture::Load(LPCTSTR pszPathName)
 	}
 
 	::CloseHandle(hFile);
-
 	
 	::GlobalUnlock(hGlobal);
-
 
 	// don't delete memory on object's release
 	IStream* pStream = NULL;
@@ -128,6 +125,33 @@ BOOL CPicture::Load(LPCTSTR pszPathName)
 	return bRet;
 }
 
+int CPicture::GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
+{
+	UINT num  = 0;
+	UINT size = 0;
+
+	Gdiplus::GetImageEncodersSize(&num, &size);
+	if(size == 0)
+		return -1;
+
+	Gdiplus::ImageCodecInfo* pImageCodecInfo = (Gdiplus::ImageCodecInfo*)(malloc(size));
+	if(pImageCodecInfo == NULL)
+		return -1;
+
+	Gdiplus::GetImageEncoders(num, size, pImageCodecInfo);
+
+	for(UINT j=0; j<num; ++j) {
+		if(wcscmp(pImageCodecInfo[j].MimeType, format) == 0) {
+			*pClsid = pImageCodecInfo[j].Clsid;
+			free(pImageCodecInfo);
+			return j;
+		}
+	}
+
+	free(pImageCodecInfo);
+	return -1;
+}
+
 //////////////////
 // Load from stream (IStream). This is the one that really does it: call
 // OleLoadPicture to do the work.
@@ -135,12 +159,80 @@ BOOL CPicture::Load(LPCTSTR pszPathName)
 BOOL CPicture::Load(IStream* pstm)
 {
 	Free();
-
-	HRESULT hr = OleLoadPicture(pstm, 0, FALSE,
-							IID_IPicture, (void**)&m_spIPicture);
+	HRESULT hr = OleLoadPicture(pstm, 0, FALSE, IID_IPicture, (void**)&m_spIPicture);
+	if (fResampleBicubic && (hr == S_OK)) { // keep some properties in case a bicubic-resample is needed at first render
+		// Rewind the stream
+		LARGE_INTEGER begin;
+		begin.QuadPart = 0;
+		pstm->Seek(begin, STREAM_SEEK_SET, NULL);
+		// capture pixelFormat and pixelSize from pstm
+		Gdiplus::Bitmap* pBitmap = Gdiplus::Bitmap::FromStream(pstm);
+		pixelFormat = pBitmap->GetPixelFormat();
+		paletteSize = pBitmap->GetPaletteSize();
+		delete pBitmap; // release pBitmap
+	}
 
 	return hr == S_OK;	 
+}
 
+//////////////////
+// Resample the image with high-quality bicubic to the new width and height
+//
+void CPicture::ResampleImageTo(LONG nWidth, LONG nHeight)
+{
+	HRESULT hr = S_FALSE;
+	// capture m_spIPicture into stream
+	SIZE sz = GetImageSize();
+	UINT pixelSize = Gdiplus::GetPixelFormatSize(pixelFormat);
+	DWORD len = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + int(sz.cy) * ((int(sz.cx * pixelSize / 8) / 4) + 1) * 4 + (Gdiplus::IsIndexedPixelFormat(pixelFormat) ? paletteSize : 0); // size in bytes of original bitmap
+	HGLOBAL hGlobalOrig = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_NODISCARD, len);
+	if (hGlobalOrig) {
+		// don't delete memory on object's release
+		IStream* pStreamOrig = NULL;
+		if ( ::CreateStreamOnHGlobal(hGlobalOrig,FALSE,&pStreamOrig) == S_OK ) {
+			m_spIPicture->SaveAsFile(pStreamOrig, FALSE, NULL);
+			// rewind the stream
+			LARGE_INTEGER begin;
+			begin.QuadPart = 0;
+			pStreamOrig->Seek(begin, STREAM_SEEK_SET, NULL);
+			Gdiplus::Bitmap* pBitmap = Gdiplus::Bitmap::FromStream(pStreamOrig);
+			Gdiplus::Bitmap* pBitmapOut = new Gdiplus::Bitmap(nWidth,nHeight,pixelFormat);
+			if (pBitmapOut) {
+				Gdiplus::Graphics * graphics = Gdiplus::Graphics::FromImage(pBitmapOut);
+				if (graphics) {
+					graphics->SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+					graphics->DrawImage(pBitmap,0,0,nWidth,nHeight); // draws pBitmap onto pBitmapOut
+					len = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + int(nHeight) * ((int(nWidth * pixelSize / 8) / 4) + 1) * 4 + (Gdiplus::IsIndexedPixelFormat(pixelFormat) ? pBitmap->GetPaletteSize() : 0); // size of resampled bitmap
+					HGLOBAL hGlobalOut = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_NODISCARD, len);
+					if (hGlobalOut) {
+						// don't delete memory on object's release
+						IStream* pStreamOut = NULL;
+						if ( ::CreateStreamOnHGlobal(hGlobalOut,FALSE,&pStreamOut) == S_OK ) {
+							// Get the class identifier for the BMP encoder.
+							CLSID bmpClsid;
+							if (GetEncoderClsid(L"image/bmp", &bmpClsid) >= 0) {
+								// Save pBitmapOut in the stream.
+								Gdiplus::Status stat = pBitmapOut->Save(pStreamOut, &bmpClsid);
+								if(stat == Gdiplus::Ok) {
+									// Rewind the stream
+									pStreamOut->Seek(begin, STREAM_SEEK_SET, NULL);
+									// delete the old m_spIPicture
+									Free();
+									// Write the stream to m_spIPicture									
+									hr = OleLoadPicture(pStreamOut, 0, FALSE, IID_IPicture, (void**)&m_spIPicture);
+								}
+							}						
+						}
+						::GlobalFree(hGlobalOut); // release pStreamOut
+					}
+					delete graphics; // release graphics
+				}
+			}
+			delete pBitmapOut; // release pBitmapOut
+			delete pBitmap; // release pBitmap
+		}
+		::GlobalFree(hGlobalOrig); // release pStreamOrig
+	}
 }
 
 //////////////////
@@ -165,6 +257,12 @@ BOOL CPicture::Render(HDC dc, RECT* rc, LPCRECT prcMFBounds)
 		long hmWidth,hmHeight; // HIMETRIC units
 		GetHIMETRICSize(hmWidth, hmHeight);
 
+		if (fResampleBicubic) {
+			SIZE sz = GetImageSize();
+			if (sz.cx != rc->right || sz.cy != rc->bottom)
+				ResampleImageTo(rc->right, rc->bottom); // this should happen only once, at first render (that is when the size is known of the corresponding FieldPicture formelement)
+		}
+
 		m_spIPicture->Render(dc, 
 							rc->left, rc->top, 
 							rc->right - rc->left, rc->bottom - rc->top,
@@ -180,7 +278,6 @@ BOOL CPicture::Render(HDC dc, RECT* rc, LPCRECT prcMFBounds)
 		CRect rct(rc);
 		//windowCDC.BitBlt(0,0,bitMap.bmWidth,bitMap.bmHeight,&cdc,0,0,SRCCOPY);
 		windowCDC.StretchBlt(0,0,rct.Width(),rct.Height(),&cdc,0,0,bitMap.bmWidth,bitMap.bmHeight, SRCCOPY);
-
 
 		cdc.SelectObject(bmOld);
 		windowCDC.Detach();
@@ -252,12 +349,10 @@ void CPicture::SetHIMETRICtoDP(HDC hdc, SIZE* sz)
 		sz->cy = MulDiv(sz->cy, cyPerInch, HIMETRIC_INCH);
 	}
 
-
 	POINT pt;
 	pt.x = sz->cx;
 	pt.y = sz->cy;
 	::DPtoLP(hdc,&pt,1);
 	sz->cx = pt.x;
 	sz->cy = pt.y;
-
 }

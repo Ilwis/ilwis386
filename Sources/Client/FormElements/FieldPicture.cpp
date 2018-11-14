@@ -73,8 +73,8 @@ bool FieldPicture::Load(unsigned char *buf, int len) {
 	return ret;
 }
 
-bool FieldPicture::Load(const FileName& fnPicture) {
-	bool ret =  picture.Load(fnPicture.sFullPath().c_str()) == TRUE;
+bool FieldPicture::Load(const FileName& fnPicture, const bool fResampleBicubic) {
+	bool ret =  picture.Load(fnPicture.sFullPath().c_str(), fResampleBicubic && !keepSize) == TRUE; // if keepSize == true then we don't need resample
 	if ( ret && keepSize) {
 		CSize sz = picture.GetImageSize();
 		psn->iMinWidth = psn->iWidth = sz.cx;

@@ -19,7 +19,7 @@ public:
 
 	// Load frm various sosurces
 	BOOL Load(HINSTANCE hInst, String name);
-	BOOL Load(LPCTSTR pszPathName);
+	BOOL Load(LPCTSTR pszPathName, bool fResampleBicubic);
 	BOOL Load(IStream* pstm);
 	BOOL Load(unsigned char *buf, int len);
 
@@ -49,11 +49,16 @@ public:
 
 protected:
 
-	void SetHIMETRICtoDP(HDC hdc, SIZE* sz) ;
+	void SetHIMETRICtoDP(HDC hdc, SIZE* sz);
+	int GetEncoderClsid(const WCHAR* format, CLSID* pClsid);
+	void ResampleImageTo(LONG nWidth, LONG nHeight);
+	bool fResampleBicubic;
 
 	CComQIPtr<IPicture> m_spIPicture; // ATL smart pointer to IPicture
 	HRESULT m_hr; // last error code
 	CBitmap bm;
+	INT pixelFormat; // keep the pixelformat and paletteSize for creating compatible bitmaps
+	INT paletteSize;
 };
 
 
