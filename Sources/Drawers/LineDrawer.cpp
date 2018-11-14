@@ -74,8 +74,14 @@ bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 
 	glColor4f(lproperties.drawColor.redP(),lproperties.drawColor.greenP(), lproperties.drawColor.blueP(),alpha );
 	glLineWidth(lproperties.thickness);
+	if (lproperties.thickness != 1.0) {
+		glEnable(GL_LINE_SMOOTH);
+		glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+		glHint(GL_POLYGON_SMOOTH_HINT,GL_NICEST);
+	}
+
 	if (lproperties.linestyle != 0xFFFF) {
-		glEnable (GL_LINE_STIPPLE);
+		glEnable(GL_LINE_STIPPLE);
 		glLineStipple(1,lproperties.linestyle);
 	}
 
@@ -135,7 +141,11 @@ bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 		glPopMatrix();
 	}
 
-	glDisable (GL_LINE_STIPPLE);
+	glDisable(GL_LINE_STIPPLE);
+	if (lproperties.thickness != 1.0) {
+		glDisable(GL_LINE_SMOOTH);
+	}
+
 	glLineWidth(1);
 	return true;
 }
