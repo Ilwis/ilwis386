@@ -65,6 +65,7 @@ protected:
 	bool useRemote;
 	URL remoteServer;
 	FinderPage *fp;
+	bool resampleBicubic;
 };
 
 typedef vector<GeonetCastFrm::Page>::iterator PageIter;

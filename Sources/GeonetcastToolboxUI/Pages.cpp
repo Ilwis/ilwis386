@@ -288,12 +288,12 @@ PicturePage::PicturePage(GeonetCastFrm *frm, FormEntry *e) : GNCPage(frm,e){
 
 }
 
-void PicturePage::setPicture(FileName fn,int width, int height) {
+void PicturePage::setPicture(FileName fn,int width, int height, const bool resampleBicubic) {
 	FieldPicture *fp = new FieldPicture(this, NULL);
 	fp->SetWidth(width);
 	fp->SetHeight(height);
 	fp->SetBevelStyle(FormEntry::bsRAISED);
-	fp->Load(fn);
+	fp->Load(fn, resampleBicubic);
 }
 
 //---------------------------------------

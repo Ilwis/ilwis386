@@ -43,7 +43,7 @@ public:
 class PicturePage : public GNCPage {
 public:
 	PicturePage(GeonetCastFrm *f, FormEntry *);
-	void setPicture(FileName fn, int w, int h);
+	void setPicture(FileName fn, int w, int h, const bool resampleBicubic);
     bool directAction() { return false; }
 
 };

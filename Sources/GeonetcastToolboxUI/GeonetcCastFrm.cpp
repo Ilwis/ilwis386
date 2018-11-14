@@ -31,7 +31,8 @@ FormWithDest(IlwWinApp()->GetMainWnd(),title , fbsSHOWALWAYS |  fbsNOOKBUTTON | 
 	curPage(NULL),
 	formType(type),
 	useRemote(false),
-	useRegion(false)
+	useRegion(false),
+	resampleBicubic(false)
 {
 	try{
 		IlwisSettings settings("Dummy");
@@ -63,18 +64,16 @@ int GeonetCastFrm::dummy(Event *ev) {
 
 void GeonetCastFrm::StartPage() {
 	GNCPage *page = GetPage(formType);
-	FieldPicture *fp = new FieldPicture(page, NULL, NULL, true);
+	FieldPicture *fp = new FieldPicture(page, NULL);
 	fp->SetWidth(350);
 	fp->SetHeight(450);
 	fp->SetBevelStyle(FormEntry::bsRAISED);
 	String ilw("%SExtensions\\%S-Toolbox\\util\\%S.bmp", getEngine()->getContext()->sIlwDir(),formType,formType);
 	tree->SetWidth(180);
-	fp->Load(FileName(ilw));
+	fp->Load(FileName(ilw), resampleBicubic);
 	if ( page)
 		page->Show();
-
 }
-
 
 int GeonetCastFrm::Fill(Event* ev)
 {
@@ -123,7 +122,6 @@ void GeonetCastFrm::ReadConfigFile(FileName fnConfig) {
 		return;
 
 	ILWIS::XMLDocument doc(fnConfig);
-	String s = doc.toString();
 	PicturePage * p = (PicturePage *)pageFactory(ptPicture);
 	pages.push_back(Page(formType, p));
 
@@ -245,6 +243,9 @@ void GeonetCastFrm::build(pugi::xml_node node,  String current, String idPath, c
 		if  ( nodeName == "Version") {
 			String id = node.attribute("id").value();
 			xmlVersion = id;
+		}
+		if  ( nodeName == "UIInfo") {
+			resampleBicubic = node.attribute("resampleBicubic").as_bool();
 		}
 		if ( nodeName == "RemoteServer") {
 			useRemote = String(node.attribute("use").value()).fVal();
