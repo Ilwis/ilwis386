@@ -143,6 +143,8 @@ void LayerDrawer::setRepresentation( const Representation& rp){
 			setDrawMethod(fUseMultiple ? NewDrawer::drmMULTIPLE : NewDrawer::drmSINGLE);
 		} else if ( dm->pdbool()) {
 			setDrawMethod(NewDrawer::drmBOOL);
+		} else if ( dm->pdcol()) {
+			setDrawMethod(NewDrawer::drmCOLOR);
 		}
 		rpr = rp; // set the representation to the "invalid" one to prevent the wrong tools from appearing (based on the old representation)
 		return;

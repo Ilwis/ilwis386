@@ -70,13 +70,15 @@ HTREEITEM AttributeTool::configure( HTREEITEM parentItem) {
 
 		for(int i=0; i < attTable->iCols(); ++i) {
 			Column col = attTable->col(i);
-			if ( col->dm()->pdsrt() || col->dm()->pdv()) {
+			if ( col->dm()->pdsrt() || col->dm()->pdv() || col->dm()->pdcol()) {
 				ritem = new DisplayOptionRadioButtonItem(col->sName(),tree, htiNode,drawer);
 				ritem->setCheckAction(this,attrCheck, (DTSetCheckFunc)&AttributeTool::setcheckattr);
 				if ( col->dm()->pdv())
 					insertItem(col->sName(),"integer",ritem);
-				if ( col->dm()->pdsrt())
+				else if ( col->dm()->pdsrt())
 					insertItem(col->sName(),"Set",ritem);
+				else if ( col->dm()->pdcol())
+					insertItem(col->sName(),"Colors",ritem);
 			}
 		}
 	}
@@ -124,6 +126,8 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 				featureLayerDrawer->setUseRpr(false);
 				if (attColumn.fValid() && attColumn->dm()->pdbool())
 					featureLayerDrawer->setDrawMethod(NewDrawer::drmBOOL);
+				else if (attColumn.fValid() && attColumn->dm()->pdcol())
+					featureLayerDrawer->setDrawMethod(NewDrawer::drmCOLOR);
 				else
 					featureLayerDrawer->setDrawMethod(NewDrawer::drmMULTIPLE);
 			}
@@ -152,6 +156,8 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 			featureLayerDrawer->setUseRpr(false);
 			if (attColumn.fValid() && attColumn->dm()->pdbool())
 				featureLayerDrawer->setDrawMethod(NewDrawer::drmBOOL);
+			else if (attColumn.fValid() && attColumn->dm()->pdcol())
+				featureLayerDrawer->setDrawMethod(NewDrawer::drmCOLOR);
 			else
 				featureLayerDrawer->setDrawMethod(NewDrawer::drmMULTIPLE);
 		}

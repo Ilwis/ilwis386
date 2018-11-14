@@ -234,7 +234,7 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		setTresholdColors(iRaw, cRet);
 							  } break;
 	case NewDrawer::drmCOLOR:
-		cRet = Color(iRaw);
+		cRet = Color(dataValues.iRawAttr(iRaw));
 		break;
 	case NewDrawer::drmBOOL:
 		switch (dataValues.iRawAttr(iRaw)) {
