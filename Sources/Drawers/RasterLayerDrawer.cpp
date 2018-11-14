@@ -507,7 +507,7 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 			glTexCoord2d(s1, t2);
 			glVertex3d(c4.x, c4.y, 0.0);
 		} else {
-			const unsigned int iSize = 10; // this makes 100 quads, thus 200 triangles per texture
+			const unsigned int iSize = 20; // this makes 400 quads, thus 800 triangles per texture
 			// avoid plotting the "added" portion of the map that was there to make the texture size a power of 2
 			double colStep = min(imageSizeX, data->imageWidth - imageOffsetX) / (double)iSize;
 			double rowStep = min(imageSizeY, data->imageHeight - imageOffsetY) / (double)iSize;
