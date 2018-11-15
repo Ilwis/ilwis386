@@ -89,7 +89,7 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 	}
 
 	if ( pp->type & NewDrawer::ptRENDER || pp->type & RootDrawer::ptRESTORE) {
-		fUsePalette = drm != drmCOLOR;
+		fUsePalette = useAttributeColumn() || (drm != drmCOLOR);
 		if ( rpr->prc()) {
 			RepresentationClass *rprC = rpr->prc();
 			for(int j =0 ; j < pp->filteredRaws.size(); ++j) {
