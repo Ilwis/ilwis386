@@ -16,6 +16,7 @@ namespace ILWIS {
 		Domain dm() const;
 		double rValByRaw(int raw, const RangeReal& range = RangeReal()) const;
 		long iRawAttr(long iRaw) const;
+		bool fUsesCol() const;
 	private:
 		BaseMap bmap;
 		Column col;

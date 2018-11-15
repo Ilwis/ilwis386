@@ -32,6 +32,7 @@ DomainValueRangeStruct IlwisData::dvrs() const{
 	}
 	return bmap->dvrs();
 }
+
 Domain IlwisData::dm() const{
 	if ( col.fValid()) {
 		return col->dm();
@@ -67,6 +68,10 @@ long IlwisData::iRawAttr(long iRaw) const {
 		return col->iRaw(iRaw);
 	else
 		return iRaw;
+}
+
+bool IlwisData::fUsesCol() const {
+	return col.fValid();
 }
 
 DrawingColor::DrawingColor(ComplexDrawer *dr, int ind) : 
@@ -477,11 +482,15 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 		}
 		} break;*/
 	case NewDrawer::drmCOLOR:
-		memcpy(bufOut, buf, iLen * sizeof(long)); // no change !!
+		if (dataValues.fUsesCol()) {
+			for (long i = 0; i < iLen; ++i)
+				bufOut[i] = Color(dataValues.iRawAttr(buf[i])).iVal();
+		} else
+			memcpy(bufOut, buf, iLen * sizeof(long)); // no change !!
 		break;
 	case NewDrawer::drmBOOL: 
 		for (long i = 0; i < iLen; ++i) {
-			long iRaw = dataValues.iRawAttr(buf[i]);			
+			long iRaw = dataValues.iRawAttr(buf[i]);
 			bufOut[i] = (iRaw == 1)?clr1.iVal():((iRaw == 2)?clr2.iVal():Color(0,0,0).iVal());
 		}
 		break;
