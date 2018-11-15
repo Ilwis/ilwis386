@@ -2265,8 +2265,13 @@ void CommandHandler::CmdCrMapList(const String& sCmd)
 	Array<FileName> arfnMaps;
 	for(int i=1; i < pm.iFixed(); ++i) 
 	{
-		arfnMaps &= FileName(pm.sGet(i));
-	}		
+		String parameter = pm.sGet(i);
+		Array<FileName> afn;
+		Array<String> asExt;
+		asExt &= ".mpr";
+		File::GetFileNames(pm.sGet(1), afn, &asExt);
+		arfnMaps &= afn;
+	}
 	MapList mpl(fnMapList, arfnMaps);
 }
 
