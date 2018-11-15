@@ -280,7 +280,7 @@ void InstColor::Exec() {
   inst->stkCalc[0]->Resize(bufBlue);
   inst->stkCalc[0]->GetVal(bufBlue);
   for (long i=0; i < inst->env.iBufSize; i++)
-	  (*so->iBuf)[i] = Color(byteConv(bufRed[i]), byteConv(bufGreen[i]), byteConv(bufBlue[i])).iVal();
+    (*so->iBuf)[i] = Color(byteConv(bufRed[i]), byteConv(bufGreen[i]), byteConv(bufBlue[i]));
   delete inst->stkCalc.pop();
   delete inst->stkCalc.pop();
   delete inst->stkCalc.pop();
@@ -309,7 +309,7 @@ void InstColorHSI::Exec() {
   for (long i=0; i < inst->env.iBufSize; i++) {
     Color c;
     c.SetHSI(byteConv(bufHue[i]), byteConv(bufSat[i]), byteConv(bufInt[i]));
-	(*so->iBuf)[i] = c.iVal();
+    (*so->iBuf)[i] = c;
   }
   delete inst->stkCalc.pop();
   delete inst->stkCalc.pop();
@@ -643,7 +643,7 @@ void InstLoad::Exec() {
           case vtCOLOR:
             { Color clrVal = cv->clrValue();
               for (int i=0; i < bufL.iSize(); i++)
-                bufL[i] = clrVal.iVal();
+                bufL[i] = clrVal;
             }
             break;
           case vtCOLUMN: {

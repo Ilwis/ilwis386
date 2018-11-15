@@ -103,7 +103,7 @@ long DomainColor::iRaw(const String& str) const
   if (iBlue == shUNDEF)
     return iUNDEF;
   Color clr(iRed,iGreen, iBlue);
-  return clr.iVal();
+  return long(clr);
 }
 
 bool DomainColor::fValid(const String& s) const

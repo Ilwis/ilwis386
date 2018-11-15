@@ -483,8 +483,11 @@ void DrawingColor::clrRaw(const long * buf, long * bufOut, long iLen, NewDrawer:
 		} break;*/
 	case NewDrawer::drmCOLOR:
 		if (dataValues.fUsesCol()) {
-			for (long i = 0; i < iLen; ++i)
-				bufOut[i] = Color(dataValues.iRawAttr(buf[i])).iVal();
+			for (long i = 0; i < iLen; ++i) {
+				Color clr (dataValues.iRawAttr(buf[i]));
+				clr.alpha() = 255 - clr.alpha();
+				bufOut[i] = clr.iVal();
+			}
 		} else
 			memcpy(bufOut, buf, iLen * sizeof(long)); // no change !!
 		break;
