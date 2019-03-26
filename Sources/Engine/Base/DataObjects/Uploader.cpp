@@ -3,9 +3,9 @@
 #include <iostream>
 #include <sstream>
 #include "Engine\Base\DataObjects\URL.h"
-#include "Engine\DataExchange\curlIncludes\curl.h"
-#include "Engine\DataExchange\curlIncludes\easy.h"
 #include "Engine\Base\DataObjects\Uploader.h"
+#include "Engine\Base\System\Engine.h"
+#include "Engine\DataExchange\curlincludes\CurlProxy.h"
 
 size_t read_callback(void *ptr, size_t size, size_t nmemb, void *userp);
 
@@ -48,26 +48,26 @@ void Uploader::upload() {
 	CURL *curl;
 	CURLcode res;
 
-    curl_global_init(CURL_GLOBAL_ALL);
-	curl = curl_easy_init();
+    getEngine()->curl->curl_global_init(CURL_GLOBAL_ALL);
+	curl = getEngine()->curl->curl_easy_init();
 	if(curl) {
 		struct curl_slist *headers=NULL;
-		headers = curl_slist_append(headers, "Content-Type: application/binary");
+		headers = getEngine()->curl->curl_slist_append(headers, "Content-Type: application/binary");
 
-		curl_easy_setopt(curl, CURLOPT_URL, url.sVal().c_str());
-		curl_easy_setopt(curl, CURLOPT_POST, TRUE);
-		curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
-		curl_easy_setopt(curl, CURLOPT_READDATA, this);
-		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, sizeleft);
-		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+		getEngine()->curl->curl_easy_setopt(curl, CURLOPT_URL, url.sVal().c_str());
+		getEngine()->curl->curl_easy_setopt(curl, CURLOPT_POST, TRUE);
+		getEngine()->curl->curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_callback);
+		getEngine()->curl->curl_easy_setopt(curl, CURLOPT_READDATA, this);
+		getEngine()->curl->curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+		getEngine()->curl->curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, sizeleft);
+		getEngine()->curl->curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
 
-		res = curl_easy_perform(curl);
+		res = getEngine()->curl->curl_easy_perform(curl);
 
-		curl_slist_free_all(headers);
+		getEngine()->curl->curl_slist_free_all(headers);
 
-		curl_easy_cleanup(curl);
+		getEngine()->curl->curl_easy_cleanup(curl);
 	}
 }
 

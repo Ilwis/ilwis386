@@ -17,6 +17,7 @@
 #include "Engine\DataExchange\WMSCollection.h"
 #include "Engine\Base\System\commandhandler.h"
 #include "Engine\DataExchange\gdalproxy.h"
+#include "Engine\DataExchange\curlincludes\curlproxy.h"
 #include <set>
 #include <fstream>
 
@@ -72,6 +73,7 @@ Engine::~Engine()
 	version = NULL;
 	delete db;
 	delete gdal;
+	delete curl;
 }
 
 // Engine initialization
@@ -120,8 +122,10 @@ void Engine::Init() {
 
 	  gdal = new GdalProxy();
 	  gdal->loadMethods(ilwDir);
-	}
 
+	  curl = new CurlProxy();
+	  curl->loadMethods(ilwDir);
+	}
 }
 
 void Engine::loadServiceLocations(const String& dir) {

@@ -43,6 +43,7 @@ public:
 	RemoteObject(const URL& url);
 	RemoteObject();
 	void getRequest(const String& url);
+	void setRequestHeaders(const std::vector<String> & requestHeaders);
 	static void *myrealloc(void *ptr, long size);
 	static size_t WriteMemoryCallback(void *ptr, size_t size, size_t nmemb, void *data);
 	static void *myrealloc(void *ptr, size_t size);
@@ -56,6 +57,7 @@ protected:
    MemoryStruct chunk;
    ofstream *file;
    CURL *curl_handle;
+   std::vector<String> vsRequestHeaders;
    static unsigned int iRef;
 };
 

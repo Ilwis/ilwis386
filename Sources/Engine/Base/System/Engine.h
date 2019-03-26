@@ -22,6 +22,7 @@ class COMServerHandler;
 class ForeignFormatMap;
 class Logger;
 class GdalProxy;
+class CurlProxy;
 
 struct RowSelectInfo {
 	FileName fn; // domain;
@@ -72,6 +73,7 @@ public:
 	void getServicesFor(const String& serviceType, map<String,String>& services, bool getUrl) const;
 	ILWIS::Database *pdb();
 	GdalProxy *gdal;
+	CurlProxy *curl;
 
 public:
 	IlwisAppContext *context;

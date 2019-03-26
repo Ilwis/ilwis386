@@ -38,8 +38,8 @@ Created on: 2007-02-8
 #include "Headers\toolspch.h"
 #include "Engine\Base\DataObjects\URL.h"
 #include "Engine\Base\DataObjects\RemoteXMLObject.h"
-#include "Engine\DataExchange\curlIncludes\curl.h"
-#include "Engine\DataExchange\curlIncludes\easy.h"
+#include "Engine\Base\System\Engine.h"
+#include "Engine\DataExchange\curlincludes\CurlProxy.h"
 
 unsigned int RemoteObject::iRef = 0;
 
@@ -47,20 +47,20 @@ RemoteObject::RemoteObject()
 : file(0)
 {
 	if (iRef == 0)
-		curl_global_init(CURL_GLOBAL_ALL);
+		getEngine()->curl->curl_global_init(CURL_GLOBAL_ALL);
 	++iRef;
 
-	curl_handle = curl_easy_init();
+	curl_handle = getEngine()->curl->curl_easy_init();
 }
 
 RemoteObject::RemoteObject(const URL& url)
 : file(0)
 {
 	if (iRef == 0)
-		curl_global_init(CURL_GLOBAL_ALL);
+		getEngine()->curl->curl_global_init(CURL_GLOBAL_ALL);
 	++iRef;
 
-	curl_handle = curl_easy_init();
+	curl_handle = getEngine()->curl->curl_easy_init();
 
 	getRequest(url.sVal());
 }
@@ -91,10 +91,10 @@ size_t RemoteObject::WriteMemoryCallback(void *ptr, size_t size, size_t nmemb, v
 RemoteObject::~RemoteObject() {
     if(chunk.memory)
 		free(chunk.memory);
-	curl_easy_cleanup(curl_handle);
+	getEngine()->curl->curl_easy_cleanup(curl_handle);
 	--iRef;
 	if (iRef == 0)
-		curl_global_cleanup();
+		getEngine()->curl->curl_global_cleanup();
 }
 
 void *RemoteObject::myrealloc(void *ptr, size_t size)
@@ -105,7 +105,6 @@ void *RemoteObject::myrealloc(void *ptr, size_t size)
 		return realloc(ptr, size);
 	else
 		return malloc(size);
-
 }
 
 MemoryStruct *RemoteObject::get() {
@@ -120,18 +119,37 @@ MemoryStruct *RemoteObject::get() {
 	return mem;
 }
 
+void RemoteObject::setRequestHeaders(const std::vector<String> & requestHeaders) {
+	vsRequestHeaders = requestHeaders;
+}
+
 void RemoteObject::getRequest(const String& url) {
     chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
     chunk.size = 0;    /* no data at this point */
+	struct curl_slist *list = NULL;
   
-	curl_easy_setopt(curl_handle, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-    curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)this);
-    curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
-    CURLcode result = curl_easy_perform(curl_handle);
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_URL, url.c_str());
+    getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+    getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)this);
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_SSL_VERIFYPEER, 0);
+	if (vsRequestHeaders.size() > 0) {
+		bool fHasUserAgent = false;
+		for (std::vector<String>::iterator headerLine = vsRequestHeaders.begin(); headerLine != vsRequestHeaders.end(); ++headerLine) {
+			list = getEngine()->curl->curl_slist_append(list, headerLine->c_str());
+			fHasUserAgent |= fCIStrEqual(headerLine->sLeft(11), "User-Agent:");
+		}
+		if (!fHasUserAgent)
+			getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, list);
+	} else {
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+	}
+    CURLcode result = getEngine()->curl->curl_easy_perform(curl_handle);
 	if ( result != 0)
-		TRACE("Curl error: %s", curl_easy_strerror(result)); // most of the time it is CURLE_PARTIAL_FILE ... do we retry?
+		TRACE("Curl error: %s", getEngine()->curl->curl_easy_strerror(result)); // most of the time it is CURLE_PARTIAL_FILE ... do we retry?
 		//throw ErrorObject(curl_easy_strerror(result)); // can we remove this "throw"?
+	if (list != 0)
+		getEngine()->curl->curl_slist_free_all(list); /* free the list again */
 }
 
 void RemoteObject::parse() {

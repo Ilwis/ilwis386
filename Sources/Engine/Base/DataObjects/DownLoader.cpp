@@ -1,9 +1,9 @@
 #include "Headers\toolspch.h"
 #include <sys/stat.h>
 #include "Engine\Base\DataObjects\URL.h"
-#include "Engine\DataExchange\curlIncludes\curl.h"
-#include "Engine\DataExchange\curlIncludes\easy.h"
 #include "Downloader.h"
+#include "Engine\Base\System\Engine.h"
+#include "Engine\DataExchange\curlincludes\CurlProxy.h"
 
 size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp) {
 	char *d = (char*)buffer;
@@ -28,8 +28,8 @@ Downloader::Downloader(const URL &_url) : url(_url), count(0) {
 FileName Downloader::download(const String& executionDir) {
 
 	count = 0;
-	CURL* ctx = curl_easy_init() ;
-	curl_easy_setopt( ctx , CURLOPT_URL,  url.sVal().c_str() );
+	CURL* ctx = getEngine()->curl->curl_easy_init() ;
+	getEngine()->curl->curl_easy_setopt( ctx , CURLOPT_URL,  url.sVal().c_str() );
 	int index = url.sVal().find_last_of("/");
 	if ( index == string::npos) 
 		return FileName();
@@ -44,13 +44,13 @@ FileName Downloader::download(const String& executionDir) {
 	if ( file == NULL)
 		return FileName();
 
-	curl_easy_setopt(ctx, CURLOPT_WRITEFUNCTION, write_data);
-	curl_easy_setopt( ctx , CURLOPT_WRITEDATA , (void *)this );
+	getEngine()->curl->curl_easy_setopt(ctx, CURLOPT_WRITEFUNCTION, write_data);
+	getEngine()->curl->curl_easy_setopt( ctx , CURLOPT_WRITEDATA , (void *)this );
 	//trq.Start();
-	const CURLcode rc = curl_easy_perform( ctx ) ;
+	const CURLcode rc = getEngine()->curl->curl_easy_perform( ctx ) ;
 	//trq.fUpdate(count);
 
-	curl_easy_cleanup( ctx ) ;
+	getEngine()->curl->curl_easy_cleanup( ctx ) ;
 	fflush(file);
 	fclose(file);
 

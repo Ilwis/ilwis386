@@ -48,6 +48,8 @@
 #include "Engine/Base/XML/pugixml.hpp"
 #include "Engine/DataExchange/curlIncludes/curl.h"
 #include "ConnectorWFS.h"
+#include "Engine\Base\System\Engine.h"
+#include "Engine\DataExchange\curlincludes\CurlProxy.h"
 
 using namespace std;
 
@@ -155,23 +157,23 @@ int ConnectorWFS::getCapabilities() {
 	chunk.size = 0;						// no data at this point 
 
 	CURL *curl_handle;
-	curl_global_init(CURL_GLOBAL_ALL);
+	getEngine()->curl->curl_global_init(CURL_GLOBAL_ALL);
 	//init the curl session
-	curl_handle = curl_easy_init();
+	curl_handle = getEngine()->curl->curl_easy_init();
 	//specify URL to get
-	curl_easy_setopt(curl_handle, CURLOPT_URL, url_GetCapabilities.c_str()); 
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_URL, url_GetCapabilities.c_str()); 
 	//send all data to this function 
-	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
 	//we pass our 'chunk' struct to the callback function
-	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
 	//some servers don't like requests that are made without a user-agent field, so we provide one
-	curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
 	//get it!
-	CURLcode err =curl_easy_perform(curl_handle);
+	CURLcode err =getEngine()->curl->curl_easy_perform(curl_handle);
 	//cleanup curl stuff
-	curl_easy_cleanup(curl_handle);
+	getEngine()->curl->curl_easy_cleanup(curl_handle);
 	//we're done with libcurl, so clean it up
-	curl_global_cleanup();
+	getEngine()->curl->curl_global_cleanup();
 	
 	
 	//logWFS->printToLog(chunk.memory);
@@ -381,15 +383,15 @@ void ConnectorWFS::describeFeatureType(const String& featureTypeName, const Stri
 	chunk.size = 0;    // no data at this point
 
 	CURL *curl_handle;
-	curl_global_init(CURL_GLOBAL_ALL);
-	curl_handle = curl_easy_init();
-	curl_easy_setopt(curl_handle, CURLOPT_URL, url_DescribeFeatureType.c_str());
-	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
-	curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
-	curl_easy_perform(curl_handle); //This is the function that makes the process slower.
-	curl_easy_cleanup(curl_handle);
-	curl_global_cleanup();
+	getEngine()->curl->curl_global_init(CURL_GLOBAL_ALL);
+	curl_handle = getEngine()->curl->curl_easy_init();
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_URL, url_DescribeFeatureType.c_str());
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+	getEngine()->curl->curl_easy_perform(curl_handle); //This is the function that makes the process slower.
+	getEngine()->curl->curl_easy_cleanup(curl_handle);
+	getEngine()->curl->curl_global_cleanup();
 
 
 	// RETRIEVE THE SCHEMA OF THE LAYER
@@ -473,15 +475,15 @@ String ConnectorWFS::getFeature(const String& featureTypeName, const String& ver
 	chunk.size = 0;    // no data at this point
 
 	CURL *curl_handle;
-	curl_global_init(CURL_GLOBAL_ALL);
-	curl_handle = curl_easy_init();
-	curl_easy_setopt(curl_handle, CURLOPT_URL, url_GetFeature.c_str());
-	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
-	curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
-	curl_easy_perform(curl_handle);
-	curl_easy_cleanup(curl_handle);
-	curl_global_cleanup();
+	getEngine()->curl->curl_global_init(CURL_GLOBAL_ALL);
+	curl_handle = getEngine()->curl->curl_easy_init();
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_URL, url_GetFeature.c_str());
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
+	getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+	getEngine()->curl->curl_easy_perform(curl_handle);
+	getEngine()->curl->curl_easy_cleanup(curl_handle);
+	getEngine()->curl->curl_global_cleanup();
 
 
 	// RETRIEVE THE SELECTED FEATURES
@@ -1055,26 +1057,26 @@ int ConnectorWFS::executeTransactionDelete(const String& layerName, std::vector<
 
 	CURL *curl_handle;
 	CURLcode res;
-	curl_global_init(CURL_GLOBAL_ALL);// In windows, this will init the winsock stuff
-	curl_handle = curl_easy_init();//get a curl handle
+	getEngine()->curl->curl_global_init(CURL_GLOBAL_ALL);// In windows, this will init the winsock stuff
+	curl_handle = getEngine()->curl->curl_easy_init();//get a curl handle
 	if(curl_handle) {
-		curl_easy_setopt(curl_handle, CURLOPT_URL, url_executeTransaction.c_str());	// First set the URL that is about to receive our POST.
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_URL, url_executeTransaction.c_str());	// First set the URL that is about to receive our POST.
 		//curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, "service=wfs&request=getCapabilities"); //This only works with the standard curl header 
-		struct curl_slist *slist = curl_slist_append(NULL, "Content-Type: text/xml; charset=utf-8");
-		curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, slist);
-		curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, str_xml.c_str());
-		curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDSIZE, str_xml.length());
-		curl_easy_setopt(curl_handle, CURLOPT_POST, 1L);
-	    curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-		curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
-		res = curl_easy_perform(curl_handle);// Perform the request, res will get the return code
+		struct curl_slist *slist = getEngine()->curl->curl_slist_append(NULL, "Content-Type: text/xml; charset=utf-8");
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, slist);
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, str_xml.c_str());
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDSIZE, str_xml.length());
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POST, 1L);
+	    getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
+		res = getEngine()->curl->curl_easy_perform(curl_handle);// Perform the request, res will get the return code
 		// Check for errors
 		if(res != CURLE_OK){
-			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+			fprintf(stderr, "curl_easy_perform() failed: %s\n", getEngine()->curl->curl_easy_strerror(res));
 		}
-		curl_easy_cleanup(curl_handle);// always cleanup 
+		getEngine()->curl->curl_easy_cleanup(curl_handle);// always cleanup 
 	}
-	curl_global_cleanup();
+	getEngine()->curl->curl_global_cleanup();
 
 	// RETRIEVE THE ANSWER!
 	pugi::xml_document answer_trans;
@@ -1150,26 +1152,26 @@ int ConnectorWFS::executeTransactionDelete(const String& layerName, const String
 
 	CURL *curl_handle;
 	CURLcode res;
-	curl_global_init(CURL_GLOBAL_ALL);// In windows, this will init the winsock stuff
-	curl_handle = curl_easy_init();//get a curl handle
+	getEngine()->curl->curl_global_init(CURL_GLOBAL_ALL);// In windows, this will init the winsock stuff
+	curl_handle = getEngine()->curl->curl_easy_init();//get a curl handle
 	if(curl_handle) {
-		curl_easy_setopt(curl_handle, CURLOPT_URL, url_executeTransaction.c_str());	// First set the URL that is about to receive our POST.
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_URL, url_executeTransaction.c_str());	// First set the URL that is about to receive our POST.
 		//curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, "service=wfs&request=getCapabilities"); //This only works with the standard curl header 
-		struct curl_slist *slist = curl_slist_append(NULL, "Content-Type: text/xml; charset=utf-8");
-		curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, slist);
-		curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, str_xml.c_str());
-		curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDSIZE, str_xml.length());
-		curl_easy_setopt(curl_handle, CURLOPT_POST, 1L);
-	    curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-		curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
-		res = curl_easy_perform(curl_handle);// Perform the request, res will get the return code
+		struct curl_slist *slist = getEngine()->curl->curl_slist_append(NULL, "Content-Type: text/xml; charset=utf-8");
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, slist);
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, str_xml.c_str());
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDSIZE, str_xml.length());
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POST, 1L);
+	    getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
+		res = getEngine()->curl->curl_easy_perform(curl_handle);// Perform the request, res will get the return code
 		// Check for errors
 		if(res != CURLE_OK){
-			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+			fprintf(stderr, "curl_easy_perform() failed: %s\n", getEngine()->curl->curl_easy_strerror(res));
 		}
-		curl_easy_cleanup(curl_handle);// always cleanup 
+		getEngine()->curl->curl_easy_cleanup(curl_handle);// always cleanup 
 	}
-	curl_global_cleanup();
+	getEngine()->curl->curl_global_cleanup();
 
 	// RETRIEVE THE ANSWER!
 	pugi::xml_document answer_trans;
@@ -1335,26 +1337,26 @@ int ConnectorWFS::executeTransactionInsert(const String& layerName, std::vector<
 
 	CURL *curl_handle;
 	CURLcode res;
-	curl_global_init(CURL_GLOBAL_ALL);// In windows, this will init the winsock stuff
-	curl_handle = curl_easy_init();//get a curl handle
+	getEngine()->curl->curl_global_init(CURL_GLOBAL_ALL);// In windows, this will init the winsock stuff
+	curl_handle = getEngine()->curl->curl_easy_init();//get a curl handle
 	if(curl_handle) {
-		curl_easy_setopt(curl_handle, CURLOPT_URL, url_executeTransaction.c_str());	// First set the URL that is about to receive our POST.
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_URL, url_executeTransaction.c_str());	// First set the URL that is about to receive our POST.
 		//curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, "service=wfs&request=getCapabilities"); //This only works with the standard curl header 
-		struct curl_slist *slist = curl_slist_append(NULL, "Content-Type: text/xml; charset=utf-8");
-		curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, slist);
-		curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, str_xml.c_str());
-		curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDSIZE, str_xml.length());
-		curl_easy_setopt(curl_handle, CURLOPT_POST, 1L);
-	    curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-		curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
-		res = curl_easy_perform(curl_handle);// Perform the request, res will get the return code
+		struct curl_slist *slist = getEngine()->curl->curl_slist_append(NULL, "Content-Type: text/xml; charset=utf-8");
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, slist);
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, str_xml.c_str());
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDSIZE, str_xml.length());
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POST, 1L);
+	    getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
+		res = getEngine()->curl->curl_easy_perform(curl_handle);// Perform the request, res will get the return code
 		// Check for errors
 		if(res != CURLE_OK){
-			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+			fprintf(stderr, "curl_easy_perform() failed: %s\n", getEngine()->curl->curl_easy_strerror(res));
 		}
-		curl_easy_cleanup(curl_handle);// always cleanup 
+		getEngine()->curl->curl_easy_cleanup(curl_handle);// always cleanup 
 	}
-	curl_global_cleanup();
+	getEngine()->curl->curl_global_cleanup();
 
 	// RETRIEVE THE ANSWER!
 	pugi::xml_document answer_trans;
@@ -1450,26 +1452,26 @@ int ConnectorWFS::executeTransactionUpdate(const String& layerName, const String
 
 	CURL *curl_handle;
 	CURLcode res;
-	curl_global_init(CURL_GLOBAL_ALL);// In windows, this will init the winsock stuff
-	curl_handle = curl_easy_init();//get a curl handle
+	getEngine()->curl->curl_global_init(CURL_GLOBAL_ALL);// In windows, this will init the winsock stuff
+	curl_handle = getEngine()->curl->curl_easy_init();//get a curl handle
 	if(curl_handle) {
-		curl_easy_setopt(curl_handle, CURLOPT_URL, url_executeTransaction.c_str());	// First set the URL that is about to receive our POST.
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_URL, url_executeTransaction.c_str());	// First set the URL that is about to receive our POST.
 		//curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, "service=wfs&request=getCapabilities"); //This only works with the standard curl header 
-		struct curl_slist *slist = curl_slist_append(NULL, "Content-Type: text/xml; charset=utf-8");
-		curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, slist);
-		curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, str_xml.c_str());
-		curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDSIZE, str_xml.length());
-		curl_easy_setopt(curl_handle, CURLOPT_POST, 1L);
-	    curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
-		curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
-		res = curl_easy_perform(curl_handle);// Perform the request, res will get the return code
+		struct curl_slist *slist = getEngine()->curl->curl_slist_append(NULL, "Content-Type: text/xml; charset=utf-8");
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, slist);
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, str_xml.c_str());
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDSIZE, str_xml.length());
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_POST, 1L);
+	    getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+		getEngine()->curl->curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&chunk);
+		res = getEngine()->curl->curl_easy_perform(curl_handle);// Perform the request, res will get the return code
 		// Check for errors
 		if(res != CURLE_OK){
-			fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+			fprintf(stderr, "curl_easy_perform() failed: %s\n", getEngine()->curl->curl_easy_strerror(res));
 		}
-		curl_easy_cleanup(curl_handle);// always cleanup 
+		getEngine()->curl->curl_easy_cleanup(curl_handle);// always cleanup 
 	}
-	curl_global_cleanup();
+	getEngine()->curl->curl_global_cleanup();
 
 	// RETRIEVE THE ANSWER!
 	pugi::xml_document answer_trans;
