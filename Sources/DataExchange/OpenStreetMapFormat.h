@@ -94,6 +94,7 @@ private:
 	int lat2tiley(double lat, int z) const;
 
 	URL	urlOpenStreetMap;
+	std::vector<String> vsRequestHeaders;
 
 	CoordBounds cb;
 	GeoRef grf;

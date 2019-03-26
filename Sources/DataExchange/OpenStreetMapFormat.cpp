@@ -112,6 +112,14 @@ OpenStreetMapFormat::OpenStreetMapFormat(const FileName& fn, ParmList& pm)
 	if ( pm.fExist("url"))
 		urlOpenStreetMap = URL(pm.sGet("url"));
 
+	if ( pm.fExist("NrHeaders")) {
+		int iHeaders = pm.sGet("NrHeaders").iVal();
+		for (int i = 0; i < iHeaders; ++i) {
+			if (pm.fExist(String("HeaderLine%d", i)))
+				vsRequestHeaders.push_back(pm.sGet(String("HeaderLine%d", i)));
+		}
+	}
+
 	LayerInfo info;
 	GetRasterInfo(info, "");
 	String ilwDir = getEngine()->getContext()->sStdDir();
@@ -147,6 +155,18 @@ void OpenStreetMapFormat::ReadParameters(const FileName& fnObj, ParmList& pm)
 	ObjectInfo::ReadElement("ForeignFormat","URL",fnObj,sV);
 	urlOpenStreetMap = URL(sV);
 	pm.Add(new Parm("url", urlOpenStreetMap.sVal()));
+	vsRequestHeaders.clear();
+	int iHeaders = 0;
+	if (ObjectInfo::ReadElement("ForeignFormat", "NrHeaders", fnObj, iHeaders))
+		pm.Add(new Parm("NrHeaders", String("%d", iHeaders)));
+	else
+		iHeaders = 0;
+	for (int i = 0; i < iHeaders; ++i) {
+		if (ObjectInfo::ReadElement("ForeignFormat", String("HeaderLine%d", i).c_str(), fnObj, sV)) {
+			vsRequestHeaders.push_back(sV);
+			pm.Add(new Parm(String("HeaderLine%d", i), sV));
+		}
+	}
 }
 
 ForeignFormat *CreateImportObjectOpenStreetMap(const FileName& fnFO, ParmList& pm) {
@@ -186,9 +206,6 @@ struct OpenStreetMapThreadData {
 
 };
 
-
-
-
 bool OpenStreetMapFormat::fIsCollection(const String& sForeignObject) const
 {
 	return false;
@@ -201,9 +218,7 @@ bool OpenStreetMapFormat::fMatchType(const String& fnFileName, const String& sTy
 
 String OpenStreetMapFormat::getMapRequest(const CoordBounds& cb2, const RowCol rc) const{
 
-
 	CoordBounds cb = llwgs84->cbConv(pseudoMercator,cb2);
-
 
 	double z  = 360.0 / cb.width();
 	double p1 = log10( z);
@@ -229,7 +244,12 @@ String OpenStreetMapFormat::getMapRequest(const CoordBounds& cb2, const RowCol r
 		query_string = url.substr(index1);
 		url = url.substr(0, index1);
 	}
-	url += String("%d/%d/%d.png",zoom,xtile,ytile) + query_string;
+	String ext = url.sRight(4);
+	if ((!fCIStrEqual(ext,".png")) && (!fCIStrEqual(ext,".jpg")))
+		ext = ".png"; // use this as default
+	else
+		url = url.sLeft(url.length() - 4);
+	url += String("%d/%d/%d%S",zoom,xtile,ytile,ext) + query_string;
 	TRACE(String("[ %d,%d ]\n", xtile, ytile).c_str());
 
 	return url;
@@ -265,6 +285,11 @@ void OpenStreetMapFormat::Store(IlwisObject obj) {
 		obj->WriteElement("ForeignFormat","GeoRef",grf->fnObj);
 	if ( urlOpenStreetMap.sVal() != "" )
 		obj->WriteElement("ForeignFormat","URL", urlOpenStreetMap.sVal());
+	if (vsRequestHeaders.size() > 0) {
+		obj->WriteElement("ForeignFormat", "NrHeaders", (int)(vsRequestHeaders.size()));
+		for (int i = 0; i < vsRequestHeaders.size(); ++i)
+			obj->WriteElement("ForeignFormat", String("HeaderLine%d", i).c_str(), vsRequestHeaders[i]);
+	}
 }
 
 int OpenStreetMapFormat::long2tilex(double lon, int z) const
@@ -304,6 +329,7 @@ bool OpenStreetMapFormat::retrieveImage() {
 	String sExpr = getMapRequest(cb2, grfOpenStreetMap->rcWMSRequest());
 	if (rxo == 0)
 		rxo = new RemoteObject();
+	rxo->setRequestHeaders(vsRequestHeaders);
 	rxo->getRequest(sExpr);
 	MemoryStruct *image;
 	image = rxo->get();
