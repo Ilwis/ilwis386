@@ -29,6 +29,8 @@ WMSTexture::WMSTexture(const Map & mp, const DrawingColor * drawColor, const Com
 {
 }
 
+#define GL_CLAMP_TO_EDGE 0x812F
+
 void WMSTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
 {
 	int textureSize = drawerContext->getMaxTextureSize();
@@ -56,8 +58,13 @@ void WMSTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, vo
 	if (fOpenStreetMap) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		if (drawerContext->getVersion() >= 1.2) {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		} else {
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+		}
 	} else {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);

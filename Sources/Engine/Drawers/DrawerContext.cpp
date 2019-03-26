@@ -6,6 +6,7 @@ using namespace ILWIS;
 DrawerContext::DrawerContext() :
 maxTextureSize(128)
 , maxPaletteSize(256)
+, rVersion(0)
 , fGLInitialized(false)
 , m_hdc(0)
 , m_hrc(0)
@@ -161,6 +162,16 @@ bool DrawerContext::initOpenGL(HDC hdc, CWnd * wnd, int m) {
 		if (vendor.iPos(String("intel")) >= 0)
 			maxPaletteSize = 256;
 	}
+	String sVersion (glGetString(GL_VERSION));
+	sVersion = sVersion.sHead(" ");
+	rVersion = 0;
+	double fac = 1.0;
+	while (sVersion.iPos('.') >= 0) {
+		rVersion += sVersion.sHead(".").rVal() * fac;
+		sVersion = sVersion.sTail(".");
+		fac = fac / 10.0;
+	}
+	rVersion += sVersion.rVal() * fac;
 	ReleaseContext();
 
 	fGLInitialized = true;

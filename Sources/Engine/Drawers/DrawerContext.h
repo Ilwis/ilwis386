@@ -15,6 +15,7 @@ namespace ILWIS {
 		void clear();
 		GLint getMaxTextureSize() const { return maxTextureSize; };
 		GLint getMaxPaletteSize() const { return maxPaletteSize; };
+		double getVersion() const { return rVersion; };
 
 		bool TakeContext();
 		void ReleaseContext();
@@ -30,6 +31,7 @@ namespace ILWIS {
 	private:
 		GLint maxTextureSize;
 		GLint maxPaletteSize;
+		double rVersion;
 		CCriticalSection csOpenglContext;
 		HDC m_hdc;
 		HGLRC m_hrc;
