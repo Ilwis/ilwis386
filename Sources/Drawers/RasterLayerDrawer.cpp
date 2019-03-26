@@ -338,9 +338,9 @@ void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned 
 
 	Coord b1, b2, b3, b4;
 	gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
-	gr()->RowCol2Coord(imageOffsetY, imageOffsetX + imageSizeX, b2);
-	gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX + imageSizeX, b3);
-	gr()->RowCol2Coord(imageOffsetY + imageSizeY, imageOffsetX, b4);
+	gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
+	gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
+	gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
 	Coord c1, c2, c3, c4;
 	c1 = getRootDrawer()->glConv(csy, b1);
 	c2 = getRootDrawer()->glConv(csy, b2);
