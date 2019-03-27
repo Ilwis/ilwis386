@@ -155,29 +155,13 @@ void GeoRefCornersWMS::Unlock() {
 	csHandleRequest.Unlock();
 }
 
-CoordBounds GeoRefCornersWMS::cbWMSRequest() const {
-	return m_cbWMSRequest;
-}
-
-RowCol GeoRefCornersWMS::rcWMSRequest() const {
-	return m_rcWMSRequest;
-}
-
-void GeoRefCornersWMS::SetRCWMSRequest(RowCol rc) {
-	m_rcWMSRequest = rc;
-}
-
-void GeoRefCornersWMS::SetCBWMSRequest(const CoordBounds & cb) {
-	m_cbWMSRequest = cb;
-}
-
 void GeoRefCornersWMS::SetRetrieveProc(ForeignFormat* context, RetrieveImageProc proc) {
 	wmsFormat = context;
 	retrieveImageProc = proc;
 }
 
-bool GeoRefCornersWMS::retrieveImage() {
+bool GeoRefCornersWMS::retrieveImage(const CoordBounds & cb, const RowCol & rc) const {
 	if (wmsFormat)
-		return (wmsFormat->*retrieveImageProc)();
+		return (wmsFormat->*retrieveImageProc)(cb, rc);
 	return false;
 }
