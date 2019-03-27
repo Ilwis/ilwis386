@@ -65,8 +65,6 @@ void OpenstreetmapDrawer::init() const
 
 bool OpenstreetmapDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
 	drawPreDrawers(drawLoop, cbArea);
-	CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
-	rastermap->gr()->pgOSM()->setLocatBounds(getRootDrawer()->getCoordinateSystem(), cb);
 	if (!data->init)
 		init();
 	if ((drawLoop == drl2D && alpha != 0.0) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0 && alpha != 0.0)) { // no palette used, so we dont need to test on Palette's alphaminmax

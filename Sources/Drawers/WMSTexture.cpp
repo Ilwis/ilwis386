@@ -130,9 +130,7 @@ bool WMSTexture::DrawTexture(int textureSize, char * outbuf, volatile bool* fDra
 	// set georef->rcSize to texureSize x textureSize and georef->cb to cb
 	GeoRefCornersWMS *grcWMS = mp->gr()->pgWMS();
 	grcWMS->Lock();
-	grcWMS->SetCBWMSRequest(cbBounds);
-	grcWMS->SetRCWMSRequest(RowCol(textureSize, textureSize));
-	bool valid = grcWMS->retrieveImage();
+	bool valid = grcWMS->retrieveImage(cbBounds, RowCol(textureSize, textureSize));
 	if( valid ) {
 		LongBuf bufIn(textureSize);
 		LongBuf bufColor(textureSize);

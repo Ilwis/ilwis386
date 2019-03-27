@@ -596,9 +596,8 @@ void WMSFormat::Store(IlwisObject obj) {
 	}
 }
 
-bool WMSFormat::retrieveImage() {
-	CoordBounds cb2 = grfWMS->cbWMSRequest();
-	String sExpr = getMapRequest(cb2, layers, srsName, grfWMS->rcWMSRequest());
+bool WMSFormat::retrieveImage(const CoordBounds & cb, const RowCol & rc) {
+	String sExpr = getMapRequest(cb, layers, srsName, rc);
 	if (rxo == 0)
 		rxo = new RemoteObject();
 	rxo->getRequest(sExpr);

@@ -107,7 +107,7 @@ public:
 	virtual long          iRaw(RowCol) const;
 	virtual long          iValue(RowCol) const;
 	virtual double        rValue(RowCol) const;
-	bool retrieveImage();
+	bool retrieveImage(const CoordBounds & cb, const RowCol & rc);
 	FileName createCollectionName(const String& name,ParmList& pm);
 
 private:
@@ -126,7 +126,6 @@ private:
 	URL urlGetMap;
 
 	String layers;
-	CoordBounds cb;
 	GeoRef grf;
 	GeoRefCornersWMS *grfWMS;
 	String srsName;

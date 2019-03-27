@@ -82,7 +82,7 @@ public:
 	virtual long          iRaw(RowCol) const;
 	virtual long          iValue(RowCol) const;
 	virtual double        rValue(RowCol) const;
-	bool retrieveImage();
+	bool retrieveImage(const CoordBounds & cb, const RowCol & rc);
 
 private:
 	//void Init();
@@ -96,7 +96,6 @@ private:
 	URL	urlOpenStreetMap;
 	std::vector<String> vsRequestHeaders;
 
-	CoordBounds cb;
 	GeoRef grf;
 	GeoRefOSM *grfOpenStreetMap;
 	GDALDatasetH gdalDataSet;

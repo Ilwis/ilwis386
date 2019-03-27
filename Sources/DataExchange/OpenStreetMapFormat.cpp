@@ -264,7 +264,7 @@ void OpenStreetMapFormat::GetRasterInfo(LayerInfo& inf, String sLayers) {
 	inf.dvrsMap = DomainValueRangeStruct(Domain("color"));
 	inf.fnObj = fnBase;
 
-	CoordBounds cb ;
+	CoordBounds cb;
 
 	inf.cbActual = inf.cbMap = cb;
 
@@ -274,7 +274,6 @@ void OpenStreetMapFormat::GetRasterInfo(LayerInfo& inf, String sLayers) {
 	MinMax mm(RowCol(0,0),RowCol(1000, (int)(1000*ratio))); // dummy size
 	grf.SetPointer(new GeoRefOSM(fnGeo, csy, mm, true, cb.cMin, cb.cMax)); 
 	inf.grf = grf;
-
 }
 
 
@@ -318,15 +317,13 @@ int OpenStreetMapFormat::lat2tiley(double lat, int z) const
 
 }
 
-bool OpenStreetMapFormat::retrieveImage() {
+bool OpenStreetMapFormat::retrieveImage(const CoordBounds & cb, const RowCol & rc) {
 	if(!grfOpenStreetMap){
 		throw ErrorObject(TR("Georeference not correctly set"));
 		return false;
 	}
 
-	CoordBounds cb2 = grfOpenStreetMap->cbWMSRequest();
-
-	String sExpr = getMapRequest(cb2, grfOpenStreetMap->rcWMSRequest());
+	String sExpr = getMapRequest(cb, rc);
 	if (rxo == 0)
 		rxo = new RemoteObject();
 	rxo->setRequestHeaders(vsRequestHeaders);
