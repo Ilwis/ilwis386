@@ -116,7 +116,7 @@ WMSFormat::WMSFormat(const FileName& fn, ParmList& pm)
 	if ( pm.fExist("georef")) {
 		grf = GeoRef(FileName(pm.sGet("georef")));
 		grfWMS = grf->pgWMS();
-		grfWMS->SetRetrieveProc(this, (RetrieveImageProc)&WMSFormat::retrieveImage);
+		grfWMS->SetRetrieveProc(fn, this, (RetrieveImageProc)&WMSFormat::retrieveImage);
 	}
 	if ( pm.fExist("url"))
 		urlWMS = URL(pm.sGet("url"));

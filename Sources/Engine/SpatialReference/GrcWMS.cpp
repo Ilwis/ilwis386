@@ -53,8 +53,6 @@ const char* GeoRefCornersWMS::sSyntax()
 
 GeoRefCornersWMS::GeoRefCornersWMS(const FileName& fn)
 : GeoRefCorners(fn)
-, wmsFormat (0)
-, retrieveImageProc(0)
 {
 	fChanged = false;
 	crdMinInit = crdMin;
@@ -155,13 +153,18 @@ void GeoRefCornersWMS::Unlock() {
 	csHandleRequest.Unlock();
 }
 
-void GeoRefCornersWMS::SetRetrieveProc(ForeignFormat* context, RetrieveImageProc proc) {
-	wmsFormat = context;
-	retrieveImageProc = proc;
+void GeoRefCornersWMS::SetRetrieveProc(const FileName & fnMap, ForeignFormat* context, RetrieveImageProc proc) {
+	procs[fnMap.sFullName()]=std::pair<ForeignFormat*, RetrieveImageProc>(context, proc);
 }
 
-bool GeoRefCornersWMS::retrieveImage(const CoordBounds & cb, const RowCol & rc) const {
-	if (wmsFormat)
-		return (wmsFormat->*retrieveImageProc)(cb, rc);
+bool GeoRefCornersWMS::retrieveImage(const FileName & fnMap, const CoordBounds & cb, const RowCol & rc) {
+	map<String, std::pair<ForeignFormat*, RetrieveImageProc>>::iterator & proc = procs.find(fnMap.sFullName());
+	if (proc != procs.end()) {
+		std::pair<ForeignFormat*, RetrieveImageProc> & formatproc = proc->second;
+		ForeignFormat* & wmsFormat = formatproc.first;
+		RetrieveImageProc & retrieveImageProc = formatproc.second;
+		if (wmsFormat)
+			return (wmsFormat->*retrieveImageProc)(cb, rc);
+	}
 	return false;
 }

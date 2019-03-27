@@ -107,7 +107,7 @@ OpenStreetMapFormat::OpenStreetMapFormat(const FileName& fn, ParmList& pm)
 	if ( pm.fExist("georef")) {
 		grf = GeoRef(FileName(pm.sGet("georef"),true));
 		grfOpenStreetMap =grf->pgOSM();
-		grfOpenStreetMap->SetRetrieveProc(this, (RetrieveImageProc)&OpenStreetMapFormat::retrieveImage);
+		grfOpenStreetMap->SetRetrieveProc(fn, this, (RetrieveImageProc)&OpenStreetMapFormat::retrieveImage);
 	}
 	if ( pm.fExist("url"))
 		urlOpenStreetMap = URL(pm.sGet("url"));

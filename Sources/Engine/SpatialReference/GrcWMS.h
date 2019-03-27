@@ -77,15 +77,14 @@ public:
 
   void Lock();
   void Unlock();
-  void SetRetrieveProc(ForeignFormat* context, RetrieveImageProc proc);
-  bool retrieveImage(const CoordBounds & cb, const RowCol & rc) const;
+  void SetRetrieveProc(const FileName & fnMap, ForeignFormat* context, RetrieveImageProc proc);
+  bool retrieveImage(const FileName & fnMap, const CoordBounds & cb, const RowCol & rc);
  protected:
   GeoRefCornersWMS(const FileName&);
   bool fInitial;
   Coord crdMinInit;
   Coord crdMaxInit;
-  ForeignFormat* wmsFormat;
-  RetrieveImageProc retrieveImageProc;
+  std::map<String, std::pair<ForeignFormat*, RetrieveImageProc>> procs;
   CCriticalSection csHandleRequest;
 };
 
