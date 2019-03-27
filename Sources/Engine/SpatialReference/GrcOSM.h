@@ -44,8 +44,6 @@
 #define ILWGROSM_H
 #include "Engine\SpatialReference\Grsmpl.h"
 
-typedef bool (ForeignFormat::*RetrieveImageProc)();
-
 class _export GeoRefOSM: public GeoRefCornersWMS
 {
   friend class GeoRef;
@@ -63,12 +61,9 @@ public:
   static const char* sSyntax();
   virtual String sType() const;
   virtual void Store();
-  void setLocatBounds(const CoordSystem& csy,const CoordBounds& bnd);
-  CoordBounds getLocalBounds() const;
   String sName(bool fExt, const String& sDirRelative) const;
 protected:
 	GeoRefOSM(const FileName& fn) ;
-	CoordBounds localBounds;
 };
 
 

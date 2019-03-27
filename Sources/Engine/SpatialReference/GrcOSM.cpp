@@ -76,20 +76,4 @@ void GeoRefOSM::Store()
 {
 	// never store anything
 }
-void GeoRefOSM::setLocatBounds(const CoordSystem& csySource, const CoordBounds& bnd){
-	if ( ! csySource->pcsLatLon()) {
-		localBounds = cs()->cbConv(csySource, bnd);
-	} else
-		localBounds = bnd;
-}
-
-CoordBounds GeoRefOSM::getLocalBounds() const{
-	if ( localBounds.fValid())
-		return localBounds;
-	return cs()->cb;
-}
-
-
-
-
 
