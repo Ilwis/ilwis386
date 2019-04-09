@@ -60,7 +60,7 @@ String URL::sVal() const {
 
 bool URL::isUrl(const String& s) {
 	String protocol = s.sHead("://");
-	return protocol == "http";
+	return protocol == "http" || protocol == "https";
 }
 
 String URL::getQuery() const {
