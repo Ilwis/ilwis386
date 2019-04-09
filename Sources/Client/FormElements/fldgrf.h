@@ -89,7 +89,6 @@ private:
 	int exec();
 	int GeoRefTypeChange(Event*);
 	int CallBackCorners(Event*);
-	int NameChange(Event*);
 	int CSysCallBack(Event*);
 	int CallBackGrfSubPixelChange(Event*);
 	void ShowHide(bool fLatLon, bool fHideAll);
@@ -115,7 +114,6 @@ private:
 	FieldReal* fldPixInMeters;
 	FieldDMS* fldPixInDegMinSec;
 	FieldCoord *fldCrdMin, *fldCrdMax;
-	bool fFromLatLon;
 	CheckBox* cbCoC;
 	CheckBox* cbSubPixel;
 	FieldLat *fldMinLat;
@@ -124,7 +122,7 @@ private:
 	FieldLon *fldMaxLon;
 	FieldDataTypeCreate* fgr;  
 	RadioGroup* rg;
-	FieldGroup* fgCorn;
+	FieldGroup* fgCorners;
 	String sRefMap, sDTM;
 	StaticText* stRemark;
 	CWnd* wParent;
@@ -142,17 +140,19 @@ public:
                      bool fOnlyTiepoints, bool fStartEdit=false);
 private:  
   int exec();
-  int CallBack(Event*);
+  int GeoRefTypeChange(Event*);
+  int CallBackCorners(Event*);
   int CallBackGrfSubPixelChange(Event*);
   int CSysCallBack(Event*);
   void ShowHide(bool fLatLon, bool fHideAll);
+  void SetOkButton();
   FormEntry* feDefaultFocus();  
   String* sGeoRef;
   String sNewName;
   String sDescr;
   String sCoordSys;
   String sDTM;
-  int iType;  // Corners, Tiepoints
+  int iOption;  // Corners, Tiepoints
   bool fCoC, fEditStart, fOnlyTiepoints;
   bool fSubPixelPrecise;
   bool fCallBackGrfSubPixelCalled;
@@ -162,7 +162,6 @@ private:
   RowCol rcSize;
   Coord crdMin, crdMax;
   LatLon llMin, llMax;
-  bool fFromLatLon;
   FieldDataTypeCreate* fgr;
   RadioGroup* rg;
   FieldGroup *fgCorners;
@@ -176,6 +175,9 @@ private:
   FieldLon *fldMaxLon;
   StaticText* stRemark;
   bool m_fInShowHide, m_fInSetVal;
+
+  bool m_fNameOK;
+  bool m_fBoundsOK;
 };
 
 class _export FieldGeoRefExisting: public FieldDataType

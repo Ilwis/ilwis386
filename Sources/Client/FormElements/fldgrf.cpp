@@ -124,7 +124,7 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
                    CoordSystem cs, CoordBounds cb, bool fOnlyCorners)
 : FormWithDest(wPar, TR("Create GeoReference")), wParent(wPar),
   sGeoRef(sGrf), crdMin(cb.cMin), crdMax(cb.cMax),
-  fgr(0), rg(0), fgCorn(0), stRemark(0), cbSubPixel(0)
+  fgr(0), rg(0), fgCorners(0), stRemark(0), cbSubPixel(0)
 {
 	iImg = IlwWinApp()->iImage(".grf");
 
@@ -134,7 +134,7 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 		sCoordSys = "";
 	fgr = new FieldDataTypeCreate(root, TR("&GeoReference Name"), &sNewName, ".GRF", false);
 	fgr->SetIndependentPos();
-	fgr->SetCallBack((NotifyProc)&FormCreateGeoRef::NameChange);
+	fgr->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
 	StaticText* st = new StaticText(root, TR("&Description:"));
 	st->psn->SetBound(0,0,0,0);
 	FieldString* fs = new FieldString(root, "", &sDescr);
@@ -151,7 +151,7 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 	RadioButton* rbParallProj = 0;
 	RadioButton* rb3D = 0;
 	if (fOnlyCorners) {
-		fgCorn = new FieldGroup(root, true);
+		fgCorners = new FieldGroup(root, true);
 		fCoC = false; // because the incoming cb is "corners"
 	} else {
 		rg = new RadioGroup(root, "", &iOption);
@@ -162,12 +162,12 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 		rbOrthoPhoto = new RadioButton(rg, TR("GeoRef &Ortho Photo"));
 		rbParallProj = new RadioButton(rg, TR("GeoRef &Parallel Projective"));
 		rb3D = new RadioButton(rg, TR("GeoRef &3-D display"));
-		fgCorn = new FieldGroup(rbCorners, true);
-		fgCorn->Align(rb3D, AL_UNDER);
+		fgCorners = new FieldGroup(rbCorners, true);
+		fgCorners->Align(rb3D, AL_UNDER);
 		fCoC = true; // here there was no incoming "cb"; leave it "true" as this was the default for many years
 	}
 	
-	fcsc = new FieldCoordSystemC(fgCorn, TR("&Coordinate System"), &sCoordSys);
+	fcsc = new FieldCoordSystemC(fgCorners, TR("&Coordinate System"), &sCoordSys);
 	fcsc->SetCallBack((NotifyProc)&FormCreateGeoRef::CSysCallBack);
   
 	bool fCrdUndef = false;
@@ -181,7 +181,6 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 		crdMin.y = 0;
 		crdMax.y = 0;
 	}
-	fFromLatLon = ( 0 != cs->pcsLatLon());
 	if (fCrdUndef) {
 		rPixSize = 10;
 		rPixSizeDMS = rRoundDMS(0.1);
@@ -192,7 +191,8 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 		r /= 800;
 		rPixSize = rRound(r);
 		rPixSizeDMS = rRoundDMS(r);
-		if (fFromLatLon) {
+		bool fLatLon = ( 0 != cs->pcsLatLon());
+		if (fLatLon) {
 			llMin = LatLon(crdMin.y, crdMin.x);
 			llMax = LatLon(crdMax.y, crdMax.x);
 		}
@@ -200,7 +200,7 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 	ValueRange vrrPixSize(0.001, 1e6, 0.001);
 	
 	// GeoRefCorners in meters
-	fgCsyMeters = new FieldGroup(fgCorn, true);
+	fgCsyMeters = new FieldGroup(fgCorners, true);
 	fgCsyMeters->Align(fcsc, AL_UNDER);
 	
 	fldPixInMeters = new FieldReal(fgCsyMeters, TR("&Pixel size"), &rPixSize, vrrPixSize);
@@ -212,7 +212,7 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 	fldCrdMax->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
 
 	// GeoRefCorners in LatLon
-	fgCsyLatLons = new FieldGroup(fgCorn, true);
+	fgCsyLatLons = new FieldGroup(fgCorners, true);
 	fgCsyLatLons->Align(fcsc, AL_UNDER);
 	
 	fldPixInDegMinSec = new FieldDMS(fgCsyLatLons, TR("&Pixel size"), &rPixSizeDMS, 30.0, true);
@@ -231,7 +231,7 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 	fldMaxLon->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
 	fldMaxLon->Align(fldMaxLat, AL_AFTER);
 	
-	cbCoC = new CheckBox(fgCorn, TR("&Center of Corner pixels"), &fCoC);
+	cbCoC = new CheckBox(fgCorners, TR("&Center of Corner pixels"), &fCoC);
 	cbCoC->Align(fldMaxLat, AL_UNDER);
 	cbCoC->SetIndependentPos();
 	cbCoC->SetCallBack((NotifyProc)&FormCreateGeoRef::CallBackCorners);
@@ -271,7 +271,7 @@ FormCreateGeoRef::FormCreateGeoRef(CWnd* wPar, String* sGrf,
 	String s('X', 50);
 	stRemark = new StaticText(root, s);
 	stRemark->SetIndependentPos();
-	stRemark->Align(fgCorn, AL_UNDER);
+	stRemark->Align(fgCorners, AL_UNDER);
 	stRemark->SetVal(String());
 	if (fOnlyCorners) 
 		SetMenHelpTopic("ilwismen\\create_a_georeference.htm");
@@ -316,29 +316,6 @@ void FormCreateGeoRef::ShowHide(bool fLatLon, bool fHideAll)
 	m_fInShowHide = false;
 }
 
-int FormCreateGeoRef::NameChange(Event*)
-{
-	if (fgr)
-		fgr->StoreData();
-
-	FileName fn(sNewName, ".grf");
-
-	m_fNameOK = false;
-	if (!fn.fValid())
-		stRemark->SetVal(TR("Not a valid GeoReference name"));
-	else if(File::fExist(fn))   
-		stRemark->SetVal(TR("GeoReference already exists"));
-	else
-	{
-		stRemark->SetVal(String());
-		m_fNameOK = true;
-	}
-	
-	SetOkButton();
-
-	return m_fNameOK ? 0 : 1;  // != 0 means namechange detected an error
-}
-
 int FormCreateGeoRef::CSysCallBack(Event*) 
 {
 	if (m_fInShowHide)
@@ -346,8 +323,13 @@ int FormCreateGeoRef::CSysCallBack(Event*)
 
 	try 
 	{
-		fFromLatLon = false;
+		bool fPrevLatLon = false;
 		FileName fnCS = FileName(sCoordSys, ".csy"); // remember previous selected CSY
+		if (fnCS.fValid()) {
+			CoordSystem csPrev(fnCS);
+			if (csPrev.fValid())
+				fPrevLatLon = (0 != csPrev->pcsLatLon());
+		}
 		fcsc->StoreData();                           // get the new CSY
 
 		if ("" == sCoordSys) {
@@ -357,19 +339,22 @@ int FormCreateGeoRef::CSysCallBack(Event*)
 		CoordSystem cs(sCoordSys);
 		if (cs.fValid())
 		{
-			fFromLatLon = (0 != cs->pcsLatLon());
-
+			bool fLatLon = (0 != cs->pcsLatLon());
 			Coord cMin;
 			Coord cMax;
 			CoordBounds cbLoc;
 			double rEps = 1; // geographic coordinates
-			if (fFromLatLon)
-			{
+			if (fPrevLatLon && !fLatLon) {
+				cbLoc = CoordBounds(Coord(llMin.Lon, llMin.Lat), Coord(llMax.Lon, llMax.Lat));
+			} else if (!fPrevLatLon && fLatLon) {
+				cbLoc = CoordBounds(crdMin, crdMax);
+				rEps = 1e-8;
+			} else if (fPrevLatLon && fLatLon) {
 				cbLoc = CoordBounds(Coord(llMin.Lon, llMin.Lat), Coord(llMax.Lon, llMax.Lat));
 				rEps = 1e-8;
-			}
-			else
+			} else { // !fPrevLatLon && !fLatLon
 				cbLoc = CoordBounds(crdMin, crdMax);
+			}
 
 			cMin = cbLoc.cMin;
 			cMax = cbLoc.cMax;
@@ -386,7 +371,7 @@ int FormCreateGeoRef::CSysCallBack(Event*)
 			
 			double r = max(cMax.x - cMin.x, cMax.y - cMin.y);
 			r /= 800;
-			if (!fFromLatLon)
+			if (!fLatLon)
 			{
 				if (fnCS != cs->fnObj)  // only change bounds when CS really changes
 				{
@@ -417,7 +402,7 @@ int FormCreateGeoRef::CSysCallBack(Event*)
 				}
 			}
 			CallBackCorners(0);
-			ShowHide(fFromLatLon, false); // show relevant controls
+			ShowHide(fLatLon, false); // show relevant controls
 		}
 		else 
 		{
@@ -428,7 +413,7 @@ int FormCreateGeoRef::CSysCallBack(Event*)
 	{
 		ShowHide(true, true); // hide all
 	}  
-  return 0;  
+  return 0;
 }
 
 int FormCreateGeoRef::CallBackCorners(Event*)
@@ -436,11 +421,25 @@ int FormCreateGeoRef::CallBackCorners(Event*)
 	if (m_fInShowHide || m_fInSetVal)
 		return 0;
 
+	m_fNameOK = false;
 	m_fBoundsOK = false;
-	if (fgCorn)
-		fgCorn->StoreData();
+	fgr->StoreData();
+	if (rg)
+		rg->StoreData();
+
+	FileName fn(sNewName, ".grf");
+	if (!fn.fValid())
+		stRemark->SetVal(TR("Not a valid GeoReference name"));
+	else if(File::fExist(fn))   
+		stRemark->SetVal(TR("GeoReference already exists"));
+	else
+	{
+		stRemark->SetVal(String());
+		m_fNameOK = true;
+	}
 
 	try {
+		fcsc->StoreData(); // get the new CSY into sCoordSys
 		FileName fnCS(sCoordSys);
 		if (!fnCS.fValid())
 			return 0;
@@ -448,15 +447,15 @@ int FormCreateGeoRef::CallBackCorners(Event*)
 		CoordSystem csInput(fnCS);
 		if (!csInput.fValid())
 			return 0;
-		
-		fFromLatLon = (0 != csInput->pcsLatLon());
 
 		if (iOption == 0)  // GeoRefCorners is selected
 		{
+			fgCorners->StoreData();
 			CoordBounds cbLoc;
 			double rPSize;
 			double rEps = 1; // geographic coordinates
-			if (fFromLatLon)
+			bool fLatLon = (0 != csInput->pcsLatLon());
+			if (fLatLon)
 			{
 				m_fBoundsOK = rPixSizeDMS > 0.00000001;
 				cbLoc = CoordBounds(Coord(llMin.Lon, llMin.Lat), Coord(llMax.Lon, llMax.Lat));
@@ -472,7 +471,6 @@ int FormCreateGeoRef::CallBackCorners(Event*)
 
 			Coord cMin = cbLoc.cMin;
 			Coord cMax = cbLoc.cMax;
-
 
 			if (m_fBoundsOK)
 			{
@@ -490,21 +488,26 @@ int FormCreateGeoRef::CallBackCorners(Event*)
 					{
 						rcSize.Col += 1;
 						rcSize.Row += 1;
-					} 
-					String s(TR("%li lines and %li columns").c_str(), rcSize.Row, rcSize.Col);
-					stRemark->SetVal(s);
+					}
+					if (m_fNameOK) {
+						String s(TR("%li lines and %li columns").c_str(), rcSize.Row, rcSize.Col);
+						stRemark->SetVal(s);
+					}
 					m_fBoundsOK = true;
 				}
 				else
 				{
-					stRemark->SetVal(TR("Minimum should be smaller than maximum"));
+					if (m_fNameOK)
+						stRemark->SetVal(TR("Minimum should be smaller than maximum"));
 					m_fBoundsOK = false;
 				}
 			}
-			else
+			else if (m_fNameOK) {
 				if (rPixSize != rUNDEF && rPixSize <= 0.001)
 					stRemark->SetVal(TR("Pixel size too small"));
-		}
+			}
+		} else
+			m_fBoundsOK = true; // don't do bounds check for all types > 0
 	}
 	catch (ErrorObject&) 
 	{
@@ -548,19 +551,23 @@ int FormCreateGeoRef::GeoRefTypeChange(Event*)
 		if (cbSubPixel)
 			cbSubPixel->Hide();
 	}
-	if ("" == sCoordSys) {
-		ShowHide(true, true); // hide all
-		return 0;
-	}
-	try {
-		CoordSystem csInput(sCoordSys);
-		fFromLatLon = (0 != csInput->pcsLatLon());
-		ShowHide(fFromLatLon, iOption != 0); // show relevant controls
-	}
-	catch (ErrorObject&)
-	{
-		ShowHide(true, true); // hide all
-	}  
+	if (0 == iOption) {
+		fcsc->StoreData(); // get the new CSY into sCoordSys
+		if ("" == sCoordSys) {
+			ShowHide(true, true); // hide all
+			return 0;
+		}
+		try {
+			CoordSystem csInput(sCoordSys);
+			bool fLatLon = (0 != csInput->pcsLatLon());
+			ShowHide(fLatLon, iOption != 0); // show relevant controls
+		}
+		catch (ErrorObject&)
+		{
+			ShowHide(true, true); // hide all
+		}
+	} else
+		CallBackCorners(0); // set the correct message in stRemark
 	return 0;
 }
 
@@ -777,7 +784,7 @@ FormCreateGeoRefRC::FormCreateGeoRefRC(CWnd* wPar, String* sGrf,
   sCoordSys = cs->sName();
   fgr = new FieldDataTypeCreate(root, TR("&GeoReference Name"), &sNewName, ".GRF", false);
   fgr->SetIndependentPos();
-  fgr->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
+  fgr->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBackCorners);
   StaticText* st = new StaticText(root, TR("&Description:"));
   st->psn->SetBound(0,0,0,0);
   FieldString* fs = new FieldString(root, "", &sDescr);
@@ -792,16 +799,16 @@ FormCreateGeoRefRC::FormCreateGeoRefRC(CWnd* wPar, String* sGrf,
     crdMin.y = 0;
     crdMax.y = 0.1;
   }
-  fFromLatLon = ( 0 != cs->pcsLatLon());
-  if (fFromLatLon) {
+  bool fLatLon = ( 0 != cs->pcsLatLon());
+  if (fLatLon) {
     llMin = LatLon(crdMin.y, crdMin.x);
     llMax = LatLon(crdMax.y, crdMax.x);
   }
-  iType = 0;
+  iOption = 0;
   fCallBackGrfSubPixelCalled = false;
   fSubPixelPrecise = false;
-  rg = new RadioGroup(root, "", &iType);
-  rg->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
+  rg = new RadioGroup(root, "", &iOption);
+  rg->SetCallBack((NotifyProc)&FormCreateGeoRefRC::GeoRefTypeChange);
   RadioButton* rbCorners = 0;
   if (!fOnlyTiepoints)
     rbCorners = new RadioButton(rg, TR("GeoRef &Corners"));
@@ -821,31 +828,30 @@ FormCreateGeoRefRC::FormCreateGeoRefRC(CWnd* wPar, String* sGrf,
 	fgCsyMeters = new FieldGroup(fgCorners, true);
 	fgCsyMeters->Align(fcsc, AL_UNDER);
     fldCrdMin = new FieldCoord(fgCsyMeters, TR("&Min X, Y"), &crdMin);
-	fldCrdMin->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
+	fldCrdMin->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBackCorners);
     fldCrdMax = new FieldCoord(fgCsyMeters, TR("&Max X, Y"), &crdMax);
-	fldCrdMax->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
+	fldCrdMax->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBackCorners);
 
 	// GeoRefCorners in LatLon
 	fgCsyLatLons = new FieldGroup(fgCorners, true);
 	fgCsyLatLons->Align(fcsc, AL_UNDER);
 	fldMinLat = new FieldLat(fgCsyLatLons, TR("&MinLatLon"), &llMin.Lat);
-	fldMinLat->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
+	fldMinLat->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBackCorners);
 	fldMinLat->Align(fcsc, AL_UNDER);
 	fldMinLon = new FieldLon(fgCsyLatLons, "", &llMin.Lon);
-	fldMinLon->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
+	fldMinLon->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBackCorners);
 	fldMinLon->Align(fldMinLat, AL_AFTER);
 	fldMaxLat = new FieldLat(fgCsyLatLons, TR("&MaxLatLon"), &llMax.Lat);
-	fldMaxLat->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
+	fldMaxLat->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBackCorners);
 	fldMaxLat->Align(fldMinLat, AL_UNDER);
 	fldMaxLon = new FieldLon(fgCsyLatLons, "", &llMax.Lon);
-	fldMaxLon->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
+	fldMaxLon->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBackCorners);
 	fldMaxLon->Align(fldMaxLat, AL_AFTER);
 
     cbCoC = new CheckBox(fgCorners, TR("&Center of Corner pixels"), &fCoC);
 	cbCoC->Align(fldMaxLat, AL_UNDER);
     cbCoC->SetIndependentPos();
-    fgCorners->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
-    cbCoC->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBack);
+    cbCoC->SetCallBack((NotifyProc)&FormCreateGeoRefRC::CallBackCorners);
   }
 
   if (rbTiePoints) {
@@ -932,6 +938,44 @@ FormEntry* FormCreateGeoRefRC::feDefaultFocus()
   return fgr;
 }
 
+int FormCreateGeoRefRC::GeoRefTypeChange(Event*)
+{
+	if (m_fInShowHide)
+		return 0;
+
+	if (rg)
+		rg->StoreData();
+	if (0 == iOption) {
+		if (cbSubPixel)
+			cbSubPixel->Hide();
+	}
+	else
+	{
+		m_fBoundsOK = true; // only relevant for GeoRefCorners
+		SetOkButton();
+		if (cbSubPixel)
+			cbSubPixel->Show();
+	}
+	if (0 == iOption) {
+		fcsc->StoreData(); // get the new CSY into sCoordSys
+		if ("" == sCoordSys) {
+			ShowHide(true, true); // hide all
+			return 0;
+		}
+		try {
+			CoordSystem csInput(sCoordSys);
+			bool fLatLon = (0 != csInput->pcsLatLon());
+			ShowHide(fLatLon, iOption != 0); // show relevant controls
+		}
+		catch (ErrorObject&)
+		{
+			ShowHide(true, true); // hide all
+		}
+	} else
+		CallBackCorners(0); // set the correct message in stRemark
+	return 0;
+}
+
 int FormCreateGeoRefRC::CallBackGrfSubPixelChange(Event*)
 {
 	if (fCallBackGrfSubPixelCalled) 
@@ -952,8 +996,13 @@ int FormCreateGeoRefRC::CSysCallBack(Event*)
 
 	try 
 	{
-		fFromLatLon = false;
+		bool fPrevLatLon = false;
 		FileName fnCS = FileName(sCoordSys, ".csy"); // remember previous selected CSY
+		if (fnCS.fValid()) {
+			CoordSystem csPrev(fnCS);
+			if (csPrev.fValid())
+				fPrevLatLon = (0 != csPrev->pcsLatLon());
+		}
 		fcsc->StoreData();                           // get the new CSY
 
 		if ("" == sCoordSys) {
@@ -963,19 +1012,22 @@ int FormCreateGeoRefRC::CSysCallBack(Event*)
 		CoordSystem cs(sCoordSys);
 		if (cs.fValid())
 		{
-			fFromLatLon = (0 != cs->pcsLatLon());
-
+			bool fLatLon = (0 != cs->pcsLatLon());
 			Coord cMin;
 			Coord cMax;
 			CoordBounds cbLoc;
 			double rEps = 1; // geographic coordinates
-			if (fFromLatLon)
-			{
+			if (fPrevLatLon && !fLatLon) {
+				cbLoc = CoordBounds(Coord(llMin.Lon, llMin.Lat), Coord(llMax.Lon, llMax.Lat));
+			} else if (!fPrevLatLon && fLatLon) {
+				cbLoc = CoordBounds(crdMin, crdMax);
+				rEps = 1e-8;
+			} else if (fPrevLatLon && fLatLon) {
 				cbLoc = CoordBounds(Coord(llMin.Lon, llMin.Lat), Coord(llMax.Lon, llMax.Lat));
 				rEps = 1e-8;
-			}
-			else
+			} else { // !fPrevLatLon && !fLatLon
 				cbLoc = CoordBounds(crdMin, crdMax);
+			}
 
 			cMin = cbLoc.cMin;
 			cMax = cbLoc.cMax;
@@ -990,7 +1042,7 @@ int FormCreateGeoRefRC::CSysCallBack(Event*)
 				}
 			}
 			
-			if (!fFromLatLon)
+			if (!fLatLon)
 			{
 				if (fnCS != cs->fnObj)  // only change bounds when CS really changes
 				{
@@ -1016,8 +1068,8 @@ int FormCreateGeoRefRC::CSysCallBack(Event*)
 					m_fInSetVal = false;
 				}
 			}
-			CallBack(0);
-			ShowHide(fFromLatLon, false); // show relevant controls
+			CallBackCorners(0);
+			ShowHide(fLatLon, false); // show relevant controls
 		}
 		else 
 		{
@@ -1036,14 +1088,27 @@ int FormCreateGeoRefRC::exec()
   try {
     FormWithDest::exec();
     if (fOnlyTiepoints)
-      iType += 1;
+      iOption += 1;
+    if ("" == sCoordSys)
+      sCoordSys = "unknown"; // to prevent errors
     FileName fn = sCoordSys;
     CoordSystem cs(fn);
     *sGeoRef = sNewName;
     fn = FileName(*sGeoRef, ".grf");
-    switch (iType) {
+    switch (iOption) {
       case 0: {
-        GeoRefCorners grc(fn, cs, rcSize, !fCoC, crdMin, crdMax);
+        Coord cMin, cMax;
+        if (cs->pcsLatLon())
+        {
+          cMin = Coord(llMin.Lon, llMin.Lat);
+          cMax = Coord(llMax.Lon, llMax.Lat);
+        }
+        else
+        {
+          cMin = crdMin;
+          cMax = crdMax;
+        }
+        GeoRefCorners grc(fn, cs, rcSize, !fCoC, cMin, cMax);
         if (sDescr != "")
           grc.sDescription = sDescr;
         else  
@@ -1121,59 +1186,92 @@ int FormCreateGeoRefRC::exec()
   return 1;
 }
 
-int FormCreateGeoRefRC::CallBack(Event*)
+int FormCreateGeoRefRC::CallBackCorners(Event*)
 {
-  fgr->StoreData();
-  bool fOk = false;
-  FileName fn(sNewName, ".grf");
-  if (!fn.fValid())
-    stRemark->SetVal(TR("Not a valid GeoReference name"));
-  else if(File::fExist(fn))   
-    stRemark->SetVal(TR("GeoReference already exists"));
-  else {
-    rg->StoreData();
-    if (iType == 0 && !fOnlyTiepoints) {
-      fgCorners->StoreData();
-      if (crdMin.x < crdMax.x && crdMin.y < crdMax.y) {
-        double rX, rY;
-        int iCorr = fCoC ? 1 : 0;
-        rX = (crdMax.x - crdMin.x) / (rcSize.Col - iCorr);
-        rY = (crdMax.y - crdMin.y) / (rcSize.Row - iCorr);
-        String s(TR("Pixel Size = %.3f m, %.3f m").c_str(), rX, rY);
-        stRemark->SetVal(s);
-        fOk = true;
-      }  
-      else 
-        stRemark->SetVal(TR("Minimum should be smaller than maximum"));
-    }
-    else {
-      stRemark->SetVal("");
-      fOk = true;
-    }
-  }
-	if (cbSubPixel)
+	if (m_fInShowHide || m_fInSetVal)
+		return 0;
+
+	m_fNameOK = false;
+	m_fBoundsOK = false;
+
+	fgr->StoreData();
+	rg->StoreData();
+
+	FileName fn(sNewName, ".grf");
+	if (!fn.fValid())
+		stRemark->SetVal(TR("Not a valid GeoReference name"));
+	else if(File::fExist(fn))   
+		stRemark->SetVal(TR("GeoReference already exists"));
+	else
 	{
-		if (rg->iVal() == 0 && !fOnlyTiepoints)
-			cbSubPixel->Hide();
-		else
-			cbSubPixel->Show();
+		stRemark->SetVal(String());
+		m_fNameOK = true;
 	}
+
 	try {
-		CoordSystem csInput(sCoordSys);
-		fFromLatLon = (0 != csInput->pcsLatLon());
-		ShowHide(fFromLatLon, rg->iVal() != 0); // show relevant controls
+		fcsc->StoreData(); // get the new CSY into sCoordSys
+		FileName fnCS(sCoordSys);
+		if (!fnCS.fValid())
+			return 0;
+		
+		CoordSystem csInput(fnCS);
+		if (!csInput.fValid())
+			return 0;
+		
+		if (iOption == 0 && !fOnlyTiepoints) {
+			fgCorners->StoreData();
+			CoordBounds cbLoc;
+			bool fLatLon = (0 != csInput->pcsLatLon());
+			if (fLatLon)
+				cbLoc = CoordBounds(Coord(llMin.Lon, llMin.Lat), Coord(llMax.Lon, llMax.Lat));
+			else
+				cbLoc = CoordBounds(crdMin, crdMax);
+
+			Coord cMin = cbLoc.cMin;
+			Coord cMax = cbLoc.cMax;
+
+			if (cMin.x < cMax.x && cMin.y < cMax.y) {
+				double rX, rY;
+				int iCorr = fCoC ? 1 : 0;
+				rX = (cMax.x - cMin.x) / (rcSize.Col - iCorr);
+				rY = (cMax.y - cMin.y) / (rcSize.Row - iCorr);
+				if (m_fNameOK) {
+					String s(TR("Pixel Size = %.3f m, %.3f m").c_str(), rX, rY);
+					stRemark->SetVal(s);
+				}
+				m_fBoundsOK = true;
+			}  
+			else {
+				if (m_fNameOK)
+					stRemark->SetVal(TR("Minimum should be smaller than maximum"));
+				m_fBoundsOK = false;
+			}
+		}
+		else {
+			m_fBoundsOK = true; // don't do bounds check for all types > 0
+		}
+		if (cbSubPixel)
+		{
+			if (rg->iVal() == 0 && !fOnlyTiepoints)
+				cbSubPixel->Hide();
+			else
+				cbSubPixel->Show();
+		}
 	}
 	catch (ErrorObject&)
 	{
-		ShowHide(true, true); // hide all
-	}  
-/*
-  if (fOk)
-    EnableOK();
-  else    
-    DisableOK();
-*/
-  return 0;
+		// do nothing
+	}
+	SetOkButton();
+	return 0;
+}
+
+void FormCreateGeoRefRC::SetOkButton()
+{
+	if (m_fNameOK && m_fBoundsOK)
+		EnableOK();
+	else    
+		DisableOK();
 }
 
 FieldGeoRef3DC::FieldGeoRef3DC(FormEntry* fe, const String& sQuestion, 
