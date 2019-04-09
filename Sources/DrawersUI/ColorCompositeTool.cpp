@@ -193,6 +193,7 @@ SetStretchCCForm::SetStretchCCForm(CWnd *wPar, ColorCompositeDrawer *dr,int _ind
 	: index(_index)
 	, DisplayOptionsForm2((ComplexDrawer *)dr,wPar,"Set stretch")
 	, rrAllowedRange (dr->getMapList()[dr->getColorCompositeBand(_index)]->rrMinMax())
+	, rStep (dr->getMapList()[dr->getColorCompositeBand(_index)]->dvrs().rStep())
 {	
 	RangeReal rrCurrentLoHi = dr->getColorCompositeRange(index);
 	if (!rrCurrentLoHi.fValid())
@@ -200,8 +201,8 @@ SetStretchCCForm::SetStretchCCForm(CWnd *wPar, ColorCompositeDrawer *dr,int _ind
 
 	low = rrCurrentLoHi.rLo();
 	high = rrCurrentLoHi.rHi();
-	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rrAllowedRange),true);
-	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rrAllowedRange),true);
+	sliderLow = new FieldRealSliderEx(root,"Lower", &low,ValueRange(rrAllowedRange, rStep),true);
+	sliderHigh = new FieldRealSliderEx(root,"Upper", &high,ValueRange(rrAllowedRange, rStep),true);
 	sliderHigh->Align(sliderLow, AL_UNDER);
 	sliderLow->SetCallBack((NotifyProc)&SetStretchCCForm::check);
 	sliderHigh->SetCallBack((NotifyProc)&SetStretchCCForm::check);
