@@ -144,9 +144,11 @@ DisplayOptionsForm(dr,wPar,TR("Labels")), tbl(_tbl), fscale(1.0), useAttrib(fals
 
 void FeatureTextToolForm::apply(){
 	fontScale->StoreData();
-	fcolumns->StoreData();
+	if (cb) {
+		cb->StoreData();
+		fcolumns->StoreData();		
+	}
 	fcolor->StoreData();
-	cb->StoreData();
 	PreparationParameters pp(NewDrawer::ptRENDER);
 	if (drw->isSet()) {
 		for(int i = 0; i < drw->getDrawerCount(); ++i) {
