@@ -374,16 +374,16 @@ int GeoRefEditor::draw(volatile bool* fDrawStop)
 		}
 		else
 			clr = colPassive;
-		zPoint pnt;
+		Coord pnt;
 		if (!grc->fSubPixelPrecision)
 		{
 			RowCol rc = grc->rc(r);
-			pnt = zPoint(rc.Col - 0.5, rc.Row - 0.5);
+			pnt = Coord(rc.Col - 0.5, rc.Row - 0.5);
 		}
 		else
 		{
 			Coord crdRC = grc->crdRC(r);
-			pnt = zPoint(crdRC.x-0.5,crdRC.y-0.5);
+			pnt = Coord(crdRC.y-0.5,crdRC.x-0.5);
 		}
 		String s("%li", r);
 		glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
@@ -606,7 +606,7 @@ zRect GeoRefEditor::rectPoint(long iNr)
 	if (!grc->fSubPixelPrecision)
 		pnt = mpv->pntPos(Coord(rc.Row-0.5,rc.Col-0.5));
 	else
-		pnt = mpv->pntPos(Coord(crdRC.x-0.5,crdRC.y-0.5));
+		pnt = mpv->pntPos(Coord(crdRC.y-0.5,crdRC.x-0.5));
 	zRect rect(pnt,pnt);
 	rect.top()   -= smb.iSize / 2 + 1;
 	rect.left()  -= smb.iSize / 2 + 1;
