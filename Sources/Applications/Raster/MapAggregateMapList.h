@@ -58,14 +58,14 @@ public:
 private:
   void Init();
   //void getColumn(unsigned char *mapBlock, long blockSize, long row, long column, double *col) const;
-  void getColumn(unsigned char *mapBlock, long blockSize, long rowSize, long row, long column, vector<double>& col) const;
+  void getColumn(unsigned char *mapRow, long rowSize, long column, vector<double>& col) const;
  // double calcValue(double *column, int sz);
   double calcValue(vector<double>& column, int sz);
-  void calcInt(const RowCol& size, long blockSize,unsigned char *mapBlock);
-  void calcByte(const RowCol& size, long blockSize,unsigned char *mapBlock);
-  void calcReal(const RowCol& size, long blockSize,unsigned char *mapBlock);
-  void calcLong(const RowCol& size, long blockSize,unsigned char *mapBlock);
-  void calcSum(const RowCol& size, long blockSize,unsigned char *mapBlock);
+  void calcInt(const RowCol& size, long rowSize,unsigned char *mapRow, IntBuf & bufi, vector<double> & col);
+  void calcByte(const RowCol& size, long rowSize,unsigned char *mapRow, ByteBuf & bufb, vector<double> & col);
+  void calcReal(const RowCol& size, long rowSize,unsigned char *mapRow, RealBuf & bufr, vector<double> & col);
+  void calcLong(const RowCol& size, long rowSize,unsigned char *mapRow, LongBuf & bufl, vector<double> & col);
+  void calcSum(const RowCol& size, long rowSize,unsigned char *mapRow, RealBuf & bufr, vector<double> & col);
   MapList ml;
   String method;
   int byteSize;

@@ -79,6 +79,9 @@ MapAggregateMapList* MapAggregateMapList::create(const FileName& fn, MapPtr& p, 
 	  RangeReal rr = ml->getRange();
 	  ValueRangeReal range(rr.rLo() * ml->iSize(), rr.rHi() * ml->iSize(),mp->dvrs().rStep());
 	  return new MapAggregateMapList(fn,p,ml,method,mp->gr(), mp->rcSize(),DomainValueRangeStruct(Domain("value"), range));
+  } else if ( method == "count"){
+	  ValueRangeInt range(0, ml->iSize());
+	  return new MapAggregateMapList(fn,p,ml,method,mp->gr(), mp->rcSize(),DomainValueRangeStruct(Domain("value"), range));
   }
   return new MapAggregateMapList(fn,p,ml,method,mp->gr(), mp->rcSize(),mp->dvrs());
 }
@@ -114,7 +117,7 @@ String MapAggregateMapList::sExpression() const
 
 bool MapAggregateMapList::fFreezing()
 { 
-  unsigned char *mapBlock = 0;
+  unsigned char *mapRow = 0;
   try {
     trq.SetText(TR("Constructing"));
 	Map mp = ml[ ml->iLower()];
@@ -132,133 +135,109 @@ bool MapAggregateMapList::fFreezing()
 		default:
 			throw ErrorObject(TR("Store type not handled by this application"));
 	}
-	long offset = 0;
-	long blockSize = size.Row * size.Col * byteSize ;
-	CSysInfo sysInfo;
-	sysInfo.Init();
-	DWORD64 memSz = sysInfo.GetAvailPhys();
-	DWORD64 szneeded = blockSize * ml->iSize();
-	if ( szneeded > memSz) {
-		throw ErrorObject(TR("Not enough physical memory"));
-	}
-	mapBlock = new unsigned char[szneeded];
+	__int64 rowSize = size.Col * byteSize ;
+	__int64 szAllRows = rowSize * ml->iSize();
+	// input
+	mapRow = new unsigned char[szAllRows];
+	// intermediate
+	vector<double> col(ml->iSize());	
+	// outputs
+	ByteBuf bufb(size.Col);
+	IntBuf bufi(size.Col);
+	LongBuf bufl(size.Col);
+	RealBuf bufr(size.Col);
 
-	memset(mapBlock, 0, blockSize * ml->iSize());
-
-	for(int i =ml->iLower(); i < ml->iSize(); ++i) {
-		Map mp = ml[ i];
-		FileName fnData(mp->fnObj,".mp#");
-		FILE *fp = fopen(fnData.sFullPath().c_str(),"r");
-		fread((void *)(mapBlock + offset),1,blockSize, fp);
-		offset += blockSize;
-		fclose(fp);
+	for(int r = 0 ; r < size.Row;++r) {
+		trq.fUpdate(r, size.Row);
+		__int64 offset = 0;
+		for(int i = ml->iLower(); i < ml->iSize(); ++i) {
+			Map mp = ml[i];
+			FileName fnData(mp->fnObj,".mp#");
+			FILE *fp = fopen(fnData.sFullPath().c_str(),"r");
+			_fseeki64(fp, (__int64) (r * rowSize), SEEK_SET);
+			fread((void *)(mapRow + offset),1,rowSize, fp);
+			offset += rowSize;
+			fclose(fp);
+		}
+		if ( method == "sum"){
+			calcSum(size, rowSize, mapRow, bufr, col);
+			pms->PutLineVal(r,bufr);
+		} else if ( method == "count"){
+			calcLong(size, rowSize, mapRow, bufl, col);
+			pms->PutLineVal(r,bufl);
+		} else if ( storeType == stBYTE) {
+			calcByte(size, rowSize, mapRow, bufb, col);
+			pms->PutLineRaw(r,bufb);
+		} else if ( storeType == stINT) {
+			calcInt(size, rowSize, mapRow, bufi, col);
+			pms->PutLineRaw(r,bufi);
+		} else if ( storeType == stLONG) {
+			calcLong(size, rowSize, mapRow, bufl, col);
+			pms->PutLineRaw(r,bufl);
+		} else if ( storeType == stREAL) {
+			calcReal(size, rowSize, mapRow, bufr, col);
+			pms->PutLineVal(r,bufr);
+		}
 	}
-	if ( method == "sum"){
-		calcSum(size, blockSize, mapBlock);
-	} else if ( storeType == stBYTE) {
-		calcByte(size, blockSize, mapBlock);
-	} else if ( storeType == stINT) {
-		calcInt(size, blockSize, mapBlock);
-	} else if ( storeType == stLONG) {
-		calcLong(size, blockSize, mapBlock);
-	} else if ( storeType == stREAL) {
-		calcReal(size, blockSize, mapBlock);
-	}
-	
 
-	delete [] mapBlock;
- 
+	delete [] mapRow;
   }
   catch (ErrorObject& err)
   {
-	delete [] mapBlock;
+	delete [] mapRow;
     err.Show();
     return false;
   }
   return true;
 }
 
-void MapAggregateMapList::calcSum(const RowCol& size, long blockSize,unsigned char *mapBlock) {
-	RealBuf bufb(size.Col);
-	//double *col = new double[ml->iSize()];
-	vector<double> col(ml->iSize());
-	for(int r = 0 ; r < size.Row;++r) {
-		trq.fUpdate(r, size.Row);
-		for(int c = 0; c < size.Col; ++c) {
-			getColumn(mapBlock,blockSize,size.Col, r,c,col);
-			double v = calcValue(col, ml->iSize());
-			if ( storeType != stREAL){
-				v = dvrs().rValue(v);
-			}
-			bufb[c] = v;
+void MapAggregateMapList::calcSum(const RowCol& size, long rowSize,unsigned char *mapRow, RealBuf & bufr, vector<double> & col) {
+	for(int c = 0; c < size.Col; ++c) {
+		getColumn(mapRow,rowSize,c,col);
+		double v = calcValue(col, ml->iSize());
+		if ( storeType != stREAL){
+			v = dvrs().rValue(v);
 		}
-		pms->PutLineVal(r,bufb);
+		bufr[c] = v;
 	}
 }
 
-void MapAggregateMapList::calcInt(const RowCol& size, long blockSize,unsigned char *mapBlock) {
-	IntBuf bufi(size.Col);
-	//double *col = new double[ml->iSize()];
-	vector<double> col(ml->iSize());
-	for(int r = 0 ; r < size.Row;++r) {
-		trq.fUpdate(r, size.Row);
-		for(int c = 0; c < size.Col; ++c) {
-			getColumn(mapBlock,blockSize,size.Col, r,c,col);
-			double v = calcValue(col, ml->iSize());
-			bufi[c] = v;
-		}
-		pms->PutLineRaw(r,bufi);
+void MapAggregateMapList::calcInt(const RowCol& size, long rowSize,unsigned char *mapRow, IntBuf & bufi, vector<double> & col) {
+	for(int c = 0; c < size.Col; ++c) {
+		getColumn(mapRow,rowSize,c,col);
+		double v = calcValue(col, ml->iSize());
+		bufi[c] = v;
 	}
 }
 
-void MapAggregateMapList::calcByte(const RowCol& size, long blockSize,unsigned char *mapBlock) {
-	ByteBuf bufb(size.Col);
-	//double *col = new double[ml->iSize()];
-	vector<double> col(ml->iSize());
-	for(int r = 0 ; r < size.Row;++r) {
-		trq.fUpdate(r, size.Row);
-		for(int c = 0; c < size.Col; ++c) {
-			getColumn(mapBlock,blockSize,size.Col, r,c,col);
-			double v = calcValue(col, ml->iSize());
-			if ( v > 255)
-				v = 255;
-			bufb[c] = v;
-		}
-		pms->PutLineRaw(r,bufb);
+void MapAggregateMapList::calcByte(const RowCol& size, long rowSize,unsigned char *mapRow, ByteBuf & bufb, vector<double> & col) {
+	for(int c = 0; c < size.Col; ++c) {
+		getColumn(mapRow,rowSize,c,col);
+		double v = calcValue(col, ml->iSize());
+		if ( v > 255)
+			v = 255;
+		bufb[c] = v;
 	}
 }
 
-void MapAggregateMapList::calcReal(const RowCol& size, long blockSize,unsigned char *mapBlock) {
-	RealBuf bufb(size.Col);
-	//double *col = new double[ml->iSize()];
-	vector<double> col(ml->iSize());
-	for(int r = 0 ; r < size.Row;++r) {
-		trq.fUpdate(r, size.Row);
-		for(int c = 0; c < size.Col; ++c) {
-			getColumn(mapBlock,blockSize,size.Col, r,c,col);
-			double v = calcValue(col, ml->iSize());
-			bufb[c] = v;
-		}
-		pms->PutLineVal(r,bufb);
+void MapAggregateMapList::calcReal(const RowCol& size, long rowSize,unsigned char *mapRow, RealBuf & bufr, vector<double> & col) {
+	for(int c = 0; c < size.Col; ++c) {
+		getColumn(mapRow,rowSize,c,col);
+		double v = calcValue(col, ml->iSize());
+		bufr[c] = v;
 	}
 }
 
-void MapAggregateMapList::calcLong(const RowCol& size, long blockSize,unsigned char *mapBlock) {
-	LongBuf bufb(size.Col);
-	//double *col = new double[ml->iSize()];
-	vector<double> col(ml->iSize());
-	for(int r = 0 ; r < size.Row;++r) {
-		trq.fUpdate(r, size.Row);
-		for(int c = 0; c < size.Col; ++c) {
-			getColumn(mapBlock,blockSize,size.Col, r,c,col);
-			double v = calcValue(col, ml->iSize());
-			if ( v >= 2147483648)
-				v = iUNDEF;
-			bufb[c] = v;
-		}
-		pms->PutLineRaw(r,bufb);
+void MapAggregateMapList::calcLong(const RowCol& size, long rowSize,unsigned char *mapRow, LongBuf & bufl, vector<double> & col) {
+	for(int c = 0; c < size.Col; ++c) {
+		getColumn(mapRow,rowSize,c,col);
+		double v = calcValue(col, ml->iSize());
+		if ( v >= 2147483648)
+			v = iUNDEF;
+		bufl[c] = v;
 	}
 }
+
 double MapAggregateMapList::calcValue(vector<double>& column, int sz) {
 //double MapAggregateMapList::calcValue(double *column, int sz) {
 	int count = 0;
@@ -313,7 +292,7 @@ double MapAggregateMapList::calcValue(vector<double>& column, int sz) {
 			}
 		}
 
-	}else 	if ( method == "sum") {
+	}else  if ( method == "sum") {
 		double sum = 0;
 		for(int i=0; i < sz; ++i) {
 			double v = column[i];
@@ -324,14 +303,23 @@ double MapAggregateMapList::calcValue(vector<double>& column, int sz) {
 		}
 		return sum;
 		
+	}else  if ( method == "count") {
+		for(int i=0; i < sz; ++i) {
+			double v = column[i];
+			if ( v == iUNDEF || v == rUNDEF || v == shUNDEF)
+				continue;
+			++count;
+		}
+		return count;
 	}
 			
 	return rUNDEF;
 }
-void MapAggregateMapList::getColumn(unsigned char *mapBlock, long blockSize, long colSize, long row, long col, vector<double>& column) const{
+
+void MapAggregateMapList::getColumn(unsigned char *mapRow, long rowSize, long col, vector<double>& column) const{
 //void MapAggregateMapList::getColumn(unsigned char *mapBlock, long blockSize, long row, long col, double *column) const{
 	for(int i =ml->iLower(); i < ml->iSize(); ++i) {
-		unsigned char *p = (mapBlock + i * blockSize + (row * colSize  + col) * byteSize);
+		unsigned char *p = (mapRow + i * rowSize + col * byteSize);
 
 		switch (byteSize) {
 			case 1:

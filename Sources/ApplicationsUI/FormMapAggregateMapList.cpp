@@ -20,6 +20,7 @@ FormMapAggregateMapList::FormMapAggregateMapList(CWnd* mw, const char* sPar)
 	methods.push_back(TR("Maximum.Max"));
 	methods.push_back(TR("Median.median"));
 	methods.push_back(TR("Sum.sum"));
+	methods.push_back(TR("Count.count"));
 
 	if (sPar) {
 		TextInput inp(sPar);

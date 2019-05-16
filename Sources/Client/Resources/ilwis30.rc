@@ -309,7 +309,8 @@ Line                    ICON                    "line.ico"
 Curve                   ICON                    "curve.ico"
 whitespace              ICON                    "whitespace.ico"
 DriveRemote             ICON                    "driveremote.ico"
-Sum                     ICON                    "sum.ico"	
+Sum                     ICON                    "sum.ico"
+Count                   ICON                    "count.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
