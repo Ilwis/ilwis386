@@ -159,6 +159,8 @@ void LegendTool::displayOptionRprClass() {
 		new PolRprForm(tree,ldr,ldr->getRepresentation()->prc(),it->raw());
 	} else if ( drawerType == dtPOINT) {
 		new PointRprForm(tree,ldr,ldr->getRepresentation()->prc(),it->raw());
+	} else if ( drawerType == dtRASTER) {
+		new RasterRprForm(tree,ldr,ldr->getRepresentation()->prc(),it->raw());
 	}
 }
 
@@ -179,7 +181,8 @@ void LegendTool::update() {
 		drawerType = dtSEGMENT;
 	} else if ( dynamic_cast<PolygonLayerDrawer *>(layerDrawer)) {
 		drawerType = dtPOLYGON;
-	}
+	} else // class-raster; display with polygon form
+		drawerType = dtRASTER;
 
 	if ( layerDrawer->useAttributeColumn() && layerDrawer->getAtttributeColumn().fValid()) {
 		dvrs = layerDrawer->getAtttributeColumn()->dvrs();
@@ -277,6 +280,7 @@ DisplayOptionsForm(dr,wPar,TR("Polygon Representation")),rcl(rc), iRaw(raw)
     sText = rcl->dm()->sValueByRaw(raw,0);
   col = rcl->clrRaw(iRaw);
   col2 = rcl->clrSecondRaw(iRaw);
+  transparency = 100.0 * (1.0 - rcl->rItemAlpha(iRaw));
 
   String base = getEngine()->getContext()->sIlwDir();
   base += "Resources\\Symbols\\";
@@ -366,6 +370,53 @@ void  PointRprForm::apply() {
   ((LayerDrawer *)drw)->setUseRpr(true);
  // pp.props.symbolType = fn.sFile;
   //pp.props.symbolSize = scale * 100.0;
+  drw->prepare(&pp);
+  view->Invalidate();
+  updateMapView();
+}
+
+//---------------------------------------------------
+RasterRprForm::RasterRprForm(CWnd *wPar, LayerDrawer *dr, RepresentationClass* rc, long raw) : 
+DisplayOptionsForm(dr,wPar,TR("Raster Representation")),rcl(rc), iRaw(raw)
+{
+   String sText;
+  if (rcl->dm()->pdp())
+    sText = String("%i", raw);
+  else  
+    sText = rcl->dm()->sValueByRaw(raw,0);
+  col = rcl->clrRaw(iRaw);
+  col.alpha() = 255 - col.alpha(); // inverse the alpha, for FieldColor
+  String base = getEngine()->getContext()->sIlwDir();
+  base += "Resources\\Symbols\\";
+  StaticText* st = new StaticText(root, sText);
+  st->SetIndependentPos();
+  FieldColor* fc = new FieldColor(root,"Area Color",&col,true);
+  if (fc->childlist().size() >= 4) {
+    FieldIntSliderEx * fcSlider = dynamic_cast<FieldIntSliderEx*>(fc->childlist()[3]);
+    if (fcSlider) {
+      fcSlider->SetCallBack((NotifyProc)&RasterRprForm::setTransparency);
+      fcSlider->setContinuous(true);
+    }
+  }
+
+  SetMenHelpTopic("ilwismen\\representation_class_editor_edit_item_raster.htm");
+  create();
+}
+
+int RasterRprForm::setTransparency(Event *ev) {
+	apply();
+	return 1;
+}
+
+void  RasterRprForm::apply() {
+  root->StoreData();
+  Color clr (col);
+  clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
+  rcl->PutColor(iRaw, clr);
+  ((LayerDrawer *)drw)->setUseRpr(true);
+  PreparationParameters pp(NewDrawer::ptRENDER, 0);
+  RepresentationProperties props;
+  pp.props = props;
   drw->prepare(&pp);
   view->Invalidate();
   updateMapView();

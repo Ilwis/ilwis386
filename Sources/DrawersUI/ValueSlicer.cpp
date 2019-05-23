@@ -215,9 +215,12 @@ void ValueSlicer::OnLButtonDblClk(UINT nFlags, CPoint point) {
 	double v2 = fldslicer->bounds[fldslicer->selectedIndex+1];
 	bool v1ChangeAllowed = fldslicer->selectedIndex > 0;
 	bool v2ChangeAllowed = fldslicer->selectedIndex < fldslicer->bounds.size() - 2;
+	clr1.alpha() = 255 - clr1.alpha(); // inverse the alpha, for FieldColor
+	clr2.alpha() = 255 - clr2.alpha(); // inverse the alpha, for FieldColor
 	SlicingStepColor frm(this,&clr1, &v1, v1ChangeAllowed, &clr2, &v2, v2ChangeAllowed);
 	if ( frm.fOkClicked()) {
-
+		clr1.alpha() = 255 - clr1.alpha(); // inverse the alpha again, for displaying
+		clr2.alpha() = 255 - clr2.alpha(); // inverse the alpha again, for displaying
 		clr2.alpha() = clr1.alpha();
 		int index = fldslicer->selectedIndex * 2;
 		fldslicer->rprgrad->SetLimitColor(index, clr1);

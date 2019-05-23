@@ -46,8 +46,9 @@
 #include "Headers\Hs\COLORS.hs"
 #include "afxdlgs.h"
 
-FieldColorSimple::FieldColorSimple(FormEntry* p, Color* color)
+FieldColorSimple::FieldColorSimple(FormEntry* p, Color* color, const bool transp)
   : FieldOneSelect(p,(long*)color), fldc((FieldColor *)p)
+  , useTransparency(transp)
 {
   psn->iMinWidth = 1.5 * FLDNAMEWIDTH;
   setHelpItem(htpUiColor);
@@ -168,7 +169,7 @@ void FieldColorSimple::create()
   int iCol = -1;
   Color c = *(Color*)val;
   Color cText = GetSysColor(COLOR_WINDOWTEXT);
-  if (c.iVal() == -1)
+  if (!useTransparency && c.iVal() == -1) // -1 means color not yet set (visible color), however -1 matches transparent-white. -2 means transparent
     c = cText;
 
   int i = 0;
@@ -286,7 +287,7 @@ FieldColor::FieldColor(FormEntry* p, const String& sQuestion,
   StaticTextSimple *st = 0;
   if (sQuestion.length() != 0)
     st = new StaticTextSimple(this, sQuestion);
-  fcs = new FieldColorSimple(this, color);
+  fcs = new FieldColorSimple(this, color, useTransparency);
   if (children.iSize() > 1) // also static text
     children[1]->Align(children[0], AL_AFTER);
   fcs->psn->SetBound(0,-1,0,0);
@@ -294,7 +295,7 @@ FieldColor::FieldColor(FormEntry* p, const String& sQuestion,
 				 (NotifyProc)&FieldColor::CreateColor, 
 				 true, false);
   if ( useTransparency) {
-	  transp = 100 - color->alphaP() * 100;
+	  transp = color->alphaP() * 100; // incoming alpha is already converted to transparency by the caller
 	  slider = new FieldIntSliderEx(this,TR("Transparency"),&transp,ValueRangeInt(0,100), true);
 	  slider->Align(st ? (FormEntry *)st : (FormEntry *)fcs, AL_UNDER);
 	  
@@ -319,7 +320,7 @@ void FieldColor::StoreData() {
 	fcs->StoreData();
 	if ( slider) {
 		slider->StoreData();
-		clr->alpha() = 255.0 - round(255.0 * transp / 100.0);
+		clr->alpha() = round(255.0 * transp / 100.0);
 	}
 }
 

@@ -52,7 +52,7 @@ class FieldColor;
 class FieldColorSimple: public FieldOneSelect
 {
 public:
-  _export FieldColorSimple(FormEntry* parent, Color *);
+  _export FieldColorSimple(FormEntry* parent, Color *, const bool transp);
   _export ~FieldColorSimple();
   void _export SetVal(Color);
   int CreateColor(void *);
@@ -63,6 +63,7 @@ protected:
   int SelChanged(Event *);
   int idCustom;
   FieldColor *fldc;
+  const bool useTransparency;
 };
 
 
@@ -88,7 +89,7 @@ class FieldFillColorSimple: public FieldColorSimple
 {
 public:
   _export FieldFillColorSimple(FormEntry* parent, Color* col)
-  : FieldColorSimple(parent,col) {}
+  : FieldColorSimple(parent,col,false) {}
   void _export StoreData();
 private:
   void _export create();

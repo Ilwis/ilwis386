@@ -9,7 +9,7 @@ class LineLayerDrawer;
 
 class LegendTool : public DrawerTool {
 public:
-	enum DrawerType{dtPOLYGON, dtPOINT, dtSEGMENT};
+	enum DrawerType{dtPOLYGON, dtPOINT, dtSEGMENT, dtRASTER};
 	LegendTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
 	~LegendTool();
 	HTREEITEM configure( HTREEITEM parentItem);
@@ -83,5 +83,16 @@ private:
   Color col;
   String symbol;
   double scale;
+};
+
+class RasterRprForm : public DisplayOptionsForm {
+	public:
+	RasterRprForm(CWnd *wPar, LayerDrawer *dr, RepresentationClass* rc, long raw);
+	void apply(); 
+private:
+	int setTransparency(Event *ev);
+  RepresentationClass* rcl;  
+  long iRaw;
+  Color col;
 };
 }
