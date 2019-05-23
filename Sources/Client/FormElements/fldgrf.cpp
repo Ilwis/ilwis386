@@ -956,7 +956,7 @@ int FormCreateGeoRefRC::GeoRefTypeChange(Event*)
 		if (cbSubPixel)
 			cbSubPixel->Show();
 	}
-	if (0 == iOption) {
+	if (0 == iOption && !fOnlyTiepoints) {
 		fcsc->StoreData(); // get the new CSY into sCoordSys
 		if ("" == sCoordSys) {
 			ShowHide(true, true); // hide all
@@ -1209,16 +1209,16 @@ int FormCreateGeoRefRC::CallBackCorners(Event*)
 	}
 
 	try {
-		fcsc->StoreData(); // get the new CSY into sCoordSys
-		FileName fnCS(sCoordSys);
-		if (!fnCS.fValid())
-			return 0;
-		
-		CoordSystem csInput(fnCS);
-		if (!csInput.fValid())
-			return 0;
-		
 		if (iOption == 0 && !fOnlyTiepoints) {
+			fcsc->StoreData(); // get the new CSY into sCoordSys
+			FileName fnCS(sCoordSys);
+			if (!fnCS.fValid())
+				return 0;
+			
+			CoordSystem csInput(fnCS);
+			if (!csInput.fValid())
+				return 0;
+
 			fgCorners->StoreData();
 			CoordBounds cbLoc;
 			bool fLatLon = (0 != csInput->pcsLatLon());
