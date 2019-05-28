@@ -103,6 +103,9 @@ ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr)
 , cbUseKilometers(0)
 {
 	Coord begin = dr->getBegin();
+	line = dr->getLine();
+	divideFirstInterval = dr->getDivideFirstInterval();
+	multiLabels = dr->getMultiLabels();
 	unit = dr->getUnit();
 	km = dr->getKm();
 	ticks = dr->getTicks();
@@ -116,8 +119,11 @@ ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr)
 	sliderH->setContinuous(true);
 	sliderV->SetCallBack((NotifyProc)&ScaleBarPosition::setPosition);
 	sliderV->setContinuous(true);
-	fldSize = new FieldReal(root, TR("Tick Size"),&sz);
-	fldTicks = new FieldInt(root, TR("Number of ticks"),&ticks);
+	cbLine = new CheckBox(root, TR("Line"),&line);
+	fldTicks = new FieldInt(root, TR("Nr of Intervals"),&ticks);
+	fldSize = new FieldReal(root, TR("Interval Length"),&sz);
+	cbDivide = new CheckBox(root, TR("1st interval divided into smaller parts"),&divideFirstInterval);
+	cbMultiLabels = new CheckBox(root, TR("Labels for every interval"),&multiLabels);
 	fldUnit = new FieldString(root, TR("Unit"),&unit);
 	CoordSystem csy = dr->getRootDrawer()->getCoordinateSystem();
 	if (csy.fValid() && !csy->pcsLatLon()) {
@@ -151,12 +157,18 @@ int ScaleBarPosition::UseKilometersChanged(Event *)
 void ScaleBarPosition::apply() {
 	setPosition(0);
 	fldUnit->StoreData();
+	cbLine->StoreData();
+	cbDivide->StoreData();
+	cbMultiLabels->StoreData();
 	fldSize->StoreData();
 	fldTicks->StoreData();
 	if (cbUseKilometers)
 		cbUseKilometers->StoreData();
 	AnnotationScaleBarDrawer *scaleDrw = (AnnotationScaleBarDrawer *)drw;
 	scaleDrw->setUnit(unit);
+	scaleDrw->setLine(line);
+	scaleDrw->setDivideFirstInterval(divideFirstInterval);
+	scaleDrw->setMultiLabels(multiLabels);
 	scaleDrw->setSize(sz);
 	scaleDrw->setTicks(ticks);
 	scaleDrw->setKm(km);

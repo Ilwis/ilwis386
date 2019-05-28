@@ -34,11 +34,17 @@ namespace ILWIS {
 		FieldReal *fldSize;
 		FieldString *fldUnit;
 		FieldInt *fldTicks;
+		CheckBox *cbLine;
+		CheckBox *cbDivide;
+		CheckBox *cbMultiLabels;
 		CheckBox *cbUseKilometers;
 		int ticks;
 		int x,y;
 		double sz;
 		String unit;
 		bool km;
+		bool multiLabels;
+		bool line;
+		bool divideFirstInterval;
 	};
 }

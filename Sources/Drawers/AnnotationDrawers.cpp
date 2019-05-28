@@ -1411,7 +1411,7 @@ ILWIS::NewDrawer *createAnnotationScaleBarDrawer(DrawerParameters *parms) {
 
 AnnotationScaleBarDrawer::AnnotationScaleBarDrawer(DrawerParameters *parms) : 
 AnnotationDrawer(parms, "AnnotationScaleBarDrawer"),
-size(rUNDEF), ticks(3), texts(0), unit("meters"), km(false)
+size(rUNDEF), ticks(5), texts(0), unit("meters"), km(false), line(false), divideFirstInterval(true), multiLabels(false)
 {
 	CoordSystem csy = getRootDrawer()->getCoordinateSystem();
 	if (csy.fValid() && csy->pcsLatLon())
@@ -1462,8 +1462,6 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 		return false;
 
 	bool is3D = getRootDrawer()->is3D(); 
-	glColor3d(0,0,0);
-	double start = 0;
 
 	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
@@ -1489,16 +1487,75 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 	glPushMatrix();
 	glTranslated(crd.x, crd.y, 0);
 
+	glColor3d(0,0,0);
 	drawPreDrawers(drawLoop, cbArea);
 
 	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block
-		glBegin(GL_LINES);
-		glVertex3d(0, 0, 0);
-		glVertex3d(totSize, 0, 0);
+		double start = 0;
+		if (line) {
+			glBegin(GL_LINES);
+			glVertex3d(0, 0, 0);
+			glVertex3d(totSize, 0, 0);
+			for(int i = 0; i <= ticks; ++i) {
+				if (divideFirstInterval && i == 0) { // the first interval should be divided into 5 small parts
+					double startD = start;
+					double tickSizeD = tickSize / 5.0;
+					for (int j = 0; j < 5; ++j) {
+						glVertex3d(startD, 0, 0);
+						glVertex3d(startD, -height * cb.height(), 0);
+						startD += tickSizeD;
+					}
+				} else {
+					glVertex3d(start, 0, 0);
+					glVertex3d(start, -height * cb.height(), 0);
+				}
+				start += tickSize;
+			}
+			glEnd();
+		} else { // blocked
+			bool white = false; // start with black
+			glBegin(GL_QUADS);
+			for(int i = 0; i < ticks; ++i) {
+				if (divideFirstInterval && i == 0) { // the first interval should be divided into 5 small parts
+					double startD = start;
+					double tickSizeD = tickSize / 5.0;
+					for (int j = 0; j < 5; ++j) {
+						if (white)
+							glColor3d(255,255,255);
+						else
+							glColor3d(0,0,0);
+						glVertex3d(startD, 0, 0);
+						glVertex3d(startD, -height * cb.height(), 0);
+						glVertex3d(startD + tickSizeD, -height * cb.height(), 0);
+						glVertex3d(startD + tickSizeD, 0, 0);
+						white = !white;
+						startD += tickSizeD;
+					}
+				} else {
+					if (white)
+						glColor3d(255,255,255);
+					else
+						glColor3d(0,0,0);
+					glVertex3d(start, 0, 0);
+					glVertex3d(start, -height * cb.height(), 0);
+					glVertex3d(start + tickSize, -height * cb.height(), 0);
+					glVertex3d(start + tickSize, 0, 0);
+					white = !white;
+				}
+				start += tickSize;
+			}
+			glEnd();
+			glColor3d(0,0,0);
+			glBegin(GL_LINE_STRIP);
+			glVertex3d(0, 0, 0);
+			glVertex3d(totSize, 0, 0);
+			glVertex3d(totSize, -height * cb.height(), 0);
+			glVertex3d(0, -height * cb.height(), 0); // the left vertical line is never drawn (not needed)
+			glEnd();
+		}
 		for(int i = 0; i <= ticks; ++i) {
-			glVertex3d(start,0, 0);
-			glVertex3d(start, -height * cb.height(),0);
-			start += tickSize;
+			if (i > 0 && !multiLabels)
+				i = ticks;
 			TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
 			if ( txtdr) {
 				String s = km ? String("%d",(long)(i * size / 1000.0)) : String("%d",(long)size * i);
@@ -1513,7 +1570,6 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 				txtdr->setCoord(Coord(x, -h,0));
 			}
 		}
-		glEnd();
 	}
 
 	drawPostDrawers(drawLoop, cbArea);
@@ -1575,9 +1631,10 @@ int AnnotationScaleBarDrawer::getTicks() const{
 }
 
 void AnnotationScaleBarDrawer::setTicks(int t){
-	if ( t > 1) {
+	if ( t > 1)
 		ticks = t;
-	}
+	else
+		ticks = 2;
 }
 
 bool AnnotationScaleBarDrawer::getKm() const{
@@ -1586,6 +1643,30 @@ bool AnnotationScaleBarDrawer::getKm() const{
 
 void AnnotationScaleBarDrawer::setKm(bool k){
 	km = k;
+}
+
+bool AnnotationScaleBarDrawer::getLine() const{
+	return line;
+}
+
+void AnnotationScaleBarDrawer::setLine(bool l){
+	line = l;
+}
+
+bool AnnotationScaleBarDrawer::getDivideFirstInterval() const{
+	return divideFirstInterval;
+}
+
+void AnnotationScaleBarDrawer::setDivideFirstInterval(bool d){
+	divideFirstInterval = d;
+}
+
+bool AnnotationScaleBarDrawer::getMultiLabels() const{
+	return multiLabels;
+}
+
+void AnnotationScaleBarDrawer::setMultiLabels(bool l){
+	multiLabels = l;
 }
 
 //------------------------------------------------
