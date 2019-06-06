@@ -1345,11 +1345,12 @@ dc.SelectObject(fntOld);
 
 void MapPaneView::OnCreatePntMap()
 {
-	String sMap, sDom;
+	String sMap, sDom, sCsys;
 	MapCompositionDoc* mcd = GetDocument();
 	CoordSystem csy = mcd->rootDrawer->getCoordinateSystem();
-	String sCsys = csy->sName();
-	CoordBounds cb = csy->cb;
+	if (csy.fValid())
+		sCsys = csy->sName();
+	CoordBounds cb = mcd->rootDrawer->getMapCoordBounds();
 	bool fOk;
 	{
 		FormCreatePnt frm(this, &sMap, sCsys, cb, sDom);
@@ -1363,10 +1364,12 @@ void MapPaneView::OnCreatePntMap()
 
 void MapPaneView::OnCreateSegMap()
 {
-	String sMap, sDom;
+	String sMap, sDom, sCsys;
 	MapCompositionDoc* mcd = GetDocument();
-	String sCsys = mcd->rootDrawer->getCoordinateSystem()->sName();
-	CoordBounds cb = mcd->rootDrawer->getCoordinateSystem()->cb;
+	CoordSystem csy = mcd->rootDrawer->getCoordinateSystem();
+	if (csy.fValid())
+		sCsys = csy->sName();
+	CoordBounds cb = mcd->rootDrawer->getMapCoordBounds();
 	bool fOk;
 	{
 		FormCreateSeg frm(this, &sMap, sCsys, cb, sDom);
@@ -1380,9 +1383,16 @@ void MapPaneView::OnCreateSegMap()
 
 void MapPaneView::OnCreateRasMap()
 {
-	String sMap, sDom;
-	FormCreateMap frm(this, &sMap, "", sDom);
-	bool fOk = frm.fOkClicked();
+	String sMap, sDom, sGrf;
+	MapCompositionDoc* mcd = GetDocument();
+	GeoRef georef = mcd->rootDrawer->getGeoReference();
+	if (georef.fValid()) // rootDrawer is set to a georeference
+		sGrf = georef->sName();
+	bool fOk;
+	{
+		FormCreateMap frm(this, &sMap, sGrf, sDom);
+		fOk = frm.fOkClicked();
+	}
 	if (fOk) {
 		FileName fn(sMap,".mpr",true);
 		EditNamedLayer(fn);
