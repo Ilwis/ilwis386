@@ -44,14 +44,13 @@ Created on: 2007-02-8
 #include "Engine\Map\Polygon\POL.H"
 #include "Engine\Map\Point\PNT.H"
 #include "Client\Mapwindow\Positioner.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
-#include "Client\Mapwindow\Drawers\Drawer.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
 #include "Client\Editors\Editor.h"
 #include "Client\Editors\Digitizer\DigiEditor.h"
 #include "Client\Editors\Utils\SYMBOL.H"
 #include "Client\Base\ButtonBar.h"
 #include "Client\Editors\Map\PointEditor.h"
-#include "Headers\Hs\Editor.hs"
 #include "Client\FormElements\syscolor.h"
 #include "Client\FormElements\fldval.h"
 #include "Client\Mapwindow\AreaSelector.h"
@@ -69,7 +68,8 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapWindow.h"
 #include "Engine\Domain\DomainUniqueID.h"
 #include "Engine\Table\Rec.h"
-#include "Headers\Hs\Coordsys.hs"
+#include "Engine\Drawers\TextDrawer.h"
+#include "Engine\Drawers\OpenGLText.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -105,27 +105,27 @@ BEGIN_MESSAGE_MAP(PointEditor, DigiEditor)
 	ON_COMMAND(ID_ADDPOINT, OnAddPoint)
 	ON_COMMAND(ID_SEGSETBOUNDS, OnSetBoundaries)
 	ON_COMMAND(ID_SELALL, OnSelectAll)
+	ON_COMMAND(ID_SELECTAREA, OnAreaSelected)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 #define addSub(ID) menSub.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 PointEditor::PointEditor(MapPaneView* mpvw, PointMap m)
-: DigiEditor(mpvw,m->cb()), 
-curEdit("EditCursor"), 
+: DigiEditor(mpvw,m->cb()),
+curEdit("EditCursor"),
 curPntEdit("EditPntCursor"),
 curPntMove("EditPntMoveCursor"), 
 curPntMoving("EditPntMovingCursor"), 
-//  aSelect(0,1), // make zero based
 mp(m)
 {
 	iFmtPnt = RegisterClipboardFormat("IlwisPoints");
 	iFmtDom = RegisterClipboardFormat("IlwisDomain");
 
 	if (mp->fDependent() || mp->fDataReadOnly() || !mp->dm()->fValidDomain()) {
-		mpv->MessageBox(SEDErrNotEditablePntMap.sVal(), SEDErrPntEditor.sVal(), MB_OK|MB_ICONSTOP);
+		mpv->MessageBox(TR("Not an editable Point Map").c_str(), TR("Point Editor").c_str(), MB_OK|MB_ICONSTOP);
 		fOk = false;
 		return;
 	}
@@ -133,22 +133,33 @@ mp(m)
 	dvs = mp->dvrs();
 
 	MapCompositionDoc* mcd = mpv->GetDocument();
-	for (list<Drawer*>::iterator iter = mcd->dl.begin(); iter != mcd->dl.end(); ++iter) 
-	{
-		Drawer* dr = *iter;
-		if (dr->obj() == mp) {
-			drw = dr;
-			break;
+	vector<NewDrawer *> allDrawers;
+	mcd->rootDrawer->getDrawers(allDrawers);
+	for(int i = 0; i < allDrawers.size(); ++i) {
+		SpatialDataDrawer *dr = dynamic_cast<SpatialDataDrawer *>(allDrawers.at(i));
+		if ( dr) {
+			if ( dr->getBaseMap()->fnObj == mp->fnObj) {
+				Editor::drw = dr->getDrawer(0);
+				fDrawerActive = Editor::drw->isActive();
+				Editor::drw->setActive(false);
+				break;
+			}
 		}
 	}
-	if (0 == drw) {
-		drw = mcd->drAppend(mp);
+
+	if (0 == Editor::drw) {
+		SpatialDataDrawer *dr = dynamic_cast<SpatialDataDrawer *>(mcd->drAppend(mp, IlwisDocument::otEDIT));
+		if (dr) {
+			Editor::drw = dr->getDrawer(0);
+			fDrawerActive = Editor::drw->isActive();
+			Editor::drw->setActive(false);
+		}
 		mcd->UpdateAllViews(mpv,2);
 	}
 
-	aSelect.Resize(mp->iFeatures()); // make zero based
-	for (long i = 1; i <= mp->iFeatures(); ++i)
-		aSelect[i-1] = false;
+	aSelect.Resize(mp->iFeatures());
+	for (long i = 0; i < mp->iFeatures(); ++i)
+		aSelect[i] = false;
 	mode = modeSELECT;
 	fFindUndefs = false;
 	smb.smb = smbPlus;
@@ -235,8 +246,18 @@ mp(m)
 		dw->bbDataWindow.LoadButtons("pntedit.but");
 		dw->RecalcLayout();
 	}
-	htpTopic = htpPointEditor;
+	help = "ilwis\\point_editor_functionality.htm";
 	sHelpKeywords = "Point editor";
+
+	const SVGLoader *loader = NewDrawer::getSvgLoader();
+	SVGLoader::const_iterator cur = loader->find("half-tone");
+	if ( cur == loader->end() || (*cur).second->getType() == IVGElement::ivgPOINT) {
+		hatch = 0;
+		hatchInverse = 0;
+	} else {
+		hatch = (*cur).second->getHatch();
+		hatchInverse = (*cur).second->getHatchInverse();
+	}
 }
 
 PointEditor::~PointEditor()
@@ -246,6 +267,11 @@ PointEditor::~PointEditor()
 		mp->Store();
 	}  
 	mp->KeepOpen(false);
+	if (Editor::drw) {
+		PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);
+		Editor::drw->prepare(&pp);
+		Editor::drw->setActive(fDrawerActive);
+	}
 }
 
 bool PointEditor::OnContextMenu(CWnd* pWnd, CPoint point)
@@ -258,8 +284,14 @@ bool PointEditor::OnContextMenu(CWnd* pWnd, CPoint point)
 	addmen(ID_PANAREA);
 	men.AppendMenu(MF_SEPARATOR);
 	addmen(ID_EDIT);
-	addmen(ID_CLEAR);
 	men.EnableMenuItem(ID_EDIT, fEditOk() ? MF_ENABLED : MF_GRAYED);
+	addmen(ID_EDIT_CUT);
+	men.EnableMenuItem(ID_EDIT_CUT, fCopyOk() ? MF_ENABLED : MF_GRAYED);
+	addmen(ID_EDIT_COPY);
+	men.EnableMenuItem(ID_EDIT_COPY, fCopyOk() ? MF_ENABLED : MF_GRAYED);
+	addmen(ID_EDIT_PASTE);
+	men.EnableMenuItem(ID_EDIT_PASTE, fPasteOk() ? MF_ENABLED : MF_GRAYED);
+	addmen(ID_CLEAR);	
 	men.EnableMenuItem(ID_CLEAR, fCopyOk() ? MF_ENABLED : MF_GRAYED);
 	men.AppendMenu(MF_SEPARATOR);
 	addmen(ID_ADDPOINT);
@@ -280,6 +312,270 @@ bool PointEditor::OnContextMenu(CWnd* pWnd, CPoint point)
 IlwisObject PointEditor::obj() const
 {
 	return mp;
+}
+
+int PointEditor::draw(volatile bool* fDrawStop)
+{
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	RootDrawer * rootDrawer = mcd->rootDrawer;
+	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom();
+	double delta = smb.iSize * cbZoom.width() / 2000.0;
+
+	Color cText, cBack, cFgBr, cBgBr;
+	cFgBr = SysColor(COLOR_HIGHLIGHT);
+	cBgBr = SysColor(COLOR_WINDOW);
+	if (fText) {
+		if ((long)colText == -1)
+			cText = SysColor(COLOR_WINDOWTEXT);
+		else {
+			cText = colText;
+		}
+		cText.alpha() = 255;
+		if ((long)colBack != -2) {
+			cBack = colBack;
+		}
+	}
+	ILWIS::DrawerParameters dpLayerDrawer (rootDrawer, 0);
+	ILWIS::TextLayerDrawer *textLayerDrawer = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dpLayerDrawer);	
+	ILWIS::DrawerParameters dpTextDrawer (rootDrawer, textLayerDrawer);
+	ILWIS::TextDrawer *textDrawer = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dpTextDrawer);
+	OpenGLText * font = new OpenGLText (rootDrawer, "arial.ttf", 15, true, 1, -15);
+	textLayerDrawer->setFont(font);
+
+	if (smb.iWidth != 1) {
+		if (smb.smb == smbCircle) {
+			glEnable(GL_LINE_SMOOTH);
+			glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+		}
+		glLineWidth(smb.iWidth);
+	}
+
+	for (long r = 0; r < mp->iFeatures(); ++r) {
+		Coord crd = mp->cValue(r);
+		if (crd.fUndef())
+			continue;
+		crd = rootDrawer->glConv(mp->cs(), crd);
+		if (!rootDrawer->is3D())
+			crd.z = 0; // OpenGLText is unable to draw on 2D when crd.z != 0
+		if (fText) {
+			if (mode == modeMOVING)
+			{
+				if (r == iActNr) 
+				{
+					Color clr = cText.clrDraw(drcLIGHT).clrDraw(drcGREY);
+					font->setColor(clr);
+				}
+				else
+					font->setColor(cText);
+			} else
+				font->setColor(cText);
+			zPoint pntText = smb.pntText(0,zPoint(0,0)); // does this compute a good offset for the text?
+			String s = mp->sValue(r);
+			textDrawer->setText(crd,s);
+			if ((long)colBack != -2) {
+				glColor4f(cBack.redP(), cBack.greenP(), cBack.blueP(), 1);
+				CoordBounds cbText = textDrawer->getTextExtent();
+				cbText.cMin += crd;
+				cbText.cMax += crd;
+				cbText.cMin.y -= textDrawer->getHeight();
+				cbText.cMax.y -= textDrawer->getHeight();
+				cbText *= 1.3;
+				double heightIncrease = cbText.height() / 8.0;
+				cbText.cMax.y += heightIncrease;
+				cbText.cMin.y -= heightIncrease;
+				glBegin(GL_QUADS);
+				glVertex3f(cbText.cMin.x, cbText.cMin.y, 0);
+				glVertex3f(cbText.cMax.x, cbText.cMin.y, 0);
+				glVertex3f(cbText.cMax.x, cbText.cMax.y, 0);
+				glVertex3f(cbText.cMin.x, cbText.cMax.y, 0);
+				glEnd();
+			}
+			textDrawer->draw(ILWIS::NewDrawer::drl2D);
+		}
+		if (aSelect[r]) {
+			glColor4d(cFgBr.redP(), cFgBr.greenP(), cFgBr.blueP(), 1);
+			glEnable(GL_POLYGON_STIPPLE);
+			glPolygonStipple(hatch);
+			glBegin(GL_QUADS);
+			glVertex3f(crd.x - delta, crd.y - delta, 0);
+			glVertex3f(crd.x + delta, crd.y - delta, 0);
+			glVertex3f(crd.x + delta, crd.y + delta, 0);
+			glVertex3f(crd.x - delta, crd.y + delta, 0);
+			glEnd();
+			glColor4d(cBgBr.redP(), cBgBr.greenP(), cBgBr.blueP(), 1);
+			glPolygonStipple(hatchInverse);
+			glBegin(GL_QUADS);
+			glVertex3f(crd.x - delta, crd.y - delta, 0);
+			glVertex3f(crd.x + delta, crd.y - delta, 0);
+			glVertex3f(crd.x + delta, crd.y + delta, 0);
+			glVertex3f(crd.x - delta, crd.y + delta, 0);
+			glEnd();
+			glDisable(GL_POLYGON_STIPPLE);
+		}
+		Symbol sym = smb;
+		if (fFindUndefs && iUNDEF == mp->iRaw(r)) {
+			sym.col = colFindUndef;
+			sym.fillCol = colFindUndef;
+		}
+		if (mode == modeMOVING && r == iActNr) 
+		{
+			Color clr = sym.col.clrDraw(drcLIGHT).clrDraw(drcGREY);
+			sym.col = clr;
+			sym.fillCol = clr;
+		}
+		drawSmb(sym, crd, delta);
+	}
+
+	if (smb.iWidth != 1) {
+		if (smb.smb == smbCircle) {
+			glDisable(GL_LINE_SMOOTH);
+		}
+		glLineWidth(1);
+	}
+	drawDigCursor();
+	delete textLayerDrawer;
+	return 0;
+}
+
+void PointEditor::drawSmb(const Symbol & sym, const Coord & crd, double delta) const
+{
+	glPushMatrix();
+	glTranslated(crd.x, crd.y, 0);
+	glScaled(delta, delta, 0);
+
+	switch (sym.smb) 
+	{
+	case smbCircle:
+		{
+			int iSteps = 20;
+			double fStart = 0;
+			glColor4d(sym.fillCol.redP(), sym.fillCol.greenP(), sym.fillCol.blueP(), 1);
+			glBegin(GL_TRIANGLE_FAN);
+			for (int i = 0; i < iSteps; ++i) {
+				double f = fStart + M_PI * i * 2.0 / iSteps;
+				glVertex3f(cos(f), sin(f), 0);
+			}
+			glEnd();
+			glColor4d(sym.col.redP(), sym.col.greenP(), sym.col.blueP(), 1);
+			glBegin(GL_LINE_STRIP);
+			for (int i = 0; i <= iSteps; ++i) {
+				double f = fStart + M_PI * i * 2.0 / iSteps;
+				glVertex3f(cos(f), sin(f), 0);
+			}
+			glEnd();
+		}
+		break;
+	case smbSquare:
+		{
+			int iSteps = 4;
+			double fStart = M_PI / 4.0;
+			glColor4d(sym.fillCol.redP(), sym.fillCol.greenP(), sym.fillCol.blueP(), 1);
+			glBegin(GL_TRIANGLE_FAN);
+			for (int i = 0; i < iSteps; ++i) {
+				double f = fStart + M_PI * i * 2.0 / iSteps;
+				glVertex3f(cos(f), sin(f), 0);
+			}
+			glEnd();
+			glColor4d(sym.col.redP(), sym.col.greenP(), sym.col.blueP(), 1);
+			glBegin(GL_LINE_STRIP);
+			for (int i = 0; i <= iSteps; ++i) {
+				double f = fStart + M_PI * i * 2.0 / iSteps;
+				glVertex3f(cos(f), sin(f), 0);
+			}
+			glEnd();
+		}
+		break;
+	case smbDiamond:
+		{
+			int iSteps = 4;
+			double fStart = 0;
+			glColor4d(sym.fillCol.redP(), sym.fillCol.greenP(), sym.fillCol.blueP(), 1);
+			glBegin(GL_TRIANGLE_FAN);
+			for (int i = 0; i < iSteps; ++i) {
+				double f = fStart + M_PI * i * 2.0 / iSteps;
+				glVertex3f(cos(f), sin(f), 0);
+			}
+			glEnd();
+			glColor4d(sym.col.redP(), sym.col.greenP(), sym.col.blueP(), 1);
+			glBegin(GL_LINE_STRIP);
+			for (int i = 0; i <= iSteps; ++i) {
+				double f = fStart + M_PI * i * 2.0 / iSteps;
+				glVertex3f(cos(f), sin(f), 0);
+			}
+			glEnd();
+		}
+		break;
+	case smbDeltaUp:
+		{
+			int iSteps = 3;
+			double fStart = M_PI / 2.0; // angles are anticlockwise, starting horizontal
+			glColor4d(sym.fillCol.redP(), sym.fillCol.greenP(), sym.fillCol.blueP(), 1);
+			glBegin(GL_TRIANGLE_FAN);
+			for (int i = 0; i < iSteps; ++i) {
+				double f = fStart + M_PI * i * 2.0 / iSteps;
+				glVertex3f(cos(f), sin(f), 0);
+			}
+			glEnd();
+			glColor4d(sym.col.redP(), sym.col.greenP(), sym.col.blueP(), 1);
+			glBegin(GL_LINE_STRIP);
+			for (int i = 0; i <= iSteps; ++i) {
+				double f = fStart + M_PI * i * 2.0 / iSteps;
+				glVertex3f(cos(f), sin(f), 0);
+			}
+			glEnd();
+		}
+		break;
+	case smbDeltaDown:
+		{
+			int iSteps = 3;
+			double fStart = - M_PI / 2.0;
+			glColor4d(sym.fillCol.redP(), sym.fillCol.greenP(), sym.fillCol.blueP(), 1);
+			glBegin(GL_TRIANGLE_FAN);
+			for (int i = 0; i < iSteps; ++i) {
+				double f = fStart + M_PI * i * 2.0 / iSteps;
+				glVertex3f(cos(f), sin(f), 0);
+			}
+			glEnd();
+			glColor4d(sym.col.redP(), sym.col.greenP(), sym.col.blueP(), 1);
+			glBegin(GL_LINE_STRIP);
+			for (int i = 0; i <= iSteps; ++i) {
+				double f = fStart + M_PI * i * 2.0 / iSteps;
+				glVertex3f(cos(f), sin(f), 0);
+			}
+			glEnd();
+		}
+		break;
+	case smbPlus:
+		{
+			glColor4d(sym.col.redP(), sym.col.greenP(), sym.col.blueP(), 1);
+			glBegin(GL_LINES);
+			glVertex3f(0, -1, 0);
+			glVertex3f(0, 1, 0);
+			glEnd();
+		}
+		// fall through
+	case smbMinus:
+		{
+			glColor4d(sym.col.redP(), sym.col.greenP(), sym.col.blueP(), 1);
+			glBegin(GL_LINES);
+			glVertex3f(-1, 0, 0);
+			glVertex3f(1, 0, 0);
+			glEnd();
+		}
+		break;
+	case smbCross:
+		{
+			glColor4d(sym.col.redP(), sym.col.greenP(), sym.col.blueP(), 1);
+			glBegin(GL_LINES);
+			glVertex3f(-1, -1, 0);
+			glVertex3f(1, 1, 0);
+			glVertex3f(-1, 1, 0);
+			glVertex3f(1, -1, 0);
+			glEnd();
+		} 
+		break;
+	}
+	glPopMatrix();
 }
 
 int PointEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDrawStop)
@@ -346,9 +642,9 @@ int PointEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDra
 		Coord crd = mp->cValue(r);
 		if (crd.fUndef())
 			continue;
-		double rRow, rCol;
-		mpv->Coord2RowCol(crd, rRow, rCol);
-		zPoint pnt = psn->pntPos(rRow,rCol);
+		//double rRow, rCol;
+		//mpv->Coord2RowCol(crd, rRow, rCol);
+		zPoint pnt = mpv->pntPos(crd);
 		if (fText) {
 			if (mode == modeMOVING)
 			{
@@ -364,7 +660,7 @@ int PointEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDra
 			String s = mp->sValue(r);
 			cdc->TextOut(pntText.x,pntText.y,s.sVal());
 		}
-		if (aSelect[r-1]) {
+		if (aSelect[r]) {
 			cdc->SetBkMode(OPAQUE);
 			cdc->SetTextColor(cFgBr);
 			cdc->SetBkColor(cBgBr);
@@ -406,7 +702,7 @@ int PointEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDra
 
 	cdc->SelectObject(penOld);
 	cdc->SelectObject(brOld);
-	//  drawDigCursor();
+	drawDigCursor();
 	return 0;
 }
 
@@ -434,8 +730,8 @@ bool PointEditor::OnLButtonDown(UINT nFlags, CPoint point)
 		GreyDigitizer(true);
 		mode = modeMOVING;
 		iActNr = iNr;
-		drawPoint(iActNr);
-				   } break;
+		mpv->Invalidate();
+	} break;
 	case modeADD: 
 		iLastButton = -1;
 		AddPoint(crd);
@@ -445,11 +741,12 @@ bool PointEditor::OnLButtonDown(UINT nFlags, CPoint point)
 		fShft = nFlags & MK_SHIFT ? true : false;
 		if (!fCtrl && !fShft)
 			DeselectAll();
-		if (mpv->as)
+		if (mpv->tools.size())
 			return true;
 		if (DragDetect(*mpv, point)) {
-			mpv->as = new AreaSelector(mpv, this, (NotifyRectProc)&PointEditor::AreaSelected);
-			mpv->as->OnLButtonDown(nFlags, point);
+			AreaSelector * as = new AreaSelector(mpv, this, (NotifyRectProc)&PointEditor::AreaSelected);
+			as->OnLButtonDown(nFlags, point);
+			mpv->addTool(as, ID_SELECTAREA);
 		}
 		else {
 			long iNr = mp->iRec(crd,rPrx);
@@ -458,16 +755,16 @@ bool PointEditor::OnLButtonDown(UINT nFlags, CPoint point)
 			else {
 				if (fCtrl)
 					if (fShft)
-						aSelect[iNr-1] = 0;
+						aSelect[iNr] = 0;
 					else
-						aSelect[iNr-1] = 1;
+						aSelect[iNr] = 1;
 				else
-					aSelect[iNr-1] = aSelect[iNr-1] ? 0 : 1;
-				drawPoint(iNr);
+					aSelect[iNr] = aSelect[iNr] ? 0 : 1;
+				mpv->Invalidate();
 			}
 		}
 		break;
-					 } 
+		} 
 	}  
 	return true;
 }
@@ -478,9 +775,9 @@ public:
 	PointCoordForm(CWnd* parent, const char* sTitle, Coord* crd)
 		: FormWithDest(parent, sTitle)
 	{
-		new FieldReal(root, SEDUiX, &crd->x);
-		new FieldReal(root, SEDUiY, &crd->y);
-		//      SetMenHelpTopic(htpPntEditAdd);
+		new FieldReal(root, "&X", &crd->x);
+		new FieldReal(root, "&Y", &crd->y);
+		SetHelpItem("ilwismen\\point_editor_add_point.htm");
 		create();
 	}
 };
@@ -496,11 +793,10 @@ case modeMOVING:
 		if (iUNDEF == iNr) 
 			break;
 		Coord crdValue = mp->cValue(iNr);
-		PointCoordForm frm(mpv, SEDTitleEditPoint.scVal(), &crdValue);
+		PointCoordForm frm(mpv, TR("Edit Point").c_str(), &crdValue);
 		if (frm.fOkClicked()) {
-			drawPoint(iNr);
 			mp->PutVal(iNr, crdValue);
-			drawPoint(iNr);
+			mpv->Invalidate();
 		}
 	} return true;
 	}
@@ -516,11 +812,10 @@ bool PointEditor::OnLButtonUp(UINT nFlags, CPoint point)
 			return 1;
 		}  
 		Mode(modeMOVE);
-		drawPoint(iActNr);
 		mp->PutVal(iActNr, crd);
 		mp->Updated();
-		drawPoint(iActNr);
 		GreyDigitizer(false);
+		mpv->Invalidate();
 	}
 	return true;
 }
@@ -538,12 +833,12 @@ bool PointEditor::OnMouseMove(UINT nFlags, CPoint point)
 int PointEditor::Edit(const Coord& crd)
 {
 	long iSel = 0;
-	long iNr = 0;
+	long iNr = -1;
 	if (crd.fUndef()) {
-		for (unsigned long i = 1; i <= aSelect.iSize(); ++i)
-			if (aSelect[i-1]) {
+		for (unsigned long i = 0; i < aSelect.iSize(); ++i)
+			if (aSelect[i]) {
 				iSel += 1;
-				if (iNr == 0) 
+				if (iNr == -1)
 					iNr = i;  
 			}  
 			if (iSel == 0)
@@ -573,22 +868,22 @@ int PointEditor::Edit(const Coord& crd)
 		return 1;
 	}
 	if (dm()->pdid()) {
-		mpv->MessageBox(SEDMsgPntEdOnlyIndiv.sVal(), SEDMsgPntEditor.sVal());
+		mpv->MessageBox(TR("Points only individually editable").c_str(), TR("Point Editor").c_str());
 		return 1;
 	}
 
-	String sRemark(SEDRemSelPnt_i.sVal(), iSel);
+	String sRemark(TR("%li points selected.").c_str(), iSel);
 	crdValue = crdUNDEF;
-	if (AskValue(sRemark, htpPntEditorAskValue)) {
+	if (AskValue(sRemark, "ilwismen\\point_editor_edit_selection.htm")) {
 		removeDigCursor();
 		crdDig = Coord();
-		for (unsigned long i = 1; i <= aSelect.iSize(); ++i)
-			if (aSelect[i-1]) {
-				drawPoint(i);  // remove old text
+		for (unsigned long i = 0; i < aSelect.iSize(); ++i) {
+			if (aSelect[i]) {
 				mp->PutVal(i, sValue);
-				drawPoint(i);
 			}
-			mp->Updated();
+		}
+		mp->Updated();
+		mpv->Invalidate();
 	}
 	return 1;
 }
@@ -597,7 +892,7 @@ void PointEditor::EditFieldOK(Coord crd, const String& s)
 {
 	crdValue = crd;
 	sValue = s;
-	long iNr = mp->iRec(crdValue, 1e-20);
+	long iNr = mp->iRec(crdValue, 1e-20); // iNr is like iRec (0-offset)
 	if (("?" != s) && dm()->pdid()) {
 		long iRaw = dm()->iRaw(s);
 		if (iUNDEF == iRaw)
@@ -607,10 +902,10 @@ void PointEditor::EditFieldOK(Coord crd, const String& s)
 			if (iNr == iRec)
 				iRec = iUNDEF;
 			if (iRec >= 0) {
-				int iRet = mpv->MessageBox(SEDMsgValInUse.sVal(), SEDMsgPntEditor.sVal(),
+				int iRet = mpv->MessageBox(TR("Value already in use. Use anyway?").c_str(), TR("Point Editor").c_str(),
 					MB_YESNO|MB_DEFBUTTON2|MB_ICONASTERISK);
 				if (IDYES != iRet) {
-					if (iNr > 0)
+					if (iNr != iUNDEF)
 						mp->PutVal(iNr, "?");
 					EditFieldStart(crd, sValue);
 					return;
@@ -618,22 +913,21 @@ void PointEditor::EditFieldOK(Coord crd, const String& s)
 			}
 		}
 	}
-	if (iNr <= 0)
-		iNr = mp->iAddVal(crdValue,s);
+	if (iNr == iUNDEF)
+		iNr = mp->iAddVal(crdValue,s) - 1; // iAddVal returns geometries.size(), iNr must become the index of the newly added item
 	else
 		mp->PutVal(iNr,s);
 	mp->Updated();
-	if (aSelect.iSize() < iNr)
+	if (aSelect.iSize() < (iNr + 1))
 		aSelect &= false;
 	removeDigCursor();
 	crdDig = Coord();
-	drawPoint(iNr);
 
 	if (dm()->pdid()) {
 		int iRaw = mp->iRaw(iNr);
 		EditAttrib(iRaw);
 	}
-	mpv->UpdateWindow();
+	mpv->Invalidate();
 }
 
 bool PointEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
@@ -654,7 +948,7 @@ case modeSELECT:
 	break;
 case modeMOVING: 
 	Mode(modeMOVE); 
-	drawPoint(iActNr);
+	mpv->Invalidate();
 	break;
 	}
 	return true;
@@ -687,19 +981,19 @@ int PointEditor::DigInit(Coord)
 {
 	dc = dcCROSS;
 	ChangeWindowBasis = (DigiFunc)&PointEditor::DigInit;
-	SetDigiFunc(SEDDigPntEditor, (DigiFunc)&DigiEditor::MoveCursor,
-		(DigiFunc)&PointEditor::AddPoint, SEDDigAddPoint,
-		(DigiFunc)&PointEditor::EditPoint, SEDDigMovePnt,
-		(DigiFunc)&DigiEditor::ChangeWindow, SEDDigChangeWindow,
-		(DigiFunc)&PointEditor::EditPointValue, SEDDigEditPoint);
+	SetDigiFunc(TR("Point Editor"), (DigiFunc)&DigiEditor::MoveCursor,
+		(DigiFunc)&PointEditor::AddPoint, TR("Add Point"),
+		(DigiFunc)&PointEditor::EditPoint, TR("Move Point"),
+		(DigiFunc)&DigiEditor::ChangeWindow, TR("Change Window"),
+		(DigiFunc)&PointEditor::EditPointValue, TR("Edit Point"));
 	return 0;
 }
 
 bool PointEditor::fCopyOk()
 {
 	long iSel = 0;
-	for (unsigned long i = 1; i <= aSelect.iSize(); ++i)
-		if (aSelect[i-1]) {
+	for (unsigned long i = 0; i < aSelect.iSize(); ++i)
+		if (aSelect[i]) {
 			iSel += 1;
 		}
 		return iSel > 0;
@@ -708,8 +1002,8 @@ bool PointEditor::fCopyOk()
 bool PointEditor::fEditOk()
 {
 	long iSel = 0;
-	for (unsigned long i = 1; i <= aSelect.iSize(); ++i)
-		if (aSelect[i-1]) {
+	for (unsigned long i = 0; i < aSelect.iSize(); ++i)
+		if (aSelect[i]) {
 			iSel += 1;
 		}
 		if (dm()->pdid()) 
@@ -742,40 +1036,40 @@ void PointEditor::OnUpdatePaste(CCmdUI* pCmdUI)
 void PointEditor::OnClear()
 {
 	unsigned int i;
-	long iNr = 0;
+	long iNr = -1;
 	long iSel = 0;
-	for (i = 1; i <= aSelect.iSize(); ++i)
-		if (aSelect[i-1]) {
+	for (i = 0; i < aSelect.iSize(); ++i) {
+		if (aSelect[i]) {
 			iSel += 1;
-			if (iNr == 0) 
+			if (iNr == -1)
 				iNr = i;  
-		}  
-		if (iSel == 0)
-			return;  
-		String s;  
-		if (iSel == 1)
-			s = SEDMsgDelSelPnt;
-		else
-			s = String(SEDMsgDelSelPnt_i.sVal(), iSel);    
-		int iRet = mpv->MessageBox(s.sVal(), SEDMsgPntEditor.sVal(),
-			MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
-		bool fDel = (IDYES == iRet) ? true : false;
-		bool fChange = false;
-		for (i = aSelect.iSize(); i > 0; --i)
-			if (aSelect[i-1]) {
-				fChange = true;
-				zRect rect = rectPoint(i);
-				if (fDel)
-					mp->Delete(i);
-				mpv->InvalidateRect(&rect);
-			}
-			if (fChange) {
-				aSelect.Reset();
-				//    aSelect.Resize(mp->iFeatures(),1);
-				aSelect.Resize(mp->iFeatures()); // make zero based
-				for (i = 1; i <= aSelect.iSize(); ++i)
-					aSelect[i-1] = false;
-			}
+		}
+	}
+	if (iSel == 0)
+		return;  
+	String s;  
+	if (iSel == 1)
+		s = TR("Delete Selected Point?");
+	else
+		s = String(TR("Delete the %li Selected Points?").c_str(), iSel);    
+	int iRet = mpv->MessageBox(s.sVal(), TR("Point Editor").c_str(),
+		MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2);
+	bool fDel = (IDYES == iRet) ? true : false;
+	bool fChange = false;
+	for (i = aSelect.iSize(); i > 0; --i) { // note: i is declared as unsigned int, thus for (i = aSelect.iSize() - 1; i >= 0; --i) doesn't work as expected
+		if (aSelect[i-1]) {
+			fChange = true;
+			if (fDel)
+				mp->Delete(i-1);
+		}
+	}
+	if (fChange) {
+		aSelect.Reset();
+		aSelect.Resize(mp->iFeatures());
+		for (i = 0; i < aSelect.iSize(); ++i)
+			aSelect[i] = false;
+	}
+	mpv->Invalidate();
 }
 
 void PointEditor::Mode(enumMode Mode) 
@@ -826,35 +1120,9 @@ case ID_FINDUNDEFS:
 	pCmdUI->SetCheck(fFindUndefs);
 	return;
 	}
-	if (0 != mpv->as)
+	if (0 != mpv->tools.size())
 		fCheck = false;
 	pCmdUI->SetRadio(fCheck);
-}
-
-zRect PointEditor::rectPoint(long iNr)
-{
-	Coord crd = mp->cValue(iNr);
-	if (crd.fUndef())
-		return zRect();
-	double rRow, rCol;
-	mpv->Coord2RowCol(crd, rRow, rCol);
-	zPoint pnt = mpv->pntPos(rRow,rCol);
-	zRect rect(pnt,pnt);
-	rect.top()   -= smb.iSize / 2 + 3;
-	rect.left()  -= smb.iSize / 2 + 3;
-	rect.bottom()+= smb.iSize / 2 + 4;
-	rect.right() += smb.iSize / 2 + 4;
-	if (fText) {
-		CClientDC cdc(mpv);
-		zPoint pntText = smb.pntText(&cdc, pnt);
-		String s = mp->sValue(iNr);
-		CSize siz = cdc.GetTextExtent(s.sVal());
-		pntText.x += siz.cx + 1;
-		pntText.y += siz.cy + 1;
-		rect.bottom() = max(rect.bottom(), pntText.y);
-		rect.right() = max(rect.right(), pntText.x);
-	}
-	return rect;
 }
 
 void PointEditor::OnSelectMode()
@@ -876,21 +1144,25 @@ void PointEditor::AreaSelected(CRect rect)
 {
 	Coord c1 = mpv->crdPnt(rect.TopLeft());
 	Coord c2 = mpv->crdPnt(rect.BottomRight());
-	for (long i = 1; i <= mp->iFeatures(); ++i) {
+	for (long i = 0; i < mp->iFeatures(); ++i) {
 		Coord crd = mp->cValue(i);
 		if (crd.fInside(c1,c2)) {
 			if (fCtrl)
 				if (fShft)
-					aSelect[i-1] = 0;
+					aSelect[i] = 0;
 				else
-					aSelect[i-1] = 1;
+					aSelect[i] = 1;
 			else
-				aSelect[i-1] = aSelect[i-1] ? 0 : 1;
-			zRect r = rectPoint(i);
-			mpv->InvalidateRect(&r);
+				aSelect[i] = aSelect[i] ? 0 : 1;
 		}
 	}
-	mpv->as->Stop();
+	mpv->PostMessage(WM_COMMAND, ID_SELECTAREA);
+}
+
+void PointEditor::OnAreaSelected()
+{
+	mpv->changeStateTool(ID_SELECTAREA, false);
+	mpv->Invalidate();
 }
 
 bool PointEditor::DeselectAll()
@@ -898,15 +1170,15 @@ bool PointEditor::DeselectAll()
 	bool fChange = false;
 	removeDigCursor();
 	crdDig = Coord();
-	for (unsigned long i = 1; i <= aSelect.iSize(); ++i)
-		if (aSelect[i-1]) {
+	for (unsigned long i = 0; i < aSelect.iSize(); ++i) {
+		if (aSelect[i]) {
 			fChange = true;
-			aSelect[i-1] = false;
-			drawPoint(i);
+			aSelect[i] = false;
 		}
-		if (fChange)
-			mpv->UpdateWindow();
-		return fChange;
+	}
+	if (fChange)
+		mpv->Invalidate();
+	return fChange;
 }
 
 int PointEditor::AddPoint(Coord crd)
@@ -925,10 +1197,10 @@ int PointEditor::AddPoint(Coord crd)
 	DomainBool* dbool = dm()->pdbool();
 	if (duid) {
 		int iRaw = duid->iAdd();
-		int iNr = mp->iAddRaw(crd,iRaw);
+		int iNr = mp->iAddRaw(crd,iRaw) - 1;
 		aSelect &= false;
-		drawPoint(iNr);
 		EditAttrib(iRaw);
+		mpv->Invalidate();
 	}
 	else if (dbit || dbool)
 		EditFieldOK(crd, "1");
@@ -937,12 +1209,12 @@ int PointEditor::AddPoint(Coord crd)
 	return 0;
 }
 
-void PointEditor::EditAttrib(int iRec)
+void PointEditor::EditAttrib(int iRaw)
 {
 	Table tbl = mp->tblAtt();
 	if (tbl.fValid()) {
 		tbl->CheckNrRecs();
-		Ilwis::Record rec = tbl->rec(iRec);
+		Ilwis::Record rec = tbl->rec(iRaw);
 		mpv->ShowRecord(rec);
 	}
 }
@@ -962,9 +1234,9 @@ int PointEditor::EditPoint(Coord crd)
 		MessageBeep(MB_ICONASTERISK);
 	else {
 		aSelect[iNr] = true;
-		drawPoint(iNr);
 		iActNr = iNr;
 		EditPointInit(crd);
+		mpv->Invalidate();
 	}
 	return 0;
 }
@@ -973,22 +1245,21 @@ int PointEditor::EditPointInit(Coord crd)
 {
 	dc = dcPLUS;
 	ChangeWindowBasis = (DigiFunc)&PointEditor::EditPointInit;
-	SetDigiFunc(SEDDigMovePnt, (DigiFunc)&DigiEditor::MoveCursor,
-		(DigiFunc)&PointEditor::EditPointCrd, SEDDigNewPos,
+	SetDigiFunc(TR("Move Point"), (DigiFunc)&DigiEditor::MoveCursor,
+		(DigiFunc)&PointEditor::EditPointCrd, TR("New Position"),
 		NULL, "",
-		(DigiFunc)&DigiEditor::ChangeWindow, SEDDigChangeWindow,
-		(DigiFunc)&PointEditor::DigInit, SEDDigReturn);
+		(DigiFunc)&DigiEditor::ChangeWindow, TR("Change Window"),
+		(DigiFunc)&PointEditor::DigInit, TR("Return"));
 	return 0;
 }
 
 int PointEditor::EditPointCrd(Coord crd)
 {
 	crdDig = Coord();
-	drawPoint(iActNr);
 	mp->PutVal(iActNr, crd);
 	mp->Updated();
-	drawPoint(iActNr);
 	DigInit(crd);
+	mpv->Invalidate();
 	return 0;
 }
 
@@ -1010,7 +1281,6 @@ int PointEditor::EditPointValue(Coord crd)
 	else 
 	{
 		aSelect[iNr] = true;
-		drawPoint(iNr);
 		iActNr = iNr;
 		crd = mp->cValue(iActNr);
 		crdDig = Coord();
@@ -1023,15 +1293,8 @@ int PointEditor::EditPointValue(Coord crd)
 		}
 		sValue = mp->sValue(iActNr);
 		EditFieldStart(crd, sValue);
+		mpv->Invalidate();
 	}
-	return 0;
-}
-
-
-int PointEditor::drawPoint(long iNr)
-{
-	zRect rect = rectPoint(iNr);
-	mpv->InvalidateRect(&rect);
 	return 0;
 }
 
@@ -1047,22 +1310,25 @@ void PointEditor::OnCopy()
 	const int iSIZE = 1000000;
 	char* sBuf = new char[iSIZE];
 	char* s = sBuf;
-	unsigned int  i;
+	long i;
 	int j;
 	Coord crd;
 	String str, sVal;
 
 	long iSize = 1;
-	for (i = 1; i <= aSelect.iSize(); ++i)
-		if (aSelect[i-1]) ++iSize;
+	for (i = 0; i < aSelect.iSize(); ++i)
+		if (aSelect[i]) ++iSize;
 	IlwisPoint* ip = new IlwisPoint[iSize];
-	ip[0].c = Coord();
+	ip[0].x = rUNDEF;
+	ip[0].y = rUNDEF;
 	ip[0].iRaw = iSize-1;
 	long iTotLen = 0;
 	int iLen;
-	for (i = 1, j = 1; i <= mp->iFeatures(); ++i)
-		if (aSelect[i-1]) {
-			ip[j].c = crd = mp->cValue(i);
+	for (i = 0, j = 1; i < mp->iFeatures(); ++i) { // keep binary structure "ip" compatible with older versions of ILWIS, to exchange points through the clipboard
+		if (aSelect[i]) {
+			crd = mp->cValue(i);
+			ip[j].x = crd.x;
+			ip[j].y = crd.y;
 			ip[j].iRaw = mp->iRaw(i);
 			++j;
 			if (iTotLen > iSIZE) 
@@ -1080,35 +1346,36 @@ void PointEditor::OnCopy()
 			strcpy(s, str.sVal());
 			s += iLen;
 		}
-		iLen = (1+iSize) * sizeof(IlwisPoint);
-		HANDLE hnd = GlobalAlloc(GMEM_MOVEABLE,iLen);
-		void* pv = GlobalLock(hnd);
-		memcpy(pv, ip, iLen);
-		GlobalUnlock(hnd);
-		SetClipboardData(iFmtPnt, hnd);
+	}
+	iLen = (1+iSize) * sizeof(IlwisPoint);
+	HANDLE hnd = GlobalAlloc(GMEM_MOVEABLE,iLen);
+	void* pv = GlobalLock(hnd);
+	memcpy(pv, ip, iLen);
+	GlobalUnlock(hnd);
+	SetClipboardData(iFmtPnt, hnd);
 
-		// Ilwis Domain Format
-		IlwisDomain* id = new IlwisDomain(mp->dm(), mp->vr());
-		iLen = sizeof(IlwisDomain);
-		hnd = GlobalAlloc(GMEM_MOVEABLE,iLen);
-		pv = GlobalLock(hnd);
-		memcpy(pv, id, iLen);
-		GlobalUnlock(hnd);
-		SetClipboardData(iFmtDom, hnd);
-		delete id;
+	// Ilwis Domain Format
+	IlwisDomain* id = new IlwisDomain(mp->dm(), mp->vr());
+	iLen = sizeof(IlwisDomain);
+	hnd = GlobalAlloc(GMEM_MOVEABLE,iLen);
+	pv = GlobalLock(hnd);
+	memcpy(pv, id, iLen);
+	GlobalUnlock(hnd);
+	SetClipboardData(iFmtDom, hnd);
+	delete id;
 
-		// Text Format
-		*s = '\0';
-		hnd = GlobalAlloc(GMEM_FIXED, strlen(sBuf)+2);
-		char* pc = (char*)GlobalLock(hnd);
-		strcpy(pc,sBuf);
-		GlobalUnlock(hnd);
-		SetClipboardData(CF_TEXT,hnd);
+	// Text Format
+	*s = '\0';
+	hnd = GlobalAlloc(GMEM_FIXED, strlen(sBuf)+2);
+	char* pc = (char*)GlobalLock(hnd);
+	strcpy(pc,sBuf);
+	GlobalUnlock(hnd);
+	SetClipboardData(CF_TEXT,hnd);
 
-		delete ip;
-		delete sBuf;
+	delete [] ip;
+	delete [] sBuf;
 
-		CloseClipboard();
+	CloseClipboard();
 }
 
 void PointEditor::OnCut()
@@ -1121,7 +1388,7 @@ void PointEditor::OnPaste()
 {
 	if (!fPasteOk()) return;
 	unsigned int iSize;
-	unsigned int i;
+	long i;
 
 	CWaitCursor curWait;
 	if (!mpv->OpenClipboard())
@@ -1144,7 +1411,7 @@ void PointEditor::OnPaste()
 		dmCb = id.dm();
 		if (dmMap->pdv()) {
 			if (0 == dmCb->pdv()) {
-				mpv->MessageBox(SEDErrNotValueInClipboard.sVal(),SEDErrPntEditor.sVal(),MB_OK|MB_ICONSTOP);
+				mpv->MessageBox(TR("Data in Clipboard does not have a Value Domain.\nPasting is not possible.").c_str(),TR("Point Editor").c_str(),MB_OK|MB_ICONSTOP);
 				CloseClipboard();
 				return;
 			}
@@ -1156,7 +1423,7 @@ void PointEditor::OnPaste()
 		}
 		else if (dmMap->pdc()) {
 			if (0 == dmCb->pdc()) {
-				mpv->MessageBox(SEDErrNotClassInClipboard.sVal(),SEDErrPntEditor.sVal(),MB_OK|MB_ICONSTOP);
+				mpv->MessageBox(TR("Data in Clipboard does not have a Class Domain.\nPasting is not possible.").c_str(),TR("Point Editor").c_str(),MB_OK|MB_ICONSTOP);
 				CloseClipboard();
 				return;
 			}
@@ -1179,10 +1446,10 @@ void PointEditor::OnPaste()
 	iSize /= sizeof(IlwisPoint);
 	iSize = ip[0].iRaw;
 
-	for (i = 1; i <= aSelect.iSize(); ++i)
-		aSelect[i-1] = false;
+	for (i = 0; i < aSelect.iSize(); ++i)
+		aSelect[i] = false;
 	for (unsigned int j = 0; j < iSize; ++j) {
-		Coord crd = ip[1+j].c;
+		Coord crd (ip[1+j].x, ip[1+j].y, 0); // Paste sets z-coord to 0, just like when manually digitizing new points.
 		if (!crd.fUndef()) {
 			long iRaw = ip[1+j].iRaw;
 			if (fConvert) {
@@ -1207,8 +1474,8 @@ void PointEditor::OnPaste()
 						}
 						iRaw = dmMap->iRaw(sVal);
 						if (iUNDEF == iRaw) {
-							String sMsg(SEDMsgNotInDomain_SS.sVal(), sVal, dmMap->sName());
-							int iRet = mpv->MessageBox(sMsg.sVal(),SEDMsgPntEditor.sVal(),MB_YESNOCANCEL|MB_ICONASTERISK);
+							String sMsg(TR("'%S' is not in the domain %S\nAdd this item to the domain?").c_str(), sVal, dmMap->sName());
+							int iRet = mpv->MessageBox(sMsg.sVal(),TR("Point Editor").c_str(),MB_YESNOCANCEL|MB_ICONASTERISK);
 							if (IDYES == iRet)
 								try {
 									iRaw = dmMap->pdsrt()->iAdd(sVal);
@@ -1233,18 +1500,8 @@ void PointEditor::OnPaste()
 				mp->iAddRaw(crd, iRaw);
 		}
 		aSelect &= true;
-		RowCol rc = mpv->rcConv(crd);
-		zPoint pnt = mpv->pntPos(rc);
-		zRect rect(pnt,pnt);
-		int iSiz = smb.iSize / 2 + 1;
-		rect.left() -= iSiz;
-		rect.top() -= iSiz;
-		rect.right() += iSiz;
-		rect.bottom() += iSiz;
-		mpv->InvalidateRect(&rect);
 	}
-	if (fText)
-		mpv->Invalidate();
+	mpv->Invalidate();
 	CloseClipboard();
 }
 
@@ -1257,25 +1514,25 @@ public:
 		Color* col,
 		long* Symbol, Color* fillCol,
 		HICON* hIcon, Color* colFindUndef)
-		: FormWithDest(parent, SEDTitleEdPntCnf),
+		: FormWithDest(parent, TR("Customize Point Editor")),
 		iSmb(Symbol)
 	{
 		//      new FieldBlank(root);
-		new FieldColor(root, SEDUiCursorColor, colDig);
-		CheckBox* cbText = new CheckBox (root, SEDUiShowText, fText);
+		new FieldColor(root, TR("&Color Digitizer Cursor"), colDig);
+		CheckBox* cbText = new CheckBox (root, TR("&Show Text"), fText);
 		FieldGroup* fg = new FieldGroup(cbText);
 		fg->Align(cbText,AL_UNDER);
-		new FieldColor(fg, SEDUiTextColor, colText);
-		new FieldFillColor(fg, SEDUiBackground, colBackText);
+		new FieldColor(fg, TR("Text &Color"), colText);
+		new FieldFillColor(fg, TR("&Background"), colBackText);
 		new FieldBlank(root);
-		fsmb = new FieldSymbol(root, SEDUiSmbType, Symbol, hIcon);
+		fsmb = new FieldSymbol(root, TR("Symbol &Type"), Symbol, hIcon);
 		fsmb->SetCallBack((NotifyProc)&PointConfigForm::FieldSymbolCallBack);
-		new FieldInt(root, SEDUiSmbSize, iSize, ValueRange(1L,100L), true);
-		new FieldInt(root, SEDUiPenWidth, iWidth, ValueRange(1L,100L), true);
-		new FieldColor(root, SEDUiColor, col);
-		ffc = new FieldFillColor(root, SEDUiFillColor, fillCol);
-		new FieldColor(root, SEDUiFindUndefColor, colFindUndef);
-		SetMenHelpTopic(htpPntEditCnf);
+		new FieldInt(root, TR("Symbol &Size"), iSize, ValueRange(1L,100L), true);
+		new FieldInt(root, TR("Pen &width"), iWidth, ValueRange(1L,100L), true);
+		new FieldColor(root, TR("&Color"), col);
+		ffc = new FieldFillColor(root, TR("&Fill Color"), fillCol);
+		new FieldColor(root, TR("Find &Undef color"), colFindUndef);
+		SetHelpItem("ilwismen\\point_editor_customize.htm");
 		create();
 	}
 private:
@@ -1339,7 +1596,7 @@ zIcon PointEditor::icon() const
 
 String PointEditor::sTitle() const
 {
-	String s(SEDTitlePntEditor_s.sVal(), mp->sName());
+	String s(TR("Point Editor: %S").c_str(), mp->sName());
 	return s;
 }
 
@@ -1362,17 +1619,17 @@ public:
 		: FormWithDest(parent, sTitle)
 	{
 		//      if (!crd->fUndef()) {
-		new FieldReal(root, SEDUiX, &crd->x);
-		new FieldReal(root, SEDUiY, &crd->y);
+		new FieldReal(root, "&X", &crd->x);
+		new FieldReal(root, "&Y", &crd->y);
 		//      }
 		//      else
 		//	new FieldBlank(root);
 		//      FieldString* fs = new FieldString(root, SDUiValue, s);
-		FieldVal* fv = new FieldVal(root, SEDUiValue, dvrs, s, true);
+		FieldVal* fv = new FieldVal(root, TR("&Value"), dvrs, s, true);
 		if (dvrs.iWidth() > 12)
 			fv->SetWidth(75);
-		//      SetHelpTopic(htpPointEditor);
-		SetMenHelpTopic(htpPntEditAdd);
+		//      SetHelpItem("ilwis\\point_editor_functionality.htm");
+		SetHelpItem("ilwismen\\point_editor_add_point.htm");
 		create();
 	}
 };
@@ -1381,11 +1638,11 @@ void PointEditor::OnAddPoint()
 {
 	if (dm()->pdid())
 		sValue = "";
-	PointForm frm(mpv, SEDTitleAddPoint.scVal(), &crdValue, dvrs(), &sValue);
+	PointForm frm(mpv, TR("Add Point").c_str(), &crdValue, dvrs(), &sValue);
 	if (!frm.fOkClicked())
 		return;
 	if (!mp->cb().fContains(crdValue)) {
-		mpv->MessageBox(SEDErrCoordNotInMap.scVal(), SEDErrPntEditor.scVal(),
+		mpv->MessageBox(TR("The coordinate lies not inside the map").c_str(), TR("Point Editor").c_str(),
 			MB_OK|MB_ICONSTOP);
 		return;
 	}
@@ -1393,7 +1650,7 @@ void PointEditor::OnAddPoint()
 	if (frm.fOkClicked()) {
 		if (dm()->pdid()) {
 			if (mp->iRec(sValue) >= 0) {
-				int iRet = mpv->MessageBox(SEDMsgValInUse.scVal(), SEDMsgPntEditor.scVal(),
+				int iRet = mpv->MessageBox(TR("Value already in use. Use anyway?").c_str(), TR("Point Editor").c_str(),
 					MB_YESNO|MB_DEFBUTTON2|MB_ICONASTERISK);
 				if (IDNO == iRet)
 					s = "?";
@@ -1407,16 +1664,16 @@ void PointEditor::OnAddPoint()
 				return;
 			}
 		}    
-		long iNr = mp->iAddVal(crdValue,s);
+		long iNr = mp->iAddVal(crdValue,s) - 1;
 		aSelect &= false;
-		drawPoint(iNr);
+		mpv->Invalidate();
 	}
 }
 
 void PointEditor::OnUndoAllChanges()
 {
-	int iRet = mpv->MessageBox(SEDMsgPntMapUndoAll.sVal(),
-		SEDMsgPntEditor.sVal(), MB_ICONQUESTION|MB_OKCANCEL|MB_DEFBUTTON2);
+	int iRet = mpv->MessageBox(TR("Undo all changes in Point Map,\nContinue?").c_str(),
+		TR("Point Editor").c_str(), MB_ICONQUESTION|MB_OKCANCEL|MB_DEFBUTTON2);
 	if (IDOK == iRet) {
 		DeselectAll();
 		CWaitCursor curWait;
@@ -1434,24 +1691,24 @@ namespace {
 	{
 	public:
 		EditBoundsForm(CWnd* wPar, PointMap pntmap, CoordBounds* cb, bool* fAdaptWindow)
-			: FormWithDest(wPar, SCSTitleBoundaries)
+			: FormWithDest(wPar, TR("Boundaries"))
 			, pm(pntmap)
 			, cbRef(cb)
 			, fDefaultCalculated(false)
 		{
 			iImg = IlwWinApp()->iImage(".mpp");
 
-			fcMin = new FieldCoord(root, SCSUiMinXY, &cb->cMin);
-			fcMax = new FieldCoord(root, SCSUiMaxXY, &cb->cMax);
-			new PushButton(root, SEDUiDefault, (NotifyProc)&EditBoundsForm::DefaultButton);
-			new CheckBox(root, SEDUiAdaptWindow, fAdaptWindow);
-			SetMenHelpTopic(htpPntEditSetBoundaries);
+			fcMin = new FieldCoord(root, TR("&Min X, Y"), &cb->cMin);
+			fcMax = new FieldCoord(root, TR("&Max X, Y"), &cb->cMax);
+			new PushButton(root, TR("&Default"), (NotifyProc)&EditBoundsForm::DefaultButton);
+			new CheckBox(root, TR("&Adapt Window"), fAdaptWindow);
+			SetHelpItem("ilwismen\\point_editor_bounds_of_map.htm");
 			create();
 		}
 	private:
 		void CheckBounds(CoordBounds& cb)
 		{
-			for (long i = 1; i <= pm->iFeatures(); ++i) 
+			for (long i = 0; i < pm->iFeatures(); ++i) 
 				cb += pm->cValue(i);
 		}
 		int DefaultButton(Event*)
@@ -1493,7 +1750,7 @@ void PointEditor::OnSetBoundaries()
 		mp->SetCoordBounds(cb);
 		if (fAdaptWindow) 
 		{
-			pane()->GetDocument()->SetBounds(cb);
+			pane()->GetDocument()->rootDrawer->setCoordBoundsMap(cb); // TODO: cConv / cbConv
 			pane()->OnEntireMap();
 		}
 	}
@@ -1504,13 +1761,12 @@ void PointEditor::OnSelectAll()
 	bool fChange = false;
 	removeDigCursor();
 	crdDig = Coord();
-	for (unsigned long i = 1; i <= aSelect.iSize(); ++i)
-		if (!aSelect[i-1]) {
+	for (unsigned long i = 0; i < aSelect.iSize(); ++i) {
+		if (!aSelect[i]) {
 			fChange = true;
-			aSelect[i-1] = true;
-			drawPoint(i);
+			aSelect[i] = true;
 		}
-		if (fChange)
-			mpv->UpdateWindow();
+	}
+	if (fChange)
+		mpv->Invalidate();
 }
-

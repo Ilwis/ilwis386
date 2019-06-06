@@ -34,7 +34,16 @@ Software Foundation, http://www.fsf.org.
 
 Created on: 2007-02-8
 ***************************************************************/
+// PointEditor.h: interface for the PointEditor class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#if !defined(AFX_POINTEDITOR_H__3DE28B44_390F_11D3_B79A_00A0C9D5342F__INCLUDED_)
+#define AFX_POINTEDITOR_H__3DE28B44_390F_11D3_B79A_00A0C9D5342F__INCLUDED_
+
+#if _MSC_VER > 1000
 #pragma once
+#endif // _MSC_VER > 1000
 
 class PointEditor: public DigiEditor    
 {
@@ -42,7 +51,7 @@ public:
 	PointEditor(MapPaneView*, PointMap);
 	virtual ~PointEditor();
 	virtual IlwisObject obj() const;
-	//  virtual void PreDraw(); // called before all other draw routines
+	virtual int draw(volatile bool* fDrawStop);
 	virtual int draw(CDC*, zRect, Positioner*, volatile bool* fDrawStop);
 	virtual bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual bool OnLButtonDown(UINT nFlags, CPoint point);
@@ -58,8 +67,6 @@ private:
 	enum enumMode { modeSELECT, modeMOVE, modeADD,
 		modeMOVING } mode;
 	void Mode(enumMode);
-	int drawPoint(long iNr);
-	zRect rectPoint(long iNr);
 	void AreaSelected(CRect);
 	bool fCopyOk();
 	bool fEditOk();
@@ -77,8 +84,8 @@ private:
 	int EditPointValue(Coord);
 	int SelPoint(Coord);
 	void UndoAll();
-	void EditAttrib(int iRec);
-	//FileName fnSave;
+	void EditAttrib(int iRaw);
+	void drawSmb(const Symbol & sym, const Coord & crd, double delta) const;
 	PointMap mp;
 	Array<char> aSelect;
 	Symbol smb;
@@ -89,7 +96,12 @@ private:
 	long iActNr;
 	zCursor curEdit, curPntEdit, curPntMove, curPntMoving;
 	Coord crdValue;
+	const byte * hatch;
+	const byte * hatchInverse;
 
+	//{{AFX_VIRTUAL(PointEditor)
+	//}}AFX_VIRTUAL
+	//{{AFX_MSG(PointEditor)
 	afx_msg void OnCopy();
 	void OnUpdateCopy(CCmdUI* pCmdUI);
 	void OnUpdateEdit(CCmdUI* pCmdUI);
@@ -110,7 +122,9 @@ private:
 	void OnFileSave();
 	void OnUpdateFileSave(CCmdUI* pCmdUI);
 	void OnSelectAll();
+	void OnAreaSelected();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
 
+#endif // !defined(AFX_POINTEDITOR_H__3DE28B44_390F_11D3_B79A_00A0C9D5342F__INCLUDED_)

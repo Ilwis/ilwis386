@@ -69,6 +69,7 @@ Created on: 2007-02-8
 #include "Client\FormElements\flddat.h"
 #include "Engine\Map\Point\PNT.H"
 #include "Client\Editors\Utils\SYMBOL.H"
+#include "Client\Editors\Map\PointEditor.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "Client\Editors\Map\SegmentEditor.h"
 #include "Engine\Map\Polygon\POL.H"
@@ -555,11 +556,11 @@ void MapPaneView::EditNamedLayer(const FileName& fn)
 		Map mp(fn);
 		edit = new PixelEditor(this, mp);
 	}
-	else if (".mpp" == fn.sExt) {
+	else */if (".mpp" == fn.sExt) {
 		PointMap mp(fn);
 		edit = new PointEditor(this, mp);
 	}
-	else */if (".mps" == fn.sExt) {
+	else if (".mps" == fn.sExt) {
 		SegmentMap mp(fn);
 		edit = new SegmentEditor(this, mp);
 	}/*
