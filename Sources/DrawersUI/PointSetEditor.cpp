@@ -295,7 +295,7 @@ void PointSetEditor::OnPaste()
 
 
 	for (unsigned int j = 0; j < iSize; ++j) {
-		Coord crd = ip[1+j].c;
+		Coord crd = Coord(ip[1+j].x, ip[1+j].y, 0); // Paste sets z-coord to 0, just like when manually digitizing new points.
 		bmapptr->fChanged = true;
 		if (!crd.fUndef()) {
 			ILWIS::Point *pnt = CPOINT(bmapptr->newFeature());
@@ -379,7 +379,8 @@ void PointSetEditor::OnCopy()
 		SelectedFeature *sf = (*cur).second;
 		ILWIS::Point *pnt = CPOINT(sf->feature);
 		Coord crd = *(pnt->getCoordinate());
-		ip[index].c = crd;
+		ip[index].x = crd.x;
+		ip[index].y = crd.y;
 		ip[index++].iRaw = pnt->iValue();
 		String sVal = pnt->sValue(bmapptr->dvrs());
 

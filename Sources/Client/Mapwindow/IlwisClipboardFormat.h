@@ -38,7 +38,8 @@
 #define ILWISCLIPFORMATS_H
 
 struct _export IlwisPoint {
-  Coord c;
+  double x;
+  double y;
   long iRaw;
 };
 

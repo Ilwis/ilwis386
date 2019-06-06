@@ -921,7 +921,8 @@ void LineSetEditor2::OnCopy()
 	IlwisPoint* ip = new IlwisPoint[iSize];
 	if (0 == ip)
 		return;
-	ip[0].c = Coord();
+	ip[0].x = rUNDEF;
+	ip[0].y = rUNDEF;
 	ip[0].iRaw = iSize-1;
 	long k = 1;
 	Coord crd;
@@ -938,11 +939,14 @@ void LineSetEditor2::OnCopy()
 		iNr = crdBuf->size();
 		long iRaw = seg->iValue();
 		for (int j = 0; j < iNr; ++j) {
-			ip[k].c = crdBuf->getAt(j);
+			Coord crd (crdBuf->getAt(j));
+			ip[k].x = crd.x;
+			ip[k].y = crd.y;
 			ip[k].iRaw = iRaw;
 			++k;
 		}
-		ip[k].c = Coord();
+		ip[k].x = rUNDEF;
+		ip[k].y = rUNDEF;
 		ip[k].iRaw = iUNDEF;
 		++k;
 
@@ -1062,7 +1066,7 @@ void LineSetEditor2::OnPaste()
 	long iRaw = iUNDEF;
 	double rVal = rUNDEF;
 	for (i = 0; i < iSize; ++i) {
-		if (ip[1+i].c.fUndef()) {
+		if ((ip[1+i].x == rUNDEF) || (ip[1+i].y == rUNDEF)) {
 			if (j > 1) {
 				ILWIS::Segment *seg = CSEGMENT(bmapptr->newFeature());
 				seg->PutCoords(j,crdBuf);
@@ -1116,7 +1120,7 @@ void LineSetEditor2::OnPaste()
 				}
 			}
 		}
-		crdBuf[j++] = ip[1+i].c;
+		crdBuf[j++] = Coord(ip[1+i].x, ip[1+i].y, 0); // Paste sets z-coord to 0, just like when manually digitizing new points.
 	}
 	if (j > 1) {
 		ILWIS::Segment *seg = CSEGMENT(bmapptr->newFeature());
