@@ -166,6 +166,7 @@ void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 	CMenu men;
 	men.CreatePopupMenu();
 	if (mapdrw) {
+		pmadd(ID_EDITLAYER);
 		pmadd(ID_PROPLAYER);
 		pmadd(ID_ZOOM_TO_LAYER);
 		pmadd(ID_ZOOM_TO_SELECTED);
@@ -174,18 +175,14 @@ void DrawerLayerTreeItem::OnContextMenu(CWnd* w, CPoint p)
 	int iCmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_NONOTIFY|TPM_RETURNCMD, p.x, p.y, w);
 	switch (iCmd) 
 	{
-		//case ID_EDITLAYER:
-		//	{
-		//		if( mapdrw->getDrawerCount(types) == 1) {
-		//			ComplexDrawer *drw = (ComplexDrawer *)mapdrw->getDrawer(0);
-		//			mapdrw->setEditMode(true);
-		//			if ( !drw->isSimple()) {
-		//				drw->setEditMode(true);
-		//				ltv->GetDocument()->mpvGetView()->createEditor(drw);
-		//			}
-		//		}
-		//	}
-		//	break;
+	case ID_EDITLAYER:
+		if (mapdrw->isEditable()) {
+			MapCompositionDoc* doc = ltv->GetDocument();
+			MapPaneView* mpv = doc->mpvGetView();
+			if (0 != mpv)
+				mpv->EditNamedLayer(mapdrw->getBaseMap()->fnObj);
+		}
+		break;
 	case ID_PROPLAYER:
 		IlwWinApp()->Execute(String("prop %S", mptr->fnObj.sFullNameQuoted()));
 		break;

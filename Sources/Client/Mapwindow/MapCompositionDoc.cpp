@@ -829,11 +829,11 @@ void MapCompositionDoc::menLayers(CMenu& men, int iBaseId)
 			//  ? MF_GRAYED : MF_ENABLED;
 		 // men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
 		 // break;
-	  //case ID_EDITLAYER:  
-		 // iFlag = !mapdrawer->isEditable()
-			//  ? MF_GRAYED : MF_ENABLED;
-		 // men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
-		 // break;
+	  case ID_EDITLAYER:  
+		  iFlag = !mapdrawer->isEditable()
+			  ? MF_GRAYED : MF_ENABLED;
+		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
+		  break;
 	  case ID_PROPLAYER:  
 		  iFlag = MF_ENABLED;
 		  men.EnableMenuItem(id, MF_BYCOMMAND | iFlag);
@@ -1260,11 +1260,12 @@ BOOL MapCompositionDoc::OnOpenPointMap(const PointMap& pm, OpenType ot,int os)
 
 	SetTitle(pm);
 
-	SpatialDataDrawer *drw = (SpatialDataDrawer *)createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38", ot, os);
+	createBaseMapDrawer(pm,"FeatureDataDrawer", "Ilwis38", ot, os);
 
 	if (ot & otEDIT) {
-		drw->setEditMode(true);
+		::AfxGetMainWnd()->PostMessage(WM_COMMAND, ID_EDITLAYER, 0);
 	}
+
 	return TRUE;
 }
 
@@ -1875,6 +1876,7 @@ NewDrawer* MapCompositionDoc::drAppend(const BaseMap& mp,IlwisDocument::OpenType
 		MapPaneView * mpv = mpvGetView();
 		if (mpv)
 			mpv->Invalidate();
+		return drawer;
 	}    
 	return 0;
 }

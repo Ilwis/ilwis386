@@ -163,8 +163,18 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	add(ID_COPY );
 	add(ID_PASTE);
 	addBreak;
+	menEditLayer.CreateMenu();
+	menPopup.AppendMenu(MF_POPUP, (UINT)menEditLayer.GetSafeHmenu(), sMen(ID_EDITLAYER)); 	
+	menSub.CreateMenu();
+	//addSub(ID_PIXELEDIT);
+	addSub(ID_POINTEDIT);
+	addSub(ID_SEGEDIT);
+	//addSub(ID_POLEDIT);
+	addSubMenu(ID_EDITOR);
+	addBreak;
 	add(ID_ADDLAYER);
 	add(ID_REMOVELAYER);
+	hMenEdit = menPopup.GetSafeHmenu();
 	addMenu(ID_MEN_LAYERS);
 
 	menPopup.CreateMenu();
@@ -368,8 +378,8 @@ void MapWindow::OnInitMenu(CMenu* pMenu)
 	MapCompositionDoc* mcd = mpv->GetDocument();  
 	if (0 == mcd) 
 		return;
-	 mcd->menLayers(menHistograms, ID_HISTOLAYER);
-	//mcd->menLayers(menEditLayer, ID_EDITLAYER);
+	mcd->menLayers(menHistograms, ID_HISTOLAYER);
+	mcd->menLayers(menEditLayer, ID_EDITLAYER);
 	mcd->menLayers(menPropLayer, ID_PROPLAYER);
 	//mcd->menLayers(menRprLayer, ID_RPRLAYER);
 	//mcd->menLayers(menDomLayer, ID_DOMLAYER);
@@ -397,7 +407,7 @@ void MapWindow::UpdateMenu()
 	men->RemoveMenu(0, MF_BYPOSITION);
 	men->RemoveMenu(0, MF_BYPOSITION);
 	men->InsertMenu(0, MF_BYPOSITION|MF_POPUP, (UINT)hMenFile, sMen(ID_MEN_FILE));
-	men->InsertMenu(1, MF_BYPOSITION|MF_POPUP, (UINT)hMenEdit, sMen(ID_MEN_EDIT));
+	men->InsertMenu(1, MF_BYPOSITION|MF_POPUP, (UINT)hMenEdit, sMen(ID_MEN_LAYERS));
 	DrawMenuBar();
 }
 
