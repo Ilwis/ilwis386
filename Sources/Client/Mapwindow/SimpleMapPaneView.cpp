@@ -258,7 +258,7 @@ void SimpleMapPaneView::Draw()
 	MapCompositionDoc* mcd = GetDocument();
 	mcd->rootDrawer->draw(mcd->rootDrawer->getCoordBoundsZoom());
 	// draw editor
-	if (edit)
+	if (edit && !mcd->rootDrawer->fUsesTopDrawer())
 		edit->draw(&fDrawStop);
 	csResizing.Lock();
 	if (fResizing) {

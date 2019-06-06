@@ -71,6 +71,7 @@ namespace ILWIS {
 		void setAnnotationWhitespace(bool fWhitespace);
 		void setAnnotationBorder(bool fBorder);
 		bool fWhitespace() const;
+		bool fUsesTopDrawer() const;
 
 		//void clear();
 		void set3D(bool yeno);

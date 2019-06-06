@@ -1073,3 +1073,7 @@ void RootDrawer::RecomputeAnnotationBorder(){
 		cbViewExt = cbView;
 	}
 }
+
+bool RootDrawer::fUsesTopDrawer() const {
+	return topDrawer != 0;
+}
