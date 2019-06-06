@@ -339,7 +339,7 @@ int PointEditor::draw(volatile bool* fDrawStop)
 	ILWIS::TextLayerDrawer *textLayerDrawer = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dpLayerDrawer);	
 	ILWIS::DrawerParameters dpTextDrawer (rootDrawer, textLayerDrawer);
 	ILWIS::TextDrawer *textDrawer = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dpTextDrawer);
-	OpenGLText * font = new OpenGLText (rootDrawer, "arial.ttf", 15, true, 1, -15);
+	OpenGLText * font = new OpenGLText (rootDrawer, "arial.ttf", 14, true, 0, -14);
 	textLayerDrawer->setFont(font);
 
 	if (smb.iWidth != 1) {
@@ -347,7 +347,7 @@ int PointEditor::draw(volatile bool* fDrawStop)
 			glEnable(GL_LINE_SMOOTH);
 			glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
 		}
-		glLineWidth(smb.iWidth);
+		glLineWidth(1.0 + (smb.iWidth - 1.0) / 1.5);
 	}
 
 	for (long r = 0; r < mp->iFeatures(); ++r) {
@@ -369,7 +369,6 @@ int PointEditor::draw(volatile bool* fDrawStop)
 					font->setColor(cText);
 			} else
 				font->setColor(cText);
-			zPoint pntText = smb.pntText(0,zPoint(0,0)); // does this compute a good offset for the text?
 			String s = mp->sValue(r);
 			textDrawer->setText(crd,s);
 			if ((long)colBack != -2) {
@@ -379,7 +378,7 @@ int PointEditor::draw(volatile bool* fDrawStop)
 				cbText.cMax += crd;
 				cbText.cMin.y -= textDrawer->getHeight();
 				cbText.cMax.y -= textDrawer->getHeight();
-				cbText *= 1.3;
+				cbText *= 1.1;
 				double heightIncrease = cbText.height() / 8.0;
 				cbText.cMax.y += heightIncrease;
 				cbText.cMin.y -= heightIncrease;
