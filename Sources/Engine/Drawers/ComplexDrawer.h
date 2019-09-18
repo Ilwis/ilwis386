@@ -97,7 +97,6 @@ class _export ComplexDrawer : public NewDrawer {
 		//Tranquilizer trq;
 		long currentIndex; // for tranquilizer purposes;
 
-		int uiCode;
 		bool info;
 		DrawMethod drm;
 		double alpha;

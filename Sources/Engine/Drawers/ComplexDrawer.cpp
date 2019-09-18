@@ -454,7 +454,6 @@ ZValueMaker *ComplexDrawer::getZMaker() const{
 }
 
 String ComplexDrawer::store(const FileName& fnView, const String& parentSection) const{
-	ObjectInfo::WriteElement(parentSection.c_str(),"UiCode",fnView, uiCode);
 	ObjectInfo::WriteElement(parentSection.c_str(),"HasInfo",fnView, info);
 	ObjectInfo::WriteElement(parentSection.c_str(),"DrawMethod",fnView, drm);
 	ObjectInfo::WriteElement(parentSection.c_str(),"Alpha",fnView, alpha);
@@ -511,7 +510,6 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 }
 
 void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
-	ObjectInfo::ReadElement(parentSection.c_str(),"UiCode",fnView, uiCode);
 	ObjectInfo::ReadElement(parentSection.c_str(),"HasInfo",fnView, info);
 	int temp;
 	ObjectInfo::ReadElement(parentSection.c_str(),"DrawMethod",fnView, temp);
