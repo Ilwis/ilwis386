@@ -77,6 +77,7 @@ public:
 	bool _export fLoad(const String& s);
   _export zIcon(const char*);
   _export zIcon(StockIcon);
+  _export zIcon(HICON);
   _export ~zIcon();
   operator HICON() { return hi; }
 };

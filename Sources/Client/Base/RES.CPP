@@ -76,6 +76,12 @@ zIcon::zIcon(const char* s)
   fRes = 1;
 }
 
+zIcon::zIcon(const HICON hIco)
+{
+  hi = hIco;
+  fRes = 0;
+}
+
 bool zIcon::fLoad(const String& s)
 {
   hi = LoadIcon(IlwWinApp()->m_hInstance, s.c_str());

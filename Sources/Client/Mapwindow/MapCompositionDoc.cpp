@@ -256,7 +256,9 @@ zIcon MapCompositionDoc::icon() const
 	else {
 		if ( rootDrawer->getDrawerCount() > 0) {
 			String name = rootDrawer->getDrawer(0)->iconName();
-			return zIcon(name.c_str());
+			int iImg = IlwWinApp()->iImage(name.c_str());
+			HICON hIco = IlwWinApp()->ilLarge.ExtractIcon(iImg);
+			return zIcon(hIco);
 		}
 	}
 	return zIcon();
@@ -1547,8 +1549,6 @@ NewDrawer* MapCompositionDoc::drAppend(const FileName& fn, IlwisDocument::OpenTy
 			String sErr(TR("%S cannot be added as a layer").c_str(), fn.sShortName());
 			AfxGetMainWnd()->MessageBox(sErr.c_str(), TR("Add data layer").c_str(), MB_OK|MB_ICONEXCLAMATION);
 			return 0;
-
-			return 0;
 		}    
 		NewDrawer* dr = 0;
 		// add layer
@@ -1606,7 +1606,7 @@ void MapCompositionDoc::OnAddLayer()
 			drAppend(fn, ot);
 		}
 		ChangeState();
-//		UpdateAllViews(0,2);
+		UpdateAllViews(0,2);
 	}
 }
 
