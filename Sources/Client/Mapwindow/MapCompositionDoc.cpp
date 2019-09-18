@@ -516,7 +516,7 @@ void MapCompositionDoc::OnSaveView()
 	if (!mpv.fValid())
 		OnSaveViewAs();
 	else {
-		rootDrawer->store(mpv->fnObj,"Root");
+		rootDrawer->store(mpv->fnObj,"RootDrawer");
 	}
 }
 
@@ -558,7 +558,7 @@ void MapCompositionDoc::OnSaveViewAs()
 		sViewName = mpv->fnObj.sFullName();
 		DoSave(sViewName.c_str());
 		mpv->Store();
-		rootDrawer->store(mpv->fnObj,"Root");
+		rootDrawer->store(mpv->fnObj,"RootDrawer");
 		SetTitle(mpv);
 	}
 }
@@ -1351,19 +1351,30 @@ BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview, int os)
 			CDocument::SetTitle(s.sVal());
 		}
 		FileName fn = GetPathName();
-		rootDrawer->load(fn,"");
-		ILWIS::PreparationParameters pp(NewDrawer::ptRESTORE,0);
-		rootDrawer->prepare(&pp);
-		for(int i=0; i < rootDrawer->getDrawerCount(); ++i) {
-			SpatialDataDrawer *spdrw = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
-			if ( spdrw) {
-				BaseMapPtr *bmptr = spdrw->getBaseMap();
-				BaseMap bmp(bmptr->fnObj);
-				addToPixelInfo(bmp, spdrw);
+		const String section = "RootDrawer";
+		String type;
+		int iRes = ObjectInfo::ReadElement(section.c_str(),"Type",fn,type);
+		if (iRes != 0 && type == "RootDrawer") {
+			rootDrawer->load(fn,section);
+			ILWIS::PreparationParameters pp(NewDrawer::ptRESTORE,0);
+			rootDrawer->prepare(&pp);
+			for(int i=0; i < rootDrawer->getDrawerCount(); ++i) {
+				SpatialDataDrawer *spdrw = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
+				if ( spdrw) {
+					BaseMapPtr *bmptr = spdrw->getBaseMap();
+					BaseMap bmp(bmptr->fnObj);
+					addToPixelInfo(bmp, spdrw);
+				}
 			}
-		}
 
-		return TRUE;
+			return TRUE;
+		} else {
+			// Unfortunately we can't prevent the MapWindow from opening, at this stage. Regardless of the ErrorObject or return FALSE, the MapWindow will open. We have to make the best out of it.
+			rootDrawer->setCoordBoundsMap(CoordBounds(0,0,1,1));
+			MessageBox(0, TR("This MapView can only be opened by ILWIS 3.7.2 or older.\nPlease close the MapWindow and re-create the MapView.\nDo not make any changes and save this MapView with this version of ILWIS.").c_str(), TR("Can't open old MapView").c_str(), MB_OK | MB_ICONEXCLAMATION);
+			//throw ErrorObject(TR("This MapView can only be opened by ILWIS 3.7.2 or older.\nPlease close the MapWindow and re-create the MapView."));
+			return TRUE;
+		}
 	}
 	catch (ErrorObject& err) 
 	{
