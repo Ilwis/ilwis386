@@ -462,7 +462,6 @@ String ComplexDrawer::store(const FileName& fnView, const String& parentSection)
 		ObjectInfo::WriteElement(parentSection.c_str(),"SubType",fnView, subType);
 	ObjectInfo::WriteElement(parentSection.c_str(),"IsActive",fnView, active);
 	ObjectInfo::WriteElement(parentSection.c_str(),"editable",fnView, editable);
-	ObjectInfo::WriteElement(parentSection.c_str(),"HasInfo",fnView, info);
 	ObjectInfo::WriteElement(parentSection.c_str(),"Name",fnView, name);
 	ObjectInfo::WriteElement(parentSection.c_str(),"SpecialOptions",fnView, specialOptions);
 
@@ -518,7 +517,6 @@ void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(parentSection.c_str(),"Type",fnView, type);
 	ObjectInfo::ReadElement(parentSection.c_str(),"IsActive",fnView, active);
 	ObjectInfo::ReadElement(parentSection.c_str(),"editable",fnView, editable);
-	ObjectInfo::ReadElement(parentSection.c_str(),"HasInfo",fnView, info);
 	ObjectInfo::ReadElement(parentSection.c_str(),"Name",fnView, name);
 	ObjectInfo::ReadElement(parentSection.c_str(),"SpecialOptions",fnView, specialOptions);
 
