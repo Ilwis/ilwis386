@@ -91,8 +91,6 @@ namespace ILWIS {
 		virtual void drawLegendItem(CDC *dc, const CRect& rct, double rVal) const = 0;
 		virtual GeneralDrawerProperties *getProperties() = 0;
 		virtual void setGeneralProperties(GeneralDrawerProperties *) = 0;
-		virtual bool isValid() const = 0;
-		virtual void setValid(bool yesno) = 0;
 		virtual bool isSelectable() const { return false;}
 		virtual void setSelectable(bool yesno ) {}
 		virtual void select(bool yesno) {};

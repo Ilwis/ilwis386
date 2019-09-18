@@ -30,14 +30,14 @@ ComplexDrawer(parms,"GraticuleDrawer")
 	lproperties.thickness = 1;
 	lproperties.drawColor = Color(0,0,0);
 	lproperties.linestyle = 0xFFFF;
-	setValid(true);
+	valid = true;
 }
 
 GraticuleDrawer::~GraticuleDrawer() {
 }
 
 bool GraticuleDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() || !isValid())
+	if ( !isActive() || !valid)
 		return false;
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -58,7 +58,7 @@ void GraticuleDrawer::prepare(PreparationParameters *pp) {
 			LatLon llMin, llMax;
 			calcBounds(getRootDrawer()->getGeoReference(), cbMap, csy, llMin, llMax);
 			if ( llMin.fUndef() || llMax.fUndef()) {
-				setValid(false);
+				valid = false;
 				return;
 			}
 			if (llMin.Lon > llMax.Lon) { // swap

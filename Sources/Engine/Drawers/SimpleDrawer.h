@@ -55,8 +55,6 @@ namespace ILWIS {
 		virtual GeneralDrawerProperties *getProperties() { return 0;}
 		void setSupportingDrawer(bool yesno) { isSupportingDrawer=yesno;};
 		void setExtrusionAlpha(double v);
-		bool isValid() const;
-		void setValid(bool yesno);
 		virtual Feature *getFeature() const {return 0;};
 		bool isManaged() const { return managed;}
 		void setDrawerParameters(DrawerParameters *);
@@ -80,7 +78,6 @@ namespace ILWIS {
 		double extrAlpha;
 		int specialOptions;
 		bool isSupportingDrawer;
-		bool valid;
 		bool managed;
 		TextDrawer *label; // TextDrawer isnt owned by this drawer
 

@@ -105,7 +105,7 @@ void CubeDrawer::SetTimePosVariables(double * _timePos, String * _sTimePosText) 
 }
 
 bool CubeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() || !isValid())
+	if ( !isActive())
 		return false;
 
 	drawPreDrawers(drawLoop, cbArea);

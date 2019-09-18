@@ -37,7 +37,7 @@ bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	if ((drawLoop == drl3DOPAQUE && alpha != 1.0) || (drawLoop == drl3DTRANSPARENT && alpha == 1.0))
 		return false;
 
-	if (!isActive() || !isValid())
+	if (!isActive())
 		return false;
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

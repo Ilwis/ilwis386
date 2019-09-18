@@ -99,7 +99,7 @@ void SpaceTimeElementsDrawer::load(const FileName& fnView, const String& current
 }
 
 bool SpaceTimeElementsDrawer::drawFootprint(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
-	if ( !isActive() || !isValid())
+	if ( !isActive())
 		return false;
 
 	if (!properties["footprint"].visible)
@@ -207,7 +207,7 @@ void SpaceTimeElementsDrawer::callFootprintList() const {
 }
 
 bool SpaceTimeElementsDrawer::drawXT(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
-	if ( !isActive() || !isValid())
+	if ( !isActive())
 		return false;
 	if (!properties["xt"].visible)
 		return false;
@@ -263,7 +263,7 @@ bool SpaceTimeElementsDrawer::drawXT(const DrawLoop drawLoop, const CoordBounds&
 }
 
 bool SpaceTimeElementsDrawer::drawXY(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
-	if ( !isActive() || !isValid())
+	if ( !isActive())
 		return false;
 	if (!properties["xy"].visible)
 		return false;
@@ -319,7 +319,7 @@ bool SpaceTimeElementsDrawer::drawXY(const DrawLoop drawLoop, const CoordBounds&
 }
 
 bool SpaceTimeElementsDrawer::drawYT(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
-	if ( !isActive() || !isValid())
+	if ( !isActive())
 		return false;
 	if (!properties["yt"].visible)
 		return false;

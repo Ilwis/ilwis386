@@ -46,7 +46,6 @@ void SimpleDrawer::init() {
 	specialOptions = NewDrawer::sdoNone;
 	fActive = true;
 	isSupportingDrawer = false;
-	valid = true;
 	managed = 0;
 	label = 0;
 }
@@ -191,13 +190,6 @@ void SimpleDrawer::setExtrusionAlpha(double v) {
 void SimpleDrawer::setActive(bool yesno) 
 { 
 	fActive=yesno;
-}
-
-bool SimpleDrawer::isValid() const{
-	return valid;
-}
-void SimpleDrawer::setValid(bool yesno) {
-	valid = yesno;
 }
 
 void SimpleDrawer::setTableSelection(const FileName& fn, long v, PreparationParameters* p) {

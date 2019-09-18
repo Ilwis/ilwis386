@@ -34,6 +34,7 @@ namespace ILWIS{
 		void calcBounds(const GeoRef& grf, const CoordBounds& cbMap, const CoordSystem& cs, LatLon& llMin, LatLon& llMax);
 		double          rDist;
 		LineProperties	lproperties;
+		bool valid;
 	};
 
 	class GraticuleLine: public LineDrawer {

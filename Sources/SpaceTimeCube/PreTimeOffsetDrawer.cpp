@@ -41,7 +41,7 @@ void PreTimeOffsetDrawer::SetTimeOffsetVariable(double * _timeOffset) {
 }
 
 bool PreTimeOffsetDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() || !isValid() || timeOffset == 0)
+	if ( !isActive() || timeOffset == 0)
 		return false;
 	glPushMatrix();
 	glTranslatef(0, 0, cube.altitude() * *timeOffset);

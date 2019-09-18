@@ -56,7 +56,7 @@ void LineDrawer::addCoords(const vector<Coord>& v,int options) {
 }
 
 bool LineDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() && !isValid())
+	if ( !isActive())
 		return false;
 
 	if (lines.size() == 0)

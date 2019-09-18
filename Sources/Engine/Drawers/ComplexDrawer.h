@@ -82,8 +82,6 @@ class _export ComplexDrawer : public NewDrawer {
 		virtual bool isSet() const { return false; }
 		Color getSelectionColor() const { return selectionColor; }
 		void setSelectionColor(const Color& clr) { selectionColor = clr; }
-		bool isValid() const;
-		void setValid(bool yesno) ;
 		virtual void select(bool yesno);
 		bool isManaged() const { return managed ; }
 		void setDrawerParameters(DrawerParameters *);
@@ -109,7 +107,6 @@ class _export ComplexDrawer : public NewDrawer {
 		bool active;
 		bool editable;
 		bool editmode;
-		bool valid;
 		ZValueMaker *zmaker;
 		int specialOptions;
 		bool dirty;

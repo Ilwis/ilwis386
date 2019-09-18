@@ -40,7 +40,6 @@ void ComplexDrawer::init() {
 	currentIndex = 0;
 	editmode = false;
 	selectionColor = Color(255,0,0);
-	valid = true;
 	selectable = false;
 }
 
@@ -607,13 +606,6 @@ bool ComplexDrawer::inEditMode() const{
 
 void ComplexDrawer::setEditMode(bool yesno){
 	editmode = yesno;
-}
-
-bool ComplexDrawer::isValid() const{
-	return valid;
-}
-void ComplexDrawer::setValid(bool yesno) {
-	valid = yesno;
 }
 
 void ComplexDrawer::select(bool yesno) {

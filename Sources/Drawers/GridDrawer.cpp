@@ -45,7 +45,7 @@ GridDrawer::~GridDrawer() {
 
 
 bool GridDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() || !isValid())
+	if ( !isActive())
 		return false;
 	ILWISSingleLock lock(csDraw, TRUE);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

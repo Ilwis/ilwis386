@@ -494,7 +494,7 @@ void AnnotationClassLegendDrawer::prepare(PreparationParameters *pp) {
 }
 
 bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() || !isValid())
+	if ( !isActive())
 		return false;
 
 	bool is3D = getRootDrawer()->is3D();
@@ -717,7 +717,7 @@ void AnnotationValueLegendDrawer::prepare(PreparationParameters *pp) {
 
 bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
 
-	if ( !isActive() || !isValid())
+	if ( !isActive())
 		return false;
 
 	// CoordBounds cbZoomExt = getRootDrawer()->getCoordBoundsZoomExt();
@@ -980,8 +980,6 @@ AnnotationBorderDrawer::~AnnotationBorderDrawer() {
 }
 
 bool AnnotationBorderDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if (!isValid())
-		return false;
 	bool fBorderActive = isActive();
 	bool fWhitespaceActive = getRootDrawer()->fWhitespace();
 	bool fActive = fBorderActive || fWhitespaceActive;
@@ -1458,7 +1456,7 @@ void AnnotationScaleBarDrawer::prepare(PreparationParameters *pp){
 }
 
 bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() || !isValid())
+	if ( !isActive())
 		return false;
 
 	bool is3D = getRootDrawer()->is3D(); 
@@ -1763,7 +1761,7 @@ void AnnotationNorthArrowDrawer::prepare(PreparationParameters *pp){
 }
 
 bool AnnotationNorthArrowDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const{
-	if ( !isActive() || !isValid())
+	if ( !isActive())
 		return false;
 	GeoRef gr = getRootDrawer()->getGeoReference();
 	double angle = 0;
