@@ -58,8 +58,6 @@ class _export ComplexDrawer : public NewDrawer {
 		NewDrawer *getParentDrawer() const;
 		double getAlpha() const;
 		void setAlpha(double value);
-		virtual int getUICode() const;
-		virtual void setUICode(int c);
 		//virtual HTREEITEM make3D(bool yeno, LayerTreeView  *tvm);
 		ZValueMaker *getZMaker() const;
 		virtual void timedEvent(UINT timerid);

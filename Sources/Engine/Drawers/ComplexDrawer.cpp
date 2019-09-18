@@ -34,7 +34,6 @@ void ComplexDrawer::init() {
 	active = true;
 	info = false;
 	alpha = 1.0;
-	uiCode = NewDrawer::ucALL;
 	zmaker = new ILWIS::ZValueMaker(this);
 	specialOptions = sdoNone;
 	dirty = true;
@@ -410,13 +409,6 @@ NewDrawer *ComplexDrawer::getParentDrawer() const {
 
 double ComplexDrawer::getAlpha() const{
 	return alpha;
-}
-
-int ComplexDrawer::getUICode() const {
-	return uiCode;
-}
-void ComplexDrawer::setUICode(int code) {
-	uiCode = code;
 }
 
 void ComplexDrawer::timedEvent(UINT timerid) {

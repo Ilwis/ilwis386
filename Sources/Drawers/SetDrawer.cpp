@@ -108,7 +108,6 @@ void SetDrawer::prepare(PreparationParameters *pp){
 							else
 								rasterset->SetPalette(palette);
 						} 
-						drw->setUICode(0);
 						trq.fUpdate(i,oc->iNrObjects()); 
 					}
 				}
