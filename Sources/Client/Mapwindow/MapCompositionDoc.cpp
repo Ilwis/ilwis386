@@ -1371,7 +1371,7 @@ BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview, int os)
 		} else {
 			// Unfortunately we can't prevent the MapWindow from opening, at this stage. Regardless of the ErrorObject or return FALSE, the MapWindow will open. We have to make the best out of it.
 			rootDrawer->setCoordBoundsMap(CoordBounds(0,0,1,1));
-			MessageBox(0, TR("This MapView can only be opened by ILWIS 3.7.2 or older.\nPlease close the MapWindow and re-create the MapView.\nDo not make any changes and save this MapView with this version of ILWIS.").c_str(), TR("Can't open old MapView").c_str(), MB_OK | MB_ICONEXCLAMATION);
+			MessageBox(0, TR("This MapView can only be opened by ILWIS 3.7.2 or older.\nPlease close the MapWindow and re-create the MapView.\nDo not make any changes or save this MapView with this version of ILWIS.").c_str(), TR("Can't open old MapView").c_str(), MB_OK | MB_ICONEXCLAMATION);
 			//throw ErrorObject(TR("This MapView can only be opened by ILWIS 3.7.2 or older.\nPlease close the MapWindow and re-create the MapView."));
 			return TRUE;
 		}
