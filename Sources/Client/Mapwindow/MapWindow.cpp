@@ -554,7 +554,8 @@ void MapWindow::InitialUpdate(CDocument* pDoc, BOOL bMakeVisible)
 
 	rect = CRect(ptTopLeft, sz);
 	MoveWindow(rect);
-	mpv->OnEntireMap(); // only now the window has its final size, so the "entire map" computation can be safely done
+	if (!mcd->obj().fValid()) // no EntireMap if a MapView was opened!
+		mpv->OnEntireMap(); // only now the window has its final size, so the "entire map" computation can be safely done
 	mpv->UpdateFrame();
 }
 
