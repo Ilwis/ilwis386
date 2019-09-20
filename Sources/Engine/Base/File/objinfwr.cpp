@@ -70,7 +70,7 @@ bool ObjectInfo::WriteElement(const char* sSection, const char* sEntry,
 		return false;
 
 	const ElementContainer* ec = dynamic_cast<const ElementContainer*>(&fn);
-	if (ec && 0 != ec->em && fn.sExt != ".mpv") { //huh? dont understand why mpv suddenly is a problem. dont like ec's anyway
+	if (ec && 0 != ec->em) {
 		if (sSection == 0 || *sSection == 0)
 			return 0;
 		if (sEntry == 0 || *sEntry == 0)

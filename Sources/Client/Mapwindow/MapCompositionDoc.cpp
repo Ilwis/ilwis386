@@ -516,7 +516,7 @@ void MapCompositionDoc::OnSaveView()
 	if (!mpv.fValid())
 		OnSaveViewAs();
 	else {
-		rootDrawer->store(mpv->fnObj,"RootDrawer");
+		OnFileSave();
 	}
 }
 
@@ -557,8 +557,6 @@ void MapCompositionDoc::OnSaveViewAs()
 		mpv->sDescription = sTitle;
 		sViewName = mpv->fnObj.sFullName();
 		DoSave(sViewName.c_str());
-		mpv->Store();
-		rootDrawer->store(mpv->fnObj,"RootDrawer");
 		SetTitle(mpv);
 	}
 }
@@ -566,19 +564,8 @@ void MapCompositionDoc::OnSaveViewAs()
 void MapCompositionDoc::StoreView()
 {
 	ObjectDependency objdep;
-	//mpv->Store();
-	//mpv->WriteElement("MapView", "Scale", rDfltScale);
-
-	//MapPaneView* vw = mpvGetView();
-	//if (vw) {
-	//	CRect rect;
-	//	vw->GetClientRect(&rect);
-	//	mpv->WriteElement("MapView", "Width", rect.Width());
-	//	mpv->WriteElement("MapView", "Height", rect.Height());
-	//}
-
-	//int iLayers = 0;
-	//rootDrawer->store(mpv->fnObj,"");
+	mpv->Store();
+	rootDrawer->store(mpv->fnObj,"RootDrawer");
 	objdep.Store(mpv.ptr());
 }
 
