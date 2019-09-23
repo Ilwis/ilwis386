@@ -204,7 +204,7 @@ BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot, int os)
 BOOL IlwisDocument::OnOpenDocument(LPCTSTR lpszPathName, ParmList& pm, int os)
 {
 	// by default ignore second parameter
-	return OnOpenDocument(lpszPathName, pm);
+	return OnOpenDocument(lpszPathName);
 }
 
 BOOL IlwisDocument::OnSaveDocument(LPCTSTR lpszPathName)
