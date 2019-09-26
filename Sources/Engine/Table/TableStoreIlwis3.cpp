@@ -115,25 +115,26 @@ bool TableStoreIlwis3::load(const FileName& fnODF, const String& prfix){
 
 	setColumnInfo(fnODF, simpleDataTypes);
 
-	long size = file.tellg();
-	char *memblock = new char [size];
+	long iFileSize = file.tellg();
+	long iMemSize = recordSize * getRowCount();
+	char *memfileblock = new char [iFileSize];
 	file.seekg (0, ios::beg);
-	file.read (memblock, size);
+	file.read (memfileblock, iFileSize);
 	file.close();
 
-	records = new char [ recordSize * getRowCount()];
-	memset(records, 0,recordSize * getRowCount());
+	records = new char [iMemSize];
+	memset(records, 0, iMemSize);
 
 	if ( !simpleDataTypes) {
-		readData(memblock);
+		readData(memfileblock);
 	} else {
-		memcpy(records, memblock+128,size - 128);
+		memcpy(records, memfileblock+128, min(iMemSize, iFileSize - 128));
 	}
 
 	long time2 = clock();
 	TRACE(String("loaded %S in %f ms\n", fnODF.sRelative(), ((double)time2-time1)/1000.0).c_str());
 
-	delete[] memblock;
+	delete[] memfileblock;
 	return true;
 }
 String *TableStoreIlwis3::readString(char *mem) {
