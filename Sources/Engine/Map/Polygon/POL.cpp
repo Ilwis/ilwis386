@@ -229,14 +229,20 @@ PolygonMapPtr::PolygonMapPtr(const FileName& fn, bool fCreate)
 	{
 		ILWIS::Version::BinaryVersion oldFormat = ILWIS::Version::bvUNKNOWN;
 		ReadElement("PolygonMapStore", "Format", (int &)oldFormat);
-		if ( oldFormat == shUNDEF) // old format
+		if ( oldFormat == ILWIS::Version::bvPOLYGONFORMAT37) { // Some versions of ILWIS 3.7 wrote a bad odf, in ILWIS30 format, but indicating ILWIS37 (the new format doesn't contain a SegmentMapStore section, the old one does).
+			FileName fnData(fn,".mpz#");
+			if (!fnData.fExist()) {
+				if (0 == ReadElement("SegmentMapStore", "Format", (int &)oldFormat)) // If there is no SegmentMapStore section, put the version back to what it was. The .mpz# file is really missing (copy bug)
+					oldFormat = ILWIS::Version::bvPOLYGONFORMAT37;
+			}
+		} else if ( oldFormat == shUNDEF) // old format
 			ReadElement("SegmentMapStore", "Format", (int &)oldFormat);
 		if ( fCreate ) oldFormat = ILWIS::Version::bvPOLYGONFORMAT37;
 		getEngine()->getVersion()->fSupportsBinaryVersion(oldFormat);
 		if ( oldFormat == ILWIS::Version::bvFORMAT30)
 			pms = new PolygonMapStoreFormat30(fn, *this); 
 		else if ( oldFormat == ILWIS::Version::bvPOLYGONFORMAT37)
-			pms	= pms = new PolygonMapStoreFormat37(fn, *this, fCreate);
+			pms	= new PolygonMapStoreFormat37(fn, *this, fCreate);
 		else if ( oldFormat == ILWIS::Version::bvFORMAT20)
 			pms = new PolygonMapStoreFormat20(fn, *this); 
 		else if ( oldFormat == ILWIS::Version::bvFORMATFOREIGN )
