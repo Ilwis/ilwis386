@@ -271,6 +271,7 @@ bool PointMapTransform::fFreezing()
 				pms->PutRaw(i, pmp->iRaw(i));
 		}
 	}
+	SetCoordBounds(csy->cbConv(pmp->cs(), pmp->cb())); // recompute bounds; leave ODF intact if nothing changed
   trq.fUpdate(pmp->iFeatures(), pmp->iFeatures());
   _iPoints = pms->iPnt();
   return true;

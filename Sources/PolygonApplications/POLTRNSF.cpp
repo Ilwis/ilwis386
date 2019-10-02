@@ -233,6 +233,7 @@ bool PolygonMapTransform::fFreezing()
 		newPol->computeEnvelope(); // then compute the envelopes and add to spatial index
 	}
 
+	SetCoordBounds(csy->cbConv(pmp->cs(), pmp->cb())); // recompute bounds; leave ODF intact if nothing changed
 	trq.fUpdate(iPol, iPol);
 	return true;
 }

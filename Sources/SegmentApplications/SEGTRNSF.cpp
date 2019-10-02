@@ -200,6 +200,7 @@ bool SegmentMapTransform::fFreezing()
 		}
 		delete seq;
 	}
+	SetCoordBounds(csy->cbConv(smp->cs(), smp->cb())); // recompute bounds; leave ODF intact if nothing changed
 	trq.fUpdate(iSeg, iSeg);
 	return true;
 }
