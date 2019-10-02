@@ -46,7 +46,7 @@
 #include "Engine\Representation\Rprclass.h"
 #include "Engine\Drawers\Drawer_n.h"
 
-const double RepresentationItems::rDefaultLineWidth = 0.2;
+const double RepresentationItems::rDefaultLineWidth = 1.0;
 
 RepresentationItems::RepresentationItems(const FileName& fn)
 : RepresentationPtr(fn)

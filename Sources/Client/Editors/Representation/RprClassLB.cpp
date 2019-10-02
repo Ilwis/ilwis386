@@ -367,7 +367,8 @@ void RepresentationClassLB::DrawItem(LPDRAWITEMSTRUCT dis)
 		case opSEG: 
 			{
 				Line lin(_rpr, iRaw);
-				lin.Resize(1.0/RepresentationClass::iSIZE_FACTOR); // To make the sizes in the MapWindow conform to the Layout
+				//lin.Resize(1.0/RepresentationClass::iSIZE_FACTOR); // To make the sizes in the MapWindow conform to the Layout
+				lin.Resize(0.1 * (3/RepresentationClass::iSIZE_FACTOR)); // lin.rWidth is multiplied with 10.0 prior to plotting. This factor results the width representing pixels.
 				int y = (rectItem.top + 20 + rectItem.bottom - 5 ) /2 + iYShift;
 				zPoint p1(rectItem.left  + 5, y);
 				zPoint p2(rectItem.right - 5, y);
