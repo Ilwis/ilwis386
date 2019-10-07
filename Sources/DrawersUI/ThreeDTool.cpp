@@ -130,6 +130,9 @@ DisplayOptionsForm(dr,wPar,TR("3D Options")), sourceIndex(0)
 	rbMaplist = new RadioButton(rg,TR("Maplist"));
 	fmaplist = new FieldMapList(rbMaplist, "", &mapListName,new MapListerDomainType(dmVALUE|dmIMAGE)); 
 	rbTable = new RadioButton(rg,TR("Attribute column"));
+	String sCol = layerDrawer->getZMaker()->getColumnName(0);
+	if (sCol != sUNDEF)
+		colName = sCol;
 	FieldColumn *fcol = new FieldColumn(rbTable,"",attTable,&colName,dmVALUE | dmIMAGE);
 
 	rg->SetIndependentPos();

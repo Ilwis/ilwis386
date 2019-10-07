@@ -239,7 +239,7 @@ int  SetStretchCCForm::check(Event *) {
 	ColorCompositeDrawer *setdr = (ColorCompositeDrawer *)drw;
 	if ( setdr->isColorComposite()) {
 		setdr->setColorCompositeRange(index, RangeReal(low, high));
-		setdr->setStretchRangeReal(RangeReal(low,high));
+		//setdr->setStretchRangeReal(RangeReal(low,high)); // Obsolete; a color composite does not use the setdrawer's stretch range; each band has its own stretch range (the color composite range, with "index")
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		setdr->prepareChildDrawers(&pp);
 		updateMapView();

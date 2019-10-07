@@ -20,6 +20,7 @@ class _export PointLayerDrawer : public FeatureLayerDrawer {
 	public:
 		enum Scaling{sNONE, sLOGARITHMIC, sLINEAR};
 		ILWIS::NewDrawer *createPointLayerDrawer(DrawerParameters *parms);
+		bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 
 		PointLayerDrawer(DrawerParameters *parms);
 		virtual ~PointLayerDrawer();
@@ -27,13 +28,12 @@ class _export PointLayerDrawer : public FeatureLayerDrawer {
 		void prepare(PreparationParameters *parms);
 		void getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers);
 		GeneralDrawerProperties *getProperties();
-		void setRotationInfo(const SymbolRotationInfo& sC) ;
+		void setRotationInfo(const SymbolRotationInfo& sC);
 		SymbolRotationInfo getRotationInfo() const;
-
 	
 	protected:
-		String store(const FileName& fnView, const String& parenSection) const;
-		void load(const FileName& fnView, const String& parenSection);
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& section);
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp, ILWIS::DrawerParameters* parms) const;
 		void setDrawMethod(DrawMethod method=drmINIT);
 		void setSymbolization(CWnd *parent);

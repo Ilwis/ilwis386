@@ -67,8 +67,8 @@ namespace ILWIS {
 		double getMinZoom(unsigned int imageSizeX, unsigned int imageSizeY, GLdouble * m_winx, GLdouble * m_winy) const;
 		virtual void init() const;
 		virtual void setup();
-		String store(const FileName& fnView, const String& parentSection) const;
-		void load(const FileName& fnView, const String& parentSection);
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& currentSection);
 		
 		RasterSetData * data;
 		RangeReal rrMinMax;

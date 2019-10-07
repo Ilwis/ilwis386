@@ -565,7 +565,7 @@ void MapCompositionDoc::StoreView()
 {
 	ObjectDependency objdep;
 	mpv->Store();
-	rootDrawer->store(mpv->fnObj,"RootDrawer");
+	rootDrawer->store(mpv->fnObj,"Root");
 	objdep.Store(mpv.ptr());
 }
 
@@ -1338,7 +1338,7 @@ BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview, int os)
 			CDocument::SetTitle(s.sVal());
 		}
 		FileName fn = GetPathName();
-		const String section = "RootDrawer";
+		const String section = "Root";
 		String type;
 		int iRes = ObjectInfo::ReadElement(section.c_str(),"Type",fn,type);
 		if (iRes != 0 && type == "RootDrawer") {
@@ -1354,6 +1354,10 @@ BOOL MapCompositionDoc::OnOpenMapView(const MapView& mapview, int os)
 				}
 			}
 
+			return TRUE;
+		} else if (0 != ObjectInfo::ReadElement("RootDrawer","Type",fn,type)) {
+			rootDrawer->setCoordBoundsMap(CoordBounds(0,0,1,1));
+			MessageBox(0, TR("This MapView can only be opened by ILWIS 3.8 til 3.8.5 .\nPlease close the MapWindow and re-create the MapView.\nDo not make any changes or save this MapView with this version of ILWIS.").c_str(), TR("Can't open old MapView").c_str(), MB_OK | MB_ICONEXCLAMATION);
 			return TRUE;
 		} else {
 			// Unfortunately we can't prevent the MapWindow from opening, at this stage. Regardless of the ErrorObject or return FALSE, the MapWindow will open. We have to make the best out of it.
@@ -1681,6 +1685,7 @@ bool MapCompositionDoc::fCoordSystemOk(const BaseMap& bmap)
 void MapCompositionDoc::RemoveDrawer(ILWIS::NewDrawer* drw)
 {
 	ChangeState();
+	rootDrawer->removeDrawersUsing(drw);
 	SpatialDataDrawer *spdrw = dynamic_cast<SpatialDataDrawer *>(drw);
 	if ( spdrw) {
 		BaseMapPtr *bmptr = spdrw->getBaseMap();

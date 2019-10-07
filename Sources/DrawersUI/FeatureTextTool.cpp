@@ -131,6 +131,10 @@ DisplayOptionsForm(dr,wPar,TR("Labels")), tbl(_tbl), fscale(1.0), useAttrib(fals
 		clr.alpha() = 255 - clr.alpha(); // inverse the alpha, for FieldColor
 	}
 
+	String labelAttribute = dr->getLabelAttribute();
+	useAttrib = labelAttribute != "";
+	colName = labelAttribute;
+
 	fontScale =  new FieldReal(root,TR("Font Scale"),&fscale,RangeReal(0.01,10.));
 	fcolor = new FieldColor(root, TR("Font Color"), &clr);
 	if ( tbl.fValid()) {

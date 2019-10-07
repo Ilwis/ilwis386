@@ -615,15 +615,14 @@ Representation RasterLayerDrawer::getRepresentation() const { // avoiding copy c
 	return LayerDrawer::getRepresentation();
 }
 
-String RasterLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = parentSection;
+String RasterLayerDrawer::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":RasterLayer";
 	LayerDrawer::store(fnView, currentSection);
 
 	return currentSection;
 }
 
-void RasterLayerDrawer::load(const FileName& fnView, const String& parentSection){
-	String currentSection = parentSection;
+void RasterLayerDrawer::load(const FileName& fnView, const String& currentSection){
 	LayerDrawer::load(fnView, currentSection);
 }
 

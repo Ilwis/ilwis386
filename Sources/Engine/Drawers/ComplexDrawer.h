@@ -86,6 +86,7 @@ class _export ComplexDrawer : public NewDrawer {
 		bool isManaged() const { return managed ; }
 		void setDrawerParameters(DrawerParameters *);
 		void setGeneralProperties(GeneralDrawerProperties *) {}
+		virtual void removeDrawersUsing(NewDrawer * drw);
 
 	protected:
 		vector<NewDrawer *> drawers;
@@ -112,15 +113,13 @@ class _export ComplexDrawer : public NewDrawer {
 		bool dirty;
 		bool selectable;
 		bool managed; // this drawer is managed by the memory manager and should never be deleted by itself
-		int totalDrawerCount;
 		Color selectionColor;
-
 		
 		ComplexDrawer(DrawerParameters *context, const String& ty);
 		ComplexDrawer();
 		virtual ~ComplexDrawer();
-		String store(const FileName& fnView, const String& parenSection) const;
-		void load(const FileName& fnView, const String& parenSection);
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& section);
 		void displayOptionTransparency(CWnd *parent) ;
 		void setInfoMode(void *v,LayerTreeView *tv);
 		NewDrawer *loadDrawer(const FileName& fnView, const String& drawerSection);

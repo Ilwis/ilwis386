@@ -17,6 +17,7 @@ namespace ILWIS {
 		double rValByRaw(int raw, const RangeReal& range = RangeReal()) const;
 		long iRawAttr(long iRaw) const;
 		bool fUsesCol() const;
+		const Column getCol() const;
 	private:
 		BaseMap bmap;
 		Column col;
@@ -37,8 +38,8 @@ public:
 	RangeReal getTresholdRange() const;
 	void setTresholdRange(const RangeReal& tr, bool s=false);
 	RangeReal getTransparentValues() const;
-	String store(const FileName& fnView, const String& parenSection) const;
-	void load(const FileName& fnView, const String& parenSection);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
 	void setMultiColors(int index, bool fInitRandom = true) ;
 	int multiColors() const;
 	void setColorSet(int index);

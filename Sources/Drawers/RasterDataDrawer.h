@@ -13,7 +13,8 @@ namespace ILWIS{
 		bool draw(int drawerIndex, const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 		virtual void setTresholdColor(const Color&clr);
 		virtual void setTresholdRange(const RangeReal& tr, bool single=false);
-
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& section);
 		
 	protected:
 		void addLayerDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::LayerDrawer *rsd, const String& name="");

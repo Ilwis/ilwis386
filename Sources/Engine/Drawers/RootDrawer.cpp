@@ -42,7 +42,6 @@ RootDrawer::RootDrawer()
 	translateX = translateY = translateZ = 0;
 	zoom3D = 1.0;
 	rootDrawer = this;
-	initRestore = false;
 	info = true;
 	ext = Extension(0,0,0,0);
 	skyColor = Color(255,255,255);
@@ -225,63 +224,79 @@ void RootDrawer::timedEvent(UINT timerID) {
 	}
 }
 
-String RootDrawer::store(const FileName& fnView, const String parenSection) const{
-	ObjectInfo::WriteElement("RootDrawer","CoordinateSystem",fnView, getCoordinateSystem());
-	ObjectInfo::WriteElement("RootDrawer","CoordBoundsZoom",fnView, getCoordBoundsZoom());
-	ObjectInfo::WriteElement("RootDrawer","CoordBoundsView",fnView, getCoordBoundsView());
-	ObjectInfo::WriteElement("RootDrawer","CoordBoundsMap",fnView, getMapCoordBounds());
-	//ObjectInfo::WriteElement("RootDrawer","AspectRatio",fnView, getAspectRatio());
-	ObjectInfo::WriteElement("RootDrawer","ViewPoint",fnView, getViewPoint());
-	ObjectInfo::WriteElement("RootDrawer","ViewPort",fnView, pixArea);
-	ObjectInfo::WriteElement("RootDrawer","XRotation",fnView, rotX);
-	ObjectInfo::WriteElement("RootDrawer","YRotation",fnView, rotY);
-	ObjectInfo::WriteElement("RootDrawer","ZRotation",fnView, rotZ);
-	ObjectInfo::WriteElement("RootDrawer","XTranslation",fnView, translateX);
-	ObjectInfo::WriteElement("RootDrawer","YTranslation",fnView, translateY);
-	ObjectInfo::WriteElement("RootDrawer","ZTranslation",fnView, translateZ);
-	ObjectInfo::WriteElement("RootDrawer","Zoom3D",fnView, zoom3D);
-	ObjectInfo::WriteElement("RootDrawer","Is3D",fnView, threeD);
+String RootDrawer::store(const FileName& fnView, const String section) const{
+	ObjectInfo::WriteElement(section.c_str(),"CoordinateSystem",fnView, getCoordinateSystem());
+	ObjectInfo::WriteElement(section.c_str(),"UseGeoRef",fnView, fUseGeoRef);
+	if (fUseGeoRef)
+		ObjectInfo::WriteElement(section.c_str(),"GeoReference",fnView, getGeoReference());
 
-	ComplexDrawer::store(fnView, "RootDrawer");
+	backgroundDrawer->store(fnView, section);
+	ComplexDrawer::store(fnView, section);
 
-	return "RootDrawer";
+	ObjectInfo::WriteElement(section.c_str(),"ViewPort",fnView, pixArea);
+	ObjectInfo::WriteElement(section.c_str(),"CoordBoundsZoom",fnView, getCoordBoundsZoom());
+	ObjectInfo::WriteElement(section.c_str(),"CoordBoundsView",fnView, getCoordBoundsView());
+	ObjectInfo::WriteElement(section.c_str(),"CoordBoundsMap",fnView, getMapCoordBounds());
+	ObjectInfo::WriteElement(section.c_str(),"AnnotationBorder",fnView, fAnnotationBorder);
+	ObjectInfo::WriteElement(section.c_str(),"Extension_left",fnView, ext.left);
+	ObjectInfo::WriteElement(section.c_str(),"Extension_right",fnView, ext.right);
+	ObjectInfo::WriteElement(section.c_str(),"Extension_top",fnView, ext.top);
+	ObjectInfo::WriteElement(section.c_str(),"Extension_bottom",fnView, ext.bottom);
+	//ObjectInfo::WriteElement(section.c_str(),"AspectRatio",fnView, getAspectRatio());
+	
+	ObjectInfo::WriteElement(section.c_str(),"XRotation",fnView, rotX);
+	ObjectInfo::WriteElement(section.c_str(),"YRotation",fnView, rotY);
+	ObjectInfo::WriteElement(section.c_str(),"ZRotation",fnView, rotZ);
+	ObjectInfo::WriteElement(section.c_str(),"XTranslation",fnView, translateX);
+	ObjectInfo::WriteElement(section.c_str(),"YTranslation",fnView, translateY);
+	ObjectInfo::WriteElement(section.c_str(),"ZTranslation",fnView, translateZ);
+	ObjectInfo::WriteElement(section.c_str(),"Zoom3D",fnView, zoom3D);
+	ObjectInfo::WriteElement(section.c_str(),"ViewPoint",fnView, viewPoint);
+	ObjectInfo::WriteElement(section.c_str(),"Is3D",fnView, threeD);
+
+	return section.c_str();
 }
 
-void RootDrawer::load(const FileName& fnView, const String parenSection){
+void RootDrawer::load(const FileName& fnView, const String section){
 	CoordSystem csy;
-	ObjectInfo::ReadElement("RootDrawer","CoordinateSystem",fnView, csy);
+	ObjectInfo::ReadElement(section.c_str(),"CoordinateSystem",fnView, csy);
+	ObjectInfo::ReadElement(section.c_str(),"UseGeoRef",fnView, fUseGeoRef);
+	if (fUseGeoRef)
+		ObjectInfo::ReadElement(section.c_str(),"GeoReference",fnView, gr);
+
+	ComplexDrawer::load(fnView,section);
+	backgroundDrawer->load(fnView, section + ":CanvasBackground");
+
 	CoordBounds cbZ,cbV,cbM;
-	ObjectInfo::ReadElement("RootDrawer","CoordBoundsZoom",fnView, cbZ);
-	ObjectInfo::ReadElement("RootDrawer","CoordBoundsView",fnView, cbV);
-	ObjectInfo::ReadElement("RootDrawer","CoordBoundsMap",fnView, cbM);
+	ObjectInfo::ReadElement(section.c_str(),"CoordBoundsZoom",fnView, cbZ);
+	ObjectInfo::ReadElement(section.c_str(),"CoordBoundsView",fnView, cbV);
+	ObjectInfo::ReadElement(section.c_str(),"CoordBoundsMap",fnView, cbM);
 	/*double aspect;
-	ObjectInfo::ReadElement("RootDrawer","AspectRatio",fnView, aspect);*/
-	Coord viewPoint;
-	ObjectInfo::ReadElement("RootDrawer","ViewPoint",fnView, viewPoint);
+	ObjectInfo::ReadElement(section.c_str(),"AspectRatio",fnView, aspect);*/
 	RowCol viewPort;
-	ObjectInfo::ReadElement("RootDrawer","ViewPort",fnView, viewPort);
-	ObjectInfo::ReadElement("RootDrawer","Is3D",fnView, threeD);
+	ObjectInfo::ReadElement(section.c_str(),"ViewPort",fnView, viewPort);
+	ObjectInfo::ReadElement(section.c_str(),"Is3D",fnView, threeD);
 	setCoordinateSystem(csy, true);
 	setViewPort(viewPort, false); // false, just "assign" to pixArea and windowAspectRatio
 	setCoordBoundsMap(cbM);
 	setCoordBoundsView(cbV, true);
 	//setCoordBoundsZoom(cbZ);
 	cbZoom = cbZ;
-	RecomputeAnnotationBorder();
+	ObjectInfo::ReadElement(section.c_str(),"AnnotationBorder",fnView, fAnnotationBorder);
+	ObjectInfo::ReadElement(section.c_str(),"Extension_left",fnView, ext.left);
+	ObjectInfo::ReadElement(section.c_str(),"Extension_right",fnView, ext.right);
+	ObjectInfo::ReadElement(section.c_str(),"Extension_top",fnView, ext.top);
+	ObjectInfo::ReadElement(section.c_str(),"Extension_bottom",fnView, ext.bottom);
+	setExtension(ext); // sets fAnnotationWhitespace and calls RecomputeAnnotationBorder()
 
-	ComplexDrawer::load(fnView,"RootDrawer");
-
-	ObjectInfo::ReadElement("RootDrawer","XRotation",fnView, rotX); 
-	ObjectInfo::ReadElement("RootDrawer","YRotation",fnView, rotY);
-	ObjectInfo::ReadElement("RootDrawer","ZRotation",fnView, rotZ);
-	ObjectInfo::ReadElement("RootDrawer","XTranslation",fnView, translateX);
-	ObjectInfo::ReadElement("RootDrawer","YTranslation",fnView, translateY);
-	ObjectInfo::ReadElement("RootDrawer","ZTranslation",fnView, translateZ);
-	ObjectInfo::ReadElement("RootDrawer","Zoom3D",fnView, zoom3D);
-
-	setViewPoint(viewPoint);
-	set3D(threeD);
-	initRestore = true;
+	ObjectInfo::ReadElement(section.c_str(),"XRotation",fnView, rotX); 
+	ObjectInfo::ReadElement(section.c_str(),"YRotation",fnView, rotY);
+	ObjectInfo::ReadElement(section.c_str(),"ZRotation",fnView, rotZ);
+	ObjectInfo::ReadElement(section.c_str(),"XTranslation",fnView, translateX);
+	ObjectInfo::ReadElement(section.c_str(),"YTranslation",fnView, translateY);
+	ObjectInfo::ReadElement(section.c_str(),"ZTranslation",fnView, translateZ);
+	ObjectInfo::ReadElement(section.c_str(),"Zoom3D",fnView, zoom3D);
+	ObjectInfo::ReadElement(section.c_str(),"ViewPoint",fnView, viewPoint);
 }
 
 void RootDrawer::RecenterZoomHorz(CoordBounds & cbZoom, const CoordBounds & cbMap)
@@ -610,13 +625,10 @@ void RootDrawer::setCoordBoundsView(/*const CoordSystem& _cs,*/ const CoordBound
 	}
 	RecomputeAnnotationBorder();
 	if ( is3D()) {
-		if ( !initRestore) { // restore set rotX, etc. But the OnEntireMap would destroy these false; so for once  the init of values is skipped
-			rotX = 0;
-			rotY = 45.0;
-			translateX = translateY = translateZ = 0;
-			zoom3D = 1.0;
-		} else 
-			initRestore = false;
+		rotX = 0;
+		rotY = 45.0;
+		translateX = translateY = translateZ = 0;
+		zoom3D = 1.0;
 		setCoordBoundsZoom(cbView);
 	}
 }

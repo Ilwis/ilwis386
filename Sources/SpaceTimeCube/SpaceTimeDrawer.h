@@ -30,13 +30,15 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		void SetTimePosVariable(double * _timePos);
 		void SetClipTPlus(bool fClip);
 		void SetClipTMinus(bool fClip);
+		const bool getClipTPlus() const;
+		const bool getClipTMinus() const;
 		virtual void drawFootprint() const = 0;
 		virtual void drawXT() const = 0;
 		virtual void drawXY() const = 0;
 		virtual void drawYT() const = 0;
 
 	protected:
-		String store(const FileName& fnView, const String& parentSection) const;
+		String store(const FileName& fnView, const String& section) const;
 		void load(const FileName& fnView, const String& currentSection);
 		vector<GLuint> getSelectedObjectIDs(const CRect& rect) const;
 		virtual vector<GLuint> getObjectIDs(vector<long> & iRaws) const = 0;

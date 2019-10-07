@@ -43,8 +43,8 @@ namespace ILWIS {
 		virtual String iconName(const String& subtype="?") const { return "?";}
 		void setSpecialDrawingOptions(int option, bool add, const vector<int>& coords=vector<int>()); 
 		int getSpecialDrawingOption(int opt=sdoNone) const; 
-		String store(const FileName& fnView, const String& parenSection) const { return parenSection;}
-		void load(const FileName& fnView, const String& parenSection) {};
+		String store(const FileName& fnView, const String& section) const { return section;}
+		void load(const FileName& fnView, const String& section) {};
 		bool isSimple() const { return true;}
 		bool isDirty() const { return true;} 
 		void setDirty(bool yesno) {}

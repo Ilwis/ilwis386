@@ -19,6 +19,9 @@ public:
 	AnnotationDrawers(DrawerParameters *parms);
 	void prepare(PreparationParameters *pp);
 	void refreshClassLegends();
+	void removeDrawersUsing(NewDrawer *drw);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
 
 protected:
 };
@@ -30,10 +33,11 @@ public:
 	virtual void setScale(double s);
 	void setTitle(const String& t);
 	String getTitle() const;
-	FileName associaltedFile() const;
+	FileName associatedFile() const;
+	const bool fUsesDrawer(NewDrawer *drw) const;
 protected:
-	String store(const FileName& fnView, const String& parenSection) const;
-	void load(const FileName& fnView, const String& parenSection);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
 	void setParent(NewDrawer *drw);
 	double scale;
 	String title;
@@ -65,8 +69,8 @@ public:
 protected:
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 	void setText(const vector<String>& v, int count, const Coord& c) const;
-	String store(const FileName& fnView, const String& parenSection) const;
-	void load(const FileName& fnView, const String& parenSection);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
 
 	CoordBounds cbBox;
 	bool drawOutsideBox;
@@ -107,8 +111,8 @@ public:
 protected:
 	void prepare(PreparationParameters *pp) ;
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
-	String store(const FileName& fnView, const String& parenSection) const;
-	void load(const FileName& fnView, const String& parenSection);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
 	vector<RawInfo> raws;
 	std::map<int, AnnotationClassAttributes> hatches;
 };
@@ -126,10 +130,9 @@ protected:
 	vector<String> makeRange(const DomainValueRangeStruct & dvs) const;
 	void drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const;
 	void drawHorizontal(CoordBounds& cbInner, const CoordBounds & cbBoxRender, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const;
-	String store(const FileName& fnView, const String& parenSection) const;
-	void load(const FileName& fnView, const String& parenSection);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
 
-	int noTicks;
 	double rstep;
 	RangeReal vrr;
 };
@@ -151,8 +154,8 @@ public:
 	void setNumberOfDigits(int num);
 private:
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
-	String store(const FileName& fnView, const String& parenSection) const;
-	void load(const FileName& fnView, const String& parenSection);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
 	void calcLocations();
 	TextDrawer *getTextDrawer(int index, AnnotationBorderDrawer::Side side);
 	void setText(const CoordBounds & cb, const CoordBounds & cbArea, AnnotationBorderDrawer::Side side, double z) const;
@@ -193,8 +196,8 @@ public:
 
 private:
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
-	String store(const FileName& fnView, const String& parenSection) const;
-	void load(const FileName& fnView, const String& parenSection);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
 
 	double size;
 	double height;
@@ -221,8 +224,8 @@ public:
 	
 private:
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
-	String store(const FileName& fnView, const String& parenSection) const;
-	void load(const FileName& fnView, const String& parenSection);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
 	Coord begin;
 	String northArrowType;
 	PointDrawer *arrow;

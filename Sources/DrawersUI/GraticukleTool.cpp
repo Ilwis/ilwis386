@@ -63,7 +63,7 @@ HTREEITEM GraticuleTool::configure( HTREEITEM parentItem) {
 void GraticuleTool::graticuleActive(void *v, HTREEITEM) {
 	bool value = *(bool *)v;
 	drawer->setActive(value);
-	PreparationParameters pp(NewDrawer::ptGEOMETRY);
+	PreparationParameters pp(NewDrawer::ptGEOMETRY|NewDrawer::ptRENDER);
 	drawer->prepare(&pp);
 	drawer->getRootDrawer()->getDrawerContext()->doDraw();
 }

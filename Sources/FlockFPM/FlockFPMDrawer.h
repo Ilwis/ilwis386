@@ -70,7 +70,7 @@ namespace ILWIS {
 		virtual void drawXY() const;
 		virtual void drawYT() const;
 	protected:
-		String store(const FileName& fnView, const String& parentSection) const;
+		String store(const FileName& fnView, const String& section) const;
 		void load(const FileName& fnView, const String& currentSection);
 		virtual vector<GLuint> getObjectIDs(vector<long> & iRaws) const;
 		virtual int getNearestEnabledObjectIDIndex(vector<GLuint> & objectIDs) const;

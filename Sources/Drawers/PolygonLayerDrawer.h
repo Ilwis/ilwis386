@@ -39,8 +39,8 @@ class _export PolygonLayerDrawer : public FeatureLayerDrawer {
 		GLUtesselator * getTesselator();
 
 	protected:
-		String store(const FileName& fnView, const String& parenSection) const;
-		void load(const FileName& fnView, const String& parenSection);
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& section);
 		void setDrawMethod(DrawMethod method=drmINIT);
 	
 		bool showAreas;

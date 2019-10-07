@@ -16,6 +16,7 @@ public:
 	void update();
 protected:
 	void setcheckattr(void *value, HTREEITEM item);
+	void setcheckinitial(int colNr, const Column & attColumn);
 
 	SetChecks *attrCheck;
 	HTREEITEM lasthit;

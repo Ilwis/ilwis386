@@ -51,37 +51,37 @@ HTREEITEM SpaceTimePathTool::configure( HTREEITEM parentItem) {
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setClipTPlus);
-	insertItem(TR("Clip T+"),"Axis",item,0);
+	insertItem(TR("Clip T+"),"Axis",item,pdrw->getClipTPlus() ? 1 : 0);
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setClipTMinus);
-	insertItem(TR("Clip T-"),"Axis",item,0);
+	insertItem(TR("Clip T-"),"Axis",item,pdrw->getClipTMinus() ? 1 : 0);
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	//item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeSpaceTimePath);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setSpaceTimePathVisibility);
-	insertItem(TR("Space Time Path"),"Axis",item,1);
+	insertItem(TR("Space Time Path"),"Axis",item,getVisibility("spacetimepath", 1));
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeFootprint);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setFootprintVisibility);
-	insertItem(TR("Footprint"),"Axis",item,0);
+	insertItem(TR("Footprint"),"Axis",item,getVisibility("footprint", 0));
 
 	// implement XT, XY, YT lines first, then uncomment the following
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeXT);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setXTVisibility);
-	insertItem(TR("XT Reference Lines"),"Axis",item,0);
+	insertItem(TR("XT Reference Lines"),"Axis",item,getVisibility("xt", 0));
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeXY);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setXYVisibility);
-	insertItem(TR("XY Reference Lines"),"Axis",item,0);
+	insertItem(TR("XY Reference Lines"),"Axis",item,getVisibility("xy", 0));
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&SpaceTimePathTool::changeYT);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&SpaceTimePathTool::setYTVisibility);
-	insertItem(TR("YT Reference Lines"),"Axis",item,0);
+	insertItem(TR("YT Reference Lines"),"Axis",item,getVisibility("yt", 0));
 
 	return htiNode;
 }
@@ -102,6 +102,16 @@ void SpaceTimePathTool::setVisibility(const String& element, bool value) {
 		(*prop)[element].visible = value;
 	}
 	mpvGetView()->Invalidate();
+}
+
+int SpaceTimePathTool::getVisibility(const String& element, int defaultVal) {
+	SpaceTimeDrawer * stdrw = (SpaceTimeDrawer*)drawer;
+	SpaceTimeElementsDrawer * eldrw = stdrw->getAdditionalElementsDrawer();
+	PathElementProperties *prop = (PathElementProperties *)(eldrw->getProperties());
+	if (prop) {
+		return (*prop)[element].visible ? 1 : 0;
+	}
+	return defaultVal;
 }
 
 void SpaceTimePathTool::elementForm(const String& element) {
@@ -235,6 +245,7 @@ DisplayOptionsForm(dr,wPar,elem.label), slider(0), fc(0), element(elem)
 		fc = new FieldColor(root,TR("Color"),&(element.color));
 	}
 	if ( element.transparency != rUNDEF) {
+		transparency = round(100.0 * element.transparency);
 		slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
 		slider->SetCallBack((NotifyProc)&SpaceTimeElementsForm::setTransparency);
 		slider->setContinuous(true);

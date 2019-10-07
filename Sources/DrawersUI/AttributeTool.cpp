@@ -58,16 +58,20 @@ HTREEITEM AttributeTool::configure( HTREEITEM parentItem) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	LayerDrawer *sdr = ((ComplexDrawer*)drawer)->isSet() ? (LayerDrawer*)((ComplexDrawer*)drawer)->getDrawer(0) : (LayerDrawer *)drawer;
 	Column attColumn = sdr->getAtttributeColumn();
+	bool useAttColumn = sdr->useAttributeColumn();
 	htiNode = insertItem(TR("Display Attribute"),".tbt",item);
 	BaseMap bmp (((ComplexDrawer*)drawer)->isSet() ? ((SpatialDataDrawer*)drawer)->getBaseMap()->fnObj : ((SpatialDataDrawer *)drawer->getParentDrawer())->getBaseMap()->fnObj);
 	Table attTable = bmp->tblAtt();
+	long iSelectedCol = -1;
 	if ( attTable.fValid()) {
 		attrCheck = new SetChecks(tree,this,(DTSetCheckFunc)&AttributeTool::setcheckattr);
 		DisplayOptionRadioButtonItem *ritem = new DisplayOptionRadioButtonItem(bmp->sName(),tree, htiNode,drawer);
 		ritem->setCheckAction(this,attrCheck, (DTSetCheckFunc)&AttributeTool::setcheckattr);
-		ritem->setState(true);
+		if (!(useAttColumn && attColumn.fValid())) // from MapView "load"
+			ritem->setState(true);
 		insertItem(bmp->sName(),bmp->fnObj.sExt,ritem);
 
+		long colNr = 1;
 		for(int i=0; i < attTable->iCols(); ++i) {
 			Column col = attTable->col(i);
 			if ( col->dm()->pdsrt() || col->dm()->pdv() || col->dm()->pdcol()) {
@@ -79,11 +83,49 @@ HTREEITEM AttributeTool::configure( HTREEITEM parentItem) {
 					insertItem(col->sName(),"Set",ritem);
 				else if ( col->dm()->pdcol())
 					insertItem(col->sName(),"Colors",ritem);
+				if (useAttColumn && attColumn.fValid() && col == attColumn)
+					iSelectedCol = colNr;
+				++colNr;
 			}
 		}
 	}
 	lasthit = 0;
+	if (iSelectedCol != -1 && useAttColumn && attColumn.fValid()) { // from MapView "load"
+		setcheckinitial(iSelectedCol, attColumn);
+	}
 	return htiNode;
+}
+
+void AttributeTool::setcheckinitial(int colNr, const Column & attColumn) { // only set the treectrl state correctly; the drawer is already in the correct state (from MapView::load)
+	HTREEITEM hit = attrCheck->getHTI(colNr);
+	attrCheck->checkItemInitial(hit);
+	DisplayOptionButtonItem *data = (DisplayOptionButtonItem  *)(tree->GetTreeCtrl().GetItemData(hit));
+	data->setState(true);
+	DrawerTool *parentTool = getParentTool();
+	// add stretchTool
+	if ( attColumn.fValid() && attColumn->dm()->pdv() && !attColumn->dm()->pdbool()) {
+		DrawerTool *stretchTool = new StretchTool(mpvGetView(),tree,drawer);
+		parentTool->addTool(stretchTool);
+		stretchTool->configure(hit); // item
+	}
+	// add annotationDrawerTool
+	LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(drawer);
+	SetDrawer *sdr = dynamic_cast<SetDrawer *>(drawer);
+	Domain dm;
+	if ( ldr) {
+		SpatialDataDrawer *spdr = (SpatialDataDrawer *)(drawer->getParentDrawer());
+		dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() : spdr->getBaseMap()->dm();
+	} else if ( sdr) {
+		dm = sdr->useAttributeTable() ? sdr->getAtttributeColumn()->dm() :   sdr->getBaseMap()->dm();
+	}
+	if ((dm->pdv() && !dm->pdbool()) || dm->pdc()) {
+		DrawerTool *annotationDrawerTool = new AnnotationDrawerTool(mpvGetView(),tree,drawer);
+		parentTool->addTool(annotationDrawerTool);
+		if (annotationDrawerTool->isActive()) // in the case of annotationDrawerTool isActive() and isActiveMode() would be the same (isActiveMode() is a function that does not exist, it would be symmetric to setActiveMode(bool)).
+			annotationDrawerTool->setActiveMode(true); // add items to the tree, and force refresh of the legend drawer
+	}
+
+	lasthit = hit;
 }
 
 void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
@@ -91,6 +133,8 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 		return;
 	int colNr = attrCheck->getState();
 	HTREEITEM hit = attrCheck->getHTI(colNr);
+	if (hit == lasthit)
+		return;
 	CString txt= tree->GetTreeCtrl().GetItemText(hit);
 	DisplayOptionButtonItem *data = (DisplayOptionButtonItem  *)(tree->GetTreeCtrl().GetItemData(hit));
 	data->setState(true);
@@ -131,6 +175,7 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 				else
 					featureLayerDrawer->setDrawMethod(NewDrawer::drmMULTIPLE);
 			}
+			featureLayerDrawer->setStretchMethod(LayerDrawer::smLINEAR);
 			featureLayerDrawer->prepareChildDrawers(&pp);
 		}
 		cdrw->prepare(&pp);
@@ -161,6 +206,7 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 			else
 				featureLayerDrawer->setDrawMethod(NewDrawer::drmMULTIPLE);
 		}
+		featureLayerDrawer->setStretchMethod(LayerDrawer::smLINEAR);
 		featureLayerDrawer->prepareChildDrawers(&pp);
 	}
 

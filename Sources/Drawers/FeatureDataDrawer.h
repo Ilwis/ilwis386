@@ -16,8 +16,8 @@ class _export FeatureDataDrawer : public SpatialDataDrawer {
 		virtual ~FeatureDataDrawer();
 		virtual void prepare(PreparationParameters *pp);
 		void getFeatures(vector<Feature *>& features, int index = 0) const;
-		String store(const FileName& fnView, const String& parenSection) const;
-		void load(const FileName& fnView, const String& parenSection);
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& section);
 
 	protected:
 		void addLayerDrawer(const BaseMap& basemap, ILWIS::PreparationParameters *pp, ILWIS::LayerDrawer *fsd, const String& name="");

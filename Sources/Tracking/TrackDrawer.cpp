@@ -67,19 +67,19 @@ long TrackSetDrawer::getTrackLength() const {
 }
 
 
-String TrackSetDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = "TrackSetDrawer::" + parentSection;
+String TrackSetDrawer::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":TrackSet";
 	ComplexDrawer::store(fnView, currentSection);
-	trackerDrawProperties.lproperties.store(fnView, currentSection);
-	trackerDrawProperties.pproperties.store(fnView, currentSection);
+	trackerDrawProperties.lproperties.store(fnView, currentSection + ":Lines");
+	trackerDrawProperties.pproperties.store(fnView, currentSection + ":Points");
 	return currentSection;
 }
 
-void TrackSetDrawer::load(const FileName& fnView, const String& parentSection){
-	String currentSection = parentSection;
+void TrackSetDrawer::load(const FileName& fnView, const String& section){
+	String currentSection = section;
 	ComplexDrawer::load(fnView, currentSection);
-	trackerDrawProperties.lproperties.load(fnView, currentSection);
-	trackerDrawProperties.pproperties.load(fnView, currentSection);
+	trackerDrawProperties.lproperties.load(fnView, currentSection + ":Lines");
+	trackerDrawProperties.pproperties.load(fnView, currentSection + ":Points");
 }
 
 bool TrackSetDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb) const {

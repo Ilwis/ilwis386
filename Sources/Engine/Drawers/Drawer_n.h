@@ -81,8 +81,8 @@ namespace ILWIS {
 		virtual String iconName(const String& subtype="?") const = 0;
 		virtual void setSpecialDrawingOptions(int option, bool add, const vector<int>& coords=vector<int>())=0 ;
 		virtual int getSpecialDrawingOption(int opt=sdoNone) const =0;
-		virtual String store(const FileName& fnView, const String& parenSection) const = 0;
-		virtual void load(const FileName& fnView, const String& parenSection) = 0;
+		virtual String store(const FileName& fnView, const String& section) const = 0;
+		virtual void load(const FileName& fnView, const String& section) = 0;
 		virtual bool isSimple() const =0;
 		virtual bool isDirty() const =0;
 		virtual void setDirty(bool yesno) = 0;

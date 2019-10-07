@@ -8,7 +8,6 @@
 #include "CanvasBackgroundDrawer.h"
 #include "Engine\Drawers\ZValueMaker.h"
 
-
 using namespace ILWIS;
 
 ILWIS::NewDrawer *createCanvasBackgroundDrawer(DrawerParameters *parms) {
@@ -108,23 +107,25 @@ bool CanvasBackgroundDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 	return true;
 }
 
-String CanvasBackgroundDrawer::store(const FileName& fnView, const String& parentSection) const {
-	ComplexDrawer::store(fnView, getType());
-	ObjectInfo::WriteElement(getType().c_str(),"InSideColor2D",fnView, inside2D);
-	ObjectInfo::WriteElement(getType().c_str(),"InSideColor3D",fnView, inside3D);
-	ObjectInfo::WriteElement(getType().c_str(),"OutSideColor2D",fnView, outside2D);
-	ObjectInfo::WriteElement(getType().c_str(),"OutSideColor3D",fnView, outside3D);
-	ObjectInfo::WriteElement(getType().c_str(),"SkyColor3D",fnView, sky3D);
-	return getType();
+String CanvasBackgroundDrawer::store(const FileName& fnView, const String& section) const {
+	String currentSection = section + ":CanvasBackground";
+	ComplexDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"InSideColor2D",fnView, inside2D);
+	ObjectInfo::WriteElement(currentSection.c_str(),"InSideColor3D",fnView, inside3D);
+	ObjectInfo::WriteElement(currentSection.c_str(),"OutSideColor2D",fnView, outside2D);
+	ObjectInfo::WriteElement(currentSection.c_str(),"OutSideColor3D",fnView, outside3D);
+	ObjectInfo::WriteElement(currentSection.c_str(),"SkyColor3D",fnView, sky3D);
+	return currentSection;
 }
 
-void CanvasBackgroundDrawer::load(const FileName& fnView, const String& parentSection) {
-	ComplexDrawer::load(fnView, getType());
-	ObjectInfo::ReadElement(getType().c_str(),"InSideColor2D",fnView, inside2D);
-	ObjectInfo::ReadElement(getType().c_str(),"InSideColor3D",fnView, inside3D);
-	ObjectInfo::ReadElement(getType().c_str(),"OutSideColor2D",fnView, outside2D);
-	ObjectInfo::ReadElement(getType().c_str(),"OutSideColor3D",fnView, outside3D);
-	if (ObjectInfo::ReadElement(getType().c_str(),"SkyColor3D",fnView, sky3D))
+void CanvasBackgroundDrawer::load(const FileName& fnView, const String& section) {
+	String currentSection = section;
+	ComplexDrawer::load(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"InSideColor2D",fnView, inside2D);
+	ObjectInfo::ReadElement(currentSection.c_str(),"InSideColor3D",fnView, inside3D);
+	ObjectInfo::ReadElement(currentSection.c_str(),"OutSideColor2D",fnView, outside2D);
+	ObjectInfo::ReadElement(currentSection.c_str(),"OutSideColor3D",fnView, outside3D);
+	if (ObjectInfo::ReadElement(currentSection.c_str(),"SkyColor3D",fnView, sky3D))
 		getRootDrawer()->SetSkyColor(sky3D);
 }
 

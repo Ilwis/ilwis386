@@ -259,6 +259,7 @@ public:
 	void addItem(HTREEITEM hti);
 	void checkItem(HTREEITEM hti);
 	void checkItem(int index);
+	void checkItemInitial(HTREEITEM hti); // restore the check-state of the tree when reading a mapview
 	void clear();
 
 	int getState() const { return state; }

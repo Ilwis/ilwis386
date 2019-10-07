@@ -31,9 +31,9 @@ StationsDrawer::StationsDrawer(DrawerParameters *parms)
 StationsDrawer::~StationsDrawer() {
 }
 
-String StationsDrawer::store(const FileName& fnView, const String& parentSection) const
+String StationsDrawer::store(const FileName& fnView, const String& section) const
 {
-	String currentSection = parentSection + "::" + getType();
+	String currentSection = section + ":Stations";
 	SpaceTimeDrawer::store(fnView, currentSection);
 	return currentSection;
 }

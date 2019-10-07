@@ -26,7 +26,7 @@ ComplexDrawer(parms,"GraticuleDrawer")
 	id = name = "GraticuleDrawer";
 	rDist = rUNDEF;
 	setActive(false);
-	setAlpha(0.8);
+	setAlpha(0.79999999999999999); // GraticuleTool opens with default transparency 20% instead of 19%
 	lproperties.thickness = 1;
 	lproperties.drawColor = Color(0,0,0);
 	lproperties.linestyle = 0xFFFF;
@@ -47,7 +47,7 @@ bool GraticuleDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 }
 
 void GraticuleDrawer::prepare(PreparationParameters *pp) {
-	if (  pp->type & RootDrawer::ptGEOMETRY){ 
+	if (  pp->type & RootDrawer::ptGEOMETRY || pp->type & NewDrawer::ptRESTORE){ 
 		String sVal;
 		Coord c, cMin, cMax;
 		Color clr;
@@ -104,7 +104,7 @@ void GraticuleDrawer::prepare(PreparationParameters *pp) {
 			getZMaker()->setThreeDPossible(true);
 		}
 	}
-	if ( pp->type & NewDrawer::ptRENDER) {
+	if ( pp->type & NewDrawer::ptRENDER || pp->type & NewDrawer::ptRESTORE) {
 		for(int i=0; i < drawers.size(); ++i) {
 			LineDrawer *ld = (LineDrawer *)drawers.at(i);
 			((LineProperties *)ld->getProperties())->drawColor = lproperties.drawColor;
@@ -267,17 +267,18 @@ void GraticuleDrawer::AddGraticuleLine(const CoordSystem &csy, const LatLon& llB
 	addDrawer(line); 
 }
 
-String GraticuleDrawer::store(const FileName& fnView, const String& parentSection) const{
-	ComplexDrawer::store(fnView, getType());
-	ObjectInfo::WriteElement(getType().c_str(),"Distance",fnView, rDist);
-	lproperties.store(fnView,getType());
-	return getType();
+String GraticuleDrawer::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":Graticule";
+	ComplexDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Distance",fnView, rDist);
+	lproperties.store(fnView,currentSection);
+	return currentSection;
 }
 
-void GraticuleDrawer::load(const FileName& fnView, const String& parenSection){
-	ComplexDrawer::load(fnView, getType());
-	ObjectInfo::ReadElement(getType().c_str(),"Distance",fnView, rDist);
-	lproperties.load(fnView,getType());
+void GraticuleDrawer::load(const FileName& fnView, const String& currentSection){
+	ComplexDrawer::load(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Distance",fnView, rDist);
+	lproperties.load(fnView,currentSection);
 }
 
 void GraticuleDrawer::setGridSpacing(double d){

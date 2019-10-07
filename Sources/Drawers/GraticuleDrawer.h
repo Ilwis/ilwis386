@@ -28,8 +28,8 @@ namespace ILWIS{
 		void displayOptionGrid3D(CWnd *parent);
 		void gridActive(void *value, LayerTreeView *v);
 		void prepareGrid( const CoordSystem &csy, double rDist, const LatLon& cMin, const LatLon& cMax );
-		String store(const FileName& fnView, const String& parenSection) const;
-		void load(const FileName& fnView, const String& parenSection);
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& currentSection);
 		void prepareChildDrawers(PreparationParameters *parms);
 		void calcBounds(const GeoRef& grf, const CoordBounds& cbMap, const CoordSystem& cs, LatLon& llMin, LatLon& llMax);
 		double          rDist;

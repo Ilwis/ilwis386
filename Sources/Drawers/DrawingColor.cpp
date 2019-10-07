@@ -74,6 +74,10 @@ bool IlwisData::fUsesCol() const {
 	return col.fValid();
 }
 
+const Column IlwisData::getCol() const {
+	return col;
+}
+
 DrawingColor::DrawingColor(ComplexDrawer *dr, int ind) : 
 clr1(168,168,168), // False
 clr2(0,176,20), // True
@@ -567,21 +571,37 @@ void DrawingColor::setTresholdRange(const RangeReal& rr, bool single){
 	useSingleValueForTreshold = single;
 }
 
-String DrawingColor::store(const FileName& fnView, const String& parentSection) const{
-	ObjectInfo::WriteElement(parentSection.c_str(),"TransparencyValues",fnView, transpValues);
-	ObjectInfo::WriteElement(parentSection.c_str(),"IdColorSet",fnView, colorSetIndex);
-	ObjectInfo::WriteElement(parentSection.c_str(),"IdColorNumbers",fnView, iMultColors);
-	ObjectInfo::WriteElement(parentSection.c_str(),"color1",fnView, clr1);
-	ObjectInfo::WriteElement(parentSection.c_str(),"color2",fnView, clr2);
-	return parentSection;
+String DrawingColor::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":DrawingColor";
+	ObjectInfo::WriteElement(currentSection.c_str(),"TransparencyValues",fnView, transpValues);
+	ObjectInfo::WriteElement(currentSection.c_str(),"IdColorSet",fnView, colorSetIndex);
+	ObjectInfo::WriteElement(currentSection.c_str(),"IdColorNumbers",fnView, iMultColors);
+	ObjectInfo::WriteElement(currentSection.c_str(),"color1",fnView, clr1);
+	ObjectInfo::WriteElement(currentSection.c_str(),"color2",fnView, clr2);
+	if (dataValues.fUsesCol()) {
+		ObjectInfo::WriteElement(currentSection.c_str(),"AttributeTable",fnView, dataValues.getCol()->fnTbl.sRelativeQuoted());
+		ObjectInfo::WriteElement(currentSection.c_str(),"AttributeColumn",fnView, dataValues.getCol()->sNameQuoted());
+	}
+	return currentSection;
 }
 
-void DrawingColor::load(const FileName& fnView, const String& parentSection){
-	ObjectInfo::ReadElement(parentSection.c_str(),"TransparencyValues",fnView, transpValues);
-	ObjectInfo::ReadElement(parentSection.c_str(),"IdColorSet",fnView, colorSetIndex);
-	ObjectInfo::ReadElement(parentSection.c_str(),"IdColorNumbers",fnView, iMultColors);
-	ObjectInfo::ReadElement(parentSection.c_str(),"color1",fnView, clr1);
-	ObjectInfo::ReadElement(parentSection.c_str(),"color2",fnView, clr2);
+void DrawingColor::load(const FileName& fnView, const String& section){
+	String currentSection = section + ":DrawingColor";
+	ObjectInfo::ReadElement(currentSection.c_str(),"TransparencyValues",fnView, transpValues);
+	ObjectInfo::ReadElement(currentSection.c_str(),"IdColorSet",fnView, colorSetIndex);
+	ObjectInfo::ReadElement(currentSection.c_str(),"IdColorNumbers",fnView, iMultColors);
+	ObjectInfo::ReadElement(currentSection.c_str(),"color1",fnView, clr1);
+	ObjectInfo::ReadElement(currentSection.c_str(),"color2",fnView, clr2);
+	Table tbl;
+	ObjectInfo::ReadElement(currentSection.c_str(), "AttributeTable", fnView, tbl);
+	if (tbl.fValid()) {
+		String colname;
+		ObjectInfo::ReadElement(currentSection.c_str(),"AttributeColumn",fnView, colname);
+		if (colname != "") {
+			Column col = tbl->col(colname);
+			dataValues.setColumn(col);
+		}
+	}
 	if (iMultColors == 3)
 		InitClrRandom();
 }

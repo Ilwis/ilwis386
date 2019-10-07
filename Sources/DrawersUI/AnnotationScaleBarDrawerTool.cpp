@@ -56,6 +56,11 @@ bool AnnotationScaleBarDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tl) {
 }
 
 HTREEITEM AnnotationScaleBarDrawerTool::configure( HTREEITEM parentItem) {
+	if ( !active)
+		return parentItem;
+	ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
+	if (annotations)
+		scaleDrawer = (AnnotationScaleBarDrawer *)annotations->getDrawer("AnnotationScaleBarDrawer");
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, parentItem, drawer);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&AnnotationScaleBarDrawerTool::makeActive);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&AnnotationScaleBarDrawerTool::setPosition);

@@ -620,7 +620,7 @@ public:
 		if (ObjectInfo::ReadElement("Ilwis", "Type", fnMapView, sType)) {
 			if (sType == "MapView") {
 				int iDrawerCount;
-				if (ObjectInfo::ReadElement("RootDrawer", "DrawerCount", fnMapView, iDrawerCount)) {
+				if (ObjectInfo::ReadElement("Root", "DrawerCount", fnMapView, iDrawerCount)) {
 					return iDrawerCount > 0;
 				} else
 					return false; // invalid MapView (old style MapView, or no layers defined)
@@ -719,7 +719,7 @@ public:
 			CoordBounds cbView = rootDrawer->getCoordBoundsView();
 
 			FileName fn = mpv->fnObj;
-			rootDrawer->load(fn,"");
+			rootDrawer->load(fn,"Root");
 			if (!fUseMapViewGeometry) {
 				rootDrawer->setCoordinateSystem(csy, true);
 				rootDrawer->setCoordBoundsMap(cbMap);

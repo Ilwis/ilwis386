@@ -22,6 +22,7 @@ namespace ILWIS {
 		void setCubeVisibility(void *value, HTREEITEM);
 		void setTicksVisibility(void *value, HTREEITEM);
 		void setVisibility(const String& element, bool value);
+		int getVisibility(const String& element);
 		void elementForm(const String& element);
 		void setCoordVisibility(void *value, HTREEITEM);
 		void setLabelVisibility(void *value, HTREEITEM);

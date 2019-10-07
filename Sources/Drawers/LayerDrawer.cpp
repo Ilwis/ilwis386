@@ -47,7 +47,7 @@ void LayerDrawer::prepare(PreparationParameters *parm){
 			csy = parm->csy;
 		Representation rpr = mapDrawer->getRepresentation();
 		//if ( rpr.fValid() && !rpr->prv())
-		if ( rpr.fValid() && !rpr->prv())
+		if (!(stretched && rrStretch.fValid()) && rpr.fValid() && !rpr->prv()) // the first condition is to prevent overwriting the user-chosen stretch with the default from mapDrawer->getStretchRangeReal()
 			setStretchRangeReal(mapDrawer->getStretchRangeReal());
 		if (!drawColor)
 			drawColor = new DrawingColor(this, parm->index);
@@ -257,12 +257,22 @@ bool LayerDrawer::useAttributeColumn() const{
 String LayerDrawer::store(const FileName& fnView, const String& parentSection) const{
 	ComplexDrawer::store(fnView, parentSection);
 	ObjectInfo::WriteElement(parentSection.c_str(),"CoordinateSystem",fnView, csy);
-	ObjectInfo::WriteElement(parentSection.c_str(),"Representation",fnView, rpr);
+	if (rpr.fValid() && rpr->fnObj.fValid())
+		ObjectInfo::WriteElement(parentSection.c_str(),"Representation",fnView, rpr);
+	else if (getDrawMethod() == NewDrawer::drmRPR) { // failsafe; InteractiveRepresentation temporarily destroys the representation, which would cause the mapview to be saved in an inconsistent state.
+		if (useAttColumn && attColumn.fValid())
+			ObjectInfo::WriteElement(parentSection.c_str(),"Representation",fnView, attColumn->dm()->rpr());
+		else {
+			SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)parentDrawer;
+			ObjectInfo::WriteElement(parentSection.c_str(),"Representation",fnView, mapDrawer->getBaseMap()->dm()->rpr());
+		}
+	} else // the original behavior: remove the item from the ODF
+		ObjectInfo::WriteElement(parentSection.c_str(),"Representation",fnView, rpr);
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchReal",fnView, rrStretch);
 	ObjectInfo::WriteElement(parentSection.c_str(),"IsStretched",fnView, stretched);
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchMethod",fnView, stretchMethod);
 	if ( attColumn.fValid())
-		ObjectInfo::WriteElement(parentSection.c_str(),"AttributeColumn",fnView, attColumn->sName());
+		ObjectInfo::WriteElement(parentSection.c_str(),"AttributeColumn",fnView, attColumn->sNameQuoted());
 	ObjectInfo::WriteElement(parentSection.c_str(),"UseAttributes",fnView, useAttColumn);
 	ObjectInfo::WriteElement(parentSection.c_str(),"ExtrusionAlpha",fnView, extrAlpha);
 	ObjectInfo::WriteElement(parentSection.c_str(),"UseRpr",fnView, useRpr);

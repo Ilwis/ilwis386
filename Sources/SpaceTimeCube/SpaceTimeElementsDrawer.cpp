@@ -85,17 +85,17 @@ GeneralDrawerProperties *SpaceTimeElementsDrawer::getProperties(){
 	return &properties;
 }
 
-String SpaceTimeElementsDrawer::store(const FileName& fnView, const String& parentSection) const {
-	String currentSection = parentSection + "::" + getType();
+String SpaceTimeElementsDrawer::store(const FileName& fnView, const String& section) const {
+	String currentSection = section + ":SpaceTimeElements";
 	ComplexDrawer::store(fnView, currentSection);
 	properties.store(fnView, currentSection);
 	return currentSection;
 }
 
-void SpaceTimeElementsDrawer::load(const FileName& fnView, const String& currentSection){
-	String drawerSection = currentSection + "::" + getType();
-	ComplexDrawer::load(fnView, drawerSection);
-	properties.load(fnView, drawerSection);
+void SpaceTimeElementsDrawer::load(const FileName& fnView, const String& section){
+	String currentSection = section + ":SpaceTimeElements";
+	ComplexDrawer::load(fnView, currentSection);
+	properties.load(fnView, currentSection);
 }
 
 bool SpaceTimeElementsDrawer::drawFootprint(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
@@ -418,7 +418,7 @@ String PathElementProperties::store(const FileName& fnView, const String& parent
 	for (map<String, PathElement>::const_iterator cur = elements.begin(); cur != elements.end(); ++cur) {
 		String elementName = cur->first;
 		PathElement element = cur->second;
-		String elementSection ("%S::PathElement%d", parentSection, index++);
+		String elementSection ("%S:PathElement%d", parentSection, index++);
 		ObjectInfo::WriteElement(elementSection.c_str(), "Name", fnView, elementName);
 		element.store(fnView, elementSection);
 	}
@@ -431,7 +431,7 @@ void PathElementProperties::load(const FileName& fnView, const String& parentSec
 		nrElements = 0;
 	for (int index = 0; index < nrElements; ++index) {
 		String elementName;
-		String elementSection ("%S::PathElement%d", parentSection, index);
+		String elementSection ("%S:PathElement%d", parentSection, index);
 		ObjectInfo::ReadElement(elementSection.c_str(), "Name", fnView, elementName);
 		PathElement element;
 		element.load(fnView, elementSection);

@@ -101,19 +101,13 @@ void FeatureDataDrawer::getFeatures(vector<Feature *>& features, int index) cons
 	}
 }
 
-String FeatureDataDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = "FeatureDataDrawer::" + parentSection;
+String FeatureDataDrawer::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":FeatureData";
 	SpatialDataDrawer::store(fnView, currentSection);
 
 	return currentSection;
 }
 
-void FeatureDataDrawer::load(const FileName& fnView, const String& parentSection){
-	SpatialDataDrawer::load(fnView, parentSection);
+void FeatureDataDrawer::load(const FileName& fnView, const String& section){
+	SpatialDataDrawer::load(fnView, section);
 }
-
-
-
-
-
-

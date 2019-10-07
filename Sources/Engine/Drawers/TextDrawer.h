@@ -21,16 +21,10 @@ public:
 	//HTREEITEM configure(LayerTreeView  *tv, HTREEITEM parent);
 	void setFontScale(double f);
 	double getFontScale() const;
-	String store(const FileName& fnView, const String& parenSection) const;
-	void load(const FileName& fnView, const String& parenSection);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
 private:
-	void displayOptionsText(CWnd *parent);
 	Color clrText;
-	String sFaceName;
-	long iFHeight;
-	long iFWeight;
-	long iFStyle;
-	long iWidth;
 	OpenGLText *font;
 	double fontScale;
 };

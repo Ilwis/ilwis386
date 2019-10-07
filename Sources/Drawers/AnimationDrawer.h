@@ -57,8 +57,8 @@ namespace ILWIS{
 		// a message needs to be send to this window else dangling pointers result;
 
 	protected:
-		String store(const FileName& fnView, const String& parenSection) const;
-		void load(const FileName& fnView, const String& parenSection);
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& section);
 
 		virtual String iconName(const String& subtype="?") const;
 		bool timerPerIndex() ;

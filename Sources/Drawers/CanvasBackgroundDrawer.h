@@ -15,8 +15,8 @@ public:
 	Color& getColor(ColorLocation cl);
 	virtual void select(bool yesno); // function is misused to notify partial draw in 2D
 private:
-	String store(const FileName& fnView, const String& parenSection) const;
-	void load(const FileName& fnView, const String& parenSection);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
 	Color inside2D;
 	Color outside2D;
 	Color inside3D;

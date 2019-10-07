@@ -56,7 +56,7 @@ void Grid3DTool::grid3D(void *v, HTREEITEM ) {
 	bool threeD = *(bool *)v;
 	GridDrawer *gdr = (GridDrawer *)drawer;
 	gdr->set3DGrid(threeD);
-	PreparationParameters pp(NewDrawer::ptGEOMETRY);
+	PreparationParameters pp(NewDrawer::ptGEOMETRY|NewDrawer::ptRENDER);
 	drawer->prepare(&pp);
 	drawer->getRootDrawer()->getDrawerContext()->doDraw();
 }

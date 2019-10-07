@@ -212,30 +212,30 @@ String ColorCompositeDrawer::getInfo(const Coord& c) const {
 	return infos;
 }
 
-String ColorCompositeDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = "ColorCompositeDrawer::" + parentSection;
-	RasterLayerDrawer::store(fnView, currentSection);
+String ColorCompositeDrawer::store(const FileName& fnView, const String& section) const{
+	String layerSection = RasterLayerDrawer::store(fnView, section);// + ":ColorComposite";	
+	String currentSection = layerSection + ":ColorComposite";
 	ObjectInfo::WriteElement(currentSection.c_str(),"MapList",fnView,  mpl->fnObj);
 	for(int i = 0; i < 3; ++i) {
 		String band("Band%d", i);
-		long index = data->ccMaps[i].index;
-		ObjectInfo::WriteElement(currentSection.c_str(),band.c_str(),fnView,  index);
+		ObjectInfo::WriteElement(currentSection.c_str(),band.c_str(),fnView, data->ccMaps[i].index);
+		ObjectInfo::WriteElement(currentSection.c_str(),(band + "_StretchReal").c_str(),fnView, data->ccMaps[i].rr);
 	}
 
-	return currentSection;
+	return layerSection;
 }
 
-void ColorCompositeDrawer::load(const FileName& fnView, const String& parentSection){
-	String currentSection = parentSection;
+void ColorCompositeDrawer::load(const FileName& fnView, const String& section){
+	String currentSection = section;
 	RasterLayerDrawer::load(fnView, currentSection);
+	currentSection += ":ColorComposite";
 	FileName fnObj;
 	ObjectInfo::ReadElement(currentSection.c_str(),"MapList",fnView,  fnObj);
 	mpl = MapList(fnObj);
 	for(int i = 0; i < 3; ++i) {
 		String band("Band%d", i);
-		long index;
-		ObjectInfo::ReadElement(currentSection.c_str(),band.c_str(),fnView,  index);
-		data->ccMaps[i].index = index;
+		ObjectInfo::ReadElement(currentSection.c_str(),band.c_str(),fnView, data->ccMaps[i].index);
+		ObjectInfo::ReadElement(currentSection.c_str(),(band + "_StretchReal").c_str(),fnView, data->ccMaps[i].rr);
 	}
 }
 

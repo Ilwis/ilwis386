@@ -27,8 +27,8 @@ namespace ILWIS {
 			return color.fEqual(colorUNDEF) && (alpha == rUNDEF) && !visible;
 		}
 		static CubeElement undefElement;
-		String store(const FileName& fnView, const String& parentSection) const;
-		void load(const FileName& fnView, const String& parentSection);
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& currentSection);
 
 		Color color;
 		double alpha;

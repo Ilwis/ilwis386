@@ -56,6 +56,7 @@ bool PolygonLayerDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea
 	getRootDrawer()->setZIndex(1 + getRootDrawer()->getZIndex()); // extra offset because of the boundary layer;
 	return true;
 }
+
 void PolygonLayerDrawer::addDataSource(void *bmap,int options) {
 	FeatureLayerDrawer::addDataSource(bmap, options);
 	ComplexDrawer *cdr = (ComplexDrawer *)getParentDrawer();
@@ -191,8 +192,8 @@ String PolygonLayerDrawer::getHatchName() const {
 }
 
 
-String PolygonLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = "PolygonLayerDrawer::" + parentSection;
+String PolygonLayerDrawer::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":PolygonLayer";
 	FeatureLayerDrawer::store(fnView, currentSection);
 	ObjectInfo::WriteElement(currentSection.c_str(),"ShowAreas",fnView, showAreas);
 	ObjectInfo::WriteElement(currentSection.c_str(),"ShowBoundaries",fnView, showBoundaries);
@@ -202,8 +203,8 @@ String PolygonLayerDrawer::store(const FileName& fnView, const String& parentSec
 	return currentSection;
 }
 
-void PolygonLayerDrawer::load(const FileName& fnView, const String& parentSection){
-	String currentSection = parentSection;
+void PolygonLayerDrawer::load(const FileName& fnView, const String& section){
+	String currentSection = section;
 	FeatureLayerDrawer::load(fnView, currentSection);
 	ObjectInfo::ReadElement(currentSection.c_str(),"ShowAreas",fnView, showAreas);
 	ObjectInfo::ReadElement(currentSection.c_str(),"ShowBoundaries",fnView, showBoundaries);

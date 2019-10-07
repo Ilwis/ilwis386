@@ -39,7 +39,12 @@ NewDrawer *PointLayerDrawer::createElementDrawer(PreparationParameters *pp, ILWI
 	drw->setGeneralProperties((GeneralDrawerProperties *)properties);
 
 	return drw;
+}
 
+bool PointLayerDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
+	FeatureLayerDrawer::draw(drawLoop, cbArea);
+	getRootDrawer()->setZIndex(1 + getRootDrawer()->getZIndex()); // extra offset because of the contours in the point symbols (TODO: not all symbols may need this because no area is drawn; for complicated symbols the zIndex may need to be increased by more than 1);
+	return true;
 }
 
 void PointLayerDrawer::prepare(PreparationParameters *parm){
@@ -68,7 +73,7 @@ void PointLayerDrawer::prepare(PreparationParameters *parm){
 
 	}
 
-	if ( (parm->type & NewDrawer::ptRENDER) != 0) {
+	if (parm->type & NewDrawer::ptRENDER || parm->type & NewDrawer::ptRESTORE) {
 		for(int i=0; i < drawers.size(); ++i) {
 			PointFeatureDrawer *ld = (PointFeatureDrawer *)drawers.at(i);
 			if ( !ld) 
@@ -119,21 +124,19 @@ void PointLayerDrawer::prepare(PreparationParameters *parm){
 	}
 }
 
-String PointLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = getType() + "::" + parentSection;
+String PointLayerDrawer::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":PointLayer";
 	FeatureLayerDrawer::store(fnView, currentSection);
 	properties->store(fnView, currentSection);
 	ObjectInfo::WriteElement(currentSection.c_str(),"RotationColumn",fnView, rotationInfo.rotationColumn);
 	ObjectInfo::WriteElement(currentSection.c_str(),"RotationOrientation",fnView, rotationInfo.clockwise);
 	ObjectInfo::WriteElement(currentSection.c_str(),"RotationRange",fnView, rotationInfo.rr);
 
-
-
 	return currentSection;
 }
 
-void PointLayerDrawer::load(const FileName& fnView, const String& parentSection){
-	String currentSection = parentSection;
+void PointLayerDrawer::load(const FileName& fnView, const String& section){
+	String currentSection = section;
 	FeatureLayerDrawer::load(fnView, currentSection);
 	properties->load(fnView, currentSection);
 	ObjectInfo::ReadElement(currentSection.c_str(),"RotationColumn",fnView, rotationInfo.rotationColumn);

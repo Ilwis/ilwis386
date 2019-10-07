@@ -55,20 +55,18 @@ void LineLayerDrawer::setDrawMethod(DrawMethod method) {
 		drm = method;
 }
 
-String LineLayerDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = "LineLayerDrawer::" + parentSection;
+String LineLayerDrawer::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":LineLayer";
 	FeatureLayerDrawer::store(fnView, currentSection);
 	lproperties.store(fnView, currentSection);
 
 	return currentSection;
 }
 
-void LineLayerDrawer::load(const FileName& fnView, const String& parentSection){
-	String currentSection = parentSection;
+void LineLayerDrawer::load(const FileName& fnView, const String& section){
+	String currentSection = section;
 	FeatureLayerDrawer::load(fnView, currentSection);
 	lproperties.load(fnView, currentSection);
-
-
 }
 
 void LineLayerDrawer::getDrawerFor(const Feature* feature,vector<NewDrawer *>& featureDrawers) {

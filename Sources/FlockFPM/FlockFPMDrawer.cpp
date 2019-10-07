@@ -349,8 +349,8 @@ void FlockFPMDrawer::drawYT() const
 {
 }
 
-String FlockFPMDrawer::store(const FileName& fnView, const String& parentSection) const {
-	String currentSection = parentSection + "::" + getType();
+String FlockFPMDrawer::store(const FileName& fnView, const String& section) const {
+	String currentSection = section + ":FlockFPM";
 	ComplexDrawer::store(fnView, currentSection);
 	return currentSection;
 }

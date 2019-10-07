@@ -276,8 +276,8 @@ GeneralDrawerProperties *CubeDrawer::getProperties(){
 	return &properties;
 }
 
-String CubeDrawer::store(const FileName& fnView, const String& parentSection) const {
-	String currentSection = parentSection + "::" + getType();
+String CubeDrawer::store(const FileName& fnView, const String& section) const {
+	String currentSection = section + ":Cube";
 	ComplexDrawer::store(fnView, currentSection);
 	properties.store(fnView, currentSection);
 	return currentSection;
@@ -317,7 +317,7 @@ String CubeProperties::store(const FileName& fnView, const String& parentSection
 	for (map<String, CubeElement>::const_iterator cur = elements.begin(); cur != elements.end(); ++cur) {
 		String elementName = cur->first;
 		CubeElement element = cur->second;
-		String elementSection ("%S::CubeElement%d", parentSection, index++);
+		String elementSection ("%S:CubeElement%d", parentSection, index++);
 		ObjectInfo::WriteElement(elementSection.c_str(), "Name", fnView, elementName);
 		element.store(fnView, elementSection);
 	}
@@ -330,7 +330,7 @@ void CubeProperties::load(const FileName& fnView, const String& parentSection) {
 		nrElements = 0;
 	for (int index = 0; index < nrElements; ++index) {
 		String elementName;
-		String elementSection ("%S::CubeElement%d", parentSection, index);
+		String elementSection ("%S:CubeElement%d", parentSection, index);
 		ObjectInfo::ReadElement(elementSection.c_str(), "Name", fnView, elementName);
 		CubeElement element;
 		element.load(fnView, elementSection);

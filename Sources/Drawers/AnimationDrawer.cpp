@@ -309,8 +309,8 @@ void AnimationDrawer::setUseTime(bool yesno) {
 	}
 }
 
-void AnimationDrawer::load(const FileName& fnView, const String& parentSection){
-	String currentSection = parentSection;
+void AnimationDrawer::load(const FileName& fnView, const String& section){
+	String currentSection = section;
 	SetDrawer::load(fnView, currentSection);
 	ObjectInfo::ReadElement(currentSection.c_str(),"Interval",fnView, interval);
 	ObjectInfo::ReadElement(currentSection.c_str(),"UseTime",fnView, useTime);
@@ -319,8 +319,8 @@ void AnimationDrawer::load(const FileName& fnView, const String& parentSection){
 	ObjectInfo::ReadElement(currentSection.c_str(),"MapIndex",fnView, mapIndex);
 }
 
-String AnimationDrawer::store(const FileName& fnView, const String& parentSection) const{
-	String currentSection = "AnimationDrawer::" + parentSection;
+String AnimationDrawer::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":Animation";
 	SetDrawer::store(fnView, currentSection);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Interval",fnView, interval);
 	ObjectInfo::WriteElement(currentSection.c_str(),"UseTime",fnView, useTime);

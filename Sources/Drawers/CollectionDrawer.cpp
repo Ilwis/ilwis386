@@ -64,5 +64,13 @@ String CollectionDrawer::iconName(const String& subtype) const {
 	return ".ioc";
 }
 
+String CollectionDrawer::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":Collection";
+	SetDrawer::store(fnView, currentSection);
 
+	return currentSection;
+}
 
+void CollectionDrawer::load(const FileName& fnView, const String& section){
+	SetDrawer::load(fnView, section);
+}

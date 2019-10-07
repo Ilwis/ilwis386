@@ -15,6 +15,8 @@ namespace ILWIS{
 		String description() const;
 		RangeReal getRange() const { return rrMinMax; }
 		void addDataSource(void *bmap, int options=0);
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& section);
 
 	protected:
 		virtual String iconName(const String& subtype="?") const;

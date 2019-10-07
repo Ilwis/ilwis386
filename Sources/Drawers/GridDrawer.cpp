@@ -138,7 +138,7 @@ void GridDrawer::prepare(PreparationParameters *pp) {
 		}
 		getZMaker()->setThreeDPossible(true);
 	}
-	if ( pp->type & NewDrawer::ptRENDER) {
+	if ( pp->type & NewDrawer::ptRENDER || pp->type & NewDrawer::ptRESTORE) {
 		for(int i=0; i < drawers.size(); ++i) {
 			LineDrawer *ld = (LineDrawer *)drawers.at(i);
 			((LineProperties *)ld->getProperties())->drawColor = lproperties.drawColor;
@@ -568,25 +568,25 @@ void GridDrawer::prepareChildDrawers(PreparationParameters *parms) {
 	}
 }
 
-String GridDrawer::store(const FileName& fnView, const String& parentSection) const{
-	ComplexDrawer::store(fnView, getType());
-	ObjectInfo::WriteElement(getType().c_str(),"Distance",fnView, rDist);
-	lproperties.store(fnView,getType());
-	ObjectInfo::WriteElement(getType().c_str(),"ThreeDGrid",fnView, threeDGrid);
-	ObjectInfo::WriteElement(getType().c_str(),"Mode",fnView, mode);
-	ObjectInfo::WriteElement(getType().c_str(),"PlaneColor",fnView, planeColor);
-	return getType();
+String GridDrawer::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":Grid";
+	ComplexDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Distance",fnView, rDist);
+	lproperties.store(fnView,currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"ThreeDGrid",fnView, threeDGrid);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Mode",fnView, mode);
+	ObjectInfo::WriteElement(currentSection.c_str(),"PlaneColor",fnView, planeColor);
+	return currentSection;
 }
 
-void GridDrawer::load(const FileName& fnView, const String& parenSection){
-	ComplexDrawer::load(fnView, parenSection);
-	ObjectInfo::ReadElement(getType().c_str(),"Distance",fnView, rDist);
-	lproperties.store(fnView,getType());
-	ObjectInfo::ReadElement(getType().c_str(),"ThreeDGrid",fnView, threeDGrid);
-	ObjectInfo::ReadElement(getType().c_str(),"Mode",fnView, mode);
-	ObjectInfo::ReadElement(getType().c_str(),"PlaneColor",fnView, planeColor);
+void GridDrawer::load(const FileName& fnView, const String& currentSection){
+	ComplexDrawer::load(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Distance",fnView, rDist);
+	lproperties.load(fnView,currentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"ThreeDGrid",fnView, threeDGrid);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Mode",fnView, mode);
+	ObjectInfo::ReadElement(currentSection.c_str(),"PlaneColor",fnView, planeColor);
 }
-
 
 double GridDrawer::getGridSpacing() const{
 	return rDist;

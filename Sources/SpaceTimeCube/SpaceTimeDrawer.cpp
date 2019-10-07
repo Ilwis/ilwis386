@@ -200,19 +200,23 @@ void SpaceTimeDrawer::prepare(PreparationParameters *parms){
 	TRACE("Space Time Drawer Prepared in %2.2f seconds;\n", duration/1000);
 }
 
-String SpaceTimeDrawer::store(const FileName& fnView, const String& parentSection) const{
-	FeatureLayerDrawer::store(fnView, parentSection);
-	ObjectInfo::WriteElement(parentSection.c_str(), "NrEdges", fnView, nrSteps);
-	storeTemporal(fnView, parentSection);
-	storeSizable(fnView, parentSection);
+String SpaceTimeDrawer::store(const FileName& fnView, const String& section) const{
+	FeatureLayerDrawer::store(fnView, section);
+	ObjectInfo::WriteElement(section.c_str(), "NrEdges", fnView, nrSteps);
+	ObjectInfo::WriteElement(section.c_str(), "ClipTPlus", fnView, fClipTPlus);
+	ObjectInfo::WriteElement(section.c_str(), "ClipTMinus", fnView, fClipTMinus);
+	storeTemporal(fnView, section);
+	storeSizable(fnView, section);
 	if (spaceTimeElementsDrawer)
-		spaceTimeElementsDrawer->store(fnView, parentSection);
-	return parentSection;
+		spaceTimeElementsDrawer->store(fnView, section);
+	return section;
 }
 
 void SpaceTimeDrawer::load(const FileName& fnView, const String& currentSection){
 	FeatureLayerDrawer::load(fnView, currentSection);
 	ObjectInfo::ReadElement(currentSection.c_str(), "NrEdges", fnView, nrSteps);
+	ObjectInfo::ReadElement(currentSection.c_str(), "ClipTPlus", fnView, fClipTPlus);
+	ObjectInfo::ReadElement(currentSection.c_str(), "ClipTMinus", fnView, fClipTMinus);
 	loadTemporal(fnView, currentSection);
 	loadSizable(fnView, currentSection);
 	if (spaceTimeElementsDrawer)
@@ -332,6 +336,14 @@ void SpaceTimeDrawer::SetClipTPlus(bool fClip) {
 
 void SpaceTimeDrawer::SetClipTMinus(bool fClip) {
 	fClipTMinus = fClip;
+}
+
+const bool SpaceTimeDrawer::getClipTPlus() const {
+	return fClipTPlus;
+}
+
+const bool SpaceTimeDrawer::getClipTMinus() const {
+	return fClipTMinus;
 }
 
 vector<GLuint> SpaceTimeDrawer::getSelectedObjectIDs(const CRect& rect) const

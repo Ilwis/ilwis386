@@ -24,8 +24,8 @@ namespace ILWIS {
 		void addCoordBounds(const CoordSystem& _cs, const CoordBounds& cb, bool extend=true);
 		bool draw(const CoordBounds&) const;
 		void timedEvent(UINT timerID);
-		String store(const FileName& fnView, const String parenSection) const;
-		void load(const FileName& fnView, const String parenSection);
+		String store(const FileName& fnView, const String section) const;
+		void load(const FileName& fnView, const String section);
 		CoordBounds getCoordBoundsView() const { return cbView; }
 		CoordBounds getCoordBoundsZoom() const; 
 		CoordBounds getMapCoordBounds() const;
@@ -117,7 +117,7 @@ namespace ILWIS {
 		bool fUseGeoRef;
 		RowCol pixArea;
 		bool threeD;
-		Coordinate viewPoint;
+		Coord viewPoint;
 		double windowAspectRatio;
 		double mapAspectRatio;
 		double rotX, rotY, rotZ;
@@ -126,7 +126,6 @@ namespace ILWIS {
 		NewDrawer *topDrawer;
 		ILWIS::DrawerContext *drawercontext;
 		NewDrawer *backgroundDrawer; 
-		bool initRestore;
 		Color skyColor;
 		bool fDrawing;
 		bool fRequestAnnotationRecompute;

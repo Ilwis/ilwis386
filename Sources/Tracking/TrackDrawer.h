@@ -33,8 +33,8 @@ class TrackSetDrawer : public ComplexDrawer {
 	protected:
 		virtual NewDrawer *createElementDrawer(PreparationParameters *pp,ILWIS::DrawerParameters* parms) const;
 		void setDrawMethod(DrawMethod method=drmINIT);
-		String store(const FileName& fnView, const String& parenSection) const;
-		void load(const FileName& fnView, const String& parenSection);
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& section);
 
 		TrackerDrawProperties trackerDrawProperties; 
 

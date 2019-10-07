@@ -56,6 +56,11 @@ bool AnnotationNorthArrowTool::isToolUseableFor(ILWIS::DrawerTool *tl) {
 }
 
 HTREEITEM AnnotationNorthArrowTool::configure( HTREEITEM parentItem) {
+	if ( !active)
+		return parentItem;
+	ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
+	if (annotations)
+		northDrawer = (AnnotationNorthArrowDrawer *)annotations->getDrawer("AnnotationNorthArrowDrawer");
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, parentItem, drawer);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&AnnotationNorthArrowTool::makeActive);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&AnnotationNorthArrowTool::setPosition);

@@ -65,6 +65,9 @@ bool AnnotationLegendDrawerTool::isToolUseableFor(ILWIS::DrawerTool *drw) {
 }
 
 HTREEITEM AnnotationLegendDrawerTool::configure( HTREEITEM parentItem) {
+	if ( !active)
+		return parentItem;
+	legend = dynamic_cast<AnnotationLegendDrawer *>(findAnnotation());
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, parentItem, drawer);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&AnnotationLegendDrawerTool::makeActive);
 	htiNode = insertItem(TR("Legend"),"legend",item, legend && legend->isActive());
@@ -102,7 +105,7 @@ AnnotationDrawer *AnnotationLegendDrawerTool::findAnnotation() const{
 		annotations->getDrawers(allDrawers);
 		for(int i = 0; i < allDrawers.size(); ++i) {
 			AnnotationDrawer *adrw = dynamic_cast<AnnotationDrawer *>(allDrawers[i]);
-			if ( adrw && adrw->associaltedFile() == associatedFile)
+			if ( adrw && adrw->associatedFile() == associatedFile)
 				return adrw;
 		}
 	}

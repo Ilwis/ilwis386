@@ -190,6 +190,8 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 						}
 						if (!scolor.fEqual(colorUNDEF)) {
 							glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), alpha);
+							if (is3D) // lines at level 1
+								glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
 							if (displayListContour != 0)
 								glCallList(displayListContour);
 							else {
@@ -198,6 +200,8 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 								drawCircleBoundaries(*cur);
 								glEndList();
 							}
+							if (is3D) // reset to level 0
+								glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
 						}
 
 						glPopMatrix();
@@ -229,6 +233,8 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 						}
 						if (!scolor.fEqual(colorUNDEF)) {
 							glColor4d(scolor.redP(), scolor.greenP(), scolor.blueP(), alpha);
+							if (is3D) // lines at level 1
+								glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
 							if (displayListContour != 0)
 								glCallList(displayListContour);
 							else {
@@ -237,6 +243,8 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 								drawRectangleBoundaries(*cur);
 								glEndList();
 							}
+							if (is3D) // reset to level 0
+								glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
 						}
 
 						glPopMatrix();
@@ -257,6 +265,8 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 						}
 						if (!scolor.fEqual(colorUNDEF)) {
 							glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), alpha);
+							if (is3D) // lines at level 1
+								glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
 							if (displayListContour != 0)
 								glCallList(displayListContour);
 							else {
@@ -265,6 +275,8 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 								drawPolygonBoundaries(*cur);
 								glEndList();
 							}
+							if (is3D) // reset to level 0
+								glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
 						}
 					}
 					break;
@@ -300,6 +312,8 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 							}
 							if (!scolor.fEqual(colorUNDEF)) {
 								glColor4f(scolor.redP(),scolor.greenP(), scolor.blueP(), alpha);
+								if (is3D) // lines at level 1
+									glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
 								if (displayListContour != 0)
 									glCallList(displayListContour);
 								else {
@@ -309,6 +323,8 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 									drawPath(*cur);
 									glEndList();
 								}
+								if (is3D) // reset to level 0
+									glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
 							}
 						}
 						else if (!scolor.fEqual(colorUNDEF)) {
@@ -335,7 +351,7 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 				glColor4d(1, 0, 0, 1);
 				glBegin(GL_QUADS);						
 				glVertex3f( cbSelect.MinX(), cbSelect.MinY(),fz);	
-				glVertex3f( cbSelect.MinX(),cbSelect.MaxY(),fz);	
+				glVertex3f( cbSelect.MinX(), cbSelect.MaxY(),fz);	
 				glVertex3f( cbSelect.MaxX(), cbSelect.MaxY(),fz);
 				glVertex3f( cbSelect.MaxX(), cbSelect.MinY(),fz);
 				glEnd();
@@ -478,7 +494,7 @@ String PointProperties::store(const FileName& fnView, const String& parentSectio
 	ObjectInfo::WriteElement(parentSection.c_str(),"Scale",fnView, scale);
 	ObjectInfo::WriteElement(parentSection.c_str(),"ScaleMode",fnView, scaleMode);
 	ObjectInfo::WriteElement(parentSection.c_str(),"RadiusArea",fnView, radiusArea);
-	ObjectInfo::WriteElement(parentSection.c_str(),"UseDirection",fnView, (long)useDirection);
+	ObjectInfo::WriteElement(parentSection.c_str(),"UseDirection",fnView, useDirection);
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchScale",fnView, stretchScale);
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchRange",fnView, stretchRange);
 	ObjectInfo::WriteElement(parentSection.c_str(),"StretchColumn",fnView, stretchColumn);

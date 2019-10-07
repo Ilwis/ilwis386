@@ -207,13 +207,8 @@ void SpatialDataDrawer::setUseAttributeTable(bool yesno){
 	useAttTable = yesno;
 }
 
-String SpatialDataDrawer::store(const FileName& fnView, const String& parentSection) const{
-	ComplexDrawer::store(fnView, parentSection);
-	if ( attTable.fValid())
-		ObjectInfo::WriteElement(parentSection.c_str(),"AttributeTable",fnView, attTable);
-	if ( attColumn.fValid())
-		ObjectInfo::WriteElement(parentSection.c_str(),"AttributeColumn",fnView, attColumn->sName());
-	ObjectInfo::WriteElement(parentSection.c_str(),"UseAttributes",fnView, useAttTable);
+String SpatialDataDrawer::store(const FileName& fnView, const String& section) const{
+	ComplexDrawer::store(fnView, section);
 	FileName fn;
 	if ( bm.fValid())
 		fn = bm->fnObj;
@@ -221,42 +216,27 @@ String SpatialDataDrawer::store(const FileName& fnView, const String& parentSect
 		fn = oc->fnObj;
 	if ( mpl.fValid())
 		fn = mpl->fnObj;
+	ObjectInfo::WriteElement(section.c_str(),"Object",fnView, fn);
+	if ( attColumn.fValid())
+		ObjectInfo::WriteElement(section.c_str(),"AttributeColumn",fnView, attColumn->sNameQuoted());
+	ObjectInfo::WriteElement(section.c_str(),"UseAttributes",fnView, useAttTable);
 
-	ObjectInfo::WriteElement(parentSection.c_str(),"Object",fnView, fn);
-
-	if ( attTable.fValid()) {
-		ObjectInfo::WriteElement(parentSection.c_str(),"AttributeTable",fnView, attTable);
-		ObjectInfo::WriteElement(parentSection.c_str(),"AttributeColumn",fnView, attColumn);
-	}
-
-	return parentSection;
-
+	return section;
 }
 
-void SpatialDataDrawer::load(const FileName& fnView, const String& parentSection){
-	ObjectInfo::ReadElement(parentSection.c_str(),"AttributeTable",fnView, attTable);
+void SpatialDataDrawer::load(const FileName& fnView, const String& section){
+	FileName fn;
+	ObjectInfo::ReadElement(section.c_str(),"Object",fnView, fn);
+	IlwisObject object = IlwisObject::obj(fn);
+	addDataSource(&object); // sets attTable if available
 	if ( attTable.fValid()) {
 		String colname;
-		ObjectInfo::ReadElement(parentSection.c_str(),"AttributeColumn",fnView, colname);
+		ObjectInfo::ReadElement(section.c_str(),"AttributeColumn",fnView, colname);
 		attColumn = attTable->col(colname);
 	}
-	ObjectInfo::ReadElement(parentSection.c_str(),"UseAttributes",fnView, useAttTable);
-	FileName fn;
-	ObjectInfo::ReadElement(parentSection.c_str(),"Object",fnView, fn);
-	IlwisObject object = IlwisObject::obj(fn);
-	addDataSource(&object);
+	ObjectInfo::ReadElement(section.c_str(),"UseAttributes",fnView, useAttTable);
 
-	ObjectInfo::ReadElement(parentSection.c_str(),"AttributeTable",fnView, fn);
-	if ( fn.fValid()) {
-		attTable = Table(fn);
-		if ( attTable.fValid()) {
-			String name;
-			ObjectInfo::ReadElement(parentSection.c_str(),"AttributeColumn",fnView, name);
-			attColumn = attTable->col(name);
-		}
-	}
-	ComplexDrawer::load(fnView, parentSection);
-
+	ComplexDrawer::load(fnView, section);
 }
 
 CoordBounds SpatialDataDrawer::cb() {

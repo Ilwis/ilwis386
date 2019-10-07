@@ -52,8 +52,8 @@ class _export SpatialDataDrawer : public ComplexDrawer {
 		IlwisObject obj;
 
 		SpatialDataDrawer(DrawerParameters *parms, const String& name);
-		String store(const FileName& fnView, const String& parenSection) const;
-		void load(const FileName& fnView, const String& parenSection);
+		String store(const FileName& fnView, const String& section) const;
+		void load(const FileName& fnView, const String& section);
 	};
 
 

@@ -1148,3 +1148,25 @@ HTREEITEM SetChecks::getHTI(int index){
 	return 0;
 }
 
+void SetChecks::checkItemInitial(HTREEITEM hti){
+	CTreeCtrl& tree = tv->GetTreeCtrl();
+	DisplayOptionRadioButtonItem *item = dynamic_cast<DisplayOptionRadioButtonItem * >((LayerTreeItem *)(tree.GetItemData(hti)));
+	if ( item) {
+		bool currentState = item->getState();
+		if ( currentState) // it was selected and will be selected, nothing to do;
+			return;
+		currentState  = !currentState;
+		item->setState(currentState);
+	}
+	for(int i = 0; i< checkedItems.size(); ++i) {
+		HTREEITEM ht = checkedItems.at(i);
+		DisplayOptionRadioButtonItem *item = dynamic_cast<DisplayOptionRadioButtonItem * >((LayerTreeItem *)(tree.GetItemData(ht)));
+		if ( ht == hti) {
+			state = i;
+			continue;
+		}
+		if ( item) {
+			item->setState(false);
+		}
+	}
+}

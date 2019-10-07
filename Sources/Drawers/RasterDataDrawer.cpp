@@ -152,3 +152,14 @@ void RasterDataDrawer::setTresholdRange(const RangeReal& rr, bool single){
 		}
 	}
 }
+
+String RasterDataDrawer::store(const FileName& fnView, const String& section) const{
+	String currentSection = section + ":RasterData";
+	SpatialDataDrawer::store(fnView, currentSection);
+
+	return currentSection;
+}
+
+void RasterDataDrawer::load(const FileName& fnView, const String& section){
+	SpatialDataDrawer::load(fnView, section);
+}

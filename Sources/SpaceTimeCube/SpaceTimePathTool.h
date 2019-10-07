@@ -25,6 +25,7 @@ namespace ILWIS {
 		void setXYVisibility(void *value, HTREEITEM);
 		void setYTVisibility(void *value, HTREEITEM);
 		void setVisibility(const String& element, bool value);
+		int getVisibility(const String& element, int defaultVal);
 		void elementForm(const String& element);
 	};
 

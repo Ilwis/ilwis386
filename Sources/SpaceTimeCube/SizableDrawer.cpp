@@ -100,6 +100,9 @@ String SizableDrawer::storeSizable(const FileName& fnView, const String& parentS
 	if (colSize.fValid()) {
 		ObjectInfo::WriteElement(parentSection.c_str(), "SizeTable", fnView, colSize->fnTbl.sRelativeQuoted());
 		ObjectInfo::WriteElement(parentSection.c_str(), "SizeColumn", fnView, colSize);
+		if (colSize2.fValid()) {
+			ObjectInfo::WriteElement(parentSection.c_str(), "SizeColumn2", fnView, colSize2);
+		}
 	}
 	return parentSection;
 }
@@ -112,8 +115,13 @@ void SizableDrawer::loadSizable(const FileName& fnView, const String& currentSec
 	if (tbl.fValid()) {
 		String sCol;
 		ObjectInfo::ReadElement(currentSection.c_str(), "SizeColumn", fnView, sCol);
-		if (sCol.length() > 0)
+		if (sCol.length() > 0) {
 			colSize = tbl->col(sCol);
+			ObjectInfo::ReadElement(currentSection.c_str(), "SizeColumn2", fnView, sCol);
+			if (sCol.length() > 0) {
+				colSize2 = tbl->col(sCol);
+			}
+		}
 		else
 			SetNoSize();
 	} else

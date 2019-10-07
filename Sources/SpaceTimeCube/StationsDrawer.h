@@ -18,7 +18,7 @@ class _export StationsDrawer : public SpaceTimeDrawer {
 		virtual void drawYT() const;
 
 	protected:
-		String store(const FileName& fnView, const String& parentSection) const;
+		String store(const FileName& fnView, const String& section) const;
 		void load(const FileName& fnView, const String& currentSection);
 		virtual void drawObjects(const int steps, GetHatchFunc getHatchFunc) const;
 		virtual vector<GLuint> getObjectIDs(vector<long> & iRaws) const;

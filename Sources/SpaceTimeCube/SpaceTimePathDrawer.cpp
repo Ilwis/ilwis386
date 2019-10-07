@@ -33,9 +33,9 @@ SpaceTimePathDrawer::~SpaceTimePathDrawer() {
 	delete objectStartIndexes;
 }
 
-String SpaceTimePathDrawer::store(const FileName& fnView, const String& parentSection) const
+String SpaceTimePathDrawer::store(const FileName& fnView, const String& section) const
 {
-	String currentSection = parentSection + "::" + getType();
+	String currentSection = section + ":SpaceTimePath";
 	SpaceTimeDrawer::store(fnView, currentSection);
 	storeSortable(fnView, currentSection);
 	storeGroupable(fnView, currentSection);

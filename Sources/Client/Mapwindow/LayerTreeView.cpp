@@ -782,7 +782,7 @@ void LayerTreeView::OnRemoveLayer()
 	String s(TR("Remove %S\nAre you sure?").c_str(), str);
 	int iRet = MessageBox(s.c_str(), TR("Remove Layer").c_str(), MB_YESNO|MB_ICONQUESTION);
 	if (IDYES == iRet) {
-		delete drwTool; // remove all tools from the mapview before removing the drawer
+		delete drwTool; // remove all tools from the mapview before removing the drawer; they will be re-created on UpdateAllViews(0)
 		drwTool = 0;
 		MapCompositionDoc* mcd = GetDocument();
 		mcd->RemoveDrawer(drw);

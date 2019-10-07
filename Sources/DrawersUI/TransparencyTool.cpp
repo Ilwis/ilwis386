@@ -58,7 +58,7 @@ HTREEITEM TransparencyTool::configure( HTREEITEM parentItem) {
 		return parentItem;
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&TransparencyTool::displayOptionTransparency);
-	String transp("Transparency (%d)", 100 - 100 * drawer->getAlpha());
+	String transp("Transparency (%d)", (int)(100 * (1.0 - drawer->getAlpha())));
 	htiNode = insertItem(transp,"Transparent", item);
 
 	return htiNode;

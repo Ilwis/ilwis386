@@ -42,24 +42,22 @@ HTREEITEM CubeElementsTool::configure( HTREEITEM parentItem) {
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&CubeElementsTool::changeCube);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&CubeElementsTool::setCubeVisibility);
-	insertItem(TR("Cube"),"SpaceTimeCube",item,1);
+	insertItem(TR("Cube"),"SpaceTimeCube",item,getVisibility("cube"));
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&CubeElementsTool::changeTicks);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&CubeElementsTool::setTicksVisibility);
-	insertItem(TR("Tic Marks"),"Axis",item,1);
+	insertItem(TR("Tic Marks"),"Axis",item,getVisibility("ticks"));
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&CubeElementsTool::changeCoordinates);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&CubeElementsTool::setCoordVisibility);
-	insertItem(TR("Coordinates"),".csy",item,1);
+	insertItem(TR("Coordinates"),".csy",item,getVisibility("coordinates"));
 
 	item = new DisplayOptionTreeItem(tree,htiNode,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&CubeElementsTool::changeLabels);
 	item->setCheckAction(this,0,(DTSetCheckFunc)&CubeElementsTool::setLabelVisibility);
-	insertItem(TR("Labels"),"Annotation",item,1);
-
-
+	insertItem(TR("Labels"),"Annotation",item,getVisibility("labels"));
 
 	return htiNode;
 }
@@ -68,9 +66,16 @@ void CubeElementsTool::setVisibility(const String& element, bool value) {
 	CubeProperties *prop = (CubeProperties *)((CubeDrawer *)(drawer->getRootDrawer()->getDrawer("CubeDrawer")))->getProperties();
 	if (prop) {
 		(*prop)[element].visible = value;
-		
 	}
 	mpvGetView()->Invalidate();
+}
+
+int CubeElementsTool::getVisibility(const String& element) {
+	CubeProperties *prop = (CubeProperties *)((CubeDrawer *)(drawer->getRootDrawer()->getDrawer("CubeDrawer")))->getProperties();
+	if (prop) {
+		return (*prop)[element].visible ? 1 : 0;
+	}
+	return 1;
 }
 
 void CubeElementsTool::elementForm(const String& element) {
@@ -141,6 +146,7 @@ DisplayOptionsForm(dr,wPar,elem.label), slider(0), fc(0), element(elem)
 		fc = new FieldColor(root,TR("Color"),&(element.color));
 	}
 	if ( element.alpha != rUNDEF) {
+		transparency = round(100.0 * (1.0 - element.alpha));
 		slider = new FieldIntSliderEx(root,"Transparency(0-100)", &transparency,ValueRange(0,100),true);
 		slider->SetCallBack((NotifyProc)&CubeElementsForm::setTransparency);
 		slider->setContinuous(true);

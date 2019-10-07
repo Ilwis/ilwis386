@@ -452,98 +452,97 @@ ZValueMaker *ComplexDrawer::getZMaker() const{
 	return zmaker;
 }
 
-String ComplexDrawer::store(const FileName& fnView, const String& parentSection) const{
-	ObjectInfo::WriteElement(parentSection.c_str(),"HasInfo",fnView, info);
-	ObjectInfo::WriteElement(parentSection.c_str(),"DrawMethod",fnView, drm);
-	ObjectInfo::WriteElement(parentSection.c_str(),"Alpha",fnView, alpha);
-	ObjectInfo::WriteElement(parentSection.c_str(),"Type",fnView, type);
+String ComplexDrawer::store(const FileName& fnView, const String& section) const{
+	ObjectInfo::WriteElement(section.c_str(),"HasInfo",fnView, info);
+	ObjectInfo::WriteElement(section.c_str(),"DrawMethod",fnView, drm);
+	ObjectInfo::WriteElement(section.c_str(),"Alpha",fnView, alpha);
+	ObjectInfo::WriteElement(section.c_str(),"Type",fnView, type);
 	if (subType != "" && subType != "ilwis38")
-		ObjectInfo::WriteElement(parentSection.c_str(),"SubType",fnView, subType);
-	ObjectInfo::WriteElement(parentSection.c_str(),"IsActive",fnView, active);
-	ObjectInfo::WriteElement(parentSection.c_str(),"editable",fnView, editable);
-	ObjectInfo::WriteElement(parentSection.c_str(),"Name",fnView, name);
-	ObjectInfo::WriteElement(parentSection.c_str(),"SpecialOptions",fnView, specialOptions);
+		ObjectInfo::WriteElement(section.c_str(),"SubType",fnView, subType);
+	ObjectInfo::WriteElement(section.c_str(),"IsActive",fnView, active);
+	ObjectInfo::WriteElement(section.c_str(),"editable",fnView, editable);
+	ObjectInfo::WriteElement(section.c_str(),"Name",fnView, name);
+	ObjectInfo::WriteElement(section.c_str(),"SpecialOptions",fnView, specialOptions);
 
 	int count = 0;
 	for(DrawerIter_C cur = preDrawers.begin(); cur != preDrawers.end(); ++cur) {
 		String order = String("%03d", (*cur).first.sHead("|").iVal());
-		String currentSection("%S%S",parentSection,order);
+		String currentSection("%S%S",section,order);
 		NewDrawer *drw = (*cur).second;
 		if ( drw && !drw->isSimple() ) {
-			String section = drw->store(fnView, currentSection);
-			ObjectInfo::WriteElement(section.c_str(),"Order",fnView, order);
-			ObjectInfo::WriteElement(parentSection.c_str(),String("PreDrawer%03d",count++).c_str(),fnView, section);
+			String subSection = drw->store(fnView, currentSection);
+			ObjectInfo::WriteElement(subSection.c_str(),"Order",fnView, order);
+			ObjectInfo::WriteElement(section.c_str(),String("PreDrawer%03d",count++).c_str(),fnView, subSection);
 		}
 	}
-	ObjectInfo::WriteElement(parentSection.c_str(),"PreDrawerCount",fnView, count);
+	ObjectInfo::WriteElement(section.c_str(),"PreDrawerCount",fnView, count);
 	int drCount = getDrawerCount();
 	count = 0; 
 	for(int index = 0; index < drCount; ++index) {
-		String currentSection("%S%03d",parentSection,index);
+		String currentSection("%S%03d",section,index);
 		NewDrawer *drw = drawers[index];
 		if ( drw && !drw->isSimple() ) {
-			String section = drw->store(fnView, currentSection);
-			ObjectInfo::WriteElement(parentSection.c_str(),String("Drawer%03d",count++).c_str(),fnView, section);
+			String subSection = drw->store(fnView, currentSection);
+			ObjectInfo::WriteElement(section.c_str(),String("Drawer%03d",count++).c_str(),fnView, subSection);
 		}
 
 	}
-	ObjectInfo::WriteElement(parentSection.c_str(),"DrawerCount",fnView, count);
+	ObjectInfo::WriteElement(section.c_str(),"DrawerCount",fnView, count);
 	count = 0;
 	for(DrawerIter_C cur = postDrawers.begin(); cur != postDrawers.end(); ++cur) {
 		String order = String("%03d", (*cur).first.sHead("|").iVal());
-		String currentSection("%S%S",parentSection,order);
+		String currentSection("%S%S",section,order);
 		NewDrawer *drw = (*cur).second;
 		if ( drw && !drw->isSimple() ) {
-			String section = drw->store(fnView, currentSection);
-			ObjectInfo::WriteElement(section.c_str(),"Order",fnView, order);
-			ObjectInfo::WriteElement(parentSection.c_str(),String("PostDrawer%03d",count++).c_str(),fnView, section);
+			String subSection = drw->store(fnView, currentSection);
+			ObjectInfo::WriteElement(subSection.c_str(),"Order",fnView, order);
+			ObjectInfo::WriteElement(section.c_str(),String("PostDrawer%03d",count++).c_str(),fnView, subSection);
 		}
 	}
-	ObjectInfo::WriteElement(parentSection.c_str(),"PostDrawerCount",fnView, count);
+	ObjectInfo::WriteElement(section.c_str(),"PostDrawerCount",fnView, count);
 
-	zmaker->store(fnView,parentSection);
+	zmaker->store(fnView,section + ":ZValues");
 
-	return parentSection;
-
+	return section;
 }
 
-void ComplexDrawer::load(const FileName& fnView, const String& parentSection){
-	ObjectInfo::ReadElement(parentSection.c_str(),"HasInfo",fnView, info);
+void ComplexDrawer::load(const FileName& fnView, const String& section){
+	ObjectInfo::ReadElement(section.c_str(),"HasInfo",fnView, info);
 	int temp;
-	ObjectInfo::ReadElement(parentSection.c_str(),"DrawMethod",fnView, temp);
+	ObjectInfo::ReadElement(section.c_str(),"DrawMethod",fnView, temp);
 	drm = (ILWIS::NewDrawer::DrawMethod)temp;
-	ObjectInfo::ReadElement(parentSection.c_str(),"Alpha",fnView, alpha);
-	ObjectInfo::ReadElement(parentSection.c_str(),"Type",fnView, type);
-	ObjectInfo::ReadElement(parentSection.c_str(),"IsActive",fnView, active);
-	ObjectInfo::ReadElement(parentSection.c_str(),"editable",fnView, editable);
-	ObjectInfo::ReadElement(parentSection.c_str(),"Name",fnView, name);
-	ObjectInfo::ReadElement(parentSection.c_str(),"SpecialOptions",fnView, specialOptions);
+	ObjectInfo::ReadElement(section.c_str(),"Alpha",fnView, alpha);
+	ObjectInfo::ReadElement(section.c_str(),"Type",fnView, type);
+	ObjectInfo::ReadElement(section.c_str(),"IsActive",fnView, active);
+	ObjectInfo::ReadElement(section.c_str(),"editable",fnView, editable);
+	ObjectInfo::ReadElement(section.c_str(),"Name",fnView, name);
+	ObjectInfo::ReadElement(section.c_str(),"SpecialOptions",fnView, specialOptions);
 
 	long count, order;
 	String drawerSection;
-	ObjectInfo::ReadElement(parentSection.c_str(),"PreDrawerCount",fnView, count);
+	ObjectInfo::ReadElement(section.c_str(),"PreDrawerCount",fnView, count);
 	for(int i = 0; i < count ; ++i) {
-		String section("PreDrawer%03d",i);
-		ObjectInfo::ReadElement(parentSection.c_str(),section.c_str(),fnView, drawerSection);
+		String subSection("PreDrawer%03d",i);
+		ObjectInfo::ReadElement(section.c_str(),subSection.c_str(),fnView, drawerSection);
 		ObjectInfo::ReadElement(drawerSection.c_str(),"Order",fnView, order);
 		addPreDrawer(order,loadDrawer(fnView, drawerSection ));
 	}
 
-	ObjectInfo::ReadElement(parentSection.c_str(),"DrawerCount",fnView, count);
+	ObjectInfo::ReadElement(section.c_str(),"DrawerCount",fnView, count);
 	for(int i = 0; i < count; ++i) {
-		ObjectInfo::ReadElement(parentSection.c_str(),String("Drawer%03d",i).c_str(),fnView, drawerSection);
+		ObjectInfo::ReadElement(section.c_str(),String("Drawer%03d",i).c_str(),fnView, drawerSection);
 		addDrawer(loadDrawer(fnView, drawerSection));
 	}
 
-	ObjectInfo::ReadElement(parentSection.c_str(),"PostDrawerCount",fnView, count);
+	ObjectInfo::ReadElement(section.c_str(),"PostDrawerCount",fnView, count);
 	for(int i = 0; i < count ; ++i) {
-		String section("PostDrawer%03d",i);
-		ObjectInfo::ReadElement(parentSection.c_str(),section.c_str(),fnView, drawerSection);
+		String subSection("PostDrawer%03d",i);
+		ObjectInfo::ReadElement(section.c_str(),subSection.c_str(),fnView, drawerSection);
 		ObjectInfo::ReadElement(drawerSection.c_str(),"Order",fnView, order);
 		addPostDrawer(order,loadDrawer(fnView, drawerSection));
 	}
 
-	zmaker->load(fnView, parentSection);
+	zmaker->load(fnView, section + ":ZValues");
 	setSpecialDrawingOptions(specialOptions | NewDrawer::sdoTOCHILDEREN, true);
 }
 
@@ -613,6 +612,16 @@ void ComplexDrawer::select(bool yesno) {
 		NewDrawer *dr = getDrawer(index);
 		if ( dr)
 			dr->select(yesno);
+	}
+}
+
+void ComplexDrawer::removeDrawersUsing(NewDrawer * drw) {
+	vector<NewDrawer *> allDrawers;
+	getDrawers(allDrawers);
+	for(int i = 0; i < allDrawers.size(); ++i) {
+		ComplexDrawer * cdrw = dynamic_cast<ComplexDrawer*>(allDrawers[i]);
+		if (cdrw)
+			cdrw->removeDrawersUsing(drw);
 	}
 }
 
