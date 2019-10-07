@@ -12,13 +12,15 @@ public:
 	bool isToolUseableFor(ILWIS::DrawerTool *tool);
 	String getMenuString() const;
 private:
-	RangeReal getBaseRange() const ;
+	RangeReal getBaseRange() const;
 	void displayOptionStretch();
+	HTREEITEM htiLower;
+	HTREEITEM htiUpper;
 };
 
 class SetStretchValueForm : public DisplayOptionsForm2 {
 	public:
-	SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _baserr, const RangeReal& _currentrr, double rStep);
+	SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _baserr, const RangeReal& _currentrr, double rStep, HTREEITEM _htiLower, HTREEITEM _htiUpper);
 	void apply(); 
 private:
 	int logStretching(Event *);
@@ -30,8 +32,8 @@ private:
 	bool inRace;
 	bool fStarting;
 	bool logStretch;
-
+	HTREEITEM htiLower;
+	HTREEITEM htiUpper;
 	int check(Event *);
-
 };
 }

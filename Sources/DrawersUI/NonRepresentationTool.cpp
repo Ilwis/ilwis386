@@ -51,7 +51,7 @@ bool NonRepresentationToolTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 		else {
 			BaseMap *bmp = (BaseMap *)tool->getDrawer()->getDataSource();
 			if (bmp)
-				isAcceptable = !(*bmp)->dm()->pdbool();
+				isAcceptable = !(*bmp)->dm()->pdbool() && !(*bmp)->dm()->pdcol();
 		}
 	}
 	if ( isAcceptable)

@@ -83,6 +83,8 @@ bool RepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	}
 	if ( !ldrw)
 		return false;
+	if (ldrw->getDrawMethod() == NewDrawer::drmCOLOR)
+		return false; // RepresentationTool is not usable for color composites
 
 	Representation rpr = ldrw->getRepresentation();
 

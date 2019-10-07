@@ -28,7 +28,11 @@ DrawerTool *createStretchTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *
 	return new StretchTool(zv, view, drw);
 }
 
-StretchTool::StretchTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : DrawerTool("StretchTool", zv, view, drw){
+StretchTool::StretchTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw)
+: DrawerTool("StretchTool", zv, view, drw)
+, htiLower(0)
+, htiUpper(0)
+{
 }
 
 HTREEITEM StretchTool::configure( HTREEITEM parentItem){
@@ -38,18 +42,23 @@ HTREEITEM StretchTool::configure( HTREEITEM parentItem){
 	if ( isConfigured)
 		return htiNode;
 
-	RangeReal rr = getBaseRange();
-	if(!rr.fValid())
+	RangeReal brr = getBaseRange();
+	if(!brr.fValid())
 		return parentItem;
-	//RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
+
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
+	SetDrawer *adrw = dynamic_cast<SetDrawer *>(drawer);
+	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
+	if (!rr.fValid())
+		rr = brr;
 
 	SpatialDataDrawer *mapDrawer = (SpatialDataDrawer *)drawer->getParentDrawer();
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	item->setDoubleCickAction(this, (DTDoubleClickActionFunc)&StretchTool::displayOptionStretch);
 	htiNode = insertItem("Stretch","Valuerange", item,-1); 
 	if ( rr.fValid()) {
-			insertItem(htiNode, String("Lower : %f",rr.rLo()), "Calculationsingle");
-			insertItem(htiNode, String("Upper : %f",rr.rHi()), "Calculationsingle");
+		htiLower = insertItem(htiNode, String("Lower : %f",rr.rLo()), "Calculationsingle");
+		htiUpper = insertItem(htiNode, String("Upper : %f",rr.rHi()), "Calculationsingle");
 	}
 	DrawerTool::configure(htiNode);
 	isConfigured = true;
@@ -93,7 +102,7 @@ void StretchTool::displayOptionStretch() {
 		rStep = bmp->dvrs().rStep();
 	}
 
-	new SetStretchValueForm(tree, drawer, rr,currentrr, rStep);
+	new SetStretchValueForm(tree, drawer, rr,currentrr, rStep, htiLower, htiUpper);
 }
 
 bool StretchTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
@@ -101,12 +110,22 @@ bool StretchTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
 	if ( !layerDrawerTool && !setDrawerTool)
 		return false;
+
+	LayerDrawer *ldrw = ((ComplexDrawer*)drawer)->isSet() ? dynamic_cast<LayerDrawer*> (((SetDrawer*)drawer)->getDrawer(0)) : dynamic_cast<LayerDrawer*>(drawer);
+	if ( !ldrw)
+		return false;
+	if (ldrw->getDrawMethod() == NewDrawer::drmCOLOR)
+		return false; // StretchTool is not usable for color composites (each band gets its own stretch tool)
+	Table attTable = ((SpatialDataDrawer *)ldrw->getParentDrawer())->getAtttributeTable();
+	if (attTable.fValid())
+		return false; // StretchTool is only usable for maps without attribute table (the StretchTool is automatically added by the AttributeTool to each appropriate attribute for maps with attribute table)
+
 	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());
 	SetDrawer *adrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
 	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
 	if ( rr.fValid())
 		parentTool = tool;
-	return rr.fValid();
+	return rr.fValid(); // StretchTool is only usable for maps that can be stretched (value maps)
 }
 
 String StretchTool::getMenuString() const {
@@ -114,13 +133,15 @@ String StretchTool::getMenuString() const {
 }
 
 //------------------------------------
-SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _baserr, const RangeReal& _currentrr, double rStep) : 
+SetStretchValueForm::SetStretchValueForm(CWnd *wPar, NewDrawer *dr, const RangeReal& _baserr, const RangeReal& _currentrr, double rStep, HTREEITEM _htiLower, HTREEITEM _htiUpper) : 
 	DisplayOptionsForm2((ComplexDrawer *)dr,wPar,"Set stretch"),
 	rr(_baserr),
 	low(_currentrr.rLo()),
 	high(_currentrr.rHi()),
 	inRace(false),
-	fStarting(true)
+	fStarting(true),
+	htiLower(_htiLower),
+	htiUpper(_htiUpper)
 {
 	LayerDrawer *ldrw = (LayerDrawer *)dr; // needs not be a valid cast
 	SetDrawer *setdrw = dynamic_cast<SetDrawer *>(drw);
@@ -198,13 +219,21 @@ int  SetStretchValueForm::check(Event *) {
 		PreparationParameters pp(NewDrawer::ptRENDER, 0);
 		setdr->prepareChildDrawers(&pp);
 	}
-	view->Invalidate();
+	String lower ("Lower : %f", low);
+	String upper ("Upper : %f", high);
+	TreeItem titem;
+	view->getItem(htiLower,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);
+	strcpy(titem.item.pszText,lower.c_str());
+	view->GetTreeCtrl().SetItem(&titem.item);
+	view->getItem(htiUpper,TVIF_TEXT | TVIF_HANDLE | TVIF_IMAGE | TVIF_PARAM | TVIS_SELECTED,titem);
+	strcpy(titem.item.pszText,upper.c_str());
+	view->GetTreeCtrl().SetItem(&titem.item);
 	updateMapView();
 	inRace = false;
 	return 1;
 }
 
-void  SetStretchValueForm::apply() {
+void SetStretchValueForm::apply() {
 	check(0);
 }
 

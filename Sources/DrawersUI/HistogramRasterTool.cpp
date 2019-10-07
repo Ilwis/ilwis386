@@ -138,6 +138,8 @@ bool HistogramRasterTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 		RasterLayerDrawer *rdrw = dynamic_cast<RasterLayerDrawer *>(tool->getDrawer());
 		if (!rdrw)
 			return false;
+		if (rdrw->getDrawMethod() == NewDrawer::drmCOLOR)
+			return false; // HistogramRasterTool is not usable for color composites
 		rangeUsedX = rdrw->getStretchRangeReal();
 		return rangeUsedX.fValid();
 	} else {

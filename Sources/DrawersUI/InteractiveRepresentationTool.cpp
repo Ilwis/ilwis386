@@ -40,6 +40,10 @@ bool InteractiveRepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 		return false;
 	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());
 	SetDrawer *adrw = dynamic_cast<SetDrawer *>(tool->getDrawer());
+	NewDrawer::DrawMethod drm = adrw ? adrw->getDrawMethod() : sdrw->getDrawMethod();
+	if (drm == NewDrawer::drmCOLOR)
+		return false; // InteractiveRepresentationTool is not usable for color composites
+
 	RangeReal rr = adrw ? adrw->getStretchRangeReal() : sdrw->getStretchRangeReal();
 	if ( rr.fValid())
 		parentTool = tool;
