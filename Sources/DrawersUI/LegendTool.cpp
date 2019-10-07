@@ -216,6 +216,7 @@ DisplayOptionsForm(dr,wPar,TR("Line Representation")),rcl(rc), iRaw(raw), line(r
   else  
     sText = rcl->dm()->sValueByRaw(raw,0);
   col = rcl->clrRaw(iRaw);
+  col.alpha() = 255 - col.alpha(); // inverse the alpha, for FieldColor
 
   StaticText* st = new StaticText(root, sText);
   st->SetIndependentPos();
@@ -235,9 +236,12 @@ int LineRprForm::CustomColor(Event*)
 }
 
 void  LineRprForm::apply() {
+  if ( initial) return;
   root->StoreData();
   line.ResizeSymbol(3.0);
-  line.clrLine() = col;
+  Color clr (col);
+  clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
+  line.clrLine() = clr;
   line.Store(rcl, iRaw);
     ((LayerDrawer *)drw)->setUseRpr(true);
   PreparationParameters pp(NewDrawer::ptRENDER, 0);
@@ -280,6 +284,8 @@ DisplayOptionsForm(dr,wPar,TR("Polygon Representation")),rcl(rc), iRaw(raw)
     sText = rcl->dm()->sValueByRaw(raw,0);
   col = rcl->clrRaw(iRaw);
   col2 = rcl->clrSecondRaw(iRaw);
+  col.alpha() = 255 - col.alpha(); // inverse the alpha, for FieldColor
+  col2.alpha() = 255 - col2.alpha();
   transparency = 100.0 * (1.0 - rcl->rItemAlpha(iRaw));
 
   String base = getEngine()->getContext()->sIlwDir();
@@ -309,14 +315,21 @@ DisplayOptionsForm(dr,wPar,TR("Polygon Representation")),rcl(rc), iRaw(raw)
 }
 
 int PolRprForm::setTransparency(Event *ev) {
+	if ( initial) return 1;
 	apply();
 	return 1;
 }
 
 void  PolRprForm::apply() {
+  if ( initial) return;
   root->StoreData();
-  rcl->PutColor(iRaw, col);
-  rcl->PutSecondColor(iRaw, col2);
+
+  Color clr (col);
+  clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
+  rcl->PutColor(iRaw, clr);
+  Color clr2 (col2);
+  clr2.alpha() = 255 - clr2.alpha(); // inverse the alpha again, for displaying
+  rcl->PutSecondColor(iRaw, clr2);
   rcl->PutAlpha(iRaw,1.0 - transparency/100.0);
   if ( hatching != ""){
 	  hatching = hatching.sTrimSpaces();
@@ -347,6 +360,7 @@ DisplayOptionsForm(dr,wPar,TR("Point Representation")),rcl(rc), iRaw(raw)
     symbol = rc->sSymbolType(raw);
     scale = rc->iSymbolSize(raw) / 100.0;
 	col = rc->clrSymbol(raw);
+	col.alpha() = 255 - col.alpha(); // inverse the alpha, for FieldColor
     StaticText* st = new StaticText(root, sText);
     st->SetIndependentPos();
 	String base = getEngine()->getContext()->sIlwDir();
@@ -360,9 +374,12 @@ DisplayOptionsForm(dr,wPar,TR("Point Representation")),rcl(rc), iRaw(raw)
 }
 
 void  PointRprForm::apply() {
+  if ( initial) return;
   root->StoreData();
-  rcl->PutColor(iRaw, col);
-  rcl->PutSymbolColor(iRaw, col);
+  Color clr (col);
+  clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
+  rcl->PutColor(iRaw, clr);
+  rcl->PutSymbolColor(iRaw, col); // not sure yet; I am putting FieldColor's color directly, because PutSymbolColor does not inverse the alpha anymore
   rcl->PutSymbolSize(iRaw,scale * 100);
   FileName fn(symbol);
   rcl->PutSymbolType(iRaw, fn.sFile);
@@ -404,11 +421,13 @@ DisplayOptionsForm(dr,wPar,TR("Raster Representation")),rcl(rc), iRaw(raw)
 }
 
 int RasterRprForm::setTransparency(Event *ev) {
+	if ( initial) return 1;
 	apply();
 	return 1;
 }
 
 void  RasterRprForm::apply() {
+  if ( initial) return;
   root->StoreData();
   Color clr (col);
   clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
