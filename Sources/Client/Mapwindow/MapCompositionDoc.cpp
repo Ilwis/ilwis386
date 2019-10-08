@@ -566,6 +566,18 @@ void MapCompositionDoc::StoreView()
 	ObjectDependency objdep;
 	mpv->Store();
 	rootDrawer->store(mpv->fnObj,"Root");
+	if (rootDrawer->getGeoReference().fValid())
+		objdep.Add(rootDrawer->getGeoReference());
+	if (rootDrawer->getCoordinateSystem().fValid())
+		objdep.Add(rootDrawer->getCoordinateSystem());
+	vector<NewDrawer *> allDrawers;
+	rootDrawer->getDrawers(allDrawers);
+	for(int i = 0; i < allDrawers.size(); ++i) {
+		SpatialDataDrawer *dr = dynamic_cast<SpatialDataDrawer *>(allDrawers.at(i));
+		if ( dr) {
+			objdep.Add(dr->getBaseMap());
+		}
+	}
 	objdep.Store(mpv.ptr());
 }
 
