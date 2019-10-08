@@ -3194,13 +3194,13 @@ void ContainsPropPage::CollectContainedFiles()
 	else if (sExt == ".mpv")
 	{
 		MapView mpv(m_obj->fnObj);
-		int iLayers = mpv->iReadElement("RootDrawer", "DrawerCount");
+		int iLayers = mpv->iReadElement("Root", "DrawerCount");
 		for (int i = 0; i < iLayers; ++i) 
 		{
 			String key("Drawer%03d", i);
 			String sLayer;
 			FileName fnData;
-			mpv->ReadElement("RootDrawer", key.c_str(),sLayer);
+			mpv->ReadElement("Root", key.c_str(),sLayer);
 			FileName data;
 			mpv->ReadElement(sLayer.c_str(),"Object", data);
 			m_as.push_back(data.sRelative());
