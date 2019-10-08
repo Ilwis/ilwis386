@@ -137,10 +137,10 @@ void MapViewPtr::GetObjectStructureLayer(ObjectStructure& os, const String& laye
 		GetObjectStructureLayer(os, player);
 	}
 	FileName fnObject;
-	os.AddFile(fnObj,layer,"Object","",!fLeaveFiles);
-	os.AddFile(fnObj,layer,"Spatialsourcemap","", !fLeaveFiles);
-	os.AddFile(fnObj,layer,"Datasourcemap","", !fLeaveFiles);
-	os.AddFile(fnObj,layer,"Table","", !fLeaveFiles);
+	os.AddFile(fnObj,layer,"Object","",!fLeaveFiles); // the object itself
+	os.AddFile(fnObj,layer + ":ZValues","Spatialsourcemap","", !fLeaveFiles); // the files used in its zmaker
+	os.AddFile(fnObj,layer + ":ZValues","Datasourcemap","", !fLeaveFiles);
+	os.AddFile(fnObj,layer + ":ZValues","Table","", !fLeaveFiles);
 
 	count = iReadElement(layer.c_str(),"DrawerCount");
 	for(int i = 0; i < count; ++i) {
@@ -169,7 +169,7 @@ void MapViewPtr::GetObjectStructure(ObjectStructure& os)
 	IlwisObjectPtr::GetObjectStructure(os);
 	if ( os.fGetAssociatedFiles() )
 	{	
-		int iLayers = iReadElement("RootDrawer", "DrawerCount");
+		int iLayers = iReadElement("Root", "DrawerCount");
 		//os.AddFile(fnObj,"MapView", "CoordSystem" ,"", fLeaveFiles );				
 		//os.AddFile(fnObj,"MapView", "GeoRef" ,"", fLeaveFiles );						
 		for (int i = 0; i < iLayers; ++i) 
@@ -177,7 +177,7 @@ void MapViewPtr::GetObjectStructure(ObjectStructure& os)
 			String sSection("Drawer%03d", i);
 			String sLayer;
 			FileName fnData;
-			ReadElement("RootDrawer", sSection.c_str(), sLayer);
+			ReadElement("Root", sSection.c_str(), sLayer);
 			GetObjectStructureLayer(os, sLayer);
 			
 	/*		if ( ReadElement(sLayer.c_str(), "Map" , fnData) != 0 )
