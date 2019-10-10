@@ -26,6 +26,7 @@ WMSTexture::WMSTexture(const Map & mp, const DrawingColor * drawColor, const Com
 : Texture(mp, drawColor, drm, 0 ,0 , 0, 0, 0, 0, 0, 0, RangeReal(), 0)
 , cbBounds(cb)
 , cbImageBounds(_cbImageBounds)
+, textureSize(0)
 {
 }
 
@@ -33,7 +34,7 @@ WMSTexture::WMSTexture(const Map & mp, const DrawingColor * drawColor, const Com
 
 void WMSTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
 {
-	int textureSize = drawerContext->getMaxTextureSize();
+	textureSize = drawerContext->getMaxTextureSize();
 	bool fOpenStreetMap = mp->gr()->pgOSM();
 	if (fOpenStreetMap)
 		textureSize = 256;
@@ -79,8 +80,6 @@ void WMSTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, vo
 	glGetBooleanv(GL_MAP_COLOR, &oldVal);
 	glPixelTransferf(GL_MAP_COLOR, false);
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, textureSize, textureSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
-	delete [] texture_data;
-	texture_data = 0;
 	glPixelTransferf(GL_MAP_COLOR, oldVal);
 	fRepresentationChanged = false;
 	if (fInThread)
@@ -89,8 +88,6 @@ void WMSTexture::CreateTexture(DrawerContext * drawerContext, bool fInThread, vo
 
 void WMSTexture::ReCreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop)
 {
-	int textureSize = drawerContext->getMaxTextureSize();
-	texture_data = new char [textureSize * textureSize * 4];
 	this->dirty = !DrawTexture(textureSize, texture_data, fDrawStop);
 
 	if (dirty)
@@ -103,8 +100,6 @@ void WMSTexture::ReCreateTexture(DrawerContext * drawerContext, bool fInThread, 
 	glGetBooleanv(GL_MAP_COLOR, &oldVal);
 	glPixelTransferf(GL_MAP_COLOR, false);
 	glTexImage2D( GL_TEXTURE_2D, 0, 4, textureSize, textureSize, 0, GL_RGBA, GL_UNSIGNED_BYTE, texture_data);
-	delete [] texture_data;
-	texture_data = 0;
 	glPixelTransferf(GL_MAP_COLOR, oldVal);
 	fRepresentationChanged = false;
 	if (fInThread)
@@ -149,4 +144,18 @@ bool WMSTexture::DrawTexture(int textureSize, char * outbuf, volatile bool* fDra
 	grcWMS->Unlock();
 	mp->KeepOpen(false);
 	return valid;
+}
+
+const long WMSTexture::iRaw(Coord & crd) const {
+	if (!valid)
+		return iUNDEF;
+	long iRow = round((double)textureSize * (cbBounds.cMax.y - crd.y) / cbBounds.height());
+	long iCol = round((double)textureSize * (crd.x - cbBounds.cMin.x) / cbBounds.width());
+	if (iRow >= 0 && iRow < textureSize && iCol >= 0 && iCol < textureSize) {
+		long iPos = (iRow * textureSize + iCol); // *4;
+		//long iRet = (texture_data[iPos]) | (texture_data[iPos + 1] << 8) | (texture_data[iPos + 2] << 16);
+		long iRet = ((long*)texture_data)[iPos];
+		return iRet;
+	} else
+		return iUNDEF;
 }

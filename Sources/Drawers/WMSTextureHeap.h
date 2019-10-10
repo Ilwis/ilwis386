@@ -19,6 +19,7 @@ namespace ILWIS {
 	{
 	public:
 		Texture * GetTexture(const CoordBounds & cb, bool fInThread);
+		Texture * GetTexture(const Coord & crd);
 		void SetCBImage(const CoordBounds & cb);
 	private:
 		Texture * GenerateTexture(const CoordBounds & cb, bool fInThread);

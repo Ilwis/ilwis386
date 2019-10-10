@@ -100,3 +100,19 @@ Texture * WMSTextureHeap::GenerateTexture(const CoordBounds & cb, bool fInThread
 
 	return 0;
 }
+
+Texture * WMSTextureHeap::GetTexture(const Coord & crd)
+{
+	WMSTexture * tex = 0;
+	CoordBounds cb (crd, crd); // a point
+	for (int i = 0; i < textures.size(); ++i) {
+		if (contains(((WMSTexture*)textures[i])->cb(), cb)) {
+			if (tex != 0) {
+				if (contains(tex->cb(), ((WMSTexture*)textures[i])->cb())) // a better texture
+					tex = (WMSTexture*)textures[i];
+			} else
+				tex = (WMSTexture*)textures[i];
+		}
+	}
+	return tex;
+}

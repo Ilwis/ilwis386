@@ -27,11 +27,14 @@ namespace ILWIS {
 		virtual void ReCreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
 		virtual void BindMe(DrawerContext * drawerContext); // To be called before glBegin
 		const CoordBounds & cb() {return cbBounds;};
+		const long iRaw(Coord & crd) const;
 
 	protected:
 		virtual bool DrawTexture(int textureSize, char * outbuf, volatile bool* fDrawStop);
 		const CoordBounds cbBounds;
 		const CoordBounds cbImageBounds;
+	private:
+		int textureSize;
 	};
 }
 

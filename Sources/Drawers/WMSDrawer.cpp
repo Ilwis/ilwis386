@@ -19,7 +19,7 @@
 #include "Engine\SpatialReference\Grcornrs.h"
 #include "Engine\SpatialReference\GrcWMS.h"
 #include "Drawers\WMSTextureHeap.h"
-
+#include "Drawers\WMSTexture.h"
 
 using namespace ILWIS;
 
@@ -374,4 +374,28 @@ void WMSDrawer::DisplayTexture3D(CoordBounds & cb) const
 
 void *WMSDrawer::getDataSource() const{
 	return 0; // no annotation-legend for colorcomposite
+}
+
+String WMSDrawer::getInfo(const Coord& c) const {
+	if ( !hasInfo() || !isActive())
+		return "";
+	Coord crd = c;
+	if (rastermap->cs() != rootDrawer->getCoordinateSystem())
+	{
+		crd = rastermap->cs()->cConv(rootDrawer->getCoordinateSystem(), c);
+	}
+	long iRaw;
+	WMSTexture* tex = (WMSTexture*)((WMSTextureHeap*)textureHeap)->GetTexture(crd);
+	if (tex)
+		iRaw = tex->iRaw(crd);
+	else
+		iRaw = iUNDEF;
+	String s;
+	if (iRaw == iUNDEF) {
+		s = String("?");
+	} else {
+		Color clr = Color(iRaw);
+		s = String("(%3i,%3i,%3i)", clr.red(), clr.green(), clr.blue());
+	}
+	return s;
 }
