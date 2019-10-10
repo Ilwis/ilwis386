@@ -387,6 +387,8 @@ bool MapParallaxCorrection::fFreezing()
 				double rColDestination;
 				gr()->Coord2RowCol(cNewCoord, rRowDestination, rColDestination);
 				RowCol rcDestination(rRowDestination, rColDestination);
+				if ((rcDestination.Row < 0) || (rcDestination.Row >= iNrLines) || (rcDestination.Col < 0) || (rcDestination.Col >= iNrCols)) // protection for displacement outside window
+					continue;
 				if (rcToCoord[rcDestination.Row * iNrCols + rcDestination.Col].x != rUNDEF)
 					continue;
 				double diffY = rRowDestination - (double)rcDestination.Row - 0.5; // between 0 and 1 (pixel)
