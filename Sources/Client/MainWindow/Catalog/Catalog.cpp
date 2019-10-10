@@ -1061,6 +1061,8 @@ void Catalog::OnGetdispinfo(NMHDR* pNMHDR, LRESULT* pResult)
 	LVITEM& item = pDispInfo->item;	
 	int iSz = arsColumnStrings.size();
 	if ( iSz == 0) return;
+	if ( arsColumnStrings.size() <= item.iItem)
+		return;
 	int iColSz = arsColumnStrings[item.iItem].size();
 	if ( viIndex.size() <= item.iItem)
 		return;
