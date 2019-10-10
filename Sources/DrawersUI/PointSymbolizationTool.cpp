@@ -97,11 +97,12 @@ DisplayOptionsForm(dr,wPar,TR("Symbolization")), selection(0)
 	//fdSelect = new FieldDataType(root,TR("Symbols"),&name,".ivg",false,0,FileName(base),false);
 	fselect = new FieldOneSelectString(root,TR("Symbols"),&selection, names);
 	fiThick = new FieldReal(root,TR("Line thickness"),&(props->thickness));
-	frScale = new FieldReal(root,TR("Symbol scale"),&scale,ValueRange(RangeReal(0.1,100.0),0.1));
+	frScale = new FieldReal(root,TR("Symbol scale"),&scale,ValueRange(RangeReal(0.0,100.0),0.0));
 	frRot = new FieldReal(root,TR("Symbol rotation"),&(props->angle),ValueRange(RangeReal(0.0,360.0),0.1));
 	t3dOr = props->threeDOrientation ? 1 : 0;
 	f3d = new CheckBox(root,TR("3D orientation"),&t3dOr);
 	create();
+	fselect->SetVal(name);
 }
 
 void PointSymbolizationForm::apply(){
