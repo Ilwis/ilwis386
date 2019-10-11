@@ -92,33 +92,26 @@ DisplayOptionsForm(dr,wPar,TR("Rotation")), tbl(_tbl), fcColumn(0), clockwise(tr
 		props = (PointProperties *)dr->getProperties();
 		inf = dr->getRotationInfo();
 	}
-	if ( tbl.fValid() || bmptr->dm()->pdv()) {
-		if ( !props->stretchRange.fValid()) {
-			if ( tbl.fValid()) {
-				if ( props->stretchColumn == "") {
-					for(int i=0 ; i < tbl->iCols(); ++i) {
-						if ( tbl->col(i)->dm()->pdv()) {
-							props->stretchColumn = tbl->col(i)->sName();
-							props->stretchRange = tbl->col(i)->dvrs().rrMinMax();
-							break;
-						}
-					}
-				} else {
-					Column  col = tbl->col(props->stretchColumn);
-					props->stretchRange = col->rrMinMax();
-
+	if ( tbl.fValid()) { // attribute table
+		if (inf.rotationColumn == "" || !tbl->col(inf.rotationColumn).fValid()) { // overwrite inf.rr, regardless of its current stretch; it is based on a non-existing column
+			for(int i = 0; i < tbl->iCols(); ++i) {
+				if ( tbl->col(i)->dm()->pdv()) {
+					inf.rotationColumn = tbl->col(i)->sName();
+					inf.rr = tbl->col(i)->rrMinMax();
+					break;
 				}
-			}else
-				props->stretchRange = bmptr->rrMinMax();
+			}
+		} else if (!inf.rr.fValid()) {
+			inf.rr = tbl->col(inf.rotationColumn)->rrMinMax();
 		}
-		if ( tbl.fValid()) {
-			fcColumn = new FieldColumn(root, TR("Attribute Column"), tbl, &(inf.rotationColumn), dmVALUE);
-			fcColumn->SetCallBack((NotifyProc)&PointDirectionForm::ColValCallBack);
-		}
-		inf.rr = props->stretchRange;
-
+		fcColumn = new FieldColumn(root, TR("Attribute Column"), tbl, &(inf.rotationColumn), dmVALUE);
+		fcColumn->SetCallBack((NotifyProc)&PointDirectionForm::ColValCallBack);
 		new FieldBlank(root);
-
+		frr = new FieldRangeReal(root, TR("Rotation range"), &(inf.rr));
+		cbClockwise = new CheckBox(root,TR("Clockwise"),&(inf.clockwise));
+	} else if ( bmptr->dm()->pdv()) { // value-pointmap (no attribute table)
+		if (!inf.rr.fValid())
+			inf.rr = bmptr->rrMinMax();
 		frr = new FieldRangeReal(root, TR("Rotation range"), &(inf.rr));
 		cbClockwise = new CheckBox(root,TR("Clockwise"),&(inf.clockwise));
 	}
