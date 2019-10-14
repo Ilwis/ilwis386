@@ -147,7 +147,7 @@ HTREEITEM HovMollerTool::configure( HTREEITEM parentItem) {
 	checkItem = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	checkItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&HovMollerTool::displayOptionAddList);
 	checkItem->setCheckAction(this,0, (DTSetCheckFunc)&HovMollerTool::setcheckTool);
-	htiNode = insertItem(TR("HovMoeller Diagram"),"Track",checkItem,working);
+	htiNode = insertItem(TR("Hovmöller Diagram"),"Track",checkItem,working);
 
 	DrawerTool *dt = DrawerTool::createTool("LineStyleTool", getDocument()->mpvGetView(),tree, line);
 	if ( dt) {
@@ -210,7 +210,7 @@ void HovMollerTool::uncheckTool() {
 }
 
 String HovMollerTool::getMenuString() const {
-	return TR("Hovemoeller Diagram");
+	return TR("Hovmöller Diagram");
 }
 
 void HovMollerTool::displayOptionAddList() {
@@ -345,7 +345,7 @@ int ChooseHovMollerForm::addSource(Event *ev) {
 
 //========================================================================
 HovMollerGraphFrom::HovMollerGraphFrom(CWnd *wPar, LayerDrawer *dr,HovMollerTool *t) :
-DisplayOptionsForm2(dr,wPar,TR("Hovmoller Diagram"),fbsBUTTONSUNDER | fbsNOCANCELBUTTON), graph(0), initial(true), tool(t)
+DisplayOptionsForm2(dr,wPar,TR("Hovmöller Diagram"),fbsBUTTONSUNDER | fbsNOCANCELBUTTON), graph(0), initial(true), tool(t)
 {
 	if ( t->source.getSource().fValid())
 		name = t->source.getSource()->fnObj.sFullPath();
