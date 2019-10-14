@@ -203,26 +203,36 @@ Color DrawingColor::clrRaw(long iRaw, NewDrawer::DrawMethod drm) const
 		}
 		break;
 	case NewDrawer::drmSINGLE:
-		if (clr2.iVal() == -1)
-			cRet = GetSysColor(COLOR_WINDOWTEXT);
-		else {
-			FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(drw);
-			if ( fdr)
-				cRet = fdr->getSingleColor();
+		{
+			double rVal = dataValues.rValByRaw(iRaw);
+			if ( rVal == rUNDEF || rVal == iUNDEF || rVal == shUNDEF)
+				return colorUNDEF;
+			if (clr2.iVal() == -1)
+				cRet = GetSysColor(COLOR_WINDOWTEXT);
+			else {
+				FeatureLayerDrawer *fdr = dynamic_cast<FeatureLayerDrawer *>(drw);
+				if ( fdr)
+					cRet = fdr->getSingleColor();
+			}
 		}
 		break;
 	case NewDrawer::drmMULTIPLE:
-		iRaw = dataValues.iRawAttr(iRaw);
-		if (3 == iMultColors)
-			cRet = clrRandom(iRaw);
-		else {
-			int iStep = 7;
-			switch (iMultColors) {
-	case 0: iStep = 7; break;
-	case 1: iStep = 15; break;
-	case 2: iStep = 31; break;
+		{
+			double rVal = dataValues.rValByRaw(iRaw);
+			if ( rVal == rUNDEF || rVal == iUNDEF || rVal == shUNDEF)
+				return colorUNDEF;
+			iRaw = dataValues.iRawAttr(iRaw);
+			if (3 == iMultColors)
+				cRet = clrRandom(iRaw);
+			else {
+				int iStep = 7;
+				switch (iMultColors) {
+					case 0: iStep = 7; break;
+					case 1: iStep = 15; break;
+					case 2: iStep = 31; break;
+				}
+				cRet = clrPrimary(1+iRaw%iStep, colorSetIndex);
 			}
-			cRet = clrPrimary(1+iRaw%iStep, colorSetIndex);
 		}  
 		break;
 	case NewDrawer::drmIMAGE: {
