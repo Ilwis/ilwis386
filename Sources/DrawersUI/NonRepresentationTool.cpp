@@ -38,22 +38,12 @@ bool NonRepresentationToolTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if ( dynamic_cast<ColorTool *>(tool) == 0)
 		return false;
 
-	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(tool->getDrawer());
+	LayerDrawer *sdrw = dynamic_cast<LayerDrawer *>(drawer);
 	if (!sdrw)
 		return false;
-	Representation rpr = sdrw->getRepresentation();
-	bool isAcceptable = false;
-	if ( rpr.fValid()) {
-		isAcceptable = !(rpr->prv() || rpr->prg());
-	} else {
-		if (sdrw->useAttributeColumn())
-			isAcceptable = !sdrw->getAtttributeColumn()->dm()->pdbool();
-		else {
-			BaseMap *bmp = (BaseMap *)tool->getDrawer()->getDataSource();
-			if (bmp)
-				isAcceptable = !(*bmp)->dm()->pdbool() && !(*bmp)->dm()->pdcol();
-		}
-	}
+	bool singleColorOptionAvailable = dynamic_cast<FeatureLayerDrawer *>(drawer) != 0;
+	bool multiColorOptionAvailable = !sdrw->getRepresentation().fValid() || (sdrw->getRepresentation().fValid() && !sdrw->getRepresentation()->prv());
+	bool isAcceptable = singleColorOptionAvailable || multiColorOptionAvailable;
 	if ( isAcceptable)
 		parentTool = tool;
 	return isAcceptable;
