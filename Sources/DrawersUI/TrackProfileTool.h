@@ -63,6 +63,7 @@ private:
 		TrackMarker *point;
 		bool working;
 		bool fDown;
+		bool fSet;
 	};
 
 	class TrackMarker : public PointDrawer {

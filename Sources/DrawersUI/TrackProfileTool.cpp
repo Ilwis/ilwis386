@@ -114,6 +114,7 @@ TrackProfileTool::TrackProfileTool(ZoomableView* zv, LayerTreeView *view, NewDra
 	fDown = false;
 	line = 0;
 	point = 0;
+	fSet = false;
 }
 
 TrackProfileTool::~TrackProfileTool() {
@@ -144,6 +145,8 @@ bool TrackProfileTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	SpatialDataDrawer *sddr = dynamic_cast<SpatialDataDrawer *>(nddr);
 	if(!sddr)
 		return false;
+
+	fSet = (setDrawerTool != 0);
 
 	Domain dm;
 	dm.SetPointer(sddr->getSourceSupportObject(IlwisObject::iotDOMAIN));
@@ -263,11 +266,35 @@ bool TrackProfileTool::isUnique(const FileName& fn) {
 void TrackProfileTool::addSource(const FileName& fn) {
 	IlwisObject obj = IlwisObject::obj(fn);
 	if( obj.fValid()) {
-		if ( isUnique(obj->fnObj)) {
+		if (!fSet && (( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) || ( IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION ))) { // unpack maplist or objectcollection and add every individual map
+			if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
+				MapList mpl (obj->fnObj);
+				for (int i = 0; i < mpl->iSize(); ++i) {
+					Map mp = mpl[i];
+					if ( isUnique(mp->fnObj)) {
+						TrackDataSource *src = new TrackDataSource(mp);
+						sources.push_back(src);
+						if (graphForm)
+							graphForm->addSource(src->getSource());
+					}					
+				}
+			} else { // objectcollection
+				ObjectCollection oc (obj->fnObj);
+				for (int i = 0; i < oc->iNrObjects(); ++i) {
+					IlwisObject io = oc->ioObj(i);
+					if ( IOTYPEBASEMAP(io->fnObj) && isUnique(io->fnObj)) {
+						TrackDataSource *src = new TrackDataSource(io);
+						sources.push_back(src);
+						if (graphForm)
+							graphForm->addSource(src->getSource());
+					}					
+				}
+			}
+		} else if ( isUnique(obj->fnObj)) {
 			TrackDataSource *src = new TrackDataSource(obj);
 			sources.push_back(src);
 			if (graphForm)
-				graphForm->addSource(src->getMap());
+				graphForm->addSource(src->getSource());
 		}
 	}
 }
