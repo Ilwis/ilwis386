@@ -163,7 +163,7 @@ HTREEITEM TrackProfileTool::configure( HTREEITEM parentItem) {
 		DrawerParameters dp(drawer->getRootDrawer(), drawer);
 		line = new TrackLine(&dp);
 		line->setActive(false);
-		drawer->getRootDrawer()->addPostDrawer(730,line);
+		drawer->getRootDrawer()->addPostDrawer(733,line);
 	}
 
 	if (!point) {
@@ -172,7 +172,7 @@ HTREEITEM TrackProfileTool::configure( HTREEITEM parentItem) {
 		point->setActive(false);
 		PreparationParameters pp(NewDrawer::ptRENDER);
 		point->prepare(&pp);
-		drawer->getRootDrawer()->addPostDrawer(731,point);
+		drawer->getRootDrawer()->addPostDrawer(734,point);
 	}
 
 	checkItem = new DisplayOptionTreeItem(tree,parentItem,drawer);
@@ -336,7 +336,7 @@ void TrackProfileTool::OnLButtonUp(UINT nFlags, CPoint pnt)
 			fDown = false;
 			tree->GetDocument()->rootDrawer->setTopDrawer(0);
 			tree->GetDocument()->mpvGetView()->setBitmapRedraw(false);
-			drawer->getRootDrawer()->addPostDrawer(730,line);
+			drawer->getRootDrawer()->addPostDrawer(733,line);
 			if (graphForm) {
 				graphForm->setTrack(coords);
 				graphForm->ShowWindow(SW_SHOW);
