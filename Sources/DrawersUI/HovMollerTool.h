@@ -87,7 +87,7 @@ private:
 		//void apply(); 
 		void setTrack(const vector<Coord>& crds);
 		void reset();
-		void addSource(const MapList& ml) ;
+		void setNewSource(const MapList& ml) ;
 		void update();
 		virtual void shutdown(int iReturn);
 	private:

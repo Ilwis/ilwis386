@@ -173,7 +173,7 @@ void HovMollerTool::setcheckTool(void *w, HTREEITEM item) {
 		tree->GetDocument()->mpvGetView()->addTool(this, getId());
 		if (!graphForm) {
 			graphForm = new HovMollerGraphFrom(tree, (LayerDrawer *)drawer, this);
-			graphForm->addSource(source.getSource());
+			graphForm->setNewSource(source.getSource());
 		} else {
 			graphForm->ShowWindow(SW_SHOW);
 			if (line && point) {
@@ -226,7 +226,7 @@ void HovMollerTool::setSource(const FileName& fn) {
 	if( mpl.fValid()) {
 		source.setSource(mpl);
 		if (graphForm)
-			graphForm->addSource(mpl);
+			graphForm->setNewSource(mpl);
 	}
 }
 
@@ -330,11 +330,11 @@ void HovMollerDataSource::updateIndex(long ind){
 
 //-------------------------------------------------------------------
 ChooseHovMollerForm::ChooseHovMollerForm(CWnd *wPar, LayerDrawer *dr, HovMollerTool *t) : 
-	DisplayOptionsForm2(dr,wPar,TR("Add data source"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON | fbsOKHASCLOSETEXT),
+	DisplayOptionsForm2(dr,wPar,TR("Set data source"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON | fbsOKHASCLOSETEXT),
 	tool(t)
 {
 	fm = new FieldDataType(root,TR("Data source"),&name, ".mpl",true);
-	new PushButton(root, TR("Add"),(NotifyProc) &ChooseHovMollerForm::addSource);
+	new PushButton(root, TR("Set"),(NotifyProc) &ChooseHovMollerForm::addSource);
 	create();
 }
 
@@ -416,9 +416,11 @@ void HovMollerGraphFrom::setTrack(const vector<Coord>& crds) {
 		graph->setTrack(crds);
 }
 
-void HovMollerGraphFrom::addSource(const MapList& mpl) {
+void HovMollerGraphFrom::setNewSource(const MapList& mpl) {
 	if ( graph)
 		graph->setSource(mpl);
+	if (fm && mpl.fValid())
+		fm->SetVal(mpl->fnObj.sFileExt());
 }
 
 void HovMollerGraphFrom::reset() {
