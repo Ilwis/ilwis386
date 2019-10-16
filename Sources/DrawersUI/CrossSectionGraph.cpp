@@ -13,7 +13,7 @@ BEGIN_MESSAGE_MAP(CrossSectionGraph, CStatic)
 	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
 
-#define CSGRPAH_SIZE 460
+#define CSGRPAH_SIZE 650
 CrossSectionGraph::CrossSectionGraph(CrossSectionGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) : BaseZapp(f) 
 {
 	fldGraph = f;
@@ -380,7 +380,7 @@ sources(_sources),
 csy(cys)
 {
 	psn->iMinWidth = psn->iWidth = CSGRPAH_SIZE;
-	psn->iMinHeight = psn->iHeight = 140;
+	psn->iMinHeight = psn->iHeight = 250;
 	SetIndependentPos();
 }
 

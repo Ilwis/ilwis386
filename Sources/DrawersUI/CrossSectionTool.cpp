@@ -270,10 +270,10 @@ DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	vector<FLVColumnInfo> v;
 	v.push_back(FLVColumnInfo("Source", 200));
 	v.push_back(FLVColumnInfo("Probe", 40));
-	v.push_back(FLVColumnInfo("Index range", 40));
-	v.push_back(FLVColumnInfo("Value range", 80));
-	v.push_back(FLVColumnInfo("Selected index", 40));
-	v.push_back(FLVColumnInfo("Value", 60));
+	v.push_back(FLVColumnInfo("Index range", 80));
+	v.push_back(FLVColumnInfo("Value range", 130));
+	v.push_back(FLVColumnInfo("Selected index", 90));
+	v.push_back(FLVColumnInfo("Value", 100));
 	graph = new CrossSectionGraphEntry(root, sources,dr->getRootDrawer()->getCoordinateSystem());
 	FieldListView * flv = new FieldListView(root,v);
 	graph->setListView(flv);

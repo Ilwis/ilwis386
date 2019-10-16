@@ -509,8 +509,8 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	vector<FLVColumnInfo> v;
 	v.push_back(FLVColumnInfo("Source", 220));
 	v.push_back(FLVColumnInfo("Distance", 70));
-	v.push_back(FLVColumnInfo("Value range", 80,true));
-	v.push_back(FLVColumnInfo("Value", 60));
+	v.push_back(FLVColumnInfo("Value range", 130, true));
+	v.push_back(FLVColumnInfo("Value", 100));
 	graph = new TrackProfileGraphEntry(root,t);
 	FieldListView *view = new FieldListView(root,v);
 	graph->setListView(view);

@@ -28,7 +28,7 @@ BEGIN_MESSAGE_MAP(TrackProfileGraph, CStatic)
 	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
 
-#define CSGRPAH_SIZE 450
+#define CSGRPAH_SIZE 650
 TrackProfileGraph::TrackProfileGraph(TrackProfileGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) : BaseZapp(f) 
 {
 	fldGraph = f;
@@ -451,7 +451,7 @@ currentIndex(iUNDEF),
 tool(t)
 {
 	psn->iMinWidth = psn->iWidth = CSGRPAH_SIZE;
-	psn->iMinHeight = psn->iHeight = 150;
+	psn->iMinHeight = psn->iHeight = 250;
 	SetIndependentPos();
 }
 
