@@ -124,7 +124,7 @@ void CrossSectionGraph::saveAsSpectrum(){
 		String path = IlwWinApp()->sGetCurDir() + name + ".spec";
 		ofstream outfile(path.c_str(),std::ofstream::out);
 		for(int i = 0; i < finalResult.size(); ++i) 
-			outfile << "band" << i << "=" << std::setprecision(5) << finalResult[i] << "\n";
+			outfile << "band" << (i + 1) << "=" << std::setprecision(5) << finalResult[i] << "\n";
 		outfile.close();
 	}
 
@@ -149,7 +149,7 @@ void CrossSectionGraph::saveAsTbl() {
 		int maxNo = values[0][0].size();
 		FileName fnTable = FileName::fnUnique(FileName(fname,".tbt"));
 		Table tbl(fnTable,Domain("none"));
-		DomainValueRangeStruct dvInt(0 , maxNo);
+		DomainValueRangeStruct dvInt(1, maxNo);
 		Column colIndex = tbl->colNew("Index",dvInt);
 		colIndex->SetOwnedByTable();
 		//Column colMap = tbl->colNew("BaseMap",Domain("String"));
@@ -201,7 +201,7 @@ void CrossSectionGraph::saveAsTbl() {
 						if ( bmp->cs() != fldGraph->csy)
 							crd = bmp->cs()->cConv(fldGraph->csy, crd);
 						String v = bmp->sValue(crd,0);
-						colIndex->PutVal(count+1,j);
+						colIndex->PutVal(count + 1, j + 1);
 						colValue->PutVal(count + 1, v);
 						//colMap->PutVal(count+1, bmp->fnObj.sFile + bmp->fnObj.sExt);
 					}
@@ -286,7 +286,7 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 		double yscale = rct.Height() / rr.rWidth();
 		double y0 = rr.rWidth() * yscale;
-		double xscale = (double)rct.Width() / numberOfMaps;
+		double xscale = (numberOfMaps > 1) ? (double)rct.Width() / (numberOfMaps - 1) : rct.Width();
 		values[m].resize(fldGraph->crdSelect.size());
 		double rx = 0;
 		int f = 20;
@@ -308,9 +308,16 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 				else 
 					dc->LineTo(rx,y);
 				if ( i % 5 == 0) {
-					String s("%d", i);
+					String s("%d", i + 1);
 					CSize sz = dc->GetTextExtent(s.c_str(), s.size());
-					dc->TextOut(rx - sz.cx / 2, crct.bottom - 16,s.c_str(),s.size());
+					int xpos;
+					if (i == 0)
+						xpos = 0;
+					else if (i == numberOfMaps - 1)
+						xpos = rx - sz.cx;
+					else
+						xpos = rx - sz.cx / 2;
+					dc->TextOut(xpos, crct.bottom - 16,s.c_str(),s.size());
 				}
 				rx += xscale;
 			}
@@ -318,8 +325,9 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		if ( oldnr != numberOfMaps) {
 			rx = 0;
 			for(int i = 0; i < numberOfMaps; ++i) {
-
 				if ( i % 5 == 0) {
+					if (rx > rct.Width() - 1)
+						rx = rct.Width() - 1;
 					dc->MoveTo(rx,rct.bottom);
 					dc->LineTo(rx,rct.bottom + 3);
 				}
@@ -346,7 +354,7 @@ void CrossSectionGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 				int numberOfMaps = getNumberOfMaps(m);
 				CRect rct;
 				GetClientRect(rct);
-				double xscale = rct.Width() / numberOfMaps;
+				double xscale = (double)rct.Width() / numberOfMaps;
 				fldGraph->currentIndex = point.x / xscale;
 				if ( fldGraph->currentIndex >= values[m].size())
 					continue;
@@ -395,19 +403,19 @@ void CrossSectionGraphEntry::fillList() {
 		for(int i = 0 ; i < count; ++i) {
 			vector<String> v;
 			v.push_back(String("%S%S",obj->fnObj.sFile,obj->fnObj.sExt));
-			v.push_back(String("%d",i));
+			v.push_back(String("%d",i + 1));
 			if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
 				MapList mpl(obj->fnObj);
-				v.push_back(String("%d:%d",mpl->iLower(), mpl->iUpper()));
+				v.push_back(String("%d:%d",mpl->iLower() + 1, mpl->iUpper() + 1));
 
 			} else if (IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
 				ObjectCollection oc(obj->fnObj);
-				v.push_back(String("0:%d",oc->iNrObjects()));
+				v.push_back(String("1:%d",oc->iNrObjects()));
 			}
 			RangeReal rr = getRange(m);
 			v.push_back(String("%S", rr.s()));
 			if ( currentIndex != iUNDEF && crossSectionGraph->values.size() > 0) {
-				v.push_back(String("%d", currentIndex));
+				v.push_back(String("%d", currentIndex + 1));
 				v.push_back(String("%g",crossSectionGraph->values[m][i][currentIndex]));
 			}
 			else{

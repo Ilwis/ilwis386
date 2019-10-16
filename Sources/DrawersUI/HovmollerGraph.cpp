@@ -94,32 +94,30 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	CDC *dc = CDC::FromHandle(lpDIS->hDC);
 
 	HGDIOBJ fntOld = dc->SelectObject(fnt);
-	if ( track.size() == 0)
+	int points = track.size();
+	if ( points == 0)
 		return;
 
 	int oldnr = iUNDEF;
 	Map mp = fldGraph->mpl[0];
-
-	int  noOfClassMaps = 0;
-	int numberOfPoints = track.size();
+	int noOfClassMaps = 0;	
 	int maps = fldGraph->mpl->iSize();
 	double yStep = (double)rctInner.Height() / maps;
-	double xStep = (double)rctInner.Width() / track.size();
+	double xStep = (double)rctInner.Width() / points;
 	ILWIS::NewDrawer *ndrw = fldGraph->tool->getDrawer();
 	ILWIS::LayerDrawer *ldr = dynamic_cast<ILWIS::LayerDrawer *>(ndrw);
 	ILWIS::DrawingColor *drc = ldr->getDrawingColor();
 	CRect moveRect; //(rctInner.left, rctInner.top,rctInner.left + xStep,rctInner.top + yStep);
 	double xoff = 0;
-	double yoff = yStep;
-	int nrOfMaps = fldGraph->mpl->iSize();
-	for(int m =0; m < nrOfMaps; ++m) {
+	double yoff = 0;
+	for(int m =0; m < maps; ++m) {
 		moveRect.left = rctInner.left;
 		moveRect.right = rctInner.left + xStep;
-		moveRect.top =  rctInner.top + yoff - yStep;
-		moveRect.bottom = rctInner.top + yoff;
-		for(int x=0; x < track.size(); ++x) {
+		moveRect.top =  rctInner.top + yoff;
+		moveRect.bottom = rctInner.top + yoff + yStep;
+		for(int x=0; x < points; ++x) {
 			Color clr;
-			if ( x == track.size() - 1) {
+			if ( x == points - 1) {
 			TRACE("left %d right %d xmin %d xmax %d\n", moveRect.left, moveRect.right, rctInner.left, rctInner.right);
 			}
 			double v = values[m][x];
@@ -138,12 +136,11 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			moveRect.right = rctInner.left + xoff + xStep;
 			CPen penTick(PS_SOLID,1,RGB(0,0,0));
 			SelectObject(lpDIS->hDC,penTick);
-			int frac = 100 * (double) x / track.size();
+			int frac = 100 * (double) x / points;
 			if ( frac % 10 == 0) {
 				dc->MoveTo(rctInner.left + xoff,rctInner.bottom);
 				dc->LineTo(rctInner.left + xoff,rctInner.bottom + 6);
 			}
-
 		}
 		CPen penTick(PS_SOLID,1,RGB(0,0,0));
 		SelectObject(lpDIS->hDC,penTick);
@@ -151,17 +148,18 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		dc->LineTo(rctInner.left-4,rctInner.bottom - yoff);
 		yoff += yStep;
 		xoff = 0;
-
 	}
+	dc->MoveTo(rctInner.left,rctInner.bottom - yoff);
+	dc->LineTo(rctInner.left-4,rctInner.bottom - yoff);
 
 	setTimeText(1, dc);
-	setTimeText(nrOfMaps / 3, dc);
-	setTimeText( 2 * nrOfMaps / 3, dc);
-	setTimeText(nrOfMaps, dc);
+	setTimeText(maps / 3, dc);
+	setTimeText(2 * maps / 3, dc);
+	setTimeText(maps, dc);
 
 	setCoordText(0,mp, dc);
-	setCoordText(track.size() / 2,  mp, dc);
-	setCoordText(track.size() - 1,  mp, dc);
+	setCoordText(points / 2,  mp, dc);
+	setCoordText(points - 1,  mp, dc);
 
 	setTextDataBlock(dc);
 
@@ -172,11 +170,11 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 void HovMollerGraph::setTextDataBlock(CDC *dc){
 	String sValue, sTime,sLocX, sLocY;
 	sValue = sTime = sLocX = sLocY = ":";
-	String sIndex = yIndex >= 0 ? String("%d",values.size() - yIndex) : "";
-	if ( xIndex >= 0 && yIndex >= 0) {
+	String sIndex = (yIndex > 0 && yIndex <= values.size()) ? String("%d",yIndex) : "";
+	if ( xIndex >= 0 && (yIndex > 0 && yIndex <= values.size())) {
 		String st;
 		if ( timeColumn.fValid()) {
-			ILWIS::Time time(timeColumn->rValue(yIndex - 1));
+			ILWIS::Time time(timeColumn->rValue(yIndex));
 			st = time.toString(true,ILWIS::Time::mDATE);
 		} else
 			st = "?";
@@ -185,7 +183,7 @@ void HovMollerGraph::setTextDataBlock(CDC *dc){
 		LatLon ll = fldGraph->mpl[0]->cs()->llConv(trackCrd[xIndex]);
 		sLocY += ll.sLat(10);
 		sLocX += ll.sLon(10);
-		sValue = String("%S%f",sValue, values[values.size() - yIndex][xIndex]);
+		sValue = String("%S%f",sValue, values[yIndex - 1][xIndex]);
 
 	}
 	dc->TextOut(rctInner.right + 8,rctInner.top, "Latitude");
@@ -204,13 +202,13 @@ void HovMollerGraph::setTimeText(int index, CDC *dc) {
 	if ( timeColumn.fValid()) {
 		ILWIS::Time time(timeColumn->rValue(index));
 		String st = time.toString(true,ILWIS::Time::mDATE);
-		double frac = (double) (index - 1.0) / fldGraph->mpl->iSize();
+		double frac = (double) (index - 1.5) / fldGraph->mpl->iSize();
 		CSize sz = dc->GetTextExtent(st.c_str(), st.size());
 		dc->TextOut(rctInner.left - sz.cx - 6,rctInner.bottom - rctInner.Height() * frac - sz.cy,st.c_str());
 
 	} else {
 		String st("%d", index);
-		double frac = (double) (index - 1.0) / fldGraph->mpl->iSize();
+		double frac = (double) (index - 1.5) / fldGraph->mpl->iSize();
 		CSize sz = dc->GetTextExtent(st.c_str(), st.size());
 		dc->TextOut(rctInner.left - sz.cx - 6,rctInner.bottom - rctInner.Height() * frac - sz.cy,st.c_str());
 	}
@@ -253,7 +251,8 @@ void HovMollerGraph::PreSubclassWindow()
 void HovMollerGraph::setTimeColumn(const String& colName) {
 	if( fldGraph->mpl->tblAtt().fValid() ) {
 		timeColumn = fldGraph->mpl->tblAtt()->col(colName);
-	}
+	} else
+		timeColumn = Column();
 }
 
 void HovMollerGraph::setTrack(const vector<Coord>& crds){

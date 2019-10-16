@@ -81,7 +81,6 @@ ILWIS::LayerDrawer *TrackProfileGraph::getLayerDrawer(ILWIS::NewDrawer *ndr) con
 		int activeIndex = spdr->getCurrentIndex();
 		if ( activeIndex != iUNDEF)
 			ldr = (ILWIS::LayerDrawer *)spdr->getDrawer(activeIndex);
-
 	}
 	return ldr;
 }
@@ -185,7 +184,6 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	::Rectangle(lpDIS->hDC, rct.left,rct.top, rct.right, rct.bottom);
 	SelectObject(lpDIS->hDC, oldBrush);
 
-
 	CFont* fnt = new CFont();
 	BOOL vvv = fnt->CreatePointFont(80,"Arial");
 	CDC *dc = CDC::FromHandle(lpDIS->hDC);
@@ -199,10 +197,10 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	double totDist = track[track.size() - 1].dist;
 	int  noOfClassMaps = 0;
 	int numberOfPoints = track.size();
+	double xscale = (numberOfPoints > 1) ? (double)rct.Width() / (numberOfPoints - 1) : rct.Width();
 	vector<double> markers;
 	for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 		values.resize(fldGraph->tool->sources.size());
-		double xscale = (double)rct.Width() / numberOfPoints;
 		double rx = 0;
 		if ( getDomain(m)->pdv() )  {
 
@@ -217,7 +215,7 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 				if (!bmp.fValid())
 					continue;
 				double v = getValue(m, bmp, track[i].crd);
-				values[m].push_back(GraphInfo(i,v,track[i].crd));
+				values[m].push_back(GraphInfo((i + 1),v,track[i].crd));
 
 				int y = v == rUNDEF ? rct.bottom : y0 - ( v - rr.rLo()) * yscale;
 				y = min(y, rct.bottom);
@@ -235,13 +233,12 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 				fldGraph->setIndex(m, gi.value, gi.crd);
 			}
 		} else if ( getDomain(m)->pdsrt()) {
-
 			long oldRaw = iUNDEF;
 			double oldX = 0;
 			for(int i = 0; i <= numberOfPoints; ++i) {
 				BaseMap bmp = fldGraph->tool->sources[m]->getMap(track[i].crd);
 				long raw = i < numberOfPoints ? getValue(m,bmp,track[i].crd) : -1;
-				values[m].push_back(GraphInfo(i,raw,track[i].crd));
+				values[m].push_back(GraphInfo((i + 1),raw,track[i].crd));
 				if ( raw != oldRaw && oldRaw != iUNDEF) {
 					if ( raw != rUNDEF) {
 						Color clr = getColor(m, bmp, oldRaw);
@@ -255,7 +252,6 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 				rx += xscale;
 			}
 			noOfClassMaps++;
-
 		}
 	}
 	CPen bpen(PS_SOLID, 1, RGB(150,150,150));
@@ -263,7 +259,6 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	for(int i = 0; i< markers.size(); ++i) {
 		dc->MoveTo(markers[i], rct.bottom);
 		dc->LineTo(markers[i], rct.top);
-
 	}
 
 	double limit = totDist;
@@ -309,43 +304,45 @@ void TrackProfileGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 }
 void TrackProfileGraph::PreSubclassWindow() 
 {
-	EnableToolTips();
-	
+	EnableToolTips();	
 	CStatic::PreSubclassWindow();
 }
 
 void TrackProfileGraph::setTrack(const vector<Coord>& crds){
-	double rD = 0;
 	track.clear();
 	values.clear();
+	double rTotalDistance = 0;
 	for(int i = 1; i < crds.size(); ++i) {
-		rD += rDist(crds[i-1], crds[i]);
+		rTotalDistance += rDist(crds[i-1], crds[i]);
 	}
-	double step = rD / 100.0;
+	double step = rTotalDistance / 99.0;
+	double remain = 0; // the remaining distance to complete a multiple of "step", after each intermediate node
 	double totDist = 0;
 	for(int i = 0; i < crds.size() - 1; ++i) {
+		if ( track.size() > 0)
+			track[track.size() - 1].marker = true;
 		Coord c1 = crds[i];
 		Coord c2 = crds[i+1];
-		double distance = rDist(c1, c2);
+		double rPartialDistance = rDist(c1, c2);
 		double angle = atan2(c2.y - c1.y, c2.x - c1.x);
 		bool notDone = true;
-		double cnt = 1;
+		double cnt = 0;
 		double d;
 		while(notDone) {
-			Coord c3(c1.x + cos(angle) * step * cnt, c1.y + sin(angle) * step * cnt);
+			Coord c3(c1.x + cos(angle) * (remain + step * cnt), c1.y + sin(angle) * (remain + step * cnt));
 			d = rDist(c1, c3);
-			if ( d < distance ) {
-					track.push_back(LocInfo(c3,totDist + d));
+			if ( d < rPartialDistance * 0.99999 ) { // if the distance is smaller than 99.999% of the partial distance, then we are not yet at the last point
+				track.push_back(LocInfo(c3, totDist + d - remain));
 			}
 			else {
-				if ( track.size() > 0)
-					track[track.size() - 1].marker = true;
+				remain = d - rPartialDistance;
 				notDone = false;
 			}
 			++cnt;
 		}
 		totDist += d;
 	}
+	track.push_back(LocInfo(crds[crds.size() - 1], rTotalDistance));
 }
 
 #define ID_GR_COPY 5000
@@ -395,8 +392,7 @@ void TrackProfileGraph::saveAsCsv() {
 				}
 			}
 			out.close();
-		}
-		
+		}		
 	}
 }
 
@@ -418,7 +414,7 @@ void TrackProfileGraph::saveAsTbl() {
 	if ( TableNameForm(this, &fname).DoModal() == IDOK) {
 		FileName fnTable = FileName::fnUnique(FileName(fname,".tbt"));
 		Table tbl(fnTable,Domain("none"));
-		DomainValueRangeStruct dvInt(0 , 100);
+		DomainValueRangeStruct dvInt(1, (values.size() > 0) ? values[0].size() : 100);
 		Column colIndex = tbl->colNew("Coordinate Index",dvInt);
 		colIndex->SetOwnedByTable();
 		Domain dmcrd;
@@ -433,11 +429,11 @@ void TrackProfileGraph::saveAsTbl() {
 				Column colValue = tbl->colNew(name.sQuote(), bmp->dvrs());
 				colValue->SetOwnedByTable();
 				for(int i=0; i < values[m].size(); ++i) {
-					GraphInfo info= values[m][i];
+					GraphInfo info = values[m][i];
 					String v = bmp->sValue(info.crd,0);
-					colIndex->PutVal(i,info.index);
-					colCrd->PutVal(i, info.crd);
-					colValue->PutVal(i, v);
+					colIndex->PutVal(i + 1, info.index);
+					colCrd->PutVal(i + 1, info.crd);
+					colValue->PutVal(i + 1, v);
 				}
 			}
 		}
@@ -483,7 +479,6 @@ void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord
 		currentIndex = iUNDEF;
 		tool->setMarker(Coord());
 		return;
-
 	}
 	vector<String> v;
 	BaseMap bmp = tool->sources[sourceIndex]->getMap(crd);
@@ -530,7 +525,6 @@ void TrackProfileGraphEntry::setTrack(const vector<Coord>& crds){
 		graph->setTrack(crds);
 		graph->Invalidate();
 	}
-
 }
 
 void TrackProfileGraphEntry::setListView(FieldListView *v) {

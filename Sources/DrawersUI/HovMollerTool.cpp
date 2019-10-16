@@ -398,6 +398,9 @@ int HovMollerGraphFrom::setSource(Event *ev) {
 					graph->setTimeColumn(columnName);
 				}
 			}
+		} else {
+			fcTime->FillWithColumns(); // delete all items from the combobox
+			graph->setTimeColumn(""); // reset the graph's time-column to "empty"
 		}
 	}
 
