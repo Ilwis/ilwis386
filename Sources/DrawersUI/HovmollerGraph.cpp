@@ -170,6 +170,7 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 void HovMollerGraph::setTextDataBlock(CDC *dc){
 	String sValue, sTime,sLocX, sLocY;
 	sValue = sTime = sLocX = sLocY = ":";
+	fldGraph->tool->setMarker(Coord());
 	String sIndex = (yIndex > 0 && yIndex <= values.size()) ? String("%d",yIndex) : "";
 	if ( xIndex >= 0 && (yIndex > 0 && yIndex <= values.size())) {
 		String st;
@@ -180,11 +181,12 @@ void HovMollerGraph::setTextDataBlock(CDC *dc){
 			st = "?";
 
 		sTime += st;
-		LatLon ll = fldGraph->mpl[0]->cs()->llConv(trackCrd[xIndex]);
+		Coord & crd (trackCrd[xIndex]);
+		LatLon ll = fldGraph->mpl[0]->cs()->llConv(crd);
 		sLocY += ll.sLat(10);
 		sLocX += ll.sLon(10);
 		sValue = String("%S%f",sValue, values[yIndex - 1][xIndex]);
-
+		fldGraph->tool->setMarker(crd);
 	}
 	dc->TextOut(rctInner.right + 8,rctInner.top, "Latitude");
 	dc->TextOut(rctInner.right + 50,rctInner.top, sLocY.c_str());
@@ -310,6 +312,8 @@ void HovMollerGraph::setTrack(const vector<Coord>& crds){
 			values[j][i] = v;
 		}
 	}
+	xIndex = -1;
+	yIndex = -1;
 }
 
 //----------------------------------------------------

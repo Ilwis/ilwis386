@@ -139,6 +139,7 @@ HTREEITEM HovMollerTool::configure( HTREEITEM parentItem) {
 		DrawerParameters dp2(drawer->getRootDrawer(), drawer);
 		point = new HTrackMarker(&dp2);
 		point->setActive(false);
+		((PointProperties *)(point->getProperties()))->drawColor = Color(0,0,0);
 		PreparationParameters pp(NewDrawer::ptRENDER);
 		point->prepare(&pp);
 		drawer->getRootDrawer()->addPostDrawer(731,point);
@@ -175,6 +176,9 @@ void HovMollerTool::setcheckTool(void *w, HTREEITEM item) {
 			graphForm->addSource(source.getSource());
 		} else {
 			graphForm->ShowWindow(SW_SHOW);
+			if (line && point) {
+				line->setActive(true); // point will show automatically if xIndex and yIndex haven't changed
+			}
 		}
 	}
 	else {
@@ -184,8 +188,8 @@ void HovMollerTool::setcheckTool(void *w, HTREEITEM item) {
 			if (line && point) {
 				line->setActive(false);
 				point->setActive(false);
-				coords.clear();
-				setCoords();
+				//coords.clear();
+				//setCoords();
 			}
 			mpvGetView()->Invalidate();
 		}
