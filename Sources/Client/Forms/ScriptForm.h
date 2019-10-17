@@ -56,6 +56,8 @@ private:
 	Script scr;
 	int iParams;
 	String* sVal;
+  void MinWidthOfColumn(FormEntryPositioner * psn, short iColNr, short& iMax);
+  void SetMinWidthOfColumn(FormEntryPositioner * psn, short iColNr, short iWid);
   void OnHelp();                             
   DECLARE_MESSAGE_MAP();
 };

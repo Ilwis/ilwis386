@@ -139,6 +139,11 @@ ScriptForm::ScriptForm(const Script& script)
 		}
 	}
 	//IlwWinApp()->setHelpItem(""); // set help button on
+	root->psn->SetCol(0); // initialize positioner columns
+	short iMax = 0;
+	MinWidthOfColumn(root->psn, 1, iMax); // compute the maximum of the iMinWidths for column 1
+	if (iMax < 250)
+		SetMinWidthOfColumn(root->psn, 1, 250);
 	create();
   ShowWindow(SW_SHOW);
 }
@@ -146,6 +151,29 @@ ScriptForm::ScriptForm(const Script& script)
 ScriptForm::~ScriptForm()
 {
 	delete [] sVal;
+}
+
+void ScriptForm::MinWidthOfColumn(FormEntryPositioner * psn, short iColNr, short& iMax)
+// gets the maximum of the minimum width values of each positioner in column iColNr
+// then check it's child positioners
+{
+    if ((psn->iCol == iColNr) && (psn->iMinWidth > iMax))
+        iMax = psn->iMinWidth;
+    for (short i = 0; i < psn->psnChild.iSize(); i++)
+        MinWidthOfColumn(psn->psnChild[i], iColNr, iMax);
+}
+
+void ScriptForm::SetMinWidthOfColumn(FormEntryPositioner * psn, short iColNr, short iWid)
+// sets the minimum width of each positioner in column iColNr to iWid
+// then set it's child positioners
+{
+    if (psn->iCol == iColNr)
+        psn->iMinWidth = iWid;
+    for (short i = 0; i < psn->psnChild.iSize(); i++)
+    {
+        if (!psn->psnChild[i]->fIndependentPos)
+            SetMinWidthOfColumn(psn->psnChild[i], iColNr, iWid);
+    }
 }
 
 String ScriptForm::sExec()
