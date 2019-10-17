@@ -1393,14 +1393,22 @@ void AnnotationBorderDrawer::calcLocations() {
 	int count = 0;
 	for (double x = ceil(cMin.x / rDistance) * rDistance; x < cMax.x ; x += rDistance, ++count)
 	{
-		if ( count % step == 0)
-			xpos.push_back(x);
+		if ( count % step == 0) {
+			if (fabs(x) < 1e-10) // prevent displaying -0.0
+				xpos.push_back(0);
+			else
+				xpos.push_back(x);
+		}
 	}
 	count = 0;
 	for (double y = ceil(cMin.y / rDistance) * rDistance; y < cMax.y ; y += rDistance, ++count)
 	{
-		if ( count % step == 0)
-			ypos.push_back(y);
+		if ( count % step == 0) {
+			if (fabs(y) < 1e-10) // prevent displaying -0.0
+				ypos.push_back(0);
+			else
+				ypos.push_back(y);
+		}
 	}
 }
 
