@@ -263,6 +263,7 @@ void RootDrawer::load(const FileName& fnView, const String section){
 	if (fUseGeoRef)
 		ObjectInfo::ReadElement(section.c_str(),"GeoReference",fnView, gr);
 
+	ComplexDrawer::load(fnView,section); // this overwrites cbZoom, cbMap etc, so they have to be loaded later.
 	backgroundDrawer->load(fnView, section + ":CanvasBackground");
 
 	CoordBounds cbZ,cbV,cbM;
@@ -286,8 +287,6 @@ void RootDrawer::load(const FileName& fnView, const String section){
 	ObjectInfo::ReadElement(section.c_str(),"Extension_top",fnView, ext.top);
 	ObjectInfo::ReadElement(section.c_str(),"Extension_bottom",fnView, ext.bottom);
 	setExtension(ext); // sets fAnnotationWhitespace and calls RecomputeAnnotationBorder()
-
-	ComplexDrawer::load(fnView,section); // load all other drawers; their state may require data from above
 
 	ObjectInfo::ReadElement(section.c_str(),"XRotation",fnView, rotX); 
 	ObjectInfo::ReadElement(section.c_str(),"YRotation",fnView, rotY);
