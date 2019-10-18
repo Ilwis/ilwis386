@@ -258,13 +258,11 @@ String RootDrawer::store(const FileName& fnView, const String section) const{
 }
 
 void RootDrawer::load(const FileName& fnView, const String section){
-	CoordSystem csy;
-	ObjectInfo::ReadElement(section.c_str(),"CoordinateSystem",fnView, csy);
+	ObjectInfo::ReadElement(section.c_str(),"CoordinateSystem",fnView, cs);
 	ObjectInfo::ReadElement(section.c_str(),"UseGeoRef",fnView, fUseGeoRef);
 	if (fUseGeoRef)
 		ObjectInfo::ReadElement(section.c_str(),"GeoReference",fnView, gr);
 
-	ComplexDrawer::load(fnView,section);
 	backgroundDrawer->load(fnView, section + ":CanvasBackground");
 
 	CoordBounds cbZ,cbV,cbM;
@@ -276,7 +274,7 @@ void RootDrawer::load(const FileName& fnView, const String section){
 	RowCol viewPort;
 	ObjectInfo::ReadElement(section.c_str(),"ViewPort",fnView, viewPort);
 	ObjectInfo::ReadElement(section.c_str(),"Is3D",fnView, threeD);
-	setCoordinateSystem(csy, true);
+
 	setViewPort(viewPort, false); // false, just "assign" to pixArea and windowAspectRatio
 	setCoordBoundsMap(cbM);
 	setCoordBoundsView(cbV, true);
@@ -288,6 +286,8 @@ void RootDrawer::load(const FileName& fnView, const String section){
 	ObjectInfo::ReadElement(section.c_str(),"Extension_top",fnView, ext.top);
 	ObjectInfo::ReadElement(section.c_str(),"Extension_bottom",fnView, ext.bottom);
 	setExtension(ext); // sets fAnnotationWhitespace and calls RecomputeAnnotationBorder()
+
+	ComplexDrawer::load(fnView,section); // load all other drawers; their state may require data from above
 
 	ObjectInfo::ReadElement(section.c_str(),"XRotation",fnView, rotX); 
 	ObjectInfo::ReadElement(section.c_str(),"YRotation",fnView, rotY);
