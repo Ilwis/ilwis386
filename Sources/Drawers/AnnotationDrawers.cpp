@@ -1464,7 +1464,7 @@ AnnotationScaleBarDrawer::AnnotationScaleBarDrawer(DrawerParameters *parms)
 
 	CoordBounds cbProject (getRootDrawer()->glToWorld(cb.cMin), getRootDrawer()->glToWorld(cb.cMax));
 
-	size = max(1.0, rRound(cbProject.width() * 0.2 / ticks));
+	size = max(isLatLon ? 0.0 : 1.0, rRound(cbProject.width() * 0.2 / ticks));
 	double totSize = ticks * size * cb.width() / cbProject.width();
 	height = 0.01;
 	begin.y = 0.95;
@@ -1513,8 +1513,8 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 
 	double tickSize = size * cb.width() / cbProject.width();
 	double totSize = ticks * tickSize;
-	if (totSize > cb.width() / 2.0 || totSize < cb.width() / 15.0) { // too big or too small: recompute size
-		const_cast<AnnotationScaleBarDrawer*>(this)->size = max(1.0, rRound(cbProject.width() * 0.2 / ticks));
+	if (totSize > cb.width() / 2.0 || totSize < cb.width() / 15.0) { // too big or too small, after zoom-in or zoom-out: recompute size to a reasonable one
+		const_cast<AnnotationScaleBarDrawer*>(this)->size = max(isLatLon ? 0.0 : 1.0, rRound(cbProject.width() * 0.2 / ticks));
 		tickSize = size * cb.width() / cbProject.width();
 		totSize = ticks * tickSize;
 	}
