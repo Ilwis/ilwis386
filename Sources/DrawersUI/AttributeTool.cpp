@@ -108,21 +108,25 @@ void AttributeTool::setcheckinitial(int colNr, const Column & attColumn) { // on
 		parentTool->addTool(stretchTool);
 		stretchTool->configure(hit); // item
 	}
-	// add annotationDrawerTool
-	LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(drawer);
-	SetDrawer *sdr = dynamic_cast<SetDrawer *>(drawer);
-	Domain dm;
-	if ( ldr) {
-		SpatialDataDrawer *spdr = (SpatialDataDrawer *)(drawer->getParentDrawer());
-		dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() : spdr->getBaseMap()->dm();
-	} else if ( sdr) {
-		dm = sdr->useAttributeTable() ? sdr->getAtttributeColumn()->dm() :   sdr->getBaseMap()->dm();
-	}
-	if ((dm->pdv() && !dm->pdbool()) || dm->pdc()) {
-		DrawerTool *annotationDrawerTool = new AnnotationDrawerTool(mpvGetView(),tree,drawer);
-		parentTool->addTool(annotationDrawerTool);
-		if (annotationDrawerTool->isActive()) // in the case of annotationDrawerTool isActive() and isActiveMode() would be the same (isActiveMode() is a function that does not exist, it would be symmetric to setActiveMode(bool)).
-			annotationDrawerTool->setActiveMode(true); // add items to the tree, and force refresh of the legend drawer
+
+	// add annotationDrawerTool if needed
+	DrawerTool *annotationDrawerTool = parentTool->findChildToolByType("AnnotationDrawerTool");
+	if (!annotationDrawerTool) {
+		LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(drawer);
+		SetDrawer *sdr = dynamic_cast<SetDrawer *>(drawer);
+		Domain dm;
+		if ( ldr) {
+			SpatialDataDrawer *spdr = (SpatialDataDrawer *)(drawer->getParentDrawer());
+			dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() : spdr->getBaseMap()->dm();
+		} else if ( sdr) {
+			dm = sdr->useAttributeTable() ? sdr->getAtttributeColumn()->dm() :   sdr->getBaseMap()->dm();
+		}
+		if ((dm->pdv() && !dm->pdbool()) || dm->pdc()) {
+			annotationDrawerTool = new AnnotationDrawerTool(mpvGetView(),tree,drawer);
+			parentTool->addTool(annotationDrawerTool);
+			if (annotationDrawerTool->isActive()) // in the case of annotationDrawerTool isActive() and isActiveMode() would be the same (isActiveMode() is a function that does not exist, it would be symmetric to setActiveMode(bool)).
+				annotationDrawerTool->setActiveMode(true); // add items to the tree, and force refresh of the legend drawer
+		}
 	}
 
 	lasthit = hit;
