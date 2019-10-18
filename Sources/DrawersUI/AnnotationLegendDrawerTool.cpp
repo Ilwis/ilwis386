@@ -60,14 +60,15 @@ void AnnotationLegendDrawerTool::clear() {
 }
 
 bool AnnotationLegendDrawerTool::isToolUseableFor(ILWIS::DrawerTool *drw) { 
-
-	return dynamic_cast<AnnotationDrawerTool *>(drw) != 0;
+	bool fUsable = dynamic_cast<AnnotationDrawerTool *>(drw) != 0;
+	if (fUsable)
+		legend = dynamic_cast<AnnotationLegendDrawer *>(findAnnotation());
+	return fUsable;
 }
 
 HTREEITEM AnnotationLegendDrawerTool::configure( HTREEITEM parentItem) {
 	if ( !active)
 		return parentItem;
-	legend = dynamic_cast<AnnotationLegendDrawer *>(findAnnotation());
 	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, parentItem, drawer);
 	item->setCheckAction(this, 0,(DTSetCheckFunc)&AnnotationLegendDrawerTool::makeActive);
 	htiNode = insertItem(TR("Legend"),"legend",item, legend && legend->isActive());
