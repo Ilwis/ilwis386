@@ -558,14 +558,23 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBoxRender.width(), cbBoxRender.height()));
 	AnnotationLegendDrawer::draw(drawLoop, cbInner);
 	drawPreDrawers(drawLoop, cbArea);
-	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block; if a legend overlaps with layers, it should be drawn on-top, even if it contains transparent items
+
+	LayerDrawer *ldr = dataDrawer->isSet() ? 
+		dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : 
+		dynamic_cast<LayerDrawer *>(dataDrawer);
+
+	double alpha = ldr->getAlpha();
+
+	if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0)) {
 		if (is3D) // colored legend elements at level 1
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
 		double shifty = cb.height() / y_cells;
 		CoordBounds cbCell(Coord(0, cbBoxRender.height() - cellHeight),Coord(cellWidth, cbBoxRender.height()));
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 		for(int i=0; i < raws.size(); ++i) {
 			if (objType == IlwisObject::iotRASMAP) {
-				glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
+				glColor4f(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP(), alpha);
 				glBegin(GL_POLYGON);
 				glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
 				glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
@@ -576,9 +585,7 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 				std::map<int, AnnotationClassAttributes>::const_iterator iter = hatches.find(raws[i].raw);
 				if ( iter != hatches.end()){
 					AnnotationClassAttributes attrib = (*iter).second;
-					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					glEnable(GL_BLEND);
-					glColor3d(1,1,1);
+					glColor4f(1,1,1,alpha);
 					glBegin(GL_POLYGON);
 					glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
 					glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
@@ -589,7 +596,7 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 						glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1.5) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1.5) * 0.0005);
 					glEnable(GL_POLYGON_STIPPLE);
 					glPolygonStipple(attrib.hatch);
-					glColor4d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP(), attrib.alpha * attrib.alpha / 65025.0);
+					glColor4f(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP(), alpha * attrib.alpha * attrib.alpha / 65025.0);
 					glBegin(GL_POLYGON);
 					glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
 					glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
@@ -598,7 +605,7 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 					glEnd();
 					glPolygonStipple(attrib.hatchInverse);
 					Color backgroundColor = attrib.backgroundColor;
-					glColor4f(backgroundColor.redP(), backgroundColor.greenP(), backgroundColor.blueP(), backgroundColor.alphaP() * attrib.alpha / 255.0);
+					glColor4f(backgroundColor.redP(), backgroundColor.greenP(), alpha * backgroundColor.blueP(), backgroundColor.alphaP() * attrib.alpha / 255.0);
 					glBegin(GL_POLYGON);
 					glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
 					glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
@@ -608,9 +615,8 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 					glDisable(GL_POLYGON_STIPPLE);
 					if (is3D) // reset to level 1
 						glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
-					glDisable(GL_BLEND);
 				} else {
-					glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
+					glColor4f(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP(), alpha);
 					glBegin(GL_POLYGON);
 					glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
 					glVertex3d(cbCell.MinX(), cbCell.MaxY(), 0);
@@ -619,13 +625,13 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 					glEnd();
 				}
 			} else if ( objType == IlwisObject::iotSEGMENTMAP) {
-				glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
+				glColor4f(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP(), alpha);
 				glBegin(GL_LINES);
 				glVertex3d(cbCell.MinX(), cbCell.MinY(), 0);
 				glVertex3d(cbCell.MaxX(), cbCell.MaxY(), 0);
 				glEnd();
-			} else {
-				glColor3d(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP());
+			} else { // IlwisObject::iotPOINTMAP
+				glColor4f(raws[i].clr.redP(), raws[i].clr.greenP(), raws[i].clr.blueP(), alpha);
 				glBegin(GL_POLYGON);
 				double delta = cbCell.width() / 4;
 				glVertex3d(cbCell.MinX() + delta, cbCell.MinY() + delta, 0);
@@ -645,6 +651,7 @@ bool AnnotationClassLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 				cbCell.MaxX() += cellWidth + maxw;
 			}
 		}
+		glDisable(GL_BLEND);
 		if (is3D) // texts and lines at level 2
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 2) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 2) * 0.0005);
 		cbCell = CoordBounds (Coord(0, cbBoxRender.height() - cellHeight),Coord(cellWidth, cbBoxRender.height()));
@@ -779,7 +786,11 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	AnnotationLegendDrawer::draw(drawLoop, cbInner);
 	drawPreDrawers(drawLoop, cbArea);
 
-	double alpha = getAlpha();
+	LayerDrawer *ldr = dataDrawer->isSet() ? 
+		dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : 
+		dynamic_cast<LayerDrawer *>(dataDrawer);
+
+	double alpha = ldr->getAlpha();
 
 	if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0)) {
 		if (is3D) // colored legend elements at level 1
@@ -790,21 +801,23 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 			static_cast<SpatialDataDrawer *>(dataDrawer) : 
 			static_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer());
 
-		LayerDrawer *ldr = dataDrawer->isSet() ? 
-			dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : 
-			dynamic_cast<LayerDrawer *>(dataDrawer);
-
 		dvs = spdr->getBaseMap()->dvrs();
 		if ( ldr && ldr->useAttributeColumn() && ldr->getAtttributeColumn().fValid()) {
 			dvs = ldr->getAtttributeColumn()->dvrs();
 		}
 		vector<String> values = makeRange(dvs);
 		RangeReal rr(dvs.rValue(values[0]), dvs.rValue(values[values.size()- 1]));
-		if ( vertical) {
-			drawVertical(cbInner, rr, 0, values, dvs);
-		} else {
-			drawHorizontal(cbInner, cbBoxRender, rr, 0, values, dvs);
+		if (alpha != 1.0) {
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 		}
+		if ( vertical) {
+			drawVertical(cbInner, rr, 0, alpha, values, dvs);
+		} else {
+			drawHorizontal(cbInner, cbBoxRender, rr, 0, alpha, values, dvs);
+		}
+		if (alpha != 1.0)
+			glDisable(GL_BLEND);
 		if (is3D) // texts and lines at level 2
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 2) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 2) * 0.0005);
 		glColor4f(0,0, 0, alpha );
@@ -832,7 +845,7 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 	return true;
 }
 
-void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const{
+void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const RangeReal& rr, const double z, const double rAlpha, const vector<String>& values, const DomainValueRangeStruct & dvs) const{
 	int count = 1;
 	DrawingColor dc(dataDrawer);
 	cbInner.MaxX() = cbInner.MinX() + cbInner.width() / 3;
@@ -848,7 +861,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 	setText(values,0,Coord(endx + cbInner.width() / 3, starty  + cbInner.height() / 100.0,z));
 	for(int i=0; i < 100; ++i) {
 		Color clr = dc.clrVal(rV);
-		glColor4f(clr.redP(),clr.greenP(), clr.blueP(), getAlpha() );
+		glColor4f(clr.redP(),clr.greenP(), clr.blueP(), rAlpha);
 		double endy = starty + cbInner.height() / 100.0;
 		glBegin(GL_POLYGON);
 		glVertex3d(startx,starty,z);
@@ -858,7 +871,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 		glEnd();
 		if ( count < values.size() && dvs.rValue(values[count]) <= rV) { 
 			setText(values, count, Coord(endx + cbInner.width() / 3, starty,z));
-			glColor4f(0,0,0,getAlpha());
+			glColor4f(0,0,0,rAlpha);
 			glBegin(GL_LINE_STRIP);
 			glVertex3d(endx,endy,z);
 			glVertex3d(endx + cbInner.width() / 10.0,endy,z);
@@ -873,7 +886,7 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 	setText(values,values.size()-1,Coord(endx + cbInner.width() / 3, cbInner.height () - h/2.0,z));
 }
 
-void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const CoordBounds & cbBoxRender, const RangeReal& rr, double z, const vector<String>& values, const DomainValueRangeStruct & dvs) const{
+void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const CoordBounds & cbBoxRender, const RangeReal& rr, const double z, const double rAlpha, const vector<String>& values, const DomainValueRangeStruct & dvs) const{
 	int count = 1;
 	double shifty = 5.0;
 	DrawingColor dc(dataDrawer);
@@ -891,7 +904,7 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Coo
 	setText(values,0,Coord(startx, endy - cbBoxRender.height() / shifty,z));
 	for(int i=0; i < 100; ++i) {
 		Color clr = dc.clrVal(rV);
-		glColor4f(clr.redP(),clr.greenP(),clr.blueP(),getAlpha());
+		glColor4f(clr.redP(),clr.greenP(),clr.blueP(),rAlpha);
 		double endx = startx + cbInner.width() / 100.0;
 		glBegin(GL_POLYGON);
 		glVertex3d(startx,starty,z);
@@ -901,7 +914,7 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Coo
 		glEnd();
 		if ( dvs.rValue(values[count]) <= rV) { 
 			setText(values, count, Coord( startx, endy - cbBoxRender.height() / shifty,z));
-			glColor4f(0,0,0,getAlpha());
+			glColor4f(0,0,0,rAlpha);
 			glBegin(GL_LINE_STRIP);
 			glVertex3d(endx,endy,z);
 			glVertex3d(endx ,endy - cbBoxRender.height() / (shifty + 8),z);
