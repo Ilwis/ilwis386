@@ -1843,7 +1843,10 @@ LRESULT createView(CWnd *parent, const String& sCmd) {
 }
 
 LRESULT Cmdrun(CWnd *parent, const String& sCmd) {
-	new ScriptForm(Script(FileName(sCmd)));
+	String s(sCmd);
+	ParmList pl(s);
+	if (pl.iSize() >= 1)
+		new ScriptForm(Script(FileName(pl.sGet(0))),sCmd.sTail(" "));
 	return -1;
 }
 

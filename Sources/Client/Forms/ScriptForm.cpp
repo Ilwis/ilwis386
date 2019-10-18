@@ -57,16 +57,17 @@ BEGIN_MESSAGE_MAP(ScriptForm, FormBaseDialog)
   ON_COMMAND(ID_HELP, OnHelp)
 END_MESSAGE_MAP()    
 
-ScriptForm::ScriptForm(const Script& script)
+ScriptForm::ScriptForm(const Script& script, const String& parms)
 :	FormWithDest(0, 0 != script->sDescr().length() ? script->sDescr() : script->sTypeName(), fbsSHOWALWAYS & ~fbsMODAL),
 	scr(script)
 {
+	ParmList pl(parms);
 	iParams = scr->iParams();
 	sVal = new String[iParams];
 	for (int i = 0; i < iParams; ++i) {
 		String sQuestion = scr->sParam(i);
 		String sDefault = scr->sDefaultValue(i);
-		sVal[i] = sDefault;
+		sVal[i] = (i < pl.iSize()) ? pl.sGet(i) : sDefault;
 		switch (scr->ptParam(i))
 		{
 			case ScriptPtr::ptSTRING:
@@ -180,7 +181,8 @@ String ScriptForm::sExec()
 {
 	String sRes;
 	for (int i = 0; i < iParams; ++i) {
-		sRes &= " ";
+		if (i > 0)
+			sRes &= " ";
     String s = sVal[i];
     switch (scr->ptParam(i)) {
       case ScriptPtr::ptSTRING: {

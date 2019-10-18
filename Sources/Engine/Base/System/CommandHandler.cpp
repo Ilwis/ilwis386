@@ -1311,9 +1311,9 @@ void CommandHandler::CmdRunScript(const String& sScript)
 		char* sTail = sScript.strchrQuoted(' ');
 		if (sTail)
 			sExpr = sTail + 1;
-		if (pl.iFixed() == 1 && scr->iParams()) // no parms specified
+		if ((pl.iFixed() - 1) < scr->iParams()) // insufficient or no parms specified; the scriptfile itself is one of the fixed parameters
 		{
-			ReroutSend(wndOwner, "run " + s1);
+			ReroutSend(wndOwner, "run " + s1 + ((sExpr != "") ? " " + sExpr : ""));
 		}
 		else {
 			String sCurDir;

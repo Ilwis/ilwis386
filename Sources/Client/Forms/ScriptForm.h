@@ -48,7 +48,7 @@
 class ScriptForm: public FormWithDest  
 {
 public:
-	ScriptForm(const Script&);
+	ScriptForm(const Script&,const String&);
 	virtual ~ScriptForm();
 	String sExec();
   virtual int _export exec();
