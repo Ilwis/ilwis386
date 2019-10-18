@@ -499,7 +499,8 @@ void ZoomableView::OnSize(UINT nType, int cx, int cy)
 		RowCol rc(cy, cx);
 		dim = zDimension(cx, cy);
 		mcd->rootDrawer->setViewPort(rc, true); // true: preserve zoom level while resizing the window
-		setScrollBars();
+		if (!mcd->rootDrawer->is3D()) // don't touch the scrollbars in 3D; they will appear!
+			setScrollBars();
 		SetDirty();		
 	}
 }
