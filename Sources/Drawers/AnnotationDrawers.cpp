@@ -1308,7 +1308,7 @@ void AnnotationBorderDrawer::load(const FileName& fnView, const String& section)
 		ObjectInfo::ReadElement(currentSection.c_str(),"Steps",fnView, step);
 		ObjectInfo::ReadElement(currentSection.c_str(),"Neatline",fnView, neatLine);
 		ObjectInfo::ReadElement(currentSection.c_str(),"Ticks",fnView, ticks);
-		ObjectInfo::ReadElement(currentSection.c_str(),"digits",fnView, numDigits);	
+		ObjectInfo::ReadElement(currentSection.c_str(),"digits",fnView, numDigits);
 }
 
 void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
@@ -1443,12 +1443,14 @@ ILWIS::NewDrawer *createAnnotationScaleBarDrawer(DrawerParameters *parms) {
 
 AnnotationScaleBarDrawer::AnnotationScaleBarDrawer(DrawerParameters *parms)
 : AnnotationDrawer(parms, "AnnotationScaleBarDrawer")
-, size(rUNDEF), ticks(5), texts(0), unit("meters"), km(false), line(false), divideFirstInterval(true), multiLabels(false)
+, size(rUNDEF), ticks(5), texts(0), unit("meters"), km(false), line(false), divideFirstInterval(true), multiLabels(false), isLatLon(false), numDigits(2)
 {
 	id = "AnnotationScaleBarDrawer";
 	CoordSystem csy = getRootDrawer()->getCoordinateSystem();
-	if (csy.fValid() && csy->pcsLatLon())
+	if (csy.fValid() && csy->pcsLatLon()) {
+		isLatLon = true;
 		unit = "degrees";
+	}
 	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
 	if (cbMap.MinX() > cb.MinX())
@@ -1463,10 +1465,10 @@ AnnotationScaleBarDrawer::AnnotationScaleBarDrawer(DrawerParameters *parms)
 	CoordBounds cbProject (getRootDrawer()->glToWorld(cb.cMin), getRootDrawer()->glToWorld(cb.cMax));
 
 	size = max(1.0, rRound(cbProject.width() * 0.2 / ticks));
-	double totSize = ticks * size / cbProject.width();
+	double totSize = ticks * size * cb.width() / cbProject.width();
 	height = 0.01;
 	begin.y = 0.95;
-	begin.x = 0.5 - totSize / 2.0;
+	begin.x = max(0.0, 0.5 - totSize / 2.0);
 }
 
 void AnnotationScaleBarDrawer::prepare(PreparationParameters *pp){
@@ -1522,7 +1524,6 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 
 	glColor3d(0,0,0);
 	drawPreDrawers(drawLoop, cbArea);
-	AnnotationDrawer::draw(drawLoop, cbArea);
 
 	if (drawLoop != drl3DTRANSPARENT) { // there are only opaque objects in the block
 		double start = 0;
@@ -1596,7 +1597,7 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 				i = ticks;
 			TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
 			if ( txtdr) {
-				String s = km ? String("%d",(long)(i * size / 1000.0)) : String("%d",(long)size * i);
+				String s = km ? String("%d",(long)(i * size / 1000.0)) : (isLatLon ? String("%.*f", numDigits, size * i) : String("%d",(long)size * i));
 				txtdr->setText(s);
 				double h = txtdr->getHeight();
 				h += height * cb.height();
@@ -1635,6 +1636,14 @@ void AnnotationScaleBarDrawer::setSize(double w){
 	size = w;
 }
 
+int AnnotationScaleBarDrawer::getNumberOfDigits() const{
+	return numDigits;
+}
+
+void AnnotationScaleBarDrawer::setNumberOfDigits(int num){
+	numDigits = num;
+}
+
 String AnnotationScaleBarDrawer::store(const FileName& fnView, const String& section) const{
 	String currentSection = section + ":AnnotationScaleBar";
 	AnnotationDrawer::store(fnView, currentSection);
@@ -1647,6 +1656,7 @@ String AnnotationScaleBarDrawer::store(const FileName& fnView, const String& sec
 	ObjectInfo::WriteElement(currentSection.c_str(),"UseLine",fnView, line);
 	ObjectInfo::WriteElement(currentSection.c_str(),"DivideFirstInterval",fnView, divideFirstInterval);
 	ObjectInfo::WriteElement(currentSection.c_str(),"MultiLabels",fnView, multiLabels);
+	ObjectInfo::WriteElement(currentSection.c_str(),"digits",fnView, numDigits);
 
 	return currentSection;
 }
@@ -1664,6 +1674,8 @@ void AnnotationScaleBarDrawer::load(const FileName& fnView, const String& sectio
 	if (!ObjectInfo::ReadElement(currentSection.c_str(),"DivideFirstInterval",fnView, divideFirstInterval)) // when not existing, ObjectInfo::ReadElement sets the bool to false; we want the default to be true.
 		divideFirstInterval = true;
 	ObjectInfo::ReadElement(currentSection.c_str(),"MultiLabels",fnView, multiLabels);
+	if (!ObjectInfo::ReadElement(currentSection.c_str(),"digits",fnView, numDigits)) // set default for existing mapviews to 2 instead of shUNDEF
+		numDigits = 2;
 }
 
 String AnnotationScaleBarDrawer::getUnit() const{

@@ -34,6 +34,7 @@ namespace ILWIS {
 		FieldReal *fldSize;
 		FieldString *fldUnit;
 		FieldInt *fldTicks;
+		FieldInt *fldNumbers;
 		CheckBox *cbLine;
 		CheckBox *cbDivide;
 		CheckBox *cbMultiLabels;
@@ -46,5 +47,6 @@ namespace ILWIS {
 		bool multiLabels;
 		bool line;
 		bool divideFirstInterval;
+		int num;
 	};
 }

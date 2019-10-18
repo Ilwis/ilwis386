@@ -106,6 +106,7 @@ void AnnotationScaleBarDrawerTool::makeActive(void *v, HTREEITEM ) {
 ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr)
 : DisplayOptionsForm(dr,wPar,TR("Properties of the ScaleBar"))
 , cbUseKilometers(0)
+, fldNumbers(0)
 {
 	Coord begin = dr->getBegin();
 	line = dr->getLine();
@@ -115,6 +116,7 @@ ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr)
 	km = dr->getKm();
 	ticks = dr->getTicks();
 	sz = dr->getSize();
+	num = dr->getNumberOfDigits();
 	x = round(100.0 * begin.x);
 	y = round(100.0 * begin.y);
 	sliderH = new FieldIntSliderEx(root,TR("X position"), &x,ValueRange(0,100),true);
@@ -131,9 +133,13 @@ ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr)
 	cbMultiLabels = new CheckBox(root, TR("Labels for every interval"),&multiLabels);
 	fldUnit = new FieldString(root, TR("Unit"),&unit);
 	CoordSystem csy = dr->getRootDrawer()->getCoordinateSystem();
-	if (csy.fValid() && !csy->pcsLatLon()) {
-		cbUseKilometers = new CheckBox(root, TR("Use Kilometers"), &km);
-		cbUseKilometers->SetCallBack((NotifyProc)&ScaleBarPosition::UseKilometersChanged);
+	if (csy.fValid()) {
+		if (csy->pcsLatLon()) {
+			fldNumbers = new FieldInt(root,TR("Significant numbers"), &num);
+		} else {
+			cbUseKilometers = new CheckBox(root, TR("Use Kilometers"), &km);
+			cbUseKilometers->SetCallBack((NotifyProc)&ScaleBarPosition::UseKilometersChanged);
+		}
 	}
 	create();
 }
@@ -169,6 +175,8 @@ void ScaleBarPosition::apply() {
 	fldTicks->StoreData();
 	if (cbUseKilometers)
 		cbUseKilometers->StoreData();
+	if (fldNumbers)
+		fldNumbers->StoreData();
 	AnnotationScaleBarDrawer *scaleDrw = (AnnotationScaleBarDrawer *)drw;
 	scaleDrw->setUnit(unit);
 	scaleDrw->setLine(line);
@@ -177,6 +185,7 @@ void ScaleBarPosition::apply() {
 	scaleDrw->setSize(sz);
 	scaleDrw->setTicks(ticks);
 	scaleDrw->setKm(km);
+	scaleDrw->setNumberOfDigits(num);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	scaleDrw->prepare(&pp);
 	updateMapView();

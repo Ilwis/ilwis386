@@ -193,6 +193,8 @@ public:
 	void setDivideFirstInterval(bool d);
 	bool getMultiLabels() const;
 	void setMultiLabels(bool l);
+	int getNumberOfDigits() const;
+	void setNumberOfDigits(int num);
 
 private:
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
@@ -205,10 +207,12 @@ private:
 	int ticks;
 	TextLayerDrawer *texts;
 	String unit;
+	bool isLatLon;
 	bool km;
 	bool line;
 	bool divideFirstInterval;
 	bool multiLabels;
+	int numDigits;
 };
 
 class _export AnnotationNorthArrowDrawer : public AnnotationDrawer {
