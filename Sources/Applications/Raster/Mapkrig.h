@@ -47,9 +47,7 @@
 #include "Engine\Base\Algorithm\semivar.h"
 
 IlwisObjectPtr * createMapKriging(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms=vector<void*>() );
-ApplicationMetadata metadataMapKrigingSimple(ApplicationQueryData *query) ;
-ApplicationMetadata metadataMapKrigingOrdinary(ApplicationQueryData *query);
-
+ApplicationMetadata metadataMapKriging(ApplicationQueryData *query);
 
 class DATEXPORT MapKriging: public MapFromPointMap
 {

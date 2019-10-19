@@ -58,33 +58,15 @@ IlwisObjectPtr * createMapKriging(const FileName& fn, IlwisObjectPtr& ptr, const
 		return (IlwisObjectPtr *)new MapKriging(fn, (MapPtr &)ptr);
 }
 
-String wpsmetadataMapKrigingSimple() {
-	WPSMetaData metadata("MapKrigingSimple");
+String wpsmetadataMapKriging() {
+	WPSMetaData metadata("MapKriging");
 	return metadata.toString();
 }
 
-ApplicationMetadata metadataMapKrigingSimple(ApplicationQueryData *query) {
+ApplicationMetadata metadataMapKriging(ApplicationQueryData *query) {
 	ApplicationMetadata md;
 	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
-		md.wpsxml = wpsmetadataMapKrigingSimple();
-	}
-	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
-		md.returnType = IlwisObject::iotRASMAP;
-	if ( query->queryType == "EXPERSSION" || query->queryType == "")
-		md.skeletonExpression =  MapKriging::sSyntax();
-
-	return md;
-}
-
-String wpsmetadataMapKrigingOrdinary() {
-	WPSMetaData metadata("MapKrigingOrdinary");
-	return metadata.toString();
-}
-
-ApplicationMetadata metadataMapKrigingOrdinary(ApplicationQueryData *query) {
-	ApplicationMetadata md;
-	if ( query->queryType == "WPSMETADATA" || query->queryType == "") {
-		md.wpsxml = wpsmetadataMapKrigingOrdinary();
+		md.wpsxml = wpsmetadataMapKriging();
 	}
 	if ( query->queryType == "OUTPUTTYPE" || query->queryType == "")
 		md.returnType = IlwisObject::iotRASMAP;

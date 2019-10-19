@@ -124,8 +124,7 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createMapApply3D,"MapApply3D"));
 	infos->push_back(CommandMap::newCommandInfo(createMapInterpolContour,"MapInterpolContour",metadataMapInterpolContour));
 	infos->push_back(CommandMap::newCommandInfo(createMapSegmentDensity,"MapSegmentDensity",metadataMapSegmentDensity));
-	infos->push_back(CommandMap::newCommandInfo(createMapKriging,"MapKrigingSimple",metadataMapKrigingSimple));
-	infos->push_back(CommandMap::newCommandInfo(createMapKriging,"MapKrigingOrdinary",metadataMapKrigingOrdinary));
+	infos->push_back(CommandMap::newCommandInfo(createMapKriging,"MapKriging___",metadataMapKriging));
 	infos->push_back(CommandMap::newCommandInfo(createMapCoKriging,"MapCoKriging"));
 	infos->push_back(CommandMap::newCommandInfo(createMapVariogramSurfacePnt,"MapVariogramSurfacePnt"));
 	infos->push_back(CommandMap::newCommandInfo(createMapComputedElsewhere,"MapComputedElsewhere"));
