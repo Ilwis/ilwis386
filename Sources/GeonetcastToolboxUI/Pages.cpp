@@ -161,8 +161,6 @@ void PageType3::set() {
 		StaticText *txt = new StaticText(this, getComment());
 		txt->SetIndependentPos();
 	}
-	fbIn = new FieldBrowseDir(this,"Input directory","",&dirIn);
-	fbIn->SetWidth(EDIT_FIELD_SIZE);
 	if ( noinput == false) {
 		fbIn = new FieldBrowseDir(this,"Input directory","",&dirIn);
 		fbIn->SetWidth(EDIT_FIELD_SIZE);
