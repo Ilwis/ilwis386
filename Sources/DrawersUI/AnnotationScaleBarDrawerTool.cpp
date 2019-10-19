@@ -135,10 +135,11 @@ ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr)
 	CoordSystem csy = dr->getRootDrawer()->getCoordinateSystem();
 	if (csy.fValid()) {
 		if (csy->pcsLatLon()) {
-			fldNumbers = new FieldInt(root,TR("Significant numbers"), &num);
+			fldNumbers = new FieldInt(root,TR("Decimal digits"), &num);
 		} else {
 			cbUseKilometers = new CheckBox(root, TR("Use Kilometers"), &km);
 			cbUseKilometers->SetCallBack((NotifyProc)&ScaleBarPosition::UseKilometersChanged);
+			fldNumbers = new FieldInt(cbUseKilometers,TR("Decimal digits"), &num);
 		}
 	}
 	create();

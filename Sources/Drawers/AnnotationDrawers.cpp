@@ -1456,13 +1456,14 @@ ILWIS::NewDrawer *createAnnotationScaleBarDrawer(DrawerParameters *parms) {
 
 AnnotationScaleBarDrawer::AnnotationScaleBarDrawer(DrawerParameters *parms)
 : AnnotationDrawer(parms, "AnnotationScaleBarDrawer")
-, size(rUNDEF), ticks(5), texts(0), unit("meters"), km(false), line(false), divideFirstInterval(true), multiLabels(false), isLatLon(false), numDigits(2)
+, size(rUNDEF), ticks(5), texts(0), unit("meters"), km(false), line(false), divideFirstInterval(true), multiLabels(false), isLatLon(false), numDigits(0)
 {
 	id = "AnnotationScaleBarDrawer";
 	CoordSystem csy = getRootDrawer()->getCoordinateSystem();
 	if (csy.fValid() && csy->pcsLatLon()) {
 		isLatLon = true;
 		unit = "degrees";
+		numDigits = 2;
 	}
 	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
 	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
@@ -1477,8 +1478,8 @@ AnnotationScaleBarDrawer::AnnotationScaleBarDrawer(DrawerParameters *parms)
 
 	CoordBounds cbProject (getRootDrawer()->glToWorld(cb.cMin), getRootDrawer()->glToWorld(cb.cMax));
 
-	size = max(isLatLon ? 0.0 : 1.0, rRound(cbProject.width() * 0.2 / ticks));
-	double totSize = ticks * size * cb.width() / cbProject.width();
+	size = max(isLatLon ? 0.0 : 1.0, rRound(cbProject.width() * 0.2 / ticks)); // length of one interval, in map-projection (note that "cb" may be expressed in pixels)
+	double totSize = ticks * size / cbProject.width(); // total length of the scalebar, as a value between 0 and 1 (percentage)
 	height = 0.01;
 	begin.y = 0.95;
 	begin.x = max(0.0, 0.5 - totSize / 2.0);
@@ -1524,8 +1525,8 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 	CoordBounds cbProject (getRootDrawer()->glToWorld(cb.cMin), getRootDrawer()->glToWorld(cb.cMax));
 	Coord crd (cb.MinX() + cb.width() * begin.x, cb.MinY() + cb.height() * begin.y);
 
-	double tickSize = size * cb.width() / cbProject.width();
-	double totSize = ticks * tickSize;
+	double tickSize = size * cb.width() / cbProject.width(); // length of one interval, in opengl-space (may be pixels)
+	double totSize = ticks * tickSize; // total length of scalebar, in opengl-space
 	if (totSize > cb.width() / 2.0 || totSize < cb.width() / 15.0) { // too big or too small, after zoom-in or zoom-out: recompute size to a reasonable one
 		const_cast<AnnotationScaleBarDrawer*>(this)->size = max(isLatLon ? 0.0 : 1.0, rRound(cbProject.width() * 0.2 / ticks));
 		tickSize = size * cb.width() / cbProject.width();
@@ -1610,7 +1611,7 @@ bool AnnotationScaleBarDrawer::draw(const DrawLoop drawLoop, const CoordBounds& 
 				i = ticks;
 			TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(i);
 			if ( txtdr) {
-				String s = km ? String("%d",(long)(i * size / 1000.0)) : (isLatLon ? String("%.*f", numDigits, size * i) : String("%d",(long)size * i));
+				String s = km ? ((numDigits > 0) ? String("%.*f", numDigits, (i * size / 1000.0)) : String("%d",(long)(i * size / 1000.0))) : (isLatLon ? String("%.*f", numDigits, size * i) : String("%d",(long)size * i));
 				txtdr->setText(s);
 				double h = txtdr->getHeight();
 				h += height * cb.height();
@@ -1687,8 +1688,8 @@ void AnnotationScaleBarDrawer::load(const FileName& fnView, const String& sectio
 	if (!ObjectInfo::ReadElement(currentSection.c_str(),"DivideFirstInterval",fnView, divideFirstInterval)) // when not existing, ObjectInfo::ReadElement sets the bool to false; we want the default to be true.
 		divideFirstInterval = true;
 	ObjectInfo::ReadElement(currentSection.c_str(),"MultiLabels",fnView, multiLabels);
-	if (!ObjectInfo::ReadElement(currentSection.c_str(),"digits",fnView, numDigits)) // set default for existing mapviews to 2 instead of shUNDEF
-		numDigits = 2;
+	if (!ObjectInfo::ReadElement(currentSection.c_str(),"digits",fnView, numDigits)) // set default for existing mapviews to 0 for projection or 2 for latlon instead of shUNDEF
+		numDigits = isLatLon ? 2 : 0;
 }
 
 String AnnotationScaleBarDrawer::getUnit() const{
