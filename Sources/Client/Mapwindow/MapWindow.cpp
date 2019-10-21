@@ -172,6 +172,8 @@ int MapWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//addSub(ID_POLEDIT);
 	addSubMenu(ID_EDITOR);
 	addBreak;
+	add(ID_EDITGRF);
+	addBreak;
 	add(ID_ADDLAYER);
 	add(ID_REMOVELAYER);
 	hMenEdit = menPopup.GetSafeHmenu();
