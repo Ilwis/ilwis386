@@ -280,6 +280,7 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 	dw->DockControlBar(&bbTxt,AFX_IDW_DOCKBAR_TOP,rect);
 
 	dw->RecalcLayout();
+	mpv->OnEntireMap();
 	Calc();
 
 	help = "ilwis\\georeference_tiepoints_editor.htm";
@@ -293,10 +294,12 @@ GeoRefEditor::~GeoRefEditor()
 {
 	grc->Store();
 
-	MapCompositionDoc* mcd = mpv->GetDocument();
-	mcd->rootDrawer->clearGeoreference();
-	PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptNEWCSY);
-	mcd->rootDrawer->prepare(&pp);
+	if (grc->fValid()) { // This is a different fValid(), indicating that the georefctp is able to "compute"
+		MapCompositionDoc* mcd = mpv->GetDocument();
+		mcd->rootDrawer->clearGeoreference();
+		PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptNEWCSY);
+		mcd->rootDrawer->prepare(&pp);
+	}
 
 	/*
 	CReBar& rebar = mpv->mwParent()->rebar;
