@@ -58,7 +58,7 @@ namespace ILWIS {
 		
 	protected:
 		virtual void setData() const;
-		virtual GeoRef gr() const;
+		virtual const GeoRef & gr() const;
 		Map rastermap;
 
 		void DisplayImagePortion(unsigned int imageOffsetX, unsigned int imageOffsetY, unsigned int imageSizeX, unsigned int imageSizeY) const;

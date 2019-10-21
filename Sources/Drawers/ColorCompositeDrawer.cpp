@@ -120,7 +120,7 @@ void ColorCompositeDrawer::setData() const{
 	textureHeap->SetData(mpl, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
 }
 
-GeoRef ColorCompositeDrawer::gr() const {
+const GeoRef & ColorCompositeDrawer::gr() const {
 	return mpl[0]->gr();
 }
 

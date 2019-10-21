@@ -63,7 +63,7 @@ namespace ILWIS {
 
 		virtual void setData() const;
 		virtual void init() const;
-		virtual GeoRef gr() const;
+		virtual const GeoRef & gr() const;
 		MapList mpl;
 	};
 }

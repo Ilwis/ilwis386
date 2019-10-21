@@ -157,7 +157,7 @@ void RasterLayerDrawer::setData() const {
 	textureHeap->SetData(rastermap, getDrawingColor(), getDrawMethod(), drawcontext->getMaxPaletteSize(), data, rrMinMax, drawcontext);
 }
 
-GeoRef RasterLayerDrawer::gr() const {
+const GeoRef & RasterLayerDrawer::gr() const {
 	return rastermap->gr();
 }
 
