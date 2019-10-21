@@ -75,6 +75,7 @@ namespace ILWIS {
 		bool isThreaded;
 		bool isThreadedBeforeOffscreen;
 		bool fLinear;
+		bool fSameGeoRef; // using same georeference as rootDrawer; shortcut some computations
 		bool fUsePalette;
 		bool fPaletteOwner; // for maplist animation: all have same palette, just use the one of the first band
 		Palette * palette;

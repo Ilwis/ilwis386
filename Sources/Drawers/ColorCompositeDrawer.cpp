@@ -45,7 +45,8 @@ void ColorCompositeDrawer::prepare(PreparationParameters *pp){
 	if ( pp->type & NewDrawer::ptRENDER || pp->type & RootDrawer::ptRESTORE) {
 		fUsePalette = false;
 		textureHeap->RepresentationChanged();
-		fLinear = (!getRootDrawer()->fConvNeeded(csy)) && gr()->fLinear();
+		fSameGeoRef = getRootDrawer()->getGeoReference().fValid() && gr().fValid() && (getRootDrawer()->getGeoReference() == gr());
+		fLinear = fSameGeoRef || ((!getRootDrawer()->fConvNeeded(csy)) && gr()->fLinear());
 	}
 	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY || pp->type & ptRESTORE) && demTriangulator != 0)) {
 		ZValueMaker * zMaker = getZMaker();

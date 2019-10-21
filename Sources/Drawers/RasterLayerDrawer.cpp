@@ -30,6 +30,7 @@ RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms)
 , isThreaded(true)
 , isThreadedBeforeOffscreen(true)
 , fLinear(true)
+, fSameGeoRef(false)
 , fUsePalette(false)
 , fPaletteOwner(false)
 , palette(0)
@@ -47,6 +48,7 @@ RasterLayerDrawer::RasterLayerDrawer(DrawerParameters *parms, const String& name
 , isThreaded(true)
 , isThreadedBeforeOffscreen(true)
 , fLinear(true)
+, fSameGeoRef(false)
 , fUsePalette(false)
 , fPaletteOwner(false)
 , palette(0)
@@ -107,7 +109,8 @@ void RasterLayerDrawer::prepare(PreparationParameters *pp){
 			getRootDrawer()->getDrawerContext()->setActivePalette(0);
 		}
 		textureHeap->RepresentationChanged();
-		fLinear = (!getRootDrawer()->fConvNeeded(csy)) && gr()->fLinear();
+		fSameGeoRef = getRootDrawer()->getGeoReference().fValid() && gr().fValid() && (getRootDrawer()->getGeoReference() == gr());
+		fLinear = fSameGeoRef || ((!getRootDrawer()->fConvNeeded(csy)) && gr()->fLinear());
 	}
 	if ((pp->type & pt3D) || ((pp->type & ptGEOMETRY || pp->type & ptRESTORE))){ // && demTriangulator != 0)) {
 		ZValueMaker * zMaker = getZMaker();
@@ -336,18 +339,26 @@ void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned 
 	glGetDoublev(GL_PROJECTION_MATRIX, m_projMatrix);
 	glGetIntegerv(GL_VIEWPORT, m_viewport);
 
-	Coord b1, b2, b3, b4;
-	gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
-	gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
-	gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
-	gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
 	Coord c1, c2, c3, c4;
-	c1 = getRootDrawer()->glConv(csy, b1);
-	c2 = getRootDrawer()->glConv(csy, b2);
-	c3 = getRootDrawer()->glConv(csy, b3);
-	c4 = getRootDrawer()->glConv(csy, b4);
-	if (c1.fUndef() || c2.fUndef() || c3.fUndef() || c4.fUndef())
-		return;
+	if (fSameGeoRef) {
+		c1 = Coord(imageOffsetX, -(double)imageOffsetY);
+		c2 = Coord(min(imageOffsetX + imageSizeX, data->imageWidth), -(double)imageOffsetY);
+		c3 = Coord(min(imageOffsetX + imageSizeX, data->imageWidth), -(double)min(imageOffsetY + imageSizeY, data->imageHeight));
+		c4 = Coord(imageOffsetX, -(double)min(imageOffsetY + imageSizeY, data->imageHeight));
+	} else {
+		Coord b1, b2, b3, b4;
+		gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+		gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
+		gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
+		gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
+		
+		c1 = getRootDrawer()->glConv(csy, b1);
+		c2 = getRootDrawer()->glConv(csy, b2);
+		c3 = getRootDrawer()->glConv(csy, b3);
+		c4 = getRootDrawer()->glConv(csy, b4);
+		if (c1.fUndef() || c2.fUndef() || c3.fUndef() || c4.fUndef())
+			return;
+	}
 	glFeedbackBuffer(2, GL_2D, feedbackBuffer);
 	glRenderMode(GL_FEEDBACK);
 	glBegin (GL_QUADS);
@@ -485,15 +496,22 @@ void RasterLayerDrawer::DisplayTexture(Coord & c1, Coord & c2, Coord & c3, Coord
 			double s2 = min(imageOffsetX + imageSizeX, data->imageWidth) / (double)data->width;
 			double t2 = min(imageOffsetY + imageSizeY, data->imageHeight) / (double)data->height;
 
-			Coord b1, b2, b3, b4;
-			gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
-			gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
-			gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
-			gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
-			c1 = getRootDrawer()->glConv(csy, b1);
-			c2 = getRootDrawer()->glConv(csy, b2);
-			c3 = getRootDrawer()->glConv(csy, b3);
-			c4 = getRootDrawer()->glConv(csy, b4);
+			if (fSameGeoRef) {
+				c1 = Coord(imageOffsetX, -(double)imageOffsetY);
+				c2 = Coord(min(imageOffsetX + imageSizeX, data->imageWidth), -(double)imageOffsetY);
+				c3 = Coord(min(imageOffsetX + imageSizeX, data->imageWidth), -(double)min(imageOffsetY + imageSizeY, data->imageHeight));
+				c4 = Coord(imageOffsetX, -(double)min(imageOffsetY + imageSizeY, data->imageHeight));
+			} else {
+				Coord b1, b2, b3, b4;
+				gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+				gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
+				gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
+				gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
+				c1 = getRootDrawer()->glConv(csy, b1);
+				c2 = getRootDrawer()->glConv(csy, b2);
+				c3 = getRootDrawer()->glConv(csy, b3);
+				c4 = getRootDrawer()->glConv(csy, b4);
+			}
 
 			glTexCoord2d(s1, t1);
 			glVertex3d(c1.x, c1.y, 0.0);
@@ -563,16 +581,22 @@ void RasterLayerDrawer::DisplayTexture3D(Coord & c1, Coord & c2, Coord & c3, Coo
 	if (tex != 0)
 	{
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		Coord b1, b2, b3, b4;
-		gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
-		gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
-		gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
-		gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
-
-		c1 = getRootDrawer()->glConv(csy, b1);
-		c2 = getRootDrawer()->glConv(csy, b2);
-		c3 = getRootDrawer()->glConv(csy, b3);
-		c4 = getRootDrawer()->glConv(csy, b4);
+		if (fSameGeoRef) {
+			c1 = Coord(imageOffsetX, -(double)imageOffsetY);
+			c2 = Coord(min(imageOffsetX + imageSizeX, data->imageWidth), -(double)imageOffsetY);
+			c3 = Coord(min(imageOffsetX + imageSizeX, data->imageWidth), -(double)min(imageOffsetY + imageSizeY, data->imageHeight));
+			c4 = Coord(imageOffsetX, -(double)min(imageOffsetY + imageSizeY, data->imageHeight));
+		} else {
+			Coord b1, b2, b3, b4;
+			gr()->RowCol2Coord(imageOffsetY, imageOffsetX, b1);
+			gr()->RowCol2Coord(imageOffsetY, min(imageOffsetX + imageSizeX, data->imageWidth), b2);
+			gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), min(imageOffsetX + imageSizeX, data->imageWidth), b3);
+			gr()->RowCol2Coord(min(imageOffsetY + imageSizeY, data->imageHeight), imageOffsetX, b4);
+			c1 = getRootDrawer()->glConv(csy, b1);
+			c2 = getRootDrawer()->glConv(csy, b2);
+			c3 = getRootDrawer()->glConv(csy, b3);
+			c4 = getRootDrawer()->glConv(csy, b4);
+		}
 		//double clip_plane0[]={c3.y - c2.y, c2.x - c3.x, 0.0, c2.x * (c2.y - c3.y) - c2.y * (c2.x - c3.x)}; // x < x2
 		//double clip_plane1[]={c1.y - c4.y, c4.x - c1.x, 0.0, c4.x * (c4.y - c1.y) - c4.y * (c4.x - c1.x)}; // x > x1
 		//double clip_plane2[]={c2.y - c1.y, c1.x - c2.x, 0.0, c1.x * (c1.y - c2.y) - c1.y * (c1.x - c2.x)}; // y > y1
