@@ -129,6 +129,8 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 	}
 
 	mcd->rootDrawer->setGeoreference(grf, true);
+	PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptNEWCSY);
+	mcd->rootDrawer->prepare(&pp);
 
 	GeoRefDirectLinear* grdl = grc->pgDirectLinear();
 	if (grdl) 
@@ -291,8 +293,10 @@ GeoRefEditor::~GeoRefEditor()
 {
 	grc->Store();
 
-	//MapCompositionDoc* mcd = mpv->GetDocument();
-	//mcd->rootDrawer->clearGeoreference();
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	mcd->rootDrawer->clearGeoreference();
+	PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptNEWCSY);
+	mcd->rootDrawer->prepare(&pp);
 
 	/*
 	CReBar& rebar = mpv->mwParent()->rebar;
@@ -326,8 +330,6 @@ bool GeoRefEditor::OnContextMenu(CWnd* pWnd, CPoint point)
 	men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
 	return true;
 }
-
-
 
 IlwisObject GeoRefEditor::obj() const
 {
@@ -526,9 +528,9 @@ void GeoRefEditor::OnAddPoint()
 void GeoRefEditor::EditFieldCoordOK(RowCol rc, Coord crd)
 {
 	int iPnt = grc->AddRec(rc, crd);
-	drawPoint(iPnt);
 	grtd->CheckNrRecs();
 	Calc();
+	mpv->Invalidate();
 }
 
 void GeoRefEditor::EditFieldCoordOK(RowCol rc, Coord crd, double rZ)
@@ -537,17 +539,17 @@ void GeoRefEditor::EditFieldCoordOK(RowCol rc, Coord crd, double rZ)
 	Column colZ = grc->tbl()->col("Z");
 	if (colZ.fValid())
 		colZ->PutVal(iPnt, rZ);
-	drawPoint(iPnt);
 	grtd->CheckNrRecs();
 	Calc();
+	mpv->Invalidate();
 }
 
 void GeoRefEditor::EditFieldLatLonOK(RowCol rc, LatLon ll)
 {
 	int iPnt = grc->AddRec(rc, ll);
-	drawPoint(iPnt);
 	grtd->CheckNrRecs();
 	Calc();
+	mpv->Invalidate();
 }
 
 void GeoRefEditor::EditFieldLatLonOK(RowCol rc, LatLon ll, double rZ)
@@ -556,17 +558,17 @@ void GeoRefEditor::EditFieldLatLonOK(RowCol rc, LatLon ll, double rZ)
 	Column colZ = grc->tbl()->col("Z");
 	if (colZ.fValid())
 		colZ->PutVal(iPnt, rZ);
-	drawPoint(iPnt);
 	grtd->CheckNrRecs();
 	Calc();
+	mpv->Invalidate();
 }
 
 void GeoRefEditor::EditFieldCoordOK(Coord crdRC, Coord crd)
 {
 	int iPnt = grc->AddRec(crdRC, crd);
-	drawPoint(iPnt);
 	grtd->CheckNrRecs();
 	Calc();
+	mpv->Invalidate();
 }
 
 void GeoRefEditor::EditFieldCoordOK(Coord crdRC, Coord crd, double rZ)
@@ -575,17 +577,17 @@ void GeoRefEditor::EditFieldCoordOK(Coord crdRC, Coord crd, double rZ)
 	Column colZ = grc->tbl()->col("Z");
 	if (colZ.fValid())
 		colZ->PutVal(iPnt, rZ);
-	drawPoint(iPnt);
 	grtd->CheckNrRecs();
 	Calc();
+	mpv->Invalidate();
 }
 
 void GeoRefEditor::EditFieldLatLonOK(Coord crdRC, LatLon ll)
 {
 	int iPnt = grc->AddRec(crdRC, ll);
-	drawPoint(iPnt);
 	grtd->CheckNrRecs();
 	Calc();
+	mpv->Invalidate();
 }
 
 void GeoRefEditor::EditFieldLatLonOK(Coord crdRC, LatLon ll, double rZ)
@@ -594,10 +596,11 @@ void GeoRefEditor::EditFieldLatLonOK(Coord crdRC, LatLon ll, double rZ)
 	Column colZ = grc->tbl()->col("Z");
 	if (colZ.fValid())
 		colZ->PutVal(iPnt, rZ);
-	drawPoint(iPnt);
 	grtd->CheckNrRecs();
 	Calc();
+	mpv->Invalidate();
 }
+
 zRect GeoRefEditor::rectPoint(long iNr)
 {
 	RowCol rc = grc->rc(iNr);
@@ -764,8 +767,7 @@ void GeoRefEditor::Calc()
 				rSigma = 0;
 			}
 		}  
-		for (int i = 1; i <= grc->iNr(); ++i) 
-			drawPoint(i);
+		mpv->Invalidate();
 		grtd->UpdateAllViews(0);
 		fInCalc = false;
 }
@@ -808,15 +810,14 @@ bool GeoRefEditor::OnLButtonDown(UINT nFlags, CPoint point)
 		return true;
 	}
 	if (iSelPnt) {
-		drawPoint(iSelPnt);
 		if (!grc->fSubPixelPrecision)
 			grc->SetRowCol(iSelPnt, rc);
 		else
 			grc->SetcrdRC(iSelPnt, crdRC);
-		drawPoint(iSelPnt);
 		Calc();
 		iSelPnt = 0;
 		curActive = curAdd;
+		mpv->Invalidate();
 	}
 	else {
 		Coord crd;
@@ -880,8 +881,9 @@ void GeoRefEditor::OnDelPoint()
 	int iDel = iNr;  
 	RangeInt ri(1, iNr);
 	DelTiePointForm frm(mpv, &iDel, ri);
-	if (frm.fOkClicked()) 
+	if (frm.fOkClicked()) {
 		DelPoints(iDel,1);
+	}
 }
 
 void GeoRefEditor::DelPoints(int iDel, int iRecs)
@@ -892,11 +894,10 @@ void GeoRefEditor::DelPoints(int iDel, int iRecs)
 	int iMax = grc->iNr();
 	if (iMax <= 0)
 		return;
-	for (int i = iDel; i <= iMax; ++i)
-		drawPoint(i);
 	grc->tbl()->DeleteRec(iDel, iRecs);
 	grtd->CheckNrRecs();
 	Calc();
+	mpv->Invalidate();
 }
 
 void GeoRefEditor::OnTransformation()
@@ -953,12 +954,9 @@ void GeoRefEditor::OnConfigure()
 {
 	GreConfigForm frm(mpv, this);
 	if (frm.fOkClicked()) {
-		int iNr = grc->iNr();
-		for (int i = 1; i <= iNr; ++i)
-			drawPoint(i);
+		mpv->Invalidate();
 
 		IlwisSettings settings("Map Window\\TiePoint Editor");
-
 		settings.SetValue("Active Color", colActive);
 		settings.SetValue("Good Color", colActGood);
 		settings.SetValue("Bad Color", colActBad);
