@@ -1056,16 +1056,14 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	else
 		rootDrawer->setCoordinateSystem(bmp->cs());
 	CoordBounds cbMap = bmp->cb();
-	if (mptr && (!cbMap.fValid() || mptr->gr()->fGeoRefNone())) { // for NONE.grf or csunknown with no boundaries
-		if (cbMap.fValid()) { // fGeoRefNone case; the rootDrawer's cb was already altered (by addDataSource above); restore the backup
-			rootDrawer->setCoordBoundsMap(cbMapRootDrawer);
-			if (cbMapRootDrawer.fValid()) // also restore cbView to what it was before addDataSource
-				rootDrawer->setCoordBoundsView(cbMapRootDrawer, true);
-		}
-		cbMap = CoordBounds(Coord(0,0), Coord(mptr->rcSize().Col, -mptr->rcSize().Row)); // none.grf bounds
-		rootDrawer->addCoordBounds(bmp->cs(), cbMap, fExtendBounds);
-		rootDrawer->setGeoreference(GeoRef(FileName("none.grf")), fExtendBounds);
-	} else
+	if (mptr) { // Raster Map
+		if (mptr->gr()->fGeoRefNone()) { // NONE.grf: rootDrawer in GeoRefNone mode, with rcSize
+			rootDrawer->setGeoreference(GeoRef(mptr->rcSize()), fExtendBounds);
+		} else if (!cbMap.fValid()) { // Georef CTP that can't compute: rootDrawer in GeoRef mode
+			rootDrawer->setGeoreference(mptr->gr(), fExtendBounds);
+		} else
+			rootDrawer->addCoordBounds(bmp->cs(), cbMap, fExtendBounds);
+	} else // Vector Map
 		rootDrawer->addCoordBounds(bmp->cs(), cbMap, fExtendBounds);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY);
 	pp.subType = subtype;
@@ -1179,15 +1177,11 @@ BOOL MapCompositionDoc::OnOpenMapList(const MapList& maplist, OpenType ot, int o
 	drawer->addDataSource((void *)&maplist, fExtendBounds ? NewDrawer::dsoEXTENDBOUNDS : NewDrawer::dsoNONE);
 	rootDrawer->setCoordinateSystem(maplist->gr()->cs());
 	CoordBounds cbMap = mp->cb();
-	if (!cbMap.fValid() || mp->gr()->fGeoRefNone()) { // for NONE.grf or csunknown with no boundaries
-		if (cbMap.fValid()) { // fGeoRefNone case; the rootDrawer's cb was already altered (by addDataSource above); restore the backup
-			rootDrawer->setCoordBoundsMap(cbMapRootDrawer);
-			if (cbMapRootDrawer.fValid()) // also restore cbView to what it was before addDataSource
-				rootDrawer->setCoordBoundsView(cbMapRootDrawer, true);
-		}
-		cbMap = CoordBounds(Coord(0,0), Coord(mp->rcSize().Col, -mp->rcSize().Row)); // none.grf bounds
-		rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
-		rootDrawer->setGeoreference(GeoRef(FileName("none.grf")), fExtendBounds);
+
+	if (mp->gr()->fGeoRefNone()) { // NONE.grf: rootDrawer in GeoRefNone mode, with rcSize
+		rootDrawer->setGeoreference(GeoRef(mp->rcSize()), fExtendBounds);
+	} else if (!cbMap.fValid()) { // Georef CTP that can't compute: rootDrawer in GeoRef mode
+		rootDrawer->setGeoreference(mp->gr(), fExtendBounds);
 	} else
 		rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
 	ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
@@ -1809,15 +1803,10 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::Ope
 		rootDrawer->setCoordinateSystem(maplist->gr()->cs());
 		Map mp = maplist[maplist->iLower()];
 		CoordBounds cbMap = mp->cb();
-		if (!cbMap.fValid() || mp->gr()->fGeoRefNone()) { // for NONE.grf or csunknown with no boundaries
-			if (cbMap.fValid()) { // fGeoRefNone case; the rootDrawer's cb was already altered (by addDataSource above); restore the backup
-				rootDrawer->setCoordBoundsMap(cbMapRootDrawer);
-				if (cbMapRootDrawer.fValid()) // also restore cbView to what it was before addDataSource
-					rootDrawer->setCoordBoundsView(cbMapRootDrawer, true);
-			}
-			cbMap = CoordBounds(Coord(0,0), Coord(mp->rcSize().Col, -mp->rcSize().Row)); // none.grf bounds
-			rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
-			rootDrawer->setGeoreference(GeoRef(FileName("none.grf")), fExtendBounds);
+		if (mp->gr()->fGeoRefNone()) { // NONE.grf: rootDrawer in GeoRefNone mode, with rcSize
+			rootDrawer->setGeoreference(GeoRef(mp->rcSize()), fExtendBounds);
+		} else if (!cbMap.fValid()) { // Georef CTP that can't compute: rootDrawer in GeoRef mode
+			rootDrawer->setGeoreference(mp->gr(), fExtendBounds);
 		} else
 			rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
 		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
@@ -1838,15 +1827,10 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::Ope
 		rootDrawer->setCoordinateSystem(maplist->gr()->cs());
 		Map mp = maplist[maplist->iLower()];
 		CoordBounds cbMap = mp->cb();
-		if (!cbMap.fValid() || mp->gr()->fGeoRefNone()) { // for NONE.grf or csunknown with no boundaries
-			if (cbMap.fValid()) { // fGeoRefNone case; the rootDrawer's cb was already altered (by addDataSource above); restore the backup
-				rootDrawer->setCoordBoundsMap(cbMapRootDrawer);
-				if (cbMapRootDrawer.fValid()) // also restore cbView to what it was before addDataSource
-					rootDrawer->setCoordBoundsView(cbMapRootDrawer, true);
-			}
-			cbMap = CoordBounds(Coord(0,0), Coord(mp->rcSize().Col, -mp->rcSize().Row)); // none.grf bounds
-			rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
-			rootDrawer->setGeoreference(GeoRef(FileName("none.grf")), fExtendBounds);
+		if (mp->gr()->fGeoRefNone()) { // NONE.grf: rootDrawer in GeoRefNone mode, with rcSize
+			rootDrawer->setGeoreference(GeoRef(mp->rcSize()), fExtendBounds);
+		} else if (!cbMap.fValid()) { // Georef CTP that can't compute: rootDrawer in GeoRef mode
+			rootDrawer->setGeoreference(mp->gr(), fExtendBounds);
 		} else
 			rootDrawer->addCoordBounds(mp->cs(), cbMap, fExtendBounds);
 		ILWIS::PreparationParameters pp(RootDrawer::ptGEOMETRY | RootDrawer::ptRENDER,0);
