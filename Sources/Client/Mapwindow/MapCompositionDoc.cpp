@@ -1084,7 +1084,7 @@ ILWIS::NewDrawer *MapCompositionDoc::createBaseMapDrawer(const BaseMap& bmp, con
 	}
 	String sysFile = bmp->fnObj.sFullName();
 	sysFile.toLower();
-	if ( fExtendBounds && cbZoom.fValid() && (sysFile.find("ilwis3\\system\\basemaps") != string::npos)) // restore cbZoom if we added a system background map
+	if ( fExtendBounds && cbZoom.fValid() && (sysFile.find("\\system\\basemaps") != string::npos)) // restore cbZoom if we added a system background map
 		rootDrawer->setCoordBoundsZoom(cbZoom);
 
 	return drawer;
