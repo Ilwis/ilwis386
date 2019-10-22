@@ -128,11 +128,17 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 		if ( !polygon)
 			return;
 		cb = polygon->cbBounds();
-		Coord c1 = getRootDrawer()->glConv(csy,cb.cMin);
-		Coord c2 = getRootDrawer()->glConv(csy,cb.cMax);
-		cb = CoordBounds(c1,c2);
-		cb.getArea(); // initializes the area
 		bool coordNeedsConversion = getRootDrawer()->fConvNeeded(csy);
+		if (coordNeedsConversion) {
+			Coord c1 = getRootDrawer()->glConv(csy,cb.cMin);
+			Coord c2 = getRootDrawer()->glConv(csy,cb.cMax);
+			Coord c3 = getRootDrawer()->glConv(csy,Coord(cb.cMax.x,cb.cMin.y));
+			Coord c4 = getRootDrawer()->glConv(csy,Coord(cb.cMin.x,cb.cMax.y));
+			cb = CoordBounds(c1,c2);
+			cb += c3;
+			cb += c4;
+		}
+		cb.getArea(); // initializes the area		
 		long *data;
 		long *count;
 		bool firstTime = polygonLayer->getTriangleData(&data, &count);
