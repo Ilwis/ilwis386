@@ -204,7 +204,7 @@ void ActionViewBar::OnUpdateCmdUI(CFrameWnd* pParent, BOOL)
 
 BOOL ActionViewBar::Create(CWnd* pParent)
 {
-	if (!CSizingControlBar::Create("", pParent, CSize(200,500), TRUE, 125))
+	if (!CSizingControlBar::Create("", pParent, CSize(220,500), TRUE, 125))
 		return FALSE;
   m_dwSCBStyle |= SCBS_SHOWEDGES;
 
