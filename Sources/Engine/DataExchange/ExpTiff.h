@@ -155,8 +155,6 @@ public:
 
 protected:
 	TiffExporter& _te;
-
-	void writeColor(const Color& color);
 	RangeReal rrDetermineValueRange(Map& ValMap);
 };
 

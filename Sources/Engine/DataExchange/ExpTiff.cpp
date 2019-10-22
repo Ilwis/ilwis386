@@ -391,12 +391,14 @@ void ColorTransformer::writeValues(Tranquilizer& trq)
 	RangeReal rr = rrDetermineValueRange(inMap);
 
 	RealBuf rBuf(inMap->iCols());
+	ByteBuf outbuf(inMap->iCols() * 3);
 	Color color;
 
 	for (long iRow = 0; iRow < inMap->iLines(); ++iRow) {
 		inMap->GetLineVal(iRow, rBuf);
 		if ( trq.fUpdate(iRow, inMap->iLines()))
 			return;
+		long outbufPtr = 0;
 		for (long iCol = 0; iCol < inMap->iCols(); ++iCol) {
 			double rVal = rBuf[iCol];
 			if (rVal == rUNDEF)
@@ -405,22 +407,32 @@ void ColorTransformer::writeValues(Tranquilizer& trq)
 				color = rpr->clr(rBuf[iCol],rr);
 			else
 				color = rpr->clr(rBuf[iCol]);
-			writeColor(color);
+			outbuf[outbufPtr++] = color.red();
+			outbuf[outbufPtr++] = color.green();
+			outbuf[outbufPtr++] = color.blue();
 		}
+		_te.outFile()->Write(inMap->iCols() * 3, outbuf.buf());
 	}
 }
 
 void ColorTransformer::writeAsColor(Tranquilizer& trq)
 {
 	Map& inMap = _te.inMap();
+	LongBuf iBuf(inMap->iCols());
+	ByteBuf outbuf(inMap->iCols() * 3);
 	for (long iRow = 0; iRow < inMap->iLines(); ++iRow)
 	{
-		LongBuf iBuf(inMap->iCols());
 		inMap->GetLineRaw(iRow, iBuf);
 		if ( trq.fUpdate(iRow, inMap->iLines())) 
 			return;
-		for (long iCol = 0; iCol < inMap->iCols(); ++iCol)
-			writeColor(iBuf[iCol]);
+		long outbufPtr = 0;
+		for (long iCol = 0; iCol < inMap->iCols(); ++iCol) {
+			Color color = iBuf[iCol];
+			outbuf[outbufPtr++] = color.red();
+			outbuf[outbufPtr++] = color.green();
+			outbuf[outbufPtr++] = color.blue();
+		}
+		_te.outFile()->Write(inMap->iCols() * 3, outbuf.buf());
 	}
 }
 
@@ -429,29 +441,43 @@ void ColorTransformer::writeAsColorRaw(Tranquilizer& trq)
 	Map& inMap = _te.inMap();
 	Representation rpr = inMap->dm()->rpr();
 
+	LongBuf iBuf(inMap->iCols());
+	ByteBuf outbuf(inMap->iCols() * 3);
+
 	for (long iRow = 0; iRow < inMap->iLines(); ++iRow)
 	{
-		LongBuf iBuf(inMap->iCols());
 		inMap->GetLineRaw(iRow, iBuf);
 		if ( trq.fUpdate(iRow, inMap->iLines())) 
 			return;
-		for (long iCol = 0; iCol < inMap->iCols(); ++iCol)
-			writeColor(rpr->clrRaw(iBuf[iCol]));
+		long outbufPtr = 0;
+		for (long iCol = 0; iCol < inMap->iCols(); ++iCol) {
+			Color color = rpr->clrRaw(iBuf[iCol]);
+			outbuf[outbufPtr++] = color.red();
+			outbuf[outbufPtr++] = color.green();
+			outbuf[outbufPtr++] = color.blue();
+		}
+		_te.outFile()->Write(inMap->iCols() * 3, outbuf.buf());
 	}
 }
 
 void ColorTransformer::writeAsColorID(Tranquilizer& trq)
 {
 	Map& inMap = _te.inMap();
-
+	LongBuf iBuf(inMap->iCols());
+	ByteBuf outbuf(inMap->iCols() * 3);
 	for (long iRow = 0; iRow < inMap->iLines(); ++iRow)
 	{
-		LongBuf iBuf(inMap->iCols());
 		inMap->GetLineRaw(iRow, iBuf);
 		if ( trq.fUpdate(iRow, inMap->iLines())) 
 			return;
-		for (long iCol = 0; iCol < inMap->iCols(); ++iCol)
-			writeColor(Color::clrPrimary(1 + iBuf[iCol] % 31));
+		long outbufPtr = 0;
+		for (long iCol = 0; iCol < inMap->iCols(); ++iCol) {
+			Color color = Color::clrPrimary(1 + iBuf[iCol] % 31);
+			outbuf[outbufPtr++] = color.red();
+			outbuf[outbufPtr++] = color.green();
+			outbuf[outbufPtr++] = color.blue();
+		}
+		_te.outFile()->Write(inMap->iCols() * 3, outbuf.buf());
 	}
 }
 
@@ -459,33 +485,26 @@ void ColorTransformer::writeAsColorPalette(TiffExportInfo& teiData, Tranquilizer
 {
 	Map& inMap = _te.inMap();
 
+	ByteBuf buf(inMap->iCols());
+	ByteBuf outbuf(inMap->iCols() * 3);
+
 	for(long iRow = 0; iRow < inMap->iLines(); ++iRow)
 	{
-		ByteBuf buf(inMap->iCols());
 		inMap->GetLineRaw(iRow, buf);
 		if ( trq.fUpdate(iRow, inMap->iLines())) 
 			return;
 
-		for (long iCol = 0; iCol < inMap->iCols(); ++iCol)
-		{
+		long outbufPtr = 0;
+		for (long iCol = 0; iCol < inMap->iCols(); ++iCol) {
 			Color color = Color(teiData.aiColorMap[buf[iCol]] >> 8,
 								teiData.aiColorMap[buf[iCol] + 256] >> 8,
 								teiData.aiColorMap[buf[iCol] + 512] >> 8);
-			writeColor(color);
+			outbuf[outbufPtr++] = color.red();
+			outbuf[outbufPtr++] = color.green();
+			outbuf[outbufPtr++] = color.blue();
 		}
+		_te.outFile()->Write(inMap->iCols() * 3, outbuf.buf());
 	}
-}
-
-void RasterTransformer::writeColor(const Color& color)
-{
-	File* outFile = _te.outFile();
-
-	byte red=color.red();
-	byte green=color.green();
-	byte blue=color.blue();
-	outFile->Write(1, &red);
-	outFile->Write(1, &green);
-	outFile->Write(1, &blue);
 }
 
 // ValuesTransformer class
@@ -603,14 +622,21 @@ void ValuesTransformer::writeColorValues(TiffExportInfo& teiData, Tranquilizer& 
 	teiData.iBitsPerSample = 24;
 
 	Map& inMap = _te.inMap();
+	LongBuf iBuf(inMap->iCols());
+	ByteBuf outbuf(inMap->iCols() * 3);
 	for (long iRow = 0; iRow < inMap->iLines(); ++iRow)
 	{
-		LongBuf iBuf(inMap->iCols());
 		inMap->GetLineRaw(iRow, iBuf);
 		if ( trq.fUpdate(iRow, inMap->iLines())) 
 			return;
-		for (long iCol = 0; iCol < inMap->iCols(); ++iCol)
-			writeColor(iBuf[iCol]);
+		long outbufPtr = 0;
+		for (long iCol = 0; iCol < inMap->iCols(); ++iCol) {
+			Color color = iBuf[iCol];
+			outbuf[outbufPtr++] = color.red();
+			outbuf[outbufPtr++] = color.green();
+			outbuf[outbufPtr++] = color.blue();
+		}
+		_te.outFile()->Write(inMap->iCols() * 3, outbuf.buf());
 	}
 }
 
