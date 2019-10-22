@@ -473,7 +473,7 @@ void ValueRangeInt::init(long iRaw0)
   else
     _iWidth = w1;
   st = DomainPtr::st(iHi()-iLo()+2);
-  if (st < stBYTE)
+  if (st < stBYTE) // this should be left as-is; required for BOOL data to work properly, otherwise they don't get their iRaw offset set to -1
     st = stBYTE;
   if (iRaw0 == iUNDEF)
     _i0 = iDefaultRaw0();
@@ -923,10 +923,10 @@ String ValueRangeReal::sValue(double rValue, short w, short dec) const
 			{
         s = String("%*.*e", w, dec, rValue);
         short dif = s.length() - w;
-        if (dif <= dec)
+        //if (dif <= dec)
           s = String("%*.*e", w, dec-dif, rValue);
-        else  // too large
-          s = String('*', w);
+        //else  // too large
+        //  s = String('*', w);
       }
       else 
 			{
