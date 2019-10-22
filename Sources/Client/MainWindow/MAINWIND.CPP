@@ -233,8 +233,8 @@ int MainWindow::OnCreate(LPCREATESTRUCT lpc)
 	men.Add(sTop,    0,                 MF_SEPARATOR);	
 	men.Add(sTop,    ID_FILE_PREFERENCES);
 	men.Add(sTop,    0,                 MF_SEPARATOR);
-	//men.Add(sTop,    ID_FILE_DIGSETUP);
-	//men.Add(sTop,    ID_FILE_DIGREF);
+	men.Add(sTop,    ID_FILE_DIGSETUP);
+	men.Add(sTop,    ID_FILE_DIGREF);
 	men.Add(sTop,    0,                 MF_SEPARATOR);
 
 	men.Add(sTop,ID_IMPORT);
@@ -520,6 +520,7 @@ void MainWindow::OnClose()
 	SaveStateOfMDIChildren(settings);
 	SaveState(settings);
 
+	IlwWinApp()->Execute("*stopserver"); // stop the http server if its running; The * is for not putting the command in the history
 	IlwWinApp()->DeleteDirDoc();
 	IlwWinApp()->OnCloseAll();
 	CMDIFrameWnd::OnClose();
