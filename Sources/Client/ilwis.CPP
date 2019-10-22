@@ -662,7 +662,7 @@ void IlwisWinApp::EnableDigitizer(bool fConfigure)
 			digitizer = new Digitizer(m_pMainWnd);
 		digitizer->Configure(0);
 	}
-	if ( IlwisSettings("Digitizer", IlwisSettings::pkuMACHINE, false, IlwisSettings::omREADONLY).fKeyExists() )
+	if ( IlwisSettings("Digitizer").fKeyExists() )
 	{
 		if ( digitizer == 0) 
 			digitizer = new Digitizer(m_pMainWnd);

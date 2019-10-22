@@ -129,7 +129,7 @@ FieldRefPoint::FieldRefPoint(FormEntry* par, int iNr, bool fMetric, const CoordS
 void FieldRefPoint::Load(int iNr)
 {
 	String sKey("Digitizer\\DigRef\\RefPoint%i", iNr);
-  IlwisSettings settings(sKey, IlwisSettings::pkuMACHINE, false, IlwisSettings::omREADONLY);
+  IlwisSettings settings(sKey);
 
 	fDig = false;
   if (settings.fKeyExists())
@@ -155,7 +155,7 @@ void FieldRefPoint::Store(int iNr)
 	String sKey("Digitizer\\DigRef\\RefPoint%i", iNr);
 	try
 	{
-	  IlwisSettings settings(sKey, IlwisSettings::pkuMACHINE, true, IlwisSettings::omREADWRITE, IlwisSettings::arALLUSERS);
+	  IlwisSettings settings(sKey, IlwisSettings::pkuUSER, true, IlwisSettings::omREADWRITE);
 
 		if (!fDig) {
 			settings.DeleteKey();

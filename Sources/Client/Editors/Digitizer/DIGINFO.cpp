@@ -72,14 +72,14 @@ int DigitizerInfoWindow::Create(CWnd *parent)
 	CDC *dc = GetDC();
 	CSize sz = dc->GetTextExtent("gk");
 	int iXSize = sz.cx * 10;
-	int iYSize = sz.cy * 7;
+	int iYSize = sz.cy * 8;
 	CRect rct(0,0, iXSize, iYSize);
 	this->ClientToScreen(&rct);
 	MoveWindow(rct);
   int i;
   //backgroundColor(SysColor(COLOR_WINDOW));
   stTitle = new CStatic;
-	stTitle->Create("", WS_CHILD | WS_VISIBLE | SS_LEFT, CRect(10, 3, 150 , sz.cy), this);
+	stTitle->Create("", WS_CHILD | WS_VISIBLE | SS_LEFT, CRect(10, 3, 150, sz.cy), this);
 	stTitle->SetFont(fnt);
   for (i = 0; i < 4; ++i) 
 	{

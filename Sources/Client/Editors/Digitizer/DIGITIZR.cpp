@@ -300,7 +300,7 @@ Digitizer::~Digitizer()
 
 void Digitizer::Load()
 {
-	IlwisSettings settings("Digitizer\\Configuration", IlwisSettings::pkuMACHINE, false, IlwisSettings::omREADONLY);
+	IlwisSettings settings("Digitizer\\Configuration");
 	if (settings.fKeyExists())
   {
 
@@ -344,7 +344,7 @@ void Digitizer::Load()
 		iParity = 0;
 	}
 
-	IlwisSettings settings2("Digitizer\\DigRef", IlwisSettings::pkuMACHINE, false, IlwisSettings::omREADONLY);
+	IlwisSettings settings2("Digitizer\\DigRef");
 	fSetup = (iPort != 0 || fWinTab) && settings2.fKeyExists();
 }
 
@@ -363,7 +363,7 @@ void Digitizer::Store()
 	
 	try
 	{
-		IlwisSettings settings("Digitizer\\Configuration", IlwisSettings::pkuMACHINE, true, IlwisSettings::omREADWRITE, IlwisSettings::arALLUSERS);
+		IlwisSettings settings("Digitizer\\Configuration", IlwisSettings::pkuUSER, true, IlwisSettings::omREADWRITE);
 		settings.SetValue("WinTab"       , fWinTab);
 		settings.SetValue("CommPort"     , iPort);
 		settings.SetValue("TabletSizeX"  , iMaxX );
@@ -387,12 +387,12 @@ void Digitizer::Store()
 		MessageBox("Unable to store digitizer settings");
 	}
 	// Remove old Digitizer\\DigRef key (and its access control list that we may not like)
-	IlwisSettings settings3("Digitizer\\DigRef", IlwisSettings::pkuMACHINE, false, IlwisSettings::omREADWRITE);
+	IlwisSettings settings3("Digitizer\\DigRef", IlwisSettings::pkuUSER, false, IlwisSettings::omREADWRITE);
 	settings3.DeleteKey();
 	// Make sure Digitizer\\DigRef exists and is public writable
 	try
 	{
-		IlwisSettings settings2("Digitizer\\DigRef", IlwisSettings::pkuMACHINE, true, IlwisSettings::omREADWRITE, IlwisSettings::arALLUSERS);
+		IlwisSettings settings2("Digitizer\\DigRef", IlwisSettings::pkuUSER, true, IlwisSettings::omREADWRITE);
 	}
 	catch (RegistryError&)
 	{
@@ -403,7 +403,7 @@ void Digitizer::Store()
 void Digitizer::RefLoad()
 {
 
-	IlwisSettings settings("Digitizer\\DigRef", IlwisSettings::pkuMACHINE, false, IlwisSettings::omREADONLY);
+	IlwisSettings settings("Digitizer\\DigRef");
 
 	act            = (Digitizer::ACT)settings.iValue("Active"    , 0);
 	fAffine        = settings.fValue("Affine"    , true);
@@ -421,7 +421,7 @@ void Digitizer::RefLoad()
 
 void Digitizer::ActStore()
 {
-	IlwisSettings settings("Digitizer\\DigRef", IlwisSettings::pkuMACHINE);
+	IlwisSettings settings("Digitizer\\DigRef");
 
 	settings.SetValue("Active", (act == actACTIVE) ? true : false );
 }
@@ -430,7 +430,7 @@ void Digitizer::RefStore()
 {
   ActStore();
 
-	IlwisSettings settings("Digitizer\\DigRef", IlwisSettings::pkuMACHINE);
+	IlwisSettings settings("Digitizer\\DigRef");
 
 	settings.SetValue("Affine", fAffine);
 	settings.SetValue("x0"    , x0);
@@ -665,7 +665,7 @@ int Digitizer::Configure(Event*)
 	if (ID_WIZFINISH == iRes)
 	{
 		Store();
-		IlwisSettings settings2("Digitizer\\DigRef", IlwisSettings::pkuMACHINE, false, IlwisSettings::omREADONLY);
+		IlwisSettings settings2("Digitizer\\DigRef");
 		fSetup = (iPort != 0 || fWinTab) && settings2.fKeyExists();
 		// Perhaps unnecessary, but it is the right thing to do
 		// in case we decide not to empty DigRef in the future
@@ -778,7 +778,7 @@ int Digitizer::Reference(Event*)
 		*/
 		act = actBUSY;
  
-		IlwisSettings settings("Digitizer\\DigRef", IlwisSettings::pkuMACHINE);
+		IlwisSettings settings("Digitizer\\DigRef");
 
 		String sCsy; 
 		int iOption = 0;
@@ -837,19 +837,19 @@ bool Digitizer::fSetupAllowed()
 {
 	try
 	{
-		IlwisSettings settings ("Digitizer\\Configuration", IlwisSettings::pkuMACHINE, true, IlwisSettings::omREADWRITE, IlwisSettings::arALLUSERS);
+		IlwisSettings settings ("Digitizer\\Configuration", IlwisSettings::pkuUSER, true, IlwisSettings::omREADWRITE);
 	}
 	catch (RegistryError&)
 	{
 	}
 	// If we have sufficient rights, the key will exist by now
 	// Now still do the following test (if the key does not exist it returns false)
-	return (IlwisSettings::fWritingAllowed("Digitizer\\Configuration", IlwisSettings::pkuMACHINE));
+	return (IlwisSettings::fWritingAllowed("Digitizer\\Configuration"));
 }
 
 bool Digitizer::fMapReferenceAllowed()
 {
-	return (IlwisSettings::fWritingAllowed("Digitizer\\DigRef", IlwisSettings::pkuMACHINE));
+	return (IlwisSettings::fWritingAllowed("Digitizer\\DigRef"));
 }
 
 bool Digitizer::fActive() 
