@@ -84,14 +84,14 @@ inline short  shortConv (long  x) { return  ((x == iUNDEF) || (x > SHRT_MAX) || 
 inline short  shortConv(double x) { return shortConv(roundx(x)); }
 inline short  shortConv(short x)  { return x; }
 inline short  shortConv(int x)    { return ((x == iUNDEF) || (x > SHRT_MAX) || (x < SHRT_MIN)) ? shUNDEF : (short)x;}
-inline long   longConv(short x)   { return x == shUNDEF ? iUNDEF : (long)x; }
+inline long   longConv(short x)   { return x <= shUNDEF ? iUNDEF : (long)x; } // Here we consider -32768 the same as SHUNDEF (-32767). Some imported maps have this value.
 inline long   longConv(int x)     { return (long)x; }
 inline long   longConv(float x)   { return roundx(x); }
 inline long   longConv(double x)  { return roundx(x); }
-inline float floatConv(short x)   { return x == shUNDEF ? flUNDEF : (float)x; }
+inline float floatConv(short x)   { return x <= shUNDEF ? flUNDEF : (float)x; } // see above
 inline float floatConv(long x)    { return x == iUNDEF ? flUNDEF : (float)x; }
 inline float floatConv(double x)  { return ((x == rUNDEF) || (x < -FLT_MAX) || (x > FLT_MAX)) ? flUNDEF : (float)x; }
-inline double doubleConv(short x) { return x == shUNDEF ? rUNDEF : (double)x; }
+inline double doubleConv(short x) { return x <= shUNDEF ? rUNDEF : (double)x; } // see above
 inline double doubleConv(long x)  { return x == iUNDEF ? rUNDEF : (double)x; }
 inline double doubleConv(float x) { return x == flUNDEF ? rUNDEF : (double)x; }
 
