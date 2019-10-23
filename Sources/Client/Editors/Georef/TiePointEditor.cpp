@@ -97,6 +97,10 @@ TiePointEditor::TiePointEditor(MapPaneView* mpvw)
 	colActGood = settings.clrValue("Good Color", colActGood);
 	colActBad = settings.clrValue("Bad Color", colActBad);
 	colPassive = settings.clrValue("Passive Color", colPassive);
+	colActive.alpha() = 255; // from the registry they come with alpha=0
+	colActGood.alpha() = 255;
+	colActBad.alpha() = 255;
+	colPassive.alpha() = 255;
   smb.smb = smbPlus;
 	smb.iSize =	settings.iValue("Symbol Size", smb.iSize);
 

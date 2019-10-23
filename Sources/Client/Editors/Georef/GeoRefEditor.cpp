@@ -184,7 +184,7 @@ GeoRefEditor::GeoRefEditor(MapPaneView* mpvw, GeoRef georef)
 	if (grc->pgCTPplanar())
 		addmen(ID_EDITGRFTRANSF)
 	else if (grc->pgOrthoPhoto())
-	addmen(ID_EDITGRFFIDMARKS);
+		addmen(ID_EDITGRFFIDMARKS);
 	hmenEdit = men.GetSafeHmenu();
 	men.Detach();
 	UpdateMenu();
@@ -359,6 +359,8 @@ int GeoRefEditor::draw(volatile bool* fDrawStop)
 	ILWIS::TextDrawer *textDrawer = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dpTextDrawer);
 	OpenGLText * font = new OpenGLText (rootDrawer, "arial.ttf", 15, true, 1, -15);
 	textLayerDrawer->setFont(font);
+	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom();
+	double delta = smb.iSize * cbZoom.width() / 2000.0;
 	for (long r = 1; r <= grc->iNr(); ++r) {
 		Color clr;
 		if (grc->fActive(r))
@@ -390,12 +392,18 @@ int GeoRefEditor::draw(volatile bool* fDrawStop)
 			Coord crdRC = grc->crdRC(r);
 			pnt = Coord(crdRC.y-0.5,crdRC.x-0.5);
 		}
-		String s("%li", r);
 		glColor4d(clr.redP(), clr.greenP(), clr.blueP(), 1);
-		glPointSize(5.0);
-		glBegin(GL_POINTS);
-		glVertex3f(pnt.x, -pnt.y, 0);
+		glPushMatrix();
+		glTranslated(pnt.x, -pnt.y, 0);
+		glScaled(delta, delta, 0);
+		glBegin(GL_LINES);
+		glVertex3f(0, -1, 0);
+		glVertex3f(0, 1, 0);
+		glVertex3f(-1, 0, 0);
+		glVertex3f(1, 0, 0);
 		glEnd();
+		glPopMatrix();
+		String s("%li", r);
 		textDrawer->addDataSource(&s);
 		textDrawer->setCoord(Coordinate(pnt.x, -pnt.y, 0));
 		font->setColor(clr);
@@ -938,19 +946,46 @@ void GeoRefEditor::OnTransformation()
 class GreConfigForm: public FormWithDest
 {
 public:
-	GreConfigForm(CWnd* parent, GeoRefEditor* gre)
+	GreConfigForm(CWnd* parent, GeoRefEditor* _gre)
 		: FormWithDest(parent, TR("Customize GeoRefEditor"))
+		, gre(_gre)
 	{
-		new FieldColor(root, TR("&Active Color"), &gre->colActGood);
-		new FieldColor(root, TR("&Medium Error"), &gre->colActive);
-		new FieldColor(root, TR("&Large Error"), &gre->colActBad);
-		new FieldColor(root, TR("&Passive Color"), &gre->colPassive);
+		colActGood = gre->colActGood;
+		colActive = gre->colActive;
+		colActBad = gre->colActBad;
+		colPassive = gre->colPassive;
+		colActGood.alpha() = 255 - colActGood.alpha(); // inverse the alpha, for FieldColor
+		colActive.alpha() = 255 - colActive.alpha();
+		colActBad.alpha() = 255 - colActBad.alpha();
+		colPassive.alpha() = 255 - colPassive.alpha();
+		new FieldColor(root, TR("&Active Color"), &colActGood);
+		new FieldColor(root, TR("&Medium Error"), &colActive);
+		new FieldColor(root, TR("&Large Error"), &colActBad);
+		new FieldColor(root, TR("&Passive Color"), &colPassive);
 		if (0 != gre->efmf)
 			new FieldColor(root, TR("&Fiducial Marks Color"), &gre->efmf->colFidMarks);
 		new FieldInt(root, TR("Symbol &Size"), &gre->smb.iSize, ValueRange(1L,100L),true);
 		SetMenHelpTopic("ilwismen\\georeference_tiepoints_editor_customize.htm");
 		create();
 	}
+int exec() {
+	FormWithDest::exec();
+	gre->colActGood = colActGood;
+	gre->colActive = colActive;
+	gre->colActBad = colActBad;
+	gre->colPassive = colPassive;
+	gre->colActGood.alpha() = 255 - gre->colActGood.alpha(); // inverse the alpha again, for displaying
+	gre->colActive.alpha() = 255 - gre->colActive.alpha();
+	gre->colActBad.alpha() = 255 - gre->colActBad.alpha();
+	gre->colPassive.alpha() = 255 - gre->colPassive.alpha();
+	return 0;
+}
+private:
+	Color colActGood;
+	Color colActive;
+	Color colActBad;
+	Color colPassive;
+	GeoRefEditor* gre;
 };  
 
 void GeoRefEditor::OnConfigure()
