@@ -119,10 +119,24 @@ private:
   Coord crdInverseOfSecondOrderBilinear(const double &rCol, const double &rRow);
   Coord crdInverseOfHigherOrder(const double &rCol, const double &rRow);
   Coord crdInverseOfProjective(const double &rCol, const double &rRow);
+  void Coord2RowColGrid(const Coord& c, double& rRow, double& rCol) const;
+  void RowCol2CoordGrid(const double rRow, const double rCol, Coord& crd) const;
   RealMatrix rmJC2R;// rmJR2C no extra matrix needed (11/3/02)
   void MakeJacMatrix(const Coord &crdIn , RealMatrix &rmJ);
   ///void MakeJacMatrix3(const Coord &crdIn , RealMatrix &rmJ);	
-	double m_rSigma;
+  double m_rSigma;
+  std::vector<std::vector<std::pair<double,double>>> forwardGridMatrix;
+  double forwardGridMinCol;
+  double forwardGridMinRow;
+  double forwardGridStepCol;
+  double forwardGridStepRow;
+  std::vector<std::vector<std::pair<double,double>>> backwardGridMatrix;
+  double backwardGridMinX;
+  double backwardGridMinY;
+  double backwardGridMaxX;
+  double backwardGridMaxY;
+  double backwardGridStepX;
+  double backwardGridStepY;
 };
 
 #endif // ILWGRPLA_H

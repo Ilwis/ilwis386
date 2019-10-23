@@ -83,7 +83,7 @@ public:
 	int _export AddRec(RowCol rc, LatLon ll); 
   int _export AddRec(Coord crdRC, Coord crd); 
   int _export AddRec(Coord crdRC, LatLon ll); 
-  bool fActive(int i)
+  const bool fActive(int i) const
     { return colAct->iValue(i)!=0; }
   void SetActive(int i, bool f)
     { colAct->PutVal(i, (long)f); }     
@@ -92,7 +92,7 @@ public:
                           // instances in many functions using it
   enum Transf { CONFORM, AFFINE,                 // this member is placed in parent in
                 SECONDORDER, FULLSECONDORDER,    // stead of in ctpplanar (where it is exclusively used)
-                THIRDORDER, PROJECTIVE } transf; // to remain accessible for current tiepoint editor
+                THIRDORDER, PROJECTIVE, INTERPOLATE, GRID } transf; // to remain accessible for current tiepoint editor
                                                  // (mainly for compile and link reasons)
   virtual int iMinNr() const  // was abstract, made empty to allow creating georefCTP 
     { return 2; }       // instances in functions in \stc\ui\fldgrf.c using it 		

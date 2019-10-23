@@ -129,6 +129,8 @@
 #include "Engine\SpatialReference\Grctppla.h"
 #include "Engine\SpatialReference\Grsmpl.h"
 #include "Engine\Base\Algorithm\Fpolynom.h"
+#include "Engine\Map\Point\PNT.H"
+#include "Engine\Map\Raster\Map.h"
 #include "Engine\Base\DataObjects\ERR.H"
 #define EPS10 1.e-10
 
@@ -149,6 +151,10 @@ GeoRefCTPplanar::GeoRefCTPplanar(const FileName& fn)
     transf = THIRDORDER;
   else if (fCIStrEqual(s , "Projective"))  
     transf = PROJECTIVE;
+  else if (fCIStrEqual(s , "Interpolate"))
+    transf = INTERPOLATE;
+  else if (fCIStrEqual(s , "Grid"))
+    transf = GRID;
   //rmJR2C = RealMatrix(2);
   rmJC2R = RealMatrix(2);
   Compute();    
@@ -182,6 +188,8 @@ void GeoRefCTPplanar::Store()
     case FULLSECONDORDER: s = "FullSecondOrder"; break;
     case THIRDORDER:      s = "ThirdOrder";      break;
     case PROJECTIVE:      s = "Projective";      break;
+    case INTERPOLATE:     s = "Interpolate";     break;
+    case GRID:            s = "Grid";            break;
   }
   WriteElement("GeoRefCTP", "Transformation", s);
 }
@@ -222,6 +230,12 @@ String GeoRefCTPplanar::sFormula() const
     case PROJECTIVE:
       s &= "Projective";
       break;
+    case INTERPOLATE:
+      s &= "Interpolate";
+      break;
+    case GRID:
+      s &= "Grid";
+      break;
   }
 	s &= String("\r\nNr of Ground Control Points: %i", tblCTP->iRecs());
   s &= String("\r\nNr of Active Ground Control Points: %i",iActive); 
@@ -236,8 +250,11 @@ String GeoRefCTPplanar::sFormula() const
     s &= String("%.3f + \r\n(%.6g * X + %.6g * Y + %.6g) \r\n/ (%.6g * X + %.6g * Y + 1)",
       rAvgRow,
       rCoeffCol[3], rCoeffCol[4], rCoeffCol[5], rCoeffCol[6], rCoeffCol[7]);
-  }
-  else {
+  } else if (INTERPOLATE == transf) {
+    s &= String("interpolated from four tiepoints");
+  } else if (GRID == transf) {
+    s &= String("interpolated from grid tiepoints");
+  } else {
     s &= String("%.3f + %.6g * X + %.6g * Y", rRowOffSet, rCoeffRow[1], rCoeffRow[2]);
     if (transf >= SECONDORDER)
       s &= String(" + %.6g * X * Y", rCoeffRow[3]);
@@ -252,8 +269,11 @@ String GeoRefCTPplanar::sFormula() const
     s &= String("%.3f + \r\n(%.6g * X + %.6g * Y + %.6g) \r\n/ (%.6g * X + %.6g * Y + 1)",
       rAvgCol,
       rCoeffCol[0], rCoeffCol[1], rCoeffCol[2], rCoeffCol[6], rCoeffCol[7]);
-  }
-  else {
+  } else if (INTERPOLATE == transf) {
+    s &= String("interpolated from four tiepoints");
+  } else if (GRID == transf) {
+    s &= String("interpolated from grid tiepoints");
+  } else {
     s &= String("%.3f + %.6g * X + %.6g * Y", rColOffSet, rCoeffCol[1], rCoeffCol[2]);
     if (transf >= SECONDORDER)
       s &= String(" + %.6g * X * Y", rCoeffCol[3]);
@@ -315,7 +335,6 @@ String GeoRefCTPplanar::sFormula() const
 		s &= "\r\nRC * XY matrix = ~";
 		s &= String("\r\n[%.6g   %.6g]", m11, m12);
 		s &= String("\r\n[%.6g   %.6g]", m21, m22);
-		
   }
   if(fSubPixelPrecision)
 		s &= String("\r\nTiepoints have RowCol positions with sub-pixel precision");
@@ -328,10 +347,16 @@ double GeoRefCTPplanar::rPixSize() const
     return rUNDEF;
   if (transf == PROJECTIVE) 
     return sqrt(abs(rCoeffX[0] * rCoeffX[4] - rCoeffX[1] * rCoeffX[3]));
+  else if (transf == GRID)
+	  return ((backwardGridMaxY - backwardGridMinY) / _rc.Row + (backwardGridMaxX - backwardGridMinX) / _rc.Col) / 2.0; // TODO: strictly spoken we should account for "center of corners"
   else
     return sqrt(abs(rCoeffX[1] * rCoeffY[2] - rCoeffX[2] * rCoeffY[1]));
 //  else
 //    return rUNDEF;
+}
+
+double interpolate2D(const double wi, const double wj, const double x00, const double x10, const double x01,const double x11) {
+	return x00 + wi * (x10 - x00) + wj * (x01 - x00) + wi * wj * (x11 + x00 - x01 - x10);
 }
 
 void GeoRefCTPplanar::Coord2RowCol(const Coord& c, double& rRow, double& rCol) const
@@ -340,7 +365,33 @@ void GeoRefCTPplanar::Coord2RowCol(const Coord& c, double& rRow, double& rCol) c
     rRow = rUNDEF;
     rCol = rUNDEF;
     return;
-  }  
+  }
+  if (transf == GRID) {
+	  Coord2RowColGrid(c, rRow, rCol);
+	  return;
+  } else if (transf == INTERPOLATE) {
+	  double ulCol = colCol->rValue(1);
+	  double ulRow = colRow->rValue(1);
+	  double urCol = colCol->rValue(2);
+	  double urRow = colRow->rValue(2);
+	  double brCol = colCol->rValue(3);
+	  double brRow = colRow->rValue(3);
+	  double blCol = colCol->rValue(4);
+	  double blRow = colRow->rValue(4);
+	  double ulX = colX->rValue(1);
+	  double ulY = colY->rValue(1);
+	  double urX = colX->rValue(2);
+	  double urY = colY->rValue(2);
+	  double brX = colX->rValue(3);
+	  double brY = colY->rValue(3);
+	  double blX = colX->rValue(4);
+	  double blY = colY->rValue(4);
+	  double wi = (c.x - ulX) / (urX - ulX);
+	  double wj = (c.y - ulY) / (blY - ulY);
+	  rRow = interpolate2D(wi, wj, ulRow, urRow, blRow, brRow);
+	  rCol = interpolate2D(wi, wj, ulCol, urCol, blCol, brCol);
+	  return;
+  }
   Coord crd = c;
   rRow = rAvgRow;
   rCol = rAvgCol;
@@ -400,7 +451,33 @@ void GeoRefCTPplanar::RowCol2Coord(double rRow, double rCol, Coord& crd) const
   if (rRow == rUNDEF || rCol == rUNDEF) {
     crd = crdUNDEF;
     return;
-  }    
+  }
+  if (transf == GRID) {
+	  RowCol2CoordGrid(rRow, rCol, crd);
+	  return;
+  } else if (transf == INTERPOLATE) {
+	  double ulCol = colCol->rValue(1);
+	  double ulRow = colRow->rValue(1);
+	  double urCol = colCol->rValue(2);
+	  double urRow = colRow->rValue(2);
+	  double brCol = colCol->rValue(3);
+	  double brRow = colRow->rValue(3);
+	  double blCol = colCol->rValue(4);
+	  double blRow = colRow->rValue(4);
+	  double ulX = colX->rValue(1);
+	  double ulY = colY->rValue(1);
+	  double urX = colX->rValue(2);
+	  double urY = colY->rValue(2);
+	  double brX = colX->rValue(3);
+	  double brY = colY->rValue(3);
+	  double blX = colX->rValue(4);
+	  double blY = colY->rValue(4);
+	  double wi = (rCol - ulCol) / (urCol - ulCol);
+	  double wj = (rRow - ulRow) / (blRow - ulRow);
+	  crd.x = interpolate2D(wi, wj, ulX, urX, blX, brX);
+	  crd.y = interpolate2D(wi, wj, ulY, urY, blY, brY);
+	  return;
+  }
   rRow -= rAvgRow;
   rCol -= rAvgCol;
   crd.x = rAvgX;
@@ -507,6 +584,8 @@ int GeoRefCTPplanar::Compute()
   double rSumY = 0;
   double rSumRow = 0;
   double rSumCol = 0;
+  forwardGridMatrix.clear();
+  backwardGridMatrix.clear();
   iNr = 0;
   for (i = 1; i <= iRecs; ++i) {
     if (fActive(i)) {
@@ -600,13 +679,127 @@ int GeoRefCTPplanar::Compute()
       iRes = iFindOblique(iNr, crdRowCol, crdXY, rCoeffX);
       if (iRes == 0)
         iRes = iFindOblique(iNr, crdXY, crdRowCol, rCoeffCol);
-    }
-    else {
+	} else if (transf == GRID) {
+		// (re-)discover minRow, maxRow, minCol, maxCol, iRows, iCols
+		long nrRows;
+		long nrCols;
+		long nrRowsBack;
+		long nrColsBack;
+		double minRow;
+		double maxRow;
+		double minCol;
+		double maxCol;
+		double minX;
+		double maxX;
+		double minY;
+		double maxY;
+		{ // intentional scope block
+			std::set<double> rows;
+			std::set<double> cols;
+			for (int i = 1; i <= iRecs; ++i) {
+				if (fActive(i)) {
+					double row = colRow->rValue(i) - 0.5; // colRow->rValue() is in human-readable row/cols (center of topleft pixel is (1,1)); row, col are in raster-image row/cols (center of topleft pixel is (0.5,0.5), corner of topleft pixel is (0,0))
+					double col = colCol->rValue(i) - 0.5;
+					double X = colX->rValue(i);
+					double Y = colY->rValue(i);
+					rows.insert(row);
+					cols.insert(col);
+					if (i == 1) {
+						minRow = row;
+						maxRow = row;
+						minCol = col;
+						maxCol = col;
+						minX = X;
+						minY = Y;
+						maxX = X;
+						maxY = Y;
+					} else {
+						minRow = min(row, minRow);
+						maxRow = max(row, maxRow);
+						minCol = min(col, minCol);
+						maxCol = max(col, maxCol);
+						minX = min(X, minX);
+						minY = min(Y, minY);
+						maxX = max(X, maxX);
+						maxY = max(Y, maxY);
+					}
+				}
+			}
+			nrRows = rows.size();
+			nrCols = cols.size();
+			nrRowsBack = nrRows;// * 4;
+			nrColsBack = nrCols;// * 4;
+			forwardGridMinCol = minCol;
+			forwardGridMinRow = minRow;
+			forwardGridStepCol = (maxCol - minCol) / (nrCols - 1);
+			forwardGridStepRow = (maxRow - minRow) / (nrRows - 1);
+			backwardGridMinX = minX;
+			backwardGridMinY = minY;
+			backwardGridMaxX = maxX;
+			backwardGridMaxY = maxY;
+			backwardGridStepX = (maxX - minX) / (nrColsBack - 1); // at first instance, use the same number of tiepoints for backward transformation
+			backwardGridStepY = (maxY - minY) / (nrRowsBack - 1);
+		}
+		// create forward transformation matrix
+		forwardGridMatrix.resize(nrRows, std::vector<std::pair<double,double>>(nrCols));
+		// create pointmap from tiepoints for backward  transformation
+		PointMap pmRow (FileName::fnUnique("grCtpGridRow.mpp"), CoordSystem(), CoordBounds(minX, minY, maxX, maxY), ValueRange(-9999999999,9999999999,0));
+		PointMap pmCol (FileName::fnUnique("grCtpGridCol.mpp"), CoordSystem(), CoordBounds(minX, minY, maxX, maxY), ValueRange(-9999999999,9999999999,0));
+		// fill forward transformation matrix and pointmap
+		for (int i = 1; i <= iRecs; ++i) {
+			if (fActive(i)) {
+				double row = colRow->rValue(i) - 0.5; // colRow->rValue() is in human-readable row/cols (center of topleft pixel is (1,1)); row, col are in raster-image row/cols (center of topleft pixel is (0.5,0.5), corner of topleft pixel is (0,0))
+				double col = colCol->rValue(i) - 0.5;
+				double X = colX->rValue(i);
+				double Y = colY->rValue(i);
+				pmRow->iAddVal(Coord(X, Y), row);
+				pmCol->iAddVal(Coord(X, Y), col);
+				// change row, col to tiepoint-matrix index
+				row = (row - forwardGridMinRow) / forwardGridStepRow;
+				col = (col - forwardGridMinCol) / forwardGridStepCol;
+				forwardGridMatrix[row][col] = std::make_pair(X,Y);
+			}
+		}
+		pmRow->Store();
+		pmCol->Store();
+		// compute georef for backward transformation (at first instance the nrRows and nrCols are the same as the forward transformation, assuming this gives a similar pixelsize thus an acceptable transformation result)
+		GeoRef grXYBounds(FileName::fnUnique("grCtpGrid.grf"), String("GeoRefCorners(%li,%li,1,%g,%g,%g,%g)", nrRowsBack, nrColsBack, minX - backwardGridStepX / 2.0, minY - backwardGridStepY / 2.0, maxX + backwardGridStepX / 2.0, maxY + backwardGridStepY / 2.0)); // cb() results by definition in a corners-of-corners GeoRef
+		grXYBounds->Store();
+		backwardGridMatrix.resize(nrRowsBack, std::vector<std::pair<double,double>>(nrColsBack)); // same nrRows and nrCols as GeoRef
+		// interpolate and rasterize pointmap
+		//Map mpRow(FileName::fnUnique("grCtpGridRow.mpr"), String("MapMovingAverage(%S,%S,InvDist(1.0,%g),plane)", pmRow->fnObj.sFileExt(), grXYBounds->fnObj.sFileExt(), max(maxX - minX, maxY - minY) / 40.0));
+		//Map mpCol(FileName::fnUnique("grCtpGridCol.mpr"), String("MapMovingAverage(%S,%S,InvDist(1.0,%g),plane)", pmCol->fnObj.sFileExt(), grXYBounds->fnObj.sFileExt(), max(maxX - minX, maxY - minY) / 40.0));
+		Map mpRow(FileName::fnUnique("grCtpGridRow.mpr"), String("MapMovingAverage(%S,%S,InvDist(0.5,%g),plane)", pmRow->fnObj.sFileExt(), grXYBounds->fnObj.sFileExt(), max(maxX - minX, maxY - minY) / 40.0));
+		Map mpCol(FileName::fnUnique("grCtpGridCol.mpr"), String("MapMovingAverage(%S,%S,InvDist(0.5,%g),plane)", pmCol->fnObj.sFileExt(), grXYBounds->fnObj.sFileExt(), max(maxX - minX, maxY - minY) / 40.0));
+		//Map mpRow(FileName::fnUnique("grCtpGridRow.mpr"), String("MapMovingAverage(%S,%S,InvDist(0.5,%g),plane)", pmRow->fnObj.sFileExt(), grXYBounds->fnObj.sFileExt(), 3.0 * max((maxX - minX) / nrCols, (maxY - minY) / nrRows)));
+		//Map mpCol(FileName::fnUnique("grCtpGridCol.mpr"), String("MapMovingAverage(%S,%S,InvDist(0.5,%g),plane)", pmCol->fnObj.sFileExt(), grXYBounds->fnObj.sFileExt(), 3.0 * max((maxX - minX) / nrCols, (maxY - minY) / nrRows)));
+		//Map mpRow(FileName::fnUnique("grCtpGridRow.mpr"), String("MapNearestPoint(%S,%S,plane)", pmRow->fnObj.sFileExt(), grXYBounds->fnObj.sFileExt()));
+		//Map mpCol(FileName::fnUnique("grCtpGridCol.mpr"), String("MapNearestPoint(%S,%S,plane)", pmCol->fnObj.sFileExt(), grXYBounds->fnObj.sFileExt()));
+		//Map mpRow(FileName::fnUnique("grCtpGridRow.mpr"), String("MapTrendSurface(%S,%S,6)", pmRow->fnObj.sFileExt(), grXYBounds->fnObj.sFileExt()));
+		//Map mpCol(FileName::fnUnique("grCtpGridCol.mpr"), String("MapTrendSurface(%S,%S,6)", pmCol->fnObj.sFileExt(), grXYBounds->fnObj.sFileExt()));
+		mpRow->Calc();
+		mpCol->Calc();
+		// use the raster to fill backward transformation matrix
+		for (long i = 0; i < nrRowsBack; ++i) {
+			RealBuf rows (nrColsBack);
+			RealBuf cols (nrColsBack);
+			mpRow->GetLineVal(nrRowsBack - i - 1, rows); // minY must be on-top, at i==0; maxY must be on bottom, at i==nrRowsBack-1
+			mpCol->GetLineVal(nrRowsBack - i - 1, cols);
+			for (long j = 0; j < nrColsBack; ++j) {
+				backwardGridMatrix[i][j] = std::make_pair(rows[j],cols[j]);
+			}
+		}
+		// delete all intermediate files
+		mpRow->fErase = true;
+		mpCol->fErase = true;
+		grXYBounds->fErase = true;
+		pmRow->fErase = true;
+		pmCol->fErase = true;
+	} else {
       int iTerms = iMinNr();
       iRes = iFindPolynom(iTerms, iNr, crdXY, crdRowCol, rCoeffCol, rCoeffRow);
       if (iRes == 0)
         iRes = iFindPolynom(iTerms, iNr, crdRowCol, crdXY, rCoeffX, rCoeffY);
-
     }
   }  
   delete [] crdXY;
@@ -864,6 +1057,54 @@ Coord GeoRefCTPplanar::crdInverseOfHigherOrder(const double &rCol, const double 
 		return crdUNDEF;
 }
 
+std::pair<double,double> interpolate(const std::vector<std::vector<std::pair<double,double>>> & matrix, double wi, double wj, long i0, long j0) {
+	const long i1 = i0 + 1;
+	const long j1 = j0 + 1;
+	double x = interpolate2D(wi, wj, matrix[j0][i0].first, matrix[j0][i1].first, matrix[j1][i0].first, matrix[j1][i1].first);
+	double y = interpolate2D(wi, wj, matrix[j0][i0].second, matrix[j0][i1].second, matrix[j1][i0].second, matrix[j1][i1].second);
+	return std::make_pair(x,y);
+}
+
+long crop(long val, long min, long max) {
+	return (val < min) ? min : ((val > max) ? max : val);
+}
+
+long floorLong(const double x) {
+	return (long) floor(x);
+}
+
+long floorAndCrop(const double x, const long min, const long max) {
+	const long rx = floorLong(x);
+	return crop(rx, min, max);
+}
+
+std::pair<double,double> getPixelValue(const std::vector<std::vector<std::pair<double,double>>> & matrix, const double offsetX, const double offsetY, const double stepX, const double stepY, double x, double y)
+{
+	const long matrixWidth = matrix[0].size();
+	const long matrixHeight = matrix.size();
+
+	double fi = (x - offsetX) / stepX;
+	double fj = (y - offsetY) / stepY;
+	const long i = floorAndCrop(fi, 0, matrixWidth - 2);
+	const long j = floorAndCrop(fj, 0, matrixHeight - 2);
+	return interpolate(matrix, fi - i, fj - j, i, j);
+}
+
+void GeoRefCTPplanar::Coord2RowColGrid(const Coord& c, double& rRow, double& rCol) const
+{
+	std::pair<double,double> val = getPixelValue(backwardGridMatrix, backwardGridMinX, backwardGridMinY, backwardGridStepX, backwardGridStepY, c.x, c.y);
+	std::pair<double,double> val2 = getPixelValue(forwardGridMatrix, forwardGridMinCol, forwardGridMinRow, forwardGridStepCol, forwardGridStepRow, val.second, val.first);
+	rRow = val.first;
+	rCol = val.second;
+}
+
+void GeoRefCTPplanar::RowCol2CoordGrid(const double rRow, const double rCol, Coord& crd) const
+{
+	std::pair<double,double> val = getPixelValue(forwardGridMatrix, forwardGridMinCol, forwardGridMinRow, forwardGridStepCol, forwardGridStepRow, rCol, rRow);
+	crd.x = val.first;
+	crd.y = val.second;
+}
+
 int GeoRefCTPplanar::iMinNr() const	
 {
   switch (transf) {
@@ -878,7 +1119,11 @@ int GeoRefCTPplanar::iMinNr() const
     case THIRDORDER:
       return 10;
     case PROJECTIVE:
-      return 4;   
+      return 4;
+    case INTERPOLATE:
+      return 4;
+	case GRID:
+      return 4;
     default:
       return 0;  
   };
@@ -902,7 +1147,7 @@ void GeoRefCTPplanar::GetDataFiles(Array<FileName>& afnDat, Array<String>* asSec
 
 bool GeoRefCTPplanar::fLinear() const   // TELLS WHETHER GRID IS RECTILINEAR
 {
-  return (transf == CONFORM) || (transf == AFFINE) || (transf == PROJECTIVE);
+  return (transf == CONFORM) || (transf == AFFINE) || (transf == PROJECTIVE) || (transf == INTERPOLATE) || (transf == GRID && iActive <= 4);
 }
 
 GeoRef GeoRefCTPplanar::grConvertToSimple() const
