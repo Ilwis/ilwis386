@@ -425,7 +425,7 @@ void RasterLayerDrawer::DisplayImagePortion(unsigned int imageOffsetX, unsigned 
 	gluProject(c3.x, c3.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[2], &m_winy[2], &m_winz[2]);
 	gluProject(c4.x, c4.y, 0.0, m_modelMatrix, m_projMatrix, m_viewport, &m_winx[3], &m_winy[3], &m_winz[3]);
 
-	double zoom = getMinZoom(imageSizeX, imageSizeY, m_winx, m_winy); // the minimum zoomout-factor, indicating that it is necessary to plot the patch more accurately
+	double zoom = getMinZoom(min(data->imageWidth - imageOffsetX, imageSizeX), min(data->imageHeight - imageOffsetY, imageSizeY), m_winx, m_winy); // the minimum zoomout-factor, indicating that it is necessary to plot the patch more accurately
 
 	double log2zoom = log(zoom)/log(2.0);
 	log2zoom = floor(log2zoom);
