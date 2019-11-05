@@ -45,6 +45,14 @@ AnnotationLegendDrawerTool::AnnotationLegendDrawerTool(ZoomableView* zv, LayerTr
 				associatedFile = obj->fnObj;
 			}
 		}
+	} else {
+		SetDrawer *sdr = dynamic_cast<SetDrawer *>(drawer);
+		if ( sdr) {
+			IlwisObjectPtr *obj = sdr->getObject();
+			if ( obj) {
+				associatedFile = obj->fnObj;
+			}
+		}
 	}
 }
 

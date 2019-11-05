@@ -92,13 +92,19 @@ AnnotationDrawer::AnnotationDrawer(DrawerParameters *parms, const String& name) 
 }
 
 FileName AnnotationDrawer::associatedFile() const {
-	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(dataDrawer);
-	if ( ldrw) {
-		SpatialDataDrawer *sddrw = dynamic_cast<SpatialDataDrawer *>(ldrw->getParentDrawer());
-		if ( sddrw) {
-			return sddrw->getObject()->fnObj;	
+	if ( dataDrawer->isSet()) {
+		SetDrawer *sdrw = dynamic_cast<SetDrawer *>(dataDrawer);
+		return sdrw->getObject()->fnObj;	
+	} else {
+		LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(dataDrawer);
+		if ( ldrw) {
+			SpatialDataDrawer *sddrw = dynamic_cast<SpatialDataDrawer *>(ldrw->getParentDrawer());
+			if ( sddrw) {
+				return sddrw->getObject()->fnObj;	
+			}
 		}
 	}
+
 	return FileName();
 }
 
@@ -333,9 +339,8 @@ void AnnotationLegendDrawer::setText(const vector<String>& v, int count, const C
 String AnnotationLegendDrawer::store(const FileName& fnView, const String& section) const{
 	AnnotationDrawer::store(fnView, section);
 	if ( dataDrawer) {
-		SpatialDataDrawer *spdr = (SpatialDataDrawer *)(dataDrawer->getParentDrawer());
-		BaseMapPtr *bmp = spdr->getBaseMap();
-		ObjectInfo::WriteElement(section.c_str(),"DrawerSource",fnView, bmp->fnObj);
+		SpatialDataDrawer *spdr = dataDrawer->isSet() ? static_cast<SpatialDataDrawer *>(dataDrawer) : static_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer());
+		ObjectInfo::WriteElement(section.c_str(),"DrawerSource",fnView, spdr->getObject()->fnObj);
 	}
 	ObjectInfo::WriteElement(section.c_str(),"Location",fnView, cbBox);
 	ObjectInfo::WriteElement(section.c_str(),"OutsideBox",fnView, drawOutsideBox);
@@ -357,11 +362,15 @@ void AnnotationLegendDrawer::load(const FileName& fnView, const String& section)
 	if ( fnObj.fValid()) {
 		for(int i = 0; i < rootDrawer->getDrawerCount(); ++i) {
 			SpatialDataDrawer *spdr = dynamic_cast<SpatialDataDrawer *>(rootDrawer->getDrawer(i));
-			if ( spdr && !spdr->isSet()) {
+			if ( spdr) {
 				if ( spdr->getObject()->fnObj == fnObj) {
-					LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(spdr->getDrawer(0));
-					if ( ldr)
-						dataDrawer = ldr;
+					if (spdr->isSet()) { // spdr is a SetDrawer (CollectionDrawer or AnimationDrawer); assign itself to dataDrawer
+						dataDrawer = spdr;
+					} else { // spdr is a pure SpatialDataDrawer; assign its LayerDrawer to dataDrawer
+						LayerDrawer *ldr = dynamic_cast<LayerDrawer *>(spdr->getDrawer(0));
+						if ( ldr)
+							dataDrawer = ldr;
+					}
 				}
 			}
 		}
