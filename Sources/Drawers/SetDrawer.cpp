@@ -19,6 +19,7 @@
 #include "drawers\Boxdrawer.h"
 #include "Drawers\DrawingColor.h" 
 #include "Engine\Drawers\ZValueMaker.h"
+#include "Engine\Domain\dmsort.h"
 
 using namespace ILWIS;
 
@@ -48,7 +49,10 @@ RangeReal SetDrawer::getStretchRangeReal(const ObjectCollection& oc) const{
 RangeReal SetDrawer::getStretchRangeReal(const MapList& mlist) const{
 	RangeReal rrMinMax (0, 255);
 	if (mlist->iSize() > 0) {
-		if (mlist->map(0)->dm()->pdv()) {
+		Domain dm = mlist->map(0)->dm();
+		if (dm.fValid() && (dm->pdbit() || dm->pdbool()))
+			rrMinMax = RangeReal(1,2);
+		else if (dm->pdv()) {
 			for (int i = 0; i < mlist->iSize(); ++i) {
 				Map mp = mlist->map(i);
 				RangeReal rrMinMaxMap = mp->rrMinMax(BaseMapPtr::mmmSAMPLED);
@@ -60,18 +64,13 @@ RangeReal SetDrawer::getStretchRangeReal(const MapList& mlist) const{
 					rrMinMax = rrMinMaxMap;
 			}
 		} else {
-			    ILWIS::LayerDrawer *sdr = (ILWIS::LayerDrawer *)const_cast<SetDrawer *>(this)->getDrawer(0);
-				if ( !sdr)
-					return RangeReal();
-				if (sdr->useAttributeColumn() && sdr->getAtttributeColumn()->dm()->pdv()) {
-				for (int i = 0; i < mlist->iSize(); ++i) {
-					Map mp = mlist->map(i);
-					if (i > 0)
-						rrMinMax += sdr->getAtttributeColumn()->vr()->rrMinMax();
-					else
-						rrMinMax = sdr->getAtttributeColumn()->vr()->rrMinMax();
-				}
-			}
+			if (getAtttributeColumn().fValid()) {
+				if (getAtttributeColumn()->dm()->pdv())
+					rrMinMax = getAtttributeColumn()->vr()->rrMinMax();
+				else if (getAtttributeColumn()->dm()->pdsrt())
+					rrMinMax = RangeReal(1, getAtttributeColumn()->dm()->pdsrt()->iSize());
+			} else if (dm->pdsrt())
+				rrMinMax = RangeReal(1, dm->pdsrt()->iSize());
 		}
 	}
 	return rrMinMax;
