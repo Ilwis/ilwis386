@@ -141,7 +141,7 @@ void AnnotationLegendDrawerTool::makeActive(void *v, HTREEITEM ) {
 				SpatialDataDrawer *spdr = (SpatialDataDrawer *)(drawer->getParentDrawer());
 				dm = ldr->useAttributeColumn() ? ldr->getAtttributeColumn()->dm() : spdr->getBaseMap()->dm();
 			} else if ( sdr) {
-				dm = sdr->useAttributeTable() ? sdr->getAtttributeColumn()->dm() :   sdr->getBaseMap()->dm();
+				dm = sdr->useAttributeTable() ? sdr->getAtttributeColumn()->dm() :  sdr->getBaseMap()->dm();
 			}
 			ILWIS::DrawerParameters dp(drawer->getRootDrawer(), drawer);
 			if (  dm->pdv())
@@ -259,13 +259,21 @@ DisplayOptionsForm(dr,wPar,TR("Appearance of Legend")) , layer(lyr), fview(0),fm
 		SpatialDataDrawer *mapDrawer = dynamic_cast<SpatialDataDrawer *>(layer); // case animation drawer
 		if ( !mapDrawer)
 			mapDrawer = dynamic_cast<SpatialDataDrawer *>(layer->getParentDrawer());
-		dvrs = mapDrawer->getBaseMap()->dvrs();
 		AnnotationValueLegendDrawer * vdr = (AnnotationValueLegendDrawer *)dr;
 		RangeReal vrr = vdr->getRange();
 		rstep = vdr->getStep();
-		if ( rstep == rUNDEF) {
+		bool fImage = dr->getDomain()->pdi() || (( vrr.rLo() == 0 || vrr.rLo() == 1) && vrr.rHi() == 255);
+		if ( fImage) {
+			if ( rstep == rUNDEF) {
+				rstep = 30;
+				vrr = RangeReal(0,255);
+			} else {
+				vrr = RangeReal(vrr.rLo(), vrr.rHi());
+			}
+		} else if ( rstep == rUNDEF) {
 			vrr = roundRange(vrr.rLo(), vrr.rHi(), rstep);
 		}
+
 		rmin = vrr.rLo();
 		rmax = vrr.rHi();
 

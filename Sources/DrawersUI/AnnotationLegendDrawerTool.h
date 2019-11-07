@@ -67,8 +67,6 @@ namespace ILWIS {
 
 		double rmin,rmax;
 		double rstep;
-		RangeReal range;
-		DomainValueRangeStruct dvrs;
 		FieldReal *fstep, *fmax, *fmin;
 	};
 
