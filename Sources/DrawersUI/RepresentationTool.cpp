@@ -91,7 +91,7 @@ bool RepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	bool isValid = rpr.fValid();
 	if (!isValid)
 		return false;
-	bool isAcceptable = rpr->prv() || rpr->prc() || rpr->prg();
+	bool isAcceptable = rpr->prg() || rpr->prc();
 	if ( isAcceptable)
 		parentTool = tool;
 	return isAcceptable;

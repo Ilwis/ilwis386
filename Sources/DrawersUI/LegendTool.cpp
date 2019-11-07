@@ -188,11 +188,10 @@ void LegendTool::update() {
 		dvrs = layerDrawer->getAtttributeColumn()->dvrs();
 	}
 	Representation rpr = layerDrawer->getRepresentation();
-	if ( rpr->prg() || rpr->prv())
+	if ( rpr->prg())
 		insertLegendItemsValue(rpr);
-	else if ( rpr->prc()) {
+	else if ( rpr->prc())
 		insertLegendItemsClass(rpr);
-	}
 }
 
 bool LegendTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
