@@ -949,7 +949,6 @@ vector<String> AnnotationValueLegendDrawer::makeRange(const DomainValueRangeStru
 		if ( rstep == rUNDEF) {
 			step = 30;
 			rmd = RangeReal(0,255);
-			fImage = true;
 		} else {
 			step = rstep;
 			rmd = RangeReal(vrr.rLo(), vrr.rHi());
