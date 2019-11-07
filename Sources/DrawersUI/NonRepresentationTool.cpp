@@ -42,7 +42,7 @@ bool NonRepresentationToolTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if (!sdrw)
 		return false;
 	bool singleColorOptionAvailable = dynamic_cast<FeatureLayerDrawer *>(drawer) != 0;
-	bool multiColorOptionAvailable = !sdrw->getRepresentation().fValid() || (sdrw->getRepresentation().fValid() && !sdrw->getRepresentation()->prv());
+	bool multiColorOptionAvailable = !sdrw->getRepresentation().fValid() || (sdrw->getRepresentation().fValid() && (singleColorOptionAvailable || !sdrw->getRepresentation()->prg()));
 	bool isAcceptable = singleColorOptionAvailable || multiColorOptionAvailable;
 	if ( isAcceptable)
 		parentTool = tool;
@@ -64,7 +64,7 @@ HTREEITEM NonRepresentationToolTool::configure( HTREEITEM parentItem) {
 		colorItem->setState(useSingleColor);
 		HTREEITEM singleColorItem = insertItem("Single Color","SingleColor",colorItem, -1);
 	}
-	if (!sdrw->getRepresentation().fValid() || (sdrw->getRepresentation().fValid() && !sdrw->getRepresentation()->prv())) {
+	if (!sdrw->getRepresentation().fValid() || (sdrw->getRepresentation().fValid() && (dynamic_cast<FeatureLayerDrawer *>(drawer) || !sdrw->getRepresentation()->prg()))) {
 		DisplayOptionRadioButtonItem *item = new DisplayOptionRadioButtonItem("Multiple Colors", tree,htiNode,drawer);	
 		item->setCheckAction(ctool,ctool->getColorCheck(), (DTSetCheckFunc)&ColorTool::setcheckRpr);
 		item->setDoubleCickAction(this,(DTDoubleClickActionFunc)&NonRepresentationToolTool::displayOptionMultiColor);
