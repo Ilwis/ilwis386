@@ -867,7 +867,12 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 		if ( texts->getDrawer(i))
 			texts->getDrawer(i)->setActive(false);
 	}
-	setText(values,0,Coord(endx + cbInner.width() / 3, starty  + cbInner.height() / 100.0,z));
+	setText(values,0,Coord(endx + cbInner.width() / 3, starty + (cbInner.height() / 100.0 - ((TextDrawer *)texts->getDrawer(0))->getHeight() * 0.9)/2.0,z));
+	glColor4f(0,0,0,rAlpha);
+	glBegin(GL_LINE_STRIP);
+	glVertex3d(endx, starty, z);
+	glVertex3d(endx + cbInner.width() / 10.0, starty, z);
+	glEnd();
 	for(int i=0; i < 100; ++i) {
 		Color clr = dc.clrVal(rV);
 		glColor4f(clr.redP(),clr.greenP(), clr.blueP(), rAlpha);
@@ -882,8 +887,8 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 			setText(values, count, Coord(endx + cbInner.width() / 3, starty,z));
 			glColor4f(0,0,0,rAlpha);
 			glBegin(GL_LINE_STRIP);
-			glVertex3d(endx,endy,z);
-			glVertex3d(endx + cbInner.width() / 10.0,endy,z);
+			glVertex3d(endx, endy, z);
+			glVertex3d(endx + cbInner.width() / 10.0, endy, z);
 			glEnd();
 			++count;
 		}
@@ -893,6 +898,11 @@ void AnnotationValueLegendDrawer::drawVertical(CoordBounds& cbInner, const Range
 	TextDrawer *txt = (TextDrawer *)texts->getDrawer( values.size()-1);
 	double h = txt->getHeight() * 0.9;
 	setText(values,values.size()-1,Coord(endx + cbInner.width() / 3, cbInner.height () - h/2.0,z));
+	glColor4f(0,0,0,rAlpha);
+	glBegin(GL_LINE_STRIP);
+	glVertex3d(endx, cbInner.MaxY() ,z);
+	glVertex3d(endx + cbInner.width() / 10.0, cbInner.MaxY(), z);
+	glEnd();
 }
 
 void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const CoordBounds & cbBoxRender, const RangeReal& rr, const double z, const double rAlpha, const vector<String>& values, const DomainValueRangeStruct & dvs) const{
@@ -910,7 +920,12 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Coo
 		if ( texts->getDrawer(i))
 			texts->getDrawer(i)->setActive(false);
 	}
-	setText(values,0,Coord(startx, endy - cbBoxRender.height() / shifty,z));
+	setText(values,0,Coord(startx, endy - cbBoxRender.height() / shifty, z));
+	glColor4f(0,0,0,rAlpha);
+	glBegin(GL_LINE_STRIP);
+	glVertex3d(startx, endy, z);
+	glVertex3d(startx, endy - cbBoxRender.height() / (shifty + 8), z);
+	glEnd();
 	for(int i=0; i < 100; ++i) {
 		Color clr = dc.clrVal(rV);
 		glColor4f(clr.redP(),clr.greenP(),clr.blueP(),rAlpha);
@@ -922,11 +937,11 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Coo
 		glVertex3d(endx,starty,z);
 		glEnd();
 		if ( dvs.rValue(values[count]) <= rV) { 
-			setText(values, count, Coord( startx, endy - cbBoxRender.height() / shifty,z));
+			setText(values, count, Coord(startx, endy - cbBoxRender.height() / shifty, z));
 			glColor4f(0,0,0,rAlpha);
 			glBegin(GL_LINE_STRIP);
-			glVertex3d(endx,endy,z);
-			glVertex3d(endx ,endy - cbBoxRender.height() / (shifty + 8),z);
+			glVertex3d(endx, endy, z);
+			glVertex3d(endx, endy - cbBoxRender.height() / (shifty + 8), z);
 			glEnd();
 			++count;
 		}
@@ -937,7 +952,12 @@ void AnnotationValueLegendDrawer::drawHorizontal(CoordBounds& cbInner, const Coo
 	//double h = txt->getHeight() * 0.9;
 	//String s(values[values.size()-1]);
 	CoordBounds cbTxt = txt->getTextExtent();
-	setText(values,values.size()-1,Coord(cbInner.MaxX() - cbTxt.width() / 2.0, cbInner.MaxY( ) - cbInner.height() - cbBoxRender.height() / shifty,z));
+	setText(values,values.size()-1,Coord(cbInner.MaxX() - cbTxt.width() / 2.0, cbInner.MaxY() - cbInner.height() - cbBoxRender.height() / shifty, z));
+	glColor4f(0,0,0,rAlpha);
+	glBegin(GL_LINE_STRIP);
+	glVertex3d(cbInner.MaxX(), endy, z);
+	glVertex3d(cbInner.MaxX(), endy - cbBoxRender.height() / (shifty + 8), z);
+	glEnd();
 }
 
 vector<String> AnnotationValueLegendDrawer::makeRange(const DomainValueRangeStruct & dvs) const{
