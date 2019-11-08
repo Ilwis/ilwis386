@@ -780,7 +780,7 @@ bool AnnotationValueLegendDrawer::draw(const DrawLoop drawLoop, const CoordBound
 		cb.MaxY() = cbMap.MaxY();
 
 	double frameWidth = vertical ? cbBox.width() * cb.height(): cbBox.width() * cb.width();
-	double frameHeight = vertical ? cbBox.height() * cb.height() : cbBox.height() * cb.width();
+	double frameHeight = cbBox.height() * cb.height();	
 
 	CoordBounds cbBoxRender (Coord(cb.cMin.x + cb.width() * cbBox.cMin.x, cb.cMin.y + cb.height() * cbBox.cMin.y),
 		Coord(cb.cMin.x + cb.width() * cbBox.MinX() + frameWidth, cb.cMin.y + cb.height() * cbBox.MinY() + frameHeight));
