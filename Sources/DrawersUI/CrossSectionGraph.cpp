@@ -262,7 +262,7 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 	CRect rct = CRect(crct.left, crct.top,crct.right, crct.bottom-20 );
 	Color bkColor = GetBkColor(lpDIS->hDC);
-	CBrush bbrushBk(RGB(0, 50, 100));
+	CBrush bbrushBk(RGB(255, 255, 255));
 	SelectObject(lpDIS->hDC, bbrushBk);
 	::Rectangle(lpDIS->hDC, rct.left,rct.top, rct.right, rct.bottom);
 	SelectObject(lpDIS->hDC, oldBrush);

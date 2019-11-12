@@ -83,7 +83,7 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 	rctInner = CRect(crct.left+60, crct.top,crct.right -100, crct.bottom-30 );
 	Color bkColor = GetBkColor(lpDIS->hDC);
-	CBrush bbrushBk(RGB(50, 50, 50));
+	CBrush bbrushBk(RGB(255, 255, 255));
 	SelectObject(lpDIS->hDC, bbrushBk);
 	::Rectangle(lpDIS->hDC, rctInner.left,rctInner.top, rctInner.right, rctInner.bottom);
 	SelectObject(lpDIS->hDC, oldBrush);
