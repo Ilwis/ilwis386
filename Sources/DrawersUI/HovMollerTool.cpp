@@ -390,6 +390,8 @@ int HovMollerGraphFrom::setSource(Event *ev) {
 		FileName fn(name);
 		MapList mpl(fn);
 		graph->setSource(mpl);
+		if (tool->coords.size() > 1)
+			graph->setTrack(tool->coords);
 		if ( mpl->fTblAtt()) {
 			Table tblAtt = mpl->tblAtt();
 			for(int i = 0; i < tblAtt->iCols(); ++i) {

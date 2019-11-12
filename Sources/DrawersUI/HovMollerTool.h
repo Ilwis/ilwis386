@@ -22,6 +22,7 @@ private:
 
 	class HovMollerTool : public DrawerTool {
 		friend class HovMollerGraph;
+		friend class HovMollerGraphFrom;
 	public:
 		HovMollerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
 		bool isToolUseableFor(ILWIS::DrawerTool *tool);

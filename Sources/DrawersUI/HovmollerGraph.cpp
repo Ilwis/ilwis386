@@ -95,7 +95,7 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 	HGDIOBJ fntOld = dc->SelectObject(fnt);
 	int points = track.size();
-	if ( points == 0)
+	if ( points == 0 || values.size() == 0 || !fldGraph->mpl.fValid())
 		return;
 
 	int oldnr = iUNDEF;
@@ -339,10 +339,9 @@ void HovMollerGraphEntry::create()
 
 
 void HovMollerGraphEntry::setSource(const MapList& ml){
-
+	mpl = ml;
 	if ( graph)
 		graph->Invalidate();
-	mpl = ml;
 }
 
 void HovMollerGraphEntry::setTrack(const vector<Coord>& crds){
