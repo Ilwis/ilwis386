@@ -36,15 +36,6 @@ AnnotationScaleBarDrawerTool::AnnotationScaleBarDrawerTool(ZoomableView* zv, Lay
 }
 
 AnnotationScaleBarDrawerTool::~AnnotationScaleBarDrawerTool() {
-	clear();
-}
-
-void AnnotationScaleBarDrawerTool::clear() {
-	if ( drawer) {
-		ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
-		if ( annotations && scaleDrawer)
-			annotations->removeDrawer(scaleDrawer->getId());
-	}
 }
 
 bool AnnotationScaleBarDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tl) { 

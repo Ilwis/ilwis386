@@ -15,7 +15,6 @@ namespace ILWIS {
 		HTREEITEM configure( HTREEITEM parentItem);
 		virtual ~AnnotationNorthArrowTool();
 		String getMenuString() const;
-		void clear();
 	protected:
 		void setPosition();
 		void setAppearance();

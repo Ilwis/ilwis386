@@ -36,15 +36,6 @@ AnnotationNorthArrowTool::AnnotationNorthArrowTool(ZoomableView* zv, LayerTreeVi
 }
 
 AnnotationNorthArrowTool::~AnnotationNorthArrowTool() {
-	clear();
-}
-
-void AnnotationNorthArrowTool::clear() {
-	if ( drawer) {
-		ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
-		if ( annotations && northDrawer)
-			annotations->removeDrawer(northDrawer->getId());
-	}
 }
 
 bool AnnotationNorthArrowTool::isToolUseableFor(ILWIS::DrawerTool *tl) { 

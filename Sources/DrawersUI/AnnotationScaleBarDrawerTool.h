@@ -14,7 +14,6 @@ namespace ILWIS {
 		HTREEITEM configure( HTREEITEM parentItem);
 		virtual ~AnnotationScaleBarDrawerTool();
 		String getMenuString() const;
-		void clear();
 	protected:
 		void setPosition();
 		void makeActive(void *v, HTREEITEM );
