@@ -394,10 +394,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\DrawersUI\PointDirectionTool.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\Sources\DrawersUI\PointScalingTool.cpp"
 				>
 			</File>
@@ -648,6 +644,10 @@
 			</File>
 			<File
 				RelativePath="..\..\Sources\DrawersUI\OperationTool.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\Sources\DrawersUI\PointDirectionTool.h"
 				>
 			</File>
 			<File
