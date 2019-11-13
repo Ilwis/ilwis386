@@ -554,7 +554,13 @@ NewDrawer *ComplexDrawer::loadDrawer(const FileName& fnView, const String& drawe
 	ILWIS::DrawerParameters dp(rootDrawer, this);
 	ILWIS::NewDrawer *drawer = NewDrawer::getDrawer(sType, sSubType, &dp);
 	if (drawer) {
-		drawer->load(fnView,drawerSection);
+		try {
+			drawer->load(fnView,drawerSection);
+		} catch (ErrorObject& err) {
+			delete drawer;
+			drawer = 0;
+			err.Show();
+		}
 	}
 	return drawer;
 }
