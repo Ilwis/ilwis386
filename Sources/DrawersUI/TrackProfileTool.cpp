@@ -107,7 +107,6 @@ TrackProfileTool::TrackProfileTool(ZoomableView* zv, LayerTreeView *view, NewDra
 	DrawerTool("TrackProfileTool",zv, view, drw)
 {
 	active = false;
-	graphForm = false;
 	stay = true;
 	graphForm = 0;
 	working = false;
@@ -126,8 +125,11 @@ TrackProfileTool::~TrackProfileTool() {
 	for(int i=0; i < sources.size(); ++i) 
 		delete sources[i];
 	sources.clear();
-	if ( graphForm && graphForm->m_hWnd != 0 && IsWindow(graphForm->m_hWnd)) {
-		graphForm->wnd()->PostMessage(WM_CLOSE);
+	if (graphForm) {
+		graphForm->tool = 0; // prevent the graphForm from cleaning up the tool, since the tool is hereby "gone".
+		if (graphForm->m_hWnd != 0 && IsWindow(graphForm->m_hWnd)) {
+			graphForm->wnd()->PostMessage(WM_CLOSE);
+		}
 	}
 }
 

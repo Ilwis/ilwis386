@@ -31,8 +31,9 @@ DrawerTool *createRepresentationTool(ZoomableView* zv, LayerTreeView *view, NewD
 	return new RepresentationTool(zv, view, drw);
 }
 
-RepresentationTool::RepresentationTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-	DrawerTool("RepresentationTool", zv,view,drw)
+RepresentationTool::RepresentationTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw)
+: DrawerTool("RepresentationTool", zv,view,drw)
+, chooseForm(0)
 {
 	//LayerDrawer *setdrw = (LayerDrawer *)drawer;
 	//Representation rpr = setdrw->getRepresentation();
@@ -42,8 +43,10 @@ RepresentationTool::RepresentationTool(ZoomableView* zv, LayerTreeView *view, Ne
 }
 
 RepresentationTool::~RepresentationTool() {
+	if (chooseForm && chooseForm->m_hWnd != 0 && IsWindow(chooseForm->m_hWnd)) {
+		chooseForm->wnd()->PostMessage(WM_CLOSE);
+	}
 }
-
 
 HTREEITEM RepresentationTool::configure( HTREEITEM parentItem){
 	LayerDrawer *ldrw = dynamic_cast<LayerDrawer *>(drawer);
@@ -100,7 +103,9 @@ bool RepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 void RepresentationTool::displayOptionSubRpr() {
 	SetDrawer *animDrw = dynamic_cast<SetDrawer *>(drawer);
 	DrawerTool *legendTool = getTool("LegendTool");
-	new RepresentationToolForm(tree, (LayerDrawer *)drawer,animDrw, legendTool);
+	if (chooseForm)
+		delete chooseForm;
+	chooseForm = new RepresentationToolForm(tree, (LayerDrawer *)drawer,animDrw, legendTool);
 }
 
 //---------------------------------------------------

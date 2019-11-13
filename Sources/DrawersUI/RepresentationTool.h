@@ -3,6 +3,7 @@
 ILWIS::DrawerTool *createRepresentationTool(ZoomableView* zv, LayerTreeView *view, ILWIS::NewDrawer *drw);
 
 namespace ILWIS {
+class RepresentationToolForm;
 
 class RepresentationTool : public DrawerTool {
 public:
@@ -11,6 +12,7 @@ public:
 	bool isToolUseableFor(ILWIS::DrawerTool *tool);
 	~RepresentationTool();
 private:
+	RepresentationToolForm * chooseForm;
 	void displayOptionSubRpr();
 	Representation rpr;
 };

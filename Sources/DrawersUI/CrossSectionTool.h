@@ -7,7 +7,6 @@ namespace ILWIS {
 class CrossSectionGraphFrom;
 class ProbeMarkers;
 
-
 	class CrossSectionTool : public DrawerTool {
 	public:
 		CrossSectionTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
@@ -45,6 +44,7 @@ class ProbeMarkers;
 	};
 
 	class CrossSectionGraphFrom : public DisplayOptionsForm2 {
+		friend class CrossSectionTool;
 	public:
 		CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr, vector<IlwisObject>& sources, CrossSectionTool *t);
 		//void apply(); 

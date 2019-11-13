@@ -94,7 +94,6 @@ HovMollerTool::HovMollerTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *d
 	DrawerTool("HovMoellerTool",zv, view, drw)
 {
 	active = false;
-	graphForm = false;
 	stay = true;
 	graphForm = 0;
 	working = false;
@@ -109,8 +108,11 @@ HovMollerTool::~HovMollerTool() {
 		drawer->getRootDrawer()->removeDrawer(line->getId(), true);
 	if (point)
 		drawer->getRootDrawer()->removeDrawer(point->getId(), true);
-	if ( graphForm && graphForm->m_hWnd != 0 && IsWindow(graphForm->m_hWnd)) {
-		graphForm->wnd()->PostMessage(WM_CLOSE);
+	if (graphForm) {
+		graphForm->tool = 0; // prevent the graphForm from cleaning up the tool, since the tool is hereby "gone".
+		if (graphForm->m_hWnd != 0 && IsWindow(graphForm->m_hWnd)) {
+			graphForm->wnd()->PostMessage(WM_CLOSE);
+		}
 	}
 }
 
@@ -218,7 +220,8 @@ String HovMollerTool::getMenuString() const {
 }
 
 void HovMollerTool::displayOptionAddList() {
-	new ChooseHovMollerForm(tree, (LayerDrawer *)drawer, this);
+	if (graphForm)
+		new ChooseHovMollerForm(graphForm, (LayerDrawer *)drawer, this);
 }
 
 void HovMollerTool::setSource(const FileName& fn) {

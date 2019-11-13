@@ -85,9 +85,6 @@ private:
 	private:
 	};
 
-
-
-
 	class ChooseTrackProfileForm : public DisplayOptionsForm2 {
 		public:
 		ChooseTrackProfileForm(CWnd *wPar, LayerDrawer *dr, TrackProfileTool *t);
@@ -99,6 +96,7 @@ private:
 	};
 
 	class TrackProfileGraphFrom : public DisplayOptionsForm2 {
+		friend class TrackProfileTool;
 	public:
 		TrackProfileGraphFrom(CWnd *wPar, LayerDrawer *dr,TrackProfileTool *t);
 		//void apply(); 

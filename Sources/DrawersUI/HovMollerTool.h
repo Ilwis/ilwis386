@@ -83,6 +83,7 @@ private:
 	};
 
 	class HovMollerGraphFrom : public DisplayOptionsForm2 {
+		friend class HovMollerTool;
 	public:
 		HovMollerGraphFrom(CWnd *wPar, LayerDrawer *dr,HovMollerTool *t);
 		//void apply(); 

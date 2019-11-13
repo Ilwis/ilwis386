@@ -75,8 +75,11 @@ CrossSectionTool::~CrossSectionTool() {
 	if ( markers)
 		drawer->getRootDrawer()->removeDrawer(markers->getId(), true);
 	sources.clear();
-	if ( graphForm && graphForm->m_hWnd != 0 && IsWindow(graphForm->m_hWnd)) {
-		graphForm->wnd()->PostMessage(WM_CLOSE);
+	if (graphForm) {
+		graphForm->tool = 0; // prevent the graphForm from cleaning up the tool, since the tool is hereby "gone".
+		if (graphForm->m_hWnd != 0 && IsWindow(graphForm->m_hWnd)) {
+			graphForm->wnd()->PostMessage(WM_CLOSE);
+		}
 	}
 }
 
