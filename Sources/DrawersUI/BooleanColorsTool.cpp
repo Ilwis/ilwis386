@@ -44,7 +44,7 @@ bool BooleanColorsTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 		isAcceptable = ldrw->getAtttributeColumn()->dm()->pdbool() != 0;
 	else {
 		BaseMap *bmp = (BaseMap *)tool->getDrawer()->getDataSource();
-		if (bmp)
+		if (bmp && bmp->fValid())
 			isAcceptable = (*bmp)->dm()->pdbool() != 0;
 	}
 

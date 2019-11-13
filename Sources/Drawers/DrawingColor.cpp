@@ -530,7 +530,7 @@ void DrawingColor::InitClrRandom()
 		ds = drw->getAtttributeColumn()->dm()->pdsrt();
 	else {
 		BaseMap *bmp = (BaseMap *)drw->getDataSource();
-		if (bmp)
+		if (bmp && bmp->fValid())
 			ds = (*bmp)->dm()->pdsrt();
 	}
 

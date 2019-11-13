@@ -49,13 +49,13 @@ bool AnnotationDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if (cdrw->isSet()) {
 		if (cdrw->getDrawerCount() > 0) {
 			BaseMap *bmp = (BaseMap *)(cdrw->getDrawer(0)->getDataSource());
-			if (!bmp || ((*bmp)->dm()->pdc() == 0 && ((*bmp)->dm()->pdv() == 0 || (*bmp)->dm()->pdbool() != 0)))
+			if (!bmp || !bmp->fValid() || ((*bmp)->dm()->pdc() == 0 && ((*bmp)->dm()->pdv() == 0 || (*bmp)->dm()->pdbool() != 0)))
 				return false;
 		} else
 			return false; // empty maplist/objectcollection: no legend needed
 	} else {
 		BaseMap *bmp = (BaseMap *)tool->getDrawer()->getDataSource();
-		if (!bmp || ((*bmp)->dm()->pdc() == 0 && ((*bmp)->dm()->pdv() == 0 || (*bmp)->dm()->pdbool() != 0)))
+		if (!bmp || !bmp->fValid() || ((*bmp)->dm()->pdc() == 0 && ((*bmp)->dm()->pdv() == 0 || (*bmp)->dm()->pdbool() != 0)))
 			return false;
 	}
 	parentTool = tool;
