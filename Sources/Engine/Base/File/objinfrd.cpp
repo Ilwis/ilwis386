@@ -405,9 +405,12 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 			}
 			// It is no internal georef, add extension and try to open as regular georef
 			fnGrf.sExt = ".grf";
-			if (!File::fExist(fnGrf))  // try in current directory
-				fnGrf.Dir(getEngine()->getContext()->sStdDir());
-			if (File::fExist(fnGrf))   // try in system directory
+			if (!File::fExist(fnGrf))  { // try in current directory
+				fnGrf.Dir(getEngine()->getContext()->sStdDir()); // try in system directory
+				if (!File::fExist(fnGrf))
+					fnGrf.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps"); // try in system\basemaps directory
+			}
+			if (File::fExist(fnGrf))
 				gr = GeoRef(fnGrf);
 			else 
 			{
@@ -447,8 +450,11 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 		FileName fnDom(sDom, fnObj);
 		try {
 			if (fCIStrEqual(fnDom.sExt, ".DOM")) {
-				if (!File::fExist(fnDom))
+				if (!File::fExist(fnDom)) {
 					fnDom.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnDom))
+						fnDom.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+				}
 				if (File::fExist(fnDom))
 					dm = Domain(fnDom);
 				else {
@@ -495,8 +501,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 		try {
 			FileName fnRpr(sRpr, fnObj);
 			if (fCIStrEqual(fnRpr.sExt , ".RPR")) {
-				if (!File::fExist(fnRpr))
+				if (!File::fExist(fnRpr)) {
 					fnRpr.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnRpr))
+						fnRpr.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+					if (!File::fExist(fnRpr))
+						fnRpr = FileName(sRpr, fnObj); // restore actual filename read from ODF (for error reporting)
+				}
 				rpr = Representation(fnRpr);
 			}
 			else
@@ -524,8 +535,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 		try {
 			FileName fnCSy(sCS, fnObj);
 			if (fCIStrEqual(fnCSy.sExt, ".csy")) {
-				if (!File::fExist(fnCSy))
+				if (!File::fExist(fnCSy)) {
 					fnCSy.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnCSy))
+						fnCSy.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+					if (!File::fExist(fnCSy))
+						fnCSy = FileName(sCS, fnObj); // restore actual filename read from ODF (for error reporting)
+				}
 				cs = CoordSystem(fnCSy);
 			}
 			else
@@ -554,8 +570,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry, const File
 		try {
 			FileName fnMap(sMap, fnObj);
 			if (fCIStrEqual(fnMap.sExt, ".mpr")) {
-				if (!File::fExist(fnMap))
+				if (!File::fExist(fnMap)) {
 					fnMap.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnMap))
+						fnMap.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+					if (!File::fExist(fnMap))
+						fnMap = FileName(sMap, fnObj); // restore actual filename read from ODF (for error reporting)
+				}
 				mp = Map(fnMap);
 			}
 			else
@@ -581,8 +602,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry, const File
 		try {
 			FileName fnMap(sMap, fnObj);
 			if (fCIStrEqual(fnMap.sExt, ".mps")) {
-				if (!File::fExist(fnMap))
+				if (!File::fExist(fnMap)) {
 					fnMap.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnMap))
+						fnMap.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+					if (!File::fExist(fnMap))
+						fnMap = FileName(sMap, fnObj); // restore actual filename read from ODF (for error reporting)
+				}
 				mp = SegmentMap(fnMap);
 			}
 			else
@@ -608,8 +634,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry, const File
 		try {
 			FileName fnMap(sMap, fnObj);
 			if (fCIStrEqual(fnMap.sExt, ".mpa")) {
-				if (!File::fExist(fnMap))
+				if (!File::fExist(fnMap)) {
 					fnMap.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnMap))
+						fnMap.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+					if (!File::fExist(fnMap))
+						fnMap = FileName(sMap, fnObj); // restore actual filename read from ODF (for error reporting)
+				}
 				mp = PolygonMap(fnMap);
 			}
 			else
@@ -635,8 +666,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry, const File
 		try {
 			FileName fnMap(sMap, fnObj);
 			if (fCIStrEqual(fnMap.sExt, ".mpp")) {
-				if (!File::fExist(fnMap))
+				if (!File::fExist(fnMap)) {
 					fnMap.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnMap))
+						fnMap.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+					if (!File::fExist(fnMap))
+						fnMap = FileName(sMap, fnObj); // restore actual filename read from ODF (for error reporting)
+				}
 				mp = PointMap(fnMap);
 			}
 			else
@@ -662,8 +698,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry, const File
 		try {
 			FileName fnTbl(sTbl, fnObj);
 			if (fCIStrEqual(fnTbl.sExt, ".tbt")) {
-				if (!File::fExist(fnTbl))
+				if (!File::fExist(fnTbl)) {
 					fnTbl.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnTbl))
+						fnTbl.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+					if (!File::fExist(fnTbl))
+						fnTbl = FileName(sTbl, fnObj); // restore actual filename read from ODF (for error reporting)
+				}
 				tbl = Table(fnTbl);
 			}
 			else
@@ -689,8 +730,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry, const File
 		try {
 			FileName fnMpl(sMpl, fnObj);
 			if (fCIStrEqual(fnMpl.sExt, ".mpl")) {
-				if (!File::fExist(fnMpl))
+				if (!File::fExist(fnMpl)) {
 					fnMpl.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnMpl))
+						fnMpl.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+					if (!File::fExist(fnMpl))
+						fnMpl = FileName(sMpl, fnObj); // restore actual filename read from ODF (for error reporting)
+				}
 				mpl = MapList(fnMpl);
 			}
 			else
@@ -715,8 +761,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 		try {
 			FileName fnFlt(sFlt, fnObj);
 			if (fCIStrEqual(fnFlt.sExt, ".fil")) {
-				if (!File::fExist(fnFlt))
+				if (!File::fExist(fnFlt)) {
 					fnFlt.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnFlt))
+						fnFlt.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+					if (!File::fExist(fnFlt))
+						fnFlt = FileName(sFlt, fnObj); // restore actual filename read from ODF (for error reporting)
+				}
 				flt = Filter(fnFlt);
 			}
 			else
@@ -744,8 +795,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 		try {
 			FileName fnClf(sClf, fnObj);
 			if (fCIStrEqual(fnClf.sExt.c_str() , ".clf")) {
-				if (!File::fExist(fnClf))
+				if (!File::fExist(fnClf)) {
 					fnClf.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnClf))
+						fnClf.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+					if (!File::fExist(fnClf))
+						fnClf = FileName(sClf, fnObj); // restore actual filename read from ODF (for error reporting)
+				}
 				clf = Classifier(fnClf);
 			}
 			else
@@ -771,8 +827,13 @@ int ObjectInfo::ReadElement(const char* sSection, const char* sEntry,
 		try {
 			FileName fnSms(sSms, fnObj);
 			if (fCIStrEqual(fnSms.sExt, ".sms")) {
-				if (!File::fExist(fnSms))
+				if (!File::fExist(fnSms)) {
 					fnSms.Dir(getEngine()->getContext()->sStdDir());
+					if (!File::fExist(fnSms))
+						fnSms.Dir(getEngine()->getContext()->sStdDir() + "\\Basemaps");
+					if (!File::fExist(fnSms))
+						fnSms = FileName(sSms, fnObj); // restore actual filename read from ODF (for error reporting)
+				}
 				sms = SampleSet(fnSms);
 			}
 			else
