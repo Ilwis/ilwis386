@@ -276,13 +276,16 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	if ( fldGraph->crdSelect.size() == 0)
 		return;
 
-	int oldnr = iUNDEF;
+	int maxNr = -1;
 	values.clear();
+	fldGraph->currentIndex.clear();
 	for(int m =0; m < fldGraph->sources.size(); ++m) {
+		fldGraph->currentIndex.push_back(iUNDEF);
 		int penStyle = m % 4;
 		values.resize(fldGraph->sources.size());
 		RangeReal rr = fldGraph->getRange(m);
 		int numberOfMaps = getNumberOfMaps(m);
+		maxNr = max(maxNr,numberOfMaps);
 
 		double yscale = rct.Height() / rr.rWidth();
 		double y0 = rr.rWidth() * yscale;
@@ -307,35 +310,34 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 					dc->MoveTo(rx,y);
 				else 
 					dc->LineTo(rx,y);
-				if ( i % 5 == 0) {
-					String s("%d", i + 1);
-					CSize sz = dc->GetTextExtent(s.c_str(), s.size());
-					int xpos;
-					if (i == 0)
-						xpos = 0;
-					else if (i == numberOfMaps - 1)
-						xpos = rx - sz.cx;
-					else
-						xpos = rx - sz.cx / 2;
-					dc->TextOut(xpos, crct.bottom - 16,s.c_str(),s.size());
-				}
 				rx += xscale;
 			}
 		}
-		if ( oldnr != numberOfMaps) {
-			rx = 0;
-			for(int i = 0; i < numberOfMaps; ++i) {
-				if ( i % 5 == 0) {
-					if (rx > rct.Width() - 1)
-						rx = rct.Width() - 1;
-					dc->MoveTo(rx,rct.bottom);
-					dc->LineTo(rx,rct.bottom + 3);
-				}
-				rx += xscale;
-			}
-		}
-		oldnr = numberOfMaps;
 	}
+
+	double rx = 0;
+	double xscale = (maxNr > 1) ? (double)rct.Width() / (maxNr - 1) : rct.Width();
+	int modval = max(1, 1 + maxNr / 15); // max. 15 numbers will be drawn inndividually on the x-axis; a larger number will be drawn every 2, every 3 etc.
+	for(int i = 0; i < maxNr; ++i) {
+		if ( i % modval == 0) {
+			String s("%d", i + 1);
+			CSize sz = dc->GetTextExtent(s.c_str(), s.size());
+			int xpos;
+			if (i == 0)
+				xpos = 0;
+			else if (i == maxNr - 1)
+				xpos = rx - sz.cx;
+			else
+				xpos = rx - sz.cx / 2;
+			dc->TextOut(xpos, crct.bottom - 16,s.c_str(),s.size());
+			if (rx > rct.Width() - 1)
+				rx = rct.Width() - 1;
+			dc->MoveTo(rx,rct.bottom);
+			dc->LineTo(rx,rct.bottom + 3);
+		}
+		rx += xscale;
+	}
+
 	fldGraph->fillList();
 
 	SelectObject(lpDIS->hDC,oldPen);
@@ -355,8 +357,8 @@ void CrossSectionGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 				CRect rct;
 				GetClientRect(rct);
 				double xscale = (double)rct.Width() / numberOfMaps;
-				fldGraph->currentIndex = point.x / xscale;
-				if ( fldGraph->currentIndex >= values[m].size())
+				fldGraph->currentIndex[m] = point.x / xscale;
+				if ( fldGraph->currentIndex[m] >= values[m][0].size())
 					continue;
 			}
 		}
@@ -375,7 +377,6 @@ CrossSectionGraphEntry::CrossSectionGraphEntry(FormEntry* par, vector<IlwisObjec
 FormEntry(par,0,true),
 crossSectionGraph(0),
 listview(0),
-currentIndex(iUNDEF),
 sources(_sources),
 csy(cys)
 {
@@ -414,9 +415,9 @@ void CrossSectionGraphEntry::fillList() {
 			}
 			RangeReal rr = getRange(m);
 			v.push_back(String("%S", rr.s()));
-			if ( currentIndex != iUNDEF && crossSectionGraph->values.size() > 0) {
-				v.push_back(String("%d", currentIndex + 1));
-				v.push_back(String("%g",crossSectionGraph->values[m][i][currentIndex]));
+			if ( crossSectionGraph->values.size() > 0 && currentIndex[m] != iUNDEF) {
+				v.push_back(String("%d", currentIndex[m] + 1));
+				v.push_back(String("%g",crossSectionGraph->values[m][i][currentIndex[m]]));
 			}
 			else{
 				v.push_back("");

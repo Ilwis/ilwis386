@@ -46,7 +46,7 @@ private:
 	vector<Coord> crdSelect;
 	FieldListView *listview;
 	vector<RangeReal> ranges;
-	int currentIndex;
+	vector<int> currentIndex;
 	CrossSectionGraph *crossSectionGraph;
 	CoordSystem csy;
 };
