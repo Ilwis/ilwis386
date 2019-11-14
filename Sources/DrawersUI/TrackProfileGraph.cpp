@@ -87,16 +87,6 @@ ILWIS::LayerDrawer *TrackProfileGraph::getLayerDrawer(ILWIS::NewDrawer *ndr) con
 
 double TrackProfileGraph::getValue(int i, const BaseMap& bmp, const Coord& c1) const{
 	Coord crd = fldGraph->tool->getDrawer()->getRootDrawer()->glToWorld(bmp->cs(), c1);
-	if ( i == 0) {
-		ILWIS::LayerDrawer *ldr = getLayerDrawer(fldGraph->tool->getDrawer());
-		if ( ldr && ldr->useAttributeColumn()) {
-			Column col = ldr->getAtttributeColumn();
-			long iRaw = bmp->iRaw(crd);
-			if ( col->dm()->pdv())
-				return col->rValue(iRaw);
-			return col->iRaw(iRaw);
-		}
-	}
 	if ( bmp->dm()->pdv())
 		return bmp->rValue(crd);
 	return bmp->iRaw(crd);
@@ -161,7 +151,17 @@ Color TrackProfileGraph::getColor(int i, const BaseMap&bmp, long raw) const {
 			return dc.clrRaw(raw, ILWIS::NewDrawer::drmRPR);
 		}
 	}
-	return bmp->dm()->rpr()->clrRaw(raw);
+	if (bmp->dm()->pdid()) {
+		if (i == 0) {
+			ILWIS::LayerDrawer *ldr = getLayerDrawer(fldGraph->tool->getDrawer());
+			if (ldr) {
+				ILWIS::DrawingColor dc(ldr);
+				return dc.clrRaw(raw, ILWIS::NewDrawer::drmMULTIPLE);
+			}
+		}
+		return Representation::clrPrimary(raw);
+	} else
+		return bmp->dm()->rpr()->clrRaw(raw);
 }
 
 void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
@@ -206,6 +206,15 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 			RangeReal rr = getRange(m);
 
+			ILWIS::LayerDrawer *ldr = getLayerDrawer(fldGraph->tool->getDrawer());
+			Column col;
+			bool fUseAttribute = false;
+			if ( ldr && ldr->useAttributeColumn()) {
+				col = ldr->getAtttributeColumn();
+				if ( col->dm()->pdv())
+					fUseAttribute = true;
+			}
+
 			double yscale = rct.Height() / rr.rWidth();
 			double y0 = rr.rWidth() * yscale;
 			CPen bpen(PS_SOLID, 1, Representation::clrPrimary(m < 2 ? m + 1 : m + 2));
@@ -216,7 +225,8 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 					continue;
 				double v = getValue(m, bmp, track[i].crd);
 				values[m].push_back(GraphInfo((i + 1),v,track[i].crd));
-
+				if (fUseAttribute)
+					v = col->rValue(v);
 				int y = v == rUNDEF ? rct.bottom : y0 - ( v - rr.rLo()) * yscale;
 				y = min(y, rct.bottom);
 				if ( i == 0)
@@ -238,7 +248,8 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			for(int i = 0; i <= numberOfPoints; ++i) {
 				BaseMap bmp = fldGraph->tool->sources[m]->getMap(track[i].crd);
 				long raw = i < numberOfPoints ? getValue(m,bmp,track[i].crd) : -1;
-				values[m].push_back(GraphInfo((i + 1),raw,track[i].crd));
+				if (i < numberOfPoints)
+					values[m].push_back(GraphInfo((i + 1),raw,track[i].crd));
 				if ( raw != oldRaw && oldRaw != iUNDEF) {
 					if ( raw != rUNDEF) {
 						Color clr = getColor(m, bmp, oldRaw);
@@ -478,6 +489,15 @@ void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord
 	if ( sourceIndex == iUNDEF) { // switch marker off
 		currentIndex = iUNDEF;
 		tool->setMarker(Coord());
+		for(int i=0; i < tool->sources.size(); ++i) {
+			vector<String> v;
+			v.push_back(tool->sources[i]->getSource()->fnObj.sFile + tool->sources[i]->getSource()->fnObj.sExt);
+			v.push_back("?");
+			v.push_back(graph->getRange(i).s());
+			v.push_back("?");
+			listview->setData(i, v);
+			listview->update();
+		}
 		return;
 	}
 	vector<String> v;
@@ -510,8 +530,8 @@ void TrackProfileGraphEntry::addSource(const IlwisObject& bmp){
 	if (listview && bmp.fValid()) {
 		vector<String> v;
 		v.push_back(bmp->fnObj.sFile + bmp->fnObj.sExt);
-		v.push_back(graph->getRange(tool->sources.size()-1).s());
 		v.push_back("?");
+		v.push_back(graph->getRange(tool->sources.size()-1).s());
 		v.push_back("?");
 
 		listview->AddData(v);

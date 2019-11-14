@@ -155,7 +155,7 @@ bool TrackProfileTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 	if (!dm.fValid() )
 		return false;
 
-	bool usable= dm->pdv() || dm->pdc() || dm->pdi() || dm->pdbool();
+	bool usable= dm->pdv() || dm->pdc() || dm->pdid() || dm->pdi() || dm->pdbool();
 	if (!usable)
 		return false;
 
@@ -213,6 +213,10 @@ void TrackProfileTool::setcheckTool(void *w, HTREEITEM item) {
 			}
 		} else {
 			graphForm->ShowWindow(SW_SHOW);
+			if (line && point) {
+				line->setActive(true); // point will show automatically if xIndex and yIndex haven't changed
+				mpvGetView()->Invalidate();
+			}
 		}
 	}
 	else {
@@ -222,8 +226,8 @@ void TrackProfileTool::setcheckTool(void *w, HTREEITEM item) {
 			if (line && point) {
 				line->setActive(false);
 				point->setActive(false);
-				coords.clear();
-				setCoords();
+				//coords.clear();
+				//setCoords();
 			}
 			mpvGetView()->Invalidate();
 		}
@@ -630,6 +634,7 @@ void TrackProfileGraphFrom::setTrack(const vector<Coord>& crds) {
 		trackCoords.clear();
 		trackCoords = crds;
 		graph->setTrack(crds);
+		graph->setIndex(iUNDEF,0,Coord());
 	}
 }
 
