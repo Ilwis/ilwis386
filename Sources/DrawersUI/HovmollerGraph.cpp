@@ -182,7 +182,8 @@ void HovMollerGraph::setTextDataBlock(CDC *dc){
 
 		sTime += st;
 		Coord & crd (trackCrd[xIndex]);
-		LatLon ll = fldGraph->mpl[0]->cs()->llConv(crd);
+		ILWIS::RootDrawer * rootDrawer = fldGraph->tool->getDrawer()->getRootDrawer();
+		LatLon ll = rootDrawer->getCoordinateSystem()->llConv(crd);
 		sLocY += ll.sLat(10);
 		sLocX += ll.sLon(10);
 		sValue = String("%S%f",sValue, values[yIndex - 1][xIndex]);
@@ -218,7 +219,9 @@ void HovMollerGraph::setTimeText(int index, CDC *dc) {
 
 void HovMollerGraph::setCoordText(int index, const Map& mp, CDC *dc) {
 	double frac = (double) index / track.size();
-	LatLon ll = mp->cs()->llConv(trackCrd[index]);
+
+	ILWIS::RootDrawer * rootDrawer = fldGraph->tool->getDrawer()->getRootDrawer();
+	LatLon ll = rootDrawer->getCoordinateSystem()->llConv(trackCrd[index]);
 	String sll = ll.sValue(20);
 	CSize sz = dc->GetTextExtent(sll.c_str(), sll.size());
 	dc->TextOut(rctInner.left  + rctInner.Width() * frac - sz.cx / 2,rctInner.bottom + 8,sll.c_str());
@@ -271,6 +274,9 @@ void HovMollerGraph::setTrack(const vector<Coord>& crds){
 	double step = rD / 100.0;
 	double totDist = 0;
 	Map mp = fldGraph->mpl[0];
+	CoordSystem csy = mp->cs();
+	ILWIS::RootDrawer * rootDrawer = fldGraph->tool->getDrawer()->getRootDrawer();
+	bool fConvNeeded = rootDrawer->fConvNeeded(csy);
 	RowCol rcOld;
 	for(int i = 0; i < crds.size() - 1; ++i) {
 		Coord c1 = crds[i];
@@ -280,7 +286,11 @@ void HovMollerGraph::setTrack(const vector<Coord>& crds){
 		bool notDone = true;
 		double cnt = 1;
 		double d;
-		RowCol rc = mp->gr()->rcConv(c1);
+		RowCol rc;
+		if (fConvNeeded)
+			rc = mp->gr()->rcConv(rootDrawer->glToWorld(csy, c1));
+		else
+			rc = mp->gr()->rcConv(c1);
 		track.push_back(rc);
 		trackCrd.push_back(c1);
 
@@ -288,7 +298,11 @@ void HovMollerGraph::setTrack(const vector<Coord>& crds){
 			Coord c3(c1.x + cos(angle) * step * cnt, c1.y + sin(angle) * step * cnt);
 			d = rDist(c1, c3);
 			if ( d < distance ) {
-				RowCol rc = mp->gr()->rcConv(c3);
+				RowCol rc;
+				if (fConvNeeded)
+					rc = mp->gr()->rcConv(rootDrawer->glToWorld(csy, c3));
+				else
+					rc = mp->gr()->rcConv(c3);
 				if ( rc != rcOld){
 					track.push_back(rc);
 					trackCrd.push_back(c3);
@@ -299,7 +313,10 @@ void HovMollerGraph::setTrack(const vector<Coord>& crds){
 			}
 			++cnt;
 		}
-		rc = mp->gr()->rcConv(c2);
+		if (fConvNeeded)
+			rc = mp->gr()->rcConv(rootDrawer->glToWorld(csy, c2));
+		else
+			rc = mp->gr()->rcConv(c2);
 		track.push_back(rc);
 		trackCrd.push_back(c2);
 	}

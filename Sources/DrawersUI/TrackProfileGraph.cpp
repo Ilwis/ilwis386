@@ -397,7 +397,8 @@ void TrackProfileGraph::saveAsCsv() {
 					String name = bmp->sName();
 					for(int i=0; i < values[m].size(); ++i) {
 						GraphInfo info= values[m][i];
-						String v = bmp->sValue(info.crd,0);
+						Coord crd = fldGraph->tool->getDrawer()->getRootDrawer()->glToWorld(bmp->cs(), info.crd);
+						String v = bmp->sValue(crd,0);
 						out << name.c_str() << "," << info.index <<"," << info.crd.x << "," << info.crd.y << "," << v.c_str() << "\n";
 					}
 				}
@@ -441,7 +442,8 @@ void TrackProfileGraph::saveAsTbl() {
 				colValue->SetOwnedByTable();
 				for(int i=0; i < values[m].size(); ++i) {
 					GraphInfo info = values[m][i];
-					String v = bmp->sValue(info.crd,0);
+					Coord crd = fldGraph->tool->getDrawer()->getRootDrawer()->glToWorld(bmp->cs(), info.crd);
+					String v = bmp->sValue(crd,0);
 					colIndex->PutVal(i + 1, info.index);
 					colCrd->PutVal(i + 1, info.crd);
 					colValue->PutVal(i + 1, v);
