@@ -155,6 +155,7 @@ void CrossSectionTool::setcheckTool(void *w, HTREEITEM item) {
 				markers->setActive(false);
 				markers->clear();
 				graphForm->reset();
+				mpvGetView()->Invalidate();
 			}
 		}
 	}
