@@ -195,19 +195,23 @@ bool CrossSectionTool::isUnique(const FileName& fn) {
 }
 
 void CrossSectionTool::addSource(const FileName& fn) {
-	IlwisObject obj;
 	if ( IOTYPE(fn) == IlwisObject::iotMAPLIST) {
 		MapList mpl(fn);
-		obj = mpl;
+		if( mpl.fValid()) {
+			if ( isUnique(mpl->fnObj)) {
+				sources.push_back(mpl);
+				if (graphForm)
+					graphForm->addSourceSet(mpl);
+			}
+		}
 	} else if (IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION) {
 		ObjectCollection oc(fn);
-		obj = oc;
-	}
-	if( obj.fValid()) {
-		if ( isUnique(obj->fnObj)) {
-			sources.push_back(obj);
-			if (graphForm)
-				graphForm->addSourceSet(obj);
+		if( oc.fValid()) {
+			if ( isUnique(oc->fnObj)) {
+				sources.push_back(oc);
+				if (graphForm)
+					graphForm->addSourceSet(oc);
+			}
 		}
 	}
 }

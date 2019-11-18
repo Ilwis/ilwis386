@@ -229,12 +229,15 @@ void SetDrawer::addLayerDrawer(int index, const BaseMap& basem,PreparationParame
 
 void SetDrawer::addDataSource(void *data, int options){
 	SpatialDataDrawer::addDataSource(data, options);
-	IlwisObject::iotIlwisObjectType type = IOTYPE(obj->fnObj);
-	if ( type == IlwisObject::iotOBJECTCOLLECTION) {
-		sourceType = sotFEATURE;
-	}
-	if ( type == IlwisObject::iotMAPLIST) {
-		sourceType = sotMAPLIST;
+	IlwisObjectPtr *obj = getObject();
+	if (obj) {
+		IlwisObject::iotIlwisObjectType type = IOTYPE(obj->fnObj);
+		if ( type == IlwisObject::iotOBJECTCOLLECTION) {
+			sourceType = sotFEATURE;
+		}
+		if ( type == IlwisObject::iotMAPLIST) {
+			sourceType = sotMAPLIST;
+		}
 	}
 }
 

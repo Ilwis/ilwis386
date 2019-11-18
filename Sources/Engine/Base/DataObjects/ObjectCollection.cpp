@@ -75,7 +75,8 @@ ObjectCollection::ObjectCollection(const ObjectCollection& mv)
 		Init();
 }
 
-ObjectCollection::ObjectCollection(const FileName& fn,  const String& sExpr) 
+ObjectCollection::ObjectCollection(const FileName& fn,  const String& sExpr)
+: IlwisObject(listObjectCollection)
 {
   FileName fnCol(fn, ".ioc", false);
   MutexFileName mut(fnCol);
@@ -477,12 +478,11 @@ FileName ObjectCollectionPtr::fnObject(int i)
 
 IlwisObject ObjectCollectionPtr::ioObj(int i) const
 {
-	IlwisObject obj = IlwisObject::obj(arObjects[i]);
 	//for the moment postponed; causes a crash in the drawers as apparently one references isnt deleted and so all object remain with invalid entries in the object list.
 	//unknwo cause at the moment.
 	//if ( objects.find(obj->fnObj.sFullPath()) == objects.end())
 	//	objects[obj->fnObj.sFullPath()] = obj;
-	return obj;
+	return IlwisObject::obj(arObjects[i]);
 }
 
 int ObjectCollectionPtr::iNrObjects() const

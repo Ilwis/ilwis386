@@ -44,7 +44,8 @@ void SpatialDataDrawer::prepare(PreparationParameters *pp){
 
 String SpatialDataDrawer::description() const {
 	String sName = getName();
-	String sDescr = obj->sDescr();
+	IlwisObjectPtr *obj = getObject();
+	String sDescr = obj != 0 ? obj->sDescr() : "";
 	if ("" != sDescr) 
 		sName = String("%S - %S", sName, sDescr);
 	return sName;
@@ -102,7 +103,6 @@ void SpatialDataDrawer::addDataSource(void *bmap,int options)
 {
 	IlwisObject *optr = (IlwisObject *)bmap;
 	FileName fn((*optr)->fnObj);
-	obj = IlwisObject::obj(fn);
 	if ( IOTYPEBASEMAP(fn))
 		bm = BaseMap(fn);
 	else if (IOTYPE(fn) == IlwisObject::iotOBJECTCOLLECTION) {
@@ -114,7 +114,8 @@ void SpatialDataDrawer::addDataSource(void *bmap,int options)
 		mpl = MapList(fn);
 	
 
-	if ( obj.fValid()) {
+	IlwisObjectPtr *obj = getObject();
+	if ( obj) {
 		if ( getName() == "Unknown")
 			setName(obj->sName());
 		if ( bm.fValid() && bm->fTblAtt()) {
@@ -227,7 +228,7 @@ String SpatialDataDrawer::store(const FileName& fnView, const String& section) c
 void SpatialDataDrawer::load(const FileName& fnView, const String& section){
 	FileName fn;
 	ObjectInfo::ReadElement(section.c_str(),"Object",fnView, fn);
-	IlwisObject object = IlwisObject::obj(fn);
+	IlwisObject object (IlwisObject::obj(fn));
 	addDataSource(&object); // sets attTable if available
 	if ( attTable.fValid()) {
 		String colname;
@@ -257,7 +258,7 @@ IlwisObjectPtr *SpatialDataDrawer::getSourceSupportObject(IlwisObject::iotIlwisO
 				IlwisObject obj = optr->ioObj(0);
 				if (IOTYPEBASEMAP(obj->fnObj)) {
 					BaseMap bm(obj->fnObj);
-					bm->dm().ptr();
+					return bm->dm().ptr();
 				}
 			}
 		}
@@ -275,7 +276,7 @@ IlwisObjectPtr *SpatialDataDrawer::getSourceSupportObject(IlwisObject::iotIlwisO
 				IlwisObject obj = optr->ioObj(0);
 				if (obj.fValid() && IOTYPEBASEMAP(obj->fnObj)) {
 					BaseMap bm(obj->fnObj);
-					bm->dm()->rpr().ptr();
+					return bm->dm()->rpr().ptr();
 				}
 			}
 		}
@@ -298,7 +299,7 @@ IlwisObjectPtr *SpatialDataDrawer::getSourceSupportObject(IlwisObject::iotIlwisO
 				IlwisObject obj = optr->ioObj(0);
 				if (obj.fValid() && IOTYPE(getBaseMap()->fnObj) == IlwisObject::iotRASMAP) {
 					Map bm(obj->fnObj);
-					bm->gr().ptr();
+					return bm->gr().ptr();
 				}
 			}
 		}

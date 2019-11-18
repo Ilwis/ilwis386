@@ -54,7 +54,8 @@ AnimationDrawer::~AnimationDrawer(){
 
 String AnimationDrawer::description() const {
 	String sName = getName();
-	String sDescr = obj->sDescr();
+	IlwisObjectPtr *obj = getObject();
+	String sDescr = (obj != 0) ? obj->sDescr() : "";
 	if ("" != sDescr) 
 		sName = String("%S Animated", sName);
 	return sName;
@@ -73,7 +74,8 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 
 void AnimationDrawer::addDataSource(void *data, int options){
 	SetDrawer::addDataSource(data, options);
-	if ( obj.fValid()) {
+	IlwisObjectPtr *obj = getObject();
+	if ( obj) {
 		IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(obj->fnObj);
 		if  (type == IlwisObject::iotSEGMENTMAP || 
 			 type == IlwisObject::iotPOINTMAP || 
@@ -185,27 +187,30 @@ bool AnimationDrawer::timerPerTime() {
 		return false;
 
 	bool redraw = false;
-	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(obj->fnObj);
-	if ( type == IlwisObject::iotOBJECTCOLLECTION ) {
-	}
-	if ( type ==IlwisObject::iotMAPLIST) {
-		Column col = mpl->tblAtt()->col(colTime);
-		ILWIS::Duration duration = (col->rrMinMax().rHi() - col->rrMinMax().rLo());
-		double steps = 1000.0 / REAL_TIME_INTERVAL;
-		double offset =  timestep * (double)index / steps;
-		if (offset > duration) {
-			offset = 0;
-			index = 0;
+	IlwisObjectPtr *obj = getObject();
+	if (obj) {
+		IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(obj->fnObj);
+		if ( type == IlwisObject::iotOBJECTCOLLECTION ) {
 		}
-		double lowtime = col->rrMinMax().rLo();
-		double currentTime = lowtime + offset;
-		redraw = activeOnTime(col, currentTime);
-		for(int i=0; i < slaves.size(); ++i) {
-			SlaveProperties& props = slaves.at(i);
-			props.slave->timedEvent(SLAVE_TIMER_ID);
+		if ( type ==IlwisObject::iotMAPLIST) {
+			Column col = mpl->tblAtt()->col(colTime);
+			ILWIS::Duration duration = (col->rrMinMax().rHi() - col->rrMinMax().rLo());
+			double steps = 1000.0 / REAL_TIME_INTERVAL;
+			double offset =  timestep * (double)index / steps;
+			if (offset > duration) {
+				offset = 0;
+				index = 0;
+			}
+			double lowtime = col->rrMinMax().rLo();
+			double currentTime = lowtime + offset;
+			redraw = activeOnTime(col, currentTime);
+			for(int i=0; i < slaves.size(); ++i) {
+				SlaveProperties& props = slaves.at(i);
+				props.slave->timedEvent(SLAVE_TIMER_ID);
 
+			}
+			SendTimeMessage(currentTime, long(this));
 		}
-		SendTimeMessage(currentTime, long(this));
 	}
 	
 	++index;
@@ -254,7 +259,9 @@ void AnimationDrawer::setMapIndex(int ind) {
 		}
 	}
 	currentIndex = activeMaps[mapIndex];
-	getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
+	IlwisObjectPtr *obj = getObject();
+	if (obj)
+		getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
 }
 
 
