@@ -27,11 +27,15 @@ private:
 	Table tbl;
 	String colName;
 	double fscale;
+	bool bold;
+	bool italic;
 	bool useAttrib;
 	Color clr;
 	FieldReal *fontScale;
 	FieldColumn *fcolumns;
 	FieldColor *fcolor;
+	CheckBox *fbold;
+	CheckBox *fitalic;
 	CheckBox *cb;
 };
 

@@ -25,6 +25,8 @@ public:
 	void load(const FileName& fnView, const String& section);
 private:
 	Color clrText;
+	bool fBold;
+	bool fItalic;
 	OpenGLText *font;
 	double fontScale;
 };

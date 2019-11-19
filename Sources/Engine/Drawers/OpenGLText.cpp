@@ -15,6 +15,9 @@ OpenGLText::OpenGLText(ILWIS::RootDrawer *_rd,const String& _name, int height, b
 , rootdrawer(_rd)
 , name(_name)
 , tempFont(0)
+, fBold(false)
+, fItalic(false)
+, color(Color(0,0,0))
 {
 	createFont();
 	calcScale();
@@ -22,20 +25,37 @@ OpenGLText::OpenGLText(ILWIS::RootDrawer *_rd,const String& _name, int height, b
 
 void OpenGLText::createFont() {
 	FileName fn(name);
+	fn.sFile += fBold ? (fItalic ? "bi" : "bd") : (fItalic ? "i" : "");
 	if ( !fn.fExist()){
 		TCHAR szPath[MAX_PATH];
 		::SHGetFolderPath(NULL, CSIDL_WINDOWS, NULL, 0, szPath); 
 		String file("%s\\fonts\\%S",szPath, name);
 		fn = FileName(file);
+		fn.sFile += fBold ? (fItalic ? "bi" : "bd") : (fItalic ? "i" : "");
     }
 	//font = new FTTextureFont(fn.sFullPath().c_str());
 	font = new FTPolygonFont(fn.sFullPath().c_str());
 	font->FaceSize(fontHeight);
-	color = Color(0,0,0);
 }
 
 OpenGLText::~OpenGLText() {
 	delete font;
+}
+
+void OpenGLText::setBoldItalic(bool bold, bool italic) {
+	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
+	fBold = bold;
+	fItalic = italic;
+	delete font;
+	createFont();
+}
+
+bool OpenGLText::getBold() const {
+	return fBold;
+}
+
+bool OpenGLText::getItalic() const {
+	return fItalic;
 }
 
 void OpenGLText::calcScale() {
@@ -108,7 +128,7 @@ Color OpenGLText::getColor() const {
 	return color;
 }
 
-double OpenGLText::getHeight() const{
+double OpenGLText::getHeight() const {
 	if ( fontHeight != iUNDEF) {
 		if ( !fixedSize && tempFont == 0) // tempfont != 0 means we are doing Edit/Copy and we want to keep the value of scale unaltered (otherwise the font that is Edit/Copied is too small / doesn't match the one that is seen on the screen)
 			const_cast<OpenGLText*>(this)->calcScale(); // compute the newest scale, before using it
@@ -117,7 +137,7 @@ double OpenGLText::getHeight() const{
 	return 0;
 }
 
-void OpenGLText::setHeight(int h){
+void OpenGLText::setHeight(int h) {
 	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	fontHeight = h ;
 	font->FaceSize(fontHeight);

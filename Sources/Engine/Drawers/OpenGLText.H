@@ -21,6 +21,9 @@ public:
 	void createFont();
 	void prepare(ILWIS::PreparationParameters *pp);
 	void setHeight(int h);
+	void setBoldItalic(bool bold, bool italic);
+	bool getBold() const;
+	bool getItalic() const;
 
 private:
 	void calcScale();
@@ -33,6 +36,8 @@ private:
 	bool fixedSize;
 	bool faceUser;
 	double scale;
+	bool fBold;
+	bool fItalic;
 	String name;
 	ILWIS::RootDrawer *rootdrawer;
 	mutable CCriticalSection csAccess;

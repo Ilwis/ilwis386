@@ -20,6 +20,8 @@ TextLayerDrawer::TextLayerDrawer(DrawerParameters *parms) :
 	ComplexDrawer(parms,"TextLayerDrawer"),
 	font(0),
 	clrText(colorUNDEF),
+	fBold(false),
+	fItalic(false),
 	fontScale(1)
 {
 }
@@ -37,6 +39,7 @@ void  TextLayerDrawer::prepare(PreparationParameters *pp){
 OpenGLText *TextLayerDrawer::getFont() const {
 	return font;
 }
+
 void TextLayerDrawer::setFont(OpenGLText *f) {
 	if ( font) {
 		delete font;
@@ -45,6 +48,7 @@ void TextLayerDrawer::setFont(OpenGLText *f) {
 		font = f;
 		if (font != 0 && !clrText.fEqual(colorUNDEF)) { // only set the color the first time, and only when the color originates from a MapView::load().
 			font->setColor(clrText);
+			font->setBoldItalic(fBold, fItalic);
 			clrText = colorUNDEF; // reset it so it isn't used after MapView::load()
 		}
 	}
@@ -61,18 +65,28 @@ double TextLayerDrawer::getFontScale() const{
 
 String TextLayerDrawer::store(const FileName& fnView, const String& section) const{
 	ComplexDrawer::store(fnView, section);
-	if (font)
+	if (font) {
+		ObjectInfo::WriteElement(section.c_str(),"TextBold",fnView, font->getBold());
+		ObjectInfo::WriteElement(section.c_str(),"TextItalic",fnView, font->getItalic());
 		ObjectInfo::WriteElement(section.c_str(),"ColorText",fnView, font->getColor());
+	}
 	ObjectInfo::WriteElement(section.c_str(),"Scale",fnView, fontScale);
 	
 	return section;
 
 }
+
 void TextLayerDrawer::load(const FileName& fnView, const String& section){
 	ComplexDrawer::load(fnView, section);
 	Color clr;
 	if (ObjectInfo::ReadElement(section.c_str(),"ColorText",fnView, clr))
 		clrText = clr; // cache this until the setFont() call
+	bool bold;
+	if (ObjectInfo::ReadElement(section.c_str(),"TextBold",fnView, bold))
+		fBold = bold; // cache this until the setFont() call
+	bool italic;
+	if (ObjectInfo::ReadElement(section.c_str(),"TextItalic",fnView, italic))
+		fItalic = italic; // cache this until the setFont() call
 	ObjectInfo::ReadElement(section.c_str(),"Scale",fnView, fontScale);
 }
 //---------------------------------------------------

@@ -122,11 +122,13 @@ String FeatureTextTool::getMenuString() const {
 
 //---------------------------------------------------
 FeatureTextToolForm::FeatureTextToolForm(CWnd *wPar, FeatureLayerDrawer *dr, const Table& _tbl):
-DisplayOptionsForm(dr,wPar,TR("Labels")), tbl(_tbl), fscale(1.0), useAttrib(false), cb(0)
+DisplayOptionsForm(dr,wPar,TR("Labels")), tbl(_tbl), fscale(1.0), bold(false), italic(false), useAttrib(false), cb(0)
 {
 	TextLayerDrawer *texts = static_cast<TextLayerDrawer *>(dr->getDrawer(223, ComplexDrawer::dtPOST));
 	if ( texts) {
 		fscale = texts->getFontScale();
+		bold = texts->getFont()->getBold();
+		italic = texts->getFont()->getItalic();
 		clr = texts->getFont()->getColor();
 		clr.alpha() = 255 - clr.alpha(); // inverse the alpha, for FieldColor
 	}
@@ -135,8 +137,10 @@ DisplayOptionsForm(dr,wPar,TR("Labels")), tbl(_tbl), fscale(1.0), useAttrib(fals
 	useAttrib = labelAttribute != "";
 	colName = labelAttribute;
 
-	fontScale =  new FieldReal(root,TR("Font Scale"),&fscale,RangeReal(0.01,10.));
+	fontScale =  new FieldReal(root,TR("Font Scale"),&fscale,ValueRange(RangeReal(0.1,10.),0.1));
 	fcolor = new FieldColor(root, TR("Font Color"), &clr);
+	fbold = new CheckBox(root, TR("Bold"), &bold);
+	fitalic = new CheckBox(root, TR("Italic"), &italic);
 	if ( tbl.fValid()) {
 		cb = new CheckBox(root,"Attribute Column",&useAttrib);
 		fcolumns = new FieldColumn(cb, "", tbl, &colName, dmCLASS | dmIDENT | dmIMAGE | dmVALUE | dmSTRING); 
@@ -145,9 +149,10 @@ DisplayOptionsForm(dr,wPar,TR("Labels")), tbl(_tbl), fscale(1.0), useAttrib(fals
 	create();
 }
 
-
 void FeatureTextToolForm::apply(){
 	fontScale->StoreData();
+	fbold->StoreData();
+	fitalic->StoreData();
 	if (cb) {
 		cb->StoreData();
 		fcolumns->StoreData();		
@@ -166,6 +171,7 @@ void FeatureTextToolForm::apply(){
 				texts->setFontScale(fscale);
 				clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
 				texts->getFont()->setColor(clr);
+				texts->getFont()->setBoldItalic(bold, italic);
 			}
 			dr->prepare(&pp);
 		}
@@ -180,6 +186,7 @@ void FeatureTextToolForm::apply(){
 			texts->setFontScale(fscale);
 			clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
 			texts->getFont()->setColor(clr);
+			texts->getFont()->setBoldItalic(bold, italic);
 		}
 		dr->prepare(&pp);
 	}
