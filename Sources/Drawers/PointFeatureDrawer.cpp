@@ -196,6 +196,7 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 			//crdLabel.x += cbZoom.width() / 800.0;
 			//crdLabel.y += cbZoom.height() / 800.0;
 			label->setCoord(crdLabel);
+			label->setActive(fRawEnabled && fColorVisible && fContainedInStretchRange);
 		}
 	}
 	p->props.symbolType = properties.symbol;

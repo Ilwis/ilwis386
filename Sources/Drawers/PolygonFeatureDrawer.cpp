@@ -245,6 +245,8 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			setTableSelection(bmpptr->tblAtt()->dm()->fnObj,feature->iValue(), p);
 		}
 		setActive(fColorVisible && fRawEnabled);
+		if ( label)
+			label->setActive(fColorVisible && fRawEnabled);
 	}
 }
 
