@@ -47,10 +47,11 @@ void ProbeMarkers::addMarker(const Coord& crd) {
 
 	PointDrawer *pdrw = new PointDrawer(&dp);
 	PointProperties *prop = (PointProperties *)pdrw->getProperties();
-	prop->symbol = "filled-crosshair";
+	prop->symbol = "crosshair";
 	prop->drawColor = clr;
 	pdrw->setCoord(crd);
 	PreparationParameters pp(NewDrawer::ptRENDER);
+	pp.props.symbolType = prop->symbol;
 	pdrw->prepare(&pp);
 	addDrawer(pdrw);
 }
