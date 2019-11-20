@@ -68,6 +68,7 @@ void TrackMarker::prepare(PreparationParameters *p){
 	properties.symbol = "crosshair";
 	properties.scale = 1.5;
 	setSpecialDrawingOptions(NewDrawer::sdoExtrusion, true);
+	p->props.symbolType = properties.symbol;
 	PointDrawer::prepare(p);
 }
 //------------------------------------------------------

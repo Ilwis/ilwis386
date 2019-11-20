@@ -55,6 +55,7 @@ bool HTrackMarker::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) cons
 void HTrackMarker::prepare(PreparationParameters *p){
 	properties.symbol = "crosshair";
 	setSpecialDrawingOptions(NewDrawer::sdoExtrusion, true);
+	p->props.symbolType = properties.symbol;
 	PointDrawer::prepare(p);
 }
 //------------------------------------------------------
