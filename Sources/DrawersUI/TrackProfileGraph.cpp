@@ -564,7 +564,29 @@ void TrackProfileGraphEntry::openAsTable() {
 	graph->saveAsTbl();
 }
 
+#define ID_REMOVE_ITEMS 5003
 
-
-
-
+void TrackProfileGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
+	vector<int> rows;
+	if (listview)
+		listview->getSelectedRowNumbers(rows);
+	bool fDisabled = (rows.size() == 0) || ((rows.size() == 1) && (rows[0] == 0));
+	String menuText = ((rows.size() == 1) && (rows[0] == 0)) ? TR("Can't remove first item") : TR("Remove");
+	CMenu men;
+	men.CreatePopupMenu();
+	men.AppendMenu(MF_STRING | fDisabled ? MF_GRAYED : 0, ID_REMOVE_ITEMS, menuText.c_str());
+	int cmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD, point.x, point.y, pWnd);
+	switch (cmd) {
+		case ID_REMOVE_ITEMS:
+			{
+				for (vector<int>::reverse_iterator it = rows.rbegin(); it != rows.rend(); ++it) {
+					if (*it == 0) // can't remove the first source, because it is the only one associated with the layer drawer
+						continue;
+					listview->RemoveData(*it);
+					tool->sources.erase(tool->sources.begin() + *it);
+				}
+				update();
+			}
+			break;
+	}
+}

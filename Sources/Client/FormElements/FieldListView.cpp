@@ -50,10 +50,11 @@ BEGIN_MESSAGE_MAP(FLVColumnListCtrl, CListCtrl)
 	ON_NOTIFY_REFLECT(LVN_ENDLABELEDIT,	  OnEndLabelEdit)
 	ON_NOTIFY_REFLECT(NM_CLICK,           OnClick)
 	ON_NOTIFY_REFLECT(NM_DBLCLK,          OnDoubleClick)
+	ON_WM_CONTEXTMENU()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-FLVColumnListCtrl::FLVColumnListCtrl(FormEntry *par) : BaseZapp(par), caller(0), function(0)
+FLVColumnListCtrl::FLVColumnListCtrl(FormEntry *par) : BaseZapp(par), caller(0), function(0), contextcaller(0), contextfunction(0)
 {
 
 }
@@ -155,6 +156,16 @@ void FLVColumnListCtrl::setItemChangedCallback(CCmdTarget *call, NotifyItemChang
 	function = proc;
 }
 
+void FLVColumnListCtrl::setContextMenuCallback(CCmdTarget *call, NotifyContextMenuProc proc){
+	contextcaller = call;
+	contextfunction = proc;
+}
+
+void FLVColumnListCtrl::OnContextMenu(CWnd* pWnd, CPoint point) 
+{
+	if (contextcaller && contextfunction)
+		(contextcaller->*contextfunction)(pWnd, point);
+}
 
 FieldListView::FieldListView(FormEntry* feParent, const vector<FLVColumnInfo> &colInfo, long _extraStyles)
 : FormEntry(feParent, 0, true), extraStyles(_extraStyles), m_clctrl(0)
@@ -187,6 +198,11 @@ void FieldListView::setItemChangedCallback(CCmdTarget *call, NotifyItemChangedPr
 		m_clctrl->setItemChangedCallback(call, proc);
 }
 
+void FieldListView::setContextMenuCallback(CCmdTarget *call, NotifyContextMenuProc proc){
+	if ( m_clctrl)
+		m_clctrl->setContextMenuCallback(call, proc);
+}
+
 void FieldListView::create()
 {
 	zPoint pntFld = zPoint(psn->iPosX,psn->iPosY);
@@ -209,7 +225,6 @@ void FieldListView::create()
 	Fill();
 
     CreateChildren();
-
 }
 
 void FieldListView::show(int v) {
@@ -235,9 +250,14 @@ void FieldListView::setData(int row, const vector<String>& rowdata) {
 }
 
 void FieldListView::AddData(const vector<String>& rowdata) {
-	SetRowCount(iRowCount() + 1);
+	SetRowCount(data.size() + 1);
 	data.push_back(vector<String>());
 	setData(data.size() - 1, rowdata);
+}
+
+void FieldListView::RemoveData(int row){
+	data.erase(data.begin() + row);
+	SetRowCount(data.size());
 }
 
 char *FieldListView::item(int row, int col) {
@@ -291,7 +311,7 @@ void FieldListView::SetColWidth(int iCol, int iWidth)
 
 void FieldListView::Fill()
 {
-	SetRowCount(1);
+	SetRowCount(0);
 }
 
 void FieldListView::CallChangeCallback()

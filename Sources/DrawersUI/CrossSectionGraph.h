@@ -38,6 +38,7 @@ public:
 	void fillList();
 	void update();
 	void reset();
+	void onContextMenu(CWnd* pWnd, CPoint point);
 	CrossSectionGraph *graph() {return crossSectionGraph;}
 
 private:

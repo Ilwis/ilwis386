@@ -529,7 +529,8 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	pb3->Align(pb2, AL_AFTER);
 	grbuttons->SetIndependentPos();
 	create();
-	view->setItemChangedCallback(graph, (NotifyItemChangedProc)&TrackProfileGraphEntry::setOverruleRange); 
+	view->setItemChangedCallback(graph, (NotifyItemChangedProc)&TrackProfileGraphEntry::setOverruleRange);
+	view->setContextMenuCallback(graph, (NotifyContextMenuProc)&TrackProfileGraphEntry::onContextMenu);
 }
 
 

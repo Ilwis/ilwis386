@@ -536,6 +536,25 @@ RangeReal CrossSectionGraphEntry::getRange(long i) {
 	return ranges[i];
 }
 
+#define ID_REMOVE_ITEMS 5103
 
-
-
+void CrossSectionGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
+	vector<int> rows;
+	if (listview)
+		listview->getSelectedRowNumbers(rows);
+	CMenu men;
+	men.CreatePopupMenu();
+	men.AppendMenu(MF_STRING | (rows.size() > 0) ? 0 : MF_GRAYED, ID_REMOVE_ITEMS, TR("Remove").c_str());
+	int cmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD, point.x, point.y, pWnd);
+	switch (cmd) {
+		case ID_REMOVE_ITEMS:
+			{
+				for (vector<int>::reverse_iterator it = rows.rbegin(); it != rows.rend(); ++it) {
+					listview->RemoveData(*it);
+					sources.erase(sources.begin() + *it);
+				}
+				update();
+			}
+			break;
+	}
+}

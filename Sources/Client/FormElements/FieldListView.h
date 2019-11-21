@@ -43,6 +43,7 @@
 class FieldListView;
 
 typedef void (CCmdTarget::*NotifyItemChangedProc)(int col, int row, const String& value);
+typedef void (CCmdTarget::*NotifyContextMenuProc)(CWnd* pWnd, CPoint point);
 
 struct _export FLVColumnInfo {
 	FLVColumnInfo(String name, int w, bool editable=false) : columnName(name), width(w), edit(editable) {}
@@ -55,7 +56,8 @@ class _export FLVColumnListCtrl: public CListCtrl, public BaseZapp {
 public:
 	FLVColumnListCtrl(FormEntry *par);
 	void SetParent(FieldListView *view);
-	void setItemChangedCallback(CCmdTarget *call, NotifyItemChangedProc proc); 
+	void setItemChangedCallback(CCmdTarget *call, NotifyItemChangedProc proc);
+	void setContextMenuCallback(CCmdTarget *call, NotifyContextMenuProc proc);
 
 private:
 	FieldListView *parentFormEntry;
@@ -64,6 +66,7 @@ private:
 	afx_msg void OnEndLabelEdit(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnDoubleClick(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	void OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult);
 
 	String tempString;
@@ -73,6 +76,9 @@ private:
 
 	CCmdTarget *caller;
 	NotifyItemChangedProc function;
+
+	CCmdTarget *contextcaller;
+	NotifyContextMenuProc contextfunction;
 
 	DECLARE_MESSAGE_MAP();
 };
@@ -95,12 +101,14 @@ public:
 	 char *item(int row, int col);
 	 void setItemText(int row, int col, const String& txt);
 	 void AddData(const vector<String>& v);
+	 void RemoveData(int row);
 	 void setData(int row, const vector<String>& v);
 	 void update();
 	 void getSelectedRowNumbers(vector<int>& rowNumbers) const;
 	 void setSelectedRows(vector<int>& rowNumbers);
 	 void clear();
 	 void setItemChangedCallback(CCmdTarget *call, NotifyItemChangedProc proc);
+	 void setContextMenuCallback(CCmdTarget *call, NotifyContextMenuProc proc);
 
 	//void ToggleAsKey(int iItem);
 	//void ToggleSelectedAsKey();

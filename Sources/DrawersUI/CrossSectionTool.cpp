@@ -291,6 +291,7 @@ DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	PushButton *pb2 = new PushButton(fg,TR("Save as Spectrum"), (NotifyProc)&CrossSectionGraphFrom::saveAsSpectrum);
 	pb2->Align(pb1, AL_AFTER);
 	create();
+	flv->setContextMenuCallback(graph, (NotifyContextMenuProc)&CrossSectionGraphEntry::onContextMenu);
 }
 
 int CrossSectionGraphFrom::saveAsTable(Event *ev) {

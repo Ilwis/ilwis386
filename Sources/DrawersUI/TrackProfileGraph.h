@@ -70,7 +70,7 @@ public:
 	void setOverruleRange(int col, int row, const String& value);
 	void update();
 	void openAsTable();
-
+	void onContextMenu(CWnd* pWnd, CPoint point);
 
 private:
 	FieldListView *listview;
