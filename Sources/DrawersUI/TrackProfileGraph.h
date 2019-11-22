@@ -53,6 +53,7 @@ private:
 	vector<vector<GraphInfo> > values;
 	vector<LocInfo> track;
 	CToolTipCtrl* toolTip;
+	bool yStretch;
 };
 
 class _export TrackProfileGraphEntry : public FormEntry {
@@ -63,6 +64,7 @@ public:
 	void setRecordRange(const RangeInt& rng);
 	void create();
 	void setTrack( const vector<Coord>& crds);
+	void setYStretch(bool stretch);
 	void setListView(FieldListView *v);
 	RangeReal getRange(long i);
 	void setIndex(int sourceIndex, double value, const Coord& crd);

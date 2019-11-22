@@ -109,9 +109,12 @@ private:
 		int openAsTable(Event *ev);
 		virtual void shutdown(int iReturn);
 	private:
+		CheckBox* cbStretch;
+		int stretchClicked(Event *);
 		TrackProfileGraphEntry *graph;
 		vector<Coord> trackCoords;
 		TrackProfileTool *tool;
+		bool yStretch;
 
 	};
 

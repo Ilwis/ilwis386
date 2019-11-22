@@ -511,7 +511,7 @@ int ChooseTrackProfileForm::addSource(Event *ev) {
 
 //========================================================================
 TrackProfileGraphFrom::TrackProfileGraphFrom(CWnd *wPar, LayerDrawer *dr,TrackProfileTool *t) :
-DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON), graph(0), tool(t)
+DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON), graph(0), tool(t), yStretch(false)
 {
 	vector<FLVColumnInfo> v;
 	v.push_back(FLVColumnInfo("Source", 220));
@@ -519,6 +519,8 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	v.push_back(FLVColumnInfo("Value range", 130, true));
 	v.push_back(FLVColumnInfo("Value", 100));
 	graph = new TrackProfileGraphEntry(root,t);
+	cbStretch = new CheckBox(root, "Individual Scaling", &yStretch);
+	cbStretch->SetCallBack((NotifyProc)&TrackProfileGraphFrom::stretchClicked);
 	FieldListView *view = new FieldListView(root,v);
 	graph->setListView(view);
 	FieldGroup *grbuttons = new FieldGroup(root);
@@ -587,6 +589,15 @@ int TrackProfileGraphFrom::loadTrack(Event *ev) {
 	tool->setCoords(coords);
 
 	return 1;
+}
+
+int TrackProfileGraphFrom::stretchClicked(Event *)
+{
+	cbStretch->StoreData();
+	if (graph) {
+		graph->setYStretch(yStretch);
+	}
+	return 0;  
 }
 
 class SegmentMapNameForm : public FormWithDest {

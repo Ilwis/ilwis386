@@ -29,7 +29,9 @@ BEGIN_MESSAGE_MAP(TrackProfileGraph, CStatic)
 END_MESSAGE_MAP()
 
 #define CSGRPAH_SIZE 650
-TrackProfileGraph::TrackProfileGraph(TrackProfileGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) : BaseZapp(f) 
+TrackProfileGraph::TrackProfileGraph(TrackProfileGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
+: BaseZapp(f)
+, yStretch(false)
 {
 	fldGraph = f;
 	if (!CStatic::Create(0,dwStyle | SS_OWNERDRAW | SS_NOTIFY, rect, pParentWnd, nID))
@@ -41,6 +43,7 @@ TrackProfileGraph::TrackProfileGraph(TrackProfileGraphEntry *f, DWORD dwStyle, c
 LRESULT TrackProfileGraph::tick(WPARAM wp, LPARAM lp) {
 	return 0;
 }
+
 int TrackProfileGraph::OnToolHitTest(CPoint point, TOOLINFO *pTI) const
 {
 	pTI->hwnd = m_hWnd;
@@ -199,12 +202,18 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	int numberOfPoints = track.size();
 	double xscale = (numberOfPoints > 1) ? (double)(rct.Width() + 1) / (numberOfPoints - 1) : (rct.Width() + 1);
 	vector<double> markers;
+	RangeReal rrTotal;
+	if (!yStretch) {
+		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
+			rrTotal += getRange(m);
+		}
+	}
 	for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 		values.resize(fldGraph->tool->sources.size());
 		double rx = 0;
 		if ( getDomain(m)->pdv() )  {
 
-			RangeReal rr = getRange(m);
+			RangeReal rr = yStretch ? getRange(m) : rrTotal;
 
 			ILWIS::LayerDrawer *ldr = getLayerDrawer(fldGraph->tool->getDrawer());
 			Column col;
@@ -551,6 +560,13 @@ void TrackProfileGraphEntry::addSource(const IlwisObject& bmp){
 void TrackProfileGraphEntry::setTrack(const vector<Coord>& crds){
 	if ( graph) {
 		graph->setTrack(crds);
+		graph->Invalidate();
+	}
+}
+
+void TrackProfileGraphEntry::setYStretch(bool stretch) {
+	if (graph) {
+		graph->yStretch = stretch;
 		graph->Invalidate();
 	}
 }
