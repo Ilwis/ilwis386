@@ -181,7 +181,7 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	Color bkColor = GetBkColor(lpDIS->hDC);
 	CBrush bbrushBk(RGB(255, 255, 255));
 	SelectObject(lpDIS->hDC, bbrushBk);
-	::Rectangle(lpDIS->hDC, rct.left,rct.top, rct.right, rct.bottom);
+	::Rectangle(lpDIS->hDC, rct.left,rct.top, rct.right, rct.bottom); // MSDN: rectangle does not include the "right" and "bottom" coordinate
 	SelectObject(lpDIS->hDC, oldBrush);
 
 	CFont* fnt = new CFont();
@@ -197,7 +197,7 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	double totDist = track[track.size() - 1].dist;
 	int  noOfClassMaps = 0;
 	int numberOfPoints = track.size();
-	double xscale = (numberOfPoints > 1) ? (double)rct.Width() / (numberOfPoints - 1) : rct.Width();
+	double xscale = (numberOfPoints > 1) ? (double)(rct.Width() + 1) / (numberOfPoints - 1) : (rct.Width() + 1);
 	vector<double> markers;
 	for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 		values.resize(fldGraph->tool->sources.size());
@@ -215,9 +215,9 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 					fUseAttribute = true;
 			}
 
-			double yscale = rct.Height() / rr.rWidth();
-			double y0 = rr.rWidth() * yscale;
-			CPen bpen(PS_SOLID, 1, Representation::clrPrimary(m < 2 ? m + 1 : m + 2));
+			double yscale = (rct.Height() - 1) / rr.rWidth();
+			double y0 = rct.bottom - 1;
+			CPen bpen(PS_SOLID, 1, Representation::clrPrimary(m < 1 ? m + 1 : m + 2)); // skip yellow
 			SelectObject(lpDIS->hDC, bpen);
 			for(int i = 0; i < numberOfPoints; ++i) {
 				BaseMap bmp = fldGraph->tool->sources[m]->getMap(track[i].crd);
@@ -227,8 +227,8 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 				values[m].push_back(GraphInfo((i + 1),v,track[i].crd));
 				if (fUseAttribute)
 					v = col->rValue(v);
-				int y = v == rUNDEF ? rct.bottom : y0 - ( v - rr.rLo()) * yscale;
-				y = min(y, rct.bottom);
+				int y = v == rUNDEF ? (rct.bottom - 1) : y0 - ( v - rr.rLo()) * yscale;
+				y = min(y, rct.bottom - 1);
 				if ( i == 0)
 					dc->MoveTo(rx,y);
 				else 
@@ -268,16 +268,15 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	CPen bpen(PS_SOLID, 1, RGB(150,150,150));
 	SelectObject(lpDIS->hDC, bpen);
 	for(int i = 0; i< markers.size(); ++i) {
-		dc->MoveTo(markers[i], rct.bottom);
+		dc->MoveTo(markers[i], rct.bottom - 2);
 		dc->LineTo(markers[i], rct.top);
 	}
 
-	double limit = totDist;
 	double rx = 0;
 	double n = 4.0;
-	double rStep = rRound(limit / n);
-	if ( n * rStep < totDist - rStep)
-		n++;
+	double rStep = rRound(totDist / n);
+	while(n * rStep <= totDist)
+		++n;
 
 	if ( (track.size() > 0) && fldGraph->tool->sources[0]->getMap(track[0].crd)->cs()->pcsProjection()) {
 		for(int i = 0; i < n; ++i) {
@@ -285,8 +284,15 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			dc->LineTo(rx,rct.bottom + 3);
 			String s("%3.1f", rStep * i);
 			CSize sz = dc->GetTextExtent(s.c_str(), s.size());
-			dc->TextOut(rx - sz.cx / 2, crct.bottom - 16,s.c_str(),s.size());
-			rx +=  rct.Width() *  rStep / totDist;
+			int xpos;
+			if (i == 0)
+				xpos = 0;
+			else if (i == n - 1)
+				xpos = min(rx - sz.cx / 2, rct.right - sz.cx);
+			else
+				xpos = rx - sz.cx / 2;
+			dc->TextOut(xpos, crct.bottom - 16,s.c_str(),s.size());
+			rx += (rct.Width() + 1) * rStep / totDist;
 		}
 	}
 

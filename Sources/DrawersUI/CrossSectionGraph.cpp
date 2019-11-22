@@ -246,7 +246,6 @@ BaseMap CrossSectionGraph::getBaseMap(long i, long m) {
 	return BaseMap();
 }
 
-
 void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	bool useDefault = false;
 	CRect crct;
@@ -326,7 +325,7 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			if (i == 0)
 				xpos = 0;
 			else if (i == maxNr - 1)
-				xpos = rx - sz.cx;
+				xpos = min(rx - sz.cx / 2, rct.right - sz.cx);
 			else
 				xpos = rx - sz.cx / 2;
 			dc->TextOut(xpos, crct.bottom - 16,s.c_str(),s.size());
