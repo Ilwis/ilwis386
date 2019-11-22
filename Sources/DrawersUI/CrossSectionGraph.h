@@ -4,6 +4,10 @@ class CrossSectionGraphEntry;
 
 //#define ID_TIME_TICK WM_USER+345
 
+namespace ILWIS {
+class CrossSectionTool;
+}
+
 class CrossSectionGraph : public CStatic, public BaseZapp {
 	friend class CrossSectionGraphEntry;
 public:
@@ -28,13 +32,14 @@ private:
 class _export CrossSectionGraphEntry : public FormEntry {
 	friend class CrossSectionGraph;
 public:
-	CrossSectionGraphEntry(FormEntry* par, vector<IlwisObject>& sources, const CoordSystem& cys);
+	CrossSectionGraphEntry(FormEntry* par, vector<IlwisObject>& sources, const CoordSystem& cys, ILWIS::CrossSectionTool *t);
 //	void addSourceSet(const IlwisObject& obj);
 	void setRecordRange(const RangeInt& rng);
 	void create();
 	void setCoord( const Coord& crd);
 	void setListView(FieldListView *v);
 	RangeReal getRange(long i);
+	ILWIS::CrossSectionTool *tool;
 	void fillList();
 	void update();
 	void reset();

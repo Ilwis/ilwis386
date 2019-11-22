@@ -570,7 +570,8 @@ void TrackProfileGraphEntry::openAsTable() {
 	graph->saveAsTbl();
 }
 
-#define ID_REMOVE_ITEMS 5003
+#define ID_ADD_ITEMS 5003
+#define ID_REMOVE_ITEMS 5004
 
 void TrackProfileGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
 	vector<int> rows;
@@ -580,9 +581,13 @@ void TrackProfileGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
 	String menuText = ((rows.size() == 1) && (rows[0] == 0)) ? TR("Can't remove first item") : TR("Remove");
 	CMenu men;
 	men.CreatePopupMenu();
+	men.AppendMenu(MF_STRING, ID_ADD_ITEMS, TR("Add").c_str());
 	men.AppendMenu(MF_STRING | fDisabled ? MF_GRAYED : 0, ID_REMOVE_ITEMS, menuText.c_str());
 	int cmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD, point.x, point.y, pWnd);
 	switch (cmd) {
+		case ID_ADD_ITEMS:
+			tool->displayOptionAddList();
+			break;
 		case ID_REMOVE_ITEMS:
 			{
 				for (vector<int>::reverse_iterator it = rows.rbegin(); it != rows.rend(); ++it) {

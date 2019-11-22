@@ -283,7 +283,7 @@ DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	v.push_back(FLVColumnInfo("Value range", 130));
 	v.push_back(FLVColumnInfo("Selected index", 90));
 	v.push_back(FLVColumnInfo("Value", 100));
-	graph = new CrossSectionGraphEntry(root, sources,dr->getRootDrawer()->getCoordinateSystem());
+	graph = new CrossSectionGraphEntry(root, sources,dr->getRootDrawer()->getCoordinateSystem(),t);
 	FieldListView * flv = new FieldListView(root,v);
 	graph->setListView(flv);
 	FieldGroup *fg = new FieldGroup(root,true);

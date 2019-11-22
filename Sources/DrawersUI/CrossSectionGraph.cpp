@@ -5,6 +5,11 @@
 #include "Client\FormElements\FieldListView.h"
 #include "Engine\Domain\DmValue.h"
 #include "Engine\Domain\dmcoord.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+#include "Drawers\LayerDrawer.h"
+#include "Client\Mapwindow\MapPaneViewTool.h"
+#include "Client\MapWindow\Drawers\DrawerTool.h"
+#include "DrawersUI\CrossSectionTool.h"
 #include "CrossSectionGraph.h"
 
 
@@ -372,12 +377,13 @@ void CrossSectionGraph::PreSubclassWindow()
 	CStatic::PreSubclassWindow();
 }
 //----------------------------------------------------
-CrossSectionGraphEntry::CrossSectionGraphEntry(FormEntry* par, vector<IlwisObject>& _sources, const CoordSystem& cys) :
+CrossSectionGraphEntry::CrossSectionGraphEntry(FormEntry* par, vector<IlwisObject>& _sources, const CoordSystem& cys, ILWIS::CrossSectionTool *t) :
 FormEntry(par,0,true),
 crossSectionGraph(0),
 listview(0),
 sources(_sources),
-csy(cys)
+csy(cys),
+tool(t)
 {
 	psn->iMinWidth = psn->iWidth = CSGRPAH_SIZE;
 	psn->iMinHeight = psn->iHeight = 250;
@@ -535,7 +541,8 @@ RangeReal CrossSectionGraphEntry::getRange(long i) {
 	return ranges[i];
 }
 
-#define ID_REMOVE_ITEMS 5103
+#define ID_ADD_ITEMS 5103
+#define ID_REMOVE_ITEMS 5104
 
 void CrossSectionGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
 	vector<int> rows;
@@ -543,9 +550,13 @@ void CrossSectionGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
 		listview->getSelectedRowNumbers(rows);
 	CMenu men;
 	men.CreatePopupMenu();
+	men.AppendMenu(MF_STRING, ID_ADD_ITEMS, TR("Add").c_str());
 	men.AppendMenu(MF_STRING | (rows.size() > 0) ? 0 : MF_GRAYED, ID_REMOVE_ITEMS, TR("Remove").c_str());
 	int cmd = men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON|TPM_RETURNCMD, point.x, point.y, pWnd);
 	switch (cmd) {
+		case ID_ADD_ITEMS:
+			tool->displayOptionAddList();
+			break;
 		case ID_REMOVE_ITEMS:
 			{
 				for (vector<int>::reverse_iterator it = rows.rbegin(); it != rows.rend(); ++it) {

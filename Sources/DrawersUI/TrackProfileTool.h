@@ -50,11 +50,11 @@ private:
 		void setCoords(const vector<Coord>& crds);
 		void uncheckTool();
 		vector<TrackDataSource *> sources;
+		void displayOptionAddList();
 	protected:
 		TrackProfileGraphFrom *graphForm;
 		DisplayOptionTreeItem *checkItem;
 
-		void displayOptionAddList( );
 		bool isUnique(const FileName& fn);
 		void setActiveMode(bool yesno);
 		void setCoords();

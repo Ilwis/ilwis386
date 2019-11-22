@@ -20,11 +20,11 @@ class ProbeMarkers;
 		void OnLButtonUp(UINT nFlags, CPoint point);
 		void OnLButtonDown(UINT fl, CPoint point);
 		void uncheckTool();
+		void displayOptionAddList();
 	protected:
 		CrossSectionGraphFrom *graphForm;
 		DisplayOptionTreeItem *checkItem;
 
-		void displayOptionAddList( );
 		bool isUnique(const FileName& fn);
 		ProbeMarkers *markers;
 
