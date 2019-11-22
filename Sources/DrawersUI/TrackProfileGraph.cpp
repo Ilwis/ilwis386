@@ -613,6 +613,7 @@ void TrackProfileGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
 					tool->sources.erase(tool->sources.begin() + *it);
 				}
 				update();
+				tool->updateCbStretch();
 			}
 			break;
 	}

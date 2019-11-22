@@ -389,6 +389,7 @@ void TrackProfileTool::setMarker(const Coord& crd) {
 	point->setCoord(crd);
 	mpvGetView()->Invalidate();
 }
+
 void TrackProfileTool::timedEvent(UINT timerid) {
 	for(int i=0; i < drawer->getRootDrawer()->getDrawerCount(); ++i) {
 		SpatialDataDrawer *cdrw = dynamic_cast<SpatialDataDrawer *>(drawer->getRootDrawer()->getDrawer(i));
@@ -405,6 +406,11 @@ void TrackProfileTool::timedEvent(UINT timerid) {
 		if ( graphForm)
 			graphForm->update();
 	}
+}
+
+void TrackProfileTool::updateCbStretch() {
+	if (graphForm)
+		graphForm->updateCbStretch();
 }
 
 void TrackProfileTool::setActiveMode(bool yesno) {
@@ -533,8 +539,8 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	create();
 	view->setItemChangedCallback(graph, (NotifyItemChangedProc)&TrackProfileGraphEntry::setOverruleRange);
 	view->setContextMenuCallback(graph, (NotifyContextMenuProc)&TrackProfileGraphEntry::onContextMenu);
+	cbStretch->disable();
 }
-
 
 int TrackProfileGraphFrom::openAsTable(Event *ev){
 	if ( graph) {
@@ -600,6 +606,13 @@ int TrackProfileGraphFrom::stretchClicked(Event *)
 	return 0;  
 }
 
+void TrackProfileGraphFrom::updateCbStretch() {
+	if (tool->sources.size() > 1)
+		cbStretch->enable();
+	else
+		cbStretch->disable();
+}
+
 class SegmentMapNameForm : public FormWithDest {
 public:
 	SegmentMapNameForm(CWnd *par,String *name) : FormWithDest(par,TR("Save as Segmentmap"),fbsSHOWALWAYS | fbsMODAL) {
@@ -654,6 +667,7 @@ void TrackProfileGraphFrom::setTrack(const vector<Coord>& crds) {
 void TrackProfileGraphFrom::addSource(const IlwisObject& bmp) {
 	if ( graph)
 		graph->addSource(bmp);
+	updateCbStretch();
 }
 
 void TrackProfileGraphFrom::reset() {

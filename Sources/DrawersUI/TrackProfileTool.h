@@ -51,6 +51,7 @@ private:
 		void uncheckTool();
 		vector<TrackDataSource *> sources;
 		void displayOptionAddList();
+		void updateCbStretch();
 	protected:
 		TrackProfileGraphFrom *graphForm;
 		DisplayOptionTreeItem *checkItem;
@@ -104,6 +105,7 @@ private:
 		void reset();
 		void addSource(const IlwisObject& bmp) ;
 		void update();
+		void updateCbStretch();
 		int saveTrack(Event *ev);
 		int loadTrack(Event *ev);
 		int openAsTable(Event *ev);
