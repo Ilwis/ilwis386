@@ -21,14 +21,13 @@ class ProbeMarkers;
 		void OnLButtonDown(UINT fl, CPoint point);
 		void uncheckTool();
 		void displayOptionAddList();
+		void updateCbStretch();
+		vector<IlwisObject> sources;
 	protected:
 		CrossSectionGraphFrom *graphForm;
 		DisplayOptionTreeItem *checkItem;
-
 		bool isUnique(const FileName& fn);
 		ProbeMarkers *markers;
-
-		vector<IlwisObject> sources;
 		bool working;
 	};
 
@@ -51,12 +50,16 @@ class ProbeMarkers;
 		void setSelectCoord(const Coord& crd);
 		void addSourceSet(const IlwisObject& obj);
 		void reset();
+		void updateCbStretch();
 		virtual void shutdown(int iReturn);
 		int saveAsTable(Event *ev);
 		int saveAsSpectrum(Event *ev);
 	private:
+		CheckBox* cbStretch;
+		int stretchClicked(Event *);
 		CrossSectionGraphEntry *graph;
 		CrossSectionTool *tool;
+		bool yStretch;
 	};
 
 	class ProbeMarkers : public ComplexDrawer {

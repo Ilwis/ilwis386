@@ -27,6 +27,7 @@ private:
 	CrossSectionGraphEntry *fldGraph;
 	vector<vector<vector<double> > >values;
 	CToolTipCtrl* toolTip;
+	bool yStretch;
 };
 
 class _export CrossSectionGraphEntry : public FormEntry {
@@ -37,6 +38,7 @@ public:
 	void setRecordRange(const RangeInt& rng);
 	void create();
 	void setCoord( const Coord& crd);
+	void setYStretch(bool stretch);
 	void setListView(FieldListView *v);
 	RangeReal getRange(long i);
 	ILWIS::CrossSectionTool *tool;

@@ -231,6 +231,7 @@ void CrossSectionTool::OnLButtonDown(UINT nFlags, CPoint pnt) {
 	}
 	mpvGetView()->Invalidate();
 }
+
 void CrossSectionTool::OnLButtonUp(UINT nFlags, CPoint point) {
 	if ( mpvGetView()->iActiveTool == ID_ZOOMIN) // during zooming, no message handling
 		return;
@@ -241,6 +242,11 @@ void CrossSectionTool::OnLButtonUp(UINT nFlags, CPoint point) {
 			graphForm->setSelectCoord(c1);
 		}
 	}
+}
+
+void CrossSectionTool::updateCbStretch() {
+	if (graphForm)
+		graphForm->updateCbStretch();
 }
 
 //-------------------------------------------------------------------
@@ -275,6 +281,7 @@ int ChooseCrossSectionForm::exec() {
 CrossSectionGraphFrom::CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr, vector<IlwisObject>& sources, CrossSectionTool *t) :
 DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON)
 , tool(t)
+, yStretch(false)
 {
 	vector<FLVColumnInfo> v;
 	v.push_back(FLVColumnInfo("Source", 200));
@@ -284,6 +291,8 @@ DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	v.push_back(FLVColumnInfo("Selected index", 90));
 	v.push_back(FLVColumnInfo("Value", 100));
 	graph = new CrossSectionGraphEntry(root, sources,dr->getRootDrawer()->getCoordinateSystem(),t);
+	cbStretch = new CheckBox(root, "Individual Scaling", &yStretch);
+	cbStretch->SetCallBack((NotifyProc)&CrossSectionGraphFrom::stretchClicked);
 	FieldListView * flv = new FieldListView(root,v);
 	graph->setListView(flv);
 	FieldGroup *fg = new FieldGroup(root,true);
@@ -292,6 +301,7 @@ DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	pb2->Align(pb1, AL_AFTER);
 	create();
 	flv->setContextMenuCallback(graph, (NotifyContextMenuProc)&CrossSectionGraphEntry::onContextMenu);
+	cbStretch->disable();
 }
 
 int CrossSectionGraphFrom::saveAsTable(Event *ev) {
@@ -306,6 +316,7 @@ int CrossSectionGraphFrom::saveAsSpectrum(Event *ev) {
 
 void CrossSectionGraphFrom::addSourceSet(const IlwisObject& obj) {
 	graph->update();
+	updateCbStretch();
 }
 
 void CrossSectionGraphFrom::setSelectCoord(const Coord& crd) {
@@ -320,5 +331,21 @@ void CrossSectionGraphFrom::shutdown(int iReturn) {
 	if (tool)
 		tool->uncheckTool();
 	DisplayOptionsForm2::shutdown(iReturn);
+}
+
+int CrossSectionGraphFrom::stretchClicked(Event *)
+{
+	cbStretch->StoreData();
+	if (graph) {
+		graph->setYStretch(yStretch);
+	}
+	return 0;  
+}
+
+void CrossSectionGraphFrom::updateCbStretch() {
+	if (tool->sources.size() > 1)
+		cbStretch->enable();
+	else
+		cbStretch->disable();
 }
 

@@ -19,7 +19,9 @@ BEGIN_MESSAGE_MAP(CrossSectionGraph, CStatic)
 END_MESSAGE_MAP()
 
 #define CSGRPAH_SIZE 650
-CrossSectionGraph::CrossSectionGraph(CrossSectionGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) : BaseZapp(f) 
+CrossSectionGraph::CrossSectionGraph(CrossSectionGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
+: BaseZapp(f)
+, yStretch(false)
 {
 	fldGraph = f;
 	if (!CStatic::Create(0,dwStyle | SS_OWNERDRAW | SS_NOTIFY, rect, pParentWnd, nID))
@@ -283,11 +285,17 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	int maxNr = -1;
 	values.clear();
 	fldGraph->currentIndex.clear();
+	RangeReal rrTotal;
+	if (!yStretch) {
+		for(int m =0; m < fldGraph->sources.size(); ++m) {
+			rrTotal += fldGraph->getRange(m);
+		}
+	}
 	for(int m =0; m < fldGraph->sources.size(); ++m) {
 		fldGraph->currentIndex.push_back(iUNDEF);
 		int penStyle = m % 4;
 		values.resize(fldGraph->sources.size());
-		RangeReal rr = fldGraph->getRange(m);
+		RangeReal rr = yStretch ? fldGraph->getRange(m) : rrTotal;
 		int numberOfMaps = getNumberOfMaps(m);
 		maxNr = max(maxNr,numberOfMaps);
 
@@ -507,6 +515,13 @@ void CrossSectionGraphEntry::setCoord(const Coord& crd){
 
 }
 
+void CrossSectionGraphEntry::setYStretch(bool stretch) {
+	if (crossSectionGraph) {
+		crossSectionGraph->yStretch = stretch;
+		crossSectionGraph->Invalidate();
+	}
+}
+
 void CrossSectionGraphEntry::setListView(FieldListView *v) {
 	listview = v;
 	v->psn->iMinWidth = v->psn->iWidth = CSGRPAH_SIZE;
@@ -559,11 +574,16 @@ void CrossSectionGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
 			break;
 		case ID_REMOVE_ITEMS:
 			{
+				int count = max(1, crdSelect.size());
 				for (vector<int>::reverse_iterator it = rows.rbegin(); it != rows.rend(); ++it) {
-					listview->RemoveData(*it);
-					sources.erase(sources.begin() + *it);
+					int sourceNr = *it / count;
+					for (int j = sourceNr * count - 1; j >= sourceNr * count; --j)
+						listview->RemoveData(j);
+					sources.erase(sources.begin() + sourceNr);
+					ranges.erase(ranges.begin() + sourceNr);
 				}
 				update();
+				tool->updateCbStretch();
 			}
 			break;
 	}
