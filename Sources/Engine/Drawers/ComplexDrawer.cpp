@@ -95,7 +95,7 @@ void ComplexDrawer::addPostDrawer(int order, NewDrawer *drw) {
 		return;
 	String name("%3d", order);
 	map<String, NewDrawer *>::iterator here = postDrawers.find(name);
-	if (  here != postDrawers.end()) {
+	if (  here != postDrawers.end() && here->second != drw) {
 		drawersById.erase(here->second->getId());
 		delete (*here).second;
 	}
@@ -108,7 +108,7 @@ void ComplexDrawer::addPreDrawer(int order, NewDrawer *drw) {
 		return;
 	String name("%3d", order);
 	map<String, NewDrawer *>::iterator here = preDrawers.find(name);
-	if (  here != preDrawers.end()) {
+	if (  here != preDrawers.end() && here->second != drw) {
 		drawersById.erase(here->second->getId());
 		delete (*here).second;
 	}
