@@ -342,15 +342,17 @@ void TrackProfileGraph::DrawMarker(int xposOld, int xpos, CRect & rect) {
 
 void TrackProfileGraph::OnLButtonDown(UINT nFlags, CPoint point) {
 	fDown = true;
+	SetCapture();
 	CWnd *wnd =  GetParent();
 	if ( wnd && values.size() > 0) {
-		int numberOfPoints = track.size();
+		int numberOfPoints = track.size() - 1;
 		CRect rct;
 		GetClientRect(rct);
+		point.x = min(rct.Width() - 1, max(0, point.x));
 		DrawMarker(markerXposOld, point.x, rct);
 		markerXposOld = point.x;
 		double fract = (double)point.x / rct.Width();
-		fldGraph->currentIndex = numberOfPoints * fract;
+		fldGraph->currentIndex = min(numberOfPoints, max(0, round(numberOfPoints * fract)));
 		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 			if ( fldGraph->currentIndex >= values[m].size())
 				continue;
@@ -365,13 +367,14 @@ void TrackProfileGraph::OnMouseMove(UINT nFlags, CPoint point) {
 	if (fDown) {
 		CWnd *wnd =  GetParent();
 		if ( wnd && values.size() > 0) {
-			int numberOfPoints = track.size();
+			int numberOfPoints = track.size() - 1;
 			CRect rct;
 			GetClientRect(rct);
+			point.x = min(rct.Width() - 1, max(0, point.x));
 			DrawMarker(markerXposOld, point.x, rct);
 			markerXposOld = point.x;
 			double fract = (double)point.x / rct.Width();
-			fldGraph->currentIndex = numberOfPoints * fract;
+			fldGraph->currentIndex = min(numberOfPoints, max(0, round(numberOfPoints * fract)));
 			for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 				if ( fldGraph->currentIndex >= values[m].size())
 					continue;
@@ -387,13 +390,14 @@ void TrackProfileGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 	fDown = false;
 	CWnd *wnd =  GetParent();
 	if ( wnd && values.size() > 0) {
-		int numberOfPoints = track.size();
+		int numberOfPoints = track.size() - 1;
 		CRect rct;
 		GetClientRect(rct);
+		point.x = min(rct.Width() - 1, max(0, point.x));
 		DrawMarker(markerXposOld, point.x, rct);
 		markerXposOld = point.x;
 		double fract = (double)point.x / rct.Width();
-		fldGraph->currentIndex = numberOfPoints * fract;
+		fldGraph->currentIndex = min(numberOfPoints, max(0, round(numberOfPoints * fract)));
 		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 			if ( fldGraph->currentIndex >= values[m].size())
 				continue;
@@ -402,6 +406,7 @@ void TrackProfileGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 		}
 		fldGraph->tool->setMarker(values[0].at(fldGraph->currentIndex).crd);
 	}
+	ReleaseCapture();
 }
 
 void TrackProfileGraph::PreSubclassWindow() 
