@@ -25,6 +25,7 @@ CrossSectionGraph::CrossSectionGraph(CrossSectionGraphEntry *f, DWORD dwStyle, c
 : BaseZapp(f)
 , yStretch(false)
 , fDown(false)
+, markerXposOld(iUNDEF)
 {
 	fldGraph = f;
 	if (!CStatic::Create(0,dwStyle | SS_OWNERDRAW | SS_NOTIFY, rect, pParentWnd, nID))
@@ -258,6 +259,7 @@ BaseMap CrossSectionGraph::getBaseMap(long i, long m) {
 
 void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	bool useDefault = false;
+	markerXposOld = iUNDEF;
 	CRect crct;
 	GetClientRect(crct);
 	Color c(GetSysColor(COLOR_3DFACE));
@@ -362,6 +364,24 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	delete fnt;
 }
 
+void CrossSectionGraph::DrawMarker(int xposOld, int xpos, CRect & rect) {
+	CDC * pDC = GetDC();
+	int dmOld = pDC->SetROP2(R2_XORPEN);
+	CPen bpen(PS_SOLID, 1, RGB(55,55,55)); // the XOR color
+	CPen* pOldPen = pDC->SelectObject(&bpen);	
+	if (xposOld != iUNDEF) {
+		pDC->MoveTo(xposOld, rect.bottom - 22);
+		pDC->LineTo(xposOld, rect.top);
+	}
+	if (xpos != iUNDEF) {
+		pDC->MoveTo(xpos, rect.bottom - 22);
+		pDC->LineTo(xpos, rect.top);
+	}
+	pDC->SelectObject(pOldPen);
+	pDC->SetROP2(dmOld);
+	ReleaseDC(pDC);
+}
+
 void CrossSectionGraph::OnLButtonDown(UINT nFlags, CPoint point) {	
 	fDown = true;
 	CWnd *wnd =  GetParent();
@@ -369,6 +389,8 @@ void CrossSectionGraph::OnLButtonDown(UINT nFlags, CPoint point) {
 		if (values.size() > 0) {
 			CRect rct;
 			GetClientRect(rct);
+			DrawMarker(markerXposOld, point.x, rct);
+			markerXposOld = point.x;
 			for(int m =0; m < fldGraph->sources.size(); ++m) {
 				RangeReal rr = fldGraph->getRange(m);
 				int numberOfMaps = getNumberOfMaps(m);
@@ -389,6 +411,8 @@ void CrossSectionGraph::OnMouseMove(UINT nFlags, CPoint point) {
 			if (values.size() > 0) {
 				CRect rct;
 				GetClientRect(rct);
+				DrawMarker(markerXposOld, point.x, rct);
+				markerXposOld = point.x;
 				for(int m =0; m < fldGraph->sources.size(); ++m) {
 					RangeReal rr = fldGraph->getRange(m);
 					int numberOfMaps = getNumberOfMaps(m);
@@ -410,6 +434,8 @@ void CrossSectionGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 		if (values.size() > 0) {
 			CRect rct;
 			GetClientRect(rct);
+			DrawMarker(markerXposOld, point.x, rct);
+			markerXposOld = point.x;
 			for(int m =0; m < fldGraph->sources.size(); ++m) {
 				RangeReal rr = fldGraph->getRange(m);
 				int numberOfMaps = getNumberOfMaps(m);

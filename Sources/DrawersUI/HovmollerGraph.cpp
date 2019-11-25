@@ -126,7 +126,8 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			else
 				clr = RGB(255,255,255);
 
-			CPen pen(PS_SOLID, 1,clr);
+			bool fSelected = (xIndex == x) && (yIndex == (maps - m));
+			CPen pen(PS_SOLID, 1,fSelected ? RGB(0,0,0) : clr);
 			SelectObject(lpDIS->hDC,pen);
 			CBrush brush(clr);
 			SelectObject(lpDIS->hDC, brush);

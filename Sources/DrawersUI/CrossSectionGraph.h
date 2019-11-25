@@ -24,6 +24,7 @@ public:
 
    DECLARE_MESSAGE_MAP();
 private:
+	void DrawMarker(int xposOld, int xpos, CRect & rect);
 	BaseMap getBaseMap(long i, long m);
 	int getNumberOfMaps(long i);
 	CrossSectionGraphEntry *fldGraph;
@@ -31,6 +32,7 @@ private:
 	CToolTipCtrl* toolTip;
 	bool yStretch;
 	bool fDown;
+	int markerXposOld;
 };
 
 class _export CrossSectionGraphEntry : public FormEntry {
