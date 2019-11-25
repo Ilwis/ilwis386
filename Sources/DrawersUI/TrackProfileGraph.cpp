@@ -22,6 +22,8 @@
 
 
 BEGIN_MESSAGE_MAP(TrackProfileGraph, CStatic)
+	ON_WM_LBUTTONDOWN()
+	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONUP()
 	ON_NOTIFY(TTN_NEEDTEXTW, 0, OnToolTipNotify)
 	ON_NOTIFY(TTN_NEEDTEXTA, 0, OnToolTipNotify)
@@ -32,6 +34,7 @@ END_MESSAGE_MAP()
 TrackProfileGraph::TrackProfileGraph(TrackProfileGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 : BaseZapp(f)
 , yStretch(false)
+, fDown(false)
 {
 	fldGraph = f;
 	if (!CStatic::Create(0,dwStyle | SS_OWNERDRAW | SS_NOTIFY, rect, pParentWnd, nID))
@@ -250,6 +253,7 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			if ( fldGraph->currentIndex >= 0) {
 				GraphInfo gi = values[m].at(fldGraph->currentIndex);
 				fldGraph->setIndex(m, gi.value, gi.crd);
+				fldGraph->tool->setMarker(gi.crd);
 			}
 		} else if ( getDomain(m)->pdsrt()) {
 			long oldRaw = iUNDEF;
@@ -312,22 +316,64 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	delete fnt;
 }
 
-void TrackProfileGraph::OnLButtonUp(UINT nFlags, CPoint point) {	
+void TrackProfileGraph::OnLButtonDown(UINT nFlags, CPoint point) {
+	fDown = true;
 	CWnd *wnd =  GetParent();
 	if ( wnd && values.size() > 0) {
+		int numberOfPoints = track.size();
+		CRect rct;
+		GetClientRect(rct);
+		double fract = (double)point.x / rct.Width();
+		fldGraph->currentIndex = numberOfPoints * fract;
 		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
-			int numberOfPoints = track.size();
-			CRect rct;
-			GetClientRect(rct);
-			double fract = (double)point.x / rct.Width();
-			fldGraph->currentIndex = numberOfPoints * fract;
 			if ( fldGraph->currentIndex >= values[m].size())
 				continue;
 			double value = values[m].at(fldGraph->currentIndex).value;
 			fldGraph->setIndex(m, value,values[m].at(fldGraph->currentIndex).crd);
 		}
+		fldGraph->tool->setMarker(values[0].at(fldGraph->currentIndex).crd);
 	}
 }
+
+void TrackProfileGraph::OnMouseMove(UINT nFlags, CPoint point) {
+	if (fDown) {
+		CWnd *wnd =  GetParent();
+		if ( wnd && values.size() > 0) {
+			int numberOfPoints = track.size();
+			CRect rct;
+			GetClientRect(rct);
+			double fract = (double)point.x / rct.Width();
+			fldGraph->currentIndex = numberOfPoints * fract;
+			for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
+				if ( fldGraph->currentIndex >= values[m].size())
+					continue;
+				double value = values[m].at(fldGraph->currentIndex).value;
+				fldGraph->setIndex(m, value,values[m].at(fldGraph->currentIndex).crd);
+			}
+			fldGraph->tool->setMarker(values[0].at(fldGraph->currentIndex).crd);
+		}
+	}
+}
+
+void TrackProfileGraph::OnLButtonUp(UINT nFlags, CPoint point) {
+	fDown = false;
+	CWnd *wnd =  GetParent();
+	if ( wnd && values.size() > 0) {
+		int numberOfPoints = track.size();
+		CRect rct;
+		GetClientRect(rct);
+		double fract = (double)point.x / rct.Width();
+		fldGraph->currentIndex = numberOfPoints * fract;
+		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
+			if ( fldGraph->currentIndex >= values[m].size())
+				continue;
+			double value = values[m].at(fldGraph->currentIndex).value;
+			fldGraph->setIndex(m, value,values[m].at(fldGraph->currentIndex).crd);
+		}
+		fldGraph->tool->setMarker(values[0].at(fldGraph->currentIndex).crd);
+	}
+}
+
 void TrackProfileGraph::PreSubclassWindow() 
 {
 	EnableToolTips();	
@@ -505,7 +551,6 @@ void TrackProfileGraphEntry::create()
 void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord& crd) {
 	if ( sourceIndex == iUNDEF) { // switch marker off
 		currentIndex = iUNDEF;
-		tool->setMarker(Coord());
 		for(int i=0; i < tool->sources.size(); ++i) {
 			vector<String> v;
 			v.push_back(tool->sources[i]->getSource()->fnObj.sFile + tool->sources[i]->getSource()->fnObj.sExt);
@@ -539,7 +584,6 @@ void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord
 			v.push_back(bmp->dm()->sValueByRaw(value,0));
 	}
 	listview->setData(sourceIndex, v);
-	tool->setMarker(crd);
 	listview->update();
 }
 

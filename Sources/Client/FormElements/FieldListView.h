@@ -109,6 +109,8 @@ public:
 	 void clear();
 	 void setItemChangedCallback(CCmdTarget *call, NotifyItemChangedProc proc);
 	 void setContextMenuCallback(CCmdTarget *call, NotifyContextMenuProc proc);
+	 void disableRedraw();
+	 void enableRedraw();
 
 	//void ToggleAsKey(int iItem);
 	//void ToggleSelectedAsKey();

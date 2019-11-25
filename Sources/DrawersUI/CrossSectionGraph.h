@@ -13,6 +13,8 @@ class CrossSectionGraph : public CStatic, public BaseZapp {
 public:
    CrossSectionGraph(CrossSectionGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
    void DrawItem(LPDRAWITEMSTRUCT lpDIS);
+   void OnLButtonDown(UINT nFlags, CPoint point);
+   void OnMouseMove(UINT nFlags, CPoint point);
    void OnLButtonUp(UINT nFlags, CPoint point);
    void setIndex(int index);
 	void PreSubclassWindow() ;
@@ -28,6 +30,7 @@ private:
 	vector<vector<vector<double> > >values;
 	CToolTipCtrl* toolTip;
 	bool yStretch;
+	bool fDown;
 };
 
 class _export CrossSectionGraphEntry : public FormEntry {

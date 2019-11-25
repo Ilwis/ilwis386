@@ -14,6 +14,8 @@
 
 
 BEGIN_MESSAGE_MAP(CrossSectionGraph, CStatic)
+	ON_WM_LBUTTONDOWN()
+	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONUP()
 	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
@@ -22,6 +24,7 @@ END_MESSAGE_MAP()
 CrossSectionGraph::CrossSectionGraph(CrossSectionGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 : BaseZapp(f)
 , yStretch(false)
+, fDown(false)
 {
 	fldGraph = f;
 	if (!CStatic::Create(0,dwStyle | SS_OWNERDRAW | SS_NOTIFY, rect, pParentWnd, nID))
@@ -359,15 +362,57 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	delete fnt;
 }
 
-void CrossSectionGraph::OnLButtonUp(UINT nFlags, CPoint point) {	
+void CrossSectionGraph::OnLButtonDown(UINT nFlags, CPoint point) {	
+	fDown = true;
 	CWnd *wnd =  GetParent();
 	if ( wnd) {
 		if (values.size() > 0) {
+			CRect rct;
+			GetClientRect(rct);
 			for(int m =0; m < fldGraph->sources.size(); ++m) {
 				RangeReal rr = fldGraph->getRange(m);
 				int numberOfMaps = getNumberOfMaps(m);
+				double xscale = (double)rct.Width() / numberOfMaps;
+				fldGraph->currentIndex[m] = point.x / xscale;
+				if ( fldGraph->currentIndex[m] >= values[m][0].size())
+					continue;
+			}
+		}
+		fldGraph->fillList();
+	}
+}
+
+void CrossSectionGraph::OnMouseMove(UINT nFlags, CPoint point) {	
+	if (fDown) {
+		CWnd *wnd =  GetParent();
+		if ( wnd) {
+			if (values.size() > 0) {
 				CRect rct;
 				GetClientRect(rct);
+				for(int m =0; m < fldGraph->sources.size(); ++m) {
+					RangeReal rr = fldGraph->getRange(m);
+					int numberOfMaps = getNumberOfMaps(m);
+					double xscale = (double)rct.Width() / numberOfMaps;
+					fldGraph->currentIndex[m] = point.x / xscale;
+					if ( fldGraph->currentIndex[m] >= values[m][0].size())
+						continue;
+				}
+			}
+			fldGraph->fillList();
+		}
+	}
+}
+
+void CrossSectionGraph::OnLButtonUp(UINT nFlags, CPoint point) {	
+	fDown = false;
+	CWnd *wnd =  GetParent();
+	if ( wnd) {
+		if (values.size() > 0) {
+			CRect rct;
+			GetClientRect(rct);
+			for(int m =0; m < fldGraph->sources.size(); ++m) {
+				RangeReal rr = fldGraph->getRange(m);
+				int numberOfMaps = getNumberOfMaps(m);
 				double xscale = (double)rct.Width() / numberOfMaps;
 				fldGraph->currentIndex[m] = point.x / xscale;
 				if ( fldGraph->currentIndex[m] >= values[m][0].size())
@@ -409,6 +454,7 @@ void CrossSectionGraphEntry::create()
 }
 
 void CrossSectionGraphEntry::fillList() {
+	listview->disableRedraw();
 	listview->clear();
 	listview->SetRowCount(0);
 	int count = max(1, crdSelect.size());
@@ -439,6 +485,7 @@ void CrossSectionGraphEntry::fillList() {
 			listview->AddData(v);
 		}
 	}
+	listview->enableRedraw();
 	listview->update();
 }
 

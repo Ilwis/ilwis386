@@ -325,6 +325,14 @@ void FieldListView::update() {
 	m_clctrl->UpdateWindow();
 }
 
+void FieldListView::disableRedraw() {
+	m_clctrl->SetRedraw(FALSE);
+}
+
+void FieldListView::enableRedraw() {
+	m_clctrl->SetRedraw(TRUE);
+}
+
 void FieldListView::setSelectedRows(vector<int>& rowNumbers) {
 	for(int i=0; i < rowNumbers.size(); ++i) {
 		m_clctrl->SetItemState(rowNumbers[i], LVIS_SELECTED, LVIS_SELECTED);

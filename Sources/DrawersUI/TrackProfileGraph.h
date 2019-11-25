@@ -28,6 +28,8 @@ class TrackProfileGraph : public CStatic, public BaseZapp {
 public:
    TrackProfileGraph(TrackProfileGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
    void DrawItem(LPDRAWITEMSTRUCT lpDIS);
+   void OnLButtonDown(UINT nFlags, CPoint point);
+   void OnMouseMove(UINT nFlags, CPoint point);
    void OnLButtonUp(UINT nFlags, CPoint point);
    void setIndex(int index);
    int OnToolHitTest(CPoint point, TOOLINFO *pTI) const;
@@ -54,6 +56,7 @@ private:
 	vector<LocInfo> track;
 	CToolTipCtrl* toolTip;
 	bool yStretch;
+	bool fDown;
 };
 
 class _export TrackProfileGraphEntry : public FormEntry {

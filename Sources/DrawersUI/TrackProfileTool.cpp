@@ -662,6 +662,8 @@ void TrackProfileGraphFrom::setTrack(const vector<Coord>& crds) {
 		graph->setTrack(crds);
 		graph->setIndex(iUNDEF,0,Coord());
 	}
+	if (tool)
+		tool->setMarker(Coord());
 }
 
 void TrackProfileGraphFrom::addSource(const IlwisObject& bmp) {
@@ -673,6 +675,8 @@ void TrackProfileGraphFrom::addSource(const IlwisObject& bmp) {
 void TrackProfileGraphFrom::reset() {
 	if ( graph)
 		graph->setIndex(iUNDEF,0,Coord());
+	if (tool)
+		tool->setMarker(Coord());
 }
 
 void TrackProfileGraphFrom::update() {
