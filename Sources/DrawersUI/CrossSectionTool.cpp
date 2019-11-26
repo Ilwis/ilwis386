@@ -241,10 +241,8 @@ void CrossSectionTool::OnLButtonUp(UINT nFlags, CPoint point) {
 		return;
 
 	Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
-	if ( graphForm && working) {
-		if ( sources.size() > 0 && working) {
-			graphForm->setSelectCoord(c1);
-		}
+	if ( graphForm) {
+		graphForm->setSelectCoord(c1);
 	}
 }
 

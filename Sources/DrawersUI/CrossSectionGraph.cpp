@@ -278,14 +278,14 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	::Rectangle(lpDIS->hDC, rct.left,rct.top, rct.right, rct.bottom);
 	SelectObject(lpDIS->hDC, oldBrush);
 
+	if ( fldGraph->crdSelect.size() == 0)
+		return;
 
 	CFont* fnt = new CFont();
 	BOOL vvv = fnt->CreatePointFont(80,"Arial");
 	CDC *dc = CDC::FromHandle(lpDIS->hDC);
 
 	HGDIOBJ fntOld = dc->SelectObject(fnt);
-	if ( fldGraph->crdSelect.size() == 0)
-		return;
 
 	int maxNr = -1;
 	values.clear();
@@ -482,32 +482,52 @@ void CrossSectionGraphEntry::fillList() {
 	listview->disableRedraw();
 	listview->clear();
 	listview->SetRowCount(0);
-	int count = max(1, crdSelect.size());
-	for(int m =0; m < sources.size(); ++m) {
-		IlwisObject obj = sources[m];
-		for(int i = 0 ; i < count; ++i) {
+	if (crdSelect.size() == 0) {
+		for(int m =0; m < sources.size(); ++m) {
+			IlwisObject obj = sources[m];
 			vector<String> v;
 			v.push_back(String("%S%S",obj->fnObj.sFile,obj->fnObj.sExt));
-			v.push_back(String("%d",i + 1));
+			v.push_back(String(""));
 			if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
 				MapList mpl(obj->fnObj);
 				v.push_back(String("%d:%d",mpl->iLower() + 1, mpl->iUpper() + 1));
-
 			} else if (IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
 				ObjectCollection oc(obj->fnObj);
 				v.push_back(String("1:%d",oc->iNrObjects()));
 			}
 			RangeReal rr = getRange(m);
 			v.push_back(String("%S", rr.s()));
-			if ( crossSectionGraph->values.size() > 0 && currentIndex[m] != iUNDEF) {
-				v.push_back(String("%d", currentIndex[m] + 1));
-				v.push_back(String("%g",crossSectionGraph->values[m][i][currentIndex[m]]));
-			}
-			else{
-				v.push_back("");
-				v.push_back("");
-			}
+			v.push_back("");
+			v.push_back("");
 			listview->AddData(v);
+		}
+	} else {
+		int count = crdSelect.size();
+		for(int m =0; m < sources.size(); ++m) {
+			IlwisObject obj = sources[m];
+			for(int i = 0 ; i < count; ++i) {
+				vector<String> v;
+				v.push_back(String("%S%S",obj->fnObj.sFile,obj->fnObj.sExt));
+				v.push_back(String("%d",i + 1));
+				if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
+					MapList mpl(obj->fnObj);
+					v.push_back(String("%d:%d",mpl->iLower() + 1, mpl->iUpper() + 1));
+				} else if (IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
+					ObjectCollection oc(obj->fnObj);
+					v.push_back(String("1:%d",oc->iNrObjects()));
+				}
+				RangeReal rr = getRange(m);
+				v.push_back(String("%S", rr.s()));
+				if ( crossSectionGraph->values.size() > 0 && currentIndex[m] != iUNDEF) {
+					v.push_back(String("%d", currentIndex[m] + 1));
+					v.push_back(String("%g",crossSectionGraph->values[m][i][currentIndex[m]]));
+				}
+				else{
+					v.push_back("");
+					v.push_back("");
+				}
+				listview->AddData(v);
+			}
 		}
 	}
 	listview->enableRedraw();
@@ -524,9 +544,10 @@ bool CrossSectionGraphEntry::isUnique(const FileName& fn) {
 }
 
 void CrossSectionGraphEntry::update() {
-	if ( crossSectionGraph){
+	if ( crossSectionGraph)
 		crossSectionGraph->Invalidate();
-	}
+	if (crdSelect.size() == 0)
+		fillList();
 	listview->update();
 
 }
@@ -581,10 +602,10 @@ void CrossSectionGraphEntry::setCoord(const Coord& crd){
 	//	}
 	//	update();
 	//}
-	if ( crossSectionGraph) {
+	if ( crossSectionGraph)
 		crossSectionGraph->Invalidate();
-	}
-
+	else
+		fillList();
 }
 
 void CrossSectionGraphEntry::setYStretch(bool stretch) {

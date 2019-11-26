@@ -191,16 +191,16 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	::Rectangle(lpDIS->hDC, rct.left,rct.top, rct.right, rct.bottom); // MSDN: rectangle does not include the "right" and "bottom" coordinate
 	SelectObject(lpDIS->hDC, oldBrush);
 
-	CFont* fnt = new CFont();
-	BOOL vvv = fnt->CreatePointFont(80,"Arial");
-	CDC *dc = CDC::FromHandle(lpDIS->hDC);
-
-	HGDIOBJ fntOld = dc->SelectObject(fnt);
 	if ( track.size() == 0) {
 		if (markerXposOld != iUNDEF)
 			DrawMarker(iUNDEF, markerXposOld, crct);
 		return;
 	}
+
+	CFont* fnt = new CFont();
+	BOOL vvv = fnt->CreatePointFont(80,"Arial");
+	CDC *dc = CDC::FromHandle(lpDIS->hDC);
+	HGDIOBJ fntOld = dc->SelectObject(fnt);
 
 	int oldnr = iUNDEF;
 	values.clear();
