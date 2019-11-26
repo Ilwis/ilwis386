@@ -386,8 +386,28 @@ void CrossSectionGraph::OnLButtonDown(UINT nFlags, CPoint point) {
 	fDown = true;
 	SetCapture();
 	CWnd *wnd =  GetParent();
-	if ( wnd) {
-		if (values.size() > 0) {
+	if ( wnd && values.size() > 0) {
+		CRect rct;
+		GetClientRect(rct);
+		point.x = min(rct.Width() - 1, max(0, point.x));
+		DrawMarker(markerXposOld, point.x, rct);
+		markerXposOld = point.x;
+		double fract = (double)point.x / (rct.Width() - 1);
+		for(int m =0; m < fldGraph->sources.size(); ++m) {
+			RangeReal rr = fldGraph->getRange(m);
+			int numberOfMaps = getNumberOfMaps(m) - 1;
+			fldGraph->currentIndex[m] = min(numberOfMaps, max(0, round(numberOfMaps * fract)));
+			if ( fldGraph->currentIndex[m] >= values[m][0].size())
+				continue;
+		}
+		fldGraph->fillList();
+	}
+}
+
+void CrossSectionGraph::OnMouseMove(UINT nFlags, CPoint point) {	
+	if (fDown) {
+		CWnd *wnd =  GetParent();
+		if ( wnd && values.size() > 0) {
 			CRect rct;
 			GetClientRect(rct);
 			point.x = min(rct.Width() - 1, max(0, point.x));
@@ -400,30 +420,6 @@ void CrossSectionGraph::OnLButtonDown(UINT nFlags, CPoint point) {
 				fldGraph->currentIndex[m] = min(numberOfMaps, max(0, round(numberOfMaps * fract)));
 				if ( fldGraph->currentIndex[m] >= values[m][0].size())
 					continue;
-			}
-		}
-		fldGraph->fillList();
-	}
-}
-
-void CrossSectionGraph::OnMouseMove(UINT nFlags, CPoint point) {	
-	if (fDown) {
-		CWnd *wnd =  GetParent();
-		if ( wnd) {
-			if (values.size() > 0) {
-				CRect rct;
-				GetClientRect(rct);
-				point.x = min(rct.Width() - 1, max(0, point.x));
-				DrawMarker(markerXposOld, point.x, rct);
-				markerXposOld = point.x;
-				double fract = (double)point.x / (rct.Width() - 1);
-				for(int m =0; m < fldGraph->sources.size(); ++m) {
-					RangeReal rr = fldGraph->getRange(m);
-					int numberOfMaps = getNumberOfMaps(m) - 1;
-					fldGraph->currentIndex[m] = min(numberOfMaps, max(0, round(numberOfMaps * fract)));
-					if ( fldGraph->currentIndex[m] >= values[m][0].size())
-						continue;
-				}
 			}
 			fldGraph->fillList();
 		}
@@ -433,21 +429,19 @@ void CrossSectionGraph::OnMouseMove(UINT nFlags, CPoint point) {
 void CrossSectionGraph::OnLButtonUp(UINT nFlags, CPoint point) {	
 	fDown = false;
 	CWnd *wnd =  GetParent();
-	if ( wnd) {
-		if (values.size() > 0) {
-			CRect rct;
-			GetClientRect(rct);
-			point.x = min(rct.Width() - 1, max(0, point.x));
-			DrawMarker(markerXposOld, point.x, rct);
-			markerXposOld = point.x;
-			double fract = (double)point.x / (rct.Width() - 1);
-			for(int m =0; m < fldGraph->sources.size(); ++m) {
-				RangeReal rr = fldGraph->getRange(m);
-				int numberOfMaps = getNumberOfMaps(m) - 1;
-				fldGraph->currentIndex[m] = min(numberOfMaps, max(0, round(numberOfMaps * fract)));
-				if ( fldGraph->currentIndex[m] >= values[m][0].size())
-					continue;
-			}
+	if ( wnd && values.size() > 0) {
+		CRect rct;
+		GetClientRect(rct);
+		point.x = min(rct.Width() - 1, max(0, point.x));
+		DrawMarker(markerXposOld, point.x, rct);
+		markerXposOld = point.x;
+		double fract = (double)point.x / (rct.Width() - 1);
+		for(int m =0; m < fldGraph->sources.size(); ++m) {
+			RangeReal rr = fldGraph->getRange(m);
+			int numberOfMaps = getNumberOfMaps(m) - 1;
+			fldGraph->currentIndex[m] = min(numberOfMaps, max(0, round(numberOfMaps * fract)));
+			if ( fldGraph->currentIndex[m] >= values[m][0].size())
+				continue;
 		}
 		fldGraph->fillList();
 	}

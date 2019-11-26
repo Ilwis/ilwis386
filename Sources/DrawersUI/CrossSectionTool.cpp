@@ -141,6 +141,10 @@ void CrossSectionTool::setcheckTool(void *w, HTREEITEM item) {
 			}
 		} else {
 			graphForm->ShowWindow(SW_SHOW);
+			if (markers) {
+				markers->setActive(true);
+				mpvGetView()->Invalidate();
+			}
 		}
 		if ( sources.size() == 0)
 			displayOptionAddList();
@@ -154,8 +158,8 @@ void CrossSectionTool::setcheckTool(void *w, HTREEITEM item) {
 			graphForm->ShowWindow(SW_HIDE);
 			if (markers) {
 				markers->setActive(false);
-				markers->clear();
-				graphForm->reset();
+				//markers->clear();
+				//graphForm->reset();
 				mpvGetView()->Invalidate();
 			}
 		}
