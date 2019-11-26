@@ -293,8 +293,7 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	double rx = 0;
 	double n = 4.0;
 	double rStep = rRound(totDist / n);
-	while(n * rStep <= totDist)
-		++n;
+	n = ceil(totDist / rStep);
 
 	if ( (track.size() > 0) && fldGraph->tool->sources[0]->getMap(track[0].crd)->cs()->pcsProjection()) {
 		for(int i = 0; i < n; ++i) {
