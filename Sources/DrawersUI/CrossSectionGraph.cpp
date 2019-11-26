@@ -324,9 +324,9 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 				values[m][p].push_back(v);
 				int y = y0 - ( v - rr.rLo()) * yscale;
 				if ( i == 0)
-					dc->MoveTo(rx,y);
+					dc->MoveTo(round(rx),y);
 				else 
-					dc->LineTo(rx,y);
+					dc->LineTo(round(rx),y);
 				rx += xscale;
 			}
 		}
@@ -393,7 +393,7 @@ void CrossSectionGraph::OnLButtonDown(UINT nFlags, CPoint point) {
 			point.x = min(rct.Width() - 1, max(0, point.x));
 			DrawMarker(markerXposOld, point.x, rct);
 			markerXposOld = point.x;
-			double fract = (double)point.x / rct.Width();
+			double fract = (double)point.x / (rct.Width() - 1);
 			for(int m =0; m < fldGraph->sources.size(); ++m) {
 				RangeReal rr = fldGraph->getRange(m);
 				int numberOfMaps = getNumberOfMaps(m) - 1;
@@ -416,7 +416,7 @@ void CrossSectionGraph::OnMouseMove(UINT nFlags, CPoint point) {
 				point.x = min(rct.Width() - 1, max(0, point.x));
 				DrawMarker(markerXposOld, point.x, rct);
 				markerXposOld = point.x;
-				double fract = (double)point.x / rct.Width();
+				double fract = (double)point.x / (rct.Width() - 1);
 				for(int m =0; m < fldGraph->sources.size(); ++m) {
 					RangeReal rr = fldGraph->getRange(m);
 					int numberOfMaps = getNumberOfMaps(m) - 1;
@@ -440,7 +440,7 @@ void CrossSectionGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 			point.x = min(rct.Width() - 1, max(0, point.x));
 			DrawMarker(markerXposOld, point.x, rct);
 			markerXposOld = point.x;
-			double fract = (double)point.x / rct.Width();
+			double fract = (double)point.x / (rct.Width() - 1);
 			for(int m =0; m < fldGraph->sources.size(); ++m) {
 				RangeReal rr = fldGraph->getRange(m);
 				int numberOfMaps = getNumberOfMaps(m) - 1;

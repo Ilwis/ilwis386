@@ -207,7 +207,7 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	double totDist = track[track.size() - 1].dist;
 	int  noOfClassMaps = 0;
 	int numberOfPoints = track.size();
-	double xscale = (numberOfPoints > 1) ? (double)(rct.Width() + 1) / (numberOfPoints - 1) : (rct.Width() + 1);
+	double xscale = (numberOfPoints > 1) ? (double)rct.Width() / (numberOfPoints - 1) : rct.Width();
 	vector<double> markers;
 	RangeReal rrTotal;
 	if (!yStretch) {
@@ -246,11 +246,11 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 				int y = v == rUNDEF ? (rct.bottom - 1) : y0 - ( v - rr.rLo()) * yscale;
 				y = min(y, rct.bottom - 1);
 				if ( i == 0)
-					dc->MoveTo(rx,y);
+					dc->MoveTo(round(rx),y);
 				else 
-					dc->LineTo(rx,y);
-				if ( track[i].marker)
-					markers.push_back(rx);
+					dc->LineTo(round(rx),y);
+				if ((m == 0) && track[i].marker)
+					markers.push_back(round(rx));
 				rx += xscale;
 			}
 			oldnr = numberOfPoints;
@@ -262,21 +262,22 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		} else if ( getDomain(m)->pdsrt()) {
 			long oldRaw = iUNDEF;
 			double oldX = 0;
-			for(int i = 0; i <= numberOfPoints; ++i) {
+			for(int i = 0; i < numberOfPoints; ++i) {
 				BaseMap bmp = fldGraph->tool->sources[m]->getMap(track[i].crd);
-				long raw = i < numberOfPoints ? getValue(m,bmp,track[i].crd) : -1;
-				if (i < numberOfPoints)
-					values[m].push_back(GraphInfo((i + 1),raw,track[i].crd));
-				if ( raw != oldRaw && oldRaw != iUNDEF) {
-					if ( raw != rUNDEF) {
-						Color clr = getColor(m, bmp, oldRaw);
-						CBrush brush(clr);
-						SelectObject(lpDIS->hDC, brush);
-						::Rectangle(lpDIS->hDC,oldX,5 + 20 * noOfClassMaps ,rx, 25 + 20 * noOfClassMaps);
-					}
+				long raw = getValue(m,bmp,track[i].crd);
+				values[m].push_back(GraphInfo((i + 1),raw,track[i].crd));
+				if ( raw != oldRaw || i == numberOfPoints - 1) {
+					Color clr = oldRaw != iUNDEF ? getColor(m, bmp, oldRaw) : Color(255,255,255);
+					CBrush brush(clr);
+					SelectObject(lpDIS->hDC, brush);
+					double xFrom = (oldX > 0) ? round(oldX - xscale / 2.0) : 0.0;
+					double xTo = (i < numberOfPoints - 1) ? round(rx - xscale / 2.0) : rct.Width();
+					::Rectangle(lpDIS->hDC, xFrom, 5 + 20 * noOfClassMaps, xTo, 25 + 20 * noOfClassMaps);
 					oldX= rx;
 				}
 				oldRaw = raw;
+				if ((m == 0) && track[i].marker)
+					markers.push_back(round(rx));
 				rx += xscale;
 			}
 			noOfClassMaps++;
@@ -351,7 +352,7 @@ void TrackProfileGraph::OnLButtonDown(UINT nFlags, CPoint point) {
 		point.x = min(rct.Width() - 1, max(0, point.x));
 		DrawMarker(markerXposOld, point.x, rct);
 		markerXposOld = point.x;
-		double fract = (double)point.x / rct.Width();
+		double fract = (double)point.x / (rct.Width() - 1);
 		fldGraph->currentIndex = min(numberOfPoints, max(0, round(numberOfPoints * fract)));
 		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 			if ( fldGraph->currentIndex >= values[m].size())
@@ -373,7 +374,7 @@ void TrackProfileGraph::OnMouseMove(UINT nFlags, CPoint point) {
 			point.x = min(rct.Width() - 1, max(0, point.x));
 			DrawMarker(markerXposOld, point.x, rct);
 			markerXposOld = point.x;
-			double fract = (double)point.x / rct.Width();
+			double fract = (double)point.x / (rct.Width() - 1);
 			fldGraph->currentIndex = min(numberOfPoints, max(0, round(numberOfPoints * fract)));
 			for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 				if ( fldGraph->currentIndex >= values[m].size())
@@ -396,7 +397,7 @@ void TrackProfileGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 		point.x = min(rct.Width() - 1, max(0, point.x));
 		DrawMarker(markerXposOld, point.x, rct);
 		markerXposOld = point.x;
-		double fract = (double)point.x / rct.Width();
+		double fract = (double)point.x / (rct.Width() - 1);
 		fldGraph->currentIndex = min(numberOfPoints, max(0, round(numberOfPoints * fract)));
 		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 			if ( fldGraph->currentIndex >= values[m].size())
