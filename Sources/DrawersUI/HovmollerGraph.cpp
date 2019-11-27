@@ -88,15 +88,15 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	::Rectangle(lpDIS->hDC, rctInner.left,rctInner.top, rctInner.right, rctInner.bottom);
 	SelectObject(lpDIS->hDC, oldBrush);
 
+	int points = track.size();
+	if ( points == 0 || values.size() == 0 || !fldGraph->mpl.fValid())
+		return;
 
 	CFont* fnt = new CFont();
 	BOOL vvv = fnt->CreatePointFont(70,"Arial");
 	CDC *dc = CDC::FromHandle(lpDIS->hDC);
 
 	HGDIOBJ fntOld = dc->SelectObject(fnt);
-	int points = track.size();
-	if ( points == 0 || values.size() == 0 || !fldGraph->mpl.fValid())
-		return;
 
 	int oldnr = iUNDEF;
 	Map mp = fldGraph->mpl[0];
@@ -132,9 +132,6 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			CBrush brush(clr);
 			SelectObject(lpDIS->hDC, brush);
 			dc->Rectangle(&moveRect);
-			xoff += xStep;
-			moveRect.left = rctInner.left + xoff ;
-			moveRect.right = rctInner.left + xoff + xStep;
 			CPen penTick(PS_SOLID,1,RGB(0,0,0));
 			SelectObject(lpDIS->hDC,penTick);
 			int frac = 100 * (double) x / points;
@@ -142,16 +139,21 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 				dc->MoveTo(rctInner.left + xoff,rctInner.bottom);
 				dc->LineTo(rctInner.left + xoff,rctInner.bottom + 6);
 			}
+			xoff += xStep;
+			moveRect.left = rctInner.left + xoff ;
+			moveRect.right = rctInner.left + xoff + xStep;
 		}
 		CPen penTick(PS_SOLID,1,RGB(0,0,0));
 		SelectObject(lpDIS->hDC,penTick);
-		dc->MoveTo(rctInner.left,rctInner.bottom - yoff);
-		dc->LineTo(rctInner.left-4,rctInner.bottom - yoff);
+		dc->MoveTo(rctInner.left + xoff - 1,rctInner.bottom);
+		dc->LineTo(rctInner.left + xoff - 1,rctInner.bottom + 6);
+		dc->MoveTo(rctInner.left - 1,rctInner.bottom - yoff - 1);
+		dc->LineTo(rctInner.left - 5,rctInner.bottom - yoff - 1);
 		yoff += yStep;
 		xoff = 0;
 	}
-	dc->MoveTo(rctInner.left,rctInner.bottom - yoff);
-	dc->LineTo(rctInner.left-4,rctInner.bottom - yoff);
+	dc->MoveTo(rctInner.left - 1,rctInner.bottom - yoff);
+	dc->LineTo(rctInner.left - 5,rctInner.bottom - yoff);
 
 	setTimeText(1, dc);
 	setTimeText(maps / 3, dc);
@@ -206,15 +208,15 @@ void HovMollerGraph::setTimeText(int index, CDC *dc) {
 	if ( timeColumn.fValid()) {
 		ILWIS::Time time(timeColumn->rValue(index));
 		String st = time.toString(true,ILWIS::Time::mDATE);
-		double frac = (double) (index - 1.5) / fldGraph->mpl->iSize();
+		double frac = (double) (index - 0.5) / fldGraph->mpl->iSize();
 		CSize sz = dc->GetTextExtent(st.c_str(), st.size());
-		dc->TextOut(rctInner.left - sz.cx - 6,rctInner.bottom - rctInner.Height() * frac - sz.cy,st.c_str());
+		dc->TextOut(rctInner.left - sz.cx - 6,rctInner.bottom - rctInner.Height() * frac - sz.cy / 2.0,st.c_str());
 
 	} else {
 		String st("%d", index);
-		double frac = (double) (index - 1.5) / fldGraph->mpl->iSize();
+		double frac = (double) (index - 0.5) / fldGraph->mpl->iSize();
 		CSize sz = dc->GetTextExtent(st.c_str(), st.size());
-		dc->TextOut(rctInner.left - sz.cx - 6,rctInner.bottom - rctInner.Height() * frac - sz.cy,st.c_str());
+		dc->TextOut(rctInner.left - sz.cx - 6,rctInner.bottom - rctInner.Height() * frac - sz.cy / 2.0,st.c_str());
 	}
 }
 
@@ -265,15 +267,15 @@ void HovMollerGraph::setTrack(const vector<Coord>& crds){
 	if ( !fldGraph->mpl.fValid() || fldGraph->mpl->iSize() == 0)
 		return;
 
-	double rD = 0;
 	track.clear();
 	values.clear();
 	trackCrd.clear();
+	double rTotalDistance = 0;
 	for(int i = 1; i < crds.size(); ++i) {
-		rD += rDist(crds[i-1], crds[i]);
+		rTotalDistance += rDist(crds[i-1], crds[i]);
 	}
-	double step = rD / 100.0;
-	double totDist = 0;
+	double step = rTotalDistance / 99.0;
+	double remain = 0; // the remaining distance to complete a multiple of "step", after each intermediate node
 	Map mp = fldGraph->mpl[0];
 	CoordSystem csy = mp->cs();
 	ILWIS::RootDrawer * rootDrawer = fldGraph->tool->getDrawer()->getRootDrawer();
@@ -282,23 +284,14 @@ void HovMollerGraph::setTrack(const vector<Coord>& crds){
 	for(int i = 0; i < crds.size() - 1; ++i) {
 		Coord c1 = crds[i];
 		Coord c2 = crds[i+1];
-		double distance = rDist(c1, c2);
+		double rPartialDistance = rDist(c1, c2);
 		double angle = atan2(c2.y - c1.y, c2.x - c1.x);
 		bool notDone = true;
-		double cnt = 1;
-		double d;
-		RowCol rc;
-		if (fConvNeeded)
-			rc = mp->gr()->rcConv(rootDrawer->glToWorld(csy, c1));
-		else
-			rc = mp->gr()->rcConv(c1);
-		track.push_back(rc);
-		trackCrd.push_back(c1);
-
+		double cnt = 0;
 		while(notDone) {
-			Coord c3(c1.x + cos(angle) * step * cnt, c1.y + sin(angle) * step * cnt);
-			d = rDist(c1, c3);
-			if ( d < distance ) {
+			Coord c3(c1.x + cos(angle) * (remain + step * cnt), c1.y + sin(angle) * (remain + step * cnt));
+			double d = rDist(c1, c3);
+			if ( d < rPartialDistance * 0.99999 ) { // if the distance is smaller than 99.999% of the partial distance, then we are not yet at the last point
 				RowCol rc;
 				if (fConvNeeded)
 					rc = mp->gr()->rcConv(rootDrawer->glToWorld(csy, c3));
@@ -310,17 +303,22 @@ void HovMollerGraph::setTrack(const vector<Coord>& crds){
 				}
 			}
 			else {
+				remain = d - rPartialDistance;
 				notDone = false;
 			}
 			++cnt;
 		}
-		if (fConvNeeded)
-			rc = mp->gr()->rcConv(rootDrawer->glToWorld(csy, c2));
-		else
-			rc = mp->gr()->rcConv(c2);
-		track.push_back(rc);
-		trackCrd.push_back(c2);
 	}
+
+	Coord c2 = crds[crds.size() - 1];
+	RowCol rc;
+	if (fConvNeeded)
+		rc = mp->gr()->rcConv(rootDrawer->glToWorld(csy, c2));
+	else
+		rc = mp->gr()->rcConv(c2);
+	track.push_back(rc);
+	trackCrd.push_back(c2);
+
 	values.resize(fldGraph->mpl->iSize());
 	for(int j =0; j < values.size(); ++j) {
 		values[j].resize(track.size());
