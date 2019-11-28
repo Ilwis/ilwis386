@@ -48,6 +48,7 @@ private:
 	void saveAsTbl();
 	RangeReal getRange(int i) const;
 	Domain getDomain(int i) const;
+	const DomainValueRangeStruct & getDvrs(int i) const;
 	double getValue(int i, const BaseMap& bmp, const Coord& crd) const;
 	Color getColor(int i, const BaseMap&bmp, long iRaw) const;
 	ILWIS::LayerDrawer *getLayerDrawer(ILWIS::NewDrawer *cdr) const ;

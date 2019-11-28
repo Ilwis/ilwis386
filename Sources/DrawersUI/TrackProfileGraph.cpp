@@ -120,6 +120,27 @@ Domain TrackProfileGraph::getDomain(int i) const{
 		return fldGraph->tool->sources[i]->getMap()->dm();
 }
 
+const DomainValueRangeStruct & TrackProfileGraph::getDvrs(int i) const{
+	if ( i == 0) {
+		ILWIS::LayerDrawer *ldr = getLayerDrawer(fldGraph->tool->getDrawer());
+		if ( ldr->useAttributeColumn()) {
+			return ldr->getAtttributeColumn()->dvrs();
+		}
+	}
+	IlwisObject obj = fldGraph->tool->sources[i]->getSource();
+	if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
+		MapList mpl(obj->fnObj);
+		return mpl[0]->dvrs();
+	}
+	else if (IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
+		ObjectCollection oc(obj->fnObj);
+		BaseMap bmp(oc->fnObject(0));
+		return bmp->dvrs();
+	}
+	else  
+		return fldGraph->tool->sources[i]->getMap()->dvrs();
+}
+
 RangeReal TrackProfileGraph::getRange(int i) const {
 	RangeReal rr = fldGraph->tool->sources[i]->getRange();
 	if ( rr.fValid())
@@ -590,7 +611,10 @@ void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord
 			vector<String> v;
 			v.push_back(tool->sources[i]->getSource()->fnObj.sFile + tool->sources[i]->getSource()->fnObj.sExt);
 			v.push_back("?");
-			v.push_back(graph->getRange(i).s());
+			const DomainValueRangeStruct & dvrs = graph->getDvrs(i);
+			RangeReal rr = graph->getRange(i);
+			String range = dvrs.sValue(rr.rLo()).sTrimSpaces() + " : " + dvrs.sValue(rr.rHi()).sTrimSpaces();
+			v.push_back(range);
 			v.push_back("?");
 			listview->setData(i, v);
 		}
@@ -611,12 +635,15 @@ void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord
 		return;
 	v.push_back(bmp->fnObj.sFile + bmp->fnObj.sExt);
 	if ( bmp->cs()->pcsProjection())
-		v.push_back(String("%g", graph->track[currentIndex].dist));
+		v.push_back(String("%.2f", graph->track[currentIndex].dist));
 	else
 		v.push_back("?");
 	if ( bmp->dm()->pdv()) {
-		v.push_back(String("%S", graph->getRange(sourceIndex).s()));
-		v.push_back(String("%g",value));
+		const DomainValueRangeStruct & dvrs = graph->getDvrs(sourceIndex);
+		RangeReal rr = graph->getRange(sourceIndex);
+		String range = dvrs.sValue(rr.rLo()).sTrimSpaces() + " : " + dvrs.sValue(rr.rHi()).sTrimSpaces();
+		v.push_back(range);
+		v.push_back(dvrs.sValue(value));
 	} else if ( bmp->dm()->pdsrt()) {
 		v.push_back(String("%S", bmp->dm()->sName()));
 		ILWIS::LayerDrawer *ldr = (ILWIS::LayerDrawer *)tool->getDrawer();
@@ -635,7 +662,10 @@ void TrackProfileGraphEntry::addSource(const IlwisObject& bmp){
 		vector<String> v;
 		v.push_back(bmp->fnObj.sFile + bmp->fnObj.sExt);
 		v.push_back("?");
-		v.push_back(graph->getRange(tool->sources.size()-1).s());
+		const DomainValueRangeStruct & dvrs = graph->getDvrs(tool->sources.size()-1);
+		RangeReal rr = graph->getRange(tool->sources.size()-1);
+		String range = dvrs.sValue(rr.rLo()).sTrimSpaces() + " : " + dvrs.sValue(rr.rHi()).sTrimSpaces();
+		v.push_back(range);
 		v.push_back("?");
 
 		listview->AddData(v);

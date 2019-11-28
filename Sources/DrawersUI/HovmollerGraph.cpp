@@ -189,7 +189,8 @@ void HovMollerGraph::setTextDataBlock(CDC *dc){
 		LatLon ll = rootDrawer->getCoordinateSystem()->llConv(crd);
 		sLocY += ll.sLat(10);
 		sLocX += ll.sLon(10);
-		sValue = String("%S%f",sValue, values[yIndex - 1][xIndex]);
+		const DomainValueRangeStruct & dvrs = fldGraph->mpl[0]->dvrs();
+		sValue = String("%S%S",sValue, dvrs.sValue(values[yIndex - 1][xIndex]));
 		fldGraph->tool->setMarker(crd);
 	}
 	dc->TextOut(rctInner.right + 8,rctInner.top, "Latitude");

@@ -495,8 +495,10 @@ void CrossSectionGraphEntry::fillList() {
 				ObjectCollection oc(obj->fnObj);
 				v.push_back(String("1:%d",oc->iNrObjects()));
 			}
+			const DomainValueRangeStruct & dvrs = getDvrs(m);
 			RangeReal rr = getRange(m);
-			v.push_back(String("%S", rr.s()));
+			String range = dvrs.sValue(rr.rLo()).sTrimSpaces() + " : " + dvrs.sValue(rr.rHi()).sTrimSpaces();
+			v.push_back(range);
 			v.push_back("");
 			v.push_back("");
 			listview->AddData(v);
@@ -516,11 +518,13 @@ void CrossSectionGraphEntry::fillList() {
 					ObjectCollection oc(obj->fnObj);
 					v.push_back(String("1:%d",oc->iNrObjects()));
 				}
+				const DomainValueRangeStruct & dvrs = getDvrs(m);
 				RangeReal rr = getRange(m);
-				v.push_back(String("%S", rr.s()));
+				String range = dvrs.sValue(rr.rLo()).sTrimSpaces() + " : " + dvrs.sValue(rr.rHi()).sTrimSpaces();
+				v.push_back(range);
 				if ( crossSectionGraph->values.size() > 0 && currentIndex[m] != iUNDEF) {
 					v.push_back(String("%d", currentIndex[m] + 1));
-					v.push_back(String("%g",crossSectionGraph->values[m][i][currentIndex[m]]));
+					v.push_back(dvrs.sValue(crossSectionGraph->values[m][i][currentIndex[m]]));
 				}
 				else{
 					v.push_back("");
@@ -647,6 +651,21 @@ RangeReal CrossSectionGraphEntry::getRange(long i) {
 		}
 	}
 	return ranges[i];
+}
+
+const DomainValueRangeStruct & CrossSectionGraphEntry::getDvrs(int i) const{
+	IlwisObject obj = sources[i];
+	if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
+		MapList mpl(obj->fnObj);
+		return mpl[0]->dvrs();
+	}
+	else if ( IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
+		ObjectCollection oc(obj->fnObj);
+		BaseMap bmp(oc->fnObject(0));
+		return bmp->dvrs();
+	}
+	else
+		return BaseMap(obj->fnObj)->dvrs(); // shouldn't happen; we only have maplists and objectcollections
 }
 
 #define ID_ADD_ITEMS 5103
