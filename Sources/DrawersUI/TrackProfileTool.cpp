@@ -525,7 +525,7 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	v.push_back(FLVColumnInfo("Value range", 130, true));
 	v.push_back(FLVColumnInfo("Value", 100));
 	graph = new TrackProfileGraphEntry(root,t);
-	cbStretch = new CheckBox(root, "Individual Scaling", &yStretch);
+	cbStretch = new CheckBox(root, "Independent Scaling", &yStretch);
 	cbStretch->SetCallBack((NotifyProc)&TrackProfileGraphFrom::stretchClicked);
 	FieldListView *view = new FieldListView(root,v);
 	graph->setListView(view);

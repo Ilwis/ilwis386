@@ -293,7 +293,7 @@ DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	v.push_back(FLVColumnInfo("Selected index", 90));
 	v.push_back(FLVColumnInfo("Value", 100));
 	graph = new CrossSectionGraphEntry(root, sources,dr->getRootDrawer()->getCoordinateSystem(),t);
-	cbStretch = new CheckBox(root, "Individual Scaling", &yStretch);
+	cbStretch = new CheckBox(root, "Independent Scaling", &yStretch);
 	cbStretch->SetCallBack((NotifyProc)&CrossSectionGraphFrom::stretchClicked);
 	FieldListView * flv = new FieldListView(root,v);
 	graph->setListView(flv);
