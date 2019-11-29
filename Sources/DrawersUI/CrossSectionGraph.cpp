@@ -605,11 +605,35 @@ void CrossSectionGraphEntry::reset() {
 ////	}
 //}
 
-void CrossSectionGraphEntry::setCoord(const Coord& crd){
+void CrossSectionGraphEntry::addCoord(const Coord& crd){
 	if ( crd == Coord())
 		return;
 
 	crdSelect.push_back(crd);
+	//int n = sources.size() / crdSelect.size();
+	//for(int i=0; i < crdSelect.size(); ++i) {
+	//	if ( i != 0) {
+	//		int groupStart = n * crdSelect.size();
+	//		if (i + groupStart < sources.size())
+	//			sources.insert(sources.begin() + i + groupStart, SourceInfo(sources[i * n].obj, crdSelect.size()));
+	//		else
+	//			sources.push_back(SourceInfo(sources[i * n].obj, crdSelect.size()));
+	//	}
+	//	update();
+	//}
+	if ( crossSectionGraph)
+		crossSectionGraph->Invalidate();
+	else
+		fillList();
+}
+
+void CrossSectionGraphEntry::setLastCoord(const Coord& crd){
+	if ( crd == Coord())
+		return;
+
+	int sz = crdSelect.size();
+	if (sz > 0)
+		crdSelect[sz - 1] = crd;
 	//int n = sources.size() / crdSelect.size();
 	//for(int i=0; i < crdSelect.size(); ++i) {
 	//	if ( i != 0) {

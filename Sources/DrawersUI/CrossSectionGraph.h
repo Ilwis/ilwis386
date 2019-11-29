@@ -43,7 +43,8 @@ public:
 //	void addSourceSet(const IlwisObject& obj);
 	void setRecordRange(const RangeInt& rng);
 	void create();
-	void setCoord( const Coord& crd);
+	void addCoord(const Coord& crd);
+	void setLastCoord(const Coord& crd);
 	void setYStretch(bool stretch);
 	void setListView(FieldListView *v);
 	RangeReal getRange(long i);

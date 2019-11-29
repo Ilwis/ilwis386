@@ -18,7 +18,8 @@ class ProbeMarkers;
 		void addSource(const FileName& fn);
 		void setcheckTool(void *w, HTREEITEM);
 		void OnLButtonUp(UINT nFlags, CPoint point);
-		void OnLButtonDown(UINT fl, CPoint point);
+		void OnMouseMove(UINT nFlags, CPoint point);
+		void OnLButtonDown(UINT nFlags, CPoint point);
 		void uncheckTool();
 		void displayOptionAddList();
 		void updateCbStretch();
@@ -29,6 +30,7 @@ class ProbeMarkers;
 		bool isUnique(const FileName& fn);
 		ProbeMarkers *markers;
 		bool working;
+		bool fDown;
 	};
 
 	class ChooseCrossSectionForm : public DisplayOptionsForm2 {
@@ -47,7 +49,8 @@ class ProbeMarkers;
 	public:
 		CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr, vector<IlwisObject>& sources, CrossSectionTool *t);
 		//void apply(); 
-		void setSelectCoord(const Coord& crd);
+		void addCoord(const Coord& crd);
+		void setLastCoord(const Coord& crd);
 		void addSourceSet(const IlwisObject& obj);
 		void reset();
 		void updateCbStretch();
@@ -69,6 +72,7 @@ class ProbeMarkers;
 		//virtual bool draw( const CoordBounds& cbArea=CoordBounds()) const;
 		void prepare(PreparationParameters *);
 		void addMarker(const Coord& crd);
+		void setLastMarkerCoord(const Coord& crd);
 		private:
 	};
 

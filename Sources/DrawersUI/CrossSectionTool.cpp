@@ -56,14 +56,21 @@ void ProbeMarkers::addMarker(const Coord& crd) {
 	addDrawer(pdrw);
 }
 
+void ProbeMarkers::setLastMarkerCoord(const Coord& crd) {
+	int sz = drawers.size();
+	if (sz > 0) {
+		PointDrawer * pdrw = (PointDrawer *)(drawers[sz - 1]);
+		pdrw->setCoord(crd);
+	}
+}
 
 DrawerTool *createCrossSectionTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) {
 	return new CrossSectionTool(zv, view, drw);
 }
 
-
-CrossSectionTool::CrossSectionTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : 
-	DrawerTool("CrossSectionTool",zv, view, drw)
+CrossSectionTool::CrossSectionTool(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw)
+: DrawerTool("CrossSectionTool",zv, view, drw)
+, fDown(false)
 {
 	active = false;
 	stay = true;
@@ -222,28 +229,50 @@ void CrossSectionTool::addSource(const FileName& fn) {
 }
 
 void CrossSectionTool::OnLButtonDown(UINT nFlags, CPoint pnt) {
+	fDown = true;
 	short state = ::GetKeyState(VK_CONTROL);
 	Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(pnt.y, pnt.x));
 	markers->setActive(true);
 	if ( (state & 0x8000)) {
+		if ( graphForm)
+			graphForm->addCoord(c1);
 		markers->addMarker(c1);
 	} else {
 		markers->clear();
-		if ( graphForm)
+		if ( graphForm) {
 			graphForm->reset();
+			graphForm->addCoord(c1);
+		}
 		markers->addMarker(c1);
 	}
 	mpvGetView()->Invalidate();
 }
 
+void CrossSectionTool::OnMouseMove(UINT nFlags, CPoint point) {
+	if ( mpvGetView()->iActiveTool == ID_ZOOMIN) // during zooming, no message handling
+		return;
+
+	if (fDown) {
+		Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
+		markers->setLastMarkerCoord(c1);
+		if ( graphForm) {
+			graphForm->setLastCoord(c1);
+		}
+		mpvGetView()->Invalidate();
+	}
+}
+
 void CrossSectionTool::OnLButtonUp(UINT nFlags, CPoint point) {
+	fDown = false;
 	if ( mpvGetView()->iActiveTool == ID_ZOOMIN) // during zooming, no message handling
 		return;
 
 	Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(point.y, point.x));
+	markers->setLastMarkerCoord(c1);
 	if ( graphForm) {
-		graphForm->setSelectCoord(c1);
+		graphForm->setLastCoord(c1);
 	}
+	mpvGetView()->Invalidate();
 }
 
 void CrossSectionTool::updateCbStretch() {
@@ -321,8 +350,12 @@ void CrossSectionGraphFrom::addSourceSet(const IlwisObject& obj) {
 	updateCbStretch();
 }
 
-void CrossSectionGraphFrom::setSelectCoord(const Coord& crd) {
-	graph->setCoord(crd);
+void CrossSectionGraphFrom::addCoord(const Coord& crd) {
+	graph->addCoord(crd);
+}
+
+void CrossSectionGraphFrom::setLastCoord(const Coord& crd) {
+	graph->setLastCoord(crd);
 }
 
 void CrossSectionGraphFrom::reset() {
