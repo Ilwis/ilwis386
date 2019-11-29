@@ -40,7 +40,7 @@ public:
 
    DECLARE_MESSAGE_MAP();
 private:
-	void DrawMarker(int xposOld, int xpos, CRect & rect);
+	void DrawMarker(int xposOld, int xpos);
 	BaseMap getBaseMap(long i, long m);
 	int getNumberOfMaps(long i);
 	LRESULT tick(WPARAM wp, LPARAM lp);
@@ -51,12 +51,13 @@ private:
 	const DomainValueRangeStruct & getDvrs(int i) const;
 	double getValue(int i, const BaseMap& bmp, const Coord& crd) const;
 	Color getColor(int i, const BaseMap&bmp, long iRaw) const;
-	ILWIS::LayerDrawer *getLayerDrawer(ILWIS::NewDrawer *cdr) const ;
+	ILWIS::LayerDrawer *getLayerDrawer(ILWIS::NewDrawer *cdr) const;
 
 	TrackProfileGraphEntry *fldGraph;
 	vector<vector<GraphInfo> > values;
 	vector<LocInfo> track;
 	CToolTipCtrl* toolTip;
+	CRect rct;
 	bool yStretch;
 	bool fDown;
 	int markerXposOld;

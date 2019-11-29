@@ -271,7 +271,29 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	SelectObject(lpDIS->hDC, oldBrush);
 	SelectObject(lpDIS->hDC, oldPen);
 
-	CRect rct = CRect(crct.left, crct.top,crct.right, crct.bottom-20 );
+	RangeReal rrTotal;
+	String sTop;
+	String sBottom;
+	if (!yStretch) {
+		for(int m =0; m < fldGraph->sources.size(); ++m) {
+			rrTotal += fldGraph->getRange(m);
+		}
+		if (fldGraph->sources.size() > 0) {
+			const DomainValueRangeStruct & dvrs = fldGraph->getDvrs(0);
+			sTop = dvrs.sValue(rrTotal.rHi());
+			sBottom = dvrs.sValue(rrTotal.rLo());
+		}
+	} else if (fldGraph->sources.size() == 1) {
+		const DomainValueRangeStruct & dvrs = fldGraph->getDvrs(0);
+		sTop = dvrs.sValue(fldGraph->getRange(0).rHi());
+		sBottom = dvrs.sValue(fldGraph->getRange(0).rLo());
+	}
+	CDC *dc = CDC::FromHandle(lpDIS->hDC);
+	CSize szTop = dc->GetTextExtent(sTop.c_str(), sTop.size());
+	CSize szBottom = dc->GetTextExtent(sBottom.c_str(), sBottom.size());
+	int iLeft = max(szTop.cx, szBottom.cx);
+	rct = CRect(crct.left + (iLeft > 0 ? iLeft + 1 : 0), crct.top, crct.right, crct.bottom-20);
+
 	Color bkColor = GetBkColor(lpDIS->hDC);
 	CBrush bbrushBk(RGB(255, 255, 255));
 	SelectObject(lpDIS->hDC, bbrushBk);
@@ -283,19 +305,16 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 	CFont* fnt = new CFont();
 	BOOL vvv = fnt->CreatePointFont(80,"Arial");
-	CDC *dc = CDC::FromHandle(lpDIS->hDC);
-
 	HGDIOBJ fntOld = dc->SelectObject(fnt);
+
+	if (!yStretch || fldGraph->sources.size() == 1) {
+		dc->TextOut(0, rct.top,sTop.c_str(),sTop.size());
+		dc->TextOut(0, rct.bottom - szBottom.cy / 2,sBottom.c_str(),sBottom.size());
+	}
 
 	int maxNr = -1;
 	values.clear();
 	fldGraph->currentIndex.clear();
-	RangeReal rrTotal;
-	if (!yStretch) {
-		for(int m =0; m < fldGraph->sources.size(); ++m) {
-			rrTotal += fldGraph->getRange(m);
-		}
-	}
 	for(int m =0; m < fldGraph->sources.size(); ++m) {
 		fldGraph->currentIndex.push_back(iUNDEF);
 		int penStyle = m % 4;
@@ -308,13 +327,12 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		double y0 = rr.rWidth() * yscale;
 		double xscale = (numberOfMaps > 1) ? (double)rct.Width() / (numberOfMaps - 1) : rct.Width();
 		values[m].resize(fldGraph->crdSelect.size());
-		double rx = 0;
 		int f = 20;
 		for(int p=0; p < fldGraph->crdSelect.size(); ++p) {
 			Color clr = Representation::clrPrimary(p == 0 ? 1 : p + 3);
 			CPen bpen(penStyle, 1, clr);
 			SelectObject(lpDIS->hDC, bpen);
-			rx = 0;
+			double rx = rct.left;
 			for(int i = 0; i < numberOfMaps; ++i) {
 				BaseMap bmp = getBaseMap(i, m);
 				Coord crd = fldGraph->crdSelect[p];
@@ -332,23 +350,26 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		}
 	}
 
-	double rx = 0;
+	CPen bpen(PS_SOLID, 1, RGB(150,150,150));
+	SelectObject(lpDIS->hDC, bpen);
+
+	double rx = rct.left;
 	double xscale = (maxNr > 1) ? (double)rct.Width() / (maxNr - 1) : rct.Width();
-	int modval = max(1, 1 + maxNr / 15); // max. 15 numbers will be drawn inndividually on the x-axis; a larger number will be drawn every 2, every 3 etc.
+	int modval = max(1, 1 + maxNr / 15); // max. 15 numbers will be drawn individually on the x-axis; a larger number will be drawn every 2, every 3 etc.
 	for(int i = 0; i < maxNr; ++i) {
 		if ( i % modval == 0) {
 			String s("%d", i + 1);
 			CSize sz = dc->GetTextExtent(s.c_str(), s.size());
 			int xpos;
 			if (i == 0)
-				xpos = 0;
+				xpos = rct.left;
 			else if (i == maxNr - 1)
 				xpos = min(rx - sz.cx / 2, rct.right - sz.cx);
 			else
 				xpos = rx - sz.cx / 2;
-			dc->TextOut(xpos, crct.bottom - 16,s.c_str(),s.size());
-			if (rx > rct.Width() - 1)
-				rx = rct.Width() - 1;
+			dc->TextOut(xpos, rct.bottom + 4,s.c_str(),s.size());
+			if (rx > rct.right - 1)
+				rx = rct.right - 1;
 			dc->MoveTo(rx,rct.bottom);
 			dc->LineTo(rx,rct.bottom + 3);
 		}
@@ -364,18 +385,18 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	delete fnt;
 }
 
-void CrossSectionGraph::DrawMarker(int xposOld, int xpos, CRect & rect) {
+void CrossSectionGraph::DrawMarker(int xposOld, int xpos) {
 	CDC * pDC = GetDC();
 	int dmOld = pDC->SetROP2(R2_XORPEN);
 	CPen bpen(PS_SOLID, 1, RGB(55,55,55)); // the XOR color
-	CPen* pOldPen = pDC->SelectObject(&bpen);	
+	CPen* pOldPen = pDC->SelectObject(&bpen);
 	if (xposOld != iUNDEF) {
-		pDC->MoveTo(xposOld, rect.bottom - 22);
-		pDC->LineTo(xposOld, rect.top);
+		pDC->MoveTo(xposOld, rct.bottom - 2);
+		pDC->LineTo(xposOld, rct.top);
 	}
 	if (xpos != iUNDEF) {
-		pDC->MoveTo(xpos, rect.bottom - 22);
-		pDC->LineTo(xpos, rect.top);
+		pDC->MoveTo(xpos, rct.bottom - 2);
+		pDC->LineTo(xpos, rct.top);
 	}
 	pDC->SelectObject(pOldPen);
 	pDC->SetROP2(dmOld);
@@ -387,12 +408,10 @@ void CrossSectionGraph::OnLButtonDown(UINT nFlags, CPoint point) {
 	SetCapture();
 	CWnd *wnd =  GetParent();
 	if ( wnd && values.size() > 0) {
-		CRect rct;
-		GetClientRect(rct);
-		point.x = min(rct.Width() - 1, max(0, point.x));
-		DrawMarker(markerXposOld, point.x, rct);
+		point.x = min(rct.right - 1, max(rct.left, point.x));
+		DrawMarker(markerXposOld, point.x);
 		markerXposOld = point.x;
-		double fract = (double)point.x / (rct.Width() - 1);
+		double fract = (double)(point.x - rct.left) / (rct.Width() - 1);
 		for(int m =0; m < fldGraph->sources.size(); ++m) {
 			RangeReal rr = fldGraph->getRange(m);
 			int numberOfMaps = getNumberOfMaps(m) - 1;
@@ -408,12 +427,10 @@ void CrossSectionGraph::OnMouseMove(UINT nFlags, CPoint point) {
 	if (fDown) {
 		CWnd *wnd =  GetParent();
 		if ( wnd && values.size() > 0) {
-			CRect rct;
-			GetClientRect(rct);
-			point.x = min(rct.Width() - 1, max(0, point.x));
-			DrawMarker(markerXposOld, point.x, rct);
+			point.x = min(rct.right - 1, max(rct.left, point.x));
+			DrawMarker(markerXposOld, point.x);
 			markerXposOld = point.x;
-			double fract = (double)point.x / (rct.Width() - 1);
+			double fract = (double)(point.x - rct.left) / (rct.Width() - 1);
 			for(int m =0; m < fldGraph->sources.size(); ++m) {
 				RangeReal rr = fldGraph->getRange(m);
 				int numberOfMaps = getNumberOfMaps(m) - 1;
@@ -430,12 +447,10 @@ void CrossSectionGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 	fDown = false;
 	CWnd *wnd =  GetParent();
 	if ( wnd && values.size() > 0) {
-		CRect rct;
-		GetClientRect(rct);
-		point.x = min(rct.Width() - 1, max(0, point.x));
-		DrawMarker(markerXposOld, point.x, rct);
+		point.x = min(rct.right - 1, max(rct.left, point.x));
+		DrawMarker(markerXposOld, point.x);
 		markerXposOld = point.x;
-		double fract = (double)point.x / (rct.Width() - 1);
+		double fract = (double)(point.x - rct.left) / (rct.Width() - 1);
 		for(int m =0; m < fldGraph->sources.size(); ++m) {
 			RangeReal rr = fldGraph->getRange(m);
 			int numberOfMaps = getNumberOfMaps(m) - 1;

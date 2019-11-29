@@ -205,7 +205,37 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	SelectObject(lpDIS->hDC, oldBrush);
 	SelectObject(lpDIS->hDC, oldPen);
 
-	CRect rct = CRect(crct.left, crct.top,crct.right, crct.bottom-20 );
+	RangeReal rrTotal;
+	String sTop;
+	String sBottom;
+	if (!yStretch) {
+		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
+			rrTotal += getRange(m);
+		}
+		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
+			if (!getDomain(m)->pdv())
+				continue;
+			const DomainValueRangeStruct & dvrs = getDvrs(m);
+			sTop = dvrs.sValue(rrTotal.rHi());
+			sBottom = dvrs.sValue(rrTotal.rLo());
+			break;
+		}
+	} else if (fldGraph->tool->sources.size() == 1) {
+		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
+			if (!getDomain(m)->pdv())
+				continue;
+			const DomainValueRangeStruct & dvrs = getDvrs(m);
+			sTop = dvrs.sValue(getRange(m).rHi());
+			sBottom = dvrs.sValue(getRange(m).rLo());
+			break;
+		}
+	}
+	CDC *dc = CDC::FromHandle(lpDIS->hDC);
+	CSize szTop = dc->GetTextExtent(sTop.c_str(), sTop.size());
+	CSize szBottom = dc->GetTextExtent(sBottom.c_str(), sBottom.size());
+	int iLeft = max(szTop.cx, szBottom.cx);
+	rct = CRect(crct.left + (iLeft > 0 ? iLeft + 1 : 0), crct.top, crct.right, crct.bottom-20);
+	
 	Color bkColor = GetBkColor(lpDIS->hDC);
 	CBrush bbrushBk(RGB(255, 255, 255));
 	SelectObject(lpDIS->hDC, bbrushBk);
@@ -214,14 +244,18 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 
 	if ( track.size() == 0) {
 		if (markerXposOld != iUNDEF)
-			DrawMarker(iUNDEF, markerXposOld, crct);
+			DrawMarker(iUNDEF, markerXposOld);
 		return;
 	}
 
 	CFont* fnt = new CFont();
 	BOOL vvv = fnt->CreatePointFont(80,"Arial");
-	CDC *dc = CDC::FromHandle(lpDIS->hDC);
 	HGDIOBJ fntOld = dc->SelectObject(fnt);
+
+	if (!yStretch || fldGraph->tool->sources.size() == 1) {
+		dc->TextOut(0, rct.top,sTop.c_str(),sTop.size());
+		dc->TextOut(0, rct.bottom - szBottom.cy / 2,sBottom.c_str(),sBottom.size());
+	}
 
 	int oldnr = iUNDEF;
 	values.clear();
@@ -230,15 +264,9 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	int numberOfPoints = track.size();
 	double xscale = (numberOfPoints > 1) ? (double)rct.Width() / (numberOfPoints - 1) : rct.Width();
 	vector<double> markers;
-	RangeReal rrTotal;
-	if (!yStretch) {
-		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
-			rrTotal += getRange(m);
-		}
-	}
 	for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 		values.resize(fldGraph->tool->sources.size());
-		double rx = 0;
+		double rx = rct.left;
 		if ( getDomain(m)->pdv() )  {
 
 			RangeReal rr = yStretch ? getRange(m) : rrTotal;
@@ -282,19 +310,27 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			}
 		} else if ( getDomain(m)->pdsrt()) {
 			long oldRaw = iUNDEF;
-			double oldX = 0;
+			double oldX = rct.left;
 			for(int i = 0; i < numberOfPoints; ++i) {
 				BaseMap bmp = fldGraph->tool->sources[m]->getMap(track[i].crd);
 				long raw = getValue(m,bmp,track[i].crd);
 				values[m].push_back(GraphInfo((i + 1),raw,track[i].crd));
-				if ( raw != oldRaw || i == numberOfPoints - 1) {
+				if ( (i > 0 && raw != oldRaw) || i == numberOfPoints - 1) {
 					Color clr = oldRaw != iUNDEF ? getColor(m, bmp, oldRaw) : Color(255,255,255);
 					CBrush brush(clr);
 					SelectObject(lpDIS->hDC, brush);
-					double xFrom = (oldX > 0) ? round(oldX - xscale / 2.0) : 0.0;
-					double xTo = (i < numberOfPoints - 1) ? round(rx - xscale / 2.0) : rct.Width();
+					double xFrom = (oldX > rct.left) ? round(oldX - xscale / 2.0) : rct.left;
+					double xTo = (i < numberOfPoints - 1 || raw != oldRaw) ? round(rx - xscale / 2.0) : rct.right;
 					::Rectangle(lpDIS->hDC, xFrom, 5 + 20 * noOfClassMaps, xTo, 25 + 20 * noOfClassMaps);
 					oldX= rx;
+				}
+				if (i == numberOfPoints - 1 && raw != oldRaw) {
+					Color clr = raw != iUNDEF ? getColor(m, bmp, raw) : Color(255,255,255);
+					CBrush brush(clr);
+					SelectObject(lpDIS->hDC, brush);
+					double xFrom = round(oldX - xscale / 2.0);
+					double xTo = rct.right;
+					::Rectangle(lpDIS->hDC, xFrom, 5 + 20 * noOfClassMaps, xTo, 25 + 20 * noOfClassMaps);
 				}
 				oldRaw = raw;
 				if ((m == 0) && track[i].marker)
@@ -311,7 +347,7 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		dc->LineTo(markers[i], rct.top);
 	}
 
-	double rx = 0;
+	double rx = rct.left;
 	double n = 4.0;
 	double rStep = rRound(totDist / n);
 	n = ceil(totDist / rStep);
@@ -324,12 +360,12 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			CSize sz = dc->GetTextExtent(s.c_str(), s.size());
 			int xpos;
 			if (i == 0)
-				xpos = 0;
+				xpos = rct.left;
 			else if (i == n - 1)
 				xpos = min(rx - sz.cx / 2, rct.right - sz.cx);
 			else
 				xpos = rx - sz.cx / 2;
-			dc->TextOut(xpos, crct.bottom - 16,s.c_str(),s.size());
+			dc->TextOut(xpos, rct.bottom + 4,s.c_str(),s.size());
 			rx += (rct.Width() + 1) * rStep / totDist;
 		}
 	}
@@ -340,21 +376,21 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	fnt->DeleteObject();
 	delete fnt;
 	if (markerXposOld != iUNDEF)
-		DrawMarker(iUNDEF, markerXposOld, crct);
+		DrawMarker(iUNDEF, markerXposOld);
 }
 
-void TrackProfileGraph::DrawMarker(int xposOld, int xpos, CRect & rect) {
+void TrackProfileGraph::DrawMarker(int xposOld, int xpos) {
 	CDC * pDC = GetDC();
 	int dmOld = pDC->SetROP2(R2_XORPEN);
 	CPen bpen(PS_SOLID, 1, RGB(55,55,55)); // the XOR color
-	CPen* pOldPen = pDC->SelectObject(&bpen);	
+	CPen* pOldPen = pDC->SelectObject(&bpen);
 	if (xposOld != iUNDEF) {
-		pDC->MoveTo(xposOld, rect.bottom - 22);
-		pDC->LineTo(xposOld, rect.top);
+		pDC->MoveTo(xposOld, rct.bottom - 2);
+		pDC->LineTo(xposOld, rct.top);
 	}
 	if (xpos != iUNDEF) {
-		pDC->MoveTo(xpos, rect.bottom - 22);
-		pDC->LineTo(xpos, rect.top);
+		pDC->MoveTo(xpos, rct.bottom - 2);
+		pDC->LineTo(xpos, rct.top);
 	}
 	pDC->SelectObject(pOldPen);
 	pDC->SetROP2(dmOld);
@@ -367,12 +403,10 @@ void TrackProfileGraph::OnLButtonDown(UINT nFlags, CPoint point) {
 	CWnd *wnd =  GetParent();
 	if ( wnd && values.size() > 0) {
 		int numberOfPoints = track.size() - 1;
-		CRect rct;
-		GetClientRect(rct);
-		point.x = min(rct.Width() - 1, max(0, point.x));
-		DrawMarker(markerXposOld, point.x, rct);
+		point.x = min(rct.right - 1, max(rct.left, point.x));
+		DrawMarker(markerXposOld, point.x);
 		markerXposOld = point.x;
-		double fract = (double)point.x / (rct.Width() - 1);
+		double fract = (double)(point.x - rct.left) / (rct.Width() - 1);
 		fldGraph->currentIndex = min(numberOfPoints, max(0, round(numberOfPoints * fract)));
 		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 			if ( fldGraph->currentIndex >= values[m].size())
@@ -389,12 +423,10 @@ void TrackProfileGraph::OnMouseMove(UINT nFlags, CPoint point) {
 		CWnd *wnd =  GetParent();
 		if ( wnd && values.size() > 0) {
 			int numberOfPoints = track.size() - 1;
-			CRect rct;
-			GetClientRect(rct);
-			point.x = min(rct.Width() - 1, max(0, point.x));
-			DrawMarker(markerXposOld, point.x, rct);
+			point.x = min(rct.right - 1, max(rct.left, point.x));
+			DrawMarker(markerXposOld, point.x);
 			markerXposOld = point.x;
-			double fract = (double)point.x / (rct.Width() - 1);
+			double fract = (double)(point.x - rct.left) / (rct.Width() - 1);
 			fldGraph->currentIndex = min(numberOfPoints, max(0, round(numberOfPoints * fract)));
 			for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 				if ( fldGraph->currentIndex >= values[m].size())
@@ -412,12 +444,10 @@ void TrackProfileGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 	CWnd *wnd =  GetParent();
 	if ( wnd && values.size() > 0) {
 		int numberOfPoints = track.size() - 1;
-		CRect rct;
-		GetClientRect(rct);
-		point.x = min(rct.Width() - 1, max(0, point.x));
-		DrawMarker(markerXposOld, point.x, rct);
+		point.x = min(rct.right - 1, max(rct.left, point.x));
+		DrawMarker(markerXposOld, point.x);
 		markerXposOld = point.x;
-		double fract = (double)point.x / (rct.Width() - 1);
+		double fract = (double)(point.x - rct.left) / (rct.Width() - 1);
 		fldGraph->currentIndex = min(numberOfPoints, max(0, round(numberOfPoints * fract)));
 		for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
 			if ( fldGraph->currentIndex >= values[m].size())
@@ -621,9 +651,7 @@ void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord
 		listview->update();
 		if ( graph) {
 			if (graph->markerXposOld != iUNDEF) {
-				CRect rect;
-				graph->GetClientRect(rect);
-				graph->DrawMarker(graph->markerXposOld, iUNDEF, rect);
+				graph->DrawMarker(graph->markerXposOld, iUNDEF);
 				graph->markerXposOld = iUNDEF;
 			}
 		}

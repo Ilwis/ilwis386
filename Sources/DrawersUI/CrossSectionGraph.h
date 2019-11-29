@@ -24,12 +24,13 @@ public:
 
    DECLARE_MESSAGE_MAP();
 private:
-	void DrawMarker(int xposOld, int xpos, CRect & rect);
+	void DrawMarker(int xposOld, int xpos);
 	BaseMap getBaseMap(long i, long m);
 	int getNumberOfMaps(long i);
 	CrossSectionGraphEntry *fldGraph;
 	vector<vector<vector<double> > >values;
 	CToolTipCtrl* toolTip;
+	CRect rct;
 	bool yStretch;
 	bool fDown;
 	int markerXposOld;
