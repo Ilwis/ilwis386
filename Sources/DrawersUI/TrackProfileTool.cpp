@@ -323,7 +323,6 @@ void TrackProfileTool::OnMouseMove(UINT nFlags, CPoint pnt)
 
 	if (fDown) {
 		SetCursor(zCursor(IDC_CROSS));
-		mpvGetView()->Invalidate();
 		Coord c1 = tree->GetDocument()->rootDrawer->screenToWorld(RowCol(pnt.y, pnt.x));
 		coords[coords.size() - 1] = c1;
 		setCoords();
