@@ -280,6 +280,11 @@ void CrossSectionTool::updateCbStretch() {
 		graphForm->updateCbStretch();
 }
 
+void CrossSectionTool::setCustomRange() {
+	if (graphForm)
+		graphForm->setCustomRange();
+}
+
 //-------------------------------------------------------------------
 ChooseCrossSectionForm::ChooseCrossSectionForm(CWnd *wPar, LayerDrawer *dr, CrossSectionTool *t) : 
 	DisplayOptionsForm2(dr,wPar,TR("Add data source"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON | fbsOKHASCLOSETEXT),
@@ -313,24 +318,34 @@ CrossSectionGraphFrom::CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr, vector
 DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON)
 , tool(t)
 , yStretch(false)
+, iScaleMethod(MAP)
 {
 	vector<FLVColumnInfo> v;
 	v.push_back(FLVColumnInfo("Source", 200));
 	v.push_back(FLVColumnInfo("Probe", 40));
 	v.push_back(FLVColumnInfo("Index range", 80));
-	v.push_back(FLVColumnInfo("Value range", 130));
+	v.push_back(FLVColumnInfo("Value range", 130, true));
 	v.push_back(FLVColumnInfo("Selected index", 90));
 	v.push_back(FLVColumnInfo("Value", 100));
 	graph = new CrossSectionGraphEntry(root, sources,dr->getRootDrawer()->getCoordinateSystem(),t);
+	rgStretch = new RadioGroup(root, "Scale", (int*)&iScaleMethod, true);
+	rgStretch->SetIndependentPos();
+	new RadioButton(rgStretch, "Map");
+	new RadioButton(rgStretch, "Probe");
+	new RadioButton(rgStretch, "Custom");
+	rgStretch->SetCallBack((NotifyProc)&CrossSectionGraphFrom::scaleChanged);
 	cbStretch = new CheckBox(root, "Independent Scaling", &yStretch);
 	cbStretch->SetCallBack((NotifyProc)&CrossSectionGraphFrom::stretchClicked);
+	cbStretch->Align(rgStretch, AL_AFTER);
 	FieldListView * flv = new FieldListView(root,v);
+	flv->Align(rgStretch, AL_UNDER);
 	graph->setListView(flv);
 	FieldGroup *fg = new FieldGroup(root,true);
 	PushButton *pb1 = new PushButton(fg,TR("Save as Table"), (NotifyProc)&CrossSectionGraphFrom::saveAsTable);
 	PushButton *pb2 = new PushButton(fg,TR("Save as Spectrum"), (NotifyProc)&CrossSectionGraphFrom::saveAsSpectrum);
 	pb2->Align(pb1, AL_AFTER);
 	create();
+	flv->setItemChangedCallback(graph, (NotifyItemChangedProc)&CrossSectionGraphEntry::setOverruleRange);
 	flv->setContextMenuCallback(graph, (NotifyContextMenuProc)&CrossSectionGraphEntry::onContextMenu);
 	cbStretch->disable();
 }
@@ -378,6 +393,22 @@ int CrossSectionGraphFrom::stretchClicked(Event *)
 	return 0;  
 }
 
+int CrossSectionGraphFrom::scaleChanged(Event *)
+{
+	rgStretch->StoreData();
+	if (graph) {
+		if (iScaleMethod == MAP) {
+			graph->setYStretchOnSamples(false);
+		} else if (iScaleMethod == PROBE) {
+			graph->setYStretchOnSamples(true);
+		} else if (iScaleMethod == CUSTOM) {
+			graph->setCustomRange();
+			graph->setYStretch(yStretch); // this is only here to trigger an Invalidate()
+		}
+	}
+	return 0;  
+}
+
 void CrossSectionGraphFrom::updateCbStretch() {
 	if (tool->sources.size() > 1)
 		cbStretch->enable();
@@ -385,3 +416,9 @@ void CrossSectionGraphFrom::updateCbStretch() {
 		cbStretch->disable();
 }
 
+void CrossSectionGraphFrom::setCustomRange() {
+	if (graph)
+		graph->setCustomRange();
+	rgStretch->SetVal(CUSTOM);
+	rgStretch->StoreData();
+}

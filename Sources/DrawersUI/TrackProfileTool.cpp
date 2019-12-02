@@ -402,14 +402,21 @@ void TrackProfileTool::timedEvent(UINT timerid) {
 				sources[j]->updateIndex(cdrw->getCurrentIndex());
 			//}
 		}
-		if ( graphForm)
+		if ( graphForm) {
+			graphForm->sourceIndexChanged();
 			graphForm->update();
+		}
 	}
 }
 
 void TrackProfileTool::updateCbStretch() {
 	if (graphForm)
 		graphForm->updateCbStretch();
+}
+
+void TrackProfileTool::setCustomRange() {
+	if (graphForm)
+		graphForm->setCustomRange();
 }
 
 void TrackProfileTool::setActiveMode(bool yesno) {
@@ -516,7 +523,7 @@ int ChooseTrackProfileForm::addSource(Event *ev) {
 
 //========================================================================
 TrackProfileGraphFrom::TrackProfileGraphFrom(CWnd *wPar, LayerDrawer *dr,TrackProfileTool *t) :
-DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON), graph(0), tool(t), yStretch(false)
+DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON), graph(0), tool(t), yStretch(false), iScaleMethod(MAP)
 {
 	vector<FLVColumnInfo> v;
 	v.push_back(FLVColumnInfo("Source", 220));
@@ -524,9 +531,17 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	v.push_back(FLVColumnInfo("Value range", 130, true));
 	v.push_back(FLVColumnInfo("Value", 100));
 	graph = new TrackProfileGraphEntry(root,t);
+	rgStretch = new RadioGroup(root, "Scale", (int*)&iScaleMethod, true);
+	rgStretch->SetIndependentPos();
+	new RadioButton(rgStretch, "Map");
+	new RadioButton(rgStretch, "Track");
+	new RadioButton(rgStretch, "Custom");
+	rgStretch->SetCallBack((NotifyProc)&TrackProfileGraphFrom::scaleChanged);
 	cbStretch = new CheckBox(root, "Independent Scaling", &yStretch);
 	cbStretch->SetCallBack((NotifyProc)&TrackProfileGraphFrom::stretchClicked);
+	cbStretch->Align(rgStretch, AL_AFTER);
 	FieldListView *view = new FieldListView(root,v);
+	view->Align(rgStretch, AL_UNDER);
 	graph->setListView(view);
 	FieldGroup *grbuttons = new FieldGroup(root);
 	PushButton *pb1 = new PushButton(grbuttons,TR("Load track"),(NotifyProc)&TrackProfileGraphFrom::loadTrack);
@@ -605,11 +620,41 @@ int TrackProfileGraphFrom::stretchClicked(Event *)
 	return 0;  
 }
 
+int TrackProfileGraphFrom::scaleChanged(Event *)
+{
+	rgStretch->StoreData();
+	if (graph) {
+		if (iScaleMethod == MAP) {
+			for (int i = 0; i < tool->sources.size(); ++i)
+				tool->sources[i]->setRange(RangeReal());
+			graph->setYStretchOnSamples(false);
+		} else if (iScaleMethod == TRACK) {
+			for (int i = 0; i < tool->sources.size(); ++i)
+				tool->sources[i]->setRange(RangeReal());
+			graph->setYStretchOnSamples(true);
+		} else if (iScaleMethod == CUSTOM) {
+			for (int i = 0; i < tool->sources.size(); ++i)
+				tool->sources[i]->setRange(graph->getRange(i));
+			graph->setYStretch(yStretch); // this is only here to trigger an Invalidate()
+		}
+	}
+	return 0;  
+}
+
 void TrackProfileGraphFrom::updateCbStretch() {
 	if (tool->sources.size() > 1)
 		cbStretch->enable();
 	else
 		cbStretch->disable();
+}
+
+void TrackProfileGraphFrom::setCustomRange() {
+	if (graph) {
+		for (int i = 0; i < tool->sources.size(); ++i)
+			tool->sources[i]->setRange(graph->getRange(i));
+	}
+	rgStretch->SetVal(CUSTOM);
+	rgStretch->StoreData();
 }
 
 class SegmentMapNameForm : public FormWithDest {
@@ -669,6 +714,11 @@ void TrackProfileGraphFrom::addSource(const IlwisObject& bmp) {
 	if ( graph)
 		graph->addSource(bmp);
 	updateCbStretch();
+}
+
+void TrackProfileGraphFrom::sourceIndexChanged() {
+	if ( graph)
+		graph->sourceIndexChanged();
 }
 
 void TrackProfileGraphFrom::reset() {

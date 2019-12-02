@@ -138,7 +138,6 @@ void CrossSectionGraph::saveAsSpectrum(){
 			outfile << "band" << (i + 1) << "=" << std::setprecision(5) << finalResult[i] << "\n";
 		outfile.close();
 	}
-
 }
 
 class TableNameForm : public FormWithDest {
@@ -481,6 +480,7 @@ CrossSectionGraphEntry::CrossSectionGraphEntry(FormEntry* par, vector<IlwisObjec
 FormEntry(par,0,true),
 crossSectionGraph(0),
 listview(0),
+yStretchOnSamples(false),
 sources(_sources),
 csy(cys),
 tool(t)
@@ -666,6 +666,14 @@ void CrossSectionGraphEntry::setYStretch(bool stretch) {
 	}
 }
 
+void CrossSectionGraphEntry::setYStretchOnSamples(bool stretch) {
+	overruleRanges.clear();
+	yStretchOnSamples = stretch;
+	if (crossSectionGraph) {
+		crossSectionGraph->Invalidate();
+	}
+}
+
 void CrossSectionGraphEntry::setListView(FieldListView *v) {
 	listview = v;
 	v->psn->iMinWidth = v->psn->iWidth = CSGRPAH_SIZE;
@@ -674,30 +682,64 @@ void CrossSectionGraphEntry::setListView(FieldListView *v) {
 
 
 RangeReal CrossSectionGraphEntry::getRange(long i) {
-	IlwisObject obj = sources[i];
-	if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
-		if ( ranges.size() <= i) {
-			MapList mpl(obj->fnObj);
-			RangeReal rr = mpl->getRange();
-			DomainValue *pdv =  mpl[i]->dm()->pdv();
-		/*	if ( pdv ) {
-				if ( !pdv->fSystemObject()) {
-					RangeReal rr1 = pdv->rrMinMax();
-					if ( rr.rWidth() < 1e8)
-						rr = rr1;
-				}
-			}*/
-			ranges.push_back(rr);
-		}
-
+	if (i < overruleRanges.size()) {
+		RangeReal rr = overruleRanges[i];
+		if ( rr.fValid())
+			return rr;
 	}
-	else if ( IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
-		if ( ranges.size() <= i) {
-			ObjectCollection oc(obj->fnObj);
-			ranges.push_back(oc->getRange());
+
+	if (yStretchOnSamples) { // from the "values" array
+		RangeReal rr;
+		if (crossSectionGraph && crossSectionGraph->values.size() > i) {
+			for (int j = 0; j < crossSectionGraph->values[i].size(); ++j) {
+				for (int k = 0; k < crossSectionGraph->values[i][j].size(); ++k)
+					rr += crossSectionGraph->values[i][j][k];
+			}
+		}
+		return rr;
+	} else { // from the entire maps
+		IlwisObject obj = sources[i];
+		if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
+			if ( ranges.size() <= i) {
+				MapList mpl(obj->fnObj);
+				RangeReal rr = mpl->getRange();
+				DomainValue *pdv =  mpl[i]->dm()->pdv();
+			/*	if ( pdv ) {
+					if ( !pdv->fSystemObject()) {
+						RangeReal rr1 = pdv->rrMinMax();
+						if ( rr.rWidth() < 1e8)
+							rr = rr1;
+					}
+				}*/
+				ranges.push_back(rr);
+			}
+		}
+		else if ( IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
+			if ( ranges.size() <= i) {
+				ObjectCollection oc(obj->fnObj);
+				ranges.push_back(oc->getRange());
+			}
 		}
 	}
 	return ranges[i];
+}
+
+void CrossSectionGraphEntry::setOverruleRange(int row, int col, const String& value) {
+	RangeReal rr(value);
+	if ( rr.fValid()) {
+		if ( row < tool->sources.size() ) {
+			tool->setCustomRange();
+			overruleRanges[row] = rr;
+			crossSectionGraph->Invalidate();
+		}
+	}
+}
+
+void CrossSectionGraphEntry::setCustomRange() {
+	if (overruleRanges.size() < tool->sources.size())
+		overruleRanges.resize(tool->sources.size());
+	for (int i = 0; i < tool->sources.size(); ++i)
+		overruleRanges[i] = getRange(i);
 }
 
 const DomainValueRangeStruct & CrossSectionGraphEntry::getDvrs(int i) const{
@@ -740,6 +782,7 @@ void CrossSectionGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
 						listview->RemoveData(j);
 					sources.erase(sources.begin() + sourceNr);
 					ranges.erase(ranges.begin() + sourceNr);
+					overruleRanges.erase(overruleRanges.begin() + sourceNr);
 				}
 				if (crossSectionGraph)
 					crossSectionGraph->recomputeValues();

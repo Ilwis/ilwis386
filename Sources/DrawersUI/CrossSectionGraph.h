@@ -47,12 +47,15 @@ public:
 	void addCoord(const Coord& crd);
 	void setLastCoord(const Coord& crd);
 	void setYStretch(bool stretch);
+	void setYStretchOnSamples(bool stretch);
 	void setListView(FieldListView *v);
 	RangeReal getRange(long i);
 	ILWIS::CrossSectionTool *tool;
 	void fillList();
 	void update();
 	void reset();
+	void setOverruleRange(int row, int col, const String& value);
+	void setCustomRange();
 	void onContextMenu(CWnd* pWnd, CPoint point);
 	CrossSectionGraph *graph() {return crossSectionGraph;}
 
@@ -63,7 +66,9 @@ private:
 	vector<Coord> crdSelect;
 	FieldListView *listview;
 	vector<RangeReal> ranges;
+	vector<RangeReal> overruleRanges;
 	vector<int> currentIndex;
+	bool yStretchOnSamples;
 	CrossSectionGraph *crossSectionGraph;
 	CoordSystem csy;
 };

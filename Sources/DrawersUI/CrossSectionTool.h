@@ -23,6 +23,7 @@ class ProbeMarkers;
 		void uncheckTool();
 		void displayOptionAddList();
 		void updateCbStretch();
+		void setCustomRange();
 		vector<IlwisObject> sources;
 	protected:
 		CrossSectionGraphFrom *graphForm;
@@ -54,15 +55,19 @@ class ProbeMarkers;
 		void addSourceSet(const IlwisObject& obj);
 		void reset();
 		void updateCbStretch();
+		void setCustomRange();
 		virtual void shutdown(int iReturn);
 		int saveAsTable(Event *ev);
 		int saveAsSpectrum(Event *ev);
 	private:
+		RadioGroup* rgStretch;
 		CheckBox* cbStretch;
 		int stretchClicked(Event *);
+		int scaleChanged(Event *);
 		CrossSectionGraphEntry *graph;
 		CrossSectionTool *tool;
 		bool yStretch;
+		enum ScaleMethod {MAP,PROBE,CUSTOM} iScaleMethod;
 	};
 
 	class ProbeMarkers : public ComplexDrawer {

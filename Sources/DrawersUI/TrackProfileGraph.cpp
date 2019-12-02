@@ -34,6 +34,7 @@ END_MESSAGE_MAP()
 TrackProfileGraph::TrackProfileGraph(TrackProfileGraphEntry *f, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 : BaseZapp(f)
 , yStretch(false)
+, yStretchOnSamples(false)
 , fDown(false)
 , markerXposOld(iUNDEF)
 {
@@ -146,27 +147,38 @@ RangeReal TrackProfileGraph::getRange(int i) const {
 	if ( rr.fValid())
 		return rr;
 
-	if ( i == 0) {
-		ILWIS::CollectionDrawer *cdr = dynamic_cast<ILWIS::CollectionDrawer *>(fldGraph->tool->getDrawer());
-		if ( cdr) {
-			return cdr->getStretchRangeReal();
+	if (yStretchOnSamples) { // from the "values" array
+		RangeReal rr;
+		if (values.size() > i) {
+			for (int j = 0; j < values[i].size(); ++j) {
+				const GraphInfo & gi = values[i].at(j);
+				rr += gi.value;
+			}
 		}
-		ILWIS::LayerDrawer *ldr = getLayerDrawer(fldGraph->tool->getDrawer());
-		if ( ldr->useAttributeColumn()) {
-			return ldr->getAtttributeColumn()->rrMinMax();
+		return rr;
+	} else { // from the entire maps
+		if ( i == 0) {
+			ILWIS::CollectionDrawer *cdr = dynamic_cast<ILWIS::CollectionDrawer *>(fldGraph->tool->getDrawer());
+			if ( cdr) {
+				return cdr->getStretchRangeReal();
+			}
+			ILWIS::LayerDrawer *ldr = getLayerDrawer(fldGraph->tool->getDrawer());
+			if ( ldr->useAttributeColumn()) {
+				return ldr->getAtttributeColumn()->rrMinMax();
+			}
 		}
+		IlwisObject obj = fldGraph->tool->sources[i]->getSource();
+		if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
+			MapList mpl(obj->fnObj);
+			return mpl->getRange();
+		}
+		else if (IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
+			ObjectCollection oc(obj->fnObj);
+			return oc->getRange();
+		}
+		else  
+			return fldGraph->tool->sources[i]->getMap()->rrMinMax(BaseMapPtr::mmmCALCULATE);
 	}
-	IlwisObject obj = fldGraph->tool->sources[i]->getSource();
-	if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
-		MapList mpl(obj->fnObj);
-		return mpl->getRange();
-	}
-	else if (IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
-		ObjectCollection oc(obj->fnObj);
-		return oc->getRange();
-	}
-	else  
-		return fldGraph->tool->sources[i]->getMap()->rrMinMax(BaseMapPtr::mmmCALCULATE);
 }
 
 Color TrackProfileGraph::getColor(int i, const BaseMap&bmp, long raw) const {
@@ -645,15 +657,17 @@ tool(t)
 	SetIndependentPos();
 }
 
-void TrackProfileGraphEntry::setOverruleRange(int col, int row, const String& value) {
+void TrackProfileGraphEntry::setOverruleRange(int row, int col, const String& value) {
 	RangeReal rr(value);
 	if ( rr.fValid()) {
-		if ( col < tool->sources.size() ) {
-			tool->sources[col]->setRange(rr);
+		if ( row < tool->sources.size() ) {
+			tool->setCustomRange();
+			tool->sources[row]->setRange(rr);
 			graph->Invalidate();
 		}
 	}
 }
+
 void TrackProfileGraphEntry::create()
 {
 	zPoint pntFld = zPoint(psn->iPosX,psn->iPosY);
@@ -676,7 +690,8 @@ void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord
 			String range = dvrs.sValue(rr.rLo()).sTrimSpaces() + " : " + dvrs.sValue(rr.rHi()).sTrimSpaces();
 			v.push_back(range);
 			v.push_back("?");
-			listview->setData(i, v);
+			if (i < listview->iRowCount())
+				listview->setData(i, v);
 		}
 		listview->update();
 		if ( graph) {
@@ -711,26 +726,38 @@ void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord
 		else
 			v.push_back(bmp->dm()->sValueByRaw(value,0));
 	}
-	listview->setData(sourceIndex, v);
+	if (sourceIndex < listview->iRowCount())
+		listview->setData(sourceIndex, v);
 	listview->update();
 }
 
 void TrackProfileGraphEntry::addSource(const IlwisObject& bmp){
+	if ( graph) {
+		graph->recomputeValues();
+	}
 	if (listview && bmp.fValid()) {
 		vector<String> v;
 		v.push_back(bmp->fnObj.sFile + bmp->fnObj.sExt);
 		v.push_back("?");
-		const DomainValueRangeStruct & dvrs = graph->getDvrs(tool->sources.size()-1);
-		RangeReal rr = graph->getRange(tool->sources.size()-1);
-		String range = dvrs.sValue(rr.rLo()).sTrimSpaces() + " : " + dvrs.sValue(rr.rHi()).sTrimSpaces();
-		v.push_back(range);
+		if (graph) {
+			const DomainValueRangeStruct & dvrs = graph->getDvrs(tool->sources.size()-1);
+			RangeReal rr = graph->getRange(tool->sources.size()-1);
+			String range = dvrs.sValue(rr.rLo()).sTrimSpaces() + " : " + dvrs.sValue(rr.rHi()).sTrimSpaces();
+			v.push_back(range);
+		} else
+			v.push_back("");
 		v.push_back("?");
 
 		listview->AddData(v);
 	}
 	if ( graph) {
-		graph->recomputeValues();
 		graph->Invalidate();
+	}
+}
+
+void TrackProfileGraphEntry::sourceIndexChanged() {
+	if ( graph) {
+		graph->recomputeValues();
 	}
 }
 
@@ -749,6 +776,20 @@ void TrackProfileGraphEntry::setYStretch(bool stretch) {
 	}
 }
 
+void TrackProfileGraphEntry::setYStretchOnSamples(bool stretch) {
+	if (graph) {
+		graph->yStretchOnSamples = stretch;
+		if ( currentIndex >= 0) {
+			for(int i=0; i < tool->sources.size(); ++i) {
+				GraphInfo gi = graph->values[i].at(currentIndex);
+				setIndex(i, gi.value, gi.crd);
+			}
+		} else
+			setIndex(iUNDEF, 0, Coord());		
+		graph->Invalidate();
+	}
+}
+
 void TrackProfileGraphEntry::setListView(FieldListView *v) {
 	listview = v;
 	v->psn->iMinWidth = v->psn->iWidth = CSGRPAH_SIZE;
@@ -762,6 +803,10 @@ void TrackProfileGraphEntry::update() {
 
 void TrackProfileGraphEntry::openAsTable() {
 	graph->saveAsTbl();
+}
+
+RangeReal TrackProfileGraphEntry::getRange(int i) const {
+	return graph->getRange(i);
 }
 
 #define ID_ADD_ITEMS 5003

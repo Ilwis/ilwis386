@@ -60,6 +60,7 @@ private:
 	CToolTipCtrl* toolTip;
 	CRect rct;
 	bool yStretch;
+	bool yStretchOnSamples;
 	bool fDown;
 	int markerXposOld;
 };
@@ -73,12 +74,14 @@ public:
 	void create();
 	void setTrack( const vector<Coord>& crds);
 	void setYStretch(bool stretch);
+	void setYStretchOnSamples(bool stretch);
 	void setListView(FieldListView *v);
-	RangeReal getRange(long i);
+	RangeReal getRange(int i) const;
 	void setIndex(int sourceIndex, double value, const Coord& crd);
 	ILWIS::TrackProfileTool *tool;
-	void setOverruleRange(int col, int row, const String& value);
+	void setOverruleRange(int row, int col, const String& value);
 	void update();
+	void sourceIndexChanged();
 	void openAsTable();
 	void onContextMenu(CWnd* pWnd, CPoint point);
 

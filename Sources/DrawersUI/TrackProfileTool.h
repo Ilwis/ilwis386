@@ -52,6 +52,7 @@ private:
 		vector<TrackDataSource *> sources;
 		void displayOptionAddList();
 		void updateCbStretch();
+		void setCustomRange();
 	protected:
 		TrackProfileGraphFrom *graphForm;
 		DisplayOptionTreeItem *checkItem;
@@ -106,18 +107,21 @@ private:
 		void addSource(const IlwisObject& bmp) ;
 		void update();
 		void updateCbStretch();
+		void setCustomRange();
 		int saveTrack(Event *ev);
 		int loadTrack(Event *ev);
 		int openAsTable(Event *ev);
+		void sourceIndexChanged();
 		virtual void shutdown(int iReturn);
 	private:
 		CheckBox* cbStretch;
+		RadioGroup* rgStretch;
 		int stretchClicked(Event *);
+		int scaleChanged(Event *);
 		TrackProfileGraphEntry *graph;
 		vector<Coord> trackCoords;
 		TrackProfileTool *tool;
 		bool yStretch;
-
+		enum ScaleMethod {MAP,TRACK,CUSTOM} iScaleMethod;
 	};
-
 }
