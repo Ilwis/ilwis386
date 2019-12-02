@@ -36,7 +36,8 @@ public:
 	void OnToolTipNotify(NMHDR *pNMHDR, LRESULT *pResult);
 	void PreSubclassWindow() ;
 	void setTrack( const vector<Coord>& crds);
-	void OnContextMenu(CWnd* pWnd, CPoint point) ;
+	void recomputeValues();
+	void OnContextMenu(CWnd* pWnd, CPoint point);
 
    DECLARE_MESSAGE_MAP();
 private:

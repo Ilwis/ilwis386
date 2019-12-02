@@ -346,6 +346,7 @@ int CrossSectionGraphFrom::saveAsSpectrum(Event *ev) {
 }
 
 void CrossSectionGraphFrom::addSourceSet(const IlwisObject& obj) {
+	graph->graph()->recomputeValues();
 	graph->update();
 	updateCbStretch();
 }

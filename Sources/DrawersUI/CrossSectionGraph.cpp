@@ -155,6 +155,8 @@ public:
 };
 
 void CrossSectionGraph::saveAsTbl() {
+	if (values.size() == 0)
+		return;
 	String fname("CrossSection");
 	if ( TableNameForm(this, &fname).DoModal() == IDOK) {
 		int maxNo = values[0][0].size();
@@ -225,18 +227,15 @@ void CrossSectionGraph::saveAsTbl() {
 	}
 }
 
-
 int CrossSectionGraph::getNumberOfMaps(long i) {
 	IlwisObject obj = fldGraph->sources[i];
 	if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
 		MapList mpl(obj->fnObj);
 		return mpl->iSize();
-
 	}
 	else if ( IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
 		ObjectCollection oc(obj->fnObj);
 		oc->iNrObjects();
-
 	}
 	return iUNDEF;
 }
@@ -246,13 +245,11 @@ BaseMap CrossSectionGraph::getBaseMap(long i, long m) {
 	if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
 		MapList mpl(obj->fnObj);
 		return mpl[i];
-
 	}
 	else if ( IOTYPE(obj->fnObj) == IlwisObject::iotOBJECTCOLLECTION) {
 		ObjectCollection oc(obj->fnObj);
 		BaseMap bmp(oc->fnObject(i));
 		return bmp;
-
 	}
 	return BaseMap();
 }
@@ -280,13 +277,13 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		}
 		if (fldGraph->sources.size() > 0) {
 			const DomainValueRangeStruct & dvrs = fldGraph->getDvrs(0);
-			sTop = dvrs.sValue(rrTotal.rHi());
-			sBottom = dvrs.sValue(rrTotal.rLo());
+			sTop = dvrs.sValue(rrTotal.rHi()).sTrimSpaces();
+			sBottom = dvrs.sValue(rrTotal.rLo()).sTrimSpaces();
 		}
 	} else if (fldGraph->sources.size() == 1) {
 		const DomainValueRangeStruct & dvrs = fldGraph->getDvrs(0);
-		sTop = dvrs.sValue(fldGraph->getRange(0).rHi());
-		sBottom = dvrs.sValue(fldGraph->getRange(0).rLo());
+		sTop = dvrs.sValue(fldGraph->getRange(0).rHi()).sTrimSpaces();
+		sBottom = dvrs.sValue(fldGraph->getRange(0).rLo()).sTrimSpaces();
 	}
 	CDC *dc = CDC::FromHandle(lpDIS->hDC);
 	CSize szTop = dc->GetTextExtent(sTop.c_str(), sTop.size());
@@ -313,12 +310,8 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	}
 
 	int maxNr = -1;
-	values.clear();
-	fldGraph->currentIndex.clear();
-	for(int m =0; m < fldGraph->sources.size(); ++m) {
-		fldGraph->currentIndex.push_back(iUNDEF);
+	for(int m =0; m < min(fldGraph->sources.size(), values.size()); ++m) {
 		int penStyle = m % 4;
-		values.resize(fldGraph->sources.size());
 		RangeReal rr = yStretch ? fldGraph->getRange(m) : rrTotal;
 		int numberOfMaps = getNumberOfMaps(m);
 		maxNr = max(maxNr,numberOfMaps);
@@ -326,20 +319,13 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		double yscale = rct.Height() / rr.rWidth();
 		double y0 = rr.rWidth() * yscale;
 		double xscale = (numberOfMaps > 1) ? (double)rct.Width() / (numberOfMaps - 1) : rct.Width();
-		values[m].resize(fldGraph->crdSelect.size());
-		int f = 20;
-		for(int p=0; p < fldGraph->crdSelect.size(); ++p) {
+		for(int p=0; p < min(fldGraph->crdSelect.size(), values[m].size()); ++p) {
 			Color clr = Representation::clrPrimary(p == 0 ? 1 : p + 3);
 			CPen bpen(penStyle, 1, clr);
 			SelectObject(lpDIS->hDC, bpen);
 			double rx = rct.left;
-			for(int i = 0; i < numberOfMaps; ++i) {
-				BaseMap bmp = getBaseMap(i, m);
-				Coord crd = fldGraph->crdSelect[p];
-				if ( bmp->cs() != fldGraph->csy)
-					crd = bmp->cs()->cConv(fldGraph->csy, crd);
-				double v = bmp->rValue(crd);
-				values[m][p].push_back(v);
+			for(int i = 0; i < min(numberOfMaps, values[m][p].size()); ++i) {
+				double v = values[m][p][i];
 				int y = y0 - ( v - rr.rLo()) * yscale;
 				if ( i == 0)
 					dc->MoveTo(round(rx),y);
@@ -385,6 +371,30 @@ void CrossSectionGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	delete fnt;
 }
 
+void CrossSectionGraph::recomputeValues() {
+	values.clear();
+	fldGraph->currentIndex.clear();
+	if ( fldGraph->crdSelect.size() == 0)
+		return;
+	values.resize(fldGraph->sources.size());
+	fldGraph->currentIndex.resize(fldGraph->sources.size());
+	for(int m =0; m < fldGraph->sources.size(); ++m) {
+		fldGraph->currentIndex[m] = iUNDEF;
+		int numberOfMaps = getNumberOfMaps(m);
+		values[m].resize(fldGraph->crdSelect.size());
+		for(int p=0; p < fldGraph->crdSelect.size(); ++p) {
+			for(int i = 0; i < numberOfMaps; ++i) {
+				BaseMap bmp = getBaseMap(i, m);
+				Coord crd = fldGraph->crdSelect[p];
+				if ( bmp->cs() != fldGraph->csy)
+					crd = bmp->cs()->cConv(fldGraph->csy, crd);
+				double v = bmp->rValue(crd);
+				values[m][p].push_back(v);
+			}
+		}
+	}
+}
+
 void CrossSectionGraph::DrawMarker(int xposOld, int xpos) {
 	CDC * pDC = GetDC();
 	int dmOld = pDC->SetROP2(R2_XORPEN);
@@ -413,7 +423,6 @@ void CrossSectionGraph::OnLButtonDown(UINT nFlags, CPoint point) {
 		markerXposOld = point.x;
 		double fract = (double)(point.x - rct.left) / (rct.Width() - 1);
 		for(int m =0; m < fldGraph->sources.size(); ++m) {
-			RangeReal rr = fldGraph->getRange(m);
 			int numberOfMaps = getNumberOfMaps(m) - 1;
 			fldGraph->currentIndex[m] = min(numberOfMaps, max(0, round(numberOfMaps * fract)));
 			if ( fldGraph->currentIndex[m] >= values[m][0].size())
@@ -432,7 +441,6 @@ void CrossSectionGraph::OnMouseMove(UINT nFlags, CPoint point) {
 			markerXposOld = point.x;
 			double fract = (double)(point.x - rct.left) / (rct.Width() - 1);
 			for(int m =0; m < fldGraph->sources.size(); ++m) {
-				RangeReal rr = fldGraph->getRange(m);
 				int numberOfMaps = getNumberOfMaps(m) - 1;
 				fldGraph->currentIndex[m] = min(numberOfMaps, max(0, round(numberOfMaps * fract)));
 				if ( fldGraph->currentIndex[m] >= values[m][0].size())
@@ -452,7 +460,6 @@ void CrossSectionGraph::OnLButtonUp(UINT nFlags, CPoint point) {
 		markerXposOld = point.x;
 		double fract = (double)(point.x - rct.left) / (rct.Width() - 1);
 		for(int m =0; m < fldGraph->sources.size(); ++m) {
-			RangeReal rr = fldGraph->getRange(m);
 			int numberOfMaps = getNumberOfMaps(m) - 1;
 			fldGraph->currentIndex[m] = min(numberOfMaps, max(0, round(numberOfMaps * fract)));
 			if ( fldGraph->currentIndex[m] >= values[m][0].size())
@@ -539,7 +546,7 @@ void CrossSectionGraphEntry::fillList() {
 				v.push_back(range);
 				if ( crossSectionGraph->values.size() > 0 && currentIndex[m] != iUNDEF) {
 					v.push_back(String("%d", currentIndex[m] + 1));
-					v.push_back(dvrs.sValue(crossSectionGraph->values[m][i][currentIndex[m]]));
+					v.push_back(dvrs.sValue(crossSectionGraph->values[m][i][currentIndex[m]]).sTrimSpaces());
 				}
 				else{
 					v.push_back("");
@@ -554,7 +561,6 @@ void CrossSectionGraphEntry::fillList() {
 }
 
 bool CrossSectionGraphEntry::isUnique(const FileName& fn) {
-
 	for(int i=0; i < sources.size(); ++i) {
 		if ( sources.at(i)->fnObj == fn)
 			return false;
@@ -621,9 +627,10 @@ void CrossSectionGraphEntry::addCoord(const Coord& crd){
 	//	}
 	//	update();
 	//}
-	if ( crossSectionGraph)
+	if ( crossSectionGraph) {
+		crossSectionGraph->recomputeValues();
 		crossSectionGraph->Invalidate();
-	else
+	} else
 		fillList();
 }
 
@@ -645,9 +652,10 @@ void CrossSectionGraphEntry::setLastCoord(const Coord& crd){
 	//	}
 	//	update();
 	//}
-	if ( crossSectionGraph)
+	if ( crossSectionGraph) {
+		crossSectionGraph->recomputeValues();
 		crossSectionGraph->Invalidate();
-	else
+	} else
 		fillList();
 }
 
@@ -733,6 +741,8 @@ void CrossSectionGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
 					sources.erase(sources.begin() + sourceNr);
 					ranges.erase(ranges.begin() + sourceNr);
 				}
+				if (crossSectionGraph)
+					crossSectionGraph->recomputeValues();
 				update();
 				tool->updateCbStretch();
 			}

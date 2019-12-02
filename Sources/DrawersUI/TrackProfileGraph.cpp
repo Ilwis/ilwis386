@@ -216,8 +216,8 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			if (!getDomain(m)->pdv())
 				continue;
 			const DomainValueRangeStruct & dvrs = getDvrs(m);
-			sTop = dvrs.sValue(rrTotal.rHi());
-			sBottom = dvrs.sValue(rrTotal.rLo());
+			sTop = dvrs.sValue(rrTotal.rHi()).sTrimSpaces();
+			sBottom = dvrs.sValue(rrTotal.rLo()).sTrimSpaces();
 			break;
 		}
 	} else if (fldGraph->tool->sources.size() == 1) {
@@ -225,16 +225,23 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			if (!getDomain(m)->pdv())
 				continue;
 			const DomainValueRangeStruct & dvrs = getDvrs(m);
-			sTop = dvrs.sValue(getRange(m).rHi());
-			sBottom = dvrs.sValue(getRange(m).rLo());
+			sTop = dvrs.sValue(getRange(m).rHi()).sTrimSpaces();
+			sBottom = dvrs.sValue(getRange(m).rLo()).sTrimSpaces();
 			break;
 		}
 	}
+	CRect rctOld  = rct;
 	CDC *dc = CDC::FromHandle(lpDIS->hDC);
 	CSize szTop = dc->GetTextExtent(sTop.c_str(), sTop.size());
 	CSize szBottom = dc->GetTextExtent(sBottom.c_str(), sBottom.size());
 	int iLeft = max(szTop.cx, szBottom.cx);
 	rct = CRect(crct.left + (iLeft > 0 ? iLeft + 1 : 0), crct.top, crct.right, crct.bottom-20);
+	if (markerXposOld != iUNDEF) { // move the marker
+		int xpos = round(rct.left + rct.Width() * (markerXposOld - rctOld.left) / rctOld.Width());
+		xpos = min(rct.right - 1, max(rct.left, xpos));
+		DrawMarker(markerXposOld, xpos);
+		markerXposOld = xpos;
+	}
 	
 	Color bkColor = GetBkColor(lpDIS->hDC);
 	CBrush bbrushBk(RGB(255, 255, 255));
@@ -258,19 +265,15 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 	}
 
 	int oldnr = iUNDEF;
-	values.clear();
 	double totDist = track[track.size() - 1].dist;
 	int  noOfClassMaps = 0;
 	int numberOfPoints = track.size();
 	double xscale = (numberOfPoints > 1) ? (double)rct.Width() / (numberOfPoints - 1) : rct.Width();
 	vector<double> markers;
-	for(int m =0; m < fldGraph->tool->sources.size(); ++m) {
-		values.resize(fldGraph->tool->sources.size());
+	for(int m =0; m < min(fldGraph->tool->sources.size(), values.size()); ++m) {
 		double rx = rct.left;
 		if ( getDomain(m)->pdv() )  {
-
 			RangeReal rr = yStretch ? getRange(m) : rrTotal;
-
 			ILWIS::LayerDrawer *ldr = getLayerDrawer(fldGraph->tool->getDrawer());
 			Column col;
 			bool fUseAttribute = false;
@@ -284,12 +287,9 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			double y0 = rct.bottom - 1;
 			CPen bpen(PS_SOLID, 1, Representation::clrPrimary(m < 1 ? m + 1 : m + 2)); // skip yellow
 			SelectObject(lpDIS->hDC, bpen);
-			for(int i = 0; i < numberOfPoints; ++i) {
-				BaseMap bmp = fldGraph->tool->sources[m]->getMap(track[i].crd);
-				if (!bmp.fValid())
-					continue;
-				double v = getValue(m, bmp, track[i].crd);
-				values[m].push_back(GraphInfo((i + 1),v,track[i].crd));
+			for(int i = 0; i < min(numberOfPoints, values[m].size()); ++i) {
+				GraphInfo & gi = values[m].at(i);
+				double v = gi.value;
 				if (fUseAttribute)
 					v = col->rValue(v);
 				int y = v == rUNDEF ? (rct.bottom - 1) : y0 - ( v - rr.rLo()) * yscale;
@@ -311,10 +311,14 @@ void TrackProfileGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 		} else if ( getDomain(m)->pdsrt()) {
 			long oldRaw = iUNDEF;
 			double oldX = rct.left;
-			for(int i = 0; i < numberOfPoints; ++i) {
+			CPen bpen(PS_SOLID, 1, RGB(0,0,0));
+			SelectObject(lpDIS->hDC, bpen);
+			for(int i = 0; i < min(numberOfPoints, values[m].size()); ++i) {
 				BaseMap bmp = fldGraph->tool->sources[m]->getMap(track[i].crd);
-				long raw = getValue(m,bmp,track[i].crd);
-				values[m].push_back(GraphInfo((i + 1),raw,track[i].crd));
+				if (!bmp.fValid())
+					continue;
+				GraphInfo & gi = values[m].at(i);
+				long raw = gi.value;
 				if ( (i > 0 && raw != oldRaw) || i == numberOfPoints - 1) {
 					Color clr = oldRaw != iUNDEF ? getColor(m, bmp, oldRaw) : Color(255,255,255);
 					CBrush brush(clr);
@@ -468,7 +472,6 @@ void TrackProfileGraph::PreSubclassWindow()
 
 void TrackProfileGraph::setTrack(const vector<Coord>& crds){
 	track.clear();
-	values.clear();
 	double rTotalDistance = 0;
 	for(int i = 1; i < crds.size(); ++i) {
 		rTotalDistance += rDist(crds[i-1], crds[i]);
@@ -501,6 +504,33 @@ void TrackProfileGraph::setTrack(const vector<Coord>& crds){
 		totDist += d;
 	}
 	track.push_back(LocInfo(crds[crds.size() - 1], rTotalDistance));
+}
+
+void TrackProfileGraph::recomputeValues() {
+	values.clear();
+	int numberOfPoints = track.size();
+	if (numberOfPoints == 0)
+		return;
+	values.resize(fldGraph->tool->sources.size());
+	for(int m =0; m < fldGraph->tool->sources.size(); ++m) {		
+		if ( getDomain(m)->pdv() )  {
+			for(int i = 0; i < numberOfPoints; ++i) {
+				BaseMap bmp = fldGraph->tool->sources[m]->getMap(track[i].crd);
+				if (!bmp.fValid())
+					continue;
+				double v = getValue(m, bmp, track[i].crd);
+				values[m].push_back(GraphInfo((i + 1),v,track[i].crd));
+			}
+		} else if ( getDomain(m)->pdsrt()) {
+			for(int i = 0; i < numberOfPoints; ++i) {
+				BaseMap bmp = fldGraph->tool->sources[m]->getMap(track[i].crd);
+				if (!bmp.fValid())
+					continue;
+				long raw = getValue(m,bmp,track[i].crd);
+				values[m].push_back(GraphInfo((i + 1),raw,track[i].crd));
+			}
+		}
+	}
 }
 
 #define ID_GR_COPY 5000
@@ -671,7 +701,7 @@ void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord
 		RangeReal rr = graph->getRange(sourceIndex);
 		String range = dvrs.sValue(rr.rLo()).sTrimSpaces() + " : " + dvrs.sValue(rr.rHi()).sTrimSpaces();
 		v.push_back(range);
-		v.push_back(dvrs.sValue(value));
+		v.push_back(dvrs.sValue(value).sTrimSpaces());
 	} else if ( bmp->dm()->pdsrt()) {
 		v.push_back(String("%S", bmp->dm()->sName()));
 		ILWIS::LayerDrawer *ldr = (ILWIS::LayerDrawer *)tool->getDrawer();
@@ -698,13 +728,16 @@ void TrackProfileGraphEntry::addSource(const IlwisObject& bmp){
 
 		listview->AddData(v);
 	}
-	if ( graph)
+	if ( graph) {
+		graph->recomputeValues();
 		graph->Invalidate();
+	}
 }
 
 void TrackProfileGraphEntry::setTrack(const vector<Coord>& crds){
 	if ( graph) {
 		graph->setTrack(crds);
+		graph->recomputeValues();
 		graph->Invalidate();
 	}
 }
@@ -757,6 +790,7 @@ void TrackProfileGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
 					listview->RemoveData(*it);
 					tool->sources.erase(tool->sources.begin() + *it);
 				}
+				graph->recomputeValues();
 				update();
 				tool->updateCbStretch();
 			}

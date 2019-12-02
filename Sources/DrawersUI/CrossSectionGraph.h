@@ -17,7 +17,8 @@ public:
    void OnMouseMove(UINT nFlags, CPoint point);
    void OnLButtonUp(UINT nFlags, CPoint point);
    void setIndex(int index);
-	void PreSubclassWindow() ;
+   void recomputeValues();
+	void PreSubclassWindow();
 	void OnContextMenu(CWnd* pWnd, CPoint point) ;
 		void saveAsTbl();
 		void saveAsSpectrum();
