@@ -139,8 +139,13 @@ HTREEITEM CrossSectionTool::configure( HTREEITEM parentItem) {
 
 void CrossSectionTool::setcheckTool(void *w, HTREEITEM item) {
 	working = *(bool *)w;
+	setActive(working); // noone else will set us active/inactive
 	if ( working) {
-		tree->GetDocument()->mpvGetView()->addTool(this, getId());
+		mpvGetView()->noTool(ID_ZOOMIN);
+		mpvGetView()->noTool(ID_ZOOMOUT);
+		mpvGetView()->noTool(ID_PANAREA);
+		if (!mpvGetView()->addTool(this, getId()))
+			mpvGetView()->changeStateTool(getId(), true);
 		if (!graphForm) {
 			graphForm = new CrossSectionGraphFrom(tree, (LayerDrawer *)drawer, sources, this);
 			for(int i = 0; i < sources.size(); ++i) {
@@ -160,7 +165,7 @@ void CrossSectionTool::setcheckTool(void *w, HTREEITEM item) {
 			graphForm->addSourceSet(sources[i]);
 	}
 	else {
-		tree->GetDocument()->mpvGetView()->noTool(getId());
+		mpvGetView()->changeStateTool(getId(), false);
 		if ( graphForm) {
 			graphForm->ShowWindow(SW_HIDE);
 			if (markers) {

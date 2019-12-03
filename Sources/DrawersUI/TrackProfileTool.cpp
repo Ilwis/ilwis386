@@ -205,8 +205,13 @@ HTREEITEM TrackProfileTool::configure( HTREEITEM parentItem) {
 
 void TrackProfileTool::setcheckTool(void *w, HTREEITEM item) {
 	working = *(bool *)w;
+	setActive(working); // noone else will set us active/inactive
 	if ( working) {
-		tree->GetDocument()->mpvGetView()->addTool(this, getId());
+		mpvGetView()->noTool(ID_ZOOMIN);
+		mpvGetView()->noTool(ID_ZOOMOUT);
+		mpvGetView()->noTool(ID_PANAREA);
+		if (!mpvGetView()->addTool(this, getId()))
+			mpvGetView()->changeStateTool(getId(), true);
 		if (!graphForm) {
 			graphForm = new TrackProfileGraphFrom(tree, (LayerDrawer *)drawer, this);
 			for(int i = 0; i < sources.size(); ++i) {
@@ -221,7 +226,7 @@ void TrackProfileTool::setcheckTool(void *w, HTREEITEM item) {
 		}
 	}
 	else {
-		tree->GetDocument()->mpvGetView()->noTool(getId());
+		mpvGetView()->changeStateTool(getId(), false);
 		if ( graphForm) {
 			graphForm->ShowWindow(SW_HIDE);
 			if (line && point) {
