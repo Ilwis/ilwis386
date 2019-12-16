@@ -370,7 +370,7 @@ bool ObjectCollectionPtr::fDependent() const
 }
 
 void ObjectCollectionPtr::SetAttributeTable(const Table& tbl){
-	if (tbl->iRecs() != arObjects.size())
+	if (tbl.fValid() && (tbl->iRecs() != arObjects.size()))
 		throw ErrorObject(TR("Table's number of records doesn't match number of objects in the collection"));
 	attTable = tbl;
 	fChanged = true;

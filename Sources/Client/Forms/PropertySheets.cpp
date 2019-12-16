@@ -2846,7 +2846,9 @@ int MapListPropPage::exec()
 		if ( !mpl->tblAtt().fValid() || mpl->tblAtt()->fnObj != fn) {
 			mpl->SetAttributeTable(Table(fn));
 		}
-
+	} else {
+		Table tbl;
+		mpl->SetAttributeTable(tbl); // SetNoAttributeTable()
 	}
 
 	return 0;
@@ -3002,7 +3004,9 @@ int ObjectCollectionPropPage::exec()
 		if ( !oc->tblAtt().fValid() || oc->tblAtt()->fnObj != fn) {
 			oc->SetAttributeTable(Table(fn));
 		}
-
+	} else {
+		Table tbl;
+		oc->SetAttributeTable(tbl); // SetNoAttributeTable()
 	}
 
 	return 0;
