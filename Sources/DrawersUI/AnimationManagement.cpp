@@ -65,7 +65,7 @@ void AnimationPropertySheet::OnDestroy() {
 LRESULT AnimationPropertySheet::command(WPARAM wp, LPARAM lp) {
 	if ( (int)wp & pRun) {
 		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(3);
-		page->DataChanged((Event *)0);
+		page->DataChanged((Event *)1);
 		page = (FormBasePropertyPage *)GetPage(2);
 		page->DataChanged((Event *)1);
 		page = (FormBasePropertyPage *)GetPage(1);
@@ -942,6 +942,7 @@ RealTimePage::RealTimePage(ILWIS::AnimationPropertySheet &sheet, AnimationRun * 
 }
 
 int RealTimePage::DataChanged(Event*ev) {
+	int code = (int)ev;
 	if ( GetSafeHwnd()) {
 		AnimationProperties *props = propsheet.getActiveAnimation();
 		if ( !props) {
@@ -952,7 +953,21 @@ int RealTimePage::DataChanged(Event*ev) {
 			return 0;
 		}
 		AnimationDrawer *adrw = props->drawer;
-		useTimeAttribute =  adrw->getUseTime();
+		if (code == 1) { // master animation changed; code != 1 means a callback was called
+			useTimeAttribute = adrw->getUseTime();
+			cbTime->SetVal(useTimeAttribute);
+			if (useTimeAttribute) {
+				fgTime->Show();
+				ILWIS::Duration t(adrw->getTimeStep());
+				fiYr->SetVal(t.get(ILWIS::Time::tpYEAR));
+				fiMonth->SetVal(t.get(ILWIS::Time::tpMONTH));
+				fiDay->SetVal(t.get(ILWIS::Time::tpDAYOFMONTH));
+				fiHour->SetVal(t.get(ILWIS::Time::tpHOUR));
+				fiMinute->SetVal(t.get(ILWIS::Time::tpMINUTE));
+			} else
+				fgTime->Hide();
+		}
+
 		IlwisObject *source = (IlwisObject *)adrw->getDataSource();
 		IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
 		if ( type ==IlwisObject::iotMAPLIST ) {
