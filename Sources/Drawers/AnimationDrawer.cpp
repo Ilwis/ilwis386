@@ -33,17 +33,15 @@ ILWIS::NewDrawer *createAnimationDrawer(DrawerParameters *parms) {
 }
 
 AnimationDrawer::AnimationDrawer(DrawerParameters *parms) : 
-	SetDrawer(parms,"AnimationDrawer"),
-	timerid(iUNDEF),
-	interval(1.0),
-	index(0),
-	useTime(false),
-	mapIndex(0),
-	offset(0),
-	manager(0)
+SetDrawer(parms,"AnimationDrawer"),
+timerid(iUNDEF),
+interval(1.0),
+index(0),
+useTime(false),
+mapIndex(0),
+manager(0)
 {
 	setTransparency(1);
-	last = 0;
 }
 
 AnimationDrawer::~AnimationDrawer(){
@@ -70,7 +68,6 @@ void AnimationDrawer::prepare(PreparationParameters *pp){
 		}
 	}
 }
-
 
 void AnimationDrawer::addDataSource(void *data, int options){
 	SetDrawer::addDataSource(data, options);
@@ -103,7 +100,6 @@ bool AnimationDrawer::draw(int drawerIndex, const DrawLoop drawLoop, const Coord
 }
 
 void AnimationDrawer::animationDefaultView() {
-
 	for(int i =0 ; i < drawers.size(); ++i) {
 		ILWIS::LayerDrawer *sdr = (ILWIS::LayerDrawer *)drawers.at(i);
 		NewDrawer *drPost;
@@ -122,12 +118,9 @@ void AnimationDrawer::animationDefaultView() {
 		sdr->prepare(&pp);
 	}
 	getRootDrawer()->getDrawerContext()->doDraw();
-
-
 }
 
 void AnimationDrawer::timedEvent(UINT _timerid) {
-    ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
 	bool redraw = false;
 	if ( timerid == _timerid) {
 		if ( useTime) {
@@ -138,25 +131,26 @@ void AnimationDrawer::timedEvent(UINT _timerid) {
 		if ( redraw) {
 			getRootDrawer()->getDrawerContext()->doDraw();
 		}
-		currentIndex = activeMaps[mapIndex];
 	}
 }
 
 bool AnimationDrawer::timerPerIndex() {
-	int nmaps = getDrawerCount();
-	int cindex = min(nmaps - 1, mapIndex % nmaps); // some safeguards for corrupt data.
-	int nindex = min(nmaps - 1,(mapIndex + 1) % nmaps);
-	getDrawer(activeMaps[cindex])->setActive(false);
-	getDrawer(activeMaps[nindex])->setActive(true);
-	mapIndex = nindex;
+	{
+		ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
+		int nmaps = activeMaps.size();
+		int cindex = min(nmaps - 1, mapIndex % nmaps); // some safeguards for corrupt data.
+		int nindex = min(nmaps - 1,(mapIndex + 1) % nmaps);
+		getDrawer(activeMaps[cindex])->setActive(false);
+		getDrawer(activeMaps[nindex])->setActive(true);
+		mapIndex = nindex;
+		currentIndex = activeMaps[mapIndex];
+	}
 	IlwisObjectPtr *obj = getObject();
 	for(int i=0; i < slaves.size(); ++i) {
 		SlaveProperties& props = slaves.at(i);
-		props.threshold += props.slaveStep;
-		if ( props.threshold >= 1.0){
-			props.slave->timedEvent(SLAVE_TIMER_ID);
-			props.threshold -= 1.0;
-		}
+		int slaveMapIndex = (int)(mapIndex * props.slaveStep + min(0.5, props.slaveStep / 2.0) + props.slaveOffset) % props.slave->getActiveMaps().size();
+		if (props.slave->getMapIndex() != slaveMapIndex)
+			props.slave->setMapIndex(slaveMapIndex);
 	}
 	if ( obj)
 		getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
@@ -166,14 +160,22 @@ bool AnimationDrawer::timerPerIndex() {
 
 bool AnimationDrawer::activeOnTime(const Column& col, double currentTime) {
 	int newMapIndex = 0;
-	while ((newMapIndex < activeMaps.size()) && (col->rValue(activeMaps[newMapIndex]) < currentTime)) // change this to find "nearest" map in maplist
+	while ((newMapIndex < activeMaps.size()) && (col->rValue(activeMaps[newMapIndex] + 1) <= currentTime)) // change this to find "nearest" map in maplist
 		++newMapIndex;
 	if (newMapIndex > 0)
 		--newMapIndex;
-	if (newMapIndex != mapIndex) {
-		getDrawer(activeMaps[mapIndex])->setActive(false);
-		mapIndex = newMapIndex;
-		getDrawer(activeMaps[mapIndex])->setActive(true);
+	bool fChanged = false;
+	{
+		ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
+		if (newMapIndex != mapIndex) {
+			getDrawer(activeMaps[mapIndex])->setActive(false);
+			mapIndex = newMapIndex;
+			getDrawer(activeMaps[mapIndex])->setActive(true);
+			currentIndex = activeMaps[mapIndex];
+			fChanged = true;
+		}
+	}
+	if (fChanged) {
 		IlwisObjectPtr *obj = getObject();
 		if ( obj) 
 			getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
@@ -195,8 +197,11 @@ bool AnimationDrawer::timerPerTime() {
 		if ( type ==IlwisObject::iotMAPLIST) {
 			Column col = mpl->tblAtt()->col(colTime);
 			ILWIS::Duration duration = (col->rrMinMax().rHi() - col->rrMinMax().rLo());
+			int totmaps = getDrawerCount();
+			if (totmaps > 1)
+				duration = duration * totmaps / double(totmaps - 1); // enlarge the duration with one timestep, to ensure that in "real time" mode the last frame shows as much time as the other frames
 			double steps = 1000.0 / REAL_TIME_INTERVAL;
-			double offset =  timestep * (double)index / steps;
+			double offset = timestep * (double)index / steps;
 			if (offset > duration) {
 				offset = 0;
 				index = 0;
@@ -207,32 +212,44 @@ bool AnimationDrawer::timerPerTime() {
 			for(int i=0; i < slaves.size(); ++i) {
 				SlaveProperties& props = slaves.at(i);
 				props.slave->timedEvent(SLAVE_TIMER_ID);
-
 			}
 			SendTimeMessage(currentTime, long(this));
 		}
 	}
-	
+
 	++index;
-
 	return redraw;
-
 }
 
 void AnimationDrawer::SetTime(ILWIS::Time time, long sender)
 {
 	if (sender == (long) this)
 		return;
-	Column col = mpl->tblAtt()->col(colTime);
-	bool redraw = activeOnTime(col, time);
-	if ( redraw)
-		getRootDrawer()->getDrawerContext()->doDraw();
+	if (useTime) {
+		IlwisObjectPtr *obj = getObject();
+		if (obj) {
+			IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(obj->fnObj);
+			if ( type == IlwisObject::iotOBJECTCOLLECTION ) {
+			} else if ( type ==IlwisObject::iotMAPLIST) {
+				Column col = mpl->tblAtt()->col(colTime);
+				bool redraw = activeOnTime(col, time);
+				if ( redraw)
+					getRootDrawer()->getDrawerContext()->doDraw();
+				ILWIS::Duration duration = (col->rrMinMax().rHi() - col->rrMinMax().rLo());
+				double frameTime = time;
+				int totmaps = getDrawerCount();
+				if (totmaps > 1)
+					duration = duration * totmaps / double(totmaps - 1); // enlarge the duration with one timestep, to ensure that in "real time" mode the last frame shows as much time as the other frames
+				double steps = 1000.0 / REAL_TIME_INTERVAL;
+				double lowtime = col->rrMinMax().rLo();
+				index = ceil(steps * (frameTime - lowtime) / timestep);
+			}
+		}
+	}
 }
 
 void AnimationDrawer::setTimeStep(ILWIS::Duration dur) 
 {
-	index = 0;
-	setMapIndex(0);
 	timestep = dur; 
 }
 
@@ -245,23 +262,44 @@ String AnimationDrawer::iconName(const String& subtype) const {
 }
 
 void AnimationDrawer::setMapIndex(int ind) {
-	ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
-	for(int i =0 ; i < drawers.size(); ++i)
-		getDrawer(i)->setActive(false);
-
-	int nmaps = activeMaps.size();
-	mapIndex = (ind)  % nmaps;
-	getDrawer(activeMaps[mapIndex])->setActive(true);
-	for(int i =0; i < slaves.size(); ++i) {
-		AnimationDrawer *slave = slaves[i].slave;
-		if ( slave) {
-			slave->setMapIndex(ind);
+	{
+		ILWISSingleLock sl(&csAccess, TRUE,SOURCE_LOCATION);
+		getDrawer(currentIndex)->setActive(false);
+		int nmaps = activeMaps.size();
+		mapIndex = ind % nmaps;
+		currentIndex = activeMaps[mapIndex];
+		getDrawer(currentIndex)->setActive(true);
+	}
+	getRootDrawer()->getDrawerContext()->doDraw();
+	if (useTime) {
+		IlwisObjectPtr *obj = getObject();
+		if (obj) {
+			IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType(obj->fnObj);
+			if ( type == IlwisObject::iotOBJECTCOLLECTION ) {
+			} else if ( type ==IlwisObject::iotMAPLIST) {
+				Column col = mpl->tblAtt()->col(colTime);
+				ILWIS::Duration duration = (col->rrMinMax().rHi() - col->rrMinMax().rLo());
+				double frameTime = col->rValue(currentIndex + 1);
+				int totmaps = getDrawerCount();
+				if (totmaps > 1)
+					duration = duration * totmaps / double(totmaps - 1); // enlarge the duration with one timestep, to ensure that in "real time" mode the last frame shows as much time as the other frames
+				double steps = 1000.0 / REAL_TIME_INTERVAL;
+				double lowtime = col->rrMinMax().rLo();
+				index = ceil(steps * (frameTime - lowtime) / timestep);				
+				SendTimeMessage(frameTime, long(this));
+			}
 		}
 	}
-	currentIndex = activeMaps[mapIndex];
+	for(int i=0; i < slaves.size(); ++i) {
+		SlaveProperties& props = slaves.at(i);
+		int slaveMapIndex = (int)(mapIndex * props.slaveStep + min(0.5, props.slaveStep / 2.0) + props.slaveOffset) % props.slave->getActiveMaps().size();
+		if (props.slave->getMapIndex() != slaveMapIndex)
+			props.slave->setMapIndex(slaveMapIndex);
+	}
+
 	IlwisObjectPtr *obj = getObject();
 	if (obj)
-		getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex); 
+		getEngine()->SendMessage(ILWM_UPDATE_ANIM,(WPARAM)&(obj->fnObj), mapIndex);
 }
 
 
@@ -272,13 +310,19 @@ int AnimationDrawer::getTimerIdCounter(bool increase) {
 	return timerIdCounter;
 }
 
-void AnimationDrawer::addSlave(const SlaveProperties& pr) {
+void AnimationDrawer::addSlave(const SlaveProperties& props) {
 	for(int i =0; i < slaves.size(); ++i) {
-		if ( slaves.at(i).slave->getId() == pr.slave->getId())
-			return;
+		if ( slaves.at(i).slave->getId() == props.slave->getId()) {
+			slaves.erase(slaves.begin() + i);
+			break;
+		}
 	}
-	slaves.push_back(pr);
-	pr.slave->setTimerId(SLAVE_TIMER_ID);
+	slaves.push_back(props);
+	props.slave->setTimerId(SLAVE_TIMER_ID);
+	props.slave->slaves.clear(); // clean slaves list in new slave
+	int slaveMapIndex = (int)(mapIndex * props.slaveStep + min(0.5, props.slaveStep / 2.0) + props.slaveOffset) % props.slave->getActiveMaps().size();
+	if (props.slave->getMapIndex() != slaveMapIndex)
+		props.slave->setMapIndex(slaveMapIndex);
 }
 
 void AnimationDrawer::removeSlave(AnimationDrawer *drw) {
@@ -288,15 +332,6 @@ void AnimationDrawer::removeSlave(AnimationDrawer *drw) {
 			slaves.erase(slaves.begin() + i);
 		}
 	}
-}
-
-int AnimationDrawer::getOffset() const {
-	return offset;
-}
-
-void AnimationDrawer::setOffset(int off) {
-	offset = off;
-	mapIndex = (mapIndex + offset) % activeMaps.size();
 }
 
 void AnimationDrawer::setTimeColumn(const Column& col) {
@@ -322,7 +357,6 @@ void AnimationDrawer::load(const FileName& fnView, const String& section){
 	ObjectInfo::ReadElement(currentSection.c_str(),"Interval",fnView, interval);
 	ObjectInfo::ReadElement(currentSection.c_str(),"UseTime",fnView, useTime);
 	ObjectInfo::ReadElement(currentSection.c_str(),"TimeColumn",fnView, colTime);
-	ObjectInfo::ReadElement(currentSection.c_str(),"Offset",fnView, offset);
 	ObjectInfo::ReadElement(currentSection.c_str(),"MapIndex",fnView, mapIndex);
 }
 
@@ -332,7 +366,6 @@ String AnimationDrawer::store(const FileName& fnView, const String& section) con
 	ObjectInfo::WriteElement(currentSection.c_str(),"Interval",fnView, interval);
 	ObjectInfo::WriteElement(currentSection.c_str(),"UseTime",fnView, useTime);
 	ObjectInfo::WriteElement(currentSection.c_str(),"TimeColumn",fnView, colTime);
-	ObjectInfo::WriteElement(currentSection.c_str(),"Offset",fnView, offset);
 	ObjectInfo::WriteElement(currentSection.c_str(),"MapIndex",fnView, mapIndex);
 
 	return currentSection;

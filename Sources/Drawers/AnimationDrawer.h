@@ -13,11 +13,10 @@ namespace ILWIS{
 	class AnimationDrawer;
 
 	struct _export SlaveProperties {
-		SlaveProperties(AnimationDrawer *s, int offset, double step) : slave(s), slaveOffset(offset), slaveStep(step),threshold(0) {}
+		SlaveProperties(AnimationDrawer *s, int offset, double step) : slave(s), slaveOffset(offset), slaveStep(step) {}
 		AnimationDrawer *slave;
 		int slaveOffset;
 		double slaveStep;
-		double threshold;
 	};
 
 	class _export AnimationDrawer : public SetDrawer, public TimeListener, public TimeProvider {
@@ -27,7 +26,7 @@ namespace ILWIS{
 		virtual void prepare(PreparationParameters *pp);
 		bool draw(int drawerIndex, const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 		void timedEvent(UINT _timerid);
-		vector<int>& getActiveMaps() { return activeMaps;}
+		vector<int>& getActiveMaps() { return activeMaps; }
 		void animationDefaultView();
 		void addDataSource(void *bmap, int options=0);
 		void setMapIndex(int ind);
@@ -40,20 +39,17 @@ namespace ILWIS{
 		void setTimeStep(ILWIS::Duration dur);
 		ILWIS::Duration getTimeStep() const;
 		int getTimerId() const { return timerid; }
-		void setIndex(int ind) { index = ind;}
 		void setTimerId(int tid) { timerid = tid; }
-		void setUseTime(bool yesno) ;
-		int getMapIndex() const { return mapIndex;}
+		void setUseTime(bool yesno);
+		int getMapIndex() const { return mapIndex; }
 		static int getTimerIdCounter(bool increase=false);
-		void addSlave(const SlaveProperties& pr);
+		void addSlave(const SlaveProperties& props);
 		void removeSlave(AnimationDrawer *drw);
-		int getOffset() const;
-		void setOffset(int off);
 		void setTresholdColor(const Color&clr);
 		void setTresholdRange(const RangeReal& rr, bool single);
 
 		static int timerIdCounter;
-		CWnd *manager; // basically a UI element, but is sufficiently abstract in thios form to be acceptable; no outisde linage needed.
+		CWnd *manager; // basically a UI element, but is sufficiently abstract in this form to be acceptable; no outisde linage needed.
 		// a message needs to be send to this window else dangling pointers result;
 
 	protected:
@@ -61,8 +57,8 @@ namespace ILWIS{
 		void load(const FileName& fnView, const String& section);
 
 		virtual String iconName(const String& subtype="?") const;
-		bool timerPerIndex() ;
-		bool timerPerTime() ;
+		bool timerPerIndex();
+		bool timerPerTime();
 		bool activeOnTime(const Column& col, double currentTime);
 		void SetTime(ILWIS::Time time, long sender);
 		double interval;
@@ -74,8 +70,6 @@ namespace ILWIS{
 		int mapIndex;
 		bool useTime;
 		String colTime;
-		clock_t last;
-		int offset;
 		//DisplayOptionsLegend *doLegend;
 
 		ILWIS::Duration timestep;

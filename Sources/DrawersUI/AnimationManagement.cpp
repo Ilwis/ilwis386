@@ -64,15 +64,23 @@ void AnimationPropertySheet::OnDestroy() {
 
 LRESULT AnimationPropertySheet::command(WPARAM wp, LPARAM lp) {
 	if ( (int)wp & pRun) {
-		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(0);
-		page->DataChanged((Event*)1);
+		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(3);
+		page->DataChanged((Event *)0);
+		page = (FormBasePropertyPage *)GetPage(2);
+		page->DataChanged((Event *)1);
+		page = (FormBasePropertyPage *)GetPage(1);
+		page->DataChanged((Event *)1);
+		page = (FormBasePropertyPage *)GetPage(0);
+		page->DataChanged((Event *)1);
 	}
 	if ( (int)wp & pSynchornization) {
 		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(1);
 		page->DataChanged((Event*)1);
 	}
 	if ( (int)wp & pProgress) {
-		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(2);
+		FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(1);
+		page->DataChanged((Event*)1);
+		page = (FormBasePropertyPage *)GetPage(2);
 		page->DataChanged((Event*)1);
 	}
 	if ( (int)wp & pTimedEvent) {
@@ -120,13 +128,19 @@ void AnimationPropertySheet::removeAnimation(AnimationDrawer * drw) {
 		if ( animations[i].drawer->getId() == drw->getId()) {
 			if ( i < activeIndex)
 				activeIndex--;
-			if ( i == activeIndex)
+			else if ( i == activeIndex) { // removing the active animation; set the state to "stop"; the timer is killed automatically when closing the parent MapWindow
+				AnimationRun *pageRun = dynamic_cast<AnimationRun *>(GetPage(0));
+				pageRun->animationRemoved();
 				activeIndex = -1;
-			FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(2);
-			page->DataChanged((Event *)3);
-			//animations[i].animBar->stop();
+			}
 			animations[i].drawer->manager = 0;
 			animations.erase(animations.begin() + i);
+			FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(3);
+			page->DataChanged((Event *)0);
+			page = (FormBasePropertyPage *)GetPage(2);
+			page->DataChanged((Event *)3);
+			page = (FormBasePropertyPage *)GetPage(1);
+			page->DataChanged((Event *)1);
 			page = (FormBasePropertyPage *)GetPage(0);
 			page->DataChanged((Event *)3);
 		}
@@ -136,7 +150,7 @@ void AnimationPropertySheet::removeAnimation(AnimationDrawer * drw) {
 
 AnimationProperties *AnimationPropertySheet::getActiveAnimation(){
 	ILWISSingleLock lock(&cs, TRUE, SOURCE_LOCATION);
-	if ( activeIndex >= 0) {
+	if ( activeIndex >= 0 && activeIndex < animations.size()) {
 		return &(animations[activeIndex]);
 	}
 	else {
@@ -207,6 +221,10 @@ AnimationRun::AnimationRun(AnimationPropertySheet& sheet)
 	foAnimations->SetWidth(100);
 	foAnimations->SetIndependentPos();
 	sliderFps = new FieldRealSliderEx(fgRest,"Frame rate(fps)", &fps,ValueRange(RangeReal(0,5),0.1),false);
+	if (fgRest->childlist().size() >= 3) { // change the allowed value range of the FieldReal so that the user can switch to another tab, with a framerate that exceeds 5.
+		FieldReal * edit = dynamic_cast<FieldReal*>(fgRest->childlist()[2]->childlist()[0]); // the FieldReal has nestled itself into fgRest; this is a mistake in FieldRealSliderEx, but I will not change that now because it has side effects, and FieldRealSliderEx is used alot.
+		edit->setValueRange(ValueRange(RangeReal(0,100),0.1));
+	}
 	sliderFps->SetCallBack((NotifyProc)&AnimationRun::speed);
 	sliderFps->Align(foAnimations, AL_UNDER);
 	FieldBlank *fb = new FieldBlank(fgRest);
@@ -237,6 +255,7 @@ AnimationRun::AnimationRun(AnimationPropertySheet& sheet)
 	fgAvi->SetIndependentPos();
 	fg->Align(fgRest, AL_UNDER);
 	create();
+	fEndInitialization = true;
 	fRunning = false; // on some computers it is "true" at this moment
 }
 
@@ -258,6 +277,8 @@ void AnimationRun::timed() {
 }
 
 int AnimationRun::changeActive(Event *ev) {
+	if ( !fEndInitialization )
+		return 1;
 	foAnimations->StoreData();
 	checkAvi(0);
 	int sel = foAnimations->ose->GetCurSel();
@@ -269,6 +290,8 @@ int AnimationRun::changeActive(Event *ev) {
 }
 
 int AnimationRun::checkAvi(Event *ev) {
+	if ( !fEndInitialization )
+		return 1;
 	cbAvi->StoreData();
 	if ( saveToAvi)
 		fldAviName->Show();
@@ -294,7 +317,6 @@ void AnimationRun::startAvi() {
 	FileName fn(fnAvi,".avi");
 	movieRecorder = new CGLToMovie(fn.sFullPath().c_str(), width, height, 24, mmioFOURCC('C','V','I','D'),1);
 	//movieRecorder = new CGLToMovie(fn.sFullPath().c_str(), width, height, 24,mmioFOURCC('d','i','v','x'));
-
 }
 
 void AnimationRun::stopAvi() {
@@ -304,11 +326,19 @@ void AnimationRun::stopAvi() {
 }
 
 void AnimationRun::refreshTimer() {
-	if (fRunning)
-		run(0);
+	if (fRunning) {
+		AnimationProperties *props = propsheet.getActiveAnimation();
+		if (!props)
+			return;
+		if (props->drawer->getTimerId() == SLAVE_TIMER_ID)
+			return;
+		run(0); // kill and set the timer with the new frequency
+	}
 }
 
 int AnimationRun::speed(Event *ev) {
+	if ( !fEndInitialization )
+		return 1;
 	sliderFps->StoreData();
 	AnimationProperties *prop = propsheet.getActiveAnimation();
 	if ( !prop)
@@ -337,13 +367,20 @@ int AnimationRun::DataChanged(Event* ev) {
 			foAnimations->ose->SetCurSel(0);
 			animIndex = 0;
 		}
+		props = propsheet.getActiveAnimation();
+		if (props) {
+			fRunning = (props->drawer->getTimerId() != iUNDEF) && (props->drawer->getTimerId() != SLAVE_TIMER_ID);
+			if (props->drawer->getInterval() > 0 && props->drawer->getInterval() != rUNDEF) {
+				fps = 1.0 / props->drawer->getInterval();
+				sliderFps->SetVal(fps);
+			}
+		}
 	}
 	UpdateUIState();
 	return 1;
 }
 
 int AnimationRun::frameMinus(Event *ev) {
-	pause(0);
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
@@ -352,12 +389,11 @@ int AnimationRun::frameMinus(Event *ev) {
 	if ( index < 0)
 		index = props->drawer->getActiveMaps().size() - 1;
 	props->drawer->setMapIndex(index);
-	props->mdoc->mpvGetView()->Invalidate();
+	propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pTimedEvent);
 	return 1;
 }
 
 int AnimationRun::framePlus(Event *ev) {
-	pause(0);
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
@@ -366,7 +402,7 @@ int AnimationRun::framePlus(Event *ev) {
 	if ( index == props->drawer->getActiveMaps().size())
 		index = 0;
 	props->drawer->setMapIndex(index);
-	props->mdoc->mpvGetView()->Invalidate();
+	propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pTimedEvent);
 	return 1;
 }
 
@@ -379,10 +415,18 @@ int AnimationRun::stop(Event  *ev) {
 	if ( saveToAvi) {
 		stopAvi();
 	}
-	props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
-	props->drawer->setMapIndex(0);
-	props->drawer->setIndex(0);
+	if (props->drawer->getTimerId() == SLAVE_TIMER_ID) {
+		int index = 0;
+		AnimationProperties *propsIt;
+		while((propsIt = propsheet.getAnimation(index)) != 0) {
+			propsIt->drawer->removeSlave(props->drawer);
+			++index;
+		}
+	} else
+		props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
 	props->drawer->setTimerId(iUNDEF);
+	props->drawer->setMapIndex(0);
+	propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pTimedEvent);
 	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
 }
@@ -393,7 +437,16 @@ int AnimationRun::pause(Event  *ev) {
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
-	props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
+	if (props->drawer->getTimerId() == SLAVE_TIMER_ID) {
+		int index = 0;
+		AnimationProperties *propsIt;
+		while((propsIt = propsheet.getAnimation(index)) != 0) {
+			propsIt->drawer->removeSlave(props->drawer);
+			++index;
+		}
+	} else
+		props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
+	props->drawer->setTimerId(iUNDEF);
 	return 1;
 }
 
@@ -402,8 +455,7 @@ int AnimationRun::end(Event  *ev) {
 	if (!props)
 		return 0;
 	props->drawer->setMapIndex(props->drawer->getDrawerCount() - 1);
-	props->drawer->setIndex(props->drawer->getActiveMaps().size() - 1);
-	props->mdoc->mpvGetView()->Invalidate();
+	propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pTimedEvent);
 	return 1;
 }
 
@@ -414,7 +466,15 @@ int AnimationRun::run(Event  *ev) {
 	if (!props)
 		return 0;
 	if ( props->drawer->getTimerId() != iUNDEF)
-		props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
+		if (props->drawer->getTimerId() == SLAVE_TIMER_ID) {
+			int index = 0;
+			AnimationProperties *propsIt;
+			while((propsIt = propsheet.getAnimation(index)) != 0) {
+				propsIt->drawer->removeSlave(props->drawer);
+				++index;
+			}
+		} else
+			props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
 	else {
 		int timeIdC = AnimationDrawer::getTimerIdCounter(true);
 		props->drawer->setTimerId(timeIdC);
@@ -434,9 +494,16 @@ int AnimationRun::begin(Event  *ev) {
 	if (!props)
 		return 0;
 	props->drawer->setMapIndex(0);
-	props->drawer->setIndex(0);
-	props->mdoc->mpvGetView()->Invalidate();
+	propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pTimedEvent);
 	return 1;
+}
+
+void AnimationRun::animationRemoved() {
+	fRunning = false;
+	UpdateUIState();
+	if ( saveToAvi) {
+		stopAvi();
+	}
 }
 
 void AnimationRun::UpdateUIState() {
@@ -461,6 +528,13 @@ offset1(0),
 choiceSlave1(-1),
 choiceMaster(-1),
 step1(1),
+foSlave1(0),
+fgMaster(0),
+fgSlaveIndex(0),
+fgSlaveTime(0),
+stMaster(0),
+fiSlaveStep(0),
+fiSlave1I(0),
 initial(true)
 {
 	fgMaster = new FieldGroup(root, true);
@@ -468,23 +542,20 @@ initial(true)
 	stMaster->SetIndependentPos();
 	StaticText *st2 = new StaticText(fgMaster, TR("Slave animation 1"));
 	st2->Align(stMaster, AL_UNDER);
-
 	foSlave1 = new FieldOneSelect(fgMaster,&choiceSlave1);
 	foSlave1->SetWidth(100);
 	foSlave1->Align(st2, AL_AFTER);
 	setTimerPerIndex(st2);
 	setTimerPerTime(st2);
-
 	create();
 }
 
 void AnimationSynchronization::setTimerPerIndex(FormEntry *anchor) {
-
 	fgSlaveIndex  = new FieldGroup(fgMaster);		
-	FieldInt *fiSlave1I = new FieldInt(fgSlaveIndex, TR("Offset"),&offset1);
+	fiSlave1I = new FieldInt(fgSlaveIndex, TR("Offset"),&offset1);
 	fiSlave1I->SetWidth(10);
 	fiSlave1I->Align(anchor, AL_UNDER);
-	FieldReal *fiSlaveStep = new FieldReal(fgSlaveIndex, TR("Step"),&step1,ValueRange(0.01,100));
+	fiSlaveStep = new FieldReal(fgSlaveIndex, TR("Step"),&step1,ValueRange(0.01,100,0));
 	fiSlaveStep->Align(fiSlave1I, AL_AFTER);
 	fiSlaveStep->SetWidth(10);
 	fgSlaveIndex->SetIndependentPos();
@@ -494,9 +565,10 @@ void AnimationSynchronization::setTimerPerIndex(FormEntry *anchor) {
 }
 
 void AnimationSynchronization::setTimerPerTime(FormEntry *anchor) {
-	year =1; month = 2; hour = 3; minute = 4;
+	year = 0; month = 0; day = 0; hour = 0; minute = 0;
 	fgSlaveTime = new FieldGroup(fgMaster);
-	FieldInt *fiYr = new FieldInt(fgSlaveTime,TR("Offset(YMDHm)"),&year);
+	fgSlaveTime->SetIndependentPos();
+	FieldInt *fiYr = new FieldInt(fgSlaveTime,TR("Offset(YMDhm)"),&year);
 	fiYr->Align(anchor,AL_UNDER);
 	FieldInt *fiMonth = new FieldInt(fgSlaveTime,"",&month);
 	fiMonth->Align(fiYr,AL_AFTER,-5);
@@ -529,13 +601,13 @@ BOOL AnimationSynchronization::OnInitDialog()
 		fgSlaveIndex->Show();
 	}
 	return v;
-
 }
 
 int AnimationSynchronization::DataChanged(Event*ev) {
 	int code = (int)ev;
 	if ( GetSafeHwnd() &&( initial || code == 1)) {
-		AnimationProperties *prop = propsheet.getActiveAnimation();;
+		initial = false;
+		AnimationProperties *prop = propsheet.getActiveAnimation();
 		int index = 0;
 		choiceMaster = propsheet.getActiveIndex();
 		AnimationProperties *props =  prop;
@@ -557,10 +629,28 @@ int AnimationSynchronization::DataChanged(Event*ev) {
 				}
 				++index;
 			}
+			offset1 = 0;
+			fiSlave1I->SetVal(0);
 			String name = prop->drawer->getName();
 			String v = TR("Master animation %S");
 			stMaster->SetVal(String(v.c_str(),name));
-			initial = false;
+		} else {
+			fgSlaveTime->Hide();
+			fgSlaveIndex->Show();
+			foSlave1->ose->ResetContent();
+		}
+	} else if (code > 1000) {
+		if ( ev->message() == Notify(CBN_SELCHANGE)) {
+			choiceMaster =  propsheet.getActiveIndex();
+			choiceSlave1 = foSlave1->ose->GetCurSel();
+			AnimationProperties *masterDrawer = propsheet.getActiveAnimation();
+			AnimationProperties *slaveDrawer = choiceSlave1 != -1 ? (AnimationProperties *)foSlave1->ose->GetItemData(choiceSlave1) : 0;
+			if ( (masterDrawer && slaveDrawer)) {
+				double sizeSlave = slaveDrawer->drawer->getActiveMaps().size();
+				double sizeMaster = masterDrawer->drawer->getActiveMaps().size();
+				step1 = sizeSlave / sizeMaster;
+				fiSlaveStep->SetVal(step1);
+			}
 		}
 	}
 	return 1;
@@ -581,14 +671,12 @@ int AnimationSynchronization::synchronize(Event*) {
 		slaveDrawer->drawer->setTimerId(SLAVE_TIMER_ID);
 		double sizeSlave = slaveDrawer->drawer->getActiveMaps().size();
 		double sizeMaster = masterDrawer->drawer->getActiveMaps().size();
-		SlaveProperties props(slaveDrawer->drawer,offset1, sizeSlave/ sizeMaster);
+		SlaveProperties props(slaveDrawer->drawer,offset1,step1);
 		masterDrawer->drawer->addSlave(props);
-		slaveDrawer->drawer->setOffset(props.slaveOffset);
 	}
-
-
 	return 1;
 }
+
 //---------------------------------------------------
 BEGIN_MESSAGE_MAP(AnimationProgress, FormBasePropertyPage)
 	ON_MESSAGE(ID_TIME_TICK, OnTimeTick)
@@ -598,27 +686,21 @@ END_MESSAGE_MAP()
 AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Threshold Marking").c_str()), propsheet(sheet), form(0)
 {
 	fgMaster = new FieldGroup(root, true);
-
 	stMaster = new StaticText(fgMaster, TR("Selected Animation                                               "), true);
 	stMaster->SetIndependentPos();
-
 	fcol = new FieldColumn(fgMaster,TR("Reference Attribute"),0,&colName,dmVALUE);
 	fcol->SetCallBack((NotifyProc)&AnimationProgress::changeColumn);
 	fcol->Hide();
 	PushButton *pb = new PushButton(fgMaster,TR("Graph Treshold"),(NotifyProc)&AnimationProgress::graphProperties);
 	pb->Align(fcol, AL_AFTER);
-
-	RangeInt setRange = RangeInt(0, 100);
+	RangeInt setRange = RangeInt(1, 100);
 	graphSlider = new TimeGraphSlider(fgMaster, setRange);
 	graphSlider->SetWidth(180);
 	graphSlider->SetHeight(110);
 	graphSlider->Align(fcol, AL_UNDER);
-
-
 	//useTimeAttribute =  adr->getUseTime();
-
-
 	create();
+	fEndInitialization = true;
 }
 
 int AnimationProgress::graphProperties(Event *ev){
@@ -631,9 +713,9 @@ int AnimationProgress::graphProperties(Event *ev){
 
 LRESULT AnimationProgress::OnCleanForm( WPARAM wParam, LPARAM lParam ) {
 	form = 0;
-
-	return 11;
+	return 1;
 }
+
 LRESULT AnimationProgress::OnTimeTick( WPARAM wParam, LPARAM lParam ) {
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if ( !props)
@@ -653,8 +735,9 @@ int AnimationProgress::DataChanged(Event*ev) {
 			form->PostMessage(WM_CLOSE);
 		form = 0;
 		graphSlider->setSourceTable(tbl);
+		graphSlider->setTimeInterval(TimeInterval());
 	}
-	if ( GetSafeHwnd() || code == 1) {
+	if ( code == 1) {
 		AnimationProperties *props = propsheet.getActiveAnimation();
 		if ( !props)
 			return 0;
@@ -668,8 +751,7 @@ int AnimationProgress::DataChanged(Event*ev) {
 		if ( type ==IlwisObject::iotMAPLIST ) {
 			MapList mpl((*source)->fnObj);
 			number = mpl->iSize();
-			tbl = mpl->tblAtt();
-		
+			tbl = mpl->tblAtt();		
 		}
 		if ( type == IlwisObject::iotOBJECTCOLLECTION){
 			ObjectCollection oc((*source)->fnObj);
@@ -684,7 +766,7 @@ int AnimationProgress::DataChanged(Event*ev) {
 				graphSlider->setTimes(col);
 			}
 		} else {
-			RangeInt setRange = RangeInt(0, number);
+			RangeInt setRange = RangeInt(1, number);
 			graphSlider->setRecordRange(setRange);
 			graphSlider->setTimeInterval(TimeInterval());
 		}
@@ -696,11 +778,10 @@ int AnimationProgress::DataChanged(Event*ev) {
 		fcol->Show();
 		fcol->FillWithColumns(&tbl);
 		graphSlider->setSourceTable(tbl);
-
 	} else
 		fcol->Hide();
 
-	if (GetSafeHwnd() && code == 2) {
+	if (code == 2) {
 		AnimationProperties *props = propsheet.getActiveAnimation();
 		if ( props == 0)
 			return 1;
@@ -711,8 +792,9 @@ int AnimationProgress::DataChanged(Event*ev) {
 	return 1;
 }
 
-
 int AnimationProgress::changeColumn(Event *) {
+	if ( !fEndInitialization )
+		return 1;
 	fcol->StoreData();
 	if ( colName != "") {
 		graphSlider->setSourceColumn(colName);
@@ -726,82 +808,85 @@ BEGIN_MESSAGE_MAP(GraphPropertyForm, DisplayOptionsForm)
 END_MESSAGE_MAP()
 
 GraphPropertyForm::GraphPropertyForm(CWnd *wPar,TimeGraphSlider *slider, const Column& _col, AnimationProperties *_props) : 
-DisplayOptionsForm(_props->drawer, wPar, TR("Thresholds")), col(_col), graph(slider), gtThreshold(0), ltThreshold(0), type(0), props(_props) {
-	calcMad(col);
+DisplayOptionsForm(_props->drawer, wPar, TR("Thresholds")), col(_col), graph(slider), threshold(0), type(0), props(_props) {
+	bool above;
+	graph->getThreshold(threshold, above);
+	if (threshold != rUNDEF) {
+		type = above ? 1 : 2;
+	} else {
+		threshold = 0;
+		calcMed(col);
+	}
 	view = props->mdoc->ltvGetView();
 	color = ((LayerDrawer *)props->drawer->getDrawer(0))->getDrawingColor()->getTresholdColor();
 	color.alpha() = 255 - color.alpha(); // inverse the alpha, for FieldColor
 	RadioGroup *rg = new RadioGroup(root, TR("Threshold type"),&type);
-	RadioButton *rb = new RadioButton(rg,TR("Above threshold"));
-	frr = new FieldReal(rb, "",&gtThreshold);
+	RadioButton *rb = new RadioButton(rg,TR("No threshold"));
+	rb = new RadioButton(rg,TR("Above threshold"));
+	frr = new FieldReal(rb, "",&threshold);
 	frr->Align(rb, AL_AFTER);
 	rb = new RadioButton(rg,TR("Below threshold"));
-	frr = new FieldReal(rb, "",&ltThreshold);
+	frr = new FieldReal(rb, "",&threshold);
 	frr->Align(rb, AL_AFTER);
 	fc = new FieldColor(root,TR("Treshold color"),&color);
 	fc->SetCallBack((NotifyProc)&GraphPropertyForm::changeColor);
 	slider->setLinkedWindow(props->animBar);
 
 	create();
-
 }
 
 int GraphPropertyForm::changeColor(Event *ev) {
+	if (initial)
+		return 1;
 	fc->StoreData();
-	oldRange = RangeReal();
 	apply();
 
 	return 1;
 }
 
-void GraphPropertyForm::calcMad(const Column& col) {
-	if ( col->dm()->pdv()) {
-	
+void GraphPropertyForm::calcMed(const Column& col) {
+	if ( col->dm()->pdv()) {	
 		RangeReal mm = col->rrMinMax();
-		double tr = mm.rLo() + mm.rWidth() * 0.8;
-		gtThreshold = tr;
-		ltThreshold = tr ;
-
+		threshold = mm.rLo() + mm.rWidth() * 0.8;
 	}
 }
 
 FormEntry *GraphPropertyForm::CheckData() {
 	return 0;
 }
+
 void GraphPropertyForm::apply() {
 	root->StoreData();
 	if ( type == 0)
-		graph->setThreshold(gtThreshold);
-	if ( type == 1)
-		graph->setThreshold(ltThreshold);
+		graph->setThreshold(rUNDEF, true); // no threshold
+	else if ( type == 1)
+		graph->setThreshold(threshold, true); // above
+	else if ( type == 2)
+		graph->setThreshold(threshold, false); // below
 	if ( props ) {
 		RangeReal rr;
-		if ( type == 0) {
-			rr = RangeReal(gtThreshold, 1e307);
-		} else {
-			rr = RangeReal(-1e307,ltThreshold); 
+		if ( type == 1) {
+			rr = RangeReal(threshold, 1e307);
+		} else if (type == 2) {
+			rr = RangeReal(-1e307, threshold); 
 		}
-	//	if ( rr != oldRange) {
+
 		Color clr (color);
 		clr.alpha() = 255 - clr.alpha(); // inverse the alpha again, for displaying
-			for(int i=0; i < props->drawer->getDrawerCount(); ++i) {
-				LayerDrawer *ldr = (LayerDrawer *)props->drawer->getDrawer(i);
-				ldr->getDrawingColor()->setTresholdColor(clr);
-				ldr->getDrawingColor()->setTresholdRange(rr);
-			}
-			PreparationParameters pp(NewDrawer::ptRENDER, 0);
-			props->drawer->prepareChildDrawers(&pp);
-		//	oldRange = rr;
-			updateMapView();
-	//	}
+		for(int i=0; i < props->drawer->getDrawerCount(); ++i) {
+			LayerDrawer *ldr = (LayerDrawer *)props->drawer->getDrawer(i);
+			ldr->getDrawingColor()->setTresholdColor(clr);
+			ldr->getDrawingColor()->setTresholdRange(rr);
+		}
+		PreparationParameters pp(NewDrawer::ptRENDER, 0);
+		props->drawer->prepareChildDrawers(&pp);
+		updateMapView();
 	}
 }
 
 void GraphPropertyForm::OnClose() {
 	GetParent()->PostMessage(ID_CLEAN_FORM);
-
 	shutdown();
-
 }
 
 //---------------------------------------------
@@ -822,13 +907,14 @@ RealTimePage::RealTimePage(ILWIS::AnimationPropertySheet &sheet, AnimationRun * 
 	cbTime->SetCallBack((NotifyProc)&RealTimePage::setTimingMode);
 	cbTime->Align(stMaster, AL_UNDER);
 
-	fgTime = new FieldGroup(fgMaster);
+	fgTime = new FieldGroup(cbTime);
+	fgTime->Align(cbTime, AL_UNDER);
 
 	fcolTime = new FieldColumn(fgTime,"",0,&timeColName,dmTIME);
 	fcolTime->SetCallBack((NotifyProc)&RealTimePage::changeTimeColumn);
 	new FieldBlank(fgTime);
 	FieldGroup *fg2 = new FieldGroup(fgTime);
-	fiYr = new FieldInt(fg2,TR("Period(YMDHm)/ sec"),&year);
+	fiYr = new FieldInt(fg2,TR("Period(YMDHm) / tick"),&year);
 	fiYr->Align(fcolTime,AL_UNDER);
 	fiMonth = new FieldInt(fg2,"",&month);
 	fiMonth->Align(fiYr,AL_AFTER,-5);
@@ -842,7 +928,7 @@ RealTimePage::RealTimePage(ILWIS::AnimationPropertySheet &sheet, AnimationRun * 
 	fiMinute = new FieldInt(fg2,"",&minute);
 	fiMinute->Align(fiHour,AL_AFTER,-5);
 	fiMinute->SetWidth(8);
-	fg2->Align(fgMaster, AL_UNDER);
+	fg2->Align(fcolTime, AL_UNDER);
 	fg2->SetIndependentPos();
 	fiYr->SetCallBack((NotifyProc)&RealTimePage::changeDuration);
 	fiMinute->SetCallBack((NotifyProc)&RealTimePage::changeDuration);
@@ -852,22 +938,26 @@ RealTimePage::RealTimePage(ILWIS::AnimationPropertySheet &sheet, AnimationRun * 
 
 	fgTime->Hide();
 	create();
+	fEndInitialization = true;
 }
 
 int RealTimePage::DataChanged(Event*ev) {
-	int code = (int)ev;
-	if ( GetSafeHwnd() || code == 1) {
+	if ( GetSafeHwnd()) {
 		AnimationProperties *props = propsheet.getActiveAnimation();
-		if ( !props)
+		if ( !props) {
+			fcolTime->FillWithColumns((TablePtr *)0);
+			tbl = Table();
+			cbTime->SetVal(false);
+			fgTime->Hide();
 			return 0;
+		}
 		AnimationDrawer *adrw = props->drawer;
 		useTimeAttribute =  adrw->getUseTime();
 		IlwisObject *source = (IlwisObject *)adrw->getDataSource();
 		IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
 		if ( type ==IlwisObject::iotMAPLIST ) {
 			MapList mpl((*source)->fnObj);
-			tbl = mpl->tblAtt();
-		
+			tbl = mpl->tblAtt();		
 		}
 		if ( type == IlwisObject::iotOBJECTCOLLECTION){
 			ObjectCollection oc((*source)->fnObj);
@@ -884,23 +974,24 @@ int RealTimePage::DataChanged(Event*ev) {
 		String name = props->drawer->getName();
 		String v = TR("Selected Animation: %S");
 		stMaster->SetVal(String(v.c_str(),name));
-	}
-	
+	}	
 
 	return 1;
 }
 
 int RealTimePage::changeDuration(Event *ev) {
+	if ( !fEndInitialization )
+		return 1;
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
 	AnimationDrawer *adrw = props->drawer;
 	if ( adrw->getTimeColumn() != "" && adrw->getUseTime()) {
 		fiYr->StoreData();
-		fiMinute->StoreData();
 		fiMonth->StoreData();
 		fiDay->StoreData();
 		fiHour->StoreData();
+		fiMinute->StoreData();
 		if ( year ==0 && month ==0 && day == 0 && hour ==0 && minute == 0)
 			return 1;
 		Duration dur(String("P%04dY%02dM%02dDT%02dH%02dM00",year,month,day,hour,minute));
@@ -911,6 +1002,8 @@ int RealTimePage::changeDuration(Event *ev) {
 }
 
 int RealTimePage::changeTimeColumn(Event *e) {
+	if ( !fEndInitialization )
+		return 1;
 	fcolTime->StoreData();
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
@@ -989,28 +1082,25 @@ double RealTimePage::calcNiceStep(Duration time) {
 	fiHour->SetVal(hour);
 	fiMinute->SetVal(minute);
 
-	return Duration(String("P%04dY%02dM%02dDT%02dH%02dM00",year,month,day,hour,minute));
-	
+	return Duration(String("P%04dY%02dM%02dDT%02dH%02dM00",year,month,day,hour,minute));	
 }
 
 int RealTimePage::setTimingMode(Event *ev) {
+	if ( !fEndInitialization )
+		return 1;
 	cbTime->StoreData();
-	fcolTime->StoreData();
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
 	AnimationDrawer *adrw = props->drawer;
 	adrw->setUseTime(useTimeAttribute);
-	if ( fgTime)
-		fgTime->Hide();
 	if ( useTimeAttribute) {
-		if ( fgTime)
-			fgTime->Show();
+		fcolTime->StoreData();
 		IlwisObject *source = (IlwisObject *)adrw->getDataSource();
 		MapListPtr * pmpl = dynamic_cast<MapListPtr*>(source->pointer());
 		if (pmpl) {
 			if ( pmpl->fTblAtt()) {
-				Column col = pmpl->tblAtt()->col(colName);
+				Column col = pmpl->tblAtt()->col(timeColName);
 				if ( col.fValid()) {
 					propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pProgress);
 				} 
@@ -1018,19 +1108,21 @@ int RealTimePage::setTimingMode(Event *ev) {
 		} else {
 			ObjectCollectionPtr * poc = dynamic_cast<ObjectCollectionPtr*>(source->pointer());
 			if ( poc->fTblAtt()) {
-				Column col = poc->tblAtt()->col(colName);
+				Column col = poc->tblAtt()->col(timeColName);
 				if ( col.fValid()) {
 					propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pProgress);
 				}
 			}
 		}
 	} else {
-
 		propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pProgress);
 	}
+	int index = props->drawer->getMapIndex();
+	props->drawer->setMapIndex(index); // change the frame text on top of the MapWindow back to "index" (instead of "date")
 	animationRun->refreshTimer();
 	return 1;
 }
+
 //---------------------------
 //--------------------------------------------------------------
 
@@ -1057,7 +1149,6 @@ AnimationBar::AnimationBar()
 	lstrcpy(logFont.lfFaceName, "MS Sans Serif");
 	fnt.CreateFontIndirect(&logFont);
 }
-
 
 LRESULT AnimationBar::OnChangeColor(WPARAM wp, LPARAM lp) {
 	isMarked = wp;
@@ -1111,13 +1202,14 @@ void AnimationBar::Create(CWnd* pParent,const AnimationProperties& props)
 	SetButtons(ai,2);
 	CRect rect;
 	GetItemRect(0, &rect);
-	SetButtonInfo(1, ID_AnimationBar,	TBBS_SEPARATOR, iWidth - rect.Width());
+	SetButtonInfo(1, ID_AnimationBar, TBBS_SEPARATOR, iWidth - rect.Width());
 
 	rect.top = 3;
 	rect.bottom -= 2;
 	rect.right = rect.left + iWidth;
 	ed.Create(WS_VISIBLE|WS_CHILD|WS_BORDER|WS_DISABLED,rect,this,ID_AnimationBar);
 	ed.SetFont(&fnt);
+	ed.SetWindowText(String("index : 1").c_str());
 	SendMessage(DM_SETDEFID,IDOK);
 
 	EnableDocking(CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM);
@@ -1166,7 +1258,7 @@ void AnimationBar::updateTime(/*const AnimationProperties* props*/) // called by
 	}
 	else {
 		if ( ed.GetSafeHwnd())
-			ed.SetWindowText(String("index : %d",animation.drawer->getCurrentIndex()).c_str());
+			ed.SetWindowText(String("index : %d",1 + animation.drawer->getCurrentIndex()).c_str());
 	}
 }
 
@@ -1187,7 +1279,7 @@ String AnimationBar::setTimeString(/*const AnimationProperties* props*/) {
 			timestring = ct.toString(true,timeCol->dm()->pdtime()->getMode());
 		}
 	}
-	return String("index %d : %S", ind, timestring);
+	return String("index %d : %S", 1 + ind, timestring);
 }
 
 

@@ -89,6 +89,7 @@ namespace ILWIS {
 		int changeActive(Event *ev);
 		void timed();
 		void refreshTimer();
+		void animationRemoved();
 	private:
 		void stopAvi();
 		void startAvi();
@@ -111,11 +112,11 @@ namespace ILWIS {
 		int framePlus(Event *ev);
 		int frameMinus(Event *ev);
 		int speed(Event *ev);
-		int begin(Event  *ev);
-		int end(Event  *ev);
-		int pause(Event  *ev);
-		int run(Event  *ev);
-		int stop(Event  *ev);
+		int begin(Event *ev);
+		int end(Event *ev);
+		int pause(Event *ev);
+		int run(Event *ev);
+		int stop(Event *ev);
 		int checkAvi(Event *ev);
 	};
 
@@ -125,8 +126,10 @@ namespace ILWIS {
 	private:
 		BOOL OnInitDialog();
 		FieldOneSelect *foSlave1;
+		FieldReal *fiSlaveStep;
 		FieldGroup *fgMaster,*fgSlaveIndex, *fgSlaveTime;
 		StaticText *stMaster;
+		FieldInt *fiSlave1I;
 		int offset1;
 		long choiceMaster, choiceSlave1;
 		double step1;
@@ -175,7 +178,6 @@ namespace ILWIS {
 		CheckBox *cbTime;
 		FieldColumn *fcolTime;
 		FieldInt *fiYr, *fiMonth, *fiDay, *fiHour, *fiMinute;
-		String colName;
 		Table tbl;
 		bool useTimeAttribute;
 		int year, month, day, hour, minute;
@@ -188,7 +190,6 @@ namespace ILWIS {
 		void setTimeElements(FormEntry *entry);
 		double calcNiceStep(Duration time);
 		AnimationRun * animationRun;
-
 	};
 
 	class GraphPropertyForm : public DisplayOptionsForm {
@@ -198,21 +199,19 @@ namespace ILWIS {
 		void apply();
 		void OnClose();
 		FormEntry *CheckData();
-		void calcMad(const Column& col);
+		void calcMed(const Column& col);
 
 		FieldReal *frr;
 		Column col;
 		TimeGraphSlider *graph;
 		AnimationProperties *props;
 		int type;
-		double gtThreshold, ltThreshold;
+		double threshold;
 		Color color;
-		RangeReal oldRange;
 		int changeColor(Event *ev);
 		FieldColor *fc;
 
-				DECLARE_MESSAGE_MAP();
-
+		DECLARE_MESSAGE_MAP();
 	};
 }
 

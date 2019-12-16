@@ -15,8 +15,8 @@ public:
    int OnToolHitTest(CPoint point, TOOLINFO *pTI) const;
 	void OnToolTipNotify(NMHDR *pNMHDR, LRESULT *pResult);
 	void PreSubclassWindow() ;
-	void setThreshold(double v, bool above = true);
-	double getThreshold() const;
+	void setThreshold(double v, bool above);
+	void getThreshold(double & v, bool & above) const;
 	void setLinkedWindow(CWnd *);
 
    DECLARE_MESSAGE_MAP();
@@ -27,7 +27,7 @@ private:
 	double threshold;
 	bool isAbove;
 	CWnd *toBeNotified;
-	vector<bool> marked;;
+	vector<bool> marked;
 };
 
 class _export TimeGraphSlider : public FormEntry {
@@ -38,12 +38,12 @@ public:
 	void setSourceColumn(const String& sName);
 	void setRecordRange(const RangeInt& rng);
 	void create();
-	void setIndex(int index);
+	void setIndex(int idx);
 	void setTimeInterval(ILWIS::TimeInterval in);
 	void setTimes(const Column& col);
 	TimeGraph *timegraph;
-	void setThreshold(double v, bool above = true);
-	double getThreshold() const;
+	void setThreshold(double v, bool above);
+	void getThreshold(double & v, bool & above) const;
 	void setLinkedWindow(CWnd *);
 private:
 
@@ -52,4 +52,5 @@ private:
 	Column timeCol;
 	ILWIS::TimeInterval interval;
 	String sourceColumn;
+	int index;
 };
