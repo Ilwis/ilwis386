@@ -123,28 +123,34 @@ void AnimationPropertySheet::addAnimation(const AnimationProperties& props) {
 }
 
 void AnimationPropertySheet::removeAnimation(AnimationDrawer * drw) {
-	ILWISSingleLock lock(&cs, TRUE, SOURCE_LOCATION);
-	for(int i=0; i < animations.size(); ++i) {
-		if ( animations[i].drawer->getId() == drw->getId()) {
-			if ( i < activeIndex)
-				activeIndex--;
-			else if ( i == activeIndex) { // removing the active animation; set the state to "stop"; the timer is killed automatically when closing the parent MapWindow
-				AnimationRun *pageRun = dynamic_cast<AnimationRun *>(GetPage(0));
-				pageRun->animationRemoved();
-				activeIndex = -1;
+	{
+		ILWISSingleLock lock(&cs, TRUE, SOURCE_LOCATION);
+		for(int i=0; i < animations.size(); ++i) {
+			if ( animations[i].drawer->getId() == drw->getId()) {
+				if ( i < activeIndex)
+					activeIndex--;
+				else if ( i == activeIndex) { // removing the active animation; set the state to "stop"; the timer is killed automatically when closing the parent MapWindow
+					AnimationRun *pageRun = dynamic_cast<AnimationRun *>(GetPage(0));
+					pageRun->animationRemoved();
+					activeIndex = -1;
+				}
+				animations[i].drawer->manager = 0;
+				if ( animations[i].animBar && animations[i].animBar->m_hWnd && ::IsWindow(animations[i].animBar->m_hWnd))
+					animations[i].animBar->ShowWindow(SW_HIDE);
+				if (animations[i].drawer->getTimerId() != iUNDEF && animations[i].drawer->getTimerId() != SLAVE_TIMER_ID)
+					animations[i].mdoc->mpvGetView()->KillTimer(animations[i].drawer->getTimerId());
+				animations.erase(animations.begin() + i);
 			}
-			animations[i].drawer->manager = 0;
-			animations.erase(animations.begin() + i);
-			FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(3);
-			page->DataChanged((Event *)0);
-			page = (FormBasePropertyPage *)GetPage(2);
-			page->DataChanged((Event *)3);
-			page = (FormBasePropertyPage *)GetPage(1);
-			page->DataChanged((Event *)1);
-			page = (FormBasePropertyPage *)GetPage(0);
-			page->DataChanged((Event *)3);
 		}
 	}
+	FormBasePropertyPage *page = (FormBasePropertyPage *)GetPage(3);
+	page->DataChanged((Event *)0);
+	page = (FormBasePropertyPage *)GetPage(2);
+	page->DataChanged((Event *)3);
+	page = (FormBasePropertyPage *)GetPage(1);
+	page->DataChanged((Event *)1);
+	page = (FormBasePropertyPage *)GetPage(0);
+	page->DataChanged((Event *)3);
 	PostMessage(ILWM_UPDATE_ANIM,pAll);
 }
 
