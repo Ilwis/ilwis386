@@ -209,10 +209,6 @@ bool AnimationDrawer::timerPerTime() {
 			double lowtime = col->rrMinMax().rLo();
 			double currentTime = lowtime + offset;
 			redraw = activeOnTime(col, currentTime);
-			for(int i=0; i < slaves.size(); ++i) {
-				SlaveProperties& props = slaves.at(i);
-				props.slave->timedEvent(SLAVE_TIMER_ID);
-			}
 			SendTimeMessage(currentTime, long(this));
 		}
 	}
@@ -289,12 +285,13 @@ void AnimationDrawer::setMapIndex(int ind) {
 				SendTimeMessage(frameTime, long(this));
 			}
 		}
-	}
-	for(int i=0; i < slaves.size(); ++i) {
-		SlaveProperties& props = slaves.at(i);
-		int slaveMapIndex = (int)(mapIndex * props.slaveStep + min(0.5, props.slaveStep / 2.0) + props.slaveOffset) % props.slave->getActiveMaps().size();
-		if (props.slave->getMapIndex() != slaveMapIndex)
-			props.slave->setMapIndex(slaveMapIndex);
+	} else {
+		for(int i=0; i < slaves.size(); ++i) {
+			SlaveProperties& props = slaves.at(i);
+			int slaveMapIndex = (int)(mapIndex * props.slaveStep + min(0.5, props.slaveStep / 2.0) + props.slaveOffset) % props.slave->getActiveMaps().size();
+			if (props.slave->getMapIndex() != slaveMapIndex)
+				props.slave->setMapIndex(slaveMapIndex);
+		}
 	}
 
 	IlwisObjectPtr *obj = getObject();

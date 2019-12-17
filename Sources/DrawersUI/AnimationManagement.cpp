@@ -124,7 +124,7 @@ void AnimationPropertySheet::addAnimation(const AnimationProperties& props) {
 
 void AnimationPropertySheet::removeAnimation(AnimationDrawer * drw) {
 	ILWISSingleLock lock(&cs, TRUE, SOURCE_LOCATION);
-	for(int i =0; i < animations.size(); ++i) {
+	for(int i=0; i < animations.size(); ++i) {
 		if ( animations[i].drawer->getId() == drw->getId()) {
 			if ( i < activeIndex)
 				activeIndex--;
@@ -213,7 +213,6 @@ AnimationRun::AnimationRun(AnimationPropertySheet& sheet)
 , fps(1)
 , saveToAvi(false)
 , movieRecorder(0)
-, fRunning(false)
 {
 	FieldGroup *fgRest = new FieldGroup(root, true);
 	foAnimations = new FieldOneSelect(fgRest,&animIndex);
@@ -256,7 +255,6 @@ AnimationRun::AnimationRun(AnimationPropertySheet& sheet)
 	fg->Align(fgRest, AL_UNDER);
 	create();
 	fEndInitialization = true;
-	fRunning = false; // on some computers it is "true" at this moment
 }
 
 AnimationRun::~AnimationRun() {
@@ -326,10 +324,11 @@ void AnimationRun::stopAvi() {
 }
 
 void AnimationRun::refreshTimer() {
+	AnimationProperties *props = propsheet.getActiveAnimation();
+	if (!props)
+		return;
+	bool fRunning = (props->drawer->getTimerId() != iUNDEF) && (props->drawer->getTimerId() != SLAVE_TIMER_ID);
 	if (fRunning) {
-		AnimationProperties *props = propsheet.getActiveAnimation();
-		if (!props)
-			return;
 		if (props->drawer->getTimerId() == SLAVE_TIMER_ID)
 			return;
 		run(0); // kill and set the timer with the new frequency
@@ -369,7 +368,6 @@ int AnimationRun::DataChanged(Event* ev) {
 		}
 		props = propsheet.getActiveAnimation();
 		if (props) {
-			fRunning = (props->drawer->getTimerId() != iUNDEF) && (props->drawer->getTimerId() != SLAVE_TIMER_ID);
 			if (props->drawer->getInterval() > 0 && props->drawer->getInterval() != rUNDEF) {
 				fps = 1.0 / props->drawer->getInterval();
 				sliderFps->SetVal(fps);
@@ -407,8 +405,6 @@ int AnimationRun::framePlus(Event *ev) {
 }
 
 int AnimationRun::stop(Event  *ev) {
-	fRunning = false;
-	UpdateUIState();
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
@@ -426,14 +422,13 @@ int AnimationRun::stop(Event  *ev) {
 		props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
 	props->drawer->setTimerId(iUNDEF);
 	props->drawer->setMapIndex(0);
+	UpdateUIState();
 	propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pTimedEvent);
 	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
 }
 
 int AnimationRun::pause(Event  *ev) {
-	fRunning = false;
-	UpdateUIState();
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
@@ -447,6 +442,7 @@ int AnimationRun::pause(Event  *ev) {
 	} else
 		props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
 	props->drawer->setTimerId(iUNDEF);
+	UpdateUIState();
 	return 1;
 }
 
@@ -460,8 +456,6 @@ int AnimationRun::end(Event  *ev) {
 }
 
 int AnimationRun::run(Event  *ev) {
-	fRunning = true;
-	UpdateUIState();
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
@@ -479,12 +473,27 @@ int AnimationRun::run(Event  *ev) {
 		int timeIdC = AnimationDrawer::getTimerIdCounter(true);
 		props->drawer->setTimerId(timeIdC);
 	}
+	if (props->drawer->getUseTime()) {
+		// kill all other timers that have useTime == true
+		int index = 0;
+		AnimationProperties *propsIt;
+		while((propsIt = propsheet.getAnimation(index)) != 0) {
+			if (propsIt != props && propsIt->drawer->getUseTime() && propsIt->drawer->getTimerId() != iUNDEF && propsIt->drawer->getTimerId() != SLAVE_TIMER_ID) {
+				propsIt->mdoc->mpvGetView()->KillTimer(propsIt->drawer->getTimerId());
+				propsIt->drawer->setTimerId(iUNDEF);
+			}
+			props->drawer->removeSlave(propsIt->drawer); // clear our own slave list
+			++index;
+		}
+	}
+
 	if ( props->drawer->getUseTime())
 		props->mdoc->mpvGetView()->SetTimer(props->drawer->getTimerId(), props->drawer->getInterval() * REAL_TIME_INTERVAL,0);
 	else
 		props->mdoc->mpvGetView()->SetTimer(props->drawer->getTimerId(), props->drawer->getInterval() * 1000.0,0);
 	if (saveToAvi)
 		startAvi();
+	UpdateUIState();
 	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
 }
@@ -499,7 +508,6 @@ int AnimationRun::begin(Event  *ev) {
 }
 
 void AnimationRun::animationRemoved() {
-	fRunning = false;
 	UpdateUIState();
 	if ( saveToAvi) {
 		stopAvi();
@@ -507,6 +515,10 @@ void AnimationRun::animationRemoved() {
 }
 
 void AnimationRun::UpdateUIState() {
+	bool fRunning = false;
+	AnimationProperties *props = propsheet.getActiveAnimation();
+	if (props)
+		fRunning = (props->drawer->getTimerId() != iUNDEF) && (props->drawer->getTimerId() != SLAVE_TIMER_ID);
 	if (fRunning) {
 		fiPause->Show();
 		fiRun->Hide();
@@ -1127,6 +1139,20 @@ int RealTimePage::setTimingMode(Event *ev) {
 				if ( col.fValid()) {
 					propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pProgress);
 				}
+			}
+		}
+		if ((props->drawer->getTimerId() != iUNDEF) && (props->drawer->getTimerId() != SLAVE_TIMER_ID)) {
+			// kill all other timers that have useTime == true
+			int index = 0;
+			AnimationProperties *propsIt;
+			while((propsIt = propsheet.getAnimation(index)) != 0) {
+				if (propsIt != props && propsIt->drawer->getUseTime() && propsIt->drawer->getTimerId() != iUNDEF && propsIt->drawer->getTimerId() != SLAVE_TIMER_ID) {
+					propsIt->mdoc->mpvGetView()->KillTimer(propsIt->drawer->getTimerId());
+					propsIt->drawer->setTimerId(iUNDEF);
+				}
+				propsIt->drawer->removeSlave(props->drawer); // remove ourselves from another drawer's slave list
+				props->drawer->removeSlave(propsIt->drawer); // also clear our own slave list
+				++index;
 			}
 		}
 	} else {

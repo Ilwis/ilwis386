@@ -105,7 +105,6 @@ namespace ILWIS {
 		bool saveToAvi;
 		CGLToMovie *movieRecorder;
 		String fnAvi;
-		bool fRunning;
 
 		AnimationPropertySheet	&propsheet;
 		virtual int DataChanged(Event*);
