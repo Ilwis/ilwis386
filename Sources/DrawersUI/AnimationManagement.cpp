@@ -563,7 +563,7 @@ initial(true)
 	fgMaster = new FieldGroup(root, true);
 	stMaster = new StaticText(fgMaster, TR("Master animation :                                                    "),true);
 	stMaster->SetIndependentPos();
-	StaticText *st2 = new StaticText(fgMaster, TR("Slave animation 1"));
+	StaticText *st2 = new StaticText(fgMaster, TR("Slave animation"));
 	st2->Align(stMaster, AL_UNDER);
 	foSlave1 = new FieldOneSelect(fgMaster,&choiceSlave1);
 	foSlave1->SetWidth(100);
@@ -966,53 +966,69 @@ RealTimePage::RealTimePage(ILWIS::AnimationPropertySheet &sheet, AnimationRun * 
 
 int RealTimePage::DataChanged(Event*ev) {
 	int code = (int)ev;
-	if ( GetSafeHwnd()) {
-		AnimationProperties *props = propsheet.getActiveAnimation();
-		if ( !props) {
-			fcolTime->FillWithColumns((TablePtr *)0);
-			tbl = Table();
-			cbTime->SetVal(false);
-			fgTime->Hide();
-			return 0;
-		}
-		AnimationDrawer *adrw = props->drawer;
-		if (code == 1) { // master animation changed; code != 1 means a callback was called
-			useTimeAttribute = adrw->getUseTime();
-			cbTime->SetVal(useTimeAttribute);
-			if (useTimeAttribute) {
-				fgTime->Show();
-				ILWIS::Duration t(adrw->getTimeStep());
-				fiYr->SetVal(t.get(ILWIS::Time::tpYEAR));
-				fiMonth->SetVal(t.get(ILWIS::Time::tpMONTH));
-				fiDay->SetVal(t.get(ILWIS::Time::tpDAYOFMONTH));
-				fiHour->SetVal(t.get(ILWIS::Time::tpHOUR));
-				fiMinute->SetVal(t.get(ILWIS::Time::tpMINUTE));
-			} else
-				fgTime->Hide();
-		}
-
-		IlwisObject *source = (IlwisObject *)adrw->getDataSource();
-		IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
-		if ( type ==IlwisObject::iotMAPLIST ) {
-			MapList mpl((*source)->fnObj);
-			tbl = mpl->tblAtt();		
-		}
-		if ( type == IlwisObject::iotOBJECTCOLLECTION){
-			ObjectCollection oc((*source)->fnObj);
-			tbl = oc->tblAtt();
-		}
-		if ( tbl.fValid())
-			fcolTime->FillWithColumns(&tbl);
-
-	/*	if ( tbl.fValid() && fgTime->fShow() == false)
+	AnimationProperties *props = propsheet.getActiveAnimation();
+	if ( !props) {
+		fcolTime->FillWithColumns((TablePtr *)0);
+		tbl = Table();
+		cbTime->SetVal(false);
+		fgTime->Hide();
+		return 0;
+	}
+	AnimationDrawer *adrw = props->drawer;
+	if (code == 1) { // code == 1 means master animation changed; code != 1 means a callback was called
+		useTimeAttribute = adrw->getUseTime();
+		timeColName = adrw->getTimeColumn();
+		cbTime->SetVal(useTimeAttribute);
+		if (useTimeAttribute) {
 			fgTime->Show();
-		else if ( fgTime->fShow())
-			fgTime->Hide();*/
+			ILWIS::Duration t(adrw->getTimeStep());
+			if ( (double)t == rUNDEF || (double)t == 0.0) {
+				if ( timeColName != "") {
+					IlwisObject *source = (IlwisObject *)adrw->getDataSource();
+					if ( IOTYPEBASEMAP((*source)->fnObj)) {
+						ObjectCollection oc((*source)->fnObj);
+					} else if ( IOTYPE((*source)->fnObj) ==IlwisObject::iotMAPLIST) {
+						MapList mpl((*source)->fnObj);
+						if ( mpl->fTblAtt()) {
+							Column col = mpl->tblAtt()->col(timeColName);
+							if ( col.fValid()) {
+								t = Duration(calcNiceStep((col->rrMinMax().rHi() - col->rrMinMax().rLo()) / ((mpl->iSize() > 1) ? (mpl->iSize() - 1) : 1)));
+								adrw->setTimeStep(t);
+							}
+						}
+					}
+				}
+			}
+			fiYr->SetVal(t.get(ILWIS::Time::tpYEAR));
+			fiMonth->SetVal(t.get(ILWIS::Time::tpMONTH));
+			fiDay->SetVal(t.get(ILWIS::Time::tpDAYOFMONTH));
+			fiHour->SetVal(t.get(ILWIS::Time::tpHOUR));
+			fiMinute->SetVal(t.get(ILWIS::Time::tpMINUTE));
+		} else
+			fgTime->Hide();
+	}
 
-		String name = props->drawer->getName();
-		String v = TR("Selected Animation: %S");
-		stMaster->SetVal(String(v.c_str(),name));
-	}	
+	IlwisObject *source = (IlwisObject *)adrw->getDataSource();
+	IlwisObject::iotIlwisObjectType type = IlwisObject::iotObjectType((*source)->fnObj);
+	if ( type ==IlwisObject::iotMAPLIST ) {
+		MapList mpl((*source)->fnObj);
+		tbl = mpl->tblAtt();		
+	}
+	if ( type == IlwisObject::iotOBJECTCOLLECTION){
+		ObjectCollection oc((*source)->fnObj);
+		tbl = oc->tblAtt();
+	}
+	if ( tbl.fValid())
+		fcolTime->FillWithColumns(&tbl);
+
+/*	if ( tbl.fValid() && fgTime->fShow() == false)
+		fgTime->Show();
+	else if ( fgTime->fShow())
+		fgTime->Hide();*/
+
+	String name = props->drawer->getName();
+	String v = TR("Selected Animation: %S");
+	stMaster->SetVal(String(v.c_str(),name));
 
 	return 1;
 }
@@ -1051,8 +1067,7 @@ int RealTimePage::changeTimeColumn(Event *e) {
 		IlwisObject *source = (IlwisObject *)adrw->getDataSource();
 		if ( IOTYPEBASEMAP((*source)->fnObj)) {
 				ObjectCollection oc((*source)->fnObj);
-		}
-		if ( IOTYPE((*source)->fnObj) ==IlwisObject::iotMAPLIST) {
+		} else if ( IOTYPE((*source)->fnObj) ==IlwisObject::iotMAPLIST) {
 			MapList mpl((*source)->fnObj);
 			if ( mpl->fTblAtt()) {
 				Column col = mpl->tblAtt()->col(timeColName);
