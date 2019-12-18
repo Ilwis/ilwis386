@@ -138,7 +138,8 @@ bool MapListApplic::fFreezing()
       SetSize(0);
       return false;
     }
-    ptr.SetGeoRef(map(0)->gr());
+	if (iMaps > 0)
+		ptr.SetGeoRef(map(0)->gr());
     trq.SetText(TR("Calculating Map"));
     for (int i = 0; i < iMaps; ++i) 
     {

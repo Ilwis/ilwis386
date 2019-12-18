@@ -201,12 +201,20 @@ UINT CommandHandler::CalcObjectAndShow(LPVOID sFile)
 		if (obj.fValid())
 		{
 			obj->Calc();
-			String sCmd = "show " + fn.sFullNameQuoted(true);
-			char* str = sCmd.sVal();
-			getEngine()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)str);
+			bool fCalculated = true; // for now we make an exception for MapList, to prevent deadlock in repeating CalcObjectAndShow indefinitely for bad MapLists
+			IlwisObject::iotIlwisObjectType iotType = IlwisObject::iotObjectType(fn);
+			if (iotType == IlwisObject::iotMAPLIST)	{
+				MapList ml(fn);
+				fCalculated = ml->fCalculated();
+			}
+			if (fCalculated) {
+				String sCmd = "show " + fn.sFullNameQuoted(true);
+				char* str = sCmd.sVal();
+				getEngine()->SendMessage(ILWM_EXECUTE, 0, (LPARAM)str);
 
-			FileName *fn2 = new FileName(fn);
-			UpdateCatalog(fn2);
+				FileName *fn2 = new FileName(fn);
+				UpdateCatalog(fn2);
+			}
 			getEngine()->RemoveThreadLocalVars();
 			return TRUE;
 		}
