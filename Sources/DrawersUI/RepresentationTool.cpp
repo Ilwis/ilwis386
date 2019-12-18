@@ -103,7 +103,7 @@ bool RepresentationTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 void RepresentationTool::displayOptionSubRpr() {
 	SetDrawer *animDrw = dynamic_cast<SetDrawer *>(drawer);
 	DrawerTool *legendTool = getTool("LegendTool");
-	if (chooseForm)
+	if (chooseForm && chooseForm->m_hWnd != 0 && IsWindow(chooseForm->m_hWnd))
 		delete chooseForm;
 	chooseForm = new RepresentationToolForm(tree, (LayerDrawer *)drawer,animDrw, legendTool);
 }
