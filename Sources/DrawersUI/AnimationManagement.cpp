@@ -135,8 +135,16 @@ void AnimationPropertySheet::removeAnimation(AnimationDrawer * drw) {
 				animations[i].drawer->manager = 0;
 				if ( animations[i].animBar && animations[i].animBar->m_hWnd && ::IsWindow(animations[i].animBar->m_hWnd))
 					animations[i].animBar->ShowWindow(SW_HIDE);
-				if (animations[i].drawer->getTimerId() != iUNDEF && animations[i].drawer->getTimerId() != SLAVE_TIMER_ID)
+				if (animations[i].drawer->getTimerId() != iUNDEF && animations[i].drawer->getTimerId() != SLAVE_TIMER_ID) // kill timer if active
 					animations[i].mdoc->mpvGetView()->KillTimer(animations[i].drawer->getTimerId());
+				else if (animations[i].drawer->getTimerId() != iUNDEF && animations[i].drawer->getTimerId() == SLAVE_TIMER_ID) { // remove from all other's slaves list
+					int index = 0;
+					AnimationProperties *propsIt;
+					while((propsIt = getAnimation(index)) != 0) {
+						propsIt->drawer->removeSlave(animations[i].drawer);
+						++index;
+					}
+				}
 				animations.erase(animations.begin() + i);
 				break;
 			}
