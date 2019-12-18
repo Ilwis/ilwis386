@@ -129,9 +129,7 @@ void AnimationPropertySheet::removeAnimation(AnimationDrawer * drw) {
 			if ( animations[i].drawer->getId() == drw->getId()) {
 				if ( i < activeIndex)
 					activeIndex--;
-				else if ( i == activeIndex) { // removing the active animation; set the state to "stop"; the timer is killed automatically when closing the parent MapWindow
-					AnimationRun *pageRun = dynamic_cast<AnimationRun *>(GetPage(0));
-					pageRun->animationRemoved();
+				else if ( i == activeIndex) { // removing the active animation
 					activeIndex = -1;
 				}
 				animations[i].drawer->manager = 0;
@@ -140,6 +138,7 @@ void AnimationPropertySheet::removeAnimation(AnimationDrawer * drw) {
 				if (animations[i].drawer->getTimerId() != iUNDEF && animations[i].drawer->getTimerId() != SLAVE_TIMER_ID)
 					animations[i].mdoc->mpvGetView()->KillTimer(animations[i].drawer->getTimerId());
 				animations.erase(animations.begin() + i);
+				break;
 			}
 		}
 	}
@@ -380,6 +379,11 @@ int AnimationRun::DataChanged(Event* ev) {
 			}
 		}
 	}
+	if (code == 3) { // animationRemoved
+		if ( saveToAvi) {
+			stopAvi();
+		}
+	}
 	UpdateUIState();
 	return 1;
 }
@@ -512,13 +516,6 @@ int AnimationRun::begin(Event  *ev) {
 	props->drawer->setMapIndex(0);
 	propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pTimedEvent);
 	return 1;
-}
-
-void AnimationRun::animationRemoved() {
-	UpdateUIState();
-	if ( saveToAvi) {
-		stopAvi();
-	}
 }
 
 void AnimationRun::UpdateUIState() {

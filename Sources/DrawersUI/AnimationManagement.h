@@ -89,7 +89,6 @@ namespace ILWIS {
 		int changeActive(Event *ev);
 		void timed();
 		void refreshTimer();
-		void animationRemoved();
 	private:
 		void stopAvi();
 		void startAvi();
