@@ -465,7 +465,7 @@ int AnimationRun::run(Event  *ev) {
 	AnimationProperties *props = propsheet.getActiveAnimation();
 	if (!props)
 		return 0;
-	if ( props->drawer->getTimerId() != iUNDEF)
+	if ( props->drawer->getTimerId() != iUNDEF) {
 		if (props->drawer->getTimerId() == SLAVE_TIMER_ID) {
 			int index = 0;
 			AnimationProperties *propsIt;
@@ -473,10 +473,12 @@ int AnimationRun::run(Event  *ev) {
 				propsIt->drawer->removeSlave(props->drawer);
 				++index;
 			}
+			int timeIdC = AnimationDrawer::getTimerIdCounter(true); // assign a new timer-id
+			props->drawer->setTimerId(timeIdC);
 		} else
-			props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
-	else {
-		int timeIdC = AnimationDrawer::getTimerIdCounter(true);
+			props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId()); // keep same timer-id as before
+	} else {
+		int timeIdC = AnimationDrawer::getTimerIdCounter(true); // assign a new timer-id
 		props->drawer->setTimerId(timeIdC);
 	}
 	if (props->drawer->getUseTime()) {
@@ -492,7 +494,6 @@ int AnimationRun::run(Event  *ev) {
 			++index;
 		}
 	}
-
 	if ( props->drawer->getUseTime())
 		props->mdoc->mpvGetView()->SetTimer(props->drawer->getTimerId(), props->drawer->getInterval() * REAL_TIME_INTERVAL,0);
 	else
