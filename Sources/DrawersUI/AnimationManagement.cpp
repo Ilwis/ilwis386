@@ -375,7 +375,14 @@ int AnimationRun::DataChanged(Event* ev) {
 		if (props) {
 			if (props->drawer->getInterval() > 0 && props->drawer->getInterval() != rUNDEF) {
 				fps = 1.0 / props->drawer->getInterval();
+				fEndInitialization = false; // temporarily disable calling "AnimationRun::speed()", as it overwrites the fps value
 				sliderFps->SetVal(fps);
+				fEndInitialization = true;
+				FieldGroup *fgRest = (FieldGroup*)sliderFps->parent();
+				if (fgRest->childlist().size() >= 3) { // change the value of "edit" back to "fps"; if fps was out of the range of the slider, then the slider overwrote the value of "edit".
+					FieldReal * edit = dynamic_cast<FieldReal*>(fgRest->childlist()[2]->childlist()[0]); // the FieldReal has nestled itself into fgRest; this is a mistake in FieldRealSliderEx, but I will not change that now because it has side effects, and FieldRealSliderEx is used alot.
+					edit->SetVal(fps);
+				}
 			}
 		}
 	}
