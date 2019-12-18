@@ -15,7 +15,9 @@ public:
 	void addSource(const IlwisObject& obj);
 	BaseMap getMap(const Coord& crd=Coord()) const;
 	IlwisObject getSource() const;
+	bool isMapList() const;
 	void updateIndex(long ind);
+	long getIndex() const;
 	Domain domain() const;
 	RangeReal getRange() const;
 	void setRange(const RangeReal& rng) ;

@@ -683,7 +683,7 @@ void TrackProfileGraphEntry::setIndex(int sourceIndex, double value, const Coord
 		currentIndex = iUNDEF;
 		for(int i=0; i < tool->sources.size(); ++i) {
 			vector<String> v;
-			v.push_back(tool->sources[i]->getSource()->fnObj.sFile + tool->sources[i]->getSource()->fnObj.sExt);
+			v.push_back(tool->sources[i]->getSource()->fnObj.sFile + (tool->sources[i]->isMapList() ? String(":%d", 1 + tool->sources[i]->getIndex()) : "") + tool->sources[i]->getSource()->fnObj.sExt);
 			v.push_back("?");
 			const DomainValueRangeStruct & dvrs = graph->getDvrs(i);
 			RangeReal rr = graph->getRange(i);
@@ -758,6 +758,13 @@ void TrackProfileGraphEntry::addSource(const IlwisObject& bmp){
 void TrackProfileGraphEntry::sourceIndexChanged() {
 	if ( graph) {
 		graph->recomputeValues();
+		if ( currentIndex >= 0) {
+			for(int i=0; i < tool->sources.size(); ++i) {
+				GraphInfo gi = graph->values[i].at(currentIndex);
+				setIndex(i, gi.value, gi.crd);
+			}
+		} else
+			setIndex(iUNDEF, 0, Coord());		
 	}
 }
 

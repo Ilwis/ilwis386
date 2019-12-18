@@ -403,14 +403,14 @@ void TrackProfileTool::timedEvent(UINT timerid) {
 		FileName fnDrw = (*obj)->fnObj;
 		for(int j = 0; j < sources.size(); ++j) {
 			FileName fn = sources[j]->getSource()->fnObj;
-			//if ( fn == fnDrw) {
+			if ( fn == fnDrw) {
 				sources[j]->updateIndex(cdrw->getCurrentIndex());
-			//}
+			}
 		}
-		if ( graphForm) {
-			graphForm->sourceIndexChanged();
-			graphForm->update();
-		}
+	}
+	if ( graphForm) {
+		graphForm->sourceIndexChanged();
+		graphForm->update();
 	}
 }
 
@@ -499,8 +499,16 @@ void TrackDataSource::setRange(const RangeReal& rng) {
 	overruleRange = rng;
 }
 
-void TrackDataSource::updateIndex(long ind){
+void TrackDataSource::updateIndex(long ind) {
 	currentIndex = ind;
+}
+
+long TrackDataSource::getIndex() const {
+	return currentIndex;
+}
+
+bool TrackDataSource::isMapList() const {
+	return mpl.fValid();
 }
 
 Domain TrackDataSource::domain() const {
