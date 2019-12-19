@@ -11,6 +11,7 @@
 #include "Client\FormElements\TimeGraphSlider.h"
 #include "Client\FormElements\fldcol.h"
 #include "Client\FormElements\FieldRealSlider.h"
+#include "Client\FormElements\FieldListView.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Engine\Base\DataObjects\ObjectCollection.h"
@@ -566,27 +567,28 @@ fgSlaveTime(0),
 stMaster(0),
 fiSlaveStep(0),
 fiSlave1I(0),
+listview(0),
 initial(true)
 {
 	fgMaster = new FieldGroup(root, true);
-	stMaster = new StaticText(fgMaster, TR("Master animation :                                                    "),true);
+	stMaster = new StaticText(fgMaster, TR("Master Animation:                                                     "),true);
 	stMaster->SetIndependentPos();
-	StaticText *st2 = new StaticText(fgMaster, TR("Slave animation"));
-	st2->Align(stMaster, AL_UNDER);
-	foSlave1 = new FieldOneSelect(fgMaster,&choiceSlave1);
-	foSlave1->SetWidth(100);
-	foSlave1->Align(st2, AL_AFTER);
-	setTimerPerIndex(st2);
-	setTimerPerTime(st2);
+	setTimerPerIndex(stMaster);
+	setTimerPerTime(stMaster);
 	create();
 }
 
 void AnimationSynchronization::setTimerPerIndex(FormEntry *anchor) {
 	fgSlaveIndex  = new FieldGroup(fgMaster);		
+	StaticText *st2 = new StaticText(fgSlaveIndex, TR("Slave Animation"));
+	st2->Align(anchor, AL_UNDER);
+	foSlave1 = new FieldOneSelect(fgSlaveIndex,&choiceSlave1);
+	foSlave1->SetWidth(100);
+	foSlave1->Align(st2, AL_AFTER);
 	fiSlave1I = new FieldInt(fgSlaveIndex, TR("Offset"),&offset1);
 	fiSlave1I->SetWidth(10);
-	fiSlave1I->Align(anchor, AL_UNDER);
-	fiSlaveStep = new FieldReal(fgSlaveIndex, TR("Step"),&step1,ValueRange(0.01,100,0));
+	fiSlave1I->Align(st2, AL_UNDER);
+	fiSlaveStep = new FieldReal(fgSlaveIndex, TR("Step"),&step1,ValueRange(0.01,100,0.0000001));
 	fiSlaveStep->Align(fiSlave1I, AL_AFTER);
 	fiSlaveStep->SetWidth(10);
 	fgSlaveIndex->SetIndependentPos();
@@ -599,6 +601,14 @@ void AnimationSynchronization::setTimerPerTime(FormEntry *anchor) {
 	year = 0; month = 0; day = 0; hour = 0; minute = 0;
 	fgSlaveTime = new FieldGroup(fgMaster);
 	fgSlaveTime->SetIndependentPos();
+	vector<FLVColumnInfo> v;
+	v.push_back(FLVColumnInfo("Time-synced animations", 200));
+	v.push_back(FLVColumnInfo("Time-attribute", 150));
+	listview = new FieldListView(fgSlaveTime,v);
+	listview->Align(anchor, AL_UNDER);
+	listview->psn->iMinHeight = listview->psn->iHeight = 100;
+
+	/*
 	FieldInt *fiYr = new FieldInt(fgSlaveTime,TR("Offset(YMDhm)"),&year);
 	fiYr->Align(anchor,AL_UNDER);
 	FieldInt *fiMonth = new FieldInt(fgSlaveTime,"",&month);
@@ -613,6 +623,7 @@ void AnimationSynchronization::setTimerPerTime(FormEntry *anchor) {
 	FieldInt *fiMinute = new FieldInt(fgSlaveTime,"",&minute);
 	fiMinute->Align(fiHour,AL_AFTER,-5);
 	fiMinute->SetWidth(8);
+	*/
 	fgSlaveTime->Hide();
 }
 
@@ -627,6 +638,20 @@ BOOL AnimationSynchronization::OnInitDialog()
 	if ( useMasterTime) {
 		fgSlaveTime->Show();
 		fgSlaveIndex->Hide();
+		listview->clear();
+		vector<String> v;
+		int index = 0;
+		AnimationProperties *props = prop;
+		while((props = propsheet.getAnimation(index)) != 0) {
+			bool slaveTime = props->drawer->getUseTime();
+			if (props->drawer->getUseTime()) {
+				v.push_back(String("%S.Animation",props->drawer->getName()));
+				v.push_back(props->drawer->getTimeColumn());
+				listview->AddData(v);
+				v.clear(); // v is used one-row-at-a-time
+			}
+			++index;
+		}
 	} else {
 		fgSlaveTime->Hide();
 		fgSlaveIndex->Show();
@@ -639,35 +664,49 @@ int AnimationSynchronization::DataChanged(Event*ev) {
 	if ( GetSafeHwnd() &&( initial || code == 1)) {
 		initial = false;
 		AnimationProperties *prop = propsheet.getActiveAnimation();
-		int index = 0;
 		choiceMaster = propsheet.getActiveIndex();
-		AnimationProperties *props =  prop;
+		AnimationProperties *props = prop;
 		if ( props) {
 			bool useMasterTime = props->drawer->getUseTime();
 			if ( useMasterTime) {
 				fgSlaveTime->Show();
 				fgSlaveIndex->Hide();
+				listview->clear();
+				vector<String> v;
+				int index = 0;
+				while((props = propsheet.getAnimation(index)) != 0) {
+					bool slaveTime = props->drawer->getUseTime();
+					if (props->drawer->getUseTime()) {
+						v.push_back(String("%S.Animation",props->drawer->getName()));
+						v.push_back(props->drawer->getTimeColumn());
+						listview->AddData(v);
+						v.clear(); // v is used one-row-at-a-time
+					}
+					++index;
+				}
 			} else {
 				fgSlaveTime->Hide();
 				fgSlaveIndex->Show();
-			}
-			foSlave1->ose->ResetContent();
-			while((props = propsheet.getAnimation(index)) != 0) {
-				bool slaveTime = props->drawer->getUseTime();
-				if ( useMasterTime == slaveTime) {
-					foSlave1->ose->AddString(String("%S.Animation",props->drawer->getName()).c_str());
-					foSlave1->ose->SetItemData(index, (DWORD_PTR)props);
+				foSlave1->ose->ResetContent();
+				int index = 0;
+				while((props = propsheet.getAnimation(index)) != 0) {
+					bool slaveTime = props->drawer->getUseTime();
+					if ( useMasterTime == slaveTime) {
+						foSlave1->ose->AddString(String("%S.Animation",props->drawer->getName()).c_str());
+						foSlave1->ose->SetItemData(foSlave1->ose->GetCount()-1, (DWORD_PTR)props);
+					}
+					++index;
 				}
-				++index;
+				offset1 = 0;
+				fiSlave1I->SetVal(0);
 			}
-			offset1 = 0;
-			fiSlave1I->SetVal(0);
 			String name = prop->drawer->getName();
-			String v = TR("Master animation %S");
+			String v = useMasterTime ? TR("Selected Animation: %S") : TR("Master Animation: %S");
 			stMaster->SetVal(String(v.c_str(),name));
 		} else {
 			fgSlaveTime->Hide();
 			fgSlaveIndex->Show();
+			stMaster->SetVal(TR("Master Animation: <none>"));
 			foSlave1->ose->ResetContent();
 		}
 	} else if (code > 1000) {
@@ -717,7 +756,7 @@ END_MESSAGE_MAP()
 AnimationProgress::AnimationProgress(AnimationPropertySheet& sheet) : FormBasePropertyPage(TR("Threshold Marking").c_str()), propsheet(sheet), form(0)
 {
 	fgMaster = new FieldGroup(root, true);
-	stMaster = new StaticText(fgMaster, TR("Selected Animation                                               "), true);
+	stMaster = new StaticText(fgMaster, TR("Selected Animation:                                               "), true);
 	stMaster->SetIndependentPos();
 	fcol = new FieldColumn(fgMaster,TR("Reference Attribute"),0,&colName,dmVALUE);
 	fcol->SetCallBack((NotifyProc)&AnimationProgress::changeColumn);
@@ -770,8 +809,10 @@ int AnimationProgress::DataChanged(Event*ev) {
 	}
 	if ( code == 1) {
 		AnimationProperties *props = propsheet.getActiveAnimation();
-		if ( !props)
+		if ( !props) {
+			stMaster->SetVal(TR("Selected Animation: <none>"));
 			return 0;
+		}
 			/*	TimeInterval interval(col->rrMinMax().rLo(),col->rrMinMax().rHi());
 				graphSlider->setTimeInterval(interval);
 				graphSlider->setTimes(col);*/
@@ -931,7 +972,7 @@ RealTimePage::RealTimePage(ILWIS::AnimationPropertySheet &sheet, AnimationRun * 
 
 	fgMaster = new FieldGroup(root, true);
 
-	stMaster = new StaticText(fgMaster, TR("Selected Animation                                               "), true);
+	stMaster = new StaticText(fgMaster, TR("Selected Animation:                                               "), true);
 	stMaster->SetIndependentPos();
 
 	cbTime = new CheckBox(fgMaster,TR("Use Time Attribute"),&useTimeAttribute);
@@ -980,6 +1021,7 @@ int RealTimePage::DataChanged(Event*ev) {
 		tbl = Table();
 		cbTime->SetVal(false);
 		fgTime->Hide();
+		stMaster->SetVal(TR("Selected Animation: <none>"));
 		return 0;
 	}
 	AnimationDrawer *adrw = props->drawer;

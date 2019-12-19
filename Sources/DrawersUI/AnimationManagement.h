@@ -9,7 +9,7 @@ class FieldColor;
 #define ID_AnimationBar 67305
 
 class CGLToMovie;
-
+class FieldListView;
 
 namespace ILWIS {
 
@@ -51,8 +51,6 @@ namespace ILWIS {
 
 		DECLARE_MESSAGE_MAP()
 	};
-
-
 
 	class AnimationPropertySheet : public CPropertySheet
 	{
@@ -128,6 +126,7 @@ namespace ILWIS {
 		FieldGroup *fgMaster,*fgSlaveIndex, *fgSlaveTime;
 		StaticText *stMaster;
 		FieldInt *fiSlave1I;
+		FieldListView *listview;
 		int offset1;
 		long choiceMaster, choiceSlave1;
 		double step1;
