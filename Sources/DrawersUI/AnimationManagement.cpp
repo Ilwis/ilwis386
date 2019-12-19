@@ -591,9 +591,9 @@ void AnimationSynchronization::setTimerPerIndex(FormEntry *anchor) {
 	fiSlave1I = new FieldInt(fgSlaveIndex, TR("Offset"),&offset1);
 	fiSlave1I->SetWidth(10);
 	fiSlave1I->Align(st2, AL_UNDER);
-	fiSlaveStep = new FieldReal(fgSlaveIndex, TR("Step"),&step1,ValueRange(0.01,100,0.0000001));
+	fiSlaveStep = new FieldReal(fgSlaveIndex, TR("Step"),&step1,ValueRange(0.01,100,0.00000001));
 	fiSlaveStep->Align(fiSlave1I, AL_AFTER);
-	fiSlaveStep->SetWidth(10);
+	fiSlaveStep->SetWidth(20);
 	fgSlaveIndex->SetIndependentPos();
 	FieldBlank *fb = new FieldBlank(fgSlaveIndex);
 	fb->Align(fiSlave1I, AL_UNDER);
