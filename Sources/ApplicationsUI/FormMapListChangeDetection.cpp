@@ -65,16 +65,16 @@ int FormMapListChangeDetection::exec()
 
 	String expr;
 	if ( choice == 0 ) {
-		expr = String("%S=MapListChangeDetection(%S, %S, %f, %s)", fnOut.sRelative(), fnIn1.sRelative(),fnIn2.sRelative(),threshold, undefHandling ? "true": "false");
+		expr = String("%S=MapListChangeDetection(%S, %S, %f, %s)", fnOut.sRelativeQuoted(), fnIn1.sRelativeQuoted(),fnIn2.sRelativeQuoted(),threshold, undefHandling ? "true": "false");
 	}
 	if ( choice == 1) {
-		expr = String("%S=MapListChangeDetection(%S, %S, %f, %s)", fnOut.sRelative(), fnIn1.sRelative(),fnIn2.sRelative(),threshold, undefHandling ? "true": "false");
+		expr = String("%S=MapListChangeDetection(%S, %S, %f, %s)", fnOut.sRelativeQuoted(), fnIn1.sRelativeQuoted(),fnIn2.sRelativeQuoted(),threshold, undefHandling ? "true": "false");
 	} 
 	if ( choice == 2) {
-		expr = String("%S=MapListChangeDetection(%S, %f, %s)", fnOut.sRelative(), fnIn1.sRelative(),threshold, undefHandling ? "true": "false");
+		expr = String("%S=MapListChangeDetection(%S, %f, %s)", fnOut.sRelativeQuoted(), fnIn1.sRelativeQuoted(),threshold, undefHandling ? "true": "false");
 	}
 	getEngine()->Execute(expr);
-	getEngine()->Execute(String("open %S", fnOut.sRelative()));
+	getEngine()->Execute(String("open %S", fnOut.sRelativeQuoted()));
 	
 	return 0;
 }

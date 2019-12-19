@@ -96,7 +96,7 @@ int FormPointInSegmention::exec()
 		option = "Vertex";
 	else 
 		option = "MiddlePoint";
-	String sExpr = String("PointMapPointInSegment(%S,%S)", fnMap1.sRelative(),option);
+	String sExpr = String("PointMapPointInSegment(%S,%S)", fnMap1.sRelativeQuoted(),option);
 
 
 	execPointMapOut(sExpr);

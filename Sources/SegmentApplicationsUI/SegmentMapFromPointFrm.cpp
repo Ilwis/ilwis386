@@ -109,13 +109,13 @@ int FormSegmentMapFromPointFrm::exec()
 	FileName fnMap1(sInMap1);
 	String sExpr;
 	if ( identCol != "" && orderCol != "")
-		sExpr = String("SegmentMapFromPoints(%S,%S,%S)", fnMap1.sRelative(), identCol, orderCol);
+		sExpr = String("SegmentMapFromPoints(%S,%S,%S)", fnMap1.sRelativeQuoted(), identCol, orderCol);
 	else if (identCol != "" && orderCol == "")
-		sExpr = String("SegmentMapFromPoints(%S,%S)", fnMap1.sRelative(), identCol);
+		sExpr = String("SegmentMapFromPoints(%S,%S)", fnMap1.sRelativeQuoted(), identCol);
 	else if (identCol == "" && orderCol != "")
-		sExpr = String("SegmentMapFromPoints(%S,,%S)", fnMap1.sRelative(), orderCol);
+		sExpr = String("SegmentMapFromPoints(%S,,%S)", fnMap1.sRelativeQuoted(), orderCol);
 	else 
-		sExpr = String("SegmentMapFromPoints(%S)", fnMap1.sRelative());
+		sExpr = String("SegmentMapFromPoints(%S)", fnMap1.sRelativeQuoted());
 
 
 	execSegmentMapOut(sExpr);

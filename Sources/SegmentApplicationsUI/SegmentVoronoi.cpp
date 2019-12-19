@@ -82,7 +82,7 @@ int FormSegmentMapVoronoi::exec()
 {
 	FormSegmentMapCreate::exec();
 	FileName fnMap1(sInMap1);
-	String sExpr = String("SegmentMapVoronoi(%S,%d)", fnMap1.sRelative(), minDistance);
+	String sExpr = String("SegmentMapVoronoi(%S,%d)", fnMap1.sRelativeQuoted(), minDistance);
 
 
 	execSegmentMapOut(sExpr);

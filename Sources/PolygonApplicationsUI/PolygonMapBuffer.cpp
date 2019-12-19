@@ -103,7 +103,7 @@ int FormPolygonMapBuffer::exec()
 			type="Butt"; break;
 	};
 	FileName fnMap(sInMap);
-	String sExpr = String("PolygonMapBuffer(%S,%f,%S)", fnMap.sRelative(true), distance, type);
+	String sExpr = String("PolygonMapBuffer(%S,%f,%S)", fnMap.sRelativeQuoted(true), distance, type);
 
 
 	execPolygonMapOut(sExpr);

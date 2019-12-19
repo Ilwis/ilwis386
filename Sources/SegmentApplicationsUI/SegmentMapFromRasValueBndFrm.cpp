@@ -82,9 +82,9 @@ int SegmentMapFromRasValueBndFrm::exec()
 	FileName fnMap1(sInMap1);
 	String sExpr;
 	if ( intervalType == 0)
-		sExpr = String("SegmentMapFromRasValueBnd(%S,%f,%f,%f,8,smooth,%f)", fnMap1.sRelative(),vr->rrMinMax().rLo(), vr->rrMinMax().rHi(), vr->rStep(),frags);
+		sExpr = String("SegmentMapFromRasValueBnd(%S,%f,%f,%f,8,smooth,%f)", fnMap1.sRelativeQuoted(),vr->rrMinMax().rLo(), vr->rrMinMax().rHi(), vr->rStep(),frags);
 	else
-		sExpr = String("SegmentMapFromRasValueBnd(%S,\"%S\",8,smooth,%f)", fnMap1.sRelative(),sequence,frags);
+		sExpr = String("SegmentMapFromRasValueBnd(%S,\"%S\",8,smooth,%f)", fnMap1.sRelativeQuoted(),sequence,frags);
 
 	execSegmentMapOut(sExpr);
 

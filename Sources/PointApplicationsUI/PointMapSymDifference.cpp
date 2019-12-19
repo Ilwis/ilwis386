@@ -86,7 +86,7 @@ int FormPointMapSymetricDifferenceion::exec()
 	FormPointMapCreate::exec();
 	FileName fnMap1(sInMap1);
 	FileName fnMap2(sInMap2);
-	String sExpr = String("PointMapSymetricDifference(%S,%S)", fnMap1.sRelative(), fnMap2.sRelative());
+	String sExpr = String("PointMapSymetricDifference(%S,%S)", fnMap1.sRelativeQuoted(), fnMap2.sRelativeQuoted());
 
 
 	execPointMapOut(sExpr);

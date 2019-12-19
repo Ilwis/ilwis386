@@ -202,7 +202,7 @@ int FormPointMapRelate::exec()
 			rel = "Within";break;
 	};
 	String negate = negation ? "true" : "false";
-	String sExpr = String("PointMapRelate(%S,%S,%S,%S)", fnMap1.sRelative(), fnMap2.sRelative(),rel,negate);
+	String sExpr = String("PointMapRelate(%S,%S,%S,%S)", fnMap1.sRelativeQuoted(), fnMap2.sRelativeQuoted(),rel,negate);
 
 
 	execPointMapOut(sExpr);

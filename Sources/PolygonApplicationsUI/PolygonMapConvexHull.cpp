@@ -133,7 +133,7 @@ int FormPolygonMapConvexHull::exec()
 	FormPolygonMapCreate::exec();
 	FileName fnMap(sInMap);
 	String com = choice == 0 ? "true" : "false";
-	String sExpr = String("PolygonMapConvexHull(%S,%S)", fnMap.sRelative(true), com);
+	String sExpr = String("PolygonMapConvexHull(%S,%S)", fnMap.sRelativeQuoted(true), com);
 
 
 	execPolygonMapOut(sExpr);

@@ -130,7 +130,7 @@ int FormSegmentMapIntersection::exec()
 	FormSegmentMapCreate::exec();
 	FileName fnMap1(sInMap1);
 	FileName fnMap2(sInMap2);
-	String sExpr = String("SegmentMapIntersect(%S,%S)", fnMap1.sRelative(), fnMap2.sRelative());
+	String sExpr = String("SegmentMapIntersect(%S,%S)", fnMap1.sRelativeQuoted(), fnMap2.sRelativeQuoted());
 
 
 	execSegmentMapOut(sExpr);

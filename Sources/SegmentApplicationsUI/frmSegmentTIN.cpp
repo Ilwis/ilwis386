@@ -82,7 +82,7 @@ int FormSegmentMapTIN::exec()
 {
 	FormSegmentMapCreate::exec();
 	FileName fnMap1(sInMap1);
-	String sExpr = String("SegmentMapTIN(%S,%s)", fnMap1.sRelative(), convex ? "true" : "false");
+	String sExpr = String("SegmentMapTIN(%S,%s)", fnMap1.sRelativeQuoted(), convex ? "true" : "false");
 
 
 	execSegmentMapOut(sExpr);

@@ -87,7 +87,7 @@ int FormSegmentMapDifference::exec()
 	FormSegmentMapCreate::exec();
 	FileName fnMap1(sInMap1);
 	FileName fnMap2(sInMap2);
-	String sExpr = String("SegmentMapDifference(%S,%S)", fnMap1.sRelative(), fnMap2.sRelative());
+	String sExpr = String("SegmentMapDifference(%S,%S)", fnMap1.sRelativeQuoted(), fnMap2.sRelativeQuoted());
 
 
 	execSegmentMapOut(sExpr);

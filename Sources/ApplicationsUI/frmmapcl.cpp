@@ -265,7 +265,7 @@ int FormMapIter::exec()
       sExpr[i] = ' ';
   String s1, s2;
 	FileName fn(sInitMap);
-	sInitMap = fn.sRelative();
+	sInitMap = fn.sRelativeQuoted();
   if (fPropagation)
     s1 = "Prop";
   if (iStopCriterium == 1)
