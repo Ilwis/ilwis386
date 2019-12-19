@@ -449,7 +449,7 @@ int AnimationRun::stop(Event  *ev) {
 	props->drawer->setTimerId(iUNDEF);
 	props->drawer->setMapIndex(0);
 	UpdateUIState();
-	propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pTimedEvent);
+	propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pTimedEvent | AnimationPropertySheet::pSynchornization);
 	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
 }
@@ -469,6 +469,7 @@ int AnimationRun::pause(Event  *ev) {
 		props->mdoc->mpvGetView()->KillTimer(props->drawer->getTimerId());
 	props->drawer->setTimerId(iUNDEF);
 	UpdateUIState();
+	propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pSynchornization);
 	return 1;
 }
 
@@ -521,6 +522,7 @@ int AnimationRun::run(Event  *ev) {
 	if (saveToAvi)
 		startAvi();
 	UpdateUIState();
+	propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pSynchornization);
 	props->mdoc->mpvGetView()->Invalidate();
 	return 1;
 }
@@ -585,6 +587,7 @@ void AnimationSynchronization::setTimerPerIndex(FormEntry *anchor) {
 	foSlave1 = new FieldOneSelect(fgSlaveIndex,&choiceSlave1);
 	foSlave1->SetWidth(100);
 	foSlave1->Align(st2, AL_AFTER);
+	foSlave1->SetIndependentPos();
 	fiSlave1I = new FieldInt(fgSlaveIndex, TR("Offset"),&offset1);
 	fiSlave1I->SetWidth(10);
 	fiSlave1I->Align(st2, AL_UNDER);
@@ -645,7 +648,11 @@ BOOL AnimationSynchronization::OnInitDialog()
 		while((props = propsheet.getAnimation(index)) != 0) {
 			bool slaveTime = props->drawer->getUseTime();
 			if (props->drawer->getUseTime()) {
-				v.push_back(String("%S.Animation",props->drawer->getName()));
+				int timerid = props->drawer->getTimerId();
+				String clock;
+				if (timerid != iUNDEF)
+					clock = "*";
+				v.push_back(String("%S.Animation",props->drawer->getName() + " " + clock));
 				v.push_back(props->drawer->getTimeColumn());
 				listview->AddData(v);
 				v.clear(); // v is used one-row-at-a-time
@@ -677,7 +684,11 @@ int AnimationSynchronization::DataChanged(Event*ev) {
 				while((props = propsheet.getAnimation(index)) != 0) {
 					bool slaveTime = props->drawer->getUseTime();
 					if (props->drawer->getUseTime()) {
-						v.push_back(String("%S.Animation",props->drawer->getName()));
+						int timerid = props->drawer->getTimerId();
+						String clock;
+						if (timerid != iUNDEF)
+							clock = "*";
+						v.push_back(String("%S.Animation",props->drawer->getName() + " " + clock));
 						v.push_back(props->drawer->getTimeColumn());
 						listview->AddData(v);
 						v.clear(); // v is used one-row-at-a-time
@@ -1231,6 +1242,7 @@ int RealTimePage::setTimingMode(Event *ev) {
 				++index;
 			}
 		}
+		propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pSynchornization);
 	} else {
 		propsheet.PostMessage(ILWM_UPDATE_ANIM, AnimationPropertySheet::pProgress);
 	}
