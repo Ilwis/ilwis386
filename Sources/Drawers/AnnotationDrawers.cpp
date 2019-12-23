@@ -1854,7 +1854,7 @@ AnnotationNorthArrowDrawer::AnnotationNorthArrowDrawer(DrawerParameters *parms)
 		cb.MaxY() = cbMap.MaxY();
 	begin.y = 0.9;
 	begin.x = 0.9;
-	scale = 2.5;
+	scale = 5.0;
 }
 
 AnnotationNorthArrowDrawer::~AnnotationNorthArrowDrawer()
