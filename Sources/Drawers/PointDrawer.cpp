@@ -130,14 +130,12 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 		}
 
 		double symbolScale = cbZoom.width() / 200;
-		CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz)); // a square in openGL coordinate space
-		double f = max(width, height);
+		CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz));
 		CoordBounds localCb = element->getCb();
-		if (localCb.fValid())
-			f = max(f, max(localCb.width(), localCb.height()));
+		double f = localCb.width() > 0 ? localCb.height() / localCb.width()  : 1.0;
 
-		double xscale = cb.width() / f;
-		double yscale = cb.height() / f;
+		double xscale = cb.width() / width;
+		double yscale = f * cb.height() / height;
 
 		glPushMatrix();
 		glTranslated(fx,fy,fz + zoffset);

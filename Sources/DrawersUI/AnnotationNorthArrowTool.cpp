@@ -101,7 +101,7 @@ void AnnotationNorthArrowTool::makeActive(void *v, HTREEITEM ) {
 
 //--------------------------------------------------------
 NorthArrowPosition::NorthArrowPosition(CWnd *wPar, AnnotationNorthArrowDrawer *dr) : 
-DisplayOptionsForm(dr,wPar,TR("Properties of the North Arrow")), scale(20 * dr->getScale()),selection(0),followGraticule(false)
+DisplayOptionsForm(dr,wPar,TR("Properties of the North Arrow")), scale(40 * dr->getScale()),selection(0),followGraticule(false)
 {
 	ILWIS::SVGLoader *loader = NewDrawer::getSvgLoader();
 	int i = 0;
@@ -147,7 +147,7 @@ int NorthArrowPosition::setArrow(Event *ev) {
 	if ( selection >= 0) {
 		AnnotationNorthArrowDrawer *northDrw = (AnnotationNorthArrowDrawer *)drw;
 		northDrw->setArrowType(names[selection]);
-		northDrw->setScale(scale * 0.05);
+		northDrw->setScale(scale * 0.025);
 		updateMapView();
 	}
 	return 1;
@@ -169,7 +169,7 @@ int NorthArrowPosition::setPosition(Event *ev) {
 int NorthArrowPosition::setScale(Event *ev) {
 	sliderScale->StoreData();
 	AnnotationNorthArrowDrawer *northDrw = (AnnotationNorthArrowDrawer *)drw;
-	northDrw->setScale(scale * 0.05);
+	northDrw->setScale(scale * 0.025);
 	updateMapView();
 
 	return 1;
