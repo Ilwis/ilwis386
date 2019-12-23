@@ -101,7 +101,7 @@ void AnnotationNorthArrowTool::makeActive(void *v, HTREEITEM ) {
 
 //--------------------------------------------------------
 NorthArrowPosition::NorthArrowPosition(CWnd *wPar, AnnotationNorthArrowDrawer *dr) : 
-DisplayOptionsForm(dr,wPar,TR("Properties of the North Arrow")), scale(40 * dr->getScale()),selection(0)
+DisplayOptionsForm(dr,wPar,TR("Properties of the North Arrow")), scale(40 * dr->getScale()),selection(0),followGraticule(false)
 {
 	ILWIS::SVGLoader *loader = NewDrawer::getSvgLoader();
 	int i = 0;
@@ -124,6 +124,7 @@ DisplayOptionsForm(dr,wPar,TR("Properties of the North Arrow")), scale(40 * dr->
 		begin.y = 0.9;
 		dr->setBegin(begin);
 	}
+	followGraticule = dr->getFollowGraticule();
 	x = round(100.0 * begin.x);
 	y = round(100.0 * begin.y);
 	sliderScale = new FieldIntSliderEx(root,TR("Scale(%)"), &scale,ValueRange(10,500),true);
@@ -136,6 +137,8 @@ DisplayOptionsForm(dr,wPar,TR("Properties of the North Arrow")), scale(40 * dr->
 	sliderV->setContinuous(true);
 	sliderScale->SetCallBack((NotifyProc)&NorthArrowPosition::setScale);
 	sliderScale->setContinuous(true);
+	cbFollowGraticule = new CheckBox(root, TR("Follow Graticule"), &followGraticule);
+	cbFollowGraticule->SetCallBack((NotifyProc)&NorthArrowPosition::setFollowGraticule);
 	create();
 }
 
@@ -172,10 +175,20 @@ int NorthArrowPosition::setScale(Event *ev) {
 	return 1;
 }
 
+int NorthArrowPosition::setFollowGraticule(Event *ev) {
+	cbFollowGraticule->StoreData();
+	AnnotationNorthArrowDrawer *northDrw = (AnnotationNorthArrowDrawer *)drw;
+	northDrw->setFollowGraticule(followGraticule);
+	updateMapView();
+
+	return 1;
+}
+
 void NorthArrowPosition::apply() {
 	setArrow(0);
 	setPosition(0);
 	setScale(0);
+	setFollowGraticule(0);
 	updateMapView();
 }
 

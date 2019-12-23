@@ -225,6 +225,8 @@ public:
 	void setArrowType(const String& type);
 	String getArrowType() const;
 	void setScale(double s);
+	void setFollowGraticule(const bool followGraticule);
+	bool getFollowGraticule() const;
 	
 private:
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
@@ -232,6 +234,7 @@ private:
 	void load(const FileName& fnView, const String& section);
 	Coord begin;
 	String northArrowType;
+	bool fFollowGraticule;
 	PointDrawer *arrow;
 };
 }

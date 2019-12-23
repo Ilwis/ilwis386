@@ -1779,6 +1779,7 @@ ILWIS::NewDrawer *createAnnotationNorthArrowDrawer(DrawerParameters *parms) {
 Coord AnnotationNorthArrowDrawer::getBegin(){
 	return begin;
 }
+
 void AnnotationNorthArrowDrawer::setBegin(const Coord& b){
 	begin = b;
 	if ( arrow)
@@ -1807,11 +1808,20 @@ String AnnotationNorthArrowDrawer::getArrowType() const{
 	return northArrowType;
 }
 
+void AnnotationNorthArrowDrawer::setFollowGraticule(const bool followGraticule){
+	fFollowGraticule = followGraticule;
+}
+
+bool AnnotationNorthArrowDrawer::getFollowGraticule() const{
+	return fFollowGraticule;
+}
+
 String AnnotationNorthArrowDrawer::store(const FileName& fnView, const String& section) const{
 	String currentSection = section + ":AnnotationNorthArrow";
 	AnnotationDrawer::store(fnView, currentSection);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Begin",fnView, begin);
 	ObjectInfo::WriteElement(currentSection.c_str(),"NorthArrowType",fnView, northArrowType);
+	ObjectInfo::WriteElement(currentSection.c_str(),"FollowGraticule",fnView, fFollowGraticule);
 
 	return currentSection;
 }
@@ -1821,6 +1831,7 @@ void AnnotationNorthArrowDrawer::load(const FileName& fnView, const String& sect
 	AnnotationDrawer::load(fnView, section);
 	ObjectInfo::ReadElement(currentSection.c_str(),"Begin",fnView, begin);
 	ObjectInfo::ReadElement(currentSection.c_str(),"NorthArrowType",fnView, northArrowType);
+	ObjectInfo::ReadElement(currentSection.c_str(),"FollowGraticule",fnView, fFollowGraticule);
 	setArrowType(northArrowType);
 }
 
@@ -1828,6 +1839,7 @@ AnnotationNorthArrowDrawer::AnnotationNorthArrowDrawer(DrawerParameters *parms)
 : AnnotationDrawer(parms, "AnnotationNorthArrowDrawer")
 , arrow(0)
 , northArrowType("Arrow")
+, fFollowGraticule(false)
 {
 	id = "AnnotationNorthArrowDrawer";
 	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
@@ -1881,12 +1893,42 @@ bool AnnotationNorthArrowDrawer::draw(const DrawLoop drawLoop, const CoordBounds
 		Coord c1 = gr->cConv(rc);
 		rc.Row += 1;
 		Coord c2 = gr->cConv(rc);
-		double rDX = c2.x - c1.x;
-		double rDY = c2.y - c1.y;
-		double at = atan2(rDX, -rDY);
-		if (at == 0 && rDY < 0)
-			at = M_PI_2;
-		angle = at * 180.0 / M_PI;
+		CoordSystem cs = getRootDrawer()->getCoordinateSystem();
+		if (fFollowGraticule && cs.fValid() && !cs->pcsLatLon() && cs->fCoord2LatLon()) {
+			LatLon ll1 = cs->llConv(c1);
+			LatLon ll2 = cs->llConv(c2);
+			double rDX = ll2.Lon - ll1.Lon;
+			double rDY = ll2.Lat - ll1.Lat;
+			double at = atan2(rDX, -rDY);
+			if (at == 0 && rDY > 0)
+				at = M_PI;
+			angle = at * 180.0 / M_PI;
+		} else {
+			double rDX = c2.x - c1.x;
+			double rDY = c2.y - c1.y;
+			double at = atan2(rDX, -rDY);
+			if (at == 0 && rDY > 0)
+				at = M_PI;
+			angle = at * 180.0 / M_PI;
+		}
+	} else if (fFollowGraticule) {
+		CoordSystem cs = getRootDrawer()->getCoordinateSystem();
+		if (cs.fValid() && !cs->pcsLatLon() && cs->fCoord2LatLon()) {
+			CoordBounds cb = getRootDrawer()->getCoordBoundsZoom();
+			double length = cb.height() / 100.0; // sample 1/100th of the map (just like the "georef" case)
+			Coord c1 = cb.middle();
+			c1.y += length / 2;
+			Coord c2 = c1;
+			c2.y -= length;
+			LatLon ll1 = cs->llConv(c1);
+			LatLon ll2 = cs->llConv(c2);
+			double rDX = ll2.Lon - ll1.Lon;
+			double rDY = ll2.Lat - ll1.Lat;
+			double at = atan2(rDX, -rDY);
+			if (at == 0 && rDY > 0)
+				at = M_PI;
+			angle = at * 180.0 / M_PI;
+		}
 	}
 	AnnotationDrawer::draw(drawLoop, cbArea);
 	if (arrow) {

@@ -29,15 +29,17 @@ namespace ILWIS {
 		int setPosition(Event *ev) ;
 		int setScale(Event *ev);
 		int setArrow(Event *ev);
+		int setFollowGraticule(Event *ev);
 		void apply();
 		
 		FieldIntSliderEx *sliderV;
 		FieldIntSliderEx *sliderH;
 		FieldIntSliderEx *sliderScale;
 		FieldOneSelectString *arrowType;
+		CheckBox* cbFollowGraticule;
 		int ticks;
 		int x,y,scale;
-		String unit;
+		bool followGraticule;
 		vector<String> names;
 		long selection;
 	};
