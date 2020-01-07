@@ -137,7 +137,7 @@ DisplayOptionsForm(dr,wPar,TR("Properties of the North Arrow")), scale(40 * dr->
 	sliderV->setContinuous(true);
 	sliderScale->SetCallBack((NotifyProc)&NorthArrowPosition::setScale);
 	sliderScale->setContinuous(true);
-	cbFollowGraticule = new CheckBox(root, TR("Follow Graticule instead of Grid"), &followGraticule);
+	cbFollowGraticule = new CheckBox(root, TR("Point to Geographic North"), &followGraticule);
 	cbFollowGraticule->SetCallBack((NotifyProc)&NorthArrowPosition::setFollowGraticule);
 	cbFollowGraticule->SetIndependentPos();
 	create();
