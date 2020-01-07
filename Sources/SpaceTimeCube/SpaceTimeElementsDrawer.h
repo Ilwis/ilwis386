@@ -68,12 +68,16 @@ namespace ILWIS {
 		void load(const FileName& fnView, const String& parentSection);
 	protected:
 		GLuint * displayListFootprint;
+		GLuint * displayListFootprintBeforeOffscreen;
 		bool * fRefreshDisplayListFootprint;
 		GLuint * displayListXT;
+		GLuint * displayListXTBeforeOffscreen;
 		bool * fRefreshDisplayListXT;
 		GLuint * displayListXY;
+		GLuint * displayListXYBeforeOffscreen;
 		bool * fRefreshDisplayListXY;
 		GLuint * displayListYT;
+		GLuint * displayListYTBeforeOffscreen;
 		bool * fRefreshDisplayListYT;
 		SpaceTimeDrawer * spaceTimeDrawer;
 		BaseMapPtr *basemap;

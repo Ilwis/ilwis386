@@ -97,6 +97,12 @@ void CubeDrawer::prepare(PreparationParameters *pp) {
 			}
 		}
 	}
+	if ( pp->type & NewDrawer::ptOFFSCREENSTART || pp->type & NewDrawer::ptOFFSCREENEND) {
+		if ( font)
+			font->prepare(pp);
+		if ( mediumFont)
+			mediumFont->prepare(pp);
+	}
 }
 
 void CubeDrawer::SetTimePosVariables(double * _timePos, String * _sTimePosText) {

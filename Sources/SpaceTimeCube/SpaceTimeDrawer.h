@@ -58,8 +58,10 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		Coord normalize(Coord c) const;
 		Coord cross(Coord c1, Coord c2) const;
 		GLuint * displayList;
+		GLuint * displayListBeforeOffscreen;
 		bool * fRefreshDisplayList;
 		GLuint * texture;
+		GLuint * textureBeforeOffscreen;
 		bool * fRefreshTexture;
 		BaseMapPtr *basemap;
 		bool fValueMap;
@@ -67,6 +69,7 @@ class _export SpaceTimeDrawer : public FeatureLayerDrawer, public TemporalDrawer
 		vector<long> disabledRaws;
 		vector<GLuint> selectedObjectIDs;
 		map<long, GLuint> *subDisplayLists;
+		map<long, GLuint> *subDisplayListsBeforeOffscreen;
 		int nrSteps;
 		bool *fHatching;
 		SpaceTimeElementsDrawer * spaceTimeElementsDrawer;

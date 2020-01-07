@@ -72,6 +72,39 @@ void SpaceTimeElementsDrawer::prepare(PreparationParameters *parms) {
 	}
 	if ( parms->type & NewDrawer::ptRENDER) {
 	}
+	if (parms->type & ptOFFSCREENSTART) {
+		displayListFootprintBeforeOffscreen = displayListFootprint;
+		displayListXTBeforeOffscreen = displayListXT;
+		displayListXYBeforeOffscreen = displayListXY;
+		displayListYTBeforeOffscreen = displayListYT;
+		displayListFootprint = new GLuint;
+		*displayListFootprint = 0;
+		displayListXT = new GLuint;
+		*displayListXT = 0;
+		displayListXY = new GLuint;
+		*displayListXY = 0;
+		displayListYT = new GLuint;
+		*displayListYT = 0;
+	}
+	if (parms->type & ptOFFSCREENEND) {
+		if (*displayListFootprint != 0) // which OpenGL context?
+			glDeleteLists(*displayListFootprint, 1);
+		delete displayListFootprint;
+		if (*displayListXT != 0)
+			glDeleteLists(*displayListXT, 1);
+		delete displayListXT;
+		if (*displayListXY != 0)
+			glDeleteLists(*displayListXY, 1);
+		delete displayListXY;
+		if (*displayListYT != 0)
+			glDeleteLists(*displayListYT, 1);
+		delete displayListYT;
+
+		displayListFootprint = displayListFootprintBeforeOffscreen;
+		displayListXT = displayListXTBeforeOffscreen;
+		displayListXY = displayListXYBeforeOffscreen;
+		displayListYT = displayListYTBeforeOffscreen;
+	}
 }
 
 void SpaceTimeElementsDrawer::RefreshDisplayList() const {

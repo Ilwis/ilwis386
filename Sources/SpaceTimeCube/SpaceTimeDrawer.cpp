@@ -133,7 +133,8 @@ void SpaceTimeDrawer::prepare(PreparationParameters *parms){
 		//Tranquilizer trq(TR("preparing data"));
 		*fRefreshDisplayList = true;
 
-	} if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::pt3D || parms->type & NewDrawer::ptRESTORE) {
+	}
+	if ( parms->type & NewDrawer::ptRENDER || parms->type & NewDrawer::pt3D || parms->type & NewDrawer::ptRESTORE) {
 		PreparationParameters pp(parms);
 		pp.type = pp.type & ~NewDrawer::ptGEOMETRY;
 
@@ -192,6 +193,52 @@ void SpaceTimeDrawer::prepare(PreparationParameters *parms){
 			*fRefreshDisplayList = true;
 		}
 	}
+	if (parms->type & ptOFFSCREENSTART) {
+		displayListBeforeOffscreen = displayList;
+		textureBeforeOffscreen = texture;
+		subDisplayListsBeforeOffscreen = subDisplayLists;
+		displayList = new GLuint;
+		*displayList = 0;
+		texture = new GLuint [2];
+		texture[0] = 0;
+		subDisplayLists = new map<long, GLuint>();
+		// highlight selected items
+		if (selectedObjectIDs.size() > 0) {
+			if (rootDrawer->getDrawerContext()->TakeContext()) {
+				bool fPrevSelected = true;
+				for (map<long, GLuint>::iterator mapEntry = subDisplayListsBeforeOffscreen->begin(); mapEntry != subDisplayListsBeforeOffscreen->end(); ++mapEntry) {
+					GLuint objectID = mapEntry->first;
+					GLuint listID = glGenLists(1); // not compiled in the display list, but executed immediately
+					(*subDisplayLists)[objectID] = listID;
+					bool fSelected = find(selectedObjectIDs.begin(), selectedObjectIDs.end(), objectID) != selectedObjectIDs.end();
+					glNewList(listID, GL_COMPILE);
+					if (fSelected && !fPrevSelected)
+						glTranslated(0, -0.5, 0);
+					else if (fPrevSelected && !fSelected)
+						glTranslated(0, 0.5, 0);
+					glEndList();
+					fPrevSelected = fSelected;
+				}
+			}
+			rootDrawer->getDrawerContext()->ReleaseContext();
+		}
+	}
+	if (parms->type & ptOFFSCREENEND) {
+		for (map<long, GLuint>::iterator mapEntry = subDisplayLists->begin(); mapEntry != subDisplayLists->end(); ++mapEntry)
+			glDeleteLists(mapEntry->second, 1); // which OpenGL context?
+		delete subDisplayLists;
+		if (*displayList != 0) // which OpenGL context?
+			glDeleteLists(*displayList, 2);
+		delete displayList;
+		if (texture[0] != 0)
+			glDeleteTextures(2, texture);
+		delete [] texture;
+
+		displayList = displayListBeforeOffscreen;
+		texture = textureBeforeOffscreen;
+		subDisplayLists = subDisplayListsBeforeOffscreen;
+	}
+
 	if (spaceTimeElementsDrawer)
 		spaceTimeElementsDrawer->prepare(parms);
 
