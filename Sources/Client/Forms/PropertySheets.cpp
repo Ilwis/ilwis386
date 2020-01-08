@@ -1216,6 +1216,9 @@ int MapPropPage::GeoRefChange(Event*)
 		err.Show(TR("GeoReference Change"));
 	}
 
+	if (!gr.fValid())
+		return 0;
+
 	m_stGRDsc->SetVal(sObjectDesc(gr));
 	CoordSystem cs = gr->cs();
 
@@ -1344,7 +1347,15 @@ int MapPropPage::exec()
 		FileName fnGR = IlwisObjectPtr::fnCheckPath(FileName(m_sNewGR, ".grf"));
 		if (fnGR != pmp->gr()->fnObj)
 		{
-			GeoRef gr(fnGR);
+			GeoRef gr;
+			try
+			{
+				gr = GeoRef(fnGR);
+			}
+			catch(const ErrorObject& err)
+			{
+				err.Show(TR("GeoReference Change"));
+			}
 			if (gr.fValid())
 				pmp->SetGeoRef(gr);
 		}
