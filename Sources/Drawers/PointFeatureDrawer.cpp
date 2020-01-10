@@ -149,10 +149,10 @@ void PointFeatureDrawer::prepare(PreparationParameters *p){
 				properties.drawColor = rpr->prc()->clrSymbol(getRaw());
 			}
 		}
+		properties.exaggeration = properties.exaggeration * properties.scale / 100.0;
 		properties.stretchScale = 1.0 + properties.exaggeration;
 		if ( properties.scaleMode != PointProperties::sNONE && v != rUNDEF ) {
 			if ( bmpptr->fTblAtt() || bmpptr->dm()->pdv()) {
-				properties.exaggeration = properties.exaggeration * p->props.symbolSize / 100.0;
 				RangeReal rr = properties.stretchRange;
 				if ( properties.stretchColumn != "") {
 					Table tbl = bmpptr->tblAtt();

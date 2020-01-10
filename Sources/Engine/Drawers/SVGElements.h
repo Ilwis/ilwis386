@@ -21,13 +21,17 @@ namespace ILWIS {
 	class IVGAttributes {
 	public:
 		enum ShapeType{sRECTANGLE, sCIRCLE,sELLIPSE,sLINE,sPOLYLINE,sPOLYGON,sPATH, sCOMPOUND, sUNKNOWN};
+		enum Stretch{sNONE,sHORIZONTAL,sVERTICAL,sBOTH};
 
-		IVGAttributes(ShapeType t=sUNKNOWN) : type(t) {
+		IVGAttributes(ShapeType t=sUNKNOWN)
+		: type(t)
+		, stretch(sBOTH)
+		{
 			strokewidth = rwidth = rheight = rx = ry = 0;
 			opacity = 1;
 			strokewidth = 1;
 			fillColor = colorUSERDEF;
-			strokeColor =Color(0,0,0);
+			strokeColor = Color(0,0,0);
 		}
 		virtual bool isPolygon() const;
 		Color fillColor, strokeColor;
@@ -35,6 +39,7 @@ namespace ILWIS {
 		vector<Coord> points;
 		vector<pair<unsigned int, vector<Coord>>> triangleStrips;
 		ShapeType type;
+		Stretch stretch;
 		CoordBounds bounds;
 		vector<Transform> transformations;
 

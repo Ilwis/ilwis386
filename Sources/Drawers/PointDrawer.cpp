@@ -81,12 +81,16 @@ void PointDrawer::setCoord(const Coord& crd) {
 
 void PointDrawer::calcSize() {
 	width = 0;
+	height = 0;
 	for(vector<IVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
 		width = max(width, (*cur)->rwidth);	
 	}
-	height = 0;
 	for(vector<IVGAttributes *>::const_iterator cur = element->begin(); cur != element->end(); ++cur) {
 		height = max(height, (*cur)->rheight);	
+	}
+	if (element->getCb().fValid()) {
+		width = max(width, element->getCb().width());
+		height = max(height, element->getCb().height());
 	}
 	CoordBounds cbZoom = getRootDrawer()->getCoordBoundsZoom();
 	if (width == 0)
@@ -129,20 +133,18 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 			label->setCoord(c);
 		}
 
-		double symbolScale = cbZoom.width() / 200;
-		CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz));
-		CoordBounds localCb = element->getCb();
-		double f = localCb.width() > 0 ? localCb.height() / localCb.width()  : 1.0;
-
-		double xscale = cb.width() / width;
-		double yscale = f * cb.height() / height;
+		double symbolScale = max(cbZoom.width(), cbZoom.height()) / 200; // rootDrawer guarantees that the coordinates are spaced evenly in both X and Y direction
+		CoordBounds cb(Coord(fx - symbolScale, fy - symbolScale,fz), Coord(fx + symbolScale, fy + symbolScale,fz)); // a rectangle in OpenGL space
+		double symbolSize = max(width, height);
+		double xscale = 2 * symbolScale / symbolSize; // fit the symbol in the rectangle
+		double yscale = xscale;
 
 		glPushMatrix();
 		glTranslated(fx,fy,fz + zoffset);
 		glScaled(xscale * properties.scaling() * element->getDefaultScale(), -yscale * properties.scaling() * element->getDefaultScale(), zscale ); // opengl's coordinate system is mirrored vertcally compared to svg
 		glRotated(properties.angle,0,0,100);
 		if ( properties.threeDOrientation){
-			glTranslated(0,0,symbolScale);
+			glTranslated(0,0,symbolScale); // ?
 			glRotated(-90,100,0,0);
 		}
 
@@ -159,6 +161,17 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 			GLuint & displayListContour = SVGSymbolDisplayListContours[*cur];
 
 			glLineWidth(properties.thickness!= 0 ? properties.thickness : (*cur)->strokewidth);
+			if ((*cur)->stretch != IVGAttributes::sBOTH) { // needs more research; currently only works when the svg's must be stretched vertically, and the coordinates are symmetrically declared
+				glPushMatrix();
+				double rUnscale = (1.0 + properties.scale / 100.0) / properties.stretchScale;
+				if ((*cur)->stretch == IVGAttributes::sNONE) {
+					glTranslated(0.0, (*cur)->bounds.cMin.y, 0.0);
+					glScaled(rUnscale, rUnscale, 1.0); // un-scale
+					glTranslated(0.0, -(*cur)->bounds.cMin.y, 0.0); // convert the scaling to a translation, that moves the topmost coordinate to where it would have been if scaling was used
+				} else {
+					glScaled(rUnscale, 1.0, 1.0); // scale only vertically
+				}
+			}
 			Color fcolor = (*cur)->fillColor.fEqual(colorUSERDEF) ? properties.drawColor : (*cur)->fillColor;
 			Color scolor = (*cur)->strokeColor.fEqual(colorUSERDEF) ? properties.drawColor : (*cur)->strokeColor;
 			switch((*cur)->type) {
@@ -341,6 +354,8 @@ bool PointDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const
 					}
 					break;			
 			}
+			if ((*cur)->stretch != IVGAttributes::sBOTH)
+				glPopMatrix();
 		}
 		glPopMatrix();
 

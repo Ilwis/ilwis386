@@ -230,8 +230,6 @@ void IVGElement::parseNode(const pugi::xml_node& node,IVGAttributes* attributes)
 				attributes->points.push_back(c);
 			}
 		}
-
-
 		
 		String swidth = getAttributeValue(node, "width");
 		if ( swidth != "" && swidth != "user-defined")
@@ -260,7 +258,6 @@ void IVGElement::parseNode(const pugi::xml_node& node,IVGAttributes* attributes)
 		} else {
 			attributes->bounds = CoordBounds(Coord(0,0), Coord(attributes->rwidth,attributes->rheight)); 
 		}
-
 }
 
 String IVGElement::parseStyle(const String& style,IVGAttributes* attributes) {
@@ -281,6 +278,15 @@ String IVGElement::parseStyle(const String& style,IVGAttributes* attributes) {
 		}
 		else if (attr == "fill-opacity") {
 			attributes->opacity = val.rVal();
+		}
+		else if (attr == "stretch") {
+			val = val.sTrimSpaces();
+			if (val == "no")
+				attributes->stretch = IVGAttributes::sNONE;
+			else if (val == "horizontal")
+				attributes->stretch = IVGAttributes::sHORIZONTAL;
+			else if (val == "vertical")
+				attributes->stretch = IVGAttributes::sVERTICAL;
 		}
 	}
 
@@ -462,6 +468,10 @@ void IVGElement::normalizePositions() {
 			att->points[i].x = att->points[i].x - shiftx;
 			att->points[i].y = att->points[i].y - shifty;
 		}
+		att->bounds.cMin.x -= shiftx;
+		att->bounds.cMax.x -= shiftx;
+		att->bounds.cMin.y -= shifty;
+		att->bounds.cMax.y -= shifty;
 		if ( att->isPolygon()) { // need to triangulate
 			GLUtesselator * tesselator = gluNewTess();
 			Triangulator tri (tesselator);
@@ -469,6 +479,10 @@ void IVGElement::normalizePositions() {
 			gluDeleteTess(tesselator);
 		}
 	}
+	cb.cMin.x -= shiftx;
+	cb.cMax.x -= shiftx;
+	cb.cMin.y += shifty;
+	cb.cMax.y += shifty;
 }
 
 bool IVGAttributes::isPolygon() const {
