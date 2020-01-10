@@ -54,7 +54,7 @@ int ExportGeoTiff::Export(Event *ev){
 	FileName fnOut(sOutput.sUnQuote());
 	fnOut.sExt = ".tif";
 	String pluginDir = "\"" + ilwDir + rootPath;
-	String gdalDir = pluginDir + "\\GDAL\\bin"; 
+	String gdalDir = pluginDir + "\\GDAL"; 
 	String command = "!" + gdalDir + "\\gdal_translate\".exe -of GTiff" ;
 	command += " \"" + sInput.sUnQuote() + "\"";
 	command += " \"" + fnOut.sFullPath() + "\"";
@@ -122,7 +122,7 @@ int ExportR::Export(Event *ev){
 	FileName fnOut(sOutput.sUnQuote());
 	fnOut.sExt = ".rda";
 	String pluginDir = "\"" + ilwDir + rootPath;
-	String gdalDir = pluginDir + "\\GDAL\\bin"; 
+	String gdalDir = pluginDir + "\\GDAL"; 
 	String command = "!" + gdalDir + "\\gdal_translate\".exe -of R" ;
 	command += " \"" + sInput.sUnQuote() + "\"";
 	command += " \"" + fnOut.sFullPath() + "\"";
@@ -660,7 +660,7 @@ int Jason2Page::import(Event *ev) {
 	FileName fn(sOutput.sUnQuote());
 	String ilwDir = IlwWinApp()->Context()->sIlwDir();
 	String pluginDir = ilwDir + rootPath;
-	String gdalDir = pluginDir + "\\GDAL\\bin";
+	String gdalDir = pluginDir + "\\GDAL";
 	String scriptPath = pluginDir + "\\" + script;
 	FileName fnScript(scriptPath);
 	String command = "run " + fnScript.sFullPathQuoted(); //import\\import_jason'.isl";
@@ -766,7 +766,7 @@ int AVHRRPage::import(Event *e) {
 	StoreData();
 	String ilwDir = IlwWinApp()->Context()->sIlwDir();
 	String pluginDir = ilwDir + rootPath;
-	String gdalDir = pluginDir + "\\GDAL\\bin"; 
+	String gdalDir = pluginDir + "\\GDAL"; 
 	String command = "!" + gdalDir + "\\gdal_translate.exe -of ILWIS";
 	command += " \"" + sInput.sUnQuote() + "\"";
 	command += " \"" + sOutput.sUnQuote() + "\"";

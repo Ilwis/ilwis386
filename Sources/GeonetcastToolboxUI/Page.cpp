@@ -87,7 +87,7 @@ void DataPage::setFolders(const String& type) {
 void DataPage::InitImport(String& ilwDir, String& pluginDir, String& gdalDir, String& utilDir,String& inputDrive, String& inputPath, String& outputDrive, String& outputPath){
 	ilwDir = IlwWinApp()->Context()->sIlwDir(); 
 	pluginDir = ilwDir + rootPath;
-	gdalDir = pluginDir + "\\GDAL\\bin";
+	gdalDir = pluginDir + "\\GDAL";
 	utilDir = pluginDir + "\\util";
 	FileName fn;
 	if(dirIn.length() != 0){

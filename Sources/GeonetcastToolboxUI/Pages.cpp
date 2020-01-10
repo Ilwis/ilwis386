@@ -570,7 +570,7 @@ int MultiLayerHDF4::Export(Event *ev) {
 			sType = "Float64"; break;
  	}
 	String pluginDir = "\"" + ilwDir + rootPath;
-	String gdalDir = pluginDir + "\\GDAL\\bin"; 
+	String gdalDir = pluginDir + "\\GDAL"; 
 	String command = "!" + gdalDir + "\\gdal_translate\".exe -of HDF4Image -ot ";
 	command += sType;
 	for(int i = 0; i < parts.size(); ++i) {
