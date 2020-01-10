@@ -341,7 +341,7 @@ void ExternalCommand::Execute(bool fBlockWhileExecuting)
 	if (fToolbox()) {
 		String path = getEngine()->getContext()->sIlwDir();
 		String dataPath = path + "Resources\\gdal_data";
-		path += "Extensions\\" + sToolboxName() + "\\GDAL\\bin";
+		path += "Extensions\\" + sToolboxName() + "\\GDAL";
 		String gdaldataPath = path + "\\gdal-data";
 		if (FileName(gdaldataPath).fExist())
 			SetEnvironmentVariable("GDAL_DATA", gdaldataPath.c_str());
