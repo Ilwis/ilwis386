@@ -40,7 +40,7 @@ public:
 		scaleMode = lp->scaleMode;
 		radiusArea = lp->radiusArea;
 		useDirection = lp->useDirection;
-		angle = (angle != 0 && lp->useDirection) ? angle : lp->angle;
+		angle = lp->useDirection ? (lp->angle + angle) : lp->angle; // this should be implemented more secure; however due to the current sequence of "prepares" this works!
 		exaggeration = lp->exaggeration;
 		scale = lp->scale;
 	}

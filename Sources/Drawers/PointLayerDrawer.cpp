@@ -70,7 +70,6 @@ void PointLayerDrawer::prepare(PreparationParameters *parm){
 			}
 		} else
 			rr = rotationInfo.rr;
-
 	}
 
 	if (parm->type & NewDrawer::ptRENDER || parm->type & NewDrawer::ptRESTORE) {
@@ -182,7 +181,7 @@ SymbolRotationInfo PointLayerDrawer::getRotationInfo() const {
 
 void PointLayerDrawer::setRotationInfo(const SymbolRotationInfo& sC) {
 	rotationInfo = sC;
-	properties->useDirection = true;
+	properties->useDirection = sC.rr.fValid();
 }
 
 

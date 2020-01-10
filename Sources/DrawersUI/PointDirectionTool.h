@@ -31,6 +31,7 @@ private:
 	FieldRangeReal *frr;
 	CheckBox *cbClockwise;
 
+	bool fRotate;
 	bool clockwise;
 	Table tbl;
 	PointProperties *props;

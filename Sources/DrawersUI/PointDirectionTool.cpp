@@ -81,7 +81,7 @@ String PointDirectionTool::getMenuString() const {
 
 //---------------------------------------------------
 PointDirectionForm::PointDirectionForm(CWnd *wPar, PointLayerDrawer *dr, const Table& _tbl):
-DisplayOptionsForm(dr,wPar,TR("Rotation")), tbl(_tbl), fcColumn(0), clockwise(true)
+DisplayOptionsForm(dr,wPar,TR("Rotation")), tbl(_tbl), fcColumn(0), fRotate(false), clockwise(true)
 {
 	SpatialDataDrawer *spdrw =  ((ComplexDrawer*)dr)->isSet() ? (SpatialDataDrawer*)dr : (SpatialDataDrawer *)(dr->getParentDrawer());
 	BaseMapPtr *bmptr = spdrw->getBaseMap();
@@ -92,6 +92,7 @@ DisplayOptionsForm(dr,wPar,TR("Rotation")), tbl(_tbl), fcColumn(0), clockwise(tr
 		props = (PointProperties *)dr->getProperties();
 		inf = dr->getRotationInfo();
 	}
+	fRotate = inf.rr.fValid();
 	if ( tbl.fValid()) { // attribute table
 		if (inf.rotationColumn == "" || !tbl->col(inf.rotationColumn).fValid()) { // overwrite inf.rr, regardless of its current stretch; it is based on a non-existing column
 			for(int i = 0; i < tbl->iCols(); ++i) {
@@ -104,16 +105,24 @@ DisplayOptionsForm(dr,wPar,TR("Rotation")), tbl(_tbl), fcColumn(0), clockwise(tr
 		} else if (!inf.rr.fValid()) {
 			inf.rr = tbl->col(inf.rotationColumn)->rrMinMax();
 		}
-		fcColumn = new FieldColumn(root, TR("Attribute Column"), tbl, &(inf.rotationColumn), dmVALUE);
+		CheckBox * cbRotate = new CheckBox(root, TR("Rotate"), &fRotate);
+		fcColumn = new FieldColumn(cbRotate, TR("Attribute Column"), tbl, &(inf.rotationColumn), dmVALUE);
 		fcColumn->SetCallBack((NotifyProc)&PointDirectionForm::ColValCallBack);
-		new FieldBlank(root);
-		frr = new FieldRangeReal(root, TR("Rotation range"), &(inf.rr));
-		cbClockwise = new CheckBox(root,TR("Clockwise"),&(inf.clockwise));
+		fcColumn->Align(cbRotate, AL_UNDER);
+		FieldBlank * fb = new FieldBlank(cbRotate);
+		fb->Align(fcColumn, AL_UNDER);
+		frr = new FieldRangeReal(cbRotate, TR("Rotation range"), &(inf.rr));
+		frr->Align(fb, AL_UNDER);
+		cbClockwise = new CheckBox(cbRotate,TR("Clockwise"),&(inf.clockwise));
+		cbClockwise->Align(frr, AL_UNDER);
 	} else if ( bmptr->dm()->pdv()) { // value-pointmap (no attribute table)
 		if (!inf.rr.fValid())
 			inf.rr = bmptr->rrMinMax();
-		frr = new FieldRangeReal(root, TR("Rotation range"), &(inf.rr));
-		cbClockwise = new CheckBox(root,TR("Clockwise"),&(inf.clockwise));
+		CheckBox * cbRotate = new CheckBox(root, TR("Rotate"), &fRotate);
+		frr = new FieldRangeReal(cbRotate, TR("Rotation range"), &(inf.rr));
+		frr->Align(cbRotate, AL_UNDER);
+		cbClockwise = new CheckBox(cbRotate,TR("Clockwise"),&(inf.clockwise));
+		cbClockwise->Align(frr, AL_UNDER);
 	}
 
 	create();
@@ -134,6 +143,8 @@ int PointDirectionForm::ColValCallBack(Event*) {
 
 void PointDirectionForm::apply(){
 	root->StoreData();
+	if (!fRotate)
+		inf.rr = RangeReal();
 	PreparationParameters pp(NewDrawer::ptRENDER, 0);
 	if (drw->isSet()) {
 		for(int i = 0; i < drw->getDrawerCount(); ++i) {
