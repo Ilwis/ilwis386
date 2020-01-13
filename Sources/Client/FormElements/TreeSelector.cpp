@@ -161,7 +161,7 @@ void TreeSelector::Add(const String& sValue, HTREEITEM hti, DWORD data, bool fLe
 	TVITEM tvi;
 	memset(&tvi, 0, sizeof(TVITEM));
 	tree->GetItem(&tvi);
-	tvi.mask = TVIF_CHILDREN;
+	tvi.mask = TVIF_PARAM | TVIF_HANDLE | TVIF_CHILDREN; 
 	//tvi.cChildren = fDynamic && !fLeaf ? 1 : 0;
 	tvi.cChildren = !fLeaf ? 1 : 0;
 
