@@ -100,11 +100,10 @@ int GeonetCastFrm::Fill(Event* ev)
 		}
 	}
 	if ( fInitial){
-		tree->SelectNode(formType);
 		fInitial=false;
+		tree->SelectNode(formType);		
 		tree->ExpandTo(1);
 	}
-	fInitial = false;
 	return 1;
 }
 
