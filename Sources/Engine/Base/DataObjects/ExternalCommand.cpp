@@ -352,6 +352,11 @@ void ExternalCommand::Execute(bool fBlockWhileExecuting)
 			SetEnvironmentVariable("GDAL_DRIVER_PATH", driverPath.c_str());
 		else
 			SetEnvironmentVariable("GDAL_DRIVER_PATH", NULL);
+		String projPath = path + "\\projlib";
+		if (FileName(projPath).fExist())
+			SetEnvironmentVariable("PROJ_LIB", projPath.c_str());
+		else
+			SetEnvironmentVariable("PROJ_LIB", NULL);
 		char cBuffer [BUFSIZE];
 		GetEnvironmentVariable("PATH", cBuffer, BUFSIZE);
 		path += ";" + String(cBuffer); // prepend the ILWIS GDAL before any other GDAL that may be in the path.
