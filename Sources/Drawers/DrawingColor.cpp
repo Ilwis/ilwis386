@@ -89,13 +89,13 @@ colorSetIndex(0),
 useSingleValueForTreshold(false)
 {
 	IlwisSettings settings("DefaultSettings");
-	Color clr1a = settings.clrValue("NoColor", colorUNDEF);
-	Color clr2a = settings.clrValue("YesColor", colorUNDEF);
-	if (clr1a != colorUNDEF) {
+	Color clr1a = settings.clrValue("NoColor", Color()); // do not compare with colorUNDEF, because then we can't assign the black color; the registry has the inverse alpha
+	Color clr2a = settings.clrValue("YesColor", Color());
+	if (clr1a != Color()) {
 		clr1 = clr1a;
 		clr1.alpha() = 255 - clr1.alpha();
 	}
-	if (clr2a != colorUNDEF) {
+	if (clr2a != Color()) {
 		clr2 = clr2a;
 		clr2.alpha() = 255 - clr2.alpha();
 	}
