@@ -192,7 +192,7 @@ void FeatureLayerDrawer::setMask(const String& sm){
 	mask = sm;
 }
 
-void FeatureLayerDrawer:: setSingleColor(const Color& c){
+void FeatureLayerDrawer::setSingleColor(const Color& c){
 	singleColor = c;
 	setDrawMethod(drmSINGLE);
 }
