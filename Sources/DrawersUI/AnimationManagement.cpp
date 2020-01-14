@@ -1079,8 +1079,13 @@ int RealTimePage::DataChanged(Event*ev) {
 		ObjectCollection oc((*source)->fnObj);
 		tbl = oc->tblAtt();
 	}
-	if ( tbl.fValid())
+	if ( tbl.fValid()) {
 		fcolTime->FillWithColumns(&tbl);
+	} else {
+		fcolTime->FillWithColumns((TablePtr *)0);
+		cbTime->SetVal(false);
+		fgTime->Hide();
+	}
 
 /*	if ( tbl.fValid() && fgTime->fShow() == false)
 		fgTime->Show();
