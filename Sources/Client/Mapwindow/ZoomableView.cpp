@@ -509,14 +509,14 @@ void ZoomableView::AreaSelected(CRect rect)
 {
 	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+		CoordBounds cbZoomExt = mcd->rootDrawer->getCoordBoundsZoomExt();
 		CRect rectWindow;
 		GetClientRect(&rectWindow);
 		Coord c1,c2;
 		if ( rect.Width() < 3 && rect.Height() < 3) { // case of clicking on the map in zoom mode
-			double posx = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine click point
-			double posy = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
-			CoordBounds cb = cbZoom; // == cbView ? cbMap : cbZoom;
+			double posx = cbZoomExt.cMin.x + cbZoomExt.width() * rect.left / (double)rectWindow.Width(); // determine click point
+			double posy = cbZoomExt.cMax.y - cbZoomExt.height() * rect.top / (double)rectWindow.Height();
+			CoordBounds cb = cbZoomExt; // == cbView ? cbMap : cbZoom;
 			double w = cb.width() / (2.0 * 1.41); // determine new window size
 			double h = cb.height() / (2.0 * 1.41);
 			c1.x = posx - w; // determine new bounds
@@ -526,18 +526,18 @@ void ZoomableView::AreaSelected(CRect rect)
 		} else if (rect.Width() < 3 || rect.Height() < 3)
 			return;
 		else {
-			c1.x = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine zoom rectangle in GL coordinates
-			c1.y = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
-			c2.x = cbZoom.cMin.x + cbZoom.width() * rect.right / (double)rectWindow.Width();
-			c2.y = cbZoom.cMax.y - cbZoom.height() * rect.bottom / (double)rectWindow.Height();
+			c1.x = cbZoomExt.cMin.x + cbZoomExt.width() * rect.left / (double)rectWindow.Width(); // determine zoom rectangle in GL coordinates
+			c1.y = cbZoomExt.cMax.y - cbZoomExt.height() * rect.top / (double)rectWindow.Height();
+			c2.x = cbZoomExt.cMin.x + cbZoomExt.width() * rect.right / (double)rectWindow.Width();
+			c2.y = cbZoomExt.cMax.y - cbZoomExt.height() * rect.bottom / (double)rectWindow.Height();
 		}
 		c1.z = c2.z = 0;
 
-		cbZoom = CoordBounds (c1,c2);
+		cbZoomExt = CoordBounds (c1,c2);
 		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
-		RecenterZoomHorz(cbZoom, cbMap);
-		RecenterZoomVert(cbZoom, cbMap);
-		mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
+		RecenterZoomHorz(cbZoomExt, cbMap);
+		RecenterZoomVert(cbZoomExt, cbMap);
+		mcd->rootDrawer->setCoordBoundsZoom(cbZoomExt);
 
 		setScrollBars();
 		OnDraw(0);
@@ -1197,15 +1197,15 @@ void ZoomableView::ZoomOutAreaSelected(CRect rect)
 {
   	MapCompositionDoc* mcd = dynamic_cast<MapCompositionDoc*>(GetDocument());
 	if ( mcd) {
-		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+		CoordBounds cbZoomExt = mcd->rootDrawer->getCoordBoundsZoomExt();
 		CoordBounds cbMap = mcd->rootDrawer->getMapCoordBounds();
 		CRect rectWindow;
 		GetClientRect(&rectWindow);
 		Coord c1,c2;
 		if ( rect.Width() < 3 && rect.Height() < 3) { // case of clicking on the map in zoom mode
-			double posx = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine click point
-			double posy = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
-			CoordBounds cb = cbZoom; // == cbView ? cbMap : cbZoom;
+			double posx = cbZoomExt.cMin.x + cbZoomExt.width() * rect.left / (double)rectWindow.Width(); // determine click point
+			double posy = cbZoomExt.cMax.y - cbZoomExt.height() * rect.top / (double)rectWindow.Height();
+			CoordBounds cb = cbZoomExt; // == cbView ? cbMap : cbZoom;
 			double w = cb.width() * 1.41 / 2.0; // determine new window size
 			double h = cb.height() * 1.41 / 2.0;
 			c1.x = posx - w; // determine new bounds
@@ -1215,24 +1215,25 @@ void ZoomableView::ZoomOutAreaSelected(CRect rect)
 		} else if (rect.Width() < 3 || rect.Height() < 3)
 			return;
 		else {
-			rect.top = - rect.top;
-			rect.bottom = dim.cy + (dim.cy - rect.bottom);
-			rect.left = - rect.left;
-			rect.right = dim.cx + (dim.cx - rect.right);
-			c1.x = cbZoom.cMin.x + cbZoom.width() * rect.left / (double)rectWindow.Width(); // determine zoom rectangle in GL coordinates
-			c1.y = cbZoom.cMax.y - cbZoom.height() * rect.top / (double)rectWindow.Height();
-			c2.x = cbZoom.cMin.x + cbZoom.width() * rect.right / (double)rectWindow.Width();
-			c2.y = cbZoom.cMax.y - cbZoom.height() * rect.bottom / (double)rectWindow.Height();
+			c1.x = cbZoomExt.cMin.x + cbZoomExt.width() * rect.left / (double)rectWindow.Width(); // determine zoom rectangle in GL coordinates
+			c1.y = cbZoomExt.cMax.y - cbZoomExt.height() * rect.top / (double)rectWindow.Height();
+			c2.x = cbZoomExt.cMin.x + cbZoomExt.width() * rect.right / (double)rectWindow.Width();
+			c2.y = cbZoomExt.cMax.y - cbZoomExt.height() * rect.bottom / (double)rectWindow.Height();
+			CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+			c1.x = cbZoom.cMin.x - (c1.x - cbZoom.cMin.x); // xmin
+			c1.y = cbZoom.cMax.y + (cbZoom.cMax.y - c1.y); // ymax
+			c2.x = cbZoom.cMax.x + (cbZoom.cMax.x - c2.x); // xmax
+			c2.y = cbZoom.cMin.y - (c2.y - cbZoom.cMin.y); // ymin
 		}
 		c1.z = c2.z = 0;
 
-		cbZoom = CoordBounds (c1,c2);
-		if (cbZoom.width() > cbMap.width() || cbZoom.height() > cbMap.height())
+		cbZoomExt = CoordBounds (c1,c2);
+		if (cbZoomExt.width() > cbMap.width() || cbZoomExt.height() > cbMap.height())
 			mcd->rootDrawer->setCoordBoundsView(mcd->rootDrawer->getMapCoordBounds(),true); // same as OnEntireMap()
 		else {
-			RecenterZoomHorz(cbZoom, cbMap);
-			RecenterZoomVert(cbZoom, cbMap);
-			mcd->rootDrawer->setCoordBoundsZoom(cbZoom);
+			RecenterZoomHorz(cbZoomExt, cbMap);
+			RecenterZoomVert(cbZoomExt, cbMap);
+			mcd->rootDrawer->setCoordBoundsZoom(cbZoomExt);
 		}
 
 		setScrollBars();
