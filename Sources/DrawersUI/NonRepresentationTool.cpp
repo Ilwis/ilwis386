@@ -58,7 +58,7 @@ HTREEITEM NonRepresentationToolTool::configure( HTREEITEM parentItem) {
 	bool useSingleColor = sdrw->getDrawMethod() == NewDrawer::drmSINGLE;
 	bool useRpr = sdrw->getDrawMethod() == NewDrawer::drmRPR;
 	if (dynamic_cast<FeatureLayerDrawer *>(drawer)) {
-		DisplayOptionRadioButtonItem *colorItem = new DisplayOptionRadioButtonItem("Single color", tree,htiNode,drawer);
+		DisplayOptionRadioButtonItem *colorItem = new DisplayOptionRadioButtonItem("Single Color", tree,htiNode,drawer);
 		colorItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&NonRepresentationToolTool::displayOptionSingleColor);
 		colorItem->setCheckAction(ctool,ctool->getColorCheck(), (DTSetCheckFunc)&ColorTool::setcheckRpr);
 		colorItem->setState(useSingleColor);
