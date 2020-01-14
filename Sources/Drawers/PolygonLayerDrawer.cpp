@@ -35,7 +35,12 @@ PolygonLayerDrawer::PolygonLayerDrawer(DrawerParameters *parms) :
 	triaFileSize(0),
 	tesselator(gluNewTess())
 {
-
+	IlwisSettings settings("DefaultSettings");
+	Color color = settings.clrValue("SingleColorPolygons", Color()); // do not compare with colorUNDEF, because then we can't assign the black color; the registry has the inverse alpha
+	if (color != Color()) {
+		singleColor = color;
+		singleColor.alpha() = 255 - singleColor.alpha();
+	}
 }
 PolygonLayerDrawer::~PolygonLayerDrawer() {
 	delete (MemoryManager<PolygonFeatureDrawer>*)managedDrawers;

@@ -27,6 +27,12 @@ LineLayerDrawer::LineLayerDrawer(DrawerParameters *parms) :
 {
 	setDrawMethod(drmSINGLE); // default;
 	lproperties.ignoreColor = true; // color is determined by rpr, not by form
+	IlwisSettings settings("DefaultSettings");
+	Color color = settings.clrValue("SingleColorSegments", Color());
+	if (color != Color()) {
+		singleColor = color;
+		singleColor.alpha() = 255 - singleColor.alpha();
+	}
 }
 
 LineLayerDrawer::~LineLayerDrawer() {

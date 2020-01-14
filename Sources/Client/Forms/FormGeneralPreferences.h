@@ -125,7 +125,7 @@ class FormGeneralPreferences : public FormWithDest
 		bool                     fWarnNotUpToDate, fShowRasterDef;
 		bool                     fPyrCreateFirstDisplay;
 		vector< MinMax>          mapPos;
-		Color                    clrYes, clrNo, clrUndef;
+		Color                    clrYes, clrNo, clrSinglePnt, clrSingleSeg, clrSinglePol, clrUndef;
 		int                      iHistoryEntries;
 		String                   sMplAction;
 		String                   sFltAction;

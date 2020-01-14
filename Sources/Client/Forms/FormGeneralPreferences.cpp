@@ -646,6 +646,18 @@ void FormGeneralPreferences::DisplayOptionsPages(IlwisSettings& settings)
 	new FieldColor(fg, TR("&False"), &clrNo);
 	fg->SetIndependentPos();
 
+	new FieldBlank(page);
+	new StaticText(page, TR("Default Color for Single colored maps"), true);
+	fg = new FieldGroup(page);
+	clrSinglePnt = clrSingleSeg = clrSinglePol = Color(0,176,20);
+	clrSinglePnt = settings.clrGetRGBColor("SingleColorPoints", clrSinglePnt);
+	clrSingleSeg = settings.clrGetRGBColor("SingleColorSegments", clrSingleSeg);
+	clrSinglePol = settings.clrGetRGBColor("SingleColorPolygons", clrSinglePol);
+	new FieldColor(fg, TR("&Point Maps"), &clrSinglePnt);
+	new FieldColor(fg, TR("&Segment Maps"), &clrSingleSeg);
+	new FieldColor(fg, TR("&Polygon Maps"), &clrSinglePol);
+	fg->SetIndependentPos();
+
 	page = GetPage(TR("Map Window#Display#Raster Maps"));
 	new StaticText(page, TR("Show Display Options dialog box for:"), true);
 	dispChecks[IlwisWinApp::dosRAS]			= new CheckBox(page, TR("&All Raster maps"), &dispOptions[IlwisWinApp::dosRAS]);
@@ -810,8 +822,8 @@ void SetRegEntry(const pair<String, String> &entry)
 	ObjectInfo::ReadElement("Domain", "Representation", fn, sDefaultRpr);
 	FileName fnDef(sDefaultRpr);
 	fnDef.Dir(sSystemDir);
-	String sRpr = entry.second;
-	if ( !(fCIStrEqual(sRpr, fnDef.sFullPath())) )
+	FileName fnRpr = FileName(entry.second);
+	if ( !(fCIStrEqual(fnRpr.sFile, fnDef.sFile)) && fnRpr.fExist())
 		settings.SetValue(entry.first, entry.second);
 	else
 		settings.DeleteValue(entry.first);
@@ -858,6 +870,9 @@ int FormGeneralPreferences::exec()
 	for_each(defRpr.begin(), defRpr.end(), SetRegEntry);
 	settings.SetValue("YesColor", clrYes);
 	settings.SetValue("NoColor", clrNo);
+	settings.SetValue("SingleColorPoints", clrSinglePnt);
+	settings.SetValue("SingleColorSegments", clrSingleSeg);
+	settings.SetValue("SingleColorPolygons", clrSinglePol);
 	// double click action
 	settings.SetValue("MapListDblClkAction", sMplAction);
 	settings.SetValue("FilterDblClkAction", sFltAction);

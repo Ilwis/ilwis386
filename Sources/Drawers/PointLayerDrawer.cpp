@@ -27,6 +27,12 @@ PointLayerDrawer::PointLayerDrawer(DrawerParameters *parms) :
 	FeatureLayerDrawer(parms,"PointLayerDrawer")
 {
 	properties = new PointProperties();
+	IlwisSettings settings("DefaultSettings");
+	Color color = settings.clrValue("SingleColorPoints", Color()); // do not compare with colorUNDEF, because then we can't assign the black color; the registry has the inverse alpha
+	if (color != Color()) {
+		singleColor = color;
+		singleColor.alpha() = 255 - singleColor.alpha();
+	}
 }
 
 PointLayerDrawer::~PointLayerDrawer() {
