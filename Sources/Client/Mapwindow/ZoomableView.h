@@ -164,6 +164,7 @@ public:
 	//}}AFX_MSG
 	void ZoomInPnt(zPoint);
 	void ZoomOutPnt(zPoint);
+	void ZoomFactor(zPoint,double);
 	void viewRotate(const CPoint& pnt, UINT message);
 	void viewTranslate(const CPoint& pnt, UINT message);
 	void viewZoom(const CPoint& pnt, UINT message);
@@ -189,6 +190,8 @@ protected:
 	void RecenterZoomHorz(CoordBounds & cbZoom, const CoordBounds & cbMap);
 	void RecenterZoomVert(CoordBounds & cbZoom, const CoordBounds & cbMap);
 	bool fTranslated; // keep track if the user has used the "pan" in 3D, to decide if we should pop-up a RMB-menu
+	int iPrevActiveTool;
+	bool fPanWheel;
 
 	DECLARE_DYNCREATE(ZoomableView)
 	DECLARE_MESSAGE_MAP()

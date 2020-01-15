@@ -124,6 +124,7 @@ class FormGeneralPreferences : public FormWithDest
 		String                   sDefaultStartUpDir;
 		bool                     fWarnNotUpToDate, fShowRasterDef;
 		bool                     fPyrCreateFirstDisplay;
+		bool                     fPanWheel;
 		vector< MinMax>          mapPos;
 		Color                    clrYes, clrNo, clrSinglePnt, clrSingleSeg, clrSinglePol, clrUndef;
 		int                      iHistoryEntries;

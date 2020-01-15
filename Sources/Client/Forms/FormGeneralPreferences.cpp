@@ -152,7 +152,7 @@ void FormGeneralPreferences::GeneralPage(IlwisSettings& settings)
 	fOldTranquilizers = settings.fValue("OldTranquilizers", false);
 	language = settings.sValue("LanguageExtension",".eng");
 
-	cbOldTranquilizers = new CheckBox(page, TR("Old style  progress indicators"), &fOldTranquilizers);
+	cbOldTranquilizers = new CheckBox(page, TR("Old style progress indicators"), &fOldTranquilizers);
 	new FieldString(page,TR("Language extension used"),&language);
 }
 
@@ -351,7 +351,9 @@ int FormGeneralPreferences::ResetButtonGW(Event *)
 void FormGeneralPreferences::MapWindowPage(IlwisSettings& settings)
 {
 	FieldPage *pg = GetPage(TR("Map Window"));
-	new StaticText(pg, TR("This item contains subentries, please expand. "));
+	fPanWheel = settings.fValue("PanWheel", false);
+	new CheckBox(pg, TR("Old style scrollwheel behavior"), &fPanWheel);
+	new StaticText(pg, TR("(use scrollwheel for Panning instead of Zooming)"));
 
 	FieldPage *page = GetPage(TR("Map Window#Position & Size"));
 
@@ -849,6 +851,9 @@ int FormGeneralPreferences::exec()
     //Tranquilizers
 	settings.SetValue("OldTranquilizers", fOldTranquilizers);
 	IlwWinApp()->SetTranquilizerStyle(fOldTranquilizers);
+
+	// mouse wheel
+	settings.SetValue("PanWheel", fPanWheel);
 	
 	//display
 	String sOptions;

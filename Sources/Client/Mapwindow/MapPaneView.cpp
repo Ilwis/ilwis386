@@ -375,8 +375,11 @@ void MapPaneView::OnEntireMap()
 		fStarting = false;
 		mcd->mpvGetView()->Invalidate();
 	}
-	if (iActiveTool == ID_ZOOMOUT)
-		noTool(ID_ZOOMOUT);
+	if (iActiveTool == ID_ZOOMOUT || iActiveTool == ID_PANAREA) {
+		int iPrev = iActiveTool;
+		noTool(iActiveTool); // sets both iActiveTool and iPrevActiveTool to 0
+		iPrevActiveTool = iPrev;
+	}
 }
 
 void MapPaneView::OnUpdateEntireMap(CCmdUI* pCmdUI)
