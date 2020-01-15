@@ -29,7 +29,8 @@ private:
 	int step;
 	int num;
 	bool neatline;
-	bool ticks;	
+	bool ticks;
+	double fscale;
 };
 
 }

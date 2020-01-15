@@ -1036,7 +1036,7 @@ ILWIS::NewDrawer *createAnnotationBorderDrawer(DrawerParameters *parms) {
 
 AnnotationBorderDrawer::AnnotationBorderDrawer(DrawerParameters *parms) : 
 AnnotationDrawer(parms, "AnnotationBorderDrawer"),
-borderBox(0), neatLine(true), ticks(true), step(1), numDigits(2){
+borderBox(0), neatLine(true), ticks(true), step(1), numDigits(2), fontScale(1) {
 	for(int i=0; i < 4; ++i)
 		hasText.push_back(true);
 	id = "AnnotationBorderDrawer";
@@ -1328,6 +1328,7 @@ String AnnotationBorderDrawer::store(const FileName& fnView, const String& secti
 	ObjectInfo::WriteElement(currentSection.c_str(),"Neatline",fnView, neatLine);
 	ObjectInfo::WriteElement(currentSection.c_str(),"Ticks",fnView, ticks);
 	ObjectInfo::WriteElement(currentSection.c_str(),"digits",fnView, numDigits);
+	ObjectInfo::WriteElement(currentSection.c_str(),"FontScale",fnView, fontScale);
 
 	return currentSection;
 }
@@ -1350,6 +1351,10 @@ void AnnotationBorderDrawer::load(const FileName& fnView, const String& section)
 		ObjectInfo::ReadElement(currentSection.c_str(),"Neatline",fnView, neatLine);
 		ObjectInfo::ReadElement(currentSection.c_str(),"Ticks",fnView, ticks);
 		ObjectInfo::ReadElement(currentSection.c_str(),"digits",fnView, numDigits);
+		double f = rUNDEF;
+		ObjectInfo::ReadElement(currentSection.c_str(),"FontScale",fnView, f);
+		if (f != rUNDEF)
+			fontScale = f;
 }
 
 void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
@@ -1363,11 +1368,12 @@ void AnnotationBorderDrawer::prepare(PreparationParameters *pp){
 			borderBox->setAlpha(1);
 			borderBox->setDrawColor(Color(255,255,255));
 			texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
-			OpenGLText * font = new OpenGLText(getRootDrawer(),"arial.ttf",12,false);
+			OpenGLText * font = new OpenGLText(getRootDrawer(),"arial.ttf",12*fontScale,false);
 			texts->setFont(font);
 			getRootDrawer()->setAnnotationFont(font);
 			addDrawer(texts);
-		}
+		} else
+			texts->getFont()->setHeight(12 * fontScale);
 		texts->clear();
 		DrawerParameters dp(getRootDrawer(),texts);
 		for(int i = 0 ; i < xpos.size() * 2; ++i) { 
@@ -1477,6 +1483,16 @@ void AnnotationBorderDrawer::setStep(int st){
 	if ( st > 0)
 		step = st;
 }
+
+double AnnotationBorderDrawer::getFontScale() const{
+	return fontScale;
+}
+
+void AnnotationBorderDrawer::setFontScale(double v){
+	if ( v > 0)
+		fontScale = v;
+}
+
 //------------------------------------------------
 ILWIS::NewDrawer *createAnnotationScaleBarDrawer(DrawerParameters *parms) {
 	return new AnnotationScaleBarDrawer(parms);
@@ -1484,7 +1500,7 @@ ILWIS::NewDrawer *createAnnotationScaleBarDrawer(DrawerParameters *parms) {
 
 AnnotationScaleBarDrawer::AnnotationScaleBarDrawer(DrawerParameters *parms)
 : AnnotationDrawer(parms, "AnnotationScaleBarDrawer")
-, size(rUNDEF), ticks(5), texts(0), unit("meters"), km(false), line(false), divideFirstInterval(true), multiLabels(false), isLatLon(false), numDigits(0)
+, size(rUNDEF), ticks(5), texts(0), unit("meters"), km(false), line(false), divideFirstInterval(true), multiLabels(false), isLatLon(false), numDigits(0), fontScale(1)
 {
 	id = "AnnotationScaleBarDrawer";
 	CoordSystem csy = getRootDrawer()->getCoordinateSystem();
@@ -1519,9 +1535,10 @@ void AnnotationScaleBarDrawer::prepare(PreparationParameters *pp){
 		if (!texts) {
 			DrawerParameters dp(getRootDrawer(),this);
 			texts = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dp);
-			texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12,false));
+			texts->setFont(new OpenGLText(getRootDrawer(),"arial.ttf",12*fontScale,false));
 			addPostDrawer(100,texts);
-		}
+		} else
+			texts->getFont()->setHeight(12 * fontScale);
 		texts->clear();
 		for(int i=0; i <= ticks; ++i) {
 			DrawerParameters dp(getRootDrawer(),texts);
@@ -1699,6 +1716,7 @@ String AnnotationScaleBarDrawer::store(const FileName& fnView, const String& sec
 	ObjectInfo::WriteElement(currentSection.c_str(),"DivideFirstInterval",fnView, divideFirstInterval);
 	ObjectInfo::WriteElement(currentSection.c_str(),"MultiLabels",fnView, multiLabels);
 	ObjectInfo::WriteElement(currentSection.c_str(),"digits",fnView, numDigits);
+	ObjectInfo::WriteElement(currentSection.c_str(),"FontScale",fnView, fontScale);
 
 	return currentSection;
 }
@@ -1718,6 +1736,10 @@ void AnnotationScaleBarDrawer::load(const FileName& fnView, const String& sectio
 	ObjectInfo::ReadElement(currentSection.c_str(),"MultiLabels",fnView, multiLabels);
 	if (!ObjectInfo::ReadElement(currentSection.c_str(),"digits",fnView, numDigits)) // set default for existing mapviews to 0 for projection or 2 for latlon instead of shUNDEF
 		numDigits = isLatLon ? 2 : 0;
+	double f = rUNDEF;
+	ObjectInfo::ReadElement(currentSection.c_str(),"FontScale",fnView, f);
+	if (f != rUNDEF)
+		fontScale = f;
 }
 
 String AnnotationScaleBarDrawer::getUnit() const{
@@ -1769,6 +1791,15 @@ bool AnnotationScaleBarDrawer::getMultiLabels() const{
 
 void AnnotationScaleBarDrawer::setMultiLabels(bool l){
 	multiLabels = l;
+}
+
+double AnnotationScaleBarDrawer::getFontScale() const{
+	return fontScale;
+}
+
+void AnnotationScaleBarDrawer::setFontScale(double v){
+	if ( v > 0)
+		fontScale = v;
 }
 
 //------------------------------------------------

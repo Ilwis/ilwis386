@@ -108,10 +108,12 @@ DisplayOptionsForm(dr,wPar,"Borders")
 	num = dr->getNumberOfDigits();
 	neatline = dr->hasNeatLine();
 	ticks = dr->hasTicks();
+	fscale = dr->getFontScale();
 	new FieldInt(root,TR("Step"),&step);
 	new FieldInt(root,TR("Significant numbers"), &num);
 	new CheckBox(root, TR("Neat line"),&neatline);
 	new CheckBox(root, TR("Ticks"),&ticks);
+	new FieldReal(root,TR("Font Scale"),&fscale,ValueRange(RangeReal(0.1,10.),0.1));
 	create();
 }
 
@@ -123,6 +125,7 @@ void  AnnotationBorderForm::apply() {
 	borderDrw->setHasTicks(ticks);
 	borderDrw->setStep(step);
 	borderDrw->setNumberOfDigits(num);
+	borderDrw->setFontScale(fscale);
 	
 	PreparationParameters pp(NewDrawer::ptRENDER | NewDrawer::ptGEOMETRY);
 	borderDrw->prepare(&pp);

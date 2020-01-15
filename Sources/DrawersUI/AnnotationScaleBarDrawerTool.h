@@ -38,6 +38,7 @@ namespace ILWIS {
 		CheckBox *cbDivide;
 		CheckBox *cbMultiLabels;
 		CheckBox *cbUseKilometers;
+		FieldReal *fontScale;
 		int ticks;
 		int x,y;
 		double sz;
@@ -47,5 +48,6 @@ namespace ILWIS {
 		bool line;
 		bool divideFirstInterval;
 		int num;
+		double fscale;
 	};
 }

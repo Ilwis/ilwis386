@@ -152,6 +152,8 @@ public:
 	void setStep(int st);
 	int getNumberOfDigits() const;
 	void setNumberOfDigits(int num);
+	double getFontScale() const;
+	void setFontScale(double v);
 private:
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
 	String store(const FileName& fnView, const String& section) const;
@@ -171,6 +173,7 @@ private:
 	bool ticks;
 	int step;
 	int numDigits;
+	double fontScale;
 };
 
 class _export AnnotationScaleBarDrawer : public AnnotationDrawer {
@@ -195,6 +198,8 @@ public:
 	void setMultiLabels(bool l);
 	int getNumberOfDigits() const;
 	void setNumberOfDigits(int num);
+	double getFontScale() const;
+	void setFontScale(double v);
 
 private:
 	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
@@ -213,6 +218,7 @@ private:
 	bool divideFirstInterval;
 	bool multiLabels;
 	int numDigits;
+	double fontScale;
 };
 
 class _export AnnotationNorthArrowDrawer : public AnnotationDrawer {

@@ -108,6 +108,7 @@ ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr)
 	ticks = dr->getTicks();
 	sz = dr->getSize();
 	num = dr->getNumberOfDigits();
+	fscale = dr->getFontScale();
 	x = round(100.0 * begin.x);
 	y = round(100.0 * begin.y);
 	sliderH = new FieldIntSliderEx(root,TR("X position"), &x,ValueRange(0,100),true);
@@ -127,12 +128,16 @@ ScaleBarPosition::ScaleBarPosition(CWnd *wPar, AnnotationScaleBarDrawer *dr)
 	if (csy.fValid()) {
 		if (csy->pcsLatLon()) {
 			fldNumbers = new FieldInt(root,TR("Decimal digits"), &num);
+			fontScale =  new FieldReal(root,TR("Font Scale"),&fscale,ValueRange(RangeReal(0.1,10.),0.1));
 		} else {
 			cbUseKilometers = new CheckBox(root, TR("Use Kilometers"), &km);
 			cbUseKilometers->SetCallBack((NotifyProc)&ScaleBarPosition::UseKilometersChanged);
 			fldNumbers = new FieldInt(cbUseKilometers,TR("Decimal digits"), &num);
+			fontScale =  new FieldReal(root,TR("Font Scale"),&fscale,ValueRange(RangeReal(0.1,10.),0.1));
+			fontScale->Align(cbUseKilometers, AL_UNDER);
 		}
-	}
+	} else
+		fontScale =  new FieldReal(root,TR("Font Scale"),&fscale,ValueRange(RangeReal(0.1,10.),0.1));
 	create();
 }
 
@@ -169,6 +174,7 @@ void ScaleBarPosition::apply() {
 		cbUseKilometers->StoreData();
 	if (fldNumbers)
 		fldNumbers->StoreData();
+	fontScale->StoreData();
 	AnnotationScaleBarDrawer *scaleDrw = (AnnotationScaleBarDrawer *)drw;
 	scaleDrw->setUnit(unit);
 	scaleDrw->setLine(line);
@@ -178,6 +184,7 @@ void ScaleBarPosition::apply() {
 	scaleDrw->setTicks(ticks);
 	scaleDrw->setKm(km);
 	scaleDrw->setNumberOfDigits(num);
+	scaleDrw->setFontScale(fscale);
 	PreparationParameters pp(NewDrawer::ptGEOMETRY);
 	scaleDrw->prepare(&pp);
 	updateMapView();
