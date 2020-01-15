@@ -246,8 +246,8 @@ DisplayOptionsForm(dr,wPar,TR("Appearance of Legend")) , layer(lyr), fview(0),fm
 	fc->Align(cbColor, AL_AFTER);
 	cbBoundary = new CheckBox(root,TR("Draw Boundary"),&drawBoundary);
 	cbBoundary->Align(cbColor, AL_UNDER);
-	fldScale =  new FieldReal(root,TR("Scale"),&scale,RangeReal(0.1,10.));
-	fontScale =  new FieldReal(root,TR("Font Scale"),&fscale,RangeReal(0.1,10.));
+	fldScale =  new FieldReal(root,TR("Scale"),&scale,ValueRange(RangeReal(0.1,10.),0.1));
+	fontScale =  new FieldReal(root,TR("Font Scale"),&fscale,ValueRange(RangeReal(0.1,10.),0.1));
 	fldTitle = new FieldString(root,TR("Title"), &title);
 	if ( dr->getDomain()->pdc()) {
 		vector<FLVColumnInfo> cols;
