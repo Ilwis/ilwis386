@@ -79,11 +79,12 @@ void SetDrawer::prepare(PreparationParameters *pp){
 	SpatialDataDrawer::prepare(pp);
 	ILWIS::DrawerParameters dp(getRootDrawer(), this);
 	if ( sourceType == sotFEATURE ) {
-		if ( pp->type & NewDrawer::ptGEOMETRY || pp->type & NewDrawer::ptRESTORE) {
+		bool isRestore = (pp->type & NewDrawer::ptRESTORE) != 0;
+		if ( pp->type & NewDrawer::ptGEOMETRY || isRestore) {
 			if ( getName() == "")
 				setName(oc->sName());
 			ILWIS::DrawerParameters parms(getRootDrawer(), this);
-			if ( drawers.size() > 0) {
+			if ( drawers.size() > 0 && !isRestore) {
 				clear();
 			}
 			Tranquilizer trq(TR("Adding maps"));
@@ -149,7 +150,7 @@ void SetDrawer::prepare(PreparationParameters *pp){
 					rasterset = (RasterLayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", "Ilwis38", &parms);
 				} else
 					rasterset = (RasterLayerDrawer *)getDrawer(i);
-				rasterset->setThreaded(false);
+				rasterset->setThreaded(false); // This is here since 2011. It is probably done to ensure that during animation, the entire frame belongs to the same moment.
 				if ( rrMinMax.fValid())
 					rasterset->setMinMax(rrMinMax);
 				if (i == 0)
@@ -181,25 +182,27 @@ void SetDrawer::setTransparency(double v) {
 
 LayerDrawer *SetDrawer::createIndexDrawer(int index, const BaseMap& basem,ILWIS::DrawerParameters& dp, PreparationParameters* pp) {
 	LayerDrawer *layerDrawer;
-	IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basem->fnObj);
-	switch ( otype) {
-		case IlwisObject::iotPOINTMAP:
-			layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("PointLayerDrawer", pp, &dp); 
-			addLayerDrawer(index, basem,pp,layerDrawer);
-			break;
-		case IlwisObject::iotSEGMENTMAP:
-			layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("LineLayerDrawer", pp, &dp); 
-			addLayerDrawer(index, basem,pp,layerDrawer);
-			break;
-		case IlwisObject::iotPOLYGONMAP:
-			layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("PolygonLayerDrawer", pp, &dp); 
-			addLayerDrawer(index, basem,pp,layerDrawer, "Areas");
-			break;
-		case IlwisObject::iotRASMAP:
-			layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", pp, &dp); 
-			addLayerDrawer(index, basem,pp,layerDrawer);
-			break;
+	if (pp->type & NewDrawer::ptRESTORE) {
+		layerDrawer = (LayerDrawer *)getDrawer(index);
+	} else {
+		IlwisObject::iotIlwisObjectType otype = IlwisObject::iotObjectType(basem->fnObj);
+		switch ( otype) {
+			case IlwisObject::iotPOINTMAP:
+				layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("PointLayerDrawer", pp, &dp); 
+				break;
+			case IlwisObject::iotSEGMENTMAP:
+				layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("LineLayerDrawer", pp, &dp); 
+				break;
+			case IlwisObject::iotPOLYGONMAP:
+				layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("PolygonLayerDrawer", pp, &dp); 
+				break;
+			case IlwisObject::iotRASMAP:
+				layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", pp, &dp); 
+				break;
+		}
 	}
+	pp->index = index;
+	addLayerDrawer(index, basem,pp,layerDrawer);
 	return layerDrawer;
 }
 
@@ -208,7 +211,8 @@ void SetDrawer::addLayerDrawer(int index, const BaseMap& basem,PreparationParame
 	fp.csy = basem->cs();
 	fp.index= index;
 	rsd->setName(name);
-	rsd->setRepresentation(basem->dm()->rpr()); //  default choice
+	if ( ! (pp->type & NewDrawer::ptRESTORE))
+		rsd->setRepresentation(basem->dm()->rpr()); //  default choice
 	rsd->getZMaker()->setSpatialSource(basem, getRootDrawer()->getMapCoordBounds());
 	//rsd->getZMaker()->setDataSourceMap(basem);
 	rsd->addDataSource((void *)&basem);
