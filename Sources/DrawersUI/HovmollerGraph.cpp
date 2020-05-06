@@ -120,7 +120,7 @@ void HovMollerGraph::DrawItem(LPDRAWITEMSTRUCT lpDIS) {
 			if ( x == points - 1) {
 			TRACE("left %d right %d xmin %d xmax %d\n", moveRect.left, moveRect.right, rctInner.left, rctInner.right);
 			}
-			double v = values[m][x];
+			double v = values[maps - m - 1][x];
 			if ( v != rUNDEF)
 				clr = drc->clrVal(v);
 			else
