@@ -32,8 +32,8 @@ int HelpSearch::openHelp(Event *ev) {
 				String path = (*cur).first;
 				if ( path == oldPath)
 					break;
-				IlwWinApp()->showHelp(path);
 				oldPath = path;
+				IlwWinApp()->showHelp(path);
 				break;
 			}
 		}
