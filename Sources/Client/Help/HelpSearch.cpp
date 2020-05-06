@@ -76,9 +76,7 @@ int HelpSearch::setTopics(Event *ev) {
 	if ( key == oldKey)
 		return 0;
 	oldKey = key;
-	#if _DEBUG
 	key = key.sHead("(");
-	#endif
 	if ( key == sUNDEF)
 		return 0;
 	for(int i =0 ; i < content.size(); ++i) {
