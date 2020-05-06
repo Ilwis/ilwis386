@@ -50,6 +50,8 @@
 #include "Engine\SpatialReference\csviall.h"
 #include "LargeVector.h"
 
+IlwisObjectPtr * createTableFlowPathLongitudinalProfile(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms );
+
 struct LongitudinalProfile
 {
     long   X;
@@ -63,11 +65,12 @@ class DATEXPORT TblFlowPathLongitudinalProfile: public TableVirtual
 
     public:
         static const char*      sSyntax();
+		static TblFlowPathLongitudinalProfile*  create(const FileName& fn, TablePtr& p, const String& sExpression);
+		TblFlowPathLongitudinalProfile(const FileName& fn, TablePtr& p);
         Column                  colMap1;
         Column                  colMap2;
 
     protected:
-        TblFlowPathLongitudinalProfile(const FileName& fn, TablePtr& p);
         TblFlowPathLongitudinalProfile(const FileName& fn, TablePtr& p, 
 									   const SegmentMap& segmpFlowPath,
 									   int iSegmentID,
@@ -80,7 +83,6 @@ class DATEXPORT TblFlowPathLongitudinalProfile: public TableVirtual
         virtual String   sExpression() const;
     
     private:
-        static TblFlowPathLongitudinalProfile*  create(const FileName& fn, TablePtr& p, const String& sExpression);
         void                      Init();
         void                      CreateColumns(vector<LongitudinalProfile> vlp);
         void                      AddDomainItem(Domain dm,long item);

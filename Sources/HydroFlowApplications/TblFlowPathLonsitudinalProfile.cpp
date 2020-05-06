@@ -53,6 +53,13 @@
 #include "Headers\Hs\tbl.hs"
 #include "Headers\Hs\map.hs"
 
+IlwisObjectPtr * createTableFlowPathLongitudinalProfile(const FileName& fn, IlwisObjectPtr& ptr, const String& sExpr, vector<void *> parms ) {
+	if ( sExpr != "")
+		return (IlwisObjectPtr *)TblFlowPathLongitudinalProfile::create(fn, (TablePtr &)ptr, sExpr);
+	else
+		return (IlwisObjectPtr *)new TblFlowPathLongitudinalProfile(fn, (TablePtr &)ptr);
+}
+
 const double rDefaultEarthRadius = 6371007.0;
 
 const char* TblFlowPathLongitudinalProfile::sSyntax()

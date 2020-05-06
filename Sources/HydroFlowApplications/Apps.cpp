@@ -14,6 +14,7 @@
 #include "HydroFlowApplications\MapFlowLengthToOutlet.h"
 #include "HydroFlowApplications\MapCatchmentExtraction.h"
 #include "HydroFlowApplications\MapCatchmentMerge.h"
+#include "HydroFlowApplications\TblFlowPathLonsitudinalProfile.h"
 #include "HydroFlowApplications\TblHortonPlots.h"
 
 
@@ -35,6 +36,7 @@ InfoVector* getCommandInfo() {
 	infos->push_back(CommandMap::newCommandInfo(createMapFlowLength2Outlet,"MapFlowLength2Outlet"));
 	infos->push_back(CommandMap::newCommandInfo(createMapCatchmentExtraction,"MapCatchmentExtraction"));
 	infos->push_back(CommandMap::newCommandInfo(createMapCatchmentMerge,"MapCatchmentMerge"));
+	infos->push_back(CommandMap::newCommandInfo(createTableFlowPathLongitudinalProfile,"tblFlowPathLongitudinalProfile"));
 	infos->push_back(CommandMap::newCommandInfo(createTableHortonPlots,"TableHortonPlots"));
 
 	return infos;
