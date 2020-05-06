@@ -66,6 +66,7 @@
 #include "Engine\SpatialReference\Goode.h"
 #include "Engine\SpatialReference\GoodeINT.h"
 #include "Engine\SpatialReference\GeoStatSat.h"
+#include "Engine\SpatialReference\GeoStatSatGoes.h"
 #include "Engine\SpatialReference\GeoStatSatView.h"
 #include "Engine\SpatialReference\HammerAitoff.H"
 #include "Engine\SpatialReference\LCONCON.H"
@@ -210,6 +211,8 @@ ProjectionPtr* ProjectionPtr::create(const String& sName, const Ellipsoid& ell)
     ptr = new ProjectionGoodeInterrupted(ell);
 	else if (_stricmp("GeoStationary Satellite", sName.c_str()) == 0)
     ptr = new ProjectionGeoStationarySatellite(ell);
+	else if (_stricmp("GeoStationary Satellite Goes", sName.c_str()) == 0)
+    ptr = new ProjectionGeoStationarySatelliteGoes(ell);
 	else if (_stricmp("GeoStationary Satellite View (PROJ4)", sName.c_str()) == 0)
     ptr = new ProjectionGeoStationarySatelliteView(ell);
   else if (_stricmp("Hammer Aitoff", sName.c_str()) == 0)

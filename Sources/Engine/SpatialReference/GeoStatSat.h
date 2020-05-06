@@ -64,6 +64,13 @@ public:
 	bool fLatLonInVisible(const PhiLam pl) const;
 	XY xyBringOutsideXYtoBorder(const XY& _xy) const;
 
+private:
+	double rSin2Phi0;
+	double rDisttoCenter;
+	double a, e2, b;
+	double rLatitudeCorrFactor;
+	double rHorizonRadius;// spehre
+	double rVisibleHalfArc; // greatcircle arc on sphere 
 };
 
 #endif // ILWGEOSTAT_H

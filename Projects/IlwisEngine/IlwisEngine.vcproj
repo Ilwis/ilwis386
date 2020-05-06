@@ -2651,6 +2651,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\Sources\Engine\SpatialReference\GeoStatSatGoes.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\Sources\Engine\SpatialReference\GeoStatSatView.cpp"
 					>
 				</File>
@@ -3076,6 +3080,10 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Engine\SpatialReference\GeoStatSat.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Engine\SpatialReference\GeoStatSatGoes.h"
 						>
 					</File>
 					<File

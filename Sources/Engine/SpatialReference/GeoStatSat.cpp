@@ -42,12 +42,6 @@
 #include "Engine\SpatialReference\Ellips.h"
 
 #define EPS10	1.e-10
-double rSin2Phi0;
-double rDisttoCenter;
-double a, e2, b;
-double rLatitudeCorrFactor;
-double rHorizonRadius;// spehre
-double rVisibleHalfArc; // greatcircle arc on sphere 
 
 ProjectionGeoStationarySatellite::ProjectionGeoStationarySatellite(const Ellipsoid& ell)
 :ProjectionAzimuthal(ell)
