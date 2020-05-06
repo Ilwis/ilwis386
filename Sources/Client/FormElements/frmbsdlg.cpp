@@ -173,7 +173,7 @@ BOOL FormBaseDialog::OnInitDialog()
 		for (int i = 0; i < iCount; ++i) 
 		{
 			id = GetMenuItemID(SysMen->m_hMenu,iPos);
-			if (id == SC_MOVE || id == SC_CLOSE)
+			if (id == SC_MOVE || id == SC_CLOSE || ((fbs & fbsCancelHasCLOSETEXT) && (id == SC_MINIMIZE || id == SC_RESTORE))) // fbsCancelHasCLOSETEXT is from Geonetcast Toolbox
 				iPos += 1;
 			else
 				DeleteMenu(SysMen->m_hMenu, iPos, MF_BYPOSITION);
@@ -312,7 +312,7 @@ void FormBaseDialog::CreateDefaultPositions()
 		if (fnt != 0)
 			fntOld = dc.SelectObject(fnt);
 		zDimension d1;
-		if ( fbs && fbsCancelHasCLOSETEXT)
+		if ( fbs & fbsCancelHasCLOSETEXT)
 			d1 = (zDimension)dc.GetTextExtent(TR("Close").c_str(), TR("Close").length());
 		else
 			d1 = (zDimension)dc.GetTextExtent(TR("Cancel").c_str(), TR("Cancel").length());
@@ -452,7 +452,7 @@ void FormBaseDialog::CreateDefaultPositions()
 
 		if (0 == (fbs & fbsNOCANCELBUTTON)) {
 			if (butCancel.GetSafeHwnd() == NULL){
-				String txt = fbs & fbsApplyButton ? TR("Apply") : TR("Cancel");
+				String txt = fbs & fbsApplyButton ? TR("Apply") : (( fbs & fbsCancelHasCLOSETEXT) ? TR("Close") : TR("Cancel"));
 				UINT id = fbs & fbsApplyButton ? id_apply : IDCANCEL;
 				butCancel.Create(txt.sVal(), BS_PUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, id); 
 			}

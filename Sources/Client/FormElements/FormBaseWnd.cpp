@@ -220,7 +220,7 @@ void FormBaseWnd::create()
     if (fnt != 0)
         fntOld = dc.SelectObject(fnt);
 	zDimension d1;
-	if ( fbs && fbsCancelHasCLOSETEXT)
+	if ( fbs & fbsCancelHasCLOSETEXT)
 		d1 = (zDimension)dc.GetTextExtent(TR("Close").c_str(), TR("Close").length());
 	else
 		d1 = (zDimension)dc.GetTextExtent(TR("Cancel").c_str(), TR("Cancel").length());
@@ -313,7 +313,7 @@ void FormBaseWnd::create()
     }
 
 	if (butCancel.GetSafeHwnd() == NULL) {
-		String txt = fbs & fbsApplyButton ? TR("Apply") : TR("Cancel");
+		String txt = fbs & fbsApplyButton ? TR("Apply") : (( fbs & fbsCancelHasCLOSETEXT) ? TR("Close") : TR("Cancel"));
 		UINT id = fbs & fbsApplyButton ? id_apply : IDCANCEL;
 		butCancel.Create(txt.sVal(), BS_PUSHBUTTON|WS_TABSTOP, CRect(pntButton, dimButton), this, id); 
 	}
