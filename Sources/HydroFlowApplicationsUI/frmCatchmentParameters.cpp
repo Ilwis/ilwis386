@@ -671,7 +671,9 @@ LRESULT Cmdflowpathlongitudinalprofile(CWnd *wnd, const String& s)
 
 
 FormFlowPathLongitudinalProfile::FormFlowPathLongitudinalProfile(CWnd* mw, const char* sPar)
-:FormTableCreate(mw, "Flow Path Longitudinal Profile")
+: FormTableCreate(mw, "Flow Path Longitudinal Profile")
+, m_iSegID(1)
+, m_rDist(0)
 {
 	if (sPar) {
 		TextInput inp(sPar);
