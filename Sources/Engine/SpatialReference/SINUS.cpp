@@ -90,7 +90,7 @@ XY ProjectionCylindSinusoidal::xyConv(const PhiLam& pl) const
   double b =ell.b;
   double pi2 = M_PI*M_PI;
   double p2; 
-  if (!ell.fSpherical()) 
+  if (fTrulyEllipsoidal) 
 	  p2 = a2 + a2*(1-e2)/2/e*log((1+e)/(1-e));
   else
 	  p2 = a2*2;
