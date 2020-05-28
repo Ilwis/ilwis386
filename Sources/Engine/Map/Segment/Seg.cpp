@@ -39,6 +39,7 @@
 #include "Engine\Map\Segment\SEGSTORE.H"
 #include "Engine\DataExchange\ForeignFormat.h"
 #include "Engine\DataExchange\SegmentMapStoreForeign.h"
+#include "Engine\DataExchange\SegmentMapStoreFormat20.h"
 #include "Engine\Applications\SEGVIRT.H"
 #include "Engine\Base\DataObjects\ObjectStructure.h"
 #include "Engine\Domain\Dmvalue.h"
@@ -241,7 +242,7 @@ SegmentMapPtr::SegmentMapPtr(const FileName& fn, bool fCreate)
 		case ILWIS::Version::bvUNKNOWN:
 		case ILWIS::Version::bvFORMAT14:
 		case ILWIS::Version::bvFORMAT20:
-				//pms = new SegmentMapStoreFormat20(fn, *this);
+				pms = new SegmentMapStoreFormat20(fn, *this);
 				break;
 		case ILWIS::Version::bvFORMATFOREIGN:
 			{
@@ -283,7 +284,7 @@ SegmentMapPtr::SegmentMapPtr(const FileName& fn, const CoordSystem& cs,
 		case ILWIS::Version::bvUNKNOWN:
 		case ILWIS::Version::bvFORMAT14:
 		case ILWIS::Version::bvFORMAT20:
-				//pms = new SegmentMapStoreFormat20(fn, *this);
+				pms = new SegmentMapStoreFormat20(fn, *this);
 				break;
 	}
   //pms = new SegmentMapStore(fn, *this, true); // create
@@ -341,7 +342,7 @@ void SegmentMapPtr::Load()
 		case ILWIS::Version::bvUNKNOWN:
 		case ILWIS::Version::bvFORMAT14:
 		case ILWIS::Version::bvFORMAT20:
-				//pms = new SegmentMapStoreFormat20(fn, *this);
+				pms = new SegmentMapStoreFormat20(fn, *this);
 				break;
 		case ILWIS::Version::bvFORMATFOREIGN:
 			{

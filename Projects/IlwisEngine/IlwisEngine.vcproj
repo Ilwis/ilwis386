@@ -1201,6 +1201,10 @@
 							>
 						</File>
 						<File
+							RelativePath="..\..\Sources\Engine\Base\Algorithm\CachedRelation.h"
+							>
+						</File>
+						<File
 							RelativePath="..\..\Sources\Engine\Base\Algorithm\Clipline.h"
 							>
 						</File>
@@ -1744,6 +1748,10 @@
 				</File>
 				<File
 					RelativePath="..\..\Sources\Engine\DataExchange\SegmentMapStoreForeign.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\Sources\Engine\DataExchange\SegmentMapStoreFormat20.cpp"
 					>
 				</File>
 				<File

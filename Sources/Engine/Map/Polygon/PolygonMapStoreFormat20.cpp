@@ -37,6 +37,7 @@
 #include "Headers\toolspch.h"
 #include "Engine\Domain\dmcoord.h"
 #include "Engine\Map\Polygon\PolygonMapStoreFormat20.h"
+#include "Engine\Base\Algorithm\CachedRelation.h"
 
 PolygonMapStoreFormat20::PolygonMapStoreFormat20(const FileName& fn, PolygonMapPtr& p) :
 	PolygonMapStore(fn, p, true)
@@ -93,71 +94,43 @@ void PolygonMapStoreFormat20::Load()
 	filPolCode->Seek(0); // ?? check
 	filPolCode->Read(iValueSize * iPol, (void *)valuebuffer);
 
-	vector<CoordBuf> coords;
-	
-	
-	DomainSort *pds = dm()->pdsrt();
+	Tranquilizer trq("Loading data");
+	GeometryFactory * fact = new GeometryFactory();
 
 	for(int iPolygon=0; iPolygon < iPol; ++iPolygon)
 	{
-		long iVal = 0;
-		double rVal = 0;
 		poltype pol = polbuf[iPolygon];
-		int iStart = abs(pol.iSegStart)-1;
-		int iCurrent = iStart;
-		toptype top = topbuf[abs(iStart)];
-		Coord crd;
-		vector< vector<Coordinate> *> rings;
-		vector<Coordinate> *v = new vector<Coordinate>();
-		bool fEnd = false;
-		do{
-			CoordBuf crdBuf;
-			GetCoordBuf(iCurrent,crdBuf,sgbuffer,crdbuffer);
-			if ( !crd.fUndef() && v->size() > 0 && v->at(0) != crdBuf[crdBuf.size() - 1]) {
-				rings.push_back(v);
-				v = new vector<Coordinate>();
+		std::vector<geos::geom::CoordinateSequence*> coords;
+		if (getRings(pol.iSegStart, topbuf, polbuf, sgbuffer, crdbuffer, coords, fact)) {
+			if ( coords.size() == 0)
+				continue;
+			autocorrectCoords(coords);
+			std::vector<std::pair<geos::geom::LinearRing *, std::vector<geos::geom::Geometry *> *>> polys = makePolys(coords, fact);
+			for (std::vector<std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *>>::iterator poly = polys.begin(); poly != polys.end(); ++poly) {
+				geos::geom::LinearRing * ring = poly->first;
+				std::vector<geos::geom::Geometry *> * holes = poly->second;
+				geos::geom::Polygon * gpol(fact->createPolygon(ring, holes)); // takes ownership of both ring and holes pointers
+				ILWIS::Polygon *polygon;
+				void *val = &(valuebuffer[iPolygon * iValueSize]);
+				if ( ptr.dvrs().fUseReals()) {
+					polygon = new ILWIS::RPolygon(spatialIndex,gpol);
+					double rVal = *((double *) val );
+					polygon->PutVal(rVal);
+				} else{
+					polygon = new ILWIS::LPolygon(spatialIndex,gpol);
+					long iVal = *((long *) val);
+					polygon->PutVal(iVal);
+				}
+				geometries->push_back(polygon);
 			}
-
-			for(int j=0; j < crdBuf.size(); ++j) {
-				Coord c = crdBuf[j];
-				if (!c.fUndef() ) {
-					if ( v->size() > 0)
-						if ( Coordinate(c) == v->at(v->size()))
-							continue;
-					v->push_back(c);
-				};
-			}
-			toptype top = topbuf[abs(iCurrent)];
-			fEnd = ( abs(top.iFwd) - 1 == iStart || abs(top.iFwd) - 1 == iCurrent) ? true : false;
-			iStart = iCurrent;
-			iCurrent = abs(top.iFwd)-1;
-			crd = crdBuf[crdBuf.size() - 1];
-			if ( fEnd) {
-				rings.push_back(v);
-			}
-
-		} while(!fEnd);
-		ILWIS::Polygon *polygon;
-		void *val = &(valuebuffer[iPolygon * iValueSize]);
-		if ( ptr.st() == stREAL )
-		{
-			polygon = new ILWIS::RPolygon(spatialIndex);
-			rVal = *((double *) val );
-			polygon->PutVal(rVal);
 		}
-		else
-		{
-			polygon = new ILWIS::LPolygon(spatialIndex);
-			iVal = *((long *) val);
-			polygon->PutVal(iVal);
+		if ( iPolygon % 100 == 0) {
+			trq.fUpdate(iPolygon, iPol); 
 		}
-		polygon->addBoundary(new LinearRing(new CoordinateArraySequence(rings.at(0)),new GeometryFactory()));
-		for(int i=1; i < rings.size(); ++i) {
-			polygon->addHole(new LinearRing(new CoordinateArraySequence(rings.at(i)),new GeometryFactory()));
-		}
-		addPolygon(polygon);
 	}
-	
+	trq.fUpdate(iPol, iPol);
+
+	CalcBounds();
 
 	delete [] sgbuffer;
 	delete [] crdbuffer;
@@ -170,12 +143,56 @@ void PolygonMapStoreFormat20::Load()
 	//	Updated();
 }
 
-void PolygonMapStoreFormat20::GetCoordBuf(short iSegIndex, CoordBuf& crdBuf,segtype *sgbuffer,crdtype *crdbuffer) {
+bool PolygonMapStoreFormat20::getRings(long startIndex, const toptype* topbuf, const poltype* polbuf, const segtype *sgbuffer, const crdtype *crdbuffer, vector<CoordinateSequence*>& coords, GeometryFactory * fact){
+	long index = startIndex;
+
+	CoordinateSequence *seq = new CoordinateArraySequence();
+	do{
+		CoordinateSequence *line = GetCoordinateSequence(abs(index)-1,sgbuffer,crdbuffer);
+		if (line->size() > 0) {
+			if( seq->size() == 0 || seq->back() == ((index > 0) ? line->front() : line->back())){
+				seq->add(line,false,index > 0);
+				delete line;
+			} else if ( seq->front() == ((index > 0) ? line->back() : line->front())) {
+				if (index < 0)
+					CoordinateSequence::reverse(line);
+				line->add(seq,false,true);
+				delete seq;
+				seq = line;
+			} else {
+				coords.push_back(seq);
+				seq = new CoordinateArraySequence();
+				seq->add(line,false,index > 0);
+				delete line;
+			}
+			if (seq->front() == seq->back()) {
+				if (seq->size() > 3)
+					coords.push_back(seq);
+				else
+					delete seq;
+				seq = new CoordinateArraySequence();
+			}
+		} else
+			delete line;
+		int oldIndex = index;
+		toptype top = topbuf[abs(index)-1];
+		index = (index > 0) ? top.iFwd : top.iBwd;
+		if ( oldIndex == index && index != startIndex) // this would indicate infintite loop. corrupt data
+			return false;
+	} while(abs(index) != abs(startIndex) && index != iUNDEF);
+	if (seq->size() > 0)
+		coords.push_back(seq);
+	else
+		delete seq;
+
+	return true;
+}
+
+CoordinateSequence * PolygonMapStoreFormat20::GetCoordinateSequence(short iSegIndex,const segtype *sgbuffer,const crdtype *crdbuffer) {
 	segtype st = sgbuffer[abs(iSegIndex)];
 	int iStart = st.fstp;
 	int iEnd = st.lstp;
 	
-
 	if ( iStart < 0 ) iStart += LONG_MAX;
 	int iCount = iStart <= iEnd ? 1 : -1;
 		int iCrdInSeg = 0;
@@ -183,22 +200,110 @@ void PolygonMapStoreFormat20::GetCoordBuf(short iSegIndex, CoordBuf& crdBuf,segt
 		iCrdInSeg = 0;
 	else
 		iCrdInSeg = iEnd - iStart + 1;
-	crdBuf.Size(iCrdInSeg + 2);
-	crdBuf[0] = ToCoord(st.fst);
-	
+	CoordinateSequence *seq = new CoordinateArraySequence(iCrdInSeg + 2);
+	seq->setAt(ToCoord(st.fst), 0);	
 	int iCrd = 0;
 	for( ; iCrd < iCrdInSeg; iCrd += iCount)
-		crdBuf[ iCrd + 1 ] = ToCoord(crdbuffer[iStart + iCrd - 1]);
-	crdBuf[ iCrd + 1] = ToCoord(st.lst);
+		seq->setAt(ToCoord(crdbuffer[iStart + iCrd - 1]), iCrd + 1);
+	seq->setAt(ToCoord(st.lst), iCrd + 1);
 	if ( iSegIndex < 0)
-		CoordinateSequence::reverse(&crdBuf);
+		CoordinateSequence::reverse(seq);
+	return seq;
 }
-
-
 
 Coord PolygonMapStoreFormat20::ToCoord(const crdtype& crd)
 {
 	return Coord( crd.x * rAlfa1 + rBeta1, crd.y * rAlfa1 + rBeta2 );
+}
+
+bool PolygonMapStoreFormat20::appendCoords(geos::geom::CoordinateSequence* & coordsA, geos::geom::CoordinateSequence & coordsB, bool fForward) const
+{
+	if (fForward ? (coordsA->back() == coordsB.front()) : (coordsA->back() == coordsB.back())) {
+		coordsA->add(&coordsB, false, fForward);
+		return true;
+	} else
+		return false;
+}
+
+void PolygonMapStoreFormat20::autocorrectCoords(std::vector<geos::geom::CoordinateSequence*> & coords) const
+{
+	bool fChanged;
+	std::vector<long> openCoords;
+	for (long i = 0; i < coords.size(); ++i) { // mark all open coordinatesequences (back != front)
+		if (coords[i]->back() != coords[i]->front())
+			openCoords.push_back(i);
+	}
+	do { // link all possible backs to fronts, creating closed coordinatesequences that can become polygons
+		fChanged = false;
+		for (long i = 0; i < openCoords.size(); ++i) {
+			for (long j = i + 1; j < openCoords.size(); ++j) {
+				if (appendCoords(coords[openCoords[i]], *coords[openCoords[j]], true)) {
+					delete coords[openCoords[j]];
+					coords.erase(coords.begin() + openCoords[j]);
+					openCoords.erase(openCoords.begin() + j);
+					for (long k = j; k < openCoords.size(); ++k) // shift all indexes
+						openCoords[k] = openCoords[k] - 1;
+					j = j - 1;
+					fChanged = true;
+				}
+			}
+			if (coords[openCoords[i]]->back() == coords[openCoords[i]]->front()) {
+				openCoords.erase(openCoords.begin() + i);
+				i = i - 1;
+			}
+		}
+	} while (fChanged);
+	for (long i = 0; i < openCoords.size(); ++i) { // delete all remaining open coordinatesequences
+		delete coords[openCoords[i]];
+		coords.erase(coords.begin() + openCoords[i]);
+		for (long k = i; k < openCoords.size(); ++k) // shift all indexes
+			openCoords[k] = openCoords[k] - 1;
+	}
+}
+
+std::vector<std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *>> PolygonMapStoreFormat20::makePolys(std::vector<geos::geom::CoordinateSequence*> & coords, GeometryFactory * fact) const
+{
+	std::vector<std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *>> result;
+	CachedRelation relation;
+
+	// CoordSequence to Polygons
+	std::vector<geos::geom::Polygon*> rings;
+	for (std::vector<geos::geom::CoordinateSequence*>::iterator coordsN = coords.begin(); coordsN != coords.end(); ++coordsN)
+		rings.push_back(fact->createPolygon(new geos::geom::LinearRing(*coordsN, fact), 0));
+
+	std::multimap<long, geos::geom::Polygon*> levels;
+	long iMaxDepth = 0;
+	
+	// find the winding level of each ring
+	for (long i = 0; i < rings.size(); ++i) {
+		geos::geom::Polygon * ringI = rings[i];
+		long iDepth = 0;
+		for (long j = 0; j < rings.size(); ++j) {
+			if (j == i) // test against every other ring, except itself
+				continue;
+			geos::geom::Polygon * ringJ = rings[j];
+			if (relation.within(ringI, ringJ))
+				++iDepth;
+		}
+		levels.insert(std::pair<long, geos::geom::Polygon*>(iDepth, ringI));
+		iMaxDepth = max(iMaxDepth, iDepth);
+	}
+
+	// go through all exterior rings and collect their holes; EVEN depths become exterior, ODD depths become holes, each hole is added only to its closest exterior ring
+	for (long iDepth = 0; iDepth <= iMaxDepth; iDepth += 2) {
+		pair<multimap<long, geos::geom::Polygon *>::iterator, multimap<long, geos::geom::Polygon *>::iterator> exteriors = levels.equal_range(iDepth);
+		pair<multimap<long, geos::geom::Polygon *>::iterator, multimap<long, geos::geom::Polygon *>::iterator> holes = levels.equal_range(iDepth + 1);
+		for (multimap<long, geos::geom::Polygon *>::iterator exteriorIt = exteriors.first; exteriorIt != exteriors.second; ++exteriorIt) {
+			std::vector<geos::geom::Geometry*> * ringHoles = new std::vector<geos::geom::Geometry*>();
+			for (multimap<long, geos::geom::Polygon *>::iterator holeIt = holes.first; holeIt != holes.second; ++holeIt) {
+				if (relation.within(holeIt->second, exteriorIt->second))
+					ringHoles->push_back((Geometry*)holeIt->second->getExteriorRing());
+			}
+			result.push_back(std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *>((LinearRing*)exteriorIt->second->getExteriorRing(), ringHoles));
+		}
+	}
+
+	return result;
 }
 
 void PolygonMapStoreFormat20::SetErase(bool f)

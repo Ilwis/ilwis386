@@ -52,6 +52,9 @@ protected:
 		
 	void Load();
 	Coord ToCoord(const crdtype& crd);
-	void SetColumns(Table& tblPolygon, Table& tblTopology);
-	void GetCoordBuf(short iSegIndex, CoordBuf& crdBbuf,segtype *sgbuffer,crdtype *crdbuffer);
+	bool getRings(long startIndex, const toptype* topbuf, const poltype* polbuf, const segtype *sgbuffer, const crdtype *crdbuffer, vector<CoordinateSequence*>& rings, GeometryFactory * fact);
+	CoordinateSequence * GetCoordinateSequence(short iSegIndex,const segtype *sgbuffer,const crdtype *crdbuffer);
+	bool appendCoords(geos::geom::CoordinateSequence* & coordsA, geos::geom::CoordinateSequence & coordsB, bool fForward) const;
+	void autocorrectCoords(std::vector<geos::geom::CoordinateSequence*> & coords) const;
+	std::vector<std::pair<geos::geom::LinearRing *, std::vector<geos::geom::Geometry *> *>> makePolys(std::vector<geos::geom::CoordinateSequence*> & rings, GeometryFactory * fact) const;
 };

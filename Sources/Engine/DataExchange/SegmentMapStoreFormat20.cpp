@@ -37,6 +37,8 @@
 #include "Headers\toolspch.h"
 #include "Engine\DataExchange\SegmentMapStoreFormat20.h"
 #include "Engine\Table\ColumnCoordBuf.h"
+#include "Engine\Domain\dmsort.h"
+#include "Engine\Base\System\Engine.h"
 #include "Headers\Hs\segment.hs"
 
 
@@ -61,6 +63,10 @@ void SegmentMapStoreFormat20::Load()
 	if ( CDFile == 0 || SGFile == 0 )
 		throw ErrorObject(SSEGErrMissing20DataFiles);
 
+	bool *fDoNotShowError = (bool *)(getEngine()->pGetThreadLocalVar(IlwisAppContext::tlvDONOTSHOWFINDERROR));
+	bool fOldVal = *fDoNotShowError;
+	*fDoNotShowError = true;
+
 	rAlfa1 = ptr.rReadElement("SegmentMap", "Alfa");
 	rBeta1 = ptr.rReadElement("SegmentMap", "Beta1");
 	rBeta2 = ptr.rReadElement("SegmentMap", "Beta2");
@@ -72,8 +78,6 @@ void SegmentMapStoreFormat20::Load()
 	ptr.SetNumberOfSegments(iNrSegments);
 	ptr.SetNumberOfDeletedSegments(iNrSegDeleted);
 	ptr.SetNumberOfCoords(iNrCoords);
-//
-	tblSegment->iRecNew(iNrSegments);
 
 	int iValueSize = st() != stREAL ? 4 : 8;
 	segtype *sgbuffer = new segtype[iNrSegments];
@@ -95,34 +99,36 @@ void SegmentMapStoreFormat20::Load()
 		SCFile->Read(iValueSize * iNrSegments, (char *)valuebuffer);
 	}
 
-	CoordBuf crdBuf(1000);
+	Tranquilizer trq("Loading data");
 	DomainSort *pds = dm()->pdsrt();
 	for(long iSeg = 0; iSeg < iNrSegments; ++iSeg)
 	{
 		segtype st = sgbuffer[iSeg];
-		if (colSegmentValue.fValid())
+		ILWIS::Segment *seg;
+		if ( SCFile )
 		{
-			if ( SCFile )
+			void *val = &(valuebuffer[iSeg * iValueSize]);
+			if (ptr.st() == stREAL)
 			{
-				void *val = &(valuebuffer[iSeg * iValueSize]);
-				if (ptr.st() == stREAL)
-				{
-					double rVal = *((double *) val );
-					colSegmentValue->PutVal(iSeg + 1 , rVal);
-				}
-				else
-				{
-					long iVal = *((long *) val);
-					colSegmentValue->PutRaw(iSeg + 1 , iVal);
-				}
+				seg = new ILWIS::RSegment(spatialIndex);
+				double rVal = *((double *) val );
+				seg->PutVal(rVal);
 			}
 			else
 			{
-				// .SC# file is missing so try to get
-				// the segment code from the .SEG file, which is always available
-				String sCode = st.code;
-				colSegmentValue->PutVal(iSeg + 1 , sCode);
+				seg = new ILWIS::LSegment(spatialIndex);
+				long iVal = *((long *) val);
+				seg->PutVal(iVal);
 			}
+		}
+		else
+		{
+			// .SC# file is missing so try to get
+			// the segment code from the .SEG file, which is always available
+			seg = new ILWIS::LSegment(spatialIndex);
+			String sCode = st.code;
+			if (pds)
+				seg->PutVal(pds->iRaw(sCode));
 		}
 
 		int iStart = st.fstp;
@@ -132,8 +138,6 @@ void SegmentMapStoreFormat20::Load()
 
 		int iCount = iStart <= iEnd ? 1 : -1;
 
-		crdBuf[0] = RowCol2Coord(st.fst);
-
 		int iCrdInSeg = 0;
 
 		if ( iEnd == 0 && iStart == 0) // hmpff
@@ -141,25 +145,29 @@ void SegmentMapStoreFormat20::Load()
 		else
 			iCrdInSeg = iEnd - iStart + 1;
 
+		CoordinateSequence *seq = new CoordinateArraySequence(iCrdInSeg + 2);
+		seq->setAt(RowCol2Coord(st.fst), 0);
+
 		int iCrd = 0;
 		for( ; iCrd < iCrdInSeg; iCrd += iCount)
-			crdBuf[ iCrd + 1 ] = RowCol2Coord(crdbuffer[iStart + iCrd - 1]);
+			seq->setAt(RowCol2Coord(crdbuffer[iStart + iCrd - 1]), iCrd + 1);
 
-		crdBuf[ iCrd + 1] = RowCol2Coord(st.lst);
-
+		seq->setAt(RowCol2Coord(st.lst), iCrd + 1);
 
 		Coord crdMin = RowCol2Coord(crdtype(st.mm.MinX, st.mm.MinY));
 		Coord crdMax = RowCol2Coord(crdtype(st.mm.MaxX, st.mm.MaxY));
-		
-		colMinCoords->PutVal(iSeg + 1, crdMin);
-		colMaxCoords->PutVal(iSeg + 1, crdMax);
-		colCrdBuf->PutVal(iSeg + 1, crdBuf, iCrdInSeg + 2);
-		if ( st.fstp >= 0 )
-			colDeleted->PutVal(iSeg + 1, 0L);
-		else
-			colDeleted->PutVal(iSeg + 1, 1L);
 
+		seg->PutCoords(seq);
+		seg->Delete(st.fstp < 0);
+		geometries->push_back(seg);
+		
+		if ( iSeg % 100 == 0) {
+			trq.fUpdate(iSeg, iNrSegments);
+		}
+
+		const Envelope *env =  seg->getEnvelopeInternal();
 	}
+	trq.fUpdate(iNrSegments, iNrSegments);
 
 	delete [] sgbuffer;
 	delete [] crdbuffer;
@@ -167,7 +175,8 @@ void SegmentMapStoreFormat20::Load()
 	delete SGFile;
 	delete CDFile;
 	delete SCFile;
-	tblSegment->Loaded(true);
+	*fDoNotShowError = fOldVal;
+	//tblSegment->Loaded(true);
 //	fvFormatVersion = fvFORMAT30; // this changes the to the 3.0 format
 //	Updated();
 }
@@ -184,7 +193,7 @@ crdtype SegmentMapStoreFormat20::Coord2RowCol(const Coord& crd, double rAlfa1, d
 
 void SegmentMapStoreFormat20::SaveAsFormat20(const SegmentMap& mp)
 {
-	int iNrSegments = mp->iSeg();
+	int iNrSegments = mp->iFeatures();
 	segtype segt;
 	String sType;
 	bool fPolygonMap = mp->ReadElement("PolygonMap", "Type", sType) != 0 ? true : false;
@@ -204,8 +213,6 @@ void SegmentMapStoreFormat20::SaveAsFormat20(const SegmentMap& mp)
 	CDFile->Write(172, &dummy);
 	if ( !fPolygonMap) SGFile->Write(sizeof(segtype), &segt); 
 
-	CoordBuf crdBuf;
-
 	int iCDPos = 0;
 	const int iMaxPnt = 1000;
 	CoordBounds cb = mp->cb();
@@ -216,11 +223,10 @@ void SegmentMapStoreFormat20::SaveAsFormat20(const SegmentMap& mp)
 
 	int iTotalSeg = 0;
 
-	for (Segment seg = mp->segFirst(); seg.fValid(); ++seg) 
+	for (ILWIS::Segment* seg = mp->segFirst(); seg->fValid(); ++seg) 
 	{
-		long iSz;
-
-		seg.GetCoords(iSz, crdBuf, true);
+		CoordinateSequence *cbuf = seg->getCoordinates();
+		long iSz = cbuf->size();
 		int iNr20Segments = iSz / iMaxPnt + 1;
 		int iPointsLastSeg = iSz % iMaxPnt;
 
@@ -231,15 +237,15 @@ void SegmentMapStoreFormat20::SaveAsFormat20(const SegmentMap& mp)
 
 			for ( int j = 1; j < iNrPoints - 1; ++j)
 			{
-				RowCol rc1 = Coord2RowCol(crdBuf[iStartPoint + j], rAlfa, rBeta1, rBeta2);
+				RowCol rc1 = Coord2RowCol(cbuf->getAt(iStartPoint + j), rAlfa, rBeta1, rBeta2);
 				CDFile->Write(sizeof(crdtype), &rc1);
 			}
 
 			if ( !fPolygonMap )
 			{
-				segt.fst = Coord2RowCol(crdBuf[ iStartPoint], rAlfa, rBeta1, rBeta2);
-				segt.lst = Coord2RowCol(crdBuf[ iStartPoint + iNrPoints - 1], rAlfa, rBeta1, rBeta2);
-				CoordBounds cb = seg.crdBounds();
+				segt.fst = Coord2RowCol(cbuf->getAt( iStartPoint), rAlfa, rBeta1, rBeta2);
+				segt.lst = Coord2RowCol(cbuf->getAt( iStartPoint + iNrPoints - 1), rAlfa, rBeta1, rBeta2);
+				CoordBounds cb = seg->cbBounds();
 				Coord cMin = cb.cMin;
 				Coord cMax = cb.cMax;
 				segt.mm = MinMax(Coord2RowCol(cMin, rAlfa, rBeta1, rBeta2), Coord2RowCol(cMax, rAlfa, rBeta1, rBeta2));
@@ -250,12 +256,12 @@ void SegmentMapStoreFormat20::SaveAsFormat20(const SegmentMap& mp)
 			}
 			if ( mp->fUseReals() )
 			{
-				double rVal = seg.rValue();
+				double rVal = seg->rValue();
 				SCFile->Write(sizeof(double), &rVal);
 			}
 			else
 			{
-				long iVal = seg.iValue();
+				long iVal = seg->iValue();
 				SCFile->Write(sizeof(long), &iVal);
 			}
 			++iTotalSeg;
@@ -267,7 +273,7 @@ void SegmentMapStoreFormat20::SaveAsFormat20(const SegmentMap& mp)
 	mp->WriteElement("SegmentMapStore", "DataSeg",  SGFile->sName() );
 	mp->WriteElement("SegmentMapStore", "DataSegCode",  SCFile->sName() );
 	mp->WriteElement("SegmentMapStore", "DataSegCrd",  CDFile->sName() );
-	mp->WriteElement("SegmentMapStore", "Format", SegmentMapStore::fvFORMAT20);
+	mp->WriteElement("SegmentMapStore", "Format", ILWIS::Version::bvFORMAT20);
 	mp->WriteElement("SegmentMapStore", "Segments", iTotalSeg);
 
 	delete SCFile;
