@@ -45,7 +45,8 @@ public:
 
 protected:
 	virtual void Load();
-	bool isForwardLinked(Coord c1, Coord c2) { return true; }
-	bool getRings(long startIndex, const Table& tblTopology, const Table& tblPolygon, vector<LinearRing*>& rings );
-	bool isForwardStartDirection(const Column& colFwl,const Column& colBwl, ColumnCoordBuf *colCrdBuf, long index);
+	bool getRings(long startIndex, const Table& tblTopology, const Table& tblPolygon, vector<CoordinateSequence*>& rings, GeometryFactory * fact);
+	bool appendCoords(geos::geom::CoordinateSequence* & coordsA, geos::geom::CoordinateSequence & coordsB, bool fForward) const;
+	void autocorrectCoords(std::vector<geos::geom::CoordinateSequence*> & coords) const;
+	std::vector<std::pair<geos::geom::LinearRing *, std::vector<geos::geom::Geometry *> *>> makePolys(std::vector<geos::geom::CoordinateSequence*> & rings, GeometryFactory * fact) const;
 };
