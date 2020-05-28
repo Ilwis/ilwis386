@@ -418,7 +418,7 @@ vector<String> PolygonMapPtr::vsValue(const Coord& crd, short iWidth, short iDec
 	vector<String> values;
 	for(int i = 0; i < v.size(); ++i) {
 		ILWIS::Polygon *p = v[i];
-		if (!p || !p->fValid())
+		if (!p || !p->fValid() || p->fDeleted())
 			values.push_back(sUNDEF);
 		else {
 			String s = p->sValue(dvrs(), iWidth, iDec);

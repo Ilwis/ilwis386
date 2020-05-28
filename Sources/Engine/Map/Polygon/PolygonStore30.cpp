@@ -27,6 +27,7 @@ void PolygonMapStoreFormat30::Load()
 	Column colValue = tblPolygon->col("PolygonValue");
 	Column colTopStart = tblPolygon->col("TopStart");
 	Column colArea = tblPolygon->col("Area");
+	Column colDeleted = tblPolygon->col("Deleted");
 	Tranquilizer trq("Loading data");
 	GeometryFactory * fact = new GeometryFactory();
 	long iPol = tblPolygon->iRecs();
@@ -50,6 +51,8 @@ void PolygonMapStoreFormat30::Load()
 					polygon = new ILWIS::LPolygon(spatialIndex,gpol);
 				}
 				polygon->PutVal(colValue->iRaw(i));
+				if (colDeleted != colUNDEF)
+					polygon->Delete(colDeleted->iValue(i) != 0);
 				geometries->push_back(polygon);
 			}
 		}

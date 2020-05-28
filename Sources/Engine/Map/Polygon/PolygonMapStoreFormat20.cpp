@@ -116,10 +116,12 @@ void PolygonMapStoreFormat20::Load()
 					polygon = new ILWIS::RPolygon(spatialIndex,gpol);
 					double rVal = *((double *) val );
 					polygon->PutVal(rVal);
+					polygon->Delete(pol.iSegStart == 0 || rVal == rUNDEF);
 				} else{
 					polygon = new ILWIS::LPolygon(spatialIndex,gpol);
 					long iVal = *((long *) val);
 					polygon->PutVal(iVal);
+					polygon->Delete(pol.iSegStart == 0 || iVal == iUNDEF);
 				}
 				geometries->push_back(polygon);
 			}
