@@ -45,6 +45,7 @@
 #include "Engine\Base\DataObjects\valrange.h"
 #include "Engine\Domain\dmsort.h"
 #include "Engine\Applications\MAPVIRT.H"
+#include "Engine\Base\Algorithm\CachedRelation.h"
 #include "Headers\Err\Ilwisapp.err"
 #include "Headers\Htp\Ilwisapp.htp"
 #include "Headers\Hs\polygon.hs"
@@ -530,6 +531,7 @@ void PolygonMapFromRas::autocorrectCoords(std::vector<geos::geom::CoordinateSequ
 std::vector<std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *>> PolygonMapFromRas::makePolys(std::vector<geos::geom::CoordinateSequence*> & coords, GeometryFactory * fact) const
 {
 	std::vector<std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *>> result;
+	CachedRelation relation;
 
 	// CoordSequence to Polygons
 	std::vector<geos::geom::Polygon*> rings;
@@ -547,7 +549,7 @@ std::vector<std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *
 			if (j == i) // test against every other ring, except itself
 				continue;
 			geos::geom::Polygon * ringJ = rings[j];
-			if (ringI->within(ringJ))
+			if (relation.within(ringI, ringJ))
 				++iDepth;
 		}
 		levels.insert(std::pair<long, geos::geom::Polygon*>(iDepth, ringI));
@@ -561,7 +563,7 @@ std::vector<std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *
 		for (multimap<long, geos::geom::Polygon *>::iterator exteriorIt = exteriors.first; exteriorIt != exteriors.second; ++exteriorIt) {
 			std::vector<geos::geom::Geometry*> * ringHoles = new std::vector<geos::geom::Geometry*>();
 			for (multimap<long, geos::geom::Polygon *>::iterator holeIt = holes.first; holeIt != holes.second; ++holeIt) {
-				if (holeIt->second->within(exteriorIt->second))
+				if (relation.within(holeIt->second, exteriorIt->second))
 					ringHoles->push_back((Geometry*)holeIt->second->getExteriorRing());
 			}
 			result.push_back(std::pair<geos::geom::LinearRing *, vector<geos::geom::Geometry *> *>((LinearRing*)exteriorIt->second->getExteriorRing(), ringHoles));
