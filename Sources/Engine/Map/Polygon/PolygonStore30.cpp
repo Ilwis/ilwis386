@@ -51,7 +51,7 @@ void PolygonMapStoreFormat30::Load()
 					polygon = new ILWIS::LPolygon(spatialIndex,gpol);
 				}
 				polygon->PutVal(colValue->iRaw(i));
-				if (colDeleted != colUNDEF)
+				if (colDeleted.fValid())
 					polygon->Delete(colDeleted->iValue(i) != 0);
 				geometries->push_back(polygon);
 			}
