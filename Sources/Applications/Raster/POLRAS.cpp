@@ -256,7 +256,6 @@ bool MapRasterizePolygon::fFreezing() {
 			ptr.PutLineRaw(y,newline);
 	}
 	return true;
-
 }
 
 long MapRasterizePolygon::FindValue(long row, long col) const {
@@ -264,8 +263,15 @@ long MapRasterizePolygon::FindValue(long row, long col) const {
 	Coord crdRas = ptr.gr()->cConv(RowCol(row, col));
 	Coord crdPol = pm->cs()->cConv(ptr.gr()->cs(), crdRas);
 	const vector<Geometry *> pols = pm->getFeatures(crdPol);
-	if (pols.size() > 0)
-		return ((ILWIS::Polygon *)pols[pols.size() - 1])->iValue();
+	long idx = pols.size() - 1;
+	while (idx >= 0) {
+		if (!((ILWIS::Polygon *)pols[idx])->fDeleted()) {
+			long iVal = ((ILWIS::Polygon *)pols[idx])->iValue();
+			if (iVal != iUNDEF)
+				return iVal;
+		}
+		--idx;
+	}
 	return iUNDEF;
 }
 
