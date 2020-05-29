@@ -658,7 +658,7 @@ String RasterLayerDrawer::getInfo(const Coord& c) const {
 	{
 		crd = rastermap->cs()->cConv(rootDrawer->getCoordinateSystem(), c);
 	}
-	String infos = rastermap->sValue(crd);
+	String infos = rastermap->sValue(crd, 0);
 	String info;
 	String s = infos.sTrimSpaces(true);
 	if ( s == "?")

@@ -224,7 +224,7 @@ String FeatureLayerDrawer::getInfo(const Coord& c) const {
 	{
 		crd = bmptr->cs()->cConv(rootDrawer->getCoordinateSystem(), c);
 	}
-	vector<String> infos = bmptr->vsValue(crd);
+	vector<String> infos = bmptr->vsValue(crd, 0);
 	if (useAttColumn) {
 		int idx = 0;
 		vector<Geometry *> geoms = bmptr->getFeatures(crd);
@@ -241,9 +241,9 @@ String FeatureLayerDrawer::getInfo(const Coord& c) const {
 					DomainValue* dv = getAtttributeColumn()->dm()->pdv();
 					if (0 != dv && dv->fUnit())
 						infos[idx] &= String(" %S", dv->sUnit());
-					++idx;
 				}
 			}
+			++idx;
 		}
 	}
 	String info;
