@@ -41,7 +41,6 @@
 */
 
 
-#include "Engine\Map\Segment\Seg.cpp"
 #include "PointApplications\PointMapFromSeg.H"
 #include "Engine\Map\Point\PNTSTORE.H"
 #include "Engine\Base\DataObjects\valrange.h"
