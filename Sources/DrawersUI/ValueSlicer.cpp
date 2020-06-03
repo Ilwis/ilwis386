@@ -2,7 +2,7 @@
 #include <gdiplus.h>
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\SpatialDataDrawer.h"
-#include "Client\FormElements\fldcolor.cpp"
+#include "Client\FormElements\fldcolor.h"
 #include "Engine\Map\basemap.h"
 #include "Client\Mapwindow\MapCompositionDoc.h"
 #include "Client\Mapwindow\MapPaneView.h"
