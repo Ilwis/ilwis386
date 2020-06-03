@@ -6,9 +6,6 @@
 
 ILWIS::NewDrawer *createColorCompositeDrawer(ILWIS::DrawerParameters *parms);
 
-class FieldOneSelectTextOnly;
-class ValueSlicerSlider;
-
 namespace ILWIS {
 
 	//struct BandInfo {

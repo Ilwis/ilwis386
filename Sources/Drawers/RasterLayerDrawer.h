@@ -6,9 +6,6 @@
 
 ILWIS::NewDrawer *createRasterLayerDrawer(ILWIS::DrawerParameters *parms);
 
-class FieldOneSelectTextOnly;
-class ValueSlicerSlider;
-
 namespace ILWIS {
 
 	struct BandInfo {
