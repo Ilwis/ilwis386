@@ -385,7 +385,7 @@ void PolygonMapPtr::Store()
 		sDescription = pmv->sExpression();
 	BaseMapPtr::Store();
 	WriteElement("BaseMap", "Type", "PolygonMap");
-	WriteElement("ILWIS", "Version", "3.7");
+	WriteElement("Ilwis", "Version", "3.7"); // This does not always make its way to the ODF, because it may be overwritten by IlwisObjectPtr::WriteBaseInfo (checked in ILWIS 3.7.1 until now). One way that surely works is copy with break dependencies. So we keep it here, but we don't depend on it.
 	if (0 != pms)
 		pms->Store();
 	else
@@ -797,14 +797,19 @@ void PolygonMapPtr::GetObjectStructure(ObjectStructure& os)
 		os.AddFile(fnObj, "PolygonMapStore", "DataPolCode");												
 		os.AddFile(fnObj, "PolygonMapStore", "DataTop");														
 	}
-	else if ( rVersion < 3.7)
+	else
 	{
-		os.AddFile(fnObj, "top:TableStore", "Data");
-		os.AddFile(fnObj, "TableStore", "Data");	
-	} else {
-		if (!fUseAs() || (os.caGetCommandAction() == ObjectStructure::caDELETE))
-			os.AddFile(fnObj, "PolygonMapStore", "DataPol");
+		ILWIS::Version::BinaryVersion format = ILWIS::Version::bvUNKNOWN;
+		ReadElement("PolygonMapStore", "Format", (int &)format);
+		if ( format == ILWIS::Version::bvPOLYGONFORMAT37) {
+			if (!fUseAs() || (os.caGetCommandAction() == ObjectStructure::caDELETE))
+				os.AddFile(fnObj, "PolygonMapStore", "DataPol");
+		} else {
+			os.AddFile(fnObj, "top:TableStore", "Data");
+			os.AddFile(fnObj, "TableStore", "Data");	
+		}
 	}
+	os.AddFile(FileName(fnObj,".tri#"));
 	FileName fnHist(fnObj, ".hsa");
 	if (File::fExist(fnHist) && IlwisObject::iotObjectType( fnHist ) != IlwisObject::iotANY)
 	{
