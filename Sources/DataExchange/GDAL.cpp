@@ -150,7 +150,7 @@ void rastergdal(const String& cmd) {
 	pm.Add(new Parm("input",pmInput.sGet(0)));
 	pm.Add(new Parm("output", pmInput.sGet(1)));
 	ForeignCollection col(pmInput.sGet(0), pm);
-	pm.Add(new Parm("threading",false));
+	pm.Add(new Parm("nothreads",true));
 	col->Create(pm);
 
 }
@@ -578,8 +578,8 @@ void GDALFormat::PutDataInCollection(ForeignCollectionPtr* col, ParmList& pm)
 	data->dir = Directory(getEngine()->sGetCurDir());
 
 	bool fUseThreading = true;
-	if ( pm.fExist("threading")) {
-		fUseThreading = pm.fGet("threading");
+	if ( pm.fExist("nothreads")) {
+		fUseThreading = !pm.fGet("nothreads");
 	}
 	if ( fUseThreading)
 		::AfxBeginThread(PutDataInThread, (VOID *)data);
@@ -608,8 +608,7 @@ UINT GDALFormat::PutDataInThread(LPVOID lp)
 
 		if ( data->fThreading)
 			getEngine()->RemoveThreadLocalVars();
-		if ( data->fThreading)
-			delete data->fptr;  // remove the foreign collection (because passed as pointer)
+		delete data->fptr;  // remove the foreign collection (because passed as pointer)
 		delete data;
 		data = 0;
 	}
