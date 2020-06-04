@@ -2946,6 +2946,7 @@ long Catalog::iObjectSize(const FileName& fn)
 				iSizeObj += iGetObjectSize(fn, "top:TableStore", "Data");
 				iSizeObj += iGetObjectSize(fn, "TableStore", "Data");
 				iSizeObj += iGetObjectSize(fn, "ForeignFormat", "Filename");
+				iSizeObj += iGetObjectSize(fn, "PolygonMapStore", "DataPol");
 			}
 			else
 			{
