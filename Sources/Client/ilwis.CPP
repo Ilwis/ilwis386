@@ -523,7 +523,9 @@ BOOL IlwisWinApp::InitInstance()
 		commandUI->initModules();
 
 		if ( m_sCommand != "") {
-			if ( m_sCommand.sHead(" ") != "open") {
+			ParmList pm(m_sCommand);
+			FileName fnFile(pm.sGet(1));
+			if ( m_sCommand.sHead(" ") != "open" || (File::fExist(fnFile) && IlwisObject::iotObjectType(fnFile) == IlwisObject::iotANY)) { // 2nd part of the test is for an open that is an import
 				Script::Exec(m_sCommand);
 				if ( getEngine()->fStayResident() == false) {
 					Execute("exit");

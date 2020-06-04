@@ -161,6 +161,17 @@ LRESULT BaseCommandHandler::fExecute(const String& sCmd)
 	} else if ( ! getEngine()->fServerMode()){
 		ReroutPost(sCmd);
 		return true;
+	} else if (sCom == "open" && getEngine()->hasClient() && sCmd != ""){
+		ParmList pm(sCmd);
+		FileName fnFile(pm.sGet(1));
+		if (File::fExist(fnFile) && IlwisObject::iotObjectType(fnFile) == IlwisObject::iotANY){ // open is import
+			//ReroutPost(sCmd);
+			size_t len = sCmd.size(); // reroute without server check
+			char * str = new char[len + 1];
+			strcpy(str, sCmd.c_str());
+			getEngine()->SendMessage(ILWM_CMDHANDLERUI, 0, (LPARAM)str);
+			return true;
+		}
 	}
 	return false;
 	} 	catch (std::exception& err) {
