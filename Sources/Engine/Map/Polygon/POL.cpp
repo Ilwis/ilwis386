@@ -801,6 +801,14 @@ void PolygonMapPtr::GetObjectStructure(ObjectStructure& os)
 	{
 		ILWIS::Version::BinaryVersion format = ILWIS::Version::bvUNKNOWN;
 		ReadElement("PolygonMapStore", "Format", (int &)format);
+		if ( format == ILWIS::Version::bvPOLYGONFORMAT37) { // Some versions of ILWIS 3.7 wrote a bad odf, in ILWIS30 format, but indicating ILWIS37 (the new format doesn't contain a SegmentMapStore section, the old one does).
+			FileName fnData(fnObj,".mpz#");
+			if (!fnData.fExist()) {
+				if (0 == ReadElement("SegmentMapStore", "Format", (int &)format)) // If there is no SegmentMapStore section, put the version back to what it was. The .mpz# file is really missing (copy bug)
+					format = ILWIS::Version::bvPOLYGONFORMAT37;
+			}
+		} else if ( format == shUNDEF) // old format
+			ReadElement("SegmentMapStore", "Format", (int &)format);
 		if ( format == ILWIS::Version::bvPOLYGONFORMAT37) {
 			if (!fUseAs() || (os.caGetCommandAction() == ObjectStructure::caDELETE))
 				os.AddFile(fnObj, "PolygonMapStore", "DataPol");
