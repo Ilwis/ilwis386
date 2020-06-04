@@ -1900,7 +1900,7 @@ void CommandHandlerUI::addExtraCommands() {
 
 	addCommand(CommandHandlerUI::createCommandInfo("open","show",Cmdopen,TR("Visuali&zation..&Show Map"),TR("Show"),"DspMap16Ico","",7010,TR("Show a map in a new map window")));
 	addCommand(CommandHandlerUI::createCommandInfo("slideshow","",Cmdmplslideshow,TR("Visuali&zation.Show Map &List.as &Slide Show"),TR("Slide Show"),"DspMap16Ico",".mpl",7013,TR("Show a map list as a slide show in a new window")));
-	addCommand(CommandHandlerUI::createCommandInfo("showastbl","showastable",Cmdshowastable,TR("Visuali&zation..Show as Table"),TR("Show as Table"),".tbt",".tbt",0,TR("Shows table based Ilwisobjects as true tables")));
+	addCommand(CommandHandlerUI::createCommandInfo("showastbl","showastable,openastbl,openastable",Cmdshowastable,TR("Visuali&zation..Show as Table"),TR("Show as Table"),".tbt",".tbt",0,TR("Shows table based Ilwisobjects as true tables")));
 	addCommand(CommandHandlerUI::createCommandInfo("showasdom","showasdomain",Cmdshowasdomain,TR("Visuali&zation..Show as Domain"),TR("Show as Domain"),".dom",".dom",0,TR("Shows domain information of Ilwisobject")));
 	addCommand(CommandHandlerUI::createCommandInfo("showasrpr","showasrepresentation",Cmdshowasrepresentation,TR("Visuali&zation..Show as Representation"),TR("Show as Representation"),".rpr",".rpr",0,TR("Shows representation information of Ilwisobject")));
 	addCommand(CommandHandlerUI::createCommandInfo("display3d","",Cmddisplay3d,TR("Visuali&zation..&Display 3D"),TR("Display 3D"),"DspMap16Ico","",7002,TR("Edit a 3D georeference to display a map in three dimensions")));
