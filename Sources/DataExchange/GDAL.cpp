@@ -42,7 +42,7 @@
 #include "DataExchange\gdalincludes\ogr_api.h"
 #include "DataExchange\gdalincludes\ogr_srs_api.h"
 #include <geos/algorithm/CGAlgorithms.h>
-
+#include <math.h>
 
 #undef DomainInfo
 
@@ -89,6 +89,9 @@
 #include "Headers\Htp\Ilwismen.htp"
 #include "Engine\Base\Round.h"
 
+#define isnan(x) _isnan(x)
+#define isinf(x) (!_finite(x))
+#define fpu_error(x) (isinf(x) || isnan(x))
 
 map<int, FormatInfo> mapDummy;
 map<int, FormatInfo> GDALFormat::mapFormatInfo = mapDummy;
@@ -1139,11 +1142,11 @@ void GDALFormat::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long iNum) con
 			break;
 		case GDT_Float32:
 			for( i = 0; i< iNum; ++i)				
- 				buf[i] = ((float *)buffer)[i];
+				buf[i] = fpu_error(((float *)buffer)[i])?iUNDEF:((float *)buffer)[i];
 			break;
 		case GDT_Float64:
-			for( i = 0; i< iNum; ++i)				
- 				buf[i] = ((double *)buffer)[i];
+			for( i = 0; i< iNum; ++i)
+				buf[i] = fpu_error(((double *)buffer)[i])?iUNDEF:((double *)buffer)[i];
 			break;
 	};
 }
@@ -1186,11 +1189,11 @@ void GDALFormat::GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum) con
 			break;
 		case GDT_Float32:
 			for( i = 0; i< iNum; ++i)				
- 				buf[i] = ((float *)buffer)[i];
+				buf[i] = fpu_error(((float *)buffer)[i])?rUNDEF:((float *)buffer)[i];
 			break;
 		case GDT_Float64:
 			for( i = 0; i< iNum; ++i)				
- 				buf[i] = ((double *)buffer)[i];
+				buf[i] = fpu_error(((double *)buffer)[i])?rUNDEF:((double *)buffer)[i];
 			break;
 	};
 }
@@ -1270,10 +1273,10 @@ double GDALFormat::rValue(RowCol rc) const
 			rVal = buffer[0];
 			break;
 		case GDT_Float32:
-			rVal = ((float *)buffer)[0];
+			rVal = fpu_error(((float *)buffer)[0])?rUNDEF:((float *)buffer)[0];
 			break;
 		case GDT_Float64:
-			rVal = ((double *)buffer)[0];
+			rVal = fpu_error(((double *)buffer)[0])?rUNDEF:((double *)buffer)[0];
 			break;
 		default:
 			rVal = rUNDEF;
