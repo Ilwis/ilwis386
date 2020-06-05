@@ -144,13 +144,8 @@ bool HistogramRasterTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 		return rangeUsedX.fValid();
 	} else {
 		AnimationDrawer *adrw = dynamic_cast<AnimationDrawer *>(animationTool->getDrawer());
-		IlwisObjectPtr *ptr = adrw->getObject();
-		if ( IOTYPE(ptr->fnObj) == IlwisObject::iotMAPLIST) {
-			MapListPtr *mptr = (MapListPtr *)ptr;
-			rangeUsedX = mptr->getRange();
-			return rangeUsedX.fValid();
-		}
-
+		rangeUsedX = adrw->getStretchRangeReal();
+		return rangeUsedX.fValid();
 	}
 	return false;
 
