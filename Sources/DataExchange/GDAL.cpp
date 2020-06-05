@@ -188,6 +188,9 @@ GDALFormat::GDALFormat()
 	LoadMethods();
 	funcs.registerAll();
 	funcs.ogrRegAll();
+	String path = getEngine()->getContext()->sIlwDir();
+	String dataPath = path + "Resources\\gdal_data";
+	funcs.setConfigOption("GDAL_DATA", dataPath.c_str());
 }
 
 ForeignFormat *CreateQueryObjectGDAL() //create query object
@@ -474,6 +477,7 @@ void GDALFormat::LoadMethods() {
 				funcs.getGCPCount = (GDALGetGCPCountFunc)GetProcAddress(hm,"_GDALGetGCPCount@4");
 				funcs.getGCPProjection = (GDALGetGCPProjectionFunc)GetProcAddress(hm,"_GDALGetGCPProjection@4");
 				funcs.getGCPs = (GDALGetGCPsFunc)GetProcAddress(hm,"_GDALGetGCPs@4");
+				funcs.setConfigOption = (CPLSetConfigOptionFunc)GetProcAddress(hm,"_CPLSetConfigOption@8");
 
 				funcs.errorMsg = (CPLGetLastErrorFunc)GetProcAddress(hm, "_CPLGetLastErrorMsg@0");
 
@@ -529,7 +533,9 @@ void GDALFormat::Init()
 	LoadMethods();
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);
 	funcs.registerAll();
-
+	String path = getEngine()->getContext()->sIlwDir();
+	String dataPath = path + "Resources\\gdal_data";
+	funcs.setConfigOption("GDAL_DATA", dataPath.c_str());
 
 	//GDALAllRegister();
 	

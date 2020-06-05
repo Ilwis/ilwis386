@@ -70,6 +70,7 @@ typedef const char* (__stdcall *GDALGetMetadataItemFunc)(GDALMajorObjectH hObjec
 typedef int (__stdcall *GDALGetGCPCountFunc)(GDALDatasetH);
 typedef const char* (__stdcall *GDALGetGCPProjectionFunc)(GDALDatasetH);
 typedef const GDAL_GCP* (__stdcall *GDALGetGCPsFunc)(GDALDatasetH);
+typedef void(__stdcall *CPLSetConfigOptionFunc)(const char *pszEnvVar, const char *pszVal);
 
 typedef const char* (__stdcall *CPLGetLastErrorFunc)(void);
 
@@ -141,6 +142,7 @@ struct GDALCFunctions {
 	GDALGetGCPCountFunc getGCPCount;
 	GDALGetGCPProjectionFunc getGCPProjection;
 	GDALGetGCPsFunc getGCPs;
+	CPLSetConfigOptionFunc setConfigOption;
 
 	CPLGetLastErrorFunc errorMsg;
 
