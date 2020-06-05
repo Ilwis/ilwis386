@@ -54,9 +54,21 @@ void RasterDataDrawer::prepare(PreparationParameters *pp){
 				if (dm.fValid() && (dm->pdbit() || dm->pdbool()))
 					rrMinMax = RangeReal(1,2);
 				else if ( basemap->dm()->pdv()) {
-					rrMinMax = basemap->rrMinMax(BaseMapPtr::mmmCALCULATE); // not mmmSAMPLED here, to get a more accurate result, otherwise there's a high chance of artifacts since the sampling is only done on this one band
-					if (rrMinMax.rLo() > rrMinMax.rHi())
-						rrMinMax = basemap->vr()->rrMinMax();
+					if (mpl.fValid()) { // ColorComposite; the (total) rrMinMax is not used, but here we force the calculation of MinMax for all bands in the maplist
+						for (int i = 0; i < mpl->iSize(); ++i) {
+							RangeReal rrMinMaxMap = mpl->map(i)->rrMinMax(BaseMapPtr::mmmCALCULATE);
+							if (rrMinMaxMap.rLo() > rrMinMaxMap.rHi())
+								rrMinMaxMap = mpl->map(i)->vr()->rrMinMax();
+							if (i > 0)
+								rrMinMax += rrMinMaxMap;
+							else
+								rrMinMax = rrMinMaxMap;
+						}
+					} else {
+						rrMinMax = basemap->rrMinMax(BaseMapPtr::mmmCALCULATE); // not mmmSAMPLED here, to get a more accurate result, otherwise there's a high chance of artifacts since the sampling is only done on this one band
+						if (rrMinMax.rLo() > rrMinMax.rHi())
+							rrMinMax = basemap->vr()->rrMinMax();
+					}
 				} else {
 					if ( rsd->useAttributeColumn()) {
 						if (rsd->getAtttributeColumn()->dm()->pdv())
