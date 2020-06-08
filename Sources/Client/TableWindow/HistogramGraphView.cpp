@@ -57,6 +57,8 @@
 #include "Engine\Table\tblview.h"
 #include "Client\Mapwindow\InfoLine.h"
 #include "Headers\messages.h"
+#include "Headers\constant.h"
+
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -73,6 +75,7 @@ BEGIN_MESSAGE_MAP(HistogramGraphView, GraphPaneView)
   	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 HistogramGraphView::HistogramGraphView() : drawer(0), mcd(0), moveMode(false), tool(0), color(RGB(25,0,0)), spread(0.01)
@@ -183,7 +186,6 @@ double HistogramGraphView::getSpread() const{
 	return spread;
 }
 
-//void HistogramGraphView::setSpatialDrawer(SpatialDataDrawer *drw){
-//	drawer = drw;
-//}
-
+void HistogramGraphView::OnDestroy() {
+	AfxGetApp()->PostThreadMessage(ILW_REMOVEDATAWINDOW, (WPARAM)m_hWnd, 0);
+}

@@ -82,10 +82,11 @@ public:
 	void setSpread(double v);
 	double getSpread() const;
 	void setThresholdRange();
-	//void setSpatialDrawer(SpatialDataDrawer *drw);
+
 protected:
   LRESULT OnViewSettings(WPARAM wP, LPARAM lP);
   void setRasterSelection(CPoint point);
+  afx_msg void OnDestroy();
 	DECLARE_DYNCREATE(HistogramGraphView)
 	DECLARE_MESSAGE_MAP()
 
