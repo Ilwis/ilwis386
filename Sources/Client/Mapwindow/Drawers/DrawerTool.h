@@ -95,7 +95,7 @@ protected:
 
 class _export DisplayOptionsForm2 : public FormBaseDialog {
 public:
-	DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title,int style=fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON);
+	DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title,int style=fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON, bool resize = false);
 	int exec();
 protected:
 	void create();

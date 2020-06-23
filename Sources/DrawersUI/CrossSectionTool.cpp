@@ -320,7 +320,7 @@ int ChooseCrossSectionForm::exec() {
 
 //========================================================================
 CrossSectionGraphFrom::CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr, vector<IlwisObject>& sources, CrossSectionTool *t) :
-DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON)
+DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON,true)
 , tool(t)
 , yStretch(false)
 , iScaleMethod(MAP)
@@ -333,6 +333,7 @@ DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	v.push_back(FLVColumnInfo("Selected index", 90));
 	v.push_back(FLVColumnInfo("Value", 100));
 	graph = new CrossSectionGraphEntry(root, sources,dr->getRootDrawer()->getCoordinateSystem(),t);
+	addResizableFormEntry(graph);
 	rgStretch = new RadioGroup(root, "Scale", (int*)&iScaleMethod, true);
 	rgStretch->SetIndependentPos();
 	new RadioButton(rgStretch, "Map");
@@ -343,6 +344,7 @@ DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	cbStretch->SetCallBack((NotifyProc)&CrossSectionGraphFrom::stretchClicked);
 	cbStretch->Align(rgStretch, AL_AFTER);
 	FieldListView * flv = new FieldListView(root,v);
+	addResizableFormEntry(flv);
 	flv->Align(rgStretch, AL_UNDER);
 	graph->setListView(flv);
 	FieldGroup *fg = new FieldGroup(root,true);

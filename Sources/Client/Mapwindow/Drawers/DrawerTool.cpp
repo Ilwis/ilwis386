@@ -296,8 +296,8 @@ void DisplayOptionsForm::create() {
 }
 
 //--------------------------------
-DisplayOptionsForm2::DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title, int style) : 
-FormBaseDialog(par,title,style),
+DisplayOptionsForm2::DisplayOptionsForm2(ComplexDrawer *dr,CWnd *par, const String& title, int style, bool resize) :
+FormBaseDialog(par,title,style, resize ? WS_THICKFRAME : 0),
 view((LayerTreeView *)par),
 drw(dr),
 initial(true)

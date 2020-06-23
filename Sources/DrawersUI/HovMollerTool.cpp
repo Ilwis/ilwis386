@@ -358,11 +358,12 @@ int ChooseHovMollerForm::addSource(Event *ev) {
 
 //========================================================================
 HovMollerGraphFrom::HovMollerGraphFrom(CWnd *wPar, LayerDrawer *dr,HovMollerTool *t) :
-DisplayOptionsForm2(dr,wPar,TR("Hovmöller Diagram"),fbsBUTTONSUNDER | fbsNOCANCELBUTTON), graph(0), initial(true), tool(t)
+DisplayOptionsForm2(dr,wPar,TR("Hovmöller Diagram"),fbsBUTTONSUNDER | fbsNOCANCELBUTTON,true), graph(0), initial(true), tool(t)
 {
 	if ( t->source.getSource().fValid())
 		name = t->source.getSource()->fnObj.sFullPath();
 	graph = new HovMollerGraphEntry(root,t);
+	addResizableFormEntry(graph);
 	graph->SetIndependentPos();
 	fm = new FieldDataType(root,TR("MapList"),&name, ".mpl",true);
 	//fm->SetFieldWidth(100);

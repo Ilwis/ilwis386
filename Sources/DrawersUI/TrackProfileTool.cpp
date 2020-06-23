@@ -536,7 +536,7 @@ int ChooseTrackProfileForm::addSource(Event *ev) {
 
 //========================================================================
 TrackProfileGraphFrom::TrackProfileGraphFrom(CWnd *wPar, LayerDrawer *dr,TrackProfileTool *t) :
-DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON), graph(0), tool(t), yStretch(false), iScaleMethod(MAP)
+DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON,true), graph(0), tool(t), yStretch(false), iScaleMethod(MAP)
 {
 	vector<FLVColumnInfo> v;
 	v.push_back(FLVColumnInfo("Source", 220));
@@ -544,6 +544,7 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	v.push_back(FLVColumnInfo("Value range", 130, true));
 	v.push_back(FLVColumnInfo("Value", 100));
 	graph = new TrackProfileGraphEntry(root,t);
+	addResizableFormEntry(graph);
 	rgStretch = new RadioGroup(root, "Scale", (int*)&iScaleMethod, true);
 	rgStretch->SetIndependentPos();
 	new RadioButton(rgStretch, "Map");
@@ -554,6 +555,7 @@ DisplayOptionsForm2(dr,wPar,TR("Track Profile Graph"),fbsBUTTONSUNDER | fbsSHOWA
 	cbStretch->SetCallBack((NotifyProc)&TrackProfileGraphFrom::stretchClicked);
 	cbStretch->Align(rgStretch, AL_AFTER);
 	FieldListView *view = new FieldListView(root,v);
+	addResizableFormEntry(view);
 	view->Align(rgStretch, AL_UNDER);
 	graph->setListView(view);
 	FieldGroup *grbuttons = new FieldGroup(root);

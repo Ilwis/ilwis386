@@ -203,6 +203,8 @@ protected:
 	afx_msg void OnMeasureItem( int nIDCtl, LPMEASUREITEMSTRUCT mi );
 	afx_msg void OnSetFocus( CWnd* pOldWnd );
 	afx_msg void OnSysCommand( UINT nID, LPARAM lParam );
+	void addResizableFormEntry(FormEntry* fe);
+	void OnSize(UINT nType, int cx, int cy);
 	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	virtual void apply();
 	int iImg; // set in derived class to set icon
@@ -214,6 +216,21 @@ private:
 		short cClass[1];
 		short cCaption[1];
 	} dlgFormBase;
+
+	// all below is for the resizing option
+	bool AddControls();
+	bool AddControl(CWnd* pControl);
+	void updateControls(int cx, int cy);
+	void WidthOfResizableColumn(FormEntry * fe, short iColNr, short& iWidth);
+	void HeightOfResizableColumn(FormEntry * fe, short iColNr, short& iHeight);
+	FormEntry * FindFormEntry(FormEntry * fe, const CRect & rect, bool fStrict);
+
+	std::map<HWND,FormEntry*> m_controls;
+	CRect rectBevel;
+	std::map<CWnd*,CRect> rectButtons;
+	std::vector<FormEntry*> m_resizableFormEntries;
+	CSize m_szinitialSize;
+	bool  m_fResizable;
 
 	DECLARE_MESSAGE_MAP()
 };

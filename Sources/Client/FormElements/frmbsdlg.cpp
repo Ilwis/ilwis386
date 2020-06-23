@@ -56,6 +56,7 @@ BEGIN_MESSAGE_MAP(FormBaseDialog, CDialog)
 	ON_COMMAND(IDHELP, OnHelp)
 	ON_COMMAND(id_apply, apply)
 	ON_COMMAND(ID_HELP, OnHelp)
+	ON_WM_SIZE()
 	ON_MESSAGE(WM_COMMANDHELP, OnCommandHelp)
 END_MESSAGE_MAP()    
 
@@ -64,6 +65,7 @@ const unsigned long defaultStyle = WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_3DLOO
 
 FormBaseDialog::FormBaseDialog(CWnd* parent, const String& sTitle, bool fShowAlways, bool fMod, bool fHideOnOk)
 : FormBase(parent, sTitle, fShowAlways, fMod, fHideOnOk)
+, m_fResizable(false)
 {
 	iImg = 0;
 	DWORD style = defaultStyle | ( fModal() ? DS_MODALFRAME : 0);
@@ -75,6 +77,7 @@ FormBaseDialog::FormBaseDialog(CWnd* parent, const String& sTitle, bool fShowAlw
 
 FormBaseDialog::FormBaseDialog(CWnd* parent, const String& sTitle, int styl, DWORD extraWindowsStyles)
 : FormBase(parent, sTitle, styl)
+, m_fResizable((extraWindowsStyles & WS_THICKFRAME) != 0)
 {
 	iImg = 0;
 	DWORD style = defaultStyle |  ( fModal() ? DS_MODALFRAME : 0);
@@ -89,6 +92,7 @@ FormBaseDialog::FormBaseDialog(CWnd* parent, const String& sTitle, int styl, DWO
 
 FormBaseDialog::FormBaseDialog(CWnd* parent, const String& sTitle, ParmList *plDefault, bool fShowAlways, bool fMod, bool fHideOnOk)
 : FormBase(parent, sTitle, plDefault, fShowAlways, fMod, fHideOnOk)
+, m_fResizable(false)
 {
 	iImg = 0;
 	DWORD style = defaultStyle |  ( fModal() ? DS_MODALFRAME : 0);
@@ -140,6 +144,7 @@ bool FormBaseDialog::CreateDialogTemplate(CWnd* p, const String& sTitle, DWORD s
 BOOL FormBaseDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
+	m_szinitialSize = CSize(0,0);
 
 	HICON hIco = IlwWinApp()->ilSmall.ExtractIcon(iImg);
 	SetIcon(hIco,FALSE);
@@ -173,7 +178,7 @@ BOOL FormBaseDialog::OnInitDialog()
 		for (int i = 0; i < iCount; ++i) 
 		{
 			id = GetMenuItemID(SysMen->m_hMenu,iPos);
-			if (id == SC_MOVE || id == SC_CLOSE || ((fbs & fbsCancelHasCLOSETEXT) && (id == SC_MINIMIZE || id == SC_RESTORE))) // fbsCancelHasCLOSETEXT is from Geonetcast Toolbox
+			if (id == SC_MOVE || id == SC_CLOSE || (m_fResizable && (id == SC_SIZE))|| ((fbs & fbsCancelHasCLOSETEXT) && (id == SC_MINIMIZE || id == SC_RESTORE))) // fbsCancelHasCLOSETEXT is from Geonetcast Toolbox
 				iPos += 1;
 			else
 				DeleteMenu(SysMen->m_hMenu, iPos, MF_BYPOSITION);
@@ -513,6 +518,8 @@ void FormBaseDialog::CreateDefaultPositions()
 		const CWnd* wTop = &wndTop;
 		if (fbs & fbsTOPMOST)
 			wTop = &wndTopMost;
+		if (m_fResizable)
+			dimForm += CSize(10,10); // THICKFRAME
 		SetWindowPos(wTop, pnt.x, pnt.y, dimForm.width() + 7 , dimForm.height(), SWP_SHOWWINDOW);
 		SetForegroundWindow();
 		SendMessage(WM_SETREDRAW, 1, 0);
@@ -538,6 +545,8 @@ void FormBaseDialog::CreateDefaultPositions()
 		shutdown();
 		return;
 	}
+	if ( m_fResizable )
+		AddControls();
 }
 
 void FormBaseDialog::OnHelp()
@@ -591,4 +600,171 @@ LRESULT FormBaseDialog::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 void FormBaseDialog::apply() {
+}
+
+void FormBaseDialog::addResizableFormEntry(FormEntry * fe) {
+	m_resizableFormEntries.push_back(fe);
+}
+
+void FormBaseDialog::OnSize(UINT nType, int cx, int cy)
+{
+	CDialog::OnSize(nType, cx, cy);
+	if (!m_fResizable)
+		return;
+	if (!root || !root->frm()->wnd())
+		return;
+
+	if ( m_szinitialSize == CSize(0,0) ) {
+		CRect rect;
+		GetClientRect(&rect);
+		m_szinitialSize = CSize(rect.Width(), rect.Height());
+	} else if ( (nType == SIZE_RESTORED || nType == SIZE_MAXIMIZED) && cx > 0 && cy > 0 ) {
+		CRect rect;
+		GetClientRect(&rect);
+		updateControls(rect.Width(), rect.Height());
+	}
+}
+
+void FormBaseDialog::WidthOfResizableColumn(FormEntry * fe, short iColNr, short& iWidth)
+// gets the maximum of the minimum width values of each positioner in column iColNr, of the resizable FormElements
+// then check it's child positioners
+{
+    if ((fe->psn->iCol == iColNr) && (fe->psn->iMinWidth > iWidth) && (find(m_resizableFormEntries.begin(), m_resizableFormEntries.end(), fe) != m_resizableFormEntries.end())) 
+        iWidth = fe->psn->iMinWidth;
+	for (short i = 0; i < fe->childlist().iSize(); i++)
+		WidthOfResizableColumn(fe->childlist()[i], iColNr, iWidth);
+}
+
+void FormBaseDialog::HeightOfResizableColumn(FormEntry * fe, short iColNr, short& iHeight)
+// gets the maximum of the minimum height values of each positioner in column iColNr, of the resizable FormElements
+// then check it's child positioners
+{
+    if ((fe->psn->iCol == iColNr) && (find(m_resizableFormEntries.begin(), m_resizableFormEntries.end(), fe) != m_resizableFormEntries.end())) 
+        iHeight += fe->psn->iMinHeight;
+	for (short i = 0; i < fe->childlist().iSize(); i++)
+		HeightOfResizableColumn(fe->childlist()[i], iColNr, iHeight);
+}
+
+void FormBaseDialog::updateControls(int cx, int cy)
+{
+	if ( m_controls.size() == 0 )
+		return;
+	if ( !root || !root->frm()->wnd() )
+		return;
+	if ( m_szinitialSize.cx <= 0 || m_szinitialSize.cy <= 0 )
+		return;
+
+	int iTotalXScalable = 0;
+	int iTotalYScalable = 0;
+
+	for (short i=0; i<20; i++) {
+		short iWidth = 0;
+		short iHeight = 0;
+		WidthOfResizableColumn(root, i, iWidth);
+		HeightOfResizableColumn(root, i, iHeight);
+		iTotalXScalable += iWidth;
+		iTotalYScalable = max(iTotalYScalable,iHeight);
+	}
+
+	for (std::vector<FormEntry*>::iterator it = m_resizableFormEntries.begin(); it != m_resizableFormEntries.end(); ++it) {
+		(*it)->psn->iWidth = (*it)->psn->iMinWidth + (cx - m_szinitialSize.cx) * (*it)->psn->iMinWidth / iTotalXScalable;
+		(*it)->psn->iHeight = (*it)->psn->iMinHeight + (cy - m_szinitialSize.cy) * (*it)->psn->iMinHeight / iTotalYScalable;
+	}
+
+	root->psn->SetPos();
+	UINT flags = SWP_NOZORDER | SWP_NOACTIVATE;
+	for (std::map<HWND,FormEntry*>::iterator it = m_controls.begin(); it != m_controls.end(); ++it) {
+		HWND hwnd = it->first;
+		FormEntry* fe = it->second;
+		if (find(m_resizableFormEntries.begin(), m_resizableFormEntries.end(), fe) != m_resizableFormEntries.end()) {
+			::SetWindowPos(hwnd, 0, fe->psn->iPosX, fe->psn->iPosY, fe->psn->iWidth, fe->psn->iHeight, flags);
+		} else if (dynamic_cast<StaticTextSimple*>(fe) != 0) {
+			zDimension dimTxt( fe->psn->iWidth, fe->psn->iMinHeight );
+			CPoint pntTxt(fe->psn->iPosX, fe->psn->iPosY);
+			pntTxt.y += (fe->psn->iHeight - dimTxt.height()) / 2; // center vertically
+			::SetWindowPos(hwnd, 0, pntTxt.x, pntTxt.y, dimTxt.width(), dimTxt.height(), flags);
+		} else {
+			CRect rect;
+			::GetWindowRect(hwnd,&rect);
+			::SetWindowPos(hwnd, 0, fe->psn->iPosX, fe->psn->iPosY, rect.Width(), rect.Height(), flags);
+		}
+	}
+
+	bool fBevel = (0 == (fbs & fbsNOBEVEL));
+	if (fBevel) {
+		CRect rect = rectBevel;
+		rect.right = rectBevel.right + cx - m_szinitialSize.cx;
+		rect.bottom = rectBevel.bottom + cy - m_szinitialSize.cy;
+		::SetWindowPos(bevel.m_hWnd, 0, rect.left, rect.top, rect.Width(), rect.Height(), flags);
+	}
+	for (std::map<CWnd*,CRect>::iterator it = rectButtons.begin(); it != rectButtons.end(); ++it) {
+		CRect rect = it->second;
+		rect.left += cx - m_szinitialSize.cx;
+		rect.right += cx - m_szinitialSize.cx;
+		rect.top += cy - m_szinitialSize.cy;
+		rect.bottom += cy - m_szinitialSize.cy;
+		::SetWindowPos(it->first->m_hWnd, 0, rect.left, rect.top, rect.Width(), rect.Height(), flags);
+	}
+
+	InvalidateRect(0, true);
+}
+
+bool FormBaseDialog::AddControls()
+{
+	if (!root || !root->frm()->wnd())
+		return false;
+	CWnd* cwnd = root->frm()->wnd();
+	CWnd* pChildWnd = cwnd->GetWindow(GW_CHILD);
+	while( pChildWnd != NULL && ::IsWindow(pChildWnd->m_hWnd) ) {
+		AddControl(pChildWnd);
+		pChildWnd = pChildWnd->GetWindow(GW_HWNDNEXT);
+	}
+	return true;
+}
+
+FormEntry * FormBaseDialog::FindFormEntry(FormEntry * fe, const CRect & rect, bool fStrict) {
+	if (rect.left == fe->psn->iPosX && (fStrict ? (rect.top == fe->psn->iPosY) : (abs(rect.top - fe->psn->iPosY) < 10)) && (rect.Width() == fe->psn->iWidth || rect.Width() == fe->psn->iMinWidth))
+		return fe;
+	else {
+		Array<FormEntry*>& children = fe->childlist();
+		for (int i = 0; i < children.size(); ++i) {
+			FormEntry * feChild = FindFormEntry(children[i], rect, fStrict);
+			if (feChild != 0)
+				return feChild;
+		}
+	}
+	return 0;
+}
+
+bool FormBaseDialog::AddControl(CWnd* pControl)
+{
+	ASSERT( pControl != NULL );
+
+	CWnd* cwnd = root->frm()->wnd();
+	if (!cwnd)
+		return false;
+
+	if ( !::IsWindow(pControl->m_hWnd) )
+		return false;
+
+	CRect rect;
+	pControl->GetWindowRect(&rect);
+	cwnd->ScreenToClient(&rect);
+
+	map<HWND,FormEntry*>::iterator result = m_controls.find(pControl->m_hWnd);
+	if ( result == m_controls.end() ) {
+		if (pControl == &bevel) {
+			rectBevel = rect;
+		} else if (pControl == &butOK || pControl == &butCancel || pControl == &butDefine || pControl == &butHelp || pControl == &butShow) {
+			rectButtons[pControl] = rect;
+		} else {
+			FormEntry * fe = FindFormEntry(root,rect,true);
+			if (fe == 0)
+				fe = FindFormEntry(root,rect,false); // StaticText is repositioned to have the text centered vertically
+			if (fe != 0)
+				m_controls.insert(std::pair<HWND,FormEntry*>(pControl->m_hWnd,fe));
+		}
+	}
+
+	return true;
 }
