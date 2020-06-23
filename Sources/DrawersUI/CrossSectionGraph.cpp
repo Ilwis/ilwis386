@@ -703,7 +703,7 @@ RangeReal CrossSectionGraphEntry::getRange(long i) {
 			if ( ranges.size() <= i) {
 				MapList mpl(obj->fnObj);
 				RangeReal rr = getRange(mpl);
-				DomainValue *pdv =  mpl[i]->dm()->pdv();
+				//DomainValue *pdv =  mpl[i]->dm()->pdv();
 			/*	if ( pdv ) {
 					if ( !pdv->fSystemObject()) {
 						RangeReal rr1 = pdv->rrMinMax();
