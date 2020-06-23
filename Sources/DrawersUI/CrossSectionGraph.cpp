@@ -803,7 +803,8 @@ void CrossSectionGraphEntry::onContextMenu(CWnd* pWnd, CPoint point) {
 						listview->RemoveData(j);
 					sources.erase(sources.begin() + sourceNr);
 					ranges.erase(ranges.begin() + sourceNr);
-					overruleRanges.erase(overruleRanges.begin() + sourceNr);
+					if (sourceNr < overruleRanges.size())
+						overruleRanges.erase(overruleRanges.begin() + sourceNr);
 				}
 				if (crossSectionGraph)
 					crossSectionGraph->recomputeValues();
