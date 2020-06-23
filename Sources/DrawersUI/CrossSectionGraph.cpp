@@ -702,7 +702,7 @@ RangeReal CrossSectionGraphEntry::getRange(long i) {
 		if ( IOTYPE(obj->fnObj) == IlwisObject::iotMAPLIST) {
 			if ( ranges.size() <= i) {
 				MapList mpl(obj->fnObj);
-				RangeReal rr = mpl->getRange();
+				RangeReal rr = getRange(mpl);
 				DomainValue *pdv =  mpl[i]->dm()->pdv();
 			/*	if ( pdv ) {
 					if ( !pdv->fSystemObject()) {
@@ -722,6 +722,27 @@ RangeReal CrossSectionGraphEntry::getRange(long i) {
 		}
 	}
 	return ranges[i];
+}
+
+const RangeReal CrossSectionGraphEntry::getRange(const MapList& mpl) const {
+	RangeReal rrMinMax (0, 255);
+	if (mpl.fValid()) {
+		Domain dm = mpl->dm();
+		if (dm.fValid() && (dm->pdbit() || dm->pdbool()))
+			rrMinMax = RangeReal(1,2);
+		else if ( dm->pdv()) {
+			for (int i = 0; i < mpl->iSize(); ++i) {
+				RangeReal rrMinMaxMap = mpl->map(i)->rrMinMax(BaseMapPtr::mmmCALCULATE);
+				if (rrMinMaxMap.rLo() > rrMinMaxMap.rHi())
+					rrMinMaxMap = mpl->map(i)->vr()->rrMinMax();
+				if (i > 0)
+					rrMinMax += rrMinMaxMap;
+				else
+					rrMinMax = rrMinMaxMap;
+			}
+		}
+	}
+	return rrMinMax;
 }
 
 void CrossSectionGraphEntry::setOverruleRange(int row, int col, const String& value) {

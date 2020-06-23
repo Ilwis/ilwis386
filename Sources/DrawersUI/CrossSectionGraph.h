@@ -61,6 +61,7 @@ public:
 
 private:
 	const DomainValueRangeStruct & getDvrs(int i) const;
+	const RangeReal getRange(const MapList& mpl) const;
 	bool isUnique(const FileName& fn);
 	vector<IlwisObject>& sources;
 	vector<Coord> crdSelect;
