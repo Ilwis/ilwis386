@@ -2,6 +2,7 @@
 
 ILWIS::NewDrawer *createAnnotationValueLegendDrawer(ILWIS::DrawerParameters *parms);
 ILWIS::NewDrawer *createAnnotationClassLegendDrawer(ILWIS::DrawerParameters *parms);
+ILWIS::NewDrawer *createAnnotationColorLegendDrawer(ILWIS::DrawerParameters *parms);
 ILWIS::NewDrawer *createAnnotationBorderDrawer(ILWIS::DrawerParameters *parms);
 ILWIS::NewDrawer *createAnnotationDrawers(ILWIS::DrawerParameters *parms);
 ILWIS::NewDrawer *createAnnotationScaleBarDrawer(ILWIS::DrawerParameters *parms);
@@ -135,6 +136,25 @@ protected:
 
 	double rstep;
 	RangeReal vrr;
+};
+
+class _export AnnotationColorLegendDrawer : public AnnotationLegendDrawer{
+public:
+	AnnotationColorLegendDrawer(DrawerParameters *parms);
+	double getOffsetAngle() const;
+	void setOffsetAngle(double rAngle);
+	bool getClockwise() const;
+	void setClockwise(bool clockwise);
+	std::vector<String> getItems() const;
+	void setItems(std::vector<String> & items);
+protected:
+	bool draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const;
+	void prepare(PreparationParameters *pp);
+	String store(const FileName& fnView, const String& section) const;
+	void load(const FileName& fnView, const String& section);
+	std::vector<String> values;
+	double rOffsetAngle;
+	bool fClockwise;
 };
 
 class _export AnnotationBorderDrawer : public AnnotationDrawer {

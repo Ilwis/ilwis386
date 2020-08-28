@@ -267,21 +267,22 @@ bool AnnotationLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cb
 
 	CoordBounds cbInner = cbArea;
 	CoordBounds cbFar;
+	double h = 0;
 
 	if ( includeName) {
 		if (is3D) // texts and lines at level 2
 			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 2) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 2) * 0.0005);
 		TextDrawer *txtdr = (TextDrawer *)texts->getDrawer(101,ComplexDrawer::dtPOST);
 		if ( txtdr) {
-			double h = txtdr->getHeight();
+			h = txtdr->getHeight();
 			txtdr->setCoord(Coord(cbInner.MinX(),cbInner.MaxY() + h * 0.8, 0));
 			cbFar += txtdr->getTextExtent();
 		}
 	}
 	CoordBounds cbBoxed = cbInner;
 	if ( !cbFar.fUndef()) {
-		cbBoxed += Coord(cbFar.width(), cbFar.height());
-		cbBoxed.MaxY() += cbFar.height() * 2;
+		cbBoxed.MaxX() = cbBoxed.MinX() + max(cbBoxed.width(), cbFar.width());
+		cbBoxed.MaxY() += h * 0.8 + cbFar.height();
 	}
 	cbBoxed *= 1.05;
 	if ( useBackground) {
@@ -1029,7 +1030,208 @@ String AnnotationValueLegendDrawer::store(const FileName& fnView, const String& 
 
 
 }
+
+//------------------------------------------------------
+ILWIS::NewDrawer *createAnnotationColorLegendDrawer(DrawerParameters *parms) {
+	return new AnnotationColorLegendDrawer(parms);
+}
+
+AnnotationColorLegendDrawer::AnnotationColorLegendDrawer(DrawerParameters *parms)
+: AnnotationLegendDrawer(parms,"AnnotationColorLegendDrawer")
+, rOffsetAngle(0)
+, fClockwise(true)
+{
+	values.push_back("Red");
+	values.push_back("Green");
+	values.push_back("Blue");
+}
+
+void AnnotationColorLegendDrawer::prepare(PreparationParameters *pp) {
+	AnnotationLegendDrawer::prepare(pp);
+	cbBox.MaxX() = cbBox.MinX() + 1.0 / 3.0;
+	cbBox.MaxY() = cbBox.MinY() + 1.0 / 3.0;
+	if ( (pp->type & NewDrawer::ptGEOMETRY) || (pp->type & NewDrawer::ptRESTORE)) {
+		while (texts->getDrawerCount() < 3) {
+			DrawerParameters dp(getRootDrawer(), texts);
+			TextDrawer *txt = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dp);
+			txt->setActive(false);
+			texts->addDrawer(txt);
+		}
+	}
+	if ( pp->type & NewDrawer::ptOFFSCREENSTART || pp->type & NewDrawer::ptOFFSCREENEND) {
+		texts->prepare(pp);
+	}
+}
+
+bool AnnotationColorLegendDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) const {
+	if ( !isActive())
+		return false;
+
+	bool is3D = getRootDrawer()->is3D();
+
+	CoordBounds cb = getRootDrawer()->getCoordBoundsZoomExt();
+	CoordBounds cbMap = getRootDrawer()->getMapCoordBoundsExt();
+	if (cbMap.MinX() > cb.MinX())
+		cb.MinX() = cbMap.MinX();
+	if (cbMap.MaxX() < cb.MaxX())
+		cb.MaxX() = cbMap.MaxX();
+	if (cbMap.MinY() > cb.MinY())
+		cb.MinY() = cbMap.MinY();
+	if (cbMap.MaxY() < cb.MaxY())
+		cb.MaxY() = cbMap.MaxY();
+
+	double frameWidth = cbBox.width() * cb.height();
+	double frameHeight = cbBox.height() * cb.height();	
+
+	CoordBounds cbBoxRender (Coord(cb.cMin.x + cb.width() * cbBox.cMin.x, cb.cMin.y + cb.height() * cbBox.cMin.y),
+		Coord(cb.cMin.x + cb.width() * cbBox.MinX() + frameWidth, cb.cMin.y + cb.height() * cbBox.MinY() + frameHeight));
+
+	glPushMatrix();
+	glTranslated(cbBoxRender.MinX(), cbBoxRender.MinY(), 0);
+	glScaled(scale, scale, 1);
+
+	double w = cbBoxRender.width();
+	CoordBounds cbInner = CoordBounds(Coord(0,0), Coord(cbBoxRender.width(), cbBoxRender.height()));
+
+	Coord middle = cbInner.middle();
+	double radTxts = cbInner.height() / 2.0;
+	double radPnts = radTxts / 1.3; // text at distance from points
+	cbInner = CoordBounds(); // reset; let corner texts determine the bounds
+	for (int i = 0; i < 3; ++i) {
+		double f = rOffsetAngle * M_PI / 180.0 + (fClockwise ? 1.0 : -1.0) * (double)i * 2.0 * M_PI / 3.0;
+		TextDrawer *txt = (TextDrawer *)texts->getDrawer(i);
+		txt->setText(values[i]);
+		CoordBounds cbTxt = txt->getTextExtent();
+		cbInner += CoordBounds(middle.x + radTxts * sin(f) - cbTxt.width() / 2.0, middle.y + radTxts * cos(f) - 1.5 * cbTxt.height() / 2.0, middle.x + radTxts * sin(f) + cbTxt.width() / 2.0, middle.y + radTxts * cos(f) + 1.5 * cbTxt.height() / 2.0);
+	}
+	Coord cMin = cbInner.cMin;
+	cbInner.MinX() -= cMin.x;
+	cbInner.MinY() -= cMin.y;
+	cbInner.MaxX() -= cMin.x;
+	cbInner.MaxY() -= cMin.y;
+	middle -= cMin;
+	for (int i = 0; i < 3; ++i) {
+		double f = rOffsetAngle * M_PI / 180.0 + (fClockwise ? 1.0 : -1.0) * (double)i * 2.0 * M_PI / 3.0;
+		TextDrawer *txt = (TextDrawer *)texts->getDrawer(i);
+		CoordBounds cbTxt = txt->getTextExtent();
+		Coord crdTxt (middle.x + radTxts * sin(f) - cbTxt.width() / 2.0, middle.y + radTxts * cos(f) - cbTxt.height() / 2.0, 0);
+		txt->setCoord(crdTxt);
+		txt->setActive(true);
+	}
+
+	AnnotationLegendDrawer::draw(drawLoop, cbInner);
+	drawPreDrawers(drawLoop, cbArea);
+
+	LayerDrawer *ldr = dataDrawer->isSet() ? 
+		dynamic_cast<LayerDrawer *>(dataDrawer->getDrawer(0)) : 
+		dynamic_cast<LayerDrawer *>(dataDrawer);
+
+	double alpha = ldr->getAlpha();
+
+	if ((drawLoop == drl2D) || (drawLoop == drl3DOPAQUE && alpha == 1.0) || (drawLoop == drl3DTRANSPARENT && alpha != 1.0)) {
+		if (is3D) // colored legend elements at level 1
+			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 1) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 1) * 0.0005);
+		//DomainValueRangeStruct dvs;
+		//SpatialDataDrawer *spdr = dataDrawer->isSet() ? 
+		//	static_cast<SpatialDataDrawer *>(dataDrawer) : 
+		//	static_cast<SpatialDataDrawer *>(dataDrawer->getParentDrawer());
+
+		if (alpha != 1.0) {
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+		}
+		glBegin(GL_POLYGON);
+		for (int i = 0; i <= 3; ++i) {
+			double f = rOffsetAngle * M_PI / 180.0 + (fClockwise ? 1.0 : -1.0) * (double)i * 2.0 * M_PI / 3.0;
+			glColor4f(i%3==0?1:0,i%3==1?1:0,i%3==2?1:0,alpha);
+			glVertex3d(middle.x + radPnts * sin(f), middle.y + radPnts * cos(f), 0); // sin, cos: clockwise
+		}
+		glEnd();
+		glColor4f(0,0,0,alpha);
+		glBegin(GL_LINE_STRIP);
+		for (int i = 0; i <= 3; ++i) {
+			double f = rOffsetAngle * M_PI / 180.0 + (fClockwise ? 1.0 : -1.0) * (double)i * 2.0 * M_PI / 3.0;
+			glVertex3d(middle.x + radPnts * sin(f), middle.y + radPnts * cos(f), 0);
+		}
+		glEnd();
+		if (alpha != 1.0)
+			glDisable(GL_BLEND);
+		if (is3D) // texts and lines at level 2
+			glDepthRange(0.01 - (getRootDrawer()->getZIndex() + 2) * 0.0005, 1.0 - (getRootDrawer()->getZIndex() + 2) * 0.0005);
+		glColor4f(0,0, 0, alpha );
+		/*
+		glBegin(GL_LINE_STRIP);
+		Coordinate c(cbInner.MinX(), cbInner.MinY());
+		glVertex3d( c.x, c.y, 0);
+		c = Coordinate(cbInner.MinX(), cbInner.MaxY());
+		glVertex3d( c.x, c.y, 0);
+		c = Coordinate(cbInner.MaxX(), cbInner.MaxY());
+		glVertex3d( c.x, c.y, 0);
+		c = Coordinate(cbInner.MaxX(), cbInner.MinY());
+		glVertex3d( c.x, c.y, 0);
+		c = Coordinate(cbInner.MinX(), cbInner.MinY());
+		glVertex3d( c.x, c.y, 0);
+		glEnd();
+		*/
+	}
+
+	drawPostDrawers(drawLoop, cbArea); // the text elements
+	glPopMatrix();
+	if (is3D) // reset to level 0
+		glDepthRange(0.01 - getRootDrawer()->getZIndex() * 0.0005, 1.0 - getRootDrawer()->getZIndex() * 0.0005);
+
+	getRootDrawer()->setZIndex(2 + getRootDrawer()->getZIndex()); // add two levels that this legend used
+
+	return true;
+}
+
+void AnnotationColorLegendDrawer::load(const FileName& fnView, const String& section) {
+	String currentSection = section;
+	AnnotationLegendDrawer::load(fnView, currentSection);
+	ObjectInfo::ReadElement(currentSection.c_str(),"OffsetAngle",fnView, rOffsetAngle);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Clockwise",fnView, fClockwise);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Item1",fnView, values[0]);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Item2",fnView, values[1]);
+	ObjectInfo::ReadElement(currentSection.c_str(),"Item3",fnView, values[2]);
+}
+
+String AnnotationColorLegendDrawer::store(const FileName& fnView, const String& section) const {
+	String currentSection = section + ":AnnotationColorLegend";
+	AnnotationLegendDrawer::store(fnView, currentSection);
+	ObjectInfo::WriteElement(currentSection.c_str(),"OffsetAngle",fnView, rOffsetAngle);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Clockwise",fnView, fClockwise);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Item1",fnView, values[0]);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Item2",fnView, values[1]);
+	ObjectInfo::WriteElement(currentSection.c_str(),"Item3",fnView, values[2]);
+	return currentSection;
+}
+
+double AnnotationColorLegendDrawer::getOffsetAngle() const {
+	return rOffsetAngle;
+}
+
+void AnnotationColorLegendDrawer::setOffsetAngle(double rAngle) {
+	rOffsetAngle = rAngle;
+}
+
+bool AnnotationColorLegendDrawer::getClockwise() const {
+	return fClockwise;
+}
+
+void AnnotationColorLegendDrawer::setClockwise(bool clockwise) {
+	fClockwise = clockwise;
+}
+
+std::vector<String> AnnotationColorLegendDrawer::getItems() const {
+	return values;
+}
+
+void AnnotationColorLegendDrawer::setItems(std::vector<String> & items) {
+	values = items;
+}
+
 //----------------------------------------------------------
+
 ILWIS::NewDrawer *createAnnotationBorderDrawer(DrawerParameters *parms) {
 	return new AnnotationBorderDrawer(parms);
 }

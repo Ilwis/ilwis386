@@ -29,7 +29,7 @@ namespace ILWIS {
 
 	class LegendPosition : public DisplayOptionsForm2 {
 		public:
-		LegendPosition(CWnd *wPar, AnnotationLegendDrawer *dr);
+		LegendPosition(CWnd *wPar, AnnotationLegendDrawer *dr, ComplexDrawer *cdrw);
 		//void apply(); 
 	private:
 		int setPosition(Event *ev) ;
@@ -68,6 +68,15 @@ namespace ILWIS {
 		double rmin,rmax;
 		double rstep;
 		FieldReal *fstep, *fmax, *fmin;
+
+		double angle;
+		bool clockwise;
+		std::vector<String> items;
+		FieldReal * frangle;
+		CheckBox * cbclockwise;
+		FieldString * fsred;
+		FieldString * fsgreen;
+		FieldString * fsblue;
 	};
 
 }

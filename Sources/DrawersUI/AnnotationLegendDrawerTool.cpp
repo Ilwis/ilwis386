@@ -24,6 +24,8 @@
 #include "Drawers\AnnotationDrawers.h"
 #include "DrawersUI\AnnotationLegendDrawerTool.h"
 #include "DrawersUI\AnnotationDrawerTool.h"
+#include "Drawers\RasterLayerDrawer.h"
+#include "Drawers\ColorCompositeDrawer.h"
 
 using namespace ILWIS;
 
@@ -99,7 +101,7 @@ String AnnotationLegendDrawerTool::getMenuString() const {
 
 void AnnotationLegendDrawerTool::setPosition() {
 	if ( legend)
-		new LegendPosition(tree,legend);
+		new LegendPosition(tree,legend,(ComplexDrawer *)drawer);
 }
 
 void AnnotationLegendDrawerTool::setAppearance() {
@@ -144,11 +146,12 @@ void AnnotationLegendDrawerTool::makeActive(void *v, HTREEITEM ) {
 				dm = sdr->useAttributeTable() ? sdr->getAtttributeColumn()->dm() :  sdr->getBaseMap()->dm();
 			}
 			ILWIS::DrawerParameters dp(drawer->getRootDrawer(), drawer);
-			if (  dm->pdv())
+			if (  dm->pdcol() || dynamic_cast<ColorCompositeDrawer *>(drawer) != 0)
+				legend = (AnnotationLegendDrawer *)NewDrawer::getDrawer("AnnotationColorLegendDrawer","ilwis38",&dp);
+			else if (  dm->pdv())
 				legend = (AnnotationLegendDrawer *)NewDrawer::getDrawer("AnnotationValueLegendDrawer","ilwis38",&dp);
-			else if (  dm->pdc()) {
+			else if (  dm->pdc())
 				legend = (AnnotationLegendDrawer *)NewDrawer::getDrawer("AnnotationClassLegendDrawer","ilwis38",&dp);
-			}
 			if ( legend) {
 				legend->prepare(&pp);
 				ComplexDrawer *annotations = (ComplexDrawer *)(drawer->getRootDrawer()->getDrawer("AnnotationDrawers"));
@@ -164,7 +167,7 @@ void AnnotationLegendDrawerTool::makeActive(void *v, HTREEITEM ) {
 }
 
 //--------------------------------------------------------
-LegendPosition::LegendPosition(CWnd *wPar, AnnotationLegendDrawer *dr) : 
+LegendPosition::LegendPosition(CWnd *wPar, AnnotationLegendDrawer *dr, ComplexDrawer *lyr) : 
 	DisplayOptionsForm2(dr,wPar,TR("Position of Legend")), rg(0), fiColumns(0)
 {
 	orientation = dr->getOrientation() ? 1 : 0;
@@ -179,12 +182,13 @@ LegendPosition::LegendPosition(CWnd *wPar, AnnotationLegendDrawer *dr) :
 	sliderH->setContinuous(true);
 	sliderV->SetCallBack((NotifyProc)&LegendPosition::setPosition);
 	sliderV->setContinuous(true);
-	if ( dr->getDomain()->pdv()) {
+	if ( dr->getDomain()->pdcol() || dynamic_cast<ColorCompositeDrawer *>(lyr) != 0) {
+	} else if ( dr->getDomain()->pdv()) {
 		rg = new RadioGroup(root,TR("Orientation"),&orientation,true);
 		new RadioButton(rg,TR("Horizontal"));
 		new RadioButton(rg,TR("Vertical"));
 		rg->SetCallBack((NotifyProc)&LegendPosition::setOrientation);
-	} else {
+	} else if (dr->getDomain()->pdc()) {
 		fiColumns = new FieldInt(root,TR("Number of Columns"),&cols);
 		fiColumns->SetCallBack((NotifyProc)&LegendPosition::setPosition);
 	}
@@ -232,7 +236,7 @@ int LegendPosition::setPosition(Event *ev) {
 
 //-------------------------------------------------------------------------------
 LegendAppearance::LegendAppearance(CWnd *wPar, AnnotationLegendDrawer *dr, ComplexDrawer *lyr) : 
-DisplayOptionsForm(dr,wPar,TR("Appearance of Legend")) , layer(lyr), fview(0),fmin(0), fmax(0), fstep(0)
+DisplayOptionsForm(dr,wPar,TR("Appearance of Legend")) , layer(lyr), fview(0),fmin(0), fmax(0), fstep(0), frangle(0), cbclockwise(0), fsred(0), fsgreen(0), fsblue(0)
 {
 	useBgColor = dr->getUseBackBackground();
 	bgColor = dr->getBackgroundColor();
@@ -249,13 +253,24 @@ DisplayOptionsForm(dr,wPar,TR("Appearance of Legend")) , layer(lyr), fview(0),fm
 	fldScale =  new FieldReal(root,TR("Scale"),&scale,ValueRange(RangeReal(0.1,10.),0.1));
 	fontScale =  new FieldReal(root,TR("Font Scale"),&fscale,ValueRange(RangeReal(0.1,10.),0.1));
 	fldTitle = new FieldString(root,TR("Title"), &title);
-	if ( dr->getDomain()->pdc()) {
+	if ( dr->getDomain()->pdcol() || dynamic_cast<ColorCompositeDrawer *>(lyr) != 0) {
+		AnnotationColorLegendDrawer * cdr = (AnnotationColorLegendDrawer *)dr;
+		angle = cdr->getOffsetAngle();
+		clockwise = cdr->getClockwise();
+		items = cdr->getItems();
+		frangle = new FieldReal(root,TR("Rotation"),&angle,ValueRange(RangeReal(0.0,360.0),0.1));
+		cbclockwise = new CheckBox(root, "Clockwise", &clockwise);
+		new StaticText(root, TR("Labels"));
+		fsred = new FieldString(root, TR("Red"), &items[0]);
+		fsgreen = new FieldString(root, TR("Green"), &items[1]);
+		fsblue = new FieldString(root, TR("Blue"), &items[2]);
+	} else if ( dr->getDomain()->pdc()) {
 		vector<FLVColumnInfo> cols;
 		StaticText *st = new StaticText(root,TR("Active classes"));
 		cols.push_back(FLVColumnInfo("Name", 150));
 		fview = new FieldListView(root,cols,LVS_EX_GRIDLINES);
 		fview->Align(st, AL_AFTER);
-	} else {
+	} else if (dr->getDomain()->pdv()) {
 		SpatialDataDrawer *mapDrawer = dynamic_cast<SpatialDataDrawer *>(layer); // case animation drawer
 		if ( !mapDrawer)
 			mapDrawer = dynamic_cast<SpatialDataDrawer *>(layer->getParentDrawer());
@@ -312,10 +327,16 @@ void LegendAppearance::apply() {
 	if ( fview){
 		fview->StoreData();
 		fview->getSelectedRowNumbers(rows);
-	} else {
+	} else if (fstep){
 		fstep->StoreData();
 		fmax->StoreData();
 		fmin->StoreData();
+	} else if (frangle){
+		frangle->StoreData();
+		cbclockwise->StoreData();
+		fsred->StoreData();
+		fsgreen->StoreData();
+		fsblue->StoreData();
 	}
 	cbBoundary->StoreData();
 
@@ -326,7 +347,12 @@ void LegendAppearance::apply() {
 	andrw->setScale(scale);
 	andrw->setTitle(title);
 	andrw->setFontScale(fscale);
-	if ( andrw->getDomain()->pdc()) {
+	if ( andrw->getDomain()->pdcol() || dynamic_cast<ColorCompositeDrawer *>(layer) != 0) {
+		AnnotationColorLegendDrawer * cdr = (AnnotationColorLegendDrawer *)drw;
+		cdr->setOffsetAngle(angle);
+		cdr->setClockwise(clockwise);
+		cdr->setItems(items);
+	} else if ( andrw->getDomain()->pdc()) {
 		vector<int> rws;
 		for(int i=0; i < rows.size(); ++i){
 			long iRaw = andrw->getDomain()->pdc()->iKey(rows[i] + 1); // +1 because raws start at 1, not a 0;
@@ -334,7 +360,7 @@ void LegendAppearance::apply() {
 			rws.push_back(iRaw);	
 		}
 		((AnnotationClassLegendDrawer *)andrw)->setActiveClasses(rws);
-	} else {
+	} else if (andrw->getDomain()->pdv()) {
 		AnnotationValueLegendDrawer * vdr = (AnnotationValueLegendDrawer *)drw;
 		vdr->setRange( RangeReal(rmin, rmax));
 		vdr->setStep(rstep);

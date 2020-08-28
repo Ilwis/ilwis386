@@ -121,7 +121,7 @@ void AttributeTool::setcheckinitial(int colNr, const Column & attColumn) { // on
 		} else if ( sdr) {
 			dm = sdr->useAttributeTable() ? sdr->getAtttributeColumn()->dm() :   sdr->getBaseMap()->dm();
 		}
-		if ((dm->pdv() && !dm->pdbool()) || dm->pdc()) {
+		if ((dm->pdv() && !dm->pdbool()) || dm->pdc() || dm->pdcol()) {
 			annotationDrawerTool = new AnnotationDrawerTool(mpvGetView(),tree,drawer);
 			parentTool->addTool(annotationDrawerTool);
 			if (annotationDrawerTool->isActive()) // in the case of annotationDrawerTool isActive() and isActiveMode() would be the same (isActiveMode() is a function that does not exist, it would be symmetric to setActiveMode(bool)).
@@ -257,7 +257,7 @@ void AttributeTool::setcheckattr(void *value, HTREEITEM item) {
 		} else if ( sdr) {
 			dm = sdr->useAttributeTable() ? sdr->getAtttributeColumn()->dm() :   sdr->getBaseMap()->dm();
 		}
-		if ((dm->pdv() && !dm->pdbool()) || dm->pdc()) {
+		if ((dm->pdv() && !dm->pdbool()) || dm->pdc() || dm->pdcol()) {
 			if (!annotationDrawerTool)
 				annotationDrawerTool = new AnnotationDrawerTool(mpvGetView(),tree,drawer);
 			parentTool->addTool(annotationDrawerTool);

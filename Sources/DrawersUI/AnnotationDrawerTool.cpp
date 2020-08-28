@@ -17,6 +17,9 @@
 #include "DrawersUI\GlobalTool.h"
 #include "DrawersUI\SetDrawerTool.h"
 #include "DrawersUI\LayerDrawerTool.h"
+#include "Drawers\LayerDrawer.h"
+#include "Drawers\RasterLayerDrawer.h"
+#include "Drawers\ColorCompositeDrawer.h"
 //#include "AnnotationBorderTool.h"
 
 using namespace ILWIS;
@@ -42,21 +45,31 @@ bool AnnotationDrawerTool::isToolUseableFor(ILWIS::DrawerTool *tool) {
 
 	LayerDrawerTool *layerDrawerTool = dynamic_cast<LayerDrawerTool *>(tool);
 	SetDrawerTool *setDrawerTool = dynamic_cast<SetDrawerTool *>(tool);
-	
+
 	if (!layerDrawerTool && !setDrawerTool)
 		return false;
 	ComplexDrawer * cdrw = (ComplexDrawer*)drawer;
 	if (cdrw->isSet()) {
 		if (cdrw->getDrawerCount() > 0) {
 			BaseMap *bmp = (BaseMap *)(cdrw->getDrawer(0)->getDataSource());
-			if (!bmp || !bmp->fValid() || ((*bmp)->dm()->pdc() == 0 && ((*bmp)->dm()->pdv() == 0 || (*bmp)->dm()->pdbool() != 0)))
-				return false;
+			if (!bmp || !bmp->fValid() || ((*bmp)->dm()->pdc() == 0 && (*bmp)->dm()->pdcol() == 0 && ((*bmp)->dm()->pdv() == 0 || (*bmp)->dm()->pdbool() != 0))) {
+				ColorCompositeDrawer *rdrw = 0;
+				if ( (rdrw = dynamic_cast<ColorCompositeDrawer *>(tool->getDrawer())) == 0)
+					return false;
+				if ( !rdrw->isColorComposite()) // accept ColorComposite
+					return false;
+			}
 		} else
 			return false; // empty maplist/objectcollection: no legend needed
 	} else {
 		BaseMap *bmp = (BaseMap *)tool->getDrawer()->getDataSource();
-		if (!bmp || !bmp->fValid() || ((*bmp)->dm()->pdc() == 0 && ((*bmp)->dm()->pdv() == 0 || (*bmp)->dm()->pdbool() != 0)))
-			return false;
+		if (!bmp || !bmp->fValid() || ((*bmp)->dm()->pdc() == 0 && (*bmp)->dm()->pdcol() == 0 && ((*bmp)->dm()->pdv() == 0 || (*bmp)->dm()->pdbool() != 0))) {
+			ColorCompositeDrawer *rdrw = 0;
+			if ( (rdrw = dynamic_cast<ColorCompositeDrawer *>(tool->getDrawer())) == 0)
+				return false;
+			if ( !rdrw->isColorComposite()) // accept ColorComposite
+				return false;
+		}
 	}
 	parentTool = tool;
 	return true;
