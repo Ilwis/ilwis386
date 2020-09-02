@@ -1,0 +1,202 @@
+<html>
+
+<head>
+<title>Stereo pair from DTM : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stereo pair from DTM">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Stereo pair from DTM</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Stereo pair from DTM operation creates a <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> from a single raster map and a Digital Terrain Model (DTM). The photograph or image will be displayed over the terrain; the result can be viewed in stereo. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Input raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input raster map, i.e. a single scanned aerial photograph, a satellite image, or a normal raster map. The map should use the <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>Image</span> domain</a>, any other <a href="..//ilwis/sec/domain_type_value2_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>, the <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Color</span> domain</a>, or the <a href="..//ilwis/sec/domain_type_picture_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Picture</span> domain</a>. Open the list box and select the desired input map, or drag a raster map directly from a Catalog into this box. </p>
+
+<p class=diabox>On the commmand line, there are no restrictions on the domain type of the input map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>DTM:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input Digital Elevation Model (DTM) (raster <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>). </p>
+
+<p class=diabox>If the DTM does not cover the entire area of the input raster map, then the parts of the input raster map for which no DTM value can be found will appear black in the output stereo pair. </p>
+
+<p class=diabox>A Digital Terrain Model is also known as a Digital Elevation Model (DEM). </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=tiptext><span class=tipnospace>Tip: </span>It is highly recommended to have the <span class=arial>Interpolation</span> check box selected in the <a href="../ilwismen/raster_map_properties.htm">Properties</a> sheet of your DTM. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Look angle:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value between 0 and 90&deg; for the total angle of 'projection' of the two output raster maps which together will form the output stereo pair. For more information, refer to <a href="stereopair_from_dtm_functionality.htm">Stereo pair from DTM : functionality</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Reference height:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a height value (of your DTM) that should appear at 'ground' level of your monitor when inspecting the stereo pair. Larger height values in the DTM will appear 'outside of your monitor'; smaller height values in the DTM will appear 'inside your monitor'. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Look modus:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select how the <i>Look angle</i> should be divided over the two output raster maps that will form the stereo pair. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Left:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The left output raster map will be 'projected' using the total <i>Look angle</i>; the right output raster map will be 'projected' vertically. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Both:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The left and the right output raster map will each be 'projected' using half the <i>Look angle</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Right:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The left output raster map will be 'projected' vertically; the right output raster map will be 'projected' using the total <i>Look angle</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Resample modus:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the method to resample the input raster map into two output raster maps which together will form the output stereo pair. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Fast:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For quick resampling. Resampling is input-driven (the estimated position of output pixels is less accurate) and biased nearest neighbour. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Accurate:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For slow but accurate resampling. Resampling is output-driven just as the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation; <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a> and maps with the <span class=courier>Color</span> domain are resampled using <a href="..//ilwisapp/popup/bilinear_interpolation_popup.htm" onClick="return popup(this, 'notes')" >bilinear interpolation</a>; other maps are resampled using nearest neighbour. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Output stereo pair:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the stereo pair. The (resampled) output raster maps of the stereo pair will also obtain this name, followed by <span class=courier>_Left</span> or <span class=courier>_Right</span>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output stereo pair. The description will appear in the status bar of the Main window when moving the mouse pointer over the stereo pair in a Catalog. If no description is supplied, the output stereo pair will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, two output raster maps and the output stereo pair will be defined, calculated and shown. When you click the <b>Define</b> button, the output stereo pair will only be defined; if necessary, the two output raster maps and thus the stereo pair will be calculated later, for instance when the stereo pair is opened to be displayed. </p>
+
+<p class=defnewpar>You can view the calculated result either: </p>
+
+<ul>
+
+<li class="ls01be">in a <a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope</a> window: </li>
+
+        <p>you will be able to view the height differences in the stereo pair by using a stereoscope that is mounted onto your monitor. </p>
+
+<li class="ls01be">as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >Anaglyph</a> in a map window: </li>
+
+        <p>the anaglyph is either displayed in Red-Green or in Red-Blue; <br>
+        you will be able to view the height differences in the stereo pair by using red-green or red-blue glasses. </p>
+
+</ul> 
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="stereopair_from_dtm_functionality.htm">Stereo pair from DTM : functionality</a></p>
+
+</body

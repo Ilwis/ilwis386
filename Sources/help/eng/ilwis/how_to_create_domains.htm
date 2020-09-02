@@ -1,0 +1,166 @@
+<html>
+
+<head>
+<title>How to create domains</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Domains, How to create ..., Create ..., Class domain, ID domain, Value domain, Bool domain, Group domain">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to create a domain</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> is a set of class names, IDs, or values that can be used in a certain <a href="ilwis_objects_data_objects.htm">data object</a>. All ILWIS data objects have a domain. One domain can be used for several data objects. </p>
+
+<p class=kopje>To create a domain:</p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, choose the <span class=arial>Create Domain</span> command, </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Create</span> item, and double-click the <span class=arial>New Domain</span> item, </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>New Domain</span> item, or </li>
+
+<li>	in a dialog box which asks for a domain as input or output, click the little create button <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Domain</span> list box.</li>
+
+</ul>
+
+<p class=defnewpar>In the <a href="../ilwismen/create_a_domain.htm">Create Domain dialog box</a> which follows, you have to specify the type of domain you want to create:</p>
+
+<ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	select <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> when the elements in the map are points, lines or areas with class names. Elements with the same name can occur in several places in the map;</li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	select <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> when the elements in the map are points, lines or areas which are uniquely identified;</li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	select <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> when the elements in the map are points, lines or areas representing measurable values;</li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	select <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a> when the elements in the map can only have 2 possible values, e.g. &quot;Suitable&quot; or &quot;Not Suitable&quot;, or the undefined value; </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	select check box <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >Group</a> to indicate upper value boundaries and group names for a subsequent Slicing operation of when you want to use the CLFY function in MapCalc to permanently slice or classify values in an existing value map.</li>
+
+</ul>
+
+<p class=defnewpar>When creating a <i>Class or ID domain</i>, the <a href="domain_class_id_editor_functionality.htm">Domain Class/ID editor</a> will be opened. In the Domain Class/ID editor, you can add the class names or the IDs that you want to use to the domain but you can also add class names or IDs to the domain later on, for instance during digitizing.</p>
+
+
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td width="60"valign="top">
+</td>
+<td valign="top"><p class="tipnospace">Note: </p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+</td>
+<td valign="top">
+	<ul class="tipul">
+	<li>Within Names of classes or IDs, any characters may be used, except percentages <span class="courier">%</span>.</li>
+	<li>Within Codes of classes or IDs, any characters may be used, except colons <span class=courier>:</span> and percentages <span class="courier">%</span>.</li>
+	</ul>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When creating a <i>Value domain</i>, you can directly define in the Create Domain dialog box what values should be stored by the domain: specify a minimum and maximum value and a precision.</p>
+
+<p class=defnewpar>When creating a <i>Bool domain</i>, the <a href="../ilwismen/edit_domain_bool.htm">Edit Bool domain</a> dialog will be opened, where you can specify user-defined strings for True and False values. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When working with maps of different years but of the same theme, or containing the same class names, IDs, or values, you are advised to create <b>one</b> domain for these maps and use this domain for all maps. It is not necessary that every class name, every ID or every value in your domain actually occurs in each map which uses that domain.</p>
+
+<p class=kopje>Representations:</p>
+
+<p><a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >Representations</a> are linked to a domain. This means that when you use the same domain in several maps, these maps can easily be displayed in the same colors. ID domains do not have a representation. </p>
+
+<p class=defnewpar>When you create a new <i> class</i> domain, a new representation
+class is automatically created with the same name as the class domain. This
+representation will be used as the default representation for the domain and the representation will
+initially be filled with default colors. </p>
+
+<p class=defnewpar>One way to view and/or edit the representation of a class domain is:</p>
+
+<ul>
+
+<li>	Open the class domain by double-clicking it in the Catalog,</li>
+
+<li>	From the <a href="domain_class_id_editor_menu_commands.htm">Edit menu</a> in the Domain Class editor, select <span class=arial>Representation</span>;</li>
+
+<li>	The Representation Class editor is opened.</li>
+
+</ul>
+
+<p>For more information, see <a href="representation_class_editor_functionality.htm">Representation Class editor</a> and <a href="../ilwis/how_to_edit_representations.htm">How to edit a representation</a>.</p>
+
+<p class=defnewpar>When you create a new <i> value</i> domain, a representation value is not automatically created.
+Instead, system representation Pseudo will be linked to this domain as the
+default representation.</p>
+
+<p class=defnewpar>Two methods to create and/or edit your own representation for a value domain are: </p>
+
+<ul>
+
+<li>	Double-click a value map in the Catalog;</li>
+
+<li>	In the <span class=arial>Display Options</span> dialog box of the map, click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box;</li>
+
+<li>	After you specified a name for the new representation in the Create Representation dialog box, the Representation Value/Gradual editor is opened;</li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	Click the value domain with the right mouse button in the Catalog;</li>
+
+<li>	Select Properties from the context-sensitive menu;</li>
+
+<li>	In the Properties dialog box of the domain, click the create button next to the Representation list box;</li>
+
+<li>	After you specified a name for the new representation in the Create Representation dialog box, the Representation Value/Gradual editor is opened;</li>
+
+</ul>
+
+<p>For more information, see <a href="representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a> and <a href="../ilwis/how_to_create_representations.htm">How to create a representation</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_domains.htm">How to edit a domain</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+<p class=seealsolinks><a href="how_to_create_domain_group.htm">How to create a domain Group</a></p>
+
+</body

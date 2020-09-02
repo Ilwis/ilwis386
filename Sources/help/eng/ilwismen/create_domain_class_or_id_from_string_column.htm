@@ -1,0 +1,108 @@
+<html>
+
+<head>
+<title>Create domain Class or ID from String column</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Convert domains, Create ..., String columns">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Create new Class or ID domain</h1>
+
+<h1 class=secondline>from a String column</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>During <a href="import_map.htm">Import</a>, some columns may have been imported with the <span class=courier>String</span> domain. However, in any calculations later on, it is often easier to work with columns that have a Class or ID domain. In this dialog box, you can convert all items found in a <span class=courier>String</span> column to class names of a new Class domain or to IDs of a new ID domain. Optionally, the newly created domain can directly be applied on the string column. For more information on domains, see <a href="../ilwis/basic_concepts_domains.htm">Basic concepts : working with domains</a> or <a href="../ilwis/ilwis_objects_domains.htm">ILWIS objects : domains</a>.</p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when in a <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >table</a>, you double-click the column name of a column which uses the <span class=courier>String</span> domain, and</li>
+
+<p class=leftmargininlist>	in the subsequent <a href="column_properties.htm">Column Properties</a> dialog box, you click the <span class=arial>Create new Domain from Strings in column</span> button.</p>
+
+</ul>
+
+<p class=kopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Domain name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the Class or ID domain that you wish to create.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Class:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose to create a Class domain, when the fields in the <span class=courier>String</span> column contain non-unique names or numbers.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Identifier:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose to create an ID domain, when the fields in the <span class=courier>String</span> column contain unique names or numbers.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Apply domain to column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box, when you want to change the <span class=courier>String</span> domain of this column into the new Class or ID domain. </p>
+
+<p class=diabox>Clear this check box, to only create a new domain. Later on, you can create a new column which uses the new domain, for instance by using a TabCalc formula like:</p>
+
+<p class=calc1>col2=stringcol</p>
+
+<p class=diabox>where <span class=courier>col2</span> is the new column and <span class=courier>stringcol</span> is the original <span class=courier>String</span> column. Make sure that the subsequent <a href="column_properties.htm">Column Properties</a> dialog box, you choose the newly created class or ID column for the domain of <span class=courier>col2</span>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="column_properties.htm">Column Properties</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_tables.htm">ILWIS objects : tables</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_columns.htm">ILWIS objects : columns</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+<p class=seealsolinks><a href="import_map.htm">Import</a> (dialog box)</p>
+
+</body

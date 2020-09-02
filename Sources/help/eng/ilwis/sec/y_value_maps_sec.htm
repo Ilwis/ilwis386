@@ -1,0 +1,97 @@
+<html>
+
+<head>
+<title>Value maps/Value columns</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Value maps/Value columns</p>
+
+<p>Value maps and value columns contain <b>values</b> in contrast to maps and columns that contain for instance class names or identifiers. </p>
+
+<p class=defnewpar>When it is stated that an operation requires or will produce a value map: </p>
+
+<ul>
+
+<li>generally a map with a value domain or the <span class=courier>Image</span> domain is meant, </li>
+<li>but sometime also a <span class=courier>Bool</span> domain can be used. </li>
+</ul>
+
+<p class=defnewpar>While performing calculations or operations: </p>
+<ul>
+<li>the system will generally suggest a domain, </li>
+<li>a <b><a href="../popup/y_value_range_popup.htm">value range</a></b> and </li>
+<li>a <b><a href="../popup/y_precision_popup.htm">precision</a></b> for the values of the output map or column. </li>
+</ul>
+
+<p>If allowed by the (selected) domain of the output object, you may vary the value range and the precision for the output map or column yourself, during each individual operation. </p>
+
+<p class=defnewpar>Value maps may use one of the system domains listed below, however, you can also create <i>your own value domains</i> when certain maps or columns contain values with a special meaning, for instance pH, height, yields, or concentration values. When you create a user-defined value domain, it is advised to use a value range and a precision that fit your data. Subsequently, you can also create a meaningful <a href="../popup/objects_representation_popup.htm">representation (type value)</a> for the values in such a domain. </p>
+
+<p class=defnewpar>System domains for values, including the undefined value:</p>
+
+<ul>
+
+<li>	<a href="../popup/yy_system_domain_value_popup.htm">system domain Value</a>,</li>
+
+<li>	<a href="../popup/yy_system_domain_distance_popup.htm">system domain Distance</a>,</li>
+
+<li>	<a href="../popup/yy_system_domain_count_popup.htm">system domain Count</a>,</li>
+
+<li>	<a href="../popup/yy_system_domain_min1to1_popup.htm">system domain Min1to1</a>,</li>
+
+<li>	<a href="../popup/yy_system_domain_perc_popup.htm">system domain Perc</a>,</li>
+
+<li>	<a href="../popup/yy_system_domain_byte_popup.htm">system domain Byte</a>.</li>
+
+</ul>
+
+<p class=defnewpar>System domains for images: </p>
+
+<ul>
+
+<li>	<a href="../popup/yy_system_domain_image_popup.htm">system domain Image</a>, </li>
+
+<li>	<a href="../popup/yy_system_domain_noaa_popup.htm">system domain NOAA</a>, </li>
+
+<li>	<a href="../popup/yy_system_domain_radar_popup.htm">system domain Radar</a>. </li>
+
+</ul>
+
+<p class=defnewpar>Furthermore, most operations that can be performed on a map with a value domain can also be performed on maps with one of the following domains:</p>
+
+<ul>
+
+<li>	<a href="../popup/yy_system_domain_bool_popup.htm">system domain Bool</a>, </li>
+
+<li>	<a href="../popup/yy_system_domain_yesno_popup.htm">system domain Yes/No</a>, </li>
+
+<li>	<a href="../popup/yy_system_domain_bit_popup.htm">system domain Bit</a> (deprecated). </li>
+
+</ul>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</p>
+
+<p class=seealsolinks><a href="../../ilwis/sec/y_system_domains_sec.htm">System domains</p>
+
+</body

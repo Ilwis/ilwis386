@@ -1,0 +1,165 @@
+<html>
+
+<head>
+<title>ILWIS objects : point maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS objects, Point maps, Data objects, MPP">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Point maps&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/pointmap.gif" align=bottom width="16" height="12"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A point map is a <a href="ilwis_objects_data_objects.htm">data object</a> used to store spatial geographic information which consists of <b>points</b>, for example water wells or sample points. Points are either identified by IDs, class names or values; this is determined by the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map. The relation between points in a point map and the position on earth is defined by the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that the map is using. Point maps can be displayed in <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map windows</a>, and edited with the <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >point editor</a>. </p>
+
+<p class=defnewpar>A point map is obtained:</p>
+
+<ul>
+
+<li>	by importing an existing point map from ILWIS version 1.41, </li>
+
+<li>	by creating a new point map and editing it with the <a href="../ilwis/point_editor_functionality.htm">point editor</a> with or without using a digitizer, </li>
+
+<li>	by converting a table which contains coordinate columns to a point map with the <a href="..//ilwisapp/popup/table_to_point_map_popup.htm" onClick="return popup(this, 'notes')" >Table to Point map</a> operation, or</li>
+
+<li>	by performing ILWIS operations that return a point map as output, for instance the <a href="..//ilwisapp/popup/attribute_map_of_points_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of point map</a> operation, or the <a href="..//ilwisapp/popup/segments_to_points_popup.htm" onClick="return popup(this, 'notes')" >Segments to Points</a> operation.</li>
+
+</ul>
+
+<p class=kopje>Contents of a point map and location of points:</p>
+
+<p>The contents of a point map are defined by the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> that the point map is using. A point map may store for example:</p>
+
+<ul>
+
+<li>	individual point features: each point is codified by its own ID, for instance individual sample points, individual bore holes, individual rainfall stations, etc.; the map uses an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a>,</li>
+
+<li>	classes of point features: points may occur in several places in the map for instance all water wells of a certain type; the map uses a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>,</li>
+
+<li>	point features representing measurable values, for instance height information; the map uses a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>,</li>
+
+<li>	true, false or undefined points; the map uses a Bool domain.</li>
+
+<li>	output values (any domain) after performing an operation, e.g. IDs after the Unique ID operation, </li>
+
+<li>	attribute values (any domain) when an attribute map was created from an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> with the Attribute map of point map operation.</li>
+
+</ul>
+
+<p>For more information on domains, refer to <a href="basic_concepts_domains.htm">Basic concepts : working with domains</a>.</p>
+
+<p class=defnewpar>The spatial location of points in a point map is defined by the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that the point map is using. </p>
+
+<p class=defnewpar>For maps using a class or ID domain, you can create an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> which stores additional information on the classes or IDs in the map. Use the same class or ID domain for the attribute table as you used for the map. Then, add the attribute columns to the table. When you have for a example a point map with rainfall stations, coded with IDs, you can add an attribute table with the rainfall figures per month for each station. To create an attribute table, refer to <a href="../ilwis/how_to_create_tables.htm">How to create an attribute table</a>.</p>
+
+<p class=kopje>Point symbols:</p>
+
+<p>The manner in which points are displayed is specified in the <a href="../ilwismen/display_options_point_map.htm">Display Options Point Map</a> dialog box.</p>
+
+<ul>
+
+<li>	When a point map uses a <i>class domain</i>, you can display point symbols as single symbols or by using or creating a <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> class. In a representation class, every class can have its own symbol, size, color, etc. For more information, see <a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor</a> and the <a href="../ilwismen/representation_class_editor_edit_item_point.htm">Edit Repr Class item (point)</a> dialog box.</li>
+
+<li>	When a point map uses an <i>ID domain</i> and when the point map has an <i>attribute table</i>, you can display point symbols as single symbols, as arrows, as graphs or by attributes. In this way, you can for instance obtain pie charts, bar graphs, volume cubes, etc. for every point in the map. Sizes, colors, etc. can be specified by using columns in the attribute table. For more information see the <a href="../ilwismen/symbols_for_class_and_id_point_maps.htm">Symbols (Class/ID)</a>, <a href="../ilwismen/symbols_by_attributes_id_point_map_with_attr_table.htm">Symbols by Attributes</a>, <a href="../ilwismen/symbols_as_arrows_id_point_map_with_attr_table.htm">Symbols as Arrows</a> and <a href="../ilwismen/symbols_as_graphs_id_point_map_with_attr_table.htm">Symbols as Graphs</a> dialog boxes.</li>
+
+<li>	When a point map uses a <i>value domain</i>, you can choose a symbol set and a symbol for all the points while the size of the selected symbol may depend on the value of the points. For more information, see the <a href="../ilwismen/symbols_for_value_point_maps.htm">Symbols (Value)</a> dialog box.</li>
+
+<li>	When a point map uses a <i>Bool domain</i>, you can specify colors for True and False points.</li>
+
+</ul>
+
+<p class=linespacing01before>For more information, see the <a href="../ilwismen/display_options_point_map.htm">Display Options Point Map</a> dialog box. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To store the display setting of one or more maps displayed in a map window, save the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>; open the <a href="map_window_menu_commands.htm">File menu</a> in a map window and choose the Save View or the Save View As command.</p>
+
+<p class=kopje>Names of point maps:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a point map:</p>
+
+<p>Open the File menu of the Main window and select the <span class=arial>Create Point Map</span> command, or double-click the <span class=arial>New PntMap</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>. In the appearing Create Point Map dialog box, enter a name and description for the point map, select or create a coordinate system, enter boundary values for the map and select or create a domain. For other create methods, see <a href="../ilwis/how_to_create_maps.htm">How to create a map</a>.</p>
+
+<p class=defnewpar>When you have a table which contains columns with X- and Y-coordinates, you can use the <a href="..//ilwisapp/popup/table_to_point_map_popup.htm" onClick="return popup(this, 'notes')" >Table to Point map</a> operation to obtain a point map from this table.</p>
+
+<p class=kopje>To display a point map:</p>
+
+<p>The easiest way to display a point map is to double-click the map in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. The map will be displayed in a new <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>. You can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> a point map from the Catalog to an existing map window, in order to show that point map on top of other information shown in the map window. For other methods, see <a href="how_to_display_maps_and_tables.htm">How to display maps and tables</a>. </p>
+
+<p class=defnewpar>In the <a href="../ilwismen/display_options_point_map.htm">Display Options Point Map</a> dialog box, you can specify how the map should be displayed. </p>
+
+<p class=defnewpar>Point maps can also be opened as tables: click the point map with the right mouse button in the Catalog, and subsequently choose <span class=arial>Open as Table</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. When you display a point map in a table window, you can edit the XY-coordinates of the points and perform calculations with the XY-coordinates of the points.</p>
+
+<p class=kopje>To edit a point map:</p>
+
+<p>You can edit a point map by clicking it with the right mouse button in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> and subsequently choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. When a point map is already displayed in a map window, you can also choose the <span class=arial>Edit Layer</span> command from the Edit menu in the map window. For other methods, see <a href="../ilwis/how_to_edit_point_segment_polygon_and_raster_maps.htm">How to edit point, segment, polygon and raster maps</a>.</p>
+
+<p class=defnewpar>Point maps are edited with the <a href="../ilwis/point_editor_functionality.htm">Point editor</a>: you can insert new points and delete existing ones, edit the class names, IDs, or values of points, and move points to a new position. You can use a digitizer but you can also use the mouse pointer. Dependent point maps and read-only point maps cannot be edited.</p>
+
+<p class=kopje>Operations on point maps:</p>
+
+<p>Examples of operations on point maps are for instance point interpolations: <a href="..//ilwisapp/popup/moving_average_popup.htm" onClick="return popup(this, 'notes')" >moving average</a>, <a href="..//ilwisapp/popup/trend_surface_popup.htm" onClick="return popup(this, 'notes')" >trend surface</a>, <a href="..//ilwisapp/popup/moving_surface_popup.htm" onClick="return popup(this, 'notes')" >moving surface</a>, or <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >kriging</a>. The point map itself may use a value domain but you can also use point maps with a class or ID domain and that have an attribute table which contains the values which you want to interpolate.</p>
+
+<p class=defnewpar>You can perform operations on a point map by selecting an operation from the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a> or from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> (for other methods, see <a href="how_to_start_operations.htm">How to start operations</a>). Subsequently, fill out the appearing dialog box of that operation and click the OK button; this generates an <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >ILWIS expression</a> on the command line. Output objects that are obtained through an operation's dialog box are always <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a>. Advanced users can type the complete ILWIS expressions on the command line of the Main window or create a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> to execute a series of expressions. </p>
+
+<p>For more information on dependent maps, see <a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a>. For more information on operations, refer to <a href="../ilwisapp/ilwis_operations.htm">ILWIS operations</a>.</p>
+
+<p class=kopje>Technical information:</p>
+
+<p>An ILWIS 3 point map consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.MPP) and a binary data file (.PT#). The object definition file contains further references to the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> and the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that the point map is using; these are <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a point map.</p>
+
+<p class=defnewpar>When opening or displaying an ILWIS 2 point map, the ILWIS 2 data file of the point map (.PN#) will be used. Only when an ILWIS 2 point map is edited, the map will be converted to and saved in the new ILWIS 3 data file format for point maps (.PT#).</p>
+
+<p class=defnewpar>By viewing the properties of a point map, you can see whether the map is dependent or not, which other objects the map is using, etc. For dependent maps, you can also manage dependencies: break dependencies, make dependent maps up-to-date, delete the dependent maps's data files, etc. For more information, see <a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a>.</p>
+
+<p class=defnewpar>Each point is stored as a pair of XY-coordinates. The coordinates are stored as pairs of 8-byte floating point reals. Points are identified by a class name, ID or a value.</p>
+
+<p class=defnewpar>If you wish, you can open a point map as a table: click the point map with the right mouse button in the Catalog, and subsequently choose <span class=arial>Open as Table</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.
+
+In the table window, you can view the class names, IDs, or values of all individual points in the map, and the coordinates of all points. </p>
+
+<p class=kopje>Limitations:</p>
+
+<p>In ILWIS 3.x, limitations for number of points per point map only depend on available memory. However, ILWIS is not designed to work with very large data sets: to speed up processing you may need to split maps into smaller logical parts.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_set_up_a_digitizer_and_start_digitizing.htm">How to setup a digitizer and start digitizing</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/ilwis_operations.htm">ILWIS operations</a></p>
+
+</body

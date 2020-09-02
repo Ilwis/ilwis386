@@ -1,0 +1,224 @@
+<html>
+
+<head>
+<title>Color composite : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Color composite">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Color composite</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A color composite is created by combining 3 raster images or maps. One map is displayed in shades of red, one in shades of green and one in shades of blue.</p>
+
+<p class=diakopje>Dialog box options for 24 Bit Color Composite:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>24 bit:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to create a map that can be displayed in 24-bit graphic mode (domain <span class=courier>Color</span>). Clear this check box if you want to create a color composite which uses a Picture domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>RGB:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Creates a 24-bit color composite with Red, Green and Blue bands as input. See Standard Color Composite options below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>HSI:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Creates a 24-bit color composite with Hue, Saturation and Intensity bands as input. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>You should only select these 24-bit options, if your graphic board is configured to use more than 256 colors, for instance High Color 16-bit or True Color 24-bit (see Display Settings in Windows' Control Panel).</p>
+
+<p class=diakopje>Dialog box options for Standard Color Composite:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Standard:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the Standard <a href="..//ilwis/popup/win_option_buttons_popup.htm" onClick="return popup(this, 'notes')" >option button</a> when you want to use the standard color composite representation which has six shades of red, six shades of green and six shades of blue (total 216 colors).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Linear Stretching:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select Linear Stretching if you want to obtain intervals of equal length (in terms of input values) for the output colors. </p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">
+<p class=diabox>Histogram equalization: </p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select Histogram Equalization if you want to obtain an equal number of pixels for the different output colors.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Percentage: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to define input intervals by a percentage of pixels to be ignored on both sides of the input map's histogram.<br>
+Clear this check box to specify input intervals by a minimum and maximum value of each input map.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=diakopje>Dialog box options for Dynamic (Heckbert) Color Composite:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Dynamic:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the Dynamic option button when you want an automatic division of input values over a number of output colors. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Colors:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Enter a value for the number of colors of which the dynamic color composite should consist (integer value between 2 and 255).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=diakopje>General dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Red Band: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a raster map to be displayed in shades of red. Open the list box and select the appropriate raster map, or directly drag a raster map from the Catalog into this box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Green Band:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a raster map to be displayed in shades of green.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Blue Band:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a raster map to be displayed in shades of blue.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a map <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output color composite.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=linespacing03before>When the Dynamic option is used, the output map will use an <a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal Picture domain</a> which has an internal representation.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>This operation creates a permanent color composite map.  When your graphics board is configured to use more than 256 colors, for instance High Color 16-bit or True Color 24-bit (see Display Settings in Windows' Control Panel), you can also interactively display a color composite by selecting the <span class=arial>Show MapList as Color Composite</span> command from the <a href="../ilwis/main_window_menu_commands.htm">Operations, Visualization</a> menu. By creating an interactive color composite, you can easily change intervals, select other bands, etc. The resulting color composite is displayed in a map window. To store such a color composite, you can save the map window as a map view.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="color_composite_functionality.htm">Color composite : functionality</a></p>
+
+</body

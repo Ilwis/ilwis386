@@ -1,0 +1,229 @@
+<html>
+
+<head>
+<title>MapCalc/TabCalc : undefined values (assign)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Assigning undefined values, Undefined functions, Map calculation, Table calculation, Calculation, Command line">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>Assigning undefined values</h1>
+
+<p class=defnewpar>To assign the undefined value to a pixel in an output map or to a record in an output column that uses a value domain, use the question mark <span class=courier>?</span>.</p>
+<p>To assign the undefined value to a pixel in an output map or to a record in an output column that uses a class, ID, string or group domain, use a question mark between double quotes <span class=courier>&quot;?&quot;</span>.</p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>MapCalc examples:</p>
+<p class=calc00>OutMap = IFF(ValueMap &gt;= 20, ?, ValueMap)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>ValueMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>5</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>-10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>20</td>
+    <td class=calcpict>0</td>
+    <td class=calcpict>30</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>40</td>
+    <td class=calcpict>45</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>5</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>-10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>0</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>?</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p>If a pixel in map <span class=courier>ValueMap</span> has a value larger than or equal to 20, then undefined is assigned to this pixel in map <span class=courier>OutMap</span>; else the pixel will get the original value.</p>
+<p class=emptyline>&nbsp;</p>
+
+<p class=calc0linsp03befaft>OutMap = IFF(Landuse=&quot;Forest&quot;,&quot;?&quot;, Landuse)</p>
+<table>
+<tr>
+	<td><p class=courier>Landuse</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>Forest</td>
+    <td class=calcpict>Forest</td>
+    <td class=calcpict>Grass</td>
+  </tr>
+  <tr>
+    <td class=calcpict>Lake</td>
+    <td class=calcpict>Lake</td>
+    <td class=calcpict>Grass</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>Grass</td>
+    <td class=calcpict>Forest</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>Grass</td>
+  </tr>
+  <tr>
+    <td class=calcpict>Lake</td>
+    <td class=calcpict>Lake</td>
+    <td class=calcpict>Grass</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>Grass</td>
+    <td class=calcpict>?</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p>If a pixel in map <span class=courier>Landuse</span> has class name "<span class=courier>Forest</span>", then undefined is assigned to this pixel in map <span class=courier>Outmap</span>; else the original class name is assigned.
+
+<p class=kopje>TabCalc examples:</p>
+<p class=calc00>OutCol = IFF(ValueCol &gt;= 20, ?, ValueCol)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>ValueCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1r>5</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>10</p></td>
+	<td valign="top"><p class=t1r>10</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-10</p></td>
+	<td valign="top"><p class=t1r>-10</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>20</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>30</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>40</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>45</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+</table>
+
+<p>If a record in column <span class=courier>ValueCol</span> has a value larger than or equal to 20, then undefined is assigned to this record in column <span class=courier>OutCol</span>; else the record will get the original value.
+<p class=emptyline>&nbsp;</p>
+<p class=calc0linsp03befaft>OutCol = IFF(Landuse=&quot;Forest&quot;, &quot;?&quot;, Landuse)</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolh>Landuse</p></td>
+	<td valign="top"><p class=tcolh>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Forest</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Forest</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Grass</p></td>
+	<td valign="top"><p class=t1>Grass</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Lake</p></td>
+	<td valign="top"><p class=t1>Lake</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Lake</p></td>
+	<td valign="top"><p class=t1>Lake</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Grass</p></td>
+	<td valign="top"><p class=t1>Grass</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>?</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Grass</p></td>
+	<td valign="top"><p class=t1>Grass</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Forest</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+</tr>
+</table>
+
+<p>If a record in column <span class=courier>Landuse</span> has class name "<span class=courier>Forest</span>", then undefined is assigned to this record in column <span class=courier>OutCol</span>; else the original class name is assigned.
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><a href="calc_isundef.htm">ISUNDEF</a></td>
+</tr>
+<tr>
+	<td valign="top"><a href="calc_ifundef.htm">IFUNDEF</a></td>
+</tr>
+<tr>
+	<td valign="top"><a href="calc_ifnotundef.htm">IFNOTUNDEF</a></td>
+</tr>
+</table>
+
+</body

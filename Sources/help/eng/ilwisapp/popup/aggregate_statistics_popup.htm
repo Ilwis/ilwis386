@@ -1,0 +1,46 @@
+<html>
+
+<head>
+<title>aggregate statistics popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Aggregate Statistics</p>
+
+<p class="defnewpar">The <a href="..//ilwisapp/aggregate_statistics.htm" onClick="return popup(this, 'notes')" >Aggregate Statistics</a> script allows you to cross a merged catchments map with a DEM (or any other map): you will obtain for each catchment the following values: <span class="courier">average</span>, <span class="courier">minimum</span>, <span class="courier">maximum</span>, <span class="courier">std</span>, <span class="courier">predominant</span>, <span class="courier">median</span>, <span class="courier">sum</span>, <span class="courier">count</span>. </p>
+
+<p>The results are added as new columns to your existing merged catchments table. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>the output table of a previous Catchment Merge operation, </li>
+
+<li>the output map of a previous Catchment Merge operation, </li>
+
+<li>another raster map containing values, e.g. your DEM. </li>
+
+</ul>
+
+<p class="defnewpar">For more information, refer to <a href="..//ilwisapp/aggregate_statistics.htm" onClick="return popup(this, 'notes')" >Aggregate Statistics</a>. </p>
+
+</body

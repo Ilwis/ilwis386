@@ -1,0 +1,45 @@
+<html>
+
+<head>
+<title>Raster to polygons : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Raster to polygons">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Raster to polygons</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Raster to Polygons operation extracts polygons from units in a raster map. The output polygon map uses the same domain as the input raster map, i.e. the class names, IDs, or values in the input raster map will also be used for the polygons in the output polygon map. </p>
+
+<p class=defnewpar>First <a href="..//ilwisapp/popup/area_numbering_popup.htm" onClick="return popup(this, 'notes')" >Area Numbering</a> is applied on the input raster map. In case of 4-connectivity, the program compares the values of the 4 horizontal and vertical neighbouring pixels with the value of the center pixel, and in case of 8-connectivity, the program compares the values of all 8 neighbouring pixels (including the diagonal neighbours) with the value of the center pixel. </p>
+
+<p class=defnewpar>Then, polygons are initialized; a topological structure is built and stored; and the areas of the polygons are calculated.</p>
+
+<p>No polygons are created for pixels with the undefined value.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="raster_to_polygons_functionality.htm">Raster to polygons : functionality</a></p>
+
+</body

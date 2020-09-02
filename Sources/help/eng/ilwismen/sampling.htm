@@ -1,0 +1,61 @@
+<html>
+
+<head>
+<title>Sample : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sampling">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Sample</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Select an existing <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> or create a new sample set. Then, <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sample</a> training pixels prior to an image classification. Sampling is the process of assigning class names to groups of pixels with similar spectral values and that are supposed to represent a known feature on the ground. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Sample set:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing sample set to continue sampling (open the list box by clicking it), or create a new sample set by clicking the little <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22">.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you create a new sample set, the <a href="../ilwismen/create_a_sample_set.htm">Create Sample Set</a> dialog box appears. In the <span class=arial>Create Sample Set</span> dialog box, you can specify which background map you want to use, the map list that should be used and the domain of the sample set. After that, you return to this <span class=arial>Sampling</span> dialog box. </p>
+
+<p class=defnewpar>When everything is OK, the <a href="../ilwis/sample_set_editor_functionality1.htm">Sample set editor</a> is started.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/sample.htm">Sample</a></p>
+
+<p class=seealsolinks><a href="../ilwis/sample_set_editor_functionality1.htm">Sample set editor</a></p>
+
+</body

@@ -1,0 +1,243 @@
+<html>
+
+<head>
+<title>Classify column or Column slicing</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Columns, Column slicing, Slicing, Classify">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Columns menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Column Slicing</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>With Column Slicing, you can classify values in a column. </p>
+
+<p class=defnewpar>The upper boundary values of the classes and the class names can be specified in a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >group domain</a>. A group domain can be created beforehand or during the Column Slicing process. </p>
+
+<p class=defnewpar>For example, to classify a column with percentage values ranging from 0 to 100 into 3 classes: Low (0-33%), Moderate (34-66%), High (67-100%), you can create a group domain which reads:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p class=tcolh>Upper Boundary</p>
+
+</td>
+<td valign="top" width=75>
+<p class=tcolh>Group Name</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>33</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Low</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>66</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Moderate</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>100</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>High</p>
+
+</td>
+</tr>
+</table>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Column name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value column</a> which contains the values that you wish to classify. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the name of a domain Group which was created beforehand, or create a new domain Group (click the little <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>). </p>
+
+<ul class=diaul>
+
+<li>When you click the create button to create a new Group domain, the <a href="create_a_domain.htm">Create Domain</a> dialog box will appear. After you specified a name for the domain Group and clicked the OK button, the domain Group editor will be opened. </li>
+
+<li>Specify upper boundary values and names for the output groups via the <a href="domain_group_editor_add_item.htm">Add Item to domain Group</a> dialog box. Optionally, you can edit the colors of the output groups. When finished, you can close the editor. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Output column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_column_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output column that will contain the classified values as groups.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click <span class=arial>OK</span>, the <a href="column_properties.htm">Column Properties</a> dialog box will appear, stating the expression, the domain of the output column etc. You can accept all defaults. </p>
+
+<p class=defnewpar>After you clicked <span class=arial>OK</span> in the Column Properties dialog box, the new column with the classified values will appear in your table. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	When a group domain already exists, you can also directly type a classify expression on the command line of the table window: </li>
+
+        <p class=calccommline>&nbsp;&nbsp;&nbsp;&nbsp;<i>OutputColumn</i> <span class=courier>=</span> <span class=courier>CLFY(</span><i>ValueColumn</i><span class=courier>, </span><i>GroupDomain</i><span class=courier>)</span> </p>
+
+        <p>For more information, see <a href="../ilwis/calc_clfy.htm">Map and Table Calculation : CLFY function</a>.</p>
+      
+</ul>
+
+<p class=kopje>Example:</p>
+
+<p>When a table contains a value column <span class=courier>MyInputColumn</span> and you created a domain group as above, the output column <span class=courier>MyOutputColumn</span> will read: </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p class=tcolh>MyInputColumn</p>
+
+</td>
+<td valign="top" width=75>
+<p class=tcolh>MyOutputColumn</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>15</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Low</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>58</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Moderate</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>66</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Moderate</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>100</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>High</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Low</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>75</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>High</p>
+
+</td>
+</tr>
+</table>
+
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_toolbar.htm">Table window : toolbar</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_menu_commands.htm">Table window : menu commands</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/calc_clfy.htm">Map &amp; Table calculation : CLFY function</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_classify_a_map_or_column.htm">How to classify a map or column</a> </p>
+
+</body

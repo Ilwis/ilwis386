@@ -1,0 +1,115 @@
+<html>
+
+<head>
+<title>MapCalc/TabCalc : simple calculators</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Simple calculators, Pocket line calculator, Map calculation, Table calculation, Calculation, Command line">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>Simple calculators</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The command line in the Main window and the command line of a table window can be used as a pocket line calculator. The pocket line calculator is an ILWIS tool which enables the user to make quick calculations. All operators and functions described in
+<a href="calc.htm">Map and Table Calculation</a> are available.</p>
+
+<p class=defnewpar>To use the pocket line calculator type on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the Main window</a>, or on the <a href="..//ilwis/popup/command_line_table_window_popup.htm" onClick="return popup(this, 'notes')" >command line of a table window</a>, a <span class="courier">?</span> followed by your calculation/expression.</p>
+
+<p class="defnewpar">The pocket line calculator is especially convenient for:</p>
+<ul>
+  <li>quick calculations without the need to start other programs;</li>
+  <li>retrieving pixel information of maps (values, classes or ID’s, colors, coordinates, etc.) without displaying them on the screen;</li>
+  <li>retrieving some information on data in your table without creating new columns;</li>
+  <li>trying out difficult calculations before performing them with maps or table columns.</li>
+</ul>
+
+<p class=defnewpar>Furthermore, all operators and functions that are available for Map
+and Table calculation can also be used:</p>
+
+<ul>
+	<li>In the expression of a Graph from Formula. For more information, see <a href="../ilwismen/graph_window_add_graph_from_formula.htm">Add Graph from Formula</a>.</li>
+	<li>When using a user-defined expression for a coordinate system of type formula.
+      For more information, see <a href="../ilwismen/edit_coordinate_system_formula.htm">Edit Coordinate
+      System Formula</a>.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>The Map and Table calculation operators and functions can of course also be used in <a href="calc_creating_and_applying_user_defined_functions.htm">user-defined functions</a> and <a href="calc_creating_and_running_scripts.htm">scripts</a>.</p>
+
+<p class="calctitle">Examples:</p>
+<p class="kopjeaftertitlesub">Pocket line calculator examples</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" width="200"><p class=calc00>? 7 + 8</p></td>
+    <td valign="top"><p>returns 15</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="200"><p class=calc00>? 10 <a href="calc_integer_division_operator.htm"> DIV</a> 3</p></td>
+    <td valign="top"><p>returns the integer quotient, i.e. 3</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="200"><p class=calc00>? <a href="calc_sin.htm">SIN</a>(<a href="calc_predefined_values.htm">PI</a>/2)</p></td>
+    <td valign="top"><p>returns the sine of PI/2, i.e. 1.0</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="200"><p class=calc00>? <a href="calc_cos.htm">COS</a>(<a href="calc_degrad.htm">DEGRAD</a>(60))</p></td>
+    <td valign="top"><p>returns the cosine of 60 degrees, i.e. 0.50</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="200"><p class=calc00>? <a href="calc_mapcolor.htm">MAPCOLOR</a> (DEM,150,200)</p></td>
+    <td valign="top"><p>retrieves the color of map <span class=courier>DEM</span> at row <span class=courier>150</span> and column <span class=courier>200</span>, e.g. (255, 89, 16)</p></td>
+  </tr>
+</table>
+<table>  
+  <tr>
+    <td valign="top" colspan="2"><p class=calc00>? <a href="calc_mapvalue.htm">MAPVALUE</a>(Tmb1,<a href="calc_coord.htm">COORD</a>(800000,8080000))</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class=calc00></p></td>
+    <td valign="top"><p>returns the value of <span class=courier>Tmb1</span> on the location with X-coordinate <span class=courier>800000</span> and Y-coordinate <span class=courier>8080000</span>, e.g. 50.</p></td>
+  </tr>
+  <tr>
+    <td valign="top" colspan="2"><p class=calc00>? <a href="calc_iff.htm">IFF</a>(MAPVALUE(DEM,(COORD(100000,100000))&gt;2500,&quot;High&quot;,&quot;Low&quot;)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class=calc00></p></td>
+    <td valign="top"><p>returns &quot;<span class=courier>High</span>&quot; if the value of the <span class=courier>DEM</span> on the specified location is higher than <span class=courier>2500</span>; when the altitude is less than <span class=courier>2500</span>, &quot;<span class=courier>Low</span>&quot; is returned.</p></td>
+  </tr>
+</table>
+
+<p class=kopje>User-defined functions in pocket line calculator:</p>
+<p>More complicated expressions or expressions which will be used several times may be stored as a user-defined function or in an ASCII-file. ASCII-files can be made in any text editor. Application of such a file requires <span class=courier>?@</span><i>FileName</i> on the command line. The user-defined function <span class=courier>Suitable</span> may look like: </p>
+
+<p class=calc0linsp03befaft>IFF ((MAPVALUE(Soil,COORD(150000,200000))=&quot;Rock&quot;) OR (MAPVALUE(Slope,COORD(150000,200000))&gt;30),&quot;Unsuitable&quot;,&quot;Suitable&quot;)</p>
+
+<p>To apply this file, type:</p>
+
+<p class=calc0>?@Suitable</p>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>For more information on user-defined functions, refer to <a href="calc_creating_and_applying_user_defined_functions.htm">Map and Table Calculation : User-defined functions</a>.</p>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="calc.htm">Map and Table Calculation</a></p>
+<p class=seealsolinks><a href="calc.htm">Map and Table Calculation : General syntax</a></p>
+
+</body

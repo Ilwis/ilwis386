@@ -1,0 +1,153 @@
+<html>
+
+<head>
+<title>Drainage network extraction : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Drainage network extraction, MapDrainageNetworkExtraction">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Drainage network extraction</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage Network Extraction</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width="68">
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDrainageNetworkExtraction</span>(<i>flowacc_rasmap</i>, <i>threshold</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="68">
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDrainageNetworkExtraction</span>(<i>flowacc_rasmap</i>, <i>threshold_rasmap</i>, <i>flowdir_rasmap</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>MapDrainageNetworkExtraction</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+
+</td>
+<td valign="top">
+<p>is the command to start the Drainage Network Extraction operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>flowacc_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster map that is the outcome of the <a href="..//ilwisapp/popup/flow_accumulation_popup.htm" onClick="return popup(this, 'notes')" >Flow Accumulation</a> operation, i.e. a raster map with a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>threshold</i></p>
+
+</td>
+<td valign="top">
+<p>a value (integer &gt; 0) to define the minimum number of pixels (i.e. the contributing area) that should drain into the pixel examined to form a network channel. </p>
+
+<p>If the condition is met, <span class="courier">true</span> is assigned in the output map; else <span class="courier">false</span> is assigned. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>threshold_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster map where the pixel values define the minimum number of pixels (i.e. the contributing area) that should drain into the pixel examined to form a network channel. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster that is the outcome of the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow Direction</a> operation, i.e. a raster map with <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class="defnewpar">The output map will always use <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Bool</span></a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="drainage_network_extraction_functionality.htm">Drainage network extraction : functionality</a></p>
+
+<p class=seealsolinks><a href="drainage_network_extraction_dialog_box.htm">Drainage network extraction : dialog box</a></p>
+
+<p class=seealsolinks><a href="drainage_network_extraction_algorithm.htm">Drainage network extraction : algorithm</a></p>
+
+
+</body

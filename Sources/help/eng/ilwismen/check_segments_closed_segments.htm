@@ -1,0 +1,105 @@
+<html>
+
+<head>
+<title>Check segments : Closed segments</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Check segments, Closed segments">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Segment editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/segment_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Check segments - Closed segments</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Checks whether each segment has only 1 node serving both as the begin node and as the end node. This format is required if you wish to use non-topological polygonization, for instance when you imported vector files (e.g. DXF) into ILWIS earlier on, and now wish to polygonize the segment map which is the result of the import. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>You only need to use this check if you wish to use non-topological polygonization later on. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >Mask</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to check a specific selection of segments. Subsequently, specify the multiple search strings to check only those segments. Clear this check box to check all segments.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Start at Begin: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Start the check with the first segment. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Start at Number:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Start the check with any segment. Subsequently, type the (internal) segment number where the check should start. Previous segments will be skipped.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If in a segment a second node is found:</p>
+
+<ul>
+
+<li>	the second node is marked on the map with a red square; </li>
+
+<li>	a message box appears stating the code of the segment with the error and the (internal) segment number, asking you to zoom in on the error or not. </li>
+
+<p class=linespacing03before>Whether you let the program zoom in automatically or not, you have to correct the error manually, for instance by using <a href="segment_editor_move_points_mode.htm">Move Points Mode</a>. </p>
+
+</ul>
+
+<p class=defnewpar>After a manual correction, you have to restart the check yourself. </p>
+
+<p class=defnewpar>If no errors are encountered for this check, a message will appear stating that the segments are OK. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_check_segments.htm">Segment editor : Check segments</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_polygonize.htm">Segment editor : Polygonize</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+</body

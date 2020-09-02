@@ -1,0 +1,97 @@
+<html>
+
+<head>
+<title>Show map list as color composite : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map lists, Show ..., Open ..., Color composite (interactive), Open as ..., Show as ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Show Map List as color composite</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Select a map list and show three images, or other raster maps with a value domain, present in this map list as an interactive color composite. The resulting color composite will be displayed in a map window which can be saved as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. Interactive color composites are very suitable to be used as a background during <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a> or during screen digitizing. </p>
+
+<p class=defnewpar>One map will be displayed in shades of red, one in shades of green and one in shades of blue. Putting three images together in one color composite map can give a better visual impression of the reality on the ground, than by displaying one band at a time. Examples of color composites are false color (or IR) images and 'natural color' images. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Show Map List as Color Composite</span> from the <a href="../ilwis/main_window_menu_commands.htm">Operations, Visualization</a> menu in the Main window,</li>
+
+<li>	when you double-click the <img src="../images/showtv.gif" align=bottom width="14" height="14"> <span class=arial>ColorComp</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Select a map list:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing map list which contains raster maps with the Image domain or raster maps with a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <a href="display_options_map_list_as_color_composite.htm">Display Options - Map List as Color Composite</a> dialog box appears. There, you can select which images/maps you want to use for your color composite and specify the stretch intervals. </p>
+
+<p class=defnewpar>A map list can only be showed as an interactive color composite, when your graphics board is configured to use more than 256 colors, for instance High Color 16-bit or True Color 24-bit (see Display Settings in Windows' Control Panel).</p>
+
+<p class=tip>Tips:</p>
+
+<p class=tiptext>When you want to create a <i>permanent</i> color composite, which can for instance be used as a drape over a 3D model, choose <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >Color Composite</a> from the <a href="../ilwis/main_window_menu_commands.htm">Operations, Image Processing</a> menu.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/show_map_list_as_color_composite.htm">Show Map List as Color Composite</a></p>
+
+<p class=seealsolinks><a href="display_options_map_list_as_color_composite.htm">Display Options - Map List as Color Composite</a></p>
+
+</body

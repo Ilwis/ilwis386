@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>nearest point popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Nearest point   (Point interpolation)</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/nearest_point.htm" onClick="return popup(this, 'notes')" >nearest point</a> operation is a <a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" >point interpolation</a> which requires a point map as input and returns a raster map as output. Each pixel in the output map is assigned the class name, identifier, or value of the nearest point, according to Euclidean distance. This method is also called Nearest Neighbour or Thiessen. The points in the input point map for the Nearest point operation do not need to be values necessarily; point maps (or attribute columns) with a class, ID or bool domain are also accepted.</p>
+
+<p class=linespacing03after>For example, schools, hospitals, water wells, etc. can be represented by points. The output map of a nearest point operation on such a point map gives the 'service area' of the schools, hospitals or water wells, based on the shortest distance (as the crow flies) between points and pixels.</p>
+
+<p class=linespacing03after>When you have many points or when you wish to use weight factors to indicate accessibilities, it is advised to rasterize the points, and then use <a href="../../ilwisapp/popup/distance_calculation_popup.htm">Distance calculation</a> to make a Thiessen map.</p>
+
+</body

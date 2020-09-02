@@ -1,0 +1,281 @@
+<html>
+
+<head>
+<title>How to use parameters in scripts</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Parameters in scripts, Scripts, How to use ..., Use ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to use parameters in scripts</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Parameters in a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> can replace (parts of) object names, operations, etc. Parameters in scripts work as DOS replaceable parameters in DOS batch files, and must be written on the Script tab of the Script editor as %1, %2, %3, up to %9. </p>
+
+<h2>To run a script with parameters using a Run Script dialog box</h2>
+
+<p class=kopje>Example: calculating slope maps in degrees and in percentages</p>
+
+<p class=defnewpar>Suppose you have a segment map 'Contour' and an existing georeference 'MyGeoref' with a certain pixel size, and you create a script called 'slopes' to calculate slope maps in degrees and in percentages. </p>
+
+<p class=defnewpar>To obtain a slope map in degrees and a slope map in percentages, create the following script: </p>
+
+<ol>
+
+<li>Type on the <a href="script_editor_functionality.htm#script_tab">Script tab</a> of the script editor:</li>
+<p class=calc0>%3 = MapInterpolContour(%1, %2)</p>
+<p class=calc0>DX = MapFilter(%3, dfdx)</p>
+<p class=calc0>DY = MapFilter(%3, dfdy)</p>
+<p class=calc0>%4 = 100 * HYP(DX, DY) / PIXSIZE(%3)</p>
+<p class=calc0>%5 = RADDEG(ATAN(%4 / 100))</p>
+<p class=calc0>calc %3.mpr</p>
+<p class=calc0>calc %4.mpr</p>
+<p class=calc0>calc %5.mpr</p>
+
+
+<p class=defnewpar>This script is more elaborately explained in <a href="calc_creating_and_running_scripts.htm">MapCalc &amp; TabCalc : creating and running scripts</a>.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>On the <a href="script_editor_functionality.htm#parameters_tab">Parameters tab</a> of the script editor, 
+        select the number of parameters (in this case 5), type a name for every parameter
+        and select for each parameter the object type. For example: </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+<table border="0" cellPadding="0" cellSpacing="0">
+        <tbody>
+          <tr>
+            <td width="80"><b>Parameter</b></td>
+            <td width="240"><b>Name</b></td>
+            <td><b>Type</b></td>
+          </tr>
+          <tr>
+            <td width="80">%1</td>
+            <td width="240">Input contour segment map</td>
+            <td>Segment Map</td>
+          </tr>
+          <tr>
+            <td width="80">%2</td>
+            <td width="240">Georef for all output maps</td>
+            <td>Georeference</td>
+          </tr>
+          <tr>
+            <td width="80">%3</td>
+            <td width="240">Output DEM</td>
+            <td>Filename</td>
+          </tr>
+          <tr>
+            <td width="80">%4</td>
+            <td width="240">Output slope map (in percentages)</td>
+            <td>Filename</td>
+          </tr>
+          <tr>
+            <td width="80">%5</td>
+            <td width="240">Output slope map (in degrees)</td>
+            <td>Filename</td>
+          </tr>
+        </tbody>
+      </table>
+
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>By specifying that a parameter is a certain ILWIS object, you will obtain a drop-down list box in the Run Script dialog box; you can then select an input object of the specified type. </li>
+
+<li>By specifying that a parameter represents a file name, you will obtain a text box in the Run Script dialog box; you can then fill out the names of output objects. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>On the <a href="script_editor_functionality.htm#default_values_tab">Default Values tab</a>, you may specify default objects and default filenames, for all variables/parameters that you wish to use in the Run Script dialog box.</li>
+
+<p class=defnewpar>For instance:</p>
+
+<ul>
+<li>The default output name for the Output DEM may be: DEM</li>
+<li>The default output name for the Output slope map (in percentages) may be: SlopePct</li>
+<li>The default output name for the Output slope map (in degrees) may be: SlopeDeg</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<li>To run this script:</li>
+
+<ul>
+
+<li>open the <a href="script_editor_menu_commands.htm">File menu</a> in the script editor and select the <span class=arial>Run Script</span> command, or</li>
+
+<li>press the <img src="../images/run.gif" alt="Run Script" align=bottom width="22" height="22"> <span class=arial>Run Script</span> button in the toolbar of the script editor, or</li>
+
+<li>type on the command line of the Main window: <span class=calc0>Run </span><i>scriptname</i></li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box will appear:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<img src="../images/scriptrun.gif" width="357" height="215" ALT="Run Script dialog box">
+
+<p class=defnewpar>In the Run Script dialog box, all parameter names are listed as specified on the Parameters tab of the script editor.</p>
+
+<ul>
+
+<li>If you did <i>not</i> specify default objects on the Default Values tab, you need to select objects for input parameters and/or type object names for output parameters. </li>
+
+        <p class="leftmargin1">In this case, you can select your own segment map with contour lines for the 'Input contour segment map', and you can select your own georeference for 'Georef for all output maps'. </p>
+
+<li>If you did fill out objects on the Default Values tab, the Run Script dialog box will already be filled out with these defaults.</li>
+
+        <p class="leftmargin1">In this case, the output map names DEM, SlopePct and SlopeDeg were already filled out on the Default Values tab. </p>
+
+</ul>
+
+<p class=linespacing03before>Click OK to execute the script.</p>
+
+</ol>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>There are also other ways to run a script: for more information see <a href="how_to_run_scripts.htm">How to run scripts</a>.</li>
+
+<li>You can create your own Help for a script so that you can explain the meaning of parameters to other users of the script. For more information, see the <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box. </li>
+
+</ul>
+
+
+<h2>To run a script with parameters without using a Run Script dialog box</h2>
+
+<p class=kopje>Example 1: calculating slope maps in degrees and in percentages</p>
+
+<ol>
+<li>If a Slopes script is defined as follows on the Script tab of the script editor: </li>
+
+        <p class=calc0>%3 = MapInterpolContour(%1, %2)</p>
+        <p class=calc0>DX = MapFilter(%3, dfdx)</p>
+        <p class=calc0>DY = MapFilter(%3, dfdy)</p>
+        <p class=calc0>%4 = 100 * HYP(DX, DY) / PIXSIZE(%3)</p>
+        <p class=calc0>%5 = RADDEG(ATAN(%4 / 100))</p>
+        <p class=calc0>calc %3.mpr</p>
+        <p class=calc0>calc %4.mpr</p>
+        <p class=calc0>calc %5.mpr</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>You can run the script and skip the Run Script dialog box, by directly filling out all parameters the command line of the Main window:</li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=calccommline><span class=courier>run Slopes Contour.mps </span><i>MyGeoref</i><span class=courier>.grf&nbsp;DEM&nbsp;SlopePct&nbsp;SlopeDeg</span></p>
+
+<p class=defnewpar>The first string found after the script name <span class=courier>Slope</span> will replace <span class=courier>%1</span>  in the script, the second one %2, etc. In this example it means that:</p>
+
+<p class=emtpylinehalf>&nbsp;</p>
+
+<table border="0" cellpadding="0" cellspacing="0">
+ 
+<tr>
+<td width="120"><span class=courier>Contour.mps</span></td>
+<td>replaces %1</td>
+</tr>
+
+<tr>
+<td width="120"><i>MyGeoref</i><span class=courier>.grf</span></td>
+<td>replaces %2</td>
+</tr>
+
+<tr>
+<td width="120"><span class=courier>DEM</span></td>
+<td>replaces %3</td>
+</tr>
+
+<tr>
+<td width="120"><span class=courier>SlopePct</span></td>
+<td>replaces %4</td>
+</tr>
+
+<tr>
+<td width="120"><span class=courier>SlopeDeg</span></td>
+<td>replaces %5</td>
+</tr>
+</table>
+
+</ol>
+
+<p class="tip">Mind: </p>
+
+<p class="tiptext">When you use long filenames as parameters, you must enclose the object name within single quotes; the <i>.ext</i> extension of ILWIS objects should be left outside the quotes. 
+
+A valid example of using long names is for instance: <br>
+
+<span class=courier>run Slopes 'My Contours'.mps '</span><i>My Georef</i><span class=courier>'.grf&nbsp;'my DEM'&nbsp;'Slope Map in Percentages'&nbsp;'Slope Map in Degrees'</span></p>
+
+<p class="tiptext">For more information, refer to <a href="how_to_use_long_object_names.htm">How to use long object names</a>. </p>
+
+<p class=defnewpar>Of course, you could also specify the object names directly in the script itself, thus creating a script without parameters.</p>
+
+<p class=kopje>Example 2: calculating yield maps of different years</p>
+
+<p>Suppose you have three landuse maps (LU70, LU80, and LU90) of different years (1970, 1980, 1990). Each map has an attribute table linked to it (LUTBL70, LUTBL80, LUTBL90), and each table contains a column YieldMainCrop. </p>
+
+<p class=defnewpar>To obtain attribute maps (yield maps) of all landuse maps, you can create the following script: </p>
+<p class=emptylinehalf>&nbsp;</p>
+<ol>
+<li>Type on the <a href="script_editor_functionality.htm#script_tab">Script tab</a> of the script editor:
+<p class=calc0>Yield%1=MapAttribute(LU%1, YieldMainCrop)</p>
+<p class=calc0>Yield%2=MapAttribute(LU%2, YieldMainCrop)</p>
+<p class=calc0>Yield%3=MapAttribute(LU%3, YieldMainCrop)</p>
+</li>
+<p class=emptylinehalf>&nbsp;</p>
+<li>If you do not specify parameters or default objects/filenames on the Parameters tab and the Default Values tab of the script editor, 
+
+you can run the script 'Yields' from the command line of the Main window, by typing:</li>
+
+<p class=calc0>run Yields 70 80 90</p>
+
+<p class=defnewpar>In script Yields, '70' replaces %1, '80' replaces %2 and '90' replaces %3. You thus obtain three attribute maps (Yield70, Yield80, Yield90) from the three input maps (LU70, LU80, LU90).</p>
+
+</ol>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>There are also other ways to run a script: for more information see <a href="how_to_run_scripts.htm">How to run scripts</a>.</li>
+
+<li>You can create your own Help for a script so that you can explain the meaning of parameters to other users of the script. For more information, see the <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="ilwis_objects_scripts.htm">ILWIS objects : scripts</a></p>
+<p class=seealsolinks><a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a></p>
+<p class=seealsolinks><a href="appendices_ilwis_commands.htm">Appendices : ILWIS commands</a></p>
+<p class=seealsolinks><a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a></p>
+<p class=seealsolinks><a href="how_to_run_scripts.htm">How to run scripts</a></p>
+<p class=seealsolinks><a href="how_to_use_long_object_names.htm">How to use long object names</a></p>
+
+</body

@@ -1,0 +1,149 @@
+<html>
+
+<head>
+<title>Cumulative column</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Columns, Cumulative sum, Column operations, ColumnCumulative">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Columns menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Cumulative Column</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Calculate the cumulative sum of a column containing values.</p>
+
+<p class=defnewpar>Optionally, you can calculate the cumulative sum according to a certain sort order. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=108>
+<p class=diabox>Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value column</a> of which you want to calculate the cumulative sum.</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=108>
+<p class=diabox>Sort by Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, select a column on which you wish to sort while calculating the cumulative sum.  </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=108>
+<p class=diabox>Output column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a new <a href="..//ilwis/popup/object_column_name_popup.htm" onClick="return popup(this, 'notes')" >column name</a>. A <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent column</a> will be created. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <a href="column_properties.htm">Column Properties</a> dialog box will appear.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>If you choose to sort on a column during a cumulative sum, it is a good idea to sort the table on that column as well: choose <span class=arial><a href="sort_records.htm">Sort</a></span> from the <a href="../ilwis/table_window_menu_commands.htm">Columns menu</a>. </li>
+
+<li>To calculate sums per group, choose the <span class=arial><a href="aggregate_column.htm">Aggregate</a></span> command on the Columns menu. </li>
+
+</ul>
+
+<p class=kopje>Command line syntax:</p>
+
+<p>You can also perform the cumulative sum calculation on the command line of the table window. Type one of the following expressions: </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p><i>outcol</i> = <span class=courier>ColumnCumulative</span>(<i>col</i>)</p>
+
+<p><i>outcol</i> = <span class=courier>ColumnCumulative</span>(<i>col</i>, <i>sortcol</i>)</p>
+
+<p><i>outcol</i> = <span class=courier><a href="../ilwis/calc_cum.htm">CUM</a></span>(<i>col</i>)</p>
+
+<p><i>outcol</i> = <span class=courier>CUM</span>(<i>col</i>, <i>sortcol</i>)</p>
+
+<p class=emptyline>&nbsp;</p>
+        
+<p>where: </p>
+
+<table cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width="60"><i>outcol</i>
+
+</td>
+<td valign="top">is the output column name; 
+
+</td>
+</tr>
+<tr>
+<td valign="top"><i>col</i>
+
+</td>
+<td valign="top">is the name of the column which contains the values of which you wish to calculate the cumulative sum; 
+
+</td>
+</tr>
+<tr>
+<td valign="top"><i>sortcol</i> 
+
+</td>
+<td valign="top">is the name of the column on which you wish to sort before calculating the cumulative sum.
+
+</td>
+</tr>
+</table>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_toolbar.htm">Table window : toolbar</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_menu_commands.htm">Table window : menu commands</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/calc_aaf.htm">Table calculation : overview of operators and functions</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/calc_cum.htm">CUM</a> </p>
+
+</body

@@ -1,0 +1,208 @@
+<html>
+
+<head>
+<title>Raster to segments : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Raster to segments">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Raster to segments</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Raster to segments operation extracts segments from the boundaries of mapping units in a raster map. </p>
+
+<p class=defnewpar>The segments in the output map are derived from the boundaries of areas of pixels that have the same class name or ID in the input raster map. You can choose to create segments:</p>
+
+<ul>
+
+<li>	from 4-connected pixels: areas of pixels are found where pixels with the same class name or ID are horizontally or vertically connected; or </li>
+
+<li>	from 8-connected pixels: areas of pixels are found where pixels with the same class name or ID are horizontally, vertically or diagonally connected.</li>
+
+</ul>
+
+<p>For more information on constructing areas of 4 or 8-connected pixels, see <a href="areanumbering_functionality.htm">Area numbering : functionality</a>. </p>
+
+<p class=defnewpar>There are two possibilities to assign names to the extracted segments:</p>
+
+<ul>
+
+<li>	single name: all extracted segments are named '<span class=courier>Boundaries</span>';</li>
+
+<li>	unique names: each segments obtains a unique name '<span class=courier>Boundary 1</span>', '<span class=courier>Boundary 2</span>' etc.; the original names or values of the units on either side of an extracted segment as well as the length of extracted segments are stored in an additional attribute table for the output map. </li>
+
+</ul>
+
+<p class=defnewpar>Furthermore, you can specify whether or not to smooth the output segments.</p>
+
+<p class=kopje>Examples:</p>
+
+<p>The effect of using 4 or 8-connected pixels and smoothing or no smoothing is illustrated in the figures below.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=189>
+<p>Input map:</p>
+
+</td>
+<td valign="top" width=189>
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p class=linespacing01before><img src="../images/rastpol.gif" align=bottom width="127" height="127"></p>
+
+</td>
+<td valign="top" width=189>
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top" width=189>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p>Output map 4-connected<br>
+no smooting:</p>
+
+</td>
+<td valign="top" width=189>
+<p>Output map 8-connected<br>
+no smoothing:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p class=linespacing01before><img src="../images/seg4ns.gif" align=bottom width="129" height="129"></p>
+
+</td>
+<td valign="top" width=189>
+<p class=linespacing01before><img src="../images/seg8ns.gif" align=bottom width="129" height="129"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top" width=189>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p>Output map 4-connected<br>
+with smoothing:</p>
+
+</td>
+<td valign="top" width=189>
+<p>Output map 8-connected<br>
+with smoothing:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p class=linespacing01before><img src="../images/seg4sm.gif" align=bottom width="129" height="129"></p>
+
+</td>
+<td valign="top" width=189>
+<p class=linespacing01before><img src="../images/seg8sm.gif" align=bottom width="129" height="129"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Using 4- and 8-connectivity, the appearance of the output map looks the same, however in the case of 4-connectivity the output map has more segments. This is because only horizontal and vertical neighbours were evaluated to construct segments from the boundaries of the mapping units. In the case of 8-connected, horizontal, vertical and diagonal neighbours were used to construct segments. Note that in the output map the two highlighted segments (dark gray and dashed) 'touch' another segment (black) in the central part of the map without a node. </p>
+
+<p class=defnewpar>The result of this operation depends on the homogeneity of the raster map and the pixel size compared to the size of the mapping units. It is advised to only use this operation on rather homogeneous raster maps that consist of areas with a considerable number of pixels. When you want to extract for instance segments from a raster map which is the result of the <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >Classify</a> operation, it may be better to first run the majority filter on that raster map to homogenize the classification results and then perform the Raster to segments operation.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>When you use the Raster to Segments operation through the dialog box, you can use for the input raster map a map with a class, ID or Bool domain. On the command line, you can use any type of input map.</p>
+
+<p>The input raster map must have a georeference which is not georeference <span class=courier>None</span>.</p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The operation creates a new domain which is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). 
+
+<ul>
+
+<li>When the Single Name option is used and when the input map has a class domain, the output map also has a class domain. <br>
+
+        All segments will obtain the name 'Boundaries'. </li>
+
+<li>When the Single Name option is used and when the input map has an ID domain, the output map also has an ID domain. <br>
+
+        All segments will obtain the name 'Boundaries'. </li>
+
+<li>When the Unique Names option is used, the output map and the attribute table will use a <span class=courier>UniqueID</span> domain. <br>
+
+        Every segment will obtain a unique name like 'Boundary 1', 'Boundary 2', etc. </li>
+
+</ul>
+
+<p>The output segment map uses the same coordinate system as the georeference of the input raster map. The coordinate boundaries for the segment map are the boundaries of this georeference.</p>
+
+<p class=kopje>Attribute table for output map:</p>
+
+<p>When the Unique Names option is used, an attribute table will be automatically created for the output map. The table will obtain the same name as the output map. The table will contain the new IDs, the names of the mapping units to the right and to the left of each extracted segment and the length of each extracted segment. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	To obtain frequency information on segments, you can calculate the histogram of the resulting segment map with the <a href="..//ilwisapp/popup/histogram_operation_popup.htm" onClick="return popup(this, 'notes')" >Histogram operation</a>.</li>
+
+<li>	If you only want to extract segments from a small part of your raster map, you can first create a <a href="..//ilwisapp/popup/sub_map_raster_popup.htm" onClick="return popup(this, 'notes')" >Submap of the raster map</a> and then extract segments from the raster submap.</li>
+
+<li>	For more information on internal domains and representations, refer to <a href="../ilwis/how_to_open_internal_domains_representations_advanced.htm">How to open internal domains/representations</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="raster_to_segments_dialog_box.htm">Raster to segments : dialog box</a></p>
+
+<p class=seealsolinks><a href="raster_to_segments_command_line.htm">Raster to segments : command line</a></p>
+
+<p class=seealsolinks><a href="raster_to_segments_algorithm.htm">Raster to segments : algorithm</a></p>
+
+</body

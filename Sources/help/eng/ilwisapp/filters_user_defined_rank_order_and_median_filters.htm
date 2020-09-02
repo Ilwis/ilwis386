@@ -1,0 +1,626 @@
+<html>
+
+<head>
+<title>Filters : user-defined rank order and median filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filters, User-defined filters, Rank order filters, Median filters, MED3x3, MED5x5, Use ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Filters</h1>
+
+<h1 class=secondline>User-defined rank order and median filters</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Standard <a href="..//ilwisapp/popup/filter_rank_order_filter_popup.htm" onClick="return popup(this, 'notes')" >rank order filters</a> are <a href="..//ilwisapp/sec/filter_med3x3_sec.htm" onClick="return popup(this, 'notes')" >MED3x3</a> and <a href="..//ilwisapp/sec/filter_med5x5_sec.htm" onClick="return popup(this, 'notes')" >MED5x5</a>; these filters sort 9 resp. 25 pixel values and assign the 5th resp. the 13th value (median value) to the center pixel in the output map. In the Filter dialog box as well as on the command line, you may define other rank order and median filters of any user-defined size and assigning any user-defined rank order value to the central pixel.</p>
+
+<p class=kopje>Using the Filter dialog box:</p>
+
+<ol>
+
+<li>	To use one of the standard rank order filters:</li>
+
+        <ul>
+
+        <li>	Open the Filter dialog box,</li>
+
+        <li>	for <span class=arial>Filter Type</span>, select: Rank Order,</li>
+
+        <li>	select the <span class=arial>Predefined</span> check box,</li>
+
+        <li>	for <span class=arial>Filter Name</span>, select: Med3x3 or Med5x5.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp; </p>
+
+<li>	To define your own rank order filter: </li>
+
+        <ul>
+
+        <li>	Open the Filter dialog box,</li>
+
+        <li>	for <span class=arial>Filter Type</span>, select: Rank Order,</li>
+
+        <li>	clear the <span class=arial>Predefined</span> check box,</li>
+
+        <li>	specify the size of the filter,</li>
+
+        <li>	specify the rank order value which should be assigned to the central pixel,</li>
+
+        <li>	optionally specify a threshold: if the absolute difference between the result and the original value is larger than the threshold, the original value is kept; if the difference is smaller than or equal to the threshold, the ranked value is assigned.</li>
+
+        </ul>
+
+        <p class=leftmargininlist>This ensures that larger differences between neighbouring pixels remain in the output, while small variations are removed.</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<li>	To define your own median filter: </li>
+
+        <ul>
+
+        <li>	Open the Filter dialog box,</li>
+
+        <li>	for <span class=arial>Filter Type</span>, select: Median,</li>
+
+        <li>	specify the size of the filter,</li>
+
+        <li>	optionally specify a threshold. </li>
+
+        </ul>
+
+</ol>
+
+<p class=defnewpar>See also the example below.</p>
+
+<p class=kopje>Using the command line (advanced):</p>
+
+<ol>
+
+<li>	To use a standard Rank order filter, type one of the following expressions on the command line of the Main window:</li>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName, <span class=courier>Med3x3</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName, <span class=courier>Med5x5</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=leftmargininlist>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p class=courier>MapFilter</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Filter operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p class=courier>Med3x3</p>
+
+</td>
+<td valign="top">
+<p>is the name of the standard Median 3x3 filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p class=courier>Med5x5</p>
+
+</td>
+<td valign="top">
+<p>is the name of the standard Median 5x5 filter.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp; </p>
+
+<li>	To define your own Rank order filter, type one of the following expressions on the command line of the Main window: </li>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName, <span class=courier>Rankorder</span>(<i>rows,cols,rank</i>))</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName, <span class=courier>Rankorder</span>(<i>rows,cols,rank,threshold</i>))</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=leftmargininlist>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p class=courier>MapFilter</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Filter operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p class=courier>Rankorder</p>
+
+</td>
+<td valign="top">
+<p>is the command to define a rank order filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p><i>rows</i></p>
+
+</td>
+<td valign="top">
+<p>are the number of rows of your rank order filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p><i>cols</i></p>
+
+</td>
+<td valign="top">
+<p>are the number of columns of your rank order filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p><i>rank</i></p>
+
+</td>
+<td valign="top">
+<p>is the rank order number that determines the output value.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p><i>threshold</i></p>
+
+</td>
+<td valign="top">
+<p>when a threshold is set, the value of the center pixel will only be replaced by the new value if the difference between the original and new pixel value is smaller than or equal to the threshold.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp; </p>
+
+<li>	To define your own Median filter, type one of the following expressions on the command line of the Main window: </li>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName,<span class=courier>Median</span>(r<i>ows,cols</i>))</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName,<span class=courier>Median</span>(<i>rows,cols,threshold</i>))</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=leftmargininlist>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p class=courier>MapFilter</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Filter operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p class=courier>Median</p>
+
+</td>
+<td valign="top">
+<p>is the command to define a median filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p><i>rows</i></p>
+
+</td>
+<td valign="top">
+<p>are the number of rows of your median filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p><i>cols</i></p>
+
+</td>
+<td valign="top">
+<p>are the number of columns of your median filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p><i>rank</i></p>
+
+</td>
+<td valign="top">
+<p>is the rank order number that determines the output value.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=119>
+<p><i>threshold</i></p>
+
+</td>
+<td valign="top">
+<p>when a threshold is set, the value of the center pixel will only be replaced by the new value if the difference between the original and new pixel value is smaller than or equal to the threshold.</p>
+
+</td>
+</tr>
+</table>
+
+</ol>
+
+<p class=kopje>Examples:</p>
+
+<ol>
+
+<li>	To obtain the <b>minimum of each 3x3 neighbouring pixels</b>:</li>
+
+        <ul>
+
+        <li>	in the Filter dialog box, select for the <span class=arial>Filter type</span> Rank Order, <br>
+        clear the <span class=arial>Predefined</span> check box, <br>
+        specify 3 for the number of rows and 3 for the number of columns, <br>
+        specify 1 for the rank, and <br>
+        optionally specify a threshold.</li>
+
+        <li>	on the command line, use a filter definition of: <span class=courier>Rankorder(3,3,1)</span> </li>
+
+        </ul>
+
+<p class=leftmargininlist>	Rank 1 means the smallest value of each 9 (3 by 3) pixel values examined will be used for the output pixel.</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<li>	To obtain the <b>maximum of each 7 horizontally neighbouring pixels</b>:</li>
+
+        <ul>
+
+        <li>	in the Filter dialog box, <br>
+        select for the <span class=arial>Filter type</span> Rank Order <br>
+        clear the <span class=arial>Predefined</span> check box, <br>
+        specify 1 for the number of rows and 7 for the number of columns, <br>
+        specify <span class=courier>7</span> for the rank, and <br>
+        optionally specify a threshold.</li>
+
+        <li>	on the command line, use a filter definition of: <span class=courier>Rankorder(1,7,7)</span> </li>
+
+        </ul>
+
+<p class=leftmargininlist>	Rank 7 means that the largest value of each 7 (1 by 7) pixel values examined is used as output value.</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<li>	To obtain the <b>median value of each 5 horizontally neighbouring pixels</b>:</li>
+
+        <ul>
+
+        <li>	in the Filter dialog box, <br>
+        select for the <span class=arial>Filter type</span> Median, <br>
+        clear the <span class=arial>Predefined</span> check box, <br>
+        specify 1 for the number of rows and 5 for the number of columns, and <br>
+        optionally specify a threshold.</li>
+
+        <li>	on the command line, use a filter definition of: <span class=courier>Median(1,5)</span>.</li>
+
+        </ul>
+
+</ol>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	Both the number of rows and the number of columns defining the filter size must be <i>odd</i> values.</li>
+
+<li>	With Neighbourhood operators similar operations can be performed as with rank order filters: for example, the minimum, maximum, sum and predominant pixel value of each 9 pixels considered can be assigned as output value to the central pixel. For more information, refer to <a href="../ilwis/calc_special_neighbourhood_operations_and_iterations.htm">MapCalc special : neighbourhood operations</a>.</li>
+
+<li>	With the <a href="..//ilwisapp/popup/aggregate_map_popup.htm" onClick="return popup(this, 'notes')" >Aggregate Map</a> operation, similar results can be obtained. Aggregate Map however moves from block to block in the map, while the Filter operation moves pixel by pixel.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filters_types_rank_order_and_median_filters.htm">Filter types : rank order and median filters</a></p>
+
+<p class=seealsolinks><a href="filter_dialog_box.htm">Filter : dialog box</a></p>
+
+<p class=seealsolinks><a href="filter_command_line.htm">Filter : command line</a></p>
+
+</body

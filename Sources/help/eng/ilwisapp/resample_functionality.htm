@@ -1,0 +1,131 @@
+<html>
+
+<head>
+<title>Resample : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Resample, Nearest neighbour, Bilinear interpolation, Bicubic interpolation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Resample</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Resample operation resamples a raster map from the map's current <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> to another target georeference. The coordinate of each output pixel is used to calculate a new value from close-by pixel values in the input map. Three resampling methods are available: nearest neighbour, bilinear interpolation, and bicubic interpolation. </p>
+
+<p class=defnewpar>In raster operations (e.g. <a href="..//ilwisapp/popup/map_calculate_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a>), all input raster maps must have the same georeference. Thus, prior to such operations, use Resample:</p>
+
+<ul>
+
+<li>	<i>to combine raster maps from various sources</i>, when maps use different coordinate systems (projections) or different georeferences (pixel size): resample the maps to one common georeference; </li>
+
+<li>	<i>to combine satellite imagery of different dates or resolutions</i>: create a georef tiepoints for each set of images, then resample the images preferably to a georef corners;</li>
+
+<li>	<i>to combine satellite images with rasterized vector maps</i>: rasterize the vector data on the georef tiepoints of the satellite images, or, in case you prefer North-oriented raster maps, rasterize the vector maps with a georef corners, and resample the images with the georef tiepoints to this georef corners;</li>
+
+<li>	<i>to combine scanned photographs with rasterized vector data</i>, or <i>to rectify scanned aerial photographs</i>: create a georef tiepoints, a georef direct linear or a georef orthophoto for the photo, then resample the photo to a georef corners.</li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>It is not advisable to use Resample to make a raster map with any georeference use a georeference 3D; use the <a href="..//ilwisapp/popup/apply_3d_popup.htm" onClick="return popup(this, 'notes')" >Apply 3D</a> operation instead.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=tiptext>For more information on georeference types or on creating georeferences, refer to <a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a> or <a href="../ilwis/how_to_create_georeferences.htm">How to create a georeference</a>. For more information on editing a georef tiepoints, a georef direct linear or a georef orthophoto, refer to <a href="../ilwis/georeference_tiepoints_editor.htm">Tiepoint editor</a>.</p>
+
+<p class=kopje>Resampling methods:</p>
+
+<p>To resample an image, select an input image which has a georeference (usually a georeference tiepoints), select a resampling method (nearest neighbour, bilinear, bicubic), type an output map name and select the target georeference (usually a georeference corners).</p>
+
+<ul>
+
+<li>	When using nearest neighbour resampling, the value of the input pixel closest to a new output pixel is used as output value (see Fig. 1); </li>
+
+<li>	when using bilinear resampling, the values of 4 input pixels closest to a new output pixel are used to interpolate output values (see Fig. 2); </li>
+
+<li>	when using bicubic resampling, the values of 16 input pixels closest to a new output pixel are used to interpolate output values.</li>
+
+</ul>
+
+<p>For more information, see <a href="resample_algorithm.htm">Resample : algorithm</a>.</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=linespacing03before><img src="../images/resnn.gif" align=bottom width="177" height="150"></p>
+
+<p class=captionfig>Fig. 1:	Nearest neighbour resampling. Input pixels are represented by dashed black lines, coordinates of input pixels by black dots; output pixels are represented by red solid lines, coordinates of output pixels by red plus signs. The grey arrows indicate how output values are determined.</p>
+
+<p>As you can see in Figure 1, some values of the input map may be used twice in the output map, while other input values may not be used at all. </p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=linesp01befafter><img src="../images/resbilin.gif" align=bottom width="177" height="150"></p>
+
+<p class=captionfig>Fig. 2:	Bilinear resampling. Input pixels are represented by dashed black lines, coordinates of input pixels by black dots; output pixels are represented by solid red lines, coordinates of output pixels by red plus signs. The grey arrows indicate how output values are determined.</p>
+
+<p class=kopjeaftertitlesub>Input map requirements:</p>
+
+<p>The input map needs to have a georeference; this is usually a georef tiepoints, a georef direct linear or a georef orthophoto. </p>
+
+<p class=defnewpar>Furthermore: </p>
+
+<ul> 
+
+<li>For nearest neighbour resampling, the input map can have any domain.</li>
+
+<li>For bilinear resampling, the input map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a> or a map using the <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Color</span></a> domain. </li>
+
+<li>For bicubic resampling, the input map needs to be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>.</li>
+
+</ul>
+
+<p class=defnewpar>The operation can also be applied on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output map uses the same domain as the input map. If the input map has a value domain, the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> can be adjusted for the output map. </p>
+
+<p>The <i>target</i> georeference for the output map has to be selected or created. You can usually select an existing georeference corners.</p>
+
+<p class=defnewpar>When the operation is performed on an input map list, you will obtain an output map list. When the output map list is opened, the output raster maps will be (defined and) calculated. </p>
+
+<ul>
+
+<li>The output raster maps will obtain the same name as the output map list followed by _1, _2, _3, etc. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="resample_dialog_box.htm">Resample : dialog box</a></p>
+
+<p class=seealsolinks><a href="resample_command_line.htm">Resample : command line (1)</a></p>
+
+<p class=seealsolinks><a href="resample_command_line2.htm">Resample : command line (2)</a></p>
+
+<p class=seealsolinks><a href="resample_algorithm.htm">Resample : algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a></p>
+
+</body

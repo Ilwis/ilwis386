@@ -1,0 +1,48 @@
+<html>
+
+<head>
+<title>objects_internal_domains_popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Internal domains</p>
+
+<p class=linespacing03after>Some operations (can) create for their output map a new Class, ID or Picture domain that is not stored as a separate object but which is stored by the output map. You can use internal domains to reduce the number of domains shown in the Catalog. When the operation creates an internal domain of the Class or Picture type, then its representation is also stored by the output map (internal representation).</p>
+
+<p>You can view internal domains and representations in the same way as normal domains and representations:</p>
+
+<ul>
+
+<li>	open the output map of the operation in a map window, open the <a href="..//ilwis/map_window_menu_commands.htm" onClick="return popup(this, 'notes')" >Edit menu</a> and choose <span class=arial>Domain</span>, or</li>
+
+<li>	open the output map of the operation in a map window, open the Edit menu and choose <span class=arial>Representation</span>, or</li>
+
+<li>	click the output map of the operation with the right mouse button in the Catalog, then choose <span class=arial>Open As Domain</span> or <span class=arial>Open As Representation</span> from the context-sensitive menu.</li>
+
+</ul>
+
+<p class=linespacing03before>Internal domains and representations do not have their own Properties dialog box and cannot be shown as a table. For more information, see <a href="..//ilwis/how_to_open_internal_domains_representations_advanced.htm" onClick="return popup(this, 'notes')" >How to open internal domains and internal representations</a>.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>When you open an internal <span class=courier>UniqueID</span> domain, you can only edit the Prefix of the IDs. </p>
+
+</body

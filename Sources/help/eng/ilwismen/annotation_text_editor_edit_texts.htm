@@ -1,0 +1,213 @@
+<html>
+
+<head>
+<title>Annotation Text editor : Edit texts</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Annotation Text editor, Edit ..., Text">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Annotation Text editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Edit Texts</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__annotation_text_editor_edit_menu_sec2.Click()>Edit menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Edit the settings of multiple selected text items. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you select multiple texts in the editor window and choose the <span class=arial>Edit</span> command from the Edit menu or from the context-sensitive menu.</li>
+
+</ul>
+
+<p>For more information on multiple selection, see below.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a font in which the selected texts should appear. Open the list box by clicking it. You can select any installed True Type font.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the font size in which the texts should appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Bold:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the selected texts should appear in <b>Bold</b>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Italic:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the selected texts should appear in <i>Italics</i>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Underline:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the selected texts should appear Underlined.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Justification:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a position for the justification mark of the selected texts. Justification Baseline Center gives justification marks located at the center of the base line of each text; justification Top Left gives justification marks located at the top left of the rectangle which surrounds each text.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Text color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color in which the selected texts should appear. Open the list box by clicking it. To create your own color, select Custom from the bottom of the list or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Transparent:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the rectangles in which the texts appear should be transparent; you will see the texts directly on the contents of the map window. </p>
+
+<p class=diabox>Clear this check box when rectangles around texts should have the background color as defined for the map window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Rotation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the rotation of selected texts. Rotation is specified in degrees: rotation 0 gives text in direction left to right, rotation 90 gives text in direction bottom to top. Maximum rotation is 360.</p>
+
+</td>
+</tr>
+</table>
+
+<h2>Multiple selection</h2>
+
+<p class=kopjeaftertitlesub>To select two or more text items:</p>
+
+<ul>
+
+<li>	choose the <span class=arial>Select All</span> command from the Edit menu; all texts in the annotation text object will be selected; </li>
+
+<li>	drag a rectangle with the mouse pointer in the editor window; all texts within this rectangle will be selected;</li>
+
+<li>	press and hold the <span class=arial>Shift</span> key down and click individual text items.</li>
+
+</ul>
+
+<p class=kopje>To deselect a selected item:</p>
+
+<ul>
+
+<li>	press and hold the <span class=arial>Shift</span> key down and click the selected text item(s) which you want to deselect.</li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	To move multiple text items: select multiple text items and <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> them to another position in the editor window.</li>
+
+<li>	To make duplicates of multiple text items: press and hold the <span class=arial>Ctrl</span> key down, select multiple text items, and drag them to another position. </li>
+
+<li>	To change the text of a text item, double-click a text in the editor window.</li>
+
+<li>	You can also edit an annotation text object in a table window: </li>
+
+        <ul class=tipul>
+
+        <li>	double-click an annotation text object in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, or </li>
+
+        <li>	open the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window, choose <a href="../ilwismen/open_show_object_as_table.htm"><span class=arial>Open as Table</a></span>, and select the desired annotation text object.</li>
+
+        </ul>
+
+<li>	To install a Windows True Type font:</li>
+
+        <ul class=tipul>
+
+        <li>	In the Windows Settings, choose Control Panel, and choose Fonts. A list of installed fonts will appear.</li>
+
+        <li>	When the desired font is not yet in this list, choose <span class=arial>File, Install New Font</span>. The Add Font dialog box will appear.</li>
+
+        <li>	Specify the directory where fonts are available and select the font(s) you want to install. Then click OK.</li>
+
+        </ul>
+
+<p class=tiptext>	Now that the fonts are registered by Windows, you can use them in ILWIS as well.</p>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/annotation_text_editor_functionality.htm">Annotation Text editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a>	</p>
+
+</body

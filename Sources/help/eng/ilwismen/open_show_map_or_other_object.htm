@@ -1,0 +1,120 @@
+<html>
+
+<head>
+<title>Open/Show map or other object</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Open ..., Main window, Show ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Open/Show Map or other object</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Select a map, table, or any other <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >object</a> and show/open it in a <b>new</b> window. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Open</span> from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window,</li>
+
+<li>	when you choose <span class=arial>Visualization, Show Map</span> from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> in the Main window, </li>
+
+<li>	when you expand the <span class=arial>Visualization</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, and double-click the <span class=arial>Show</span> item, </li>
+
+<li>	when you double-click the <span class=arial>Show</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, </li>
+
+<li>	when you click the <span class=arial>Show Map</span> button in the <a href="../ilwis/main_window_standard_toolbar.htm">toolbar of the Main window</a>. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Select an object:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an object which you want to open in a new window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Select object type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the type of object you want to open: a map, a table, a map list, a map view, a domain, a representation, a georeference, a coordinate system, a histogram, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>A map is displayed in a <b>new</b> map window. A <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box appears to set <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> for the map. To display multiple maps in one map window, use the <span class=arial><a href="add_layer_to_map_window.htm">Add Layer</a></span> command on the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> of a map window.</p>
+
+<p>A table, histogram, two-dimensional table, or an annotation text object will be displayed in a table window.</p>
+
+<p>For other objects: either a specific editor is opened, or a dialog box appears. </p>
+
+<p class=defnewpar>When the selected object is not open yet, it is opened in a new window.</p>
+
+<p>When the selected object is already open, the object is restored and its window becomes the active window.</p>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	To open a map or table or any other object, you can also double-click it in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, or click the right mouse button on the object in a Catalog and select <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+<li>	To hide or show certain object types from a Catalog, use the <a href="../ilwis/main_window_object_selection_toolbar.htm">Object Selection toolbar</a> or the <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog, Object Selection tab</a>. </li>
+
+<li>	You can also open objects by typing the <span class=courier>Open</span> or <span class=courier>Show</span> command on the command line of the Main window. For more information, see <a href="../ilwis/appendices_ilwis_commands.htm">Appendices : ILWIS commands</a>.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects.htm">ILWIS objects</a></p>
+
+</body

@@ -1,0 +1,113 @@
+<html>
+
+<head>
+<title>ILWIS objects : graphs</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Graphs, ILWIS objects, Container objects">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Graphs&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/graphicon.gif" align=bottom width="15" height="15"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A graph can be created from <a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >columns</a> in a <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >table</a>. </p>
+
+<p class=defnewpar>You can either create a so-called graph from columns (displayed as points, bars, line, step or needle), or a rose diagram. The graph will be shown in a <a href="..//ilwis/popup/graph_window_popup.htm" onClick="return popup(this, 'notes')" >graph window</a>.</p>
+
+<p class=defnewpar>After you displayed a graph from columns, you can add graphs from formula, a least squares fit, or a semi-variogram model. The graphs are shown in the graph window. The different graph layers will furthermore appear in the <a href="graph_window_graph_management.htm">Graph Management</a> pane. </p>
+
+<p class=defnewpar>For more information on a graph window and on types of graphs, refer to <a href="graph_window_functionality.htm">Graph window : functionality</a> and <a href="graph_window_examples_of_graphs.htm">Graph window : examples of graphs</a>. </p>
+
+<p class=defnewpar>A saved graph contains all necessary display options to redisplay the graph after the graph window has been closed. </p>
+
+<p class=kopje>Names of graphs:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a new graph:</p>
+
+<p>To obtain a graph window containing a new graph: </p>
+
+<ul>
+
+<li>open the table which contains the column(s) from which you wish to create a graph, </li>
+
+<li>choose <span class=arial>Create Graph</span> or <span class=arial>Create Rose Diagram</span> from the <a href="table_window_menu_commands.htm">File menu</a> in the table window. </li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="../ilwismen/create_a_graph.htm">Create Graph</a> dialog box or the <a href="../ilwismen/create_a_rose_diagram.htm">Create Rose Diagram</a> dialog box will be opened. After you selected the column(s), a new graph window will be opened. </p>
+
+<p class=defnewpar>To create a graph, you can also: </p>
+
+<ul>
+
+<li>click the <span class=arial>Graph</span> button <img src="../images/table_graph.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/table_window_toolbar.htm">toolbar of a table window</a>, </li>
+
+<li>use the <span class=arial>New Graph</span> command in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or </li>
+
+<li>click a table with the right mouse button in a Catalog, and choose the <span class=arial>Create Graph</span> or the <span class=arial>Create Rose Diagram</span> command from the context-sensitive menu. </li>
+
+</ul>
+
+<p class=defnewpar>The graph will be shown in a <a href="graph_window_functionality.htm">Graph window</a>. </p>
+
+<p class=kopje>To edit a graph:</p>
+
+<ul>
+
+<li>	In the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, double-click a graph, </li>
+
+<li>	select a graph in the Catalog, open the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window and choose <span class=arial>Edit Object, </span>or </li>
+
+<li>	in the Catalog, click a graph with the right mouse button, and select <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p>The graph will be opened in a <a href="graph_window_functionality.htm">Graph window</a>. </p>
+
+<p class=defnewpar>You can also open existing graphs from within a graph window. </p>
+
+<p class=defnewpar>In a graph window, you can add graph layers, show/hide graph layers, remove graph layers, change the appearance of a graph layer (Graph Options), adapt the axes of the graph, etc. The final graph can be saved; you can furthermore print the graph, copy it to the clipboard, etc. For more information, refer to <a href="graph_window_functionality.htm">Graph window : functionality</a> and <a href="graph_window_graph_management.htm">Graph window : Graph Management</a>. </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>Graphs consist of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.GRH). This file contains references to the <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >table(s)</a> that contain the <a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >columns</a> from which the graph was created. Furthermore, it stores among others the display settings of the graphs layers and the display settings and domains used by the axes. </p>
+
+<p class=defnewpar>By opening the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a graph, you can see on the <span class=arial>Contains</span> tab, the table name(s) that contain the columns from which the graph was constructed. For more information, see the <a href="../ilwismen/graph_properties.htm">Graph Properties</a> sheet. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="graph_window_functionality.htm">Graph window : functionality</a></p>
+
+<p class=seealsolinks><a href="graph_window_graph_management.htm">Graph window : Graph Management</a></p>
+
+</body

@@ -1,0 +1,249 @@
+<html>
+
+<head>
+<title>Insert/Edit Scale Bar in layout</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Scale bar, Layout editor, Layouts, Add ..., Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert/Edit Scale Bar</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Insert or edit a <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bar</a> for a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in your <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>. </p>
+
+<p class=defnewpar>The scale bar that will be created is based on the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> used by the raster map in the selected map view; or if the map view does not contain a raster map, by the georeference of the map view itself. </p>
+
+<p class=defnewpar>You need to specify an interval length in meters: </p>
+
+<ul>
+
+<li>the scale bar that will be constructed will consist of at least 2 of such intervals; </li>
+
+<li>you can choose whether the intervals should be distinguished by alternating colors or by ticks; </li>
+
+<li>you will automatically obtain some text directly below the scale bar for the beginning of the first interval and the end of the last interval; </li>
+
+<li>optionally, the first interval can be divided into five smaller parts. </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>You can also obtain scale information for the map view as <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >text</a>, for instance 1:100000. Select a map view in your layout, and click the <span class=arial>Scale Text</span> <img src="../images/annscatxt.gif" align=bottom width="22" height="22"> button or choose <span class=arial><a href="../ilwismen/layout_editor_insert_edit_scale_text.htm">Scale Text</a></span> from the <a href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a>. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Blocked:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose this option button to obtain a scale bar in which the intervals are visible as alternating colored blocks. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Line:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose this option button to obtain a scale bar appearing as a line; ticks along the axis indicate the intervals.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Height of scale bar:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the height of the scale bar (mm). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Tick placement: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of a Line scale bar: specify whether ticks along the scale bar should be pointing up or down.  </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Nr. of intervals:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the number of intervals you wish to obtain (minimum 2, maximum 12). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Interval length:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the size of each interval, i.e. the distance that each interval should represent. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>First interval divided into smaller parts:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select this check box if the first interval should be divided into 5 small parts. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Unit indication:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you wish to obtain the distance units along the scale bar, usually <i>m</i> for meters. Optionally, you can choose to obtain <i>km</i> for kilometers as unit indication.</p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the scale bar and the start and end text that will automatically appear along the scale bar. To create your own color, select 'Custom' at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>; the Windows <a href="../ilwismen/custom_colors.htm">Color</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the <a href="..//ilwis/popup/font_popup.htm" onClick="return popup(this, 'notes')" >font</a> in which the start and end text along the scale bar should appear; you can select an installed font from the list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the font size (pt) in which the start and end text along the scale bar should appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Bold:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if the text along the scale bar should appear in <b>bold</b>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Italic:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if the text along the scale bar should appear in <i>italics</i>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Examples:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=136>
+<p class=diabox><img src="../images/scaleb1.gif" align=top width="125" height="20"></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Blocked scale bar, 5 intervals of 1000 m, unit indication in km, font Arial 12 pt. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diabox><img src="../images/scaleb2.gif" align=top width="120" height="20"></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Line scale bar, 5 intervals of 1000 m, first interval divided into smaller parts, font Arial 12 pt. </p>
+
+</td>
+</tr>
+</table>
+
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	In the Layout editor, a scale bar can be made larger or smaller in horizontal direction by <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> for instance a middle <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handle</a> which appears at the right hand side or the left hand side of the selected scale bar. The mouse pointer changes into a double-sided arrow when at the right position to start dragging. The number of intervals will automatically increase or decrease, and the text along the scale bar is automatically adapted to the new size. </li>
+
+<li>	To store annotation, you need to save the layout. Open the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a> and choose the <span class=arial><a href="../ilwismen/layout_editor_save_layout.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/layout_editor_save_layout_as.htm">Save As</a></span> command. You can also click in the white space of your layout, and click the <span class=arial>Save</span> button in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>. </li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/layout_editor_insert_edit_scale_text.htm">Layout editor : Insert/Edit Scale Text</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+</body

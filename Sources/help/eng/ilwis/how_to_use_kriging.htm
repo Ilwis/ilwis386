@@ -1,0 +1,489 @@
+<html>
+
+<head>
+<title>How to use Kriging</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to use ..., Use ..., Kriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to use Kriging</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar><a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" ><i>Kriging</i></a> is an alternative to many other <a href="../ilwisapp/point_interpolation.htm">point interpolation</a> techniques. Unlike straightforward methods, such as <a href="..//ilwisapp/popup/nearest_point_popup.htm" onClick="return popup(this, 'notes')" >Nearest Point</a>, <a href="..//ilwisapp/popup/trend_surface_popup.htm" onClick="return popup(this, 'notes')" >Trend Surface</a>, <a href="..//ilwisapp/popup/moving_average_popup.htm" onClick="return popup(this, 'notes')" >Moving Average</a> or <a href="..//ilwisapp/popup/moving_surface_popup.htm" onClick="return popup(this, 'notes')" >Moving Surface</a>; Kriging is based on a statistical method. Kriging is the only interpolation method available in ILWIS that gives you an an interpolated map and output error map with the standard errors of the estimates. As Kriging is an advanced technique that heavily relies on statistical theory, the novice user of GIS may need to ask advice from an expert. </p>
+
+<p class=defnewpar>Before you are going to use the Kriging method you should have thought about things like:</p>
+
+<ul>
+
+<li>	Do I really need the Kriging interpolation method? <br>
+
+        When estimates with their errors are required, you should use Kriging instead of another interpolation technique. Examples of situations where Kriging could be very helpful are the mining industry, environmental research where decisions could have major economical and juridical consequences (e.g. is the area under study polluted or not) and so on.  </li>
+
+<li>	Is Kriging the most appropriate interpolation method for my sample data? <br>
+
+        Before using an interpolation technique, first the assumptions of the method(s) should be considered carefully. As a user, you should choose the most appropriate method for your job. For example, when you want to do some <i>modelling</i> it is better to choose a straightforward interpolation method. When you are interested in the <i>estimation errors</i> however you should use Kriging. Several articles are available on the comparison of different interpolation techniques and Kriging, which may help the GIS user to decide on the method to use. Examples of such kind of studies can be found in Burrough 1986 and Burrough and McDonnell 1998. </li>
+
+</ul>
+
+<p class=defnewpar>Once you have decided that Kriging is the method you want to use, you should continue with the following steps.</p>
+
+<h2>Step 1: Examining the input data</h2>
+
+<p class=kopjeaftertitleboun>1.1  Visual and statistical data inspection</p>
+
+<p>In the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, select the point map with the sample points. Press the right mouse button and select <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. The <a href="../ilwismen/polygon_map_properties.htm">Point Map - Properties</a> dialog box is opened. </p>
+
+<ul>
+
+<li>	Check the map's <i>domain</i> and the amount of points and press <span class=arial>Cancel</span>. </li>
+
+</ul>
+
+<p class=defnewpar>Double-click the point map in the Catalog. The <a href="../ilwismen/display_options_point_map.htm">Display Options - Point Map</a> dialog box is presented. Accept the defaults by clicking the OK button. The point map is opened. Check the <i>distribution</i> of the sample points visually. Another way to investigate whether your points are randomly distributed, or appear clustered, regular, or paired, etc., is by doing a <a href="..//ilwisapp/popup/pattern_analysis_popup.htm" onClick="return popup(this, 'notes')" >Pattern Analysis</a>. </p>
+
+<p class=defnewpar>If you decide that there are enough sample points available and that the distribution of points is good enough to do a Kriging interpolation, <i>measure</i> the shortest and longest <i>distance</i> between two sample points in the point map.</p>
+
+<p>You can measure the length of both the shortest and the longest point-pair vector with the <a href="../ilwismen/measure_distance.htm">Measure Distance</a> button <img src="../images/dist.gif" align=bottom width="22" height="22"> (the pair of compasses) from the toolbar of the map window. You need this distance information later on for defining the <i>number of lags</i> and the <i>lag spacing</i> in the <a href="..//ilwisapp/popup/variogram_surface_popup.htm" onClick="return popup(this, 'notes')" >Variogram Surface</a> operation (step 1.2), the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial Correlation</a> or the <a href="..//ilwisapp/popup/cross_variogram_popup.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a> operation (step 2.1). </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>If you have sufficient sample points to do a proper Kriging interpolation, split up your data set in two parts. Use one part for interpolation and the other part for verification of the interpolated map.</p>
+
+<p class=defnewpar>Next, calculate the <i>variance</i> of the sample data set. </p>
+
+<ul>
+
+<li>	When the value data that you want to interpolate is stored in a column of the map's attribute table: open the attribute table. When values are stored in the point map itself, open the point map as a table via the context-sensitive menu. From the <a href="table_window_menu_commands.htm">Columns menu</a> in the table window, choose the <span class=arial>Statistics</span> command. In the <a href="../ilwismen/column_statistics.htm">Column Statistics</a> dialog box:</li>
+
+        <ul>
+
+        <li>	select the <span class=arial>Variance</span> function, and</li>
+
+        <li>	select the input variable for which you want to calculate the variance.</li>
+
+        <li>	Press the OK button. You can use this calculated variance as an indication for the sill when modelling the variogram (step 3.1).</li>
+
+        </ul>
+
+</ul>
+
+<p class=kopjeboldandund>1.2  Anisotropy</p>
+
+<p>When the variation of the variable under study is not the same in all directions, then anisotropy is present. In case of suspected anisotropy, calculate a Variogram Surface with the <a href="..//ilwisapp/popup/variogram_surface_popup.htm" onClick="return popup(this, 'notes')" >Variogram Surface</a> operation.</p>
+
+<ul>
+
+<li class=ls01be>	Select the point map in the Catalog. Press the right mouse button and choose <span class=arial>Statistics, Variogram Surface</span> from the context-sensitive menu. </li>
+
+<li>	The <a href="../ilwisapp/variogram_surface_dialog_box.htm">Variogram Surface dialog box</a> is opened. In case the point map is linked to an attribute table, choose the attribute column with the sample data. Enter the lag spacing, the number of lags and a name for the output map.</li>
+
+<li>	Select the <span class=arial>Show</span> check box and press OK. The variogram surface map is calculated. </li>
+
+</ul>
+
+<p class=defnewpar>The output map can best be viewed in a map window using representation <span class=courier>Pseudo</span> while a histogram has been calculated. To view the coordinates and the position of the origin in the output raster map, you can add grid lines, where the grid distance equals the specified lag spacing. It is important to recognize the origin of the plot/output map.</p>
+
+<ul>
+
+<li class=ls01be> Semi-variogram values close to the origin of the output map are expected to be small (blue in representation <span class=courier>Pseudo</span>), as values of points at very short distances to each other are expected to be similar. When there is no anisotropy, semi-variogram values will gradually increase from the origin into all directions. You will thus find circle-like shapes from the origin outwards where the color gradually changes from blue at the origin to green and red further away from the origin. </li>
+
+<li> Your input data is supposed to be <i>anisotropic</i> when you find an ellipse-like shape of low semi-variogram values (blue in representation <span class=courier>Pseudo</span>) in a certain direction going through the origin. In this direction, the semi-variogram values do not increase much. However, in the perpendicular direction, you find a clear increase of semi-variogram values: from blue at the origin to green and red further away from the origin. If anisotropy is present you should use <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a>.</li>
+
+</ul>
+
+<p class=defnewpar>You can measure the direction of anisotropy with the <a href="../ilwismen/measure_distance.htm">Measure Distance</a> button <img src="../images/dist.gif" align=bottom width="22" height="22"> from the toolbar of the map window, e.g. by following a 'line' of blue pixels going through the origin of the plot. You need this angle later on in step 2.1 (Spatial Correlation; bidirectional method) and step 4.3 (Anisotropic Kriging).</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	The semi-variogram values in the output map can be compared to the overall variance of your input data (calculated in step 1.1)</li>
+
+<li>	When no points are encountered in a certain directional distance class, the semi-variogram value of that cell/pixel in the output surface will be undefined. </li>
+
+<li>	When you find many undefined semi-variogram surface values in between few rather large semi-variogram values, you should consider to increase the lag spacing. Mind that results will be more reliable when say more than 30 point pairs are found in individual directional distance classes.</li>
+
+<li>	When you find very many undefined semi-variogram values mainly at the outer parts of the surface, you should consider to reduce the lag spacing.</li>
+
+<li>	When using an input point map with very many points, calculations of a large surface may take quite long. It is advised, to start using the operation with rather few lags and/or a rather small lag spacing.</li>
+
+</ul>
+
+<p class=kopjeboldandund>1.3  Trend</p>
+
+<p>One can perform a Kriging operation (i.e. <a href="..//ilwisapp/popup/universal_kriging_popup.htm" onClick="return popup(this, 'notes')" >Universal Kriging</a>) while taking into account a <i>local drift</i> or <i>trend</i> that is supposed to exist within the limiting distance defined around each pixel to be interpolated. Very often you know the trend already: </p>
+
+<ul>
+
+<li>	when you carried out another interpolation technique like <a href="..//ilwisapp/popup/moving_surface_popup.htm" onClick="return popup(this, 'notes')" >Moving surface</a> or a <a href="..//ilwisapp/popup/trend_surface_popup.htm" onClick="return popup(this, 'notes')" >Trend surface</a>, before you decided that you wanted to use the Kriging interpolation method, or </li>
+
+<li>	when you know the natural behavior of the variable (e.g. soil textures near a river levee are very often more extreme than in a backswamp area). </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>If a <i>global trend</i> is present in the sample set, subtract the trend for the input data with a <a href="calc.htm">TabCalc</a> statement. Perform <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Ordinary Kriging</a> on the de-trended data set and use <a href="calc.htm">MapCalc</a> to add both output maps again. This method is an alternative for Universal Kriging. However, a major disadvantage of this alternative is that the error map is incorrect.  </p>
+
+<p class=kopjeboldandund>1.4  Multiple variables</p>
+
+<p>If you decide that the <i>variable under study is sparsely sampled</i>, find out if there is <i>another variable that is better sampled</i> and has many corresponding sample points (identical XY-coordinates).</p>
+
+<p>Open the attribute table that is linked to the point map. Find out if there are two columns with value domains and corresponding XY- coordinates. If there is a second variable, calculate the variance of both variables individually and the correlation between the two columns. </p>
+
+<p>When the two variables are highly correlated, you can use the better-sampled variable and the relationship between the two variables to help to interpolate the sparsely sampled one with <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a>.</p>
+
+<p>If the correlation between the two variables is low it is advised to use another interpolation technique or not to interpolate at all.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	The correlation between the two variables should make sense. In other words, it should be based on physical relationships/laws (e.g. temperature and relative humidity, temperature and height)</li>
+
+<li>	If the variable is poorly sampled and there is no other variable that can help to interpolate the sparsely sampled one, it is not wise to interpolate because the results do not make much sense. Taking the average of the sample values is as good as interpolating. </li>
+
+<li>	If the variable is sparsely sampled, you may consider to go back into the field and take more measurements. </li>
+
+</ul>
+
+<h2>Step 2: Calculation of the experimental variograms</h2>
+
+<p class=kopjeaftertitleboun>2.1  Spatial Correlation and Cross Variogram</p>
+
+<p>Kriging assumes a certain degree of <i>spatial correlation</i> between the input point values. To investigate whether your point values are spatially correlated and until which distance from any point this correlation occurs, you can use the <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial Correlation</a> operation. When you want to use <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a>, you can investigate spatial correlation with <a href="..//ilwisapp/popup/cross_variogram_popup.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a>.</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<ul>
+
+<li>	Select the point map with the sample points in the Catalog. Press the right mouse button and select <span class=arial>Statistics, Spatial Correlation</span> (or <span class=arial>Cross Variogram</span> when you want to do CoKriging) from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. The Spatial Correlation dialog box or the Cross Variogram dialog box is opened. </li>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<li>	In the <a href="../ilwisapp/spatial_correlation_dialogbox.htm">Spatial Correlation dialog box</a>, you can choose to use either the omnidirectional or the bidirectional method:</li>
+
+        <ul>
+
+        <li>	The <i>omnidirectional method</i> simply determines all distances between all point pairs, regardless of any direction, i.e. in all directions. Thus, all point pairs that have a certain distance towards each other will be counted in a certain distance class. Then, Moran's I, Geary's c, and the semi-variance are calculated for all point pairs within each distance class.</li>
+
+        <li>	The <i>bidirectional method</i> first counts, just like the omnidirectional method, all pairs of points that have a certain distance to each other, and then calculates the Moran's I and Geary's c for these point pairs within each distance class. Furthermore, all point pairs are counted with a certain distance to each other and with a certain direction towards each other. For these point pairs, semi-variance will be calculated. Then, also, for the direction perpendicular to the specified direction, point pairs are counted and semi-variances are calculated. </li>
+
+        </ul>
+
+<p class=leftmargininlist>		You must use the <i>bidirectional</i> method when <i>anisotropy</i> is present in your data set and you have to do an <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a> interpolation. Use the same <i>anisotropy angle</i> as measured in step 1.2.</p>
+
+<li>	Enter the <i>lag spacing</i> and a name for the output table. Select the <span class=arial>Show</span> check box and press OK. </li>
+
+<li>	The Spatial Correlation table is calculated.</li>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<li>	In a <a href="../ilwisapp/cross_variogram_dialog_box.htm">Cross Variogram dialog box</a>:</li>
+
+        <ul>
+
+        <li>	Enter the correct attribute columns, the <i>lag spacing</i> and a name for the output table. Select the <span class=arial>Show</span> check box and press OK. </li>
+
+        <li>	The Cross Variogram table is calculated.</li>
+
+        </ul>
+
+</ul>
+
+<p class=defnewpar>Then, <i>display</i> the output table of the Spatial Correlation operation or the output table of the Cross variogram operation in a <i>table window</i>. Inspect in the output table the following columns:</p>
+
+<ul>
+
+<li class=ls01be>	when you used Spatial Correlation omnidirectional method, </li>
+
+<p class=leftmargininlist>	columns <span class=courier>Distance</span>, <span class=courier>AvgLag</span>, <span class=courier>NrPairs</span>;</p>
+
+<li class=ls01be>	when you used Spatial Correlation bidirectional method, </li>
+
+<p class=leftmargininlist>	columns <span class=courier>Distance</span>, <span class=courier>AvgLag1</span>/<span class=courier>AvgLag2</span>, <span class=courier>NrPairs1</span>/<span class=courier>NrPairs2</span>.</p>
+
+<li class=ls01be>	when you used Cross Variogram, </li>
+
+<p class=leftmargininlist>	columns: <span class=courier>Distance</span>, <span class=courier>AvgLag</span>, <span class=courier>NrPairsA</span>/<span class=courier>NrPairsB</span>/<span class=courier>NrPairsAB</span> and verify the Cauchy-Schwarz condition:  <span class=symbol>g</span><sup>2</sup><sub>AB</sub> <span class=symbol>£</span> <span class=symbol>g</span><sub>A</sub> <span class=courier>*</span> <span class=symbol>g</span><sub>B</sub> , for all values of the distance <i>h</i>.</p>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	For columns <span class=courier>Distance</span>/<span class=courier>AvgLags</span>: usually not more than half of the total sample distance should be taken into account; the larger the distance between the point pairs, the less point pairs, and the less reliable the outcome;</li>
+
+<li>	For column <span class=courier>NrPairs</span>: for reliable semi- or cross-variogram values, distance classes should at least contain 30 point pairs. When the amount of point pairs in each distance class becomes too much you should choose a smaller lag spacing to get more information.</li>
+
+</ul>
+
+<p class=kopjeboldandund>2.2  Displaying experimental variograms</p>
+
+<p>The next step is to create <i>point graphs</i>, i.e. <i>experimental semi- and cross-variogram(s)</i>, from the columns of the Spatial Correlation or Cross Variogram output table.</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<ul>
+
+<li>	From the <a href="../ilwis/table_window_menu_commands.htm">File menu</a> in the table window, choose the <span class=arial>Create Graph</span> command.</li>
+
+<li>	In the <a href="../ilwismen/create_a_graph.htm">Create Graph</a> dialog box:</li>
+
+        <ul>
+
+        <li>	choose for the X-axis, the <span class=courier>Distance</span> column or the column with the average distance between point pairs within lags (<span class=courier>AvgLag</span>); </li>
+
+        <li>	choose for the Y-axis, the column with the experimental semi- or cross-variogram values.</li>
+
+        </ul>
+
+</ul>
+
+<p class=defnewpar>When you used the omnidirectional Spatial Correlation method, you can draw one graph:</p>
+
+<ul>
+
+<li>	<span class=courier>Distance</span> or <span class=courier>AvgLag</span> , against <span class=courier>SemiVar</span>.</li>
+
+</ul>
+
+<p class=defnewpar>The discrete experimental semi- or cross-variogram values will by default be displayed as points in a new graph window. </p>
+
+<p class=defnewpar>When you used the bidirectional Spatial Correlation method, you can draw two graphs:</p>
+
+<ul>
+
+<li>	<span class=courier>Distance</span> or <span class=courier>AvgLag1</span> against <span class=courier>SemiVar1</span> (semi-variogram values in the specified direction), and</li>
+
+<li>	<span class=courier>Distance</span> or <span class=courier>AvgLag2</span>, against <span class=courier>SemiVar2</span> (semi-variogram values in the perpendicular direction).</li>
+
+</ul>
+
+<p class=defnewpar>When you used the Cross Variogram operation, you can draw three graphs: </p>
+
+<ul>
+
+<li>	<span class=courier>Distance</span> or <span class=courier>AvgLag</span>, against <span class=courier>SemiVarA</span> (semi-variogram values of the sparsely sampled variable), </li>
+
+<li>	<span class=courier>Distance</span> or <span class=courier>AvgLag</span>, against <span class=courier>SemiVarB</span> (semi-variogram values of the other variable), and </li>
+
+<li>	<span class=courier>Distance</span> or <span class=courier>AvgLag</span>, against <span class=courier>CrossVarAB</span> (cross-variogram values).</li>
+
+</ul>
+
+<p class=defnewpar>To add a second, third etc. graph layer to the graph window, choose <a href="../ilwismen/graph_window_add_graph_from_columns.htm">Add Graph from Columns</a> from the <a href="graph_window_menu_commands.htm">Edit menu</a> in the graph window, or click the <span class=arial>Add Graph</span> button <img src="../images/add_graph_layer.gif" align=bottom width="36" height="22"> in the <a href="graph_window_toolbar.htm">toolbar</a> of the graph window. </p>
+
+<p class=defnewpar>In the graph window, you may wish to adapt the boundaries of the X-axis from 0 to more or less half of the total distance between the samples. You may also wish to adapt the Y-axis from 0 to more or less the expected variance of your input sample values (<span class=symbol>s</span><sup>2</sup>, calculated in step 1.1).</p>
+
+<h2>Step 3: Modelling variograms</h2>
+
+<p class=kopjeaftertitleboun>3.1  Adding models</p>
+
+<p>Then, you need to <i>model</i> the discrete values of your experimental semi- or cross-variogram by a continuous function, which will give an expected value for any desired distance <i>h</i>.</p>
+
+<ul>
+
+<li class=ls01be>	From the <a href="graph_window_menu_commands.htm">Edit menu</a> in the graph window, choose the <span class=arial>Add Semi-variogram Model</span> command.</li>
+
+<li>	In the <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Add Graph Semi-variogram Model</a> dialog box, you can choose a <i>type</i> of semi- or cross-variogram model, and you can fill out values for the <i>sill</i>, <i>range</i> and <i>nugget</i> (or when using the <span class=courier>Power</span> model values for the <i>sill</i>, <i>slope</i> and <i>power</i>). A line will then be drawn according to the model you selected and the values you selected for sill, range and nugget. </li>
+
+</ul>
+
+<p class=tip>Remark: </p>
+
+<p class=tiptext>When you used the <i>bidirectional</i> Spatial Correlation method keep in mind that the model in the specified direction should be the same as the one in the perpendicular direction. ILWIS supports only geometric anisotropy: only the <i>ranges</i> of the models can be different. </p>
+
+<p class=kopjeboldandund>3.2  Editing models</p>
+
+<p>You are advised to visually experiment with models and with the values for sill, range, and nugget to find the best line through your discrete experimental semi- or cross variogram values. </p>
+
+<ul>
+
+<li class=ls01be>To edit an existing model, double-click the semi-variogram model you wish to edit in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane. </li>
+
+<li>The <a href="../ilwismen/graph_window_options_semivariogram_model.htm">Graph Options - Semivariogram Model</a> dialog box will appear in which you can adapt the model and the values for the nugget, sill and range until you are satisfied with the result.</li>
+
+</ul>
+
+<p class=defnewpar>If you like, you can also add other layers, i.e. other semi-variaogram models, for instance by choosing <span class=arial>Add Graph, Semi-variogram Model</span> from the <a href="graph_window_menu_commands.htm">Edit menu</a> in the graph window, or by clicking the arrow next to the <span class=arial>Add Graph</span> button <img src="../images/add_graph_layer.gif" align=bottom width="36" height="22"> and selecting <span class=arial>Semi-variogram Model</span>.
+
+<p class=kopjeboldandund>3.3  Checking models</p>
+
+<p>You can use the <a href="..//ilwis/popup/column_semivariogram_popup.htm" onClick="return popup(this, 'notes')" >Column SemiVariogram</a> operation to find which model fits your experimental semi- or cross-variogram values best. This operation calculates semi- or cross-variogram values according to a user-specified model and stores calculated semi- or cross-variogram values in an output column. </p>
+
+<ul>
+
+<li class=ls01be>	Open the output table of the Spatial Correlation or Cross Variogram operation and choose the <span class=arial>SemiVariogram</span> command from the <a href="table_window_menu_commands.htm">Columns menu</a> in the table window. </li>
+
+<li>	In the <a href="../ilwismen/column_semivariogram.htm">Column SemiVariogram</a> dialog box, select the same distance column and use the same model and values for the nugget, sill and range as you specified when creating the semi-variogram model (step 3.1). Name the output column for instance <i>SemiCol</i>.</li>
+
+<li>	You can test which semi- or cross-variogram model fits best, by calculating the Goodness of Fit (R<sup>2</sup>). </li>
+
+</ul>
+
+<p class=defnewpar><img src="../images/goodfit.gif" align=bottom width="182" height="45">	</p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p><img src="../images/gamest.gif" align=bottom width="6" height="15"></p>
+
+</td>
+<td valign="top">
+<p>are the experimental semi- or cross-variogram values calculated by the Spatial Correlation or by the Cross Variogram operation;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p><span class=symbol>g</span></p>
+
+</td>
+<td valign="top">
+<p>are the semi- or cross-variogram values calculated by the Column SemiVariogram operation;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>N</p>
+
+</td>
+<td valign="top">
+<p>is the total number of distance classes/intervals. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The numerator of the fraction gives the sum of the squared differences between the experimental semi- or cross-variogram values and the semi- or cross-variogram values calculated by a user-specified semi- or cross-variogram model.</p>
+
+<p>The denominator of the fraction gives the sum of the squared differences between the experimental values and the average experimental semi- or cross-variogram value of all distance classes/intervals. </p>
+
+<p class=defnewpar>The Goodness of Fit indicator can be calculated using some <a href="calc.htm">TabCalc</a> statements:</p>
+
+<ul>
+
+<li class=ls01be>	The terms in the numerator are computed by first making a new column in the Spatial Correlation or Cross Variogram table with the command: </li>
+
+<p class=linespacing01before><span class=courier>	g_gam_sqr = <a href="calc_sq.htm">SQ</a>(</span><i>SemiVar </i><span class=courier>-</span> <i>SemiCol</i><span class=courier>) </span></p>
+
+<p class=linespacing01before>	where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p><i>SemiVar</i></p>
+
+</td>
+<td valign="top">
+<p>is the name of the column with the experimental semi- or cross-variogram values</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p><i>SemiCol</i></p>
+
+</td>
+<td valign="top">
+<p>is the name of the column with the semi- or cross-variogram values calculated with the Column SemiVariogram operation</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<li>	The terms in the denominator first require the calculation of  <span class=symbol>S</span><img src="../images/gamest.gif" align=bottom width="6" height="15"> (h<sub>i</sub>)/N   (i.e. the average experimental semi- or cross-variogram values) in a new column: </li>
+
+<p class=linespacing01before>	<span class=courier>mean_g = <a href="calc_avg.htm">AVG</a>(</span><i>SemiVar</i><span class=courier>)</span></p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<li>	This average must be used in a new column with squared terms: </li>
+
+<p class=linespacing01before>	<span class=courier>g_avg_sqr = SQ(</span><i>SemiVar </i><span class=courier>- mean_g)</span></p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<li>	The 'Goodness of Fit' indicator R<sup>2</sup> is now obtained by: </li>
+
+<p class=linespacing01before>	<span class=courier>R2 = 1 - <a href="calc_sum.htm">SUM</a>(g_gam_sqr) / SUM(g_avg_sqr)</span></p>
+
+</ul>
+
+<p class=defnewpar>The maximum value of R<sup>2</sup> is 1, meaning an exact match of semi-or cross-variogram values calculated using a certain semi- or cross-variogram model and parameters, and experimental semi- or cross-variogram values. Once, you have decided which model fits your data best, you can continue with the Kriging operation.</p>
+
+<h2>Step 4: Kriging interpolation</h2>
+
+<p>Perform one of the 5 Kriging operations available in ILWIS:</p>
+
+<p class=kopjeboldandund>4.1  Simple Kriging</p>
+
+<p>Simple Kriging assumes that the randomized spatial function is stationary and that the mean is constant over the area of interest. This assumption is often unrealistic; the more robust Ordinary Kriging is thus frequently used instead. In Simple Kriging, all input points are used to calculate each output pixel value. For more information, see <a href="../ilwisapp/kriging_functionality.htm">Kriging : functionality</a>.</p>
+
+<p class=kopjeboldandund>4.2  Ordinary Kriging</p>
+
+<p>In Ordinary Kriging the randomized spatial function is non-stationary and the mean varies over the area of interest. Ordinary Kriging amounts to re-estimating the mean at each new location. In Ordinary Kriging, you can influence the number of points that should be taken into account in the calculation of an output pixel value by specifying a <i>limiting distance</i> and a <i>minimum and maximum number of points</i>. Only the points that fall within the limiting distance to an output pixel will be used in the calculation for that output pixel value. For more information, see <a href="../ilwisapp/kriging_functionality.htm">Kriging : functionality</a>.</p>
+
+<p class=kopjeboldandund>4.3  Anisotropic Kriging</p>
+
+<p>Anisotropic Kriging is a variant of Ordinary Kriging. Anisotropic Kriging incorporates the influence of <i>direction dependency</i> , i.e. Anisotropy in the Kriging operation. For more information, see <a href="../ilwisapp/anisotropic_kriging_functionality.htm">Anisotropic Kriging : functionality</a>.</p>
+
+<p class=kopjeboldandund>4.4  Universal Kriging</p>
+
+<p>Universal Kriging is another variant of the Ordinary Kriging operation: Universal Kriging is Kriging with a <i>local trend</i>. The local trend or drift is a continuous and slowly varying trend surface on top of which the variation to be interpolated is superimposed. The assumption of a 'constant' mean in Ordinary Kriging is replaced by a prior trend model that is incorporated in the predictions. For more information, see <a href="../ilwisapp/universal_kriging_functionality.htm">Universal Kriging : functionality</a>.</p>
+
+<p class=kopjeboldandund>4.5  CoKriging</p>
+
+<p>CoKriging is a multivariate extension of the Ordinary Kriging method. One parameter, which is too <i>sparsely sampled</i> to carry out an accurate interpolation, is highly correlated with another parameter of which enough samples are available to do Kriging. Based on the well sampled data set Kriging is carried out. For more information, see <a href="../ilwisapp/cokriging_functionality.htm">CoKriging : functionality</a>.</p>
+
+<h2>Step 5: Output</h2>
+
+<p class=kopjeaftertitleboun>5.1  Confidence interval maps</p>
+
+<p>From the combination of a Kriged output map containing the estimates and its output error map, you can create confidence interval maps by using some MapCalc statements. For more information, see <a href="../ilwis/how_to_calculate_confidence_interval_maps.htm">How to calculate confidence interval maps</a>.</p>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>	Burrough, P.A. 1986. Principles of Geographical Information Systems for Land Resources Assessment. Oxford University Press. 194 pp.</li>
+
+<li>	Burrough, P.A. and R.A. McDonnell 1998. Principles of Geographical Information Systems. Oxford University Press. 330 pp.</li>
+
+</ul>
+
+</body

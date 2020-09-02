@@ -1,0 +1,71 @@
+<html>
+
+<head>
+<title>Filter types : pattern filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filter types, Pattern filters">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="70%"><h1 class=firstline>Filter types</h1></td>
+<td rowspan="2" class=menucommand><a class=menlink href=JavaScript:__ilwisapp__sec__filter_pattern_example_sec.Click()>Example pattern filters</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Pattern filters</h1></td>
+</tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>With a pattern filter you can detect: <b>areas</b> where pixels have more or less the same value, <b>outliers</b> where the values of all neighbours are largely different from the center pixel, and the <b>directions</b> in which differences between a center pixel and its neighbours are found. A pattern filter always works in a 3x3 environment and works on images and other raster maps with a value domain.  </p>
+
+<p class=defnewpar>Whether or not any of the 8 neighbours is considered to have more or less the same value as the center pixel, is determined by the threshold value that you have to specify. When the absolute difference between a neighbour and the center pixel is smaller than or equal to the threshold value, the answer is true. For each true neighbour, a certain bit is set. The value assigned to the center pixel in the output map is the bit-wise combination of all true neighbours. For more information, refer to <a href="..//ilwisapp/sec/filter_pattern_example_sec.htm" onClick="return popup(this, 'notes')" >Example pattern filters</a>. </p>
+
+<p class=defnewpar>This will give you the following results:</p>
+
+<ul>
+
+<li>	When all neighbours are false, the final output value is 0 which means that there are large differences between central pixel and all its neighbours (= outlier).</li>
+
+<li>	When all neigbours are true, the output value is 255 which means that there are small differences between the central pixel and its neighbours (= area),</li>
+
+<li>	All other output values bit-wise represent the directions in which differences are found. </li>
+
+</ul>
+
+<p class=kopje>Standard pattern filters:</p>
+
+<p>There is no standard pattern filter stored on disk. </p>
+
+<p class=kopje>User-defined pattern filters:</p>
+
+<p>A pattern filter always works in a 3x3 environment. In the Filter dialog box as well as on the command line, you can define a pattern filter; specify the threshold value which has to be used. For more information and some examples, refer to <a href="../ilwisapp/filters_user_defined_pattern_filters.htm">User-defined pattern filters</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_user_defined_pattern_filters.htm">User-defined pattern filters</a></p>
+
+<p class=seealsolinks><a href="filter.htm">Filter (operation)</a></p>
+
+</body

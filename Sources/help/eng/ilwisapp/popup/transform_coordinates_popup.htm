@@ -1,0 +1,46 @@
+<html>
+
+<head>
+<title>transform coordinates popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Transform coordinates</p>
+
+<p>The <a href="..//ilwisapp/transform_coordinates.htm" onClick="return popup(this, 'notes')" >Transform coordinates</a> dialog box allows you to: </p>
+
+<ul> 
+
+<li>select a certain input <a href="../../ilwis/popup/objects_coordinate_system_popup.htm">coordinate system</a>, </li>
+
+<li>type a XY-coordinate or a LatLon coordinate, using this input coordinate system, </li>
+
+<li>select another target coordinate system, </li>
+
+<li>then, the entered XY-coordinate or LatLon-coordinate will be shown in the selected target coordinate system. </li>
+
+</ul>
+
+<p>In this way, you can interactively check whether a certain transformation is correct. </p>
+
+<p class=linespacing03before>The Transform Coordinates dialog box can only be used when a transformation between the input coordinate system and the target coordinate system is possible. </p>
+
+</body

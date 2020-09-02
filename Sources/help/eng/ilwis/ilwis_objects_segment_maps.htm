@@ -1,0 +1,154 @@
+<html>
+
+<head>
+<title>ILWIS objects : segment maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS objects, Segment maps, Data objects, MPS">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Segment maps&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/segmap.gif" align=bottom width="16" height="12"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A segment map is a <a href="ilwis_objects_data_objects.htm">data object</a> used to store spatial geographic information that consists of <b>lines</b>, for example roads, rivers or contour lines. Segments are either codified by IDs, class names or values (height map); this is determined by the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map. The relation between segments in a segment map and the position on earth is defined by the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that the map is using. Segment maps can be displayed in <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map windows</a>, and edited with the <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >segment editor</a>. </p>
+
+<p class=defnewpar>A segment map can be obtained:</p>
+
+<ul>
+
+<li>	by importing an existing segment map from ILWIS version 1.41, </li>
+
+<li>	by creating a new segment map and editing it with the <a href="../ilwis/segment_editor_functionality.htm">segment editor</a> with or without using a digitizer, or</li>
+
+<li>	by performing ILWIS operations that return a segment map as output, for instance the <a href="..//ilwisapp/popup/mask_segments_popup.htm" onClick="return popup(this, 'notes')" >Mask Segments</a> operation.</li>
+
+</ul>
+
+<p class=kopje>Contents of a segment map and location of segments:</p>
+
+<p>The contents of a segment map are defined by the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> that the segment map is using. A segment map may store for example:</p>
+
+<ul>
+
+<li>	individual line features: each segment is codified by its own ID for instance when each pipe line or river section has its own unique ID; the map uses an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a>,</li>
+
+<li>	classes of line features: segments may occur in several places in the map for instance primary roads, secondary roads, etc.; the map uses a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>,</li>
+
+<li>	line features representing measurable values, for instance a contour map with height information; the map uses a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>,</li>
+
+<li>	true, false or undefined segments; the map uses a Bool domain,</li>
+
+<li>	output values (any domain) after performing an operation, e.g. IDs after the Unique ID operation, </li>
+
+<li>	attribute values (any domain) when an attribute map was created from an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> with the <a href="..//ilwisapp/popup/attribute_map_of_segments_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of segment map</a> operation.</li>
+
+</ul>
+
+<p>For more information on domains, refer to <a href="basic_concepts_domains.htm">Basic concepts : working with domains</a>.</p>
+
+<p class=defnewpar>The spatial location of segments in a segment map is defined by the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that the segment map is using. </p>
+
+<p class=defnewpar>For maps using a class or ID domain, you can create an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> which stores additional information on the classes or IDs in the map. Use the same class or ID domain for the attribute table as you used for the map. Then, add the attribute columns to the table. To create an attribute table, refer to <a href="../ilwis/how_to_create_tables.htm">How to create an attribute table</a>. </p>
+
+<p class=defnewpar>The manner in which segments are displayed is specified in the <a href="../ilwismen/display_options_segment_map.htm">Display Options Segment Map</a> dialog box. </p>
+
+<ul>
+
+<li>	When a segment map uses a <i>class domain</i>, you can display segments in a single color, or by using or creating a <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> class. In a representation class, every class can have its own line type, line width, color, etc. You can also represent a line by equally spaced symbols. For more information, see <a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor</a> and the <a href="../ilwismen/representation_class_editor_edit_item_segment.htm">Edit Repr Class item (segment)</a> dialog box.</li>
+
+<li>	When a segment map uses a <i>value domain</i>, you can display segments in a single color, in multiple system colors or by using or creating a representation value or a representation gradual. For more information, see <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a>. </li>
+
+<li>	When a segment map uses an <i>ID domain</i> or a <i>Bool domain</i>, you have to specify colors each time you display the map.</li>
+
+</ul>
+
+<p>For more information, see <a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representations</a>.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To store the display setting of one or more maps displayed in a map window, save the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>; open the <a href="map_window_menu_commands.htm">File menu</a> in a map window and choose the Save View or the Save View As command.</p>
+
+<p class=kopje>Names of segment maps:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a segment map:</p>
+
+<p>Open the File menu of the Main window and select the <span class=arial>Create Segment Map</span> command, or double-click the <span class=arial>New SegMap</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>. In the appearing Create Segment Map dialog box, enter a name and description for the segment map, select or create a coordinate system, enter boundary values for the map and select or create a domain. For other create methods, see <a href="../ilwis/how_to_create_maps.htm">How to create a map</a>.</p>
+
+<p class=kopje>To display a segment map:</p>
+
+<p>The easiest way to display a segment map is to double-click the map in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. The map will be displayed in a new <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>. You can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> a segment map from the Catalog to an existing map window, in order to show that segment map on top of other information shown in the map window. For other methods, see <a href="how_to_display_maps_and_tables.htm">How to display maps and tables</a>.</p>
+
+<p class=defnewpar>In the <a href="../ilwismen/display_options_segment_map.htm">Display Options Segment Map</a> dialog box, you can specify how the map should be displayed.</p>
+
+<p class=kopje>To edit a segment map:</p>
+
+<p>You can edit a segment map by clicking it with the right mouse button in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> and subsequently choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. When a segment map is already displayed in a map window, you can also choose the <span class=arial>Edit Layer</span> command from the Edit menu in the map window. For other methods, see <a href="../ilwis/how_to_edit_point_segment_polygon_and_raster_maps.htm">How to edit point, segment, polygon and raster maps</a>.</p>
+
+<p class=defnewpar>Segment maps are edited with the <a href="../ilwis/segment_editor_functionality.htm">Segment editor</a>: you can insert new segments and delete and undelete existing ones, edit the class names, IDs, or values of segments, change the shape of segments, split and merge segments, and pack, check and polygonize segments. You can use a digitizer but you can also use the mouse pointer. Dependent segment maps and read-only segment maps cannot be edited.</p>
+
+<p class=kopje>Operations on segment maps:</p>
+
+<p>Frequently used operations on segment maps are for instance the <a href="..//ilwisapp/popup/segments_to_polygons_popup.htm" onClick="return popup(this, 'notes')" >Segments to Polygons</a> operation to polygonize a segment map and the <a href="..//ilwisapp/popup/segments_to_raster_popup.htm" onClick="return popup(this, 'notes')" >Segments to Raster</a> operation which rasterizes a segment map. During the rasterize operation, you have to select or create a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> for the raster map to define the size of the pixels in the raster map. Another operation on a segment map is for instance <a href="..//ilwisapp/popup/contour_interpolation_popup.htm" onClick="return popup(this, 'notes')" >Contour interpolation</a>. </p>
+
+<p class=defnewpar>You can perform operations on a segment map by selecting an operation from the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a> or from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> (for other methods, see <a href="how_to_start_operations.htm">How to start operations</a>). Subsequently, fill out the appearing dialog box of that operation and click the OK button; this generates an <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >ILWIS expression</a> on the command line. Output objects that are obtained through an operation's dialog box are always <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a>. Advanced users can type the complete ILWIS expressions on the command line of the Main window or create a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> to execute a series of expressions. </p>
+
+<p>For more information on dependent maps, see <a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a>. For more information on operations, refer to <a href="../ilwisapp/ilwis_operations.htm">ILWIS operations</a>.</p>
+
+<p class=kopje>Technical information:</p>
+
+<p>An ILWIS 3 segment map consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.MPS) and a binary data file (.MPS#). The object definition file contains further references to the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> and the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that the segment map is using; these are <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a segment map.</p>
+
+<p class=defnewpar>When opening or displaying an ILWIS 2 segment map, the ILWIS 2 data files of the segment map (.CD#, .SC#, .SG#) will be used. Only when an ILWIS 2 segment map is edited, the map will be converted to and saved in the new ILWIS 3 data file format for segment maps (.MPS#).</p>
+
+<p class=defnewpar>By viewing the properties of a segment map, you can see whether the map is dependent or not, which other objects the map is using, etc. For dependent maps, you can also manage dependencies: break dependencies, make dependent maps up-to-date, delete the
+data files of a dependent maps, etc. For more information, see <a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a>. </p>
+
+<p class=defnewpar>A segment map stores one or more segments. A segment is nothing more than a sequence of XY-coordinates and an ID, class name or value to identify the segment. Each XY-coordinate in a segment is stored as a pair of 8-byte floating point reals (doubles). The first and the last XY-coordinate in a segment are called <b>nodes</b>. The XY-coordinate of a node can be used by multiple segments. Thus, nodes are required to begin and end individual segments and they can be used to connect two or more segments. Inserting a new node into an existing segment is called <i>splitting</i>; connecting a new segment to an existing node is called <i>snapping</i>. </p>
+
+<p class=defnewpar>If you wish, you can open a segment map as a table: click the segment map with the right mouse button in the Catalog, and subsequently choose <span class=arial>Open as Table</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. In the table window, you can view the class names, IDs, or values of all individual segments in the map, the length of each segment, and the coordinates of the bounding box around each segment. </p>
+
+<p class=kopje>Limitations:</p>
+
+<p>In ILWIS 3.x, limitations for number of segments per segment map, or number of points per segment, only depend on available memory. However, ILWIS is not designed to work with very large data sets: to speed up processing you may need to split maps into smaller logical parts. You can also try to reduce the number of coordinates in segment maps by using the <a href="..//ilwisapp/popup/tunnel_segments_popup.htm" onClick="return popup(this, 'notes')" >Tunnel Segments</a> operation.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_set_up_a_digitizer_and_start_digitizing.htm">How to setup a digitizer and start digitizing</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/ilwis_operations.htm">ILWIS operations</a></p>
+
+</body

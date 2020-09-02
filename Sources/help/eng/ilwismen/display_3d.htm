@@ -1,0 +1,80 @@
+<html>
+
+<head>
+<title>Display 3D : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Display 3D">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+
+<h1 class=firstline>Display 3D</h1>
+
+<h1 class=secondline>Dialog box</h1>
+			
+<!--<hr>-->
+
+<p class=defnewpar>Create a three-dimensional view of your study area. Use an existing georeference 3D or create a new one.</p>
+
+<p class=defnewpar>A Digital Terrain Model (DTM), also called a Digital Elevation Model (DEM), is required to create a georeference 3D. For more information on creating a DEM, see <a href="../ilwis/how_to_calculate_digital_elevation_models.htm">How to calculate a DEM</a>. </p>
+
+<p class=defnewpar>By relating any map with the corresponding terrain surface in a 3D model, you can discover and understand relations between spatial data sets. For example, by draping a land use map over the height values of a 3D model, you can see where your areas of interest are located: on slopes, on flat areas, in the lower areas, in the mountains, etc. </p>
+
+<p>Although Display 3D was originally developed to model relief, it can of course also be used to model the continuous variation of any other value map as a surface (e.g. concentration values, land values).</p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Display 3D</span> from the <a href="../ilwis/main_window_menu_commands.htm">Operations</a>, <span class=arial>Visualization</span> menu in the Main window, or</li>
+
+<li>	when you double-click the <span class=arial>Display3D</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Georeference:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing georeference 3D, or create a new georeference 3D by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you create a new georeference 3D, the <a href="create_a_georeference_3d.htm">Create Georeference 3D</a> dialog box appears. In that dialog box, you can specify the name of a DEM which should be used, and the size of the map window in which the 3D view should appear. After that, you return to this Display 3D dialog box. </p>
+
+<p class=defnewpar>When everything is OK, the <a href="display_options_3d_grid.htm">Display Options - 3D Grid</a> dialog box appears. The DEM can be displayed as 3D grid lines with or without a drape of a raster map. </p>
+
+<p class=defnewpar>To obtain a suitable perspective on the terrain, edit the georeference 3D with the Georeference 3D editor. When finished editing the 3D view, you can add point, segment and/or polygon maps and/or annotation to improve the 3D view.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/display_3D.htm">Display 3D</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_display_digital_elevation_models.htm">How to display Digital Elevation Models</a></p>
+
+</body

@@ -1,0 +1,381 @@
+<html>
+
+<head>
+<title>Color composite : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Color composite, MapColorComp, MapHeckbert">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Color composite</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >color composite</a> can be directly created by typing one of the following expressions on the command line of the Main Window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapColorComp</span>(MapList, <i>range1, range2, range3</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapColorCompLinear</span>(MapList, <i>range1, range2, range3</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapColorCompHistEq</span>(MapList, <i>range1, range2, range3</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapHeckbert</span>(MapList, <i>NrColors</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapColorComp24</span>(MapList)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapColorComp24</span>(MapList, <i>range1, range2, range3</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapColorComp24Linear</span>(MapList)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapColorComp24Linear</span>(MapList, <i>range1, range2, range3</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapColorComp24HistEq</span>(MapList,<i>range1, range2, range3</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapColorComp24HSI</span>(MapList)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output color composite.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapColorComp</p>
+
+</td>
+<td valign="top">
+<p>is the command start the Color composite operation using linear stretching.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapColorCompLinear</p>
+
+</td>
+<td valign="top">
+<p>is the command start the Color composite operation using linear stretching.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapColorCompHistEq</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Color composite operation using histogram equalization.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapHeckbert</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Color composite operation using the Heckbert dynamic algorithm.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapColorComp24</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the 24-bit Color composite operation using linear stretching.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapColorComp24Linear</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the 24-bit Color composite operation using linear stretching.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapColorComp24HistEq</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the 24-bit Color composite operation using histogram equalization.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapColorComp24HSI</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the 24-bit Color composite operation using hue, saturation, and intensity.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>MapList</p>
+
+</td>
+<td valign="top">
+<p>is the name of an existing map list which contains 3 raster maps with the <span class=courier>Image</span> domain, or the definition of a map list as:<br>
+<span class=courier>mlist</span>(<i>ImageRed, ImageGreen, ImageBlue</i>)<br>
+For more information, see the examples below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>range1..3</i></p>
+
+</td>
+<td valign="top">
+<p>for each band, the intervals of input values to be used as <i>min:max</i> or as <i>perc</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=leftmargin1><i>min:max</i></p>
+
+</td>
+<td valign="top">
+<p>minimum and maximum value determining range of input values, e.g. <span class=courier>20:200</span>; integer values between 0 and 255.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=leftmargin1><i>perc</i></p>
+
+</td>
+<td valign="top">
+<p>percentage of input values to be ignored on both sides of the maps' histogram during linear stretch or histogram equalization; 0 <span class=symbollarger>£</span> real value &lt; 50.</p>
+
+<p>When no ranges are specified for the <span class=courier>MapColorComp24</span> or <span class=courier>MapColorComp24Linear</span> commands then all input values are used, i.e. no stretching. The <span class=courier>MapHeckbert</span> and the <span class=courier>MapColorComp24HSI</span> commands always use all input values.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>NrColors</i></p>
+
+</td>
+<td valign="top">
+<p>For Dynamic (Heckbert) color composites: the number of colors present in the output map (2-255).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>All maps in the input map list must have the same georeference. </p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=kopje>Examples:</p>
+
+<p>A complete expression to calculate a color composite of bands tm4, tmb3, and tmb2, using linear stretching and ignoring 1% of all input values, might thus read:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=courier>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=courier>=</p>
+
+</td>
+<td valign="top">
+<p class=courier>MapColorComp(mlist(tmb4,tmb3,tmb2),1,1,1)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>A complete expression to calculate a dynamic color composite of bands tm4, tmb3, and tmb2, using 200 colors, might thus read:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=courier>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=courier>=</p>
+
+</td>
+<td valign="top">
+<p class=courier>MapHeckbert(mlist(tmb4,tmb3,tmb2),200)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="color_composite_functionality.htm">Color composite : functionality</a></p>
+
+</body

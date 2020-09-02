@@ -1,0 +1,105 @@
+<html>
+
+<head>
+<title>Mask points : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Mask points, PointMapMask">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Mask points</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/mask_points_popup.htm" onClick="return popup(this, 'notes')" >Mask Points</a> operation can be directly executed by typing the following expression on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapMask(</span>Input PointMap,<span class=courier>&quot;</span>mask<span class=courier>&quot;)</span></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>PointMapMask</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Mask Points operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>InputPointMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>&quot;mask&quot;</p>
+
+</td>
+<td valign="top">
+<p>are the (multiple) search strings to find the classes, IDs or values in the input map that you want to copy into the output map; on the command line, the total <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> needs to be surrounded by double quotes.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="mask_points_functionality.htm">Mask Points : functionality</a></p>
+
+</body

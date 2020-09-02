@@ -1,0 +1,369 @@
+<html>
+
+<head>
+<title>Classify : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Classify">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Classify</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Classify operation performs a <a href="..//ilwisapp/popup/classify_multispectral_popup.htm" onClick="return popup(this, 'notes')" >multi-spectral</a> image classification according to training pixels in a <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a>.</p>
+
+<p class=defnewpar>The following classification methods are available: </p>
+
+<ul>
+
+<li>	<a href="#clbox"><span class=bookmark>Box classifier</span></a>, using a multiplication factor, </li>
+
+<li>	<a href="#clmindist"><span class=bookmark>Minimum Distance</span></a>, optionally using a threshold value, </li>
+
+<li>	<a href="#clminmahadist"><span class=bookmark>Minimum Mahalanobis distance</span></a>, optionally using a threshold value, </li>
+
+<li>	<a href="#clmaxlike"><span class=bookmark>Maximum Likelihood</span></a>, optionally using a threshold value, </li>
+
+<li>	<a href="#clpriorpr"><span class=bookmark>Maximum Likelihood including Prior Probabilities</span></a>, optionally using a threshold value. </li>
+
+</ul>
+
+<p class=kopje>Explanation of terms: </p>
+
+<ul>
+
+<li>The term 'Class mean' (<b>m</b><sub>i</sub>) is used for the means of the training pixels in class <i>i</i> for the <i>n</i> input bands. When for example you wish to classify an image with 7 bands, a class mean vector is a 7 x 1 vector, containing the mean values of a single class in band 1, in band 2, ..., band 7. The class means (in all input bands) of a certain class are directly visible in the <a href="..//ilwis/popup/sample_statistics_popup.htm" onClick="return popup(this, 'notes')" >Sample Statistics</a> of your sample set. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>The term 'Feature vector' (<b>x</b>) is used for the spectral values of a certain pixel to be classified in <i>n</i> bands. When for example you wish to classify an image with 7 bands, and a pixel to be classified has value 56 in band 1, value 88 in band 2, value 190 in band 3, ... , and value 165 in band 7, the feature vector for this pixel is a 7 x 1 vector containing values 56, 88, 190, ..., 165. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>The optional 'threshold' value is expressed as the n-dimensional spectral distance towards a class mean; how the spectral distance is calculated depends on the selected classification method. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+        <p>In general, it is compared whether the spectral distance of a feature vector towards a class mean is smaller than the specified n-dimensional spectral threshold distance or not: </p>
+
+                <ul>
+
+                <li>if smaller, the pixel (feature vector) is acceptable for this class; </li>
+
+                <p>the pixel will be classified as this class, when there is no other class mean at an even smaller spectral distance;  </p>
+
+                <li>if larger, the pixel (feature vector) is rejected for, i.e. not classified as, this class. </li>
+
+                </ul>
+
+<p class=emptyline>&nbsp;</p>
+
+        <p>Examples of the threshold value using the Minimum Distance classifier: </p>
+
+        <ol>
+
+        <li>Suppose you wish to classify an image containing <b>7 bands</b>: </li>
+
+        <ul>
+
+        <li>When specifying a threshold of 100, then the root of the squared sums of distances towards a class mean in all bands may not exceed 100. </li>
+
+        <li>When, for a certain feature vector to be classified, the distance (or difference) towards a certain class mean equals 3 in bands 1, 2, and 3, and equals 4 in bands 4, 5, 6, and 7, then: </li>
+
+                <p class=leftmargin06>100 &#8804; <span class=symbollarger>&Ouml;</span>(3<sup>2</sup> + 3<sup>2</sup> + 3<sup>2</sup> + 4<sup>2</sup> + 4<sup>2</sup> + 4<sup>2</sup> + 4<sup>2</sup>) </p>
+
+                <p>The inequality is fulfilled, thus the feature vector is accepted and the pixel will be classified as this class. </p>
+
+        <li>Similarly, a feature vector will also be accepted and classified as this class, when the distances of the feature vector towards a certain class mean equals 7 in band 1; 5 in band 2; 4 in bands 3, 4, 5; and 1 in bands 6 and 7; as </li>                
+
+                <p class=leftmargin06>100 &#8804; <span class=symbollarger>&Ouml;</span>(7<sup>2</sup> + 5<sup>2</sup> + 4<sup>2</sup> + 4<sup>2</sup> + 4<sup>2</sup> + 1<sup>2</sup> + 1<sup>2</sup>) </p>
+
+        </ul>
+
+        <li>Suppose you wish to classify an image with <b>3 bands</b>: </li>
+
+        <ul>
+
+        <li>When specifying a threshold of 100, then the root of the squared sums of distances towards a class mean in all bands may not exceed 100. </li>
+
+        <li>When, for a certain feature vector to be classified, the distance (or difference) towards a certain class mean equals 6 in two bands, and equals 5 in the other band, then:  </li>
+
+                <p class=leftmargin06>100 &#8804; <span class=symbollarger>&Ouml;</span>(6<sup>2</sup> + 6<sup>2</sup> + 5<sup>2</sup>) </p>
+
+                <p>The inequality is fulfilled, thus the feature vector is accepted and the pixel will be classified as this class. </p>
+
+        <li>Similarly, a feature vector will also be accepted and classified as this class, when the distances of the feature vector towards a certain class mean equals 9 in one band, and equals 3 in the two other bands, as</li>                
+
+                <p class=leftmargin06>100 &#8804; <span class=symbollarger>&Ouml;</span>(9<sup>2</sup> + 3<sup>2</sup> + 3<sup>2</sup>) </p>
+
+        </ul>
+
+        </ol>
+
+<p class=defnewpar>In case of Minimum Distance, the spectral distance of a feature vector towards a class mean is thus a simple Euclidian distance in <i>n</i>-dimensions, as demonstrated above. For the Minimum Mahalanobis distance or the Maximum Likelihood classifier however, the calculation of the spectral distance towards a class mean involves the variance-covariance matrix of the class; this implies a non-Euclidian distance concept. </p>
+
+</ul>
+
+<h2>Classification methods</h2>
+
+<p>Prior to any classification, empirical statistics are drawn from the training pixels in the input sample set. These sample statistics are calculated per class of training pixels and per band. For instance, for a single class (<i>i</i>), <i>n</i> mean values are calculated when there are <i>n</i> input bands; these <i>n</i> mean values together are called the class mean (vector) for that class (<b>m</b><sub>i</sub>). </p>
+
+<p class=defnewpar>Depending on the selected classification method, the following statistics are calculated: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>for each <i>class</i> <i>i</i> of training pixels</li>:
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>the means of training pixels per band (<b>m</b><sub>i</sub>), </li>
+
+<li>in case of box classifier: the variance of the training pixels per band, </li>
+
+<li>the standard deviation of the training pixels per band (should be &gt; 0), </li>
+
+<li>the predominant value (mode) per band, </li>
+
+<li>in case of Minimum Mahalanobis distance, Maximum Likelihood and Prior Probability classifier: an <i>n</i> x <i>n</i> variance-covariance matrix (V<sub>i</sub>) which stores class variance per band, and class covariance between bands. </li>
+
+</ul>
+
+</ul>
+
+<p class=linespacing03before>For each feature vector to be classified, these statistics are used to calculate the shortest 'distance' towards the training classes. All classification decisions are thus based on these statistical empirical parameters. </p>
+
+<p id="clbox" class=kopje>Box classifier:</p>
+
+<p>For each class, a multi-dimensional box is drawn around the class mean.</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>For each class, the size of the box is calculated as:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargin1>(class mean ± standard deviation per band) <span class=courier>*</span> multiplication factor</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<ul>
+
+<li>	If a feature vector falls inside a box, then the corresponding class name is assigned. </li>
+
+<li>	if a feature vector falls within two boxes, the class name of the box with the smallest product of standard deviations is assigned, i.e. the class name of the smallest box. </li>
+
+<li>	if a feature vector does not fall within a box, the undefined value is assigned.</li>
+
+</ul>
+
+<p id="clmindist" class=kopje>Minimum Distance to Mean:</p>
+
+<p>For each feature vector, the distances towards class means are calculated. </p>
+
+<ul>
+
+<li>	The shortest Euclidian distance to a class mean is found;</li>
+
+<li>	if this shortest distance to a class mean is smaller than the user-defined threshold, then this class name is assigned to the output pixel. </li>
+
+<li>	else the undefined value is assigned. </li>
+
+</ul>
+
+<p id="clminmahadist" class=kopje>Minimum Mahalanobis distance:</p>
+
+<p>For each feature vector, the Mahalanobis distances towards class means are calculated. This includes the calculation of the variance-covariance matrix V for each class <i>i</i>. </p>
+
+<p class=defnewpar>The Mahalanobis distance is calculated as:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargin1>d<sub>i</sub>(<b>x</b>) = <b>y</b><sup>T</sup>V<sub>i</sub><sup>-1</sup><b>y</b></p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>For an explanation of the parameters, see Maximum Likelihood classifier. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	For each feature vector <b>x</b>, the shortest Mahalanobis distance to a class mean is found;</li>
+
+<li>	if this shortest distance to a class mean is smaller than the user-defined threshold, then this class name is assigned to the output pixel. </li>
+
+<li>	else the undefined value is assigned. </li>
+
+</ul>
+
+<p id="clmaxlike" class=kopje>Maximum Likelihood:</p>
+
+<p>For each feature vector, the distances towards class means are calculated. This includes the calculation of the variance-covariance matrix V for each class <i>i</i>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>The formula used in Maximum Likelihood reads:</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<p class=leftmargin1>d<sub>i</sub>(<b>x</b>) = ln|V<sub>i</sub>| + <b>y</b><sup>T</sup>V<sub>i</sub><sup>-1</sup><b>y</b></p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>d<sub>i</sub></p>
+
+</td>
+<td valign="top">
+<p>distance between feature vector (<b>x</b>) and a class mean (<b>m</b><sub>i</sub>) based on probabilities</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>V<sub>i</sub></p>
+
+</td>
+<td valign="top">
+<p>the <i>n</i> x <i>n</i> variance-covariance matrix of class <i>i</i>, where <i>n</i> is the number of input bands</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>|V<sub>i</sub>|</p>
+
+</td>
+<td valign="top">
+<p>determinant of  V<sub>i</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>V<sub>i</sub><sup>-1</sup></p>
+
+</td>
+<td valign="top">
+<p>the inverse of  V<sub>i</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p><b>y</b></p>
+
+</td>
+<td valign="top">
+<p><b>x</b> - <b>m</b><sub>i</sub> ; is the difference vector between feature vector <b>x</b> and class mean vector <b>m</b><sub>i</sub> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p><b>y</b><sup>T</sup></p>
+
+</td>
+<td valign="top">
+<p>the transposed of <b>y</b></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	For each feature vector <b>x</b>, the shortest distance d<sub>i</sub> to a class mean <b>m</b><sub>i</sub> is found;</li>
+
+<li>	if this shortest distance to a class mean is smaller than the user-defined threshold, then this class name is assigned to the output pixel. </li>
+
+<li>	else the undefined value is assigned. </li>
+
+</ul>
+
+<p id="clpriorpr" class=kopje>Maximum Likelihood including Prior Probabilities:</p>
+
+<p>For each feature vector, the distances towards class means are calculated. This includes the calculation of the variance-covariance matrix V for each class <i>i</i>. Furthermore, for each class, the prior probabilities are taken into account; these are listed in a column of a table. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>The formula used in Maximum Likelihood with Prior Probabilities reads:</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<p class=leftmargin1>d<sub>i</sub>(<b>x</b>) = ln|V<sub>i</sub>| + <b>y</b><sup>T</sup>V<sub>i</sub><sup>-1</sup><b>y</b> - 2 ln(P(C<sub>i</sub>)) </p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>P(C<sub>i</sub>)</p>
+
+</td>
+<td valign="top">
+<p>the prior probability for class <i>i</i></p>
+
+</td>
+</tr>
+</table>
+
+<p>For an explanation of the other parameters, see Maximum Likelihood classifier. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	For each feature vector <b>x</b>, the shortest distance d<sub>i</sub> to a class mean <b>m</b><sub>i</sub> is found;</li>
+
+<li>	if this shortest distance to a class mean is smaller than the user-defined threshold, then this class name is assigned to the output pixel. </li>
+
+<li>	else the undefined value is assigned. </li>
+
+</ul>
+
+<p class=kopje>Reference:</p>
+
+<ul>
+
+<li>Gorte, B., 1998. Probabilistic Segmentation of Remotely Sensed Images. ITC publication nr 63. ITC, Enschede. 143 pp. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="classify_functionality.htm">Classify : functionality</a></p>
+
+</body

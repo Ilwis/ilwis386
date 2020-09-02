@@ -1,0 +1,125 @@
+<html>
+
+<head>
+<title>How to make dependent data objects up-to-date</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Update, Make up-to-date, Dependent data objects, Properties of objects, How to make dependent objects up-to-date">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to make dependent data objects up-to-date</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar><a href="basic_concepts_dependent_data_objects.htm">Dependent maps, tables and columns</a> are the result of a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculation</a> with MapCalc or TabCalc (in which you used the definition sign =) or the result of another <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>. The complete <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >expression</a> by which dependent output objects are created is stored by the output maps, tables and columns as their <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a>. Dependent data objects thus know how they were created and on which input data they depend.</p>
+
+<p class=defnewpar>Whenever you edit one of the input maps, tables or columns on which a dependent object depends, it is obvious that also the dependent output objects need to be updated, i.e. recalculated. In the Properties sheet of dependent maps, tables and columns, it is specified whether the current object is still up-to-date or not. If not, you can press the <span class=arial>Make Up-to-Date</span> button in the Properties sheet and the dependent data object is redefined. In fact, all dependent maps, tables and columns in between the current one and your updated starting material are scanned and recalculated. There is thus no need to completely redo all operations to obtain the dependent output again. </p>
+
+<p class=kopje>To make dependent maps and dependent tables up-to-date:</p>
+
+<ul>
+
+<li>	select <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >one or more</a> dependent raster, polygon, segment and/or point maps, and/or dependent tables in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>,</li>
+
+<li>	press the right mouse button, </li>
+
+<li>	choose <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>,</li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	select one or more dependent maps and/or tables in a Catalog, </li>
+
+<li>	open the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window,</li>
+
+<li>	choose <span class=arial>Properties</span>. </li>
+
+</ul>
+
+<p class=defnewpar>The <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Property sheet(s)</a> of the selected dependent map(s) and/or table(s) will appear:</p>
+
+<ul>
+
+<li>go to the <span class=arial>Dependency</span> tab, and </li>
+
+<li>click the button <span class=arial>Make Up-to-Date</span>. </li>
+
+</ul>
+
+<p class=defnewpar>When a dependent map is displayed in a map window, or when a dependent table is displayed in a table window, you can also open the File menu in the map or table window and select the <span class=arial>Properties</span> command. The Properties sheet of that map or table then appears. To make the map or table up-to-date, go to the <span class=arial>Dependency</span> tab, and click the button <span class=arial>Make Up-to-Date</span>.</p>
+
+<p class=kopje>To make dependent columns up-to-date:</p>
+
+<p>To make <i>all</i> dependent columns in a table up-to-date:</p>
+
+<ul>
+
+<li>    open a table in a table window, </li>
+
+<li>    click the <span class=arial>Update All Columns</span> button <img src="../images/table_update_all_cols.gif" align=bottom width="22" height="22"> in the <a href="table_window_toolbar.htm">toolbar</a>, or</li>
+
+<li>    choose <span class=arial>Update All Columns</span> from the <a href="table_window_menu_commands.htm">Columns</a> menu.</li>
+
+</ul>
+
+<p class=defnewpar>To make a <i>specific</i> column in a table up-to-date:</p>
+
+<ul>
+
+<li>	open a table in a table window, </li>
+
+<li>	double-click the column button (which displays the column name) of a dependent column,</li>
+
+<p class=leftmargininlist>or</p>
+
+<li>	from the <a href="table_window_menu_commands.htm">Columns menu</a>, choose <span class=arial>Column Management</span>, a dialog box appears in which all columns are listed, then double-click a column in the list, or select a column in the list and click the <span class=arial>Properties</span> button.</li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box will appear; click the button <span class=arial>Make Up-to-Date</span>.</p>
+
+<p class=kopje>To make dependent data objects up-to-date on the command line or in scripts:</p>
+
+<p>You can also make dependent maps and tables up-to-date by typing the following on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line in the Main window</a> or in a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a>:</p>
+
+<p class=calc1>	update <i>object.ext</i></p>
+
+<p>For <span class=courier><i>object.ext</i></span> fill out the <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object name</a> and its <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >extension</a>. It is also allowed to use the DOS wildcards <span class=courier>*</span> and ?. </p>
+
+<p class=defnewpar>To make a dependent column up-to-date, you can type:</p>
+
+<p class=calc1>	updatecol <i>table.ext.column</i></p>
+
+<p>For <span class=courier><i>table.ext.column</i></span> fill out the <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >table name</a>, its <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >extension</a> in case it is not .TBT, and the <a href="..//ilwis/popup/object_column_name_popup.htm" onClick="return popup(this, 'notes')" >column name</a>. It is not allowed to use the DOS wildcards.</p>
+
+<p class=defnewpar>For more information, <a href="appendices_ilwis_scripts_language_syntax.htm">see Appendices : script language (syntax)</a>.</p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a></p>
+
+<p class=seealsolinks><a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a></p>
+
+<p class=seealsolinks><a href="how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit the properties of an object</a></p>
+
+</body

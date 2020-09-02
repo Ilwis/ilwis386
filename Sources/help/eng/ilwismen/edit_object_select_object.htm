@@ -1,0 +1,304 @@
+<html>
+
+<head>
+<title>Select object to be edited</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Edit ..., Main window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Select object to be edited</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Select a map, or table or any other <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >object</a>, open it and edit it.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Select an object:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the object which you want to edit. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Select object type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the type of object you want to edit: a map, a table, a map list, a domain, a representation, a georeference, a coordinate system, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Depending on the selected object, an editor or a dialog box appears:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >Raster map</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <a href="../ilwis/pixel_editor_functionality.htm">Pixel editor</a> is started.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >Polygon map</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <a href="../ilwis/polygon_editor_functionality.htm">Polygon editor</a> is started. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >Segment map</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <a href="../ilwis/segment_editor_functionality.htm">Segment editor</a> is started.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >Point map</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <a href="../ilwis/point_editor_functionality.htm">Point editor</a> is started.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >Table</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The table is displayed in a <a href="../ilwis/table_window_functionality.htm">table window</a>. Fields of source columns can directly be edited.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_table2dim_popup.htm" onClick="return popup(this, 'notes')" >Two-dimensional table</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The two-dimensional table is displayed in a <a href="../ilwis/table_window_functionality.htm">table window</a>. Fields in the table can directly be edited.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >Map list</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The map list is opened in a kind of Catalog which has some extra possibilities. See <a href="../ilwis/how_to_edit_map_lists.htm">How to edit a map list</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >Map view</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The map view is displayed in a <a href="../ilwis/map_window_functionality.htm">map window</a>. You can add data and annotation layers as usual.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >Domain</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For a class or identifier domain, the <a href="../ilwis/domain_class_id_editor_functionality.htm">Domain Class/ID editor</a> is started. </p>
+
+<p class=diabox>For a value domain, the <a href="../ilwismen/edit_domain_value.htm">Edit Domain Value</a> dialog box appears. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >Representation</a>: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>For a representation linked to a class domain, the <a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor</a> is started. </p>
+
+<p class=diabox>For a representation linked to a value domain: the <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a> is started. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >Georeference</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For a georeference corners, the <a href="edit_georeference_corners.htm">Edit Georeference Corners</a> dialog box appears.</p>
+
+<p class=diabox>For a georeference tiepoints, the <a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor</a> is started. </p>
+
+<p class=diabox>For a georeference 3D, the <a href="../ilwis/georeference_3d_editor_functionality.htm">Georeference 3D editor</a> is opened.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >Coordinate system</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For a coordinate system boundary only, the <a href="edit_coordinate_system_boundary_only.htm">Edit Coordinate System Boundary Only</a> dialog box will appear.</p>
+
+<p class=diabox>For a coordinate system projection, the <a href="../ilwismen/edit_coordinate_system_projection.htm">Edit Coordinate System Projection</a> dialog box will appear.</p>
+
+<p class=diabox>For a coordinate system latlon, the <a href="edit_coordinate_system_latlon.htm">Edit Coordinate System LatLon</a> dialog box will appear.</p>
+
+<p class=diabox>For a coordinate system formula, the <a href="edit_coordinate_system_formula.htm">Edit Coordinate System Formula</a> dialog box will appear.</p>
+
+<p class=diabox>For a coordinate system tiepoints, the <a href="../ilwis/coordinate_system_tiepoints_editor_functionality.htm">Coordinate system Tiepoints</a> editor will be opened.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_histogram_raster_popup.htm" onClick="return popup(this, 'notes')" >Histogram</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The histogram is displayed in a table window. Histogram columns cannot be edited, but you can perform calculations using the histogram columns.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >Sample set</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <a href="../ilwis/sample_set_editor_functionality1.htm">Sample set editor</a> is started.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_matrices_popup.htm" onClick="return popup(this, 'notes')" >Matrix</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The matrix is displayed. You cannot edit the matrix.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/obj_linear_filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <a href="../ilwis/filter_editor.htm">Filter editor</a> is started.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_userdef_functions_popup.htm" onClick="return popup(this, 'notes')" >Function</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <a href="../ilwis/function_editor_functionality.htm">Function editor</a> is started.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >Script</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <a href="../ilwis/script_editor_functionality.htm">Script editor</a> is started.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	To edit a map or a map list, you can also click the right mouse button on the map or map list in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, and choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+<li>	In a map window, you can also choose <span class=arial>Edit Layer</span> from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> and select the layer which you want to edit; the appropriate map editor is opened.</li>
+
+<li>	To edit a table, domain, a representation, a georeference or a coordinate system, it is generally easier to double-click it in the Catalog. The object is opened and you can directly edit it. </li>
+
+<li>	To edit a table, domain, representation, georeference, coordinate system, map view, sample set, filter, function or script, you can also click it with the right mouse button in the Catalog, and then choose <span class=arial>Open</span> from the context-sensitive menu.</li>
+
+<li>	To select the type of objects that are displayed in the Catalog, click the <span class=arial>Customize Catalog</span> button <img src="../images/custcat.gif" align=bottom width="22" height="22"> in the toolbar of the Main window.</li>
+
+<li>	<a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent data objects</a> and objects marked as read-only cannot be edited.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects.htm">ILWIS objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/editors.htm">Editors</a></p>
+
+</body

@@ -1,0 +1,264 @@
+<html>
+
+<head>
+<title>Moving average : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Moving average">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Moving average</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Moving average performs a weighted averaging on point values and returns a raster map as output. The user has to specify a weight function and a limiting distance. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ol>
+
+<li>	First, for each output pixel, the distances of all points towards the output pixel are calculated to determine weight factors for the points:</li>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>For each output pixel, weight factors for the points are then calculated according to the weight function specified by the user. Two weight functions are available: inverse distance and linear decrease.</p>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>Inverse distance:</p>
+
+</td>
+<td valign="top">
+<p>weight = (1 / d<sup>n</sup> ) - 1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>Linear decrease:</p>
+
+</td>
+<td valign="top">
+<p>weight = 1 - d<sup>n</sup></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp;	</p>
+
+<p class=leftmargininlist>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=30>
+<p>d</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>D/D<sub>0</sub>  = relative distance of point to output pixel</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p>D</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>Euclidean distance of point to output pixel</p>
+
+<p class=linespacing01before>When the <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distance</a> option is used, distances (D) are calculated over the sphere using the projection of the coordinate system that is used by the georeference of the output raster map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p>D<sub>0</sub></p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwisapp/sec/point_interpolation_limiting_distance_sec.htm" onClick="return popup(this, 'notes')" >limiting distance</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p>n</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>weight exponent</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>Figures 1 and 2 below show the manner in which weight values decrease with increasing distance, for different values of n. The X-axes represent d: the distance of a point towards an output pixel divided by the limiting distance. The Y-axes represent the calculated weight values. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top" width=226>
+<p><img src="../images/invdist.gif" align=bottom width="200" height="200"></p>
+
+</td>
+<td valign="top" width=226>
+<p><img src="../images/linear.gif" align=bottom width="200" height="200"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top" width=226>
+<p class=captionfig>Fig. 1: Inverse distance<br>
+weight = (1/d<sup>n</sup> ) - 1<br>
+X-axis: d = D/D0<br>
+Y-axis: weight values</p>
+
+</td>
+<td valign="top" width=226>
+<p class=captionfig>Fig. 2: Linear decrease<br>
+weight = 1 - d<sup>n</sup><br>
+X-axis: d = D/D0<br>
+Y-axis: weight values</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>The weight functions ensure that points close to an output pixel obtain a larger weight value than points which are farther away from an output pixel.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>See that when the distance of a point towards an output pixel equals the limiting distance (value 1.0 at X-axis), or when the distance of a point towards an output pixel is larger than the limiting distance, the calculated weight value will equal 0; the weight functions are thus continuous.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li> The <i>inverse distance</i> function can be selected when you have very accurately measured point values and when local variation, within a pixel, is small. This function ensures that the computed output values equal the input point values.</li>
+
+<li> The <i>linear decrease</i> function can be selected for point maps in which you know there are measurement errors, and when points lying close to each other have different values. This function will decrease the overall error by correcting erroneous measurements with other close points. The consequence is that the computed output values will not necessarily coincide with the measured point values. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	Then, for each output pixel, an output value is calculated as the sum of the products of calculated weight values and point values, divided by sum of weights. </li>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>output pixel value</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p><span class=symbol>S</span> (<sub> </sub>w <sub>i</sub>  <span class=courier>*</span>  val <sub>i  </sub>) / <span class=symbol>S</span> w <sub>i </sub></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=30>
+<p>w <sub>i</sub></p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>weight value for point i</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p>val <sub>i</sub></p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>point value of point i</p>
+
+</td>
+</tr>
+</table>
+
+</ol>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>For time efficiency reasons, it is strongly advised to choose a rather large pixel size for the output raster map. Further interpolation on the raster values can be performed with the <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a> operation or the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation (using bilinear or bicubic interpolation).</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/moving_average_functionality.htm">Moving average : functionality</a></p>
+
+</body

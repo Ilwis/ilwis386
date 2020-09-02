@@ -1,0 +1,97 @@
+<html>
+
+<head>
+<title>Overland flow length : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Overland flow length">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Overland flow length</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class="defnewpar">The Overland Flow Length operation calculates for each pixel the overland distance towards the 'nearest' drainage according to the flow paths available in the Flow Direction map. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>the output raster map of the <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation and its linked attribute table, </li>
+
+<li>the output raster map of the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation. </li>
+
+</ul>
+
+<p class="defnewpar">The operation produces a raster map that contains the overland down-flow distances towards the drainage into which a pixel will drain according to the flow direction map. </p>
+
+<p class="kopje">Example:</p>
+
+<table cellspacing="0">
+<tr>
+<td width="350">Input flow direction map</td>
+<td width="380">Input drainage network ordering map (in blue); <br> 
+	catchments from catchment extraction (in green) for reference</td>
+</tr>
+<tr>
+<td valign="top"><img src="../images/hydro_flow_path1.gif" width="334" height="334"></td>
+<td valign="top"><img src="../images/hydro_flow_path2.gif" width="334" height="334"></td>
+</tr>
+<tr><td valign="top"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td colspan="2">Output overland flow length map; <br>
+	input streams (in white) and catchments (in black) for reference 
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top"><img src="../images/hydro_flow_path3.gif" width="334" height="334"></td>
+</tr>
+<tr><td colspan="2" valign="top">Smaller distance values in blue; larger distance values in red</td>
+</tr>
+</table>
+
+<p class="kopje">Input map requirements: </p>
+
+<ul>
+
+<li>the output raster map of a previous <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation and its linked attribute table, </li>
+
+<li>the output raster map of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation. </li>
+
+</ul>
+
+<p class="kopje">Domain and georeference of output map: </p>
+
+<p>The output raster map will always use <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">Value</span></a>; the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> is automatically set to 0.001. </p>
+
+<p>The output map uses the same georeference as the input maps. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="overland_flow_length_dialog_box.htm">Overland flow length : dialog box</a></p>
+
+<p class=seealsolinks><a href="overland_flow_length_command_line.htm">Overland flow length : command line</a></p>
+
+<p class=seealsolinks><a href="overland_flow_length_algorithm.htm">Overland flow length : algorithm</a></p>
+
+
+</body

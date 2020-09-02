@@ -1,0 +1,192 @@
+<html>
+
+<head>
+<title>NEG</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="NEG, Sign functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>NEG( ) or -( ) function</h1>
+
+<p class=defnewpar>Returns the input value multiplied by -1.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>NEG</span>(<i>Value</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>Value</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>NEG</span> returns:</td>
+	<td valign="top">a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The <span class=courier>NEG</span>(a) function is equivalent to <span class=courier>-</span>(a).</li>
+	<li>When the input value is undefined, the output will also be undefined.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="130"><p class=calc00>? NEG(-12)</p></td>
+	<td><p>returns 12</p></td>
+</tr>
+<tr>
+	<td width="130"><p class=calc00>? NEG(POW(-2,3))</p>
+	<td><p>returns 8</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>OutMap = NEG(InMap)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>2.0</td>
+    <td class=calcpict>1.0</td>
+    <td class=calcpict>0.5</td>
+  </tr>
+  <tr>
+    <td class=calcpict>0.2</td>
+    <td class=calcpict>0.0</td>
+    <td class=calcpict>-1.0</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>-0.4</td>
+    <td class=calcpict>-0.1</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>-2.0</td>
+    <td class=calcpict>-1.0</td>
+    <td class=calcpict>-0.5</td>
+  </tr>
+  <tr>
+    <td class=calcpict>-0.2</td>
+    <td class=calcpict>0.0</td>
+    <td class=calcpict>1.0</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>0.4</td>
+    <td class=calcpict>0.1</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = NEG(InCol)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2.0</p></td>
+	<td valign="top"><p class=t1r>-2.0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1.0</p></td>
+	<td valign="top"><p class=t1r>-1.0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.5</p></td>
+	<td valign="top"><p class=t1r>-0.5</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.2</p></td>
+	<td valign="top"><p class=t1r>-0.2</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.0</p></td>
+	<td valign="top"><p class=t1r>0.0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-1.0</p></td>
+	<td valign="top"><p class=t1r>1.0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-0.4</p></td>
+	<td valign="top"><p class=t1r>0.4</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-0.1</p></td>
+	<td valign="top"><p class=t1r>0.1</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_abs.htm">ABS</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_sgn.htm">SGN</a></p></td>
+</tr>
+</table>
+
+</body

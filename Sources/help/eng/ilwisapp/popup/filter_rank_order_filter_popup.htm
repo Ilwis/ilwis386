@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>filter rank order filter popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Rank order filters</p>
+
+<p class=linespacing03after>A <a href="..//ilwisapp/filters_types_rank_order_and_median_filters.htm" onClick="return popup(this, 'notes')" >rank order filter</a> of size 3x3 for example, examines 9 pixel values of the input map at a time, sorts these values from small to large, and selects as output value that value which is encountered at a certain rank order number. </p>
+
+<p class=linespacing03after>Standard rank order filters are the <a href="filter_median_popup.htm">median filters</a>: <a href="../../ilwisapp/sec/filter_med3x3_sec.htm">MED3x3</a> and <a href="../../ilwisapp/sec/filter_med5x5_sec.htm">MED5x5</a>. The median filters can for instance be used to smooth an image. </p>
+
+<p>Furthermore, <a href="..//ilwisapp/filters_user_defined_rank_order_and_median_filters.htm" onClick="return popup(this, 'notes')" >user-defined rank order and median filters</a> can be used; specify the size of a rank order filter, the rank order number and a threshold. In this way you can obtain for example the minimum or maximum value of a number of pixels examined.</p>
+
+</body

@@ -1,0 +1,171 @@
+<html>
+
+<head>
+<title>ILWIS introduction : getting started with ILWIS for Windows</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS introduction">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Introduction</h1>
+
+<h1 class=secondline>Getting started with ILWIS for Windows</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>When the ILWIS icon is double-clicked on the desktop, the ILWIS logo appears, followed by the ILWIS <a href="..//ilwis/popup/main_window_popup.htm" onClick="return popup(this, 'notes')" >Main window</a>.</p>
+
+<p class=kopje>Main window:</p>
+
+<p>Just below the menu bar you see a line in which text appears as soon as you click a map or menu command. This is the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line</a>, on which you can type for example MapCalc statements. Below the command line is a <a href="..//ilwis/popup/button_bar_popup.htm" onClick="return popup(this, 'notes')" >toolbar</a> which allows you to quickly display maps or tables. If you want to change to another directory or drive you can use the <a href="..//ilwis/popup/navigator_popup.htm" onClick="return popup(this, 'notes')" >navigator</a>: the list boxes to the right of the toolbar.</p>
+
+<p class=defnewpar>The central right part of the Main window is the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. It displays the ILWIS objects in the current directory. All ILWIS objects are preceded by an icon. The icons preceding data objects are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/mpl.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map lists</a>,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rasmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a>,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/polmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a>,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/segmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a>,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/pointmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a>,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/table.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >tables</a>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>To see more objects in the Catalog than only data objects, see <a href="how_to_customize_the_catalog.htm">How to customize the Catalog</a>.</p>
+
+<p>For a list of all ILWIS objects and their icons, see <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >ILWIS objects</a>. For short Help on an object in the Catalog, click an object with the right mouse button and choose Help from the context-sensitive menu.</p>
+
+<p class=defnewpar>Below the Catalog, you find a scroll bar which you can use to view more objects of the current directory in the Catalog. </p>
+
+<p class=defnewpar>Lists of all operations can be found in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> and the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, by default located on the first two tabs at the left hand side of the Main window. The operations are preceded by an icon. </p>
+
+<p class=defnewpar>At the bottom of the Main window you see the <a href="..//ilwis/popup/win_statusline_popup.htm" onClick="return popup(this, 'notes')" >status bar</a> which gives additional information on maps, tables, operations, etc. The Main window can be sized by dragging its borders.</p>
+
+<p class=kopje>Displaying maps and tables:</p>
+
+<p>There are several ways to open a map or table in a window:</p>
+
+<ul>
+
+<li>	open the <a href="main_window_menu_commands.htm">File menu</a>, choose the <span class=arial>Open</span> command, and select a map or table to display, or</li>
+
+<li>	double-click a map or table in the Catalog.</li>
+
+</ul>
+
+<p>Other ways to display maps and tables are by using the <a href="..//ilwis/popup/button_bar_popup.htm" onClick="return popup(this, 'notes')" >toolbar</a>, the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> under the right mouse button when the mouse pointer is positioned on a map or table, or by double-clicking the Show item in the Operation-tree or the Operation-list. When opening a map, a dialog box appears in which you can specify some display options for the map.</p>
+
+<p class=defnewpar>A map is displayed in a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>. You can open as many map windows as you like. A map window can display one or more rasters, polygon maps, segment maps, and/or point maps; a map list as a color composite with additional vector maps; and furthermore, optional grid lines, graticules and annotation text layers. You can zoom in and zoom out, and if the map does not fit in the map window, you can pan or scroll. </p>
+<p>You can add other maps to an existing map window, either by <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> the desired map(s) from the Catalog to the existing map window, or by using the <span class=arial>Add Layer</span> command on the <a href="map_window_menu_commands.htm">Layers menu</a> of the map window. To see the value or meaning of a pixel, point, segment, or polygon of displayed maps in a map window, you can press the left mouse button (info). When the displayed map has an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>, you can double-click in the map window to see and edit the attributes. </p>
+<p>You can use <a href="map_window_layer_management.htm">Layer Management</a> pane for instance to add or to remove layers from a map window, to change the order of layers or to change display options of a layer. </p>
+<p>Multiple maps, grid lines, graticules, etc. displayed in a map window can be saved as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. You can add one or more map views to a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>, to which you can then add further <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a>. </p>
+
+<p class=defnewpar>A table is displayed in a <a href="..//ilwis/popup/table_window_popup.htm" onClick="return popup(this, 'notes')" >table window</a>. You can open as many table windows as you like. Each table window displays one table. A table can be shown as a whole, or record by record. When the table does not fit in the table window, you can scroll. Fields in a table can be edited by clicking them. The width of a column and the order of columns can easily be changed. From a table window, you can create graphs in a graph window. </p>
+
+<p class=kopje>Pixel info:</p>
+
+<p>In the <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel information window</a> you can get information on multiple maps and attribute tables which contain <a href="..//ilwis/popup/attribute_data_popup.htm" onClick="return popup(this, 'notes')" >attribute data</a>. Open the pixel information window through the command <span class=arial>Open Pixel Info</span> on the File menu of the Main or a map window. Add one or more maps to the pixel info window by using the File menu of the pixel info window, or <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> map icons from the Catalog to the pixel information window. </p>
+
+<p class=kopje>Starting ILWIS operations:</p>
+
+<p>ILWIS operations, such as Distance calculation or Filter, are listed in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> and the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>. There are five ways to start an ILWIS operation:</p>
+
+<ol>
+
+<li>	Open the <a href="main_window_menu_commands.htm">Operations menu</a> in the Main Window and choose an operation, or</li>
+
+<li>	Double-click an operation in the Operation-tree, or </li>
+
+<li>	Double-click an operation in the Operation-list, or </li>
+
+<li>	Press the right mouse button on an object in the Catalog: a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> appears from which you can choose an operation, or</li>
+
+<li>	<a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >Drag</a> an ILWIS data object from the Catalog to an operation in the Operation-tree or the Operation-list. </li>
+
+</ol>
+
+<p>Usually a dialog box is opened in which you can select input and output object names and where you can set some parameters necessary for the operation.</p>
+
+<p>To obtain short Help on an operation in the Operation-tree or the Operation-list, click an operation with the right mouse button and choose Help from the context-sensitive menu. </p>
+
+<p class=kopje>Command lines:</p>
+
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >Map calculation</a> formulae can be typed on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the Main window</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >table calculation</a> formulae can be typed on the <a href="..//ilwis/popup/command_line_table_window_popup.htm" onClick="return popup(this, 'notes')" >command line of a table window</a>. These command lines can also be used as a <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >pocket line calculator</a>. The command line of the Main window can also be used to type <a href="..//ilwis/popup/command_line_main_commands_popup.htm" onClick="return popup(this, 'notes')" >ILWIS commands</a>, <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >ILWIS expressions</a>, or to run a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="basic_concepts.htm">Basic concepts</a></p>
+
+<p class=seealsolinks><a href="ilwis_window_types_and_their_functionality.htm">ILWIS window types and their functionality</a></p>
+
+</body

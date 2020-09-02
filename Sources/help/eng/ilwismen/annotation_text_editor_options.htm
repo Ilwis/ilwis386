@@ -1,0 +1,133 @@
+<html>
+
+<head>
+<title>Annotation Text editor : Options</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Annotation Text editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Annotation Text editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Options</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__annotation_text_editor_file_menu_sec2.Click()>File menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Change the working scale, or change from working in XY-coordinates to working in RowCols or vice versa. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when in the Annotation Text editor, you choose the <span class=arial>Options</span> command from the <a href="..//ilwismen/sec2/annotation_text_editor_file_menu_sec2.htm" onClick="return popup(this, 'notes')" >File menu</a> or from the <a href="..//ilwis/popup/context_sensitive_menu_editors.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Working scale:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for your new working scale; this can be for instance the scale on which you will print your maps later on. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Use XY-coordinates:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>You can use XY-coordinates for the positions of your texts in the Annotation Text object when you are working on a map with a georeference corners, or a georeference tiepoints (conformal or affine transformation).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Use RowCols:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>You should use RowCol-numbers for the positions of your texts in the Annotation Text object when you are working on a map with a georeference tiepoints (second order transformation or higher order transformation), a georeference 3D, a georeference direct linear, or a georeference orthophoto.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When changing the working scale, a message will follow asking you to update all font sizes as stored in the Annotation Text object (i.e. the table):</p>
+
+<ul>
+
+<li>	to have your texts appear in the same proportions on your map, answer this question with <span class=courier>Yes</span>; the font sizes in the table will be updated to your new working scale,</li>
+
+<li>	to use the same font sizes as currently stored in the Annotation Text object, answer <span class=courier>No</span>; your texts will either appear larger or smaller in your map window, depending on whether you specified a larger value for the working scale or a smaller one.</li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	Annotation Text objects using XY-coordinates can be used on any georeference of about the same area, e.g. drag drop from Catalog to map window.</li>
+
+<li>	Text items in an Annotation Text objects using RowCols can be easily aligned regardless of the georeference. For precise editing of RowCol numbers, it is adivised to open the annotation text object as a table. </li>
+
+<li>	An Annotation Text object should work in Row Cols when you have a georef direct linear, georef orthophoto, or a georef3D and you want to position texts in the map window but outside the DTM area (there are no coordinates defined outside your DTM area). </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/annotation_text_editor_functionality.htm">Annotation Text editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a></p>
+
+</body

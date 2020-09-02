@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<title>show map list as color composite popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Show map list as color composite</p>
+
+<p class=linespacing03after>Display three images, or other raster maps with a value domain, present in a <a href="../../ilwis/popup/objects_map_list_popup.htm">map list</a> as a
+<a href="show_map_list_as_color_composite_popup.htm"> color composite</a>. You will show an <a href="..//ilwisapp/show_map_list_as_color_composite.htm" onClick="return popup(this, 'notes')" >Interactive color composite</a>.</p>
+
+<p class=linespacing03after>By using an <i>interactive</i> color composite, you can easily change intervals, select other bands, etc. The resulting color composite is displayed in a map window which can be saved as a <a href="../../ilwis/popup/objects_map_view_popup.htm">map view</a>. Interactive color composites are very suitable to be used as a background during <a href="sample_popup.htm">sampling</a> or during screen digitizing. <br>
+Your graphics board needs to be configured to use more than 256 colors, for instance High Color 16-bit, or True Color 24-bit (see Display Settings in Windows' Control Panel).</p>
+
+<p class=linespacing03after>A <i>permanent</i> color composite can always be created with the <span class=arial>Color Composite</span> operation on the <a href="..//ilwis/main_window_menu_commands.htm" onClick="return popup(this, 'notes')" >Operations, Image Processing menu</a>.</p>
+
+</body

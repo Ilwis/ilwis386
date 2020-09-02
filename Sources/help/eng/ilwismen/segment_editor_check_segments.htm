@@ -1,0 +1,124 @@
+<html>
+
+<head>
+<title>Segment editor : Check segments</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment editor, Check segments, Dead ends in segments, Self overlap in segments, Intersections in segments, Code consistency in segments, Closed segments">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Segment editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/segment_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Check Segments</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>With Check Segments you can check whether segments have been correctly digitized. The Check Segments command is also automatically performed when you choose the <span class=arial>Polygonize</span> option in the segment editor.</p>
+
+<p class=defnewpar>Select one of the following options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=119>
+<p><a href="check_segments_self_overlap.htm">Self overlap</a>: </p>
+
+</td>
+<td valign="top">
+<p>Checks whether segments overlap themselves. Overlapping segments cannot be polygonized, with this option overlaps can be traced and corrected. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=119>
+<p><a href="check_segments_dead_ends.htm">Dead ends</a>: </p>
+
+</td>
+<td valign="top">
+<p>Checks whether segments have dead ends. Segments with dead ends cannot be polygonized, with this option dead ends can be traced. </p>
+
+<!-- <p>also contour lines having the same height value should be properly connected. For contour lines, it is advised to, during digitizing, snap the ends of the contour lines to a temporary 'frame' segment which defines the boundary of your study area. When finished digitizing, you can run the check and then remove the 'frame' segment. </p>-->
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=119>
+<p><a href="check_segments_intersections.htm">Intersections</a>: </p>
+
+</td>
+<td valign="top">
+<p>Checks whether different segments cross each other. Crossing segments cannot be polygonized, also contour lines with different height values are not supposed to cross each other. With this option intersections can be traced and corrected. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=119>
+<p><a href="check_segments_code_consistency.htm">Code consistency</a>: </p>
+
+</td>
+<td valign="top">
+<p>Checks whether segments, which are connected to each other by a node, have the same value. This option is designed to check whether a contour line, which consists of multiple consecutive segments, has one height value. To polygonize segments, this check is not necessary.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=119>
+<p><a href="../ilwismen/check_segments_closed_segments.htm">Closed segments</a>: </p>
+
+</td>
+<td valign="top">
+<p>Checks whether each segment has only 1 node serving both as the begin node and as the end node. This format is required if you wish to use non-topological polygonization, for instance when you imported vector files (e.g. DXF) into ILWIS earlier on, and now wish to polygonize the segment map which is the result of the import. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If an error is encountered, some questions will be asked whether you wish to zoom in and whether the segment(s) should be automatically corrected (if possible). If you answer these questions with <span class=courier>No</span>, the segment check stops and you can correct the error manually. After an automatic correction, the check will be continued automatically; after a manual correction, you have to restart the check yourself. </p>
+
+<p class=defnewpar>If no errors are encountered for a check, a message will appear stating that the segments are OK. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/check_segments_self_overlap.htm">Check segments : Self overlap</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/check_segments_dead_ends.htm">Check segments : Dead ends</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/check_segments_intersections.htm">Check segments : Intersections</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/check_segments_code_consistency.htm">Check segments : Code consistency</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/check_segments_closed_segments.htm">Check segments : Closed segments</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_polygonize.htm">Segment editor : Polygonize</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+</body

@@ -1,0 +1,30 @@
+<html>
+
+<head>
+<title>segment density popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Segment Density</p>
+
+<p>The <a href="..//ilwisapp/segment_density.htm" onClick="return popup(this, 'notes')" >Segment Density</a> operation rasterizes a segment map. For each output pixel, the total length of all segment parts within the boundaries of the pixel is <i>summed</i>: this is the output value for the pixel. By using a <a href="../../ilwis/sec/mask_sec.htm">mask</a> you can specify the elements of the input map that are to be used in the calculation.</p>
+
+</body

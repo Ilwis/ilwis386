@@ -1,0 +1,374 @@
+<html>
+
+<head>
+<title>ILWIS objects : georeference Direct Linear (non-coplanarity of tiepoints)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Georeference, Tiepoints, Coplanar tiepoints, DLT, Direct Linear Transformation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>ILWIS objects</h1>
+
+<h1 class=secondline>Georeference Direct Linear (non-coplanarity of tiepoints)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>It is recommended to create a georeference direct linear when: </p>
+
+<ul>
+
+<li>	you have small format photographs, i.e. photographs taken with normal camera and photographs without fiducial marks,</li>
+
+<li>	the terrain covered by the photograph has clear height differences, i.e. you need to correct for tilt and relief displacement,</li>
+
+<li>	a Digital Terrain Model (DTM) of the area is available.</li>
+
+</ul>
+
+<p class=defnewpar>By creating a georef direct linear and displaying the photograph, you can for instance directly digitize on the displayed non-rectified photograph on your screen. For more information, see <a href="how_to_screen_digitize.htm">How to screen digitize</a>.</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	For photographs that cover an almost flat terrain, you can use a georeference tiepoints with a projective transformation.</li>
+
+<li>	For photographs that have fiducial marks, you should use a georeference orthophoto.</li>
+
+</ul>
+
+<p class=kopje>General information on a georeference direct linear:</p>
+
+<ul>
+
+<li>	A georef direct linear is calculated by a Direct Linear Transformation (DLT):</li>
+
+<p class=leftmargininlist>	Row = (aX + bY + cZ + d) / (eX + fY + gZ +1)</p>
+
+<p class=leftmargininlist>	Col = (hX + iY + jZ + k) / (eX + fY + gZ +1)</p>
+
+<li>	A georef direct linear requires at least 6 tiepoints (also called control points). For each tiepoint, RowCol numbers from the photograph and real world  XY-coordinates are stored. Height (Z) values can be supplied by the user, otherwise these are obtained through the XY-coordinates from the DTM. </li>
+
+<li>	The flying height, the camera projection center (X0, Y0, Z0), the camera axis angles (<span class=symbol>a</span>, <span class=symbol>b</span>, <span class=symbol>g</span>) with the X, Y, Z axes are calculated from the tiepoints.</li>
+
+</ul>
+
+<p class=kopje>Avoiding coplanarity:</p>
+
+<p>In a georeference orthophoto, the inner orientation calculates the principal point from the fiducial marks and the principal distance. Then, camera position (X<sub>0</sub>, Y<sub>0</sub>, Z<sub>0</sub>) and angles (<span class=symbol>k</span>,<span class=symbol> f</span>, <span class=symbol>w</span>) are calculated from the tiepoints (outer orientation).</p>
+
+<p>In a georeference direct linear, there is no inner orientation; the principal point thus remains unknown. The location (X<sub>0</sub>, Y<sub>0</sub>, Z<sub>0</sub>) and the tilt of the camera are calculated from the tiepoints only. </p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp;</p>
+
+<ul>
+
+<li>	When all tiepoints in your georef direct linear fit in one (tilted) plane in XYZ-direction, a projection center cannot be calculated and you will get an error message that you have a singular matrix. Your tiepoints are coplanar. The matrix will remain singular when only one tiepoint is outside the common plane.</li>
+
+<li>	When the tiepoints almost fit in one plane, i.e. when tiepoints are almost coplanar, then the Direct Linear Transformation seems to work but is not reliable. </li>
+
+</ul>
+
+<p class=defnewpar>A georeference direct linear has the highest accuracy within the 3D envelop bounded by the tiepoints; thus the better the XYZ spread of tiepoints, the better the transformation will work. To obtain a reliable georeference direct linear, it is necessary that (at least) 2 tiepoints clearly deviate in Z-direction from a (tilted) plane that can be fit by means of a least squares approximation through the active tiepoints. </p>
+
+<p class=defnewpar>Examples:</p>
+
+<ul>
+
+<li>	When your photograph covers a valley with hills or mountains on either side of the valley, then position your control points both <i>in the valley</i> and <i>on both sides</i> of this valley <i>in the hills or mountains</i>;</li>
+
+<li>	When your photograph covers many valleys and hills, then position your tiepoints <i>in a number of valleys</i> and <i>on a number of hills</i>.</li>
+
+</ul>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	It is always a good idea to find <i>many</i> reliable tiepoints. The more tiepoints you have, the better a georeference will be. </li>
+
+<li>	Make sure that tiepoints are well spread over the photograph (<i>XY-direction</i>), that the tiepoints use different height values in your DEM (<i>Z-direction</i>). The Z-values of at least 2 tiepoints need to be outside a tilted plane that can be fit through all active tiepoints. </li>
+
+<li>	The results of a Direct Linear Transformation are most reliable inside the 3D envelop bounded by the tiepoints. For positions far away from any tiepoint (e.g. borders of photograph), and for areas where the difference between the DEM-value and the calculated plane is significantly greater than the Z-confidence value (see below), results will not be reliable. </li>
+
+</ul>
+
+<p class=kopje>Detecting coplanarity:</p>
+
+<p>You may have a problem with coplanar tiepoints when you use a georeference direct linear and during screen digitizing you notice a shift between the location of the segments or points which you were digitizing and the location where these digitized segments and points are appearing in the photo on the screen.</p>
+
+<p class=defnewpar>By opening the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of a georeference direct linear and by clicking the <span class=arial>Additional Info</span> button in the Properties dialog box, you can find for instance:</p>
+
+<ul>
+
+<li>	the number of active tiepoints;</li>
+
+<li>	the Root Mean Square (RMS) of the vertical Z-differences of all active control points towards a tilted plane that is the result of a least squares fit through all control points;</li>
+
+<li>	the 2 tiepoints that are found to be the outliers (O1 and O2); these are the tiepoints with the largest vertical Z-differences towards the tilted plane;</li>
+
+<li>	the geometric mean of the vertical distances d1 and d2 of these outliers towards the tilted plane is called the Z-confidence range; this is an estimate for the reliable Z-range above and below the tilted plane; this is calculated as <span class=symbollarger>&Ouml;</span>(d1<span class=courier>*</span>d2).</li>
+
+</ul>
+
+<p>For your information, <span class=arial>Additional Info</span> also shows the Direct Linear Transformation equations, the estimated camera projection center, the camera axis angles with respect to the X, Y, Z axes, and the calculated approximate pixel size in the photograph. </p>
+
+<p class=defnewpar>In a georeference direct linear <i>without</i> coplanar tiepoints, both the Root Mean Square value and the Z-confidence range are large. The theoretical maximum RMS is about half the range of height values in your DTM. </p>
+
+<p class=defnewpar>In a georeference direct linear <i>with almost coplanar tiepoints</i>, the Z-differences of all control points towards the calculated XYZ plane are very small, also the RMS and Z-confidence range are small. </p>
+
+<p>In case of almost coplanar tiepoints, the transformation may even give an estimated camera projection center below the ground (or below the average Z-coordinate of the active control points). Obviously, the transformation will then give completely wrong results.</p>
+
+<h2>Technical information</h2>
+
+<p class=kopjeaftertitlesub>Introduction</p>
+
+<p>Direct Linear Transformation (DLT) as used in an ILWIS 'GeoRefDirectLinear' is based on solving 2 equations between Row,Col pairs in a given (scanned) photo and X,Y,Z coordinates of corresponding ground control points (in meters):</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p>Row<sub>i</sub> = (aX<sub>i</sub> + bY<sub>i</sub> + cZ<sub>i</sub> + d) / (eX<sub>i</sub> + fY<sub>i</sub> + gZ<sub>i</sub> +1)</p>
+
+</td>
+<td valign="top">
+<p>(Eq. 1)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p>Col<sub>i</sub> = (hX<sub>i</sub> + iY<sub>i</sub> + jZ<sub>i</sub> + k) / (eX<sub>i</sub> + fY<sub>i</sub> + gZ<sub>i</sub> +1)</p>
+
+</td>
+<td valign="top">
+<p>(Eq. 2)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>There are 11 parameters to be solved (a, b ... k), the so-called DLT-coefficients.</p>
+
+<p>In ILWIS this is done by reformulating (Eq. 1) and (Eq. 2) as linear equations with these coefficients as unknowns:</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p>X<sub>i</sub><span class=courier>*</span>a + Y<sub>i</sub><span class=courier>*</span>b + Z<sub>i</sub><span class=courier>*</span>c + d + X<sub>i</sub><span class=courier>*</span>Row<sub>i</sub><span class=courier>*</span>e + Y<sub>i</sub><span class=courier>*</span>Row<sub>i</sub><span class=courier>*</span>f + Z<sub>i</sub><span class=courier>*</span>Row<sub>i</sub><span class=courier>*</span>g + Row<sub>i</sub> = 0</p>
+
+</td>
+<td valign="top">
+<p>(Eq. 1a)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p>X<sub>i</sub><span class=courier>*</span>h + Y<sub>i</sub><span class=courier>*</span>i + Z<sub>i</sub><span class=courier>*</span>j + d + X<sub>i</sub><span class=courier>*</span>Col<sub>i</sub><span class=courier>*</span>e + Y<sub>i</sub><span class=courier>*</span>Col<sub>i</sub><span class=courier>*</span>f + Z<sub>i</sub><span class=courier>*</span>Col<sub>i</sub><span class=courier>*</span>g + Col<sub>i</sub>  = 0</p>
+
+</td>
+<td valign="top">
+<p>(Eq. 2a)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The unknowns can be solved if we have 6 or more control points, giving 12 or more linear equations, that can be solved, unless the points are co-planar (see below).</p>
+
+<p class=defnewpar>After solving the DLT coefficients, the position of the aerial camera can be estimated from the intersection of 3 planes in space given by linear equations in terms of ground coordinates:</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top" width=226>
+<p>a X + b Y + c Z + d  = 0</p>
+
+</td>
+<td valign="top">
+<p>(Eq. 3)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top" width=226>
+<p>h X + i Y + j Z + k  =  0</p>
+
+</td>
+<td valign="top">
+<p>(Eq. 4)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top" width=226>
+<p>e X + f Y + g Z + 1 =  0</p>
+
+</td>
+<td valign="top">
+<p>(Eq. 5)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The plane defined by equation (Eq. 5) is parallel to the photo plane and passes through the projection center (PC) (assuming a perfect central projection). It intersects the ground at points that do not appear in the photograph (projected at 'infinity'). </p>
+
+<p>The planes defined by (Eq. 3) and (Eq. 4) pass through the projection center and the lines in the photo where (reduced) values of Row and Col resp. are equal to 0.</p>
+
+<p class=defnewpar>Furthermore, the knowledge of the DLT coefficients a, b ... k,  enables the forward transformation (from XY to RowCols) using (Eq. 1) and (Eq. 2); this is the photographic central projection from ground (3D) to photo plate (2D). </p>
+
+<p class=defnewpar>The inverse transformation (from RowCol to XY) is more complicated (from 2D to 3D) and only possible with the use of a complete DTM of the ground. </p>
+
+<p>It is possible to assume the Z-coordinate (say Z1 ) for a point in the ground system associated to a photo point (given as RowCol), and solve the remaining unknowns X and Y. These are the coordinates of the piercing point of a corresponding light-ray with the horizontal level-plane Z = Z1.</p>
+
+<p>The DTM  is then used to improve the initial guess of the Z-coordinate. Improving the X,Y estimation is done iteratively with the help of the position parameters of the light-ray (slope cotangents with X and Y -axes and start X1,Y1 of piercing point). The iterative algorithm to find the piercing point of each light-ray is the main part of the inverse DLT. </p>
+
+<p>This is very similar to what is implemented for the Georeference Orthophoto.</p>
+
+<p class=defnewpar>The accuracy of the two georeference transformations (forward and inverse) of the Georeference DirectLinear highly depends on the quality of the DLT coefficients. How well the DLT performs the transformation for the given control points is visible in the value of <i>sigma</i>. Apart from the horizontal XY spread of the control points, it mainly depends on co-planarity properties of the control points. </p>
+
+<p>This is in contrast to the transformation used in a Georeference Orthophoto. In a Georeference Orthophoto, the quality of the transformation mainly depends on the quality of the inner orientation (camera and photo geometry) and the outer orientation (using at least 3 control points).</p>
+
+<p>In both 3D georeferencing methods the quality of the transformation also highly depends on the quality of the underlying DTM.</p>
+
+<p class=defnewpar>Recalling the main use of the transformations:</p>
+
+<p>The forward transformation (XY to RowCol) is needed for:</p>
+
+<ul>
+
+<li>	Overlaying the non-rectified photomap with vectors (points, segments, grid, graticule, polygons);</li>
+
+<li>	Resampling from the 'photo'-georef to a GeorefCorners (rectification while making orthophotos and mosaicking).</li>
+
+</ul>
+
+<p class=defnewpar>The inverse transformation (RowCol to XY) is needed for:</p>
+
+<ul>
+
+<li>	Getting pixel info from vector maps that are overlaid on the non-rectified photo;</li>
+
+<li>	Screen digitizing on the non rectified background photo.</li>
+
+</ul>
+
+<p class=kopje>Coplanarity</p>
+
+<p>Ground control points can be <i>co-planar</i>, i.e. lie in one (possibly non-horizontal) plane, even if the terrain is very mountainous. When this is the case, the computation of the DLT- coefficients is impossible because Z is a linear function of X and Y; for each control point: Z = rX + sY + t. This makes the DLT-coefficients 'triple-wise' linearly dependent: (a, b, c), (h, i, j) and (e, f, g) each have one redundant unknown, see Eq. 3, Eq. 4, Eq. 5.</p>
+
+<p class=defnewpar>The systems of equations like (Eq. 1a)and (Eq. 2a) only allow to solve 8 independent coefficients out of the 11, no matter how many (coplanar) control points are used. In other words, the rank of the normal equations found from an over-determined collection of equations of types (Eq. 1a) and (Eq. 2a) will be at most 11 - 3 = 8, i.e. the column rank of the matrix of this collection. The loss of rank is caused by vanishing columns related to the unknowns d, k and g because their coefficients contain Z. Hence the system of normal equations (11 by 11) will be singular.</p>
+
+<p>To raise its rank above 11, one needs 2 control points outside a common plane of the others. One 'outsider' together with at least 4 points inside a plane would bring the rank up to 10, making still a singular normal matrix.</p>
+
+<p class=defnewpar>Conclusion: to solve the DLT coefficients one needs at least 6 control points and such that 2 are not coplanar with the others. </p>
+
+<p class=defnewpar>If the ground control points are <i>nearly co-planar</i>, the system will be ill-conditioned.</p>
+
+<p>This means: small perturbations (errors) in ground control coordinates or RowCol identification in the photo will cause large perturbations in the DLT coefficients. These perturbations will not much influence the sigma value displayed in the editor window of the tiepoint table. This sigma tells how well the transforms of the control points coordinates match with their photo coordinates, but not how good this transformation works in areas lying outside the region enclosed by the ground control points. </p>
+
+<p>The DLT errors in turn will cause errors in the position of the projection center and in the mentioned light-ray parameters which are used in the inverse DLT. Even if control-points were error-free (both in terrain and photo system), in case of near-coplanarity, the DLT would be unreliable for points away from the control points despite of a low sigma value of these control points especially for terrain points far above or below the coplanar 'trend' plane.</p>
+
+<p class=defnewpar>Other factors that influence the errors due to near-coplanarity are:</p>
+
+<ul>
+
+<li>	spread of the control points in terms of X,Y coordinates;</li>
+
+<li>	the random (measurement) error in the control points in both systems;</li>
+
+<li>	the flying height found by the relative positions of the planes of Eq. 3, Eq. 4 and Eq. 5. </li>
+
+</ul>
+
+<p class=kopje>Non-coplanarity</p>
+
+<p>As a general rule, one can say that the DLT transformation and its inverse are reliable inside the convex hull of the control points. This hull is defined as the smallest convex polyhedron one can construct around a (3D-) collection of points. A polygon (in 2D) or a polyhedron (in 3D)  is called convex if each pair of inside points can be connected by a straight line that lies completely inside the polygon cq. polyhedron.</p>
+
+<p class=defnewpar>Practically speaking, if one wants to be sure that the Georeference Direct Linear is reliable for the whole region of interest, one needs to use control points which convex hull englobes the complete region, also with respect to Z coordinates (heights).</p>
+
+<p>For instance, when all control points are located in valleys and are nearly coplanar, the points will not produce a good transformation for<b> </b>points lying far above this common plane.   </p>
+
+<p class=defnewpar>One way to quantify non-coplanarity is using RMS (root mean square). It is computed after fitting a plane ('trend' plane) through the control points by means of a least squares approximation. The vertical distances between the control points and the plane (Z-differences) are squared, added and divided by n, the number of points. The non-coplanarity is defined as the square root of this result. It is expressed in terrain units (generally meters). Its theoretical maximum (optimum) equals about half the range of the DTM height-values. </p>
+
+<p class=defnewpar>For another quantification of non-coplanarity, especially for the 2 necessary outliers, we can find what is called in ILWIS a confidence range of the Z-values. First of all, the outliers, defined as the control points having the largest Z-deviation from the earlier mentioned trend plane need to be found. The 2 vertical distances d1 and d2 of the outliers towards the trend plane are calculated. The geometric mean of d1 and d2 is an estimate for the reliable Z range below and above the trend plane. This is called the Z-confidence Range in Additional Info. It is a measure of the thickness of the convex hull of control points. </p>
+
+<p class=defnewpar>If a point to be transformed is at a vertical distance d from the average control point position and if r stands for the earlier defined  Z-confidence Range, the ratio d/r gives an idea about the transformation error to be expected.</p>
+
+<p>If d/r &lt; 1 , one might expect errors similar to those in the control points themselves (sigma).</p>
+
+<p>If d/r &gt;&gt; 1 , the point is likely far beyond the convex 'control' hull and the error will increase with the increase of d/r.</p>
+
+<p>The values of r and d can be found c.q. derived from the Additional Info that is delivered after creation or modification of a Direct Linear georeference. In this Additional Info one can find also the DTM height difference of all control points with respect to the trend plane.</p>
+
+<p class=defnewpar>Finally one finds information on the computed camera orientation: its distance above the nadir point, its distance from the centroid of the control points and the orientation of the camera axis. If the distances turn out to be negative or too small, the user should conclude that the transformation is not well determined due to errors in the control point coordinates or due to (quasi-)coplanarity. </p>
+
+<p class=defnewpar>How the real stochastic error behavior is, inside and outside the convex hull, also strongly depends on the XY spread of the control points with respect to each other and the rest of the terrain, and on variance-covariance models of the observations.</p>
+
+<p>This is beyond the scope of this analysis.</p>
+
+<p class=kopje>References:</p>
+
+<p>K.G. Grabmaier, Orientation Theory, ITC Lecture Notes.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a></p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Georeference editor : functionality</a></p>
+
+<p class=seealsolinks><a href="how_to_screen_digitize.htm">How to screen digitize</a></p>
+
+</body

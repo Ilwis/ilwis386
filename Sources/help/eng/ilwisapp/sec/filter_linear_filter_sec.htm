@@ -1,0 +1,166 @@
+<html>
+
+<head>
+<title>filter linear filter sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Example linear filters</p>
+
+<p class=linespacing01after>An example of a <a href="..//ilwisapp/filters_types_linear_filters.htm" onClick="return popup(this, 'notes')" >linear filter</a> is for instance the standard AVG3x3 filter. This filter contains the following values in its matrix:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>1</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargin06>Gain factor  0.111111</p>
+
+<p class=defnewpar>When 9 values in an input map are:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>17</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>22</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>18</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>21</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>15</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>18</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>17</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>20</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>23</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The AVG3x3 filter calculates: </p>
+
+<p class=courier>(1*17 + 1*22 + 1*18 +</p>
+
+<p class=courier> 1*21 + 1*15 + 1*18 +</p>
+
+<p class=courier> 1*17 + 1*21 + 1*23 ) * 0.111111 = 19</p>
+
+<p class=defnewpar>The output value assigned to the central pixel is 19. </p>
+
+<p class=defnewpar>Also, you can create your own <a href="..//ilwisapp/filters_user_defined_linear_filters.htm" onClick="return popup(this, 'notes')" >user-defined linear filters</a> (defining filter size, matrix value, and gain), and <a href="..//ilwisapp/filters_user_defined_average_filters.htm" onClick="return popup(this, 'notes')" >user-defined average filters</a> (defining filter size).</p>
+
+</body

@@ -1,0 +1,204 @@
+<html>
+
+<head>
+<title>Stereo pair from DTM : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stereo pair from DTM">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Stereo pair from DTM</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+                            
+<p>The Stereo pair from DTM operation creates a <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> from a single raster map and a Digital Terrain Model (DTM). </p>
+
+<p class=defnewpar>As input is needed: </p>
+
+<ul>
+
+<li class="ls01be">a raster map that you wish to display over the terrain, for instance a scanned aerial photograph, a satellite image, or a 'normal' raster map; </li>
+
+<li class="ls01be">a Digital Terrain Model (DTM), i.e. a raster map with height values. A DTM is also known as a Digital Elevation Model (DEM). </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>It is highly recommended to select the <span class=arial>Interpolation</span> check box in the <a href="../ilwismen/raster_map_properties.htm">Properties</a> sheet of your DTM, before you use the Stereo pair from DTM operation. </p>
+
+<p class=defnewpar>In the output stereo pair, the input photograph or image is displayed over the terrain. The output stereo pair will contain a left and a right raster map. </p>
+
+<p class=defnewpar>You can view the result in stereo, either: </p>
+
+<ul>
+
+<li class="ls01be">in a <a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope</a> window: use a stereoscope that is mounted onto your monitor, </li>
+
+<li class="ls01be">as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >Anaglyph</a> in a map window: use red-green or red-blue glasses. </li>
+
+</ul> 
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>With this operation, stereo vision is only achieved for height differences in terrain. When viewing an output stereo pair, you will not see the heights of objects such as buildings, trees, etc. because these heights are not included in the DTM. </p>
+
+
+<p class=kopje>Process and options: </p>
+
+<p class="kopjeboldnoundafterkopje">Look angle</p>
+
+<p>The input raster map will be projected twice on the terrain; the input map will be resampled into a left output raster map and a right output raster map. The shift between the left and right output map is determined by the specified look angle. The look angle thus determines the angle by which the left and the right output map are projected over the terrain. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>When the height differences in the DTM are small, it is advised to use a somewhat larger look angle. This will exaggerate the height differences. </li>
+
+<li>Reversely, when the height differences in the DTM are large, you can reduce the look angle. </li>
+
+</ul>
+
+<p class="kopjeboldnound">Look modus</p>
+
+<p>You can choose to divide this look angle equally over both output maps (look modus Both), i.e. when the look angle is specified as 30&deg;, the left output map will be projected at 15&deg; left over the terrain, and the right output map at 15&deg; right. </p>
+
+<p class=defnewpar>You can also choose to look entirely from the left (look modus Left): the left output map will then be projected over the terrain using the total look angle; the right output map will then be projected vertically. </p>
+
+<p>Similarly, when you choose look modus Right, to have the left output map projected vertically, while the right output map is projected over the terrain using the total look angle. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>When you wish to use the output stereo pair for <a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen digitizing</a> later on, you can use any look modus. After displaying the stereo pair, it does not make a difference whether you screen digitize on the left or on the right output map. </p> 
+
+<p class="kopjeboldnound">Reference height</p>
+
+<p>You need to provide a reference height, that is the altitude (of the DTM) that should appear at the level of your screen when viewing the stereo pair. </p>
+
+<p>When viewing the stereo pair, larger height values in the DTM will appear 'outside of your monitor', while smaller height values in the DTM will appear 'inside your monitor'. </p>
+
+<p class=defnewpar>Objects in a row at reference level in the input map, will end up <i>in the same column</i> in a row of the left and the right output map. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>For the reference height, you can choose for instance, the height of a central well recognizable object in the input photograph/image, the height of an area of interest in the input photograph/image, the average altitude in your DTM, etc. </p>
+
+<p class="kopjeboldnound">Resample modus</p>
+
+<p>For the resampling process, you can choose between:</p>
+
+<ul>
+
+<li>Fast resampling: resampling is quick, input-driven (the estimated position of output pixels is less accurate) and biased nearest neighbour. </li>
+
+<li>Accurate resampling: resampling is output-driven just as the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation, and is therefore more accurate on the positions of output pixels. 
+Furthermore, values in the output maps are more accurate as <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a> and maps with the <span class=courier>Color</span> domain 
+are resampled using <a href="..//ilwisapp/popup/bilinear_interpolation_popup.htm" onClick="return popup(this, 'notes')" >bilinear interpolation</a>; other maps will be resampled using nearest neighbour. </p>
+
+<p class=tiptext><span class=tip>Tip: </span>For more information on accurate resampling methods, see <a href="resample_algorithm.htm">Resample : algorithm</a>. </p></li>
+
+</ul>
+
+<p class=defnewpar>The left and right output raster map form together the output stereo pair. </p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>For the input raster map that will be displayed over the terrain:</p>
+
+<ul>
+
+<li>In the dialog box, the input photograph, image or 'normal' raster map may use the <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>Image</span> domain</a>, any other <a href="..//ilwis/sec/domain_type_value2_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>, the <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Color</span> domain</a>, or the <a href="..//ilwis/sec/domain_type_picture_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Picture</span> domain</a>. </li>
+
+<li>On the command line, the input map may use any domain. </li>
+
+<li>The input map should use a georeference that is compatible with the georeference of the DTM. This can be for instance a georeference tiepoints, a georeference direct linear or a georeference orthophoto. </li>
+
+</ul>
+
+<p class=defnewpar>The DTM should use a value domain. The area covered by the DTM should preferably be larger than the area covered by the input photograph or image. Only the parts of the photograph or image that also exist in the DTM will be displayed in the output stereo pair. </p>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>To obtain an output stereo pair in which the height differences are continuous, i.e. smoothly spread over the input photograph or image: </p>
+
+        <ul class=tipul>
+
+        <li>make sure the <span class=arial>Interpolation</span> check box in the DTM's <a href="../ilwismen/raster_map_properties.htm">Properties</a> sheet is selected, </li>
+
+        <li>use a DTM with a good <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> for the height values (for instance a precision of 0.1 or 0.01). </li>
+
+        </ul>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>Instead of an input photograph or image, you can also use a shadow map as input and a DTM. A shadow map can be obtained by <a href="filter.htm">filtering</a> the DTM with the Shadow filter; create a new domain during Filtering and link this domain (through the Domain Properties) to system representation Gray. After the Stereo pair from DTM operation, you can view the shadow map in stereo. </li>
+
+<li>Instead of an input DTM, you can also use a value map, or a value column in an attribute table of a class or ID map, which does not contain height values but another type of values. These values will then be used as 'height' differences. With the Stereo pair from DTM operation, you can then display for instance a photo or an image, or the value map itself, on top of these (attribute) values. </li>
+
+</ul>
+
+<p class=kopje>Output objects:</p>
+
+<p>A <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> stereo pair is created which will contain: </p>
+
+<ul>
+
+<li>a left output raster map and a right output raster map; </li>
+
+<li>the left and right output raster maps will each use a new georeference of their own; this is a georeference of type stereomate. </li>
+
+</ul>
+
+<p class=defnewpar>The output stereo pair depends on the input raster map and the DTM. </p>
+
+<p>The output raster maps obtain the same name as the output stereo pair; the left output raster map name is followed by '_Left', the right output raster map name  is followed by '_Right'. </p>
+
+<p>The dependency links of the output maps are always broken, so that the output maps are editable. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>To create a stereo pair from two photographs or images with overlap: use the <a href="epipolar_stereopair.htm">Epipolar stereo pair</a> operation. </li>
+
+</ul>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="stereopair_from_dtm_dialogbox.htm">Stereo pair from DTM : dialog box</a></p>
+
+<p class=seealsolinks><a href="stereopair_from_dtm_commandline.htm">Stereo pair from DTM : command line</a></p>
+
+<p class=seealsolinks><a href="stereopair_from_dtm_algorithm.htm">Stereo pair from DTM : algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_stereopairs.htm">ILWIS objects : stereo pairs</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/stereoscope.htm">Stereoscope</a></p>
+
+<p class=seealsolinks><a href="../ilwis/stereopair_stereoscope_window.htm">Stereoscope window</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/anaglyph.htm">Anaglyph</a></p>
+
+</body

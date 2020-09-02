@@ -1,0 +1,910 @@
+<html>
+
+<head>
+<title>Filter types : gradient or derivative filters (technical information)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filter types, Linear filters, Gradient filters, Derivative filters, DFDX, DFDY, DFDDN, DFDUP, D2FDX2, D2FDY2, D2FDXDY">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Filter types</h1>
+
+<h1 class=secondline>Gradient or derivative filters (technical information)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Linear (convolution) filters consist of a matrix with coefficients and a gain factor. When considering a linear filter of size 3x3, the 9 matrix coefficients are multiplied with 9 pixel values in the input raster map, this is summed and then multiplied with the gain factor. The result is assigned to the center pixel in the output map. </p>
+
+<p class=defnewpar>The following standard filters are known as gradient filters or derivative filters: <a href="..//ilwisapp/sec/filter_dfdx_sec.htm" onClick="return popup(this, 'notes')" >DFDX</a>, <a href="..//ilwisapp/sec/filter_dfdy_sec.htm" onClick="return popup(this, 'notes')" >DFDY</a>, <a href="..//ilwisapp/sec/filter_dfddn_sec.htm" onClick="return popup(this, 'notes')" >DFDDN</a>, <a href="..//ilwisapp/sec/filter_dfdup_sec.htm" onClick="return popup(this, 'notes')" >DFDUP</a>, <a href="..//ilwisapp/sec/filter_d2fdx2_sec.htm" onClick="return popup(this, 'notes')" >D2FDX2</a>, <a href="..//ilwisapp/sec/filter_d2fdy2_sec.htm" onClick="return popup(this, 'notes')" >D2FDY2</a>, <a href="..//ilwisapp/sec/filter_d2fdxdy_sec.htm" onClick="return popup(this, 'notes')" >D2FDXDY</a>. For each group of pixel values considered, they calculate the first or second derivative in one or more directions. Derivative filters are often used in relation to slope calculations. </p>
+
+<p class=defnewpar>The standard derivative filters mentioned above have a typical size of 1x5, 5x1, or 5x5. Of course, you can also create your own linear gradient filters. </p>
+
+<p class=defnewpar>This topic is intended for people who would like to understand the mathematical background of the coefficients in the matrices of derivative filters. First, 3x3 filters will be described, then 5x5 filters. </p>
+
+<h2>3x3 filters</h2>
+
+<p class=kopjeaftertitlesub>Introduction:</p>
+
+<p>The simplest mathematical situation is represented when using a 3x3 filter, however these filters may not be exact enough to calculate slopes. A 3x3 filter uses the 9 input values to calculate a value for the center pixel in the output map. </p>
+
+<p class=defnewpar>To do calculations with a 3x3 filter, a local coordinate system (x,y) is defined around the current center pixel, as: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=56>
+<p class=filtcour>&nbsp;(-1,1)</p>
+
+</td>
+<td valign="top" width=56>
+<p class=filtcour>&nbsp;(0,1)</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>&nbsp;(1,1)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=56>
+<p class=filtcour>&nbsp;(-1,0)</p>
+
+</td>
+<td valign="top" width=56>
+<p class=filtcour>&nbsp;(0,0)</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>&nbsp;(1,0)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=56>
+<p class=filtcour>(-1,-1)</p>
+
+</td>
+<td valign="top" width=56>
+<p class=filtcour>(0,-1)</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>(1,-1)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>Both x and y can have the values -1, 0, and 1. </p>
+
+<p class=defnewpar>When calculating the first derivative only in the x-direction, y remains 0, and x can have value -1, 0, or 1.</p>
+
+<p class=defnewpar>To calculate derivatives, a continuous function is needed. The input pixel values are to be described by a function f<sub>x</sub> where:</p>
+
+<p class=leftmargin1>f<sub>0  </sub>= input pixel value of the center pixel; x=0 </p>
+
+<p class=leftmargin1>f<sub>-1 </sub>= input pixel value of the pixel to the left of the center pixel; x=-1</p>
+
+<p class=leftmargin1>f<sub>1 </sub>=  input pixel value of the pixel to the right of the center pixel; x=1</p>
+
+<p class=kopje>Formulas:</p>
+
+<p>As continuous function, a polynomial function is used. With 9 known values, a second order polynomial can be fitted through these points.</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(1)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>xy</sub> = a<sub>00</sub> + a<sub>10 </sub>x + a<sub>20 </sub>x<sup>2</sup> + a<sub>01 </sub>y + a<sub>11 </sub>xy + <sub>a21 </sub>x<sup>2</sup>y + a<sub>02 </sub>y<sup>2</sup> + a<sub>12 </sub>xy<sup>2</sup> + a<sub>22 </sub>x<sup>2</sup>y<sup>2</sup></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When we are only interested in the first derivative in x-direction, formula 1 can be simplified by substituting y with 0 to:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(2)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>x</sub> = a<sub>0</sub> + a<sub>1 </sub>x + a<sub>2 </sub>x<sup>2</sup> </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The function for the first derivative equals:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(3)</p>
+
+</td>
+<td valign="top">
+<p>df/dx = f'<sub>x</sub> = a<sub>1</sub> + 2a<sub>2 </sub>x </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The second derivative equals:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(4)</p>
+
+</td>
+<td valign="top">
+<p>d<sup>2</sup>f/dx<sup>2</sup> = f<sub>&quot;x</sub> = 2a<sub>2</sub> </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Because we are interested in the derivatives at the central pixel where x=0, in formulas 3 and 4, x can be substituted with 0: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(5)</p>
+
+</td>
+<td valign="top">
+<p>df/dx = f'<sub>0</sub> = a<sub>1</sub> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(6)</p>
+
+</td>
+<td valign="top">
+<p>d<sup>2</sup>f/dx<sup>2</sup> = f&quot;<sub>0</sub> = 2a<sub>2</sub> </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>To find f<sub>-1</sub>, f<sub>0</sub> and f<sub>1</sub>, in formula 2, x is substituted with values -1, 0, and 1: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(7)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>-1</sub> = a<sub>0</sub> - a<sub>1</sub> + a<sub>2</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(8)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>0</sub> = a<sub>0</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(9)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>1</sub> = a<sub>0</sub> + a<sub>1</sub> + a<sub>2</sub></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Then, by elimination, a<sub>1</sub> and a<sub>2</sub> are found:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(10)</p>
+
+</td>
+<td valign="top">
+<p>a<sub>1</sub> = (f<sub>1</sub> - f<sub>-1</sub>) / 2</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(11)</p>
+
+</td>
+<td valign="top">
+<p>a<sub>2</sub> = (f<sub>-1</sub> - 2f<sub>0</sub> + f<sub>1</sub>) / 2</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>A 3x3 first derivative filter for the x-direction will thus read:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>-1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour> &nbsp;1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06>Gain factor = 1/2 = 0.5</p>
+
+<p class=defnewpar>A 3x3 second derivative filter for the x-direction will thus read:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>-2</p>
+
+</td>
+<td valign="top">
+<p class=filtcour> &nbsp;1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06>Gain factor = 1/2 = 0.5</p>
+
+<p class=defnewpar>To calculate the second derivative in <i>both </i>the x-direction and the y-direction, f&quot;=d<sup>2</sup>f/dxdy, formula 1 is needed. After the substitution of all 9 coordinates in the equation, and solving them, the results are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(12)</p>
+
+</td>
+<td valign="top">
+<p>d<sup>2</sup>f / dxdy = a<sub>11</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(13)</p>
+
+</td>
+<td valign="top">
+<p>a<sub>11</sub> = (f<sub>1,1</sub> + f-<sub>1,-1</sub>) - (f-<sub>1,1</sub> + f<sub>1,-1</sub>) / 4</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>A 3x3 second derivative filter for both the x-direction and the y-direction will thus read:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>-1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour> &nbsp;1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>-1</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06>Gain factor = 1/4 = 0.25</p>
+
+<h2>5x5 filters</h2>
+
+<p>Calculation of matrix coefficients for 5x5 filters follows the same method as for 3x3 filters. Although 5x5 filters are a little bit more complicated, they will produce more accurate results. </p>
+
+<p class=defnewpar>Again a local coordinate system is used around the current center pixel as:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(-2,2)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(-1,2)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(0,2)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(1,2)</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>&nbsp;(2,2)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(-2,1)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(-1,1)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(0,1)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(1,1)</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>&nbsp;(2,1)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(-2,0)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(-1,0)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(0,0)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>&nbsp;(1,0)</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>&nbsp;(2,0)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>(-2,-1)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>(-1,-1)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>(0,-1)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>(1,-1)</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>(2,-1)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>(-2,-2)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>(-1,-2)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>(0,-2)</p>
+
+</td>
+<td valign="top" width=68>
+<p class=filtcour>(1,-2)</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>(2,-2)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=linespacing01before>Both x and y can have the values -2, -1, 0, 1, and 2.</p>
+
+<p class=defnewpar>The polynomial function fx and its derivatives are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(14)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>x</sub> = a<sub>0</sub> + a<sub>1 </sub>x + a<sub>2 </sub>x<sup>2</sup> + a<sub>3 </sub>x<sup>3</sup> + a<sub>4 </sub>x<sup>4</sup></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(15)</p>
+
+</td>
+<td valign="top">
+<p>df/dx=  f'<sub>x</sub> = a<sub>1</sub> + 2a<sub>2 </sub>x + 3a<sub>3 </sub>x<sup>2</sup> + 4a<sub>4 </sub>x<sup>3</sup></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(16)</p>
+
+</td>
+<td valign="top">
+<p>d<sup>2</sup>f/dx<sup>2</sup> = f&quot;<sub>x</sub> = 2a<sub>2</sub> + 6a<sub>3 </sub>x + 12a<sub>4 </sub>x<sup>2</sup></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>By substituting x in formulas 15 and 16 with 0, the previous equations 5 and 6 are obtained again: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(5)</p>
+
+</td>
+<td valign="top">
+<p>df/dx = f'<sub>0</sub> = a<sub>1</sub> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(6)</p>
+
+</td>
+<td valign="top">
+<p>d<sup>2</sup>f/dx<sup>2</sup> = f&quot;<sub>0</sub> = 2a<sub>2</sub> </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>By substituting x in formula 14 with values -2, -1, 0, 1, and 2; f<sub>-2</sub>, f<sub>-1</sub>, f<sub>0</sub> , f<sub>1</sub> and f<sub>2</sub> are found:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(17)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>-2</sub> = a<sub>0</sub> - 2a<sub>1</sub> + 4a<sub>2</sub> - 8a<sub>3</sub> + 16a<sub>4</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(18)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>-1</sub> = a<sub>0</sub> - a<sub>1</sub> + a<sub>2</sub> - a<sub>3</sub> + a<sub>4</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(19)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>0</sub> = a<sub>0</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(20)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>1</sub> = a<sub>0</sub> + a<sub>1</sub> + a<sub>2</sub> + a<sub>3</sub> + a<sub>4</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(21)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>2</sub> = a<sub>0</sub> + 2a<sub>1</sub> + 4a<sub>2</sub> + 8a<sub>3</sub> + 16a<sub>4</sub></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>With some restructuring, the following equations are obtained:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(22)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>1</sub> + f<sub>-1</sub> = 2a<sub>0</sub> + 2a<sub>2</sub> + 2a<sub>4</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(23)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>1</sub> - f<sub>-1</sub> = 2a<sub>1</sub> + 2a<sub>3</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(24)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>2</sub> + f<sub>-2</sub> = 2a<sub>0</sub> + 8a<sub>2</sub> + 32a<sub>4</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>(25)</p>
+
+</td>
+<td valign="top">
+<p>f<sub>2</sub> - f<sub>-2</sub> = 4a<sub>1</sub> + 16a<sub>3</sub></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The matrix coefficients for a 1x5 filter which calculates the first derivative in x-direction are found by the elimination of a<sub>3</sub>: subtracting equation 23 eight times from equation 25. This results in:</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(26)</p>
+
+</td>
+<td valign="top">
+<p>a<sub>1</sub> = (f<sub>-2</sub> - 8f<sub>-1</sub> + 8f<sub>1</sub> - f<sub>2</sub>) / 12</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>A 1x5 first derivative filter for the x-direction will thus read:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>&nbsp;1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>-8</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>&nbsp;0</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>&nbsp;8</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>-1</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06>Gain factor = 1/12 = 0.0833333</p>
+
+<p class=linespacing03before>This is exactly the <a href="..//ilwisapp/sec/filter_dfdx_sec.htm" onClick="return popup(this, 'notes')" >DFDX</a> filter.</p>
+
+<p class=defnewpar>The matrix coefficients for a 1x5 filter which calculates the second derivative in x-direction are found by the elimination of a<sub>4</sub>: subtracting equation 22 sixteen times from equation 24 and substituting f<sub>0</sub> for a<sub>0</sub>. This results in:</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>(27)</p>
+
+</td>
+<td valign="top">
+<p>a<sub>2</sub> = (-f<sub>-2</sub> + 16f<sub>-1</sub> - 30f<sub>0</sub> + 16f<sub>1</sub> - f<sub>2</sub>) / 24</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>A 1x5 second derivative filter for the x-direction will thus read:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;-1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;16</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>-30</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;16</p>
+
+</td>
+<td valign="top">
+<p class=filtcour> &nbsp;-1</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06>Gain factor = 1/24 = 0.0416667</p>
+
+<p class=linespacing03before>This is exactly the <a href="..//ilwisapp/sec/filter_d2fdx2_sec.htm" onClick="return popup(this, 'notes')" >D2FDX2</a> filter.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filter.htm">Filter (operation)</a></p>
+
+</body

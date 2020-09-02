@@ -1,0 +1,42 @@
+<html>
+
+<head>
+<title>import popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Import</p>
+
+<p>Import files from another package into ILWIS 3.</p>
+
+<p class=linespacing03before>You can choose to use: </p>
+
+<ul>
+
+<li><a href="..//ilwismen/import_map.htm" onClick="return popup(this, 'notes')" >ILWIS Map Import</a></li>
+
+<li><a href="..//ilwismen/import_general_raster.htm" onClick="return popup(this, 'notes')" >Import General Raster</a></li>
+
+<li><a href="..//ilwismen/import_table_input_table_name.htm" onClick="return popup(this, 'notes')" >Import Table wizard</a></li>
+
+</ul>
+
+</body

@@ -1,0 +1,105 @@
+<html>
+
+<head>
+<title>How to change the definition of a dependent data object</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Dependent data objects, How to change ..., Change ..., Definition, Edit ..., How to edit ..., Properties of objects">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to change </h1>
+
+<h1 class=secondline>the definition of a dependent data object</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar><a href="basic_concepts_dependent_data_objects.htm">Dependent raster maps</a> that are the result of a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculation</a> with <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a> and <a href="basic_concepts_dependent_data_objects.htm">dependent columns</a> that are the result of a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculation</a> with <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, have an editable <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a>. The formula or expression with which a dependent raster map (MapCalculate) or a dependent column (ColumnCalculate) is created, is stored in the object definition file of the object, can be viewed in the properties dialog box of the object and can also be changed there. </p>
+
+<p class=defnewpar>You can thus simply redo a calculation with a slightly different formula in the same map or the same column without the need of creating another new map or column. </p>
+
+<p class=defnewpar>You can only edit the definition of MapCalculate maps and ColumnCalculate columns; expressions of other dependent objects created by other <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operations</a> (such as MapFilter, MapDistance, MapCross) cannot be edited. For maps created by an operation, the properties dialog box allows you to select another output domain, and in case of a value domain adjust the value range and precision with which values are to be stored for the output map.</p>
+
+<p class=kopje>To edit the definition a dependent raster map:</p>
+
+<ul>
+
+<li>	select <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >one or more</a> dependent raster maps in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, </li>
+
+<li>	press the right mouse button, </li>
+
+<li>	choose <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>,</li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	select one or more dependent data objects in a Catalog, </li>
+
+<li>	open the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window,</li>
+
+<li>	choose <span class=arial>Properties</span>. </li>
+
+</ul>
+
+<p class=defnewpar>One or more <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> sheet(s) will appear: </p>
+
+<ul>
+
+<li>on the <span class=arial>Raster Map</span> tab, </li>
+
+<li>click the button <span class=arial>Edit Definition</span>. </li>
+
+</ul>
+
+<p class=defnewpar>Subsequently, the <a href="../ilwismen/raster_map_definition.htm">Raster Map Definition</a> dialog box appears in which you can change the expression by which the raster map is created, select a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> and in case of a value domain, specify the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> with which the values in the output map should be stored. When you click the <span class=arial>OK</span> button, the raster map is redefined.</p>
+
+<p class=kopje>To edit the definition of a dependent column:</p>
+
+<p>The table which contains the dependent columns should be displayed in a table window. Then,</p>
+
+<ul>
+
+<li>	double-click the column header (displaying the column name) of a dependent column,</li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	from the <a href="table_window_menu_commands.htm">Columns menu</a>, choose <span class=arial>Column Management</span>, a dialog box appears in which all columns are listed, then </li>
+
+<li>	double-click a column in the list, or select a column in the list and click the <span class=arial>Properties</span> button.</li>
+
+</ul>
+
+<p class=linespacing03before>A <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box will appear in which you can change the expression by which the column is created, select a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> and in case of a value domain, specify the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> with which the values in the output column should be stored. When you click the <span class=arial>OK</span> button, the column is redefined and immediately recalculated.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a></p>
+
+<p class=seealsolinks><a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a></p>
+
+<p class=seealsolinks><a href="how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit the properties of an object</a></p>
+
+</body

@@ -1,0 +1,183 @@
+<html>
+
+<head>
+<title>ILWIS objects : raster maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS objects, Raster maps, Pyramid layers, Data objects, MPR">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Raster maps&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/rasmap.gif" align=bottom width="16" height="12"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A raster map is a <a href="ilwis_objects_data_objects.htm">data object</a> used to store spatial geographic information and remote sensing data as <b>pixels</b> (picture elements) of a certain size, e.g. 20 x 20 m. These pixels are either codified by IDs, class names, values or colors; this is determined by the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map. The relation between pixels in a raster map and the position on earth is defined by the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> that the raster map is using. </p>
+
+<p class=defnewpar>Raster maps can be displayed in a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>, and can be edited with the <a href="..//ilwis/popup/pixel_editor_popup.htm" onClick="return popup(this, 'notes')" >pixel editor</a>. You can calculate with raster maps (<a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>) and you can perform many other raster and image processing operations on them such as: <a href="..//ilwis/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a>, <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a>, <a href="..//ilwisapp/popup/distance_calculation_popup.htm" onClick="return popup(this, 'notes')" >Distance calculation</a>, etc. In ILWIS, most spatial <a href="../ilwisapp/ilwis_operations.htm">operations</a> are performed on raster maps. </p>
+
+<p class=defnewpar>A raster map can be obtained:</p>
+
+<ul>
+
+<li>	by importing an existing raster map from ILWIS version 1.41,</li>
+
+<li>	by rasterizing an existing point, segment, or polygon map, </li>
+
+<li>	by creating a new raster map and editing its pixels with the pixel editor,</li>
+
+<li>	by using a satellite image which is already a raster map, </li>
+
+<li>	by scanning a map or photograph and importing it into ILWIS.</li>
+
+</ul>
+
+<p>As mentioned above, the output of spatial operations is usually another raster map. </p>
+
+<p class=defnewpar>When working with the multi-spectral bands of a satellite image or with multiple raster map of a time series, you can combine these bands or maps into a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>.</p>
+
+<p class=kopje>Contents of a raster map and location of pixels:</p>
+
+<p>The contents of a raster map are defined by the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> that the raster map is using. A raster map may store for example:</p>
+
+<ul>
+
+<li>	rasterized individual point, segment or polygon features codified by IDs for instance cadastral plot IDs; the map uses an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a>, </li>
+
+<li>	rasterized classes of point, segment, or polygon features codified by class names, for example land use classes; the map uses a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>,</li>
+
+<li>	rasterized point, segment or polygon values for example height values; the map uses a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>, </li>
+
+<li>	reflection values in case of satellite images; the maps use the <a href="..//ilwis/sec/domain_image_sec.htm" onClick="return popup(this, 'notes')" >Image domain</a>, the NOAA domain, or the Radar domain,</li>
+
+<li>	true or false pixels; the map uses the <a href="..//ilwis/sec/domain_type_bit_sec.htm" onClick="return popup(this, 'notes')" >Bit domain</a>,</li>
+
+<li>	true, false or undefined pixels; the map uses a <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool domain</a>,</li>
+
+<li>	colors in case of a scanned picture that was imported into ILWIS; the map uses a <a href="..//ilwis/sec/domain_type_picture_sec.htm" onClick="return popup(this, 'notes')" >Picture domain</a>, or the <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" >Color domain</a>,</li>
+
+<li>	output values after a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >map calculation</a> (any domain),</li>
+
+<li>	output values (any domain) after performing an <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>, e.g. classes after the <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >Classify</a> operation (image classification), or values after a <a href="..//ilwisapp/popup/distance_calculation_popup.htm" onClick="return popup(this, 'notes')" >Distance calculation</a>, or colors after creating a <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >Color Composite</a>, </li>
+
+<li>	attribute values (any domain) when an <a href="..//ilwisapp/popup/attribute_map_of_raster_map_popup.htm" onClick="return popup(this, 'notes')" >attribute map</a> was created from an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>, </li>
+
+<li>	classified values, when a value map was classified (a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >group domain</a>) with the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation.</li>
+
+</ul>
+
+<p>For more information on domains, refer to <a href="basic_concepts_domains.htm">Basic concepts : working with domains</a>.</p>
+
+<p class=defnewpar>The spatial location of the pixels in a raster map is defined by the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> that the raster map is using. </p>
+
+<p class=defnewpar>For maps using a class or ID domain, you can create an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> which stores additional information on the classes or IDs in the map. Use the same class or ID domain for the attribute table as you used for the map. Then, add the attribute columns to the table. To create an attribute table, refer to <a href="../ilwis/how_to_create_tables.htm">How to create an attribute table</a>. </p>
+
+<p class=defnewpar>The manner in which raster maps are displayed is specified in a <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> Raster Map dialog box. </p>
+
+<ul>
+
+<li>	When a raster map uses a <i>class domain</i>, you can use or create a representation class. In a representation class, every class has its own color. You can edit the colors of a representation class in the <a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor</a>, or directly in a map window by using the Double-click action. </li>
+
+<li>	When a raster map uses a <i>value domain</i>, you can use or create a representation value or a representation gradual. For more information, see <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a>.</li>
+
+<li>	Raster maps that are satellite images and use the <i>Image domain</i>, are usually displayed with system representation Gray; the default stretch range is the 1% interval.</li>
+
+<li>	When a raster map uses an <i>ID domain</i>, you can display the map in one single color or in multiple system colors. However, an ID raster map will usually have an attribute table and you can then choose to display the map by one of its attribute columns. For class columns, you can select or create a domain class; for value columns, you can select or create a representation value or a representation gradual, etc. For more information, see How to display a map by one of its attributes.</li>
+
+<li>	When a raster map uses a <i>Bool domain</i>,  you can specify colors for True and False pixels.</li>
+
+</ul>
+
+<p>For more information, see <a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representations</a>.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To store the display setting of one or more maps displayed in a map window, save the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>; open the <a href="map_window_menu_commands.htm">File menu</a> in a map window and choose the Save View or the Save View As command.</p>
+
+<p class=kopje>Names of raster maps:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a raster map:</p>
+
+<p>Usually, you have to rasterize a point, segment or polygon map with the <a href="..//ilwisapp/popup/points_to_raster_popup.htm" onClick="return popup(this, 'notes')" >Points to Raster</a>, <a href="..//ilwisapp/popup/segments_to_raster_popup.htm" onClick="return popup(this, 'notes')" >Segments to Raster</a> or <a href="..//ilwisapp/popup/polygons_to_raster_popup.htm" onClick="return popup(this, 'notes')" >Polygons to Raster</a> operation. In the Rasterize process, you have to specify the dimensions of the raster map's pixels in the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of the raster map.</p>
+
+<p class=kopje>To display a raster map:</p>
+
+<p>The easiest way to display a raster map is to double-click the map in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. The map will be displayed in a new <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>. For other display methods, see <a href="how_to_display_maps_and_tables.htm">How to display maps and tables</a>. </p>
+
+<p class=defnewpar>In the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> Raster Map dialog box, you can specify how the map should be displayed.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To speed up the display of large raster maps e.g. maps consisting of a few thousand lines and columns or more, you can create Pyramid layers. For more information, refer to <a href="ilwis_objects_raster_maps_pyramids.htm">ILWIS objects : Raster maps - Pyramid layers</a>. </p>
+
+<p class=kopje>To edit a raster map:</p>
+
+<p>You can edit a raster map by clicking it with the right mouse button in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> and subsequently choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. When a raster map is already displayed in a map window, you can also choose the <span class=arial>Edit Layer</span> command from the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window. For other methods, see <a href="../ilwis/how_to_edit_point_segment_polygon_and_raster_maps.htm">How to edit point, segment, polygon and raster maps</a>.</p>
+
+<p class=defnewpar>Raster maps are edited with the <a href="..//ilwis/popup/pixel_editor_popup.htm" onClick="return popup(this, 'notes')" >Pixel editor</a>; you can edit the class names, IDs, or values of the pixels in the raster map. Dependent raster maps and read-only raster maps cannot be edited.</p>
+
+<p class=kopje>Operations on raster maps:</p>
+
+<p>You can calculate with raster maps by typing a <a href="calc.htm">Map Calculation</a> formula on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the Main window</a> or in the Map Calculation dialog box. When the definition symbol = is used in a calculation, the output map is <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a>. </p>
+
+<p class=defnewpar>You can also perform other operations on a raster map by selecting an operation from the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a> or from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> (for other methods, see <a href="how_to_start_operations.htm">How to start operations</a>). Subsequently, fill out the appearing dialog box of that operation and click the OK button; this generates an <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >ILWIS expression</a> on the command line. Output objects that are obtained through an operation's dialog box are always dependent. </p>
+
+<p>Advanced users can type the complete ILWIS expressions on the command line of the Main window or create a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> to execute a series of expressions. For more information, see <a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a>. </p>
+
+<p class=defnewpar>When the output map of a calculation or another operation uses a value domain, you can usually define a <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> for the output map, see below. Operations on raster maps are for instance <a href="..//ilwisapp/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a>, <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a> and <a href="..//ilwisapp/popup/distance_calculation_popup.htm" onClick="return popup(this, 'notes')" >Distance calculation</a>. For more information on dependent maps, see <a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a>. For more information on operations, refer to <a href="../ilwisapp/ilwis_operations.htm">ILWIS operations</a>.</p>
+
+<p class=kopje>Technical information:</p>
+
+<p>A raster map consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.MPR) and a binary data file (.MP#); when pyramid layers have been created for a raster map, also an .MPY# file is available. The object definition file contains further references to the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> and the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> that the raster map is using; these are <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a raster map.</p>
+
+<p class=defnewpar>By viewing the properties of a raster map, you can see whether the map is dependent or not, which other objects the map is using, etc. In the properties dialog box of a <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value raster map</a>, you can select the Interpolation option to obtain interpolated values on sub-pixel level. For <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent maps</a>, you can manage dependencies: break dependencies, make dependent maps up-to-date, delete the dependent map's data file, etc. For more information, see <a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a> or the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> dialog box. </p>
+
+<p class=defnewpar>The IDs, class names or values of pixels are stored line by line, starting from the first pixel (left) on the first line in the map (up), to the last pixel in the last line. Raster maps are stored as bit, byte, 2-byte, 4-byte or 8-byte maps. The store type of a raster map is primarily defined by the domain that the map is using. For value maps this is determined by the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> that you specify for the output map during a calculation or operation. Usually, ILWIS will come up with defaults, but you can adjust these values. Choosing a wide value range and a very small precision results in a large data file on disk as more bytes are needed to store each pixel value in the map, also the speed of display and the speed of calculations may decrease. </p>
+
+<p class=defnewpar>For value maps that use 1 or 2 bytes per pixel, the map's <a href="..//ilwis/popup/objects_histogram_raster_popup.htm" onClick="return popup(this, 'notes')" >histogram</a> is automatically calculated when you open the map and a histogram is not available yet. For value maps that are stored using 4 or 8 bytes per pixel, you need to use the Histogram operation to obtain the map's histogram.</p>
+
+<p class=kopje>Limitations:</p>
+
+<p>In ILWIS 3.x, limitations on maximum number of lines and columns have been removed. In practice however, general limitations depend on available disk space; for printing purposes limitations depend on available memory. Furthermore, ILWIS is not designed to work with very large data sets: to speed up processing you may need to split maps into smaller logical parts.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">ILWIS objects : Raster maps - Pyramid layers</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/pixel_editor_functionality.htm">Pixel editor</a></p>
+
+<p class=seealsolinks><a href="calc.htm">Map calculation</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/ilwis_operations.htm">ILWIS operations</a></p>
+
+</body

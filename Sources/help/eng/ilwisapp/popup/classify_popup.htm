@@ -1,0 +1,46 @@
+<html>
+
+<head>
+<title>classify popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Classify</p>
+
+<p>The <a href="..//ilwisapp/classify.htm" onClick="return popup(this, 'notes')" >Classify</a> operation performs a <a href="classify_multispectral_popup.htm">multi-spectral</a> image classification according to training pixels in a <a href="../../ilwis/popup/objects_sample_set_popup.htm">sample set</a>.</p>
+
+<p class=linespacing03before>The following classification methods can be used: </p>
+
+<ul>
+
+<li>	Box classifier, </li>
+
+<li>	Minimum distance, </li>
+
+<li>	Minimum Mahalanobis distance, </li>
+
+<li>	Maximum Likelihood, </li>
+
+<li>    Maximum Likelihood including Prior Probabilities.</li>
+
+</ul>
+
+</body

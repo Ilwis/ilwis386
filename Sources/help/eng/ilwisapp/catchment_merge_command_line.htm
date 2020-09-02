@@ -1,0 +1,231 @@
+<html>
+
+<head>
+<title>Catchment merge : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catchment merge, MapCatchmentMerge">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Catchment merge</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/catchment_merge_popup.htm" onClick="return popup(this, 'notes')" >Catchment Merge</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window: </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width="68">
+<p class=calccommline>OUTNAME</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCatchmentMerge</span>(<i>drainorder_rasmap</i>, <i>flowdir_rasmap</i>, <i>flowacc_rasmap</i>, <i>outlet_pntmap</i>, <i>include_undefs</i>, <i>extract_segments</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="68">
+<p class=calccommline>OUTNAME</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCatchmentMerge</span>(<i>drainorder_rasmap</i>, <i>flowdir_rasmap</i>, <i>flowacc_rasmap</i>, <i>outlet_pntmap</i>, <i>include_undefs</i>, <i>extract_segments</i>, <i>outsegmap_longestFlow</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="68">
+<p class=calccommline>OUTNAME</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCatchmentMerge</span>(<i>drainorder_rasmap</i>, <i>flowdir_rasmap</i>, <i>flowacc_rasmap</i>, <i>order_system</i>, <i>stream_order</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="68">
+<p class=calccommline>OUTNAME</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCatchmentMerge</span>(<i>drainorder_rasmap</i>, <i>flowdir_rasmap</i>, <i>flowacc_rasmap</i>, <i>order_system</i>, <i>stream_order</i>, <i>outsegmap_longestFlow</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTNAME</p>
+
+</td>
+<td valign="top">
+<p>is an output name that will be used for the output raster map, the output polygon map and the output attribute table. The output maps will contain all sub-catchments (one for each stream); the attribute table will contain information on each sub-catchment. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=courier>MapCatchmentMerge</p>
+</td>
+
+</td>
+<td valign="top">
+<p>is the command to start the Catchment Merge operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>drainorder_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster map that is the outcome of the <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage Network Ordering</a> operation, i.e. a raster map with an Identifier domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster that is the outcome of the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow Direction</a> operation, i.e. a raster map with <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>flowacc_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster map that is the outcome of the <a href="..//ilwisapp/popup/flow_accumulation_popup.htm" onClick="return popup(this, 'notes')" >Flow accumulation</a> operation, i.e. a raster map with a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>outlet_pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a point map that contains the outlet locations; all sub-catchments draining to these outlets will be merged into new catchments.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>include_undefs</i></p>
+
+</td>
+<td valign="top">
+<p><span class="courier">true</span> | <span class="courier">false</span> | <span class="courier">1</span> | <span class="courier">0</span> </p>
+
+<p>specify <span class="courier">true</span> or <span class="courier">1</span> when you wish to include pixels that have value undefined in the DEM into a catchment; this option can only be used when the outlet point map contains only a single point. </p>
+
+<p>specify <span class="courier">false</span> or <span class="courier">0</span> to do nothing special. </p>
+
+</td>
+</tr>
+<tr>
+<tr>
+<td valign="top" width=119>
+<p><i>extract_segments</i></p>
+
+</td>
+<td valign="top">
+<p><span class="courier">true</span> | <span class="courier">false</span> | <span class="courier">1</span> | <span class="courier">0</span> </p>
+
+<p>optionally, specify whether or not a segment map and related attribute table should be created, similar to the output segment map and attribute table of the Drainage Network Ordering operation. Only segments that fall within the new catchments will remain; any other streams will not appear anymore. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>order_system</i></p>
+
+</td>
+<td valign="top">
+<p><span class="courier">strahler</span> | <span class="courier">shreve</span></p>
+<p>specify whether you wish to use the Strahler or the Shreve ordering system.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>stream_order</i></p>
+
+</td>
+<td valign="top">
+<p>specify a stream order value (integer value &gt; 0); adjacent sub-catchments that have a value smaller than or equal to the specified value and that drain into the same higher order sub-catchment will be merged. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>outsegmap_longestFlow</i></p>
+
+</td>
+<td valign="top">
+<p>optionally, specify a name for an output segment map and related attribute table, that will contain the longest possible flow path in each new catchment.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="catchment_merge_functionality.htm">Catchment merge : functionality</a></p>
+
+<p class=seealsolinks><a href="catchment_merge_dialog_box.htm">Catchment merge : dialog box</a></p>
+
+<p class=seealsolinks><a href="catchment_merge_algorithm.htm">Catchment merge : algorithm</a></p>
+
+
+</body

@@ -1,0 +1,138 @@
+<html>
+
+<head>
+<title>Variance-Covariance matrix : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Variance-Covariance matrix">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Variance-Covariance matrix</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The variance-covariance operation calculates variances and covariances of a number of raster maps in a map list. The variance is a means to express the variation of pixel values within a single raster map, i.e. a measure of the variation to the mean of the DN (Digital Number) values in a raster map. The covariance is a measure to express the variation of pixel values in two raster maps. It denotes the joint variation to the common mean of pixel values of the maps. </p>
+
+<p class=defnewpar>The resulting covariance matrix contains computed variances and covariances. Furthermore, the mean and standard deviation of each individual raster map is calculated and shown.</p>
+
+<p class=kopje>General information:</p>
+
+<p class=linespacing03after>The following shows how the covariance matrix is composed for three raster maps (band1, band2, band3):</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p><b>band1</b></p>
+
+</td>
+<td valign="top" width=96>
+<p><b>band2</b></p>
+
+</td>
+<td valign="top">
+<p><b>band3</b></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><b>band1</b></p>
+
+</td>
+<td valign="top" width=96>
+<p>Var1</p>
+
+</td>
+<td valign="top" width=96>
+<p>CoVar1-2</p>
+
+</td>
+<td valign="top">
+<p>CoVar1-3</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><b>band2</b></p>
+
+</td>
+<td valign="top" width=96>
+<p>CoVar2-1</p>
+
+</td>
+<td valign="top" width=96>
+<p>Var2</p>
+
+</td>
+<td valign="top">
+<p>CoVar2-3</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><b>band3</b></p>
+
+</td>
+<td valign="top" width=96>
+<p>CoVar3-1</p>
+
+</td>
+<td valign="top" width=96>
+<p>CoVar3-2</p>
+
+</td>
+<td valign="top">
+<p>Var3</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The diagonal elements (Var) present the respective variances of the bands. The off-diagonal elements (CoVar) present the respective covariances of band pairs. Since covariance calculations are symmetric, the covariance matrix is also, e.g. CoVar1-2 is identical to Covar2-1.</p>
+
+<p class=kopje>Input requirements:</p>
+
+<p>The operation requires a map list in which all raster maps use the <span class=courier>Image</span> domain or the same value domain, and the same georeference. Pixels in the input maps that have the undefined value are ignored in the calculation.</p>
+
+<p class=kopje>Output matrix:</p>
+
+<p>After performing the operation, the covariance matrix, and the mean and standard deviation of the individual raster maps are shown on the screen. To show the matrix once more after closing this window, you have to perform the operation again. The values of the covariance matrix are stored by the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the map list (.MPL). When the map list contains a single raster map the resulting matrix will only contain the variance of the map. </p>
+
+<p class=defnewpar>Furthermore, after calculating a covariance matrix or a <a href="..//ilwisapp/popup/correlation_matrix_popup.htm" onClick="return popup(this, 'notes')" >correlation matrix</a>, the <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the input map list shows you the <a href="..//ilwisapp/popup/optimum_index_factor_popup.htm" onClick="return popup(this, 'notes')" >Optimum Index Factors</a>, i.e. the combinations of three input maps with largest sum of standard deviations and smallest correlation. This can give you an indication which raster maps to use to create a color composite. For more information, see <a href="optimum_index_factor_functionality_algorithm.htm">Optimum Index Factor : functionality / algorithm</a>.</p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>As the output covariance matrix is not stored as a separate object, this operation cannot be executed from the command line. </p>
+
+<p class=Seealso>See also: </p>
+
+<p class=seealsolinks><a href="variance_covariance_matrix_dialog_box.htm">Variance-Covariance matrix : dialog box</a></p>
+
+<p class=seealsolinks><a href="variance_covariance_matrix_algorithm.htm">Variance-Covariance matrix : algorithm</a></p>
+
+</body

@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>status bar popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Status bar</p>
+
+<p>The <a href="..//ilwis/status_line.htm" onClick="return popup(this, 'notes')" >status bar</a> is by default displayed at the bottom of a window. The states bar gives a brief explanation on selected menu commands and on the functionality of buttons in a toolbar. </p>
+
+<p class=defnewpar>Furthermore, the status bar may give additional information when the mouse pointer is located in the <a href="../../ilwis/popup/catalog_popup.htm">Catalog</a>, the <a href="operation_tree_list_popup.htm">Operation-list</a>, a <a href="map_window_popup.htm">map window</a>, a <a href="table_window_popup.htm">table window</a>, the <a href="../../ilwis/popup/pixel_information_window_popup.htm">pixel information window</a>, or an editor.</p>
+
+</body

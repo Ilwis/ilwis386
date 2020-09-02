@@ -1,0 +1,123 @@
+<html>
+<head>
+<title>Compound Index calculation (DEM-Hydro Processing script)</title>
+<meta name="keywords" content="Compound parameter extraction, Compound Index calculation, Wetness Index, Stream Power Index, Sediment Transport Index, DEM Hydro-Processing, Hydrologic Operations, DEM">
+<meta name="Generator" content="ILWIS Script Form">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>DEM-Hydro Processing scripts</h1>
+
+<h1 class=secondline>Compound Index calculation</h1>
+
+<!--<hr>-->
+
+<p>Next to <a href="..//ilwisapp/popup/overland_flow_length_popup.htm" onClick="return popup(this, 'notes')" >Overland Flow Length</a>, a number of scripts (routines) are given here to calculate a 
+	number of maps that are relevant with respect to watershed management, soil erosion and conservation 
+	type of studies. </p>
+<p class="emptyline">&nbsp;</p>
+<ul>
+<li>The <b>wetness index</b> sets catchment area in relation to the slope gradient. <br>
+	 This is basically the famous: <br>
+	<table cellspacing="0" width="80%">
+	<tr>
+	<td><span class="courier">w = ln(As/tan(ß))</span> </td>
+	<td valign="top" align="right">(Beven and Kirkby, 1993)</span></td>
+	</tr>
+	</table>
+	An idea of the spatial
+	distribution and zones of saturation or variable sources for runoff generation is obtained. </li>
+<li>The <b>stream power index</b> is the product of catchment area and slope and could be used to
+	identify suitable locations for soil conservation measures to reduce the effect of
+	concentrated surface runoff. </li>
+<li>Finally, the <b>sediment transport index</b> accounts for the effect
+	of topography on erosion. The two-dimensional catchment area is used instead of the
+	one-dimensional slope length factor as in the Universal Soil Loss Equation. </li>
+</ul>
+
+<p class="defnewpar">The equations for the indices applied are those given by Burrough and McDonnell (1998).</p>
+
+<p class=diakopje>Dialog box options:</p>
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top" width="144"><p class=diabox>Input DEM:</p></td>
+<td valign="top"><p class=diabox>Select an input raster map which contains height values, i.e. your DEM. </p></td>
+</tr>
+<tr>
+<td valign="top"><p class=diabox>Flow Accumulation Map:</p></td>
+<td valign="top"><p class=diabox>Select a raster map that is the output of a previous <a href="flow_accumulation_functionality.htm">Flow accumulation</a> operation.</p></td>
+</tr>
+<tr>
+<td valign="top" colspan="2"><p class="diabox">Output Wetness Index Map:</p></td>
+</tr>
+</tr>
+<td valign="top"><p class="diabox"></p></td>
+<td valign="top"><p class=diabox>Type a name for the output raster map that will contain for every pixel the wetness index. </p></td>
+</tr>
+<tr>
+<td valign="top" colspan="2"><p class="diabox">Output Stream Power Index Map:</p></td>
+</tr>
+<tr>
+<td valign="top"><p class="diabox"></p></td>
+<td valign="top"><p class=diabox>Type a name for the output raster map that will contain for every pixel the stream power index. </p></td>
+</tr>
+<tr>
+<td valign="top" colspan="2"><p class="diabox">Output Sediment Transport Index Map:</p></td>
+</tr>
+<tr>
+<td valign="top"><p class="diabox"></p></td>
+<td valign="top"><p class=diabox>Type a name for the output raster map that will contain for every pixel the sediment transport index. </p></td>
+</tr>
+</table>
+
+
+<p class="kopje">Short explanation of the calculations by the script: </p>
+
+<ul>
+<li class="ls01be">The DFDX and DFDY filters are used on the Digital Elevation Model to calculate the first derivative in X and Y direction. </li>
+<li class="ls01be">Slope maps are calculated, in percentages and degrees. </li>
+<li class="ls01be">Possible zero-values are removed from the slope map in degrees. </li>
+
+<li class="ls01be">The Wetness Index is calculated as: <br>
+<span class="tiptext"><i>OUTMAP_wetness_index</i> = LN((<i>flowacc_rasmap</i> <span class="courier">*</span> PIXSIZE(%1) <span class="courier">*</span> PIXSIZE(%1)) / (TAN(DEGRAD(<i>temp_slopemap_deg</i>))))</span></li>
+
+
+<li class="ls01be">The Stream Power Index is calculated as: <br>
+<span class="tiptext"><i>OUTMAP_stream_power_index</i> = (<i>flowacc_rasmap</i> <span class="courier">*</span> PIXSIZE(%1) <span class="courier">*</span> PIXSIZE(%1)) / (TAN(DEGRAD(<i>temp_slopemap_deg</i>)))</span></li>
+
+
+<li class="ls01be">The Sediment Transport Index is calculated as: <br>
+<span class="tiptext"><i>OUTMAP_sediment_transport_index</i> = POW(((<i>flowacc_rasmap</i> <span class="courier">*</span> PIXSIZE(%1) <span class="courier">*</span> PIXSIZE(%1)) / (22.13)), 0.6) <span class="courier">*</span> POW(SIN(DEGRAD(<i>temp_slopemap_deg</i>)) / 0.0896, 1.3)</span></li>
+
+<li class="ls01be">Finally, temporary raster maps are removed.</li>
+</ul>
+
+<p class="tip">Tip: </p>
+
+<p class="tiptext">For more information on the MapCalc functions used in this script, please refer to the following topics: <a href="../ilwis/calc_degrad.htm">DEGRAD</a>, <a href="../ilwis/calc_ln.htm">LN</a>, <a href="../ilwis/calc_pixsize.htm">PIXSIZE</a>, <a href="../ilwis/calc_pow.htm">POW</a>, <a href="../ilwis/calc_sin.htm">SIN</a>, <a href="../ilwis/calc_tan.htm">TAN</a>, or to <a href="../ilwis/calc.htm">Map and Table Calculation</a>. </p>
+
+<p class=seealso>See also:</p>
+<p class="seealsolinks"><a href="overland_flow_length_functionality.htm">Overland flow length : functionality</a></p>
+<p class="seealsolinks"><a href="../ilwis/calc.htm">Map and Table calculation</a></p>
+<p class=seealsolinks><a href="../ilwis/script_editor_functionality.htm">Script editor : functionality</a></p>
+<p class="seealsolinks"><a href="../ilwis/ilwis_objects_scripts.htm">ILWIS objects : scripts</a></p>
+<p class=seealsolinks><a href="../ilwis/how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a></p>
+<p class=seealsolinks><a href="http://www.52n.org/index.php?option=com_projects&task=showProject&id=30&Itemid=127" target="_blank">ILWIS on the web (52 North)</a></p>
+</body

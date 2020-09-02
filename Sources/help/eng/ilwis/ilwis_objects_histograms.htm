@@ -1,0 +1,138 @@
+<html>
+
+<head>
+<title>ILWIS objects : histograms</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Histogram, ILWIS objects, Special objects, HIS, HSA, HSS, HSP">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Histograms&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/hist.gif" align=bottom width="13" height="14"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A histogram is a dependent table which stores frequency information on values, classes or IDs in a raster, polygon, segment or point map. A raster histogram is automatically calculated when displaying a value raster map which is stored using one or two bytes per pixel. Further, the <a href="../ilwisapp/histogram.htm">Histogram</a> operation can be used to calculate a histogram. The values in a histogram are presented as a table. A histogram always has the same name as the map from which it is calculated.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hist.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A raster histogram lists, depending on the domain of the map, for each value, class name or ID, the number of pixels in the map, and for each value, class name or ID the size of the area of these pixels as a percentage of the total area in square meters. If the input raster map uses a Value domain, the cumulative number of pixels, the cumulative percentages of the areas and the percentage of pixels of the total area that are not undefined are also calculated.</p>
+
+<p>Furthermore, summary information can be viewed in the properties of the histogram such as mean, predominant value, standard deviation, and percentage intervals.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hispol.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A polygon histogram lists, depending on the domain of the map, for each value, class name or ID, the number of polygons, and the perimeter and the area in square meters of these polygons. If the input polygon map uses a Value domain, the cumulative number of polygons, cumulative perimeters and cumulative areas are also calculated. </p>
+
+<p>Furthermore, summary information is available in the properties of the histogram.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hisseg.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A segment histogram lists, depending on the domain of the map, for each value, class name or ID, the number of segments and their length. If the input segment map uses a Value domain, the cumulative number of segments and the cumulative lengths are also calculated. </p>
+
+<p>Furthermore, summary information is available in the properties of the histogram.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hispnt.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A point histogram lists, depending on the domain of the map, for each value, class name or ID, the number of points. If the input point map uses a Value domain, the cumulative number of points is also calculated. </p>
+
+<p>Furthermore, summary information is available in the properties of the histogram.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Names of histograms:</p>
+
+<p>A histogram always obtains the same name as the map from which it is calculated. For more information on long object names, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To calculate a histogram:</p>
+
+<p>You can double-click the <a href="../ilwisapp/histogram.htm">Histogram</a> operation in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a> and select the map from which you want to calculate a histogram. You can also click a map in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> with the right mouse button and choose <span class=arial>Statistics, Histogram</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. For other methods, see <a href="../ilwis/how_to_calculate_histograms.htm">How to calculate a histogram</a>.</p>
+
+<p>Furthermore, a histogram is automatically calculated when you display a value raster map (domain <span class=courier>Image</span>, system domain <span class=courier>Value</span>, another system value domain or a user-defined value domain) which is stored using 1 or 2 bytes per pixel.</p>
+
+<p class=kopje>To display a histogram as a table and as a graph:</p>
+
+<p>The easiest way to display a histogram is to double-click a histogram in a Catalog. The values of the histogram will be shown in the table pane of the histogram window; a graph of the histgram will be shown in the graph pane of the histgram window. <p>
+
+<p class=kopje>Editing a histogram:</p>
+
+<p>As a histogram is a dependent table, depending on the values, class names, or IDs in a map, the values of the calculated (table-owned) columns in a histogram table cannot be edited. You can always perform further calculations using these columns by typing expressions on the TabCalc command line.</p>
+
+<p>If you really want to manually edit the values of calculated table-owned columns, you first have to break the dependency link of the histogram table in its Properties dialog box.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>For histograms of domain Class or ID maps: as the domain of the histogram is the same as the domain of the map, all columns of the histogram can be joined to an attribute table of a map. See also <a href="../ilwis/how_to_join_areas_from_a_histogram_to_an_attribute_table.htm">How to join areas from a histogram to an attribute table</a>.</p>
+
+<p class=kopje>Technical information:</p>
+
+<p>A histogram consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.HIS, .HSA, .HSS or .HSP) and a binary data file (.HI#, .HA#, .HS# or .HP#). The object definition file contains references to the map from which the histogram was calculated and the domain of that map. The domain of the map is is also the domain of the histogram.</p>
+
+<p class=defnewpar>By viewing the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a histogram, you can see whether the histogram is up-to-date. If this is not the case, i.e. after editing the map from which the histogram was calculated, you can easily recalculate the histogram by clicking the Make Up-to-Date button. The properties of a value histogram also present a histogram summary: the Mean, Standard Deviation, Median, Predominant value and the number of times this value occurs in the map. Furthermore, the values in the map which define the 0%, 0.5%, 1.0%, 2.0%, 5.0% and 10.0% percentage intervals in the histogram are listed. </p>
+
+<p class=kopje>Limitations:</p>
+
+<p>The maximum number of entries in a histogram is 2 billion. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/histogram.htm">Histogram operation</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_histograms.htm">How to calculate a histogram</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit the properties of an object</a></p>
+
+</body

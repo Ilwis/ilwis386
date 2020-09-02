@@ -1,0 +1,149 @@
+<html>
+
+<head>
+<title>How to use the Georeference Tiepoints editor</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Tiepoints, Georeference Tiepoints editor, Master/Slave, Use ..., How to use ..., Tiepoint editor, Control points, Ground control points">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to use</h1>
+
+<h1 class=secondline>the Georeference Tiepoints editor</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>This topic gives information on different methods to 'manually' insert tiepoints in the Tiepoint editor for a georef tiepoints, a georef direct linear or a georef orthophoto. For more information on georeference types, see <a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a>.</p>
+
+<p class=defnewpar>When you already have tiepoints (X-coordinates, Y-coordinates, row numbers, column numbers) in a file, it is advised to use copy and paste, to paste these tiepoints into the tiepoint table of a georeference tiepoints. For a detailed description of the steps involved, see <a href="how_to_paste_coords_into_georef_tiepoints.htm">How to paste coordinates into a georeference tiepoints</a>. </p>
+
+<p class=kopje>To insert tiepoints by using an existing map with coordinates (Master/Slave):</p>
+
+<ul>
+
+<li>	Display any map with correct XY-coordinates in a map window (Master). </li>
+
+<li>	Display the image that you want to give tiepoints (Slave) in another map window; open the <a href="map_window_menu_commands.htm">Edit menu</a> and choose <span class=arial>Georeference</span>; the <a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor</a> will be started. </li>
+
+<li>	Make sure that you can identify future tiepoints both in the slave image (row, col) and in the other master map with the correct georeference and/or coordinate system (XY-coordinates). </li>
+
+</ul>
+
+<p class=defnewpar>Then:</p>
+
+<ul>
+
+<li>	click in the slave image;</li>
+
+<li>	the <a href="../ilwismen/georeference_tiepoints_editor_add_tiepoint.htm">Add Tiepoint</a> dialog box appears, the Row and Column values are filled out;</li>
+
+</ul>
+
+<p>and</p>
+
+<ul>
+
+<li>	click on the corresponding position in the master raster map in the other map window;</li>
+
+<li>	in the <span class=arial>Add Tiepoint</span> dialog box, the correct X and Y coordinates are filled out;</li>
+
+<li>	click OK.</li>
+
+</ul>
+
+<p>Repeat for other tiepoints.</p>
+
+<p class=kopje>To insert tiepoints by using a map on a digitizer:</p>
+
+<p>Stick an analog paper map on the digitizer, setup the digitizer and reference the map. For more information, see <a href="how_to_set_up_a_digitizer_and_start_digitizing.htm">How to setup a digitizer and reference a map</a>.</p>
+
+<p>Start the Georeference Tiepoints editor with the image that you want to give coordinates. Make sure that you can identify future tiepoints both in the image and in the map on the digitizer.</p>
+
+<p class=defnewpar>Then:</p>
+
+<ul>
+
+<li>	click in the image;</li>
+
+<li>	the <span class=arial>Add Tiepoint</span> dialog box appears, the Row and Column values are filled out;</li>
+
+</ul>
+
+<p>and</p>
+
+<ul>
+
+<li>	click with the digitizer cursor on the corresponding position in the map on the digitizer;</li>
+
+<li>	in the <span class=arial>Add Tiepoint</span> dialog box, the correct X and Y coordinates are filled out;</li>
+
+<li>	click OK.</li>
+
+</ul>
+
+<p>Repeat for other tiepoints.</p>
+
+<p class=kopje>To insert tiepoints by reading coordinates from paper:</p>
+
+<p>Start the tiepoint editor with the map that you want to give coordinates. </p>
+
+<p>Then:</p>
+
+<ul>
+
+<li>	click with the mouse pointer in the tiepoint editor window on a recognizable point;</li>
+
+<li>	the <span class=arial>Add Tiepoint</span> dialog box appears, the Row and Column values are filled out;</li>
+
+<li>	when you already have some tiepoints, the dialog box will also come up with a suggestion for the XY-coordinates. Do <b>not</b> accept these defaults, but always read the corresponding XY-coordinates for this point from the paper map.</li>
+
+</ul>
+
+<p>Repeat for other tiepoints.</p>
+
+<p class=kopje>To insert tiepoints entirely by keyboard:</p>
+
+<p>When you have a complete relation between row and column numbers and X and Y coordinates <i>on paper</i>, you can also:</p>
+
+<ul>
+
+<li>	click on a gray record button in the tiepoint table, or</li>
+
+<li>	in the map window, press the right mouse button, select the <span class=arial>Add Tiepoint</span> command from the context-sensitive menu;</li>
+
+<li>	the <span class=arial>Add TiePoint</span> dialog box appears;</li>
+
+</ul>
+
+<p>then:</p>
+
+<ul>
+
+<li>	type Row and Column values and X and Y coordinates for a tiepoint in the dialog box. </li>
+
+</ul>
+
+<p>Repeat for other tiepoints.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a></p>
+
+<p class=seealsolinks><a href="how_to_create_georeferences.htm">How to create a georeference</a></p>
+
+<p class=seealsolinks><a href="how_to_edit_georeferences.htm">How to edit a georeference</a></p>
+
+<p class=seealsolinks><a href="how_to_add_coordinates_to_an_image_color_composite_scanned_photo.htm">How to add coordinates to an image</a></p>
+
+<p class=seealsolinks><a href="how_to_paste_coords_into_georef_tiepoints.htm">How to paste coordinates into a georeference tiepoints</a></p>
+
+<p class=seealsolinks><a href="how_to_screen_digitize.htm">How to screen digitize</a></p>
+
+<p class=seealsolinks><a href="how_to_monoplot.htm">How to monoplot</a></p>
+
+<p class=seealsolinks><a href="how_to_create_orthophoto.htm">How to create an orthophoto</a></p>
+
+</body

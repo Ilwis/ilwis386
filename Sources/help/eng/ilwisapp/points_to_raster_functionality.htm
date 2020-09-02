@@ -1,0 +1,85 @@
+<html>
+
+<head>
+<title>Points to raster : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Points to raster">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Points to raster</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Points to raster operation rasterizes a point map. The output raster map always uses the same domain as the input point map. This means that the class names, IDs, or values used in the point map are also used in the raster map. </p>
+
+<p class=defnewpar>For the output raster map, an existing <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> has to be selected or a new one can be created. The georeference determines the number of lines and columns of the output map and the pixel size of the raster map. It is strongly advised that vector maps of the same area are rasterized on the same georeference: any map calculation or spatial operation performed later on a combination of raster maps will only make sense if the pixels in these maps refer to the same area on the ground. </p>
+
+<p class=defnewpar>Normally, each point will be represented by 1 pixel in the output raster map. </p>
+
+<p>As you may have stored information as points that are actually refering to areas, the operation has an option to indicate by how many pixels a point should be represented. When a point size of 1 is specified (default), it means that each point is represented by 1 pixel in the output raster map; when a point size of 2 is specified, it means that each point is represented by 2<span class=courier>*</span>2 pixels in the output raster map, etc. </p>
+
+<p class=defnewpar>When points are rasterized with a small point size, it can be difficult to see the rasterized points when the output map is displayed. You can always display the original point map on top of the raster map. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To analyse the surroundings of points, you can rasterize points with a point size larger than one, and then perform a <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a> operation. </p>
+
+<p class=emptyline>&nbsp; </p>
+
+<p>When a point map has an attribute table or when the domain of the point map has an attribute table, the Points to raster operation automatically links this attribute table to the output raster map.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special input map requirements.</p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output raster map uses the same domain as the input point map.</p>
+
+<p>The georeference for the output map has to be selected or created; you can usually select an existing georeference corners. The georeference for the raster map must use the same <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> as the point map. Georeference None cannot be selected for the output map.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	The <a href="..//ilwisapp/popup/point_density_popup.htm" onClick="return popup(this, 'notes')" >Point density</a> operation counts the number of points that are located in each pixel. </li>
+
+<li>	Interpolations on point values can be performed with the <a href="..//ilwisapp/popup/moving_average_popup.htm" onClick="return popup(this, 'notes')" >Moving average</a>, <a href="..//ilwisapp/popup/trend_surface_popup.htm" onClick="return popup(this, 'notes')" >Trend surface</a> and <a href="..//ilwisapp/popup/moving_surface_popup.htm" onClick="return popup(this, 'notes')" >Moving surface</a> operations.</li>
+
+<li>	To rasterize only points with a specific code, you can first use the <a href="..//ilwisapp/popup/mask_points_popup.htm" onClick="return popup(this, 'notes')" >Mask points</a> operation.</li>
+
+<li>	When you want to print vector maps for annotation purposes on top of raster maps, print quality will improve if you use the vector maps as they are, thus without rasterizing them.</li>
+
+<li>	To obtain frequency information on points, you can calculate the histogram of a point map with the <a href="..//ilwisapp/popup/histogram_operation_popup.htm" onClick="return popup(this, 'notes')" >Histogram</a> operation.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="points_to_raster_dialogbox.htm">Points to raster : dialog box</a></p>
+
+<p class=seealsolinks><a href="points_to_raster_commandline.htm">Points to raster : command line</a></p>
+
+<p class=seealsolinks><a href="points_to_raster_algorithm.htm">Points to raster : algorithm</a></p>
+
+</body

@@ -1,0 +1,272 @@
+<html>
+
+<head>
+<title>How to calculate Digital Elevation Models</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Calculate ..., How to calculate ..., Digital Elevation Model, DEM, How to create ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to calculate</h1>
+
+<h1 class=secondline>a Digital Elevation Model</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In ILWIS, you can obtain a Digital Elevation Model (DEM) by interpolation of segments, by an interpolation of points, or by an interpolation of a raster map which contains rasterized value segments and points.</p>
+
+<h2>From Segments</h2>
+
+<p>Digitize the contour lines of a segment map with a value domain. Make sure that contour lines that consist of more than one segment have the same value. Code consistency of segments can be checked in the <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >Segment editor</a>.  </p>
+
+<p class=defnewpar>Then perform a <a href="../ilwisapp/contour_interpolation.htm">Contour interpolation</a>. Contour interpolation is an operation which first rasterizes the contour lines in a segment map with a value domain, and then calculates values by means of a linear interpolation for pixels that are not covered by segments. For the Contour interpolation operation, you can also use a segment map with a class or ID domain as input, then the segment map must have an attribute table with a value column representing height values. </p>
+
+<p class=kopje>To create a Digital Elevation Model from Segments:</p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">Operations menu</a> in the Main window, choose <span class=arial>Interpolation, Contour Interpolation</span>, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Interpolation</span> item, and double-click the <span class=arial>InterpolSeg</span> operation, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>InterpolSeg</span> operation, or</li>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click a segment map with the <i>right</i> mouse button, and select <span class=arial>Contour Interpolation</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwisapp/contour_interpolation_dialog_box.htm">Contour Interpolation</a> dialog box appears. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When later on you want to create a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> orthophoto or a georeference direct linear, which will use the created DEM, it is strongly advised to mark the Interpolation check box in the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> dialog box of the DEM.</p>
+
+<h2>From Points</h2>
+
+<p>Perform a <a href="../ilwisapp/point_interpolation.htm">point interpolation</a> on your point map. A point interpolation performs an interpolation on randomly distributed point values and returns regularly distributed point values. This is also known as gridding. In ILWIS, the output values are raster values. </p>
+
+<p class=defnewpar>The input map for a point interpolation is a point map where:</p>
+
+<ul>
+
+<li>	points are values (point map with a value domain), or</li>
+
+<li>	points are identifiers (point map with an ID domain) and for which elevation values are stored in a column in a linked <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>. </li>
+
+</ul>
+
+<p class=kopje>To create a Digital Elevation Model from Points:</p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">Operations menu</a> in the Main window, choose <span class=arial>Interpolation, Point Interpolation, Moving Average</span> or <span class=arial>Moving Surface</span>, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Interpolation, Point Interpolation</span> item, and double-click the <span class=arial>MovAverage</span> or <span class=arial>MovSurface</span> operation, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>MovAverage</span> or <span class=arial>MovSurface</span> operation, or</li>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click a point map with the <i>right</i> mouse button, and select <span class=arial>Interpolation, Moving Average</span> or <span class=arial>Moving Surface</span>.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwisapp/moving_average_dialogbox.htm">Moving Average</a> dialog box or the <a href="../ilwisapp/moving_surface_dialog_box.htm">Moving Surface</a> dialog box appears.</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	Point interpolation is a time consuming operation, to speed up the process the user is advised to use a relatively large pixel size during the interpolation and perform the <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a> operation after the interpolation. Densify is a raster operation which lets you reduce the pixel size of your map. The number of rows and columns is increased, and new values are assigned to the pixels by means of a bilinear or bicubic interpolation.</li>
+
+<li>	When later on you want to create a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> orthophoto or a georeference direct linear, which will use the created DEM, it is strongly advised to mark the Interpolation check box in the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> dialog box of the DEM.</li>
+
+</ul>
+
+<h2>From Segments with additional Point data</h2>
+
+<ol>
+
+<li>	Digitize the contour lines of a segment map with a value domain. Rasterize the segment map with the <a href="../ilwisapp/segments_to_raster.htm">Segments to Raster</a> operation:</li>
+
+        <ul>
+
+        <li>	from the <a href="main_window_menu_commands.htm">Operations menu</a> in the Main window, choose <span class=arial>Rasterize, Segment to Raster</span>, </li>
+
+        <li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Rasterize</span> item, and double-click the <span class=arial>SegRas</span> operation, or</li>
+
+        <li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>SegRas</span> operation, or</li>
+
+        <li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click a segment map with the <i>right</i> mouse button, and select <span class=arial>Rasterize, Segment to Raster</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<li>	Rasterizing the point data:
+
+        <ol class=abc>
+        
+        <li>    If you have a point map with a value domain, rasterize the point map with the <a href="../ilwisapp/points_to_raster.htm">Points to Raster</a> operation:</li>
+
+                <ul>
+
+                <li>	from the Operations menu in the Main window, choose <span class=arial>Rasterize, Point to Raster</span>,</li>
+
+                <li>	in the Operation-tree, open the <span class=arial>Rasterize</span> item, and double-click the <span class=arial>PntRas</span> operation, or</li>
+
+                <li>	in the Operation-list, double-click the <span class=arial>PntRas</span> operation, or</li>
+
+                <li>	in the Catalog, click a point map with the <i>right</i> mouse button, and select <span class=arial>Rasterize, Point to Raster </span>from the context-sensitive menu.</li>
+
+                </ul>
+
+                <p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+        <li>	If you have a point map that contains points with identifiers (point map with an ID domain) for which elevation values are stored in a column in a linked attribute table, </li>
+
+                <ul>
+
+                <li>	rasterize the point map with the Points to Raster operation (see 2a) and in the Rasterize Point Map dialog box, select the correct column in which your elevation data is stored.</li>
+
+                </ul>
+
+                <p class=emptyline>&nbsp; </p>
+
+                <p class=leftmargininlist>	Use the same georeference for both the rasterized segment and rasterized point map.</p>
+
+        </ol>
+
+<p class=emptyline>&nbsp; </p>
+
+<li>	Then, combine the two raster maps by typing the following MapCalc expression on the command line of the Main window:</li>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=71>
+<p><i>pntseg</i></p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>iff(isundef(</span><i>pntras</i><span class=courier>)</span>, <i>segras</i>, <i>pntras</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; 	</p>
+
+<p class=leftmargininlist>	where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=71>
+<p><i>pntseg</i></p>
+
+</td>
+<td valign="top">
+<p>is the output raster map name of the combined point and segment map </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=71>
+<p><i>pntras</i></p>
+
+</td>
+<td valign="top">
+<p>is the name of the rasterized point map</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=71>
+<p><i>segras</i></p>
+
+</td>
+<td valign="top">
+<p>is the name of the rasterized segment map</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<li>	Finally, interpolate the <i>pntseg</i> raster map which contains the rasterized segments and the rasterized points. Type on the command line of the Main window:</li>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=71>
+<p class=courier>DEM</p>
+
+</td>
+<td valign="top" width=18>
+<p class=courier>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>mapinterpolcontour</span>(<i>pntseg</i>)</p>
+
+</td>
+</tr>
+</table>
+
+</ol>
+
+<h2>Visualize a DEM</h2>
+
+<p>To visualize a DEM, you can simply the DEM in a map window or apply the <span class=courier>Shadow</span> filter on the DEM and display the filtered map in a map window; you can overlay the contour lines in one color. Further, you can use <a href="..//ilwisapp/popup/display3d_popup.htm" onClick="return popup(this, 'notes')" >Display 3D</a> to create a three-dimensional view of your study area. For more information and an example, see <a href="../ilwis/how_to_display_digital_elevation_models.htm">How to display Digital Elevation Models</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/contour_interpolation.htm">Contour interpolation</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/point_interpolation.htm">Point interpolation</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_display_digital_elevation_models.htm">How to display Digital Elevation Models</a></p>
+
+</body

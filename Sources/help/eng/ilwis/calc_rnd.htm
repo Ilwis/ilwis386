@@ -1,0 +1,277 @@
+<html>
+
+<head>
+<title>RND</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="RND, Random functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>RND( ) function</h1>
+
+<p class=defnewpar>Returns a random value.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>RND()<br>
+RND(0)</span><br>
+<span class=courier>RND</span>(<i>Value</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="145" valign="top"><i>Value</i></td>
+	<td valign="top">is a long integer value</td>
+</tr>
+<tr>
+	<td width="145" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="145" valign="top">Value range:</td>
+	<td valign="top">&gt;=0</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="145" valign="top"><span class=courier>RND()</span>  returns:</td>
+	<td valign="top">a real value at random</td>
+</tr>
+<tr>
+	<td width="145" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+<tr>
+	<td width="145" valign="top">Value range:</td>
+	<td valign="top">[0,1&gt;</td>
+</tr>
+</table>
+<p class=emptylinehalf>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td width="145" valign="top"><span class=courier>RND</span>(0) returns:</td>
+	<td valign="top">a 0 or a 1 at random</td>
+</tr>
+<tr>
+	<td width="145" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+<p class=emptylinehalf>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td width="145" valign="top"><span class=courier>RND</span>(<i>Value</i>) returns:</td>
+	<td valign="top">a long integer value</td>
+</tr>
+<tr>
+	<td width="145" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+<tr>
+	<td width="145" valign="top">Value range:</td>
+	<td valign="top">[1,<i>Value</i>]</td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>It is advised to use the assignment symbol := in formulae with random functions; using the definition symbol = will result in the assignment of new random values during every calculation. </li>
+	<li>The maximum value for <span class=courier>RND</span>(<i>Value</i>) is around 2 billion, i.e. 2147483646 or 2.14E09.</li>
+	<li>When the input value is outside the value range, the output value will be undefined.</li>
+	<li>When the input value is undefined, the output value will also be undefined</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>The random function can for instance be used to simulate a point dataset for comparison with measured point data (see also <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial Correlation</a> and <a href="../ilwisapp/pattern_analysis_functionality.htm">Pattern Analysis</a>).</li>
+	<li>To simulate a die, use the <span class=courier>RND</span> function in the form of <span class=courier>RND(6)</span>.</li>
+	<li>To generate a random real value between a and b, use <span class=courier>RND()*(b-a)+a</span>.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="150"><p class=calc00>? RND()</p></td>
+	<td><p>may return a random value between 0 and 1, e.g. 0.857</p></td>
+</tr>
+<tr>
+	<td width="150"><p class=calc00>? RND(0)</p></td>
+	<td><p>may return a 0 or 1 at random, e.g. 1</p></td>
+</tr>
+<tr>
+	<td width="150"><p class=calc00>? RND(1000)</p></td>
+	<td><p>may return a random integer value between 1 and 1000, e.g. 472</p></td>
+</tr>
+<tr>
+	<td width="150"><p class=calc00>? RND(POW(2,3))</p>
+	<td><p>may return a random integer value between 1 and 8, e.g. 4</p></td>
+</tr>
+<tr>
+	<td width="150"><p class=calc00>? RND(6)+RND(6)</p>
+	<td><p>simulates the casting of two dice</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>OutMap1 := RND()</p>
+<p class=calc00>OutMap2 := RND(0)</p>
+<p class=calc00>OutMap3 := RND(1000)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>OutMap1</p></td>
+	<td><p class=courier>OutMap2</p></td>
+	<td><p class=courier>OutMap3</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>0.689</td>
+    <td class=calcpict>0.376</td>
+    <td class=calcpict>0.725</td>
+  </tr>
+  <tr>
+    <td class=calcpict>0.574</td>
+    <td class=calcpict>0.803</td>
+    <td class=calcpict>0.245</td>
+  </tr>
+  <tr>
+    <td class=calcpict>0.615</td>
+    <td class=calcpict>0.243</td>
+    <td class=calcpict>0.157</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>0</td>
+    <td class=calcpict>0</td>
+  </tr>
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>1</td>
+    <td class=calcpict>0</td>
+  </tr>
+  <tr>
+    <td class=calcpict>0</td>
+    <td class=calcpict>1</td>
+    <td class=calcpict>1</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>371</td>
+    <td class=calcpict>61</td>
+    <td class=calcpict>992</td>
+  </tr>
+  <tr>
+    <td class=calcpict>760</td>
+    <td class=calcpict>266</td>
+    <td class=calcpict>142</td>
+  </tr>
+  <tr>
+    <td class=calcpict>482</td>
+    <td class=calcpict>953</td>
+    <td class=calcpict>674</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol1 := RND()</p>
+<p class=calc00>OutCol2 := RND(0)</p>
+<p class=calc00>OutCol3 := RND(1000)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>OutCol1</p></td>
+	<td valign="top"><p class=tcolhr>OutCol2</p></td>
+	<td valign="top"><p class=tcolhr>OutCol3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.689</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>371</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.376</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>61</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.725</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>992</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.574</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>760</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.803</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>266</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.245</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>142</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.615</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>482</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.243</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>953</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.157</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>674</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><a href="calc_round.htm">ROUND</a></td>
+</tr>
+</table>
+</body

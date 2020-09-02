@@ -1,0 +1,35 @@
+<html>
+
+<head>
+<title>apply 3D popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Apply 3D</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/apply_3d.htm" onClick="return popup(this, 'notes')" >Apply 3D</a> operation resamples an input raster map according to a
+<a href="../../ilwis/popup/objects_georeference_popup.htm"> georeference</a> 3D. This enables you to permanently and quickly display the output raster map in three dimensions, i.e. as 3D view. </p>
+
+<p class=linespacing03after>You can create a georeference 3D with <a href="../../ilwisapp/popup/display3d_popup.htm">Display 3D</a> or Apply 3D; a Digital Elevation Model (DEM) is required and you have to specify 3D view parameters using the
+<a href="../../ilwis/popup/georeference_3d_editor_popup.htm"> Georeference 3D
+editor</a>.</p>
+
+</body

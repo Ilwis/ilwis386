@@ -1,0 +1,604 @@
+<html>
+
+<head>
+<title>Appendices : file extensions</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Appendices, File extensions, Extensions, MPL, MPR, MPA, MPS, MPP, TBT, DOM, RPR, GRF, CSY, MPV, HIS, HSA, HSS, HSP, SMS, TA2, MAT, FIL, FUN, ISL, ATX, ILO, GRH, IOC, STP, SMC">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Appendices</h1>
+
+<h1 class=secondline>File extensions</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In ILWIS 2 and beyond, all <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >ILWIS objects</a> have an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> which refers to the object's data file, domain, store type, projection, georeference, representation (color, line width etc.), etc. Thus, object definition files may refer to further object definition files and to binary data files. The last character of the extension of a binary data file is mostly #.&nbsp;</p>
+
+<p class=kopje>ILWIS file extensions:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.AT#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for an annotation text object. Stores text strings, positions of text strings (XY-coordinate or RowCol numbers) and settings such as font name, font size, bold, italics, underline, justification, color, transparent and rotation for all text items. Always together with a .ATX file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.ATX</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text object</a>. ASCII file. Always together with a .AT# file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.CS#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for a coordinate system tiepoints. Stores the tiepoints (X, Y, Xref, Yref, dX, and dY). Always together with a .CSY file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.CSY</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition and data file for a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>. ASCII file. Coordinate systems store the possible minimum and maximum XY-coordinates or LatLon-coordinates that can be used in point, segment, and polygon maps and in georeferences of raster maps. A coordinate system tiepoints also has a .CS# file. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.DOM</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>. Stores the set of valid IDs, Class names or values for a data object. ASCII file. Domains of type Class, ID and Group also have a binary data file (.DM#). </p>
+
+<p class=linesp01befafter>A domain is used by one or more raster, polygon, segment and/or point maps, tables and/or columns in tables. A domain Class, Value, and Picture use a representation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.DM!</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for an internal class, ID or group domain of a point map. If a point map has an internal domain, the object definition file of the point map (.MPP) contains a reference to this .DM! file. A .DM! file is comparable to a .DM# file. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.DM@</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for an internal class, ID or group domain of a polygon map. If a polygon map has an internal domain, the object definition file of the polygon map (.MPA) contains a reference to this .DM@ file. A .DM@ file is comparable to a .DM# file. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.DM#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for a domain ID, Class, or Group. Always together with a .DOM file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.DM$</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for an internal class, ID or group domain of a segment map. If a segment map has an internal domain, the object definition file of the segment map (.MPS) contains a reference to this .DM$ file. A .DM$ file is comparable to a .DM# file. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.DM%</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for an internal class, ID or group domain of a raster map. If a raster map has an internal domain, the object definition file of the raster map (.MPR) contains a reference to this .DM% file. A .DM% file is comparable to a .DM# file. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.FIL</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_filters_popup.htm" onClick="return popup(this, 'notes')" >filters</a> which includes its ASCII data file. Standard filters are available in the <span class=courier>\SYSTEM</span> directory. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.FND</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>ASCII data file for functions. Always together with a .FUN file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.FUN</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_userdef_functions_popup.htm" onClick="return popup(this, 'notes')" >functions</a>. ASCII file. Always together with a .FND file. Standard functions are available in the <span class=courier>\SYSTEM</span> directory. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.GR#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for a georeference tiepoints, a georef direct linear and a georef orthophoto. Stores the tiepoints (row, col, X, Y, drow, and dcol), uses a background raster map. Always together with a .GRF file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.GRF</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of raster maps. Stores the relation between rows and columns and real-world coordinates. ASCII file. A georeference tiepoints, a georef direct linear and a georef orthophoto, also have a .GR# file. A georeference can be used by one or more raster maps. A georeference uses a coordinate system; a georeference tiepoints also uses a background raster map on which tiepoints are positioned.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.GRH</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for a <a href="..//ilwis/popup/objects_graph_popup.htm" onClick="return popup(this, 'notes')" >graph</a>. Stores the table name(s) which contain the columns from which the graph was created and stores display options of the graph. ASCII file. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.HA#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for a histogram of a polygon map. Always together with a .HSA file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.HI#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for a histogram of a raster map. Always together with a .HIS file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.HIS</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_histogram_popup.htm" onClick="return popup(this, 'notes')" >histograms</a> of a raster map. ASCII file. Always together with a .HI# file. A histogram of a raster map belongs to the raster map with the same name.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.HP#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for a histogram of a point map. Always together with a .HSP file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.HS#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for a histogram of a segment map. Always together with a .HSS file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.HSA</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for histograms of a polygon map. ASCII file. Always together with a .HA# file. A histogram of a polygon map belongs to the polygon map with the same name.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.HSP</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for histograms of a point map. ASCII file. Always together with a .HP# file. A histogram of a point map belongs to the point map with the same name.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.HSS</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for histograms of a segment map. ASCII file. Always together with a .HS# file. A histogram of a segment map belongs to the segment map with the same name.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.ILO</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layouts</a>. Stores the name and location of the map view(s) that were inserted in the layout; stores the display settings of annotation (Legend, Map Border, North Arrow, Scale Bar, Scale Text, Text, Box) inserted in the layout, and; stores inserted Bitmaps and/or Pictures completely. When the layout does not contain bitmaps or pictures, this file is an ASCII file. When the layout does contain bitmaps or pictures, the file is partly binary. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.IOC</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collections</a> and <a href="..//ilwis/popup/objects_database_collection_popup.htm" onClick="return popup(this, 'notes')" >database collections</a>. ASCII file. Stores the name and location of the object definition files that are included in this object collection. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.ISF</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>ILWIS Script File. ASCII data file for a script, containing the commands and expressions. Always together with a .ISL file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.ISL</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>ILWIS Script Language. Object definition file for a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a>. ASCII file. Always together with a .ISF file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.MAT</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition and data file for a <a href="..//ilwis/popup/objects_matrices_popup.htm" onClick="return popup(this, 'notes')" >matrix</a>. ASCII file. A matrix is for instance produced by the operations Principle Components and Factor Analysis. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.MP#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for a raster map. Stores the raw values of a raster map. Always together with an .MPR file. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.MPA</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a> (A for Area). Together with an .MPAP# and an .MPAT# file, unless a dependent polygon map was not calculated yet. A polygon map uses a domain and a coordinate system. Maps of domain Class, ID or Group can have an attribute table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+
+<p class=linesp01befafter>.MPAP#</p>
+
+</td>
+<td valign="top">
+
+<p class=linesp01befafter>Binary data file for polygon maps. Stores coordinates of the bounding box around each polygon, polygon areas, length of polygon boundaries, polygon codes and contains references to the topology of the polygons. Always together with an .MPA and an .MPAT# file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+
+<p class=linesp01befafter>.MPAT#</p>
+
+</td>
+<td valign="top">
+
+<p class=linesp01befafter>Binary data file for polygon maps. Stores coordinates of polygon boundaries, coordinates of nodes, and topology information of the polygon map. Always together with an .MPA and an .MPAP# file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.MPL</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition and data file for <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map lists</a>. Stores the names of raster maps in the map list. ASCII file. A map list thus has a reference to a number of raster maps, and to a georeference. If a variance-covariance or correlation matrix is calculated, then the values are stored in the .MPL.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.MPP</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a>. ASCII file. Together with a .PT#</a> file, unless a dependent point map was not calculated yet. A point map uses a domain and a coordinate system. Maps of domain Class, ID or Group can have an attribute table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.MPR</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a>. ASCII file. Together with an .MP# file, unless a dependent raster map was not calculated yet. Optionally, also a file for the pyramid layers (.MPY#) may exist. A raster map uses a domain and a georeference. Maps of domain Class, ID or Group can have an attribute table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.MPS</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a>. ASCII file. Together with an .MPS# file, unless a dependent segment map was not calculated yet. A segment map uses a domain and a coordinate system. Maps of domain Class, ID or Group can have an attribute table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.MPS#</p>
+
+</td>
+<td valign="top">
+
+<p class=linesp01befafter>Binary data file for segment maps. Stores coordinates of intermediate points, coordinates of nodes and segment codes. Always together with an .MPS file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.MPV</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a>. ASCII file. Stores the names and display options of the data and annotation layers that were saved as a map view.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.MPY#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary file for a raster map that has been stored with pyramid layers. Stores the raw values of a raster map at all possible zoom factors (factors of 2). Always together with an .MPR and an .MP# file. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.PT#</a></p>
+
+</td>
+<td valign="top">
+
+<p class=linesp01befafter>Binary data file for point maps. Stores all point coordinates and the codes of the points. Always together with an .MPP file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.RP!</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for an internal representation class of a point map. When a point map has an internal representation, the object definition file of the point map (.MPP) contains a reference to this .RP! file. A .RP! file is comparable to a .PR# file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.RP@</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for an internal representation class of a polygon map. When a polygon map has an internal representation, the object definition file of the polygon map (.MPP) contains a reference to this .RP@ file. A .RP@ file is comparable to a .PR# file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.RP#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for a representation belonging to a domain Class, Group, or Picture. Always together with a .RPR file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.RP$</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for an internal representation class of a segment map. When a segment map has an internal representation, the object definition file of the segment map (.MPS) contains a reference to this .RP$ file. A .RP$ file is comparable to a .PR# file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.RP%</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for an internal representation class of a raster map. When a raster map has an internal representation, the object definition file of the raster map (.MPR) contains a reference to this .RP% file. A .RP% file is comparable to a .PR# file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.RP^</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for an internal representation class of a picture domain. When a picture domain has an internal representation, the object definition file of the domain (.DOM) contains a reference to this .RP^ file. A .RP^ file is comparable to a .PR# file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.RPR</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a>. Stores the representation of raster, polygon, segment or point maps: colors, line width, etc. ASCII file. A representation for a domain type Class, Group, or Picture also has a binary data file (.RP#). A representation uses a domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.SMC</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_criteria_trees_popup.htm" onClick="return popup(this, 'notes')" >criteria trees</a>. ASCII file. Stores references to the name(s) of the output map(s), the names of all criteria, whether these are factors, constraints or a group, the names of all input maps, and the methods of standardization and weighing. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.SMS</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample sets</a>. ASCII file. Stores references to a sample map with positions of training pixels, a map list and a background map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.STP</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for a <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a>. ASCII file. Contains references to two input raster maps, position of fiducial marks, principal points, transferred principal points, and optional scaling points. If the stereo pair is calculated, it also stores the names of the Left and Right output raster maps. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.T2#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for a two-dimensional table. Always together with a .TA2 file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.TA2</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_table2dim_popup.htm" onClick="return popup(this, 'notes')" >two-dimensional tables</a>. ASCII file. Always together with a T2# file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.TB#</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Binary data file for a table. Always together with a .TBT file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=64>
+<p class=linesp01befafter>.TBT</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>Object definition file for <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >tables</a>. Stores attribute information belonging to raster, polygon, segment, and/or point maps. ASCII file. Together with a .TB# file, unless a dependent table was not calculated yet. A table uses a domain.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The following ILWIS 2 file extensions for vector maps can be read by ILWIS 3.x: .PC#, .PD#, .PL#, .PS#, .TP# (polygons), .CD#, .SC#, .SG# (segments), .PN# (points). However, these extensions are obsolete as soon as the ILWIS 2 vector map is edited in ILWIS 3.x. Furthermore, all ILWIS 1.4 file extensions are obsolete since ILWIS 3.x. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_general_structure_of_object_definition_files.htm">Appendices : object definition files</a></p>
+
+</body

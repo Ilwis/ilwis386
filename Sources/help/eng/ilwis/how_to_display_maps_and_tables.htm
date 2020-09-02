@@ -1,0 +1,212 @@
+<html>
+
+<head>
+<title>How to display maps and tables + zoom</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Display ..., How to display ..., Visualization, Transparency, Display by attribute, Mask, Zoom in">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to display maps and tables &amp; zoom</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, maps and tables are preceded by the following icons:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rasmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>for raster maps,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/polmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>for polygon maps,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/segmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>for segment maps,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/pointmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>for point maps,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/table.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>for tables.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>To display maps and tables in new windows:</p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, a map window or a table window, choose the <span class=arial>Open</span> command and select a map or table, or</li>
+
+<li>	in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, double-click a map or table, or </li>
+
+<li>	in the <a href="main_window_standard_toolbar.htm">standard toolbar of the Main window</a>, use the <span class=arial>Show Map</span> or <span class=arial>Show Table</span> button and select a map or table, or </li>
+
+<li>	in a Catalog, <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >select one or more</a> maps and tables, click the selection with the <i>right</i> mouse button, and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, expand the <span class=arial>Visualization</span> item, and double-click the <span class=arial>Show</span> item, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Show</span> item, or</li>
+
+<li>	<a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> a map or table from a Catalog to the <span class=arial>Show</span> item in the Operation-tree or the Operation-list.</li>
+
+</ul>
+
+<p>You can also click the <span class=arial>Show Map</span> button <img src="../images/showmap.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/main_window_standard_toolbar.htm">toolbar of the Main window</a>.</p>
+
+<p class=defnewpar>Before a map is displayed, some <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> have to be specified, then a map is displayed in a new <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>.</p>
+
+<p>A table is directly displayed in a new <a href="..//ilwis/popup/table_window_popup.htm" onClick="return popup(this, 'notes')" >table window</a>.</p>
+
+<p class=kopje>To add maps to an existing map window:</p>
+
+<ul>
+
+<li>	from the <a href="map_window_menu_commands.htm">Layers menu</a> in a map window, choose the <span class=arial>Add Layer</span> command; in the <a href="../ilwismen/add_layer_to_map_window.htm">Add Layer</a> dialog box, you can select a raster map, segment map, polygon map, point map, map list (to be displayed as a color composite), or an annotation text layer, </li>
+
+<li>	click the <span class=arial>Add Layer</span> button <img src="../images/addlayer.gif" align=bottom width="22" height="22"> in the <a href="map_window_toolbar.htm">toolbar</a> of a map window, or </li>
+
+<li>    in the white space of the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane in a map window, click the right mouse button, and choose <span class=arial>Add Layer</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or </li>
+
+<li>	<a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> one or more point, segment, or polygon maps, a raster map or a map list from a Catalog or from Windows Explorer into a map window. </li>
+
+</ul>
+
+<p class=defnewpar>Before the extra layer is displayed, some <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> have to be specified. Then, the selected point, segment or polygon map is displayed on top of the other layers that are currently shown in the map window. </p>
+
+<p class=defnewpar>Similarly, when the map window already displays a raster map (or a map list), and you add another raster map (or map list) with the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> to the map window, then the selected raster map (or map list) will also be added to the map window. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>In the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a layer, you can specify whether a layer has to be displayed with a certain <i>transparency</i>. If you use the Transparency option, any layer that has been added to the map window before, e.g. an image or a shadow map, will remain partly visible through the transparent layer. In this manner, you can display thematic information on top of images, a shadow map etc. and view both types of information simultaneously. Click the following link for an <a href="..//ilwis/popup/map_window_transparent_layers_example.htm" onClick="return popup(this, 'notes')" >Example of transparent layers</a>. </p>
+
+<p class=kopje>To show a map by one of its attributes:</p>
+
+<p>Instead of showing the units in a raster, polygon, segment or point map, you can also display the attribute values of these units in a map window. The raster, polygon, segment or point map should use a class or ID domain and an attribute table should be linked to the map or to its domain.</p>
+
+<ul>
+
+<li>	double-click a map in a Catalog or use another method as described above, and </li>
+
+<li>	in the Display Options dialog box of the map, click the <span class=arial>Attribute</span> check box and select an attribute column from the attribute table, </li>
+
+<li>	select or create a suitable representation.</li>
+
+</ul>
+
+<p class=kopje>To retrieve specific elements of polygon, segment or point maps:</p>
+
+<p>Instead of showing <b>all</b> units in a polygon, segment or point map, you can selectively display only those polygons, segments or points that have certain class names or class codes, IDs or values. Using a mask is a powerful search method to retrieve only the polygons, segments or points of interest.</p>
+
+<ul>
+
+<li>	double-click a map in a Catalog or use another method as described above, and </li>
+
+<li>	in the Display Options dialog box of the map, click the <span class=arial>Mask</span> check box and specify a mask, i.e. type one or more class names, class codes, IDs, or values (depending on the domain of the map) that you want to retrieve.</li>
+
+</ul>
+
+<p>For more information, see <a href="how_to_use_masks.htm">How to use masks</a>.</p>
+
+<p class=defnewpar>When you want to retrieve specific classes, identifiers or values of a raster maps, you can type a MapCalc formula on the command using the INMASK function.</p>
+
+<p class=kopje>To zoom in on maps displayed in a map window or in a map editor: </p>
+
+<ul>
+
+<li>	click the <span class=arial>Zoom In</span> button <img src="../images/zoomin.gif" align=bottom width="22" height="22"> in the <a href="map_window_toolbar.htm">toolbar</a> of a map window or a map editor, or</li>
+
+<li>	press the right mouse button while in a map window or a map editor; choose <span class=arial>Zoom In</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or </li>
+
+<li>	from the <a href="map_window_menu_commands.htm">Options menu</a> in a map window or a map editor, choose the <span class=arial>Zoom In</span> command.</li>
+
+</ul>
+
+<p class=defnewpar>The mouse pointer changes into a magnifying-glass with a large plus inside, then:</p>
+
+<ul>
+
+<li>	<b>click</b> somewhere in the map to zoom in on this spot with a factor 2, or </li>
+
+<li>	<b>drag</b> the cursor from one corner of interest to another (any zoom factor). </li>
+
+        <p>Whether the shape of the map window then changes or not depends on whether the command Adjust Window Size on the <a href="map_window_menu_commands.htm">Options menu</a> of the map window is marked or not.</p>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>You can also use the <a href="../ilwis/map_window_overview_window.htm">overview window</a> in a map window to zoom in. </p></p>
+
+<p class=defnewpar>To zoom in, you can also press CTRL + I on the keyboard: ILWIS will automatically zoom in at the center of the map window with a factor 2. You can then use the PgUp and PgDn keys on the keyboard to scroll vertically, and the Home and End keys to scroll horizontally. For more information, see <a href="../ilwismen/zoom_in_on_maps.htm">Map window : Zoom in</a>. </p>
+
+<p class=defnewpar>To zoom out or to display the entire map again in the map window, select the <span class=arial>Zoom Out</span> or <span class=arial>Entire map</span> commands on the <a href="map_window_menu_commands.htm">Options menu</a> or use the <span class=arial>Zoom Out</span> <img src="../images/zoomout.gif" align=bottom width="22" height="22"> or the <span class=arial>Entire map</span> <img src="../images/entirmap.gif" align=bottom width="22" height="22"> button in the toolbar. </p>
+
+<p class=defnewpar>The <a href="..//ilwis/popup/status_line_popup.htm" onClick="return popup(this, 'notes')" >status bar</a> gives a brief explanation on the effect of a button in a toolbar, when the mouse pointer is located above one.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To speed up the display of large raster map, for instance maps that have more than a few thousand lines and columns, you can create pyramid layers. For more information, refer to <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">ILWIS objects : Raster maps - Pyramid layers</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window.htm">Map window</a></p>
+
+<p class=seealsolinks><a href="how_to_use_layers_in_a_map_window.htm">How to use layers in a map window</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window.htm">Table window</a></p>
+
+<p class=seealsolinks><a href="how_to_open_objects.htm">How to open objects</a></p>
+
+</body

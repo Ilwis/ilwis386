@@ -1,0 +1,103 @@
+<html>
+
+<head>
+<title>Sample set editor : functionality (2)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sample set editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Sample set editor</h1>
+
+<h1 class=secondline>Functionality (2)</h1>
+
+<!--<hr>-->
+
+<p class=kopje>To merge existing classes:</p>
+
+<p>When two classes of training pixels are found very similar, based on the Sample Statistics and the Feature Spaces, you may decide to merge these classes. In fact, training pixels of one class are merged together with the training pixels of another class. </p>
+
+<ul>
+
+<li>	from the Edit menu or from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, choose <span class=arial>Merge Classes</span>.</li>
+
+</ul>
+
+<p>The <a href="../ilwismen/sample_set_editor_merge_classes.htm">Merge Classes</a> dialog box appears.</p>
+
+<p class=kopje>To assign training pixels to another class:</p>
+
+<ul>
+
+<li>	reselect the pixels that you to assign to another class, and</li>
+
+<li>	from the Edit menu or from the context-sensitive menu, choose <span class=arial>Edit</span>.</li>
+
+</ul>
+
+<p>The Edit Pixels dialog box appears. Assign the desired class to the selected pixels. </p>
+
+<p class=kopje>To rename a class:</p>
+
+<p>Renaming classes can be done in the domain Class editor. Open the domain from the Main window, and edit a class name into another class name. For more information, see also <a href="../ilwis/how_to_edit_domains.htm">How to edit a domain</a> and <a href="domain_class_id_editor_functionality.htm">Domain Class/ID editor</a>. </p>
+
+<p class=kopje>To delete one or more pixels from a class of training pixels:</p>
+
+<p>When by mistake some pixels were sampled and assigned to a certain class, you can remove these from the class by reselecting these pixels and assigning them the undefined value.</p>
+
+<ul>
+
+<li>	in the sample set editor window, select the pixels that you want to remove from the class, and </li>
+
+<li>	from the Edit menu or from the context-sensitive menu, choose <span class=arial>Edit</span>.</li>
+
+</ul>
+
+<p>The <span class=arial>Edit Pixels</span> dialog box appears. Assign the undefined value (?) to the selected pixels. </p>
+
+<p class=kopje>To delete a whole class of training pixels:</p>
+
+<ul>
+
+<li>	from the Edit menu or from the context-sensitive menu, choose <span class=arial>Delete Class</span>. </li>
+
+</ul>
+
+<p>The <a href="../ilwismen/sample_set_editor_delete_class.htm">Delete Class</a> dialog box appears, select a class of training pixels to be deleted. Training pixels of the selected class are removed from the sample set, but the class remains in the domain. To also remove the class from the domain, first delete the training pixels of the class, then delete the class from the domain in the domain Class/ID editor.</p>
+
+<p class=kopje>To change the color of a class:</p>
+
+<ul>
+
+<li>	from the Edit menu, choose Representation. </li>
+
+</ul>
+
+<p>The <a href="representation_class_editor_functionality.htm">Representation Class editor</a> is opened where you can edit the colors of the classes.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="sample_set_editor_functionality1.htm">Sample set editor : functionality (1)</a></p>
+
+<p class=seealsolinks><a href="..//ilwismen/sec2/sample_set_editor_sec2.htm" onClick="return popup(this, 'notes')" >Sample set editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="sample_set_editor_toolbar.htm">Sample set editor : toolbar</a></p>
+
+</body

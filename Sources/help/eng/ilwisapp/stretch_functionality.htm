@@ -1,0 +1,115 @@
+<html>
+
+<head>
+<title>Stretch : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stretch">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Stretch</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Stretch operation re-distributes values of an input map over a wider or narrower range of values in an output map. Stretching can for instance be used to enhance the contrast in your map when it is displayed. Two stretch methods are available: <a href="..//ilwisapp/popup/stretch_linear_popup.htm" onClick="return popup(this, 'notes')" >linear stretching</a> and <a href="..//ilwisapp/popup/stretch_histequa_popup.htm" onClick="return popup(this, 'notes')" >histogram equalization</a>.</p>
+
+<p class=kopje>Example linear stretching:</p>
+
+<p>In any satellite image, the possible pixel values are in the range of 0 to 255. In practice however, not all these values will occur in your images. Suppose you have a certain image in which the values range from 55 to 103. When this map is stretched linearly to output range 0 to 255: the minimum input value 55 is brought to output value 0, and maximum input value 103 is brought to output value 255, and all other values in between change accordingly (using the same formula). As 0 is by default displayed in black, and 255 in white, the contrast will be better when the image is displayed.</p>
+
+<p class=kopje>Example histogram equalization:</p>
+
+<p>When an image is stretched with histogram equalization, also the number of pixels with a certain value is taken into account. Input values are re-distributed over a user-defined number of output intervals; in principle, all output intervals contain an equal number of pixels. When a certain image with values between 55 and 103 is stretched with histogram equalization to 256 output intervals; the minimum input value 55 is brought to output value 0, and maximum input value 103 is brought to output value 255; the other input values are divided over these 256 output intervals in such a way that each interval contains an equal number of pixels as far as possible. In general, it can be said that the part of an image's histogram with the largest amount of pixels is relatively stretched more than the parts with few pixels. </p>
+
+<p class=defnewpar>For more information on both stretch methods, see <a href="stretch_algorithm.htm">Stretch : algorithm</a>.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>The stretch operation produces a new output map with stretched values.</p>
+
+<p class=tiptext>Temporary linear stretching can be performed during the display of a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>: you can specify 'stretch from' range in the Display Options dialog box. </p>
+
+<p class=kopje>Input map requirements and type of output map:</p>
+
+<p>An input map for the Stretch operation must be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>.</p>
+
+<p>The result of the Stretch operation is always another value map. </p>
+
+<p class=defnewpar>The operation can also be applied on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. </p>
+
+<p class=kopje>'Stretch from' and 'stretch to' range:</p>
+
+<p>During Stretch, the user has to specify an input value range to <b>stretch from</b>, and an output value range to <b>stretch to</b>. The 'stretch from' range can be specified as two values, which act as the lower and upper boundaries of input values that you want to stretch. </p>
+
+<p>The 'stretch from' range can also be specified as a percentage (e.g. 1%). This percentage stands for the cumulative amount of pixels on each side of the map's histogram that should not be taken into account during stretch. In fact, the 1% range of values on the lower side of a map's histogram is brought to the lower 'stretch to' value and the 1% range of values on the upper side of a map's histogram is brought to the upper 'stretch to' value. Ignoring for instance 1% of the smallest values in the map and 1% of the largest values in a map during stretching can improve the overall stretch results as the ends of a map's histogram usually contain few sparse values.</p>
+
+<p>For linear stretching, the 'stretch to' range is specified by the domain of the output map. When choosing the Image domain, the output stretch range is from 0 to 255. When choosing another value domain, you need to specify the minimum and maximum values to stretch to (<a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>) and a <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> (resolution of output values). </p>
+
+<p>For histogram equalization, the 'stretch to' range is the number of specified intervals; when 256 intervals are specified, the output values will range from 0 to 255. When another number of output intervals is specified, the first interval will obtain output value 1, the second value 2, etc. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>By default, the output map will use <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Image</span></a>, but you can also choose another value domain, e.g. <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a>. </p>
+
+<p>The output map always uses the same georeference as the input map. </p>
+
+<p class=defnewpar>When the operation is performed on an input map list, you will obtain an output map list. When the output map list is opened, the output raster maps will be (defined and) calculated. </p>
+
+<ul>
+
+<li>The output raster maps will obtain the same name as the output map list followed by _1, _2, _3, etc. </li>
+
+</ul>
+
+<p class=kopje>Examples:</p>
+
+<p>In this example, a TM band is shown with its original histogram (Fig. 1), then the result a linear stretch (Fig. 2) of this image, and finally the result after performing histogram equalization (Fig. 3) on this image. In both cases, stretching was performed on all values in the input map (0%); for linear stretching these values were stretched to the image domain (range 0-255, precision 1), and for histogram equalization the input values were stretched into 256 output intervals.</p>
+
+<p class=defnewpar>Fig. 1: Original histogram of TMB4:</p>
+
+<p class=linesp01befafter><img src="../images/tmb4.gif" align=bottom width="331" height="199"></p>
+
+<p>The values in the original image range from 0 to 103.</p>
+
+<p class=defnewpar>Fig. 2: Result after linear stretching:</p>
+
+<p class=linesp01befafter><img src="../images/tmb4lin.gif" align=bottom width="331" height="192"></p>
+
+<p>After linear stretching, the values of the image range from 0 - 255. There are still a lot of pixels with values in the middle of the image range (histogram has a bell shape).</p>
+
+<p class=defnewpar>Fig. 3: Result after histogram equalization:</p>
+
+<p class=linesp01befafter><img src="../images/tmb4he.gif" align=bottom width="332" height="192"></p>
+
+<p>After histogram equalization, the values of the image range from 0-255. The peak of values which occurred in the centre of the original histogram as well as in the result after linear stretching is smoothed out. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="stretch_dialog_box.htm">Stretch : dialog box</a></p>
+
+<p class=seealsolinks><a href="stretch_command_line.htm">Stretch : command line (1)</a></p>
+
+<p class=seealsolinks><a href="stretch_command_line2.htm">Stretch : command line (2)</a></p>
+
+<p class=seealsolinks><a href="stretch_algorithm.htm">Stretch : algorithm</a></p>
+
+</body

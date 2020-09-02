@@ -1,0 +1,97 @@
+<html>
+
+<head>
+<title>Objects-domains popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Domains&nbsp;&nbsp;&nbsp;<img src="../../images/domain.gif" align=bottom width="16" height="14"></p>
+
+<p>A <a href="..//ilwis/basic_concepts_domains.htm" onClick="return popup(this, 'notes')" >domain</a> defines the values, classes or identifiers that can be stored in a map or column. When you create a map or column, you also have to select or create a suitable domain for that map or column. When you create an attribute table for a map, the attribute table must use the same domain as the map to which the table refers; the domain provides the link between the map and the table. Further, a domain uses a certain <a href="../../ilwis/popup/objects_representation_popup.htm">representation</a> which defines the graphical representation of a map, e.g. the coloring. </p>
+
+<p class=linespacing03before>The four main types of domains are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<ul>
+
+<li>	<a href="../../ilwis/sec/domain_id_sec.htm">ID</a></li>
+
+</ul>
+
+</td>
+<td valign="top">
+<p>for data objects that contain <i>unique identifiers</i> (e.g. plot 1024, plot 1025) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<ul>
+
+<li>	<a href="../../ilwis/sec/domain_class_sec.htm">Class</a></li>
+
+</ul>
+
+</td>
+<td valign="top">
+<p>for data objects that contain <i>classes</i> (e.g. soil units: clay, sandy loam)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<ul>
+
+<li>	<a href="../../ilwis/sec/domain_type_value_sec.htm">Value</a></li>
+
+</ul>
+
+</td>
+<td valign="top">
+<p>for data objects that contain measured, calculated or interpolated <i>values</i> (e.g. height, concentration)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<ul>
+
+<li>	<a href="../../ilwis/sec/domain_image_sec.htm">Image</a></li>
+
+</ul>
+
+</td>
+<td valign="top">
+<p>for satellite images containing values between 0 and 255.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=linespacing03before>All ILWIS <a href="..//ilwis/ilwis_objects_data_objects.htm" onClick="return popup(this, 'notes')" >data objects</a> have a domain. One domain can be used for several data objects. For an introduction on domains, see <a href="..//ilwis/basic_concepts_before_creating_maps_and_tables.htm" onClick="return popup(this, 'notes')" >Basic concepts : before creating maps and tables</a> and <a href="..//ilwis/basic_concepts_domains.htm" onClick="return popup(this, 'notes')" >Basic concepts : working with domains</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</a></p>
+
+</body

@@ -1,0 +1,335 @@
+<html>
+
+<head>
+<title>Table to point map : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table to point map, PointMapFromTable">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Table to point map</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/table_to_point_map_popup.htm" onClick="return popup(this, 'notes')" >Table to Point Map</a> operation can be directly executed by typing one of the following 9 expressions on the command line of the Main window:</p>
+
+<p class=kopje>To obtain an ID point map <span class=DefaultStyle><u><i>with linked attribute table,</i></u></span><br>
+from a table with an ID domain:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapFromTable</span>(InputTableName, XYcolumn)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapFromTable</span>(InputTableName, Xcolumn, Ycolumn, CoordinateSystem)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapFromTable</span>(InputTableName, CoordinateSystem)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>PointMapFromTable</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Table to Point Map operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputTableName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input table (table with an ID domain).</p>
+
+<p>The output point map will use this ID domain and the table will be linked as attribute table to the output point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>XYcolumn</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to specify the name of a column which contains the XY-coordinates as (X,Y) for the points in the output map; this column uses a coordinate system as its domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Xcolumn</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to specify the name of the column which contains X-coordinates for the points in the output map; the column should use a value domain. The parameter does not have to be specified when the input table has a column named <span class=courier>X</span> which contains the X-coordinates for the points. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Ycolumn</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to specify the name of the column which contains Y-coordinates for the points; the column should use a value domain. The parameter does not have to be specified when the input table has a column named <span class=courier>Y</span> which contains the Y-coordinates for the points. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>CoordinateSystem</p>
+
+</td>
+<td valign="top">
+<p>when not using an XYcolumn, the parameter to specify an existing coordinate system for the output point map. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>To obtain an ID point map <span class=DefaultStyle><u><i>with linked attribute table,</i></u></span><br>
+from a table with domain <span class=courier>None</span>:</p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapFromTable</span>(InputTableName, XYcolumn [, Prefix])</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapFromTable</span>(InputTableName, Xcolumn, Ycolumn, CoordinateSystem [, Prefix])</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapFromTable</span>(InputTableName, CoordinateSystem [, Prefix])</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>InputTableName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input table (table with domain <span class=courier>None</span>).</p>
+
+<p>A new ID domain will be created in which the IDs consist of a prefix followed by the record numbers as found in the input table. The new ID domain will automatically obtain the same name as specified for the output point map.</p>
+
+<p>The output point map will use this new ID domain. Furthermore, the domain of the input table will change from domain <span class=courier>None</span> to the new ID domain, and the table will be linked as attribute table to the output point map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Prefix</p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to specify a user-defined prefix for the IDs in the new output ID domain. The square brackets are only used to indicate that it is an optional parameter; the brackets should not be used in an expression on the command line.  </p>
+
+<p>If not specified, the prefix will be set to <span class=courier>Pnt</span>. </p>
+
+</tr>
+</td>
+<tr>
+<td valign="top" colspan="2">
+<p>For other parameters, see above. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>To obtain a point map with the domain of a column in the table:</p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapFromTable</span>(InputTableName, XYcolumn, AttributeColumn)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapFromTable</span>(InputTableName, Xcolumn, Ycolumn, CoordinateSystem, AttributeColumn)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapFromTable</span>(InputTableName, CoordinateSystem, AttributeColumn)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>InputTableName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input table; the table can have any domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>AttributeColumn</p>
+
+</td>
+<td valign="top">
+<p>is the name of an attribute column; the output point map will obtain the domain of this column. The output point map will not have an attribute table.</p>
+
+</tr>
+</td>
+<tr>
+<td valign="top" colspan="2">
+<p>For other parameters, see above. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="table_to_point_map_functionality_algorithm.htm">Table to point map : functionality / algorithm</a></p>
+
+</body

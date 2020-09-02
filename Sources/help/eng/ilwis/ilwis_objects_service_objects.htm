@@ -1,0 +1,156 @@
+<html>
+
+<head>
+<title>ILWIS objects : service objects</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Service objects, ILWIS objects">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>ILWIS objects </h1>
+
+<h1 class=secondline>Service objects</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Service objects are used by <a href="ilwis_objects_data_objects.htm">data objects</a>; they contain accessories required by data objects besides the data itself. Service objects define, for example, the valid type of values for a data object (ID, Classes, Values), the colors assigned to the data, and, coordinate information for the data object.  </p>
+
+<p class=defnewpar>Service objects are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/domain.gif" align=bottom width="16" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="ilwis_objects_domains.htm">domains</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rpr.gif" align=bottom width="16" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="ilwis_objects_representations.htm">representations</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/georef.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="ilwis_objects_georeferences.htm">georeferences</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/coordsy.gif" align=bottom width="15" height="15"></p>
+
+</td>
+<td valign="top">
+<p><a href="ilwis_objects_coordinate_system.htm">coordinate systems</a></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Service objects can be selected to serve one or more data objects, created, changed, etc. through the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> dialog box of a data object or another service object. For more information, see <a href="appendices_relations_between_ilwis_objects.htm">Appendices : Relations between ILWIS objects</a>. </p>
+
+<p class=defnewpar>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names.</p> 
+
+<ul>
+
+<li>In object names, any character may be used except<span class=courier> \ / : * ? &lt; &gt; | &quot;</span></li>
+
+<li>The maximum length of an object name is 255 characters including the full path.</li>
+
+</ul>
+
+<p>Furthermore, it is not allowed to use <span class=courier>%</span> in any ILWIS object name. </p>
+
+<p class=linespacing03before>In dialog boxes, long object names can be used freely. </p>
+
+<p class=linespacing03before>On the command line and in scripts however, object names must be enclosed by <i>single quotes</i> e.g. <span class=courier>'My Object'.</span><i>ext</i> when the object name: </p>
+
+<ul>
+
+<li>starts with a digit from 0 to 9,</li>
+
+<li>starts with or contains one or more spaces, or </li>
+
+<li>starts with or contains any of the following special characters <span class=courier> ` ~ ! @ # $ ^ &amp; ( ) - + = [ ] { } ; ' , .</span></li>
+
+</ul>
+
+<p>See also <a href="how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=defnewpar>Furthermore, in ILWIS 3, Universal Naming Convention (UNC) paths are supported. A UNC path starts with <span class=courier>\\<i>ServerName</i>\</span>... rather than with <span class=courier><i>DriveLetter</i>:\</span>...</p>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li> To hide or show certain object types from a Catalog, use the <a href="../ilwismen/catalog_show.htm">Catalog - Show</a> command, <a href="main_window_object_selection_toolbar.htm">Object Selection toolbar</a> or the <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog, Object Selection tab</a>.</li>
+
+<li>	It is advised to use the <b>same</b> service objects for several data objects:</li>
+
+        <ul class=tipul>
+
+        <li>	if you have several thematic maps with the same kind of class names (not every class has to exist in each map), you should use the same domain for all maps,</li>
+
+        <li>	if you have several raster maps of the same study area, you should use the same georeference for all maps.</li>
+
+        </ul>
+
+<li> To copy, rename or delete ILWIS objects, you MUST use ILWIS commands.</li>
+
+        <ul>
+
+        <li> To copy or to rename a single object: select an object and choose the <span class=arial><a href="../ilwismen/copy_object_to.htm">Copy Object To</a></span> command. </li>
+
+        <li> To copy one or more objects: select the object(s) and use <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag and drop</a>, or select the object(s) and choose the <span class=arial><a href="..//ilwismen/popup/main_window_copy_popup.htm" onClick="return popup(this, 'notes')" >Copy</a></span> command and then the <span class=arial><a href="..//ilwismen/popup/main_window_paste_popup.htm" onClick="return popup(this, 'notes')" >Paste</a></span> command. </li>
+
+        <li> To delete one or more objects: select the object(s) and choose the <span class=arial><a href="..//ilwismen/popup/main_window_delete_popup.htm" onClick="return popup(this, 'notes')" >Delete</a></span> command. </li>
+
+        </ul>
+
+        <p>For more information, see <a href="how_to_copy_objects.htm">How to copy objects</a> or <a href="how_to_delete_objects.htm">How to delete objects</a>.</p>
+ 
+<li> <span class=tip>Mind: </span>It is strongly discouraged to copy, rename or delete files using Windows Explorer or DOS.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_representations.htm">ILWIS objects : representation</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_georeferences.htm">ILWIS objects : georeference</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate system</a></p>
+
+</body

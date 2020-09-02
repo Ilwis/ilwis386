@@ -1,0 +1,229 @@
+<html>
+
+<head>
+<title>Classify : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Classify, Box classifier, Minimum distance classifier, Minimum Mahalanobis distance classifier, Maximum likelihood classifier, Prior probabilities">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Classify</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Classify operation performs a <a href="..//ilwisapp/popup/classify_multispectral_popup.htm" onClick="return popup(this, 'notes')" >multi-spectral</a> image classification according to training pixels in a <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a>. Before classification, a sample set thus has to be prepared with <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >Sample</a>. </p>
+
+<p class=defnewpar>The following classification methods are available: </p>
+
+<ul>
+
+<li>	Box classifier, using a multiplication factor, </li>
+
+<li>	Minimum distance, optionally using a threshold value, </li>
+
+<li>	Minimum Mahalanobis distance, optionally using a threshold value, </li>
+
+<li>	Maximum Likelihood, optionally using a threshold value, and </li>
+
+<li>	Maximum Likelihood including Prior Probabilities, optionally using a threshold value. </li>
+
+</ul>
+
+<p class=defnewpar>As <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >Sample</a> was the training phase, where classes of pixels with similar spectral values are defined, Classify is the decision phase, where each output pixel is assigned a class name if the spectral values of that pixel are similar enough to a training class; if this is not the case, an output pixel may be assigned the undefined value. As Classify uses the training pixels selected by the user, Classify is a supervised classification.</p>
+
+<p class=defnewpar>A supervised classification foremost depends on the spectral values of the pixels that you selected to serve as training pixels in Sample. Relevant information on the classes for which training pixels have been selected in the sample set, can be viewed in the <a href="..//ilwis/popup/sample_statistics_popup.htm" onClick="return popup(this, 'notes')" >Sample Statistics</a>. </p>
+
+<p class=defnewpar>The manner in which the spectral values of input pixels are compared to the known values and statistics of the training pixels, to decide on the class that should be assigned to a pixel, furthermore depends on the classification method that you choose, and the parameters you use for that method. In general, to each output pixel, the class will be assigned of which the spectral values are most similar to (or 'nearest') to the spectral values of an input pixel. </p>
+
+<p class=defnewpar>The bands that you wish to classify should be combined in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. This map list is part of the required input sample set. There is no limitation for the number of bands that can be classified. </p>
+
+<p>Training pixels should be assigned a class name; this is done in Sample. There is no limitation for the number of classes that a sample set can contain. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>During Sampling, you can already create some <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output maps</a> with the Classify operation (various methods, various parameters) using the current sample set as input. To create a dependent output map, click the <span class=arial>Define</span> button in the Classify dialog box; you will just create the definition for an output map. In this way various dependent output maps may exist only by their <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> and are not yet calculated and stored on disk. </p>
+
+<p class=tiptext>If you then add these dependent maps to a <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel info window</a>, you can already see the results of classifying while still busy with the sampling process.</p>
+
+<p class=kopje>General introduction to classification methods:</p>
+
+<p>All classification methods calculate the means per band for each class of training pixels as defined in the sample set. The set of means per class is called a <i>class mean</i> below; this is an <i>n</i>-dimensional vector in the feature space, formed by <i>n</i> bands. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>The Box classifier is based on the distances towards class means and, for each training class and for each band, the standard deviation of the training pixels. </li>
+
+<li>The Minimum Distance classifier is based on Euclidean distances towards class means only. </li>
+
+<li>Both the Minimum Mahalanobis distance classifier and the Maximum Likelihood classifier are based on the distances towards class means and the variance-covariance matrix of each class. </li>
+
+<li>The Prior Probability classifier is the same as the Maximum Likelihood classifier but includes prior probabilities. </li>
+
+</ul>
+
+<p class=defnewpar>For the Box classifier a <i>multiplication factor</i> has to be specified. This factor is multiplied with the standard deviations of the classes to make the boxes around the classes a bit wider. The larger you choose the multiplication factor, the easier a pixel will be assigned to a class. </p>
+
+<p class=defnewpar>For the other classifiers a <i>threshold distance</i> may be specified. You should use a threshold value when pixels with a spectral signature that is <i>not</i> similar to any of the training classes, should <i>not</i> be classified. The threshold value is, for a pixel to be classified, the allowed spectral distance towards a class mean; the method of calculation spectral distances towards class means depends on the selected classification method. </p>
+
+<p class=linespacing03before>When, for a pixel to be classified, the spectral distance towards a class mean: </p>
+
+<ul>
+
+<li>is smaller than or equal to the threshold, the pixel is acceptable to be assigned this class name, </li>
+
+        <p class=leftmargin03>(when the pixel is acceptable for multiple classes, the class that is 'closest' is selected); </p>
+
+<li>is larger than the threshold, the pixel is rejected and will not classified as that class. </li>
+
+</ul>
+ 
+<p class=linespacing03before>The larger you choose the threshold, the easier a pixel will be assigned to a class. </p>
+
+<p class=linespacing03before>If <i>no</i> threshold value is specified, all pixels of the image will be classified. </p>
+
+<p class=linespacing03before>Examples of the meaning of a certain threshold value for map lists containing 3 or 7 bands are presented in <a href="classify_algorithm.htm">Classify : algorithm</a>. </p>
+
+<p class=linespacing03before>In general, a 'good' threshold values does not exist prior to the classification; a 'good' value has to be found interactively while classifying, or estimated from the training pixels in the input sample set. </p>
+
+<p class=kopje>Box classifier:</p>
+
+<p>For each class, multi-dimensional boxes are drawn around class means based on the standard deviation of the training pixels in each band. The user can insert a multiplication factor (usually &gt; 1) to make all boxes a bit wider. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>If the spectral values of a pixel to be classified fall inside a box, then that class name is assigned. </li>
+
+<li>If the spectral values of a pixel fall within multiple boxes, the class name of the box with the smallest product of standard deviations is assigned (i.e. class name of the box with the smallest <i>n</i>-dimensional 'volume'). </li>
+
+<li>If the spectral values of a pixel do not fall within any class box, the undefined value is assigned. </li>
+
+</ul>
+
+<p>The default multiplication factor is <span class=symbol>&Ouml;</span>3 for 3 bands.</p>
+
+<p class=kopje>Minimum Distance to Mean classifier:</p>
+
+<p>For the spectral values of a pixel to be classified, the distances towards the class means are calculated. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>If the shortest (Euclidean) distance to a class mean is smaller than the user-defined threshold, then this class name is assigned to the output pixel. </li>
+
+<li>Else the undefined value is assigned. </li>
+
+</ul>
+
+<p class=kopje>Minimum Mahalanobis Distance classifier:</p>
+
+<p>For the spectral values of a pixel to be classified, the distances towards the class means are calculated as Mahalanobis distance. The Mahalanobis distance depends on the distances towards class means and the variance-covariance matrix of each class. 
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>The class name with the shortest Mahalanobis distance is assigned, if this distance is smaller than the user-defined threshold value. </li>
+
+<li>Else, the undefined value is assigned.</li>
+
+</ul>
+
+<p class=kopje>Maximum Likelihood classifier:</p>
+
+<p>The Maximum Likelihood classification assumes that spectral values of training pixels are statistically distributed according to a 'multi-variate normal (Gaussian) probability density function'. </p>
+
+<p class=linespacing03before>For each set of spectral input values, the distance towards each of the classes is calculated using Mahalanobis distance. Another factor is added to compensate for within class variability. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>The class name with the shortest distance is assigned, if this distance is smaller than the user-defined threshold value. </li>
+
+<li>Else, the undefined value is assigned. </li>
+
+</ul>
+
+<p class=kopje>Maximum Likelihood classifier including Prior Probabilities:</p>
+
+<p>This classification method is similar to the Maximum Likelihood classification but includes a user-defined multiplication factor for each class: the prior probabilities. </p>
+
+<p class=linespacing03before>Prior probability values can be used to favor certain classes above others, e.g. in case of spectral overlap, on the basis of <i>a priori</i> knowledge. For example, classes which are known to cover large parts of the study area (high frequency), can be given a higher prior probability value. </p>
+
+<p class=linespacing03before>Prior Probabilities should be listed in a value column of a table, where the table should use the same domain as the sample set. The column then contains for each class, a prior probability value. Each probability value must be &#8805; 0. Theoretically, the sum of the prior probability values of all classes should equal 1; however, if the sum of prior probability values in your column is not equal to 1, the program will internally normalize the prior probability values from 0 to 1. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>For each set of spectral input values, the distance towards each of the classes is calculated using Mahalanobis distance, including a factor to compensate for within class variability, and the prior probabilities. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>The class name with the shortest distance is assigned, if this distance is smaller than the user-defined threshold value. </li>
+
+<li>Else, the undefined value is assigned. </li>
+
+</ul>
+
+<p class=defnewpar>For more information on classification methods, see <a href="classify_algorithm.htm">Classify : algorithm</a>. </p>
+
+<p class=kopje>Input requirements:</p>
+
+<p>A <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> is required. The standard deviation of each class of training pixels should be &gt; 0 in every band. </p>
+
+<p class=defnewpar>For Prior Probability classification, also a table (same domain as sample set) is required; the table should contain a value column that contains for each class a prior probability value (values &#8805; 0).  </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output map uses the same domain as the sample set.</p>
+
+<p>The output map uses the same georeference as the input maps of the sample set.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	Classification relies on the spectral separability of classes. Heterogeneous classes that contain elements of many other classes, for example towns (mixture of roofs, roads, forest, grass, water etc.), are in general difficult to classify. If all town pixels are to be classified as town, then elsewhere the forest, grass and water pixels are likely to be misclassified. </li>
+
+<li>	The spectral values of pixels at the border of 2 distinct classes are usually influenced by both classes. In a feature space, these pixels are usually positioned in between the 2 classes. During classification such pixels may obtain the undefined value as they are not similar enough to either class. </li>
+
+<li>	The spectral values of elongated terrain objects, such as roads, having a width smaller than the image's pixel size, are usually influenced by the spectral values of surrounding pixels. Elongated features may therefore be difficult to classify. Classification is mainly suitable for classes that form areas in the terrain. </li>
+
+<li>	To assess the accuracy of a classification, you can prepare a confusion matrix. For more information, see <a href="../ilwis/how_to_calculate_confusion_matrix.htm">How to calculate a confusion matrix</a> or <a href="../ilwismen/confusion_matrix.htm">Table window - View menu : Confusion matrix</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="classify_dialogbox.htm">Classify : dialog box</a></p>
+
+<p class=seealsolinks><a href="classify_commandline.htm">Classify : command line</a></p>
+
+<p class=seealsolinks><a href="classify_algorithm.htm">Classify : algorithm</a></p>
+
+</body

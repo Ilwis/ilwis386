@@ -1,0 +1,175 @@
+<html>
+
+<head>
+<title>Variogram surface : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Variogram surface">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Variogram surface</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Variogram surface operation uses a point map or a raster map as input and calculates a surface of semi-variogram values where each cell (pixel) in the surface represents a directional distance class. The output surface, a raster map with a special kind of georeference, may help you to visualize possible anisotropy of your data and to determine the direction of the anisotropy axis. </p>
+
+<p class=defnewpar>Subsequently, you can calculate directional semi-variograms by using the bidirectional method in the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. From the output table of Spatial correlation, you can prepare a semi-variogram model and you can investigate the range of the variable in the semi-variogram model both in the direction of anisotropy as well as in the direction perpendicular to it. Then, you are ready to perform <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a>.</p>
+
+<p class=kopje>Concept and process:</p>
+
+<p>For the Variogram surface operation, you can use a point map or a raster map as input. The map should use a value domain, or should be linked to an attribute table which contains value columns. In the remainder of the text, the words point maps, point pairs and points will be used; when using an input raster map, please read raster maps, pairs of defined input pixels and defined input pixels.</p>
+
+<p class=defnewpar>The output of the Variogram surface operation is a plot, depicted as a raster map, with the origin in the center. Each cell in the plot (each pixel in the output map) has the size of the user-specified lag spacing. The number of cells in the output surface (from the central cell at the origin towards positive and negative X and Y axes) is defined by the user-specified number of lags. The cells in the output surface thus represent directional distance classes; each cell will contain the semi-variogram value of all point pairs whose separation vector ends up in that cell/pixel (see Figures 1 to 4 below). </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=105>
+<p><img src="../images/vars1a.gif" align=bottom width="105" height="180"></p>
+
+</td>
+<td valign="top" width=151>
+<p><img src="../images/vars2a.gif" align=bottom width="155" height="176"></p>
+
+</td>
+<td valign="top" width=170>
+<p><img src="../images/vars3a.gif" align=bottom width="170" height="176"></p>
+
+</td>
+<td valign="top">
+<p><img src="../images/vars4a.gif" align=bottom width="155" height="176"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=captionfig>Fig. 1-4:	Figure 1 presents 4 points (A, B, C, and D) in a point map. All point pairs are identified by a colored line: red for point pair AB, green for point pair AD, blue for point pair AC, cyan for point pair BC, magenta for point pair CD, and gray for point pair BD.<br>
+In Figure 2, the <i>separation vectors</i> between points of point pairs are shown in an initial plot. The colors are the same as in the previous figure.<br>
+In Figure 3, the <i>lag spacing</i> is shown as a gray grid. The lag spacing determines the size of the grid cells/pixels in the output surface/output raster map. <br>
+Figure 4 shows in gray the <i>output pixels</i>, i.e. the <i>directional distance classes</i>, of the surface for which a semi-variogram value will be calculated. Values are calculated from the point values of the point pairs whose separation vector ends up in that pixel. For good calculations, the semi-variogram value of a single pixel should be calculated from the values of at least 30 point pairs. The 0's indicate the position of the origin in the output map's georeference.</p>
+
+<p>Process:</p>
+
+<ul>
+
+<li>	The 'separation vectors' between all input point pairs are determined, i.e. the distances and the directions between individual points in point pairs. </li>
+
+<li>	All separation vectors are 'transferred' to the framework of the output semi-variogram surface: all vectors start in the origin. </li>
+
+<li>	For each cell in the output surface, a semi-variogram value is then calculated from the values of all point pairs whose separation vectors end up in that cell/pixel. </li>
+
+</ul>
+
+<p class=kopje>Additional information on the output surface/raster map:</p>
+
+<p>The directional distance classes which are shown as pixels in the output raster map (the variogram surface) are defined by:</p>
+
+<ul>
+
+<li>	the <i>lag spacing</i>: this determines the horizontal and vertical size in meters of the distance classes, i.e. the size of individual cells/pixels in the output map. When a point map is used as input, you can specify the lag spacing yourself. When the input is a raster map, then the pixel size of the input map is automatically used for the lag spacing/pixel size of the output map.</li>
+
+<li>	the <i>number of lags</i>: this determines the number of distance classes (cells/pixels) that appear in your output map in each of the 4 main directions away from the origin. When you use 10 lags, the output map will have 19 <span class=courier>*</span> 19 pixels. </li>
+
+        <p>Example: keeping in mind that the first lag is only half a lag, when using 10 lags and a lag spacing of 250 m, the semi-variogram values will be calculated for points up to 2500 - 125 = 2375 m apart in horizontal and vertical directions, and up to <span class=symbollarger>&Ouml;</span>((2375)<sup><sup>2</sup> + </sup>(2375)<sup>2</sup>) = 3358 m apart in diagonal directions. The output surface will not contain semi-variogram values for points that have greater distances towards each.</p>
+
+</ul>
+
+<p class=defnewpar>The output raster map uses a special kind of georeference, a <i>georereference differential</i>, which stores the number of lags and the lag spacing. This georeference is internally stored and therefore not available on disk. The georeference is needed to give a proper XY-orientation to the pixels in the output map, so that for instance grid lines can be overlaid and angles can be measured. </p>
+
+<p class=defnewpar>The number of rows in the output map is always equal to the number of columns in the output map, and these are always uneven. The number of rows and columns in the output map is (2 <span class=courier>*</span> nr lags) - 1. For limitations on the number of lags and the combination of lag spacing and number of lags that can be used, see <a href="variogram_surface_dialog_box.htm">Variogram surface : dialog box</a> and <a href="variogram_surface_command_line.htm">Variogram surface : command line</a>. </p>
+
+<p class=defnewpar>As a vector between 2 input points (A and B) may point from A to B and also from B to A, and as the output surface contains a cell for both possibilities, the output surface is symmetric in the origin. Semi-variogram values in the first quadrant of the output map also appear in the third quadrant, and semi-variogram values in the second quadrant in the output map also appear in the fourth quadrant.  </p>
+
+<p class=defnewpar>The semi-variogram values in the output map can be compared to the overall variance of your input data.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input point map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>, or when a point map uses an ID domain and when the map is linked to an attribute table, you can also use a column with a value domain from the map's attribute table. </p>
+
+<p>Alternatively, you can use an input raster map with a value domain, or a raster map with a linked attribute table which contains value columns. As distances and directions between defined pixels are being calculated, an input raster map may not use georeference <span class=courier>None</span>.</p>
+
+<p>You need to specify the lag length (for an input point map) and the number of lags. On the command line, these parameters may be omitted.</p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output raster map always uses <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>. The <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> can be adjusted for the output map. </p>
+
+<p>The output map uses an internally defined georeference differential (not available on disk) which simply stores the lag spacing and the number of lags. The georeference is necessary to give a proper XY-orientation to the pixels in the output map. When using an input point map, the pixels in the output map have the size of the user-specified lag spacing; when using an input raster map, the pixels in the output map will automatically have the same size as the pixels in the input map. The number of rows and columns in the output map is (2 <span class=courier>*</span> <i>nr of lags</i>) - 1. The output map has a central cell/pixel at the origin.</p>
+
+<p class=kopje>Interpretation of anisotropy in the output map:</p>
+
+<ul>
+
+<li>	The output map can best be viewed in a map window using representation <span class=courier>Pseudo</span> while a histogram has been calculated. To view the coordinates and the position of the origin in the output raster map, you can <a href="../ilwismen/display_options_grid_lines.htm">add grid lines</a> where the grid distance equals the specified lag spacing. It is important to recognize the origin of the plot/output map.</li>
+
+<li>	Semi-variogram values close to the origin of the output map are expected to be small (blue in repr. <span class=courier>Pseudo</span>), as values of points at very short distances to each other are expected to be similar.</li>
+
+<li>	When there is no anisotropy, semi-variogram values will gradually increase from the origin into all directions. You will thus find <i>circle-like</i> shapes from the origin outwards where the color gradually changes from blue at the origin to green to red away from the origin. </li>
+
+<li>	Your input data is supposed to be anisotropic when you find an <i>ellipse-like</i> shape of low semi-variogram values (blue in repr. <span class=courier>Pseudo</span>) in a certain direction going through the origin. In this direction, the semi-variogram values do not increase much. However, in the perpendicular direction, you find a clear increase of semi-variogram values: from blue at the origin to green to red away from the origin.</li>
+
+<li>	You can measure the <i>direction</i> of anisotropy with the Measure Distance button <img src="../images/dist2.gif" align=bottom width="28" height="24"> from the toolbar of the map window, e.g. by following a 'line' of blue pixels going through the origin of the plot. The Measure Distance button measures distances and angles clockwise from the Y-axis. </li>
+
+</ul>
+
+<p class=defnewpar>You can specify this angle in the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation while choosing for the bidirectional method:</p>
+
+<ul>
+
+<li>	to obtain semi-variogram values in the direction of the anisotropy as well as for the perpendicular direction, </li>
+
+<li>	to prepare the semi-variogram model in the direction of the anisotropy as well as for the perpendicular direction, </li>
+
+<li>	to investigate the range of the variable in the direction of the anisotropy as well as in the perpendicular direction.</li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	When no points are encountered in a certain directional distance class, the semi-variogram value of that cell in the output surface will be undefined. </li>
+
+<li>	When you find many undefined semi-variogram surface values in between few rather large semi-variogram values, you should consider to increase the lag spacing. Mind that results will be more reliable when say more than 30 point pairs are found in individual directional distance classes.</li>
+
+<li>	When you find very many undefined semi-variogram values mainly at the outer parts of the surface, you should consider to reduce the lag spacing.</li>
+
+<li>	When using an input point map with very many points, calculations of a large surface may take quite long. It is advised, to start using the operation with rather few lags and/or a rather small lag spacing.</li>
+
+<li>	General explanations on semi-variogram values and semi-variogram models can be found in <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a> and <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="variogram_surface_dialog_box.htm">Variogram surface : dialog box</a></p>
+
+<p class=seealsolinks><a href="variogram_surface_command_line.htm">Variogram surface : command line</a></p>
+
+<p class=seealsolinks><a href="variogram_surface_algorithm.htm">Variogram surface : algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a></p>
+
+<p class=seealsolinks><a href="anisotropic_kriging_functionality.htm">Anisotropic Kriging : functionality</a></p>
+
+</body

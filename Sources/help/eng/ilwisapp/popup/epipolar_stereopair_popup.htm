@@ -1,0 +1,66 @@
+<html>
+
+<head>
+<title>epipolar stereopair</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Epipolar Stereo Pair</p>
+
+<p>With the <a href="..//ilwisapp/epipolar_stereopair.htm" onClick="return popup(this, 'notes')" >Epipolar Stereo Pair</a> operation, you will create a <a href="../../ilwis/popup/objects_stereopair_popup.htm">stereo pair</a> from two scanned aerial photographs with overlap. </p>
+
+<p class=linespacing03before>In short, the process is as follows: </p>
+
+<ul>
+
+<li>Specify the left input map and the right input map; one of the maps may already have a georeference. </li>
+
+<li>Specify the output name of the stereo pair that will be created. </li>
+
+</ul>
+
+<p class=linespacing03before>Then, in the <a href="..//ilwis/epipolar_stereopair_creation_window.htm" onClick="return popup(this, 'notes')" >Epipolar Stereo Pair - Creation window</a>: </p>
+
+<ul>
+
+<li>Mark on each photograph two, three, or four fiducial marks. </li>
+
+<li>Mark the calculated principal point of the left photograph, on the right photograph (transferred principal point). </li>
+
+<li>Mark the principal point of the right photograph, on the left photograph (transferred principal point). </li>
+
+<li>In case of large scale differences between the two input maps, specify one or two scaling points in both photographs. </li>
+
+</ul>
+
+<p class=linespacing03before>When you close the Epipolar Stereo Pair - Creation window, both input photographs will be resampled to output maps, i.e. the stereo pair is calculated. Rotation differences and possible scale differences between the photographs will be removed. </p>
+
+<p class=linespacing03before>A calculated stereo pair can be viewed: </p> 
+
+<ul>
+
+        <li>in a <a href="stereoscope_popup.htm">stereoscope</a> window, while using a stereoscope, and </li>
+
+        <li>as an <a href="anaglyph_popup.htm">anaglyph</a> in a map window, while using red-green or red-blue glasses. </li>
+
+</ul>
+
+</body

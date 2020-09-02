@@ -1,0 +1,182 @@
+<html>
+
+<head>
+<title>Table window : mouse functions</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Mouse functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Table window</h1>
+
+<h1 class=secondline>Mouse functions</h1>
+
+<!--<hr>-->
+
+<p class=kopje>Moving the mouse pointer over:</p>
+
+<ul>
+
+<li>	Move the mouse pointer over column header: </li>
+
+        <p>the status bar gives a hint to double-click the column in order to edit the <a href="../ilwismen/column_properties.htm">Column Properties</a>. The status bar also shows the column name and its description. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	Move the mouse pointer over a record button: </li>
+
+        <p>the status bar gives a hint to click the record button and show the record in <a href="table_window_record_view_pane.htm">Record View</a>. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	Move the mouse pointer over a field in the table: </li>
+
+        <p>the status bar gives information on the column name and the description of the column. </p>
+
+<li>	The Column Management button <a href="../ilwismen/column_management.htm"><img src="../images/columnmanagement.gif" align=bottom width="45" height="17" border="none"></a>: the status bar gives a hint to click the button to open the <a href="../ilwismen/column_management.htm">Column Management</a> dialog box.</li>
+
+</ul>
+
+<p class=kopje>Clicking:</p>
+
+<ul>
+
+<li>	Click a field: to <a href="../ilwismen/table_window_edit_single_column.htm">Edit</a> the field. 
+
+        <p class=tiptext><span class=tip>Mind: </span>Fields of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent columns</a> cannot be edited. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	Click a column header: to select the column. </li>
+
+        <p>You can for instance use the context-sensitive menu (after selecting the column, click the selection with the right mouse button):
+        
+        <ul>
+
+        <li>to <a href="../ilwismen/sort_records.htm">Sort</a> the table on this column in ascending or descending order, </li>
+
+        <li>to <a href="../ilwismen/copy_table_selection_to_clipboard.htm">Copy</a> the column into the clipboard, etc. </li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	Click a record button: to show and optionally edit the selected record in <a href="table_window_record_view_pane.htm">Record View</a>. </li>
+
+        <p>You can for instance use the context-sensitive menu (after selecting the column, click the selection with the right mouse button):
+        
+        <ul>
+
+        <li>to <a href="../ilwismen/table_window_edit_multiple_columns.htm">Edit</a> the fields in the record in a special dialog box, </li>
+
+        <li>to <a href="../ilwismen/copy_table_selection_to_clipboard.htm">Copy</a> the record into the clipboard, etc. </li>
+
+        </ul>
+
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	The Column Management button <a href="../ilwismen/column_management.htm"><img src="../images/columnmanagement.gif" align=bottom width="45" height="17" border="none"></a>: to open the <a href="../ilwismen/column_management.htm">Column Management</a> dialog box.</li>
+
+</ul>
+
+<p class=kopje>Double-clicking:</p>
+
+<ul>
+
+<li>	Double-click a column header: to open the <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box.</li>
+
+<p class=leftmargininlist>	In case of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent columns</a> created by an earlier TabCalc expression, you can set or change the TabCalc expression to redefine and/or recalculate the column. You can also set or change the column's <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>, <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a>, etc. in this dialog box. </p>
+
+<p class=leftmargininlist>	Furthermore, for any column type, you can change the position of the column in the table, or set or change the width of the column. In case of a value column, you can also set or change the number of decimals shown. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	Double-click to the right of the last column header: to add a new editable column. The <a href="../ilwismen/add_column_to_table.htm">Add Column</a> dialog box will appear.</li>
+
+</ul>
+
+<p class=kopje>Dragging:</p>
+
+<ul>
+
+<li>	Drag the end of a column header to the right or to the left: to increase or to decrease the width of the column. When you are at the right position to start dragging, the mouse pointer changes to a double-sided arrow. </li>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <p><img src="../images/tablecolumnwidth.gif" align=bottom width="272" height="75"></p>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+<li>	Drag a column header to another position in the table: to move the column to another position in the table. While moving the column, the mouse pointer changes into a grayish column icon. </li>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <p><img src="../images/tablecolumnmove.gif" align=bottom width="272" height="75"></p>
+
+        <p class=emptyline>&nbsp;</p>
+
+<li>	Drag the mouse pointer over a number of fields or records: to select these fields or records. </li>
+
+        <p>Subsequently, you can: </p>
+
+        <ul>
+
+        <li>edit the selected fields or edit the selected records, see <a href="../ilwismen/table_window_edit_single_column.htm">Edit fields in a single column</a> or <a href="../ilwismen/table_window_edit_multiple_columns.htm">Edit fields in multiple columns</a>, </li>
+        
+        <li><a href="../ilwismen/copy_table_selection_to_clipboard.htm">Copy</a> the selection into the clipboard, </li>
+
+        <li><a href="../ilwismen/paste_table_data_into_table_window.htm">Paste</a> table data from clipboard into the selection, </li>
+
+        <li><a href="../ilwismen/delete_selection_from_table.htm">Clear</a> or <a href="../ilwismen/delete_selection_from_table.htm">Delete</a> the selection, </li>
+
+        <li><a href="../ilwismen/print_table.htm">Print</a> the selection. </li>
+
+        </ul>
+
+        <p class=tip>Tip:</p>
+
+        <p class=tiptext>To select multiple columns: click the first column of a sequence of columns, press and hold the <span class=arial>Shift</span> key down, and click the last column of a sequence of columns. </p>
+
+</ul>
+
+<p class=kopje>Clicking the <b>right</b> mouse button: </p>
+
+<ul>
+
+<li>Click a selection of fields, columns, or records with the right mouse button: to <a href="../ilwismen/copy_table_selection_to_clipboard.htm">Copy</a>, <a href="../ilwismen/paste_table_data_into_table_window.htm">Paste</a>, <a href="../ilwismen/delete_selection_from_table.htm">Clear or Delete</a>, or Edit the selection (for edit, see <a href="../ilwismen/table_window_edit_single_column.htm">Edit fields in a single column</a> or <a href="../ilwismen/table_window_edit_multiple_columns.htm">Edit fields in multiple columns</a>). </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Click a selected single column with the right mouse button: to Copy, Paste, Delete, or <a href="../ilwismen/table_window_edit_single_column.htm">Edit</a> the selection, to <a href="../ilwismen/sort_records.htm">Sort</a> the table on this column in ascending or descending order, or to view/edit the <a href="../ilwismen/column_properties.htm">properties</a> of the column. </li>
+
+</ul>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="table_window_toolbar.htm">Table window : toolbar</a></p>
+
+<p class=seealsolinks><a href="table_window_command_line.htm">Table window : command line</a></p>
+
+<p class=seealsolinks><a href="table_window_menu_commands.htm">Table window : menu commands</a></p>
+
+</body

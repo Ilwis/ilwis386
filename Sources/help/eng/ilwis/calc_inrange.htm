@@ -1,0 +1,315 @@
+<html>
+
+<head>
+<title>INRANGE</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="INRANGE">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>INRANGE( ) function</h1>
+
+<p class=defnewpar>Tests whether <i>Value a</i> is contained by a range or closed interval with endpoints <i>Value b</i> and <i>Value c</i>, i.e. <i>b</i> <span class=symbol>£</span> <i>a</i> <span class=symbol>£</span> <i>c</i> or  a <span class=symbol>&Icirc;</span> [<i>b,c</i>].</p>
+
+<p class=calctitlesyntax>Syntax</p>
+
+<p class=syntax><span class=courier>INRANGE</span>(<i>Value a</i>, <i>Value b</i>,
+<i>Value c</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="120" valign="top"><i>Value a</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="120" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="120" valign="top" <i>Value b</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="120" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="120" valign="top"><i>Value c</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="120" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+
+</table>
+<p class=calctitle>Output</p>
+
+<table cellspacing=0>
+<tr>
+	<td width="120" valign="top"><span class=courier>INRANGE</span>    returns:</td>
+	<td valign="top">a boolean value, i.e. True, False or undefined</td>
+</tr>
+<tr>
+	<td width="120" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Bool</span></a></td>
+</tr>
+</table>
+<p class=tip>Note:</p>
+<ul class=tipul>
+	<li>The mathematical notation of the <span class=courier>INRANGE</span> function is: b &#8804; a &#8804; c.</li>
+	<li>When one input value is undefined or when both input values are undefined, the output will also be undefined.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+<li>The <span class=courier>INRANGE</span> function is often used in combination with the conditional
+  <a href="calc_iff.htm"><span class=courier>IFF</span></a> function and relational operators, such as
+  <a href="calc_eq_operator.htm">=</a>, <a href="calc_lt_operator.htm"> &lt;</a>,
+  <a href="calc_gt_operator.htm"> &gt;</a>, etc.</li>
+<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>,
+<a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+
+<table cellspacing=0>
+<tr>
+	<td width="170"><p class=calc00>? INRANGE(20,10,100)</p></td>
+	<td><p>returns True</p></td>
+</tr>
+<tr>
+	<td width="170"><p class=calc00>? INRANGE(200,10,100)</p>
+	<td><p>returns False</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+
+<p class=calc00>OutMap = INRANGE(InMap,1200,1500)</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>800</td>
+    <td class=calcpict>900</td>
+    <td class=calcpict>1000</td>
+  </tr>
+  <tr>
+    <td class=calcpict>-900</td>
+    <td class=calcpict>0</td>
+    <td class=calcpict>1200</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>1300</td>
+    <td class=calcpict>1600</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+  </tr>
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>True</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>True</td>
+    <td class=calcpict>False</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class=calc0linsp03befaft>OutMap = IFF(INRANGE(InMapA,1200,1500),InMapA,InMapB)</p>
+
+<table>
+<tr>
+<td><p class=courier>InMapA</p></td>
+<td><p class=courier>InMapB</p></td>
+<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>800</td>
+    <td class=calcpict>900</td>
+    <td class=calcpict>1000</td>
+  </tr>
+  <tr>
+    <td class=calcpict>-900</td>
+    <td class=calcpict>0</td>
+    <td class=calcpict>1200</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>1300</td>
+    <td class=calcpict>1600</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>11</td>
+    <td class=calcpict>12</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>-6</td>
+    <td class=calcpict>3</td>
+    <td class=calcpict>-15</td>
+  </tr>
+  <tr>
+    <td class=calcpict>3</td>
+    <td class=calcpict>16</td>
+    <td class=calcpict>19</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>11</td>
+    <td class=calcpict>12</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>-6</td>
+    <td class=calcpict>3</td>
+    <td class=calcpict>1200</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>1300</td>
+    <td class=calcpict>19</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If a pixel in map <span class=courier>InMapA</span> has a value that is larger than or equal to 1200, and at the same time the value of this pixel is less than or equal to 1500, then the orginal value of map <span class=courier>InMapA</span> is assigned in output map <span class=courier>OutMap</span>. For other pixels, the value of the pixel in <span class=courier>InMapB</span> is
+assigned.</p>
+<p class=kopje>TabCalc example:</p>
+
+<p class=calc00>OutCol1 = INRANGE(InColA,1200,1500)</p>
+<p class=calc00>OutCol2 = IFF(INRANGE(InColA,1200,1500),InColA,IncolB)</p>
+<p class=calc00>OutCol3 = IFF(INRANGE(InColA,900,1300),&quot;Inside&quot;,&quot;Outside&quot;)</p>
+
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InColA</p></td>
+	<td valign="top"><p class=tcolhr>InColB</p></td>
+	<td valign="top"><p class=tcolhr>OutCol1</p></td>
+	<td valign="top"><p class=tcolhr>OutCol2</p></td>
+	<td valign="top"><p class=tcolhr>OutCol3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>800</p></td>
+		<td valign="top"><p class=t1r>11</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1r>11</p></td>
+	<td valign="top"><p class=t1>Outside</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>900</p></td>
+		<td valign="top"><p class=t1r>12</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1r>12</p></td>
+	<td valign="top"><p class=t1>Inside</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1000</p></td>
+		<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1>Inside</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-900</p></td>
+		<td valign="top"><p class=t1r>-6</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1r>-6</p></td>
+	<td valign="top"><p class=t1>Outside</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0</p></td>
+		<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1>Outside</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1200</p></td>
+	<td valign="top"><p class=t1r>-15</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+	<td valign="top"><p class=t1r>1200</p></td>
+	<td valign="top"><p class=t1>Inside</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1300</p></td>
+	<td valign="top"><p class=t1r>16</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+	<td valign="top"><p class=t1r>1300</p></td>
+	<td valign="top"><p class=t1>Inside</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1600</p></td>
+	<td valign="top"><p class=t1r>19</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1r>19</p></td>
+	<td valign="top"><p class=t1>Outside</p></td>
+</tr>
+</table>
+
+</body

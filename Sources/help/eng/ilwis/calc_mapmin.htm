@@ -1,0 +1,253 @@
+<html>
+
+<head>
+<title>MAPMIN</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="MAPMIN, Data property functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>MAPMIN( ) function</h1>
+
+<p class=defnewpar>Returns the minimum value of a value map.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>MAPMIN</span>(<i>ValueMap</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>ValueMap</i></td>
+	<td valign="top">is a raster, polygon, segment or point map</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>MAPMIN</span> returns:</td>
+	<td valign="top">a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>By default, this function works on raster maps with extension <span class=courier>.mpr</span>; you can omit the extension <span class=courier>.mpr</span>. To use
+this function on polygon maps, segment maps or point maps, you need to specify the
+object's <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >extension</a> (<span class=courier>.mpa</span>, <span class=courier>.mps</span> or <span class=courier>.mpp</span>).</p>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>This function may be handy to use in <a href="..//ilwis/popup/dde_popup.htm" onClick="return popup(this, 'notes')" >DDE</a> applications.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a>, <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="150"><p class=calc00>? MAPMIN(DEM)</p></td>
+	<td>returns the minimum value of raster map <span class=courier>DEM</span>, e.g. 342</td>
+</tr>
+<tr>
+	<td width="150"><p class=calc00>? MAPMIN(Rain.mpp)</p>
+	<td>returns the minimum value of point map <span class=courier>Rain</span>, e.g. 17</td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>OutMap = MAPMIN(InMap)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>35</td>
+    <td class=calcpict>20</td>
+  </tr>
+  <tr>
+    <td class=calcpict>35</td>
+    <td class=calcpict>15</td>
+    <td class=calcpict>40</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>40</td>
+    <td class=calcpict>30</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class=emptyline>&nbsp;</p>
+<p class=calc0>OutMap1 = InMap1 - MAPMIN(InMap1)</p>
+<p class=emptylinehalf>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>InMap1</p></td>
+	<td><p class=courier>OutMap1</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>35</td>
+    <td class=calcpict>20</td>
+  </tr>
+  <tr>
+    <td class=calcpict>35</td>
+    <td class=calcpict>15</td>
+    <td class=calcpict>40</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>40</td>
+    <td class=calcpict>30</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>0</td>
+    <td class=calcpict>25</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>25</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>30</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>30</td>
+    <td class=calcpict>20</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = InCol + MAPMIN(InMap)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>10</p></td>
+	<td valign="top"><p class=t1r>20</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>35</p></td>
+	<td valign="top"><p class=t1r>45</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>20</p></td>
+	<td valign="top"><p class=t1r>30</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>35</p></td>
+	<td valign="top"><p class=t1r>45</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>15</p></td>
+	<td valign="top"><p class=t1r>25</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>40</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>40</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>30</p></td>
+	<td valign="top"><p class=t1r>40</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="75"><a href="calc_mapmax.htm">MAPMAX</a></td>
+	<td valign="top"><a href="calc_pixarea.htm">PIXAREA</a></td>
+</tr>
+<tr>
+	<td valign="top" width="75"><a href="calc_maprows.htm">MAPROWS</a></td>
+	<td valign="top"><a href="calc_tblrecs.htm">TBLRECS</a></td>
+</tr>
+<tr>
+	<td valign="top" width="75"><a href="calc_mapcols.htm">MAPCOLS</a></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_tblcols.htm">TBLCOLS</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="75"><a href="calc_pixsize.htm">PIXSIZE</a></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_tblvalue.htm">TBLVALUE</a></p></td>
+</tr>
+</table>
+
+</body

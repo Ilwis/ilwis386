@@ -1,0 +1,560 @@
+<html>
+
+<head>
+<title>AND</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="AND operator, Logical operators">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>AND operator</h1>
+
+<p class=defnewpar>Returns if both <i>a</i> and <i>b</i> are true, i.e. <i>a</i> <span class=courier>AND</span> <i>b</i>.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><i>a</i> <span class=courier>AND</span> <i>b</i></p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>a</i></td>
+	<td valign="top">is a boolean expression</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>b</i></td>
+	<td valign="top">is a boolean expression</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>OR</span>       returns:</td>
+	<td valign="top">a boolean value, i.e. True, False or undefined</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Bool</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The truth table of the logical AND operator is:</li>
+<table cellspacing=0>
+<tr>
+<td><img src="../images/thrand.gif" align="bottom" width="94" height="84"></td>
+</tr>
+</table>
+<li>This means that:<br>
+  - if both <i>a</i> and <i>b</i> are true, true is returned,<br>
+  - if either <i>a</i> or <i>b</i> is true, false is returned,<br>
+  - if both <i>a</i> and <i>b</i> are false, false is returned,<br>
+  - if <i>a</i> is true and <i>b</i> is undefined, or vice versa, undefined is returned,<br>
+  - if <i>a</i> is false and <i>b</i> is undefined, or vice versa, false is returned, and<br>
+  - if both input parameters are undefined, the output will also be undefined.</li>
+<li>In mathematics, the logic <span class=courier>AND</span> is called a intersection.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>Logical operators are often used in combination with a <a href="calc_iff.htm">conditional <span class=courier>IFF</span> function</a>.</li>
+	<li>Testing whether values are within a certain range can also be performed with the <a href="calc_inrange.htm"><span class=courier>INRANGE</span> function</a>.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopje>MapCalc examples:</p>
+<p class=calc00>OutMap = (InMapA &gt;= 20) AND (InMapB &gt;= 70)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>InMapA</p></td>
+	<td><p class=courier>InMapB</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>5</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>-10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>20</td>
+    <td class=calcpict>0</td>
+    <td class=calcpict>30</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>40</td>
+    <td class=calcpict>45</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>90</td>
+    <td class=calcpict>70</td>
+  </tr>
+  <tr>
+    <td class=calcpict>5</td>
+    <td class=calcpict>50</td>
+    <td class=calcpict>75</td>
+  </tr>
+  <tr>
+    <td class=calcpict>35</td>
+    <td class=calcpict>80</td>
+    <td class=calcpict>?</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+  </tr>
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>True</td>
+  </tr>
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>True</td>
+    <td class=calcpict>?</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class=emptyline>&nbsp;</p>
+<p class=calc00>OutMap2 = (Landuse=&quot;Forest&quot;) AND (DEM &gt; 1000)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>Landuse</p></td>
+	<td><p class=courier>DEM</p></td>
+	<td><p class=courier>OutMap2</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>Forest</td>
+    <td class=calcpict>Forest</td>
+    <td class=calcpict>Grass</td>
+  </tr>
+  <tr>
+    <td class=calcpict>Lake</td>
+    <td class=calcpict>Lake</td>
+    <td class=calcpict>Grass</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>Grass</td>
+    <td class=calcpict>Forest</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>800</td>
+    <td class=calcpict>900</td>
+    <td class=calcpict>1000</td>
+  </tr>
+  <tr>
+    <td class=calcpict>-900</td>
+    <td class=calcpict>0</td>
+    <td class=calcpict>1200</td>
+  </tr>
+  <tr>
+    <td class=calcpict>1100</td>
+    <td class=calcpict>1300</td>
+    <td class=calcpict>1600</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+  </tr>
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>True</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class=emptyline>&nbsp;</p>
+<p class=calc00>OutMap3 = (Landuse=&quot;Grass&quot;) AND (Geomorphology=&quot;OL&quot;)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>Landuse</p></td>
+	<td><p class=courier>Geomorphology</p></td>
+	<td><p class=courier>OutMap3</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>Forest</td>
+    <td class=calcpict>Forest</td>
+    <td class=calcpict>Grass</td>
+  </tr>
+  <tr>
+    <td class=calcpict>Lake</td>
+    <td class=calcpict>Lake</td>
+    <td class=calcpict>Grass</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>Grass</td>
+    <td class=calcpict>Forest</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>GS</td>
+    <td class=calcpict>GL</td>
+    <td class=calcpict>OL</td>
+  </tr>
+  <tr>
+    <td class=calcpict>GV</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>OL</td>
+  </tr>
+  <tr>
+    <td class=calcpict>AF</td>
+    <td class=calcpict>AL</td>
+    <td class=calcpict>HE</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>True</td>
+  </tr>
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>True</td>
+  </tr>
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc examples:</p>
+<p class=calc00>OutCol = (InColA &gt;= 20) AND (InColB &gt;= 70)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InColA</p></td>
+	<td valign="top"><p class=tcolhr>InColB</p></td>
+	<td valign="top"><p class=tcolh>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1r>10</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>10</p></td>
+	<td valign="top"><p class=t1r>90</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-10</p></td>
+	<td valign="top"><p class=t1r>70</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>20</p></td>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>30</p></td>
+	<td valign="top"><p class=t1r>75</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>35</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>40</p></td>
+	<td valign="top"><p class=t1r>80</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>45</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+</tr>
+</table>
+<p class=emptyline>&nbsp;</p>
+<p class=calc00>OutCol2 = (Landuse=&quot;Forest&quot;) AND (DEM &gt; 1000)</p>
+<p class=calc00>OutCol3 = (Landuse=&quot;Grass&quot;) AND (Geom=&quot;OL&quot;)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolh>Landuse</p></td>
+	<td valign="top"><p class=tcolhr>DEM</p></td>
+	<td valign="top"><p class=tcolh>Geom</p></td>
+	<td valign="top"><p class=tcolh>OutCol2</p></td>
+	<td valign="top"><p class=tcolh>OutCol3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Forest</p></td>
+	<td valign="top"><p class=t1r>800</p></td>
+	<td valign="top"><p class=t1>GS</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Forest</p></td>
+	<td valign="top"><p class=t1r>900</p></td>
+	<td valign="top"><p class=t1>GL</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Grass</p></td>
+	<td valign="top"><p class=t1r>1000</p></td>
+	<td valign="top"><p class=t1>OL</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Lake</p></td>
+	<td valign="top"><p class=t1r>-900</p></td>
+	<td valign="top"><p class=t1>GV</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Lake</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Grass</p></td>
+	<td valign="top"><p class=t1r>1200</p></td>
+	<td valign="top"><p class=t1>OL</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>?</p></td>
+	<td valign="top"><p class=t1r>1100</p></td>
+	<td valign="top"><p class=t1>AF</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Grass</p></td>
+	<td valign="top"><p class=t1r>1300</p></td>
+	<td valign="top"><p class=t1>AL</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Forest</p></td>
+	<td valign="top"><p class=t1r>1600</p></td>
+	<td valign="top"><p class=t1>HE</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+</table>
+
+<p class=kopje>Example with an attribute table:</p>
+<p class="calc00">ResVal = (Parcel.Landuse = &quot;Residential&quot;) AND (Parcel.Commval &gt; 20)</p>
+<table>
+<tr>
+	<td><p class=courier>Parcel</p></td>
+	<td><p class=courier>ResVal</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>2</td>
+    <td class=calcpict>3</td>
+  </tr>
+  <tr>
+    <td class=calcpict>4</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>6</td>
+  </tr>
+  <tr>
+    <td class=calcpict>7</td>
+    <td class=calcpict>8</td>
+    <td class=calcpict>9</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+  </tr>
+  <tr>
+    <td class=calcpict>True</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+  </tr>
+  <tr>
+    <td class=calcpict>True</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>True</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<P>&nbsp;</P>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" colspan="3"><p class=th>Attribute table Parcel</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="tcolhr">Parcelnr</p></td>
+    <td valign="top"><p class="tcolh">Landuse</p></td>
+    <td valign="top"><p class="tcolhr">CommVal</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">1</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">10</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">2</p></td>
+    <td valign="top"><p class="t1">Commercial</p></td>
+    <td valign="top"><p class="t1r">35</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">3</p></td>
+    <td valign="top"><p class="t1">Industrial</p></td>
+    <td valign="top"><p class="t1r">20</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">4</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">25</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">5</p></td>
+    <td valign="top"><p class="t1">Industrial</p></td>
+    <td valign="top"><p class="t1r">35</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">6</p></td>
+    <td valign="top"><p class="t1">Commercial</p></td>
+    <td valign="top"><p class="t1r">15</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">7</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">40</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">8</p></td>
+    <td valign="top"><p class="t1">Industrial</p></td>
+    <td valign="top"><p class="t1r">30</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">9</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">35</p></td>
+  </tr>
+</table>
+
+<p class="defnewpar">The map <span class=courier>ResVal</span> is created from a map (presumably with parcels) which has an attribute table <span class=courier>Parcel</span>.
+This attribute table has a column <span class=courier>Landuse</span> and a column <span class=courier>CommVal</span> (commercial values). When a record in the table is <span class=courier>Residential</span> in column <span class=courier>Landuse</span>, and has a commercial value larger than <span class=courier>20000</span> in column <span class=courier>CommVal</span>, then the expression is true and True is assigned to the corresponding pixels in map <span class=courier>ResVal</span>.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_or_operator.htm">OR</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_xor_operator.htm">XOR</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_not_operator.htm">NOT</a></p></td>
+</tr>
+</table>
+
+</body

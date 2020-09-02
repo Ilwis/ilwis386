@@ -1,0 +1,68 @@
+<html>
+
+<head>
+<title>layout editor popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Layout editor</p>
+
+<p class=linespacing03after>In the <a href="..//ilwis/layout_editor_functionality.htm" onClick="return popup(this, 'notes')" >Layout editor</a> you can edit a <a href="objects_layout_popup.htm">layout</a>. A layout is a virtual sheet of paper on which you can make a composition of one or more <a href="objects_map_view_popup.htm">map views</a> and <a href="layers_annotation_layers_popup.htm">annotation</a> before printing. </p>
+
+<p class=defnewpar>In the layout editor, you can add to a layout: </p>
+
+<ul>
+
+<li>one or more <a href="objects_map_view_popup.htm">map views</a> to be printed on a certain scale; each map view may include one <a href="objects_raster_map_popup.htm">raster map</a> and/or one or more <a href="objects_point_map_popup.htm">point maps</a>, <a href="objects_segment_map_popup.htm">segment maps</a> and/or <a href="objects_polygon_map_popup.htm">polygon maps</a>, <a href="annotation_text_popup.htm">annotation text layers</a>, <a href="ann_grid_lines_popup.htm">grid lines</a> and/or <a href="ann_graticule_popup.htm">graticules</a>; </li>
+
+<li><a href="ann_text_popup.htm">texts</a> such a titles; </li>
+
+<li><a href="ann_box_popup.htm">boxes</a>; </li>
+
+<li><a href="ann_windows_metafile_popup.htm">pictures</a> and/or <a href="ann_bitmap_popup.htm">bitmaps</a>;</li>
+
+<li>a <a href="../../ilwis/popup/ann_page_border_popup.htm">page border</a>.</li> 
+
+</ul>
+
+<p class=defnewpar>For each map view in a layout, you can furthermore add:</p>
+
+<ul>
+
+<li>a <a href="ann_legend_popup.htm">legend</a> for a layer in a map view; </li>
+
+<li>a <a href="ann_map_border_popup.htm">map border</a>, including coordinates and ticks for grid lines and/or a graticule;</li>
+
+<li>a <a href="ann_north_arrow_popup.htm">North arrow</a>; </li>
+
+<li>a <a href="ann_scale_bar_popup.htm">scale bar and scale text</a>. </li>
+
+</ul>
+
+<p class=defnewpar>You can also add or delete layers from a map view, or edit the grid lines or graticule(s) in a map view. </p>
+
+<p class=defnewpar>Finally, any picture or bitmap that was copied into the clipboard from another Windows application program can be pasted into a layout.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>Multiple texts stored in an <a href="annotation_text_popup.htm">Annotation Text</a> object can be edited in the <a href="annotation_text_editor_popup.htm">Annotation Text editor</a>.</p>
+
+</body

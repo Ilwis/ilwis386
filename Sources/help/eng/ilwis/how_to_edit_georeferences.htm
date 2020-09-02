@@ -1,0 +1,115 @@
+<html>
+
+<head>
+<title>How to edit georeferences</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Edit ..., How to edit ..., Georeference">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to edit a georeference</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> stores the relation between rows and columns of a raster map (row,col) and real world coordinates (X,Y) or (X,Y,Z). A georeference is needed for raster maps. A georeference uses a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>. </p>
+
+<p class=defnewpar>There are basically five types of georeferences:</p>
+
+<ul>
+
+<li>	<b>georeference corners</b>: a North-oriented georeference to be used during rasterization of vector data or as the North-oriented georeference to which you want to resample maps; </li>
+
+<li>	<b>georeference tiepoints</b>: a non-North-oriented georeference to add coordinates to a satellite image or to a scanned photograph, a scanned map, etc. without using a DTM;</li>
+
+<li>	<b>georeference direct linear</b>: to add coordinates to a scanned photograph while using a DTM; </li>
+
+<li>	<b>georeference orthophoto</b>: to add coordinates to a scanned photograph while using a DTM and camera parameters; </li>
+
+<li>	<b>georeference 3D</b>: to create a three dimensional view of maps. </li>
+
+</ul>
+
+<p class=defnewpar>Other types of georeferences (non-editable) are obtained when performing an operation on raster maps:</p>
+
+<ul>
+
+<li>	georeference factor: created by the <a href="..//ilwisapp/popup/aggregate_map_popup.htm" onClick="return popup(this, 'notes')" >Aggregate map</a> and the <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a> operation;</li>
+
+<li>	georeference mirrorrotate: created by the <a href="..//ilwisapp/popup/mirror_rotate_popup.htm" onClick="return popup(this, 'notes')" >MirrorRotate</a> operation; </li>
+
+<li>	georeference submap: created by the <a href="..//ilwisapp/popup/sub_map_raster_popup.htm" onClick="return popup(this, 'notes')" >Sub-map of raster map</a> and the <a href="..//ilwisapp/popup/glue_raster_maps_popup.htm" onClick="return popup(this, 'notes')" >Glue raster maps</a> operation.</li>
+
+</ul>
+
+<p>Further, you can have georeference <span class=courier>None</span> for raster maps without a georeference (not advised).</p>
+
+<p class=tip>Tips:<span class=DefaultStyle> </span></p>
+
+<ol class=tipol>
+
+<li>	You can see the type of a georeference by viewing the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a georeference.</li>
+
+<li>	To be able to calculate with raster maps, it is advised that raster maps of the same area use the same georeference corners or the same georeference tiepoints. </li>
+
+<li>	To have a raster map use another georeference than its current one, perform the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation. </li>
+
+</ol>
+
+<p class=kopje>To edit a georeference:</p>
+
+<ul>
+
+<li>	double-click a georeference in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" ><span class=DefaultStyle><u>Catalog</u></span></a>, or</li>
+
+<li>	click a georeference in the Catalog with the right mouse button, and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>,</li>
+
+<li>	open the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window, choose <span class=arial>Edit Object</span> and select any georeference, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Edit</span> item, and select any georeference, or</li>
+
+<li>	drag any georeference from the Catalog to the <span class=arial>Edit</span> item in the Operation-tree or the Operation-list, or</li>
+
+<li>	when a raster map is displayed in a map window, you can also choose the <span class=arial>Georeference</span> command on the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window.</li>
+
+</ul>
+
+<p class=defnewpar>Depending on the type of the georeference you selected (or on the type of the georeference of the raster map in the map window), a dialog box will appear or an appropriate editor will be opened:</p>
+
+<ul>
+
+<li class=ls01af>	for a <b>georef corners</b>: the <a href="../ilwismen/edit_georeference_corners.htm">Edit Georeference Corners</a> dialog box will appear;</li>
+
+<li class=ls01af>	for a <b>georef tiepoints</b>, a <b>georef direct linear</b>, or a <b>georef orthophoto</b>: the <a href="../ilwis/georeference_tiepoints_editor.htm">Tiepoint</a> editor will be opened. When editing a georef orthophoto, the <a href="../ilwismen/georef_ortho_locate_fiducial_marks.htm">Locate Fiducial Marks</a> dialog box will appear first;</li>
+
+<li>	<b>for a georef 3D</b>: the <a href="../ilwismen/display_options_3d_grid.htm">Display Options - 3D Grid</a> dialog box appears, in which you can specifying how the 3D view should be displayed in the map window. When the 3D view is displayed in a map window, you can select the <span class=arial>Georeference</span> command from the <a href="map_window_menu_commands.htm">Edit menu</a> of the map window to edit the georeference 3D. The <a href="..//ilwis/popup/georeference_3d_editor_popup.htm" onClick="return popup(this, 'notes')" >Georeference 3D editor</a> is started with the <a href="../ilwismen/georeference_3d_editor_edit.htm">Georeference 3D editor : Edit</a> dialog box.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/edit_georeference_corners.htm">Edit Georeference Corners dialog box</a></p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Tiepoint editor</a></p>
+
+<p class=seealsolinks><a href="georeference_3d_editor_functionality.htm">Georeference 3D editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeference</a></p>
+
+</body

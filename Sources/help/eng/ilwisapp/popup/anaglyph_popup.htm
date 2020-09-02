@@ -1,0 +1,48 @@
+<html>
+
+<head>
+<title>anaglyph popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Anaglyph</p>
+
+<p><a href="..//ilwisapp/anaglyph.htm" onClick="return popup(this, 'notes')" >Anaglyph</a> will show a calculated <a href="../../ilwis/popup/objects_stereopair_popup.htm">stereo pair</a> in a map window; the anaglyph is either displayed in Red-Green or in Red-Blue. You will be able to view the height differences in the stereo pair by using red-green or red-blue glasses. </p>
+
+<p class=defnewpar>To create a stereo pair: </p>
+
+<ul>
+
+<li>use the <a href="epipolar_stereopair_popup.htm">Epipolar Stereo Pair</a> operation, or </li>
+
+<li>use the <a href="stereopair_from_dtm_popup.htm">Stereo pair from DTM</a> operation. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>A stereo pair can also be shown in a <a href="stereoscope_popup.htm">Stereoscope</a> window where you can view the stereo pair with a stereoscope. </p>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="..//ilwisapp/anaglyph.htm" onClick="return popup(this, 'notes')" >Show stereo pair as anaglyph</a> </p>
+
+</body

@@ -1,0 +1,142 @@
+<html>
+
+<head>
+<title>Filter types : binary filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filter types, Binary filters, BINMAJOR, CONN8TO4, DILATE4, DILATE8, SHRINK4, SHRINK8, INBND4, INBND8, OUTBND4, OUTBND8, PEPPSALT, LIFEGAME">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="70%"><h1 class=firstline>Filter types</h1></td>
+<td rowspan="2" class=menucommand><a class=menlink href=JavaScript:__ilwisapp__sec__filter_binary_filter_sec.Click()>Example binary filters</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Binary filters</h1></td>
+</tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Binary filters are used to morphologically filter binary structures or objects in images or other maps. You can for instance enhance the outlines of a structure by making (the edges of) structures 1 pixel wider in any direction (dilate), by making (the edges of ) structures 1 pixel smaller in any direction (shrink), etc. </p>
+
+<p class=defnewpar>In short, binary filters are 3 by 3 filters that consider <i>defined values unequal to zero</i> in the input map as true values (the 'structures') and <i>zero values</i> in the input map as false. Depending on the number and position of true and false values of a central pixel and its 8 neighbours, a 9 digit binary number is produced which determines whether a 0 (false) or a 1 (true) should be returned for the pixel in the output map. </p>
+
+<p class=defnewpar>This means that: </p>
+
+<ul>
+
+<li>	for input maps with the <a href="..//ilwis/popup/yy_system_domain_bit_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>Bit</a></span> domain: <i>1 values</i> are interpreted as 1 (true) and <i>zero values</i> are interpreted as 0 (false);</li>
+
+<li>	for input maps with a <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a> domain: <i>1 values</i> are interpreted as 1 (true), <i>zero values</i> and <i>undefined neighbour values</i> are interpreted as 0 (false) while undefined central values will return undefined;</li>
+
+<li>	for input maps with the <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>Image</a></span> domain: <i>all values unequal to zero</i> are interpreted as 1 (true) and <i>zero values</i> are interpreted as 0 (false);</li>
+
+<li>	for input maps with another <a href="..//ilwis/popup/yy_system_domain_value_all_popup.htm" onClick="return popup(this, 'notes')" >Value</a> domain: <i>all values unequal to zero </i>are interpreted as 1 (true), <i>zero values</i> and <i>undefined neighbour values</i> are interpreted as 0 (false) while undefined central values will always return undefined; </li>
+
+<li>	for input maps with a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> or <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> domain: <i>all classes and IDs</i> are interpreted as 1 (true) and <i>all undefined values</i> are interpreted as 0 (false).</li>
+
+</ul>
+
+<p class=defnewpar>Each 9 binary pixels examined by a binary filter are put in a special order or bit position as below (where 0 means the last position, 1 the one but last position, etc.):</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>5</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>6</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>7</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>4</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>8</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>3</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>2</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>1</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>This results in a binary number of 9 digits (when only lower right pixel is true: 000000010). Thus depending on the position of true pixels in the input map a unique number is obtained. To decide whether the central pixel should be assigned a 0 or 1, the binary number is looked up in a table which is present in each binary filter itself. </p>
+
+<p class=kopje>Standard binary filters:</p>
+
+<p>The standard binary filters are: <a href="..//ilwisapp/sec/filter_binmajor_sec.htm" onClick="return popup(this, 'notes')" >BINMAJOR</a>, <a href="..//ilwisapp/sec/filter_eighttofour_sec.htm" onClick="return popup(this, 'notes')" >CONN8TO4</a>, <a href="..//ilwisapp/sec/filter_dilate4_sec.htm" onClick="return popup(this, 'notes')" >DILATE4</a>, <a href="..//ilwisapp/sec/filter_dilate8_sec.htm" onClick="return popup(this, 'notes')" >DILATE8</a>, <a href="..//ilwisapp/sec/filter_shrink4_sec.htm" onClick="return popup(this, 'notes')" >SHRINK4</a>, <a href="..//ilwisapp/sec/filter_shrink_8_sec.htm" onClick="return popup(this, 'notes')" >SHRINK8</a>, <a href="..//ilwisapp/sec/filter_inbdn4_sec.htm" onClick="return popup(this, 'notes')" >INBND4</a>, <a href="..//ilwisapp/sec/filter_inbnd8_sec.htm" onClick="return popup(this, 'notes')" >INBND8</a>, <a href="..//ilwisapp/sec/filter_outbnd4_sed.htm" onClick="return popup(this, 'notes')" >OUTBND4</a>, <a href="..//ilwisapp/sec/filter_outbnd8_sec.htm" onClick="return popup(this, 'notes')" >OUTBND8</a>, <a href="..//ilwisapp/sec/filter_peppsalt_sec.htm" onClick="return popup(this, 'notes')" >PEPPSALT</a>, LIFEGAME.</p>
+
+<p class=kopje>User-defined binary filters:</p>
+
+<p>There are no possibilities in ILWIS to define your own binary filters. However, you could copy an existing binary filter (*.FIL), edit it with an ASCII editor like Notepad and thus create your own binary filter. </p>
+
+<p>Only Pattern filters, which work more or less the same as binary filters, can be user-defined via the Filter dialog box or the command line.  </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filters_standard_filters.htm">Filters : standard filters</a></p>
+
+<p class=seealsolinks><a href="filter.htm">Filter (operation)</a></p>
+
+</body

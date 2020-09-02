@@ -1,0 +1,104 @@
+<html>
+
+<head>
+<title>SMCE window : Insert a factor</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Insert factor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert a factor</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+<p class=defnewpar>Insert a new <a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factor</a> under the main root of the criteria tree or under a selected group of factors in the criteria tree. Factors are non-binding criteria and are considered as preferred for situations that can compensate each other. </p>
+
+<p class=defnewpar>A <a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factor</a> can either be a cost or a benefit. </p>
+
+<ul>
+
+<li>A factor is a <img src="../images/criteria_tree_benefit_factor.gif" width="21" height="15"> <b>benefit</b> when high values in the input map are considered to have a <i>positive effect</i> on the composite index output map.</li>
+
+<li>A factor is a <img src="../images/criteria_tree_cost_factor.gif" width="21" height="15"> <b>cost</b> when high values in the input map are considered to have a <i>negative effect</i> on the composite index output map (e.g. slope values in degrees for selecting a waste disposal area).</li>
+
+</ul>
+  
+<p class=defnewpar></p>The Factor dialog box appears: </p>
+
+<ol>
+
+<li>when you are in the <img src="../images/smce_problem_definition_icon.gif" align=bottom width="23" height="23"> Problem Definition mode, and </li>
+
+<li>when you selected the <img src="../images/criteria_tree_main_goal.gif" width="21" height="15"> main goal, or when you selected a sub goal (i.e. a group), and </li>
+
+<li>do one of the following: </li>
+
+	<ul>
+	<li>choose <span class=arial>Insert Factor</span> from the <a href="../ilwis/smce_window_menu_commands.htm">Edit menu</a> in the SMCE window, </li>
+	<li>click the <span class=arial>Insert Factor</span> button <img src="../images/smce_insert_factor_icon.gif" width="23" height="23"> in the <a href="../ilwis/smce_window_toolbar.htm">toolbar</a> of the SMCE window, </li>
+	<li>click the main goal or a group of factors with the right mouse button and choose <span class=arial>Insert Factor</span> from the context-sensitive menu.</li>
+	<li>press the <span class=arial>Insert</span> Key on the keyboard and choose <span class=arial>Insert Factor</span> from the context-sensitive menu.</li>
+	</ul>
+
+</ol>
+
+<p class=diakopje>Dialog box options:</p>
+<table cellspacing=0>
+  <tr>
+    <td valign="top" width="96"><p class=diabox>Name:</p></td>
+    <td valign="top"><p class=diabox>Type a new textual name for this factor to describe it. </p></td>
+  </tr>
+  <tr>
+	<td valign="top" width=80><p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Benefit:</p></td>
+	<td valign="top"><p class=diabox>Consider the new factor as a benefit (default).</p></td>
+  </tr>
+<tr>
+	<td valign="top" width=80><p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Cost:</p></td>
+    	<td valign="top"><p class=diabox>Consider the new factor as a cost.</p></td>
+  </tr>
+</table>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>The newly inserted factor will appear under the main goal or under the sub goal that you selected in step 2 above. </li>
+
+<li>Next, select the input map or an input attribute column which will be used to calculate with this factor. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_insert_constraint.htm">Insert a constraint</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_insert_group.htm">Insert a group</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a></p>
+</body

@@ -1,0 +1,97 @@
+<html>
+
+<head>
+<title>How to create 3D views</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., How to create ..., 3D view, Display 3D">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to create a 3D view</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To obtain a 3D view of your study area, you first of all need a Digital Elevation Model (DEM). For more information on creating DEMs, see <a href="../ilwis/how_to_calculate_digital_elevation_models.htm">How to calculate a DEM</a>. Then you can to construct a 3D view by creating a georeference 3D with the <a href="..//ilwis/popup/georeference_3d_editor_popup.htm" onClick="return popup(this, 'notes')" >georeference 3D editor</a>. The process is shortly described below. </p>
+
+<p class=defnewpar>To start the <a href="..//ilwisapp/popup/display3d_popup.htm" onClick="return popup(this, 'notes')" >Display 3D</a> operation:</p>
+
+<ul>
+
+<li>	select <span class=arial>Visualization, Display 3D</span> from the Operations menu in the Main window, or </li>
+
+<li>	double-click the <span class=arial>Display 3D</span> item in the Operation-list. </li>
+
+</ul>
+
+<p>The <a href="../ilwismen/display_3d.htm">Display 3D</a> dialog box appears. </p>
+
+<p class=defnewpar>In the Display 3D dialog box:</p>
+
+<ul>
+
+<li>	select an existing georef3D from the drop-down list, or </li>
+
+<li>	click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> to create a new georeference 3D (a dialog box follows in which you have to specify the name of the DEM, then you return to this dialog box).</li>
+
+</ul>
+
+<p>The <a href="../ilwismen/display_options_3d_grid.htm">Display Options - 3D Grid</a> box appears.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<p class=leftmargin06>	(When you already have a georeference 3D, you can open it by double-clicking it in the Catalog, or in the Catalog, click the georeference 3D with the right mouse button, and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. The Display Options - 3D Grid box appears.)</p>
+
+<p class=defnewpar>In the <span class=arial>Display Options - 3D Grid</span> dialog box, you can specify how the 3D view should be displayed:</p>
+
+<ul>
+
+<li>	using 3D grid lines in X and Y directions, </li>
+
+<li>	using a raster map (satellite image, thematic map, scanned photograph) draped over your height values,</li>
+
+<li>	using both a raster map draped over your height values, and 3D grid lines. </li>
+
+</ul>
+
+<p>The DEM is displayed in three dimensions in a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>.</p>
+
+<p class=defnewpar>To modify the 3D view (i.e. the georeference 3D):</p>
+
+<ul>
+
+<li>	choose <span class=arial>Georeference</span> from the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window.</li>
+
+</ul>
+
+<p>The <a href="..//ilwis/popup/georeference_3d_editor_popup.htm" onClick="return popup(this, 'notes')" >Georeference 3D editor</a> is opened.</p>
+
+<p class=defnewpar>The Georeference 3D editor mainly consists of one large <a href="../ilwismen/georeference_3d_editor_edit.htm">Georeference 3D dialog box</a> in which you can specify parameters (altitude, rotation, distance, vertical exaggeration, etc.) to define the perspective of the observer in relation to the 3D model. Some examples of the effects of changing parameters in the dialog box are presented in <a href="georeference_3d_editor_functionality.htm">Georeference 3D editor : functionality</a>. </p>
+
+<p class=defnewpar>When finished editing the 3D view, you can exit the editor and return to the map window. If you like, you can add any other vector map or annotation to this map window. You can save the 3D view in the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. </p>
+
+<p class=defnewpar>To permanently apply a georeference 3D to a raster map, use the <a href="..//ilwisapp/popup/apply_3d_popup.htm" onClick="return popup(this, 'notes')" >Apply 3D</a> operation. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="georeference_3d_editor_functionality.htm">Georeference 3D editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_display_digital_elevation_models.htm">How to display Digital Elevation Models</a></p>
+
+</body

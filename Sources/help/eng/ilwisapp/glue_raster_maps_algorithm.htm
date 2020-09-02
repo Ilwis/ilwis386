@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<title>Glue raster maps : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Glue raster maps, Merge raster maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Glue raster maps</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Glue raster maps operation glues or merges two or more georeferenced input raster maps into one output raster map. The output map then comprises the total area of all input maps. The domains of the input maps are merged when needed. </p>
+
+<p class=defnewpar>First, the operation checks whether the georeferences and the domain types of the input maps are compatible. If so, the operation can be performed. For more information on mergeable domain types, see <a href="glue_raster_maps_functionality.htm">Glue raster maps : functionality</a>.</p>
+
+<p class=kopje>Output georeference:</p>
+
+<p>If an existing georeference is specified (or created through the dialog box), the output map will use the specified georeference. </p>
+
+<p class=defnewpar>If no existing georeference is specified for the output map, and if required, a new georeference submap will be automatically created for the output map (same name as the output map). </p>
+
+<ul>
+
+<li>	The pixel size of the first input map is used and the georeference is extended in X and Y direction so that all input maps fit into the output georeference. </li>
+
+<li>	If needed, all input maps are resampled to this output georeference. The nearest neighbour resampling method is used in the same way as when resampling the values of a single raster map to a new georeference (see <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a>).</li>
+
+<li>	Usually, the input georeferences will use the same coordinate system which covers the whole area already. In case the input georeferences use a different but compatible coordinate system (e.g. different projections), the coordinate system of the first input map is used and a coordinate transformation is performed for the other maps. </li>
+
+</ul>
+
+<p class=kopje>Output domain:</p>
+
+<ul>
+
+<li>	When merging maps with the same domain, the output map will also use that domain. </li>
+
+<li>	When merging value maps, the value range for the output map is determined by the smallest minimum and the largest maximum of all input maps; the precision is the smallest precision of the input maps.</li>
+
+<li>	When merging a value map with an Image, the output map always uses system domain <span class=courier>Value</span> . The value range for the output map is determined by the smallest minimum and the largest maximum of the input maps; the precision is the smallest precision of the input maps.</li>
+
+<li>	When merging Class maps or when merging ID maps that do not have the same domain, a new output domain is created which contains all domain items, i.e. all classes or all IDs. The new domain is either stored as a separate object, or is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </li>
+
+<li>	When merging Pictures, a new output domain and a new representation are created which are both stored by the output map (internal domain and internal representation); the representation contains all colors of the input maps with a maximum of 256. </li>
+
+<li>	When merging an image or a class, ID, or value map with a Color map, the output map will use the Color domain. </li>
+
+<li>	When merging a class map with an image or when merging a class map with a  value map, the output map will use the Color domain. </li>
+
+</ul>
+
+<p class=kopje>Overlapping pixels:</p>
+
+<ul>
+
+<li>	By default, the last map appears on top of the first map.</li>
+
+<li>	Undefined pixels in the map on top are considered transparent and act as openings. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="glue_raster_maps_functionality.htm">Glue raster maps : functionality</a></p>
+
+</body

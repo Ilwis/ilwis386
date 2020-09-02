@@ -1,0 +1,390 @@
+<html>
+
+<head>
+<title>^</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="^ operator, Exponential operator, Arithmetic operators">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>^ operator</h1>
+
+<p class=defnewpar>The exponential operator returns the result of a value <i>a</i> raised to a power <i>b</i>, i.e. a<sup>b</sup>.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><i>a</i> <span class=courier>^</span> <i>b</i></p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>a</i></td>
+	<td valign="top">is the base value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>b</i></td>
+	<td valign="top">is the exponent to which <i>a</i> is raised</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>^</span> returns:</td>
+	<td valign="top">a real value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>a^b is equivalent to <a href="calc_pow.htm"><span class=courier>POW</span></a>(a,b).</li>
+	<li>When the base value is negative, the exponent has to be a whole integer value (otherwise the output will be undefined).</li>
+	<li>When one of the operands is undefined, or when both operands are undefined, the output will also be undefined.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>Using the operator in the form of a^(1/n) returns the n<sup>th</sup> root of a (<sup>n</sup><span class="symbollarger">Ö</span>a). See also <a href="..//ilwis/popup/calc_laws_of_exponents_popup.htm" onClick="return popup(this, 'notes')" >laws of exponents</a>.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+
+<table cellspacing=0>
+<tr>
+	<td width="100"><p class=calc00>? 10^3</p></td>
+	<td><p>returns 1000</p></td>
+</tr>
+<tr>
+	<td width="100"><p class=calc00>? POW(10,3)</p></td>
+	<td><p>returns 1000</p></td>
+</tr>
+<tr>
+	<td width="100"><p class=calc00>? 8^(1/3)</p></td>
+	<td><p>returns 2.000</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>OutMap = InMapA ^ InMapB</p>
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+	<td><p class=courier>InMapA</p></td>
+	<td><p class=courier>InMapB</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>20</td>
+    <td class=calcpict>30</td>
+  </tr>
+  <tr>
+    <td class=calcpict>-40</td>
+    <td class=calcpict>50</td>
+    <td class=calcpict>60</td>
+  </tr>
+  <tr>
+    <td class=calcpict>70</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>90</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>2</td>
+    <td class=calcpict>3</td>
+  </tr>
+  <tr>
+    <td class=calcpict>2</td>
+    <td class=calcpict>0</td>
+    <td class=calcpict>-1</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>-2</td>
+    <td class=calcpict>0.5</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>400</td>
+    <td class=calcpict>27000</td>
+  </tr>
+  <tr>
+    <td class=calcpict>1600</td>
+    <td class=calcpict>1</td>
+    <td class=calcpict>0.0167</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>9.487</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = InColA ^ InColB</p>
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InColA</p></td>
+	<td valign="top"><p class=tcolhr>InColB</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>10</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>10</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>20</p></td>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1r>400</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>30</p></td>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1r>27000</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-40</p></td>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1r>1600</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>50</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>60</p></td>
+	<td valign="top"><p class=t1r>-1</p></td>
+	<td valign="top"><p class=t1r>0.0167</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>70</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>-2</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>90</p></td>
+	<td valign="top"><p class=t1r>0.5</p></td>
+	<td valign="top"><p class=t1r>9.487</p></td>
+</tr>
+</table>
+
+<p class=kopje>Applied example: exponential growth functions</p>
+<p>In general, an exponential growth function is defined as:</p>
+<p class=calc0linsp03befaft>A<sub>n</sub> = A<sub>0</sub> <span class="courier">*</span> (1 + perc/100)<sup>n</sup></p>
+<p class="emptylinehalf">where:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="bottom" width=40><p>A<sub>n</sub></p></td>
+	<td valign="bottom"><p>is the amount after n years</p>
+</td>
+</tr>
+<tr>
+	<td valign="bottom" width=40><p>A<sub>0</sub></p></td>
+	<td valign="bottom"><p>is the amount in year 0</p></td>
+</tr>
+<tr>
+	<td valign="bottom" width=40><p>perc</p></td>
+	<td valign="bottom"><p>is the growth rate as a percentage per year</p></td>
+</tr>
+<tr>
+	<td valign="bottom" width=40><p><sub>n</sub></p></td>
+	<td valign="bottom"><p>is the number of years</p></td>
+</tr>
+</table>
+<p class=emptyline>&nbsp;</p>
+<p>In ILWIS this function looks like:</p>
+<p class=calc0linsp03befaft>An = A0 * (1 + perc/100)^ n</p>
+<p>The expected total residential area after 4 years, of a residential area of 1136 ha with an estimated growth rate of 6% per year, is:</p>
+<p class=calc0linsp03befaft>1136 * (1 + 6/100) ^ 4 = 1434</p>
+<p>For the other landuse areas the results are:</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top">
+      <p class="tcolh">LandUse</p>
+    </td>
+    <td valign="top">
+      <p class="tcolhr">AreaHaY0</p>
+    </td>
+    <td valign="top">
+      <p class="tcolhr">GrowPerc</p>
+    </td>
+    <td valign="top">
+      <p class="tcolhr">AreaHaY4</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class="t1">Residential</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">1136</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">6</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">1434</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class="t1">Commercial</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">116</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">2</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">126</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class="t1">Industrial</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">173</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">3</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">195</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class="t1">Institutional</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">137</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">1</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">143</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class="t1">Recreational</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">77</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">2</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">83</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class="t1">Transportation</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">18</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">1</p>
+    </td>
+    <td valign="top">
+      <p class="t1r">19</p>
+    </td>
+  </tr>
+</table>
+<p class="emptylinehalf">&nbsp;</p>
+<p>Where:</p>
+<p>Column <span class="courier">AreaHaY0</span> contains the areas in hectares for each land use class in year 0.</p>
+<p>Column <span class="courier">GrowPerc</span> contains growth rates per year.</p>
+<p>Column <span class="courier">AreaHaY4</span> contains the areas of the land use classes after 4 years.</p>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>Instead of years you may also calculate in months, days, etc.</li>
+	<li>For an example of another growth function, see the <a href="calc_exp.htm"> EXP() function</a>.</li>
+</ul>
+
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="50"><a href="calc_addition_operator.htm">+</a></td>
+	<td valign="top"><a href="calc_division_operator.htm">/</a></td>
+</tr>
+<tr>
+	<td valign="top" width="50"><a href="calc_subtraction_operator.htm">-</a></td>
+	<td valign="top"><a href="calc_modulus_operator.htm">MOD</a></td>
+</tr>
+<tr>
+	<td valign="top" width="50"><p class=seealsolinks><a href="calc_multiplication_operator.htm">*</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_integer_division_operator.htm">DIV</a></p></td>
+</tr>
+</table>
+
+</body

@@ -1,0 +1,144 @@
+<html>
+
+<head>
+<title>Trend surface : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Trend surface">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Trend surface</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Trend Surface operation is a point interpolation which requires a point map as input and returns a raster map as output. One polynomial surface is calculated by a global least squares fit approaching all point values in the map. The calculated surface values are assigned to the output pixels. </p>
+
+<p class=defnewpar>Below the functions and surface types are listed, as well as the absolute minimum number of points that are mathematically required to fit such a surface. You will always need more points than this absolute mathematical minimum to obtain good results. </p>
+
+<p class=defnewpar>In general, the use of simple surfaces is preferred, as these will produce the least artificial extreme values.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>Plane:</p>
+
+</td>
+<td valign="top">
+<p>the surface is a plane; formula:</p>
+
+<p>z = a + bx + cy</p>
+
+<p>Minimum number of points required: 3</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>2nd degree Linear:</p>
+
+</td>
+<td valign="top">
+<p>the surface is planar but tilted, i.e. first order plane; formula:</p>
+
+<p>z = a + bx + cy + dxy</p>
+
+<p>Minimum number of points required: 4</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>2nd degree Parabolic:</p>
+
+</td>
+<td valign="top">
+<p>the surface is a second order polynomial surface; formula:</p>
+
+<p>z = a + bx + cy + ex<sup>2</sup> + fy<sup>2</sup></p>
+
+<p>Minimum number of points required: 5</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>2nd degree:</p>
+
+</td>
+<td valign="top">
+<p>the surface is a full second order polynomial surface; formula:</p>
+
+<p>z = a + bx + cy + dxy + ex<sup>2</sup> + fy<sup>2</sup></p>
+
+<p>Minimum number of points required: 6</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>3rd degree:</p>
+
+</td>
+<td valign="top">
+<p>the surface is a third order polynomial surface; formula:</p>
+
+<p>z = a + ... + gx<sup>3</sup> + hx<sup>2</sup>y + ixy<sup>2</sup> + jy<sup>3</sup></p>
+
+<p>Minimum number of points required: 10</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>4th degree:</p>
+
+</td>
+<td valign="top">
+<p>the surface is a fourth order polynomial surface; formula:</p>
+
+<p>z = a + ... + kx<sup>4</sup> + lx<sup>3</sup>y + mx<sup>2</sup>y<sup>2</sup> + nxy<sup>3</sup> + oy<sup>4</sup></p>
+
+<p>Minimum number of points required: 15</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>5th degree: </p>
+
+</td>
+<td valign="top">
+<p>the surface is a fifth order polynomial surface; formula:</p>
+
+<p>z = a + ... +px<sup>5</sup> + qx<sup>4</sup>y +rx<sup>3</sup>y<sup>2</sup> + ... + uy<sup>5</sup></p>
+
+<p>Minimum number of points required: 21</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>6th degree: </p>
+
+</td>
+<td valign="top">
+<p>the surface is a sixth order polynomial surface</p>
+
+<p>z = a + ... + vx<sup>6</sup>+...</p>
+
+<p>Minimum number of points required: 28</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="trend_surface_functionality.htm">Trend surface : functionality</a></p>
+
+</body

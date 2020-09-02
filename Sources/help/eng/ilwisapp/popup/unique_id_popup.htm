@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>Unique ID popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Unique ID</p>
+
+<p>The <a href="..//ilwisapp/unique_id.htm" onClick="return popup(this, 'notes')" >Unique ID</a> operation can be used to assign unique identifiers to all elements in a segment, polygon or point map. The output map contains the same geographic information as the input map, but each point, segment or polygon will have a unique ID. </p>
+
+<p class=linespacing03before>Furthermore, an attribute table is created for the output map. The table contains a column with the original classes, IDs or values of the input map; the areas of individual output polygons; the lengths of individual output segments. </p>
+
+</body

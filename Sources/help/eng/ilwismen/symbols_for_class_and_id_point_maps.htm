@@ -1,0 +1,176 @@
+<html>
+
+<head>
+<title>Symbols for Class and ID point maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Symbols, Point symbols">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Symbol</h1>
+
+<h1 class=secondline>Point maps with a class or ID domain</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Specify symbol type, size, color, line width and line color in which all points should be displayed. You can use simple symbols or use any installed True Type symbol font. </p>
+
+<p class=defnewpar>This dialog box appears when you open a class or ID point map, or when you display a point map by a class or ID attribute column, and you choose to <i>show the points by the same kind of symbols.</i> In the <a href="display_options_point_map.htm">Display Options dialog box of a point map</a>, you selected the Single Symbols option and/or clicked the <span class=arial>Symbol</span> button.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Symbol type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select Simple symbols or any installed True Type <i>symbol font</i>; open the list box by clicking it. Windows symbol fonts are for example Symbol, Wingdings, etc; you can also select an installed Corel Draw symbol font, see also the Tip below.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=diakopje>In case of symbol type Simple:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Symbol ...:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a symbol type from the list box: circle, square, diamond, delta up, delta down, plus, minus, or cross.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the symbol size. Symbol size is expressed in points (1/72 inch), i.e. as choosing a font size in word processing packages.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Fill Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For symbols circle, square, diamond, delta up, delta down: select a color to fill the symbols with; open the list box by clicking it. To create your own color, select Custom at the bottom of the drop-down list. To obtain symbols which are not filled, select Transparent from the drop-down list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Line width:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the line width with which the selected symbols should be drawn. Line width values are expressed in screen pixels (for on the screen) and in dots (for on the printer).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color to draw the (outer lines of) symbols; open the list box by clicking it. To create your own color, select Custom at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=diakopje>In case of a Windows symbol font:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Symbol box:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a symbol from the symbol box by clicking it.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the symbol size. Symbol size is expressed in points, i.e. as choosing a font size in word processing packages.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color with which symbols should be drawn; open the list box by clicking it. To create your own color, select Custom at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Rotation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the rotation of the symbols. Rotation is expressed in degrees (anti-clock wise).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Mind:</p>
+
+<p class=tiptext>These settings are not automatically stored. To store the display of the point map, you can save the contents of the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To use for instance a Corel Draw symbol font, first make sure that the font is registered by Windows:</p>
+
+<ul class=tipul>
+
+<li>	In the Windows Settings, choose Control Panel, and choose Fonts. A list of installed fonts will appear.</li>
+
+<li>	When the desired symbol fonts are not yet in this list, choose File, Install New Font. The Add Font dialog box will appear.</li>
+
+<li>	Specify the Corel Draw/Symbols directory, select the fonts you want to use and click OK.</li>
+
+</ul>
+
+<p class=tiptext>Now that the symbol fonts are registered by Windows, you can use them in ILWIS as well.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="display_options_point_map.htm">Display Options Point map</a> (dialog box)</p>
+
+</body

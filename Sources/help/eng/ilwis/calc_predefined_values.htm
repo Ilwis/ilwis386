@@ -1,0 +1,205 @@
+<html>
+
+<head>
+<title>Predefined values</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Predefined values">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>Predefined values</h1>
+
+<p class=defnewpar>In ILWIS the following internal constants are defined:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=60 class=syntax2><p><span class=courier>PI</span></p></td>
+<td valign="top" width=10></td>
+<td valign="top" width=80><p>Value <span class=symbol>p</span>:</p></td>
+<td valign="top"><p>3.141592653589793...</p></td>
+</tr>
+<tr>
+<td valign="top" width=60 class=syntax2><p><span class=courier>PI2</span></p></td>
+<td valign="top" width=10></td>
+<td valign="top" width=80><p>Value 2<span class=symbol>p</span>:</p></td>
+<td valign="top"><p>6.283185307179586...</p></td>
+</tr>
+<tr>
+<td valign="top" width=60 class=syntax2><p><span class=courier>PIDIV2</span></p></td>
+<td valign="top" width=10></td>
+<td valign="top" width=80><p>Value ½<span class=symbol>p</span>:</p></td>
+<td valign="top"><p>1.570796326794896...</p></td>
+</tr>
+<tr>
+<td valign="top" width=60 class=syntax2><p><span class=courier>PIDIV4</span></p></td>
+<td valign="top" width=10></td>
+<td valign="top" width=80><p>Value ¼<span class=symbol>p</span>:</p></td>
+<td valign="top"><p>0.785398163397448...</p></td>
+</tr>
+<tr>
+<td valign="top" width=60 class=syntax2><p><span class=courier>EXP(1)</span></p></td>
+<td valign="top" width=10></td>
+<td valign="top" width=80><p>Value <span class=courier>e</span>:</p></td>
+<td valign="top"><p>2.718281828459045...</p></td>
+</tr>
+<tr>
+<td valign="top" width=60 class=syntax2><p><span class=courier>TRUE</span></p></td>
+<td valign="top" width=10></td>
+<td valign="top" width=80><p></p></td>
+<td valign="top"><p>1</p></td>
+</tr>
+<tr>
+<td valign="top" width=60 class=syntax2><p><span class=courier>FALSE</span></p></td>
+<td valign="top" width=10></td>
+<td valign="top" width=80><p></p></td>
+<td valign="top"><p>0</p></td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>The predefined <span class=symbol>p </span>values are often applied in combination with trigonometric functions like
+<a href="calc_sin.htm">SIN</a>, <a href="calc_acos.htm">ACOS</a>, <a href="calc_atan2.htm">ATAN2</a>, etc.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="170"><p class=calc00>? COS(PI)</p></td>
+	<td><p>returns -1.000</p></td>
+</tr>
+<tr>
+	<td width="170"><p class=calc00>? TAN(PIDIV4)</p></td>
+	<td><p>returns 1</p></td>
+</tr>
+<tr>
+	<td width="170"><p class=calc00>? RADDEG(ATAN2(PI,PI))</p></td>
+	<td><p>returns 45.00</p></td>
+</tr>
+<tr>
+	<td width="170"><p class=calc00>? TRUE*8</p></td>
+	<td><p>returns 8</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>OutMap = InMap + SIN(PIDIV2)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>2.0</td>
+    <td class=calcpict>1.0</td>
+    <td class=calcpict>0.5</td>
+  </tr>
+  <tr>
+    <td class=calcpict>0.2</td>
+    <td class=calcpict>0.3</td>
+    <td class=calcpict>-1.0</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>-0.4</td>
+    <td class=calcpict>-0.1</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>3.0</td>
+    <td class=calcpict>2.0</td>
+    <td class=calcpict>1.5</td>
+  </tr>
+  <tr>
+    <td class=calcpict>1.2</td>
+    <td class=calcpict>1.3</td>
+    <td class=calcpict>0.0</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>0.6</td>
+    <td class=calcpict>0.9</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = InCol + COS(PI2)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2.0</p></td>
+	<td valign="top"><p class=t1r>3.0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1.0</p></td>
+	<td valign="top"><p class=t1r>2.0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.5</p></td>
+	<td valign="top"><p class=t1r>1.5</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.2</p></td>
+	<td valign="top"><p class=t1r>1.2</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.3</p></td>
+	<td valign="top"><p class=t1r>1.3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-1.0</p></td>
+	<td valign="top"><p class=t1r>0.0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-0.4</p></td>
+	<td valign="top"><p class=t1r>0.6</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-0.1</p></td>
+	<td valign="top"><p class=t1r>0.9</p></td>
+</tr>
+</table>
+
+</body

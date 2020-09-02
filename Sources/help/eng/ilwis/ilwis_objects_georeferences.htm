@@ -1,0 +1,340 @@
+<html>
+
+<head>
+<title>ILWIS objects : georeferences</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Georeference, ILWIS objects, Service objects, Coordinates, GRF">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Georeferences&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/georef.gif" align=bottom width="16" height="12"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A georeference defines the relation between rows and columns in a raster map and XY-coordinates. The location of pixels in a raster map is thus defined by a georeference. It is advised that raster maps of the same area use the same georeference. A georeference uses a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> which may contain projection information. Polygon, segment and point maps merely use a coordinate system. A georeference is a <a href="ilwis_objects_service_objects.htm">service object</a>, usually for several raster maps. </p>
+
+<p class=kopje>Georeference types:</p>
+
+<p>There are five main types of georeferences:</p>
+
+<ul>
+
+<li>	<b>georeference corners</b>: a North-oriented georeference to be used during rasterization of vector data or as the North-oriented georeference to which you want to resample maps; </li>
+
+<li>	<b>georeference tiepoints</b>: a non-North-oriented georeference to add coordinates to a satellite image or to a scanned photograph, a scanned map, etc. without using a DTM;</li>
+
+<li>	<b>georeference direct linear</b>: to add coordinates to a scanned photograph while using a DTM; </li>
+
+<li>	<b>georeference orthophoto</b>: to add coordinates to a scanned aerial photograph while using a DTM and camera parameters; </li>
+
+<li>	<b>georeference 3D</b>: to create a three dimensional view of maps. </li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>For a correct behaviour of a georef direct linear, and a georef orthophoto, it is essential that you have marked the 'Interpolation' check box in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of your DTM raster map. For more information, refer to the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> dialog box.</p>
+
+<p class=defnewpar>Furthermore, system georeference <span class=courier>None</span> is available for raster maps that do not have coordinates.</p>
+
+<p class=defnewpar>Other types of georeferences are obtained when performing an operation on raster maps:</p>
+
+<ul>
+
+<li>	georeference factor: created by the <a href="..//ilwisapp/popup/aggregate_map_popup.htm" onClick="return popup(this, 'notes')" >Aggregate map</a> and the <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a> operation;</li>
+
+<li>	georeference mirrorrotate: created by the <a href="..//ilwisapp/popup/mirror_rotate_popup.htm" onClick="return popup(this, 'notes')" >MirrorRotate</a> operation; </li>
+
+<li>	georeference submap, submapcorners or submapcoords: created by the <a href="..//ilwisapp/popup/sub_map_raster_popup.htm" onClick="return popup(this, 'notes')" >Sub-map of raster map</a> and the <a href="..//ilwisapp/popup/glue_raster_maps_popup.htm" onClick="return popup(this, 'notes')" >Glue raster maps</a> operation;</li>
+
+<li>	georeference differential: created by the <a href="..//ilwisapp/popup/variogram_surface_popup.htm" onClick="return popup(this, 'notes')" >Variogram surface</a> operation (defined internally, i.e. not available on disk); </li>
+
+<li>    georeference scale_rotate: created by the <a href="..//ilwisapp/popup/epipolar_stereopair_popup.htm" onClick="return popup(this, 'notes')" >Epipolar stereo pair</a> operation for the output maps of the <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a>. </li>
+
+</ul>
+
+<p class=kopje>General use of georeferences:</p>
+
+<p>When a raster map has a georeference, you can:</p>
+
+<ul>
+
+<li>	inspect coordinates at the position of the mouse pointer in a map window, at the status bar;</li>
+
+<li>	retrieve information at the position of the mouse pointer in a map window from other maps, i.e. functionality of the <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel information window</a>;</li>
+
+<li>	inspect the pixel size of raster maps in meters;</li>
+
+<li>	check if raster maps fit on top of each other (requirement for <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a> and <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a>);</li>
+
+<li>	overlay vector data on raster maps;</li>
+
+<li>	rasterize vector data to raster maps;</li>
+
+<li>	<a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >resample</a> raster data which uses a particular georeference to another georeference; create an <a href="..//ilwis/popup/orthophoto_popup.htm" onClick="return popup(this, 'notes')" >orthophoto</a> from a scanned aerial photograph which has a georef orthophoto by resampling it to a georef corners;</li>
+
+<li>	<a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen digitize</a> on satellite images or on scanned photographs which have a georef tiepoints; screen digitize on scanned photographs which have a georef direct linear; <a href="..//ilwis/popup/monoplotting_popup.htm" onClick="return popup(this, 'notes')" >monoplot</a> on scanned aerial photographs which have a georef orthophoto.</li>
+
+</ul>
+
+<p class=defnewpar>A map window also uses a georeference. When the map window displays a raster map, this is the georeference of the raster map. When a map window only displays vector data, an internal georeference is used that is created from the coordinate system and coordinate boundaries of the vector maps.</p>
+
+<p class=kopje>Names of georeferences:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To view which georeference is used by a raster map, check the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of the raster map.</p>
+
+<p class=kopje>To create a georeference:</p>
+
+<p>A georeference can be created:</p>
+
+<ul>
+
+<li>	during rasterization, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create georeference button</a> in a <span class=arial>Rasterize</span> dialog box; the <a href="../ilwismen/create_a_georeference_corners_during_rasterize.htm">Create Georeference Corners</a> dialog box will appear; you can create a georef corners.</li>
+
+<li>	when a satellite image, a scanned photograph, or a scanned map is displayed in a map window, choose the <span class=arial>Create Georeference</span> command from the <a href="map_window_menu_commands.htm">File menu</a> of the map window; the <a href="../ilwismen/create_a_georeference_in_map_window.htm">Create Georeference (in map window)</a> will appear; you can create a georef tiepoints, a georef direct linear or a georef orthophoto.</li>
+
+<li>	when you want to create a 3D view of your study area, start the <a href="..//ilwisapp/popup/display3d_popup.htm" onClick="return popup(this, 'notes')" >Display 3D</a> operation, and click the create georeference button in the dialog box; the <a href="../ilwismen/create_a_georeference_3d.htm">Create Georeference 3D</a> dialog box will appear; you can create a georef 3D.</li>
+
+</ul>
+
+<p class=defnewpar>Other general ways to create a georeference are:</p>
+
+<ul>
+
+<li>	by choosing the <span class=arial>Create Georeference</span> command on the <a href="main_window_menu_commands.htm">File menu</a> of the Main window,</li>
+
+<li>	by double-clicking the <span class=arial>New Georef</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, </li>
+
+<li>	by opening the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of a raster map: click the <span class=arial>Edit</span> button in the Properties dialog box and click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> in the subsequent Edit Properties dialog box. </li>
+
+</ul>
+
+<p class=defnewpar>For more information, refer to <a href="how_to_create_georeferences.htm">How to create a georeference</a>, <a href="how_to_add_coordinates_to_an_image_color_composite_scanned_photo.htm">How to add coordinates to an image</a>, <a href="how_to_screen_digitize.htm">How to screen digitize</a>, <a href="how_to_monoplot.htm">How to monoplot</a>, <a href="how_to_create_orthophoto.htm">How to create an orthophoto</a> or <a href="how_to_create_3d_views.htm">How to create a 3D view</a>. </p>
+
+<p class=kopje>To view or edit a georeference:</p>
+
+<p>You can view and edit a georef corners, a georef tiepoints, a georef directlinear, a georef orthophoto and a georef 3D. The easiest way to edit a georeference is to double-click a georeference in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. When a raster map which has a georeference is displayed in a map window, you can also open the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window and choose <span class=arial>Georeference</span>. </p>
+
+<p class=defnewpar>Depending on the type of georeference you open (or the georeference which is used by the raster map in the map window), a dialog box will appear or an appropriate editor will be opened:</p>
+
+<ul>
+
+<li>	for a georef <b>corners</b>: the Edit Georeference Corners dialog box will appear;</li>
+
+<li>	for a georef <b>tiepoints</b>, a georef <b>direct linear</b>, or a <b>georef orthophoto</b>: the <a href="../ilwis/georeference_tiepoints_editor.htm">Tiepoint editor</a> will be opened. When editing a georef orthophoto, the <a href="../ilwismen/georef_ortho_locate_fiducial_marks.htm">Locate Fiducial Marks</a> dialog box will appear first;</li>
+
+<li>	for a georef <b>3D</b>: the <a href="../ilwismen/display_options_3d_grid.htm">Display Options - 3D Grid</a> dialog box appears, in which you can specifying how the 3D view should be displayed in the map window. When the 3D view is displayed in a map window, you can select the <span class=arial>Georeference</span> command from the <a href="map_window_menu_commands.htm">Edit menu</a> of the map window to edit the georeference 3D. The <a href="georeference_3d_editor_functionality.htm">Georeference 3D editor</a> is started.</li>
+
+</ul>
+
+<p>For more information, see <a href="how_to_edit_georeferences.htm">How to edit a georeference</a>.</p>
+
+<p class=defnewpar>A georef factor, a georef mirrorrotate or a georef submap cannot be edited. Information on these georeferences can be found in their <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> dialog box. </p>
+
+<p class=defnewpar>Advanced users may wish to open a georef tiepoints, a georef directlinear or a georef orthophoto as a table. For more information, see <a href="how_to_open_objects_as_a_table_advanced.htm">How to open objects as a table</a>.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To have a raster map use another georeference that the current one, perform the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation.</p>
+
+<p class=kopje>Technical information:</p>
+
+<p>A georeference consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.GRF); in case of a georef tiepoints, a georef direct linear or a georef orthophoto, also a binary data file (.GR#) is available. The object definition file contains further references to:</p>
+
+<ul>
+
+<li>	the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that is used by the georeference;</li>
+
+<li>	in case of a georef tiepoints, georef direct linear or a georef orthophoto, the background map on which tiepoints are positioned;</li>
+
+<li>	in case of a georef direct linear or a georef orthophoto, the DTM from which height values should be obtained.</li>
+
+</ul>
+
+<p>These are <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a georeference. </p>
+
+<p class=defnewpar>By viewing the properties of a georeference, you can see for instance the type of the georeference and find out which raster maps are using this georeference. By clicking the Additional Info button in the <a href="../ilwismen/georeference_properties.htm">Properties dialog box</a> of a georef tiepoints, a georef direct linear or a georef orthophoto, you will get extra information on transformation or orientation results.</p>
+
+<p class=kopje>Georeference <span class=courier><u>None</u></span>:</p>
+
+<p>System georeference <span class=courier>None</span> is available for raster maps that do not have coordinates.</p>
+
+<p class=kopje>Georeference corners:</p>
+
+<p>Stores minimum and maximum XY-coordinates, and whether these refer to the corners of the corner pixels or to the centers of the corner pixels.</p>
+
+<p>Col = a<sub>1</sub> X + b<sub>1 </sub></p>
+
+<p>Row = a<sub>2</sub> Y + b<sub>2</sub></p>
+
+<p class=kopje>Georeference tiepoints:</p>
+
+<p>Stores a set of tiepoints in RowCol and XY-coordinates and a transformation method. Parameters are found by a least squares method. Height values are not taken into account. Available transformation methods and their formulas are: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>Conformal:</p>
+
+</td>
+<td valign="top">
+<p>minimum of two tiepoints required;</p>
+
+<p>Col = aX + bY + c<sub>1</sub> </p>
+
+<p>Row = bX - aY + c<sub>2</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Affine:</p>
+
+</td>
+<td valign="top">
+<p>recommended for satellite images; minimum of three tiepoints required;</p>
+
+<p>Col = a<sub>11</sub>X + a<sub>12</sub>Y + b<sub>1</sub></p>
+
+<p>Row = a<sub>12</sub>X + a<sub>22</sub>Y + b<sub>2</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Second order bilinear:</p>
+
+</td>
+<td valign="top">
+<p>minimum of 4 tiepoints required;</p>
+
+<p>Col = a<sub>1</sub> + b<sub>1</sub>X + c<sub>1</sub>Y + d<sub>1</sub>XY</p>
+
+<p>Row = a<sub>2</sub> + b<sub>2</sub>X + c<sub>2</sub>Y + d<sub>2</sub>XY</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Full second order:</p>
+
+</td>
+<td valign="top">
+<p>minimum of 6 tiepoints required;	</p>
+
+<p>Col = a<sub>1</sub> + b<sub>1</sub>X + c<sub>1</sub>Y + d<sub>1</sub>XY + e<sub>1</sub>X<sup>2</sup> + f<sub>1</sub>Y<sup>2</sup></p>
+
+<p>Row = a<sub>2</sub> + b<sub>2</sub>X + c<sub>2</sub>Y + d<sub>2</sub>XY + e<sub>2</sub>X<sup>2</sup> + f<sub>2</sub>Y<sup>2</sup></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Third order:</p>
+
+</td>
+<td valign="top">
+<p>minimum of 10 tiepoints required;</p>
+
+<p>Col = a<sub>1</sub> + b<sub>1</sub>X + c<sub>1</sub>Y + d<sub>1</sub>XY + e<sub>1</sub>X<sup>2</sup> + f<sub>1</sub>Y<sup>2</sup> + g<sub>1</sub> X<sup>3</sup> + h<sub>1</sub> X<sup>2</sup>Y + i<sub>1</sub>XY<sup>2</sup> + j<sub>1</sub> Y<sup>3</sup></p>
+
+<p>Row = a<sub>2</sub> + b<sub>2</sub>X + c<sub>2</sub>Y + d<sub>2</sub>XY + e<sub>2</sub>X<sup>2</sup> + f<sub>2</sub>Y<sup>2</sup> + g<sub>2</sub> X<sup>3</sup> + h<sub>2</sub> X<sup>2</sup>Y + i<sub>2</sub>XY<sup>2</sup> + j<sub>2</sub> Y<sup>3</sup></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Projective:</p>
+
+</td>
+<td valign="top">
+<p>recommended for normal camera, i.e. small format, photographs; conventional rectification; minimum of 4 tiepoints required;</p>
+
+<p>Col = (aX + bY + c) / (gX + hY +1)</p>
+
+<p>Row = (dX + eY + f) / (gX + hY + 1)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Georeference DirectLinear:</p>
+
+<p>Recommended for normal camera, i.e. small format, photographs when a DTM is available; also corrects for tilt and relief displacement; Direct Linear Transformation (DLT). Stores a set of tiepoints in RowCol and XYZ-coordinates. Height values can be supplied by the user, otherwise these are obtained from the DTM. Outer orientation parameters, i.e. camera position (X0, Y0, Z0) and camera axis angles (a, b, g) are calculated from the tiepoints. Minimum of 6 tiepoints required; tiepoints must not be co-planar, i.e. the tiepoints should not be on a (tilted) plane.</p>
+
+<p>Row = (aX + bY + cZ + d) / (eX + fY + gZ +1)</p>
+
+<p>Col = (hX + iY + jZ + k) / (eX + fY + gZ +1)</p>
+
+<p>For more information, see also <a href="ilwis_objects_georeference_direct_linear_non_coplanarity_of_tiepoints.htm">ILWIS objects : georeference Direct Linear</a>.</p>
+
+<p class=kopje>Georeference OrthoPhoto:</p>
+
+<p>Recommended for photogrammetric camera aerial photographs when a DTM is available; also corrects for tilt and relief displacement; Differential rectification. Stores fiducial marks, principal distance, and a set of tiepoints in RowCol and XYZ-coordinates. Height values can be supplied by the user, otherwise these are obtained from the DTM. The user needs to specify fiducial marks and principal distance; from this the principal point is calculated (inner orientation). Camera position (X0, Y0, Z0) and angles (<span class=symbol>k</span>, <span class=symbol>f</span>, <span class=symbol>w</span>) are calculated from the tiepoints (outer orientation). Minimum of 3 tiepoints required. </p>
+
+<p class=kopje>Georeference 3D:</p>
+
+<p>Stores a number of 3D view parameters: view point, location height, scale height, horizontal and vertical rotation, distance, view angle.</p>
+
+<p class=kopje>Georeference factor:</p>
+
+<p>Stores a factor of the pixel size of another raster map and horizontal and vertical offset of another raster map.</p>
+
+<p class=kopje>Georeference mirrorrotate:</p>
+
+<p>Stores whether another georeference is mirrored horizontally, vertically, diagonally or is transposed, or rotated 90, 180, or 270°.</p>
+
+<p class=kopje>Georeference (1) submap, (2) submapcorners, (3) submapcoords:</p>
+
+<p>Stores (1) start line and column, and number of lines and columns of input georeference, (2) start line and column, and end line and column of input georeference, or (3) start coordinate, and end coordinate of input georeference.  </p>
+
+<p class=kopje>Georeference differential:</p>
+
+<p>Stores lag spacing and number of lags. Origin in the center. Stores in fact differences of coordinates of point pairs or pixel pairs. Internally defined, not available on disk. Uses a coordinate system differential. </p>
+
+<p class=kopje>Georeference scale-rotate: </p>
+
+<p>Stores for each input map of the stereo pair, the parameters needed for resampling in order to create the output maps of the <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a>. This includes for each input map: position of principal point, position of transferred principal point, position of optional scaling points; from this the rotation and optional scaling factor for resampling are calculated. Furthermore, the georeference of an input map may be stored. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="how_to_create_georeferences.htm">How to create a georeference</a></p>
+
+<p class=seealsolinks><a href="how_to_edit_georeferences.htm">How to edit a georeference</a></p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Georeference tiepoints editor</a></p>
+
+<p class=seealsolinks><a href="georeference_3d_editor_functionality.htm">Georeference 3D editor</a></p>
+
+</body

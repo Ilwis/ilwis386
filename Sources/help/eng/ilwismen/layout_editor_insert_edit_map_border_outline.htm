@@ -1,0 +1,307 @@
+<html>
+
+<head>
+<title>Insert/Edit Map Border in layout (outline around map view)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Border, Map border, Outline around map view, Layout editor, Layouts, Add ..., Annotation, Map view">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="3"><h1 class=firstline>Layout editor</h1></td>
+<td colspan="2" class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a></td>
+</tr>
+<tr>
+<td colspan="5"><h1 class=secondline>Insert/Edit Map Border</h1></td>
+</tr>
+<tr>
+<td width="20%"><h1 class=firsttabnotactive><a class=othertab href="layout_editor_insert_edit_map_border_neatline.htm">Neat line</a></h1>
+</td>
+<td width="20%"><h1 class=othertab><a class=othertab href="layout_editor_insert_edit_map_border_grid.htm">Grid</a></h1>
+</td>
+<td width="20%"><h1 class=othertab><a class=othertab href="layout_editor_insert_edit_map_border_graticule.htm">Graticule</a></h1>
+</td>
+<td width="20%"><h1 class=othertab><a class=othertab href="layout_editor_insert_edit_map_border_corners.htm">Corners</a></h1>
+</td>
+<td width="20%"><h1 class=thistab><a class=thistab href="layout_editor_insert_edit_map_border_outline.htm">Outline</a></h1>
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p>Insert or edit a <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map border</a>, and/or ticks and/or coordinates for grid lines or a graticule for a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in your <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>.</p>
+
+<p class=defnewpar>You can insert or edit: </p>
+
+<ul>
+
+<li>a neatline which exactly fits the selected map view; </li>
+
+<li>grid ticks and/or coordinates along the map view in meters; </li>
+
+<li>graticule ticks and/or coordinates along the map view in degrees, minutes, seconds; </li>
+
+<li>coordinates for the corners of a map view; </li>
+
+<li>an outline at a certain distance around a map view. </li>
+
+</ul>
+
+<p>Use the tabs to go to a specific page. </p>
+
+<p class=defnewpar>On this Outline page, you can add or edit a border <i>at a certain distance</i> around your map view. To add a border which exactly fits the map view, use the <a href="layout_editor_insert_edit_map_border_neatline.htm">Neat line</a> tab. To obtain a border along the margins of the page of a layout, choose <span class=arial><a href="..//ilwismen/popup/layout_editor_page_border_popup.htm" onClick="return popup(this, 'notes')" >Page Border</a></span> from the <a href="../ilwis/layout_editor_menu_commands.htm">Edit menu</a>. </p>
+
+<p class=diakopje>Outline page options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Outline:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to obtain an outline around the selected map view. </p>
+
+<p class=diabox>Clear this check box if you do not wish to obtain an outline.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Outline offset (mm):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the space in mm between the map view and the outline. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Line type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a line type for the outline: Single, Dot, Dash, Dash dot, Dash dot dot, Blocked or Symbol (see below).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the outline. To define your own color, select the 'Custom' item at the bottom of the list or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>; the Windows <a href="custom_colors.htm">Color</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><span class=arial>Symbol</span> button:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line type Symbol: click the Symbol button to select a symbol type (= symbol font), a symbol, a symbol size, etc. You can use simple symbols or a symbol from any installed symbol font. The <a href="../ilwismen/representation_class_editor_line_symbols_on_segments.htm">Line Symbols</a> dialog box will appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Support line:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line types Single, Dot, Dash, Dash dot, Dash dot dot and Symbol; select this check box when you wish to use an extra support line; the outline will then be drawn 'on top' of the support line. </p>
+
+<p class=diabox>Clear this check box when just the outline should be drawn. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Background color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for a support line or select the second color for a blocked outline. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Line width (mm):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line types Single, Double, Triple and Blocked: type a value for the width of the outline (both on screen and on printer). Line width 0 means: a width of 1 pixel on the screen, and a width of 1 dot on a printer, i.e. as fine as possible (hair line). Values larger than 0 are in mm. </p>
+
+<p class=diabox>Line types Dot, Dash, Dash dot, Dash dot dot will always be displayed with a width of 1 pixel on the screen, and printed a width of 1 dot on a printer, i.e. as fine as possible (hair line). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Block distance (mm):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line type Blocked: type a value for the distance between the blocks (mm).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Symbol distance (mm):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line type Symbol: specify a value for the distance between the symbols.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Examples:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex1.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Red; Line type Single; No Support line; Line width 0.0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex2.gif" align=bottom width="115" height="6"></p>
+
+</td>
+<td valign="top">
+<p>Color Red; Line type Single; No Support line; Line width 1.0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex3.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Red; Line type Double; No Support line; Background color White; Line width 0.5</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex4.gif" align=bottom width="115" height="7"></p>
+
+</td>
+<td valign="top">
+<p>Color Red; Line type Triple; No Support line; Background color Yellow; Line width 1.5</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex5.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Black; Line type Dot; No Support line</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex6.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Black; Line type Dash dot; Support line; Background color Yellow; Line width 1.3</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex7.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Black; Line type Blocked; Background color White; Line width 1.0; Block distance 5</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex8.gif" align=bottom width="115" height="9"></p>
+
+</td>
+<td valign="top">
+<p>Color Black; Line type Symbol; Symbol type Symbol; Size 15; Rotation 0; No Support line; Symbol distance 6</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex8a.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Red; Line type Symbol; Symbol type Simple; Symbol Circle; Symbol Size 4; Symbol Fill color Red; Symbol Line width 1; Support line; Background color Red; Line width 0.3; Symbol distance 5</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex9.gif" align=bottom width="115" height="16"></p>
+
+</td>
+<td valign="top">
+<p>Color Blue; Line type Symbol; Symbol type Windings; Size 20; Rotation 0; No Support line; Symbol distance 8</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	If you size a selected map border in the Layout editor, by <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> one of the <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of a selected map border, then the size or the scale of your map view will change. This depends on whether you used the <a href="../ilwismen/layout_editor_keep_scale.htm">Keep Scale</a> button. </li>
+
+<li>	To store annotation, you need to save the layout. Open the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a> and choose the <span class=arial><a href="../ilwismen/layout_editor_save_layout.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/layout_editor_save_layout_as.htm">Save As</a></span> command. You can also click in the white space of your layout, and click the <span class=arial>Save</span> button in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>. </li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+</body

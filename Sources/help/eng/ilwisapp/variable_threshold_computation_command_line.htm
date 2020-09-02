@@ -1,0 +1,209 @@
+<html>
+
+<head>
+<title>Variable threshold computation : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Variable threshold computation, MapVariableThresholdComputation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Variable threshold computation</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/variable_threshold_computation_popup.htm" onClick="return popup(this, 'notes')" >Variable threshold computation</a> operation can be directly executed by typing the following expression on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapVariableThresholdComputation</span>(InputMapName, <i>FilterSize</i>, <i>NrOfClasses</i>, &quot;<i>UpperBounds_and_ThresholdVals</i>&quot;, <i>InternalReliefMap</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>MapVariableThresholdComputation</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+
+</td>
+<td valign="top">
+<p>is the command to start the Variable threshold computation operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input raster map (value domain); the input raster map is expected to be a Digital Elevation Model (DEM). </p>
+
+<p>To use a value attribute column from an attribute table which is linked to a raster map with a Class or an ID domain, use <i>InputMapName.ColumnName</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>FilterSize</i></p>
+
+</td>
+<td valign="top">
+<p>is a value for the size of the window that will move over the map(s); filter size 3, means that each time 3 x 3 input pixels are considered.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>NrOfClasses</i></p>
+
+</td>
+<td valign="top">
+<p>is a parameter to specify the number of classes that you wish to obtain in the output threshold map (1 <span class="symbollarger">£</span> integer value <span class="symbollarger">£</span> 5) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p>&quot;<i>UpperBounds_and_ThresholdVals</i>&quot;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p></p>
+
+</td>
+<td valign="top">
+<p>is a string in which, for each class at a time, the upper boundary value for internal relief values is specified, followed by the desired output threshold value. Boundary values and threshold values are separated by commas, this is repeated for each output 'class'; the total string needs to be surrounded by double quotes. </p>
+
+<p>When using for instance 2 classes, the string could read: <span class="courier">&quot;25, 750, 75, 250, 500, 100&quot;</span></p>
+
+<p>In this example, values 25, 75 and 500 are the upper boundary values for the internal relief; values 750, 250, and 100 are the respective threshold values that will be assigned to these classes. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>InternalReliefMap</i></p>
+
+</td>
+<td valign="top">
+<p><span class="courier">true</span> | <span class="courier">false</span> | <span class="courier">1</span> | <span class="courier">0</span> </p>
+
+<p>Specify <span class="courier">true</span> or <span class="courier">1</span> when you wish to obtain an output raster map with internal relief values. 
+
+	The internal relief map will obtain the same name as the output threshold map, followed by <span class="courier">__1</span>. </p>
+
+<p>Specify <span class="courier">false</span> or <span class="courier">0</span> when no internal relief map is required. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=kopje>Example:</p>
+
+<p>To perform the Variable threshold operation on height map <span class=courier>MyFilledDEM</span>, </p>
+
+<ul>
+
+<li>	producing output raster map <span class=courier>OUTMAP</span>,</li>
+
+<li>	using a 5 x 5 window that will move over the map(s); </li>
+
+<li>	using 3 output classes, where: </li>
+
+		<ul>
+		<li>internal relief values <span class="symbollarger">£</span> 30 will be assigned threshold value 1000, </li>
+		<li>internal relief values <span class="symbollarger">£</span> 80 will be assigned threshold value 250, </li>
+		<li>internal relief values <span class="symbollarger">£</span> 500 will be assigned threshold value 50, </li>
+		<li>internal relief values <span class="symbollarger">&gt;</span> 500 will be assigned the undefined value,</li>
+		</ul>
+
+<li>	producing an internal relief map,</li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p>you can use the following expression:</p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=courier>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=courier>=</p>
+
+</td>
+<td valign="top">
+<p class=courier>MapVariableThresholdComputation(MyFilledDEM,5,3,&quot;30,1000,80,250,500,50&quot;, 1)</p>
+
+</td>
+</tr>
+</table>
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="variable_threshold_computation_functionality.htm">Variable threshold computation : functionality</a></p>
+
+<p class=seealsolinks><a href="variable_threshold_computation_dialog_box.htm">Variable threshold computation : dialog box</a></p>
+
+<p class=seealsolinks><a href="variable_threshold_computation_algorithm.htm">Variable threshold computation : algorithm</a></p>
+
+</body

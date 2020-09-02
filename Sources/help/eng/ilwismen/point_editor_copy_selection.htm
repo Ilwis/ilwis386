@@ -1,0 +1,193 @@
+<html>
+
+<head>
+<title>Point editor : Copy</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point editor, Copy to clipboard">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Point editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/point_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Copy to clipboard</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Copy selected points with their coordinates and their class names, identifiers or values to the clipboard. In the clipboard, the information is only available <i>text</i> format. </p>
+
+<p class=defnewpar>Subsequently, the copied points can be pasted as points into another <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >point editor</a>, as one segment into a <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >segment editor</a>, and/or into any other application which uses the <i>text</i> format (e.g. a word processor or a data base).</p>
+
+<p class=kopje>To copy:</p>
+
+<p>Select one or more points, and: </p>
+
+<ul>
+
+<li>choose <span class=arial>Copy</span> from the Edit menu, or</li>
+
+<li>press <span class=arial>Ctrl+C</span> on the keyboard.</li>
+
+</ul>
+
+<p class=defnewpar>For more information on selecting points, see <a href="point_editor_select_mode.htm">Point editor : Select mode</a>.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To copy the active window including the window borders, title bar, menu bar and status bar as a <i><a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmap</a></i> to clipboard, press <span class=arial>Alt+PrintScrn</span> on the keyboard.</li>
+
+<li>	From within a map window, you can copy (the displayed part of) a map as a <i>picture</i> to the clipboard; choose <span class=arial><a href="copy_map_window_to_clipboard.htm">Copy</a></span> from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in a map window. Coordinate information will not be available however. </li>
+
+<li>	You can use Windows' Clipboard/Clipbook Viewer to inspect the current contents of the clipboard. For more information, see the Windows Help.</li>
+
+</ul>
+
+<p class=kopje>Example:</p>
+
+<p>Some points which have been copied to the clipboard. </p>
+
+<p class=defnewpar>Text format: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellpadding="3">
+<tr>
+<td>
+<p class=t1>803429.000</p>
+</td>
+<td>
+<p class=t1>8074631.000</p>
+</td>
+<td>
+<p class=t1>UMSS</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>799748.000</p>
+</td>
+<td>
+<p class=t1>8082415.000</p>
+</td>
+<td>
+<p class=t1>Taquina</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>803511.000</p>
+</td>
+<td>
+<p class=t1>8087422.000</p>
+</td>
+<td>
+<p class=t1>Laguna Santa Rosa</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>801281.000</p>
+</td>
+<td>
+<p class=t1>8088967.000</p>
+</td>
+<td>
+<p class=t1>Laguna Totura</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>802613.000</p>
+</td>
+<td>
+<p class=t1>8080483.000</p>
+</td>
+<td>
+<p class=t1>PROMIC</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>806816.000</p>
+</td>
+<td>
+<p class=t1>8076585.000</p>
+</td>
+<td>
+<p class=t1>Aro Cagua</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>797465.000</p>
+</td>
+<td>
+<p class=t1>8078352.000</p>
+</td>
+<td>
+<p class=t1>Colca Pithua</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>796346.000</p>
+</td>
+<td>
+<p class=t1>8087736.000</p>
+</td>
+<td>
+<p class=t1>Cerro MachaMach</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>806042.000</p>
+</td>
+<td>
+<p class=t1>8085414.000</p>
+</td>
+<td>
+<p class=t1>LagunaWaraWara</p>
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_menu_commands.htm">Point editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/point_editor_select_mode.htm">Point editor : Select Mode</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/point_editor_paste_selection.htm">Point editor : Paste</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_paste_selection.htm">Segment editor : Paste</a></p>
+
+<p class=seealsolinks><a href="copy_map_window_to_clipboard.htm">Map window : copy to clipboard</a></p>
+
+</body

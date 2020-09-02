@@ -1,0 +1,91 @@
+<html>
+
+<head>
+<title>Tunnel segments : functionality/algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Tunnel segments, Nodes, Remove redundant nodes">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Tunnel segments</h1>
+
+<h1 class=secondline>Functionality / Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Tunnel segments operation reduces the amount of intermediate points within segments in a segment map. The segments of the input map are copied into a new segment map. However, for every three consecutive intermediate points within a segment, the middle one is omitted if it falls within a user-defined tunnel-width. Redundant nodes can also be removed.</p>
+
+<p class=kopje>Tunnelling:</p>
+
+<p>In a segment map, each segment is stored as a begin node, an end node and usually one or more intermediate coordinates. Tunnelling (see Figure 1) constructs a tunnel around 3 points within a segment at a time. Each time, it is determined whether the middle coordinate falls inside the tunnel or not:</p>
+
+<ul>
+
+<li>	if the middle coordinate falls outside the tunnel it will be copied into the output map, and the next tunnel will start from this point;</li>
+
+<li>	if the middle coordinate falls inside the tunnel, it will not be copied to the output map. This results in a straight line between the first and the third point. The next tunnel will then start from the third point. </li>
+
+</ul>
+
+<p>The tunnel has a user-defined width in meters. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p><img src="../images/tun1.gif" align=bottom width="290" height="209"></p>
+
+<p class=captionfignolnspaft>Fig. 1:	Tunnelling: The first tunnel is constructed around node 1, and intermediate coordinates 2 and 3. Intermediate coordinate 2 falls outside the tunnel and thus remains. The second tunnel is constructed around intermediate coordinates 2, 3, and 4. Intermediate coordinate 3 falls inside the tunnel and is thus omitted. Now that point 3 is omitted, the next tunnel will be constructed around intermediate coordinates 4, 5, and 6 (point 6 is not in this picture).</p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>When you use an extremely large tunnel width, all intermediate points between begin and end nodes may be deleted. The output map may then contain only straight lines between your begin and end nodes. </p>
+
+<p class=kopje>Removing superfluous nodes:</p>
+
+<p>Nodes form the beginning and end points of segments. Two or more segments are connected to each other when they share a node. </p>
+
+<p>In the special case that only 2 segments with the same code are connected to each other by a node, this node is not necessary, as one segment going through all the points of both segments would do. With the Tunnel segment operation, you can remove these superfluous nodes; segment codes will remain the same.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special input map requirements.</p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The output segment map uses the same domain as the input segment map. </p>
+
+<p>The output segment map uses the same coordinate system and the same coordinate boundaries as the input segment map. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To insert more intermediate coordinates within segments, use the <a href="..//ilwisapp/popup/densify_segment_coordinates_popup.htm" onClick="return popup(this, 'notes')" >Densify segment coordinates</a> operation.</li>
+
+<li>	You can also remove redundant nodes in the Segment editor, but there, any node between 2 segments is deleted regardless of the codes of these segments. The Segment editor option will thus find and remove more redundant nodes, but codes of resulting segments may get changed. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="tunnel_segments_dialogbox.htm">Tunnel segments : dialog box</a></p>
+
+<p class=seealsolinks><a href="tunnel_segments_commandline.htm">Tunnel segments : command line</a></p>
+
+</body

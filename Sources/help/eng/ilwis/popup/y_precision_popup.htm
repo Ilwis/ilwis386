@@ -1,0 +1,44 @@
+<html>
+
+<head>
+<title>Precision</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Precision</p>
+
+<p class=linespacing03after>The precision for a <a href="../../ilwis/sec/y_value_maps_sec.htm">value map</a> or a <a href="../../ilwis/sec/y_value_maps_sec.htm">value column</a> determines the 'resolution' of possible values in the value map or value column. All values will be rounded so that they will fit the specified precision. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>If you specify that a value map or a value column should use: </p>
+
+<ul>
+
+<li>precision 1, then values in the map or column will be natural (whole) numbers; </li>
+
+<li>precision 0.1, then values will have 1 decimal; </li>
+
+<li>precision 0.01, then values will have 2 decimals; </li>
+
+<li>precision 100, then values can increase and decrease by 100 (e.g. 0, 100, 200, 300); </li>
+
+<li>precision 25, then values can increase and decrease by 25 (e.g. 0, 25, 50, 75). </li>
+
+</ul>
+
+<p>For the precision of a value map or a value column you can choose any figure you like, also 2, 5, or 250. </p>
+
+<p class=linespacing03before>During calculations or operations, the system will come up with a suggestion for the precision of the output map or column. If allowed by the domain that you selected for the output object, you can adjust the precision yourself. </p>
+
+<p class=linespacing03before>You cannot specify the precision for the values in an output map or column when you select a domain that has a fixed precision (e.g. system domains <span class=courier><a href="yy_system_domain_image_popup.htm">Image</a></span>, <span class=courier><a href="yy_system_domain_noaa_popup.htm">NOAA</a></span>, or <span class=courier><a href="yy_system_domain_radar_popup.htm">Radar</a></span>). </p>
+
+<p class=linespacing03before>The smaller you choose the precision of a map, the larger the size of the map will be (in bytes on disk), as more bytes will be needed to store each value in the map. Values in value maps can be stored as fixed point real numbers (using 1 byte, 2 bytes, 4 bytes per pixel) or as floating point real numbers (using 8 bytes per pixel). The display of maps using 1 byte per pixel is fast and the display of 8 byte maps is slower, also calculation time may increase.</p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="y_value_range_popup.htm">Value range</a></p>
+
+</body

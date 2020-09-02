@@ -1,0 +1,168 @@
+<html>
+
+<head>
+<title>SMCE window : Standardize Class</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Standardize Class">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Analysis menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Standardize Class Input</span>&nbsp;&nbsp;&nbsp;<img src="../images/smce_standardize_icon.gif" align=middle width="23" height="23"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Standardize a class map. </p> 
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>Input values are found in a column of an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> that is linked to the map. </li>
+
+<li>In principle, values in the attribute column must be between 0 and 1; <br>
+
+	this means that the attribute column that you wish to use: </li>
+
+	<ul>
+	<li>can use a <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value domain</a> and have a value range between 0 and 1, or </li>
+	<li>can use the <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >Bool domain</a>. </li>
+	</ul>
+
+<li>However, for benefit factors or for cost factors, if you wish to insert values that are larger than 1, you can use the <span class=arial>Apply Weigh Wizard</span> button, see below. </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>In general, it may be easier to prepare an attribute table beforehand and link it to the input class map (through the <a href="../ilwismen/raster_map_properties.htm">Properties</a> of the raster map). You can then: </p>
+
+<ul class=tipul>
+<li>directly select an attribute column (any value range) as input in the criteria tree viewer, and </li>
+<li>standardize the values in the attribute column using the <a href="../ilwismen/smce_window_standardize_value.htm">Standardize Value Input</a> dialog box. </li>
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>Standardization possibilities are slightly different for <a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a> and for <a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >constraints</a>.</p>
+
+<ul>
+<li class=ls01be><a href="#factor"><span class=bookmark>Standardization of factors (benefits and costs)</span></a>: output values range between 0 and 1; </li>
+<li class=ls01be><a href="#constraint"><span class=bookmark>Standardization of constraints</span></a>; output values are either 0 or 1.</li>
+</ul>
+
+<h2 id="factor">Standardization of factors (benefits and costs)</h2>
+
+<p>Specify a column in an attribute table that matches class names to values between 0&nbsp;and&nbsp;1. The attribute column can still be created; values in the attribute column must be between 0 and 1. </p>
+
+<p class=diakopje>Dialog box options:</p>
+<table cellspacing=0>
+  <tr>
+    <td width="168" valign="top"><p class=diabox><span class=arial>Edit</span></p>
+    </td><td valign="top"><p class=diabox>Click the <span class=arial>Edit</span> button to open the linked attribute table for editing. You can for instance inspect the attribute columns to decide which column you wish to use, edit the values, or even create a new attribute column and fill it with values. When creating a new column, make sure that the column uses a value range between 0 and 1. When finished editing values in the attribute column that you wish to use, click the <span class=arial>Refresh Attribute List</span> button. </p>
+      </td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diabox><span class=arial>Refresh Attribute List</span></p></td>
+    <td valign="top"><p class=diabox>Click the <span class=arial>Refresh Attribute List</span> button to refresh the  attribute list. If you manually edited values or manually created a new attribute column using the <span class=arial>Edit</span> button, you must click the <span class=arial>Refresh Attribute List</span> button to make the application read the new values, and/or show the newly created column in the 'Attribute between 0 and 1' drop-down list box. </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diabox>Attribute between 0 and 1:</p></td>
+    <td valign="top"><p class=diabox>Select an attribute column (a value column with values between 0 and 1 or a boolean column) with which the map should be standardized;
+        open the drop-down list box by clicking it. You can select one of the existing attribute columns, or you can create a new column by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> button <img src="../images/crea.gif" align=bottom width="17" height="22">. If you create a new attribute column through the Create button, click the <span class=arial>Edit</span> button in this dialog box to fill the new attribute column with values (see above). </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diabox><span class=arial>Apply Weigh Wizard</span></p></td>
+    <td valign="top"><p class=diabox>Click the <span class=arial>Apply Weigh Wizard</span> button to open the <a href="../ilwismen/smce_window_weigh.htm">Weigh wizard</a>: all class names will appear in a list, and you can insert a value for each class. You can enter any positive value and value zero: the Weigh wizard will automatically convert this to values between 0 and 1 for you. Value 0 will always be converted to 0; the largest value that you insert in the <span class=arial>Apply Weigh Wizard</span> will automatically obtain value 1. The <span class=arial>Apply Weigh Wizard</span> button is not available when the number of classes is larger than 15.</p>
+    </td>
+  </tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip</span>: When a factor (a benefit or a cost) with a class domain has been standardized, the <a href="../ilwis/smce_window_criteria_tree_viewer.htm">criteria tree viewer</a> shows information about the way the factor is standardized, see the first column below. </p>
+
+<table class=tiptext cellpadding="0" cellspacing="0" width="100%">
+  <tr><td colspan="3"><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td width="40%" valign="top"><i>Criterion name</i>--Std:Attr='<i>AttributeCol</i>'</td>
+   	<td valign="top">Classes in the input map are standardized by using an attribute column. </td>
+  </tr>
+</table>
+
+<h2 id="constraint">Standardization of constraints</h2>
+
+<p>Standardization of constraints is slightly different.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+  <tr>
+    <td width="168" valign="top"><p class=diabox><span class=arial>Edit</span></p>
+    </td><td valign="top"><p class=diabox>Click the <span class=arial>Edit</span> button to open the linked attribute table for editing. For more information, see above. </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diabox><span class=arial>Refresh Attribute List</span></p></td>
+    <td valign="top"><p class=diabox>Click the <span class=arial>Refresh Attribute List</span> button to make the application read new attribute values, and/or show a newly created attribute column in the 'Attribute between 0 and 1' drop-down list box. For more information, see above. </p>
+  </tr>
+  <tr>
+    <td valign="top">Boolean Attribute: </td>
+    <td valign="top"><p class=diabox>Select an attribute column with the <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >Bool domain</a>; the class map will be standardized according to the values in the selected attribute column. You can select one of the existing attribute columns, or you can create a new column by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> button <img src="../images/crea.gif" align=bottom width="17" height="22">. For more information, see above. </p>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip</span>: When a constraint with a class domain has been standardized, the <a href="../ilwis/smce_window_criteria_tree_viewer.htm">criteria tree viewer</a> shows information about the way the factor is standardized, see the first column below. </p>
+
+<table class=tiptext cellpadding="0" cellspacing="0">
+  <tr><td colspan="3"><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+   	<td width="40%" valign="top"><i>Criterion name</i>--Std:Attr='<i>AttributeCol</i>_bool'</td>
+	<td>Classes in the input map are standardized by using an attribute column. The attribute column must use the <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >Bool</a> domain. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_standardize.htm">SMCE window : Standardize</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_standardize_value.htm">SMCE window : Standardize Value Input</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_standardize_boolean.htm">SMCE window : Standardize Boolean Input</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a></p>
+
+</body

@@ -1,0 +1,167 @@
+<html>
+
+<head>
+<title>Import Table wizard - Select Table Format</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table import, Import table wizard">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Import Table wizard</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">Main window, File menu</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Select Table Format</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="import_table_input_table_name.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="import_table_view_file.htm">Next</a>&nbsp;&gt;
+</tr>
+</table>
+
+<!--<hr>-->
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>Select the format of the table you wish to import. The dBase DBF format, the ILWIS 1.4 table format and the Comma delimited format are automatically recognized. </p>
+
+<p class=diakopje>Page options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> dBase DBF:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The file to be imported is a binary file in dBase format; </p>
+
+<p class=diabox>required extension .DBF</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> ILWIS 1.4:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The file to be imported is an ASCII file in ILWIS 1.4 table format; </p>
+
+<p class=diabox>default extension .TBL, any extension allowed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Comma Delimited:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The file to be imported is an ASCII file; </p>
+
+<p class=diabox>any extension allowed; </p>
+
+<p class=diabox>in a record, fields are separated by a comma. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Space Delimited:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The file to be imported is an ASCII file; </p>
+
+<p class=diabox>any extension allowed; </p>
+
+<p class=diabox>in a record, fields are separated by (at least) one space or (at least) one tab. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Fixed Format:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The file to be imported is an ASCII file; 
+
+<p class=diabox>default extension .SDF, any extension allowed; </p>
+
+<p class=diabox>in every record, a certain field starts at the same specific position. </p> 
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>When you specify to import a file in ASCII format (ILWIS 1.4, Comma delimited, Space delimited, or Fixed format), and click the <span class=arial>Next</span> button, the <b><a href="../ilwismen/import_table_view_file.htm">Import Table - View File</a></b> page will appear. On that page, the first 100 lines of the file will be displayed, so that you can see whether the file to be imported has a header that should be skipped, and where you can inspect the structure of the file. </p>
+
+<p class=defnewpar>When you specify to import a file in dBase format, and click the <span class=arial>Next</span> button, the <b><a href="../ilwismen/import_table_edit_column_details.htm">Import Table - Edit Column Details</a></b> page will appear directly. </p>
+
+<h2>Additional information</h2>
+
+<p class=kopjeaftertitlesub>Space delimited format:</p>
+
+<p>A files that is space delimited may look like: </p> 
+
+<table cellspacing=1>
+<tr>
+<td>
+<p class=courier>1&nbsp;45&nbsp;abc&nbsp;999&nbsp;0.045</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>2&nbsp;44&nbsp;defghij&nbsp;25&nbsp;0.061</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>3&nbsp;48&nbsp;xxyyz&nbsp;31&nbsp;0.075</p>
+</td>
+</tr>
+</table>
+
+<p class=linespacing03before>In a record, a field is separated from a next field by (at least) one space or (at least) one tab. </p>
+
+<p class=kopje>Fixed format (Standard format):</p>
+
+<p>A files that is in fixed format (also called standard format) may look like: </p> 
+
+<table cellspacing=1>
+<tr>
+<td>
+<p class=courier>1&nbsp;45&nbsp;abc&nbsp;&nbsp;&nbsp;&nbsp;999&nbsp;0.0450.4</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>2&nbsp;44&nbsp;defghij&nbsp;25&nbsp;0.0610.5</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>3&nbsp;48&nbsp;xxyyz&nbsp;&nbsp;&nbsp;31&nbsp;0.0750.7</p>
+</td>
+</tr>
+</table>
+
+<p class=linespacing03before>In every record, a certain field starts at the same specific position. Positions without information are supposed to be filled with spaces. </p>
+
+<p>As you can see, subsequent fields are not necessarily separated from one another by a separator (last 2 'columns'). </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/import_table_view_file.htm">Import Table - View File</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/import_table_edit_column_details.htm">Import Table - Edit Column Details</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_import_data.htm">How to import data</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwistableimport_commandline">Appendices : ILWIS script language (syntax), section ILWIS Table import</a></p>
+
+</body

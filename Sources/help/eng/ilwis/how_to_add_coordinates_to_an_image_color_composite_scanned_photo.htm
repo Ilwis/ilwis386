@@ -1,0 +1,257 @@
+<html>
+
+<head>
+<title>How to add coordinates to an image, color composite, scanned photo</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Tiepoints, Add ..., How to add ..., Control points, Coordinates, Satellite images, Images, Scanned images, Ground control points, Photographs, Color composite, Color composite (interactive)">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to add</h1>
+
+<h1 class=secondline>coordinates to a color composite, an image, a scanned map, a scanned photograph, etc.</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To add coordinates to a satellite image, to a scanned map, or to a scanned photograph when you do not have a Digital Terrain Model (DTM), create a <a href="..//ilwis/popup/georeference_tiepoints_popup.htm" onClick="return popup(this, 'notes')" >georeference tiepoints</a>. A georeference stores the relation between locations in the image (row,col) and real world coordinates (X,Y). These locations are called tiepoints or ground control points. A <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> uses a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	In case you have a scanned photograph without fiducial marks and you have a DTM of the area, create a <i>georef direct linear</i>. </li>
+
+<li>	In case you have a scanned aerial photograph with fiducial marks and a DTM, create a <i>georef orthophoto</i>. </li>
+
+</ul>
+
+<p>For more information on types of georeferences, see <a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a>.</p>
+
+<p class=defnewpar>The remainder of this topic deals with georeferences tiepoints. </p>
+
+<p class=defnewpar>The topic contains the following paragraphs:</p>
+
+<ol>
+
+<li>	Introduction.</li>
+
+<li>    Creating a georef tiepoints:</li>
+
+        <ol class=abc>
+        
+        <li>	while working with an interactive color composite, a single band of a satellite image, a scanned map or a scanned photograph.</li>
+
+        <li>	while working with a permanent color composite.</li>
+
+        </ol>
+
+<li>	Adding tiepoints.</li>
+
+<li>	Adding the created georef tiepoints to all bands of a satellite image.</li>
+
+<li>	Optional resampling to a georef corners.</li>
+
+</ol>
+
+<p class=kopje>1.  Introduction:</p>
+
+<p>By creating and adding tiepoints to a color composite, one band of a satellite image, a scanned map or a scanned photograph, the tiepoint coordinates are <b>added</b> to the image, photo or map which was specified as background map. </p>
+
+<p class=defnewpar>When you were successful in creating a georef tiepoints for a color composite, a band of a satellite image, a scanned map or a scanned photograph, you can:</p>
+
+<ul>
+
+<li>	see the coordinates according to the created georeference tiepoints on the status bar of the map window;</li>
+
+<li>	display any type of vector data on top of the map;</li>
+
+<li>	create new vector data using the georeferenced image as background;</li>
+
+<li>	update vector data using the georeferenced image as background;</li>
+
+<li>	use the map in pixel info;</li>
+
+<li>	rasterize any vector data on this georeference (for map calculations);</li>
+
+<li>	you can also <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >resample</a> the image which has a georeference tiepoints to a georeference corners, or vice versa, in order to perform raster operations in which raster maps with different georeferences need to be combined;</li>
+
+<li>	<a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen digitize</a> on satellite images or on scanned photographs which have a georef tiepoints.</li>
+
+</ul>
+
+<p class=kopje>2a.  Creating a georef tiepoints while working with an interactive color composite, a single band of a satellite image, a scanned map or a scanned photograph:</p>
+
+<ul>
+
+<li>	Display in a map window:</li>
+
+        <ul>
+
+        <li>	an <i>interactive</i> color composite: create a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> of <i>all</i> bands of an image and double-click the map list in a Catalog or use the <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >Show Map List as Color Composite</a> option. <span class=tip>Tip: </span><span class=tiptext>Using a map list is the advised method for satellite images with multiple bands.</span> </li>
+
+        <li>	one of the bands of your satellite image, or </li>
+
+        <li>	a scanned map, or </li>
+
+        <li>	a scanned photograph.</li>
+
+        </ul>
+
+<li>    Choose the <span class=arial>Create Georeference</span> command from the <a href="map_window_menu_commands.htm">File menu</a> in the map window. In the subsequent <a href="../ilwismen/create_a_georeference_in_map_window.htm">Create Georeference</a> dialog box, type a name for the georeference, choose for a Georef Tiepoints and select a coordinate system. When you click the OK button, the Georeference Tiepoints editor is automatically started in the map window.</li>
+
+</ul>
+
+<p>You can now add tiepoints to the georeference tiepoints: continue with step 3.</p>
+
+<p class=kopje>2b.  Creating a georef tiepoints while working with a permanent color composite:</p>
+
+<p>When your graphics board cannot be configured to use more than 256 colors (see Display Settings in Windows' Control Panel), you need to create a <i>permanent</i> color composite with the <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >Color composite</a> operation. A <i>permanent</i> color composite is available in a Catalog and is stored on disk.</p>
+
+<ul>
+
+<li>	Create a permanent color composite (from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> in the Main window, choose <span class=arial>Image Processing</span> and <span class=arial>Color Composite</span>);</li>
+
+<li>	Open the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> sheet of the color composite;</li>
+
+<li>	In the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> sheet, go to the <span class=arial>Dependency</span> tab and click the <span class=arial>Break Dependency Link</span> button (if available); </li>
+
+<li>	Show the map in a map window, choose <span class=arial>Create Georeference</span> command from the <a href="map_window_menu_commands.htm">File menu</a> in the map window, In the subsequent <a href="../ilwismen/create_a_georeference_in_map_window.htm">Create Georeference</a> dialog box, type a name for the georeference, choose for a Georef Tiepoints and select a coordinate system. When you click the OK button, the Georeference Tiepoints editor is automatically started in the map window.</li>
+
+</ul>
+
+<p>You can now add tiepoints to the georeference tiepoints: continue with step 3.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargin1>Other methods:</p>
+
+<p class=leftmargin1>When you create a georeference tiepoints through the File menu of the Main window, or through the <span class=arial>Properties</span> sheet of a raster map, you have to open the Georeference Tiepoint editor yourself, for example by double-clicking the newly created georeference tiepoints in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p>
+
+<p class=leftmargin1>For more information, see <a href="../ilwis/how_to_create_georeferences.htm">How to create a georeference</a>.</p>
+
+<p class=kopje>3.  Adding tiepoints:</p>
+
+<p>You have to add tiepoints or ground control points to the image or scanned photograph which is displayed in the map window of the <a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor</a>. Each tiepoint establishes a relation between the row and column value in the map and an XY-coordinate. </p>
+
+<p class=defnewpar>In the Georeference Tiepoints editor, you can add tiepoints to a map in several manners:</p>
+
+<ul>
+
+<li>	first, click at a recognizable point in the map without coordinates,</li>
+
+<li>	the <span class=arial>Add TiePoint</span> dialog box appears. In this dialog box, the row and column values at the position of the click are filled out. When you already have some tiepoints, the dialog box will also come up with a suggestion for the XY coordinates.</li>
+
+</ul>
+
+<p>Then:</p>
+
+<ul>
+
+<li>	click at the same position in a map which already has correct XY coordinates and which is displayed in another map window (master/slave), or</li>
+
+<li>	digitize the same point in an analog paper map on a digitizer, or</li>
+
+<li>	read the correct XY coordinates for this point from an analog paper map or a table, and type these XY coordinates in the dialog box.</li>
+
+</ul>
+
+<p class=defnewpar>For a more detailed description on inserting tiepoints (for instance Master/Slave), refer to <a href="../ilwis/how_to_use_the_georeference_tiepoints_editor.htm">How to use the Georeference Tiepoints editor</a>. When you already have tiepoints (X-coordinates, Y-coordinates, row numbers, column numbers) for an image in a file, it is advised to paste these tiepoints into the tiepoint table of a georeference tiepoints. For more information, see <a href="how_to_paste_coords_into_georef_tiepoints.htm">How to paste coordinates into a georeference tiepoints</a>. </p>
+
+<p class=defnewpar>Furthermore, for a georef tiepoints, you have to select a <a href="..//ilwis/popup/georeference_transformation_method_popup.htm" onClick="return popup(this, 'notes')" >transformation method</a>: conformal, affine, second order, full second order, third order or projective. The number of tiepoints that are required depends on this selected transformation method. </p>
+
+<ul>
+
+<li>	For satellite imagery, an affine transformation will usually do. </li>
+
+<li>	For scanned photographs, a projective transformation is recommended. </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To judge the quality of your tiepoints while entering them in the Tiepoint editor:</p>
+
+<ul class=tipul>
+
+<li>	display any existing vector data on top of the background map in the Tiepoint editor (choose <a href="../ilwismen/add_layer_to_map_window.htm"><span class=arial>Add Layer</span></a> from the Layers menu), </li>
+
+<li>	add tiepoints to the image or photograph in the map window, and </li>
+
+<li>	press the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22">.</li>
+
+</ul>
+
+<p class=tiptext>You can now easily see whether existing roads, rivers, etc. coincide with the background map.</p>
+
+<p class=kopje>4.  Editing properties of satellite bands:</p>
+
+<p>You have to make sure, that all maps which exactly fit on each other also use the same georeference. You can change the georeference of a map in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> sheet of the map.</p>
+
+<p class=defnewpar>In case you created a georef tiepoints (as described under 2a) for:</p>
+
+<ul>
+
+<li>	an <i>interactive color composite</i>, then the created georef tiepoints will be automatically linked to all maps in the map list. You do not need to edit properties of the individual maps in the map list.</li>
+
+<li>	a <i>scanned map or a scanned photograph</i>, then the created georef tiepoints be automatically linked to the scanned map or photo. You do not need to edit properties.</li>
+
+</ul>
+
+<p class=defnewpar>However, you have to manually add the created georef tiepoints to <i>all (other) bands of the image</i> when you located the tiepoints:</p>
+
+<ul>
+
+<li>	on only <i>one</i> of the bands of an image (as described under 2a), or</li>
+
+<li>	on a <i>permanent</i> but a <i>non-dependent</i> color composite (as described under 2b). </li>
+
+</ul>
+
+<p class=defnewpar>Then, after you finished adding tiepoints to the single background map in the Tiepoint editor:</p>
+
+        <ul>
+
+        <li>create a map list of all bands, open the <a href="../ilwismen/map_list_properties.htm">Property sheet of the map list</a>, and select the Georeference Tiepoints you just created: the newly created Georef Tiepoints will automatically be added to all raster maps in the maplist. </li>
+
+        </ul>        
+
+        <p>You can also open the <a href="../ilwismen/raster_map_properties.htm">Property sheets of all other bands</a>, and select the newly created Georef Tiepoints for each band separately. </p>
+
+<p class=defnewpar>See also <a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit properties of an object</a>.</p>
+
+<p class=kopje>5.  Optional resampling to a georef corners:</p>
+
+<p>When maps use a georef tiepoints, you can decide to <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >resample</a> these maps to the georeference of another existing north-oriented map to be able to combine the maps with each other in MapCalc, etc. For more information, see <a href="../ilwisapp/resample_functionality.htm">Resampling : functionality</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_georeferences.htm">How to create a georeference</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_georeferences.htm">How to edit a georeference</a></p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_use_the_georeference_tiepoints_editor.htm">How to use the Georeference Tiepoints editor</a></p>
+
+<p class=seealsolinks><a href="how_to_paste_coords_into_georef_tiepoints.htm">How to paste coordinates into a georeference tiepoints</a></p>
+
+<p class=seealsolinks><a href="how_to_screen_digitize.htm">How to screen digitize</a></p>
+
+</body

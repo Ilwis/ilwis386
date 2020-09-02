@@ -1,0 +1,170 @@
+<html>
+<head>
+<title>Aggregate statistics (DEM-Hydro Processing script)</title>
+<meta name="keywords" content="Aggregate statistics, DEM Hydro-Processing, Hydrologic Operations, DEM">
+<meta name="Generator" content="ILWIS Script Form">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<!-- COPY of ILWISxx\Scripts\Hydro-DEM\aggregate_statistics.htm -->
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>DEM-Hydro Processing scripts</h1>
+
+<h1 class=secondline>Aggregate statistics</h1>
+
+<!--<hr>-->
+
+<p>This script allows you to cross a merged catchments map with a DEM (or any other map): you will obtain for each catchment the following values: <span class="courier">average</span>, <span class="courier">minimum</span>, <span class="courier">maximum</span>, <span class="courier">std</span>, <span class="courier">predominant</span>, <span class="courier">median</span>, <span class="courier">sum</span>, <span class="courier">count</span>. </p>
+
+<p>The results are added as new columns to your existing merged catchments table. </p>
+
+<p class=diakopje>Dialog box options:</p>
+<table cellspacing=0>
+<tr>
+<td valign="top" width="168"><p class=diabox>Merged Catchment Table:</p></td>
+<td valign="top"><p class=diabox>Select the output table of a previous <a href="..//ilwisapp/popup/catchment_merge_popup.htm" onClick="return popup(this, 'notes')" >Catchment Merge</a> operation. The output columns that will contain the result of the script will be added to this table. </p></td>
+<tr>
+<td valign="top"><p class=diabox>Merged Catchment Map:</p></td>
+<td valign="top"><p class=diabox>Select a raster map that is the output of a previous Catchment Merge operation. The map may contain a single catchment or multiple catchments. </p></td>
+<tr>
+<td valign="top" colspan="2"><p class=diabox>Parameter Map for Aggregate Statistics:</p></td>
+</tr>
+<tr>
+<td valign="top"></td>
+<td valign="top"><p class=diabox>Select a raster map with a value domain, for instance your DEM. The merged catchments map will be crossed with the raster map selected here. </p></td>
+</tr>
+</table>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>For more information, refer to <a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : Joining columns from other tables</a>. </p>
+
+<p class="tip">Note: </p>
+
+<p class="tiptext">If you choose a class map for the cross (instead of a value map), the join operation cannot aggregate the classes very well. Then, the predominant class 'value' will be returned. </p>
+
+<p class="kopje">Output columns:</p>
+
+<p>Suppose you cross the merged catchments map with a DEM:</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="119"><span class="courier">average</span></td>
+<td valign="top">The average height value in each catchment.</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">minimum</span></td>
+<td valign="top">The minimum height value in each catchment.</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">maximum</span></td>
+<td valign="top">The maximum height value in each catchment.</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">std</span></td>
+<td valign="top">The standard deviation of height values in each catchment.</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">predominant</span></td>
+<td valign="top">The predominant height value in each catchment.</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">median</span></td>
+<td valign="top">The predominant height value in each catchment.</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">sum</span></td>
+<td valign="top">The sum of all height values in each catchment.</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">count</span></td>
+<td valign="top">The number of pixels in each catchment.</td>
+</tr>
+</table>
+ 
+<p class="kopje">Short explanation of the calculations by the script: </p>
+
+<ul>
+
+<li class="ls01be">First, the Merged Catchments map is crossed with the other raster map (value domain); the results are stored in a temporary cross table. </li>
+
+<li class="ls01be">Subsequently, the Merged Catchments table is opened, and several Join operations are performed: </li>
+
+	<ul>
+	
+	<li class="ls01be">the values of the DEM are retrieved from the temporary cross table, </li>
+
+	<li class="ls01be">these values are aggregated by the IDs of the merged catchments (to obtain a single value per catchment), </li>
+
+	<li class="ls01be">during some Joins, the NPix column is used from the cross table as a weight factor, </li>
+
+	<li class="ls01be">the result of each Join operation is stored in a new column in the Merged Catchments table. </li>
+
+	</ul>
+
+<li class="ls01be">To prepare for the calculation of the summed values per catchment, first a calculation has to be performed in the temporary cross table: </li>
+
+	<p class="tiptextls01be">temporary column <span class="courier">temp_sum</span> = <i>values_2nd_map</i> * <i>NPix_column_in_temp_cross_table</i> </p>
+
+<li class="ls01be">The Joins are performed by the following expressions:   </li>
+
+	<p class="tipemptylinehalf">&nbsp;</p>
+
+	<p class="tiptext">output column <span class="courier">average</span> = <span class="courier">ColumnJoinAvg</span>(<i>temp_cross_table</i>, <i>values_2nd_map</i>, <i>merged_catchment_IDs</i>, <i>NPix</i>) </p>
+
+	<p class="tipemptylinehalf">&nbsp;</p>
+
+	<p class="tiptext">output column <span class="courier">minimum</span> = <span class="courier">ColumnJoinMin</span>(<i>temp_cross_table</i>, <i>values_2nd_map</i>, <i>merged_catchment_IDs</i>) </p>	
+
+	<p class="tipemptylinehalf">&nbsp;</p>
+
+	<p class="tiptext">output column <span class="courier">maximum</span> = <span class="courier">ColumnJoinMax</span>(<i>temp_cross_table</i>, <i>values_2nd_map</i>, <i>merged_catchment_IDs</i>) </p>
+
+	<p class="tipemptylinehalf">&nbsp;</p>
+
+	<p class="tiptext">output column <span class="courier">std</span> = <span class="courier">ColumnJoinStd</span>(<i>temp_cross_table</i>, <i>values_2nd_map</i>, <i>merged_catchment_IDs</i>, <i>NPix</i>) </p>
+
+	<p class="tipemptylinehalf">&nbsp;</p>
+
+	<p class="tiptext">output column <span class="courier">predominant</span> = <span class="courier">ColumnJoinPrd</span>(<i>temp_cross_table</i>, <i>values_2nd_map</i>, <i>merged_catchment_IDs</i>, <i>NPix</i>) </p>
+
+	<p class="tipemptylinehalf">&nbsp;</p>
+
+ 	<p class="tiptext">output column <span class="courier">median</span> = <span class="courier">ColumnJoinMed</span>(<i>temp_cross_table</i>, <i>values_2nd_map</i>, <i>merged_catchment_IDs</i>, <i>NPix</i>) </p>
+
+	<p class="tipemptylinehalf">&nbsp;</p>
+
+	<p class="tiptext">output column <span class="courier">sum</span> = <span class="courier">ColumnJoinSum</span>(<i>temp_cross_table</i>, <i>temp_sum</i>, <i>merged_catchment_IDs</i>) </p>
+
+	<p class="tipemptylinehalf">&nbsp;</p>
+
+	<p class="tiptext">output column <span class="courier">count</span> = <span class="courier">ColumnJoinSum</span>(<i>temp_cross_table</i>, <i>NPix</i>, <i>merged_catchment_IDs</i>) </p>
+
+	<p class="tipemptylinehalf">&nbsp;</p>	
+
+<li>Finally, the temporary cross table and other temporary maps are removed, and the output merged catchments table with the new columns is displayed. </li>
+
+</ul><p class=seealso>See also:</p>
+<p class="seealsolinks"><a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : Joining columns from other tables</a></p>
+<p class="seealsolinks"><a href="../ilwisapp/cross_functionality.htm">Cross : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/script_editor_functionality.htm">Script editor : functionality</a></p>
+<p class="seealsolinks"><a href="../ilwis/ilwis_objects_scripts.htm">ILWIS objects : scripts</a></p>
+<p class=seealsolinks><a href="../ilwis/how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a></p>
+<p class=seealsolinks><a href="http://www.52n.org/index.php?option=com_projects&task=showProject&id=30&Itemid=127" target="_blank">ILWIS on the web (52 North)</a></p>
+</body

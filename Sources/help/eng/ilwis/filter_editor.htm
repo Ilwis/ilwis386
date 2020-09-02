@@ -1,0 +1,168 @@
+<html>
+
+<head>
+<title>Filter editor</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Edit ..., Filters, Filter editor, Linear filters, User-defined filters">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Filter editor</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Edit a user-defined <a href="..//ilwis/popup/obj_linear_filter_popup.htm" onClick="return popup(this, 'notes')" >linear filter</a> or view the contents of a linear system filter. Linear filters use a linear combination of all pixels in a rectangle around the input pixel. </p>
+
+<p class=defnewpar>The Filter editor is opened:</p>
+
+<ul>
+
+<li>	when you click the OK button in the <a href="../ilwismen/create_a_filter.htm">Create Filter</a> dialog box,</li>
+
+<li>    when you double-click a user-defined linear filter in a Catalog, </li>
+
+<li>	selected a filter in a Catalog, and choose <span class=arial>Edit Object</span> from the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window, </li>
+
+<li>	when in a Catalog, you click a user-defined linear filter with the right mouse button in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, and select <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=diakopje>Options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Matrix:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The window shows a matrix with the number of rows and columns as specified before when creating a linear filter. The rows and columns of the filter are numbered; cell 0,0 is the center of the filter. If the filter is rather large, scroll bars appear.</p>
+
+<p class=diabox>To edit values in the matrix: </p>
+
+        <ul class=diaul>
+
+        <li>select a cell at a time and type a value, or</li>
+
+        <li>select multiple cells, click the selection with the right mouse button and choose <span class=arial>Edit</span> from the context-sensitive menu. </li>
+
+        <li>select multiple cells, and choose <span class=arial>Edit</span> from the Edit menu. </li>
+
+        </ul>
+
+<!--<ul class=diaul>
+
+<li>	when you cleared the Real Matrix check box in the Create Filter dialog box, you can only enter integers (whole values);</li>
+
+<li>	when you selected the Real Matrix check box in the Create Filter dialog box, you can also type real values (with decimals).</li>
+
+</ul>-->
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the filter. The description is visible on the status bar of the Main window when moving the mouse pointer over a filter in the Catalog. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Gain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the Gain factor yourself, see the example below.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Moving through the matrix by keyboard:</p>
+
+<ul>
+
+<li>	to move up and down in the matrix: press the <span class=arial>Arrow Up</span> and <span class=arial>Arrow Down</span> keys;</li>
+
+<li>	to move to one cell to the right: press the <span class=arial>Tab</span> key;</li>
+
+<li>	to move to one cell to the left: press the <span class=arial>Shift+Tab</span> key.</li>
+
+</ul>
+
+<p class=kopje>Example:</p>
+
+<p>When considering a linear filter of size 3x3, the 9 matrix values are multiplied with 9 pixel values in the input raster map, this is summed and multiplied by the gain factor. The result is assigned to the center pixel in the output map.</p>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	To view the contents of a linear <i>system</i> filter: </li>
+
+        <ul class=tipul>
+
+        <li>	click the <span class=arial>Customize Catalog</span> button <img src="../images/custcat.gif" align=bottom width="22" height="22"> in the <a href="main_window_standard_toolbar.htm">standard toolbar</a> of the Main window, </li>
+
+        <li>	in the <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog</a> dialog box, select the object type Filter (use the scroll bar) and select the check box <span class=arial>Include System Objects</span>,</li>
+
+        <li>	then, in the Catalog, the linear system filters will appear: AVG3x3, D2FDX2, D2FDXDY, D2FDY2, DFDDN, DFDUP, DFDX, DFDY, EDGESENH, LAPLACE, SHADOW, </li>
+
+        <li>    you can open a system filter by double-clicking it. </li>
+
+        </ul>
+
+<p class=tiptext>	System filters cannot be edited.</p>
+
+<li>	To copy the contents of a filter to clipboard: </li>
+
+        <ul class=tipul>
+
+        <li>	open a filter, </li>
+
+        <li>	from the Edit menu in the Filter editor, choose the <span class=arial>Select All</span> command, then</li>
+
+        <li>	from the Edit menu, select the <span class=arial>Copy</span> command or press the <span class=arial>Ctrl+C</span> keys on the keyboard. </li>
+
+        </ul>
+
+<li>    To copy the whole filter editor window to clipboard: </li>
+
+        <ul>
+
+        <li>    press the <span class=arial>Alt+PrintScrn</span> keys on the keyboard. </li>
+
+        </ul>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_types_linear_filters.htm">Filters : linear filters</a></p>
+
+<p class=seealsolinks><a href="how_to_create_linear_filters.htm">How to create linear filters</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filter_functionality.htm">Filter operation : functionality</a></p>
+
+</body

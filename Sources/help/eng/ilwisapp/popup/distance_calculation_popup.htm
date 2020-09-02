@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<title>distance calculation popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Distance calculation</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/distance_calculation.htm" onClick="return popup(this, 'notes')" >Distance calculation</a> assigns to each pixel the smallest distance in meters towards user-specified source pixels, for example to schools, to roads etc. The output is called a <a href="distance_calculation_distance_map_popup.htm">distance map</a>. </p>
+
+<p class=linespacing03after>The input map for a distance calculation is called a <a href="../../ilwisapp/popup/distance_calculation_source_map_popup.htm">source map</a>: all pixels with a class name, ID, or value are regarded as source pixels, and distance values will be calculated for all pixels that are undefined. In the Distance calculation dialog box, a source map can be any raster map with a class domain or an ID domain. On the command line, you can also use raster maps with a value domain. </p>
+
+<p class=linespacing03after>Inaccessible or less accessible areas can be indicated in a <a href="../../ilwisapp/popup/distance_calculation_weight_map_popup.htm">weight map</a>. The weight factors in such a map represent the relative difficulty, a 'resistance', to surpass pixels. By using weight factors that are inversely proportional to the possible speed that can be obtained in different mapping units, a so-called <a href="../../ilwisapp/popup/distance_calculation_time_travel_map_popup.htm">time travel map</a> can be calculated.</p>
+
+<p>Through a distance calculation, also a <a href="../../ilwisapp/popup/distance_calculation_thiessen_map_popup.htm">Thiessen map</a> can be calculated. A weight map can be used, but is not obligatory.</p>
+
+</body

@@ -1,0 +1,293 @@
+<html>
+
+<head>
+<title>Create a domain</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Domains, Create domain, Class domain, ID domain, Value domain, Bool domain">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a domain</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> contains the set of valid IDs, class names or values that can be used in a map or a table. All ILWIS data objects (maps, tables, columns) need a domain. A <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> can be linked to a domain, so that maps using the same domain can be displayed with the same colors. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Create Domain</span> from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window,</li>
+
+<li>	when you double-click the <span class=arial>New Domain</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>,</li>
+
+<li>	when you clicked the little <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22"> next to a domain drop-down list box in a dialog box.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Domain type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the domain type:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Create a class domain when the elements in your map are classes which occur in several places in your map (e.g. soil units: clay, sandy loam). 
+
+ Subsequently, the <a href="../ilwis/domain_class_id_editor_functionality.htm">domain Class/ID editor</a> is opened where you can add all classes of this domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1><a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >Group</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Only select 'Group' if you want to create a domain Group with which you can <i>permanently</i> slice or classify the values in an image or in a value map. 
+
+The domain Group editor is opened where you can add the upper boundary values of groups, group names, etc. See also tip 5 below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >Identifier</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Create an ID domain when the elements in your map are uniquely identified (e.g. cadastral plots: 1024, 1025). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1>Nr. of items:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the number of items that should be automatically added to this ID domain. </p>
+
+<ul class=diaul>
+<li>When you accept the default number of items 0, the <a href="../ilwis/domain_class_id_editor_functionality.htm">domain Class/ID editor</a> is opened; 
+
+        you have to add IDs yourself. </li>
+
+<li>When you type a value, the specified number of IDs are automatically added to the domain as <i>numbers</i> starting from 1. 
+
+        All IDs will be preceded by the prefix which you have to specify in the Prefix box.</li>
+
+</ul>
+
+<p class=diabox>The maximum number of items that can be shown in the domain Class/ID editor is 100 million.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1>Prefix:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a (short) text that will be used as the prefix for all numbered IDs which will be automatically added to this domain. 
+
+ The IDs in this domain may appear for instance as <i>My Prefix</i> 1, <i>My Prefix</i> 2, etc. 
+ 
+ The default prefix is <b>nr</b>. In a prefix, it is allowed to use spaces and characters as @, #, etc., 
+
+ the colon character <span class=courier>:</span> however may not be used in a prefix.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Create a Bool domain when the elements in your map may only use 2 possible codes (e.g. &quot;Suitable&quot; and &quot;Not Suitable&quot;) or may be undefined. Subsequently, the <a href="../ilwismen/edit_domain_bool.htm">Edit Bool domain</a> dialog box will be opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Create a value domain when the elements in your map represent measurable values (e.g. height, concentration). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1>Min   Max:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type values for the minimum and maximum value of this domain. This is also called the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>.</p>
+
+<p class=diabox>The specified minimum and maximum values of a value domain will be used as the default minimum and maximum values for any new maps or columns that use this domain. </p>
+
+<p class=diabox>When you create a representation for this value domain, the specified minimum and maximum values will determine the absolute lower and upper boundaries of that representation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of this domain. By specifying a precision of 0.01, all values will use 2 decimals; by specifying a precision of 25, all values will increase or decrease in steps of 25, etc. </p>
+
+<p class=diabox>The combination of specified values for minimum, maximum and precision implies the store type of raster maps that use this domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Width:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the default width (i.e. the number of characters) to be used in other parts of the software by lists which show class names or IDs. By default, class names in class domains will be shown in 15 characters and IDs of an ID domain will be shown in 6 characters. If you are planning to use longer class names or IDs, you specify a larger width value. This domain width is used for instance in map editors when you are assigning class names/id's to points, segments, polygons and in tables when editing fields of class/id columns. The domain width can also be set in the <a href="../ilwismen/domain_properties.htm">Properties of a Class/ID domain</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the domain. The description is visible on the status bar of the Main window when moving the mouse pointer over the domain in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip 1:</p>
+
+<p class=tiptext>It is advised <b>not</b> to create more than one domain for: </p>
+
+<ul class=tipul>
+
+<li>	maps of the same theme (Class), </li>
+
+<li>	maps containing the same IDs, </li>
+
+<li>	maps containing the same kind of values, or </li>
+
+<li>	maps of different years but of the same theme, or with the same IDs or values. </li>
+
+</ul>
+
+<p class=tiptext>Instead, select the same domain as used before. It is not necessary that all IDs, class names or values actually occur in each map.</p>
+
+<p class=tip>Tip 2:</p>
+
+<p class=tiptext>Similarly, when creating an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> for a map, you should <b>not</b> create a new domain for the attribute table; the attribute table should use the <i>same domain as the map</i> to which the attribute table is related.</p>
+
+<p class=tip>More tips:</p>
+
+<ol class=tipol>
+
+<li>	When <b>calculating</b> with <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>, you can generally accept the <b>default</b> <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a>. <br>
+
+        You can select or create a <i>user-defined value domain</i> when the values have a specific meaning, i.e. when values are known to be valid only between certain minimum and maximum values, and when the values should always use a certain precision.  </li>
+
+<li>	When creating a new class or group domain, a new representation class is
+  automatically created. This representation has the same name as the class or group 
+  domain and it will be used as the default representation for this domain. You
+  can edit the colors etc. of the classes in the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation
+  Class</a> editor.	</li>
+
+<li>	
+  <p align="left">When creating a new value domain, the default representation
+  for that domain will be <a href="..//ilwis/sec/y_system_representations_sec.htm" onClick="return popup(this, 'notes')" >system
+  representation Pseudo</a>.	</li>
+
+<li>	To create your own representation for a value domain, you can:</li>
+
+        <ul class=tipul>
+
+        <li>	open the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> of your value domain and in the Domain Properties dialog box, click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box; or</li>
+
+        <li>	open the map with your value domain, and in the map's <span class=arial>Display Options</span> dialog box, click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box.</li>
+
+        </ul>
+
+        <p class=tiptext>The <a href="create_a_representation.htm">Create Representation</a> dialog box follows.</p>
+
+        <ul class=tipul>
+
+        <li>For (maps using) the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a>, you can both create representations of type <i>gradual</i> in which boudaries are defined in percentages as well as representations of type <i>value</i> in which boundaries are defined in values. </li>
+
+        <li>For (maps using) a user-defined value domain, you can create representations of type <i>value</i>.</li>
+        
+        </ul>
+
+        <p class=tiptext>Representations for value maps are edited in the <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a>. </p>
+
+<li>    To <i>permanently</i> slice an image or to permanently classify a map, you have to create a domain Group and fill it with upper boundary values and class names. 
+
+        To apply the domain Group, you have to use the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation or the <a href="../ilwis/calc_clfy.htm">CLFY</a> function on the command line. <br>
+
+        To <i>interactively</i> slice an image or to interactively classify a map, you don't have to create a domain Group. You can simply create a new representation value or gradual for an image or a value map. When you display the image or value map with such a representation, the value map appears as if it was sliced but the original values are retained.<br>
+
+        Both the interactive and the permanent method are described in <a href="../ilwis/how_to_slice_an_image.htm">How to slice an image</a> and <a href="../ilwis/how_to_classify_a_map_or_column.htm">How to classify a map or column</a>.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_before_creating_maps_and_tables.htm">Basic concepts : before creating maps and tables</a></p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_domains.htm">Basic concepts : domains</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_domains.htm">How to create
+a domain</a></p>
+
+</body

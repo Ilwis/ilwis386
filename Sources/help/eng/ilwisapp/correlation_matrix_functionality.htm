@@ -1,0 +1,180 @@
+<html>
+
+<head>
+<title>Correlation matrix : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Correlation matrix">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Correlation matrix</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The operation calculates correlation coefficients of raster maps in a map list. Correlation coefficients characterize the distribution of pixel values in two raster maps. Furthermore, the mean and standard deviation of each individual raster map is calculated.  </p>
+
+<p class=defnewpar>Analyzing satellite data the images often show a degree of correlation. This means that when spectral values in one band are high the values in another band are expected to be high as well. Plotting values from highly correlated bands in a feature space will result in an ellipsoid denoting that the two bands contain dependent information. From a set of highly correlated bands only one adds real value whilst the other ones may be derived or estimated. Calculating a correlation matrix helps to detect the redundancy and identifies possible reductions in the number of bands, e.g.,  to be used in a color composite. </p>
+
+<p class=defnewpar>Correlation coefficients are normalized covariance values. A correlation coefficient ranges from -1 to +1. Diagonal elements are always 1. A correlation close to +1 indicates a direct relationship between two bands. This suggests that if the reflectance (DN) of a pixel in one band is known, the reflectance of that pixel in the other band can be derived or estimated. A correlation close to -1 indicates an inverse relationship between the reflectance values of one band and the reflectance values in the other one. </p>
+
+<p class=kopje>Example:</p>
+
+<p>The following example shows a correlation matrix for 4 input bands. Bands 1 and 2 are highly correlated with a correlation coefficient of 0.97. Bands 1 and 4 seem independent with a correlation coefficient of -0.10.  </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=56>
+<p class=th></p>
+
+</td>
+<td valign="top" width=56>
+<p class=th>band 1</p>
+
+</td>
+<td valign="top" width=56>
+<p class=th>band 2</p>
+
+</td>
+<td valign="top" width=56>
+<p class=th>band 3</p>
+
+</td>
+<td valign="top">
+<p class=th>band 4</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=th>band 1</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>1.00</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>0.97</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>0.50</p>
+
+</td>
+<td valign="top">
+<p class=t1>-0.10</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=th>band 2</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>0.97</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>1.00</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>0.43</p>
+
+</td>
+<td valign="top">
+<p class=t1>-0.21</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=th>band 3</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>0.50</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>0.43</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>1.00</p>
+
+</td>
+<td valign="top">
+<p class=t1>0.83</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=th>band 4</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>-0.10</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>-0.21</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>0.83</p>
+
+</td>
+<td valign="top">
+<p class=t1>1.00</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The high correlation between band 1 and band 2 suggests the removal of one of these bands; in a color composite use band 1 or band 2, and band 3 and band 4.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The operation requires a map list in which all raster maps use the <span class=courier>Image</span> domain or the same value domain and the same georeference. Pixels in the input maps that have the undefined value are ignored in the calculation.</p>
+
+<p class=kopje>Output matrix:</p>
+
+<p>After performing the operation, the correlation matrix, and the mean and standard deviation of each individual raster map are shown on the screen. To show the matrix once more after closing this window, you have to perform the operation again. The values of the correlation matrix are stored by the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the map list (.MPL). </p>
+
+<p class=defnewpar>Furthermore, after calculating a correlation matrix or a <a href="..//ilwisapp/popup/variance_covariance_matrix_popup.htm" onClick="return popup(this, 'notes')" >covariance matrix</a>, the Properties dialog box of the input map list shows you the <a href="..//ilwisapp/popup/optimum_index_factor_popup.htm" onClick="return popup(this, 'notes')" >Optimum Index Factors</a>, i.e. the combinations of three input maps with largest sum of standard deviations and smallest correlation. This can give you an indication which raster maps to use to create a color composite. For more information, see <a href="optimum_index_factor_functionality_algorithm.htm">Optimum Index Factor : functionality / algorithm</a>.</p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>As the output correlation matrix is not stored as a separate object, this operation cannot be executed from the command line. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="correlation_matrix_dialog_box.htm">Correlation matrix : dialog box</a></p>
+
+<p class=seealsolinks><a href="correlation_matrix_algorithm.htm">Correlation matrix : algorithm</a></p>
+
+</body

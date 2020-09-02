@@ -1,0 +1,85 @@
+<html>
+
+<head>
+<title>filter d2fdx2 sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>D2FDX2  filter</p>
+
+<p>The D2FDX2 filter is standard a <a href="../popup/filter_linear_filter_popup.htm">linear filter</a> which works in a 1 by 5 environment. It calculates the second derivative in x-direction (d<sup>2</sup>f/dx<sup>2</sup>). The values in the matrix are:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>-1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>16</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>-30</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>&nbsp;-16</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>&nbsp; -1</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargin06>Gain factor = 1/24 = 0.04166666</p>
+
+<p class=defnewpar>When using the D2FDX2 filter on a DEM:</p>
+
+<ul>
+
+<li>	positive values in the output map mean that the terrain is concave in x-direction,</li>
+
+<li>	negative values mean that the terrain is convex. </li>
+
+</ul>
+
+<p class=defnewpar>To calculate concavity and convexity in both x- and y-directions you can use the <a href="../../ilwisapp/sec/filter_laplace_sec.htm">LAPLACE</a> filter.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_types_linear_filters.htm" onClick="return popup(this, 'notes')" >Filter types : linear filters</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_types_gradient_or_derivative_filters_technical_information.htm" onClick="return popup(this, 'notes')" >Filter types: gradient or derivative filters (technical information)</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_user_defined_linear_filters.htm" onClick="return popup(this, 'notes')" >Filters : user-defined linear filters</a></p>
+
+</body

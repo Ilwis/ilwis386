@@ -1,0 +1,83 @@
+<html>
+
+<head>
+<title>Basic concepts : layers in a map window</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Basic concepts, Layers, Layer Management, Data layers, Map window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Basic concepts</h1>
+
+<h1 class=secondline>Layers in a map window</h1>
+
+<!--<hr>-->
+
+<p class=kopje>Map window: </p>
+
+<p>In a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>, you can display: one or more <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a>, <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a>, <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a> and/or <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a>. In a map window you can also display: three images of a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> as an <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >interactive color composite</a>, or all maps of a map list as a <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>. Maps displayed in a map window are called <a href="..//ilwis/popup/layers_data_layers_popup.htm" onClick="return popup(this, 'notes')" >data layers</a>. </p>
+
+<p class=defnewpar>Furthermore, you can add <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text</a> layers, and <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and/or <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a> to a map window. All objects that are added to a map window are called <a href="..//ilwis/popup/layers_popup.htm" onClick="return popup(this, 'notes')" >layers</a>. </p> 
+
+<p class=defnewpar>Before a layer can be displayed in a map window, you need to specify the <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> of the layer, i.e. settings that will determine how the layer will be displayed. </p>
+
+<p class=kopje>Layer Management pane in a map window: </p>
+
+<p>All layers that are added to a map window will appear in the Layer Management pane of the map window. By default, this pane is located along the left-hand side of a map window. 
+
+<p class=defnewpar>The Layer Management pane allows you: </p>
+
+<ul>
+
+<li>to inspect the meaning of the maps that were added to a map window: the legends of added maps will appear in the Layer Management pane; </li>
+
+<li>to change the order of layers in a map window; </li>
+
+<li>to show or hide a certain layer; </li>
+
+<li>to inspect the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a map, such as the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of a map, the <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> used by the domain, the map's <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> and/or <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>; </li>
+
+<li>to change the colors, line-widths etc. in user-defined <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representations</a> as used by the domain of a map; etc. </li>
+
+</ul>
+
+<p>For more information, see <a href="how_to_use_layers_in_a_map_window.htm">How to use layers in a map window</a>. </p>
+
+<p class=kopje>Storing layers in a map view: </p>
+
+<p>All layers as displayed in a map window can be saved as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. Map views are used to store and quickly re-display a <i>set</i> of maps and other layers in a map window, without the need of specifying display options. Furthermore, you will need map views later on to be able to print one or more map windows; you have to add map views to a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> where you can additionally add legends, north arrows, bitmaps and pictures, ticks and coordinates, etc. </p>
+
+<p>For more information, see <a href="basic_concepts_map_views_and_layouts.htm">Basic concepts : map views and layouts</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="map_window_menu_commands.htm">Map window : menu commands</a></p>
+
+<p class=seealsolinks><a href="how_to_use_layers_in_a_map_window.htm">How to use layers in a map window</a></p>
+
+<p class=seealsolinks><a href="basic_concepts_map_views_and_layouts.htm">Basic concepts : map views and layouts</a></p>
+
+<p class=seealsolinks><a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a></p>
+
+
+
+</body

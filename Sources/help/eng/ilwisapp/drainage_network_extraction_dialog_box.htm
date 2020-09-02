@@ -1,0 +1,126 @@
+<html>
+
+<head>
+<title>Drainage network extraction : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Drainage network extraction">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Drainage network extraction</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Drainage network extraction operation extracts a basic drainage network (boolean raster map). </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Flow accumulation map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> that is the output of a previous <a href="..//ilwisapp/popup/flow_accumulation_popup.htm" onClick="return popup(this, 'notes')" >Flow accumulation</a> operation. Open the list box and select the desired input map or map list, or directly drag a raster map or map list from a Catalog into this box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Stream threshold:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the minimum number of pixels that should drain into a pixel examined to add this pixel to the output drainage network. </p>
+
+<p class="diabox">Example: when using a stream threshold value of 10: </p>
+
+<ul class="diaul">
+
+<li>pixels in the flow accumulation map that have a value <span class="symbollarger">&gt;</span> 10 will be assigned value True in the output drainage network map. </li>
+
+<li>pixels in the flow accumulation map that have a value <span class="symbollarger">£</span> 10 will be assigned value False. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Use stream threshold map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you wish to use a <i>map</i> containing various stream threshold values; subsequently, select an input raster map (with a value domain) that contains the threshold values. </p>
+
+<p class="tiptext"><span class="tip">Tip: </span>A threshold map can be prepared with the <a href="variable_threshold_computation_functionality.htm">Variable threshold computation</a> operation. A threshold map can for example be based on internal relief values or on certain infiltration values for specific geological units, etc. </p>
+
+<p class="diabox">Clear this check box when you wish to use a single stream threshold value. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxleft1>Flow direction map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When using a stream threshold map, select a raster map that is the output of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation. </p>
+
+<p class="diabox">The Flow direction map is used to automatically fill possible gaps between found drainage lines. As a result, you will always obtain a continuous drainage network. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the extracted drainage network. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="drainage_network_extraction_functionality.htm">Drainage network extraction : functionality</a></p>
+
+</body

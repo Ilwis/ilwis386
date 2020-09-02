@@ -1,0 +1,30 @@
+<html>
+
+<head>
+<title>principal components popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Principal Components</p>
+
+<p>The <a href="..//ilwisapp/principal_component_analysis.htm" onClick="return popup(this, 'notes')" >Principal Component analysis</a> operation is mathematical method to uncover relationships among many variables (as found in a set of raster maps in a map list) and to reduce the amount of data needed to define the relationships. With Principal Component Analysis each variable is transformed into a linear combination of orthogonal common components (output raster maps) with decreasing variation. The linear transformation assumes the components will explain all of the variance in each variable. Hence each component (output raster map) carries different information which is uncorrelated with other components. </p>
+
+</body

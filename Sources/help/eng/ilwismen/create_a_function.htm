@@ -1,0 +1,169 @@
+<html>
+
+<head>
+<title>Create a function</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Functions, Create ..., User-defined functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a function</h1>
+
+<!--<hr>-->
+<p><a href="../ilwis/ilwis_objects_functions.htm">Functions</a> can be used in all three calculators in ILWIS: <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, in <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, in <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a> or in the <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >pocket line calculator</a>. Some 50 internal functions are available (see also <a href="../ilwis/calc.htm">MapCalc</a> and <a href="../ilwis/calc.htm">TabCalc</a>), but also user-defined functions can be created. </p>
+
+<p class=linespacing03before>A user-defined function generally contains of a
+combination of:</p>
+
+<ul>
+
+<li>existing MapCalc/TabCalc operators and functions, and</li>
+
+<li>user-defined parameters which represent maps and/or columns on which the function will be applied later on.</li>
+
+</ul>
+
+<p class=kopje>To create a user-defined function:</p>
+
+<ul>
+
+<li>	in the Main window, open the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> 
+  and	choose <span class=arial>Create Function,</span> or</li>
+
+<!--<li>	in the Table window, open the <a href="..//ilwismen/sec2/table_window_file_menu_sec2.htm" onClick="return popup(this, 'notes')" >File menu</a> 
+  and choose <span class=arial>Function,</span> or</li>-->
+
+<li>	in the Operation-tree, expand the <span class=arial>Create</span>  item and double-click
+  <span class=arial>New Function</span>, or&nbsp;</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a><a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >,</a>
+  double-click the <span class=arial>New Function</span> item.</li>
+
+</ul>
+
+<p class=defnewpar>A user-defined function can be created:</p>
+
+<ul>
+
+<li>	to perform calculations in MapCalc and TabCalc which use difficult or long formulas that are tedious to type in on the command line, or </li>
+
+<li>	to define calculations for MapCalc and TabCalc which you want to use a number of times on different maps or columns.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Function name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the user-defined function.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Expression:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the expression that the function should perform. 
+
+<p class=diabox>An expression is a combination of user-defined parameter names with which you want to calculate and some <a href="../ilwis/calc.htm"> MapCalc</a> and <a href="../ilwis/calc.htm"> TabCalc</a> operators and functions. </p>
+
+<p class=linespacing01before>Parameter names: </p>
+
+<ul>
+
+<li>must start with a character from A to Z, </li>
+
+<li>may contain characters from A to Z, digits 0 to 9, and underscores, </li>
+
+<li>may be longer than 8 characters. </li>
+
+</ul>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the user-defined function. The description is visible on the status bar of the Main window when moving the mouse pointer over the function in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <a href="../ilwis/function_editor_functionality.htm">Function editor</a> is opened. For more information on function syntax, see <a href="../ilwis/function_editor_functionality.htm">Function editor : functionality</a>.</p>
+
+<p class=kopje>Example:</p>
+
+<ul>
+
+<li>To sum for each record in a table (e.g. Rainfall), the values of two columns (e.g. January and February), you can create a function (e.g. sumcols). </li>
+
+<li>The expression for this function can be: a + b</li>
+
+<li>To apply the function, open the table Rainfall and type on the command line of the table window:</li>
+
+<p class=leftmargininlist>	<span class=courier>newcol = sumcols(January,February)</span></p>
+
+<li>	To use the same function on columns March and April, type on the command line:</li>
+
+<p class=leftmargininlist>	<span class=courier>newcol2 = sumcols(March,April)</span></p>
+
+</ul>
+
+<p class=defnewpar>In <a href="../ilwis/calc_creating_and_applying_user_defined_functions.htm">Map calculation : creating and applying user-defined functions</a> and in <a href="../ilwis/calc_creating_and_applying_user_defined_functions.htm">Table calculation : creating and applying user-defined functions</a> other 'basic' examples are available. <br>
+
+For more advanced user-defined functions, e.g. user-defined functions with IF, THEN, ELSE loops, FOR loops, WHILE loops and REPEAT/UNTIL loops, see <a href="../ilwis/calc_user_defined_functions_advanced.htm">Map and Table calculation : User-defined functions (advanced)</a>.
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>User-defined functions can be used on the command line of the Main window for map calculations, on the command line of a table window for table calculations and in <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a> for a sequence of map and table calculations. </li>
+
+<li>ILWIS operations can be started from the command line of the Main window by typing an ILWIS expression. For more information, see <a href="../ilwis/appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a>.</li>
+
+<li>To perform a function on multiple maps or columns at a go, or to perform a series of ILWIS operations at a go, use a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a>. For more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">ILWIS script language (syntax)</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_functions.htm">ILWIS objects : functions</a></p>
+
+<p class=seealsolinks><a href="../ilwis/function_editor_functionality.htm">Function editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/calc_creating_and_applying_user_defined_functions.htm">Map calculation : creating and applying user-defined functions</a></p>
+
+<p class=seealsolinks><a href="../ilwis/calc_creating_and_applying_user_defined_functions.htm">Table calculation : creating and applying user-defined functions</a></p>
+
+<p class=seealsolinks><a href="../ilwis/calc_user_defined_functions_advanced.htm">Map and Table calculation : user-defined functions (advanced)</a></p>
+
+</body

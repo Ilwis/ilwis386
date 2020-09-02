@@ -1,0 +1,74 @@
+<html>
+
+<head>
+<title>Sample set editor : Merge classes</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sample set editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Sample set editor</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__sample_set_editor_edit_menu_sec2.Click()>Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Merge Classes</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Merge one class of training pixels in the <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> into another class. </p>
+
+<p class=defnewpar>When you find that the spectral values of two classes of training pixels are very similar to each other, you may decide to merge these classes into one class. This decision can be based on similar statistics of these classes in the sample statistics and/or overlapping classes in feature spaces.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Merge Class:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a class of training pixels that you want to merge into another class (i.e. specify the old class name).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Into Class:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the class into which the other class should be merged (i.e. specify the new class name).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/sample_set_editor_functionality2.htm">Sample set editor : functionality (2)</a></p>
+
+</body

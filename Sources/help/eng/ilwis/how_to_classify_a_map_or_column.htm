@@ -1,0 +1,204 @@
+<html>
+
+<head>
+<title>How to classify a map or column</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to classify a map, Classify, Slicing, How to classify a column">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to classify a map or column</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>You can:</p>
+
+<ol>
+
+<li>	<a href="#mapinteract"><span class=bookmark>Slice or classify a value map interactively</span></a>;</li>
+
+<li>	<a href="#mappermanent"><span class=bookmark>Slice or classify a value raster map permanently</span></a>;</li>
+
+<li>	<a href="#colpermanent"><span class=bookmark>Classify a value column permanently</span></a>;</li>
+
+<li>	<a href="#multispectral"><span class=bookmark>Perform a multi-spectral image classification on satellite imagery</span></a>.</li>
+
+</ol>
+
+<p id="mapinteract" class=kopjeboldandund>1. To slice or classify a value map interactively:</p>
+
+<ul>
+
+<li>	Double-click a value map (raster, polygon or segment map) in the Catalog;</li>
+
+<li>	In the <span class=arial>Display Options</span> dialog box, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box;</li>
+
+<li>	in the appearing <span class=arial>Create Representation</span> dialog box, type a name for the new representation but do not change the domain listed in this dialog box; </li>
+
+        <ul>
+
+        <li>	when the map is using the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>, you will create a <b>representation gradual</b>, in which boundary values are represented by <i>percentages</i>;</li>
+
+        <li>	when the map is using any other value domain, you will create a <b>representation value</b> in which boundary values are the actual <i>values in your map</i>;</li>
+
+        </ul>
+
+<li>    Click OK in the <span class=arial>Create Representation</span> dialog box. The <a href="representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a> is opened;</li>
+
+<li>	Click OK in the <span class=arial>Display Options</span> dialog box of the map. The map is displayed in a map window; </li>
+
+<li>	Keep the map window open and switch to the editor.</li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>For maps which use <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain Value</a>, only a representation gradual can be created which works on percentages. When you want to create a representation value (working on values) for such maps, you need to change the domain of the map from system domain Value to a user-defined value domain. For more information, see <a href="how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a>.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+
+<ul>
+
+<li>	In the <a href="representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a>, you can add limits, assign colors to the limits, and choose to stretch in between limits or use the colors of upper or lower boundaries (slices);</li>
+
+        <ul>
+
+        <li>	to insert a limit: choose <span class=arial>Insert Limit</span> from the <a href="..//ilwismen/sec2/repr_value_gradual_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a> or press <span class=arial>Ins</span> on the keyboard; in the appearing <span class=arial>Insert Limit</span> dialog box, type a value for the upper boundary of a slice, e.g. 100 and assign a color to this limit;</li>
+
+        <li>	double-click a number of times in between two limits, and decide whether the color(s) of the values in between these two limits in the map should be stretched or should use the color of the upper limit or the lower limit;</li>
+
+        <li>	double-click an existing limit to change its boundary value or its color; </li>
+
+        <li>	the color bar at the bottom of the editor gives an impression of how your total representation looks like;</li>
+
+        </ul>
+
+<li>    When finished adding limits, keep the Representation editor open, and switch to the map window;</li>
+
+<li>	In the map window, click the Redraw button <img src="../images/redraw.gif" align=bottom width="22" height="22"> in the toolbar. The map will be displayed in the colors you just defined;</li>
+
+<li>	Keep the map window open and switch to the representation editor. </li>
+
+<li>	Continue to edit boundary values and/or colors in the Representation Value/Gradual editor, and redrawing the map window until satisfied.</li>
+
+</ul>
+
+<p class=defnewpar>For more information, see also <a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representations</a>, <a href="representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a> or <a href="how_to_slice_an_image.htm">How to slice an image</a>.</p>
+
+<p id="mappermanent" class=kopjeboldandund>2. To classify a raster map with a value domain permanently:</p>
+
+<ul>
+
+<li>	You can first try the interactive method;</li>
+
+<li>	Create a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >domain Group</a> (Main window, <span class=arial>File</span>, <span class=arial>Create</span>) in which you fill in the upper boundaries and the output class/group names. For more information, see <a href="../ilwis/how_to_create_domain_group.htm">How to create a Group domain</a>.<br>
+        Optionally, you can edit the <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> for this domain, by choosing the <span class=arial>Representation</span> command from the <a href="domain_class_id_editor_menu_commands.htm">Edit menu</a> in the domain editor.</li>
+
+<li>	Then, in the Main window, open the <a href="main_window_menu_commands.htm">Operations menu</a>, choose <span class=arial>Image Processing, <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" ></span>Slicing</a> or use the <a href="calc_clfy.htm">CLFY function</a> on the command line of the Main window or in a MapCalc dialog box. For more information, see the <a href="../ilwisapp/slicing.htm">Slicing</a> operation or <a href="calc_clfy.htm">Map calculation : classifying a map (CLFY)</a>.</li>
+
+<li>	Display the output raster map in a map window.</li>
+
+<li>	You can edit the representation of the map by choosing the <span class=arial>Representation</span> command from the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window. Redraw <img src="../images/redraw.gif" align=bottom width="22" height="22"> the map in the map window. </li>
+
+</ul>
+
+<p class=kopje>To edit the representation of the classified map:</p>
+
+<ul>
+
+<li>	In the map window, open the <a href="map_window_menu_commands.htm">Edit menu</a> and choose <span class=arial>Representation</span>; </li>
+
+<li>	The <a href="representation_class_editor_functionality.htm">Representation Class editor</a> is opened: edit the colors of the classes as you wish;</li>
+
+<li>	Keep the editor open and switch to the map window;</li>
+
+<li>	In the map window, click the <span class=arial>Redraw</span> <img src="../images/redraw.gif" align=bottom width="22" height="22"> button.</li>
+
+</ul>
+
+<p class=defnewpar>You can continue switching to the Representation editor and back to the map window to redraw the map until satisfied.</p>
+
+<p class=kopje>To change the boundary values on second thought:</p>
+
+<ul>
+
+<li>	You may keep the map window open;</li>
+
+<li>	In the map window, open the <a href="map_window_menu_commands.htm">Edit menu</a> and choose <span class=arial>Domain</span>;</li>
+
+<li>	The Domain Class/ID/Group editor is opened: edit the boundary values of the groups, insert more groups, etc.;</li>
+
+<li>	In the map window, open the Edit menu and choose <span class=arial>Properties</span>;</li>
+
+<li>	In the appearing <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box, click the <span class=arial>Make Up-to-Date</span> button;</li>
+
+<li>	a message appears asking for confirmation to recalculate the map, click OK;</li>
+
+<li>	when the calculation has finished, click the <span class=arial>Redraw</span> <img src="../images/redraw.gif" align=bottom width="22" height="22"> button in the map window. </li>
+
+</ul>
+
+<p id="colpermanent" class=kopjeboldandund>3. To classify a column with a value domain:</p>
+
+<p>You can choose to work via a dialog box or via the command line of the table window. </p>
+
+<p class=defnewpar>When you wish to work through a dialog box:</p>
+
+<ul>
+
+<li>    choose <span class=arial>Column Slicing</span> from the <a href="table_window_menu_commands.htm">Columns menu</a> in the table window; </li>
+
+<li>    the <a href="../ilwismen/column_slicing.htm">Column Slicing</a> dialog box will appear; </li>
+
+<li>    you can create a domain Group which contains upper boundary values and output class names via the dialog box. </li>
+
+</ul>
+
+<p class=defnewpar>When you wish to type a formula on the command line: </p>
+
+<ul>
+
+<li>	create a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >domain Group</a> in which you fill in the upper boundaries and the output class/group names;</li>
+
+<li>	use the <a href="calc_clfy.htm">CLFY function</a> on the command line in a table window:</li>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+<p class=calccommline>&nbsp;&nbsp;&nbsp;&nbsp;<i>OutputColumn</i> <span class=courier>=</span> <span class=courier>CLFY(</span><i>InputColumn</i><span class=courier>, </span><i>GroupDomain</i><span class=courier>)</span> </p>
+
+</ul>
+
+<p class=defnewpar>For more information, see <a href="calc_clfy.htm">Map &amp; Table calculation :
+CLFY function</a>.</p>
+
+<p id="multispectral" class=kopjeboldandund>4. To perform a multi-spectral image classification on satellite imagery:</p>
+
+<ul>
+
+<li>	<a href="../ilwis/how_to_create_sample_sets.htm">create a sample set</a> of the bands with <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >Sample</a>, and the Sample Set editor; </li>
+
+<li>	open the <a href="main_window_menu_commands.htm">Operations menu</a>, choose <span class=arial>Image Processing</span>, <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >Classify</a>.</li>
+
+</ul>
+
+<p class=defnewpar>For more information, see <a href="../ilwisapp/sample.htm">Sample</a>, <a href="sample_set_editor_functionality1.htm">Sample Set editor</a>, and <a href="../ilwisapp/classify.htm">Classify</a>.</p>
+
+</body

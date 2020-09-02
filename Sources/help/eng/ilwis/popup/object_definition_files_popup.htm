@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>Object definition files popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Object definition files</p>
+
+<p class=linespacing03after>All <a href="../../ilwis/sec/ilwis_objects_sec.htm"> ILWIS objects</a> have an ASCII <a href="..//ilwis/appendices_general_structure_of_object_definition_files.htm" onClick="return popup(this, 'notes')" >object definition file</a> which stores all information on the object. Object definition files list for instance the object's name, its creation time, relations to other required objects (e.g. domain, georeference, representation, etc.), the name of the object's data files, whether the object is dependent or not, whether a dependent object is up to date or not, etc. The contents of object definition files is shown in the <a href="../../ilwis/popup/object_properties_popup.htm">properties</a> of an object.</p>
+
+<p class=linespacing03after>Object definition files of <a href="../../ilwis/popup/object_dependent_data_objects_popup.htm">dependent data objects</a> also store the <a href="../../ilwis/popup/object_definition_popup.htm">definition</a> of how the dependent map, table or column was created. For dependent maps and tables, in principle only the map's or table's object definition file is stored on disk. When the dependent map or table is displayed, the data file is automatically calculated and stored on disk. All dependent data objects can be recalculated in case the input data have changed. </p>
+
+</body

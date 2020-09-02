@@ -1,0 +1,91 @@
+<html>
+
+<head>
+<title>Polygons to segments : functionality/algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygons to segments">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Polygons to segments</h1>
+
+<h1 class=secondline>Functionality / Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Polygons to segments operation extracts polygon boundaries and creates a segment map out of them. By default, the operation extracts segments from all polygon boundaries of the input map. You can also specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> to extract segments of specific polygons. The operation might be useful when you want to edit/update boundaries of polygons. </p>
+
+<p class=defnewpar>There are two possibilities to assign names to the extracted segments:</p>
+
+<ul>
+
+<li>	single name: all extracted segments are named '<span class=courier>Boundary</span>';</li>
+
+<li>	unique names: each segments obtains a unique name '<span class=courier>Boundary 1</span>', '<span class=courier>Boundary 2</span>' etc.; the original names or values of the neighbouring polygons on either side of an extracted segment as well as the length of extracted segments are stored in an additional attribute table for the output map. </li>
+
+</ul>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special input map requirements.</p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The operation creates a new domain which is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). 
+
+<ul>
+
+<li>When the Single Name option is used and when the input map has a class domain, the output map also has a class domain. <br>
+
+        All segments will obtain the name 'Boundary'.</li>
+
+<li>When the Single Name option is used and when the input map has an ID domain, the output map also has an ID domain. <br>
+
+        All segments will obtain the name 'Boundary'.</li>
+
+<li>When the Unique Names option is used, the output map and the attribute table will use a <span class=courier>UniqueID</span> domain. <br>
+
+        Every segment will obtain a unique name like 'Boundary 1', 'Boundary 2', etc. </li>
+
+</ul>
+
+<p>The output segment map uses the same coordinate system as the input polygon map.</p>
+
+<p class=kopje>Attribute table for output map:</p>
+
+<p>When the Unique Names option is used, an attribute table will be automatically created for the output map. The table will obtain the same name as the output map; it will contain the names of the polygons to the right and to the left of each extracted segment and the length of each extracted segment. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	You can also extract segments in the polygon editor. </li>
+
+<li>	For more information on internal domains and representations, refer to <a href="../ilwis/how_to_open_internal_domains_representations_advanced.htm">How to open internal domains/representations</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="polygons_to_segments_dialog_box.htm">Polygons to segments : dialog box</a></p>
+
+<p class=seealsolinks><a href="polygons_to_segments_command_line.htm">Polygons to segments : command line</a></p>
+
+</body

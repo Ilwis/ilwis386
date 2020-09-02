@@ -1,0 +1,92 @@
+<html>
+
+<head>
+<title>Extend window by coordinates</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Extend window, Map window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map&nbsp;window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Options menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Extend Window by Coordinates</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Increase or decrease the size of the current map window. The current boundaries of the map window are given as defaults. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>If you increase the coordinates boundaries of the map window, extra space will be added to the map window. </li>
+
+<li>If you decrease the coordinates boundaries of the map window, only part of your map will be shown. </li>
+
+</ul>
+
+<p class=defnewpar>Only the coordinate boundaries of the current map window will be changed, i.e. display; the coordinate boundaries of map(s) in the map window will remain the same. You can save the new situation of the map window, by saving the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Minimum X, Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the new minimum X-coordinate and for the new minimum Y-coordinate of the map window.</p>
+
+<p class=diabox>With minimum XY-coordinates, the coordinates of the <i>lower left corner</i> are meant. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Maximum X, Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the new maximum X-coordinate and for the new maximum Y-coordinate of the map window.</p>
+
+<p class=diabox>With maximum XY-coordinates, the coordinates of the <i>upper right corner</i> are meant. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To permanently change the size or outer coordinates of a map, use the Sub-map operations. </p>
+
+<p class=Seealso>See also: </p>
+
+<p class=seealsolinks><a href="extend_window_by_percentage.htm">Extend Window by Percentage</a></p>
+
+</body

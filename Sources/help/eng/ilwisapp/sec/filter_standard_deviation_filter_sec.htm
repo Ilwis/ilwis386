@@ -1,0 +1,148 @@
+<html>
+
+<head>
+<title>filter standard deviation filter sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Example standard deviation filters</p>
+
+<p>A <a href="..//ilwisapp/filter_types_standard_deviation_filters.htm" onClick="return popup(this, 'notes')" >standard deviation filter</a> may have any user-defined size. The filter calculates the standard deviation of the pixels considered, and assigns the answer to the center pixel in the output map. </p>
+
+<p class=kopje>Example 1:</p>
+
+<p>When the filter is defined as a 3x3 filter and when 9 pixel values in an input map are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>17</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>22</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>18</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>21</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>15</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>18</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>17</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>20</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>23</p>
+
+</td>
+</tr>
+</table>
+
+<p class=linespacing01before>The filter calculates:</p>
+
+<ul>
+
+<li>	the mean: (17+22+18+21+15+18+17+20+23) / 9 = 19</li>
+
+<li>	the standard deviation: sqrt((17-19)<sup>2</sup> + (22-19)<sup>2</sup> + ... (23-19)<sup>2</sup> / (9-1)) = sqrt (7) = 2.65</li>
+
+</ul>
+
+<p class=defnewpar>Thus, value 2.65 is assigned to the central pixel in the output map. </p>
+
+<p class=kopje>Example 2:</p>
+
+<p>When the filter is defined as a 1 by 5 filter, and 5 values in an input map are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>17</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>22</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>18</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>18</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>15</p>
+
+</td>
+</tr>
+</table>
+
+<p class=linespacing01before>The filter calculates:</p>
+
+<ul>
+
+<li>	the mean: (17+22+18+18+15) / 5 = 18</li>
+
+<li>	the standard deviation: sqrt((17-18)<sup>2</sup> + (22-18)<sup>2</sup> + ... + (15-18)<sup>2</sup> / (5-1)) = sqrt (26) = 5.1</li>
+
+</ul>
+
+<p class=defnewpar>Thus, value 5.1 is assigned to the central pixel in the output map. </p>
+
+</body

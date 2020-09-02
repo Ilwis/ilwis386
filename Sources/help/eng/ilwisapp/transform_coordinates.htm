@@ -1,0 +1,175 @@
+<html>
+
+<head>
+<title>Transform coordinates</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Transform coordinates, Projections">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Transform coordinates</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Transform coordinates dialog box allows you to: </p>
+
+<ul> 
+
+<li>select a certain input <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>, </li>
+
+<li>type a XY-coordinate or a LatLon coordinate, using this input coordinate system, </li>
+
+<li>select another target coordinate system, </li>
+
+<li>then, the entered XY-coordinate or LatLon-coordinate will be shown in the selected target coordinate system. </li>
+
+</ul>
+
+<p>In this way, you can interactively check whether a certain transformation is correct. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Points, Transform Coordinates</span> from the <a href="../ilwis/main_window_menu_commands.htm">Operations, Vector Operations</a> menu in the Main window, or</li>
+
+<li>	when you double-click the <span class=arial>Transform Coordinates</span> item in the Operation-list, or</li>
+
+<li>	when you click a coordinate system in the Catalog with the right mouse button and choose <span class=arial>Vector Operations, Transform Coordinates</span> from the context-sensitive menu.</li>
+
+</ul>
+
+<p class=defnewpar>The Transform Coordinates dialog box can only be used when a transformation between the input and target coordinate systems is possible. You can: </p>
+
+<ul>
+
+<li>	transform coordinates from a <i>coordinate system projection</i> with a certain projection, ellipsoid and/or datum to another <i>coordinate system projection</i> with a different projection, ellipsoid and/or datum;</li>
+
+<li>	transform coordinates from a <i>coordinate system projection</i> with a certain projection, ellipsoid and/or datum to a <i>coordinate system latlon</i> with a certain ellipsoid and/or datum (and vice versa);</li>
+
+<li>	transform coordinates from a <i>coordinate system latlon</i> with a certain ellipsoid and/or datum to another <i>coordinate system latlon</i> with a different ellipsoid and/or datum;</li>
+
+<li>	transform coordinates from a <i>coordinate system formula</i> to the '<i>related coordinate system</i>' of this coordinate system formula (and vice versa);</li>
+
+<li>	transform coordinates from a <i>coordinate system tiepoints</i> to the '<i>related coordinate system</i>' of this coordinate system tiepoints (and vice versa).</li>
+
+</ul>
+
+<p class=defnewpar>Furthermore:</p>
+
+<ul>
+
+<li>	when in a coordinate system an ellipsoid is not specified, then a sphere is assumed, and </li>
+
+<li>	when in either of the 2 coordinate systems a datum is not specified, then the same datum is assumed.</li>
+
+</ul>
+
+<p class=defnewpar>For more information on coordinate system types, see <a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a>.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Input coordinate system: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input coordinate system. Open the list box and select the desired coordinate system, or drag a coordinate system directly from the Catalog into this box. If a description exists for this coordinate system, this description will appear just below this Input coordinate system list box; otherwise the name and type of the coordinate system will be listed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Decimal degrees:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case you selected an input coordinate system of <i>type latlon</i>: </p>
+
+<p class=diabox>Select this check box if you wish to specify input LatLon-coordinates in decimal degrees. </p>
+
+<p class=diabox>Clear this check box if you wish to specify input LatLon-coordinates as Degrees, minutes, seconds, N/S, E/W. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Input coordinate:</p>
+
+</td>
+<td valign="top">
+
+<p class=diabox>In case you selected an input coordinate system of <i>type projection</i>, <i>type formula</i>, or <i>type tiepoints</i>: </p>
+
+<p class=diabox>type the X and Y coordinates of a point of interest.</p>
+
+<p class=diabox>In case you selected an input coordinate system of <i>type latlon</i>: </p>
+
+<p class=diabox>type the Lat and Lon coordinates of a point of interest.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Output coordinate system:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a target coordinate system. Open the list box and select the desired coordinate system, or drag a coordinate system directly from the Catalog into this box. If a description exists for this coordinate system, this description will appear just below this Output coordinate system list box; otherwise the name and type of the coordinate system will be listed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Output coordinate:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The calculated coordinates for the point of interest in the output projection will be displayed. Depending on the type of the selected output coordinate system, coordinates will be shown as XY-coordinates or as LatLon-coordinates. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When you wish to compare coordinate transformation results of <i>multiple</i> coordinate systems, you can add several different coordinate systems to a <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel information window</a>. Then: </p>
+
+<ul class=tipul>
+
+<li>Open a map with 'the input coordinate system' and move the mouse pointer or click at a position of interest; </li>
+
+<li>when a transformation from the current coordinate system to the other coordinate system(s) is possible, the pixel information window will show the transformation results. </li>
+
+</ul>
+
+<p class=tiptext>For more information, see <a href="../ilwis/pixel_information_window_functionality.htm">Pixel information window : functionality</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="transform_polygon_map.htm">Transform polygon map</a></p>
+
+<p class=seealsolinks><a href="transform_segment_map.htm">Transform segment map</a></p>
+
+<p class=seealsolinks><a href="transform_point_map.htm">Transform point map</a></p>
+
+</body

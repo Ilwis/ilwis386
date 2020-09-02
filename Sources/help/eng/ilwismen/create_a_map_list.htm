@@ -1,0 +1,188 @@
+<html>
+
+<head>
+<title>Create a map list</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Map lists">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a map list</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Create a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. A map list is for instance required in <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >Sample</a> to locate sample pixels. You can also create a map list of images to display three selected images of your map list as an <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >interactive color composite</a>. When you add raster maps of the same theme but for instance of different years to a map list, i.e. the map list contains a time-series, you can display the map list as a <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>.  </p>
+
+<p class=defnewpar>A map list can only be created of raster maps that have the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> and the same <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Create Map List</span> from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window, or</li>
+
+<li>	when you double-click the <span class=arial>New MapList</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or </li>
+
+<li>	when you click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> in a dialog box which requires a map list as input.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=150>
+<p class=diabox>Map List name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the map list.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=150>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the map list. The description is visible on the status bar of the Main window when moving the mouse pointer over the map list in the Catalog. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=150>
+<p class=diabox>Selectable raster maps:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <i>left hand</i> list box lists all available raster maps in the current directory. </p>
+
+<p class=diabox>Select the raster maps (same georeference and same domain) which you want to include in the map list and click the &gt; button. </p>
+
+<p class=diabox>To select multiple raster maps, press and hold down the <span class=arial>Shift</span> key while selecting, see also below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=150>
+<p class=diabox>Selected raster maps:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <i>right hand</i> list box lists the raster maps that will be included in the map list. </p>
+
+<p class=diabox>To excluded one or more raster maps from the map list, use the &lt; button, see below. </p>
+
+<p class=tiptextls01be><span class=tipnospace>Tip: </span>For slide shows: you can change the order of maps by <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> individual raster maps up or down in the list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=150>
+<p class=diabox><img src="../images/forw.gif" align=bottom width="60" height="22"></p>
+
+</td>
+<td valign="top">
+<p class=diabox>To <i>add</i> one or more raster maps to the map list: </p>
+
+<ul class=diaul>
+
+<li>	select one or more raster maps in the left hand list box <br>
+(to select multiple raster maps, press and hold down the Shift or the Ctrl key while selecting, see also below);</li>
+
+<li>	then press this &gt; button. </li>
+
+</ul>
+
+<p class=diabox>The raster maps will be added to the bottom of the list in the right hand list box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=150>
+<p class=diabox><img src="../images/backw.gif" align=bottom width="60" height="22"></p>
+
+</td>
+<td valign="top">
+<p class=diabox>To <i>remove</i> one or more raster maps from the map list: </p>
+
+<ul class=diaul>
+
+<li>	select one or more raster maps in the right hand list box <br>
+(to select multiple raster maps, press and hold down the Shift or the Ctrl key while selecting, see also below);</li>
+
+<li>	then press this &lt; button. </li>
+
+</ul>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If the selected raster maps use the same <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> and the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>, the <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> is created; it will appear in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>.</p>
+
+<h2>Additional information : Multiple selection</h2>
+
+<p class=kopjeaftertitlesub>To select two or more maps in sequence:</p>
+
+<ul>
+
+<li>	click the first raster map you want to select, </li>
+
+<li>	keep the left mouse button down, and </li>
+
+<li>	move the mouse pointer to the last raster map you want to select, </li>
+
+<li>	then release the left mouse button;</li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	click the first raster map you want to select,</li>
+
+<li>	press and hold down the <span class=arial>Shift</span> key while you click the last raster map in the group. </li>
+
+</ul>
+
+<p class=kopje>To select two or more maps out of sequence:</p>
+
+<ul>
+
+<li>	press and hold down the <span class=arial>Ctrl</span> key while you click each raster map.</li>
+
+</ul>
+
+<p class=kopje>To cancel the selection of a map:</p>
+
+<ul>
+
+<li>	press and hold down the <span class=arial>Ctrl</span> key while you click a selected raster map.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_map_lists.htm">ILWIS objects : map lists</a></p>
+
+</body

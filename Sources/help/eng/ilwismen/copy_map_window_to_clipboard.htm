@@ -1,0 +1,83 @@
+<html>
+
+<head>
+<title>Copy map window to clipboard</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Copy to clipboard, Map window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Copy to clipboard</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Copies the current contents of the map window as a <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >picture</a> to the clipboard. </p>
+
+<p class=defnewpar>If you copy for instance a map window which displays multiple <a href="..//ilwis/popup/layers_data_layers_popup.htm" onClick="return popup(this, 'notes')" >layers</a> (i.e. a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>) to the clipboard, you can paste the picture later into a word processor, a desk top publishing system, etc. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>All layers that are displayed in the map window will be copied to the clipboard. </li>
+
+<li>When you zoomed in on a part of the map window, only that part will be copied. </li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	You can also use <span class=arial>Ctrl+C</span> to copy the currently displayed part of the map window to the clipboard.</li>
+
+<li>	To copy the whole map window including the window borders, title bar, menu bar, toolbar, status bar, etc., press <span class=arial>Alt+PrintScrn</span> on the keyboard. The map window will be copied as a <i>bitmap</i> to clipboard. </li>
+
+<li>	You can use Windows' Clipboard Viewer to inspect the current contents of the clipboard.</li>
+
+<li>	To copy (part of) a map as <i>ILWIS data</i> or as <i>text</i> (coordinates and class names, IDs or values) to the clipboard, use the <span class=arial>Copy</span> command on the Edit menu of the Pixel editor, Polygon editor, Segment editor or Point editor.</li>
+
+<li>    To add maps to a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>, it is advised to first save the contents of a map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>, and then add the map view to the layout in the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="pixel_editor_copy_selection.htm">Pixel editor : Copy</a></p>
+
+<p class=seealsolinks><a href="polygon_editor_copy_selection.htm">Polygon editor : Copy</a></p>
+
+<p class=seealsolinks><a href="segment_editor_copy_selection.htm">Segment editor : Copy</a></p>
+
+<p class=seealsolinks><a href="point_editor_copy_selection.htm">Point editor : Copy</a></p>
+
+</body

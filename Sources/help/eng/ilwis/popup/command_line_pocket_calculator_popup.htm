@@ -1,0 +1,111 @@
+<html>
+
+<head>
+<title>command line pocket calculator popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Pocket line calculator</p>
+
+<p>The <a href="command_line_main_window_popup.htm">command line in the Main window</a> and the <a href="command_line_table_window_popup.htm">command line of a table window</a> can be used as a pocket calculator. </p>
+
+<p class=defnewpar>Type a question mark on the command line followed by an expression, i.e. a combination of constant values and operators or functions, or an expression of functions on map names, etc. It is allowed to use map, table and column names in the pocket line calculator.</p>
+
+<p class=kopje>Examples:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=166>
+<p class=courier>? 2 + 4</p>
+
+</td>
+<td valign="top">
+<p>returns 6</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=166>
+<p class=courier>? SQRT(64)</p>
+
+</td>
+<td valign="top">
+<p>returns 8</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=166>
+<p class=courier>? POW(2,8)</p>
+
+</td>
+<td valign="top">
+<p>returns 256</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=166>
+<p class=courier>? MAX(MyColumn)</p>
+
+</td>
+<td valign="top">
+<p>in a table window, returns the maximum value of column <span class=courier>MyColumn</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=166>
+<p class=courier>? STD(MyColumn)</p>
+
+</td>
+<td valign="top">
+<p>in a table window, returns the standard deviation of column <span class=courier>MyColumn</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=166>
+<p class=courier>? MyFunc(22,44,66)</p>
+
+</td>
+<td valign="top">
+<p>returns the result of a user-defined function <span class=courier>MyFunc</span>; the first three parameters in this function are replaced by values 22, 44, and 66.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Constant value <span class=symbol>p</span> can be used by typing <span class=courier>PI</span> </p>
+
+<p>Constant value <span class=courier>e</span> can be used by typing <span class=courier>EXP(1)</span>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/calc_simple_calculators.htm" onClick="return popup(this, 'notes')" >Map calculation : pocket line calculator</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/calc_simple_calculators.htm" onClick="return popup(this, 'notes')" >Table calculation : pocket line calculator</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/calc_aaf.htm" onClick="return popup(this, 'notes')" >Map calculation : overview of operators and functions</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/calc_aaf.htm" onClick="return popup(this, 'notes')" >Table calc : overview of operators and functions</a></p>
+
+</body

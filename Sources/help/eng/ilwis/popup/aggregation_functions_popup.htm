@@ -1,0 +1,125 @@
+<html>
+
+<head>
+<title>aggregation functions popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Aggregation functions</p>
+
+<p>The following aggregations functions are available: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=132>
+<p>Average</p>
+
+</td>
+<td valign="top">
+<p>Returns the average of a whole column, the averages per group, the weighted average of a whole column or weighted averages per group.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p>Count</p>
+
+</td>
+<td valign="top">
+<p>Counts the number of records which are not undefined in a column or counts the number of records which are not undefined per group.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p>Maximum</p>
+
+</td>
+<td valign="top">
+<p>Returns the maximum value of a whole column or the maximum values per group.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p>Median</p>
+
+</td>
+<td valign="top">
+<p>Returns the median value of a whole column, the median values per group, weighted median value of a whole column, or weighted medians per group.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p>Minimum</p>
+
+</td>
+<td valign="top">
+<p>Returns the minimum value of a whole column or the minimum values per group.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p>Predominant</p>
+
+</td>
+<td valign="top">
+<p>Returns the predominant value of a whole column, the predominant values per group, weighted predominant value of a whole column, or weighted predominant values per group.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p>Standard Deviation</p>
+
+</td>
+<td valign="top">
+<p>Returns the standard deviation of a whole column, the standard deviations per group, the weighted standard deviation, or the weighted standard deviations per group.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p>Sum</p>
+
+</td>
+<td valign="top">
+<p>Sums the values of a whole column or sums values per group.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When using an aggregation function, a <a href="aggregation_group_by_column_popup.htm">'group by'</a> column can be selected to calculate sums, averages etc. per group. </p>
+
+<p class=defnewpar>All aggregation functions expect a value column on which the aggregation should be performed; however, the functions Count, Median and Predominant also work an a class or ID input column. </p>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="..//ilwis/calc_aaf.htm" onClick="return popup(this, 'notes')" >TabCalc : aggregate functions</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/calc_joining_columns_from_other_tables.htm" onClick="return popup(this, 'notes')" >TabCalc : joining columns from other tables</a> </p>
+
+</body

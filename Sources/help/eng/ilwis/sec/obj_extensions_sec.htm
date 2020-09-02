@@ -1,0 +1,320 @@
+<html>
+
+<head>
+<title>obj extentsions sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Extensions of ILWIS object definition files</p>
+
+<p class=kopjeaftertitlesub>Data objects:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=170>
+<p>Raster maps</p>
+
+</td>
+<td valign="top">
+<p>.MPR</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Polygon maps</p>
+
+</td>
+<td valign="top">
+<p>.MPA</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Segment maps</p>
+
+</td>
+<td valign="top">
+<p>.MPS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Point maps</p>
+
+</td>
+<td valign="top">
+<p>.MPP</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Tables</p>
+
+</td>
+<td valign="top">
+<p>.TBT</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Container objects:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=170>
+<p>Map lists</p>
+
+</td>
+<td valign="top">
+<p>.MPL</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Object collections and <br>&nbsp;&nbsp;&nbsp;Database collections</p>
+
+</td>
+<td valign="top">
+<p>.IOC</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Map views</p>
+
+</td>
+<td valign="top">
+<p>.MPV</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Layouts</p>
+
+</td>
+<td valign="top">
+<p>.ILO</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Annotation Text objects</p>
+
+</td>
+<td valign="top">
+<p>.ATX</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Graphs</p>
+
+</td>
+<td valign="top">
+<p>.GRH</p>
+
+</td>
+</tr>
+</table>
+
+
+<p class=kopje>Service objects:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=170>
+<p>Domains</p>
+
+</td>
+<td valign="top">
+<p>.DOM</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Representations</p>
+
+</td>
+<td valign="top">
+<p>.RPR</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Georeferences</p>
+
+</td>
+<td valign="top">
+<p>.GRF</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Coordinate systems</p>
+
+</td>
+<td valign="top">
+<p>.CSY</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Special objects:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=170>
+<p>Raster map histograms</p>
+
+</td>
+<td valign="top">
+<p>.HIS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Polygon map histograms</p>
+
+</td>
+<td valign="top">
+<p>.HSA</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Segment map histograms</p>
+
+</td>
+<td valign="top">
+<p>.HSS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Point map histograms</p>
+
+</td>
+<td valign="top">
+<p>.HSP</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Sample sets</p>
+
+</td>
+<td valign="top">
+<p>.SMS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Stereo pairs</p>
+
+</td>
+<td valign="top">
+<p>.STP</p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170><p>Criteria trees</p></td>
+<td valign="top"><p>.SMC</p></td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Two-dimensional tables</p>
+
+</td>
+<td valign="top">
+<p>.TA2</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Matrices</p>
+
+</td>
+<td valign="top">
+<p>.MAT</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Filters</p>
+
+</td>
+<td valign="top">
+<p>.FIL</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Functions</p>
+
+</td>
+<td valign="top">
+<p>.FUN</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=170>
+<p>Scripts</p>
+
+</td>
+<td valign="top">
+<p>.ISL</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/appendices_file_extensions.htm" onClick="return popup(this, 'notes')" >Appendices : file extensions</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/appendices_general_structure_of_object_definition_files.htm" onClick="return popup(this, 'notes')" >Appendices : object definition files</a></p>
+
+</body

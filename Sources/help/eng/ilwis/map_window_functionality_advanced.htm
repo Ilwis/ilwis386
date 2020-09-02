@@ -1,0 +1,138 @@
+<html>
+
+<head>
+<title>Map window : functionality (advanced)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Double-click action in a map window, Slide show, Map window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map window </h1>
+
+<h1 class=secondline>Functionality (advanced)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>This topic deals with:</p>
+
+<ul>
+
+<li><a href="#double_click"><span class=bookmark>double-click actions</span></a> on raster, polygon, segment or point maps (Class or ID domain) in a map window, </li>
+
+<li>displaying the raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> as a <a href="#slide_show"><span class=bookmark>slide show</span></a> in a map window. </li>
+
+</ul>
+
+<h2 id="double_click">Double-click actions</h2>
+
+<p>By double-clicking a mapping unit in a displayed raster, polygon, segment or point map, of which the <span class=arial>Info</span> check box in the layer's <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box has been selected, you can: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ol>
+
+<li>	View and/or edit <b>attributes</b> of a double-clicked mapping unit: </li>
+
+        <ul>
+
+        <li>the map should have a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> or an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a>, </li>
+
+        <li>an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> should be linked to the map or to the domain of the map. </li>
+
+        </ul>        
+
+<p class=emptylinehalf>&nbsp;</p>
+<li>	Change the <b>representation</b> of a mapping unit: </li>
+
+        <ul>
+
+        <li>the map should have a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a>. </li>
+
+        </ul>
+<p class=emptylinehalf>&nbsp;</p>
+<li>	<b>Execute an action</b>, i.e. show another map, a table, a GIF image, a bitmap, play a sound or a video, etc.: </li>
+
+        <ul>
+        
+        <li>the map should have a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> or an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a>, </li>
+
+        <li>an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> should be linked to the map or to the domain of the map, </li>
+
+        <li>the attribute table should contain a column named <span class=courier>Action</span>, this column should use the <a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >String</a> domain, </li>
+
+        <li>in this <span class=courier>Action</span> column, you have specified the file names inclusive path and extension of the (ILWIS) map, (ILWIS) table, GIF image, picture, sound or video that should be opened when a certain class or ID unit in the map is double-clicked, and </li>
+
+        <li>Windows should know which program should be used to open the specified files (registered file types, default 'Open' action). </li>
+
+        </ul>
+
+<p>Executing an action on a double-click may give spectacular effects.</p>
+
+</ol>
+
+<p class=defnewpar>You must make sure that the <span class=arial>Info</span> check box of the layer you wish to use is selected. The <span class=arial>Info</span> check box is available in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a layer. </p>
+
+<p class=defnewpar>You can select the type of double-click action by choosing the <a href="../ilwismen/double_click_action.htm">Double-click Action</a> command on the <a href="../ilwis/map_window_menu_commands.htm">Layers</a> menu in a map window; select <span class=arial>Attributes</span>, <span class=arial>Representation</span>, or <span class=arial>Execute Action</span> from the cascading menu. </p>
+
+<p class=defnewpar>Upon a double-click, it is attempted to find the (defined) class name or ID of the unit that was double-clicked. When multiple layers are displayed, all layers will be searched from top to bottom. You can see which class name or ID will be found by pressing the left mouse button in the map window (Info). </p>
+
+<p class=defnewpar>Results when using:</p>
+
+        <ul>
+
+        <li>Attributes: if, upon a double-click, a class name or an identifier is found, and an attribute table is available, then the attributes of this class or identifier will be shown in a separate window. You can also edit the attributes there. </li>
+
+        <li>Representation: if, upon a double-click, a class name is found, then an Edit Representation Item dialog box will appear in which you can select another color, etc. for this class. Changes will be directly applied in the map window. </li>
+
+        <li>Execute Action: if, upon a double-click, a class name or identifier is found, and an attribute table is found with a column <span class=courier>Action</span> in which, for this class or ID, a filename is found that has a known 'Open' action, then that file is opened (map or table is shown, audio or video is played, etc.). </li>
+
+        </ul>
+
+<p class=defnewpar>For more information, see <a href="../ilwismen/double_click_action.htm">Double-click Action</a> dialog box. </p>
+
+<h2 id="slide_show">Displaying the raster maps in a map list as a slide show</h2>
+
+<p>A map window can show multiple raster maps like a <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>.  A slide show is designed to present multi-temporal changes in maps. All maps that you wish to show need to be combined in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, then the maps in the map list are displayed one by one in a map window at a user-specified rate. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>Create a map list of the maps that you want to show. </li>
+
+<li>Open the map list, for instance: </li>
+
+        <ul>
+
+        <li> by double-clicking the map list in a Catalog, then click the <span class=arial>Open As Slide Show</span> button <img src="../images/slidefilm.gif" align=bottom width="22" height="22"> in the Catalog displaying the contents of the map list, or </li>
+
+        <li> by using the right mouse button on a map list in a Catalog and choosing <span class=arial>Visualization, as Slide Show</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, etc. </li>
+
+        </ul>
+
+<li>In a slide show, only one set of <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >Display Options</a> will be used; the defaults are based on the first map in the map list. The parameters as set for this map define the display options for all the other maps in the map list. </li>
+
+<li>Then, in the <a href="../ilwismen/display_options_map_list_as_slide_show.htm">Display Options - Map list as slide show</a> dialog box, specify the number of images you want to see per minute in the map window. </li>
+
+</ul>
+
+<p class=defnewpar>For more information, see <a href="../ilwis/how_to_display_a_map_list_as_a_slide_show.htm">How to display a map list as a slide show</a>.</p>
+
+</body

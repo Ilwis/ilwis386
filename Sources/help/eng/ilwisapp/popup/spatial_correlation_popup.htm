@@ -1,0 +1,33 @@
+<html>
+
+<head>
+<title>spatial_correlation_popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Spatial correlation</p>
+
+<p><a href="..//ilwisapp/spatial_correlation.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> calculates some <a href="..//ilwisapp/point_statistics.htm" onClick="return popup(this, 'notes')" >point statistics</a>: spatial autocorrelation (as Moran's I), spatial variance (as Geary's c) and semi-variogram values <span class=symbol>g</span>(h). Semi-variogram values are either calculculated in all directions (omnidirectional) or in a certain direction and the perpendicular direction (bidirectional). This may help you to get an impression of the nature of your point data, for instance prior to a
+<a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" > point interpolation</a>. Furthermore, from the output table of the Spatial Correlation operation, you can create semi-variogram models in a graph window so that necessary input parameters for a <a href="kriging_popup.htm">Kriging</a>, <a href="anisotropic_kriging_popup.htm">Anisotropic Kriging</a> or <a href="../../ilwisapp/popup/universal_kriging_popup.htm">Universal Kriging</a> operation can be determined.</p>
+
+<p class=linespacing03before>As input for this operation, you can use a point map with a value domain, or a point map with a class or ID domain with an attribute table that contains one or more value columns (the attribute table must be linked to the map). The output of this operation is a table from which you can create graphs such as a semi-variogram.</p>
+
+</body

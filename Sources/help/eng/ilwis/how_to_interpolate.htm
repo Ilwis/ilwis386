@@ -1,0 +1,51 @@
+<html>
+
+<head>
+<title>How to interpolate</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Interpolation, Contour interpolation, Point interpolation, Densify raster map, How to interpolate, Kriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to interpolate</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Interpolations can be performed on domain Value segment maps, point maps and raster maps. The following interpolation operations are available: </p>
+
+<p class=defnewpar><a href="../ilwisapp/contour_interpolation.htm">Contour interpolation</a>: </p>
+
+<p class=leftmargin1>Contour interpolation first rasterizes a domain Value segment map, and then calculates values for pixels that are not covered by segments by means of a linear interpolation. Contour interpolation can be used to create digital elevation models (DEM), also called a digital terrain models (DTM), or any other raster map representation of a continuously changing variable.</p>
+
+<p class=defnewpar><a href="../ilwisapp/point_interpolation.htm">Point interpolation</a>: </p>
+
+<p class=leftmargin1>A point interpolation performs an interpolation on randomly distributed point values (domain Value point map) and returns regularly distributed point values. This is also known as gridding. In ILWIS, the output values are raster values. Several interpolation methods are available: <a href="..//ilwisapp/popup/nearest_point_popup.htm" onClick="return popup(this, 'notes')" >Nearest point</a>, <a href="..//ilwisapp/popup/moving_average_popup.htm" onClick="return popup(this, 'notes')" >Moving average</a>, <a href="..//ilwisapp/popup/trend_surface_popup.htm" onClick="return popup(this, 'notes')" >Trend surface</a>, <a href="..//ilwisapp/popup/moving_surface_popup.htm" onClick="return popup(this, 'notes')" >Moving surface</a>. For the Moving average and Moving surface operations, several weight functions are available. After a point interpolation, Densify should be used to obtain finer grid values. </p>
+
+<p class=leftmargin1>Furthermore, a number or Kriging methods are available: Simple and Ordinary <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a>, <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a>, <a href="..//ilwisapp/popup/universal_kriging_popup.htm" onClick="return popup(this, 'notes')" >Universal Kriging</a> and <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a>. Before Kriging, you need to calculate experimental semi-variogram values with <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a>, or with <a href="..//ilwisapp/popup/cross_variogram_popup.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a> (for CoKriging only). Then, in a graph window, you need to determine a semi-variogram model which fits your experimental semi-variogram values. The weight factors in a Kriging operation are determined by using the user-specified semi-variogram model and the distribution of input points. </p>
+
+<p class=defnewpar><a href="../ilwisapp/densify.htm">Densify</a>: </p>
+
+<p class=leftmargin1>Densify performs a reduction of the pixel size of a raster map. The number of rows and columns of the map are increased, and new values are assigned to the pixels by means of a bilinear or bicubic interpolation.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>For value raster maps, you can mark the 'Interpolation' check box in a <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> dialog box; when pressing the left mouse button in a map window which displays such a value raster map (Info), you will then obtain interpolated value information on sub-pixel level.</p>
+
+</body

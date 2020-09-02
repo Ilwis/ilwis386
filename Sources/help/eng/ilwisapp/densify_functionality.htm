@@ -1,0 +1,99 @@
+<html>
+
+<head>
+<title>Densify : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Densify raster map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Densify</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Densify operation allows you to reduce the pixel size of a raster map, i.e. the number of rows and columns is increased in the output map. When the input map is a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>, new values can be assigned to the pixels in the output map by means of nearest neighbour, or a bilinear or bicubic interpolation. When the input map is a domain class or ID map, only the nearest neighbour method is available. </p>
+
+<p class=defnewpar>Densify should be used after you performed a <a href="point_interpolation.htm">point interpolation</a>. Furthermore, you can use Densify before printing raster maps with the <span class=courier>Image</span> domain or a value domain, to improve the quality of the printed maps.</p>
+
+<p class=kopje>Example:</p>
+
+<p>When an input raster map has 400 rows by 400 columns with a pixel size of 25m,</p>
+
+<p>and Densify is applied with an enlargement factor 2.5,</p>
+
+<p>the resulting output raster map has 1000 rows and 1000 columns and a pixel size of 10m.</p>
+
+<p class=defnewpar>Mind that a byte map of 1000 rows and 1000 columns requires 1 MB disk space, while a map of 400 rows and 400  columns merely requires 160 kB disk space. The effect of using an enlargement factor of 2.5 is that the original map size increases by the square of the enlargement factor.</p>
+
+<p class=kopje>Nearest Neighbour:</p>
+
+<p>For each output pixel, the class name, ID or value of the nearest pixel in the input map is assigned.</p>
+
+<p class=kopje>Bilinear versus bicubic interpolation:</p>
+
+<p>A <a href="..//ilwisapp/popup/bilinear_interpolation_popup.htm" onClick="return popup(this, 'notes')" >bilinear interpolation</a> takes much less time than a bicubic interpolation.</p>
+
+<p>A bilinear interpolation results in discontinuity when taking the first derivative of a densify output map. A <a href="..//ilwisapp/popup/bicubic_interpolation_popup.htm" onClick="return popup(this, 'notes')" >bicubic interpolation</a> remains continuous up to the second derivative.</p>
+
+<p class=defnewpar>This means that when you obtained a value raster map from a point interpolation, the point interpolation results can be improved with the Densify operation:</p>
+
+<ul>
+
+<li>	Densify with a bilinear interpolation gives a quick results;</li>
+
+<li>	Densify with a bicubic interpolation is advised if after Densify, you intend to apply first derivative <a href="filter_functionality.htm">filters</a> like DFDX, DFDY, or SHADOW on the densify output map.</li>
+
+</ul>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>For nearest neighbour, the input raster map can have any domain. For a bilinear or bicubic interpolation, the input raster map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. The input raster map must have a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> which is not georeference <span class=courier>None</span>.</p>
+
+<p class=defnewpar>The operation can also be applied on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output map uses the same value domain as the input map. The <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> can be adjusted for the output map.</p>
+
+<p>The operation always creates a new georeference for the output map. The output georeference obtains the same name as the output map and is calculated from the input georeference and the specified enlargement factor. </p>
+
+<p class=defnewpar>When the operation is performed on an input map list, you will obtain an output map list. When the output map list is opened, the output raster maps will be (defined and) calculated. </p>
+
+<ul>
+
+<li>The output raster maps will obtain the same name as the output map list followed by _1, _2, _3, etc. </li>
+
+<li>All output raster maps will use the georeference created for the first raster map in the map list, e.g. <i>Out</i>_1. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="densify_dialogbox.htm">Densify : dialog box</a></p>
+
+<p class=seealsolinks><a href="densify_commandline.htm">Densify : command line (1)</a></p>
+
+<p class=seealsolinks><a href="densify_commandline2.htm">Densify : command line (2)</a></p>
+
+<p class=seealsolinks><a href="densify_algorithm.htm">Densify : algorithm</a></p>
+
+</body

@@ -1,0 +1,193 @@
+<html>
+
+<head>
+<title>Repr Value/Gradual editor : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Representation editors, Edit representation, Editors, Colors, Transfer functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Representation Value/Gradual editor</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Representation Value/Gradual editor allows you to change the <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> of a map that uses a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a> or the <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >image domain</a>. In the Representation Value/Gradual editor, the values of the domain that uses this representation are called boundary values or limits. The general idea is that you insert limits, assign colors to limits and that you choose a coloring method for the values in between two limits. </p>
+
+<p class=defnewpar>To start the Representation Value/Gradual editor, see <a href="../ilwis/how_to_create_representations.htm">How to create a representation</a> and <a href="../ilwis/how_to_edit_representations.htm">How to edit a representation</a>. </p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>The functionality of the Representation Value/Gradual editor resembles the functionality of the ILWIS 1.4 Transfer Function program.</p>
+
+<p class=kopje>Parts of the Representation Value/Gradual editor:</p>
+
+<ul>
+
+<li>	The Representation Value/Gradual editor has a <a href="..//ilwismen/sec2/repr_class_editor_sec2.htm" onClick="return popup(this, 'notes')" >menu bar</a>. </li>
+
+<li>	In the editor, you see values or percentages on the left, and colors on the right side of the window. </li>
+
+        <ul>
+
+        <li>	<i>Percentages</i> are shown when you create a new representation for a map using the <a href="..//ilwis/popup/yy_system_domain_value_all_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>, or when you edit an existing <i>representation gradual</i>;</li>
+
+        <li>	<i>Values</i> are shown when you create a new representation for a map with any value domain, except the system domain <span class=courier>Value</span>, or when you edit an existing <i>representation value</i>. </li>
+
+        </ul>
+
+        <p class=leftmargininlist>	These values or percentages in the representation Value/Gradual editor are called <i>boundaries</i> or <i>limits</i>. </p>
+
+<li>	At the bottom, you see a color bar which gives an overview of how colors are assigned to the values of the domain.</li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>Maps which use <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span> can only be shown with a <i>representation gradual</i> which works on percentages. When you want to create a <i>representation value</i> (working on values) for such maps, in order to assign specific colors to specific values, you need to change the domain of the map from system domain <span class=courier>Value</span> to a user-defined value domain. For more information, see <a href="how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a>.</p>
+
+<p class=kopje>General working of the Representation Value/Gradual editor:</p>
+
+<p>In general, in the representation Value/Gradual editor, you can: </p>
+
+<ul>
+
+<li>	insert and delete limits, </li>
+
+<li>	change the color assigned to limits,</li>
+
+<li>	change the value of limits,</li>
+
+<li>	change the coloring method of values in between two limits. </li>
+
+</ul>
+
+<p class=kopje>To change the color or the value of a limit:</p>
+
+<ul>
+
+<li>	double-click a limit, or</li>
+
+<li>	select a limit and press <span class=arial>Enter</span> on the keyboard, or </li>
+
+<li>	select a limit and, from the <a href="..//ilwismen/sec2/repr_value_gradual_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit Menu</a>, choose <span class=arial>Edit Limit</span>.</li>
+
+</ul>
+
+<p>In the appearing <a href="../ilwismen/representation_value_gradual_editor_edit_limit.htm"><span class=arial>Edit Limit</a></span> dialog box, you can select new color for this limit. You can also change the value or percentage of the limit. </p>
+
+<p class=kopje>To insert a limit:</p>
+
+<ul>
+
+<li>	press <span class=arial>Ins</span> on the keyboard, or</li>
+
+<li>	from the <a href="..//ilwismen/sec2/repr_value_gradual_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit Menu</a>, choose <span class=arial>Insert Limit</span>.</li>
+
+</ul>
+
+<p>In the appearing <a href="../ilwismen/representation_value_gradual_editor_insert_limit.htm"><span class=arial>Insert Limit</a></span> dialog box, you can fill in a new value (percentage or value) for the limit, and you can select a color for this limit.</p>
+
+<p class=kopje>To delete a limit:</p>
+
+<ul>
+
+<li>	select a limit and press <span class=arial>Del</span> on the keyboard, or</li>
+
+<li>	select a limit and, from the <a href="..//ilwismen/sec2/repr_value_gradual_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit Menu</a>, choose <span class=arial>Delete Limit</span>.</li>
+
+</ul>
+
+<p class=kopje>To choose a coloring method for values/percentages <span class=DefaultStyle><u><b>in between</b></u></span> two limits:</p>
+
+<p>For values or percentages in between two limits there are three possibilities: </p>
+
+<ol>
+
+<li>	colors either range from the color of the limit below to the color of the limit above (<b>stretch</b>), or </li>
+
+<li>	they have the same color as the limit below (<b>lower</b>) or </li>
+
+<li>	they have the same colors as the limit above (<b>upper</b>). </li>
+
+</ol>
+
+<p class=defnewpar>To change the coloring of value/percentages in between two limits:</p>
+
+<ul>
+
+<li>	double-click in between two limits; this is a three-fold toggle: from <b>stretch</b> to <b>upper</b> to <b>lower</b>, or</li>
+
+<li>	select a limit or color and press <span class=arial>Enter</span> on the keyboard, or </li>
+
+<li>	select a line in between limits and from the <a href="..//ilwismen/sec2/repr_value_gradual_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit Menu</a>, choose <span class=arial>Edit Limit</span>.</li>
+
+</ul>
+
+<p class=defnewpar>When starting from <b>stretch</b>:</p>
+
+<ul>
+
+<li>	one double-click results in a change to the color of the <b>upper</b> limit, </li>
+
+<li>	another double-click results in the color of the <b>lower</b> limit, and </li>
+
+<li>	yet another double-click results in <b>stretch</b> again. </li>
+
+</ul>
+
+<p class=kopje>To change the number of colors in between two limits:</p>
+
+<ul>
+
+<li>	from the <a href="..//ilwismen/sec2/repr_value_gradual_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a>, choose <span class=arial>Stretch Steps</span>.</li>
+
+</ul>
+
+<p>In the appearing <a href="../ilwismen/representation_value_gradual_editor_stretch_steps.htm"><span class=arial>Stretch Steps</a></span> dialog box, enter a value for the number of colors that should be used in between two limits. </p>
+
+<p class=kopje>To interactively change colors of value maps:</p>
+
+<ul>
+
+<li>	Open a map with a value domain in a map window, open the map's representation by selecting the <span class=arial>Representation</span> command on the <a href="map_window_menu_commands.htm">Edit menu</a> of the map window;</li>
+
+<li>	The Representation Value/Gradual editor is opened; insert limits, edit colors, etc.;</li>
+
+<li>	Keep the editor open and switch to the map window;</li>
+
+<li>	Redraw <img src="../images/redraw.gif" align=bottom width="22" height="22"> the map window to apply the changes;</li>
+
+<li>	Continue editing colors and redrawing the map until satisfied.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwismen/sec2/repr_value_gradual_editor_sec2.htm" onClick="return popup(this, 'notes')" >Representation Value/Gradual editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representations</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_representations.htm">How to create a representation</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_representations.htm">How to edit a representation</a></p>
+
+</body

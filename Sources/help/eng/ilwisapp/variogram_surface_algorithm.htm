@@ -1,0 +1,133 @@
+<html>
+
+<head>
+<title>Variogram surface : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Variogram surface">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Variogram surface</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Variogram surface operation uses a point map or a raster map as input and calculates a surface of semi-variogram values where each cell (pixel) in the surface represents a directional distance class. The output surface, a raster map with a special kind of georeference, may help you to visualize possible anisotropy of your data and to determine the direction of the anisotropy axis. </p>
+
+<p class=defnewpar>Subsequently, you can calculate directional semi-variograms by using the bidirectional method in the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. From the output table of Spatial correlation, you can prepare a semi-variogram model and you can investigate the range of the variable in the semi-variogram model both in the direction of anisotropy as well as in the direction perpendicular to it. Then, you are ready to perform Anisotropic Kriging. </p>
+
+<p class=kopje>Process:</p>
+
+<ul>
+
+<li>	The 'separation vectors' between all input point pairs are determined, i.e. the distances and the directions between individual points in point pairs. </li>
+
+<li>	All separation vectors are 'transferred' to the framework of the output semi-variogram surface: all vectors start in the origin. For more information, see <a href="variogram_surface_functionality.htm">Variogram surface : functionality</a>.</li>
+
+<li>	For each cell in the output surface, a semi-variogram value is then calculated from the values of all point pairs whose separation vectors end up in that cell/pixel. For the calculation of semi-variogram values, see <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a> and <a href="spatial_correlation_algorithm.htm">Spatial correlation : algorithm</a>.</li>
+
+</ul>
+
+<p class=defnewpar>The formula to calculate experimental semi-variogram values reads:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><span class=symbol><img src="../images/gamest.gif" align=bottom width="6" height="15"></span></p>
+
+</td>
+<td valign="top" width=18>
+<p><span class=symbol>=</span></p>
+
+</td>
+<td valign="top">
+<p><span class=symbol>  </span><span class=symbollarger>S</span><span class=symbol> (</span>z<sub>i</sub><span class=symbol> - </span>z<sub>j</sub><span class=symbol>)</span><sup>2</sup> / 2n</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p><span class=symbol><img src="../images/gamest.gif" align=bottom width="6" height="15"></span></p>
+
+</td>
+<td valign="top">
+<p>experimental semi-variogram value of points that have a certain distance (h) towards each other</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>z<sub>i</sub></p>
+
+</td>
+<td valign="top">
+<p>the value of point i</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>z<sub>j</sub></p>
+
+</td>
+<td valign="top">
+<p>the value of point j</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><span class=symbollarger>S</span><span class=symbol> (</span>z<sub>i</sub><span class=symbol> - </span>z<sub>j</sub><span class=symbol>)</span><sup>2</sup></p>
+
+</td>
+<td valign="top">
+<p>the sum of the squared differences between point values of all point pairs within a certain distance class</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>n</p>
+
+</td>
+<td valign="top">
+<p>the number of point pairs within a distance class</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="variogram_surface_functionality.htm">Variogram surface : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a></p>
+
+<p class=seealsolinks><a href="spatial_correlation_algorithm.htm">Spatial correlation : algorithm</a></p>
+
+</body

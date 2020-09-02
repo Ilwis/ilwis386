@@ -1,0 +1,148 @@
+<html>
+
+<head>
+<title>ILWIS objects : object collections</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS objects, Object collections, Container objects, IOC">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Object collections&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/objcol.gif" align=bottom width="15" height="13"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>An object collection is a set of <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >ILWIS objects</a>. An object collection only stores the names and locations of the maps, tables, etc. that are included in the object collection but not the data itself. References to the names and locations of the <i>data files</i> on disk are in the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition files</a> of the maps and tables etc. themselves. </p>
+
+<p class=defnewpar>Object collections:
+
+<ul>
+
+<li>can be created to organize your data as 'projects'; </li>
+
+<li>are the result of importing ASTER (1A/1B) images through <a href="../ilwismen/import_map.htm">ILWIS Map Import</a>.</li>
+
+</ul>
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_database_collection_popup.htm" onClick="return popup(this, 'notes')" >database collection</a> is a special form of an object collection. While an object collection may contain all kinds of <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >ILWIS objects</a> (maps, tables, layouts, etc.), a database collection may only contain tables. The tables of a database collection are in <i>Use As</i> mode <img src="../images/table.gif" align=bottom width="13" height="14"><sub class=blue> u</sub>. </p>
+
+<p class=defnewpar>A database collection is the result of: </p>
+
+<ul>
+
+<li>accessing an external database.</li>
+
+</ul>
+
+<p class=defnewpar>You are not allowed to add any tables to a database collection, and you cannot delete any tables from a database collection. To obtain a database collection and some general information on database collections, refer to <a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a>. </p>
+
+<p class=defnewpar>Except for the technical information, in which both object collections and database collections are treated, the remainder of this topic deals with object collections. </p>
+
+<p class=kopje>Names of object collections:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create an object collection:</p>
+
+<p>Open the <a href="main_window_menu_commands.htm">File menu</a> in the Main window and select the <span class=arial>Create Object Collection</span> command, or double-click the <span class=arial>New Object Collection</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>. In the appearing <a href="../ilwismen/create_an_object_collection.htm">Create Object Collection</a> dialog box, you can enter a name and description for the object collection. The object collection will be directly opened.</p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>An object collection is automatically created when importing ASTER level 1A or level 1B images through <a href="../ilwismen/import_map.htm">ILWIS Map Import</a>. </p>
+
+<p class=kopje>To add objects to an object collection:</p>
+
+<p>To add objects to an object collection: </p>
+
+<ul>
+
+<li>open the Catalog with the data that should appear in your object collection; </li>
+
+<li>open the object collection; </li>
+
+<li>select the objects in the Catalog that should appear in the object collection; </li>
+
+<li>drag the selected objects from the Catalog into the object collection. </li>
+
+</ul>
+
+<p>This is the same as using <span class=arial>Copy</span> and <span class=arial>Paste</span>. For more information, see <a href="../ilwis/how_to_copy_objects.htm">How to copy objects</a>. </p>
+
+<p class=defnewpar>You can add objects from various directories to an object collection. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>You can choose whether a Catalog should show: </p>
+
+<ul class=tipul>
+
+<li>both object collections and the objects that are included in object collections (the members of the object collections), or </li>
+
+<li>only object collection(s) and not the members of object collections. </li>
+
+</ul>
+
+<p class=tiptext>The setting can be specified on the <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog, Object Selection</a> page. </p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>Imported objects will be automatically added to the created object
+collection when importing ASTER level 1A or level 1B images through <a href="../ilwismen/import_map.htm">ILWIS Map Import</a>. </p>
+
+<p class=kopje>To open an object collection and to open the objects it contains: </p>
+
+<p>To open an object collection, you can double-click it in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p> 
+
+<p>In turn, to open objects that are part of an object collection: double-click them in the opened object collection. </p>
+
+<p class=kopje>Operations on (objects in) object collections:</p>
+
+<p>As object collections may contain any kind of objects (map lists, maps, domains, georeferences, etc.), no operations can be performed on object collections as a whole. Object collections are only used to store the location on disk of the objects they contain. </p>
+
+<p class=defnewpar>On maps and tables IN an object collection, you can perform the same operations as usual. When the data object(s) on which an operation is performed are in the same object collection, the output of the operation will also be stored in the object collection. </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>An object collection only consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.IOC). The object definition file contains further references to the objects that are included in the object collection.</p>
+
+<p class=defnewpar>Similarly, a database collection uses the same type an ASCII object definition file as an object collection (.IOC). The object definition file of a database collection contains further references to the tables that are included in the database collection. The object definition files of the tables (.TBT) that are part of a database collection, are only created when a (<i>Use As</i>) table of a database collection is opened. </p>
+
+<p class=defnewpar>If you like, you can save a Use As table to a normal ILWIS table by using <span class=arial>Save Copy As</span> from the File menu of a table window which displays a Use As table. You will then obtain an object definition file for the table (.TBT) and a data file for the table (.TB#). </p>
+
+<p class=defnewpar>By viewing the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of an object collection, you can see on the <span class=arial>Contains</span> tab, the names of the objects that are included in the object collection. When the object collection is a database collection, the <span class=arial>Contains</span> tab lists the names of the tables that are included in the database collection. For more information, see the <a href="../ilwismen/object_collection_properties.htm">Object Collection Properties</a> sheet. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/create_an_object_collection.htm">Create an object collection</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/import_map.htm">Import Map</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a></p>
+
+</body

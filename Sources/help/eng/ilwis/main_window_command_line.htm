@@ -1,0 +1,139 @@
+<html>
+
+<head>
+<title>Main window : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Command line, Main window, Map calculation, Use ..., How to use ..., History of expressions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Main window</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The command line of the Main window is by default located at the top of the Main window, just below the menu bar and the toolbar. </p>
+
+<p class=defnewpar>The user may type commands and expresssions on the command line to carry out calculations, operations and scripts.</p>
+
+<p class=defnewpar>The command line is used: </p>
+
+<ul>
+
+<li>	to perform <a href="calc.htm">calculations with maps and attribute tables</a>,</li>
+
+<li>	to perform <a href="..//ilwis/popup/command_line_main_commands_popup.htm" onClick="return popup(this, 'notes')" >ILWIS commands</a>: to display, edit, create or view the properties of ILWIS objects, and to obtain dialog boxes to start an ILWIS operation. This functionality is equivalent to typing an ILWIS 1.4 executable name on the DOS command line in ILWIS version 1.4.</li>
+
+<li>	to perform <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >ILWIS expressions</a>: to perform complete ILWIS operations. This functionality is equivalent to typing the ILWIS 1.4 executable name and all parameters required by this executable, on the DOS command line in ILWIS version 1.4. </li>
+
+<li>	to run <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a>, which usually contain a sequence of ILWIS expressions. With a script, you can build a complete GIS and Remote Sensing analysis/application for your own research discipline. Scripts are more or less equivalent to batch files in ILWIS version 1.4. </li>
+
+<li>	to copy and delete objects, break dependency links of objects, etc. For more information, see <a href="appendices_ilwis_commands.htm">ILWIS commands</a> and <a href="appendices_ilwis_scripts_language_syntax.htm">ILWIS script syntax</a>.</li>
+
+</ul>
+
+<p class=defnewpar>If you wish you can move the command line and <i>dock</i> it for instance at the bottom of the Main window; you can also make the command line floating. The command line can be hidden or shown by opening the <a href="main_window_menu_commands.htm">View menu</a> in the Main window, choose <span class=arial>Command line</span>.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>The command line has a <a href="..//ilwis/popup/history_popup.htm" onClick="return popup(this, 'notes')" >history</a>: use the <span class=arial>Arrow Up</span> key to
+        retrieve previously used expressions and commands. The <span class=arial>Arrow Down</span> key can be used to scroll forwards
+        again. You can also open the list of previously used commands and expressions by clicking the arrow at the right hand side of the command line. </li>
+
+<li>	The maximum length of an expression on the command line is 32000 characters.
+        You can use the (<span class=arial>Ctrl+</span>) <span class=arial>Left</span> and <span class=arial>Right Arrow</span> keys on the keyboard to move back and forth in your formula. 
+        You can use the somewhat larger <a href="../ilwisapp/map_calculation_dialog_box.htm">MapCalc dialog box</a> if you want to type a <a href="calc.htm">MapCalc formula</a> on multiple lines.</li>
+
+<li>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names.
+        On the command line however, object names must be enclosed in single quotes when they start with a digit, contain a space or
+        any of the following characters <span class=courier> ` ~ ! @ # $ ^ &amp; ( ) - + = [ ] { } ; ' , . </span>
+        <br>For more information, see <a href="How_to_use_long_object_names.htm">How to use long object names</a>.</li> 
+
+</ul>
+
+<p class=kopje>Other functionality:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><span class="courier">?</span><i>expression</i></p>
+
+</td>
+<td valign="top">
+<p>Performs calculations as a <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >pocket line calculator</a>.</p>
+
+<p>For more information, see <a href="appendices_ilwis_commands.htm#other_commands_expressions">Appendices : ILWIS commands</a>, section <a href="appendices_ilwis_commands.htm#other_commands_expressions"><span class="bookmark">Other commands and expressions</span></a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p><span class="courier">!</span><i>command</i> <i>optional_parameter(s)</i><br>
+<span class="courier">!!</span><i>command</i> <i>optional_parameter(s)</i></p>
+
+</tr>
+<tr>
+<td class="nospacetop" valign="top" width=96>
+<p class="nospacetop">&nbsp;</p>
+
+</td>
+<td class="nospacetop" valign="top">
+<p class="nospacetop">Starts any Windows application, Windows shortcut, files with a registered file type, a batch file, a DOS application (with a .PIF file available), etc. 
+
+Type the <i>command</i> directly after the exclamation mark (no spaces allowed). </p>
+
+<p class="tiptext"><span class="tip">Example: </span>to start Notepad, type: <span class=courier>!Notepad</span></p>
+
+<p>For more information, see <a href="appendices_ilwis_commands.htm#other_commands_expressions">Appendices : ILWIS commands</a>, section <a href="appendices_ilwis_commands.htm#other_commands_expressions"><span class="bookmark">Other commands and expressions</span></a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Miscellaneous</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>Copy,</span> <span class=courier>del,</span> <span class=courier>cd,</span> <span class=courier>md,</span> <span class=courier>rd</span>. </p>
+
+<p>For more information, see <a href="appendices_ilwis_commands.htm#dataman_commands">Appendices : ILWIS commands</a>, section <a href="appendices_ilwis_commands.htm#dataman_commands"><span class="bookmark">Data management</span></a>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="calc.htm">Map calculation</a></p>
+
+<p class=seealsolinks><a href="calc_general_syntax.htm">Map calculation : general syntax</a></p>
+
+<p class=seealsolinks><a href="calc_aaf.htm">Map calculation : overview of operators and functions</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_commands.htm">Appendices : ILWIS commands</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a></p>
+
+</body

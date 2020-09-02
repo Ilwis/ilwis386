@@ -1,0 +1,109 @@
+<html>
+
+<head>
+<title>Georef Tiepoints editor : Add tiepoint</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Georeference Tiepoints editor, Tiepoint editor, Tiepoints">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Georeference Tiepoints editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Add Tiepoint</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__georeference_tiepoints_editor_edit_menu_sec2.Click()>Edit menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Adds a tiepoint, also called ground control point, to this georeference tiepoints, this georeference direct linear or this georeference orthophoto. A tiepoint establishes the relation between a Row Column number in a map and its real world XY- or XYZ-coordinate.</p>
+
+<p class=diakopje>Dialog box:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Row  Col:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The Row and Column numbers of the position that you clicked in the background image are shown.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>X  Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To obtain the XY-coordinate for this tiepoint, either:</p>
+
+<ul class=diaul>
+
+<li>	read the XY-coordinate of this position from a paper map, and type these in the X  Y boxes, or </li>
+
+<li>	click at the same position in a map window which already has correct coordinates (master/slave) and the X Y boxes are automatically filled out, or </li>
+
+<li>	digitize the same position on a map stuck on the digitizer and the X Y boxes are automatically filled out. </li>
+
+</ul>
+
+<p class=diabox>When you already have a (mathematically) sufficient number of tiepoints, and you add a new tiepoint, the dialog box comes up with a suggestion for the XY-coordinates for this point. The suggested XY-coordinate gives an indication of the quality of your existing tiepoints. You should <b>never</b> accept this suggestion but always look up the correct XY-coordinate from a paper map, a master, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Z:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When adding a tiepoint to a georef direct linear or a georef orthophoto, select this check box when you want to fill out a Z (height) value for the inserted tiepoint; as a default, the Z-value found in the DTM is given.</p>
+
+<p class=diabox>Clear this check box when you want to use the height value found in the DTM.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click OK, the tiepoint will be added to the tiepoint table.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To make a tiepoint inactive for this georeference: in column <span class=courier>Active</span>, set the value on False by typing an <span class=courier>F</span>.</li>
+
+<li>	To check the quality of a georeference tiepoints, you can add a segment map with digitized features on top of the raster map when adding tiepoints. Then, add tiepoints, redraw the map window once in a while and see when the segments fit well enough on your background image.</li>
+
+<li>	To add a created georeference tiepoints to other bands of a satellite image, open the properties of the other bands: in the <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box, click the <span class=arial>Edit Properties</span> button, then select the newly created georeference tiepoints. For more information, see <a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit the properties of an object</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor : functionality</a></p>
+
+</body

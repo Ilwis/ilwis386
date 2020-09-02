@@ -1,0 +1,148 @@
+<html>
+
+<head>
+<title>Display options - Stereo Pair as Anaglyph</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Display options ..., Stereo pairs, Epipolar stereo pair, Stereo pairs (display), Epipolar stereo pair (display), Anaglyph">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table class=headingblue cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="65%"><h1 class=firstline>Display&nbsp;options</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Layers menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Stereo Pair as Anaglyph</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Specify <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> for a <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> that you wish to show as an anaglyph in a map window. </p>
+
+<p class=defnewpar>Before the stereo pair is displayed as an anaglyph in a map window, you have to answer some questions on how the stereo pair should be displayed. Also, once maps are displayed in a map window, you may wish to change the display options of a layer: </p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> in a map window, choose the <span class=arial>Display Options</span> command, then select a layer from the cascading menu, or </li>
+
+<li>	click the right mouse button in the map window, choose the <span class=arial>Display Options</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_map.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, and select a layer from the cascading menu, or </li>
+
+<li>	double-click a layer in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of a map window. </li>
+
+</ul> 
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="96">
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Red - Green: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the Red-Green option, if you wish to view the anaglyph with Red-Green glasses. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="96">
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Red - Blue: </p>
+
+</td>
+<td>
+<p class=diabox>Select the Red-Blue option, if you wish to view the anaglyph with Red-Blue glasses. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Left Range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, stretch the values of the left photograph/image to enhance the contrast in the image. </p>
+
+<p class=diabox>By default, the 1% interval is used for stretching. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Right Range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><p class=diabox>Optionally, stretch the values of the right photograph/image to enhance the contrast in the image. </p>
+
+<p class=diabox>By default, the 1% interval is used for stretching. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Create Pyramid Layers:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=128>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>In case <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">pyramid layers</a> are not yet available for the (output) raster maps of the stereo pair: </p>
+
+<ul class=diaul>
+
+<li>Select this check box to create pyramid layers for the (output) raster maps of the stereo pair. Pyramid layers speed up the display of large raster maps in a map window. </li>
+
+<li>Clear this check box if you do not wish to create pyramid layers for the raster maps. </li>
+
+</ul>
+
+<p>For more information on pyramid layers, see <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">ILWIS objects : Raster maps - Pyramid layers</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The first text line in this dialog box states the object type (stereo pair) and the object name. Furthermore, the dialog box shows the description of the stereo pair. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>As the calculated output images of the stereo pair may have a very large file size, it is advised to create <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">Pyramid Layers</a> for both output raster maps. This will speed up display in the map window. </li>
+
+<li>In order to show the stereo pair as an anaglyph, the output images of the stereo pair must use the <span class=arial>Image</span> domain or another value domain. To convert a map with the <span class=courier>Color</span> domain to the <span class=courier>Image</span> domain, you can use the <a href="..//ilwisapp/popup/color_separation_popup.htm" onClick="return popup(this, 'notes')" >Color Separation</a> operation; choose option <span class=arial>Intensity</span>. See also <a href="../ilwis/how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_stereopairs.htm">ILWIS objects : stereo pairs</a></p>
+
+</body

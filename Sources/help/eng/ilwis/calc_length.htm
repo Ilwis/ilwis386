@@ -1,0 +1,154 @@
+<html>
+
+<head>
+<title>LENGTH</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="LENGTH, String functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>LENGTH( ) function</h1>
+
+<p class=defnewpar>Returns the number of characters (the length) of a string.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>LENGTH</span>(<i>String</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>String</i></td>
+	<td valign="top">is a string</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> or <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> domain, or <a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >system domain
+      <span class=courier>String</span></a></td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>LENGTH</span>   returns:</td>
+	<td valign="top">an integer value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>When the input string is undefined, the output will also be undefined.</p>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="170"><p class=calc00>? LENGTH(&quot;Landuse&quot;)</p></td>
+	<td><p>returns 7</p></td>
+</tr>
+<tr>
+	<td width="170"><p class=calc00>? LENGTH(&quot;Industrial&quot;)</p>
+	<td><p>returns 10</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = LENGTH(InCol)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolh>InCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Institutional</p></td>
+	<td valign="top"><p class=t1r>13</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Commercial</p></td>
+	<td valign="top"><p class=t1r>9</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Residential</p></td>
+	<td valign="top"><p class=t1r>11</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Industrial</p></td>
+	<td valign="top"><p class=t1r>10</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Recreational</p></td>
+	<td valign="top"><p class="t1r">12</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Transport</p></td>
+	<td valign="top"><p class=t1r>9</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Airport</p></td>
+	<td valign="top"><p class="t1r">7</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Water</p></td>
+	<td valign="top"><p class=t1r>5</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_left.htm">LEFT</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strlt.htm">STRLT</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_in.htm">IN</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_right.htm">RIGHT</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strle.htm">STRLE</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_inmask.htm">INMASK</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_sub.htm">SUB</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strgt.htm">STRGT</a></p></td>
+	<td valign="top"><p class=seealsolinks></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_strpos.htm">STRPOS</a></p></td>
+	<td valign="top" width="60"><a href="calc_strge.htm">STRGE</a></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

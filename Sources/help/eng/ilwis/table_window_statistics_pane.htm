@@ -1,0 +1,173 @@
+<html>
+
+<head>
+<title>Table window : Statistics pane</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Statistics, Statistics pane in table window, Column statistics, Minimum, Maximum, Average, Standard deviation, Sum">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Table window</h1>
+
+<h1 class=secondline>Statistics pane</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The statistics pane lists for each <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value column</a> in a table: </p>
+
+<ul>
+
+<li>the minimum, </li>
+
+<li>the maximum, </li>
+
+<li>the average, </li>
+
+<li>the standard deviation, and </li> 
+
+<li>the sum of the values in the column. </li>
+
+</ul>
+
+<p class=defnewpar>The statistics pane is a split window which can either be shown or hidden. If it is shown it will always be shown at the bottom of the table window; you cannot drag the statistics pane to another position on your screen. If you like, you can change the height of the statistics pane. The order of the statistical values is fixed and the values themselves cannot be edited. </p>
+
+<p class=defnewpar>Figure 1 below shows part of the <span class=courier>Rainfall</span> table. In the upper part of the picture, there is the table view pane showing the names of the rainfall stations (domain of table) and the rainfall values for the months March and April (columns). The statistics pane is shown in the lower part of the picture. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/tablestatspane.gif" align="bottom" width="314" height="259"></p>
+
+<p class=captionfig>Fig. 1: Statistics pane at the bottom of a table window. </p> 
+
+
+<p class=kopje>To hide or show the statistics pane:</p>
+
+<ul>
+
+<li>Choose <span class=arial>Statistics Pane</span> from the <a href="table_window_menu_commands.htm">View menu</a> of the table window. </li>
+
+</ul>
+
+<p>The statistics pane is shown when a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7"> appears in front of the menu command. </p>
+
+<p class=defnewpar>Upon closing a table, it is stored whether or not the statistics pane is shown in the current table. This will then be used as the default setting to show or hide the statistics pane when the table is re-opened later on. </p>
+
+<p class=kopje>To change the height of the statistics pane: </p>
+
+<ul>
+
+<li>Position the mouse pointer at the split bar between the table view pane and the statistics pane as indicated in Figure 1. </li>
+
+<li>Drag the split bar up or down to increase or to decrease the height of the statistics pane. </li>
+
+</ul>
+
+<p class=kopje>To recalculate column statistics:</p>
+
+<p>When you have <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent columns</a>, and when input data has changed, the values in the dependent columns may still reflect the situation of the 'old' input data. The statistics pane will then also show 'old' values. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>Recalculate all columns: </li>
+
+        <ul>
+
+        <li>choose <span class=arial><a href="../ilwismen/update_all_columns.htm">Update All Columns</a></span> from the <a href="table_window_menu_commands.htm">Columns menu</a> in the table window, or </li>
+        
+        <li>click the <span class=arial>Update All Columns</span> button <img src="../images/table_update_all_cols.gif" align=bottom width="22" height="22"> in the <a href="table_window_toolbar.htm">toolbar</a>. </li>
+
+        </ul>
+
+<li>The values in the statistics pane are automatically recalculated. </li>
+
+</ul>
+
+<p class=kopje>To copy statistics to clipboard:</p>
+
+<p>To copy the statistical values for all columns to clipboard, copy the records in the statistics pane to clipboard. </p>
+
+<ol>
+
+<li class=ls01be>Select the records you wish to copy: </li>
+
+        <ul>
+
+        <li>To select a single record: click the record button of the record you wish to copy. </li>
+
+        <li>To select multiple records in sequence: </li>
+
+        <ul>
+
+        <li>keep the left mouse button down while moving over the record buttons of the records that you wish to copy, </li>
+
+        <p>or</p>
+
+        <li>click the first record button of a sequence of records that you wish to copy, </li>
+
+        <li>press the <span class=arial>Shift</span> key on the keyboard and hold it down, </li>
+
+        <li>click the last record button of a sequence or records that you wish to copy. </li>
+
+        </ul>
+
+        </ul>        
+
+<li class=ls01be>Copy the selection to clipboard: </li>
+
+
+        <ul>
+
+        <li>choose <span class=arial>Copy</span> from the Edit menu, </li>
+
+        <li>click the <span class=arial>Copy</span> button <img src="../images/copy.gif" align=bottom width="22" height="22"> in the <a href="table_window_toolbar.htm">toolbar</a>, </li>
+
+        <li>press the <span class=arial>Ctrl+C</span> keys on the keyboard, or </li>
+
+        <li>click the selection with the right mouse button, and choose <span class=arial>Copy</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+        </ul>
+
+</ol>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>For more information, see <a href="../ilwismen/copy_table_selection_to_clipboard.htm">Table window : Copy to clipboard</a>. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To calculate other column statistics, such as Standard error, Variance, Covariance, Correlation, Student's <i>t</i>-test or a <img src="../images/stchisq.gif" align=bottom width="16" height="16">-test, choose <span class=arial><a href="../ilwismen/column_statistics.htm">Column Statistics</a></span> from the <a href="table_window_menu_commands.htm">Columns menu</a> of a table window. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="table_window_record_view_pane.htm">Table window : record view</a></p>
+
+<p class=seealsolinks><a href="table_window_toolbar.htm">Table window : toolbar</a></p>
+
+<p class=seealsolinks><a href="table_window_command_line.htm">Table window : command line</a></p>
+
+<p class=seealsolinks><a href="table_window_menu_commands.htm">Table window : menu commands</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/column_statistics.htm">Column Statistics</a></p>
+
+</body

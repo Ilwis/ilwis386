@@ -1,0 +1,57 @@
+<html>
+
+<head>
+<title>Filter types : majority filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filter types, Majority filters, MAJORITY, MAJUNDEF, MAJZERO">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Filter types</h1>
+
+<h1 class=secondline>Majority filters</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>For each group of pixels considered in the input map, a majority filter assign the predominant (=mostly frequently occurring) value or class name of these to the center pixel in the output map. Undef-majority filters only do this when the center pixel in the input map is undefined; zero-majority filters only do this when the value of the center pixel in the input map is 0. </p>
+
+<p class=defnewpar>Undef-Majority filters are often used as a post-classification operation to reduce the number of undefined pixels in the output map of an image classification.</p>
+
+<p class=kopje>Standard majority filters:</p>
+
+<p>For each 3x3 pixels considered, the standard <a href="..//ilwisapp/sec/filter_majority_filter_sec.htm" onClick="return popup(this, 'notes')" >MAJORITY</a> filter assigns the predominant <b>value or class name</b> to the central pixel in the output map. If no predominant value is found, for instance when all 9 input pixels have a different value or class name, the value or class name which is encountered first is used as output.</p>
+
+<p class=defnewpar>The standard undef-majority filter (<a href="..//ilwisapp/sec/filter_majority_filter_undef_sec.htm" onClick="return popup(this, 'notes')" >MAJUNDEF</a>) will only assign the predominant value or class name to the central pixel in the output map if the central pixel in the input map is <i>undefined</i>. </p>
+
+<p class=defnewpar>The standard zero-majority filter (<a href="..//ilwisapp/sec/filter_majority_filter_zero_sec.htm" onClick="return popup(this, 'notes')" >MAJZERO</a>) will only assign the predominant value or class name to the central pixel in the output map if the central pixel in the input map has value <i>zero</i>. </p>
+
+<p class=kopje>User-defined majority filters:</p>
+
+<p>In the Filter dialog box as well as on the command line, you can define your own majority filters: specify the size of the filter and whether a condition has to be used. For more information, refer to <a href="../ilwisapp/filters_user_defined_majority_filters.htm">user-defined majority filters</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filters_standard_filters.htm">Filters : standard filters</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_user_defined_majority_filters.htm">Filters : user-defined majority filters</a></p>
+
+<p class=seealsolinks><a href="filter.htm">Filter (operation)</a></p>
+
+</body

@@ -1,0 +1,30 @@
+<html>
+
+<head>
+<title>tunnel segments popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Tunnel segments</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/tunnel_segments.htm" onClick="return popup(this, 'notes')" >Tunnel segments</a> operation reduces the amount of intermediate points within segments in a segment map. The segments of the input map are copied into a new segment map. However, for every three consecutive intermediate points within a segment, the middle one is omitted if it falls within a user-defined tunnel-width. Redundant nodes can also be removed.</p>
+
+</body

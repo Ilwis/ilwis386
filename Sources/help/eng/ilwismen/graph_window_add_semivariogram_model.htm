@@ -1,0 +1,278 @@
+<html>
+
+<head>
+<title>Add semi-variogram model</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Graph - Semi-variogram Model, Graph window, Semi-variogram, Semi-variogram model, Variogram">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Graph window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/graph_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Add Semi-variogram Model</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>   
+
+<!--<hr>-->
+
+<p class=defnewpar>From the results of the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation, you can make a semi-variogram. In the semi-variogram, the discrete experimental semi-variogram values <img src="../images/gamest.gif" align=bottom width="6" height="15"> that are the outcome of Spatial correlation will be modeled by a continuous function so that a semi-variogram value <span class=symbol>g</span> will be available for any desired distance h for the <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation later on. </p>
+
+<p class=defnewpar>A semi-variogram model describes the relation between squared differences of pairs of point values and distance. For general information on semi-variograms, see the <a href="graph_window_add_semivariogram_model.htm#semivar"><span class=bookmark>Additional Info</a></span> below. The points in the pairs are at certain distances towards each other and optionally in a certain direction towards each other. You can choose a type of semi-variogram model (spherical, exponential, etc.), and you can fill out the model's parameters: nugget, sill, and range. According to the specified semi-variogram model and parameters, a line will be drawn in the graph window that displays experimental semi-variogram values. </p>
+
+<p class=defnewpar>The aim is to find the model and its parameters that fit your experimental semi-variogram values 'best'. You may need to experiment a little with different models, different values for sill, range and nugget, etc. Once, you have decided which model, and which values for nugget, sill, and range fit your data best, you can continue with the <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation. </p>
+
+<p class=defnewpar>Besides a visual comparison of different models in a graph as described below, you can also use the <a href="column_semivariogram.htm">Column Semi-variogram</a> operation to calculate semi-variogram values <span class=symbol>g</span> for specific distances and store the results in an output column. </p>
+
+<p class=kopje>Preparation:</p>
+
+<p>Display the <i>input table</i> of the Spatial correlation operation in a table window.</p>
+
+<ul>
+
+<li>	Determine the variance (<span class=symbol>s</span><sup>2</sup>) of your variable in the input table, or in a histogram of the input map. The variance of a column can be calculated by using an expression like <span class=courier>?var(</span><i>columnname</i><span class=courier>)</span>. You can also use the <span class=arial>Statistics</span> command on the <a href="../ilwis/table_window_menu_commands.htm">Columns menu</a>. <br>
+
+		This calculated variance of your input variable is the expected value for the sill of that variable.</li>
+
+</ul>
+
+<p class=defnewpar>Display the <i>output table</i> of the Spatial correlation operation in a table window.</p>
+
+<ul>
+
+<li>	Inspect the following columns:</li>
+
+<ul>
+
+<li>	columns <span class=courier>Distance</span>, and <span class=courier>AvgLag</span>/<span class=courier>AvgLag1</span>/<span class=courier>AvgLag2</span>: these columns represent distance classes for which experimental semi-variogram values are calculated in a <span class=courier>SemiVar</span> column. Distance classes are created according to the user-specified lag spacing in Spatial Correlation. To fit a semi-variogram model through experimental semi-variogram values, usually not more than <i>half</i> of the total sampled distance should be taken into account; the larger the distance between the point pairs, the less point pairs, and the less reliable the outcome;</li>
+
+<li>	columns <span class=courier>NrPairs</span>/<span class=courier>NrPairs1</span>/<span class=courier>NrPairs2</span>: these columns contain the number of point pairs per distance class. For reliable semi-variogram values, distance classes should contain at least 30 point pairs. </li>
+
+</ul>
+
+</ul>
+
+<p class=defnewpar>Create point graphs, i.e. the experimental semi-variogram(s), from the columns in the output table of the Spatial correlation operation:</p>
+
+<ul>
+
+<li>	From the <a href="../ilwis/table_window_menu_commands.htm">File menu</a> in the table window, choose the <span class=arial>Create Graph</span> command.</li>
+
+<li>	In the <a href="create_a_graph.htm">Create Graph</a> dialog box, when you used the <i>omni directional</i> method in Spatial Correlation:</li>
+
+<ul>
+
+<li>	choose for the X-axis, the <span class=courier>Distance</span> column or the <span class=courier>AvgLag</span> column; </li>
+
+<li>	choose for the Y-axis, the <span class=courier>SemiVar</span> column.</li>
+
+</ul>
+
+<p class=leftmargininlist>	When you used the <i>bi-directional</i> method in Spatial Correlation, you can draw two graphs (e.g. in two graph windows): </p>
+
+<ul>
+
+<li>	<span class=courier>Distance</span> or <span class=courier>AvgLag1</span> against <span class=courier>SemiVar1</span> (semi-variogram values in the specified direction) and,</li>
+
+<li>	<span class=courier>Distance</span> or <span class=courier>AvgLag2</span> against <span class=courier>SemiVar2</span> (semi-variogram values in the perpendicular direction). </li>
+
+</ul>
+
+<li>	The experimental semi-variogram values will be automatically displayed as a point graph. </li>
+
+<li>	You may wish to adapt the boundaries of the X-axis from 0 to more or less <i>half</i> of the total distance between your sample; and the boundaries of the Y-axis from 0 to the expected variance (<span class=symbol>s</span><sup>2</sup>) of your sample values.</li>
+
+</ul>
+
+<p>In literature, the shown graph is called a discrete experimental semi-variogram. </p>
+
+<p class=defnewpar>Then, fit a semi-variogram model through the experimental semi-variogram values. </p>
+
+<p>To add a semi-variogram model:</p>
+
+<ul>
+
+<li>	select the <span class=arial>Add Graph Semi-variogram Model</span> command from the <a href="../ilwis/graph_window_menu_commands.htm">Edit menu</a> in the graph window, </li>
+
+<li>	click the arrow next to the <span class=arial>Add Graph</span> button <img src="../images/add_graph_layer.gif" align=bottom width="36" height="22"> in the <a href="../ilwis/graph_window_toolbar.htm">toolbar</a> of the graph window, and select <span class=arial>Semi-variogram Model</span>, or </li>
+
+<li>	use the right mouse button in the white space of the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane, and choose <span class=arial>Add Graph Semi-variogram Model</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+</ul>
+
+<p class=defnewpar>This Add Graph Semi-variogram Model dialog box will appear. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Semi-variogram:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose a model which fits your experimental semi-variogram values and which later on can be used in the Kriging operation to calculate the values for the semi-variogram function <span class=symbol>g</span>(h). You can choose between the Spherical model, Exponential model, Gaussian model, Wave model, Rational Quadratic model, Circular model, or the Power model. For more information on the mathematical formulae of the models, see <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >Formulae of semi-variogram models</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Nugget:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you found a nugget effect, specify the value. A nugget effect is the vertical jump from value 0 at the origin, to the semi-variogram value at extremely small separation distances. You are specifying  parameter 'C<sub>0</sub>' for the selected model. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Sill:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the sill; the sill is the plateau that the semi-variogram values reach at the range. You are specifying parameter 'C<sub>0</sub> + C' for the selected model. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the range; the range is the distance at which the semi-variogram values do not increase anymore and reach a plateau. You are specifying parameter 'a' for the selected model (real value &gt; 0). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Slope:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Power model only: type a value for the 'slope', i.e. specify parameter 'k' for this model. When you use the Power model with a power exponent of 1, the model becomes linear (a straight sloping line); then, this 'slope' parameter equals the direction coefficient (<span class=symbol>Dg</span>/<span class=symbol>D</span>h) of the line.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Power:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Power model only: type a real value for the power exponent, i.e. specify parameter ‘m’ for this model. The power function is meaningful if 0 &lt; power exponent &lt; 2. When value 1 is used, the Power model becomes linear and the slope will be constant. If the power exponent is 2 the assumed stochastic model (‘randomness’) is not always justifiable and the interpolation can become pathological.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>A (continuous) line, i.e. the semi-variogram model, will be directly drawn in the graph window. </p>
+
+<p class=defnewpar>You are advised to visually experiment a little with models and sill, range, and nugget values to find the best line through your experimental semi-variogram values. You can edit a semi-variogram model by double-clicking the semi-variogram layer in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane: the <a href="../ilwismen/graph_window_options_semivariogram_model.htm">Graph Options - Semi-variogram Model</a> dialog box will appear. </p>
+
+<p class=defnewpar>To adapt the title, the X-axis, or the Y-axis (left or right) of the graph, double-click the appriopriate item in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane or in the graph window itself: the <a href="graph_window_options_title.htm">Title</a>, <a href="graph_window_options_x_axis.htm">X-axis</a>, <a href="graph_window_options_y_axis_left.htm">Y-axis (left)</a>, or the <a href="graph_window_options_y_axis_right.htm">Y-axis (right)</a> dialog box will appear. The grid lines of the graph can be modified in the X-axis and Y-axis dialog boxes. </p>
+
+<p class=defnewpar>To store semi-variogram values <i>in a column</i> and to evaluate which model and parameters give the best fit through your experimental semi-variogram values, choose the <span class=arial>Semi-variogram</span> command on the <a href="../ilwis/table_window_menu_commands.htm">Columns menu</a> in the table window. The <a href="column_semivariogram.htm">Column Semivariogram</a> dialog box will appear. </p>
+
+<p class=defnewpar>When finished, you can save the contents of the graph window by choosing the <span class=arial><a href="../ilwismen/graph_window_save_graph.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/graph_window_save_graph_as.htm">Save As</a></span> commands from the <a href="../ilwis/graph_window_menu_commands.htm">File menu</a> of the graph window. </li>
+
+<p class=defnewpar>Once you have decided which model and which values for sill, range and nugget fit your data, you can continue with the <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation. </p>
+
+<h2><a name="semivar">Additional information</a></h2>
+
+<p class=linespacing03before>Figure 1 below shows a semi-variogram depicting a spherical model:</p>
+
+<ul>
+
+<li>	When the distance between sample points is 0, the differences between sampled values is also expected to be 0. Thus, the semi-variogram value at distance 0 equals 0, i.e. <span class=symbol>g</span>(0)=0. </li>
+
+<li>	Samples that are at a very small distance to each other are expected to have almost the same values; thus, the squared differences between sample values are expected to be small positive values at small distances.</li>
+
+<li>	With increasing distance between point pairs, the expected squared differences between point values will also increase.</li>
+
+<li>	At some distance the points that are compared are so far apart that they are not any more related to each other, i.e. the sample values will become independent of one another. Then, the expected squared differences of the point values will become equal in magnitude to the variance of the variable. The semi-variogram no longer increases and the semi-variogram develops a flat region, called the <i>sill</i>. The distance at which the semi-variogram approaches the variance is referred to as the <i>range</i> or the span of the variable. </li>
+
+</ul>
+
+<p><img src="../images/smvar3.gif" align=bottom width="320" height="161"></p>
+
+<p class=captionfig>Fig. 1:	A semi-variogram depicting a spherical model.</p>
+
+<p>Remarks on semi-variograms:</p>
+
+<ul>
+
+<li>	A semi-variogram with a <i>nugget</i> effect is a semi-variogram that goes from 0 to the level of the nugget effect in a distance less than the sampling distance. The semi-variogram model shows the semi-variogram value 0 at distance 0 and a discontinuity (jump) to a semi-variogram value at an extremely small distance. A nugget effect indicates that the variable is erratic over very short distances, the variable is highly variable over distances less than the specified lag spacing or the sampling interval. </li>
+
+<li>	For semi-variograms which, after a flat sill level, show an ongoing increase in semi-variogram values, probably a trend has to be taken into account for the longer distances. However, the experimental semi-variogram values for the distances up to the sill, are probably accurate enough to be used in a model.</li>
+
+<li>	Possible dips in the semi-variogram indicate that at certain distances between points there is less difference between the samples than at other distances; this might indicate periodic trends.</li>
+
+</ul>
+
+<p class=defnewpar>Examples of different semi-variogram models:</p>
+
+<p>Figure 2 below depicts a semi-variogram through which multiple <i>models</i> are fitted. In this example, only the Gaussian and the Power model (for the shorter distances) describe the experimental semi-variogram values reasonably; the Spherical model and the Exponential model show rather different values for the experimental and the modeled semi-variogram values.</p>
+
+<p class=defnewpar>The values that were used in this example for nugget, sill and range are:</p>
+
+<ul>
+
+<li>	for the spherical model: 0, 7200, 4500;</li>
+
+<li>	for the exponential model: 0, 10000, 4000;</li>
+
+<li>	for the gaussian model: 200, 7550, 2400;</li>
+
+<li>	for the power model: 200, slope 0.4, power 1.2.</li>
+
+</ul>
+
+<p>The mathematical formula of each model are described in <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >Formulae of semi-variogram models</a>.</p>
+
+<p class=defnewpar><img src="../images/svgrmod1.gif" align=bottom width="350" height="232"></p>
+
+<p class=captionfig>Fig. 2:     Finding the best semi-variogram model through an experimental semi-variogram. The black dots are the outcomes of the Spatial correlation operation, i.e. the experimental semi-variogram values; the colored lines represent different semi-variogram models calculated for all possible distances. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_functionality.htm">Graph window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_graph_management.htm">Graph window : Graph Management</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_toolbar.htm">Graph window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_menu_commands.htm">Graph window : menu commands</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/graph_window_options_semivariogram_model.htm">Graph Options - Semi-variogram Model</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a></p>
+
+<p class=seealsolinks><a href="column_semivariogram.htm">Column semi-variogram</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/kriging_functionality.htm">Kriging : functionality</a></p>
+
+</body

@@ -1,0 +1,575 @@
+<html>
+
+<head>
+<title>Variable threshold computation : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Variable threshold computation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Variable threshold computation</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class="defnewpar">The Variable threshold computation operation helps you to prepare a threshold map that can be used in the <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network extraction</a> operation. </p>
+
+
+<p class="defnewpar">You can base the threshold map on a height map (DEM), or on attribute values from an attribute table of a raster map with a class or ID domain (e.g. infiltration attribute values in a table linked to a geological unit map). </p>
+
+<p class="defnewpar">As a user, you have to: </p>
+
+<ul>
+
+<li>specify the size of a kernel or moving window, so that for the calculation of each output pixel, only 3 x 3 or 5 x 5, etc. input pixels will be considered; </li>
+
+<li>specify the number of desired output classes; </li>
+
+<li>specify a boundary value and a desired output value for each output class that you wish to obtain. </li>
+
+</ul>
+
+<p class="defnewpar">When height values are used as input, you can optionally obtain an internal relief map as additional output. </p>
+
+
+<p class="kopje">Brief explanation of the algorithm: </p>
+
+<p>Suppose that you use a 3 x 3 kernel. </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<ol>
+
+<li>First, the 3 x 3 kernel moves over the input values and determines the maximum difference between each 9 input values. When you use height values as input, this is the calculation of the internal relief. </li> 
+
+<li>Subsequently, these maximum difference values are classified into several user-defined classes. Each class is assigned the threshold value that was specified for this class. </li>
+
+<li>Finally, for generalization purposes, the 3 x 3 kernel moves over the map from the previous step: 
+
+	the predominant value of each 9 temporary threshold values is found and this threshold value is assigned to the output pixel. </li>
+
+</ol>
+
+<p class="defnewpar">When using a 5 x 5 kernel, 25 input pixels are considered at a time, etc. </p>
+
+<p class="defnewpar">Below, you will find some <a href="#example"><span class="bookmark">examples</span></a> and a more <a href="#further_explanation"><span class="bookmark">detailed explanation</span></a> of these 3 steps. </p>
+
+<p class="kopje">Input map requirements:</p>
+
+<p>The operation requires an input Digital Elevation Model (DEM) (<a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value raster map</a>).</p>
+
+<p class="defnewpar">You can also use a class or ID map and choose a (value) attribute column from the attribute table that is linked to this map. In this way, you can base the output threshold map for instance on infiltration (attribute) values of geological units (map), etc. </p>
+
+<p class="kopje">Domain and georeference of output maps: </p>
+
+<p>The output threshold map and the optional internal relief output map will use <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain Value</a>; the value range and precision for the output maps are automatically calculated. </p>
+
+<p>An output internal relief map will obtain the same name as the output threshold map, followed by <span class="courier">__1</span>. </p>
+
+<p>The output maps will use the same georeference as the input map. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>The output threshold map of this operation can be used as input threshold map in a <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network extraction</a> operation. </p>
+
+<h2 id="example">Examples</h2>
+
+<p class="kopjeaftertitleboun">1. Simple example:</p>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<p>In this example, a relatively flat part of a DEM is used. </p>
+
+<p class="defnewpar">Consider the following 9 pixels in a DEM: </p>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<table cellspacing=0 border="0">
+<tr>
+<td valign="top" width="22">
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width="36">
+<p class=filtcour>2060</p>
+
+</td>
+<td valign="top" width="36">
+<p class=filtcour>2055</p>
+
+</td>
+<td valign="top" width="36">
+<p class=filtcour>2052</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=filtcour></p>
+
+</td>
+<td valign="top">
+<p class=filtcour>2056</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>2051</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>2051</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=filtcour></p>
+
+</td>
+<td valign="top">
+<p class=filtcour>2050</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>2047</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>2046</p>
+
+</td>
+</tr>
+</table>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+
+<p class="kopje">Internal relief: </p>
+
+<p>The internal relief value, for the center pixel, is: maximum - minimum = 2060 - 2046 = 14. <br>
+
+This value is the output value that is assigned to the 'center' pixel in the internal relief map below (in bold). <br>
+
+For your reference, the internal relief values calculated for the other pixels are also shown. </p>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<table cellspacing=0 border="0">
+<tr>
+<td valign="top" width="22">
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width="36">
+<p class=filtcour>16</p>
+
+</td>
+<td valign="top" width="36">
+<p class=filtcour>10</p>
+
+</td>
+<td valign="top" width="36">
+<p class=filtcour>10</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=filtcour></p>
+
+</td>
+<td valign="top">
+<p class=filtcour>17</p>
+
+</td>
+<td valign="top">
+<p class=filtcour><b>14</b></p>
+
+</td>
+<td valign="top">
+<p class=filtcour>13</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=filtcour></p>
+
+</td>
+<td valign="top">
+<p class=filtcour>12</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>13</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>13</p>
+
+</td>
+</tr>
+</table>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<p class="kopje">Classification: </p>
+
+<p>The upper boundary values were set to 25 and 75. </p>
+
+<ul>
+
+<li>For internal relief values <span class="symbollarger">£</span> 25, an output threshold value of 750 should be assigned. </li>
+
+<li>For internal relief values <span class="symbollarger">&gt;</span> 25 but <span class="symbollarger">£</span> 75, an output threshold value of 250 should be assigned. </li>
+
+</ul>
+
+<p class="defnewpar">In this case, the internal relief value is 14, thus the output threshold value will be 750 (in bold below). <br>
+
+For your reference, the classified threshold values for the other pixels are also shown. </p>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<table cellspacing=0 border="0">
+<tr>
+<td valign="top" width="22">
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width="36">
+<p class=filtcour>750</p>
+
+</td>
+<td valign="top" width="36">
+<p class=filtcour>750</p>
+
+</td>
+<td valign="top" width="36">
+<p class=filtcour>750</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=filtcour></p>
+
+</td>
+<td valign="top">
+<p class=filtcour>750</p>
+
+</td>
+<td valign="top">
+<p class=filtcour><b>750</b></p>
+
+</td>
+<td valign="top">
+<p class=filtcour>750</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=filtcour></p>
+
+</td>
+<td valign="top">
+<p class=filtcour>750</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>750</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>750</p>
+
+</td>
+</tr>
+</table>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<p class="kopje">Predominant threshold value:</p>
+
+<p>From the pixel values above, it is easily seen that the predominant value is 750. <br>
+
+This is the final output value that will be assigned to the pixel in the output threshold map (in bold below). </p>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<table cellspacing=0 border="0">
+<tr>
+<td valign="top" width="22">
+<p class=filtcour></p>
+
+</td>
+<td align="center" valign="top" width="60">
+<p class=filtcour><i>depends</i></p>
+
+</td>
+<td align="center" valign="top" width="60">
+<p class=filtcour>&nbsp;&nbsp;750</p>
+
+</td>
+<td align="center" valign="top" width="60">
+<p class=filtcour><i>depends</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=filtcour></p>
+
+</td>
+<td align="center" valign="top">
+<p class=filtcour>750</p>
+
+</td>
+<td align="center" valign="top">
+<p class=filtcour>&nbsp;&nbsp;<b>750</b></p>
+
+</td>
+<td align="center" valign="top">
+<p class=filtcour>750</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=filtcour></p>
+
+</td>
+<td align="center" valign="top">
+<p class=filtcour><i>depends</i></p>
+
+</td>
+<td align="center" valign="top">
+<p class=filtcour>&nbsp;&nbsp;750</p>
+
+</td>
+<td align="center" valign="top">
+<p class=filtcour><i>depends</i></p>
+
+</td>
+</tr>
+</table>
+
+<p class="defnewpar">For the final output values of the neighbours, the following can be said: </p>
+
+<ul>
+
+<li>for the pixels directly above, below, to the right and to the left of the center pixel, 6 out of 9 pixels in the classification map have value 750; these 4 pixels will thus also be assigned value 750 in the output map; </li>
+
+<li>for the corner pixels goes that at least 4 out of 9 pixels have value 750; for these pixels, their final output value depends on the values of other neighbours. </li>
+
+</ul>
+
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="kopjeboldandund">2. More complicated example: </p>
+
+<p class="defnewpar">In this example, a part of a DEM is used in which the internal relief values are just below and just above the first boundary value of 25. </p>
+
+<p class="defnewpar">Consider the input DEM below. </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<img src="../images/hydro_varthres_dem.gif" width="337" height="277">
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="defnewpar">A 3x3 filter was used to determine internal relief values. The internal relief map is shown below.</p>
+
+<p class="emptyline">&nbsp;</p>
+
+<img src="../images/hydro_varthres_intrelief.gif" width="337" height="277">
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="defnewpar">The same classification was used as in the simple example:  </p>
+
+<ul>
+
+<li>For internal relief values <span class="symbollarger">£</span> 25, an output threshold value of 750 should be assigned. </li>
+
+<li>For internal relief values <span class="symbollarger">&gt; </span> 25 but <span class="symbollarger">£</span> 75, an output threshold value of 250 should be assigned. </li>
+
+</ul>
+
+<p class="defnewpar">However, because the predominant value (of the 3x3 window) is assigned, the output is as follows: </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<img src="../images/hydro_varthres_out.gif" width="337" height="277">
+
+<p class="emptyline">&nbsp;</p>
+
+<h2 id="further_explanation">Explanation of the operation's process</h2>
+
+<p class="kopje">1. Calculation of internal relief values: </p>
+
+<p>A kernel (filter) with a user-defined size, e.g. 3 x 3, 5 x 5, etc., will move over the input map. Each time, only the 9, 25, etc. pixel values 'within' the kernel are considered. When an output value is obtained, the kernel moves 1 pixel to the right, until all pixels in a row are done. This is repeated for all rows. </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="leftmargin1">The filter size has to be specified in the operation's dialog box or on the command line: </p>
+
+    <table cellspacing="0">
+    <tr>
+    <td valign="top" width="32"></td>
+    <td valign="top">
+    <ul>
+    <li>any odd size can be used, </li>
+    <li>filters are always symmetrical, e.g. 3 x 3, 5 x 5, etc. </li>
+    <li>if an even value is specified for the filter size, this value is automatically increased by 1, so that an odd size is obtained, </li>
+	<li>if a filter size &lt; 3 is used, the program will automatically use a 3 x 3 kernel. </li>
+    </ul>
+	</td>
+	</tr>
+	</table>
+
+<p class="defnewpar">From the 9, 25, etc. input values considered, the minimum value and the maximum value are found. The difference between the maximum value and the minimum value is the internal relief: </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="leftmargin1">Internal relief = MAX - MIN </p>
+
+<p class="defnewpar">This value is assigned to the corresponding pixel, at the center of the kernel, in the optional internal relief output map. </p>
+
+<p class="defnewpar">For more information, see also <a href="filter_functionality.htm">Filter (operation) : functionality</a> or <a href="../ilwis/calc_special_neighbourhood_operations_and_iterations.htm">Neighbourhood operations</a> (section Using neighbourhood functions on multiple neighbours), and/or Neighbourhood functions NBMAX and NBMIN.</p>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="leftmargin1">The output internal relief map, using a 3x3 filter size, could be created 'manually' by using: </p>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="32"></td>
+<td valign="top" width="60">MaximumValuesMap</td>
+<td valign="top" width="18"> = </td>
+<td valign="top">NBMAX(<i>InputDEM</i><span class="courier">#</span>)</td>
+</tr>
+<tr>
+<td valign="top" width="32"></td>
+<td valign="top">MinimumValuesMap</td>
+<td valign="top"> = </td>
+<td valign="top">NBMIN</span>(<i>InputDEM</i><span class="courier">#</span>)</td>
+</tr>
+<tr>
+<td valign="top" width="32"></td>
+<td valign="top">InternalReliefMap</td>
+<td valign="top"> = </td>
+<td valign="top">MaximumValuesMap - MinimumValuesMap</td>
+</tr>
+</table>
+
+<p class="kopje">2. Reclassification of internal relief values into output threshold values: </p>
+
+<p>The user has to specify upper boundary values for the internal relief values and has to specify output values for these internal relief classes. </p>
+
+<p class="defnewpar">For instance, an internal relief value map contains values between 0 and 450. </p>
+
+<p class="defnewpar">Suppose, you wish to divide these internal relief values into 3 classes: </p>
+<ul>
+<li>all internal relief values between 0 and 30 should obtain output value: 1000 </li>
+<li>all internal relief values between 31 and 80 should obtain output value: 250 </li>
+<li>all internal relief values between 81 and 500 should obtain output value: 50 </li>
+</ul>
+
+<p class="defnewpar">You should then use the following upper boundary values and output threshold values: </p>
+<p class="emptylinehalf">&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="10"></td>
+<td><p class="tcolhr">Upper bound value</p></td>
+<td><p class="tcolhr">Output threshold value</p></td>
+</tr>
+<tr>
+<td valign="top" width="10"></td>
+<td valign="top"><p class="t1r">30</p></td>
+<td valign="top"><p class="t1r">1000</p></td>
+</tr>
+<tr>
+<td valign="top" width="10"></td>
+<td valign="top"><p class="t1r">80</p></td>
+<td valign="top"><p class="t1r">250</p></td>
+</tr>
+<tr>
+<td valign="top" width="10"></td>
+<td valign="top"><p class="t1r">500</p></td>
+<td valign="top"><p class="t1r">50</p></td>
+</tr>
+</table>
+
+<p class="defnewpar">The maximum number of output classes that can be specified is 5. </p>
+
+<p class="tip">Note: </p>
+
+<p class="tiptext">The upper boundary value of the last class should be large enough to fit 'all' internal relief values. If an internal relief value is found that is greater than the last upper boundary value, then such a pixel will not be classified and will thus obtain output value undefined. <p>
+
+<p class="tipemptylinehalf">&nbsp;</p>
+
+<p class="tiptext">To prevent this, it is advised to specify for the last upper boundary value: </p>
+
+<p class="tipemptylinehalf">&nbsp;</p>
+
+<p class="tiptext">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maximum value in your entire DEM - Minimum value in your entire DEM </p>
+
+<p class="tipemptylinehalf">&nbsp;</p>
+
+<p class="tiptext">In this way, you ensure that no additional undefined values will appear in your output map. </p>
+
+<p class="kopje">3. Assigning the predominant output value 'within the filter' to the output pixel: </p>
+
+<p>Finally, the filter with your user-defined size, e.g. 3 x 3, 5 x 5, etc., will move over the output map with the threshold values from step 2. Each time, only the pixel values 'within' the filter are considered. </p>
+
+<p class="defnewpar">From these values, while any pixels with value undefined are ignored, the predominant value is determined. This predominant value is then assigned to the corresponding pixel, at the center of the filter, in the final output map. </p>
+
+<p class="defnewpar">Then, the filter moves on to the next pixel. </p>
+
+<p class="defnewpar">By assigning the predominant threshold value: </p>
+
+<ul>
+
+<li>the output map with threshold values will appear smoother, especially along the edges of the output classes, and </li>
+
+<li>the output map will have less speckles, i.e. the amount of small groups of pixels with a different value than most of their neighbours is reduced. </li>
+
+</ul>
+
+<p class="defnewpar">For more information, see <a href="..//ilwisapp/sec/filter_majority_filter_sec.htm" onClick="return popup(this, 'notes')" >Majority filter</a>, or <a href="../ilwis/calc_special_neighbourhood_operations_and_iterations.htm">Neighbourhood operations</a> (section Using neighbourhood functions on multiple neighbours), and Neighbourhood function NBPRD. </p>
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="variable_threshold_computation_dialog_box.htm">Variable threshold computation : dialog box</a></p>
+
+<p class=seealsolinks><a href="variable_threshold_computation_command_line.htm">Variable threshold computation : command line</a></p>
+
+<p class=seealsolinks><a href="variable_threshold_computation_algorithm.htm">Variable threshold computation : algorithm</a></p>
+
+
+</body

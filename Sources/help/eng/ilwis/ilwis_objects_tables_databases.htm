@@ -1,0 +1,189 @@
+<html>
+
+<head>
+<title>Databases</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Data objects, ILWIS objects, Tables, Databases, Database collections, External file types, Foreign file types, IOC, TBT, dBase, DBF, MS Excel, Excel, XLS, MS Access, Access, MDB, ADO, ODBC, OLE DB, Import database">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Tables - Databases</h1></td>
+</tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>In ILWIS, you can use databases from other sources. </p>
+
+<p class=defnewpar>A database is:</p>
+
+<ul>
+
+<li>a single file containing a single table (e.g. dBase or Paradox), or </li>
+
+<li>a single file containing multiple tables (e.g. Excel or Access). </li>
+
+</ul>
+
+<p class=defnewpar>In general, you can access a database in two ways: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>by <i>converting</i> parts of a database to the ILWIS table format, using the Import Table wizard, you can calculate with the output table(s), and edit the output table(s), etc. as usual. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>by keeping the external database in its original format, and have access to tables or the entire database in a <i>Use As</i> manner. </li>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <p>With the <i>Use As</i> method, you will have: </p>
+
+        <ul>
+
+        <li>read access, so that the table(s) can be displayed; </li>
+
+        <li>write access, so that fields of the tables can be edited; you can add records; when you save the Use As table as a normal ILWIS table, you are also allowed to create new columns. </li>
+
+        </ul>
+
+        <p class=defnewpar>When you open an entire database with the <i>Use As</i> method, you will obtain a so-called database collection <img src="../images/objcol.gif" align=bottom width="15" height="13">. A database collection is similar to an <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collection</a>; the difference is that an object collection may contain all kinds of <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >ILWIS objects</a> (maps, tables, layouts, etc.), while a database collection may only contain tables. You are not allowed to add any tables to a database collection, and you cannot delete any tables from a database collection. </p>
+
+</ul>
+
+<p class=defnewpar>The access to an external database is achieved through a Windows technique called ADO (ActiveX Data Objects), which makes use of an OLE DB provider, which, in turn, probably uses an ODBC (Open DataBase Connectivity) driver. The OLE DB provider and the ODBC drivers that are installed on your system determine which types of databases can be used. For a standard Windows database program like Access, the required driver is already present on your system. </p>
+
+<h2>Using a database</h2>
+
+<p>Below, two methods will be shortly described to open an external database. </p>
+
+<p class=kopje>1. Showing and opening foreign database files through the Catalog: </p>
+
+<p>This method can be used when the database consists of a single file which contains one or more tables (e.g. dBase, Paradox, Excel, Access): </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li class=ls01be><a href="../ilwismen/customize_catalog_selection.htm">Customize the Catalog</a> so that the desired foreign extensions (e.g. <span class=courier>dbf</span>, <span class=courier>xls</span> or <span class=courier>mdb</span>) are shown. </li>
+
+<li class=ls01be>Double-click the external file in the Catalog. </li>
+
+</ul>
+
+<p class=defnewpar>You will obtain a database collection <img src="../images/objcol.gif" align=bottom width="15" height="13"> in your Catalog. When you double-click the database collection, the tables <img src="../images/table.gif" align=bottom width="13" height="14"> in the database collection will appear. When you double-click a table, it will be opened in <i>Use As</i> manner <img src="../images/table.gif" align=bottom width="13" height="14"><sub class=blue> u</sub>. </li>
+
+<p class=defnewpar>You can: </p>
+
+<ul>
+
+<li>show tables of the database, </li>
+
+<li>edit fields of tables in the database, </li>
+
+<li>perform table calculations, as long as you write the output into an existing column, </li>
+
+<li>join columns into an existing ILWIS table. </li>
+
+</ul>
+
+<p class=defnewpar>Only when you save a <i>Use As</i> table as a regular ILWIS table, you can also: </p>
+
+<ul>
+
+<li>create new columns, </li>
+
+<li>perform calculations and write the output to a new column. </li>
+
+</ul>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>In a Use As table, you will find that most columns use system domain <span class=courier>Value</span>, or system domain <span class=courier>String</span>. You can convert the domain of a <span class=courier>String</span> column for instance by double-clicking the column's header, and then in the <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box, press the <a href="../ilwismen/create_domain_class_or_id_from_string_column.htm"><span class=arial>Create new Domain from Strings in column</span></a> button. </li>
+
+<li>To save a Use As table to a normal ILWIS table, open the Use As table and choose <span class=arial>Save Copy As</span> from the File menu in the table window. </li>
+
+</ul>
+
+<p class=kopje>2. Using the Import Table wizard: </p>
+
+<p>The <a href="../ilwismen/import_table_input_table_name.htm">Import Table wizard</a> can be used when the database consists of a single file which contains one or more tables (e.g. dBase, Paradox, Excel, Access): </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li class=ls01be>From the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, choose <span class=arial>Import, Table</span>: </li>
+
+        <p class=leftmargin03>the <a href="../ilwismen/import_table_input_table_name.htm">Import Table wizard</a> will be opened. </li>
+
+<li class=ls01be>Select the desired database.</li>
+
+<li class=ls01be>Select a <b>single table</b> of the database, and select the domain for that table. </li>
+
+<li class=ls01be>Accept the default SQL query (to retrieve all records of the table), or use your own SQL query to retrieve specific data from the table. </li>
+
+<li class=ls01be>Specify an output name for the table, and choose:</li>
+
+        <ul>
+
+        <li>to <i>convert</i> the table to the ILWIS table format, or </li>
+
+        <li>not to convert the table, but use it in <i>Use As</i> manner. </li>
+
+        </ul>
+
+</ul>
+
+<p class=defnewpar>When you choose to <i>convert</i> the table to ILWIS table format, you will obtain an ILWIS table <img src="../images/table.gif" align=bottom width="13" height="14"> that can be shown, edited and with which you can calculate as usual. </p>
+
+<p class=defnewpar>When you choose to obtain a <i>Use As</i> table <img src="../images/table.gif" align=bottom width="13" height="14"><sub class=blue> u</sub>, the same restrictions apply as described in section 1. </p>
+
+<h2>Additional information</h2>
+
+<p>For technical information on database collections, refer to <a href="../ilwis/ilwis_objects_object_collections.htm">ILWIS objects : object collections</a>. </p>
+
+<p class=defnewpar>For your information, in Windows Control Panel, under Administrative Tools, Data Sources (ODBC), you can find a list of installed ADO/ODBC drivers. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="how_to_import_data.htm">How to import data</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/import_table_input_table_name.htm">Import Table wizard</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_object_collections.htm">ILWIS objects : object collections</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_tables.htm">ILWIS objects : tables</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_columns.htm">ILWIS objects : columns</a></p>
+
+</body

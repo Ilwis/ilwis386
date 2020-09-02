@@ -1,0 +1,117 @@
+<html>
+
+<head>
+<title>Principal Component Analysis : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Principal component analysis">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Principal Component Analysis</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Principal Component Analysis operation is mathematical method to uncover relationships among many variables (as found in a set of raster maps in a map list) and to reduce the amount of data needed to define the relationships. With Principal Component Analysis each variable is transformed into a linear combination of orthogonal common components (output raster maps) with decreasing variation. The linear transformation assumes the components will explain all of the variance in each variable. Hence each component (output raster map) carries different information which is uncorrelated with other components. </p>
+
+<p class=defnewpar>The input for Principal components analysis consists of a map list with raster maps from which the <a href="..//ilwisapp/popup/variance_covariance_matrix_popup.htm" onClick="return popup(this, 'notes')" >covariance matrix</a> will be calculated. </p>
+
+<p class=defnewpar>The output of the principal component analysis operation is: </p> 
+
+<ul>
+
+<li>an output <i>matrix</i> denoting the transformation coefficients (calculated from the covariance matrix), </li>
+
+<li>an output <i>map list</i> containing the set of transformed <i>raster maps</i> (also called the components). </li>
+
+</ul>
+
+<p class=defnewpar>The output raster maps are listed in decreasing order of variance. This enables a reduction of output maps because the last number of transformed maps have little or no variation left (may be virtually constant maps). The 'last' components thus do not add significance and may hence be discarded. During the operation, the number of output bands can be directly reduced by specifying a parameter. </p>
+
+<p class=defnewpar>The additional information of the output matrix contains furthermore the amount of variance accounted for by each component. </p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>Just as Principal Component Analysis uses the covariance matrix to calculate the map transformations, <a href="..//ilwisapp/popup/factor_analysis_popup.htm" onClick="return popup(this, 'notes')" >Factor analysis</a> uses the correlation matrix (standardized variance-covariance matrix). The difference in approach is that Principal Component Analysis is more of a mathematical manipulation whilst Factor analysis is regarded as a statistical technique (Davis, 1986).</p>
+
+<p class=defnewpar>Principal components analysis can be used for several purposes, e.g.:</p>
+
+<ul>
+
+<li>	Data compression. For example you have 7 TM bands. Using principal components most of the variance in a seven-band TM data set can be explained in two or three components.</li>
+
+<li>	Pre-processing procedure prior to classification of the data.</li>
+
+<li>	To find targets of interest, e.g., the component with the lowest variance may contain some interesting information (Mather, 1987). </li>
+
+</ul>
+
+<p class=kopje>Input requirements:</p>
+
+<p>The operation requires a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> that contains at least 2 raster maps (bands) and, when using the dialog box, a maximum of 99 raster maps. On the command line, the maximum number of bands in the input map list is not limited. </p>
+
+<p class=defnewpar>All raster maps in the map list must use the <span class=courier>Image</span> domain or the same value domain, and all raster maps should have the same georeference. Undefined values in the input raster maps are ignored.</p>
+
+<p class=kopje>Output objects of this operation:</p>
+
+<ol>
+
+<li>	First, the operation defines an output <a href="..//ilwis/popup/objects_matrices_popup.htm" onClick="return popup(this, 'notes')" >matrix</a> and an output <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. </li>
+
+        <ul>
+        
+        <li>The output map list will obtain the same name as the matrix. </li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>When the output matrix has been calculated, it contains the eigenvectors of the calculated covariance matrix. The total variance per band is also calculated; this is shown in <span class=arial>Additional Info</span> pane in the matrix viewer and in the <a href="../ilwismen/matrix_properties.htm">Matrix Properties</a>. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	When both the output matrix and the output map list have been calculated, all output raster maps in the output map list are defined as linear combinations of the eigenvectors and the input maps. </li>
+
+        <ul>
+
+        <li>The output maps obtain the same name as the matrix but the map names are followed by _1, _2, _3, etc., where for instance <span class=courier>OutComp_1</span> represents the first axis, i.e. explaining the largest amount of variation of all input maps, and where <span class=courier>OutComp_2</span> is the second orthogonal axis, etc. </li>
+
+        <li>When the eigenvectors to construct the first output map <span class=courier>OutComp_1</span> are for instance: 0.43, 0.65, 0.63 (as the first row in the matrix); then the first output map <span class=courier>OutComp_1</span> is calculated as 0.43<span class=courier> * InMap1</span> + 0.65<span class=courier> * InMap2</span> + 0.63<span class=courier> * InMap3</span>. </li>
+
+        </ul>
+
+</ol>
+
+<p class=kopje>Domain and georeference of output raster maps:</p>
+
+<p>The output raster maps use the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system <span class=courier>Value</span> domain</a> and have the same georeference as the input raster maps. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="principal_component_analysis_dialog_box.htm">Principal Component Analysis: dialog box</a></p>
+
+<p class=seealsolinks><a href="principal_component_analysis_command_line.htm">Principal Component Analysis: command line</a></p>
+
+<p class=seealsolinks><a href="principal_component_analysis_algorithm.htm">Principal Component Analysis: algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_matrices.htm">ILWIS objects : matrices</a></p>
+
+</body

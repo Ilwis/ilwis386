@@ -1,0 +1,206 @@
+<html>
+
+<head>
+<title>Stretch : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stretch">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Stretch</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Stretch operation re-distributes values of an input map over a wider or narrower range of values in an output map. Stretching can for instance be used to enhance the contrast in your map when it is displayed. Two stretch methods are available: <a href="..//ilwisapp/popup/stretch_linear_popup.htm" onClick="return popup(this, 'notes')" >linear stretching</a> and <a href="..//ilwisapp/popup/stretch_histequa_popup.htm" onClick="return popup(this, 'notes')" >histogram equalization</a>. For general information, see <a href="stretch_functionality.htm">Stretch : functionality</a>.</p>
+
+<p class=kopje>Linear stretching:</p>
+
+<p>The input values of a map are re-scaled to output values in the output map.</p>
+
+<p>Input values are specified by the 'stretch from' values; the lower and upper 'stretch from' boundary values are included in the stretching. </p>
+
+<p>Output values are specified by the output domain and the value range and precision of this domain.</p>
+
+<p class=defnewpar>Linear stretching uses the following formula:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p>OUTVAL</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>(INVAL - INLO) * ((OUTUP-OUTLO)/(INUP-INLO)) + OUTLO</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p>OUTVAL</p>
+
+</td>
+<td valign="top">
+<p>Value of pixel in output map</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>INVAL</p>
+
+</td>
+<td valign="top">
+<p>Value of pixel in input map</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>INLO</p>
+
+</td>
+<td valign="top">
+<p>Lower value of 'stretch from' range</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>INUP</p>
+
+</td>
+<td valign="top">
+<p>Upper value of 'stretch from' range</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>OUTLO</p>
+
+</td>
+<td valign="top">
+<p>Lower value of 'stretch to' range</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>OUTUP</p>
+
+</td>
+<td valign="top">
+<p>Upper value of 'stretch to' range </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the 'stretch from' range is specified as values, these are INLO and INUP.</p>
+
+<p>When the 'stretch from' range is specified as a percentage (e.g. 1%), INLO and INUP are determined from the map's histogram (1% and 99% npcumpct); all input values smaller than or equal to INLO are brought to OUTLO, and all input values greater than or equal to INUP are brought to OUTUP.</p>
+
+<p>When choosing output domain <span class=courier>Image</span>, then OUTLO is 0, and OUTUP is 255. When choosing domain Value, the minimum and maximum values specified as the value range are used as OUTLO and OUTUP ('stretch to' range).</p>
+
+<p>The value specified as the precision of the output value domain is used to round OUTVAL.</p>
+
+<p class=defnewpar>The result of a linear stretch is that all input values are stretched to the same extent, see Fig. 1 below.</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p><img src="../images/strlin.gif" align=bottom width="300" height="112"></p>
+
+<p class=captionfig>Fig. 1:	Schematic explanation of a linear stretch. Input values range from 55 to 103; output values range from 0 to 255.</p>
+
+<p class=kopjeaftertitlesub>Histogram equalization:</p>
+
+<p>Lower and upper boundaries of the 'stretch from' range are determined in the same way as with linear stretching. The 'stretch to' values are determined from the number of specified output intervals. When 256 intervals are specified, the output values will range from 0 to 255. When another number of output intervals is specified, the first interval will obtain output value 1, the second value 2, etc.</p>
+
+<ol>
+
+<li>	The histogram of the input map is calculated. The total number of pixels with values is calculated (undefined values are not considered).</li>
+
+<li>	The total number of pixels with values is divided by the number of required output intervals, in order to get a 'threshold' for the number of pixels that ideally should end up in each interval.</li>
+
+<li>	The 'threshold' divides the input histogram into the desired number of output intervals as follows:</li>
+
+<li>	For the first interval:</li>
+
+        <ul>
+
+        <li>	when in the histogram of the input map, the cumulative number of pixels reaches the 'threshold' value, </li>
+
+        <li>	the input value in the histogram closest to this 'threshold' is selected, and</li>
+
+        <li>	all input pixel values smaller or equal than this value are assigned the first output value.</li>
+
+        </ul>
+
+<li>	For next intervals:</li>
+
+        <ul>
+        
+        <li>	whenever a next factor of the 'threshold' is reached in the input histogram,</li>
+
+        <li>	the value closest to this 'threshold' is selected, and</li>
+
+        <li>	all input pixel values smaller or equal than this value but larger than the previous interval boundary value are assigned the next output value.</li>
+
+        </ul>
+
+        <p class=leftmargininlist>	In this way all output intervals are filled with input values.</p>
+
+</ol>
+
+<p class=defnewpar>The result of a histogram equalization stretch is that parts of the histogram with many pixels are stretched more than parts with few pixels, see also Figure 2 below. Figure 3 below shows step 3 as described above: the determination of which input values belong to which output interval, in the histogram of an input map.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p><img src="../images/strhe2.gif" align=bottom width="329" height="355"></p>
+
+<p class=captionfig>Fig. 2:	Schematic explanation of a histogram equalization. Input values range from 55 - 103. Number of output intervals 6.</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+<p><img src="../images/strhet2.gif" align=bottom width="238" height="479"></p>
+
+<p class=captionfig>Fig. 3:	Part of an input map's histogram showing the determination of which input values belong to which output intervals. The total number of pixels in this map was 187000. The threshold value for 6 groups, is thus 31166.67 pixels. Every time a multiple of this figure is reached in the histogram, a boundary is inserted; the value of the input map is closest to this threshold value is selected (66, 69, 73, 76, 79). <br>
+The first interval thus contains a total of 27236 pixels, the second interval 31223 pixels, the third interval 37520 pixels, the fourth interval 36168 pixels, the fifth interval 23244 pixels, and the sixth interval 31609 pixels.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="stretch_functionality.htm">Stretch : functionality</a></p>
+
+</body

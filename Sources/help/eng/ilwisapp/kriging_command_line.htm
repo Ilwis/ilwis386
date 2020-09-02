@@ -1,0 +1,685 @@
+<html>
+
+<head>
+<title>Kriging : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Kriging, MapKriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Kriging</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <span class=courier>No</span> | <span class=courier>Average</span> | <span class=courier>Firstval</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <span class=courier>Average</span> | <span class=courier>Firstval</span> , <i>Tolerance</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>, , <span class=courier>No</span> | <span class=courier>Average</span> | <span class=courier>Firstval</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>, , <span class=courier>Average</span> | <span class=courier>Firstval</span> , <i>Tolerance</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <span class=courier>No</span> | <span class=courier>Average</span> | <span class=courier>Firstval</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <span class=courier>Average</span> | <span class=courier>Firstval</span> , <i>Tolerance</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>, , <span class=courier>No</span> | <span class=courier>Average</span> | <span class=courier>Firstval</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingSimple</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>, , <span class=courier>Average</span> | <span class=courier>Firstval</span> , <i>Tolerance</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingOrdinary</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <i>LimDist</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingOrdinary</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <i>LimDist</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingOrdinary</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <i>LimDist</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <i>min, max</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingOrdinary</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <i>LimDist</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <i>min, max,</i> <span class=courier>No</span> | <span class=courier>Average</span> | <span class=courier>Firstval</span> )</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingOrdinary</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <i>LimDist</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <i>min, max,</i> <span class=courier>Average</span> | <span class=courier>Firstval</span>, <i>Tolerance</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingOrdinary</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>, <i>LimDist</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingOrdinary</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>, <i>LimDist</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingOrdinary</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>, <i>LimDist</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <i>min, max</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingOrdinary</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>, <i>LimDist</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <i>min, max,</i> <span class=courier>No</span> | <span class=courier>Average</span> | <span class=courier>Firstval</span> )</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingOrdinary</span>(InputPointMap, Georef, <i>SemiVarModel</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>, <i>LimDist</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <i>min, max,</i> <span class=courier>Average</span> | <span class=courier>Firstval</span>, <i>Tolerance</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map containing the Kriging estimates.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapKrigingSimple</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Kriging operation, using the Simple Kriging method.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapKrigingOrdinary</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Kriging operation, using the Ordinary Kriging method.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPointMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map with a value domain. To use a value attribute column from an attribute table which is linked to an ID point map, use <i>InputPointMap.Columnname</i>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Georef</p>
+
+</td>
+<td valign="top">
+<p>is the name of an existing georeference for the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>SemiVarModel</i></p>
+
+</td>
+<td valign="top">
+<p><i>Model</i>(<i>nugget, sill, range</i>)<span class=courier> | Power</span>(<i>nugget, slope, pow</i>)</p>
+
+<p>This expression defines the <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >semi-variogram model</a> that should be used and the expected parameters.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>Model</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Spherical | Exponential  | Gaussian | Wave | RatQuad | Circular</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>nugget</i></p>
+
+</td>
+<td valign="top">
+<p>value for the nugget, according to your semi-variogram (real value).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>sill</i></p>
+
+</td>
+<td valign="top">
+<p>value for the sill, according to your semi-variogram (real value). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>range</i></p>
+
+</td>
+<td valign="top">
+<p>value for the range, according to your semi-variogram (real value &gt; 0).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>slope</i></p>
+
+</td>
+<td valign="top">
+<p>when using the <span class=courier>Power</span> model: value for the 'slope'. When <i>pow</i> is specified as 1 (i.e. thus using a linear model), then <i>slope</i> is the direction coefficient, i.e. <span class=symbol>Dg</span>/<span class=symbol>D</span>h.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>pow</i></p>
+
+</td>
+<td valign="top">
+<p>when using the <span class=courier>Power</span> model: an exponent 0 &lt; real value &lt;
+2. When you use value 1, the <span class=courier>Power</span> model will become
+linear and the slope will be constant. If the power exponent is 2 the assumed stochastic model (‘randomness’) is not always justifiable and the interpolation can become pathological.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><span class=courier>plane</span> | <span class=courier>sphere</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >sphere</a> by using the projection of the coordinate system as used by the georeference of the output raster map (<span class=courier>sphere</span>). If not specified, distances will be calculated in a plane. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>LimDist</i></p>
+
+</td>
+<td valign="top">
+<p>For Ordinary Kriging: a value for the limiting distance: points that are farther away from an output pixel than the limiting distance will not be used in the Kriging equations. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>1 | 0</p>
+
+</td>
+<td valign="top">
+<p>Specify whether or not an error map has to be created. The error map will contain the square root of the Kriging error variance values, i.e. standard deviations per pixel. When this parameter is not specified, no error map will be created. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>1</p>
+
+</td>
+<td valign="top">
+<p>Create an error map. The error map will obtain the same name as specified for the output Kriging map followed by the additional string <span class=courier>_Error</span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>0</p>
+
+</td>
+<td valign="top">
+<p>Do not create an error map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>min, max</i></p>
+
+</td>
+<td valign="top">
+
+<p>For Ordinary Kriging: Optional parameters to specify the minimum and maximum number of points that should be taken into account during the calculation of each Kriging estimate/prediction, i.e. the minimum and maximum number of points within the limiting distance of an output pixel that should be taken into account in the calculation of the output value for that pixel. 1 &lt;= <i>min. nr. of points</i> (integer) &lt;= <i>max. nr. of points</i> (integer). </p>
+
+<ul>
+
+<li>When the minimum is not specified, value 1 will be used. When, for an output pixel, less points than the specified minimum are found within the specified limiting distance, no Kriging is performed: the output pixel will be assigned the undefined value. </li>
+
+<li>When the maximum is not specified, value 16 will be used. When, for an output pixel, more points than the specified maximum are found within the specified limiting distance, only the specified maximum number of points that are nearest to the output pixel will be used. </li>
+
+</ul>
+
+<p class=tiptextls01be><span class=tipnospace>Tip: </span>To speed up the algorithm when using large numbers of points within each limiting distance, it is advised to first rasterize the point values and then to use the <a href="..//ilwisapp/popup/kriging_from_raster_popup.htm" onClick="return popup(this, 'notes')" >Kriging from Raster</a> operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>No | Average | Firstval</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p>Choose how to handle possible coinciding points or duplicates. When no method is specified, <span class=courier>Average</span> will be used.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>No</p>
+
+</td>
+<td valign="top">
+<p>No removal of duplicates. Mind: when there are coinciding points, the Kriging system may become unstable or unsolvable.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>Average</p>
+
+</td>
+<td valign="top">
+<p>Values of duplicates are replaced by the average (arithmetic mean); the coordinates of the first point are taken as new position.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>Firstval</p>
+
+</td>
+<td valign="top">
+<p>Values of duplicates (and their coordinates) are replaced by those of the first point.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>Tolerance</i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter to specify the distance within which 2 points are considered to coincide. When not specified, a tolerance of 0.1 m will be used.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=kopje>Example:</p>
+
+<p>To perform Ordinary Kriging on the attribute values in column <span class=courier>MyAttrib</span> of an attribute table linked to point map <span class=courier>MyPoints</span>,</p>
+
+<ul>
+
+<li>	producing an output raster map <span class=courier>OUTMAP</span> which uses existing georef <span class=courier>MyGeoref</span>,</li>
+
+<li>	using a Spherical semi-variogram model with nugget 10&nbsp;m, sill 70&nbsp;m and range 800&nbsp;m (found by means of SpatCorr), </li>
+
+<li>	using a limiting distance of 200&nbsp;m,</li>
+
+<li>	producing an output error map <span class=courier>OUTMAP_Error</span>,</li>
+
+<li>	while each Kriging equation should use at least 5 and at most 35 input points (min, max), </li>
+
+<li>	while considering points that are closer to each other than 10&nbsp;cm as coinciding (tolerance), </li>
+
+<li>	while for coinciding points only the value of the first point encountered should count, </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>use the following expression:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=courier>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=courier>=</p>
+
+</td>
+<td valign="top">
+<p class=courier>MapKrigingOrdinary(MyPoints.MyAttrib, MyGeoref, Spherical(10,70,800), 200, 1, 5, 35, Firstval, 0.10)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you wish to use spherical distances, the expression will read: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=courier>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=courier>=</p>
+
+</td>
+<td valign="top">
+<p class=courier>MapKrigingOrdinary(MyPoints.MyAttrib, MyGeoref, Spherical(10,70,800), sphere, 200, 1, 5, 35, Firstval, 0.10)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="kriging_functionality.htm">Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="point_interpolation.htm">Point interpolation</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >Formulae of semi-variogram models</a></p>
+
+</body

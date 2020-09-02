@@ -1,0 +1,49 @@
+<html>
+
+<head>
+<title>Cross : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cross">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Cross</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=kopje>Cross table:</p>
+
+<p>For all pixels at similar positions in both input maps, the combination of pixel 'values' in both maps is listed, and the number of pixels occurring as this combination is counted. </p>
+
+<p>From the pixel size of the maps and the number of pixels encountered as a combination, the areas of the combinations are calculated.</p>
+
+<p class=kopje>Domain of cross map and cross table:</p>
+
+<p>Cross creates an Identifier domain for the output cross map and cross table. This output domain obtains the same name as the output table and is filled with the combinations of class names, IDs or values of both input maps. When an input map has a class or ID domain in which the class names or IDs have <i>codes</i>, then these codes will appear in the output domain.</p>
+
+<!--<p>When crossing two <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>, or maps with very many classes or IDs, the number of combinations of input map values may be larger than 16000. In this case, the output cross domain will <i>not</i> be sorted. When you open the output cross table, you can sort on columns, calculate with columns and perform column aggregations as usual.</p>-->
+
+<p class=Seealso>See also: </p>
+
+<p class=seealsolinks><a href="cross_functionality.htm">Cross : functionality</a></p>
+
+</body

@@ -1,0 +1,251 @@
+<html>
+
+<head>
+<title>Kriging from Raster : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Kriging from Raster, Raster Kriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Kriging from Raster</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Kriging from Raster is similar to the <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" > Ordinary Kriging</a>
+interpolation c.q. prediction method but requires a raster map as input, instead of
+a point map. The operation can be seen as a raster interpolation and returns a raster map with estimations and optionally an error map. The estimations are weighted averaged input
+values, similar to the <a href="..//ilwisapp/popup/moving_average_popup.htm" onClick="return popup(this, 'notes')" >Moving Average</a> operation. The weight factors in Kriging
+from Raster are determined by using a user-specified semi-variogram model (based on the output of the
+<a href="..//ilwisapp/popup/autocorrelation_popup.htm" onClick="return popup(this, 'notes')" > Autocorrelation -
+Semivariance</a> operation), the distribution of input pixels, and are calculated in such a way that they minimize the estimation error in each output pixel. The estimated or predicted values are thus a linear combination of the input values and have a minimum estimation error. The optional error map contains the standard errors of the estimates. </p>
+
+<p class=defnewpar>For more information about the differences and advantages of
+Kriging from Raster compared to other point interpolation techniques see <a href="kriging_from_raster_functionality.htm">Kriging from Raster: functionality</a>.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=136>
+<p class=diabox>Input raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input raster map. Open the list box and select the desired input map, or drag a
+raster map directly from the Catalog into this box. You can select a raster map with a value domain, or a
+raster map with an ID domain. In case you selected an input raster map with an ID domain, select an attribute column (value domain) from the
+linked attribute table.&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diabox><a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >Semi-variogram Model</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the model which should be used to calculate the semi-variogram function <span class=symbol>g</span> (h). The available models are: Spherical, Exponential, Gaussian, Wave, Rational Quadratic, Circular, and Power. The model/function as well as the variables nugget, sill and range can be found by modelling the semi-variogram which is the output of the
+<a href="..//ilwisapp/popup/autocorrelation_popup.htm" onClick="return popup(this, 'notes')" >Autocorrelation -
+Semivariance</a> operation. For more information, see <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a> section on semi-variograms, or <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add Graph Semi-variogram</a> (dialog box).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diaboxleft1>Nugget:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you found a nugget effect, specify the value. A nugget effect is the vertical jump from value 0 at the origin to the semi-variogram value <span class=symbol>g</span> at extremely small separation distances. You are specifying  parameter 'C0' for the selected model. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diaboxleft1>Sill:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the sill; the sill is the plateau that the semi-variogram values <span class=symbol>g</span> reach at the range. You are specifying parameter 'C0 + C' for the selected model. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diaboxleft1>Range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the range; the range is the distance at which the semi-variogram values do not increase anymore and reach a plateau. You are specifying parameter 'a' for the selected model (real value &gt; 0). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diaboxleft1>Slope:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Power model only: type a value for the 'slope', i.e. specify parameter 'k' for this model. When you use the Power model with a power exponent of 1, the model becomes linear (a straight sloping line), then, this 'slope' parameter equals the direction coefficient (<span class=symbol>Dg</span>/<span class=symbol>D</span>h) of the line.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diaboxleft1>Power:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Power model only: type a real value for the power exponent, i.e. specify parameter ‘m’ for this model. The power function is meaningful if 0 &lt; power exponent &lt; 2. When value 1 is used, the Power model becomes linear and the slope will be constant. If the power exponent is 2 the assumed stochastic model (‘randomness’) is not always justifiable and the interpolation can become pathological.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diabox><a href="..//ilwisapp/sec/point_interpolation_limiting_distance_sec.htm" onClick="return popup(this, 'notes')" >Limiting distance</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the limiting distance also called search radius or limiting circle. Input samples (pixels) that are farther away from an output pixel than the limiting distance will not be used in the calculation of the value for that output pixel. The limiting distance is usually smaller than the range of your
+semi-variogram. (0 &lt; limiting distance &lt; diagonal of
+raster map). </p>
+
+<p class=diabox>One can either enter the search radius in meters or in pixels.
+Both entry fields are presented in the dialog box simultaneously. Changing the
+contents in one of the fields causes a change in the other because the two
+values are defined by the pixel size of the input map in constant
+proportion.&nbsp;&nbsp; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Meters:</p>
+
+</td>
+<td valign="top">
+<p>Limiting distance will be specified in meters, and specify a limiting distance value (0 &lt; real value &lt;= 40*<i>pixelsize</i>). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Pixels:</p>
+
+</td>
+<td valign="top">
+<p>Limiting distance will be specified in pixels, and specify a limiting distance value (0 &lt; integer value &lt;= 40). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diaboxleft1>Min nr of pixels:</p>
+
+</td>
+<td valign="top">
+
+<p class=diabox>Type a value for the minimum number of input pixels with a value that should be used by the calculation within each limiting distance (search radius). This is necessary to make sure that the estimation is based at least this many values. </p>
+
+<p class=diabox>When for an output pixel, not enough valid input pixels are found within the specified limiting distance, then the undefined value will be assigned to the output pixel. It is advised to use at least 4 input pixels.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diaboxleft1>Max nr of pixels: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the maximum number of input pixels with a value that should be used by the calculation within each limiting distance (search radius). Limitation: you cannot use more than 100 valid input pixels within each limiting distance. </p>
+
+<p class=diabox>When for an output pixel more input pixels with a value are found within the limiting distance than specified, then only the input pixels which are nearest to the output pixel will be used in the calculation. </p>
+
+<p class=diabox>By specifying a rather small maximum, the algorithm may be faster but the estimation quality may be less.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a name for the output raster map that will contain the Kriging estimates.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, or specify your own range of possible values in the output map. It is advisable to make the value range for the output map wider than the input value range; as negative weights may be used, Kriging estimates may be greater or smaller than your original input values. Mind: in case estimates are calculated that fall outside the specified value range, the pixel will be assigned the undefined value.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of output values, or specify your own precision.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=136>
+<p class=diabox>Error map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you also want to obtain an error map. The error map will contain the standard error of the estimates, i.e. the square root of the error variance.
+The name of the error map will be the same as the name specified for the Kriging output
+map followed by the additonal string <span class=courier>_Error</span>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=defnewpar>Optionally, a second output map containing standard errors can be created.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="kriging_from_raster_functionality.htm">Kriging from Raster: functionality</a></p>
+
+<p></p>
+
+</body

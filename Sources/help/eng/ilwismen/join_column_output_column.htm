@@ -1,0 +1,75 @@
+<html>
+
+<head>
+<title>Join column wizard - Output column</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Columns, Join columns, Column operations, Table window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table bgcolor="#006699" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Join Column wizard</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Select Output Column Name</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="join_column_aggregation_method.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="../ilwis/table_window_menu_commands.htm">Finish</a>&nbsp;&gt;</td>
+</tr>
+<tr><td bgcolor="FFFFFF" colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>On this last page of the Join Column wizard, you need to specify a new column name for the output of the join. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Output Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a new column name for the data that will be joined into the current table. You cannot use a column name which already exists in the current table. </p>
+
+<p class=diabox>The output column in the current table which will contain the joined data, is always a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent column</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <span class=arial>Finish</span> button: </p>
+
+        <ul>
+
+        <li>The <a href="column_properties.htm">Column Properties</a> dialog box will appear; you can generally accept the suggested output domain, value range and precision for the output column. </li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip:</span> Experienced users may also join columns from other tables by typing an expression on the TabCalc command line. For more information, see <a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a>. This topic also provides some examples, both for using the wizard and for using the command line. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a></p>
+
+</body

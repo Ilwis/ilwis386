@@ -1,0 +1,197 @@
+<html>
+
+<head>
+<title>Histogram : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Histogram, TableHistogram, TableHistogramPnt, TableHistogramPol, TableHistogramSeg">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Histogram</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/histogram_operation_popup.htm" onClick="return popup(this, 'notes')" >Histogram</a> operation can be directly executed by typing the following expression on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableHistogram</span>(InputMapName)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableHistogramPnt</span>(InputPntMapName)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableHistogramPol</span>(InputPolMapName)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableHistogramSeg</span>(InputSegMapName)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p>OUTTABLE</p>
+
+</td>
+<td valign="top">
+<p>is <b>not a user-defined name</b> of a histogram: the histogram table automatically obtains the same name as the input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>TableHistogram</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Histogram operation and calculate the histogram of a raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>TableHistogramPnt</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Histogram operation and calculate the histogram of a point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>TableHistogramPol</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Histogram operation and calculate the histogram of a polygon map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>TableHistogramSeg</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Histogram operation and calculate the histogram of a segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input raster map (any domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>InputPntMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input point map (any domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>InputPolMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input polygon map (any domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>InputSegMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input segment map (any domain).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>You can only create histograms using the definition symbol =. The output histogram always obtains the same name as the input map and is a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> object.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="histogram_functionality.htm">Histogram : functionality</a></p>
+
+</body

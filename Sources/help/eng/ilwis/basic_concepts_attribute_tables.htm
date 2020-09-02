@@ -1,0 +1,69 @@
+<html>
+
+<head>
+<title>Basic concepts : attribute tables</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Basic concepts, Attribute tables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Basic concepts</h1>
+
+<h1 class=secondline>Attribute tables</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Attribute tables store additional information on elements in a map, i.e. extra tabular data which relates to the mapping units, points, segments, or polygons in your maps. </p>
+
+<p class=defnewpar>Raster, polygon, segment and point maps that use a domain of the class or ID type can have attribute tables. The domain of the attribute table should be the same as the domain of the map to which it relates. The domain is the relational link between the map and the attribute table. </p>
+
+<p>Maps of domain type Value contain purely values; they cannot have attributes.</p>
+
+<p class=defnewpar>When a map that is linked to an attribute table is displayed in a map window, and you double-click in the map, the attributes of the selected class or ID are shown and can be edited. Whether an attribute table is linked to a map can be inspected in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> sheet of the map. </p>
+
+<p class=defnewpar>The best way to create an attribute table is:</p>
+
+<ul>
+
+<li>	open the <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Properties</a> sheet of a point, segment, polygon or raster map, </li>
+
+<li>	in the <a href="../ilwismen/point_map_properties.htm">Point Map Properties</a>, <a href="../ilwismen/segment_map_properties.htm">Segment Map Properties</a>, <a href="../ilwismen/polygon_map_properties.htm">Polygon Map Properties</a>, <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> sheet: </li>
+
+        <ul>
+
+        <li>    select the <span class=arial>Attribute</span> check box, and</li>
+
+        <li>	create a new table by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select an existing table (only tables with the same domain as the map are shown).</li>
+
+        </ul>
+
+</ul>
+
+<p>For more information, refer to <a href="how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit  the properties</a> of an object and <a href="how_to_create_tables.htm">How to create a table</a>.</p>
+
+<p class=defnewpar>You can perform calculations on your attribute data in the attribute table with Table Calculation, and you can also derive another map from a column in an attribute table with the Attribute Map, Attribute Polygon Map, Attribute Segment Map or Attribute Point Map operations.</p>
+
+<p class=kopje>Example:</p>
+
+<p>A map with terrain units may have the following classes: Lagoon plain, Coastal upland, Infilled valleys, Inland levees, Volcanic hills moderately steep, Volcanic hills steep, Colluvial footslopes, etc. </p>
+
+<p class=defnewpar>Attributes for these classes might be: minimum and maximum slope, slope length, drainage density, genesis, etc.</p>
+
+</body

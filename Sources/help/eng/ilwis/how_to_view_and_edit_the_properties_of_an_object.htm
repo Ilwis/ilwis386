@@ -1,0 +1,178 @@
+<html>
+
+<head>
+<title>How to view and edit the properties of an object</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to change ..., Properties of objects, How to view and edit properties of an object, Object properties, How to edit ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to view and edit</h1>
+
+<h1 class=secondline>the properties of an object</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a map, table or column or any other ILWIS object shows you important information on the object. In fact, an object's Properties sheet is listing the information that is stored in an object's <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> and that is relevant to the user. </p>
+
+<p class=defnewpar>Viewing the properties of an object may be very useful. You can see for instance the date and time and the description of the object, which other objects the current object is using (e.g. for raster maps the domain and georeference) and whether an attribute table is linked to a map or a domain. The properties sheet also shows whether the object is <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> or not, and whether a dependent object is up-to-date or not. Furthermore, you can easily update objects when they are not up-to-date any more, you can change the definition of calculated maps and calculated columns, break dependencies, etc. For more information, see <a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a>. </p>
+
+<h2>Viewing properties of objects</h2>
+
+<p class=kopjeaftertitlesub>To view the properties of an object (except columns):</p>
+
+<ul>
+
+<li>	click an object in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> with the right mouse button, and choose <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or</li>
+
+<li>	select <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >one or more</a> objects in a Catalog, and choose <span class=arial>Properties</span> from the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window. </li>
+
+</ul>
+
+<p class=defnewpar>Other methods are:</p>
+
+<ul>
+
+<li>	for maps displayed in a map window, open the <a href="map_window_menu_commands.htm">File menu</a> of the map window, and choose <span class=arial>Properties</span>, </li>
+
+<li>    in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of a map window, double-click the word 'Properties' of a layer, </li>
+
+<li>    in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of a map window, expand the <img src="../images/laymanprop.gif" align=bottom width="83" height="14"> item of a layer, then click an object with the right mouse button and select <span class=arial>Properties</span> from the context-sensitive menu, </li>
+
+<li>	for a table displayed in a table window, open the <a href="table_window_menu_commands.htm">Edit menu</a> in the table window and choose <span class=arial>Properties</span>, </li>
+
+<li>	for domains Class or ID displayed in the Domain Class/ID editor, open the <a href="domain_class_id_editor_menu_commands.htm">File menu</a> in the domain Class/ID editor and choose <span class=arial>Properties</span>, </li>
+
+<li>	for representations displayed in the Representation Class editor or Representation Value editor, open the <a href="..//ilwismen/sec2/repr_class_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >File menu</a> in the Representation Class editor or the <a href="..//ilwismen/sec2/repr_value_gradual_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >File menu</a> in the Representation Value editor window and choose <span class=arial>Properties</span>.</li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Properties sheet</a> of the selected object appears.</p>
+
+<p class=kopje>To view the properties of a column in a table:</p>
+
+<ul>
+
+<li>	open a table in a table window, and double-click a column button (which displays a column name), or </li>
+
+<li>	from the <a href="table_window_menu_commands.htm">Columns menu</a> in a table window, choose <span class=arial>Column Management</span>, the Column Management dialog box appears, select a column in the <a href="..//ilwis/popup/win_list_boxes_popup.htm" onClick="return popup(this, 'notes')" >list box</a> and click the <span class=arial>Properties </span>button. </li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box of the selected column appears. </p>
+
+<h2>Handling properties of objects</h2>
+
+<ul>
+
+<li>	The <span class=arial>Description</span> of an object can always be changed.</li>
+
+<li>	An <span class=arial>Attribute table</span> can always be linked to a raster, polygon, segment or point maps with a class or ID domain or to a class or ID domain itself.</li>
+
+<li>	The <span class=arial>Used By</span> button can always be pressed to see by which other objects the current object is used.</li>
+
+<li>	An object can always be made <span class=arial>read-only</span> or not.</li>
+
+<li>	For columns that are the result of a calculation (ColumnCalculate), the calculation formula or expression used to create the column can be changed. </li>
+
+</ul>
+
+<p class=defnewpar>For <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent maps, tables and columns</a>, the most important features of a properties sheet or dialog box are invoked by pressing one of the following buttons that may appear in the Properties: <span class=arial>Make Up-to-Date</span>, <span class=arial>Edit Definition</span>, <span class=arial>Break Dependency Link</span>, <span class=arial>Release Disk Space</span>, <span class=arial>Calculate</span>.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=arial>Make Up-to-Date:</p>
+
+</td>
+<td valign="top">
+<p>For dependent data objects of which the input data has changed: click this button to redefine the dependent output object. See also <a href="how_to_make_dependent_data_objects_up_to_date.htm">How to make dependent data objects up-to-date</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=arial>Edit Definition:</p>
+
+</td>
+<td valign="top">
+<p>For dependent raster maps that are the result of a map calculation (MapCalculate), click this button to modify the map calculation formula by which this map was created. The definition of  a dependent column that is the result of a table calculation (ColumnCalculate), can be directly edited in the Properties dialog box of the column. See also <a href="../ilwis/how_to_change_the_definition_of_a_dependent_data_object.htm">How to change the definition of a dependent data object</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=arial>Break Dependency Link:</p>
+
+</td>
+<td valign="top">
+<p>For dependent data objects: click this button to break the dependency links between the current dependent object and the objects it depends on. After breaking dependency links of a dependent map, table or column, the map, table, or column becomes editable. See also <a href="how_to_break_dependency_links.htm">How to break dependency links</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=arial>Release Disk Space:</p>
+
+</td>
+<td valign="top">
+<p>For dependent data objects with a calculated data file: click this button to delete calculated data files. Only the object definition file that contains the expression by which the object is defined remains. See also <a href="how_to_release_disk_space.htm">How to release disk space</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=arial>Calculate:</p>
+
+</td>
+<td valign="top">
+<p>For dependent data objects without a calculated data file: click this button to execute the expression by which this object was created and store the calculated data file on disk. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For more information, refer to <a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a> or to the <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Property sheets</a>.</p>
+
+<h2>Editing properties of non-dependent objects</h2>
+
+<p>For non-dependent objects, relations to other objects may be changed. You can for instance link another default representation to a domain, another georeference to a raster map, or link another coordinate system to a vector map, or change the domain of an object. Editing Properties is something for the more experienced user. Especially changing the domain of an object is only necessary in very specific cases and should never be done without a backup of your original map.</p>
+
+<p class=kopje>To edit the properties of a non-dependent object:</p>
+
+<ul>
+
+<li>	open the Properties sheet of an object as described above.</li>
+
+</ul>
+
+<p class=linespacing03before>You can change the links to objects that the current object uses, such as domain, georeference, etc. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a></p>
+
+<p class=seealsolinks><a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a></p>
+
+<p class=seealsolinks><a href="appendices_relations_between_ilwis_objects.htm">Appendices: relations between ILWIS objects</a></p>
+
+</body

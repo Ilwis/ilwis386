@@ -1,0 +1,166 @@
+<html>
+
+<head>
+<title>ILWIS objects : functions</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Functions, ILWIS objects, Special objects, User-defined functions, Parameters in functions, FUN">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Functions&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/func.gif" align=bottom width="15" height="14"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Functions can be used in all three calculators in ILWIS: in <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>/<a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>,
+in <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a> and in the <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >pocket line calculator</a>. In ILWIS, some 50 internal functions are available (see also <a href="calc.htm">MapCalc</a> and <a href="calc.htm">TabCalc</a>), but you can also create your own functions. By creating a user-defined function beforehand, your MapCalc and TabCalc formulas may be simplified. </p>
+
+<p class=defnewpar>A user-defined function allows you to pre-define complex calculations and/or calculations which
+you will need to repeat several times. At the time of using the function, you
+will only need to fill out the function's parameters and not the complicated
+formula itself. </p>
+
+
+<p class=defnewpar>A user-defined function may contain any combination of operators and existing functions, and may use parameters representing map names, table names and column names.</p>
+
+<p class=kopje>To create a user-defined function:</p>
+
+<ul>
+  <li>in the Main window, open the <a href="main_window_menu_commands.htm">File
+    menu</a> and choose <span class="arial">Create Function</span>, or
+  <li>in the Table window, open the <a href="main_window_menu_commands.htm">File
+    menu</a> and choose <span class="arial">Function</span>, or
+  <li>in the Operation-tree, expand the <span class="arial">Create</span>  item and
+    double-click <span class="arial">New Function</span>, or
+  <li>in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class="arial">New Function</span>
+    item.</li>
+</ul>
+
+<p>The <a href="../ilwismen/create_a_function.htm">Create Function</a> dialog box appears in which you can type the expression that the function should perform. </p>
+
+<p class=kopje>To edit a user-defined function:</p>
+
+<ul>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, double-click a function, or </li>
+
+<li>	select a function in the Catalog, open the <a href="main_window_menu_commands.htm">Edit menu</a>
+  in the Main window and choose <span class=arial>Edit Object, </span>or </li>
+
+<li>	in the Catalog, click a function with the right mouse button, and select <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p>The <a href="function_editor_functionality.htm">Function editor</a> appears. </p>
+
+<p class=kopje>Names of user-defined functions:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>Parameters in user-defined functions:</p>
+
+<p>A function will perform a certain calculation based on the parameters and the MapCalc/TabCalc operators and functions that you define in the <i>expression</i> of the function. </p>
+
+<p class=defnewpar>Parameter names:</p>
+
+<ul>
+
+<li>must start with a character from A to Z, </li>
+
+<li>may contain characters from A to Z, digits 0 to 9, and underscores, </li>
+
+<li>may be longer than 8 characters. </li>
+
+</ul>
+
+<p class=kopje>Output domain type of a function and input domain types of function parameters:</p>
+
+<p>In the function editor, the first line states: </p>
+
+<ul>
+
+<li>the name of the function, as <span class=functionexpl>Function <i>functionname</i></span> </li>
+
+<li>the names of input parameters and the domain type of each input parameter, when for instance using 2 parameters, as <span class=functionexpl>(Value <i>param_name1</i>, Value <i>param_name2</i>)</span> </li>
+
+<li>the output domain of the function, as <span class=functionexpl>: Value</span> </li>
+
+</ul>
+
+<p class=defnewpar>Thus, when creating a function: </p>
+
+<ul>
+
+<li>the domain type of all input parameters is by default set to <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >domain type Value</a>, meaning that you can use <a href="..//ilwis/popup/yy_system_domain_value_all_popup.htm" onClick="return popup(this, 'notes')" >any system value domain</a> or any user-defined value domain, </li>
+
+<li>the output domain of the function is by default set to the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a>. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tipnospace>Mind: </span>In case your input parameters use <i>another</i> domain type than domain type Value, or when the output domain of the function is another domain than system domain Value, you need to <i>change</i> the word(s) <span class=functionexpl>Value</span> yourself in the appropriate place(s). <br>
+
+In other words, you must make sure that the domain types of parameters and the output domain of the function are correctly declared. </p>
+
+<p class=defnewpar>Function syntax is explained in detail in <a href="function_editor_functionality.htm">Function editor : functionality</a>. <p>
+
+<p class=kopje>To apply a function:</p>
+
+<p>When you use the function on the command line of the Main window or a Table window, you have to type the function name followed by brackets in which you type the map name(s) or column name(s) that need to be filled out for the parameter(s) in the function. You can separate parameters with commas. Instead of map names or column names, you can also type complete expressions.</p>
+
+<p>The first filled out parameter is taken as the first parameter encountered in the function, etc. </p>
+
+<p>In this way, you can use the function several times, each time filling out different map or column names on which the function should be applied.&nbsp; </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>Functions consist of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.FUN), and an ASCII data file (.FND). </p>
+
+<p>Internal MapCalc and TabCalc functions are built in in the software and cannot be visualized.</p>
+
+<p class=kopje>Examples:</p>
+
+<p>In <a href="calc_creating_and_applying_user_defined_functions.htm">Map calculation : creating and applying user-defined functions</a>
+and in <a href="calc_creating_and_applying_user_defined_functions.htm">Table calculation : creating and applying user-defined functions</a>
+several 'basic' examples are given. For more advanced user-defined functions,
+e.g. user-defined functions with IF, THEN, ELSE loops, FOR loops, WHILE loops
+and REPEAT/UNTIL loops, see <a href="calc_user_defined_functions_advanced.htm">Map and Table calculation : User-defined functions (advanced)</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/create_a_function.htm">Create a function</a> (dialog box)</p>
+<p class=seealsolinks><a href="function_editor_functionality.htm">Function editor
+: functionality</a></p>
+<p class=seealsolinks><a href="calc_creating_and_applying_user_defined_functions.htm">Map calculation : creating and applying user-defined functions</a></p>
+<p class=seealsolinks><a href="calc_creating_and_applying_user_defined_functions.htm">Table calculation : creating and applying user-defined functions</a></p>
+<p class=seealsolinks><a href="calc_user_defined_functions_advanced.htm">Map and
+Table calculations : user-defined functions (advanced)</a></p>
+
+</body

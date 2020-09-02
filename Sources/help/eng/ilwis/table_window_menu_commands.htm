@@ -1,0 +1,132 @@
+<html>
+
+<head>
+<title>Table window : menu commands</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Menu commands">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<a id="top">
+<h1 class=firstline>Table window</h1>
+
+<h1 class=secondline>Menu commands</h1>
+</a>
+<!--<hr>-->
+
+<table class=menupage border="0" cellspacing="0" width="100%" cellpadding="1">
+<tr bgcolor="#CCCCCC">
+
+<!--FILE MENU -->
+
+<td valign="top" width="20%" align="left" nowrap>&nbsp;<span class=menuheading><u>F</u>ile</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a onclick="doExpand(exp1,link1)" href="#top"><u>C</u>reate <img src="../images/menuarrt.gif" align="bottom" id="link1" border=0 width="9" height="13"></a><br>
+<DIV ID="exp1" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_graph.htm"><u>G</u>raph ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_rose_diagram.htm"><u>R</u>ose Diagram</a><br>
+</div>
+&nbsp;<a href="../ilwismen/print_table.htm"><u>P</u>rint ...</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/table_properties.htm">Propert<u>i</u>es ...</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="..//ilwismen/popup/exit_tablewindow_popup.htm" onClick="return popup(this, 'notes')" >E<u>x</u>it</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<!--EDIT MENU -->
+
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>E</u>dit</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/copy_table_selection_to_clipboard.htm"><u>C</u>opy</a> <br>
+&nbsp;<a href="../ilwismen/paste_table_data_into_table_window.htm"><u>P</u>aste</a> <br>
+&nbsp;<a href="../ilwismen/delete_selection_from_table.htm"><u>D</u>elete</a> <br>
+&nbsp;<a href="../ilwismen/table_window_edit_single_column.htm"><u>E</u>dit ...</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br>
+&nbsp;<a href="..//ilwismen/popup/table_select_all_popup.htm" onClick="return popup(this, 'notes')" >Select <u>A</u>ll</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br>
+&nbsp;<a href="../ilwismen/add_record.htm">Add <u>R</u>ecord</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<!--COLUMNS MENU-->
+
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>C</u>olumns</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/column_management.htm"><u>C</u>olumn Management</a> <br>
+&nbsp;<a href="../ilwismen/add_column_to_table.htm"><u>A</u>dd Column ...</a> <br>
+&nbsp;<a href="../ilwismen/goto_column.htm">Goto Column ...</a> <br> 
+&nbsp;<a href="../ilwismen/sort_records.htm"><u>S</u>ort ...</a> <br>
+&nbsp;<a href="../ilwismen/update_all_columns.htm"><u>U</u>pdate All Columns</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+&nbsp;<a href="../ilwismen/column_statistics.htm">Statistics ...</a> <br>
+&nbsp;<a href="../ilwismen/join_column.htm">Join ...</a> <br>
+&nbsp;<a href="../ilwismen/aggregate_column.htm">Aggregation ...</a> <br>
+&nbsp;<a href="../ilwismen/cumulative_column.htm">Cumulative ...</a> <br>
+&nbsp;<a href="../ilwismen/least_squares_fit.htm">Least Squares ...</a> <br>
+&nbsp;<a href="../ilwismen/column_semivariogram.htm">Semi-variogram ...</a> <br>
+&nbsp;<a href="../ilwismen/column_slicing.htm">Column Slicing ...</a> <br>
+
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<!--RECORDS MENU-->
+
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>R</u>ecords</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/goto_record.htm"><u>G</u>oto Record ...</a> <br>
+&nbsp;<a href="..//ilwismen/popup/table_goto_first_rec_popup.htm" onClick="return popup(this, 'notes')" >Goto <u>F</u>irst Record</a> <br>
+&nbsp;<a href="..//ilwismen/popup/table_goto_prev_rec_popup.htm" onClick="return popup(this, 'notes')" >Goto <u>P</u>revious Record</a> <br>
+&nbsp;<a href="..//ilwismen/popup/table_goto_next_rec_popup.htm" onClick="return popup(this, 'notes')" >Goto <u>N</u>ext Record</a> <br>
+&nbsp;<a href="..//ilwismen/popup/table_goto_last_rec_popup.htm" onClick="return popup(this, 'notes')" >Goto <u>L</u>ast Record</a> <br>
+
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<!--VIEW MENU-->
+
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>V</u>iew</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_record_view_table_window_popup.htm" onClick="return popup(this, 'notes')" ><u>R</u>ecord View</a> <br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_addinfo_table_popup.htm" onClick="return popup(this, 'notes')" ><u>A</u>dditional Info</a> <br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/confusion_matrix.htm"><u>C</u>onfusion Matrix ...</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_command_line_table_popup.htm" onClick="return popup(this, 'notes')" >Command Line</a> <br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_stats_pane_table_window_popup.htm" onClick="return popup(this, 'notes')" ><u>S</u>tatistics pane</a> <br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_toolbar_table_window_popup.htm" onClick="return popup(this, 'notes')" ><u>T</u>oolbar</a> <br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_status_bar_table_popup.htm" onClick="return popup(this, 'notes')" >Status Bar</a> <br>
+
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+</tr>
+</table>
+
+</body

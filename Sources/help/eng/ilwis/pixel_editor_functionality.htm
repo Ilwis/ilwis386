@@ -1,0 +1,195 @@
+<html>
+
+<head>
+<title>Pixel editor : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Editors, Map editors, Pixel editor, Edit raster map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Pixel editor</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The pixel editor is used to edit class names, IDs or values of pixels in a <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a>. The pixel editor has one mode, Normal/Select mode, to select pixels of which you wish to change the class name, ID or value. The pixel editor has a <a href="pixel_editor_menu_commands.htm">menu bar</a>, a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, and a <a href="pixel_editor_toolbar.htm">toolbar</a>.</p>
+
+<p class=defnewpar>You can edit a raster map by using the mouse or by using the keyboard. </p>
+
+<p class=kopje>To start the pixel editor:</p>
+
+<p>To edit an existing raster map, display a raster map in a map window, open the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window, choose <span class=arial><a href="../ilwismen/edit_layer.htm">Edit Layer</a></span>, and select the raster map layer you wish to edit. You can also click a raster map with the right mouse button in a Catalog and choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. For other methods, see <a href="../ilwis/how_to_edit_point_segment_polygon_and_raster_maps.htm">How to edit point, segment, polygon, and raster maps</a>. </p>
+
+<p class=defnewpar><a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent</a> raster maps cannot be edited: first break the dependency links in the <a href="../ilwismen/raster_map_properties.htm">Raster Map's Properties</a> sheet. </p>
+
+<p class=defnewpar>When the pixel editor is opened, it starts in Normal/Select mode; the mouse pointer appears as a hand. </p>
+
+<h2 id="pixedkeyboard">Working with the keyboard</h2>
+
+<p class=kopje>To zoom in on the map:</p>
+
+<p>Zoom in on the raster map for instance by clicking the <span class=arial>Zoom In</span> button on the toolbar. When you zoomed in <i>deeply</i>, the pixel values, class names or IDs of the pixels are displayed. For more information, see <a href="../ilwismen/zoom_in_on_maps.htm">Map window : Zoom in</a>. </p>
+
+<p class=kopjenoboldnound><u><b>Normal/Select mode </b>to select pixels:</u> <img src="../images/ed_select_mode.gif" align=bottom width="22" height="22"></p>
+
+<p>The pixel editor has one mode, <span class=arial><a href="../ilwismen/pixel_editor_select_mode.htm">Normal/Select mode</a></span>, to select pixels of which you wish to change the class name, ID or value. In <span class=arial>Normal/Select mode</span>, the mouse pointer appears as a hand. </p>
+
+<p class=kopje>Selecting pixels using the keyboard:</p>
+
+<ul>
+
+<li>Use the <span class=arial>arrow</span> keys to move the selection cursor; </li>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>Press the <span class=arial>Shift</span> key and move the selection cursor, to change the status of pixels; </li>
+
+        <ul>
+
+        <li>pixels that were not yet selected will added to the selection,</li>
+
+        <li>pixels that were already selected will be removed from the selection.</li>
+        
+        </ul>
+
+<li>Press the <span class=arial>Ctrl</span> key and move the selection cursor, to add pixels to the selection; </li>
+
+<li>Press the <span class=arial>Shift+Ctrl</span> keys and move the selection cursor, to remove pixels from the selection; </li>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>Press the <span class=arial>Spacebar</span> to select or deselect a single pixel; </li>
+
+<li>Press <span class=arial>Esc</span> to clear the entire selection. </li>
+
+</ul>
+
+<p class=kopje>Editing pixels using the keyboard:</p>
+
+<p>Select the pixels you wish to edit, then press the <span class=arial>Enter</span> key to edit the selection: </p>
+
+<ul>
+
+<li>when you selected a single pixel, you can immediately select a class name, type an identifier, or type a value; </li>
+
+<li>when you selected multiple pixels, you can select a class name, type an identifier or type a value for the selection in the appearing <span class=arial><a href="../ilwismen/pixel_editor_edit_selection.htm">Edit</a></span> dialog box. For more information, see <a href="../ilwismen/pixel_editor_edit_selection.htm">Pixel editor : Edit</a>. </li>
+
+</ul>
+
+<h2 id="pixedmouse">Working with the mouse</h2>
+
+<p class=kopjeaftertitlesub>To zoom in on the map:</p>
+
+<p>Zoom in on the raster map for instance by clicking the <span class=arial>Zoom In</span> button on the toolbar. When you zoomed in <i>deeply</i>, the pixel values, class names or IDs of the pixels are displayed. For more information, see <a href="../ilwismen/zoom_in_on_maps.htm">Map window : Zoom in</a>. </p>
+
+<p class=kopjenoboldnound><u><b>Normal/Select mode </b>to select pixels:</u> <img src="../images/ed_select_mode.gif" align=bottom width="22" height="22"></p>
+
+<p>The pixel editor has one mode, <span class=arial><a href="../ilwismen/pixel_editor_select_mode.htm">Normal/Select mode</a></span>, to select pixels of which you wish to change the class name, ID or value. In <span class=arial>Normal/Select mode</span>, the mouse pointer appears as a hand. You can select one or more pixels by clicking them or dragging a box around them, in order to change their class name, ID, or value. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>	To select a single pixel: </li>
+
+        <p>click a pixel, or, </p>
+        
+        <p>move the pixel selection cursor with the arrow keys on the keyboard and press the space bar.</p>
+
+<li>	To select all pixels within a selected area: </li>
+
+        <p>drag a box with the left mouse button and all pixels in the box are selected.</p>
+
+<li>	To add pixels to a selection: </li>
+
+        <p>press and hold down the <span class=arial>Ctrl</span> key and click the other pixels you wish to select. When finished, release the <span class=arial>Ctrl</span> key.</p>
+
+<li>	To clear a part of a selection: </li>
+
+        <p>press and hold down the <span class=arial>Ctrl+Shift </span>keys, then click previously selected pixels or drag a box around pixels: these pixels are deselected. When finished, release the <span class=arial>Ctrl+Shift</span> keys.</p>
+
+<li>	To toggle between select and deselect: </li>
+
+        <p>press and hold down the <span class=arial>Shift</span> key, then click pixels or drag a box around pixels: selected pixels are deselected, and non-selected pixels are selected. When finished, release the <span class=arial>Shift</span> key.</p>
+
+</ul>
+
+<p>For more information, see <a href="../ilwismen/pixel_editor_select_mode.htm">Pixel editor : Normal/Select mode</a>. </p>
+
+<p class=kopje>Editing the value of selected pixels:</p>
+
+<p>Depending on the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the raster map that you are editing, you can change the class name, identifier or value of selected pixels. </p>
+
+<p class=defnewpar>To edit the class name, ID or value etc. of one or more pixels:</p>
+
+<ul>
+
+<li>	double-click a pixel, or; </li>
+
+<li>	select one or more pixels, then choose <span class=arial><a href="../ilwismen/pixel_editor_edit_selection.htm">Edit</a></span> from the <a href="pixel_editor_menu_commands.htm">Edit menu</a> or from the context-sensitive menu;  </li>
+
+<li>	select one or more pixels, and press the <span class=arial>Enter</span> key on the keyboard. </li>
+
+</ul>
+
+<p class=defnewpar>When you double-click a pixel, you can immediately select a class name, type an identifier, or type a value. </p> 
+
+<p class=defnewpar>When you selected multiple pixels, you can select a class name, type an identifier or type a value for the selection in the appearing <span class=arial><a href="../ilwismen/pixel_editor_edit_selection.htm">Edit</a></span> dialog box. For more information, see <a href="../ilwismen/pixel_editor_edit_selection.htm">Pixel editor : Edit</a>. </p>
+
+<p class=defnewpar>All changes that you make are immediately stored in the raster map.</p>
+
+<h2>Other functionality</h2>
+
+<p class=kopjeaftertitlesub>To copy pixels into the clipboard:</p>
+
+<p>You can copy selected pixels with their coordinates and class names, IDs, or values to the clipboard. Select the pixels you wish to copy and choose <span class=arial><a href="../ilwismen/pixel_editor_copy_selection.htm">Copy</a></span> from the <span class=arial>Edit</span> menu. </p>
+
+<p>For more information, see <a href="../ilwismen/pixel_editor_copy_selection.htm">Pixel editor : Copy</a>.</p>
+
+<p class=kopje>To paste pixels from the clipboard:</p>
+
+<p>You can paste pixels, points, and/or nodes and intermediate point of segments and polygon boundaries from the clipboard into the pixel editor. </p>
+
+<p>For more information, see <a href="../ilwismen/pixel_editor_paste_selection.htm">Pixel editor : Paste</a>.</p>
+
+<p class=kopje>Clearing the value of selected pixels: </p>
+
+<p>To clear the class name, IDs or values of pixels, first make a selection, and then press the <span class=arial>Del</span> key on the keyboard, or choose <span class=arial><a href="../ilwismen/pixel_editor_delete_selection.htm">Delete</a></span> from the Edit menu or from the context-sensitive menu. </p>
+
+<p>For more information, see <a href="../ilwismen/pixel_editor_delete_selection.htm">Pixel editor : Delete</a>. </p>
+
+<p class=kopje>To exit the pixel editor:</p>
+
+<p>To exit the pixel editor, choose the <span class=arial>Exit Editor</span> command on the <span class=arial>File</span> menu or from the context-sensitive menu. You can also click the <span class=arial>Exit editor</span> button in the toolbar. In these cases, the editor is closed but the map(s) remain displayed in a map window. </p>
+
+<p>When you double-click the <span class=arial>Close</span> button or the <a href="..//ilwis/popup/win_controlmenubox_popup.htm" onClick="return popup(this, 'notes')" >Control-menu box</a>, the map and the editor are closed. </p>
+
+<p>All changes that you make in the raster map are continuously stored.</p>
+
+<p class=defnewpar>For more information, see also <a href="appendices_keyboard_shortcuts.htm">Appendices : Keyboard shortcuts</a> and <a href="appendices_mouse_functions.htm">Appendices : Mouse functions</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="pixel_editor_menu_commands.htm">Pixel editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="pixel_editor_toolbar.htm">Pixel editor : toolbar</a></p>
+
+</body

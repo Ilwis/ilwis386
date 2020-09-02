@@ -1,0 +1,437 @@
+<html>
+
+<head>
+<title>Universal Kriging : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Universal Kriging, MapKrigingUniversal">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Universal Kriging</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/universal_kriging_popup.htm" onClick="return popup(this, 'notes')" >Universal Kriging</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingUniversal</span>(InputPointMap, Georef, <i>SemiVarModel, LimDist, TrendType, </i><span class=courier>0</span>, <span class=courier>1</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingUniversal</span>(InputPointMap, Georef, <i>SemiVarModel, LimDist, TrendType, </i><span class=courier>0</span>, <span class=courier>1</span>, <span class=courier>1|0</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingUniversal</span>(InputPointMap, Georef, <i>SemiVarModel, LimDist, TrendType, </i><span class=courier>0</span>, <span class=courier>1</span>,  <span class=courier>1|0</span>, <i>min, max</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingUniversal</span>(InputPointMap, Georef, <i>SemiVarModel, LimDist, TrendType, </i><span class=courier>0</span>, <span class=courier>1</span>,  <span class=courier>1|0</span>, <i>min, max, </i><span class=courier>No</span> | <span class=courier>Average</span> | <span class=courier>Firstval</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingUniversal</span>(InputPointMap, Georef, <i>SemiVarModel, LimDist, TrendType, </i><span class=courier>0</span>, <span class=courier>1</span>, <span class=courier>1|0</span>, <i>min, max, </i><span class=courier>Average</span> | <span class=courier>Firstval</span>, <i>Tolerance</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapKrigingUniversal</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Universal Kriging operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPointMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map with a value domain. To use a value attribute column from an attribute table which is linked to an ID point map, use <i>InputPointMap.Columnname</i>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Georef</p>
+
+</td>
+<td valign="top">
+<p>is the name of an existing georeference for the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>SemiVarModel</i></p>
+
+</td>
+<td valign="top">
+<p><i>Model</i>(<i>nugget, sill, range</i>) | <span class=courier>Power</span>(<i>nugget, slope, pow</i>)</p>
+
+<p>This expression defines the semi-variogram model and its parameters that should be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>Model</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Spherical | Exponential | Gaussian | Wave | RatQuad | Circular </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>nugget</i></p>
+
+</td>
+<td valign="top">
+<p>value for the nugget, according to your semi-variogram (real value).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>sill</i></p>
+
+</td>
+<td valign="top">
+<p>value for the sill, according to your semi-variogram (real value) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>range</i></p>
+
+</td>
+<td valign="top">
+<p>value for the range, according to your semi-variogram (real value &gt; 0).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>slope</i></p>
+
+</td>
+<td valign="top">
+<p>when using the <span class=courier>Power</span> model: value for the 'slope'. When <i>pow</i> is specified as 1 (i.e. thus using a linear model), then <i>slope</i> is the direction coefficient, i.e. <span class=symbol>Dg</span>/<span class=symbol>D</span>h (real value &gt;= 0).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>pow</i></p>
+
+</td>
+<td valign="top">
+<p>when using the <span class=courier>Power</span> model: an exponent 0 &lt; real value &lt;
+2. When you use value 1, the power model will become linear and the slope will
+be constant. If the power exponent is 2 the assumed stochastic model (‘randomness’) is not always justifiable and the interpolation can become pathological. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>LimDist</i></p>
+
+</td>
+<td valign="top">
+<p>a value for the limiting distance: points that are further away from an output pixel than the limiting distance will not be used in the Kriging equations. Normally, this is a value smaller than the range of the semi-variogram model (0 &lt;= real value &lt; diagonal size of the map).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>TrendType</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>0 | 1 | 2</p>
+
+<p>Define the trend surface; either <span class=courier>0</span> (no trend) , <span class=courier>1</span> (linear trend) or <span class=courier>2</span> (quadratic trend).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>0, 1</p>
+
+</td>
+<td valign="top">
+<p>Parameters (<i>angle</i> and <i>ratio</i>) to indicate that there is no anisotropy. If you wish to include anisotropy (not advised), specify the <i>angle</i> and <i>ratio</i> parameters as explained in <a href="anisotropic_kriging_command_line.htm">Anisotropic Kriging : command line</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>1 | 0</p>
+
+</td>
+<td valign="top">
+<p>Specify whether or not an error map has to be created. The error map will contain the square root of the Kriging error variance values, i.e. standard deviations per pixel. When this parameter is not specified, no error map will be created. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>1</p>
+
+</td>
+<td valign="top">
+<p>Create an error map. The error map will obtain the same name as specified for the output Kriging map followed by the additional string <span class=courier>_Error</span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>0</p>
+
+</td>
+<td valign="top">
+<p>Do not create an error map. </p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>min, max</i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameters (integer values) to specify the minimum and maximum number of points that should be taken into account per Kriging estimate/prediction, i.e. the number of points within the limiting distance of an output pixel that should be taken into account in the calculation of the output value for that pixel.</p>
+
+<ul>
+
+<li>When the minimum is not specified, the following minumum number of points will be used: <br>
+
+        1 when the trend is 0 (plane), <br>
+
+        3 when the trend is 1 (linear), and <br>
+
+        6 when the trend is 2 (quadratic). <br>
+
+When, for an output pixel, less points than the specified minimum are found within the specified limiting distance, no Kriging is performed and the output pixel will become undefined. If the whole map contains less points than the specified minimum, an error message will appear and no output will be produced. </li>
+
+<li>When the maximum is not specified, then a maximum of 16 points will be used within each limiting distance. When, for an output pixel, more points than the specified maximum are found within the specified limiting distance, only the specified maximum number of points that are nearest to the output pixel will be used. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>No | Average | Firstval</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p>Choose how to handle possible coinciding points or duplicates. When no method is specified, <span class=courier>Average</span> will be used.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>No</p>
+
+</td>
+<td valign="top">
+<p>No removal of duplicates. Mind: when there are coinciding points, the Kriging system may become unsolvable and will give undefined values for the pixels for which coinciding points are found.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>Average</p>
+
+</td>
+<td valign="top">
+<p>Values of duplicates are replaced by the average (arithmetic mean); the coordinates of the first point are taken as new position.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>Firstval</p>
+
+</td>
+<td valign="top">
+<p>Values of duplicates (and their coordinates) are replaced by those of the first point.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>Tolerance</i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter to specify the distance within which 2 sample points are considered to coincide. When not specified, a tolerance of 0.1 m will be used.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated.</p>
+
+<p class=kopje>Example:</p>
+
+<p>The following expression:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=courier>OutUniK</p>
+
+</td>
+<td valign="top" width=18>
+<p class=courier>=</p>
+
+</td>
+<td valign="top">
+<p class=courier>MapKrigingUniversal(MyPoints.MyAttrib, MyGeoref, Spherical(10,70,800), 200, 2, 0, 1, 1, 6, 20, Firstval, 0.2)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>performs Universal Kriging:</p>
+
+<ul>
+
+<li>	on the attribute values in column <span class=courier>MyAttrib</span> in an attribute table that is linked to point map <span class=courier>MyPoints</span>; </li>
+
+<li>	georeference <span class=courier>MyGeoref</span> will be used for the output raster maps; </li>
+
+<li>	a Spherical semi-variogram model will be used with a nugget of 10, a sill of 70, and a range of 800 meter;</li>
+
+<li>	a limiting distance will be used of 200 m;</li>
+
+<li>	a local quadratic trend (2) will be used;</li>
+
+<li>	each Kriging equation will use at least 6 points and at most 20 points (min, max);</li>
+
+<li>	points are considered as coinciding when the distance between them is less than 0.2 m (tolerance);</li>
+
+<li>	for coinciding points only the value and coordinates of the first point encountered will be used.</li>
+
+</ul>
+
+<p class=defnewpar>The results of the expression are: </p>
+
+<ul>
+
+<li>	output raster map <span class=courier>OutUniK</span> containing the Kriging estimates;</li>
+
+<li>	output error map <span class=courier>OutUniK_Error</span>.</li>
+
+</ul>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>The <span class=courier>MapKrigingUniversal(</span>...<span class=courier>)</span> expressions can also be used for Anisotropic Kriging. For more information, see <a href="anisotropic_kriging_command_line.htm">Anisotropic Kriging : command line</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="universal_kriging_functionality.htm">Universal Kriging : functionality</a></p>
+
+</body

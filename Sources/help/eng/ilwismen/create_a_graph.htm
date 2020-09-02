@@ -1,0 +1,131 @@
+<html>
+
+<head>
+<title>Create a graph</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Graphs, Table window, Graph - from Columns, Create ..., Graph window, Bar chart, Scatter diagram">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a graph</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Create a new <a href="..//ilwis/popup/objects_graph_popup.htm" onClick="return popup(this, 'notes')" >Graph</a> from Columns in a graph window. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose the <span class=arial>Create Graph</span> command from the <a href="../ilwis/table_window_menu_commands.htm">File menu</a> in a table window, </li>
+
+<li>	when you click the <span class=arial>Create Graph</span> button <img src="../images/table_graph.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/table_window_toolbar.htm">toolbar</a> of a table window, </li>
+
+<li>	when you choose the <span class=arial>Create Graph</span> command from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window, </li>
+
+<li>	when you double-click the <span class=arial>New Graph</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, </li>
+
+<li>    when you click a table with the right mouse button in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> and choose <span class=arial>Create Graph</span> from the context-sensitive menu, or </li>
+
+<li>	when you choose the <span class=arial>New Graph</span> command from the <a href="../ilwis/graph_window_menu_commands.htm">File menu</a> in a graph window, in case the graph window already displays a graph from columns, a graph from formula, a least squares fit, or a semi-variogram model.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a table which contains the column(s) that you wish to show as a graph. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>X-axis:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you wish to use a <i>column</i> for the X-axis of the graph. </p>
+
+<p class=diabox>Clear this check box when the <i>domain of the table</i> should be used on the X-axis of the graph. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Y-axis:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a column for the Y-axis of the graph. The list box shows all columns of the table.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>A new graph window will be opened, displaying the graph. </p>
+
+<ul>
+
+<li>When a value column is selected for the X-axis, you will by default obtain a point graph. </li>
+
+<li>When using the domain of a table, and when the table uses <a href="..//ilwis/popup/yy_system_domain_none_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>None</span></a>, you will by default obtain a point graph. </p>
+
+<li>When a class or ID column is selected for the X-axis, you will by default obtain a bar graph. </li>
+
+<li>Similarly, when using the class or ID domain of a table, you will by default obtain a bar graph. </li>
+
+</ul>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>When creating a new graph in an existing graph window and when the existing graph has changed, a question will first be asked whether you wish to save the existing graph. </li>
+
+<li>To edit the appearance or the name of the graph, double-click the graph layer in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane: the <a href="graph_window_options_graph_from_columns.htm">Graph Options - Graph from Columns</a> dialog box will appear. </li>
+
+<li>To adapt the title, the X-axis, or the Y-axis (left or right) of the graph, double-click the appriopriate item in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane or in the graph window itself: the <a href="graph_window_options_title.htm">Title</a>, <a href="graph_window_options_x_axis.htm">X-axis</a>, <a href="graph_window_options_y_axis_left.htm">Y-axis (left)</a>, or the <a href="graph_window_options_y_axis_right.htm">Y-axis (right)</a> dialog box will appear. </li>
+
+<p>The grid lines of the graph can be modified in the X-axis and Y-axis dialog boxes. </p>
+
+<li>To add another graph layer to an existing graph displayed in a graph window, choose <span class=arial>Add Graph</span> from the <a href="../ilwis/graph_window_menu_commands.htm">Edit menu</a> in the graph window. You can also click the <span class=arial>Add Graph</span> button <img src="../images/add_graph_layer.gif" align=bottom width="36" height="22"> in the <a href="../ilwis/graph_window_toolbar.htm">toolbar</a> of the graph window. </li>
+
+</ul>
+ 
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_functionality.htm">Graph window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_graph_management.htm">Graph window : Graph Management</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_toolbar.htm">Graph window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_menu_commands.htm">Graph window : menu commands</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_graphs.htm">ILWIS objects : graphs</a></p>
+
+</body

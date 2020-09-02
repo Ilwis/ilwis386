@@ -1,0 +1,719 @@
+<html>
+
+<head>
+<title>How to calculate a cross-section through the terrain (advanced)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cross-section, Calculate (advanced) ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to calculate a cross-section through the terrain</h1>
+
+<h1 class=secondline>(Advanced)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>This topic describes how you can make a cross-section through (a part of) your study area. In general, the procedure is as follows:</p>
+
+<ol>
+
+<li>	Choose the location of the cross-section and make raster map which only shows the pixels of the cross-section. <br>
+You can also <a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen-digitize</a> one segment along which you want to obtain a cross-section.</li>
+
+<li>	Convert the raster map to a points map, or convert the segment map to a point map.</li>
+
+<li>	Open the point map as a table and perform a calculation on the point data so that for the coordinates of all points, the height information is retrieved from a DEM.</li>
+
+<li>	Finally, make a graph to show the cross-section.</li>
+
+</ol>
+
+<p class=kopje>Choosing the location of the cross-section:</p>
+
+<p>Open some satellite images and raster maps. You can use for instance the TMbands or the Geology or Landuse maps from the Cochabamba area. Furthermore, it is assumed that you already created a DEM from the area. </p>
+
+<p class=defnewpar>Column 165 in the Geology map seems to cover many different terrain units and is chosen as the line along which the cross-section should be made. To make a raster map showing the cross-section, use the formula:</p>
+
+<p class=calc0linsp03befaft>crosssec = <a href="calc_iff.htm">IFF</a>(<a href="calc_predefined_variable_c.htm">%C</a>=165, Geology,?)</p>
+
+<p>In this expression, you specify with <span class=courier>%c </span>the column number along which you want to obtain the geology class names. </p>
+
+<p>Raster map <span class=courier>crosssec</span> only shows the geological classes along column 165; all other pixels of this map are undefined. </p>
+
+<p class=kopje>Convert the raster map to a point map:</p>
+
+<p>Drag raster map <span class=courier>crosssec</span> from the Catalog to the Raster to Point operation in the Operation-list. </p>
+
+<p>The <a href="..//ilwisapp/popup/raster_to_points_popup.htm" onClick="return popup(this, 'notes')" >Raster to Points</a> dialog box appears:</p>
+
+<ul>
+
+<li>	Fill out the name of the output point map; you can use map name <span class=courier>crosssec</span> again as the extension of a point map (.MPP) is different from the extension of a raster map (.MPR). </li>
+
+<li>	Click the <span class=arial>Show</span> button.</li>
+
+</ul>
+
+<p>The output point map will be calculated and displayed. </p>
+
+<p class=defnewpar>In the Display Options dialog box of the point map, accept the default representation and click on OK. The point map will appear on the screen. </p>
+
+<p class=defnewpar>(When you screen-digitized a segment along which you want to obtain the cross-section, use the Segments to Points operation. The operation extracts points at regular distances along the segment; you have to specify the distance between the subsequent point coordinates (e.g. 20m).)</p>
+
+<p class=kopje>Open the point map as a table and performing calculations in the point table:</p>
+
+<p>To open the point map as a table, click point map <span class=courier>crosssec</span> in the Catalog with the right mouse button, and choose <span class=arial>Open as table</span> from the context-sensitive menu. </p>
+
+<p class=defnewpar>The table shows all points. Columns X and Y are the XY-coordinates of the points and column Name shows the geology class of each point. </p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=28>
+<p></p>
+
+</td>
+<td valign="top" width=180>
+<p class=th>Coordinate</p>
+
+</td>
+<td valign="top">
+<p class=th>Name</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>21</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090110.00)</p>
+
+</td>
+<td valign="top">
+<p class=t1>Shales</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>22</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090090.00)</p>
+
+</td>
+<td valign="top">
+<p class=t1>Shales</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>23</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090070.00)</p>
+
+</td>
+<td valign="top">
+<p class=t1>Shales</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>24</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090050.00)</p>
+
+</td>
+<td valign="top">
+<p class=t1>Shales</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>25</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090030.00)</p>
+
+</td>
+<td valign="top">
+<p class=t1>Shales</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>26</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090010.00)</p>
+
+</td>
+<td valign="top">
+<p class=t1>Shales</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Now, make the command line visible by choosing the <span class=arial>Command Line</span> command from the View menu in the table window. </p>
+
+<p class=defnewpar>If you would like for instance to retrieve land use information for all points, i.e. to find out about the land use type at each point coordinate, you can type the following formula on the command line of the table window: </p>
+
+<p class=calc0linsp03befaft>Landuse = <a href="calc_mapvalue.htm">MAPVALUE</a>(Landuse,Coordinate)</p>
+
+<p>For each XY-coordinate found in the <span class=courier>Coordinate</span> column in the point table, the land use class as found in raster map <span class=courier>Landuse</span> at that coordinate will be retrieved; this is stored in column <span class=courier>Landuse</span>. Accept the defaults in the <span class=arial>Column Properties</span> dialog box and click OK. </p>
+
+<p>The new column is calculated and appears in the table.</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;  </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p></p>
+
+</td>
+<td valign="top" width=180>
+<p class=th>Coordinate</p>
+
+</td>
+<td valign="top" width=100>
+<p class=th>Name</p>
+
+</td>
+<td valign="top">
+<p class=th>Landuse</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=th>629</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8077950.00)</p>
+
+</td>
+<td valign="top" width=100>
+<p class=t1>Lake deposits</p>
+
+</td>
+<td valign="top">
+<p class=t1>Agriculture</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=th>630</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8077930.00)</p>
+
+</td>
+<td valign="top" width=100>
+<p class=t1>Lake deposits</p>
+
+</td>
+<td valign="top">
+<p class=t1>Agriculture</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=th>631</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8077910.00)</p>
+
+</td>
+<td valign="top" width=100>
+<p class=t1>Lake deposits</p>
+
+</td>
+<td valign="top">
+<p class=t1>Agriculture</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=th>632</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8077890.00)</p>
+
+</td>
+<td valign="top" width=100>
+<p class=t1>Lake deposits</p>
+
+</td>
+<td valign="top">
+<p class=t1>Agriculture</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=th>633</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8077870.00)</p>
+
+</td>
+<td valign="top" width=100>
+<p class=t1>Lake deposits</p>
+
+</td>
+<td valign="top">
+<p class=t1>Urban periphery</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=th>634</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8077850.00)</p>
+
+</td>
+<td valign="top" width=100>
+<p class=t1>Lake deposits</p>
+
+</td>
+<td valign="top">
+<p class=t1>Urban periphery</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In the same way, height information can be retrieved for each point coordinate. You can use the same
+<span class=courier>MAPVALUE</span> function, but this time you will information from raster map DEM:  </p>
+
+<p class=calc0linsp03befaft>Altitude = MAPVALUE(Dem,Coordinate)</p>
+
+<p>For each XY-coordinate as found in column <span class=courier>Coordinate</span>, an elevation value is retrieved from the Digital Elevation Model (<span class=courier>Dem</span>). The output is written in column <span class=courier>Altitude</span>.</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;  </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=28>
+<p></p>
+
+</td>
+<td valign="top" width=180>
+<p class=th>Coordinate</p>
+
+</td>
+<td valign="top" width=50>
+<p class=th>Name</p>
+
+</td>
+<td valign="top" width=75>
+<p class=th>Landuse</p>
+
+</td>
+<td valign="top">
+<p class=th>Altitude</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>21</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090110.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top">
+<p class=t1>4260.0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>22</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090090.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top">
+<p class=t1>4257.8</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>23</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090070.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top">
+<p class=t1>4256.7</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>24</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090050.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top">
+<p class=t1>4254.4</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>25</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090030.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top">
+<p class=t1>4253.0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>26</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090010.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top">
+<p class=t1>4252.7</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Furthermore, you can see that the difference between each subsequent Y-coordinate is 20m; this is the pixel size of the original raster map from which you extracted the points.</p>
+
+<p>To make a distance axis in kilometers for the graph, you can use the following expression: </p>
+
+<p class=calc0linsp03befaft>Distance = <a href="calc_predefined_variable_r.htm">%R</a> * 20 / 1000</p>
+
+<p>In this expression, %R are the record numbers; these are multiplied by 20m and divided by 1000. The answers are stored in column <span class=arial>Distance</span>.</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;  </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=28>
+<p></p>
+
+</td>
+<td valign="top" width=180>
+<p class=th>Coordinate</p>
+
+</td>
+<td valign="top" width=50>
+<p class=th>Name</p>
+
+</td>
+<td valign="top" width=75>
+<p class=th>Landuse</p>
+
+</td>
+<td valign="top" width=75>
+<p class=th>Altitude</p>
+
+</td>
+<td valign="top">
+<p class=th>Distance</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>21</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090110.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4260.0</p>
+
+</td>
+<td valign="top">
+<p class=t1>0.420</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>22</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090090.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4257.8</p>
+
+</td>
+<td valign="top">
+<p class=t1>0.440</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>23</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090070.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4256.7</p>
+
+</td>
+<td valign="top">
+<p class=t1>0.460</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>24</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090050.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4254.4</p>
+
+</td>
+<td valign="top">
+<p class=t1>0.480</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>25</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090030.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4253.0</p>
+
+</td>
+<td valign="top">
+<p class=t1>0.500</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=28>
+<p class=th>26</p>
+
+</td>
+<td valign="top" width=180>
+<p class=t1>( 798770.00, 8090010.00)</p>
+
+</td>
+<td valign="top" width=50>
+<p class=t1>Shales</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4252.7</p>
+
+</td>
+<td valign="top">
+<p class=t1>0.520</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>(When you screen-digitized a segment from which you extracted points, then multiply the record numbers with the distance value that you specified in the Segments to Points operation, and divide by 1000 if you want to obtain values in kilometers.)</p>
+
+<p class=kopje>Displaying the cross-section as a graph:</p>
+
+<p>Now you can display the cross-section by making a graph which shows the relief values along the distance values. From the File menu in the table window, choose <span class=arial>Create Graph</span>.</p>
+
+<p>The <span class=arial>Create Graph</span> dialog box appears:</p>
+
+<ul>
+
+<li>	For the X-axis, select: Distance.</li>
+
+<li>	For the Y-axis, select: Altitude.</li>
+
+</ul>
+
+<p>Accept other defaults, click OK, and the graph is displayed on the screen.</p>
+
+<p class=defnewpar>In this case, you can also choose column Y for the X-axis of the graph, because the points were extracted along a column of a north-oriented raster map; in the point table you can see that X-coordinate values are constant and only Y-coordinate values change. </p>
+
+<p class=defnewpar><img src="../images/crossec2.gif" align=bottom width="432" height="311"></p>
+
+<p class=defnewpar>The graph shows the relief along the cross-section. The first point lies high in the mountains on an altitude of around 4300 m while the end of the cross-section is in a relatively flat area around 2500 m altitude.</p>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="calc_aaf.htm#point_functions">Point functions</a></p>
+<p class=seealsolinks><a href="calc_aaf.htm#coordinate_functions">Coordinate functions</a></p>
+
+</body

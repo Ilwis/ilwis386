@@ -1,0 +1,122 @@
+<html>
+
+<head>
+<title>Cross Variogram : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cross Variogram, Semi-variogram (experimental)">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Cross Variogram</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Cross Variogram operation calculates experimental semi-variogram values for two variables and cross-variogram values for the combination of both variables. As input for the Cross Variogram operation, you can use a point map with a linked attribute table containing at least two value attribute columns. The Cross Variogram operation is a multivariate form of the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. </p>
+
+<p class=defnewpar>From the output table of the Cross Variogram operation, you can create semi-variogram models for both variables and a cross-variogram model for the combination of the variables (<a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>). All three models serve as input for the <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a> operation. CoKriging calculates estimates or predictions for a poorly sampled variable (the predictand) with help of a well-sampled variable (the covariable). The variables should be highly correlated (positive or negative).  </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Point map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input point map. Open the list box and select the desired input map, or drag a point map directly from the Catalog into this box. You should select a point map with an ID domain that has a linked attribute table. The attribute table should contain at least 2 columns with a value domain. You can also select a point map with a class domain and a linked attribute table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Column A:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a column with a value domain that you want to use as the first variable. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Column B:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a column with a value domain that you want to use as the second variable. </p>
+
+<p class=diabox>For many points, there should be measured values both for Column A and Column B. The variables in Column A and Column B should be highly correlated (positive or negative). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Lag spacing (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value that will be used for the distance classes (real value &gt; 0). The output table will contain a Distance column with multiples of the specified lag spacing; these values represent the middle values of actual distance classes. When the variables were sampled at regular distances, you can enter this distance as the lag spacing. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Use spherical distance:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to calculate with spherical distances, i.e. distances are calculated over the sphere using the projection of the coordinate system of the input point map. It is advised to select this option in case your map covers a relatively large area, or when you are working in LatLon coordinates. For more information, see <a href="cross_variogram_functionality.htm">Cross variogram : functionality</a>. </p>
+
+<p class=diabox>Clear this check box to calculate with planar (Euclidean) distances. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output table that contain will the experimental semi-variogram values of the variables A and B and the experimental cross-variogram values of AB.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output table. The description will appear in the status bar of the Main window when moving the mouse pointer over the table in a Catalog, and in the title bar of a table window when the output table is displayed. If no description is supplied, the output table will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output table will only be defined; if necessary the table will be calculated later, for instance when the table is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cross_variogram_functionality.htm">Cross Variogram : functionality</a></p>
+
+</body

@@ -1,0 +1,95 @@
+<html>
+
+<head>
+<title>Transpose table : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Transpose table">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Transpose table</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Transpose table operation interchanges the rows and columns of a table. Each row of the input table becomes a column in the output table; while column names of the input table become output domain records.</p>
+
+<p class=kopje>Example:</p>
+
+<p>In this example, a Rainfall table which contains rainfall figures of January, February and March for all rainfall stations in the Cochabamba area is transposed.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">
+<p>Input table:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=linespacing01before><img src="../images/transin.gif" align=bottom width="399" height="142"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">
+<p>Output table:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=linespacing01before><img src="../images/transou.gif" align=bottom width="420" height="58"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Input table requirements:</p>
+
+<p>The input table should have a class or ID domain or domain <span class=courier>None</span>.</p>
+
+<p>The input table should not have more than 1000 records.</p>
+
+<p>The columns in the input table are generally <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value columns</a>.</p>
+
+<p class=kopje>Domain of output table and of output columns:</p>
+
+<p>The Transpose table operation creates a class domain out of all column names of the input table. The output table thus uses a class domain.</p>
+
+<p>In the output table, all columns will use the same domain; you can select the domain for the output columns during the operation. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="transpose_table_dialog_box.htm">Transpose table : dialog box</a></p>
+
+<p class=seealsolinks><a href="transpose_table_command_line.htm">Transpose table : command line</a></p>
+
+<p class=seealsolinks><a href="transpose_table_algorithm.htm">Transpose table : algorithm</a></p>
+
+</body

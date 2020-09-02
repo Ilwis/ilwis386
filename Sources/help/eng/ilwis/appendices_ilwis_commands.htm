@@ -1,0 +1,3145 @@
+<html>
+
+<head>
+<title>Appendices : ILWIS commands</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS commands, Appendices, Commands, Command line, Syntax">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Appendices</h1>
+
+<h1 class=secondline>ILWIS commands</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>By typing an <a href="..//ilwis/popup/command_line_main_commands_popup.htm" onClick="return popup(this, 'notes')" >ILWIS command</a> on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the Main window</a>, usually a dialog box is opened. Generally, some user-interaction is required before the command can be carried out, i.e. you may have to supply additional information in the dialog box, and click the OK button in the dialog box. </p>
+
+<p class=defnewpar>You can for instance obtain dialog boxes to display objects, edit objects, open the properties of objects, or create objects. You can also obtain the dialog box of an operation. </p>
+
+<p class=defnewpar>This topic contains the following sections:</p>
+
+<ol>
+
+<li>	<a href="#open_edit_create_prop_commands"><span class=bookmark>Open, edit, or create an object or open properties of an object</span></a>.</li>
+
+        <ul>
+
+        <li><a href="#table_window_commands"><span class=bookmark>Commands on the command line of a table window</span></a>.</li>
+
+        </ul>
+
+<li>	<a href="#operation_dialbox_commands"><span class=bookmark>Open the dialog box of an operation</span></a>.</li>
+
+<li>	<a href="#dataman_commands"><span class=bookmark>Data management: delete, etc.</span></a></li>
+
+<li>	<a href="#other_commands_expressions"><span class=bookmark>Other commands and expressions, use of ?&nbsp;&nbsp;!&nbsp;&nbsp;!!&nbsp;&nbsp;;&nbsp;&nbsp;etc.</span></a></li>
+
+</ol>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>Commands typed on the command line are not case sensitive. </li>
+
+<li>When using long object names, see also topic <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>. </li>
+
+<li>For syntax to perform operations via the command line in the Main window, see <a href="../ilwis/appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a>; </li>
+
+<li>For additional script syntax to perform table calculations via the command line in the Main window and to automatically perform tasks which are not pure calculations or operations (without any any user-interaction), see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS Script Language (syntax)</a>. </li>
+
+</ul>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>The commands described below: </p>
+
+        <ul class=tipul>
+        
+        <li>have effect when typed interactively on the command line; </li>        
+        
+        <li>have no effect when used in <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a>; </li>
+
+        <li>have effect when using <a href="appendices_ilwis_as_dde_server.htm">ILWIS as a DDE server</a> (advanced); </li>
+
+        <li>the commands of the <a href="#table_window_commands"><span class=bookmark>table window commands</span></a> section however cannot be used with DDE. </li>
+
+        </ul>
+
+<h2 id="open_edit_create_prop_commands">1. Open, edit, create, or open properties</h2>
+
+<p>Several commands can be typed on the command line of the Main window to open, edit, or open the properties of an object. To open an object, it is generally faster though to double-click an object in the Catalog. To edit an object, open the properties of an object, open an object as a table or to create objects you can use context-sensitive menu in the Catalog. For more information, see <a href="how_to_use_the_catalog.htm">How to use the Catalog</a>.</p>
+
+<p class=kopje>To open or edit an object or to open the properties of an object:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>Open, Show, Map, Pol, Seg, Pnt, Tbl, Mpl, View </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=nospacetop></p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>The commands above open an Open dialog box in which you can select the object you wish to display.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Edit</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/open_show_map_or_other_object.htm">Edit Object</a> dialog box in which you can select the object you wish to edit.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Prop</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/view_edit_properties_of.htm">View Properties of</a> dialog box in which you can select the object which properties you wish to view.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>To directly open or edit an object or to open the object properties:</p>
+
+<p>When an <span class=courier>Open</span>, <span class=courier>Show</span>, <span class=courier>Edit</span> or <span class=courier>Prop</span> command is followed by an object name including the object's <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >extension</a>, then the object will be directly show, directly opened in an editor, or the object's Properties sheet will be directly opened. The dialog boxes described above in which an object needs to be selected are thus skipped. To close a shown object, an editor or a Properties sheet however, user-interaction is still required. </p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Open</span> <i>objname.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Opens object <i>objname.ext</i> immediately where <i>objname</i> is the name of the object and <i>.ext</i> is the object's <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >extension</a>.</p>
+
+<p>Opens a <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box in case of maps, opens a table window displaying the table, the two-dimensional table or the histogram, or shows the object otherwise immediately; for details, see next paragraphs. <span class=tiptext><span class=tip>Tip: </span>To skip a Display Options dialog box, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">ILWIS script language (syntax)</a>, where you can use the parameter <span class=courier>-noask</span></span>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Show</span> <i>objname.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Same as <span class=courier>Open</span> <i>objname.ext</i>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Edit</span> <i>objname.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Starts the appropriate editor or opens a dialog box in which you can edit the object. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Prop</span> <i>objname.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Show the <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Property</a> sheet of the object. For more information, see <a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Other possibilities to open specific objects (generally no extensions required):</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Map</span> <i>Rasmapname</i></p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box for the raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Pol</span> <i>Polmapname</i></p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/display_options_polygon_map.htm">Display Options - Polygon Map</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Seg</span> <i>Segmapname</i></p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/display_options_segment_map.htm">Display Options - Segment Map</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Pnt</span> <i>Pointmapname</i></p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/display_options_point_map.htm">Display Options- Point Map</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Tbl</span> <i>Tablename</i></p>
+
+</td>
+<td valign="top">
+<p>Displays the table in a table window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Mpl</span> <i>MapListname</i></p>
+
+</td>
+<td valign="top">
+<p>The <a href="../ilwismen/display_options_map_list_as_color_composite.htm">Display Options - Map List as Color Composite</a> dialog box is opened. If the raster maps in the map list are not <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>, an error message will appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>View</span> <i>MapViewname</i></p>
+
+</td>
+<td valign="top">
+<p>Displays the map view in a map window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Layout</span></p>
+
+</td>
+<td valign="top">
+<p>Opens a new empty layout in the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >Layout editor</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>Layout</span> <i>MapViewname.mpv</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create a new (untitled) layout and add map view <i>MapViewname</i> to it. The extension .MPV is required. First a small dialog box will appear asking for the scale on which the map view should be displayed. Then, the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >Layout editor</a> will be opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Layout</span> <i>Layoutname.ilo</p>
+
+</td>
+<td valign="top">
+<p>Opens the existing layout <i>Layoutname.ilo</i> in the Layout editor. The extension .ILO is required. </p>
+
+
+</td>
+</tr>
+<tr>                    
+<td valign="top" width=144>
+<p><span class=courier>Dom</span> <i>Domname</i></p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="..//ilwis/popup/domain_classid_editor_popup.htm" onClick="return popup(this, 'notes')" >Domain Class/ID editor</a> in case a of domain class, ID, Group or Picture, or opens the <a href="../ilwismen/edit_domain_value.htm">Edit Domain Value</a> dialog box in case of an editable value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=calccommline><span class=courier>Rpr</span> <i>Reprname</i></p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Class editor</a> in case of a repesentation Class or Picture, or opens the <a href="..//ilwis/popup/representation_value_gradual_editor_popup.htm" onClick="return popup(this, 'notes')" >representation Value/Gradual editor</a> in case of an editable representation Value or Gradual.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>To show objects as tables (advanced):</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=courier>ShowAsTbl</p>
+
+</td>
+<td valign="top">
+<p>Opens the Show As Table dialog box which allows you to select any object that can be opened as a table. For more information, see also <a href="../ilwis/how_to_open_objects_as_a_table_advanced.htm">How to open objects as a table</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>OpenAsTbl</p>
+
+</td>
+<td valign="top">
+<p>Alias for <span class=courier>ShowAsTbl</span>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=calccommline><span class=courier>ShowAsTbl</span> <i>pntmap</i><span class=courier>.mpp</span></p>
+
+</td>
+<td valign="top">
+<p>Opens the point map <i>pntmap</i> immediately as a table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=calccommline><span class=courier>ShowAsTbl</span> <i>domain</i><span class=courier>.dom</span></p>
+
+</td>
+<td valign="top">
+<p>Opens the domain <i>domain</i> immediately as a table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=calccommline><span class=courier>ShowAsTbl</span> <i>repres</i><span class=courier>.rpr</span></p>
+
+</td>
+<td valign="top">
+<p>Opens the representation <i>repres</i> immediately as a table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=calccommline><span class=courier>ShowAsTbl</span> <i>georef</i><span class=courier>.grf</span></p>
+
+</td>
+<td valign="top">
+<p>Opens the georeference tiepoints <i>georef</i> immediately as a table.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>To show internal domains and representations (advanced):</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=calccommline><span class=courier>ShowAsDom</span> <i>objname.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Opens the internal domain of object <i>objname.ext</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>OpenAsDom</p>
+
+</td>
+<td valign="top">
+<p>Alias for <span class=courier>ShowAsDom</span>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><span class=courier>ShowAsRpr</span> <i>objname.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Opens the internal representation of object <i>objname.ext</i>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>OpenAsRpr</p>
+
+</td>
+<td valign="top">
+<p>Alias for <span class=courier>ShowAsRpr</span>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>To create an ILWIS object:</p>
+
+<p>Use the <span class=courier>Create</span> command followed by an object abbreviation:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create map</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_raster_map.htm">Create Raster Map</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create seg</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_segment_map.htm">Create Segment Map</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create pnt</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_point_map.htm">Create Point Map</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create tbl</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_table.htm">Create Table</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create mpl</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_map_list.htm">Create Map List</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create ioc</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_an_object_collection.htm">Create Object Collection</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>Create ilo | Create lay | Create layout</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Opens a new empty layout in the layout editor.</p>
+
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create dom</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_domain.htm">Create Domain</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create rpr</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_representation.htm">Create Representation</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create grf</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_georeference.htm">Create Georeference</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create csy</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_coordinate_system.htm">Create Coordinate System</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create sms</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_sample_set.htm">Create Sample Set</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create tb2</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_two_dimensional_table.htm">Create Two-Dimensional Table</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create fil</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_filter.htm">Create Filter</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>Create fun | Create function</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Opens the <a href="../ilwismen/create_a_function.htm">Create Function</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>Create isl | Create script</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Opens the <a href="script_editor_functionality.htm">Script editor</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Create dir</p>
+
+</td>
+<td valign="top">
+<p>Creates a new directory: first a small dialog box appears in which you can specify the name of the new directory; then, the new directory will be shown in a new Catalog. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>To open the pixel info window:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Pixelinfo</p>
+
+</td>
+<td valign="top">
+<p>Opens a new empty <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel info window</a>. <span class=tiptext><span class=tip>Tip: </span>To directly add maps, map lists and/or coordinate systems to the pixel info window, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS Script Language</a></span>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>To run a script:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>Run</span> <i>scriptname var1  var2</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Runs script <i>scriptname</i> with variables <i>var1</i> and <i>var2</i>. Variables are optional. By using the <span class=courier>Run</span> command, you can continue working with ILWIS while the script is running. For more information, see <a href="how_to_run_scripts.htm">How to run scripts</a>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>To obtain help:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Help</p>
+
+</td>
+<td valign="top">
+<p>Opens the ILWIS.CHM Help file on the page of the current window. Same as using the <span class=courier>F1</span> key in a window: Help on this window.</p>
+
+</td>
+</tr>
+</table>
+
+<p id="table_window_commands" class=kopje>Commands on the command line of a table window:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Sorton</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/sort_records.htm">Sort</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><span class=courier>Sorton</span> <i>col</i></p>
+
+</td>
+<td valign="top">
+<p>Sorts the table in ascending order on column <i>col</i>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p><span class=courier>Sorton</span> <i>col</i> [<span class=courier>-sortorder=ascending</span>|<span class=courier>descending</span>]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class="nospacetop">&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class="nospacetop">Sorts the table on column <i>col</i>; whether the table is sorted in ascending or descending order depends on the value specified for the parameter <span class=courier>-sortorder=</span> which should be followed either by <span class=courier>ascending</span> or <span class=courier>descending</span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Colman</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/column_management.htm">Column Management</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>UpdateAllColumns</p>
+
+</td>
+<td valign="top">
+<p>Recalculates all dependent columns which are not up-to-date anymore; all columns are thus made up-to-date again. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Statistics</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/column_statistics.htm">Column Statistics</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Join</p>
+
+</td>
+<td valign="top">
+<p>Opens the first page of the <a href="../ilwismen/join_column.htm">Join Column</a> wizard. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Aggregate</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/aggregate_column.htm">Aggregate Column</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Cumulative</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/cumulative_column.htm">Cumulative Column</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>LeastSquares</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/least_squares_fit.htm">Least Squares Fit</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>SemiVariogram</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/column_semivariogram.htm">Semi-variogram column</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Slicing</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/column_slicing.htm">Column Slicing</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><span class=courier>AddRecord</span></p>
+
+</td>
+<td valign="top">
+<p>Adds a single record to a table which has domain <span class=courier>None</span>. </p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><span class=courier>AddRecord</span> <i>nr</i></p>
+
+</td>
+<td valign="top">
+<p>Adds a certain number <i>nr</i> of records to a table which has domain <span class=courier>None</span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Graph</p>
+
+</td>
+<td valign="top">
+<p>Opens the dialog box to obtain a <a href="../ilwismen/create_a_graph.htm">Graph</a> from columns. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>RoseDiagram</p>
+
+</td>
+<td valign="top">
+<p>Opens the dialog box to obtain a <a href="../ilwismen/create_a_rose_diagram.htm">Rose diagram</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>ConfMat</p>
+
+</td>
+<td valign="top">
+<p>Opens the dialog box to obtain a <a href="../ilwismen/confusion_matrix.htm">Confusion Matrix</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>AddInfo</p>
+
+</td>
+<td valign="top">
+<p>Opens the additional info of the table. Handy when inspecting a histogram, or when a georeference is opened as a table. Additional Info is also accessible through in the properties sheet of a histogram, a georeference, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Prop</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/table_properties.htm">Table Properties</a> sheet. </p>
+
+</td>
+</tr>
+</table>
+
+<h2 id="operation_dialbox_commands">2. Open the dialog box of an operation</h2>
+
+<p>To obtain the dialog box of an ILWIS operation, type one of the following commands or aliases. </p>
+
+<p>To obtain the dialog box of an operation, you can also double-click the operation in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or select it from the <a href="main_window_menu_commands.htm">Operations menu</a>. </p>
+
+<p>Any operation which is performed through a dialog box will result in a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output object</a>.</p>
+
+<p class=emptyline>&nbsp;  </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="200">
+<p><span class=DefaultStyle><u><b>Operation</b></u></span></p>
+
+</td>
+<td valign="top" width=144>
+<p><span class=courier><u><b>command</b></u></span></p>
+
+</td>
+<td valign="top">
+<p><span class=courier><u><b>alias(es)</b></u></span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=kopje>Visualization</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Show Map</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Show</p>
+
+</td>
+<td valign="top">
+<p class=courier>Open, Map, CopyMap</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Show Table</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Tbl</p>
+
+</td>
+<td valign="top">
+<p class=courier>TabCalc</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Show MapList </p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr> 
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>as Color Composite</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>ColorComp</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>as Slide Show</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>SlideShow</p>
+
+</td>
+<td valign="top">
+<p class=courier>Film</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Display 3D</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Display3D</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>             
+<tr>
+<td valign="top" width="200">
+<p>Apply 3D</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Apply3D</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Show Stereo Pair</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr> 
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>as Anaglyph</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Anaglyph</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>with Stereoscope</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Stereoscope</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=kopje>Raster Operations</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Map Calculate</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>MapCalc</p>
+
+</td>
+<td valign="top">
+<p class=courier>MCalc</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Attribute Map</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>AttribRas</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Cross</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Cross</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Aggregate Map</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Aggregate</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Distance</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Distance</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Iteration</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>MapIter</p>
+
+</td>
+<td valign="top">
+<p class=courier>Iter, Iterp</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Area Numbering</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>AreaNumb</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Sub Map</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>SubRas</p>
+
+</td>
+<td valign="top">
+<p class=courier>SubMap</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Glue Maps</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Glue</p>
+
+</td>
+<td valign="top">
+<p class=courier>GlueRas</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Mirror Rotate</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Mirror</p>
+
+</td>
+<td valign="top">
+<p class=courier>MirrorRotate</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>SMCE</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>SMCE</p>
+
+</td>
+<td valign="top">
+<p class=courier></p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="200">
+<p class=kopje>Image Processing</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Filter</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Filter</p>
+
+</td>
+<td valign="top">
+<p class=courier>FiltrMap</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Stretch</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Stretch</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Slicing</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Slicing</p>
+
+</td>
+<td valign="top">
+<p class=courier>Clfy</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Color Separation</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>ColorSep</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Color Composite</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>ColorCmp</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Cluster</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Cluster</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Sample</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Sample</p>
+
+</td>
+<td valign="top">
+<p class=courier>Smpl</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Classify</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Classify</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Resample</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Resample</p>
+
+</td>
+<td valign="top">
+<p class=courier>GeoCorr</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Epipolar Stereo Pair</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>MakeStereoPair</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Stereo Pair from DTM</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>MakeSTPfromDTM</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="200">
+<p class=kopje>Statistics</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Histogram</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Histogram</p>
+
+</td>
+<td valign="top">
+<p class=courier>Histgram</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Raster</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Autocorrelation</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Autocorr</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Variogram Surface</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>VariogramSurface</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>MapList</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Principal Components</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>PrincCmp</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Factor Analysis</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>FactAnal</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Variance Covariance</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>MatVarCov</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Correlation Matrix</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>MatCorr</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Polygons</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Neighbour Polygons</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>HistNbPol</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=courier><span class=DefaultStyle>Segments</span></p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Direction Histogram</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>HistSegDir</p>
+
+</td>
+<td valign="top">
+<p class=courier>LinAnal</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Points</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Spatial correlation</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>SpatCorr</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Variogram Surface</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>VariogramSurface</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Cross Variogram</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>CrossVariogram</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Pattern Analysis</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>PattAnal</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+</table>
+
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="200">
+<p class=kopje>Interpolation</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Densify map</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>DensRas</p>
+
+</td>
+<td valign="top">
+<p class=courier>Densify, InterpolRas</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Kriging From Raster</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>KrigingRas</p>
+
+</td>
+<td valign="top">
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Contour Interpolation</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>InterpolSeg</p>
+
+</td>
+<td valign="top">
+<p class=courier>Interpol</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Point Interpolation</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Nearest Point</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>NearestPnt</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Moving Average</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>MovAverage</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Trend Surface</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>TrendSurface</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Moving Surface</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>MovSurface</p>
+
+</td>
+<td valign="top">
+<p class=courier>Gridding</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Kriging</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Kriging</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Anisotropic Kriging</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>AnisotrKriging</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Universal Kriging</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>UnivKriging</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>CoKriging</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>CoKriging</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="200">
+<p class=kopje>Vector Operations</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Unique ID</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>UniqueID</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Polygons</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Attribute Map</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>AttribPol</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Mask Polygons</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>MaskPol</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Assign Labels</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>LabelPol</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Transform Polygons</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>TransfPol</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>ID Grid Map</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>IDGrid</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Segments</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Attribute Map</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>AttribSeg</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Mask Segments</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>MaskSeg</p>
+
+</td>
+<td valign="top">
+<p class=courier>CopySeg</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Assign Labels</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>LabelSeg</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Sub Map</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>SubSeg</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Glue Maps</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>GlueSeg</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Densify Coordinates</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>DensSeg</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Transform Segments</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>TransfSeg</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Tunneling</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>TunnelSeg</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Points</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Attribute Map</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>AttribPnt</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Mask Points</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>MaskPnt</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>SubMap</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>SubPnt</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Glue Maps</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>GluePnt</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Transform Points</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>TransfPnt</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="200">
+<p>Coordinates</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Transform Coordinates</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Transform</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Find Datum Parameters</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>FindDatumParms</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="200">
+<p class=kopje>Rasterize</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Polygon to Raster</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>PolRas</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Segment to Raster</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>SegRas</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Segment Density</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>SegDensity</p>
+
+</td>
+<td valign="top">
+<p class=courier>Ld</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Point to Raster</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>PntRas</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Point Density</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>PntDensity</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="200">
+<p class=kopje>Vectorize</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Raster to Polygon</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>RasPol</p>
+
+</td>
+<td valign="top">
+<p class=courier>RasVec</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Raster to Segment</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>RasSeg</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Raster to Point</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>RasPnt</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Polygon to Segment</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>PolSeg</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Polygon to Point</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>PolPnt</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Segment to Polygon</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>SegPol</p>
+
+</td>
+<td valign="top">
+<p class=courier>Polygonize</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Segment to Point</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>SegPnt</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="200">
+<p class=kopje>Table Operations:</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Transpose Table</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>Transpose</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Change Domain</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>TblChDom</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Table to PointMap</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>TblPnt</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Glue tables</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>TblGlue</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=kopje>DEM-Hydro Processing:</p>
+
+</td>
+
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Flow Determination</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Fill Sinks</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>FillSinks</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Flow Direction</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>FlowDirection</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Flow Accumulation</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>FlowAccumulation</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Flow Modification</p>
+
+</td>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>DEM Optimization</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>DemOptimization</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Topological Optimization</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>TopologicalOptimization</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p>Variable Threshold Computation</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>VariableThresholdComputation</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p>Network and Catchment Extraction</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Drainage Network Extraction</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>DrainageNetworkExtraction</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Drainage Network Ordering</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>DrainageNetworkOrdering</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Catchment Extraction</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>CatchmentExtraction</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Catchment Merge</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>CatchmentMerge</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p>Compound Parameter Extraction</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Overland Flow Length</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>OverlandFlowLength</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p>Statistical Parameter Extraction</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p class=leftmargin03>Horton Statistics</p>
+
+</td>
+<td valign="top" width=144>
+<p class=courier>HortonPlots</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Import/Export commands:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=124>
+<p class=courier>Import</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/import_map.htm">Import</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>Import -generalraster</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Opens the <a href="../ilwismen/import_general_raster.htm">Import (General Raster)</a> dialog box while for <span class=arial>Import Format</span> is selected: <span class=arial>Use General Raster Import</span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>Import -tablewizard</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Opens the first page of the <a href="../ilwismen/import_table_input_table_name.htm">Import Table</a> wizard. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=courier>Export</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/export.htm">Export</a> dialog box. </p>
+
+</td>
+</tr>
+</table>
+
+<h2 id="dataman_commands">3. Data Management</h2>
+
+<p>Below, you may read Folder where it reads directory. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>Del </span></p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/delete_object_select_object.htm">Select object to be deleted</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>Del</span> <i>objname.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Deletes object <i>objname.ext</i> where <i>objname</i> is the object name and <i>.ext</i> the object's <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >extension</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>dir</span></p>
+
+</td>
+<td valign="top">
+<p>Refreshes the current Catalog. You can also use the F5 key on the keyboard. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>dir</span> <i>query</i></p>
+
+</td>
+<td valign="top">
+<p>In the current Catalog, only show the objects that are the result of the query <i>query</i>. For more information, see <a href="../ilwismen/customize_catalog_query.htm#querysyntax">Customize Catalog, Query, section Query syntax</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>cd\</span></p>
+
+</td>
+<td valign="top">
+<p>Change the current working directory to the root of the current drive and list the objects in the current Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>cd\</span><i>dir</i></p>
+
+</td>
+<td valign="top">
+<p>Change the current working directory to the (sub)directory <i>dir</i> and list the objects in that directory in the current Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>cd..</span></p>
+
+</td>
+<td valign="top">
+<p>Change the current working directory to one directory up (parent directory) and list the objects in that directory in the current Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>cd ..</span></p>
+
+</td>
+<td valign="top">
+<p>Change the current working directory to one directory up (parent directory) and list the objects in that directory in the current Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>cd</span> <i>subdir</i></p>
+
+</td>
+<td valign="top">
+<p>Change the current working directory to subdirectory <i>subdir</i> and list the objects in that directory in the current Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>md</span></p>
+
+</td>
+<td valign="top">
+<p>Gives a dialog box to create a new subdirectory in the current working directory; specify a new directory name, then a new Catalog is opened for the new directory.</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>md</span> <i>newdir</i></p>
+
+</td>
+<td valign="top">
+<p>Creates a new subdirectory <i>newdir</i> in the current working directory, and opens a new Catalog for the new directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>mkdir</span> <i>newdir</i></p>
+
+</td>
+<td valign="top">
+<p>Creates a new subdirectory <i>newdir</i> in the current working directory, and opens a new Catalog for the new directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>rd</span></p>
+
+</td>
+<td valign="top">
+<p>Gives a dialog box to remove an empty subdirectory from the current working directory; specify the name of an empty subdirectory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>rd</span> <i>subdir</i></p>
+
+</td>
+<td valign="top">
+<p>Removes the empty subdirectory <i>subdir</i> from the current working directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>rmdir</span> <i>subdir</i></p>
+
+</td>
+<td valign="top">
+<p>Removes the empty subdirectory <i>subdir</i> from the current working directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>a:</span></p>
+
+</td>
+<td valign="top">
+<p>Sets the current working directory to the specified drive. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>exit</span></p>
+
+</td>
+<td valign="top">
+<p>Closes ILWIS.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To work with long directory names, enclose the <i>dir</i>, <i>subdir</i> or <i>newdir</i> parameter in single quotes. See also <a href="how_to_use_long_object_names.htm">How to use long object names</a>. </li>
+
+<li>For other data management syntax, see also <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#script_data_management"><span class=bookmark>Data management</span></a>. </li>
+
+</ul>
+
+<h2 id="other_commands_expressions">Other commands and expressions</h2>
+
+<table cellspacing=0 cellpadding="0">
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>?</span><i>expression</i></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Pocket line calculator</a>, performs calculations with constant values and/or MapCalc/TabCalc functions.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+&nbsp;
+
+</td>
+<td valign="top">
+&nbsp;
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>!</span><i>command</i> </p>
+<p class=calccommline><span class=courier>!</span><i>command</i> <i>optional_parameter(s)</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" class="nospacetop" width=124>
+<p class="nospacetop">&nbsp;</p>
+
+</td>
+<td class="nospacetop" valign="top">
+<p class="nospacetop">Starts any Windows application, a batch file, etc. and <i>will wait</i> until the application has finished, i.e. ILWIS cannot be used until the external application has been closed again. </p>
+
+	<p>Using <span class=courier>!</span><i>command</i> with optional parameters may come in handy when you wish to adapt the Operations menu, the Operation-tree and the Operation-list. 
+	   For more information, see <a href="../ilwis/how_to_customize_the_operation_list.htm">How to customize the Operation-tree, the Operation-list and the Operations menu</a>. </p>
+
+	<p class="emptyline">&nbsp;</p>
+
+	<ul>
+	<li>Type the <i>command</i> directly after the exclamation mark (no spaces allowed). </li>
+	<li><i>Programs</i> with the following extensions can always be started: <span class="courier">.exe</span>, <span class="courier">.com</span>, <span class="courier">.bat</span>. </li>
+	<li>You can also use Windows <i>shortcuts</i> (<span class="courier">.lnk</span>) to Windows applications, provided that the shortcut points to the correct location of the application. </li>
+	<li>Furthermore, <i>files of a registered file type</i> can be opened with the application for which the file type has been registered (Open command). 
+		Examples of possible <i>registered</i> file types on your computer may be: <span class="courier">.doc</span>, <span class="courier">.txt</span>, <span class="courier">.pdf</span>, <span class="courier">.xls</span>, <span class="courier">.ppt</span>, <span class="courier">.pps</span>, <span class="courier">.gif</span>, <span class="courier">.bmp</span>, etc. </li>
+	<li>If no extension is specified, <span class="courier">.exe</span> is assumed. </li>	
+	<li>Full paths and relative paths (relative to the currently active folder/currently active Catalog) may be used. </li>
+	<li>If no path is specified for a program (<span class="courier">.exe</span>, <span class="courier">.com</span>, <span class="courier">.bat</span>), the following locations will be searched: the currently active ILWIS working folder/Catalog, the ILWIS folder, the Windows folder, the Windows\System folder, and the folders specified in the PATH environment variable. </li>
+    <li>If no path is specified for a shortcut (<span class="courier">.lnk</span>) or for other files (e.g. <span class="courier">.doc</span>, <span class="courier">.xls</span>, <span class="courier">.gif</span> etc.), only the currently active ILWIS working folder, i.e. the currently active Catalog, will be searched. </li>
+	<li>Long file names (e.g. programs, paths or file names containing spaces) must be quoted within single quotes, including possible extensions. </li>
+	<li>Optionally, one or more parameters may be passed, separated by spaces. Parameters that contain spaces themselves, must again be quoted within single quotes, including possible extensions. </li>
+	</ul>
+ 
+<p class="tip">Examples:</p>
+
+<ul class="tipul">
+
+<li class="ls01be">to start NotePad, type: <span class=courier>!NotePad</span> </li>
+
+<li class="ls01be">To start Notepad via a shortcut to Notepad, when the shortcut is located in D:\My Folder, type: <br>
+
+	<span class="courier">!!'D:\My&nbsp;Folder\shortcut&nbsp;to&nbsp;notepad.exe.lnk'</span></li>
+
+<li class="ls01be">To open a Word document called <i>Document of Interest</i> that is located in D:\My Documents, with the program that by default opens such files (i.e. Word), type: <br />
+
+		<span class="courier">!'D:\My Documents\Document of Interest.doc'</span></li>
+
+<li class="ls01be">to start a program called <i>My Program.exe</i> that is located in C:\Program Files\Any Folder\, type: <br />
+
+		<span class="courier">!'C:\Program Files\Any Folder\My Program.exe'</span></li>
+
+<li class="ls01be">to start a program called <i>My Program.exe</i> located in C:\Program Files\Any Folder\, and to pass two parameters for this program, type: <br />
+
+		<span class="courier">!'C:\Program Files\Any Folder\My Program.exe' 'D:\this file.gif' 'D:\other file.tif'</span></li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+&nbsp;
+
+</td>
+<td valign="top">
+&nbsp;
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>!!</span><i>command</i> </p>
+<p class=calccommline><span class=courier>!!</span><i>command</i> <i>optional_parameter(s)</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" class="nospacetop" width=124>
+<p class="nospacetop">&nbsp;</p>
+
+</td>
+<td class="nospacetop" valign="top">
+<p class="nospacetop">Same as <span class=courier>!</span><i>command</i>, but <i>enables a continuation</i> of ILWIS while the external application is running. </p>
+
+	<p>Using <span class=courier>!!</span><i>command</i> with optional parameters may come in handy when you wish to adapt the Operations menu, the Operation-tree and the Operation-list. 
+	   For more information, see <a href="../ilwis/how_to_customize_the_operation_list.htm">How to customize the Operation-tree, the Operation-list and the Operations menu</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+&nbsp;
+
+</td>
+<td valign="top">
+&nbsp;
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=calccommline><span class=courier>Script </span><i>expression</i></p>
+
+</td>
+<td valign="top">
+<p>Executes the expression as if running a script. By using the <span class=courier>Script</span> command followed by any expression that is allowed in a script (see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">ILWIS script language</a>), you cannot continue working with ILWIS while the expression is executed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+&nbsp;
+
+</td>
+<td valign="top">
+&nbsp;
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p><i>expression</i>;</p>
+
+</td>
+<td valign="top">
+<p>Same as <span class=courier>Script </span><i>expression</i>. </p>
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="how_to_use_long_object_names.htm">How to use long object names</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_expressions.htm">ILWIS expressions</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">ILWIS script language (syntax)</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_as_DDE_server.htm">ILWIS as DDE server</a></p>
+
+</body

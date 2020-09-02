@@ -1,0 +1,192 @@
+<html>
+
+<head>
+<title>MapCalc : two-dimensional tables</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map calculation, Calculation, MapCalculate, Command line, Two-dimensional tables, Classify">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map calculation</h1>
+<h1 class=secondline>Classifying maps according to a two-dimensional table</h1>
+
+<p class=defnewpar><a href="..//ilwis/popup/objects_table2dim_popup.htm" onClick="return popup(this, 'notes')" >Two-dimensional tables</a> are used to combine or reclassify two raster maps with a Class, Group or ID domain. It defines a new class or a value for each possible combination of input classes, groups or IDs. </p>
+
+<p class=defnewpar>A two-dimensional table view consists of rows representing one domain, and  columns representing another domain. In the two-dimensional table, you have to assign a value, class name or ID to each possible combination of  your input domains.</p>
+
+<p class=defnewpar>Application of a two-dimensional table on the command line of the Main window, requires two input raster maps which have the domains as used by the two-dimensional table. The output raster map then contains the values, classes or IDs that you entered in the fields of the two-dimensional table. </p>
+
+<p class=defnewpar>When you create a new two-dimensional table, it is directly displayed in a table window where you can also edit it directly. To open and edit an existing two-dimensional table, double-click a two-dimensional table in the Catalog, double-click the <span class=arial>Open</span> or <span class=arial>Edit</span> item in the Operation-list, or select the <span class=arial>Edit Object</span> command on the Edit menu of the Main window and select a two-dimensional table. </p>
+
+<p class=kopje>To apply a two-dimensional table:</p>
+
+<p>A two-dimensional table can be applied by typing the following expression on the command line of the Main window: </p>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=syntax>OutMap = <i>Two-DimTableName</i>[<i>InMap1</i>,<i>InMap2</i>]</p>
+<p class=emptylinehalf>&nbsp;</p>
+<p>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144><p>OutMap</p></td>
+<td valign="top"><p>is the name of your output map.</p></td>
+</tr>
+<tr>
+<td valign="top" width=144><p><i>Two-DimTableName</i></p></td>
+<td valign="top"><p>is the name of your two-dimensional table (extension <span class=courier>.TA2</span>).</p></td>
+</tr>
+<tr>
+<td valign="top" width=144><p><i>InMap1</i>&nbsp; <i>InMap2</i></p></td>
+<td valign="top"><p>are your input maps from which the domains are used in the two-dimensional table.</p></td>
+</tr>
+</table>
+
+<p class=kopje>Example:</p>
+
+<p>Two small raster maps will be combined to one output map according to a two-dimensional table. The domain of <span class=courier>InMap1</span> contains the IDs: A, B, C, D and E;
+<span class=courier>InMap2</span> has the classes: P, Q, R, and S.</p>
+
+<p class=defnewpar>The two-dimensional table may for instance look like:</p>
+<p class=emptyline>&nbsp;</p>
+<p class=th>TwoDim.ta2</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"></td>
+	<td valign="top" width=60><p class=tcolh>P</p></td>
+	<td valign="top" width=130><p class=tcolh>Q</p></td>
+	<td valign="top" width=130><p class=tcolh>R</p></td>
+	<td valign="top"><p class=tcolh>S</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=tcolh>A</p></td>
+	<td valign="top" width=60><p class=t1>Very Low</p></td>
+	<td valign="top" width=130><p class=t1>Very Low</p></td>
+	<td valign="top" width=130><p class=t1>Very Low</p></td>
+	<td valign="top"><p class=t1>Very Low</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=tcolh>B</p></td>
+	<td valign="top" width=60><p class=t1>Very Low</p></td>
+	<td valign="top" width=130><p class=t1>Low</p></td>
+	<td valign="top" width=130><p class=t1>Intermediately Low</p></td>
+	<td valign="top"><p class=t1>Intermediate</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=tcolh>C</p></td>
+	<td valign="top" width=60><p class=t1>Very Low</p></td>
+	<td valign="top" width=130><p class=t1>Intermediately Low</p></td>
+	<td valign="top" width=130><p class=t1>Intermediate</p></td>
+	<td valign="top"><p class=t1>Intermediately High</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=tcolh>D</p></td>
+	<td valign="top" width=60><p class=t1>Very Low</p></td>
+	<td valign="top" width=130><p class=t1>Intermediate</p></td>
+	<td valign="top" width=130><p class=t1>Intermediately High</p></td>
+	<td valign="top"><p class=t1>High</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=tcolh>E</p></td>
+	<td valign="top" width=60><p class=t1>Very Low</p></td>
+	<td valign="top" width=130><p class=t1>Intermediately High</p></td>
+	<td valign="top" width=130><p class=t1>High</p></td>
+	<td valign="top"><p class=t1>Very High</p></td>
+</tr>
+</table>
+
+<p class=defnewparlnsp01aft>To apply this table to <span class=courier>InMap1</span> and <span class=courier>InMap2</span> and obtain <span class=courier>OutMap</span> use the following formula:</p>
+
+<p class=calc0>OutMap = TwoDim[InMap1,InMap2] </p>
+
+<p class=emptyline></p>
+<table>
+<tr>
+	<td><p class=courier>InMap1</p></td>
+	<td><p class=courier>InMap2</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>A</td>
+    <td class=calcpict>A</td>
+    <td class=calcpict>D</td>
+  </tr>
+  <tr>
+    <td class=calcpict>D</td>
+    <td class=calcpict>A</td>
+    <td class=calcpict>B</td>
+  </tr>
+  <tr>
+    <td class=calcpict>B</td>
+    <td class=calcpict>C</td>
+    <td class=calcpict>C</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>Q</td>
+    <td class=calcpict>P</td>
+    <td class=calcpict>S</td>
+  </tr>
+  <tr>
+    <td class=calcpict>P</td>
+    <td class=calcpict>Q</td>
+    <td class=calcpict>Q</td>
+  </tr>
+  <tr>
+    <td class=calcpict>R</td>
+    <td class=calcpict>R</td>
+    <td class=calcpict>T</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>VL</td>
+    <td class=calcpict>VL</td>
+    <td class=calcpict>H</td>
+  </tr>
+  <tr>
+    <td class=calcpict>VL</td>
+    <td class=calcpict>VL</td>
+    <td class=calcpict>L</td>
+  </tr>
+  <tr>
+    <td class=calcpict>IL</td>
+    <td class=calcpict>I</td>
+    <td class=calcpict>H</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar><span class=courier>OutMap</span> has pixel values according to the classification given in the two-dimensional table <span class=courier>TwoDim</span>. Each combination of corresponding pixel values is assigned its new value.</p>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="calc.htm">Map and Table Calculation</a></p>
+<p class=seealsolinks><a href="ilwis_objects_two_dimensional_tables.htm">ILWIS objects : two-dimensional tables</a></p>
+
+</body

@@ -1,0 +1,162 @@
+<html>
+
+<head>
+<title>Keep scale of map view in layout</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map view, Layout editor, Layouts, Keep scale, Scale of map views in layout editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">View menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Keep Scale</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>You can use the <span class=arial>Keep Scale</span> option on the View menu or the <span class=arial>Keep Scale</span> button <img src="../images/annkeepscale.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a> to influence the behaviour of a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> when <i>dragging</i> the borders of the map view. </p>
+
+<p class=defnewpar>When you add a map view to a layout, you have to specify an initial scale for each map view. By default, this is the scale on which you saved the map view. However, if this would not fit on the paper size you specified for the layout, the scale of the map view is adapted so that it will fit the paper size. </p>
+
+<p class=defnewpar>When <i>for a selected map view</i>: </p>
+
+<ul>
+
+<li><span class=arial>Keep Scale</span> is active (button down): </li>
+
+        <p class=leftmargin03>the scale of the selected map view is fixed, </p>
+
+        <p class=leftmargin03>the scale of that map view will not change when dragging a border of a map view;</p>
+
+<li><span class=arial>Keep Scale</span> is not active (button up): </li>
+
+        <p class=leftmargin03>the scale of that map view can be changed by dragging a border of a map view. </p>
+
+</ul>
+
+<p class=defnewpar>You must decide on the scale of each map view, because a map view will be printed later on its specified scale, and in the layout there should be enough space around map views to position <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a>. </p>
+
+<p class=kopje>1. <span class=arial>Keep Scale</span> is active: </p>
+
+<p>When for a selected map view, <span class=arial>Keep Scale</span> is active: </p>
+
+<ul>
+
+<li>the <span class=arial>Keep Scale</span> button <img src="../images/annkeepscaledown.gif" align=bottom width="25" height="24"> appears <b>down</b>; </li>
+
+<li>the <span class=arial>Keep Scale</span> command is preceded by a <img src="../images/chkmark.gif" align=bottom width="7" height="7"> check mark. </li>
+
+</ul>
+
+
+<p class=defnewpar>When dragging the borders of the map view: </p>
+
+<ul>
+
+<li>the scale on which the map view is displayed remains the same; </li>
+
+<li>the size of the map view in the layout will usually change; </li>
+
+<li>the part of the study area shown by the map view will change.</li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>You can still change the scale of the map view manually by typing a scale for the map view in the Layout Management pane. </p>
+
+<p class=defnewpar>When you drag the <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of the map view to the outside: </p>
+
+<ul>
+
+<li>if the map view was displayed as an entire map, the map view will remain as it was; the scale of the map view, the size of the map view, and the displayed study area will all remain the same.</li>
+
+<li>if only part of the map view was displayed, then the displayed part of the study area will become larger, the size of the map view in the layout will become larger, but the scale on which the map view is displayed remains the same. </li>
+
+</ul>
+
+<p class=defnewpar>When you drag the size handles of the map view to the inside: </p>
+
+<ul>
+
+<li>the part of the study area displayed by the map view and the size of the map view in the layout will become smaller, but the scale on which the map view is displayed remains the same. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=kopje>2. <span class=arial>Keep Scale</span> is not active: </p>
+
+<p>When for a selected map view, <span class=arial>Keep Scale</span> is not active: </p>
+
+<ul>
+
+<li>the <span class=arial>Keep Scale</span> button <img src="../images/annkeepscale.gif" align=bottom width="22" height="22"> appears <b>up</b>; </li>
+
+<li>the <span class=arial>Keep Scale</span> command is <i>not</i> preceded by a <img src="../images/chkmark.gif" align=bottom width="7" height="7"> check mark. </li>
+
+</ul>
+
+
+<p class=defnewpar>When dragging the borders of the map view: </p>
+
+<ul>
+
+<li>the scale on which the map view is displayed will change;</li>
+
+<li>the size of the map view in the layout will change; </li>
+
+<li>the part of the study area shown by the map view will remain the same.</li>
+
+</ul>
+
+
+        <p class=defnewpar>When you drag the <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of the map view to the outside: </p>
+
+        <ul> 
+
+        <li>the (part of the) study area displayed by the map view will remain the same, but the size of the map view in the layout will become larger; the scale on which the map view is displayed will be automatically adjusted. </li>
+
+        </ul>
+
+        <p class=defnewpar>When you drag the size handles of the map view to the inside: </p>
+
+        <ul>
+
+        <li>the (part of the) study area displayed by the map view will remain the same, but the size of the map view in the layout will become smaller; the scale on which the map view is displayed will be automatically adjusted. </li>
+
+        </ul>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/layout_editor_print.htm">Print</a> (dialog box)</p>
+
+</body

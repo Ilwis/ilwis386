@@ -1,0 +1,509 @@
+<html>
+
+<head>
+<title>Edit coordinate system projection</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Coordinate system, Edit ..., Projections">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Edit Coordinate System Projection</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>View and/or edit a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> projection. A coordinate system projection defines the XY-coordinates in your maps, and optionally the projection of the maps. Coordinate systems are used by polygon, segment and point maps, and by the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of a raster map. </p>
+
+<p class=defnewpar>Specify the XY-coordinate boundaries of a map, and optionally supply projection information. You can specify projection information later on or right away. By supplying projection information, you will see the geographic coordinates (latitude, longitude in degrees) on the status bar of a map window for every position in a map. Furthermore, when a map has projection information, you will be able to transform the map to another coordinate system with another projection. </p>
+
+<p class=defnewpar>Depending on the projection you have or want to use, you will need to specify a number of projection parameters. </p>
+
+<ul>
+
+<li>	For calculation purposes, you must be absolutely sure about the required parameters for a selected projection. </li>
+
+<li>	For display purposes, you can make a number of different coordinate systems with different projections and/or different projection parameters and play around. </li>
+
+</ul>
+
+<p>For more information, refer to <a href="../ilwismen/select_projection.htm">Select Projection</a>.</p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when in the <a href="create_a_coordinate_system.htm">Create Coordinate System</a> dialog box, you selected to create a coordinate system of the type projection, </li>
+
+<li>	when in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, you double-click a coordinate system of the type projection,</li>
+
+<li>	when in the Catalog, you press the right mouse button on a coordinate system of the type projection, and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>,</li>
+
+<li>	when from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> in the Main window, you choose <span class=arial>Edit Object</span>  and subsequently you select a coordinate system of the type projection,</li>
+
+<li>	when from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in a map window which uses a coordinate system of the type projection, you choose <span class=arial>Coordinate System</span>; you can refine for instance projection information of the coordinate system.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the coordinate system. The description is visible on the status bar of the Main window when moving the mouse pointer over the coordinate system in the Catalog. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Min X, Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the minimum X-coordinate and the minimum Y-coordinate for this coordinate system. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Max X, Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the maximum X-coordinate and the maximum Y-coordinate for this coordinate system. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>The boundary values will only be used to determine:</p>
+
+<ul class=diaul>
+
+<li>	default map coordinate boundaries for vector maps, and </li>
+
+<li>	default coordinate boundaries for a georeference for raster maps.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=tipnospace>Tips:</p>
+
+<ol class=tipol>
+
+<li>	When you work with multiple neighbouring map sheets, it is advised to create one coordinate system in which the smallest minimum X and Y, and the largest maximum X and Y coordinates of all those map sheets are defined. Then, select this one coordinate system for all your maps which you will create. </li>
+
+<li>	When digitizing one single map sheet out of many neighbouring map sheets:</li>
+
+        <ul class=tipul>
+
+        <li>	create <b>one</b> coordinate system in which all the coordinates of the different map sheets fit,</li>
+
+        <li>	use this coordinate system for all your maps, </li>
+
+        <li>	as the boundaries of each map, use the coordinates of each separate map sheet.</li>
+
+        </ul>
+
+</ol>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Projection</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Click this button if you want to add or change projection information for the coordinate system. The <a href="../ilwismen/select_projection.htm">Select Projection</a> dialog box appears in which you can select a projection. In that dialog box, you can also find explanations for all available projections. </p>
+
+<p class=diabox>After selecting a projection, this Edit Coordinate System Projection dialog box will reappear in which you have to specify the parameters for the selected projection. These projection parameters, such as for instance Central Meridian, Central Parallel, Standard Parallels, Scale Factor, etc., depend on the projection you select. For more information on projection parameters see below. </p>
+
+<p class=diabox>When mapping the whole world, a hemisphere or large continents, you can assume that the earth is a sphere, i.e. there is no need to specify an ellipsoid or a datum.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Ellipsoid</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>This button appears when a projection is selected for which ellipsoidal transformations are available. When you click this button, the <a href="../ilwismen/select_ellipsoid.htm">Select Ellipsoid</a> dialog box will appear. You need to select an ellipsoid when you are making maps at medium scale, for instance when mapping areas like countries or provinces. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Datum</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>This button appears when a projection is selected for which datum transformations are available. When you click this button, the <a href="../ilwismen/select_datum.htm">Select Datum</a> dialog box will appear. You need to specify a datum when you are making maps at a rather large scale (e.g. 1: 20,000 or less), thus when mapping areas like small provinces, towns, infrastructure as sewage systems, water pipes, electricity cables, etc. By supplying a datum, you will be able to transform coordinates from one datum to another; differences between ellipsoid centers will be taken into account.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=diakopje>Projection parameters:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Projection:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>States the name of the selected projection.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Ellipsoid:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>States the name of the selected ellipsoid.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Datum:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>States the name of the selected datum (it automatically specifies the ellipsoid)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Sphere radius (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>This option is available when no ellipsoid or datum can or has been selected. That is correct when mapping the entire earth, a hemisphere or larger continents. It is assumed that the earth is a sphere and a spherical model can be used. As default a sphere of 6371007.0m is given. If you wish you can change this value.</p>
+
+<p class=diabox>In case you did select an ellipsoid or datum, the radius (equatorial and polar) of the ellipsoid is already defined; then, the name of the selected ellipsoid and/or datum will be displayed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>False Easting:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The value of the X-coordinate at the origin, i.e. at the center of projection. The overall increase of map X-coordinates ('eastings') indicates a <i>westward shift</i> of the redefined origin relative to the origin of projection. A reason to redefine the origin might be to obtain positive coordinates on the map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>False Northing:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The value of the Y-coordinate at the origin, i.e. at the center of projection. The overall increase of map Y-coordinates ('northings') indicates a <i>southward shift</i> of the redefined origin relative to the origin of projection. A reason to redefine the origin might be to obtain positive coordinates on the map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Central Meridian:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <i>line of longitude at the center of a projection</i>. Generally the basis for constructing the projection. (The specified values determine the center vertical line in the map). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Central Parallel:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The <i>line of latitude at the center of a projection</i>. (The specified values determine the center horizontal line in the map). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Scale factor:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Factor to specify the distortion of the map at the central meridian. The default scale factor is 1. A scale factor of 1 means that the scale at the central meridian, central parallel, or the two standard parallels is true, i.e. linearly and proportionally to the earth. By deliberately choosing a scale factor of for instance 0.9996, the scale of a map will be correct at two lines at an equal distance from the central meridian, central parallel, two standard parallels, etc. This will reduce the overall scale error in your map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_conical_popup.htm" onClick="return popup(this, 'notes')" >Conical</a>: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>When the cone is tangent to the earth surface at the central parallel the scale factor is one (no distortion at the central parallel). When the cone is secant through the earth surface, the two standard parallels along the central meridian will then have a scale factor of 1. So at the central parallel, the scale factor will be less then 1.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Cylindrical</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>At the place where the cylinder is tangent to the earth surface, the scale is 1. If the scale is smaller than 1, the cylinder is secant through the surface.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_azimuthal_popup.htm" onClick="return popup(this, 'notes')" >Azimuthal</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>At the point where the plane is tangent to the earth surface the scale is 1. If the scale is smaller than 1, the plane is secant through the surface.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Standard Parallel 1 / Standard Parallel 2:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>These parameters appear when a conical projection is chosen. The values for standard parallel 1 and 2 indicate the latitudes where the cone is secant through the earth surface. At the parallels the (east-west) scale of a map is correct. When specifying the same value for both standard parallels, the cone is tangent to the earth surface and latitude at this parallel is of true scale.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Latitude of True Scale:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>The plane of projection touches the globe along a single parallel, where the (east-west) specified scale factor (see above) is correct. The same as a central parallel.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Azimuth of Central Line of True Scale:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>For the Oblique Mercator projection: specify an angle (-90° &lt; angle &lt; 90°) between the central line and the central meridian. The central line is a great circle of true scale. The specified angle determines the great circle which goes through the center of projection. The center of projection is the point where the central meridian and central parallel meet. This azimuth is an angle 'east of north', i.e. clockwise starting at the central meridian. If the projected coordinates are not North-oriented, then the X-axis of the projection is pointing from the center of projection in the direction of the central line. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>North-Oriented XY-Coordinate System:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>For the Oblique Mercator projection: select this check box when the Y-axis in your map should be parallel to the direction of the central meridian where this central meridian intersects with the central parallel, i.e. in the center of of the projection.</p>
+
+<p class=diabox>Clear this check box to make the central line coincide with the X-axis of the projected coordinates (see also Azimuth of Central Line above). As a consequence, the Y-axis will not point to the North.</p>
+
+<p class=diabox>When you want to use an azimuth of 90, use the Mercator projection instead.</p>
+
+<p class=diabox>When you want to use an azimuth of 0, use the Transverse Mercator projection instead.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Height Perspective Center (m):</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>For the General Perspective projection: specify a value for the height (measured from the earth's spherical surface) from which you want to look at the earth or where your 'camera' is located. For Vertical Perspective projections, this value can be rather large, i.e. from space. For Tilted Perspective projections, this value is usually closer to the earth. The height of the perspective center will usually be less than 600,000,000 m.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Tilt of Projection Plane:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>For the General Perspective projection: when the default tilt = 0 is accepted, you will use a Vertical Perspective projection. The 'camera' precisely faces the center of the earth and the plane of projection is perpendicular to the line from the center of the earth and the 'camera', tangent to the earth in the projection center.</p>
+
+<p class=diabox>When a value &gt; 0 (angle) is specified for the tilt, you will use a Tilted Perspective projection. The 'camera' is not facing the center of the earth; the plane of projection is parallel to the line from the center of projection and the 'camera'. A tilt angle should normally be less than ± 20°. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Azimuth of Projection Y-axis:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>For the General Perspective projection: specify a value for the clockwise angle between the central (straight) meridian with respect to the Y-axis of the map (-90&#176; &#8804; angle &#8804; 90&#176;)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Northern Hemisphere:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>For a UPS or a UTM projection: select this box when the mapped area is situated on the northern hemisphere. Clear this box when the mapped area is situated on the southern hemisphere.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Zone:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For UTM projection or Gauss Boaga (Italy), Gauss (Colombia), Gauss-Kr&uuml;ger (Germany), Lambert Conformal Conic (France) projection: specify the zone number in which your mapped area is located. </p>
+
+<p class=diabox>For more information on UTM zones, see <a href="../ilwismen/projections_utm_zones.htm">UTM zones</a>; for more information on zone numbers for the other projections, see the <a href="../ilwismen/select_projection.htm">Select Projection</a> dialog box.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	ILWIS expects that all maps that you want to display together in one map window have the same coordinate system. Displaying maps with different coordinate systems in one map window is possible though:</li>
+
+        <ul>
+
+        <li>	when for both coordinate systems projection information is available, or </li>
+
+        <li>	when another transformation is possible, e.g. when a map is using a coordsys tiepoints or a coordsys formula which is related to the current coordsys of the map window. </li>
+
+        </ul>
+
+<p class=tiptext>	Then, the coordinates of a vector map are <i>temporary</i> and instantaneously transformed into the coordinate system that the map window is using at the moment. </p>
+
+<li>	Of course, you can also use the <a href="..//ilwisapp/popup/transform_polygons_popup.htm" onClick="return popup(this, 'notes')" >Transform Polygon Map</a>, <a href="..//ilwisapp/popup/transform_segments_popup.htm" onClick="return popup(this, 'notes')" >Transform Segment Map</a> and/or the <a href="..//ilwisapp/popup/transform_points_popup.htm" onClick="return popup(this, 'notes')" >Transform Point Map</a> operations to <i>permanently</i> transform coordinates of vector maps to another coordinate system, or the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation to permanently transform coordinates of raster maps to another georeference.</li>
+
+<li>	Once you have created a correct coordinate system it is advised to make it read-only.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a></p>
+
+<p class=seealsolinks><a href="create_a_coordinate_system.htm">Create Coordinate System</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/select_projection.htm">Select Projection</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/projections_suggested_projections.htm">Suggested projections</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/select_ellipsoid.htm">Select Ellipsoid</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/select_datum.htm">Select Datum</a> (dialog box)</p>
+
+</body

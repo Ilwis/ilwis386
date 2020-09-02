@@ -1,0 +1,1373 @@
+<html>
+
+<head>
+<title>Appendices : ILWIS as DDE server</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer, Bas Retsios">
+<meta name="keywords" content="DDE, Dynamic Data Exchange, Appendices">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Appendices</h1>
+
+<h1 class=secondline>ILWIS as DDE server (advanced)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>When you have programming experience and quite some ILWIS experience, you can write your own dedicated applications e.g. Visual Basic, Delphi, or C++. The applications will run on top of ILWIS. The end users of your application are not required to have any major ILWIS knowledge. </p>
+
+<p class=defnewpar>Purpose and opportunities:</p>
+
+<ul>
+
+<li>	create your own dialog boxes for input;</li>
+
+<li>	all difficult ILWIS calculations/expressions will be performed by your dedicated application, (i.e. not by the end user);</li>
+
+<li>	combine and present information which you get from ILWIS in your own user-interface.</li>
+
+<li>	combine the functionality of two or more different programs that act as DDE servers (e.g. ILWIS, Microsoft Word, Microsoft Excel, Microsoft Access, etc.).</li>
+
+</ul>
+
+<p class=defnewpar>In short, you can:</p>
+
+<ol>
+
+<li>	Access or execute all ILWIS commands, all MapCalc operators and functions, all TabCalc operators and functions, all ILWIS expressions, and all ILWIS script commands (<a href="#system_execute"><span class=bookmark>SYSTEM - EXECUTE</span></a>).</li>
+
+<li>	Retrieve or calculate simple information of a map, table or georeference, such as the value in a map at a certain coordinate, the number of rows (or columns) in a raster map, the minimum (or maximum) value in a map, the value as found in a certain record and column in a table, etc. The value to be retrieved or calculated is expected to be <i>one</i> value, string etc. only (<a href="#calc_request"><span class=bookmark>CALC - REQUEST</span></a>).</li>
+
+<li>	At the position of a mouse click in a map window, retrieve the value in a map or the coordinates at that mouse click, i.e. simulate Pixel Info (<a href="#coord"><span class=bookmark>COORD</span></a>).</li>
+
+</ol>
+
+<h2 id="ddegeneral">GENERAL INFORMATION</h2>
+
+<p class=kopjeaftertitlesub>What is DDE?</p>
+
+<p>DDE is an abbreviation for Dynamic Data Exchange. Two Windows programs which both support DDE can exchange data with each other. The data transfer is called a conversation. A conversation takes place between a DDE server and a DDE client. A DDE client can transfer data (e.g. expressions/commands or any other information) to a DDE server. The server then replies with a response to the client; the response can either be an acknowledgement that the data was processed, or the result of a request for which the client asked. The DDE client can also 'subscribe' to data that the server sends to all subscribed clients every time a certain event occurs. </p>
+
+<p class=defnewpar>ILWIS always acts as the <i>DDE server</i>:</p>
+
+<ul>
+
+<li>	executing the text (command, formula, expression) that is sent via DDE as if it were a script command;</li>
+
+<li>	replying to the client by providing or calculating requested information;</li>
+
+<li>	supplying information at a mouse click in a map window to DDE clients that 'subscribed' to such information.</li>
+
+</ul>
+
+<p>The DDE server or source (ILWIS) thus <i>supplies</i> data to another application through a DDE link.</p>
+
+<p class=defnewpar>The <i>DDE client</i> is a program written in Visual Basic, Delphi, C++, etc. in which:</p>
+
+<ul>
+
+<li>	you may have built your own user-interface for any necessary input;</li>
+
+<li>	you may have defined the commands, formulas, expressions that ILWIS should execute for you;</li>
+
+<li>	you may have built your own user-interface for the output.</li>
+
+</ul>
+
+<p>The DDE client or destination is thus the application that <i>requests</i> and <i>receives</i> data.</p>
+
+<p class=defnewpar>In this Help topic, a general overview of DDE is given, sufficient to start building applications upon ILWIS. Some sample applications which show how DDE can be correctly used and which give some useful examples are supplied on the ILWIS CD.</p>
+
+<p class=defnewpar>For information on the programming process and required syntax of your dedicated application program, refer to the documentation of Visual Basic, Delphi or C++, etc., i.e. the language in which you are programming.</p>
+
+<p class=kopje>Introduction to DDE:</p>
+
+<p>A DDE conversation in a DDE capable environment can be established as follows (ILWIS independent): </p>
+
+<ol>
+
+<li>Set the DDE Link <b>Topic</b>. This tells the Windows DDE manager with which DDE server you wish to communicate, and it tells the DDE server which one of its available 'topics' you wish to use. Depending on the programming language used, you may need to specify the DDE server separately.</li>
+
+<li>Set the DDE Link <b>Mode</b>. The Link Mode can be one of the following: <i>none</i>, <i>manual</i> or <i>automatic</i>. Setting the mode to manual or automatic will actually establish the DDE link between the client and the server. An existing link is cleared and freed when the mode is set to none.</li>
+
+<li>Set a Link <b>TimeOut</b> if needed. The Link TimeOut has to be set to 10x the number of seconds that the application should wait before it concludes that there is a problem with the DDE communication (-1 means 'wait forever'). </li>
+
+<li>If the intention is to do a Link Request, you may first need to set the DDE Link <b>Item</b> (server dependent). The DDE Link Item does not have to be specified in other cases. Depending on the programming language used, the Link Item may be a parameter of the Link Request method instead of a link property. If the intention is to use automatic mode, it is recommended to set this property to a valid value before setting the Link Mode to establish the link. However, once the link is established, this property can safely be changed to a new valid value. </li>
+
+<li>When manual mode is used, call Link <b>Execute</b> or Link <b>Request</b>; when automatic mode is used, just wait. </li>
+
+        <ul>
+
+        <li>Link Execute passes a parameter to the server; the server can read it and act accordingly. </li>
+
+        <li>Link Request makes the server respond with the result of a calculation; the calculation may have been specified in Link Item. </li>
+
+        <li>In automatic mode, the server will automatically send information 'asked for' through the Link Topic and Link Item parameters; the information will be sent every time a certain event occurs (this is up to the server).</li>
+
+        </ul>
+
+</ol>
+
+<p class=defnewpar> Furthermore a DDE server usually responds to some standard DDE calls with which a client can find out, for instance, which topics are available by the DDE server and which data exchange formats are supported by the DDE server. </p>
+
+<p class=kopje>Language dependent DDE syntax:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><b>DDE Link Topic</b></p>
+
+<p class=times>LinkTopic (Visual Basic)</p>
+
+<p class=times>SetLink (Delphi)</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p><b>DDE Link Mode</b></p>
+
+<p class=times>LinkMode (Visual Basic)</p>
+
+<p class=times>ConnectMode (Delphi)</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=times>0 = None</span></p>
+
+<p class=times>1 = Automatic</span></p>
+
+<p class=times>2 = Manual</span></p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p><b>DDE Request method</b> </p>
+
+<p class=times>LinkRequest (Visual Basic) </p>
+
+<p class=times>RequestData (Delphi) </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p><b>DDE Execute method</b> </p>
+
+<p class=times>LinkExecute (Visual Basic) </p>
+
+<p class=times>ExecuteMacro (Delphi) </p>
+
+
+<p class=kopje>Using the topics of the ILWIS DDE server: </p>
+
+<p>The ILWIS DDE server has three available <b>topics</b>: </p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="84">
+<ul>
+<li><b>system</b></li>
+</ul>
+</td>
+<td>
+<p>to execute ILWIS commands or ILWIS expressions, and for requesting the server's properties;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="84">
+<ul>
+<li><b>calc</b></li>
+</ul>
+</td>
+<td>
+<p>to request results of some calculations; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="84">
+<ul>
+<li><b>coord</b></li>
+</ul>
+</td>
+<td>
+<p>to 'subscribe' to information available at mouse clicks in a map window, or to request the latest version of this information. </p>
+</td>
+</tr>
+</table>
+
+
+<p class=defnewpar>The <b>system</b> topic is meant to make the server execute ILWIS commands and ILWIS expressions; it is the only topic that will respond to the DDE <b>Execute</b> method. The ILWIS commands and expressions are passed (as a string) by the required parameter of this method. </p>
+
+<p>The 'system' topic will also respond to Link Request methods. In that case, the only possible values for the Link Item property are 'topics', 'sysitems', 'status' and 'format'. The responses are only informative and are implemented so that ILWIS complies with the requirements of the DDE protocol. </p>
+
+<p class=defnewpar>The <b>calc</b> topic will only respond to the Link <b>Request</b> method, in which case the value of the Link Item property is used to pass the expression. </p>
+
+<p class=defnewpar>The <b>coord</b> topic will automatically respond upon clicks in a map window when the mode is set to Automatic, i.e. no Request is required; when the mode is set to Manual, the 'coord' topic will respond to the Request method.  In both cases, the only possible values for the Link Item property are <i>.X</i>, <i>.Y</i>, <i>.XY</i> and <i>mapname.ext</i>. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>Thus, the three Link Topics that are implemented in ILWIS and the Methods to access the topics are: </p>
+
+<ul>
+
+<li>for the <b>system</b> topic, use the Link <b>Execute</b> method, see section <a href="#system_execute"><span class=bookmark>SYSTEM - EXECUTE</span></a>, </li>
+
+<li>for the <b>calc</b> topic, use the Link <b>Request</b> method, see section <a href="#calc_request"><span class=bookmark>CALC - REQUEST</a></span>, </li>
+
+<li>for the <b>coord</b> topic, it is optional to use the Link <b>Request</b> method, see section <a href="#coord"><span class=bookmark>COORD</a></span>. </li>
+
+</ul>
+
+<p>Detailed information can be found in the sections below. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>For more information on ILWIS syntax that you may wish to use, refer to: </p>
+
+<ul>
+
+<li>	<b>To execute commands/expressions</b> (<a href="#system_execute"><span class=bookmark>SYSTEM - EXECUTE</span></a>): <a href="appendices_ilwis_commands.htm">Appendices : ILWIS commands</a>, <a href="calc_aaf.htm">Map and Table Calculation : Functional overview of operators and functions</a>, <a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a>, <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language</a>;</li>
+
+<li>	<b>To retrieve or calculate a single value</b> (<a href="#calc_request"><span class=bookmark>CALC - REQUEST</span></a>): <a href="calc_aaf.htm#coordinate_functions">Coordinate functions</a>, <a href="calc_aaf.htm#point_functions">Point functions</a>, <a href="calc_aaf.htm#data_property_functions">Data property functions</a>, <a href="calc_aaf.htm#color_functions">Color functions</a>;</li>
+
+<li>	<b>To retrieve information at mouse clicks</b> (<a href="#coord"><span class=bookmark>COORD</span></a>): <a href="../ilwis/pixel_information_window_functionality.htm">Pixel information window : functionality</a>.</li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	For more information about how to set up and close a DDE conversation, refer to the related documentation of Visual Basic, Delphi or C++, etc. Also check the sample applications available on the ILWIS CD. </li>
+
+<li>	Make sure that ILWIS, i.e. the DDE server program, is running during the entire DDE conversation. Your program may hang or crash if no DDE server responds to a request.</li>
+
+<li>	Mind that all data sent to ILWIS and all 'values' returned by ILWIS are in <i>text</i> format (strings). </li>
+
+</ul>
+
+
+<h2 id="system_execute">1. SYSTEM - EXECUTE - MANUAL MODE</h2>
+
+<p>Use this DDE conversation method to perform ILWIS tasks as in an <a href="ilwis_objects_scripts.htm">ILWIS script</a> in order to define and/or calculate an ILWIS map, table, column, etc. or to display an ILWIS object, without the need to actually create an ILWIS script.</p>
+
+<p class=defnewpar>Through a DDE link, you can assign any task to ILWIS that can be handled by an ILWIS script. You can for instance:</p>
+
+<ul>
+
+<li>	open an ILWIS dialog box on your screen;</li>
+
+<li>	show an ILWIS map or table on your screen;</li>
+
+<li>	perform any ILWIS MapCalc/TabCalc formula;</li>
+
+<li>	perform any ILWIS operation;</li>
+
+<li>	use the additional ILWIS script commands.</li>
+
+</ul>
+
+<p class=tip>DDE syntax for SYSTEM - EXECUTE</p>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext>To use the SYSTEM - EXECUTE conversation method in your application program:
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<ul class=tipul>
+
+<li>the DDE <b>topic</b> should be <b>&quot;ilwis|system&quot;</b> <br>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+        or server=&quot;ilwis&quot; and topic=&quot;system&quot; depending on the language you're using; </li>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<li>use the DDE <b>Execute</b> method, its parameter is a string containing one or more ILWIS command(s) or expression(s); the ILWIS commands and expressions will be executed by ILWIS as if running an ILWIS script. </li>
+
+        <ul class=tipul>
+
+        <li>You can establish one DDE link after the other, each time using a DDE Execute command and specifying <i>one</i> ILWIS expression, or</li>
+
+        <li>You can also use one DDE Execute command, and specify <i>all</i> ILWIS expressions in the string; separate the expressions by semicolons. <br>
+
+        Note that this is only valid for ILWIS, as it differs from the method provided by the DDE protocol in which all commands are enclosed in square brackets ('[' and ']'). The square brackets are also supported by ILWIS for compatibility reasons. </li>
+
+        </ul>
+</ul>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext>The string containing the ILWIS command(s)/expression(s) to be executed is sent to the server; this string is a parameter to the DDE method 'Execute'; each call to the method 'Execute' is a request of the client to the server to execute the command(s)/expression(s) that are contained in the string.</p>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext>Some examples of the ILWIS commands, MapCalc/TabCalc formulae, ILWIS operation expressions, and ILWIS Script commands that may be used are given below. </p>
+
+<p class=kopje>DDE example for SYSTEM - EXECUTE (Visual Basic):</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=times>' Assumption: <i>MyControl</i> is an existing object of class <i>Control</i> (e.g. a text box in the Visual Basic form) </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><span class=times><i>MyControl</i>.Link<b>Topic</b> = <b>&quot;ilwis|system&quot;</b></span></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><span class=times><i>MyControl</i>.Link<b>Mode</b> = 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'mode Manual, to start the DDE conversation</span></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><span class=times><i>MyControl</i>.Link<b>Execute </b>&quot;Tmb1Edge=MapFilter(tmb1,edgesenh);calc Tmb1Edge.mpr;open -noask Tmb1Edge.mpr&quot;</span></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><span class=times>' The string on the previous line contains the ILWIS commands and expressions to be executed, separated by a ';'</span></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><span class=times><i>MyControl</i>.Link<b>Mode</b> = 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'mode None, to close the DDE conversation </span></p>
+
+<p class=defnewpar>Map TMB1 is filtered with the edge enhancement filter, the output map TMB1Edge is calculated and displayed on the screen. </p>
+
+<p class=kopje>Some examples of ILWIS commands, MapCalc/TabCalc formulae, ILWIS expressions for operations, and ILWIS script commands which can be used with SYSTEM - EXECUTE:</p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=times>filter</p>
+
+</td>
+<td valign="top">
+<p class=times>Opening the dialog box of the Filter operation on the screen.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>open MAP.ext -noask </p>
+
+</td>
+<td valign="top">
+<p class=times>Displaying raster, polygon, segment or point map MAP.ext without a Display Options dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times><i>see <a href="appendices_ilwis_commands.htm">Appendices : ILWIS commands</i> </a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>OUTMAP = MAP1 + MAP2 </p>
+
+</td>
+<td valign="top">
+<p class=times>Defining output map OUTMAP by performing a MapCalc formula. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>OUTMAP = NDVI(MAP1, MAP2) </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Defining output map OUTMAP by performing a MapCalc formula to calculate an NDVI map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>OUTMAP{dom=suitable}= IFF((SOIL=&quot;clay&quot;) AND (LANDUSE=&quot;agriculture&quot;, &quot;very suitable&quot;, &quot;unsuitable&quot;) </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Defining output map OUTMAP using class domain Suitable by performing a MapCalc formula with the IFF function. </p>
+
+</td>
+</tr>   
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times><i>See <a href="calc_aaf.htm">Map calculation : overview of operators and functions</i> </a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>tabcalc OUTTABLE OUTCOLUMN = COLUMN1 + COLUMN2 </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Defining output column OUTCOLUMN in existing table OUTTABLE by performing a TabCalc formula. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>tabcalc OUTTABLE OUTCOLUMN = ColumnAggregateAvg(COLUMNNAME, WeightColumn) </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Defining output column OUTCOLUMN in existing table OUTTABLE by a column operation which aggregates values of column COLUMNNAME using weight values of column WeightColumn. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>tabcalc OUTTABLE OUTCOLUMN = ColumnJoinAvg(TableName, ColumnName, GroupBy) </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Defining output table OUTTABLE and output column OUTCOLUMN by performing a Join operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times><i>See <a href="calc_aaf.htm">Table calculation : overview of operators and functions</i> </a></p>
+
+<p class=times><a href="calc_aaf.htm#aggregate_functions"><i>Aggregate functions</i></a></p>
+
+<p class=times><a href="calc_joining_columns_from_other_tables.htm"><i>Table calculation : joining columns from other tables</i></a></p>
+
+</td>
+</tr>                       
+<tr>
+<td valign="top" width=180>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>OUTMAP = MapFilter(MAP, filtername) </span></p>
+
+</td>
+</tr>                       
+<tr>
+<td valign="top" width=180>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=times>Defining output map OUTMAP by performing the ILWIS Filter operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>OUTTABLE = TableCross(MAP1, MAP2) </span></p>
+
+</td>
+</tr>                       
+<tr>
+<td valign="top" width=180>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=times>Defining output table OUTTABLE by performing the ILWIS Cross operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times><i>See <a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</i> </a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>calc MAP.ext </p>
+
+</td>
+<td valign="top">
+<p class=times>Calculating output raster, polygon, segment or point map MAP.ext. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>open MAP.ext -noask </p>
+
+</td>
+<td valign="top">
+<p class=times>Displaying map MAP.ext. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>crdom suitable -type=class </p>
+
+</td>
+<td valign="top">
+<p class=times>Creating class domain Suitable. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>additemtodomain suitable &quot;very suitable&quot; </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Adding class &quot;very suitable&quot; to domain Suitable. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>additemtodomain suitable &quot;unsuitable&quot; </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Adding class &quot;not suitable&quot; to domain Suitable. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>cd\<i>path</i></p>
+
+</td>
+<td valign="top">
+<p class=times>Make a certain directory the current ILWIS working directory. <b>It is strongly advised to first  set the ILWIS working directory to the directory where your ILWIS data is located!</b> If you don't set the path to the working directory, you need to use full paths to refer to ILWIS data. </p>
+
+<p class=times><i>See <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language</i></a></p>
+
+</td>
+</tr>
+</table>
+
+
+<h2 id="calc_request">2. CALC - REQUEST - MANUAL MODE</h2>
+
+<p>Use this DDE conversation method to retrieve or calculate a single value as using the <a href="calc_simple_calculators.htm">pocket line calculator</a>, in order to get information from ILWIS and use this in your dedicated application program.</p>
+
+<p class=tip>DDE syntax for CALC - REQUEST </p>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext>To use the CALC - REQUEST conversation method in your application program: 
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<ul class=tipul>
+
+<li>the DDE <b>topic</b> should be <b>&quot;ilwis|calc&quot;</b> <br>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+        or server=&quot;ilwis&quot; and topic=&quot;calc&quot; depending on the language you're using; </li>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<li>in the Link <b>Item</b> property, specify an ILWIS expression (string) to be evaluated; </li>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<li>use the DDE <b>Request</b> method. </li>
+
+</ul>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext>By applying the DDE Request method on a client control in your application, the server is asked to evaluate the expression. The result is then made available as the value of the used control object. </p>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext>Some examples of MapCalc/TabCalc functions that retrieve or calculate a single value or a single string are given below. </p>
+
+<p class=kopje>DDE example for CALC - REQUEST (Visual Basic):</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=times>' Assumption: <i>TextResult</i> is an existing object of class <i>Control</i> (e.g. a text box in the Visual Basic form)</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><span class=times><i>TextResult</i>.Link<b>Topic</b> = </span><span class=times><b>&quot;ilwis|calc&quot;</b></span></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><span class=times><i>TextResult</i>.Link<b>Mode</b> = 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'mode Manual, to start the DDE conversation</span></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><span class=times><i>TextResult</i>.Link<b>Item</b> = &quot;MAPVALUE(tmb1, coord(800000,8080000))&quot;</span></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><span class=times>' The string on the previous line sets the expression to be evaluated at the next request</span></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><span class=times><i>TextResult</i>.Link<b>Request</b></span></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><span class=times><i>TextResult</i>.Link<b>Mode</b> = 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'mode None, to close the DDE conversation</span></p>
+
+<p class=defnewpar>The value in map TMB1 at the specified XY-coordinate will be retrieved from ILWIS and displayed in the <span class=times><i>TextResult</i></span> control in the dialog box of your application.</p>
+
+<p class=kopje>Examples of ILWIS MapCalc/TabCalc functions that retrieve/calculate a single value or a single string:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>MAPVALUE (MapName.ext, COORD(99834,299287))</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieving the class name, ID or value in raster, polygon, segment or point map MapName.ext at specified coordinates.</p>
+
+</td>
+</tr>                    
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>RASVALUE(RasMapName, rownr, colnr) </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieving the class name, ID or value in raster map RasMapName at specified row and column.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>TRANSFORM(COORD(234982,2934729,CurrentCoordSys), OtherCoordSys) </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Calculate/Transforms coordinate COORD(X,Y) from the current coordinate system to a coordinate in the other coordinate system</p>
+
+</td>
+</tr>                       
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>MAPCRD(RasMapName, rownr, colnr) </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve from raster map RasMapName the XY-coordinate at specified row and column.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>MINCRDX(MapName.ext)</p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve the minimum X-coordinate of raster, polygon, segment or point map MapName.ext</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times><i>See <a href="calc_aaf.htm#coordinate_functions">Coordinate functions</i></a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>PNTNR(PntMapName, &quot;Laguna Santa Rosa&quot;) </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve point number of point &quot;Laguna Santa Rosa&quot;.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>PNTVAL(PntMapName, Pntnr)</p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve the class name, ID or value of point number Pntnr in point map PntMapName. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>PNTCRD(PntMapName, Pntnr)</p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve the XY-coordinate of the point stored as Pntnr in point map PntMapName. </p>
+
+</td>
+</tr>              
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>PNTCRD(PntMapName, &quot;Laguna Santa Rosa&quot;) </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve the XY-coordinate of the point called &quot;Laguna Santa Rosa&quot;.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times><i>See <a href="calc_aaf.htm#point_functions">Map and Table Calculation : Functional overview of operators and functions</a></i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>PIXSIZE(RasMapName)</p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve the pixel size of raster map RasMapName.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>MAPROWS(RasMapName)</p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve the number of rows in raster map RasMapName.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>MAPMIN(MapName.ext)</p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve/calculate the minimum value in raster, polygon, segment or point map MapName.ext. Mind: this function works only on maps with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>MAPMAX(MapName.ext)</p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve/calculate the maximum value in raster, polygon, segment or point map MapName.ext. Mind: this function works only on maps with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>TBLRECS(TableName.ext)</p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve the number of records of table TableName. When you specify an extension, you can also access representations, domains, histograms, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=times>TBLCOLS(TableName.ext)</p>
+
+</td>
+<td valign="top">
+<p class=times>Retrieve the number of columns of table TableName. When you specify an extension, you can also access representations, domains, histograms, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before><span class=times>TBLVALUE(TableName.ext, &quot;ColumnName&quot;, RecNr | &quot;Class or ID&quot;)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<td valign="top">
+<p class=times>Retrieve from table TableName.ext, the value as found in column &quot;ColumnName&quot; and in record number RecNr (value) or in record &quot;ClassName&quot; or &quot;ID&quot; (string). When you specify an extension, you can also access representations, domains, histograms, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=times><i>See <a href="calc_aaf.htm#data_property_functions">Data property functions</i></a></p>
+</td>
+</tr>
+</table>
+
+<h2 id="coord">3. COORD - AUTOMATIC AND MANUAL MODE</h2>
+
+<p>Use this DDE conversation method to retrieve value or coordinate information from maps <i>at the position of a mouse click in a map window</i> as in <a href="../ilwis/pixel_information_window_functionality.htm">Pixel Info</a>, in order to get information from ILWIS and use this in your dedicated application program. </p>
+
+<p>When an analog map is referenced on a digitizer tablet, you can also use the digitizer cursor to retrieve this information. For more information, see <a href="../ilwis/pixel_information_window_functionality.htm">Pixel information window : functionality</a>. </p>
+
+<p class=defnewpar>If Automatic Mode is used, each mouse click will be automatically sent to your DDE application; this method 'subscribes' your application to (a subset of) the information that ILWIS can send to subscribed DDE clients on every mouse click. </p>
+
+<p class=defnewpar>If Manual Mode is used, the 'value' of the latest mouse click has to be requested for. </p>
+
+<p class=tip>DDE syntax for COORD</p>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext>To use the COORD conversation method in your application program: </p>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<ul class=tipul>
+
+<li>the DDE <b>topic</b> should be <b>&quot;ilwis|coord&quot;</b> <br>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+        or server=&quot;ilwis&quot; and topic=&quot;coord&quot; depending on the language you're using; </li>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<li>set the Link <b>Item</b> property to either <b>.X</b>, <b>.Y</b>, <b>.XY</b> or <b><i>mapname.ext</i></b>. </li>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><b>.X</b></p>
+
+</td>
+<td valign="top">
+<p>To retrieve the X-coordinate of any raster, polygon, segment or point map at the position of a mouse click.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><b>.Y</b></p>
+
+</td>
+<td valign="top">
+<p>To retrieve the Y-coordinate of any raster, polygon, segment or point map at the position of a mouse click.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><b>.XY</b></p>
+
+</td>
+<td valign="top">
+<p>To retrieve the XY-coordinate as (X, Y) of any raster, polygon, segment or point map at the position of a mouse click.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><b><i>MapName.ext</i></b></p>
+
+</td>
+<td valign="top" >
+<p>To get the class name, ID or value from any raster, polygon, segment or point map <i>MapName.ext</i> at the coordinate of the mouse click. It is not required that <i>Map MapName.ext</i> is currently displayed in the map window.</p>
+
+</td>
+</tr>
+</table>
+
+</ul>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext>When specifying <b>Automatic Mode</b>, <i>any click in a map window</i> will automatically update the value of the object in the dedicated application program. This happens in the same way as with the CALC conversation method: the result becomes available as the value of the control object used to do the DDE conversation. 
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext>When using <b>Manual Mode</b>, information of the <i>latest click</i> in a map window will be sent to the dedicated application program upon making a <b>Request</b>.</p>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext>The <b>Timeout</b> can be used to determine how long a control waits before assuming that there is a problem with the DDE conversation. A Timeout of -1 will keep the DDE conversation active forever.</p>
+
+<p class=kopje>DDE example for COORD, using Mode Automatic (Visual Basic):</p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p class=times>' Assumption: <i>CurrVal</i> and <i>CurrX</i> are existing objects of class <i>Control</i> (e.g. text boxes in the Visual Basic form)</p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p class=times><i>CurrVal</i>.Link<b>Topic</b> = <b>&quot;ilwis|coord&quot;</b></p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p class=times><i>CurrVal</i>.Link<b>Item</b> = &quot;Landuse.mpa&quot;</p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p class=times><i>CurrVal</i>.Link<b>Mode</b> = 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'mode Automatic</p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p class=times><i>CurrVal</i>.Link<b>TimeOut</b> = <b>-1</b></p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p class=times><i>CurrX</i>.Link<b>Topic</b> = <b>&quot;ilwis|coord&quot;</b></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=times><i>CurrX</i>.Link<b>Item</b> = &quot;<b>.X</b>&quot;</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=times><i>CurrX</i>.Link<b>Mode</b> = 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'mode Automatic</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=times><i>CurrX</i>.Link<b>TimeOut</b> = <b>-1</b></p>
+
+<p class=emptyline>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=72>
+<p class=times><i>CurrVal</i></p>
+
+</td>
+<td valign="top">
+<p>will give you the value, class name or ID in polygon map Landuse at the position of a mouse click in a map window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=times><i>CurrX</i></p>
+
+</td>
+<td valign="top">
+<p>will give you the X-coordinate of the click in a map window.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<h2 id="dde_syntax">OVERVIEW of DDE syntax in ILWIS</h2>
+
+<table cellspacing=1 width="100%">
+<tr>
+<td valign="top" width="11%">
+<p><u><b>Server</b></u></p>
+
+</td>
+<td valign="top" width="13%">
+<p><u><b>Topic</b></u></p>
+
+</td>
+<td valign="top" width="25%">
+<p><u><b>Item</b></u></p>
+
+</td>
+<td valign="top" width="30%">
+<p><u><b>Method</b></u></p>
+
+</td>
+<td valign="top" width="20%">
+<p><u><b>Mode</b></u></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="11%">
+<p><b>ILWIS</b></p>
+
+</td>
+<td valign="top" width="13%">
+<p><b>SYSTEM</b></p>
+
+</td>
+<td valign="top" width="25%">
+<p>&lt;not used&gt;</p>
+
+</td>
+<td valign="top" width="30%">
+<p><b>EXECUTE</b></p>
+
+<p>Specify any ILWIS command, a MapCalc/TabCalc formula or an expression as in an ILWIS script.</p>
+
+<p>Separate multiple expressions by semicolons.</p>
+
+</td>
+<td valign="top" width="20%">
+<p><b>Mode Manual</b></p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="11%">
+<p><b>ILWIS</b></p>
+
+</td>
+<td valign="top" width="13%">
+<p><b>SYSTEM</b></p>
+
+</td>
+<td valign="top" width="25%">
+<p><b>TOPICS</b></p>
+
+</td>
+<td valign="top" width="30%">
+<p><b>REQUEST</b></p>
+
+</td>
+<td valign="top" width="20%">
+<p><b>Mode Manual</b></p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="11%">
+<p><b>ILWIS</b></p>
+
+</td>
+<td valign="top" width="13%">
+<p><b>SYSTEM</b></p>
+
+</td>
+<td valign="top" width="25%">
+<p><b>SYSITEMS</b></p>
+
+</td>
+<td valign="top" width="30%">
+<p><b>REQUEST</b></p>
+
+</td>
+<td valign="top" width="20%">
+<p><b>Mode Manual</b></p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="11%">
+<p><b>ILWIS</b></p>
+
+</td>
+<td valign="top" width="13%">
+<p><b>SYSTEM</b></p>
+
+</td>
+<td valign="top" width="25%">
+<p><b>STATUS</b></p>
+
+</td>
+<td valign="top" width="30%">
+<p><b>REQUEST</b></p>
+
+</td>
+<td valign="top" width="20%">
+<p><b>Mode Manual</b></p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="11%">
+<p><b>ILWIS</b></p>
+
+</td>
+<td valign="top" width="13%">
+<p><b>SYSTEM</b></p>
+
+</td>
+<td valign="top" width="25%">
+<p><b>FORMAT</b></p>
+
+</td>
+<td valign="top" width="30%">
+<p><b>REQUEST</b></p>
+
+</td>
+<td valign="top" width="20%">
+<p><b>Mode Manual</b></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="11%">
+<p><b>ILWIS </b></p>
+
+</td>
+<td valign="top" width="13%">
+<p><b>CALC</b></p>
+
+</td>
+<td valign="top" width="25%">
+<p>Specify a MapCalc/TabCalc formula that will retrieve or calculate 1 value.</p>
+
+</td>
+<td valign="top" width="30%">
+<p><b>REQUEST</b></p>
+
+</td>
+<td valign="top" width="20%">
+<p><b>Mode Manual</b></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="11%">
+<p><b>ILWIS</b></p>
+
+</td>
+<td valign="top" width="13%">
+<p><b>COORD</b></p>
+
+</td>
+<td valign="top" width="25%">
+<p><b>.X</b></p>
+
+<p>Get X-coord at mouse click in map window.</p>
+
+</td>
+<td valign="top" width="30%">
+<p><b>REQUEST</b> only for Mode Manual.</p>
+
+</td>
+<td valign="top" width="20%">
+<p><b>Mode Automatic</b> or <b>Mode Manual</b></p>
+
+<!--<p><b>Timeout = -1</b></p>//-->
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="11%">
+<p></p>
+
+</td>
+<td valign="top" width="13%">
+<p></p>
+
+</td>
+<td valign="top" width="25%">
+<p><b>.Y</b></p>
+
+<p>Get Y-coord at mouse click in map window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="11%">
+<p></p>
+
+</td>
+<td valign="top" width="13%">
+<p></p>
+
+</td>
+<td valign="top" width="25%">
+<p><b>.XY</b></p>
+
+<p>Get (X,Y)-coord at mouse click in map window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="11%">
+<p></p>
+
+</td>
+<td valign="top" width="13%">
+<p></p>
+
+</td>
+<td valign="top" width="25%">
+<p><b>MapName.ext</b></p>
+
+<p>Get value from raster, polygon, segment or point map MapName.ext at the coordinate of the mouse click.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <b>topic</b> identifies the source application and topic. </p>
+
+<p>The <b>item</b> identifies the particular data (the item) that the server sends to the client. Under topic SYSTEM, the items TOPICS, SYSITEMS, STATUS and FORMAT (that resp. return the server's topics, the system items, the status and the supported data formats) are only there so that ILWIS complies to the DDE protocol. Most likely you will not need to use these items in your application.</p>
+
+<p>The <b>execute method</b> sends a command string to the conversation partner; the <b>request method</b> asks the server to update the property values of a client's DDE control.</p>
+
+<p>The <b>mode</b> identifies the type of link that is used during a DDE conversation. It lets the application determine whether the client control receives new values anytime the data changes in the source ('automatic' or 'hot link'). Alternatively, the mode lets the application decide whether the client must explicitly request the updated values ('manual' or 'cold link').</p>
+
+<p>The <b>timeout</b> determines how long a control waits before assuming that there is a problem with the DDE conversation.</p>
+
+<p class=defnewpar>Topic, Item, Mode and Timeout are the properties of a DDE conversation.</p>
+
+<p>Execute and Request are methods that act as DDE commands.</p>
+
+
+</body

@@ -1,0 +1,178 @@
+<html>
+
+<head>
+<title>Raster to polygons : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Raster to polygons">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Raster to polygons</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Raster to Polygons operation extracts polygons from units in a raster map. The output polygon map uses the same domain as the input raster map, i.e. the class names or IDs in the input raster map will also be used for the polygons in the output polygon map. No polygons are created for pixels with the undefined value. </p>
+
+<p class=defnewpar>The polygons in the output map are derived from areas of pixels in the input raster map:</p>
+
+<ul>
+
+<li>	where pixels have the same class name or ID or </li>
+
+<li>	where pixels have exactly the same value (only possible via the command line).</li>
+
+</ul>
+
+<p class=defnewpar>You can choose to create polygons:</p>
+
+<ul>
+
+<li>	from 4-connected pixels: areas of pixels are found where pixels with the same class name, ID or value are horizontally or vertically connected; or </li>
+
+<li>	from 8-connected pixels: areas of pixels are found where pixels with the same class name, ID or value are horizontally, vertically or diagonally connected.</li>
+
+</ul>
+
+<p>For more information on constructing areas of 4 or 8-connected pixels, see <a href="areanumbering_functionality.htm">Area numbering : functionality</a>. </p>
+
+<p class=defnewpar>Furthermore, you can specify whether or not to smooth the boundaries of the output polygons. </p>
+
+<p class=defnewpar>The Raster to Polygons operation attempts to create polygons for neighbouring pixels which have the same class name or ID or exactly the same value. In an input map which uses a class or ID domain, the areas with a certain class name or ID are clearly distinct, thus, it is rather simple to find the areas. In the dialog box of this operation, you can therefore only select class or ID maps. On the command line, you can also use <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a> or images as input. However, in a value map or an image, there are usually no distinct areas with exactly the same value; the values of neighbouring pixels may be similar but are usually not exactly the same. As the operation attempts to find areas where neighbouring pixels have exactly the same value, the resulting output map will usually contain very many areas; these areas may consist of individual pixels or of small groups of a few pixels. To make polygons of a value raster map or an image, it is advised to first use the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation; then, you can use the output map of the Slicing operation in the Raster to Polygons operation. </p>
+
+<p class=kopje>Examples:</p>
+
+<p>The effect of using 4 or 8-connected pixels and smoothing or no smoothing is illustrated in the figures below.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=189>
+<p>Input map:</p>
+
+</td>
+<td valign="top" width=189>
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p class=linespacing01before><img src="../images/pol48ns.gif" align=bottom width="127" height="127"></p>
+
+</td>
+<td valign="top" width=189>
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top" width=189>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p>Output map 4-connected<br>
+no smoothing:</p>
+
+</td>
+<td valign="top" width=189>
+<p>Output map 8-connected<br>
+no smoothing:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p class=linespacing01before><img src="../images/pol48ns.gif" align=bottom width="127" height="127"></p>
+
+</td>
+<td valign="top" width=189>
+<p class=linespacing01before><img src="../images/pol48ns.gif" align=bottom width="127" height="127"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+<td valign="top" width=189>
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p>Output map 4-connected<br>
+with smoothing:</p>
+
+</td>
+<td valign="top" width=189>
+<p>Output map 8-connected<br>
+with smoothing:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p class=linespacing01before><img src="../images/pol4sm.gif" align=bottom width="127" height="127"></p>
+
+</td>
+<td valign="top" width=189>
+<p class=linespacing01before><img src="../images/pol8sm.gif" align=bottom width="127" height="127"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The result of this operation depends on the homogeneity of the raster map and the pixel size compared to the size of the mapping units. It is advised to only use this operation on rather homogeneous raster maps that consist of areas with a considerable number of pixels. When you want to extract for instance polygons from a raster map which is the result of the <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >Classify</a> operation, it may be better to first run the majority filter on that raster map to homogenize the classification results and then perform the Raster to polygons operation.</p>
+
+<p class=defnewpar>When the  input raster map has an attribute table or when the domain of the input raster map has an attribute table, the Raster to polygons operation automatically links this attribute table to the output polygon map.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>When you use the Raster to Polygons operation through the dialog box, you can use for the input raster map a map with a class, ID or Bool domain. On the command line, you can use any type of input map. </p>
+
+<p>The input raster map must have a georeference which is not georeference <span class=courier>None</span>.</p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The output polygon map uses the same domain as the input raster map. </p>
+
+<p>The output polygon map uses the same coordinate system as the georeference of the input raster map. The coordinate boundaries for the polygon map are the boundaries of this georeference.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="raster_to_polygons_dialog_box.htm">Raster to polygons : dialog box</a></p>
+
+<p class=seealsolinks><a href="raster_to_polygons_command_line.htm">Raster to polygons : command line</a></p>
+
+<p class=seealsolinks><a href="raster_to_polygons_algorithm.htm">Raster to polygons : algorithm</a></p>
+
+</body

@@ -1,0 +1,95 @@
+<html>
+
+<head>
+<title>SMCE window : Standardize</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Standardize">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Analysis menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Standardize</span>&nbsp;&nbsp;&nbsp;<img src="../images/smce_standardize_icon.gif" align=middle width="23" height="23"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Standardize the currently selected <a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factor</a> or <a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >constraint</a>.</p>
+
+<p class=defnewpar>In the Problem Definition mode, you have selected input data for your criteria (factors or constraints). This input data are various maps or attribute columns with a value domain, a class domain, or the Bool domain. The values in these input maps or columns have a meaning and express different measurement units (e.g. distance, cost, age etc.). In order to compare criteria with each other in a way that makes sense, they have to be standardized, i.e. transformed to the same unit. Moreover, different standardization methods express different utility of input values. When standardizing, depending on the type of input map, a dialog box will appear in which you can choose the &quot;rule&quot; by which the map or column values are converted to values between 0 and 1.</p>
+
+<p class=defnewpar>Depending on the domain of the map or attribute column selected in step 2 below, one of the Standardize dialog boxes will appear: </p>
+
+<ul>
+<li>For value maps: <a href="../ilwismen/smce_window_standardize_value.htm">Standardize  Value Input</a>.</li>
+<li>For class maps: <a href="../ilwismen/smce_window_standardize_class.htm">Standardize  Class Input</a>.</li>
+<li>For boolean maps: <a href="../ilwismen/smce_window_standardize_boolean.htm">Standardize  Boolean Input</a>.</li>
+</ul>
+
+<p class=defnewpar>A Standardize dialog box will appear:</p>
+
+<ol>
+
+<li>When you are in <a href="..//ilwismen/popup/smce_window_multicriteria_analysis_mode_popup.htm" onClick="return popup(this, 'notes')" >Multicriteria Analysis mode</a>, and </li>
+
+<li>when you selected a factor or constraint in the criteria tree viewer, and </li>
+
+<li>do one of the following: </li>
+
+    <ul>
+
+	    <li>choose <span class=arial>Standardize</span> from the <a href="../ilwis/smce_window_menu_commands.htm">Analysis menu</a> in the SMCE window, </li>
+
+	    <li>click the <span class=arial>Standardize</span> button <img src="../images/smce_standardize_icon.gif" width="23" height="23"> in the <a href="../ilwis/smce_window_toolbar.htm">toolbar</a> of the SMCE window, </li>
+
+	    <li>click a criteria with the right mouse button and choose <span class=arial>Standardize</span> from the context-sensitive menu, </li>
+
+	    <li>press the <span clclass=arial>Enter</span> Key, or </li>
+
+	    <li>double-click a factor or constraint in the criteria tree viewer.</li>
+	</ul>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/smce_window_standardize_value.htm">SMCE window : Standardize Value Input</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/smce_window_standardize_class.htm">SMCE window : Standardize Class Input</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/smce_window_standardize_boolean.htm">SMCE window : Standardize Boolean Input</a></p>
+
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a></p>
+
+</body

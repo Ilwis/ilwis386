@@ -1,0 +1,237 @@
+<html>
+
+<head>
+<title>Stereo Pair - Stereoscope window : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stereo pairs, Epipolar stereo pair, Stereo pair from DTM, Stereo pairs (display), Epipolar stereo pair (display)">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Stereo Pair - Stereoscope window</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In the Stereo Pair - Stereoscope window, you can view a calculated <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a>.  </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>When you created an epipolar stereo pair with the <a href="../ilwisapp/epipolar_stereopair.htm">Epipolar Stereo Pair</a> operation, you can view the overlapping area in two scanned photographs or images in stereo with a stereoscope. </li>
+
+<li>When you created a stereo pair from a scanned photograph, an image or any other map, and a DTM with the <a href="../ilwisapp/stereopair_from_dtm.htm">Stereo pair from DTM</a> operation, you can view the area of the photograph or image draped over the terrain in stereo with a stereoscope. </li>
+
+</ul>
+
+<p>A stereoscope should be mounted onto your monitor. </p>
+
+<p class=defnewpar>The Stereoscope window has two panes (see the Figure below): </p>
+
+<ul>
+
+<li>left-hand pane: displays the left-hand output raster map of the stereo pair, </li>
+
+<li>right-hand pane: displays the right-hand output raster map of the stereo pair. </li>
+
+</ul>
+
+<p class=defnewpar>The window furthermore has a menu bar, a context-sensitive menu, a <a href="stereopair_stereoscope_window_toolbar.htm">toolbar</a>, and a status bar.  </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p><img src="../images/stereo_view_example.gif" align=bottom width="413" height="292"></p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=defnewpar>If you like, you can <a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen digitize</a> on the stereo pair in the Stereoscope window: </p>
+
+<ul>
+
+<li>If the input maps of the stereo pair did not have a georeference yet, i.e. georef <span class=courier>None</span>, you can add a georef tiepoints, a georef direct linear, a georef orthophoto, or a georef parallel projective to one of the output maps of the stereo pair in the Stereoscope window. You can then start screen digitizing. </li>
+
+<li>If one of the input maps of the stereo pair already had a georeference, then the coordinates will be retained in the output map. You can directly then start screen digitizing on the output map that has the georeference. </li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To view a stereo pair in the Stereoscope window, the output maps calculated by the stereo pair may have the <span class=courier>Color</span> domain, the <span class=courier>Image</span> domain or any other value domain. </li>
+
+<li>If the maps in a stereo pair use the <span class=courier>Image</span> domain, a stereo pair can also be viewed as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >anaglyph</a>. </li>
+
+</ul>
+
+<p class=tiptext>For more information, refer to <a href="../ilwis/epipolar_stereopair_creation_window.htm">Epipolar Stereo Pair - Creation window</a>. </p>
+
+<p class=kopje>To create a stereo pair:</p>
+
+<ul>
+
+<li>To create an epipolar stereo pair: choose <a href="..//ilwisapp/popup/epipolar_stereopair_popup.htm" onClick="return popup(this, 'notes')" >Epipolar Stereo Pair</a> from the <a href="../ilwis/main_window_menu_commands.htm">Operations</a>, Image Processing menu, and add fiducial marks, transferred principal points and optional scaling points in the <a href="../ilwis/epipolar_stereopair_creation_window.htm">Epipolar Stereo Pair - Creation window</a>. </li>
+
+<li>To create a stereo pair from a DTM: choose <a href="..//ilwisapp/popup/stereopair_from_dtm_popup.htm" onClick="return popup(this, 'notes')" >Stereo Pair from DTM</a> from the <a href="../ilwis/main_window_menu_commands.htm">Operations</a>, Image Processing menu. </li>
+
+</ul>
+
+<p class=kopje>To open the Stereo Pair - Stereoscope window:</p>
+
+<p>By default, the Open action for a stereo pair is that the stereo pair is shown in the Stereoscope window. This means that:</p>
+
+<ul>
+
+<li>When you close the <a href="../ilwis/epipolar_stereopair_creation_window.htm">Epipolar Stereo Pair - Creation window</a> with the <span class=arial>Exit and Show</span> <img src="../images/stereo_showcalc.gif" align=bottom width="22" height="22"> button, the input maps will be resampled to output maps, i.e. the stereo pair is calculated, then the Stereo Pair - Stereoscope window will be opened automatically, and the resulting maps will be shown. </li>
+
+<li>When you click the <span class=arial>Show</span> button in the <a href="../ilwisapp/stereopair_from_dtm_dialogbox.htm">Stereo pair from DTM : dialog box</a>, the input maps will be resampled to output maps, i.e. the stereo pair is calculated, then the Stereo Pair - Stereoscope window will be opened automatically, and the resulting maps will be shown. </li>
+
+<li>When you double-click a stereo pair in a Catalog, the Stereo Pair - Stereoscope window will be opened automatically. </li>
+
+</ul>
+
+<p class=defnewpar>This default Open action is defined in the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>, section Main window. </p> 
+
+<p class=defnewpar>Other ways to open a stereo pair in the Stereoscope window are:</p>
+
+<ul>
+
+<li>choose <span class=arial>Stereoscope</span> from the <a href="../ilwis/main_window_menu_commands.htm">Operations, Visualization menu</a> in the Main window; </li>
+
+<li>double-click the <span class=arial>Stereoscope</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>; </li>
+
+<li>open the <span class=arial>Visualization</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, and double-click the <span class=arial>Stereoscope</span> item; </li>
+
+<li>click a stereo pair in a Catalog with the right mouse button, and choose <span class=arial>Visualization, Stereoscope</span> from the context-sensitive menu. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>As the output images of a stereo pair may have a very large file size, it is advised to create <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">Pyramid Layers</a> for both output raster maps. This will speed up display in the Stereo Pair - Stereoscope window. </p>
+
+<h2>Functionality</h2>
+
+<p class=kopjeaftertitlesub>Proper stereo viewing (tuning the window size for your eye base): </p>
+
+<p>To properly view the stereo pair in stereo, you have to resize the Stereoscope window so that the horizontal distance between the left-hand and the right-hand photograph fits your eye base: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>Make sure that the splitter between the left-hand pane and the right-hand pane in the Stereoscope window is in the middle of your stereoscope; you may have to reposition the Stereoscope window a bit on your screen. </li>
+
+<li>Look through the stereoscope to the photographs in the Stereoscope window. </li>
+
+<li>Make the Stereoscope window larger, by dragging a corner of the window, to increase the horizontal distance between the left-hand and the right-hand photograph. </li>
+
+<li>Make the Stereoscope window smaller, by dragging a corner of the window, to decrease the horizontal distance between the left-hand and the right-hand photograph. </li>
+
+<li>Stop changing the size of the Stereoscope window when you properly view the photographs in stereo. </li>
+
+</ul>
+
+<p class=kopje>Zooming, panning, scrolling, entire map, redraw: </p>
+
+<p>When you use Zooming, Panning, Entire map or Redraw or when you scroll in one of the displayed photographs, this will be applied to both panes. </p>
+
+<p class=defnewpar></p>
+
+<p class=kopje>Unlocking the panes: </p>
+
+<p>To move one or both photographs a little to the left or to the right, in order to improve stereo vision, you may unlock the left pane and right pane from each other: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>Click the <span class=arial>Unlock Horizontal Scroll</span> button <img src="../images/stereo_unlock_horscroll.gif" align=bottom width="22" height="22"> in the toolbar. </li>
+
+</ul>
+
+<p class=linespacing03before>The <span class=arial>Unlock Horizontal Scroll</span> button in the toolbar will appear down. You may now use the horizontal scroll bar below a photograph, to move the photograph a little to the left or to the right. </p>
+
+<p class=kopje>To add a georeference to one of the output maps of the stereo pair: </p>
+
+<p>When you created an <a href="..//ilwisapp/popup/epipolar_stereopair_popup.htm" onClick="return popup(this, 'notes')" >epipolar stereo pair</a> from two photographs or images which used georeference <span class=courier>None</span>, you have to add a georeference to one of the output images if you wish to <a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen digitize</a> on one of the output maps. </p>
+
+<ul>
+
+<li>Click the <span class=arial>Active Left Pane</span> button <img src="../images/stereo_left_frame.gif" align=bottom width="22" height="22"> or the <span class=arial>Activate Right Pane</span> button <img src="../images/stereo_right_frame.gif" align=bottom width="22" height="22">, depending on whether you wish to add a georeference to the left-hand photograph or to the right-hand photograph. </li>
+
+<li>Choose <span class=arial>Create Georeference</span> from the File menu of the Stereoscope window. </li>
+
+<li>The <a href="../ilwismen/create_a_georeference_in_map_window.htm">Create Georeference in map window</a> dialog box will appear. </li>
+
+<li>In this dialog box, you can choose to create a georef tiepoints, a georef direct linear, a georef orthophoto, or a georef parallel projective. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>A possibly existing georeference will be replaced by a newly created one. </p>
+
+<p class=defnewpar>When you wish to screen digitize on the left or right output map of a <a href="..//ilwisapp/popup/stereopair_from_dtm_popup.htm" onClick="return popup(this, 'notes')" >stereo pair from DTM</a>, it is advised to specify <span class=arial>Left</span> or <span class=arial>Right</span> for the <span class=arial>Look modus</span> option during the Stereo pair from DTM operation. One of the output maps will then be projected vertically. You can then screen digitize on the vertically projected output map. </p>
+
+<p class=kopje>To create a point map or a segment map on the stereo pair: </p>
+
+<p>When one of the output maps has a georeference, you can create a point map or a segment map on the stereo pair with screen digitizing: </p>
+
+<ul>
+
+<li>Click the <span class=arial>Activate Left Pane</span> button <img src="../images/stereo_left_frame.gif" align=bottom width="22" height="22"> or the <span class=arial>Activate Right Pane</span> button <img src="../images/stereo_right_frame.gif" align=bottom width="22" height="22">, depending on whether you wish to screen digitize on the left-hand photograph or on the right-hand photograph. </li>
+
+<li>Choose <span class=arial>Create Point Map</span> or <span class=arial>Create Segment Map</span> from the File menu in the Stereoscope window. </li>
+
+<li>The <a href="../ilwismen/create_a_point_map.htm">Create Point Map</a> or the <a href="../ilwismen/create_a_segment_map.htm">Create Segment Map</a> dialog box will appear. </li>
+
+<li>In this dialog box, the coordinate boundaries of the left-hand map or right-hand map are already filled out. </li>
+
+<li>After you have specified a name for the map that you wish to create, you will proceed in the point editor or in the segment editor where you can add points or segments as usual. For more information, refer to <a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a> or <a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a>. </li>
+
+</ul>
+
+<p class=tip>Mind: </p>
+
+<p class=tiptext>It is not advised to create a vector map on a photograph when the photograph does not have a proper georeference yet. If you do so, you will <i>only</i> be able to display the vector map on the same photograph later on, but you will not be able to display these maps with any other maps which do have proper coordinates. </p>
+
+<p class=kopje>Other functionality:</p>
+
+<p>Most of the other functionality of the Stereoscope window is largely the same as in a normal map window. For more information, refer to <a href="../ilwis/map_window_functionality.htm">Map window : functionality</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/epipolar_stereopair.htm">Epipolar Stereo Pair</a> (operation)</p>
+
+<p class=seealsolinks><a href="../ilwis/epipolar_stereopair_creation_window.htm">Epipolar Stereo Pair - Creation window</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/stereopair_from_dtm.htm">Stereo Pair from DTM</a> (operation)</p>
+
+<p class=seealsolinks><a href="../ilwisapp/stereoscope.htm">Show stereo pair with stereoscope</a></p>
+
+<p class=seealsolinks><a href="../ilwis/stereopair_stereoscope_window_toolbar.htm">Stereo Pair - Stereoscope window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/anaglyph.htm">Show stereo pair as anaglyph</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_stereopairs.htm">ILWIS objects : stereo pairs</a></p>
+
+</body

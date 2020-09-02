@@ -1,0 +1,279 @@
+<html>
+
+<head>
+<title>Aggregate map : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Aggregate map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Aggregate map</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Aggregate Map operation aggregates blocks of input pixels by applying an aggregation function: Average, Count, Maximum, Median, Minimum, Predominant, Standard Deviation or Sum. The Aggregate Map operation either creates a new georeference in which each block of input pixels corresponds to one output pixel (group) or the output raster map uses the same georeference as the input map (no group).</p>
+
+<p class=defnewpar>The Aggregate Map operation is designed for applications that require a multi-resolution approach, for instance to find densities of certain features in raster maps. You can also use this operation to generalize raster data.</p>
+
+<p class=defnewpar>First, the user has to specify a group size which determines the size of the blocks of input pixels, e.g. 3 x 3, 4 x 4, 5 x 5 pixels, etc. on which an aggregation has to be performed. </p>
+
+<p class=defnewpar>Then, you have to select an aggregation function which calculates an output value for each block of (n x n) input pixels:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p>Average</p>
+
+</td>
+<td valign="top">
+<p>calculates the average for each block of input pixel values;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Count</p>
+
+</td>
+<td valign="top">
+<p>counts the number of pixels in each block of input pixels that are not undefined;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Maximum</p>
+
+</td>
+<td valign="top">
+<p>finds the maximum for each block of input pixel values;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Median</p>
+
+</td>
+<td valign="top">
+<p>finds the median for each block of input pixels;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Minimum</p>
+
+</td>
+<td valign="top">
+<p>finds the minimum for each block of input pixel values;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Predominant</p>
+
+</td>
+<td valign="top">
+<p>finds the most occuring (predominant) class name, ID or value for each block of input pixels;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Std Deviation</p>
+
+</td>
+<td valign="top">
+<p>calculates the standard deviation for each block of input pixel values;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Sum</p>
+
+</td>
+<td valign="top">
+<p>calculates the sum for each block of input pixel values.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>All aggregation functions work on <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>. The aggregation functions Count, Median and Predominant also work on maps with another domain type. For the Median function, the order of a Class or ID domain is used.</p>
+
+<p class=defnewpar>Lastly, you have to choose between Group and No Group:</p>
+
+<ul>
+
+<li>	Group: the operation creates a new georeference with the same name as the output map in which the pixels are a factor larger than in the input map. </li>
+
+<p class=leftmargininlist>	For example, when you used a group factor of 4:</p>
+
+<ul>
+
+<li>	the aggregated value for each block of 4 x 4 input pixels is stored in 1 output pixel; </li>
+
+<li>	pixels in the output map will thus represent an area that is 16 times larger than the areas represented by pixels of the input map;</li>
+
+<li>	when an input map had 1600 rows and 1200 columns, the output map will have 400 rows and 300 columns;</li>
+
+<li>	when the pixel size of pixels in an input map is 25m (pixels represent 25 x 25m), the pixel size in the output map will be 100m (pixels represent 100 x 100m). </li>
+
+</ul>
+
+<li>	No Group: the output map uses the same georeference as the input map. For example, when you used a group factor of 4, the aggregated value for each block of 4 x 4 input pixels in stored in 4 x 4 output pixels which correspond to the pixels of the input map. </li>
+
+</ul>
+
+<p>Figures 1, 2 and 3 below illustrate the difference between Group and No Group.</p>
+
+<p class=kopje>Example using Group and No Group:</p>
+
+<p>In this example, the input map has 6 x 6 pixels (Figure 1). Each block of 3 x 3 input pixels is aggregated with the Average function. With the Group option, this results in a map of 2 x 2 pixels (Figure 2); with the No Group option, this results in a map of 6 x 6 pixels (Figure 3).</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>Input map:</p>
+
+</td>
+<td valign="top" width=151>
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/agginp.gif" align=bottom width="125" height="125"></p>
+
+</td>
+<td valign="top" width=151>
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=captionfig>Fig. 1:	Input map for an aggregation.</p>
+
+</td>
+<td valign="top" width=151>
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p></p>
+
+</td>
+<td valign="top" width=151>
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Output map Group:</p>
+
+</td>
+<td valign="top" width=151>
+<p>Ouput map No Group:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/aggoutg.gif" align=bottom width="125" height="125"></p>
+
+</td>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/aggoutn.gif" align=bottom width="125" height="125"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=captionfig>Fig. 2:	Output of average aggregation when using the Group option. </p>
+
+</td>
+<td valign="top" width=151>
+<p class=captionfig>Fig. 3: Output of average aggregation when using the No Group option. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopjeaftertitlesub>Input map requirements:</p>
+
+<p>All aggregation functions can be used on <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>. </p>
+
+<p>The aggregation functions Count, Median and Predominant can also be applied on raster maps with another domain type.</p>
+
+<p class=defnewpar>The operation can also be applied on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The default domain depends on the selected aggregation function.</p>
+
+<p>When the option Group is selected, a new georeference is created for the output map. When the option No Group is selected, the output raster map uses the same georeference as the input raster map. </p>
+
+<p class=defnewpar>When the operation is performed on an input map list, you will obtain an output map list. When the output map list is opened, the output raster maps will be (defined and) calculated. </p>
+
+<ul>
+
+<li>The output raster maps will obtain the same name as the output map list followed by _1, _2, _3, etc. </li>
+
+<li>When the Group option is selected, all output raster maps will use the georeference created for the first raster map in the map list, e.g. <i>Out</i>_1. </li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To obtain smaller pixels in an output map, use the <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a> operation. </li>
+
+<li>	To aggregate segments, you can use the <a href="..//ilwisapp/popup/segment_density_popup.htm" onClick="return popup(this, 'notes')" >Segment Density</a> operation. </li>
+
+<li>	To aggregate points, you can use the <a href="..//ilwisapp/popup/point_density_popup.htm" onClick="return popup(this, 'notes')" >Point Density</a> operation. </li>
+
+<li>	You can also calculate averages, maximum values, median values, minimum values, standard deviations with the <a href="..//ilwisapp/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a> operation. The Aggregate Map operation considers blocks of n x n input pixels at a time; when an aggregated value is calculated for one block, the next block of n x n input pixels is considered; each time an aggregated value is either assigned to one large aggregated pixel (group) or to all pixels of the block that was considered (no group). The Filter operation considers a number of input pixels as specified by the filter size; when one filtered value is calculated, the filter moves one input pixel to right and calculates the next value; each time an output value is assigned to the center pixel of the filter.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="aggregate_dialog_box.htm">Aggregate map : dialog box</a></p>
+
+<p class=seealsolinks><a href="aggregate_command_line.htm">Aggregate map : command line (1)</a></p>
+
+<p class=seealsolinks><a href="aggregate_command_line2.htm">Aggregate map : command line (2)</a></p>
+
+<p class=seealsolinks><a href="aggregate_algorithm.htm">Aggregate map : algorithm</a></p>
+
+</body

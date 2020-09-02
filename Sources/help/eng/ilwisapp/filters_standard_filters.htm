@@ -1,0 +1,345 @@
+<html>
+
+<head>
+<title>Filters : standard filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Standard filters, Filters, Linear filters, Gradient filters, Derivative filters, Rank order filters, Median filters, Majority filters, Binary filters, AVG3X3, EDGESENH, LAPLACE, SHADOW, DFDX, DFDY, DFDDN, DFDUP, D2FDX2, D2FDY2, D2FDXDY, MED3X3, MED5X5, MAJORITY, MAJUNDEF, MAJZERO, BINMAJOR, CONN8TO4, DILATE4, DILATE8, SHRINK4, SHRINK8, INBND4, INBND8, OUTBND4, OUTBND8, PEPPSALT">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Filters</h1>
+
+<h1 class=secondline>Standard filters</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar><a href="..//ilwisapp/popup/filter_linear_filter_popup.htm" onClick="return popup(this, 'notes')" >Linear convolution filters</a>:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_avg3x3_sec.htm" onClick="return popup(this, 'notes')" >AVG3x3</a></p>
+
+</td>
+<td valign="top">
+<p>calculates the average value of each 9 pixel values considered (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_edgesenh_sec.htm" onClick="return popup(this, 'notes')" >EDGESENH</a></p>
+
+</td>
+<td valign="top">
+<p>calculates Pixel value - Laplace; enhances edges (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_laplace_sec.htm" onClick="return popup(this, 'notes')" >LAPLACE</a></p>
+
+</td>
+<td valign="top">
+<p>calculates second derivative in all directions (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_shadow_sec.htm" onClick="return popup(this, 'notes')" >SHADOW</a></p>
+
+</td>
+<td valign="top">
+<p>applies artificial illumination from the Northwest (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_dfdx_sec.htm" onClick="return popup(this, 'notes')" >DFDX</a></p>
+
+</td>
+<td valign="top">
+<p>calculates first derivative in x-direction (1x5 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_dfdy_sec.htm" onClick="return popup(this, 'notes')" >DFDY</a></p>
+
+</td>
+<td valign="top">
+<p>calculates first derivative in y-direction (5x1 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_dfddn_sec.htm" onClick="return popup(this, 'notes')" >DFDDN</a></p>
+
+</td>
+<td valign="top">
+<p>calculates first derivative along downward diagonal (5x5 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_dfdup_sec.htm" onClick="return popup(this, 'notes')" >DFDUP</a></p>
+
+</td>
+<td valign="top">
+<p>calculates first derivative along upward diagonal (5x5 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_d2fdx2_sec.htm" onClick="return popup(this, 'notes')" >D2FDX2</a></p>
+
+</td>
+<td valign="top">
+<p>calculates second derivative in x-direction (5x5 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_d2fdy2_sec.htm" onClick="return popup(this, 'notes')" >D2FDY2</a></p>
+
+</td>
+<td valign="top">
+<p>calculates second derivative in y-direction (5x5 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_d2fdxdy_sec.htm" onClick="return popup(this, 'notes')" >D2FDXDY</a></p>
+
+</td>
+<td valign="top">
+<p>calculates second derivative in all diagonal directions (5x5 matrix)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar><a href="..//ilwisapp/popup/filter_rank_order_filter_popup.htm" onClick="return popup(this, 'notes')" >Rank order filters</a>:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_med3x3_sec.htm" onClick="return popup(this, 'notes')" >MED3x3</a></p>
+
+</td>
+<td valign="top">
+<p>replaces the value of the center pixel by the median value of each 9 pixel values considered (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_med5x5_sec.htm" onClick="return popup(this, 'notes')" >MED5x5</a></p>
+
+</td>
+<td valign="top">
+<p>replaces the value of the center pixel by the median value of each 9 pixel values considered (5x5 matrix)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar><a href="..//ilwisapp/popup/filter_majority_popup.htm" onClick="return popup(this, 'notes')" >Majority filters</a>:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_majority_filter_sec.htm" onClick="return popup(this, 'notes')" >MAJORITY</a></p>
+
+</td>
+<td valign="top">
+<p>The majority filter selects the predominant (most frequently occurring) value or class name of a pixel and its 8 neighbours. (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_majority_filter_undef_sec.htm" onClick="return popup(this, 'notes')" >MAJUNDEF</a></p>
+
+</td>
+<td valign="top">
+<p>The undef-majority filter only assigns the predominant value or class name when the central pixel is undefined. (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_majority_filter_zero_sec.htm" onClick="return popup(this, 'notes')" >MAJZERO</a></p>
+
+</td>
+<td valign="top">
+<p>The zero-majority filter only assigns the predominant value or class name when the central pixel has value 0. (3x3 matrix)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar><a href="..//ilwisapp/popup/filter_binary_filter_popup.htm" onClick="return popup(this, 'notes')" >Binary filters</a>:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_binmajor_sec.htm" onClick="return popup(this, 'notes')" >BINMAJOR</a></p>
+
+</td>
+<td valign="top">
+<p>replaces the central pixel with the predominant value (0 or 1) of the 9 pixels considered (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_eighttofour_sec.htm" onClick="return popup(this, 'notes')" >CONN8TO4</a></p>
+
+</td>
+<td valign="top">
+<p>makes 8-connected true pixels 4-connected (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_dilate4_sec.htm" onClick="return popup(this, 'notes')" >DILATE4</a></p>
+
+</td>
+<td valign="top">
+<p>dilation of 4-connected true pixels (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_dilate8_sec.htm" onClick="return popup(this, 'notes')" >DILATE8</a></p>
+
+</td>
+<td valign="top">
+<p>dilation of 8-connected true pixels (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_shrink4_sec.htm" onClick="return popup(this, 'notes')" >SHRINK4</a></p>
+
+</td>
+<td valign="top">
+<p>shrinking of 4-connected true pixels (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_shrink_8_sec.htm" onClick="return popup(this, 'notes')" >SHRINK8</a></p>
+
+</td>
+<td valign="top">
+<p>shrinking of 8-connected true pixels (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_inbdn4_sec.htm" onClick="return popup(this, 'notes')" >INBND4</a></p>
+
+</td>
+<td valign="top">
+<p>gives the inner boundary of areas of 4-connected true pixels (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_inbnd8_sec.htm" onClick="return popup(this, 'notes')" >INBND8</a></p>
+
+</td>
+<td valign="top">
+<p>gives the inner boundary of areas of 8-connected true pixels (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_outbnd4_sed.htm" onClick="return popup(this, 'notes')" >OUTBND4</a></p>
+
+</td>
+<td valign="top">
+<p>gives the outer boundary of areas of 4-connected true pixels (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_outbnd8_sec.htm" onClick="return popup(this, 'notes')" >OUTBND8</a></p>
+
+</td>
+<td valign="top">
+<p>gives the outer boundary of areas of 8-connected true pixels (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_peppsalt_sec.htm" onClick="return popup(this, 'notes')" >PEPPSALT</a></p>
+
+</td>
+<td valign="top">
+<p>only removes single true pixels and single false pixels (3x3 matrix)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>LIFEGAME</p>
+
+</td>
+<td valign="top">
+<p>game: small groups of true pixels die of loneliness, large groups of true pixels die of overcrowding, and when there is space (false pixels), true pixels reproduce and make one of their false neighbours true (3x3 matrix).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Standard filters are stored in your <span class=courier>ILWIS\SYSTEM</span> directory and have extension <span class=DefaultStyle><small>.FIL</small></span>. They are stored in ASCII format, so you can have a look at them with any text editor, for example Notepad. </p>
+
+<p class=defnewpar>Besides the standard filters mentioned above, you can create and store your own linear filters and you may define your own average filters, rank order filters, median filters, majority filters, pattern filters, standard deviation filters or linear filters. For more information, refer to <a href="../ilwisapp/filters_user_defined_filters.htm">Filters : user-defined filters</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_filter_types.htm">Filter types</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_user_defined_filters.htm">Filters : user-defined filters</a></p>
+
+<p class=seealsolinks><a href="filter.htm">Filter (operation)</a></p>
+
+</body

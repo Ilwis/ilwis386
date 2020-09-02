@@ -1,0 +1,136 @@
+<html>
+
+<head>
+<title>Flow direction : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Flow direction">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Flow direction</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p>In a (sink-free) Digital Elevation Model (DEM), the Flow direction operation determines into which neighbouring pixel any water in a central pixel will flow naturally. </p>
+
+<p class=defnewpar>Flow direction is calculated for every central pixel of input blocks of 3 by 3 pixels, each time comparing the value of the central pixel with the value of its 8 neighbours. The output map contains flow directions as N (to the North), NE (to the North East), etc. </p>
+
+
+<p class=kopje>Steepest slope method: </p>
+
+<ul>
+
+        <li>For each block of 3x3 input pixels, the operation calculates the height difference between the central pixel (CP) and each of the 8 neighbour pixels. </li>
+
+        <li>If, for a neighbour, the height difference is positive (i.e. central pixel has larger value than the specific neighbour), then: 
+
+        <ul>
+                <li>for corner neighbours, height differences are divided by (distance) 1.4 </li>
+
+                <li>for horizontal neighbours, height differences are divided by (distance) 1</li>
+        </ul>
+
+        This determines the steepness between the central pixel and its neigbours. </li>
+
+        <li>Then, the (position of the) neighbour with the largest 'steepness' value is the output flow direction for the current central pixel. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<table border="0">
+<tr>
+<td valign="bottom" width="80">Input values:</td>
+<td width="10">&nbsp;</td>                           
+<td valign="bottom" width="80">Height differences:</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td valign="bottom" width="80">Distances: </td>
+<td width="10">&nbsp;</td>
+<td width="10">&nbsp;</td>
+<td valign="bottom" width="80">Steepest slope:</td>
+<td>&nbsp;</td>
+<td valign="bottom" width="140">Output flow direction: </td>
+</tr>
+<tr>
+<td><img src="../images/flowdir_ex1.gif" height="64" width="64"></td>
+<td width="10">&nbsp;</td>
+<td><img src="../images/flowdir_ex2.gif" height="64" width="64"></td>
+<td>/</td>
+<td>&nbsp;</td>
+<td><img src="../images/flowdir_ex2a.gif" height="64" width="64"></td>
+<td>=</td>
+<td>&nbsp;</td>
+<td><img src="../images/flowdir_ex3_s.gif" height="64" width="64"></td>
+<td>&nbsp;</td>
+<td><img src="../images/flowdir_ex4_s.gif" height="64" width="64"></td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=kopje>Lowest height method: </p>
+
+<ul>
+
+        <li>For each block of 3x3 input pixels, the operation calculates the height difference between the central pixel (CP) and each of the 8 neighbour pixels; </li>
+
+        <li>From all neighbours with a positive height difference, (i.e. central pixel has larger value than a specific neighbour), <br>
+
+        (the position of) the neighbour with largest positive height difference is the output flow direction for the current central pixel. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td valign="bottom" width="90">Input values:</td>
+
+<td valign="bottom" width="90">Height differences:</td>
+
+<td valign="bottom" width="90">Largest height difference: </td>
+
+<td valign="bottom" width="140">Output flow direction: </td>
+</tr>
+<tr>
+<td><img src="../images/flowdir_ex1.gif" height="64" width="64"></td>
+
+<td><img src="../images/flowdir_ex2.gif" height="64" width="64"></td>
+
+<td><img src="../images/flowdir_ex3_h.gif" height="64" width="64"></td>
+
+<td><img src="../images/flowdir_ex4_h.gif" height="64" width="64"></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=kopje>Additional rules that are applied: </p>
+
+<ul>
+
+<li>Pixels along the edges of the input map (margins and corners) will always return the undefined value in the output map. </li>
+
+<li>If all neighbouring pixels of a central pixel have a larger value than the central pixel itself (i.e. a sink or pit), the undefined value will be returned in the output map. 
+
+        In principle, this situation should not occur; it is advised to use a sink-free input DEM. </li>
+
+<li>When a central pixel has the undefined value, undefined will be returned in the output map. </li>
+
+<li>Neighbour pixels that have the undefined value are ignored during the calculation. </li>
+
+<li>If from eight neighbour pixels considered, three adjacent neighbour pixels in a single row or column are found to have the same steepest slope or the same smallest height value, then the position of the neighbour pixel that is in the middle of those three neighbours is used. </li>
+
+<li>If from eight neighbour pixels considered, two neighbour pixels are found to have the same steepest slope or smallest height value, then the position of one of these two neighbour pixels is used arbitrarily. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="flow_direction_functionality.htm">Flow direction : functionality</a></p>
+
+</body

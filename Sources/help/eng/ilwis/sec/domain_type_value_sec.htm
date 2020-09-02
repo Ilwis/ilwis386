@@ -1,0 +1,115 @@
+<html>
+
+<head>
+<title>Domain type : Value (2)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Domain type Value</p>
+
+<p class=linespacing03after><a href="../../ilwis/sec/y_value_maps_sec.htm">Value maps</a> and <a href="../../ilwis/sec/y_value_maps_sec.htm">value columns</a> are supposed to contain <i>measured, calculated or interpolated values </i>in contrast to maps and columns that contain for instance class names or identifiers. You should use a value <a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >domain</a> for a map when the map contains for example height information such as in a contour map or a Digital Elevation Model. Ranges of values in a value map will be represented by ranges of colors. It is not possible to link attributes to a map with a value domain.</p>
+
+<p class=linespacing03after>By using a certain value domain for a map or column, you define <i>the kind of values that should be available</i> in the map or column. This comprises the possible minimum and maximum value that you want to be available (the <a href="../popup/y_value_range_popup.htm">value range</a>) and the number of decimals you want to work with (the <a href="../popup/y_precision_popup.htm">precision</a>). Values smaller than the minimum or larger than the maximum are considered undefined. </p>
+
+<p>A number or <a href="../../ilwis/popup/yy_system_domain_value_all_popup.htm">system value domains</a> are avaible in ILWIS, such as:</p>
+
+<ul>
+
+<li>	<a href="../../ilwis/popup/yy_system_domain_value_popup.htm">system domain <span class=courier>Value</a></span> which can generally be accepted when calculating with value maps or columns; it can store any value you can imagine, </li>
+
+<li>	<a href="../../ilwis/popup/yy_system_domain_min1to1_popup.htm">system domain <span class=courier>Min1to1</a></span> which is designed to store values between -1.00 and 1.00; it is suitable for instance NDVI calculations or correlations,</li>
+
+<li>	<a href="../../ilwis/popup/yy_system_domain_perc_popup.htm">system domain <span class=courier>Perc</a></span> which is designed to store percentage values between 0 and 100, etc. </li>
+
+</ul>
+
+<p class=linespacing03before>It is advised to create create a <i>user-defined value domain</i><b> </b>when values in a map or column have a specific meaning, are in a specific range and should be represented by specific colors or ranges of colors. <br>
+For example, for a height map of a mountainous area, you can create a user-defined value domain <span class=courier>Height</span> with values between 3500 and 5000m. You can then create a representation value <span class=courier>Height</span> in which you can define the colors for various ranges of values. </p>
+
+<p class=linespacing03before>As a value domain is linked to a certain <i>representation value</i> or a <i>representation gradual</i>, the value domain you choose thus also defines the default representation (=&nbsp;coloring) in which a map will appear. Maps using the same value domain will by default appear in the same colors. </p>
+
+<ul>
+
+<li>	For value maps which use the <a href="../../ilwis/popup/yy_system_domain_value_popup.htm">system domain <span class=courier>Value</a></span>, you can choose to create a <i>representation value</i> (boundaries in values) or a <i>representation gradual</i> (boundaries in percentages). </li>
+
+<li>	For value maps which use another <a href="../../ilwis/popup/yy_system_domain_value_all_popup.htm">system value domain</a> or a user-defined value domain, you can create a <i>representation value</i> (boundaries in values). </li>
+
+<li>	A representation gradual can be used to display any value map; <br>
+
+        a representation value can be used to display maps which use the value domain for which the representation value was created. </li>
+
+</ul>
+
+<p>For more information on <a href="../../ilwis/popup/objects_representation_popup.htm">representations</a> for a value domain, see <a href="..//ilwis/ilwis_objects_representations.htm" onClick="return popup(this, 'notes')" >ILWIS objects : representations</a> or <a href="..//ilwis/representation_value_gradual_editor_functionality.htm" onClick="return popup(this, 'notes')" >Representation Value/Gradual editor</a>. </p>
+
+<p class=linespacing03before>During calculations with <a href="../popup/map_calculation_popup.htm">MapCalc</a> or <a href="../../ilwis/popup/table_calculation_popup.htm">TabCalc</a> or when performing <a href="../popup/y_operation_popup.htm">operations</a> on value raster maps or columns, you will usually need to specify a <i>domain</i> for the output value map or value column, as well as a <i>value range </i>and<i> precision</i> for the output value map or value column.</p>
+
+<ul>
+
+<li>	<i>Domain for output map or column</i>: You can generally select <a href="../../ilwis/popup/yy_system_domain_value_popup.htm">system domain <span class=courier>Value</a></span> for an output map or column. You can also select or create another value domain, for instance when the value range of that other domain will better suit the output values. ILWIS will generally come up with a proper default domain for the output map or column. </li>
+
+<li>	<i>Value range and precision for output map or column</i>: You also need to specify a value range and precision for an output value map or column. </li>
+
+        <ul>
+
+        <li>	The <a href="../../ilwis/popup/y_value_range_popup.htm">value range</a> of an output map determines between which minimum and maximum value the values in the output map can occur. The actual minimum and maximum values occuring in an output map will be somewhere in between these values.</li>
+
+        <li>	The <a href="../../ilwis/popup/y_precision_popup.htm">precision</a> of an output map determines the resolution of the values in the output map; a precision of 1 means whole values, a precision of 0.01 means working with 2 decimals, and a precision of 25 means that only values like 0, 25, 50, 75, 100 etc. will be stored. </li>
+
+        <li>	For raster maps, the value range and precision of a map together determine in how many bytes per pixel the output map will be stored; this determines the size of the raster map in bytes on disk and has concequences for the amount of time required for calculations and display, etc. </li>
+
+        </ul>
+
+        <p class=leftmargininlist>	ILWIS will come up with defaults for the value range and precision of an output map or column; these defaults are based on actual minimum and maximum values as occuring in the input map(s) and columns(s), or if these are not known, on the value range and precision of the domain(s) of the input maps and columns, and on the default value range and precision of the domain which you selected for the output map. </p>
+
+        <p class=leftmargininlist>	You can of course adapt the defaults so that the value range and precision for an output map will better fit the expected values in an output map or column or will better suit your needs. </p>
+
+</ul>
+
+<p class=kopje>Examples:</p>
+
+<ul>
+
+<li>	point maps with height values, </li>
+
+<li>	segment map with height values (contour lines), </li>
+
+<li>	raster map of rasterized point, segment, or polygon maps with values,</li>
+
+<li>	raster map with interpolated height values (Digital Elevation Model),</li>
+
+<li>	columns containing calculated values,</li>
+
+<li>	attribute maps of attributes stored in a value column in map-related tables,</li>
+
+<li>	output maps of calculations with maps that use a value domain or the image domain. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_before_creating_maps_and_tables.htm" onClick="return popup(this, 'notes')" >Before creating ILWIS maps and tables</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_domains.htm" onClick="return popup(this, 'notes')" >Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</a></p>
+
+</body

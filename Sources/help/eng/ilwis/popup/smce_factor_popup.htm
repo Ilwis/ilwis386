@@ -1,0 +1,86 @@
+<html>
+
+<head>
+<title>SMCE factor popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>SMCE Factors: <img src="../../images/criteria_tree_benefit_factor.gif" width="21" height="15"> Benefits and <img src="../../images/criteria_tree_cost_factor.gif" width="21" height="15"> Costs</p>
+
+<p>A Factor in the <a href="..//ilwis/smce_window_functionality.htm" onClick="return popup(this, 'notes')" >SMCE</a> application is a criterion that contributes to a certain degree to the output. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>a <b>Benefit</b>: contributes positively to the output; the <i>more</i> you have (the higher the values), the better it is. </li>
+
+<li>a <b>Cost</b>: contributes negatively to the output; the <i>less</i> you have (the lower the values), the better it is. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>A Factor is either an input map or an attribute column in an attribute table. </p> 
+
+<p class=defnewpar>As opposed to <a href="../../ilwis/popup/smce_constraint_popup.htm">constraints</a>, poor performance of a factor can be compensated by good performance of another factor. This can still lead to good overall performance in the composite index map. </p>
+
+<p class=defnewpar>When creating and filling a criteria tree, you need to specify for each factor: </p>
+
+	<ul>
+	
+	<li>a name as text (like a description), and </li>
+
+	<li>an input map or an input attribute column (the data). </li>
+	
+	</ul>
+
+<p>For more information, see <a href="..//ilwismen/smce_window_insert_factor.htm" onClick="return popup(this, 'notes')" >Insert Factor</a>. </p>
+
+<p class=defnewpar>Before calculating a sub goal or the main goal (i.e. a composite index map), you also need to: </p>
+
+	<ul>
+	
+	<li>standardize the input data for each factor, </li>
+
+	<li>specify the weight for each factor. </li>
+	
+	</ul>
+
+<p>For more information, see <a href="..//ilwismen/smce_window_standardize.htm" onClick="return popup(this, 'notes')" >Standardize</a> and <a href="..//ilwismen/smce_window_weigh.htm" onClick="return popup(this, 'notes')" >Weigh</a>. </p>
+
+<p class=defnewpar>Optionally, to keep overview of various criteria that can be considered as a sub goal of the main goal, you can add a Group of Factors (i.e. sub goals). Under a Group, you can add multiple Cost Factors and multiple Benefit Factors. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwismen/smce_window_insert_factor.htm" onClick="return popup(this, 'notes')" >Insert Factor</a></p>
+
+<p class=seealsolinks><a href="..//ilwismen/smce_window_standardize.htm" onClick="return popup(this, 'notes')" >Standardize</a></p>
+
+<p class=seealsolinks><a href="..//ilwismen/smce_window_weigh.htm" onClick="return popup(this, 'notes')" >Weigh</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/smce_window_functionality.htm" onClick="return popup(this, 'notes')" >SMCE window : functionality</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/smce_window_criteria_tree_viewer.htm" onClick="return popup(this, 'notes')" >SMCE window : criteria tree viewer</a></p>
+
+<p class=seealsolinks><a href="../../ilwis/popup/smce_constraint_popup.htm">SMCE Constraints</a></p>
+
+</body

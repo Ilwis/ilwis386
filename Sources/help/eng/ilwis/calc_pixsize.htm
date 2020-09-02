@@ -1,0 +1,214 @@
+<html>
+
+<head>
+<title>PIXSIZE</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="PIXSIZE, Data property functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>PIXSIZE( ) function</h1>
+
+<p class=defnewpar>Returns the pixel size of a raster
+map or a georeference.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>PIXSIZE</span>(<i>RasterMap</i>)<br> 
+<span class=courier>PIXSIZE</span>(<i>GeoReference<span class=courier>.grf</span></i>)</p>
+
+<p class=calctitle>Input</p>
+<p>When used on raster maps:</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><i>RasterMap</i></td>
+	<td valign="top">is a raster map</td>
+</tr>
+</table>
+
+<p class=defnewpar>When used on georeferences:</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><i>GeoReference<span class=courier>.grf</span></i></td>
+	<td valign="top">is a georeference</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><span class=courier>PIXSIZE</span> returns:</td>
+	<td valign="top">a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>For georeferences which are not a georeference corners, an approximation of the pixel size is returned.</p>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>The <span class=courier>PIXSIZE</span> function is often used in the calculation of <a href="../ilwis/how_to_calculate_slope_maps.htm">slope maps</a>, the <a href="../ilwis/how_to_calculate_shortest_path.htm">shortest path</a> and in <a href="../ilwis/calc_special_neighbourhood_operations_and_iterations.htm">neighbourbood operations</a>.</li>
+	<li>This function may be handy to use in <a href="..//ilwis/popup/dde_popup.htm" onClick="return popup(this, 'notes')" >DDE</a> applications</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="150"><p class=calc00>? PIXSIZE(DEM)</p></td>
+	<td><p>returns the pixel size of raster map DEM, e.g. 20</p></td>
+</tr>
+<tr>
+	<td width="150"><p class=calc00>? PIXSIZE(TM.grf)</p>
+	<td><p>returns the pixel size of georeference TM, e.g. 30.58&nbsp;</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p>Suppose map <span class=courier>InMap</span> has a pixel size of 20.</p>
+<p class=calc0linsp03befaft>OutMap = InMap * PIXSIZE(InMap)</p>
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>35</td>
+    <td class=calcpict>20</td>
+  </tr>
+  <tr>
+    <td class=calcpict>35</td>
+    <td class=calcpict>15</td>
+    <td class=calcpict>40</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>40</td>
+    <td class=calcpict>30</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>200</td>
+    <td class=calcpict>700</td>
+    <td class=calcpict>400</td>
+  </tr>
+  <tr>
+    <td class=calcpict>700</td>
+    <td class=calcpict>300</td>
+    <td class=calcpict>800</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>800</td>
+    <td class=calcpict>600</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>An applied example of the <span class=courier>PIXSIZE</span> function in combination with other functions is given in the topic <a href="how_to_calculate_slope_maps.htm"> How to calculate a slope map</a>.</p>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = InCol * PIXSIZE(InMap)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>10</p></td>
+	<td valign="top"><p class=t1r>200</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>35</p></td>
+	<td valign="top"><p class=t1r>700</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>20</p></td>
+	<td valign="top"><p class=t1r>400</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>35</p></td>
+	<td valign="top"><p class=t1r>700</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>15</p></td>
+	<td valign="top"><p class=t1r>300</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>40</p></td>
+	<td valign="top"><p class=t1r>800</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>40</p></td>
+	<td valign="top"><p class=t1r>800</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>30</p></td>
+	<td valign="top"><p class=t1r>600</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="80"><a href="calc_mapmax.htm">MAPMAX</a></td>
+	<td valign="top"><a href="calc_pixarea.htm">PIXAREA</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_mapmin.htm">MAPMIN</a></td>
+	<td valign="top"><a href="calc_tblrecs.htm">TBLRECS</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_maprows.htm">MAPROWS</a></td>
+	<td valign="top"><a href="calc_tblcols.htm">TBLCOLS</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_mapcols.htm">MAPCOLS</a></td>
+	<td valign="top"><a href="calc_tblvalue.htm">TBLVALUE</a></p></td>
+</tr>
+</table>
+
+</body

@@ -1,0 +1,214 @@
+<html>
+
+<head>
+<title>STRPOS</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="STRPOS, String functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>STRPOS( ) function</h1>
+
+<p class=defnewpar>Returns the starting position of the second string (i.e. the substring) in the first string.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>STRPOS</span>(<i>String a</i>,&quot;<i>String b</i>&quot;)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>String a</i></td>
+	<td valign="top">is a string</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> or <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> domain, or <a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>String</span></a></td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>String b</i></td>
+	<td valign="top">is a string</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> or <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> domain, or <a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>String</span></a></td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>STRPOS</span>    returns:</td>
+	<td valign="top">an integer value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>When one of the input parameters is undefined, or when both input parameters are undefined, the output will also be undefined.</p>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>The <span class=courier>STRPOS</span> function might be useful when you want to find out the starting position of your second input domain when using the domain of a cross table. See also the <a href="#Applied example"> applied example</a> below.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="210"><p class=calc00>? STRPOS(&quot;Commercial&quot;,&quot;mm&quot;)</p></td>
+	<td><p>returns 3</p></td>
+</tr>
+<tr>
+	<td width=210><p class=calc00>? STRPOS(&quot;Landuse&quot;,&quot;p&quot;)</p>
+	<td><p>returns 0</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = STRPOS(InCol,&quot;slope&quot;)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolh>InCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Active alluvial fan</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Denudational steep to very steep slopes</p></td>
+	<td valign="top"><p class=t1r>34</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Denudational moderately steep slopes</p></td>
+	<td valign="top"><p class=t1r>31</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Fault-line scarp</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Fault-related hills</p></td>
+	<td valign="top">
+      <p class="t1r">0</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Steep face-slopes</p></td>
+	<td valign="top"><p class=t1r>12</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Infilled lake</p></td>
+	<td valign="top">
+      <p class="t1r">0</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Steep dipslopes</p></td>
+	<td valign="top"><p class=t1r>10</p></td>
+</tr>
+</table>
+
+<p class=kopje><a name="Applied example">Applied example</a>:</p>
+<p>The next example uses the cross table of a Landuse map and a Geomorphology map.<p class=calc0linsp03befaft>OutCol = STRPOS(InCol, &quot;* &quot;) + 2</p>
+
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolh>InCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Bare rock * Glacial slope</p></td>
+	<td valign="top"><p class=t1r>13</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Bare rock * Glacial lake</p></td>
+	<td valign="top"><p class=t1r>13</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Grassland * Old landslide</p></td>
+	<td valign="top"><p class=t1r>13</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Grassland * Active landslide</p></td>
+	<td valign="top"><p class=t1r>13</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Bare soils * Heavily eroded area</p></td>
+	<td valign="top"><p class=t1r>14</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Bare soils * Hills near a fault</p></td>
+	<td valign="top"><p class="t1r">14</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Forest * Valley in alluvial fan</p></td>
+	<td valign="top"><p class=t1r>10</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Shrubs * Alluvial fan (flooding possible)</p></td>
+	<td valign="top"><p class="t1r">10</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Urban periphery * Infilled lake</p></td>
+	<td valign="top"><p class=t1r>19</p></td>
+</tr>
+</table>
+<p class=emptyline>&nbsp;</p>
+<p>In column <span class=courier>OutCol</span> the starting position is found of sub-string <span class=courier>*</span> followed by a space. Then <span class=courier>2</span> is added to find the real starting position of the geomorphological description.</p> 
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_left.htm">LEFT</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strlt.htm">STRLT</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_in.htm">IN</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_right.htm">RIGHT</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strle.htm">STRLE</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_inmask.htm">INMASK</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_sub.htm">SUB</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strgt.htm">STRGT</a></p></td>
+	<td valign="top"><p class=seealsolinks></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_length.htm">LENGTH</a></p></td>
+	<td valign="top" width="60"><a href="calc_strge.htm">STRGE</a></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

@@ -1,0 +1,158 @@
+<html>
+
+<head>
+<title>Point editor : Edit</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point editor, Edit point map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Point editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/point_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Edit ...</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Edit the class name(s) or value(s) of the current selection of points, or edit the ID of a single selected point. </p>
+
+<p class=defnewpar>The point(s) that you wish to edit should first be selected with the <i>mouse</i> in <span class=arial><a href="point_editor_select_mode.htm">Select mode</a></span>.</p>
+
+<p class=defnewpar>This dialog box appears: </p>
+
+<ul>
+
+<li>	when you select one or more points with the mouse in <span class=arial>Select mode</span>, and: </li>
+
+        <ul>
+
+        <li>choose <span class=arial>Edit</span> from the <a href="../ilwis/point_editor_menu_commands.htm">Edit menu</a>, or </li>
+
+        <li>choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_editors.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or </li>
+
+        <li>press the <span class=arial>Enter</span> key on the keyboard. </li>
+
+        </ul>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>For more information on selecting points, refer to <span class=arial><a href="point_editor_select_mode.htm">Select mode</a></span>. </p>
+
+<p class=tip>Mind: </p>
+
+<ul class=tipul>
+
+<li>In a point map that uses an ID domain or a system <span class=courier>UniqueID</span> domain, you can only edit points one by one, because in such maps, each point is supposed to have a unique code. </li>
+
+<li>When you select a single ID point and choose <span class=arial>Edit</span>, you will not get this dialog box, but a small text box will appear in which you can type an ID. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To edit the class name, ID or value of a <i>single</i> point, you can also double-click the point. You will then not get this <span class=arial>Edit</span> dialog box, but you can select a class name from a list, or type an ID or value in a small text box. </li>
+
+<p class=diakopje>Dialog box:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Class name/Value:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To assign a class name or value to the selected point(s), and depending on the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point map</a>: select a class name from the drop-down list, or type a value. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Class names, IDs, values, etc. </p>
+
+<ul>
+
+<li class=linespacing01before>For a map using a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>: select an existing class name from the drop-down list. </li>
+
+        <p>To assign a new class name: select <b>&lt;new&gt;</b> from the list, then type the new class name, and, optionally, type a class code and choose a color for the new class.</li>
+
+        <p>A new class name will be automatically added to the class domain. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a>: type an ID for the single selected point in the text box. </li>
+
+        <p>When an ID is assigned that already exists in the map, a question is asked whether you wish to use the same ID again or not. </p>
+
+        <p>A new ID will be automatically added to the ID domain. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>: type a value. </li>
+
+        <p>The value should fall inside the minimum and maximum value of the value domain used by the map. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using a <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool domain</a>: select <span class=arial>True</span>, <span class=arial>False</span>, or <span class=arial>?</span> (= undefined) from the drop-down list. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>When you choose the '?' question mark, the selected point(s) will have not get a class name or value; they will have the undefined value. </p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>For a single selected point of a map using a <span class=arial>UniqueID</span> domain, you can type a <span class=courier>Name</span> in the Attribute window. The <span class=courier>Names</span> will be available as a <span class=courier><a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >String</a></span> column in the attribute table of the map. In the attribute table, the <span class=courier>Name</span> column can be easily converted to a regular Class or ID column through the <a href="column_properties.htm">Column Properties</a> dialog box of the column by clicking the <span class=arial><a href="create_domain_class_or_id_from_string_column.htm">Create new domain from Strings</a></span> button. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	The <b>width</b> of class names, ID, or values as shown in the <span class=arial>Edit</span> dialog box, depends on the width of the domain. You can change the width of a domain by editing the <a href="../ilwismen/domain_properties.htm">Domain Properties</a> sheet.</li>
+
+<li>	<a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent maps</a> cannot be edited; first break the dependency links of the map in the <a href="point_map_properties.htm">Point Map Properties</a> sheet.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="point_editor_select_mode.htm">Point editor : Select mode</a><p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_toolbar.htm">Point editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_menu_commands.htm">Point editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="point_editor_insert_mode.htm">Point editor : Insert mode</a></p>
+
+<p class=seealsolinks><a href="point_editor_insert_new_point.htm">Point editor : Insert new point</a></p>
+
+</body

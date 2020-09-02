@@ -1,0 +1,86 @@
+<html>
+
+<head>
+<title>Polygons to raster : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygons to raster">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Polygons to raster</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Polygons to raster operation rasterizes a polygon map. The class names, IDs, or values in the polygon map are also used in the raster map, i.e. the domain of the polygon map is also the domain of the raster map. The user has to select or create a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> for the output raster map.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Input polygon map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input polygon map. Open the list box and select the desired input map, or drag a polygon map directly from the Catalog into this box. You can also select an attribute from a map's attribute table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the rasterized polygons.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Georeference:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing georeference for the output raster map; open the list box by clicking it. Or create a new georeference by clicking the little <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22">. You can usually select an existing georeference corners.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary, the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="polygons_to_raster_functionality.htm">Polygons to raster : functionality</a></p>
+
+</body

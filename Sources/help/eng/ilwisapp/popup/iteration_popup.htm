@@ -1,0 +1,30 @@
+<html>
+
+<head>
+<title>iteration popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Iteration</p>
+
+<p><a href="..//ilwisapp/iteration.htm" onClick="return popup(this, 'notes')" >Iterations</a> are a special type of map calculations. They are a successive repetition of a mathematical operation, using the result of one calculation as input for the next. These calculations are performed line by line, pixel by pixel and take place in all directions. When a calculation in one direction is finished (for instance from top to bottom) a rotation takes place for the calculation in the next direction. The calculation stops when there are no more differences between an output map compared to the previous output map, or when a certain number of iterations is reached as defined before. Iterations are often used in combination with neighbourhood operations.</p>
+
+</body

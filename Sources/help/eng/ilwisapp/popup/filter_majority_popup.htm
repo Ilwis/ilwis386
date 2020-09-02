@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<title>filter majority popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Majority filters</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/filters_types_majority_filters.htm" onClick="return popup(this, 'notes')" >Majority filters</a> assign the predominant (=most frequently occurring) value or class name of each 3x3 pixels to the center pixel in the output map. Undef-majority filters only do this when the center pixel in the input map is undefined; zero-majority filters only do this when the value of the center pixel in the input map is 0.</p>
+
+<p class=linespacing03after>Undef-majority filters are often used after an image classification to reduce the number of undefined pixels.</p>
+
+<p class=linespacing03after>Standard majority filters are: <a href="../../ilwisapp/sec/filter_majority_filter_sec.htm">MAJORITY</a>, <a href="../../ilwisapp/sec/filter_majority_filter_undef_sec.htm">MAJUNDEF</a>, and <a href="../../ilwisapp/sec/filter_majority_filter_zero_sec.htm">MAJZERO</a>. </p>
+
+<p>Furthermore, <a href="..//ilwisapp/filters_user_defined_majority_filters.htm" onClick="return popup(this, 'notes')" >user-defined majority filters</a> can be used: specify the size of the filter and whether a condition has to be used or not. </p>
+
+</body

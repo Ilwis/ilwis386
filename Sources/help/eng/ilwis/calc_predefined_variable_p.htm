@@ -1,0 +1,102 @@
+<html>
+
+<head>
+<title>%P</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="%P, Predefined variables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>Predefined variable %P</h1>
+
+<p class=defnewpar>Returns the position of a neighbour in the neighbourhood expression.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>%P</span></p>
+
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>P stands for Position.</li>
+	<li>%P and <a href="calc_special_neighbourhood_operations_and_iterations.htm#NBPOS">NBPOS</a> are aliases of each other. For more information, see <a href="calc_special_neighbourhood_operations_and_iterations.htm">Map Calculation : Neighbourhood operations &amp; iterations</a>.
+<table>
+<tr>
+	<td>Return values:</td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>2</td>
+    <td class=calcpict>3</td>
+  </tr>
+  <tr>
+    <td class=calcpict>4</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>6</td>
+  </tr>
+  <tr>
+    <td class=calcpict>7</td>
+    <td class=calcpict>8</td>
+    <td class=calcpict>9</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+    </li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a></p>
+
+<p class=calctitle>Examples</p>
+<p class="calc00">Ridges = NBCNT8(10-Aspect#=NBPOS)</p>
+<p class="defnewpar">Calculate for each pixel the number of neighbour pixels for which the aspect is in the direction of the central pixel. A result of zero indicates a ridge or a flat area.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_x.htm">%X</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_y.htm">%Y</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_l.htm">%L</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_c.htm">%C</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_r.htm">%R</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_k.htm">%K</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_d.htm">%D</a></p></td>
+</tr>
+</table>
+
+</body

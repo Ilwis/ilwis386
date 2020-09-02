@@ -1,0 +1,298 @@
+<html>
+
+<head>
+<title>How to calculate aspect maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Calculate ..., Aspect map, How to calculate ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to calculate an aspect map</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>An aspect map shows to which side a slope is directed. An aspect value of 0 means that the slope is facing the North. </p>
+
+<p class=defnewpar>To calculate a classified aspect map:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=linespacing01before>1.</p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>Create a segment map with a value domain. Digitize the contour lines and give the contour lines the height value they represent. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=linespacing01before>2.</p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>To create an interpolated height map from segment contour lines: open the <a href="main_window_menu_commands.htm">Operations menu</a> in the Main window, choose Interpolation, then choose <a href="..//ilwisapp/popup/contour_interpolation_popup.htm" onClick="return popup(this, 'notes')" >Contour Interpolation</a>. The output map is a Digital Elevation Model (DEM).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=linespacing01before>3.</p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>To calculate height differences in X-direction: start the <a href="..//ilwisapp/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a> operation, select the Digital Elevation Model as the input map and select linear filter dfdx. Call the output map for example DX.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=linespacing01before>4.</p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>To calculate height differences in Y-direction: start the Filter operation again, select the Digital Elevation Model as input map and select linear filter dfdy. Call the output map for example DY.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=linespacing01before>5.</p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>To calculate an aspect map in radians from these maps DX and DY, type on the command line of the Main window: </p>
+
+<p class=calc0>ASPECTR = ATAN2(DX,DY) + PI</p>
+
+<p class=linespacing03before>To convert the radians into degrees, type: </p>
+
+<p class=calc0>ASPECTD = RADDEG((ASPECTR))</p>
+
+<p class=linespacing03before>If you wish, you can combine both statements above into one:</p>
+
+<p class=calc0>ASPECTD = RADDEG(ATAN2(DX,DY) + PI)</p>
+
+<p class=linespacing03before>Functions <a href="calc_atan2.htm">ATAN2</a> and <a href="calc_raddeg.htm">RADDEG</a> are internal MapCalc/TabCalc functions. ASPECTR and ASPECTD are the output map names of the aspect maps in radians and degrees respectively.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=linespacing01before>6.</p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>To classify the aspect map, first create a domain group (e.g. called ASPGR) in which you can use for instance the following boundary values and classes:</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top" width=48>
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>22.5</p>
+
+</td>
+<td valign="top">
+<p class=t1>North</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>67.5</p>
+
+</td>
+<td valign="top">
+<p class=t1>North-East</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>112.5</p>
+
+</td>
+<td valign="top">
+<p class=t1>East</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>157.5</p>
+
+</td>
+<td valign="top">
+<p class=t1>South-East</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>202.5</p>
+
+</td>
+<td valign="top">
+<p class=t1>South</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>247.5</p>
+
+</td>
+<td valign="top">
+<p class=t1>South-West</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>292.5</p>
+
+</td>
+<td valign="top">
+<p class=t1>West</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>337.5</p>
+
+</td>
+<td valign="top">
+<p class=t1>North-West</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>361</p>
+
+</td>
+<td valign="top">
+<p class=t1>North2</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=linespacing01before>7.</p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>Then, use the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation. From the <a href="main_window_menu_commands.htm">Operations menu</a> in the Main window, choose <span class=arial>Image Processing, Slicing</span>: use as input map <span class=courier>ASPECTD</span>, as the group domain <span class=courier>APSPGR</span> and call the output map for instance <span class=courier>ASPECTCL</span>.</p>
+
+<p class=linespacing01before>On the command line, you can use:</p>
+
+<p class=calc0>ASPECTCL = MapSlicing(ASPECTD,ASPGR)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=linespacing01before>8.</p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>Adapt the representation class <span class=courier>ASPGR</span> which accompanies group domain <span class=courier>ASPGR</span> according to your wishes; use the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Class editor</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	When you start creating the segment map for the contour lines, it is advised to create a user-defined value domain <span class=courier>Height</span>. Afterwards you can then create a user-defined representation <span class=courier>Height</span> for this domain. You can change the colors of this representation in the Representation Value/Gradual editor. </li>
+
+<li>	Instead of using the Slicing operation, you can also interactively classify the values in your aspect map by creating a new representation value for the output aspect map. This will only work nicely when you use a user-defined value domain; then you can create a representation value (working in values). When you use system domain <span class=courier>Value</span>, you can only create a representation gradual (working in percentages) which is absolutely unsuitable for aspect maps.</li>
+
+<p class=tiptext>	For more information on classifying maps both interactively and permanently, see <a href="../ilwis/how_to_classify_a_map_or_column.htm">How to classify a map</a>.</p>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_classify_a_map_or_column.htm">How to classify a map</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_slope_maps.htm">How to calculate a slope map</a></p>
+
+</body

@@ -1,0 +1,360 @@
+<html>
+
+<head>
+<title>Epipolar Stereo Pair - Creation window : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stereo pairs, Epipolar stereo pair, Stereo pairs (create), Epipolar stereo pair (create), Editors, Fiducial marks, Principal points">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Epipolar Stereo Pair - Creation window</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In the Epipolar Stereo Pair - Creation window, you can create a stereo pair from two images with overlap. </p>
+
+<p class=defnewpar>In short, you will need to: </p>
+
+<ul>
+
+<li>mark on each photograph the position of two, three, or four fiducial marks (FM), </li>
+
+<li>mark the position of the calculated principal point (PP) of the <i>left</i> photograph, on the <i>right</i> photograph (transferred principal point or TP), </li>
+
+<li>mark the position of the calculated principal point (PP) of the <i>right</i> photograph, on the <i>left</i> photograph (transferred principal point or TP), </li>
+
+<li>in case of scale differences between the two input maps, mark the position of one or two scaling points (SP) in both photographs. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="210">
+<img src="../images/stereo_create_left_picture.gif" align=bottom width="196" height="214">
+
+</td>
+<td valign="top" width="210">
+<img src="../images/stereo_create_right_picture.gif" align=bottom width="197" height="214">
+
+</td>
+<td valign="middle">
+<p class=kopjeaftertitlesub>Legend:</p>
+<p class=captionfignolnspaft>1,2,3 = Fiducial Marks</p>
+<p class=captionfignolnspaft>PP = Principal Point</p>
+<p class=captionfignolnspaft>TP = Transferred Principal Point</p>
+</td>
+</tr>
+</table>
+
+<p>When you close the Epipolar Stereo Pair - Creation window with the <span class=arial>Exit and Show</span> button <img src="../images/stereo_showcalc.gif" align=bottom width="22" height="22">, both input photographs will be resampled to output maps, i.e. the stereo pair is calculated. Rotation differences and possible scale differences between the photographs will be removed. </p>
+
+<p class=defnewpar>The output stereo pair can then be viewed in stereo, either with a <a href="..//ilwisapp/popup/stereoscope_popup.htm" onClick="return popup(this, 'notes')" >stereoscope</a> or as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >anaglyph</a>. </p>
+
+<p class=defnewpar>The window has a menu bar, a context-sensitive menu, a <a href="epipolar_stereopair_creation_window_toolbar.htm">toolbar</a>, dialog panes at the bottom of the window, and a status bar.  </p>
+
+<p class=kopje>To open the Epipolar Stereo Pair - Creation window:</p>
+
+<p>For the creation of an epipolar stereo pair, you need two scanned images (for instance two aerial photographs with fiducial marks) with at least 50% overlap. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>When you wish to view the stereo pair later on with a stereoscope, you can use input raster maps with the <span class=courier>Color</span> domain, the <span class=courier>Image</span> domain, or another value domain. </li>
+
+<li>When you wish to view the stereo pair as an anaglyph later on, you can only use raster maps with the <span class=courier>Image</span> domain, or with another value domain. </li>
+
+</ul>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>As scanned images may have a very large file size, it is advised to create <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">Pyramid Layers</a> for both input raster maps. This will speed up display in the Epipolar Stereo Pair - Creation window. </li>
+
+<li>If one or both of the images was scanned in the wrong direction, you can use the <a href="..//ilwisapp/popup/mirror_rotate_popup.htm" onClick="return popup(this, 'notes')" >Mirror Rotate</a> operation before starting to create a stereo pair. In the input pair, you should make sure that the ground track of the flight line is more or less from left to right, and thus more or less at a right angle to the columns of the images. </li>
+
+<li>To convert a map with the <span class=courier>Color</span> domain to the <span class=courier>Image</span> domain, you can use the <a href="..//ilwisapp/popup/color_separation_popup.htm" onClick="return popup(this, 'notes')" >Color Separation</a> operation; choose option <span class=arial>Intensity</span>. See also <a href="how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a>. </li>
+
+</ul>
+
+<p class=defnewpar>You can start the Epipolar Stereo Pair operation: </p>
+
+<ul>
+
+<li>by double-clicking the <span class=arial>Epipolar Stereo Pair</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, </li>
+
+<li>by opening the <span class=arial>Image Processing</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, and double-clicking the <span class=arial>Epipolar Stereo Pair</span> item, </li>
+
+<li>by choosing <span class=arial>Epipolar Stereo Pair</span> from the <a href="main_window_menu_commands.htm">Operations</a>, <span class=arial>Image Processing</span> menu in the Main window. </li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwismen/create_a_stereopair.htm">Create Stereo Pair</a> dialog box will appear in which you can specify the names of the left and right input maps, and the name of the output stereo pair. The Epipolar Stereo Pair - Creation window will also be opened. </p>
+
+<p class=defnewpar>The Epipolar Stereo Pair window consists of four parts: </p>
+
+<ul>
+
+<li>upper left pane: displays the left-hand photograph, </li>
+
+<li>upper right pane: displays the right-hand photograph, </li>
+
+<li>lower left pane: shows the row/col positions of marked points in the left-hand photograph, </li>
+
+<li>lower right pane: shows the row/col positions of marked points in the right-hand photograph. </li>
+
+</ul>
+
+<h2>Functionality</h2>
+
+<p class=kopjeaftertitlesub>To add a fiducial mark: </p>
+
+<ul>
+
+<li>Activate the photograph/image on which you wish to work by clicking the <span class=arial>Activate Left Pane</span> button <img src="../images/stereo_left_frame.gif" align=bottom width="22" height="22"> or the <span class=arial>Activate Right Pane</span> <img src="../images/stereo_right_frame.gif" align=bottom width="22" height="22"> button. </li>
+
+<li>Zoom in on the area where you expect to find a fiducial mark. </li>
+
+<li>Indicate that you wish to mark the position of a fiducial mark: </li>
+
+        <ul>
+
+        <li>choose <span class=arial>Select Fiducial Marks</span> from the Edit menu or from the context-sensitive menu, or </li>
+
+        <li>press the <span class=arial>Fiducial Mark</span> button in the toolbar <img src="../images/stereo_create_fidmark.gif" align=bottom width="22" height="22">, or </li>
+
+        <li>select a fiducial mark check box in the lower dialog pane.</li>
+
+        </ul>
+
+        <p>Check that the cursor displays the number of the fiducial mark that you wish to enter, and that the row/col boxes of the fiducial mark that you are about to enter appear highlighted (by default yellow). </p>
+
+<li>Position the cursor as exact as possible and click the location of the fiducial mark in the photograph. </li>
+
+<li>Repeat for the other fiducial marks. </li>
+
+</ul>
+
+<p class=defnewpar>You are supposed to enter two, three or four fiducial marks for each photograph. For one photograph, use either the fiducial marks located in the corners of the photograph or the fiducial marks that are in the middle along an edge of the photograph. </p>
+
+<p class=kopje>To remove a fiducial mark: </p>
+
+<ul>
+
+<li>Clear a fiducial mark check box in the lower dialog pane.</li>
+
+</ul>
+
+<p class=defnewpar>To re-enter a wrong fiducial mark: </p>
+
+<ul>
+
+<li>first clear the check box of the wrong fiducial mark in the lower dialog pane, </li>
+
+<li>then reactivate the check box of the fiducial mark that you wish to re-enter, and </li>
+
+<li>click the position of the fiducial mark again in the photograph. </li>
+
+</ul>
+
+<p class=kopje>Automatic positioning of principal point: </p>
+
+<p>When for a photograph, enough fiducial marks are entered, then the position of the principal point will automatically appear in the photograph. </p>
+
+<p class=defnewpar>The principal point of a photograph, is also called the pivot; it is the point around which the photograph will be rotated. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=leftmargin1>The principal point is only an approximation of the best possible rotation point or pivot. Theoretically, the nadir point (i.e. the terrain point perpendicular under the camera) is the point around which the photos should be rotated to make the photos epipolar to each other. However, without ground control points, the nadir point is hard to find, and in case of vertical photographs, the nadir point coincides with the principal point. </p>
+
+<p class=kopje>Manual positioning of principal point (optional): </p>
+
+<p>If you don't have fiducial marks, you can also indicate the position of the principal point yourself: </p>
+
+<ul>
+
+<li>Do not enter fiducial marks, or clear the fiducial mark check boxes. </li>
+
+<li>Activate the photograph/image on which you wish to work by clicking the <span class=arial>Activate Left Pane</span> button or the <span class=arial>Activate Right Pane</span> button. </li>
+
+<li>Zoom in on the area where you expect to find the principal point. </li>
+
+<li>Indicate that you wish to mark the position of the principal point: </li>
+
+        <ul>
+
+        <li>choose <span class=arial>Select Principal Point</span> from the Edit menu or from the context-sensitive menu, or </li>
+
+        <li>press the <span class=arial>Principal Point</span> button <img src="../images/stereo_create_princpnt.gif" align=bottom width="22" height="22"> in the toolbar, or </li>
+
+        <li>position the cursor in the Principal Point row box or column box in the lower dialog pane.</li>
+
+        </ul>
+
+        <p>Check that the cursor displays <span class=arial>PP</span>, and that the row/col boxes of the principal point appear highlighted (by default yellow). </p>
+
+<li>Position the cursor as exact as possible and click the location of the principal point in the photograph, or type row/column numbers in the lower dialog pane. </li>
+
+</ul>
+
+<p class=kopje>To transfer the principal point of the left photograph to the right photograph (and vice versa):</p>
+
+<ul>
+
+<li>Zoom in on the area of the principal point in the <i>left</i> photograph. </li>
+
+<li>Zoom in on the area where you expect to find this point in the <i>right</i> photograph. </li>
+
+<li>Activate the photograph/image in which you wish to work (the <i>right</i>), by clicking the <span class=arial>Activate Left Pane</span> button <img src="../images/stereo_left_frame.gif" align=bottom width="22" height="22"> or the <span class=arial>Activate Right Pane</span> button <img src="../images/stereo_right_frame.gif" align=bottom width="22" height="22">. </li>
+
+<li>Indicate that you wish to mark the position of a transferred principal point: </li>
+
+        <ul>
+
+        <li>choose <span class=arial>Select Transferred Principal Point</span> from the Edit menu or from the context-sensitive menu, or </li>
+
+        <li>press the <span class=arial>Transferred Principal Point</span> button <img src="../images/stereo_create_transprincpnt.gif" align=bottom width="22" height="22"> in the toolbar, or </li>
+
+        <li>position the mouse pointer in the <span class=arial>Transferred Principal Point</span> row and column boxes in the lower dialog pane.</li>
+
+        </ul>
+
+        <p>Check that the cursor displays <span class=arial>TP</span>, and that the row/col boxes of the transferred principal point appear highlighted in the lower dialog pane (by default yellow). </p>
+
+<li>Position the cursor as exact as possible and click the location of the transferred principal point in the (<i>right</i>) photograph. </li>
+
+</ul>
+
+<p class=defnewpar>Now do the same vice versa, and transfer the principal point of the <i>right</i> photograph to the <i>left</i> photograph. </p>
+
+<p class=defnewpar>The imaginary line between the principal point and the transferred principal point in a photograph is called the photo base; in normal circumstances, it coincides with the flight line projected on the ground (ground track). </p>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+
+<li>In the left-hand photograph, the transferred principal point must be located to the right of the principal point of that photo, i.e. the column number of transferred principal point should be greater than the column number of the principal point. </li>
+
+<li>In the right-hand photograph, the transferred principal point must be located to the left of the principal point of that photo, i.e. the column number of transferred principal point should be smaller than the column number of the principal point. </li>
+
+<li>As long as this is not fulfilled, you cannot start the calculation of the stereo pair's output maps. </li>
+
+</ul>
+
+<p class=kopje>To specify scaling points (optional):</p>
+
+<p>When there are scale differences between the left and right photograph, you should specify one or two scaling points in both photographs. Like the principal point, the scaling point that you mark in one photograph has also to be marked in the other. </p>
+
+<p class=defnewpar>A scaling point should be located at the top or the bottom of photograph, at a distance of at least half the photo base away from the photo base/flight line, otherwise calculation of the stereo pair's output maps is not possible. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>Mark the position of a scaling point in one photograph. </li>
+
+<li>Mark this scaling point also in the other photograph. </li>
+
+<li>You can use the <span class=arial>Scaling Point</span> button <img src="../images/stereo_create_scalpnt.gif" align=bottom width="22" height="22"> in the toolbar, or the <span class=arial>Select Scaling Points</span> option on the Edit menu or the context-sensitive menu. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=leftmargin1>As soon as one or two scaling points are placed, a 'scaling distance' is displayed as 'Total distance from flight line'. This distance is expressed in photo pixels (rowcols). It is (the sum of) the distance(s) between the scaling point(s) and the base line. During resampling, the resolution of the photograph with the smallest scaling distance will be increased to the resolution of the other photograph. </p>
+
+<p class=kopje>To <b>exit</b> the Epipolar Stereo Pair - Creation window and <b>show</b> the resulting stereo pair (Exit and Show):</p>
+
+<p>To save all entered points, and to calculate the resulting stereo pair which can be viewed in stereo: </p>
+
+<ul>
+
+<li>click the <span class=arial>Exit and Show</span> button <img src="../images/stereo_showcalc.gif" align=bottom width="22" height="22"> in the toolbar, or </li>
+
+<li>choose <span class=arial>Exit and Show</span> from the File menu. </li>
+
+</ul>
+
+<p>The Epipolar Stereo Pair - Creation window will be closed. </p>
+
+<p class=defnewpar>The stereo pair and its two output raster maps will be calculated. </p>
+
+<p class=defnewpar>By default the stereo pair will be displayed in a <a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope window</a>. The default Open action (i.e. open in Stereoscope window or open as <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >Anaglyph</a>) can be specified in the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>. </p>
+
+<p class=kopje>Other ways to exit the Epipolar Stereo Pair - Creation window:</p>
+
+<p>In some cases you may wish to leave the Epipolar Stereo Pair - Creation window in another way than described above. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>Exit: the changes you made in the Epipolar Stereo Pair - Creation window will be stored, but the stereo pair will not be calculated yet. </li>
+
+        <p class=leftmargin06>To exit: </p>
+
+        <ul class=dialeft1ul>
+
+        <li>click the <span class=arial>Exit</span> button <img src="../images/ed_stoped.gif" align=bottom width="22" height="22"> in the toolbar, </li>
+        
+        <li>choose <span class=arial>Exit</span> from the File menu, or </li>
+
+        <li>click the <span class=arial>Close</span> button <img src="../images/winclose.gif" align=bottom width="17" height="15"> of the window. </li>
+
+        </ul>
+
+        <p>The Epipolar Stereo Pair - Creation window will be closed. The stereo pair will be calculated when necessary, e.g. when opened to be displayed. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>Quit: none of the changes you made in this session of the Epipolar Stereo Pair - Creation window will be stored. </li>
+
+        <p class=leftmargin06>To quit: </p>
+
+        <ul class=dialeft1ul>
+
+        <li>choose <span class=arial>Quit</span> from the File menu. </li>
+
+        </ul>
+
+        <p>The Epipolar Stereo Pair - Creation window will be closed. </p>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/epipolar_stereopair.htm">Epipolar Stereo Pair</a> (operation)</p>
+
+<p class=seealsolinks><a href="../ilwis/epipolar_stereopair_creation_window_toolbar.htm">Epipolar Stereo Pair - Creation window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/stereoscope.htm">Show stereo pair with stereoscope</a></p>
+
+<p class=seealsolinks><a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope window</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/anaglyph.htm">Show stereo pair as anaglyph</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_stereopairs.htm">ILWIS objects : stereo pairs</a></p>
+
+</body

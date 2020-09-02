@@ -1,0 +1,156 @@
+<html>
+
+<head>
+<title>Show stereo pair with stereoscope</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stereo pairs, Epipolar stereo pair, Stereo pair from DTM, Stereo pairs (display), Epipolar stereo pair (display), Visualization, Stereoscope, Show ..., Show as ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Show stereo pair</h1>
+
+<h1 class=secondline>with stereoscope</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Show a calculated <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> in a <a href="../ilwis/stereopair_stereoscope_window.htm">Stereoscope window</a>; you will be able to view the height differences in the stereo pair by using a stereoscope that is mounted onto your monitor. </p>
+
+<p class=kopje>To create a stereo pair:</p>
+
+<ul>
+
+<li>use the <a href="..//ilwisapp/popup/epipolar_stereopair_popup.htm" onClick="return popup(this, 'notes')" >Epipolar Stereo Pair</a> operation, or </li>
+
+<li>use the <a href="..//ilwisapp/popup/stereopair_from_dtm_popup.htm" onClick="return popup(this, 'notes')" >Stereo pair from DTM</a> operation. </li>
+
+</ul>
+
+<p class=kopje>To start showing a stereo pair with a stereoscope: </p>
+
+<p>When creating an epipolar stereo pair: </p>
+
+<ol>
+
+<li>    close the <a href="../ilwis/epipolar_stereopair_creation_window.htm">Epipolar Stereo Pair - Creation window</a> with the <span class=arial>Exit and Show</span> button <img src="../images/stereo_showcalc.gif" align=bottom width="22" height="22">, or </li>
+
+</ol>
+
+<p class=defnewpar>When a stereo pair already exists: </p>
+
+<ol start="2">
+
+<li>	from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> of the Main window, choose <span class=arial>Visualization, Show Stereo Pair with Stereoscope</span>, or </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Stereoscope</span> item, or </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, expand the <span class=arial>Visualization</span> item and double-click the <span class=arial>Stereoscope</span> item, or </li>
+
+<li>    double-click a stereo pair in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, or </li>
+
+<li>    click a stereo pair in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> with the right mouse button and choose <span class=arial>Visualization, Stereoscope</span> from the context-sensitive menu. </li>
+
+</ol>
+
+<p class=defnewpar>In case 2, 3, and 4, first the <a href="../ilwismen/open_stereopair.htm">Open Stereo Pair</a> dialog box will appear: </p>
+
+<ul>
+
+<li>Select a stereo pair. </li>
+
+<li>The stereo pair (and its output maps) will automatically be calculated from the input maps if the stereo pair was not yet calculated. </li>
+
+<li>The stereo pair will then be shown in a <a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope window</a>. </li>
+
+</ul>
+
+<p class=defnewpar>In case 1, 5 and 6, the stereo pair will directly be opened in the Stereo Pair - Stereoscope window. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul> 
+
+<li>To view a stereo pair in the Stereoscope window, the output maps calculated by the stereo pair may have the <span class=courier>Color</span> domain, the <span class=courier>Image</span> domain or any other value domain. </li>
+
+<li>As the output images of a stereo pair may have a very large file size, it is advised to create <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">Pyramid Layers</a> for both output raster maps. This will speed up display in the Stereo Pair - Stereoscope window. </li>
+
+<li>The default Open behaviour for a stereo pair, i.e. open in Stereoscope window or open as Anaglyph, can be defined in the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>, section Main window. </li>
+
+</ul>
+
+
+<p class=kopje>Stereo Pair - Stereoscope window: </p>
+
+<p>The stereo pair is shown in a Stereo Pair - Stereoscope window: </p>
+
+<ul>
+
+<li>the left-hand pane of this window displays the left-hand output map of the stereo pair, </li>
+
+<li>the right-hand pane of this window displays the right-hand output map of the stereo pair. </li>
+
+</ul>
+
+<p class=defnewpar>A stereoscope has to be mounted onto your monitor. </p>
+
+<p class=defnewpar>Refer the topic on the <a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope window</a> for information on: </p>
+
+<ul>
+
+<li>how to size the window in order to properly view the area with overlap in stereo, </li>
+
+<li>how to add a georeference to one of the maps, </li>
+
+<li>how to add a point map or a segment map to the stereo pair (<a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen digitizing</a>). </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>A stereo pair can also be shown as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >Anaglyph</a> in a map window. </p>
+
+<p class=kopje>Additional information:</p>
+
+<ul>
+
+<li>A Stereoscope window is split into two panes. You should position the window in such a way that the splitter is in the middle of your stereoscope. </li>
+
+<li>Initially, the horizontal offset between the rotation points of the photographs is equal to the width of each pane. This offset will be maintained during zooming, scrolling and panning. </li>
+
+<li>You may have to resize the window for proper stereo vision; by resizing the window, the horizontal offset between the rotation points of the photographs will change. </li>
+
+<li>You can further adjust stereo vision by unlocking the horizontal scroll. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="epipolar_stereopair.htm">Epipolar Stereo Pair</a> (operation)</p>
+
+<p class=seealsolinks><a href="../ilwis/epipolar_stereopair_creation_window.htm">Epipolar Stereo Pair : Creation window</a></p>
+
+<p class=seealsolinks><a href="stereopair_from_dtm.htm">Stereo Pair from DTM</a> (operation)</p>
+
+<p class=seealsolinks><a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope window</a></p>
+
+<p class=seealsolinks><a href="anaglyph.htm">Show stereo pair as anaglyph</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_stereopairs.htm">ILWIS objects : stereo pairs</a></p>
+
+</body

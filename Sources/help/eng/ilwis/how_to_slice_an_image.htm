@@ -1,0 +1,195 @@
+<html>
+
+<head>
+<title>How to slice an image</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Slicing, How to slice an image">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to slice an image</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>You can slice an image interactively or permanently; follow the instructions below.</p>
+
+<p class=kopjeboldandund>1. To slice an image interactively:</p>
+
+<ul>
+
+<li>	Double-click an image in the Catalog;</li>
+
+<li>	In the appearing <span class=arial>Display Options - Raster Map</span> dialog box, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box;</li>
+
+<li>	In the appearing <span class=arial>Create Representation</span> dialog box, type a name for your new representation but do not change the domain listed in this dialog box;</li>
+
+<li>	Click OK in the <span class=arial>Create Representation</span> dialog box. The Representation Value/Gradual editor is opened;</li>
+
+<li>	Then click OK in the <span class=arial>Display Options - Raster Map</span> dialog box. The image is displayed in a map window;</li>
+
+<li>	Click somewhere in the Representation Value/Gradual editor to make this window the active window.</li>
+
+</ul>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	In the <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a>:</li>
+
+<ul>
+
+<li>	Choose <span class=arial>Insert Limit</span> from the Edit menu or press <span class=arial>Ins</span> on the keyboard;</li>
+
+<li>	in the appearing <span class=arial>Insert Limit</span> dialog box, type a value for the upper boundary of a slice, e.g. <span class=courier>75</span>, and assign a color to this limit;</li>
+
+<li>	Double-click a number of times in between two limits, and decide whether the values in between the two limits in the image should use the color of the upper limit or the lower limit; you can also stretch the colors in between two limits;</li>
+
+<li>	Double-click an existing limit to change its boundary value or its color; </li>
+
+<li>	The color bar at the bottom of the editor gives an impression of how your total representation looks like;</li>
+
+<li>	Keep the editor open and switch to the map window.</li>
+
+</ul>
+
+</ul>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	In the map window:</li>
+
+<ul>
+
+<li>	Click the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22"> in the toolbar to see the result of editing the representation;</li>
+
+<li>	Keep the map window open and switch to the editor.</li>
+
+</ul>
+
+</ul>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	In the Representation editor:</li>
+
+<ul>
+
+<li>	Continue to insert limits, edit colors of limits, etc.;</li>
+
+<li>	Keep the editor open and switch to the map window.</li>
+
+</ul>
+
+</ul>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	In the map window:</li>
+
+<ul>
+
+<li>	Click the <span class=arial>Redraw</span> button in the toolbar to see the result of editing the representation.</li>
+
+</ul>
+
+</ul>
+
+<p class=defnewpar>Continue to switch between the Representation editor (to edit the representation) and the map window (to redraw the map) until satisfied.</p>
+
+<p class=tip>Notes: </p>
+
+<ul class=tipul>
+
+<li>	All changes you make in the editor are immediately stored in the new representation. </li>
+
+<li>	Each time you open a map with the <span class=courier>Image</span> domain, you can select the new representation.</li>
+
+<li>	You can use this method of creating a new representation, editing colors and redrawing the map for all maps that use a value domain. </li>
+
+</ul>
+
+<p class=kopjeboldandund>2. To slice an image permanently:</p>
+
+<ul>
+
+<li>	First, try the interactive method to get an idea where you want to put your boundaries;</li>
+
+<li>	Create a domain Group (Main window, <span class=arial>File</span>, <span class=arial>Create</span>) in which you fill in the upper boundaries and the output class/group names, and, optionally, edit the representation of this domain. For more information, refer to <a href="../ilwis/how_to_create_domain_group.htm">How to create a domain Group</a>;</li>
+
+<li>	In the Main window, open the <a href="main_window_menu_commands.htm">Operations menu</a>, choose <span class=arial>Image Processing, Slicing</span>, or <br>
+
+        in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Image Processing</span> item and double-click the <span class=arial>Slicing</span> operation, or <br>
+
+        in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Slicing</span> operation. <br>
+
+        For more information, refer to the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation. <br>
+        
+        You can also use the CLFY function on the command line of the Main window or in a MapCalc dialog box. For more information, see <a href="calc_clfy.htm">Map calculation : classifying a map (CLFY function)</a>;</li>
+
+<li>	Display the output raster map in a map window.</li>
+
+</ul>
+
+<p class=kopje>To edit the representation of the output map:</p>
+
+<ul>
+
+<li>	In the map window, open the <a href="map_window_menu_commands.htm">Edit menu</a> and choose <span class=arial>Representation</span>; </li>
+
+<li>	The <a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor</a> is opened: edit the colors of the classes as you wish;</li>
+
+<li>	Keep the editor open and switch to the map window;</li>
+
+<li>	In the map window, click the <span class=arial>Redraw</span> <img src="../images/redraw.gif" align=bottom width="22" height="22"> button .</li>
+
+</ul>
+
+<p class=defnewpar>You can continue switching to the Representation editor and back to the map window to redraw the map until satisfied.</p>
+
+<p class=kopje>To change the boundary values on second thought:</p>
+
+<ul>
+
+<li>	You may keep the map window open;</li>
+
+<li>	In the map window, open the <a href="map_window_menu_commands.htm">Edit menu</a> and choose <span class=arial>Domain</span>;</li>
+
+<li>	The Domain Class/ID/Group editor is opened: edit the boundary values of the groups, insert more groups, etc.;</li>
+
+<li>	In the map window, open the Edit menu and choose <span class=arial>Properties</span>;</li>
+
+<li>	In the appearing <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box, click the <span class=arial>Make Up-to-Date</span> button;</li>
+
+<li>	a message appears asking for confirmation to recalculate the map, click OK;</li>
+
+<li>	when the calculation has finished, click the <span class=arial>Redraw</span> <img src="../images/redraw.gif" align=bottom width="22" height="22"> button in the map window. </li>
+
+</ul>
+
+<p class=defnewpar>For more information, refer to <a href="../ilwis/how_to_create_domain_group.htm">How to create a domain Group</a> or <a href="calc_clfy.htm">Map calculation : classifying a map (CLFY function)</a>.</p>
+
+</body

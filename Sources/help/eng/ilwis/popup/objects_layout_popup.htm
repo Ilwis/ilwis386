@@ -1,0 +1,74 @@
+<html>
+
+<head>
+<title>Objects-layout popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Layout&nbsp;&nbsp;&nbsp;<img src="../../images/layout.gif" align=top width="12" height="14"></p>
+
+<p>A <a href="..//ilwis/ilwis_objects_layouts.htm" onClick="return popup(this, 'notes')" >layout</a> is required to print maps with optional annotation. A layout is a virtual sheet of paper on which you can make a composition of one or more <a href="objects_map_view_popup.htm">map views</a>, specify the scale on which these map views should be printed, and on which you can insert <a href="layers_annotation_layers_popup.htm">annotation</a>. </p>
+
+<p class=defnewpar>In the <a href="layout_editor_popup.htm">layout editor</a>, you can add to a layout: </p>
+
+<ul>
+
+<li>one or more <a href="objects_map_view_popup.htm">map views</a>, each of which may include one <a href="objects_raster_map_popup.htm">raster map</a> and/or one or more <a href="objects_point_map_popup.htm">point maps</a>, <a href="objects_segment_map_popup.htm">segment maps</a> and/or <a href="objects_polygon_map_popup.htm">polygon maps</a>, <a href="annotation_text_popup.htm">annotation text layers</a>, <a href="ann_grid_lines_popup.htm">grid lines</a> and/or <a href="ann_graticule_popup.htm">graticules</a>; </li>
+
+<li><a href="ann_text_popup.htm">texts</a> such a titles; </li>
+
+<li><a href="ann_box_popup.htm">boxes</a>; </li>
+
+<li><a href="ann_windows_metafile_popup.htm">pictures</a> and/or <a href="ann_bitmap_popup.htm">bitmaps</a>;</li>
+
+<li>a <a href="../../ilwis/popup/ann_page_border_popup.htm">page border</a>.</li> 
+
+</ul>
+
+<p class=defnewpar>For each map view, you can add to the layout:</p>
+
+<ul>
+
+<li>a <a href="ann_legend_popup.htm">legend</a> for a layer in a map view; </li>
+
+<li>a <a href="ann_map_border_popup.htm">map border</a>, including coordinates and ticks for grid lines and/or a graticule;</li>
+
+<li>a <a href="ann_north_arrow_popup.htm">North arrow</a>; </li>
+
+<li>a <a href="ann_scale_bar_popup.htm">scale bar and scale text</a>. </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To obtain a layout, first save a <a href="map_window_popup.htm">map window</a> containing one or more maps, optionally <a href="annotation_text_popup.htm">Annotation Text</a>, <a href="ann_grid_lines_popup.htm">grid lines</a> and/or <a href="ann_graticule_popup.htm">graticules</a> as a <a href="objects_map_view_popup.htm">map view</a>. Then, create a layout and add one or more map views to it. </p>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_map_views_and_layouts.htm" onClick="return popup(this, 'notes')" >Basic concepts : map views and layouts</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_map_views.htm" onClick="return popup(this, 'notes')" >ILWIS objects : map views</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_layouts.htm" onClick="return popup(this, 'notes')" >ILWIS objects : layouts</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/layout_editor_functionality.htm" onClick="return popup(this, 'notes')" >Layout editor : functionality</a></p>
+
+</body

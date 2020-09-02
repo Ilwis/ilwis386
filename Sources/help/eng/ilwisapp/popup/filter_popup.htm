@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>filter popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Filter</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/filter.htm" onClick="return popup(this, 'notes')" >Filtering</a> is a raster operation in which each pixel value in a raster map is replaced with a new value. </p>
+
+<p class=linespacing03after>The new value is obtained by applying a certain function to each input pixel and its direct neighbours. These neighbours are usually the 8 adjacent pixels (in a 3 x 3 filter) or the 24 surrounding pixels (in a 5 x 5 filter). When you create or define your own filters, any odd sized matrix is allowed (5 x 1, 11 x 23, 25 x 25). </p>
+
+<p>Filtering is for instance used to sharpen a satellite image, to detect line features, etc. </p>
+
+</body

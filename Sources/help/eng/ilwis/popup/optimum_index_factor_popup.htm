@@ -1,0 +1,30 @@
+<html>
+
+<head>
+<title>Optimum index factor popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Optimum Index Factor</p>
+
+<p>The <a href="..//ilwisapp/optimum_index_factor_functionality_algorithm.htm" onClick="return popup(this, 'notes')" >Optimum Index Factor (OIF)</a> is a statistic value that can be used to select the optimum combination of three bands in a satellite image with which you want to create a color composite. The optimum combination of bands out of all possible 3-band combinations is the one with the highest amount of 'information' (= highest sum of standard deviations), with the least amount of duplication (lowest correlation among band pairs). </p>
+
+</body

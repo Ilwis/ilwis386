@@ -1,0 +1,44 @@
+<html>
+
+<head>
+<title>objects-raster map popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Raster map&nbsp;&nbsp;&nbsp;<img src="../../images/rasmap.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="..//ilwis/ilwis_objects_raster_maps.htm" onClick="return popup(this, 'notes')" >raster map</a> consists of <b>pixels</b> (picture elements) of a certain size, e.g. 20m x 20m. Pixels are either codified by IDs, class names, values, or colors; this is determined by the <a href="objects_domains_intro_popup.htm">domain</a> of the map. A raster map should have coordinates, that is a <a href="objects_georeference_popup.htm">georeference</a>. In ILWIS, most spatial operations are performed on raster maps.</p>
+
+<p class=linespacing03before>To obtain a  raster map:</p>
+
+<ul>
+
+<li>	rasterize an existing point, segment or polygon map, or</li>
+
+<li>	create a new raster map and edit it with the pixel editor, </li>
+
+<li>	use a satellite image which is already a raster map, or</li>
+
+<li>	scan a map or photograph and import it into ILWIS.</li>
+
+</ul>
+
+</body

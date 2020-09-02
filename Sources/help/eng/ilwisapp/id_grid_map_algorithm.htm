@@ -1,0 +1,250 @@
+<html>
+
+<head>
+<title>ID Grid map : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ID Grid map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>ID Grid map</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+<p class=linespacing03after>The ID Grid map operation uses a coordinate system and optionally an attribute table as input and creates a polygon map as output. The output polygon map consists of rectangular grid cells with a unique ID, and can be linked to a table with attribute data when sample data is available for rectangular grid cells (e.g. biodiversity data in 5x5 km blocks).</p> 
+<p>Besides the above, the operation can create an additional point map with label points at the center of each grid cell.</p>
+
+<p class=kopje>Labeling</p>
+
+<p>In the ID Grid map operation four different labeling methods are available:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>Horizontal:</p>
+<p>From top to bottom or from bottom to top, line by line,</p>
+<ul>
+<li>left to right when using the upper left or lower left corner as starting corner, or</li>
+<li>right to left when using the upper right or lower right corner as starting corner.</li>
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>Vertical:</p>
+<p>From top to bottom or from bottom to top, column by column,</p>
+
+<ul>
+<li>left to right when using the upper left or lower left corner as starting corner, or</li>
+<li>right to left when using the upper right or lower right corner as starting corner.</li>
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>Horizontal Continued:</p>
+<p>From left to right for the first line, then from right to left for the second etc. or vice versa, line by line,</p>
+
+<ul>
+<li> from top to bottom when using the upper left or upper right corner as starting corner, or</li>
+<li> from bottom to top when using the lower left or lower right corner as starting corner.</li>
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>Vertical Continued:</p>
+<p>From top to bottom for the first column, bottom to top for the second column etc. or vice versa, column by column,</p>
+
+<ul>
+<li> left to right when using the upper left or lower left corner as starting corner, or</li>
+<li> right to left when using the upper right or lower right corner as starting corner.</li>
+</ul>
+
+<p class=kopje>Labeling examples:</p>
+
+<table>
+<tr>
+	<td><p class=courier>OutMap1</p></td>
+	<td><p class=courier>OutMap2</p></td>
+	<td><p class=courier>OutMap3</p></td>
+	<td><p class=courier>OutMap4</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>7</td>
+    <td class=calcpict>8</td>
+    <td class=calcpict>9</td>
+  </tr>
+  <tr>
+    <td class=calcpict>4</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>6</td>
+  </tr>
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>2</td>
+    <td class=calcpict>3</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>7</td>
+    <td class=calcpict>4</td>
+    <td class=calcpict>1</td>
+  </tr>
+  <tr>
+    <td class=calcpict>8</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>2</td>
+  </tr>
+  <tr>
+    <td class=calcpict>9</td>
+    <td class=calcpict>6</td>
+    <td class=calcpict>3</td>
+  </tr>
+</table>
+</td>
+
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>11</td>
+    <td class=calcpict>61</td>
+    <td class=calcpict>71</td>
+  </tr>
+  <tr>
+    <td class=calcpict>21</td>
+    <td class=calcpict>51</td>
+    <td class=calcpict>81</td>
+  </tr>
+  <tr>
+    <td class=calcpict>31</td>
+    <td class=calcpict>41</td>
+    <td class=calcpict>91</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>nr7A</td>
+    <td class=calcpict>nr8A</td>
+    <td class=calcpict>nr9A</td>
+  </tr>
+  <tr>
+    <td class=calcpict>nr6A</td>
+    <td class=calcpict>nr5A</td>
+    <td class=calcpict>nr4A</td>
+  </tr>
+  <tr>
+    <td class=calcpict>nr1A</td>
+    <td class=calcpict>nr2A</td>
+    <td class=calcpict>nr3A</td>
+  </tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p class=defnewpar>The left figure shows the default situation when using the dialog box. The Start corner is defined as the Lower Left corner and the labeling order is defined as Horizontal, line by line. The Start number and Step size are both 1.<br>
+The figure next to it (<span class=courier>OutMap2</span>) uses also a value 1 for the Starting number and the Step size. The labeling order is however defined as Vertical and the Start corner is the Upper Right corner.<br>
+In the third figure (<span class=courier>OutMap3</span>) the Start cell is defined as the Upper Left corner and the labeling order is Vertical
+Continued. Start number is 11 and Step size is 10.<br>
+The rightmost figure shows another example. In this figure labeling starts in the Lower Left corner, the ordering is Horizontal
+Continued and the Start number and Step size are both 1. Besides this, the characters
+'nr' are used as prefix and 'A' is used as suffix.</p>
+
+<p class=kopje>Attribute table:</p>
+
+<p>An existing attribute table with an ID domain can be directly linked to the output polygon map. However the ID to be assigned to each grid cell should be available in the ID domain of the attribute table. If the IDs in the domain do not exactly match with the IDs of the grid cells undefined values will be assigned to the cells during the labeling process. The figure below shows an example.</p>
+
+<table>
+<tr>
+	<td><p class=courier>Attribute table</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>ID</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Elephants</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Buffalo</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Cattle</p></td>
+	<td valign="top"><p class=tcolhr>Nr...</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr1</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class="t1r">53</td>
+	<td valign="top"><p class="t1r">22</td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr2</p></td>
+	<td valign="top"><p class=t1r>22</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+	<td valign="top"><p class=t1r>34</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr3</p></td>
+	<td valign="top"><p class=t1r>24</p></td>
+	<td valign="top"><p class=t1r>80</p></td>
+	<td valign="top"><p class=t1r>45</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr5</p></td>
+	<td valign="top"><p class=t1r>34</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+	<td valign="top"><p class=t1r>70</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr6</p></td>
+	<td valign="top"><p class=t1r>45</p></td>
+	<td valign="top"><p class=t1r>20</p></td>
+	<td valign="top"><p class=t1r>22</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr9</p></td>
+	<td valign="top"><p class=t1r>12</p></td>
+	<td valign="top"><p class=t1r>15</p></td>
+	<td valign="top"><p class=t1r>21</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+</table>
+</td>
+
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>nr1</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>nr2</td>
+    <td class=calcpict>nr5</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>nr3</td>
+    <td class=calcpict>nr6</td>
+    <td class=calcpict>nr9</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="id_grid_map_functionality.htm">ID Grid map : functionality</a></p>
+
+</body

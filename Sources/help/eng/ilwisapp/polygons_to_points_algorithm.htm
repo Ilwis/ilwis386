@@ -1,0 +1,55 @@
+<html>
+
+<head>
+<title>Polygons to points : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygons to points">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Polygons to points</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Polygons to points operation creates a point for each polygon in the polygon map. Each point obtains the class name, ID, or value of the corresponding polygon. In this way, polygon label points are created. Optionally, you can also obtain label points for polygons which have no class name, no ID or no value, i.e. for undefined polygons.</p>
+
+<p class=kopje>Label points:</p>
+
+<p>For each polygon:</p>
+
+<ul>
+
+<li>	The Y-coordinate of a label point is determined as the mean value of the minimum and maximum Y-coordinate used by the polygon. In other words, the Y-coordinate of the label point will be positioned on the horizontal middle line of the polygon.</li>
+
+<li>	In case the polygon is convex, the X-coordinate of a label point is determined as the mean of the minimum and maximum X-coordinate used by the polygon.</li>
+
+<li>	In case the polygon is concave, it is possible that the horizontal middle line is cut into several pieces by the polygon boundary. Then, the X-coordinate of the label point is positioned at the middle of the longest piece of the horizontal middle line inside the polygon. </li>
+
+</ul>
+
+<p class=defnewpar>This means that:</p>
+
+<ul>
+
+<li>	for circular polygons, the label point lies more or less at the center of the polygon;</li>
+
+<li>	for vertical half-moon shaped polygons, the label point lies in the middle of the broader part of the polygon.</li>
+
+<li>	for horizontal half-moon shaped polygons, the label point lies in one of the tips of the half-moon.</li>
+
+<li>	for hour-glass shaped polygons, the label point may lie at the narrowest part of the polygon.</li>
+
+<li>	for polygons containing one or more islands, the label point may lie at a narrow part close to an island.</li>
+
+</ul>
+
+<p class=defnewpar>When you are not satisfied with the position of a label point, display the polygon boundaries and the label points in the same map window, break the dependency link of the point map, and use the <a href="../ilwis/point_editor_functionality.htm">Point editor</a> to move a label point to another position. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="polygons_to_points_functionality.htm">Polygons to points : functionality</a></p>
+
+</body

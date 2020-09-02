@@ -1,0 +1,118 @@
+<html>
+
+<head>
+<title>Contour interpolation : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Contour interpolation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Contour interpolation</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Contour interpolation is an operation which first rasterizes contour lines of a segment map with a value domain, and then calculates values for pixels that are not covered by segments by means of a linear interpolation. Furthermore, on the command line, this operation can also use an input raster map. </p>
+
+<p class=defnewpar>When using Contour interpolation on a segment map containing height (contour) information, the resulting raster map is a Digital Elevation Model (DEM).</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Contour map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input segment map with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Georeference:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a georeference for the output raster map or create a new georeference by clicking the little create button <img src="../images/crea.gif" align=bottom width="17" height="22">.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default domain, or select an another existing value domain, or create a new value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, or specify your own range of possible values in the output map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> for the output values, or specify your own precision.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/contour_interpolation_functionality.htm">Contour interpolation : functionality</a></p>
+
+</body

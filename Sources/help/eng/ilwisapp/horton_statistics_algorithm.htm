@@ -1,0 +1,188 @@
+<html>
+
+<head>
+<title>Horton statistics : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Horton statistics">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Horton statistics</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class="defnewpar">For each merged catchment all streams are found, and sorted by their Strahler stream order value. </p>
+
+<p class="defnewpar">The number of streams, the length of these streams and the catchment areas are found for all streams of a certain Strahler stream order number within each catchment. Connected streams with the same order number are joined and are counted as a single stream. Values are summed for each Strahler stream order number within each catchment. </p>
+
+<p class="defnewpar">Then a least squares fit is performed on all output columns containing summed values: </p>
+
+<ul>
+
+<li>When the total number of stream orders, i.e. the number of records in the Horton table, is <span class="symbollarger">£</span> 2, a least squares fit will not be calculated. </li>
+
+<li>When the total number of stream orders equals 4, the highest order is ignored during the least squares fit (i.e. values in the last record will not be taken into account). </li>
+
+<li>When the total number of stream orders is <span class="symbollarger">&#179;</span> 5, the lowest and highest orders are ignored during the least squares fit (i.e. values in the first and the last record in the table will not be taken into account.) </li>
+
+</ul>
+
+<p class="defnewpar">If you wish to perform the least squares fit by hand, as described below, you should first assign some undefined values in the columns containing summed values, using the rules above. </p>
+
+<p class="defnewpar">Expected values are calculated: </p>
+
+<ul>
+
+<li class="ls01be">by taking the logarithm of the empirical values, </li>
+
+<li class="ls01be">by performing a least squares fit through the logarithmic values, </li>
+
+<li class="ls01be">by 'undoing' the logarithm of the first step: the expected values equal 10 raised to the power of <i>the outcome least squares fit values</i> of the previous step. </li>
+
+</ul>
+
+<p class="defnewpar">In TabCalc syntax, this is obtained as follows (example to calculate expected values for <span class="courier">C1_N</span>): </p>
+<p class="emptylinehalf">&nbsp;</p>
+<p class="leftmargin06"><span class="tiptext"><span class="courier">C1_N_log = log(C1_N)</span></span></p>
+<p class="emptylinehalf">&nbsp;</p>
+<p class="leftmargin06"><span class="tiptext"><span class="courier">C1_N_poly = ColumnLeastSquaresFit(Order, C1_N_log, polynomial, 2)</span></span></p>
+<p class="emptylinehalf">&nbsp;</p>
+<p class="leftmargin06"><span class="tiptext"><span class="courier">C1_N_expected = 10 ^ C1_N_poly</span></span></p>
+
+<p class="defnewpar">This is repeated for <span class="courier">C1_L</span> and <span class="courier">C1_A</span>, and if required for other catchments C2, C3, etc. as well.  </p>
+
+<p class="defnewpar">For more information, please refer to <a href="../ilwismen/least_squares_fit.htm">Table window: Least Squares Fit</a>. </p>
+
+<h2>Additional information</h2>
+
+<p class="kopje">RB, RL, RA for subsequent stream orders <i>i</i>: </p>
+
+<p class="defnewpar">R<sub>B</sub>, R<sub>L</sub>, or R<sub>A</sub> value for subsequent stream orders <i>i</i> can be calculated as follows: </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<ul>
+
+<li>The bifurcation ratio R<sub>B</sub> for a catchment is defined as: N<sub><i>i</i></sub> / (N<sub><i>i</i> + 1</sub>)</li>
+
+<li>To calculate R<sub>B</sub> for catchment C1, type on the command line of the table window: <br> 
+
+	<span class="tiptext"><span class="courier">C1_RB = C1_N / C1_N[%r+1]</span></span></li>
+
+	<p class="emptyline">&nbsp;</p>
+
+<li>The length ratio R<sub>L</sub> for a catchment is defined as: (L<sub><i>i</i> + 1</sub>) / L<sub><i>i</i></sub></li>
+
+<li>To calculate R<sub>L</sub> for catchment C1, type on the command line of the table window: <br> 
+
+	<span class="tiptext"><span class="courier">C1_RL = C1_L[%r+1] / C1_L</span></span></li>
+
+	<p class="emptyline">&nbsp;</p>
+
+<li>R<sub>A</sub> for a catchment is defined as: (A<sub><i>i</i> + 1</sub>) / A<sub><i>i</i></sub></li>
+
+<li>To calculate R<sub>A</sub> for catchment C1, type on the command line of the table window: <br> 
+
+	<span class="tiptext"><span class="courier">C1_RA = C1_A[%r+1] / C1_A</span></span></li>
+
+</ul>
+
+<p class="defnewpar">This can be done for all other catchments C2, C3, etc. as well. </p>
+
+<p class="defnewpar">For more information on %R, see <a href="../ilwis/calc_predefined_variable_r.htm">Table Calculation : predefined variable %R</a></p>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<p class="kopje">RB, RL, RA as the slope of the regression lines: </p>
+
+<p class="defnewpar">The R<sub>B</sub>, R<sub>L</sub>, or R<sub>A</sub> as the slope of the regression lines can be calculated as follows: </p>
+
+<ul>
+
+<li>To calculate R<sub>B</sub> for catchment C1, open the <span class="arial"><a href="../ilwismen/column_properties.htm">Column Properties</a></span> of the <span class="courier">C1_N_poly</span> column, and click the <span class="arial">Additional Info</span> button. </li>
+
+<li>You will see the formula that is the result of the least squares fit, e.g. Y = <i>b</i> + <span class="tip"><i>a</i></span> <span class="courier">*</span> X</li>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<li>Copy value <span class="tip"><i>a</i></span>, or write this value down. </li>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<li>To calculate the bifurcation ration R<sub>B</sub>, type on the command line of the table window: <br> 
+
+	<span class="tiptext"><span class="courier">RB = 10 ^ ABS</span>(<span class="tip"><i>a</i></span>) </span></li>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<li>To calculate the Length Ratio R<sub>L</sub>, use regression coefficient <span class="tip"><i>a</i></span> of column <span class="courier">C1_L_poly</span>. </li>
+
+<li>To calculate R<sub>A</sub>, use regression coefficient <span class="tip"><i>a</i></span> of column <span class="courier">C1_A_poly</span>. </li>
+
+</ul>
+
+<p class="kopje">Reference: </p>
+
+<p>Ven te Chow, D.R. Maidment, L.W. Mays (1988) Applied hydrology. In: McGraw-Hill Series in Water Resources and Environmental Engineering. McGraw-Hill, New York. pp. 166-170. ISBN 0-07-010810-2. </p>
+
+<!--
+<p class="emptyline">&nbsp;</p>
+
+<ol>
+<li>Take the logarithm of the number of streams column <span class="courier">C1_N</span>, i.e. type on the command line of the table window: <br>
+	<span class="tiptext"><span class="courier">C1_N_log = log(C1_N)</span></span></li>
+
+<p class="emptyline">&nbsp;</p>
+<li>Calculate the exponents for the expected values: </li>
+	
+	<ul>
+	<li>open the Columns menu and choose <span class="arial">Least Squares</span>,</li>
+	<li>in the <a href="../ilwismen/least_squares_fit.htm">Least Squares Fit</a> dialog box: </li>
+
+		<ul>
+		<li>for X-column, choose: <span class="courier">Order</span>, </li>
+		<li>for the Y-column, choose: <span class="courier">C1_N_log</span></li>
+		<li>for function, choose: <span class="arial">Polynomial</span>, 
+		<li>for Nr. of terms, choose: 2, </li>
+		<li>for the output column name, type for instance: <span class="courier">C1_N_poly</span> </li>
+		<li>the output column will appear in the table. </li>
+        </ul>
+
+		<ul class="tipul">
+		<li><span class="tip">Tip: </span><span class="tiptext">To perform a Least Squares Fit via the command line, type: <br>
+			<span class="courier">C1_N_poly = ColumnLeastSquaresFit(Order, C1_N_log, polynomial, 2)</span>
+			</span>
+		</ul>
+		
+
+	</ul>
+<p class="emptyline">&nbsp;</p>
+
+<li>Finally, calculate the the expected values. <br>
+	Because the Least Squares Fit was performed on logarithmic values, now take the inverse log (i.e. 10 to the power <i>calculated exponent</i>) on the calculated exponents from the previous step: <br>
+	<span class="tiptext"><span class="courier">C1_N_expected = 10 ^ C1_N_poly</span></span><br>
+	These values will be plotted in the graph as a line as the expected values later. </li>
+
+<p class="emptyline">&nbsp;</p>
+
+<li>Repeat the procedure above for columns <span class="courier">C1_L</span>, i.e. stream lengths per order number, and for <span class="courier">C1_A</span>, i.e. catchment area size per stream order number. <br>
+	In the calculations above, replace <span class="courier">C1_N</span> with <span class="courier">C1_L</span> and with <span class="courier">C1_A</span> respectively. <br>
+	If you have multiple catchments in your merged catchments map, you can also repeat the calculations for the other catchments. </li>
+
+</ol>
+-->
+
+<p class=Seealso>See also:</p>
+
+<p class="seealsolinks"><a href="../ilwismen/least_squares_fit.htm">Table window: Least Squares Fit</a></p>
+
+<p class=seealsolinks><a href="horton_statistics_functionality.htm">Horton statistics : functionality</a></p>
+
+<p class=seealsolinks><a href="horton_statistics_dialog_box.htm">Horton statistics : dialog box</a></p>
+
+<p class=seealsolinks><a href="horton_statistics_command_line.htm">Horton statistics : command line</a></p>
+
+</body

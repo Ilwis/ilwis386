@@ -1,0 +1,107 @@
+<html>
+
+<head>
+<title>Insert a Legend / Map Layer Selection</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Legend, Layout editor, Layouts, Add ..., Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert a Legend / Map Layer Selection</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>When a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> contains multiple map layers, select the <a href="..//ilwis/popup/layers_data_layers_popup.htm" onClick="return popup(this, 'notes')" >data layer</a> for which you want to create a <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legend</a>. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when in the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a>, you <i>select a map view</i> that contains more than one data layer, and then:</li>
+
+        <ul>
+
+        <li>	choose the <span class=arial>Legend</span> command from the <a href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a> of the layout editor, or </li>
+
+        <li>	click the <span class=arial>Legend</span> button <img src="../images/annleg.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/layout_editor_layout_toolbar.htm">Layout toolbar</a> of the layout editor. </li>
+
+        </ul>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<p class=diabox>In the list box, select the map layer for which you want to create a legend.</p>
+
+<p class=defnewpar>Depending on the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map layer you select, a dialog box will appear in which you can further specify the appearance of the legend. </p>
+
+<p class=defnewpar>When you select: </p>
+
+<ul>
+
+<li class=ls01be>	a raster, polygon, segment or point map layer with a Class domain, </li>
+
+        <p>the <a href="display_options_legend_class.htm">Display Options - Legend (Class)</a> dialog box appears;</p>
+
+<li class=ls01be>	a raster, polygon or segment map layer with a value domain or the Image domain, </li>
+
+        <p>the <a href="display_options_legend_image_value.htm">Display Options - Legend (Image/Value)</a> dialog box appears;</p>
+
+<li class=ls01be>	a point map with a value domain, </li>
+
+        <p>the <a href="display_options_legend_point_values_as_sized_symbols.htm">Display Options - Legend (point values as sized symbols)</a> dialog box appears;</p>
+
+<li class=ls01be>	an ID point map with an attribute table, displayed as arrows, </li>
+
+        <p>the <a href="display_options_legend_point_id_attributes_symbols_as_arrows.htm">Display Options - Legend (point ID + attributes, symbols as arrows)</a> dialog box appears;</p>
+
+<li class=ls01be>	an ID point map with an attribute table, displayed as pie charts, bar charts, or composed bars, </li>
+
+        <p>first, a <a href="legend_for_id_points_symbols_as_graphs.htm">Create Legend</a> dialog box appears; </p>
+
+<p class=leftmargininlist>	then, either the: </p>
+
+        <ul>
+
+        <li>	the <a href="display_options_legend_point_id_attributes_symbols_as_graphs_size.htm">Display Options - Legend (point ID + attributes, symbols as graphs, size)</a> dialog box, (for pie charts, bar charts and composed bars), or</li>
+
+        <li>	the <a href="display_options_legend_point_id_attributes_symbols_as_graphs_color.htm">Display Options - Legend (point ID + attributes, symbols as graphs, color)</a> dialog box appears (for pie charts, bar graphs, composed bars, and volume cubes). For volume cubes, this dialog box will directly appear.</li>
+
+        </ul>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_layouts.htm">ILWIS objects : layouts</a></p>
+
+</body

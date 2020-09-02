@@ -1,0 +1,91 @@
+<html>
+
+<head>
+<title>How to release disk space</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Dependent data objects, Release disk space, Properties of objects, How to release disk space">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to release disk space</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>When creating <a href="basic_concepts_dependent_data_objects.htm">dependent data objects</a> through a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculation</a> or another <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>, in principle only a small ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> is stored on disk. The object definition file stores among others the expression by which the dependent object was created, this is the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> of the dependent object. Based on the definition, a dependent data object can always recalculate itself. </p>
+
+<p class=defnewpar>Data files of dependent objects are automatically calculated when you display a dependent map or a dependent table, i.e. when needed. Data files may need a lot of disk space and as the definition of the object is stored in an object's object definition file, data files may thus be deleted to obtain more free disk space. For dependent raster maps for example, the data file (.MP#) can be deleted as long as the object definition file (.MPR) remains. </p>
+
+<p class=defnewpar>You can release disk space for dependent raster, polygon, segment and point maps and for dependent tables. You cannot release disk space for dependent columns.</p>
+
+<p class=kopje>To release disk space:</p>
+
+<ul>
+
+<li>	select <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >one or more</a> dependent raster, polygon, segment and/or point maps and/or dependent tables in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>,</li>
+
+<li>	press the right mouse button, </li>
+
+<li>	choose <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>,</li>
+
+</ul>
+
+<p>or </p>
+
+<ul>
+
+<li>	select one or more dependent maps and/or tables in a Catalog, </li>
+
+<li>	open the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window,</li>
+
+<li>	choose <span class=arial>Properties</span>.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Property sheet(s)</a> of the selected dependent map(s) and/or table(s) will appear: </p>
+
+<ul>
+
+<li>go to the <span class=arial>Dependency</span> tab, and </li>
+
+<li>click the button <span class=arial>Release Disk Space</span>. </li>
+
+</ul>
+
+<p class=defnewpar>When a dependent map is displayed in a map window, or when a dependent table is displayed in a table window, you can also open the File menu in the map or table window and select the <span class=arial>Properties</span> command. The Property sheet of that map or table then appears. To release disk space, go to the <span class=arial>Dependency</span> tab, and click the button <span class=arial>Release Disk Space</span>.</p>
+
+<p class=kopje>To release disk space on the command line or in scripts:</p>
+
+<p>You can also release disk space by typing the following on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the Main window</a> or in a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a>:</p>
+
+<p class=calc1>	reldisksp <i>object.ext</i></p>
+
+<p>For <span class=courier><i>object.ext</i></span> fill out the <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object name</a> and its <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >extension</a>. </p>
+
+<p>For more information, <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">see Appendices : script language (syntax)</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a></p>
+
+<p class=seealsolinks><a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit the properties of an object</a></p>
+
+</body

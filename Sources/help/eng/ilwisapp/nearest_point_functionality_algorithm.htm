@@ -1,0 +1,112 @@
+<html>
+
+<head>
+<title>Nearest point : functionality/algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Nearest point">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Nearest point</h1>
+
+<h1 class=secondline>Functionality / Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Nearest point operation requires a point map as input and returns a raster map as output. Each pixel in the output map is assigned the class name, identifier, or value of the nearest point. </p>
+
+<p class=kopje>Example:</p>
+
+<p>Schools, hospitals, water wells, etc. may be represented by points. The output of a nearest point operation on such a point map gives the 'service area' of the schools, hospitals or water wells, based on the shortest distance (as the crow flies) between points and pixels. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>Input map:</p>
+
+</td>
+<td valign="top">
+<p>Output map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/thiesi.gif" align=bottom width="100" height="100"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/thieso.gif" align=bottom width="100" height="100"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Nearest point operation versus Distance operation:</p>
+
+<p>The Nearest point is operation is also known as Nearest neighbour or Thiessen Map. Also the <a href="..//ilwisapp/popup/distance_calculation_popup.htm" onClick="return popup(this, 'notes')" >Distance</a> operation has an option to create a Thiessen map.</p>
+
+<ul>
+
+<li>	When every pixel in the output map is equally accessible, the Nearest point operation offers a quick way to obtain a Thiessen map from point data. Furthermore, as the Nearest point operation uses <i>Euclidean</i> distances, the output of the Nearest point operation may be somewhat more precise than the output of the Distance operation which uses approximated <i>raster</i> distances.</li>
+
+<li>	When you have many points or when you wish to use weights to indicate accessibilities, you can use the Distance operation. For more information, see <a href="distance_calculation_thiessen_map.htm">Distance calculation: Thiessen map</a>.</li>
+
+</ul>
+
+<p class=kopje>Spherical distances:</p>
+
+<p>Optionally, you can choose to calculate with <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distances</a>, i.e. distances calculated over the sphere using the projection that is specified in the coordinate system used by the georeference of the output raster map. It is advised to use this spherical distance option for maps that comprise large areas (countries or regions) and for maps that use LatLon coordinates. In more general terms, spherical distance should be used when there are 'large' scale differences within a map as a consequence of projecting the globe-shaped earth surface onto a plane. </p>
+
+<p>When the spherical distance option is not used, distances will be calculated in a plane as Euclidean distances. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When you used the spherical distance option in the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial Correlation</a> operation, it is advised to also use the spherical distance option in the Nearest Point operation. </p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special input map requirements. Input maps may be maps of domain type class, ID, value, or bool. Furthermore, you can use a class or ID map with an attribute table. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output raster map uses the same domain as the input point map or the domain of the attribute column.</p>
+
+<p>The georeference for the output map has to be selected or created; you can usually select an existing georeference corners.</p>
+
+<p class=kopje>Algorithm:</p>
+
+<p>For each output pixel, the Euclidean distances towards all points are determined. The value of the point with the shortest distance towards an output pixel is assigned to this output pixel.</p>
+
+<p class=defnewpar>In case the option <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distance</a> is used, spherical distances are calculated from each output pixel towards all input points. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="point_interpolation.htm">Point interpolation</a></p>
+
+<p class=seealsolinks><a href="nearest_point_dialogbox.htm">Nearest point : dialog box</a></p>
+
+<p class=seealsolinks><a href="nearest_point_commandline.htm">Nearest point : command line</a></p>
+
+<p class=seealsolinks><a href="distance_calculation_thiessen_map.htm">Distance calculation : Thiessen map</a></p>
+
+</body

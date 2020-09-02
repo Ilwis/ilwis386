@@ -1,0 +1,213 @@
+<html>
+
+<head>
+<title>MAPCRD</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="MAPCRD, Coordinate functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>MAPCRD( ) function</h1>
+
+<p class=defnewpar>Returns the (X,Y) coordinate of a raster map at a certain row, column position.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax>
+<span class=courier>MAPCRD</span>(<i>RasterMap</i>)<span class=courier><br>
+MAPCRD</span>(<i>RasterMap</i>, <i>RowNumber</i>, <i>ColumnNumber</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>RasterMap</i></td>
+	<td valign="top">is a raster map</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>RowNumber</i></td>
+	<td valign="top">is a row number</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>ColumnNumber</i></td>
+	<td valign="top">is a column number</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>MAPCRD</span> returns:</td>
+	<td valign="top">an (X,Y) coordinate</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top">the coordinate system used by the georeference of raster map <i>RasterMap</i></td>
+</tr>
+</table>
+
+<p class="tip">Note:</p>
+<p class="tiptext"><span class=courier>MAPCRD</span> is mostly used as input in an expression.</p>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>This function may be handy to use in <a href="..//ilwis/popup/dde_popup.htm" onClick="return popup(this, 'notes')" >DDE</a> applications.</li>
+	<li>The expression <span class=courier>MAPCRD</span>(<i>RasterMap</i>) returns the coordinates of the raster map at the current row, column position (MapCalc only).</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a>, <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="175"><p class=calc00>? MAPCRD(DEM, 120,150)</p></td>
+	<td><p>returns the coordinate of a raster map DEM at row 120 and column 150, e.g. (798470.00,8088130.00).</p></td>
+</tr>
+<tr>
+	<td valign="top" colspan="2"><p class=calc00>? DIST(MAPCRD(Geology,1,1),MAPCRD(Geology,1,MAPCOLS(Geology)))</p>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=calc00></p>
+	<td valign="top"><p>returns the distance (e.g. 12720.000 m) of a pixel at the left boundary and a pixel at the right boundary of map <span class=courier>Geology</span>. Since the map has a rectangular shape you can use any row number you like. In this example the first one is taken.</p>
+	<p class=tiptext><span class=tip>Note: </span>The function <a href="calc_mapcols.htm"><span class=courier>MAPCOLS</span></a> returns the number of columns in a map. Therefore, it is unnecessary to put the map on the screen to find out which column is the last one.</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc examples:</p>
+<p class=calc00>LanduseCrd=MAPCRD(Landuse,Row,Col)</p>
+<p class=calc00>Tmb1Crd=MAPCRD(Tmb1,Row,Col)</p>
+<p class=emptylinehalf>&nbsp;
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=th>Tmgeo.grf opened as table</p></td>
+</tr>
+</table>
+<table cellspacing=0>
+<table>
+<tr>
+	<td valign="top"><p class=tcolhr></p></td>
+	<td valign="top"><p class=tcolhr>X</p></td>
+	<td valign="top"><p class=tcolhr>Y</p></td>
+	<td valign="top"><p class=tcolhr>Row</p></td>
+	<td valign="top"><p class=tcolhr>Col</p></td>
+	<td valign="top"><p class=tcolhr>LanduseCrd</p></td>
+	<td valign="top"><p class=tcolhr>Tmb1Crd</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>801490</p></td>
+	<td valign="top"><p class=t1r>8089155</p></td>
+	<td valign="top"><p class=t1r>23</p></td>
+	<td valign="top"><p class=t1r>90</p></td>
+	<td valign="top"><p class=t1r>(797270.00,8090070.00)</p></td>
+	<td valign="top"><p class=t1r>(801489.15,8089154.06)</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1r>802004</p></td>
+	<td valign="top"><p class=t1r>8075147</p></td>
+	<td valign="top"><p class=t1r>471</p></td>
+	<td valign="top"><p class=t1r>205</p></td>
+	<td valign="top"><p class=t1r>(799590.00,8081110.00)</p></td>
+	<td valign="top"><p class=t1r>(802013.11,8075141.54)</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1r>800242</p></td>
+	<td valign="top"><p class=t1r>8074191</p></td>
+	<td valign="top"><p class=t1r>510</p></td>
+	<td valign="top"><p class=t1r>156</p></td>
+	<td valign="top"><p class=t1r>(798590.00,8080330.00)</p></td>
+	<td valign="top"><p class=t1r>(800251.34,8074210.12)</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>802445</p></td>
+	<td valign="top"><p class=t1r>8077922</p></td>
+	<td valign="top"><p class=t1r>379</p></td>
+	<td valign="top"><p class=t1r>201</p></td>
+	<td valign="top"><p class=t1r>(799490.00,8082950.00)</p></td>
+	<td valign="top"><p class=t1r>(802471.55,8077928.79)</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1r>802841</p></td>
+	<td valign="top"><p class=t1r>8076212</p></td>
+	<td valign="top"><p class=t1r>433</p></td>
+	<td valign="top"><p class=t1r>224</p></td>
+	<td valign="top"><p class=t1r>(799950.00,8081870.00)</p></td>
+	<td valign="top"><p class=t1r>(802805.90,8076196.50)</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1r>797727</p></td>
+	<td valign="top"><p class=t1r>8076145</p></td>
+	<td valign="top"><p class=t1r>461</p></td>
+	<td valign="top"><p class=t1r>61</p></td>
+	<td valign="top"><p class=t1r>(796690.00,8081310.00)</p></td>
+	<td valign="top"><p class=t1r>(797718.58,8076137.76)</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1r>805768</p></td>
+	<td valign="top"><p class=t1r>8086385</p></td>
+	<td valign="top"><p class=t1r>90</p></td>
+	<td valign="top"><p class=t1r>247</p></td>
+	<td valign="top"><p class=t1r>(800410.00,8088730.00)</p></td>
+	<td valign="top"><p class=t1r>(805767.38,8086388.24)</td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>As maps <span class=courier>Landuse</span>  and <span class=courier>Tmb1</span> use different georeferences, the returned coordinates in the output columns are not the same.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="90"><a href="calc_coord.htm">COORD</a></td>
+	<td valign="top" width="80"><a href="calc_mincrdx.htm">MINCRDX</a></td>
+	<td valign="top" width="80"><a href="calc_maprow.htm">MAPROW</a></td>
+	<td valign="top"><a href="calc_rasvalue.htm">RASVALUE</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_crdx.htm">CRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mincrdy.htm">MINCRDY</a></td>
+	<td valign="top" width="80"><a href="calc_mapcol.htm">MAPCOL</a></td>
+	<td valign="top"><a href="calc_dist.htm">DIST</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_crdy.htm">CRDY</a></td>
+	<td valign="top" width="80"><a href="calc_maxcrdx.htm">MAXCRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mapvalue.htm">MAPVALUE</a></td>
+	<td valign="top"><a href="calc_dist2.htm">DIST2</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_transform.htm">TRANSFORM</a></td>
+	<td valign="top" width="80"><a href="calc_maxcrdy.htm">MAXCRDY</a></td>
+	<td valign="top" width="80"></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

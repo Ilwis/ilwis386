@@ -1,0 +1,37 @@
+<html>
+
+<head>
+<title>flow accumulation popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Flow accumulation</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/flow_accumulation.htm" onClick="return popup(this, 'notes')" >Flow accumulation</a> operation determines the number of pixels that naturally drain into outlets. The operation can be used to find the drainage pattern of a terrain. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+<li>As input the operation uses the output map of the <a href="../popup/flow_direction_popup.htm">Flow direction</a> operation. </li>
+<li>The output map contains cumulative hydrologic flow values that represent the number of input pixels which contribute any water to the outlets (or sinks if these have not been removed). </li>
+</ul>
+
+</body

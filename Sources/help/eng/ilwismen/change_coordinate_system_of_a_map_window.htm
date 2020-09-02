@@ -1,0 +1,121 @@
+<html>
+
+<head>
+<title>Change coordinate system of a map window</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Coordinate system, Map window, Change coordinate system of map window, Change georeference of map window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Options menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Change Coordinate System</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Show the point, segment and polygon maps displayed in this map window with another <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> and/or <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>. </p>
+
+<p class=defnewpar>The newly selected coordinate system or georeference is only temporarily used by the map window, it is not added to the vector map(s). </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>This option can be used to quickly display vector maps in different coordinate systems, for example with different projections. </li>
+
+<li>You can also use this option to show the vector maps with a previously created georeference 3D, or with a georeference tiepoints as used by images of the same area. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Select coordinate system or georeference:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select a coordinate system or a georeference to be used by the current map window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If ILWIS is able to convert the coordinate system of the map into the 'new' coordinate system, the map window displays the maps using the 'new' coordinate system. The resulting map window can be saved as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>.</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	Instead of choosing the menu command <span class=arial>Change Coordinate System</span>, you can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> a coordinate system or a georeference from the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> to the map window. This has the same effect. </li>
+
+<li>	Another way to set the georeference of a map window is to add a raster map to the map window. The map window then automatically gets the georeference of that raster map.</li>
+
+<li>	To permanently change the coordinate system of a vector map, use one of the <a href="..//ilwis/popup/transform_operations_popup.htm" onClick="return popup(this, 'notes')" >Transform</a> operations.</li>
+
+<li>	To show raster maps with a different coordinate system or georeference, the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation should be used. </li>
+
+</ul>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/transform_point_map_functionality_algorithm.htm">Transform point map : functionality / algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/transform_segment_map_functionality_algorithm.htm">Transform segment map : functionality / algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/transform_polygon_map_functionality_algorithm.htm">Transform polygon map : functionality / algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/resample_functionality.htm">Resample : functionality</a></p>
+
+</body

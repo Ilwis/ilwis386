@@ -1,0 +1,214 @@
+<html>
+
+<head>
+<title>Filter : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filter operation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Filter</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Filtering is a process in which each pixel value in a raster map is replaced with a new value. The new value is obtained by applying a certain function on each input pixel and its direct neighbours. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Input raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> or an input <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. Open the list box and select an input map or map list, or directly drag a raster map or map list from a Catalog into this box.</p>
+
+<p class=diabox>When you select an input map list, the operation will be performed on all raster maps in the map list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Filter type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the type of filter to use: <a href="..//ilwisapp/popup/filter_linear_filter_popup.htm" onClick="return popup(this, 'notes')" >linear</a>, <a href="..//ilwisapp/popup/filter_average_popup.htm" onClick="return popup(this, 'notes')" >average</a>, <a href="..//ilwisapp/popup/filter_majority_popup.htm" onClick="return popup(this, 'notes')" >majority</a>, <a href="..//ilwisapp/popup/filter_rank_order_filter_popup.htm" onClick="return popup(this, 'notes')" >rank order</a>, <a href="..//ilwisapp/popup/filter_median_popup.htm" onClick="return popup(this, 'notes')" >median</a>, <a href="..//ilwisapp/popup/filter_pattern_popup.htm" onClick="return popup(this, 'notes')" >pattern</a>, <a href="..//ilwisapp/popup/filter_binary_filter_popup.htm" onClick="return popup(this, 'notes')" >binary</a>, or <a href="..//ilwisapp/popup/filter_standard_deviation_popup.htm" onClick="return popup(this, 'notes')" >standard deviation</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Predefined:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you selected as the Filter type: Majority or Rank Order: </p>
+
+<p class=diabox>select this check box if you want to use a standard predefined Majority filter <span class=courier>(Majority</span>, <span class=courier>MajUndef</span>, <span class=courier>MajZero</span>) or a standard predefined Rank order filter (<span class=courier>Med3x3</span>, <span class=courier>Med5x5</span>) on disk. </p>
+
+<p class=diabox>Clear this check box if you want to construct your own majority or rank order filter. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Filter name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For linear, predefined majority, predefined rank order and binary filter types: select the name of an existing filter on disk.</p>
+
+<p class=diabox>When you selected as the Filter type: Linear; you can also create your own linear filter by clicking the create button <img src="../images/crea.gif" align=bottom width="17" height="22">. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Rows Columns:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type values for the number of rows and columns to define the filter size. Row and column values must be odd values but do not need to be the same.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Rank:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For user-defined rank order filters: optionally, specify the rank order number of the considered pixels that should be used as output value.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Threshold:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, specify a threshold value. An output value of the filter will only be used if the difference between the original and new pixel value is smaller than or equal to the threshold. If the difference between the original and new pixel value is larger than the threshold the original value will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Undefined:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For a user-defined majority filter: optionally, select this check box to replace only undefined values. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the raster output map that will contain the filtered values. </p>
+
+<p class=diabox>If you selected an input map list, then you can type a name for the output map list; all raster maps in the output map list will obtain this name followed by _1, _2, _3, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default domain, or select another domain for the output map(s), or create <img src="../images/crea.gif" align=bottom width="17" height="22"> your own domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, of specify your own range of possible values in the output map(s). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of output values, or specify your own precision. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map or the output map list. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map or the output map list will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you selected a single raster map as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when it is opened to be displayed. </li>
+
+</ul>
+
+<p class=defnewpar>When you selected a map list as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map list</a> and its dependent raster maps will be defined and calculated. Then, the output map list will be shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map list will only be defined. When you open the output map list later on, the map list will be calculated, which means that the output raster maps will be defined and calculated. </li>
+
+</ul>
+
+<p class=defnewpar>For more information and some examples on using standard or user-defined filters from the Filter dialog box, refer to <a href="../ilwisapp/filters_user_defined_filters.htm">Filters : user-defined filters</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filter_functionality.htm">Filter : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_filter_types.htm">Filters : filter types</a></p>
+
+<p class=seealsolinks><a href="filters_standard_filters.htm">Filters : standard filters</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_user_defined_filters.htm">Filters : user-defined filters</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_filters.htm">ILWIS objects : filters</a></p>
+
+</body

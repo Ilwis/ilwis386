@@ -1,0 +1,185 @@
+<html>
+
+<head>
+<title>ILWIS objects : criteria trees</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Criteria trees, Multi Criteria trees, ILWIS objects, Special objects, SMCE window, SMC">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Criteria trees&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/criteria_tree.gif" align=bottom width="13" height="14"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A criteria tree contains the definition of a complicated calculation in which multiple input maps and/or attribute columns are combined, according to certain user-defined rules or criteria, to obtain a final output raster map using <a href="../ilwis/smce_window_functionality.htm">Spatial Multi-Criteria Evaluation (SMCE)</a>. </p>
+
+<p class=defnewpar>Under the <i>main goal</i> of a criteria tree, you can add: </p>
+
+<ul>
+
+<li>criteria: these rules are either <i><a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a></i> or <i><a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >constraints</a></i>. </li>
+
+<li><i>groups</i>: as many criteria may be involved, you can create groups under the main goal of a tree to keep an overview of all rules. A group defines an intermediate or a partial goal. Under a group, you can add one or more <i>factors</i>. </li>
+
+</ul>
+
+<p class=defnewpar>A criteria tree as a whole contains all rules you defined; it thus contains the way in which all input data should be standardized, grouped or weighed, to be able to calculate the final output map. The calculated final output map will show the performance of an area for the main goal that was set. </p>
+
+<p class=defnewpar>To build a criteria tree, you need to specify: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td width="28%" valign="top"><b>Names as text</b></td>
+<td valign="top"><b>Data and additional information</b></td>
+</tr>
+<tr>
+<td valign="top">the name of the <i>main goal</i></td>
+<td valign="top">
+	<ul>
+	<li>the name of the output raster map that will contain the calculated final result.</li>
+	</ul>
+</td>
+</tr>
+<tr>
+<td valign="top">the names of the criteria</td>
+<td valign="top">
+
+	<ul>
+	
+	<li>for each criterion: whether the criterion should be regarded as a <i><a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a></i> (benefit or cost) or as a <i><a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >constraints</a></i>, </li>
+
+	<li>for each criterion: the input raster map or the attribute column that needs to be used. </li>
+
+	</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top">the names of <i>groups</i></td>
+<td valign="top">
+
+	<ul>
+	
+	<li>optionally for each group: the name of the output raster map that will contain the calculated result for this group, </li>
+
+	<li>for each group: the names of the <i><a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a></i> that will be used in the group, </li>
+
+	<li>for each factor: the input raster map or the attribute column that needs to be used. </li>
+	
+	</ul>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Optionally, you can calculate performance by multiple <i>scenarios</i> or <i>alternatives</i>, in order to select the best scenario or alternative, and to identify poorly performing scenarios or alternatives. You will use: </p>
+
+<ul>
+
+<li>the same criteria tree, i.e. the same rules for standardization, grouping and weighing of criteria, </li>
+
+<li>for each alternative: other input maps. </li>
+
+</ul>
+
+<p class=defnewpar>Other wording:</p>
+
+<ul>
+
+<li>The final output raster map is the <i>root</i> of the criteria tree. </li>
+
+<li>An intermediate or partial goal is a <i>branch</i> of the criteria tree. </li>
+
+<li>A criterion or effect is a <i>leaf</i> of the criteria tree. </li> 
+
+</ul>
+
+<p class=kopje>Names of criteria trees:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a criteria tree:</p>
+
+<ul>
+
+<li>in the Main window, choose the <span class="arial">Raster Operations, 
+Spatial Multi-Criteria Evaluation</span> command from the 
+<a href="main_window_menu_commands.htm"><span class="arial">Operations</span> menu</a>; </li>
+
+<li>in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the
+<span class="arial">Raster Operations </span>item, and select the
+<span class="arial">Spatial Multi-Criteria Evaluation</span> command; </li>
+
+<li>in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the
+<span class="arial">Spatial Multi-Criteria Evaluation</span> command.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="..//ilwis/popup/smce_window_popup.htm" onClick="return popup(this, 'notes')" >SMCE window</a> 
+opens. In this window the criteria's tree structure can be edited, items can be 
+weighed and standardized and output maps can be generated. For more information, refer to
+<a href="smce_window_functionality.htm">SMCE window : functionality</a>. </p>
+
+<p class=kopje>To edit a criteria tree:</p>
+
+<ul>
+<li>in the Catalog, double-click a criteria tree, or </li>
+<li>select a criteria tree in the Catalog, open the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window and choose <span class=arial>Edit Object</span>, or </li>
+<li>in the Catalog, click a criteria tree with the right mouse button, and select <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+</ul>
+
+<p class=linespacing03before>The <a href="smce_window_functionality.htm">SMCE window</a> appears.</p>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>To show criteria trees in the Catalog, refer to <a href="how_to_customize_the_catalog.htm">How to customize the Catalog</a>.</p>
+
+<p class=kopje>To save a criteria tree:</p>
+<p>A criteria tree can be saved by choosing the <span class=arial><a href="../ilwismen/smce_window_save.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/smce_window_save_as.htm">Save As</a></span> commands from the <a href="../ilwis/smce_window_menu_commands.htm">File menu</a> of the 
+SMCE window, or by clicking the <span class=arial>Save</span> button <img src="../images/save.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/smce_window_toolbar.htm">toolbar</a> of the SMCE window.</p>
+
+<p class=kopje>Technical information:</p>
+
+<p>A criteria tree only consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.SMC). The object definition file stores the number of alternatives, the structure of the tree, the type of the criteria that are used (i.e. groups, factors and/or constraints), references to the input maps, and information on the standardization and weighing methods that are used.</p>
+
+<p class=defnewpar>By opening the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a criteria tree, you can see the size of the object and the time it was last 
+changed. For more information, see the <a href="../ilwismen/criteria_tree_properties.htm">Criteria tree Properties</a> sheet.</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="smce_window_status_bar.htm">SMCE window : status bar</a></p>
+<p class=seealsolinks><a href="smce_window_menu_commands.htm">SMCE window : menu commands</a></p>
+
+</body

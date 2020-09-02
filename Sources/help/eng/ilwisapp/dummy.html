@@ -1,0 +1,133 @@
+<html>
+
+<head>
+<title>CoKriging : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="CoKriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>CoKriging</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>CoKriging can be seen as a <a href="point_interpolation.htm">point interpolation</a>, which requires a point map as input and which returns a raster map with estimations and optionally an error map. CoKriging is a multivariate variant of the Ordinary <a href="/ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >: Add semi-variogram model</a>). All three models serve as input for the CoKriging operation. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Predictand:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input point map that contains the predictand (the poorly sampled variable). Open the list box and select the desired input map, or drag a point map directly from the Catalog into this box. </p>
+
+<p class=diabox>You can select a point map with a value domain, but you may also use a point map with a ID domain which has a linked attribute table, then select an attribute column with a value domain from the attribute table. You should generally select the point map which you used in Cross Variogram. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Covariable:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In the same way, select an input point map or an attribute that contains the covariable (the well sampled variable). This is also usually the point map which you used in Cross Variogram. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="/ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >ill is the plateau that the semi- or cross-variogram values g reach at the range. You are specifying parameter 'C0 + C' for the selected model. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the range; the range is the distance at which the semi- or cross-variogram values do not increase anymore and reach a plateau. You are specifying parameter 'a' for the selected model (real value &gt; 0). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Slope:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Power model only: type a real value for the 'slope', i.e. specify parameter 'k' for this model. When you use the Power model with a power exponent of 1, the model becomes linear (a straight sloping line), then, this 'slope' parameter equals the direction coefficient (<span class=symbol>Dg</span>/<span class=symbol>D</span>h) of the line.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Power:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Power model only: type a real value for the power exponent, i.e. specify parameter ‘m’ for this model. The power function is meaningful if 0 &lt; power exponent &lt; 2. When value 1 is used, the Power model becomes linear and the slope will be constant. If the power exponent is 2 the assumed stochastic model (‘randomness’) is not always justifiable and the interpolation can become pathological.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="/ilwisapp/sec/point_interpolation_limiting_distance_sec.htm" onClick="return popup(this, 'notes')" > box to calculate with spherical distances, i.e. distances are calculated over the sphere using the projection of the coordinate system of the georeference of the output raster map. It is advised to select this option in case your map covers a relatively large area, or when you are working in LatLon coordinates. For more information, see <a href="cokriging_functionality.htm">CoKriging : functionality</a>. </p>
+
+<p class=diabox>Clear this check box to calculate with planar (Euclidean) distances. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="/ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >me="Item1" value="__ilwisapp__sec__point_interpolation_limiting_distance_sec;ilwis.chm::/ilwisapp/sec/point_interpolation_limiting_distance_sec.htm">
+</OBJECT>
+<OBJECT id=__ilwis__popup__object_name_popup type="application/x-oleobject"
+classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<PARAM name="Command" value="Related Topics">
+<PARAM name="Window" value="sec">
+<PARAM name="Item1" value="__ilwis__popup__object_name_popup;ilwis.chm::/ilwis/popup/object_name_popup.htm">
+</OBJECT>
+<OBJECT id=__ilwis__popup__win_create type="application/x-oleobject"
+classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<PARAM name="Command" value="Related Topics">
+<PARAM name="Window" value="sec">
+<PARAM name="Item1" value="__ilwis__popup__win_create;ilwis.chm::/ilwis/popup/win_create.htm">
+</OBJECT>
+<OBJECT id=__ilwis__popup__y_value_range_popup type="application/x-oleobject"
+classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<PARAM name="Command" value="Related Topics">
+<PARAM name="Window" value="sec">
+<PARAM name="Item1" value="__ilwis__popup__y_value_range_popup;ilwis.chm::/ilwis/popup/y_value_range_popup.htm">
+</OBJECT>
+<OBJECT id=__ilwis__popup__y_precision_popup type="application/x-oleobject"
+classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<PARAM name="Command" value="Related Topics">
+<PARAM name="Window" value="sec">
+<PARAM name="Item1" value="__ilwis__popup__y_precision_popup;ilwis.chm::/ilwis/popup/y_precision_popup.htm">
+</OBJECT>
+<OBJECT id=__ilwis__popup__object_definition_popup type="application/x-oleobject"
+classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<PARAM name="Command" value="Related Topics">
+<PARAM name="Window" value="sec">
+<PARAM name="Item1" value="__ilwis__popup__object_definition_popup;ilwis.chm::/ilwis/popup/object_definition_popup.htm">
+</OBJECT>
+<OBJECT id=__ilwis__popup__object_dependent_data_objects_popup type="application/x-oleobject"
+classid="clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11">
+<PARAM name="Command" value="Related Topics">
+<PARAM name="Window" value="sec">
+<PARAM name="Item1" value="__ilwis__popup__object_dependent_data_objects_popup;ilwis.chm::/ilwis/popup/object_dependent_data_objects_popup.htm">
+</OBJECT>
+</html>
+ÿ

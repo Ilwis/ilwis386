@@ -1,0 +1,564 @@
+<html>
+
+<head>
+<title>Confusion matrix</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Confusion matrix, Table window, Error matrix, Post classification, Accuracy">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">View menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Confusion Matrix</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>To assess the accuracy of an image <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >classification</a>, it is common practice to create a confusion matrix. In a confusion matrix, your classification results are compared to additional ground truth information. The strength of a confusion matrix is that it identifies the nature of the classification errors, as well as their quantities.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>The output cross table of a <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a> operation on two maps which use a class or ID domain, can also be shown in matrix form. For more information, refer to <a href="../ilwisapp/cross_functionality.htm">Cross : functionality</a>. </p>
+
+<p class=kopje>Preparation:</p>
+
+<ul>
+
+<li>	Create a raster map which contains additional ground truth information (such a map is also known as the test set). It is strongly advised that the test set raster map does not contain the same pixels as the sample set raster map from the training phase.</li>
+
+<li>	Furthermore, the output raster map of the image classification is required. </li>
+
+<li>	Then, perform a Cross with the ground truth map and the classified map to obtain a cross table.</li>
+
+<li>	Open the cross table in a table window, and choose <span class=arial>Confusion matrix</span> from the <span class=arial>View</span> menu in the table window. </li>
+
+</ul>
+
+<p>The details of these steps are described in <a href="../ilwis/how_to_calculate_confusion_matrix.htm">How to calculate a confusion matrix</a>.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>First column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the column with the same name as the ground truth map (or test set).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Second column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the column with the same name as the output map of the Classify operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Frequency:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the <span class=courier>NPix</span> column.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The confusion matrix appears in a secondary window.</p>
+
+<p class="tip">Note: </p>
+<ul class="tipul">
+<li>If in the dialog box, you choose the ground truth map for the first column, and the classification results for the second column (i.e. the <b>same</b> as shown above), then the <b>ground truth can be found in the rows</b> of the confusion matrix, and the classification results will appear in the columns. You can read the explanation below without further changes. </li>
+<li>However, if in the dialog box, you choose the classification results as the first column, and the ground truth map for the second column (i.e. <i>reverse</i> as shown above), then the classification results can be found in the rows in the confusion matrix, and the ground truth will appear in the columns. You will then have to read 'columns' instead of 'rows', and 'rows' instead of 'columns' in the remainder of this topic. Furthermore you should read ACC (accuracy) instead of REL (reliability) and vice versa. </li>
+</ul>
+
+<p class=kopje>Interpretation of a confusion matrix:</p>
+
+<p>Consider the following example of a confusion matrix:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="118">
+<p class=th></p>
+
+</td>
+<td valign="top">
+<p class=th>CLASSIFICATION RESULTS</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="68">
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=tcolh> forest </p>
+
+</td>
+<td valign="top" width=48>
+<p class=tcolh> bush  </p>
+
+</td>
+<td valign="top" width=48>
+<p class=tcolh> crop </p>
+
+</td>
+<td valign="top" width=48>
+<p class=tcolh> urban </p>
+
+</td>
+<td valign="top" width=48>
+<p class=tcolh> bare </p>
+
+</td>
+<td valign="top" width=48>
+<p class=tcolh> water </p>
+
+</td>
+<td valign="top" width=48>
+<p class=tcolh>unclass</p>
+
+</td>
+<td valign="top" width=48>
+<p class=tcolh>ACC</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=th>GROUND</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>forest</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>440</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>40</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>30</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.83</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=th>TRUTH</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>bush</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>20</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>220</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>40</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>20</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.71</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>crop</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>210</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>50</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>60</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.58</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>urban</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>20</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>20</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>240</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>100</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>40</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.56</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>bare</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>230</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.88</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>water</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>20</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>240</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.89</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>REL</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.90</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.76</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.88</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.92</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.51</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.86</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p>Average accuracy</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top" width=96>
+<p>74.25%</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>Average reliability</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top" width=96>
+<p>80.38%</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>Overall accuracy</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top" width=96>
+<p>73.15%</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In the example above: </p>
+
+<ul>
+
+<li>unclass represents the Unclassified column, </li>
+
+<li>ACC represents the Accuracy column, </li>
+
+<li>REL represents the Reliability column. </li>
+
+</ul>
+
+<p class=defnewpar>Explanation:</p>
+
+<ul>
+
+<li>	Rows correspond to classes in the ground truth map (or test set).</li>
+
+<li>	Columns correspond to classes in the classification result. </li>
+
+<li>	The <i>diagonal elements</i> in the matrix represent the number of correctly classified pixels of each class, i.e. the number of ground truth pixels with a certain class name that actually obtained the same class name during classification. In the example above, 440 pixels of 'forest' in the test set were correctly classified as 'forest' in the classified image.</li>
+
+<li>	The <i>off-diagonal elements</i> represent misclassified pixels or the classification errors, i.e. the number of ground truth pixels that ended up in another class during classification. In the example above, 40 pixels of 'forest' in the test set were classified as 'bush' in the classified image. <br>
+	<ul>
+	<li>Off-diagonal <i>row</i> elements represent ground truth pixels of a certain class which were excluded from that class during classification. Such errors are also known as <i>errors of omission</i> or exclusion. For example, 50 ground truth pixels of 'crop' were excluded from the 'crop' class in the classification and ended up in the 'bare' class. </li>
+	<li>Off-diagonal <i>column</i> elements represent ground truth pixels of other classes that were included in a certain classification class. Such errors are also known as <i>errors of commission </i>or inclusion. For example, 100 ground truth pixels of 'urban' were included in the 'bare' class by the classification.</li>
+	</ul>
+
+<li>	The figures in column <i>Unclassified</i> represent the ground truth pixels that were found not classified in the classified image.</li>
+
+</ul>
+
+<p class=defnewpar><i>Accuracy</i> (also known as producer's accuracy): The figures in column <i>Accuracy</i> (ACC) present the accuracy of your classification: it is the fraction of correctly classified pixels with regard to all pixels of that ground truth class. For each class of ground truth pixels (row), the number of correctly classified pixels is divided by the total number of ground truth or test pixels of that class. For example, for the 'forest' class, the accuracy is 440/530 = 0.83 meaning that approximately 83% of the 'forest' ground truth pixels also appear as 'forest' pixels in the classified image.</p>
+
+<p class=defnewpar><i>Reliability</i> (also known as user's accuracy): The figures in row <i>Reliability</i> (REL) present the reliability of classes in the classified image: it is the fraction of correctly classified pixels with regard to all pixels classified as this class in the classified image. For each class in the classified image (column), the number of correctly classified pixels is divided by the total number of pixels which were classified as this class. For example, for the 'forest' class, the reliability is 440/490 = 0.90 meaning that approximately 90% of the 'forest' pixels in the classified image actually represent 'forest' on the ground. </p>
+
+<p class=defnewpar>The <i>average accuracy</i> is calculated as the sum of the accuracy figures in column Accuracy divided by the number of classes in the test set. </p>
+
+<p>The <i>average reliability</i> is calculated as the sum of the reliability figures in column Reliability divided by the number of classes in the test set. </p>
+
+<p>The <i>overall accuracy</i> is calculated as the total number of correctly classified pixels (diagonal elements) divided by the total number of test pixels. </p>
+
+<p class=defnewpar>From the example above, you can conclude that the test set classes 'crop' and 'urban' were difficult to classify as many of such test set pixels were excluded from the 'crop' and the 'urban' classes, thus the areas of these classes in the classified image are probably underestimated. On the other hand, class 'bare' in the image is not very reliable as many test set pixels of other classes were included in the 'bare' class in the classified image, thus the area of the 'bare' class in the classified image is probably overestimated.</p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>The results of your confusion matrix highly depend on the selection of ground truth / test set pixels. You may find yourself in a situation of the chicken-egg problem with your sample set, the classification result and your test set. On the one hand, you want to have as many correct sample set pixels as possible so that the classification will be OK; on the other hand, you also need to have an ample number of correct ground truth pixels for the test set to be able to assess the accuracy and reliability of your classification. Using the same data for both the sample set and the test set will produce far too optimistic figures in the confusion matrix. It is mathematically correct to use half of your ground truth data for the sample set and the other half for the test set.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/classify.htm">Classify operation</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_confusion_matrix.htm">How to calculate a confusion matrix</a></p>
+
+</body

@@ -1,0 +1,71 @@
+<html>
+
+<head>
+<title>SMCE window : Edit</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Edit">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Edit</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+<p class=defnewpar>Edit the currently selected item in the criteria tree. The actual edit action depends on the mode (problem definition mode or multicriteria analysis mode) and the type of item (group, factor or constraint) selected.</p>
+<p class=defnewpar>When the SMCE application is in <a href="..//ilwismen/popup/smce_window_problem_definition_mode_popup.htm" onClick="return popup(this, 'notes')" >Problem Definition</a> mode you can use the edit option:</p>
+
+<ul>
+	<li>to edit item properties,</li>
+	<li>to select input maps, and</li>
+	<li>to edit the name(s) of the output map(s).</li>
+</ul>
+<p class=defnewpar>When the SMCE application is in <a href="..//ilwismen/popup/smce_window_multicriteria_analysis_mode_popup.htm" onClick="return popup(this, 'notes')" >Multicriteria Analysis</a> mode you can use the edit option:</p>
+  
+<ul>
+	<li>to standardize factors and contraints (in this case the Edit button does exactly the same as the <a href="../ilwismen/smce_window_standardize.htm">Standardize button</a>), </li>
+	<li>to weigh the criteria root or groups of factors (in this case the Edit button does exactly the same as the <a href="../ilwismen/smce_window_weigh.htm">Weigh button</a>), and</li>	
+    <li>to edit the name(s) of the output map(s).</li>
+</ul>
+<p class=defnewpar>The edit action is executed:</p>
+<ul>
+	<li>when you choose <span class=arial>Edit</span> from the <a href="../ilwis/smce_window_menu_commands.htm">Edit menu</a> in a SMCE window;</li>
+	<li>when you  click the <span class=arial>Edit</span> button <img src="../images/smce_edit_icon.gif" width="23" height="23"> in the <a href="../ilwis/smce_window_toolbar.htm">toolbar</a> of the SMCE window;</li>
+    <li>when you press the <span class=arial>Enter</span> Key on the keyboard;</li>
+    <li>when you click an item in the criteria tree with the right mouse button and choose <span class=arial>Edit</span> from the context-sensitive menu;</li>
+    <li>when you  double-click the root, a constraint or a factor in the criteria tree;</li>
+    <li>when you single-click a selected group of factors, an input map or an output map in the criteria tree.</li>
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a></p>
+
+</body

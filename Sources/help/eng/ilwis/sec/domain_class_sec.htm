@@ -1,0 +1,92 @@
+<html>
+
+<head>
+<title>Domain type : Class</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Domain type Class</p>
+
+<p class=linespacing03after>A class <a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >domain</a> is a<i> list of class names</i> and optionally class codes that can be used for instance in a certain map. Class domains are suitable for <i>thematic maps</i> for instance a land use map, a soil unit map, etc. The mapping units, i.e. the classes, have a certain meaning, should be represented by a certain color, probably have attribute information, and generally occur more than once in the map.</p>
+
+<p class=linespacing03after>In a map with a class domain, the points, segments, polygons or mapping units use the class names as listed in the domain linked to that map. Points, segments, polygons or pixels without a class name are considered undefined.</p>
+
+<p class=linespacing03after>When you create a class domain, you have to add all class names and optionally class codes to the domain yourself in the <a href="..//ilwis/domain_class_id_editor_functionality.htm" onClick="return popup(this, 'notes')" >Domain Class editor</a>. You can always add more classes to a class domain later on.</p>
+
+<p class=linespacing03after>A class domain is always linked to an editable user-defined <i>representation class</i>. You can assign a color to each class of the domain but you can also assign a range of colors to multiple classes. For polygons, segments and points, there are also possibilities for hatching and patterns, for line types and line widths, and for symbols and symbol sizes, etc. For more information, see <a href="..//ilwis/representation_class_editor_functionality.htm" onClick="return popup(this, 'notes')" >Representation Class editor</a>. <br>
+All maps that use the same class domain will by default appear in the same colors. A class domain and its representation together form the <i>legend</i> of a map.</p>
+
+<p class=linespacing03after>Maps with a class domain (or an identifier domain) can have an <a href="../popup/objects_table_popup.htm">attribute table</a>. The domain of the attribute table is the same as the domain of the map to which the table refers; the domain provides the record entries in the table. You can then add additional attribute information (in columns of the table) on each of the classes in your map. <br>
+Just as maps, each column has a domain to define the type of information you want to store in that column: when you want to store values in a column, use a value domain for that column; when you want to store class information in a column, use a class domain for that column, etc. </p>
+
+<p>In <a href="../popup/map_calculation_popup.htm">MapCalc</a> or <a href="../popup/table_calculation_popup.htm">TabCalc</a>, you can calculate with specific classes by using double quotes around the class names or their codes.</p>
+
+<p class=kopje>Examples:</p>
+
+<ul>
+
+<li>	point maps containing water well types, e.g. by pump type, or simply all water wells.</li>
+
+<li>	segment maps containing road types, e.g. highways, primary roads, secondary roads, or simply all roads.</li>
+
+<li>	segment maps containing river types or simply all rivers.</li>
+
+<li>	polygon maps containing land use classes, e.g. paddy rice fields, upland field crops, tree crops, homestead gardens, grazing, forest, etc. </li>
+
+<li>	polygon maps containing terrain units, e.g. tidal lowland, coastal upland, volcanic hills, colluvial footslopes, etc.</li>
+
+<li>	polygon map containing soil texture units, e.g. sandy clay loam, sandy loam, clay loam.</li>
+
+<li>	rasterized forms of these point, segment and polygon maps.</li>
+
+<li>	attribute tables containing extra attribute information on the classes in the maps above.</li>
+
+<li>	columns containing extra attribute information.</li>
+
+<li>	attribute maps of attribute columns stored in a class column.</li>
+
+<li>	output maps of <a href="../popup/map_calculation_popup.htm">MapCalc</a> operations on raster maps with a class domain.</li>
+
+<li>	output map of the <a href="../../ilwisapp/popup/classify_popup.htm">Classify operation</a> on satellite images.</li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	When you work with for example land use maps of different years of the same area, it is strongly advised to work with one class domain Landuse for all maps. In this user-defined domain called <span class=courier>Landuse</span> you should list all possible land use classes of all years. Use this one domain <span class=courier>Landuse</span> for all landuse maps of all different years. Not every class name of the domain has to be used in each map. </li>
+
+<li>	It is advised to use class domains for thematic maps on semi-detailed to reconnaissance scale (approx. 1 : 25,000 to 1 : 250,000).</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_before_creating_maps_and_tables.htm" onClick="return popup(this, 'notes')" >Before creating ILWIS maps and tables</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_domains.htm" onClick="return popup(this, 'notes')" >Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/domain_class_id_editor_functionality.htm" onClick="return popup(this, 'notes')" >Domain Class/ID editor</a></p>
+
+</body

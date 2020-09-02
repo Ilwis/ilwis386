@@ -1,0 +1,172 @@
+<html>
+
+<head>
+<title>Aggregate map : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Aggregate map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Aggregate map</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Aggregate Map operation aggregates blocks of input pixels by applying an aggregation function: Average, Count, Maximum, Median, Minimum, Predominant, Standard Deviation or Sum. The Aggregate Map operation either creates a new georeference in which each block of input pixels corresponds to one output pixel (group) or the output raster map uses the same georeference as the input map (no group).</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Input raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> or an input <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. Open the list box and select the desired input map or map list, or directly drag a raster map or map list from a Catalog into this box. Refer to <a href="aggregate_functionality.htm">Aggregate map : functionality</a> to see which aggregation functions work on which types of input maps. </p>
+
+<p class=diabox>When you select an input map list, the operation will be performed on all raster maps in the map list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Group factor:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the size of the blocks of input pixels on which an aggregation function should be applied. When you specify value 4, the aggregation is performed on each block of 4 x 4 input pixels. The Group factor should be at least 2. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Function:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an aggregation function: Average, Count, Maximum, Median, Minimum, Predominant, Standard Deviation, or Sum. For more information, refer to <a href="aggregate_functionality.htm">Aggregate map : functionality</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Group:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if each block of input pixels should appear as one pixel in the output map after the aggregation. The operation will create a new georeference which will obtain the same name as the output map. Clear this check box if the georeference of the input map and the output map should be the same: each aggregated value will be stored in all pixels in the output map which correspond to the considered block of input pixels.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Offset:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, select this check box when the aggregation should skip a certain number of rows at the top of the input map and/or a certain number of columns at the left of the input map. Subsequently specify the number of rows and/or columns which should be skipped. For example, when you use a RowOffset of 2 and a ColumnOffset of 4, the operation will start at line 3 and at column 5. When offsets are used while the option No Group is selected, the skipped lines and columns are assigned the undefined value.</p>
+
+<p class=diabox>Clear this check box when the aggregation should start at row 1, col 1 of the input map (offset 0, 0). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the aggregated values. </p>
+
+<p class=diabox>If you selected an input map list, then you can type a name for the output map list; all raster maps in the output map list will obtain this name followed by _1, _2, _3, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When the output map(s) will contain values, accept the default domain, or select another existing value domain, or create <img src="../images/crea.gif" align=bottom width="17" height="22"> your own output value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, or specify your own range of possible values in the output map(s). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> for the output values, or specify your own precision.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map or the output map list. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map or the output map list will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you selected a single raster map as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when it is opened to be displayed. </li>
+
+</ul>
+
+<p class=defnewpar>When you selected a map list as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map list</a> and its dependent raster maps will be defined and calculated. Then, the output map list will be shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map list will only be defined. When you open the output map list later on, the map list will be calculated, which means that the output raster maps will be defined and calculated. </li>
+
+</ul>
+
+<p class=defnewpar>Furthermore, when the Group option is used, a new georeference is created for the output map(s); this georeference obtains the same name as the output map, or the same name as the output map list followed by _1.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="aggregate_functionality.htm">Aggregate map : functionality</a></p>
+
+</body

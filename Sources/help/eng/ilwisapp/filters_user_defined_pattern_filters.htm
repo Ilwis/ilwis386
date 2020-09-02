@@ -1,0 +1,137 @@
+<html>
+
+<head>
+<title>Filters : user-defined pattern filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filters, User-defined filters, Pattern filters, Use ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Filters</h1>
+
+<h1 class=secondline>User-defined pattern filters</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>With a <a href="..//ilwisapp/sec/filter_pattern_sec.htm" onClick="return popup(this, 'notes')" >pattern filter</a>, you can detect <b>areas</b> where pixels have more or less the same value, <b>outliers</b> where the values of all neighbouring pixels are very different from the center pixel, and the <b>directions</b> in which differences between neighbouring pixel values are found. Whether or not 3x3 neighbouring pixels are considered to have more or less the same value, is determined by the threshold value that you have to specify. </p>
+
+<p class=defnewpar>There is no standard pattern filter stored on disk. A pattern filter always works in a 3x3 environment. In the Filter dialog box as well as on the command line, you can define the threshold value which has to be used by the pattern filter.</p>
+
+<p class=kopje>Using the Filter dialog box:</p>
+
+<p>To use a pattern filter: </p>
+
+<ul>
+
+<li>	Open the Filter dialog box,</li>
+
+<li>	for<span class=arial> Filter Type</span>, select: Pattern, </li>
+
+<li>	specify a threshold value which determines whether the absolute differences between the central pixel and its neighbours are considered large (edge) or small (area). </li>
+
+</ul>
+
+<p class=kopje>Using the command line (advanced):</p>
+
+<p>To define a pattern filter, type the following expression on the command line of the Main window: </p>
+
+<p class=emptyline>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName, <span class=courier>Pattern</span>(<i>threshold</i>))</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapFilter</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Filter operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>Pattern</p>
+
+</td>
+<td valign="top">
+<p>is the command to define a pattern filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>threshold</i></p>
+
+</td>
+<td valign="top">
+<p>specify a value for the threshold which determines whether the absolute differences between the central pixel and its neighbours are considered large (outlier or direction of edge) or small (area). </p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filters_types_pattern_filters.htm">Filter types : pattern filters</a></p>
+
+<p class=seealsolinks><a href="filter_dialog_box.htm">Filter : dialog box</a></p>
+
+<p class=seealsolinks><a href="filter_command_line.htm">Filter : command line</a></p>
+
+</body

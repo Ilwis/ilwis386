@@ -1,0 +1,447 @@
+<html>
+
+<head>
+<title>Filter : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filter operation, Filters, Standard filters, Linear filters, Gradient filters, Derivative filters, Rank order filters, Median filters, Pattern filters, Majority filters, Binary filters, Standard deviation filters, AVG3X3, EDGESENH, LAPLACE, SHADOW, DFDX, DFDY, DFDDN, DFDUP, D2FDX2, D2FDY2, D2FDXDY, MED3X3, MED5X5, MAJORITY, MAJUNDEF, MAJZERO, BINMAJOR, CONN8TO4, DILATE4, DILATE8, SHRINK4, SHRINK8, INBND4, INBND8, OUTBND4, OUTBND8, PEPPSALT">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Filter</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Filtering is a process in which each pixel value in a raster map is replaced with a new value. The new value is obtained by applying a certain function to each input pixel and its direct neighbours. These neighbours are usually the 8 adjacent pixels (in a 3 x 3 filter) or the 24 surrounding pixels (in a 5 x 5 filter). When you create or define your own filters, any <b>odd</b> sized matrix is allowed (5 x 1, 11 x 23, 25 x 25).</p>
+
+<p class=defnewpar>Filters can be used for a number of purposes: </p>
+
+<ul>
+
+<li>	to enhance 'sharpness' of a satellite image for better visual interpretation, </li>
+
+<li>	to reduce noise in an image prior to a multi-band image classification when classifying rather large areas</li>
+
+<li>	to detect line features or edges in a satellite image,</li>
+
+<li>	to calculate steepness, direction (aspect), and shape (concave, convex) of slopes in a DEM, 	</li>
+
+<li>	to assign pixels which were classified as unknown during a multi-band image classification the value of the most frequent occurring class around the unknown pixel, </li>
+
+<li>	morphologic filtering on bit maps, etc.</li>
+
+</ul>
+
+<p class=kopje>Sharpening images:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_edgesenh_sec.htm" onClick="return popup(this, 'notes')" >EDGESENH</a></p>
+
+</td>
+<td valign="top">
+<p>the edges enhancement filter leaves the overall look of the image the same, but pixels at the borders of light areas become light as well, and pixels at the borders of dark areas become dark. Homogenous areas remain the same. This gives the impression that the image is sharper. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Noise reduction in images (smoothing):</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_avg3x3_sec.htm" onClick="return popup(this, 'notes')" >AVG3x3</a></p>
+
+</td>
+<td valign="top">
+<p>calculates the average value of 9 pixels and assigns the result to the central pixel. The AVG filter smoothes the image but may blur it.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_med3x3_sec.htm" onClick="return popup(this, 'notes')" >MED3x3</a></p>
+
+</td>
+<td valign="top">
+<p>reads and orders 9 pixel values from low to high and replaces the central pixel with the middle value (= the pixel value with rank order 5 = median value). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_med5x5_sec.htm" onClick="return popup(this, 'notes')" >MED5x5</a></p>
+
+</td>
+<td valign="top">
+<p>reads and orders 25 pixel values from low to high and replaces the central pixel with the middle value (= the pixel value with rank order 13 = median value). </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The MED3x3 and MED5x5 filters remove point noise better than the AVG filter and they do not blur the image, but thin line features may disappear. Median filters can be used prior to a multi-band image classification if the classes to distinguish are 'large' areas (forest, agriculture) and not small or fine features (farm, roads).</p>
+
+<p class=kopje>Detecting line features and edges:</p>
+
+<p class=linespacing01after>Gradient filters: see <a href="..//ilwisapp/sec/filter_dfdx_sec.htm" onClick="return popup(this, 'notes')" >DFDX</a>, <a href="..//ilwisapp/sec/filter_dfdy_sec.htm" onClick="return popup(this, 'notes')" >DFDY</a>, <a href="..//ilwisapp/sec/filter_d2fdx2_sec.htm" onClick="return popup(this, 'notes')" >D2FDX2</a>, <a href="..//ilwisapp/sec/filter_d2fdy2_sec.htm" onClick="return popup(this, 'notes')" >D2FDY2</a>, etc. below.</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_edgesenh_sec.htm" onClick="return popup(this, 'notes')" >EDGESENH</a></p>
+
+</td>
+<td valign="top">
+<p>the edges enhancement filter leaves the overall look of the image the same, but pixels at the borders of light areas become light as well, and pixels at the borders of dark areas become dark. Homogenous areas remain the same. This gives the impression that the image is sharper. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_laplace_sec.htm" onClick="return popup(this, 'notes')" >LAPLACE</a></p>
+
+</td>
+<td valign="top">
+<p>The LAPLACE filter calculates gradients both in x- and y-direction (second partial derivative). The effect of using the LAPLACE filter is that when the value of the central pixel is relatively high compared to its neighbours, the value assigned to the central pixel will be even lower than the neighbours; and that when the value of the central pixel is relatively low compared to its neighbours, the value assigned to the central pixel will be even higher than the neighbours. Thus values which 'largely' differ from their neighbours come out as an opposite in the output map, while areas with more or less the same pixel value 'disappear'.  The LAPLACE filter is quite sensitive to noise.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Detecting areas and directions of change:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_pattern_sec.htm" onClick="return popup(this, 'notes')" >PATTERN</a></p>
+
+</td>
+<td valign="top">
+<p>detects homogenous areas where pixels have more or less the same value; detects outliers where the value of all neighbouring pixels is largely different from a center pixel; detects the directions in which differences between the center pixel and its neighbours are found. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Using filters on DEMs:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_dfdx_sec.htm" onClick="return popup(this, 'notes')" >DFDX</a></p>
+
+</td>
+<td valign="top">
+<p>detects slope differences in x-direction. Positive values in the output map mean that the terrain goes up from left to right (West to East); negative values in the output mean the terrain goes down.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_dfdy_sec.htm" onClick="return popup(this, 'notes')" >DFDY</a></p>
+
+</td>
+<td valign="top">
+<p>detects slope differences in y-direction. Positive values in the output map means that the terrain goes up from bottom to top (South to North); negative values mean that terrain goes down. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_d2fdx2_sec.htm" onClick="return popup(this, 'notes')" >D2FDX2</a></p>
+
+</td>
+<td valign="top">
+<p>detects slope shape differences in x-direction (second derivative). Positive values in the output map mean that the terrain is concave in x-direction; negative values mean that the terrain is convex.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_d2fdy2_sec.htm" onClick="return popup(this, 'notes')" >D2FDY2</a></p>
+
+</td>
+<td valign="top">
+<p>detects slope shape differences in y-direction (second derivative). Positive values in the output map mean that the terrain is concave in y-direction; negative values mean that the terrain is convex.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_laplace_sec.htm" onClick="return popup(this, 'notes')" >LAPLACE</a></p>
+
+</td>
+<td valign="top">
+<p>the LAPLACE filter can be used to investigate which parts of the terrain are convex (negative value in output map) or concave (positive value in output map). Flat areas and uniform slopes obtain output value 0.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_shadow_sec.htm" onClick="return popup(this, 'notes')" >SHADOW</a></p>
+
+</td>
+<td valign="top">
+<p>applies artificial illumination (from the Northwest) to the DEM.  As a result, higher parts in the DEM become more pronounced because they obtain a shadow.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Using filters after a multi-band classification:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_majority_filter_undef_sec.htm" onClick="return popup(this, 'notes')" >MAJUNDEF</a></p>
+
+</td>
+<td valign="top">
+<p>the undefined-majority filter assigns to pixels classified as unknown during a multi-band image classification, the value of the most frequent occurring class around the unknown pixel. It considers 8 neighbours around an unclassified pixel and assigns the predominant class name of the neighbours to the unclassified pixel in the output map. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Morphologic filtering:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_dilate4_sec.htm" onClick="return popup(this, 'notes')" >DILATE4</a></p>
+
+</td>
+<td valign="top">
+<p>assigns a 1 to the center pixel if one or more horizontal or vertical neighbours is true as well. The result of using DILATE4 is that true pixels 'grow' in horizontal and vertical direction.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_dilate8_sec.htm" onClick="return popup(this, 'notes')" >DILATE8</a></p>
+
+</td>
+<td valign="top">
+<p>assigns a 1 to the center pixel if any of the neighbours is true. The result of using DILATE8 is that true pixels 'grow' in all directions.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_shrink4_sec.htm" onClick="return popup(this, 'notes')" >SHRINK4</a></p>
+
+</td>
+<td valign="top">
+<p>assigns a 1 only when the center pixel is 1 and all horizontal and vertical neighbours are 1 as well. The result of using the SHRINK4 filter is that areas of true pixels 'shrink' along their edges; single lines of true pixels and single true pixels totally surrounded by false pixels disappear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_shrink_8_sec.htm" onClick="return popup(this, 'notes')" >SHRINK8</a></p>
+
+</td>
+<td valign="top">
+<p>assigns a 1 only when the center pixel is 1 and all neighbours are 1 as well. The result of using the SHRINK8 filter is that areas of true pixels 'shrink' along their edges; single lines of true pixels and single true pixels totally surrounded by false pixels disappear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_inbdn4_sec.htm" onClick="return popup(this, 'notes')" >INBND4</a></p>
+
+</td>
+<td valign="top">
+<p>assigns a 1 only when the center pixel is 1 and at least one of the horizontal or vertical neighbours is 0 (meaning it is located at the edge of a group of true pixels). The result of using this filter is that 4-connected areas of true pixels are replaced by their 4-connected outline (a 4-connected boundary of true pixels). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_inbnd8_sec.htm" onClick="return popup(this, 'notes')" >INBND8</a></p>
+
+</td>
+<td valign="top">
+<p>assigns only a 1 when the center pixel is 1 and at least one of the 8 neighbours is 0 (meaning it is located at the edge of a group of true pixels). The result of using this filter is that areas of 8-connected true pixels are replaced by their 8-connected outline (an 8-connected boundary of true pixels). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_outbnd4_sed.htm" onClick="return popup(this, 'notes')" >OUTBND4</a></p>
+
+</td>
+<td valign="top">
+<p>results in a 4-connected outline of groups of false pixels.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_outbnd8_sec.htm" onClick="return popup(this, 'notes')" >OUTBND8</a></p>
+
+</td>
+<td valign="top">
+<p>results in an 8-connected outline of groups of false pixels.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_eighttofour_sec.htm" onClick="return popup(this, 'notes')" >CONN8TO4</a></p>
+
+</td>
+<td valign="top">
+<p>when true pixels are only 8-connected, this filter makes them 4-connected by adding a true pixel in some places. This might give your binary image a better outlook.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_binmajor_sec.htm" onClick="return popup(this, 'notes')" >BINMAJOR</a></p>
+
+</td>
+<td valign="top">
+<p>assigns the predominant value of each group of 9 pixels to the center pixel. The filter removes single pixels and very small groups of pixels; larger areas are smoothed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="..//ilwisapp/sec/filter_peppsalt_sec.htm" onClick="return popup(this, 'notes')" >PEPPSALT</a></p>
+
+</td>
+<td valign="top">
+<p>only removes single true pixels and single false pixels. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Standard filters are found in the <span class=courier>ILWIS\SYSTEM</span> directory. You can also define your own filters in the <a href="filter_dialog_box.htm">Filter dialog box</a> or by typing an expression on the command line of the Main window. For more information and some examples, refer to <a href="../ilwisapp/filters_user_defined_filters.htm">Filters : user-defined filters</a>.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>Input map requirements depend on the used filter type:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=150>
+<p>Linear filters:</p>
+
+</td>
+<td valign="top">
+<p>raster map with a Value domain or the <span class=courier>Image</span> domain;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=150>
+<p>Rank order filters:</p>
+
+</td>
+<td valign="top">
+<p>raster map with a Value domain or the <span class=courier>Image</span> domain;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=150>
+<p>Majority filters:</p>
+
+</td>
+<td valign="top">
+<p>any raster map; no restrictions on domain type;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=150>
+<p>Binary filters:</p>
+
+</td>
+<td valign="top">
+<p>raster map with a Value domain, the <span class=courier>Image</span> domain, a Bool domain, the Bit domain or a Class or ID domain;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=150>
+<p>Pattern filters:</p>
+
+</td>
+<td valign="top">
+<p>raster map with a Value domain or the <span class=courier>Image</span> domain;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=150>
+<p>Standard deviation filters:</p>
+
+</td>
+<td valign="top">
+<p>raster map with a Value domain or the <span class=courier>Image</span> domain.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The operation can also be applied on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>An output domain is proposed depending on the domain of the input map and the filter type used. The <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> for the output raster map can be adjusted each time you perform the Filter operation. </p>
+
+<p>The output map uses the same georeference as the input map.</p>
+
+<p class=defnewpar>When the operation is performed on an input map list, you will obtain an output map list. When the output map list is opened, the output raster maps will be (defined and) calculated. </p>
+
+<ul>
+
+<li>The output raster maps will obtain the same name as the output map list followed by _1, _2, _3, etc. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filter_dialog_box.htm">Filter : dialog box</a></p>
+
+<p class=seealsolinks><a href="filter_command_line.htm">Filter : command line (1)</a></p>
+
+<p class=seealsolinks><a href="filter_command_line2.htm">Filter : command line (2)</a></p>
+
+<p class=seealsolinks><a href="filter_algorithm.htm">Filter : algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_filters.htm">ILWIS objects : filters</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_filter_types.htm">Filters : filter types</a></p>
+
+<p class=seealsolinks><a href="filters_standard_filters.htm">Filters : standard filters</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_user_defined_filters.htm">Filters : user-defined filters</a></p>
+
+</body

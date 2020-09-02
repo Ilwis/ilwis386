@@ -1,0 +1,105 @@
+<html>
+
+<head>
+<title>Edit point map</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point maps, Edit ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Edit Point Map</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Select a <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point map</a> that you want to edit while using the current contents of the map window as a background. This is also called screen digitizing. </p>
+
+<p class=defnewpar>This dialog box appears when from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in a map window, you choose <a href="../ilwismen/edit_other_map.htm">Edit Other Map</a>, <span class=arial>Point editor</span>.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Point map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the point map you wish to edit.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >Point editor</a> is started; you can start editing the selected point map.</p>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	<a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent maps</a> and maps marked as read-only cannot be edited. First break the dependency link or remove the read-only flag in the <a href="../ilwismen/point_map_properties.htm">Point Map - Properties</a> sheet. </li>
+
+<li>	To directly edit a point map:</li>
+
+        <ul class=tipul>
+
+        <li>	in the Catalog, select an editable point map, then open the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> in the Main window and choose <span class=arial>Edit Object</span>, or</li>
+
+        <li>	in the Catalog, click an editable point map with the right mouse button and choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or</li>
+
+        <li>	in a map window where the point map is displayed, open the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> and select <span class=arial>Edit Layer</span>.</li>
+
+        </ul>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor</a></p>
+
+</body

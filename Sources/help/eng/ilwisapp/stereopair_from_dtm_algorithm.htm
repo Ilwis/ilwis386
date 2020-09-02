@@ -1,0 +1,69 @@
+<html>
+
+<head>
+<title>Stereo pair from DTM : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stereo pair from DTM">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Stereo pair from DTM</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Stereo pair from DTM operation creates a <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> from an input photograph or image and a Digital Terrain Model (DTM). The input photograph or image will be displayed over the terrain. The result can be viewed in stereo. </p>
+
+<p class=kopje></p>
+
+<p class=defnewpar>The input photo or image is draped twice, once from the left and once from the right, with a certain angle, over the terrain and is then projected onto the plane of the reference height. </p>
+
+<!--<p class=defnewpar><i>plaatje</i></p> -->
+
+<p class=defnewpar>The rows of the left and the right output map are created by parallel projections (at right angles to the columns) onto these two shifted planes. Relief displacement as defined by the DTM is taken into account. </p>
+
+<p class=defnewpar>This is done row by row; any row of the input map will end up in the same row in both output maps. </p>
+
+<p class=defnewpar>Depending on the terrain height, objects in a row of the input map, are shifted in X-direction (x-parallax) in the rows of the output maps. This ensures stereo vision. </p>
+
+<p class=defnewpar>An object in a row on the specified reference height will end up in exactly the same column of a row in the output maps. </p>
+
+<p class=kopje>Resampling:</p>
+
+<ul>
+
+<li>Fast reampling: resampling is quick, input-driven (the estimated position of output pixels is less accurate) and biased (nearest neighbour). </li>
+
+<li>Accurate resampling: resampling is output-driven just as the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation, and is therefore more accurate on the positions of output pixels. Furthermore, values in the output maps are more accurate as <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a> and maps with the <span class=courier>Color</span> domain are resampled using <a href="..//ilwisapp/popup/bilinear_interpolation_popup.htm" onClick="return popup(this, 'notes')" >bilinear interpolation</a>; other maps are resampled using nearest neighbour. </p>
+
+<p class=tiptext><span class=tip>Tip: </span>For more information on accurate resampling methods, see <a href="resample_algorithm.htm">Resample : algorithm</a>. </p></li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>With this operation, stereo vision is only achieved for height differences in terrain. When viewing an output stereo pair, you will not see the heights of objects such as buildings, trees, etc. because these heights are not included in the DTM. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="stereopair_from_dtm_functionality.htm">Stereo pair from DTM : functionality</a></p>
+
+</body

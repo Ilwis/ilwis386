@@ -1,0 +1,202 @@
+<html>
+
+<head>
+<title>DEM optimization : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="DEM optimization">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>DEM optimization</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The DEM optimization operation can be used to enhance a Digital Elevation Model (DEM), on which you wish to use the <a href="../ilwisapp/flow_direction_functionality.htm">Flow direction</a> operation later on. 
+
+The DEM optimization operation will 'burn' existing drainage features into your Digital Elevation Model (DEM); a subsequent Flow direction operation will thus better follow the existing drainage pattern. </p>
+
+<p class=defnewpar>The DEM optimization operation offers the following possibilities: </p>
+
+<ul>
+
+<li>Gradual drop of (drainage) segments in the output DEM, over a certain distance to the (drainage) segments. </li>
+
+<li>Gradual raise of (watershed-divide) segments on the output DEM, over a certain distance to the (watershed-divide) segments. </li>
+
+<li>Additional sharp drop or raise of segments on top of the gradual drop or raise. </li>
+
+<li>Simple drop or raise of polygons in the output DEM. </li>
+
+</ul>
+
+<p class=defnewpar>The result of using the DEM optimization operation is a 'corrected' DEM in which existing drainage features are more pronounced. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>Before using the DEM optimization operation, you can use the <a href="../ilwisapp/fill_sinks_functionality.htm">Fill sinks</a> operation to remove local depressions from your DEM. </p>
+
+
+<p class=kopje>Explanation of terms:</p>
+
+<p>Figure 1 and Figure 2 below show cross sections through the terrain. </p>
+
+<ul>
+
+<li>The dotted line shows the original height value(s) in the input DEM, the blue line shows the position of a drainage. </li>
+
+<li>The Buffer distance is shown in pink, the influence of Smooth drop in greenish and the influence of Sharp drop in red. </li>
+
+</ul>
+
+<table width="90%" border="0">
+<tr>
+<td width="40%"><img src="../images/dem_opti1.gif" width="197" height="127"></td>
+<td width="4px"></td>
+<td valign="bottom">DEM pixel size: 10 m<br>
+    Buffer distance: 35 m<br>
+    Smooth drop: 30 m<br>
+    Sharp drop: 10 m</td>
+</tr>
+<tr>
+<td colspan="3"><p class="captionfig">Fig. 1:&nbsp;&nbsp;Effect of Buffer distance, Smooth drop and Sharp drop on a DEM, using a single drainage segment as example.</p></td>
+</tr>
+<tr>
+<td width="40%"><img src="../images/dem_opti2.gif" width="197" height="127"></td>
+<td width="4px"></td>
+<td valign="bottom">DEM pixel size: 10 m<br>
+    Smooth drop: 0 m<br>
+    Buffer distance: n.a.<br>
+    Sharp drop: 40 m</td>
+</tr>
+<tr>
+<td colspan="3"><p class="captionfig">Fig. 2:&nbsp;&nbsp;Effect of Smooth drop 0 and Sharp drop on a DEM, using a single drainage segment as example. <br />
+        If using Smooth drop 0, then Buffer distance will not be taken into account. </p></td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td width="120" valign="top">Buffer distance:</td>
+<td valign="top">Buffer distance determines the width at either side of a segment where height values should be adapted. </td>
+</tr>
+<tr>
+<td valign="top">Smooth drop:</td>
+<td valign="top">Smooth drop determines the height with which segments and their surroundings (as specified by the Buffer distance) should be gradually dropped (positive value) or raised (negative value) in the terrain. </td>
+</tr>
+<tr>
+<td valign="top">Sharp drop:</td>
+<td valign="top">Sharp drop determines the height with which segments themselves should be dropped (positive value) or raised (negative value) in the terrain. </td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+<li>For Smooth drop and Sharp drop goes: values &gt; 0 represent a drop; values &lt; 0 represent a raise. </li>
+<li>When Smooth drop &lt;&gt; 0 and Sharp drop &lt;&gt; 0, Sharp drop is an additional drop or raise on top of the Smooth drop (Figure 1). </li>
+<li>Smooth drop 0 means no gradual drop; Buffer distance will then automatically be disregarded; Sharp drop will ensure a drop or raise at the position of the segments themselves (Figure&nbsp;2). </li>
+<li>When polygons are used, only Sharp drop applies.</li>
+<li>Undefined height values in the input DEM will remain undefined in the output DEM. </li>
+</ul>
+
+<p class=defnewpar>For more information on the calculation of output values, see <a href="dem_optimization_algorithm.htm">DEM optimization : algorithm</a>.</p>
+
+<p class=kopje>Specifying buffer distance, smooth drop and sharp drop values via an attribute table:</p>
+
+<p>If you wish to a apply the <i>same</i> buffer distance, smooth drop value and sharp drop value to <i>all</i> segments/polygons in the drainage map, there is no need to use an attribute table. You can directly specify the values in the dialog box or on the command line. </p>
+
+<p class=defnewpar>To apply <i>specific</i> buffer distance(s), smooth drop value(s) and sharp drop value(s) for <i>specific classes or IDs</i> of segments, you can use an attribute table (see Figure 3 below). </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table width="90%" border="0">
+<tr>
+<td width="20%"><img src="../images/dem_opti_drain1.gif" width="85" height="85"></td>
+<td width="4px"></td>
+<td><img src="../images/dem_opti_drain1_table.gif" width="265" height="68"></td>
+</tr>
+<tr>
+<td colspan="3"><p class="captionfig">Fig. 3:&nbsp;&nbsp;Example of a segment drainage map and its attribute table in which different values are used for Buffer distance, Smooth drop and Sharp drop for individual segment classes.</p></td>
+</tr>
+</table>
+
+<ul>
+
+<li>An attribute table that is linked to a segment map or to the domain of a segment map is automatically recognized by the dialog box and the command line.</li>
+
+<li>Column names <span class=courier>Buffer_dist</span>, <span class=courier>Smooth_drop</span>, <span class=courier>Sharp_drop</span> are automatically recognized by the dialog box and the command line. Of course, you can also use your own column names. </li>
+
+</ul>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>An input Digital Elevation Model (DEM) is required (<a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value raster map</a>).</p>
+
+<p class=defnewpar>Furthermore, an input 'drainage' map (vector map) is required: 
+
+<ul>
+
+<li>You can use a segment map (domain type Class or ID) and optionally an attribute table for the segments. </li>
+
+        <ul>
+
+        <li>Segments may represent genuine drainages, for instance when the position of segments should be dropped in the output DEM. </li>
+
+        <li>Segments may also represent watershed-divides, for instance when the position of segments should be raised in the output DEM. </li>
+
+        <li>An attribute table should be used when you wish to apply specific buffer distances, smooth drop and/or sharp drop values for individual segment classes or IDs. </li>
+
+        </ul>
+
+<li>For the 'drainage' map, you can also use a polygon map (any domain) to drop or raise areas in the output DEM. </li>
+
+</ul>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output map will use <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain Value</a>; the value range for the output map is automatically calculated. </p>
+
+<p>The output map will use the same georeference as the input map. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>The output map of the DEM optimization operation can be used as input map for the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation. </p>
+
+<p class=kopje>Reference:</p>
+
+<p>The DEM optimization operation complies with the AGREE method, developed by Ferdi Hellweger at the University of Texas, Austin, 1997. For more information, refer to: <a href="http://www.ce.utexas.edu/prof/maidment/gishydro/ferdi/research/agree/agree.html">http://www.ce.utexas.edu/prof/maidment/gishydro/ferdi/research/agree/agree.html</a> </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="fill_sinks_functionality.htm">Fill sinks : functionality</a></p>
+
+<p class=seealsolinks><a href="dem_optimization_dialogbox.htm">DEM optimization : dialog box</a></p>
+
+<p class=seealsolinks><a href="dem_optimization_commandline.htm">DEM optimization : command line</a></p>
+
+<p class=seealsolinks><a href="dem_optimization_algorithm.htm">DEM optimization : algorithm</a></p>
+
+<p class=seealsolinks><a href="flow_direction_functionality.htm">Flow direction : functionality</a></p>
+
+</body

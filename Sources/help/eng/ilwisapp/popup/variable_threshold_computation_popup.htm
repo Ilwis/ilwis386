@@ -1,0 +1,48 @@
+<html>
+
+<head>
+<title>variable threshold computation popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Variable Threshold Computation</p>
+
+<p class="defnewpar">The <a href="..//ilwisapp/variable_threshold_computation.htm" onClick="return popup(this, 'notes')" >Variable Threshold Computation</a> operation helps you to prepare a threshold map that can be used in a Drainage network extraction operation. </p>
+
+<p class="defnewpar">You can base the threshold map on a height map (DEM), or on attribute values from an attribute table of a raster map with a class or ID domain (e.g. infiltration attribute values in a table linked to a geological unit map). </p>
+
+<p class="defnewpar">As a user, you have to: </p>
+
+<ul>
+
+<li>specify the size of a kernel or moving window, so that for the calculation of each output pixel, only 3 x 3 or 5 x 5, etc. input pixels will be considered; </li>
+
+<li>specify the number of desired output classes; </li>
+
+<li>specify a boundary value and a desired output value for each output class that you wish to obtain. </li>
+
+</ul>
+
+<p class="defnewpar">When height values are used as input, you can optionally obtain an internal relief map as additional output. </p>
+
+<p class="defnewpar">For more information on the calculations that will take place, refer to <a href="..//ilwisapp/variable_threshold_computation_functionality.htm" onClick="return popup(this, 'notes')" >Variable threshold computation : functionality</a>. </p>
+
+</body

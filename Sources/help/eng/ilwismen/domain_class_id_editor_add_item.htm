@@ -1,0 +1,147 @@
+<html>
+
+<head>
+<title>Domain Class/ID editor : Add item</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Domain Class/ID editor, Add ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Domain Class/ID editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Add Item</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/domain_class_id_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Add a new class or identifier to this <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>. 
+
+You can enter a name, and optionally a code and a description.</p>
+
+<p class=defnewpar>This dialog box appears when in the Domain Class/ID editor:</p>
+
+<ul>
+
+<li>	you choose <span class=arial>Add Item</span> from the <a href="../ilwis/domain_class_id_editor_menu_commands.htm">Edit menu</a>, or</li>
+
+<li>    when you click the <span class=arial>Add Item</span> button in the toolbar, or
+
+<li>    when you press the right mouse button and choose <span class=arial>Add Item</span> from the context-sensitive menu, or
+
+<li>	when you press the <span class=arial>Ins</span> key on the keyboard.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a new class name or a new identifier. Class names and identifiers can be as long as you like. </p>
+
+<p class="tiptext"><span class="tip">Note: </span>Class names or IDs may contain any characters, except the <span class="courier">%</span> character. </p>
+
+<p class=diabox>You will see the class names or IDs when pressing the left mouse button (Info) in a map window; you will see the class names or IDs as record names when creating an attribute table for this domain (or for a map using this domain); when enclosed in double quotes, you can use the class names or IDs in <i>calculations</i>.
+
+You can also show class names or IDs in a legend.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Code:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a short code for this class name or identifier. 
+
+<p class="tiptext"><span class="tip">Note: </span>In codes, colons <span class="courier">:</span> and percentages <span class="courier">%</span> may not be used. </p>
+
+<p class=diabox>When displaying a map which uses this domain in a map window and pressing the left mouse button (Info), and in Pixel Info, you will see the code and the class name or ID as <i>code: class name</i> or <i>code: Identifier</i>. 
+
+When enclosed in double quotes, you can use codes in <i>calculations</i>. 
+
+In a legend, you can optionally show codes.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a longer description for this class name or identifier. </p>
+
+<p class=diabox>You can use descriptions for example in a legend.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Limitations:</p>
+
+<ul>
+
+<li>The complete set of Names and Codes must be unique in the domain. </li>
+
+<li>The maximum number of items that can be shown in the domain Class/ID editor is 100 million.</li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	To change the order of class names or identifiers in this domain, set the sorting to <a href="..//ilwismen/popup/domain_class_id_editor_manual_ordering_popup.htm" onClick="return popup(this, 'notes')" ><span class=arial>Manual Ordering</a></span> and drag domain items to a new position in the list. </li>
+
+<li>    To edit the colors of classes, you can choose the <span class=arial>Open Representation</span> command from the <a href="../ilwis/domain_class_id_editor_menu_commands.htm">File menu</a>. The <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Class</a> editor will be opened showing the representation that is currently linked to this domain. An ID domain does not have a representation.</li>
+
+<li>    If you like, you can fill out the Name field in this dialog box as <i>code</i><span class=courier>:</span><i>name</i>.
+
+<li>	You can increase or decrease the number of characters shown by lists from which you can choose a class name or an ID, 
+
+        for instance when editing units in a map editor and when editing fields of class columns in a table, 
+
+        by setting the 'width' in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of the domain. 
+
+        The default width for a class domain is 15, the default width for an identifier domain is 6.</li>
+
+<li>	In <a href="../ilwis/calc_aaf.htm">MapCalc</a> or <a href="../ilwis/calc_aaf.htm">TabCalc</a> calculations, you can use class names or identifiers as well as codes. In calculations, class names, identifiers or codes should be enclosed in &quot;double quotes&quot;. </li>
+
+<li>	For advanced users: you can also add class names to a class domain or identifiers to an identifier domain by using the <span class=courier>additemtodomain</span> script command on the command line of the Main window. For more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/domain_class_id_editor_functionality.htm">Domain Class/ID editor : functionality</a></p>
+
+</body

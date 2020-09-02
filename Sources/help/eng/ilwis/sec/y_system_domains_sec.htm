@@ -1,0 +1,242 @@
+<html>
+
+<head>
+<title>System domains</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>System domains</p>
+
+<p>The following domains are system domains:</p>
+
+<table cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td colspan="2"><p class=kopje>For values including undefined: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p><a href="../../ilwis/popup/yy_system_domain_value_popup.htm">system domain <span class=courier>Value</a></span></p>
+</td>
+<td valign="top">
+<p>For general use to calculate with <a href="../../ilwis/sec/y_value_maps_sec.htm">value maps</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="200">
+<p><a href="../../ilwis/popup/yy_system_domain_distance_popup.htm">system domain <span class=courier>Distance</a></span></p>
+</td>
+<td valign="top">
+<p>Designed to calculate distances; unit 'm'.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_count_popup.htm">system domain <span class=courier>Count</a></span></p>
+</td>
+<td valign="top">
+<p>Designed to count values that are not undefined; fixed precision.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_min1to1_popup.htm">system domain <span class=courier>Min1to1</a></span></p>
+</td>
+<td valign="top">
+<p>Designed to calculate with values from -1.00 to +1.00; fixed value range.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_nilto1_popup.htm">system domain <span class=courier>NILto1</a></span></p>
+</td>
+<td valign="top">
+<p>Designed to calculate with values from 0.00 to +1.00; fixed value range.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_perc_popup.htm">system domain <span class=courier>Perc</a></span></p>
+</td>
+<td valign="top">
+<p>Designed to calculate with percentage values; unit '%'.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_byte_popup.htm">system domain <span class=courier>Byte</a></span></p>
+</td>
+<td valign="top">
+<p>To calculate with images which have a value range from 1 to 255; where 0 should mean undefined; fixed value range and precision.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2"><p class=kopje>For satellite imagery: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_image_popup.htm">system domain <span class=courier>Image</a></span></p>
+</td>
+<td valign="top">
+<p>For images with integer values from 0 to 255.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_noaa_popup.htm">system domain <span class=courier>NOAA</a></span></p>
+</td>
+<td valign="top">
+<p>For NOAA images with integer values from 0 to 1023.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_radar_popup.htm">system domain <span class=courier>Radar</a></span></p>
+</td>
+<td valign="top">
+<p>For Radar images with integer values from 0 to 32767.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2"><p class=kopje>For Boolean values and undefined: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_bool_popup.htm">system domain <span class=courier>Bool</a></span></p>
+
+</td>
+<td valign="top">
+<p>To calculate with boolean values True, False and undefined.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_yesno_popup.htm">system domain <span class=courier>YesNo</a></span></p>
+
+</td>
+<td valign="top">
+<p>To calculate with boolean values Yes, No and undefined.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2"><p class=kopje>For Boolean values and no undefined: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_bit_popup.htm">system domain <span class=courier>Bit</a></span> </p>
+
+</td>
+<td valign="top">
+<p>To calculate with values 0 and 1 (deprecated).</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2"><p class=kopje>Other: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_string_popup.htm">system domain <span class=courier>String</a></span></p>
+
+</td>
+<td valign="top">
+<p>To use in columns that should contain plain texts such as descriptions.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>system domain <span class=courier>UniqueID</span></p>
+
+</td>
+<td valign="top">
+<p>To use in maps in which each mapping unit should obtain its own unique ID.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>system domain <span class=courier>Color</span> </p>
+
+</td>
+<td valign="top">
+<p>To use for colored images (256 x 256 x 256 colors).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>system domain <span class=courier>ColorCmp</span> </p>
+
+</td>
+<td valign="top">
+<p>Is used as output domain by the <a href="../../ilwisapp/popup/color_composite_popup.htm">Color Composite</a> operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><a href="../../ilwis/popup/yy_system_domain_flow_direction_popup.htm">system domain <span class=courier>FlowDirection</span></a></p>
+
+</td>
+<td valign="top">
+<p>To calculate with eight compass directions: N (to the North), E (to the East), S, W, NE, SE, SW, NW. Fixed output domain for the <a href="../../ilwisapp/popup/flow_direction_popup.htm">Flow direction</a> operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>system domain <span class=courier>None</span> </p>
+
+</td>
+<td valign="top">
+<p>For tables that have no class or ID domain, i.e. when the table should simply store records.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</a></p>
+
+</body

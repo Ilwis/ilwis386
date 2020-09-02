@@ -1,0 +1,96 @@
+<html>
+
+<head>
+<title>Basic concepts : map views and layouts</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Basic concepts, Map view, Views, Layouts, Print, Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Basic concepts</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Map views&nbsp;<img src="../images/mpv.gif" align=bottom width="16" height="12"> and Layouts&nbsp;<img src="../images/layout.gif" align=bottom width="12" height="14"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=kopje>Map views: </p>
+
+<p>When a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a> displays one or more <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a>, <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a>, <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a> and/or <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a>, and optionally <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text</a> layers, <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and/or <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a>, you may store such a set as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. </p>
+
+<p class=defnewpar>A <a href="ilwis_objects_map_views.htm">map view</a> contains the names of maps and their display settings, and the settings for the grid lines and/or the graticule(s). Furthermore, the georeference of the map window, the area on which you may have zoomed in, and the scale factor by which the map(s) should be displayed are stored. </p>
+
+<p class=defnewpar>By opening a map view later on, the map window will appear exactly as it was saved. You do not need to add individual maps to the map window, nor specify their display options, nor zoom in on a specific area anymore. </p>
+
+<p class=kopje>Layouts: </p>
+
+<p>For presentation purposes or to print maps later on, you must create a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>. </p>
+
+<p class=defnewpar>A <a href="ilwis_objects_layouts.htm">layout</a> is a virtual sheet of paper on which you can make a composition of one or more <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a>; for each map view you can specify the <i>scale</i> on which this map view should be displayed and printed later on. </p>
+
+<p class=tiptext><span class=tip>Mind: </span>A map view in a layout may only contain one raster map. </p>
+
+<p class=defnewpar>For each map view in the layout, you can add additional <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> such as: </p>
+
+<ul>
+
+<li>a <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legend</a> for a certain map in a map view; </li>
+
+<li>a <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map border</a>, including coordinates and ticks for grid lines and/or a graticule;</li>
+
+<li>a <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >North arrow</a>; </li>
+
+<li>a <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bar and a scale text</a>. </li>
+
+</ul>
+
+<p class=defnewpar>To complete your layout, you can also add: </p>
+
+<ul>
+
+<li><a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a>; </li>
+
+<li><a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >boxes</a>; </li>
+
+<li><a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >pictures</a> and/or <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmaps</a>; </li>
+
+<li>a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a>.</li> 
+
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_map_views.htm">ILWIS objects : map views</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_layouts.htm">ILWIS objects : layouts</a></p>
+
+<p class=seealsolinks><a href="layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+</body

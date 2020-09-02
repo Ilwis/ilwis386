@@ -1,0 +1,283 @@
+<html>
+
+<head>
+<title>Domain Class/ID editor : toolbar</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Toolbar, Toolbar, Domain Class/ID editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Domain Class/ID/Group editor</h1>
+
+<h1 class=secondline>Toolbar</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The toolbar of the Domain Class/ID/Group editor provides <i>shortcuts</i> for some regularly used menu commands for instance to edit a selected domain item, to add and delete domain items, to cut, copy and paste domain items to and from other domains, to sort the domain, etc. </p>
+
+<p class=defnewpar><img src="../images/bbdomed.gif" align=bottom width="289" height="26"></p>
+
+<p class=defnewpar>When you leave the mouse pointer for a short period of time on top of a button, a tooltip will appear with the name of the button / the menu command that it will perform. Also the <a href="..//ilwis/popup/status_line_popup.htm" onClick="return popup(this, 'notes')" >status bar</a> at the bottom of the window may provide you with a short explanation on the effect of using the button. </p>
+
+<p class=defnewpar>You can move the toolbar and <i>dock</i> it along an edge of the window; you can also make the toolbar floating. Some of the actions that are available via the toolbar are also available via the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</p>
+
+<p class=defnewpar>The following actions can be performed:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top" width=24>
+<img src="../images/domeditsel.gif" align=bottom width="22" height="22">
+<p></p>
+
+</td>
+<td valign="top" width=84>
+<p>Edit Item:</p>
+
+</td>
+<td valign="top">
+<p>The <a href="../ilwismen/domain_class_id_editor_edit_item.htm">Edit Item</a> dialog box appears, 
+
+in which you can edit the Name, and optionally the Code and the Description of a selected domain item. 
+
+When editing a group domain, you can edit the upper boundary value of the selected item as well.
+
+When you selected multiple items, you can just modify the Description of these items.
+
+You can also double-click an item in the domain; select one or more items and press the <span class=arial>Enter</span> key on the keyboard, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=24>
+<p><img src="../images/domadditem.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Add Item:</p>
+
+</td>
+<td valign="top">
+<p>The <a href="../ilwismen/domain_class_id_editor_add_item.htm">Add Item</a> dialog box appears, 
+
+in which you can fill out a Name, and optionally a Code and/or a Description for the new class name or ID. 
+
+When editing a group domain, you have to fill out the upper boundary value for the new group as well. 
+
+You can also press the <span class=arial>Ins</span> key on the keyboard.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=24>
+<p><img src="../images/domdelitem.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Delete Item:</p>
+
+</td>
+<td  valign="top">
+<p>Delete one or more selected items from this domain. 
+
+You can also select one or more items and press the <span class=arial>Del</span> key on the keyboard. </p>
+
+<p>Deleting items from a domain should be done with care. 
+
+When the domain and the deleted class, ID or group was used: </p>
+
+<ul>
+
+<li>	in a map, the undefined value will appear;</li>
+
+<li>	as a table domain, the record will not be shown any more;</li>
+
+<li>	as field in a column of a table, the undefined value will appear.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=24>
+<p><img src="../images/copy.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Copy:</p>
+
+</td>
+<td valign="top">
+<p>Copy the names, codes, and descriptions of one or more selected domain items to the clipboard. In case of a group domain, also upper boundary values are copied. You can also use the <span class=arial>Ctrl+C</span> keys on the keyboard. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=24>
+<p><img src="../images/paste.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Paste:</p>
+
+</td>
+<td valign="top">
+<p>Paste the contents of the clipboard into this domain. You can also use the <span class=arial>Ctrl+V</span> keys on the keyboard. </p>
+
+<p>For class and ID domains, the expected format is:
+
+Name&lt;TAB&gt;Code&lt;TAB&gt;Descr&lt;CR&gt;&lt;LF&gt; </p>
+
+<p>For group domains, the expected format is:
+
+Name&lt;TAB&gt;Code&lt;TAB&gt;Descr&lt;TAB&gt;UpBoundVal&lt;CR&gt;&lt;LF&gt;</p>
+
+<p>This is exactly the format that is obtained when copying domain items to the clipboard.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=24>
+<p><img src="../images/domsortname.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Sort by Name:</p>
+
+</td>
+<td valign="top">
+<p>Sort the items in this class or ID domain alphabetically by Name. See also the tip below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=24>
+<p><img src="../images/domsortcode.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Sort by Code:</p>
+
+</td>
+<td valign="top">
+<p>Sort the items in this class or ID domain alphabetically by Code. See also the tip below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" rowspan=2 width=24>
+<p><img src="../images/domsortman.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" colspan=2>
+<p>Manual Ordering:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=84>
+<p>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p>Allows you to order the domain items manually. </p>
+
+<p>Subsequently, select a domain item in the domain Class/ID editor and drag it to a new position in the list. Continue to do so until satisfied. See also the tip below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=24 rowspan=2>
+<p><img src="../images/openrepr.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" colspan=2>
+<p>Open Representation:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=84>
+<p>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p>When editing a class domain or a group domain, open the <a href="representation_class_editor_functionality.htm">Representation Class editor</a> with the class representation that is currently linked to this domain.  In the Representation Class editor, you can edit the representation (colors etc.) of each class or group in this domain. </p>
+
+<p>As ID domains do not have a representation, this button is grayed out when editing an ID domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=24>
+<p><img src="../images/prop.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Properties:</p>
+
+</td>
+<td valign="top">
+<p>Open the <a href="../ilwismen/domain_properties.htm">Properties</a> of the current domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=24>
+<p><img src="../images/print.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Print:</p>
+
+</td>
+<td valign="top">
+<p>Print the domain or print a selection of the domain.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The toolbar can be hidden or shown with the <span class=arial>Toolbar</span> command on the <a href="domain_class_id_editor_menu_commands.htm">View menu</a>. If the action of a certain button cannot be performed at a certain moment, the button appears gray.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>The sorting order of the classes or IDs in a domain determines 
+
+ the order of these items in a legend in a map window, 
+
+ the order of classes in a representation class, 
+
+ the order of records in an attribute table, and 
+
+ the order in lists from which you can choose a class name or ID, 
+
+ for instance when editing units in a map editor and when editing fields of class columns in a table.</p>
+
+<p class=tiptext>The order of a group domain is determined by the upper boundary values of the groups in the group domain.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="domain_class_id_editor_functionality.htm">Domain Class/ID editor : functionality</a></p>
+
+<p class=seealsolinks><a href="domain_class_id_editor_menu_commands.htm">Domain Class/ID editor : menu commands</a></p>
+
+</body

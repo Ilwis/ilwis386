@@ -1,0 +1,142 @@
+<html>
+
+<head>
+<title>CODE</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="CODE, String functions, String conversion functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>CODE( ) function</h1>
+
+<p class=defnewpar>Returns the code of an item in a class or ID domain.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>CODE</span>(<i>String</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>String</i></td>
+	<td valign="top">is a column with a Class or ID domain, or the Class or ID domain of a table (<a href="calc_predefined_variable_k.htm">%K</a>)</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top"><a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> or <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>CODE</span> returns:</td>
+	<td valign="top">a string</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>String</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>When the input is undefined, the output will also be undefined.</li>
+	<li>When a domain item has no code, an empty string is returned.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Example</p>
+
+<p class=kopjeaftertitlesub>TabCalc example:</p>
+<p class=calc00>InCol = %K</p>
+<p class=calc00>OutCol = CODE(InCol)</p>
+<p class=calc00>OutCol = CODE(%K)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolh>InCol</p></td>
+	<td valign="top"><p class=tcolh>
+	OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Accumulation of debris on slope</p></td>
+	<td valign="top"><p class=t1>ad</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Active landslide</p></td>
+	<td valign="top"><p class=t1>al</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Alluvial fan (flooding possible)</p></td>
+	<td valign="top"><p class=t1>af</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Alluvial fan (no flooding possible)</p></td>
+	<td valign="top"><p class=t1>an</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>?</p></td>
+	<td valign="top"><p class=t1>?</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Glacial lake</p></td>
+	<td valign="top"><p class=t1>gl</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Glacial valley</p></td>
+	<td valign="top"><p class=t1>gv</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Heavily eroded area</p></td>
+	<td valign="top"><p class=t1>he</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Old landslide</p></td>
+	<td valign="top"><p class=t1>ol</td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>The domain of a table simply shows <a href="calc_name.htm">names</a> only.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="55"><p class=seealsolinks><a href="calc_name.htm">NAME</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_left.htm">LEFT</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="55"><p class=seealsolinks><a href="calc_value.htm">VALUE</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_right.htm">RIGHT</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="55"><p class=seealsolinks><a href="calc_string.htm">STRING</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_sub.htm">SUB</a></p></td>
+</tr>
+</table>
+
+</body

@@ -1,0 +1,157 @@
+<html>
+
+<head>
+<title>Graph Options - Rose diagram</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Graph Options, Graph - Rose diagram, Graph window, Rose diagram ">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Graph window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/graph_window_graph_management.htm">Graph Management</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Graph Options - Rose Diagram</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Modify the name and/or the appearance (i.e. display options) of the selected rose diagram. </p>
+
+<p class=defnewpar>The option Rose Diagram is designed to display the output of the <a href="..//ilwisapp/popup/segment_direction_histogram_popup.htm" onClick="return popup(this, 'notes')" >Segment direction histogram</a> operation in graphical format. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you double-click an existing rose diagram in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane, </li>
+
+<li>	when you click an existing rose diagram with the right mouse button in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane, and select <span class=arial>Graph Options</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, modify the name of this rose diagram. The name of the graph layer is visible in the Graph Management pane and in the legend of the graph window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Line:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to connect the value of a record (Y values) with the value of the next record through a straight line. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Step:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to connect the value of a record (Y values) with the value of the next record through a step-wise line. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Needle:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to obtain a separate line in the rose diagram for every record (Y values) in the table. Every line will at 0,0. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color in which the rose diagram should be displayed. </p>
+
+<p class=diabox>To define your own color, click the little <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select the 'Custom' item at the bottom of the list; then, the Windows <a href="custom_colors.htm">Color</a> dialog box will appear.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Examples:</p>
+
+<p>Figure 1 below shows a rose diagram of the Faults in segment map Faults of the example data. The X-axis shows the direction of the Fault segments, the Y-axis show the length of these segments in a certain direction. </p>
+
+<p><img src="../images/rosediag1.gif" align=bottom width="508" height="218"></p>
+
+<p class=captionfig>Fig. 1: Rose diagram showing directions and lengths of Faults. The line type of the rose diagram is Needle. </p>
+
+<p class=defnewpar>Figure 2 below shows a rose diagram of the Lineaments in segment map Faults of the example data. The X-axis shows the direction of the Lineament segments, the Y-axis show the length of these segments in a certain direction. </p>
+
+<p><img src="../images/rosediag2.gif" align=bottom width="508" height="218"></p>
+
+<p class=captionfig>Fig. 2: Rose diagram showing directions and lengths of Lineaments. The line type of the rose diagram is Needle. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>To adapt the title, X-axis, Y-axis of the rose diagram, double-click the appriopriate item in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane or in the graph window itself: the <a href="graph_window_options_title.htm">Title</a>, <a href="graph_window_options_x_axis_rose.htm">X-axis (rose diagram)</a>, or the <a href="graph_window_options_y_axis_rose.htm">Y-axis (rose diagram)</a> dialog box will appear. </li>
+
+<p>The grid lines of the rose diagram can be modified in the X-axis and Y-axis dialog boxes. </p>
+
+<li>To add another rose diagram to the current graph window, choose <span class=arial>Add Graph</span> from the <a href="../ilwis/graph_window_menu_commands.htm">Edit menu</a> in the graph window or click the <span class=arial>Add Graph</span> button <img src="../images/add_graph_layer.gif" align=bottom width="36" height="22"> in the <a href="../ilwis/graph_window_toolbar.htm">toolbar</a> of the graph window; the <a href="graph_window_add_rose_diagram.htm">Add Rose Diagram</a> dialog box will appear. </li>
+
+<li>To create a new graph in a new graph window, choose <span class=arial>Create Graph</span> from the <a href="../ilwis/graph_window_menu_commands.htm">File menu</a> in the graph window: the <a href="create_a_graph.htm">Create Graph</a> dialog box will appear. </li>
+
+<li>To save the contents of a graph window as a graph, choose <span class=arial><a href="graph_window_save_graph.htm">Save</a></span> or <span class=arial><a href="graph_window_save_graph_as.htm">Save As</a></span> from the <a href="../ilwis/graph_window_menu_commands.htm">File menu</a> in the graph window. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_functionality.htm">Graph window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_graph_management.htm">Graph window : Graph Management</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_toolbar.htm">Graph window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_menu_commands.htm">Graph window : menu commands</a></p>
+
+<p class=seealsolinks><a href="create_a_rose_diagram.htm">Create a rose diagram</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="graph_window_add_rose_diagram.htm">Add a rose diagram</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_graphs.htm">ILWIS objects : graphs</a></p>
+
+</body

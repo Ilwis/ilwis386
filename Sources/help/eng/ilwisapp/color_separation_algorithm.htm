@@ -1,0 +1,132 @@
+<html>
+
+<head>
+<title>Color separation : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Color separation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Color separation</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Color separation operation allows you to extract different 'bands' for instance from a scanned or digital color photo as if using color filters when taking the picture. After color extraction, you can perform the normal Image Processing operations like Filtering, Classification, etc. on these bands. </p>
+
+<p class=defnewpar>Maps that have a Picture domain or the (24 bit) <span class=courier>Color</span> domain store for each pixel three values: Red, Green and Blue. The Color separation operation allows you to retrieve for each pixel either the Red, Green or Blue value and store these in a separate map. You can also retrieve Yellow, Magenta, Cyan, combined Gray values, or Hue, Saturation or Intensity values for each pixel. </p>
+
+<p class=defnewpar>For each pixel the selected color is retrieved. Red, Green and Blue values are directly retrieved from the map or the picture domain. When another color is selected, one of the following formulas is applied:</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p>Yellow</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>255 - Blue</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Magenta</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>255 - Green</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Cyan</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>255 - Red</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Hue</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>(255/2<span class=symbollarger>p</span>) <span class=courier>*</span> arctan2 (1/2 <span class=symbollarger>&Ouml;</span>3 <span class=courier>*</span> (Green-Blue) , Red - (Green+Blue) / 2 ) <span class=courier>*</span> 240/255 </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Saturation</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p><span class=symbollarger>&Ouml;</span> (Red<sup>2</sup> + Green<sup>2</sup> + Blue<sup>2</sup> - Red<span class=courier>*</span>Green - Red<span class=courier>*</span>Blue - Green<span class=courier>*</span>Blue) <span class=courier>*</span> 240/255</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Intensity</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>1/3 <span class=courier>*</span> (Red + Green + Blue) <span class=courier>*</span> 240/255</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Gray</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>0.3 <span class=courier>*</span> Red + 0.59 <span class=courier>*</span> Green + 0.11 <span class=courier>*</span> Blue</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Red, Green, and Blue values range from 0 to 255. Hue, Saturation, and Intensity values however range from 0 to 240; this range complies with the Windows color scheme definition. In the formulas for Hue, Saturation and Intensity above, multiplication factor 240/255 is used to obtain that range.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="color_separation_functionality.htm">Color separation : functionality</a></p>
+
+</body

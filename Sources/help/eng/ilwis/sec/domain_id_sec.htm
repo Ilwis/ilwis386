@@ -1,0 +1,82 @@
+<html>
+
+<head>
+<title>Domain type : ID (1)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Domain type Identifier</p>
+
+<p class=linespacing03after>An identifier <a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >domain</a> is a <i>list of unique identifiers (IDs)</i> and optionally codes that can be used for instance in a certain map. Identifier domains are suitable for instance for cadastral maps where each polygon has a unique ID. Individual mapping units each with a unique ID generally occur only once in a map, have no meaning nor color of themselves but probably have a lot of attribute information about them. </p>
+
+<p class=linespacing03after>In a map with an identifier domain, the points, segments, polygons or mapping units are identified by one of the IDs as listed in the identifier domain linked to that map. In principle, each ID in an identifier domain occurs only once in the map but it is possible that you use IDs more than once. Points, segments, polygons, or pixels without an identifier are considered undefined.</p>
+
+<p class=linespacing03after>When you <i>create</i> an identifier domain, you can either add all IDs to the domain yourself in the <a href="../popup/domain_classid_editor_popup.htm">Domain Class/ID editor</a>, or you can specify to use a certain list of numbers with or without using your own <i>prefix</i>. Furthermore, you can always add new IDs yourself to the domain later on, i.e. in the Domain Class/ID editor, or interactively, for instance during digitizing.</p>
+
+<p class=linespacing03after>Maps with an identifier domain (or a class domain) can have an <a href="../../ilwis/popup/objects_table_popup.htm">attribute table</a>. The domain of the attribute table is the same as the domain of the map to which the table refers; the domain provides the record entries in the table. You can then add additional attribute information (in the columns of the table) on each of the IDs in your map. <br>
+Just as maps, also each column has a domain to define the type of information you want to store in that column: when you want to store values in a column, use a value domain for that column; when you want to store class information in a column, use a class domain for that column, etc.</p>
+
+<p class=linespacing03after>Maps with an identifier domain <i>have no user-defined representation</i>; they can only be shown in 1, 7, 15 or 31 system colors. However, ID maps will usually be shown by selecting a certain attribute column of interest as stored in the attribute table of the map. When a selected attribute column has a value domain, you can use a <i>representation value</i> or a <i>representation gradual</i>; when the attribute column has a class domain, you can use a <i>representation class</i>. <br>
+There are special possibilities to display point maps with an identifier domain and attribute information: these can be shown for instance by sized symbols, or the attribute information can be shown as pie charts, bar graphs, etc.</p>
+
+<p>In <a href="../popup/map_calculation_popup.htm">MapCalc</a> or <a href="../../ilwis/popup/table_calculation_popup.htm">TabCalc</a>, you can calculate with specific IDs by using double quotes around the IDs or their codes.</p>
+
+<p class=kopje>Examples:</p>
+
+<p>You can use an identifier domain:</p>
+
+<ul>
+
+<li>	for point maps with individual water wells where each well has a number,</li>
+
+<li>	for segment maps with individual road sections where each road section has an ID,</li>
+
+<li>	for segment maps with individual river sections,</li>
+
+<li>	for polygon maps of cadastral plots where each plot has an ID,</li>
+
+<li>	for rasterized forms of these maps,</li>
+
+<li>	as the domain of an attribute table for an ID map: the attribute table contains extra attribute information on the individual IDs in the map,</li>
+
+<li>	output map of an <a href="../../ilwisapp/popup/area_numbering_popup.htm">Area Numbering</a> operation on a raster map of domain type class.</li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	When you work with for example maps of different years of cadastral plots, you should work with one identifier domain e.g. <span class=courier>PLOTID</span> for all maps. In this user-defined domain called <span class=courier>PLOTID</span> you should list all possible plot identifiers of all years. Not every ID has to exist in each year. </li>
+
+<li>	It is advised to use an ID domain for detailed maps on large scales, for instance larger than 1 : 2,500 for example for cadastral and infrastructural purposes.</li>
+
+</ul>
+
+<p class=Seealso>See also: </p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_before_creating_maps_and_tables.htm" onClick="return popup(this, 'notes')" >Before creating ILWIS maps and tables</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_domains.htm" onClick="return popup(this, 'notes')" >Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</a></p>
+
+</body

@@ -1,0 +1,223 @@
+<html>
+
+<head>
+<title>Segment editor : Polygonize</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment editor, Polygonize, Create ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Segment editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/segment_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Polygonize</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Polygonizes the current segment map or polygonizes a selection of segments of the current segment map.  </p>
+
+<p class=defnewpar>To polygonize segments digitized in ILWIS or to polygonize imported segments which use a topological structure (see below), use the topological polygonization method. The segments are first checked for any topological errors as <a href="check_segments_self_overlap.htm">Self overlap</a>, <a href="check_segments_dead_ends.htm">Dead ends</a> and <a href="check_segments_intersections.htm">Intersections</a>. </p>
+
+<ul>
+
+<li>If an error is found, you must correct the error in the segment editor. It is advised to then first perform the separate Self overlap, Dead ends, and Intersections checks in the segment editor yourself, and restart Polygonize when these three checks are OK. </li>
+
+<li>When the segments are correct, the polygonization will be carried out. </li>
+
+</ul>
+
+<p class=defnewpar>To polygonize imported segments of which each segment encloses a full future polygon, use the non-topological polygonization method (see below). It is first checked whether each segment has only 1 node which serves both as the begin node and as the end node of the segment (<a href="check_segments_closed_segments.htm">Closed segments</a>). </p>
+
+<ul>
+
+<li>When the segments are correct, the polygonization will be carried out. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >Mask</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to polygonize a specific selection of segments. Subsequently, specify the one or more segment codes to select only those segments (see also <a href="../ilwis/how_to_use_masks.htm">How to use masks</a>). Clear this check box to polygonize all segments.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Topology:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you digitized the segments in ILWIS, or, in case you wish to polygonize imported segments, when you are sure that each segment can be used both to define the boundary of a polygon to its left and a polygon to its right (topological structure). </p>
+
+<p>Clear this check box when you imported non-topological polygons (e.g. DXF) into ILWIS earlier on, and now wish to polygonize the segment map which is the result of the import. In this type of segment maps, each segment has only 1 node (serving both as begin node and as end node), and each segment encloses exactly 1 polygon. Neighbouring polygons thus do not share the same segment as their boundary (non-topological structure). </p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to use an existing domain for the polygon map, or <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> a new domain for the polygon map. Note that polygons will not obtain names yet during the polygonization process: after polygonization, you need to assign names, IDs, or values to all polygons yourself in the <a href="..//ilwis/popup/polygon_editor_popup.htm" onClick="return popup(this, 'notes')" >polygon editor</a>. Select the <span class=arial>Edit</span> check box if you directly want to continue with the polygon editor.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Segment Codes:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Only available in case you have cleared the Topology check box, i.e. when you wish to create polygons from segments which each enclose a single polygon (non-topological): select this option when you wish to assign to each polygon, the name of the segment which encloses the polygon. Select the <span class=arial>Show</span> check box to display the resulting polygon map in a map window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Label Points: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to assign class names, IDs, or values to the polygons as present in a label point map (recommended). Subsequently, select a point map from the list. Select the <span class=arial>Show</span> check box to display the resulting polygon map in a map window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Unique Identifiers: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to obtain uniquely named polygons. All polygons will be named automatically and sequentially, i.e. as <span class=courier>Pol 1</span>, <span class=courier>Pol 2</span>, <span class=courier>Pol 3</span>, <span class=courier>Pol 4</span>, etc. The output map will use an <a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal <span class=courier>UniqueID</span> domain</a>. Select the <span class=arial>Show</span> check box to display the resulting polygon map in a map window.</p>
+
+<p class=diabox> Note that some ID's may be used by the system for internal administration. </p>
+
+<p class=diabox>When, after polygonization, you open the output map as a domain, you can only edit the Prefix 'Pol' of the IDs. </p>
+
+<p class=diabox>If, after polygonization, you wish to assign other names to the polygons, you should: </p>
+
+<ul class=diaul>
+
+<li>open the <a href="../ilwismen/polygon_map_properties.htm">Properties of the polygon map</a>, and create an attribute table for the polygon map, </li>
+     
+<li>open the attribute table, and add an (empty) attribute column to the table into which the new polygon names can be entered later on, </li>
+
+<li>open the map in a map window, and use the <a href="../ilwismen/double_click_action.htm">Double-click Action, Edit Attributes</a> option to enter the desired polygon names in the attribute column, <br>
+
+    (if you broke the Dependency Links of the polygon map, you can also edit the map in the <a href="../ilwis/polygon_editor_functionality.htm">polygon editor</a> and enter the desired polygon names in the attribute column), </li>
+
+<li>use the <a href="..//ilwisapp/popup/attribute_map_of_polygons_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of polygon map</a> operation to obtain a polygon map with the new class names, IDs, etc. </li>
+
+</ul>
+
+<p class=diabox>Of course, also other attributes can be entered in or joined into this attribute table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output polygon map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a new <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output polygon map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Edit:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When using the Domain option: select this check box to continue in the polygon editor when polygonization has finished. Clear this check box if you do not want to see this map immediately: you simply define how the polygon map should be created. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Show:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When using the Segment Codes, Label Points or Unique Identifiers option: select this check box if you want the polygon map to be displayed in a map window when the operation has finished. Clear this check box if you do not want to see this map immediately: you simply define how the polygon map should be created. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	When you used the Domain option, an editable polygon map will be created (dependencies are immediately broken).</li>
+
+<li>	When you used the Segment Codes, the Label Points, or the Unique Identifiers option, a <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >dependent polygon map</a> will be created. 
+
+        <ul class=tipul>
+
+        <li>You can <b>view</b> the results of polygonization by displaying the polygon map in a map window; use the left mouse button to check polygon names, etc. </li>
+
+        <li>To <b>edit</b> class names, IDs or values of polygons, you first need to <a href="../ilwis/how_to_break_dependency_links.htm">break the dependency link</a> in the <a href="../ilwismen/polygon_map_properties.htm">Properties</a> sheet of the polygon map. Only after the dependency link has been broken, you can edit the polygon map in the <a href="..//ilwis/popup/polygon_editor_popup.htm" onClick="return popup(this, 'notes')" >polygon editor</a>. </li>
+
+        <p>     For more information, see also <a href="../ilwis/basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a> and <a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit the properties of an object</a>.</p>
+
+        </ul>
+
+<li>	For more information on making a selection of segments with a mask, see <a href="../ilwis/how_to_use_masks.htm">How to use masks</a>.</li>
+
+<li>    To polygonize segments without any user interaction, use the <a href="..//ilwisapp/popup/segments_to_polygons_popup.htm" onClick="return popup(this, 'notes')" >Segments to Polygons</a> operation. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_check_segments.htm">Segment editor : Check segments</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_functionality.htm">Polygon editor : functionality</a></p>
+
+</body

@@ -1,0 +1,157 @@
+<html>
+
+<head>
+<title>Cross Variogram : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cross Variogram, Semi-variogram (experimental)">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Cross Variogram</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Cross Variogram operation, necessary to perform <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a>, is an extension of the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. Distances, Average lags, Nr of Pairs and semi-variogram values are calculated in the same way as in <a href="spatial_correlation_algorithm.htm">Spatial correlation (algorithm)</a>. </p>
+
+<ul>
+
+<li>Distance classes are usually based on a user-specified lag spacing. </li>
+
+<li>When the <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distance</a> option is used, all distances are calculated over the sphere using the projection of the coordinate system that is used by the input point map. </li>
+
+</ul>
+
+<p class=defnewpar>Cross-variogram values are estimated directly from the sample data using the formula:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">
+<p><img src="../images/crvar1.gif" align=bottom width="314" height="37"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing03before>(1)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p><span class=symbol><img src="../images/crvar2.gif" align=bottom width="7" height="16"></span><sub>AB</sub> (h)</p>
+
+</td>
+<td valign="top">
+<p>is the estimated cross-variogram value at distance <i>h</i> where <i>h</i> is ||<b>h</b>||</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p>n(<b>h</b>)</p>
+
+</td>
+<td valign="top">
+<p>is the number of data pairs of observations of the first variable Z<sub>A</sub> and the second variable Z<sub>B</sub>  at locations <b>x</b><sub>i</sub> and <b>x</b><sub>j</sub>  when the distance between <b>x</b><sub>i</sub> and <b>x</b><sub>j</sub>  fits in a distance class <b>h</b>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Equation (1) resembles the manner in which experimental semi-variogram values are computed in the Spatial correlation operation with variable Z<sub>B</sub> replaced by Z<sub>A</sub> itself.  </p>
+
+<p class=defnewpar>Cross-variogram values can increase or decrease with distance <i>h</i> depending on the correlation between variable A and variable B. Semi-variogram values on the other hand are by definition positive. When models are fitted to the experimental semi-and cross-variograms, the Cauchy-Schwartz relation (equation 2) must be checked to guarantee a correct CoKriging estimation variance in all circumstances (Deutsch and Journel 1992; Isaaks and Srivastava 1989).</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">
+<p>|<span class=symbol>g</span><sub>AB </sub>| &lt;= <span class=symbollarger>&Ouml;</span> (<span class=symbol>g</span><sub>A * </sub><span class=symbol>g</span><sub>B </sub>) </p>
+
+</td>
+<td valign="top">
+<p>(2)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>for all values of distance 0 &lt; h &lt; limiting distance in the CoKriging operation.</p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p><span class=symbol>g</span><sub>AB</sub></p>
+
+</td>
+<td valign="top">
+<p>is a cross-variogram value,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p><span class=symbol>g</span><sub>A</sub></p>
+
+</td>
+<td valign="top">
+<p>is a semi-variogram value for variable A,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p><span class=symbol>g</span><sub>B</sub></p>
+
+</td>
+<td valign="top">
+<p>is a semi-variogram value for variable B.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>	Deutsch, C.V., and A.G. Journel. 1992. Geostatistical software library and user's guide. Oxford University Press, New York. 340 pp.</li>
+
+<li>	Isaaks, E. H., and R. M. Srivastava. 1989. An introduction to applied Geostatistics. Oxford University Press, New York. 561 pp.</li>
+
+<li>	Pebesma, E.J. 1996. Mapping Groundwater Quality in the Netherlands. KNAG/Faculteit Ruimtelijke Wetenschappen, Utrecht University. 128 pp.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cross_variogram_functionality.htm">Cross Variogram : functionality </a></p>
+
+</body

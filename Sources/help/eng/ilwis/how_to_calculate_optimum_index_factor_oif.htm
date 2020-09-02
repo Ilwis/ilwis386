@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<title>How to calculate Optimum Index Factor (OIF)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Calculate ..., Optimum Index Factor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to calculate</h1>
+
+<h1 class=secondline>Optimum Index Factor (OIF)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To obtain multivariate statistical information on a data set, you can calculate the Optimum Index Factor (OIF) for any combination of three bands within your <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. The Optimum Index Factor (OIF) is a statistic value that can be used to select the optimum combination of three bands in a satellite image with which you want to create a <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >color composite</a>. The optimum combination of bands out of all possible 3-band combinations is the one with the highest amount of 'information' (= highest sum of standard deviations), with the least amount of duplication (lowest correlation among band pairs). </p>
+
+<p class=kopje>To calculate and show the Optimum Index Factor:</p>
+
+<ol>
+
+<li>	Create a map list which contains the multi-spectral bands of your satellite image. For more information, refer to <a href="how_to_create_map_lists.htm">How to create a map list</a>.</li>
+
+<li class=ls01be>	Calculate a variance-covariance matrix or a correlation matrix for the maps in the map list:</li>
+
+        <ul>
+
+        <li>	in the Main window, open the Operations menu, choose <span class=arial>Statistics</span>, <span class=arial>Map List</span> and the <span class=arial>Variance-Covariance</span> or <span class=arial>Correlation</span> command, and select a map list, or </li>
+
+        <li>	double-click the <span class=arial>VarCovMat</span> or the <span class=arial>CorrMat</span> operation in the Operation-list, and select a map list, or</li>
+
+        <li>	press the right mouse button on the map list in the Catalog, choose <span class=arial>Statistics</span> and <span class=arial>Variance-Covariance</span> or <span class=arial>Correlation</span> from the context-sensitive menu.</li>
+
+        </ul>
+
+        <p class=leftmargininlist>	For more information, refer to <a href="../ilwisapp/variance_covariance_matrix.htm">Variance-covariance matrix</a> or to <a href="../ilwisapp/correlation_matrix.htm">Correlation matrix</a>.</p>
+
+<li class=ls01be>	Open the Properties of the map list:</li>
+
+        <ul>
+
+        <li>	from the Edit menu in the Main window, choose <span class=arial>Properties</span>, and select the map list, or</li>
+
+        <li>	press the right mouse button on the map list in the Catalog, and choose <span class=arial>Properties</span> from the context-sensitive menu.</li>
+
+        </ul>
+
+        <p class=leftmargininlist01be>	The <a href="../ilwismen/map_list_properties.htm">Map List Properties</a> dialog box appears.</p>
+
+<li class=ls01be>	Click the <span class=arial>Additional Info</span> button in the Map List Properties dialog box. </li>
+
+</ol>
+
+<p class=defnewpar>A dialog box appears which displays the ranked OIF values and corresponding band combinations. For more information on the interpretation the OIF values, refer to <a href="../ilwisapp/optimum_index_factor_functionality_algorithm.htm">Optimum Index Factor : functionality / algorithm</a>.</p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>The <span class=arial>Additional Info</span> button will not appear in the Map List Properties dialog box when a Variance-covariance matrix or a Correlation matrix has not been calculated yet for the map list.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/variance_covariance_matrix.htm">Variance-covariance matrix</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/correlation_matrix.htm">Correlation matrix</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/optimum_index_factor_functionality_algorithm.htm">Optimum Index Factor : functionality/algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/color_composite.htm">Color composite</a></p>
+
+</body

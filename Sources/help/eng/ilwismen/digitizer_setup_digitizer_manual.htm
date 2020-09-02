@@ -1,0 +1,206 @@
+<html>
+
+<head>
+<title>Setup Digitizer - Manual Setup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Setup digitizer, Digitizer setup">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Setup Digitizer wizard</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Manual Setup</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="digitizer_setup_digitizer_autodetect.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="digitizer_setup_digitizer_size.htm">Next</a>&nbsp;&gt;</td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Unravel the received ASCII string yourself. </p>
+
+
+<p class=kopje>Received digitizer coordinates (check whether you have communication): </p>
+
+<p>You <i>have</i> communication between the digitizer and the computer: </p>
+
+<ul>
+
+<li> when the first line of this page reads:</li>
+
+        <p><span class=functionexpl><b>Received:</b></span> coordinates as readable numbers; </p>
+        
+<li>         when coordinates change from about 0,0 (when moving the digitizer cursor into the lower left corner of the tablet) to greater positive figures (when moving the digitizer cursor into upper right corner of the tablet). </li>
+
+</ul>
+
+<p class=defnewpar>You definitely <i>don't have</i> a proper communication between your digitizer and your computer: </p>
+
+<ul>
+
+<li>	when the first line of this page reads:
+
+        <p><span class=functionexpl>Received:</span> <span class=courier>Nothing</span> </p>
+
+        <p><span class=functionexpl>Received:</span> coordinates as unreadable characters </p>
+
+<li>    when coordinates do not change when you move the digitizer cursor over the tablet,  </li>
+
+<li>    when coordinates only appear after pressing a button on the digitizer cursor. </li> 
+
+</ul>
+
+<p class=linespacing03before>Read the <a href="digitizer_setup_digitizer_autodetect.htm#fixing_digitizer_problems">Trouble shooting</a> section on the Automatic Setup page. </p>
+
+<p class=diakopje>Page options:</p>
+
+<table cellspacing=0 cellpadding=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Received:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Try to interpret the ASCII string after 'Received' yourself. You should be able to determine an X-coordinate, a Y-coordinate, and a value for the digitizer buttons (flags). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Nr chars:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for total numbers of characters in the string after 'Received'. Count all characters in the string, including possible spaces, commas, etc. which may be used as separators. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>X Pos:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the position where the first character of the X-coordinate is found in the string; this could be 1.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>X Length:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the total number of characters used for the X-coordinate in the string. Do not include spaces or commas that are used as separators. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Y Pos:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the position where the first character of the Y-coordinate is found in the string. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Y Length:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the total number of characters used for the Y-coordinate in the string. Do not include spaces or commas that are used as separators. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Flag Pos:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the position where digitizer cursor button flags (sent when digitizer cursor buttons are pressed) are found in the string; this a single position. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Flag Codes:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify values for the flag codes that are received by the computer when digitizer cursor buttons are pressed; e.g. 1248 </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Example:</p>
+
+<p>Suppose a received string reads: <span class=courier>07287,07980,0</span>. When pressing digitizer cursor buttons <span class=arial>0,1,2,3</span>, you obtain flag codes <span class=courier>1,2,4,8</span>. Then, you should specify the following values: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0 cellpadding=0>
+<tr>
+<td width="60">Nr chars</td>
+
+<td width="36">13</td>
+
+<td width="72">&nbsp;</td>
+
+<td width="24">&nbsp;</td>
+</tr>
+
+<tr>
+<td>X Pos</td>
+
+<td>1</td>
+
+<td>X Length</td>
+
+<td>5</td>
+</tr>
+
+<tr>
+<td>Y Pos</td>
+
+<td>7</td>
+
+<td>Y Length</td>
+
+<td>5</td>
+</tr>
+
+<tr>
+<td>Flag Pos</td>
+
+<td>13</td>
+
+<td>Flag Codes</td>
+
+<td>1248</td>
+</tr>
+</table>
+
+
+<p class=defnewpar>When finished, click the <span class=arial>Next</span> button on this page; the <b><a href="../ilwismen/digitizer_setup_digitizer_size.htm">Setup Digitizer - Size, Resolution, Final Check</a></b> page will appear. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/digitizer_setup_digitizer_size.htm">Setup Digitizer - Size, Resolution, Final Check</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_set_up_a_digitizer_and_start_digitizing.htm">How to setup a digitizer</a></p>
+
+</body

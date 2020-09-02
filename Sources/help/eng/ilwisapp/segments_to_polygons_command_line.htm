@@ -1,0 +1,633 @@
+<html>
+
+<head>
+<title>Segments to polygons : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segments to polygons, PolygonMapFromSegment">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segments to polygons</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/segments_to_polygons_popup.htm" onClick="return popup(this, 'notes')" >Segment to polygons</a> operation  can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, &quot;mask&quot;</span>) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, &quot;mask&quot;, <i>MethodTopo</i>) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, &quot;mask&quot;, <i>MethodTopo</i>, <span class=courier>Auto</span>) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, , <i>MethodTopo</i>) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, , <i>MethodTopo</i>, <span class=courier>Auto</span>) </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegmentNonTopo</span>(InputSegmentMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegmentNonTopo</span>(InputSegmentMap, &quot;mask&quot;</span>) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegmentNonTopo</span>(InputSegmentMap, &quot;mask&quot;, <i>MethodNonTopo</i>) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegmentNonTopo</span>(InputSegmentMap, , <i>MethodNonTopo</i>) </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output polygon map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>PolygonMapFromSegment</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p></p>
+
+</td>
+<td valign="top">
+<p>topological polygonization: the command to start the Segments to Polygons operation if the segment structure is topological, <br>
+
+i.e. when segments can be used both to define the boundary between a polyon to its left and a polygon to its right.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>PolygonMapFromSegmentNonTopo</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=nospacetop></p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>non-topological polygonization: the command to start the Segments to Polygons operation if the segment structure is non-topological, <br>
+
+i.e. when each segment has only 1 node (serving both as begin node and as end node), and when each segment encloses exactly 1 polygon. Neighbouring polygons thus do not share the same segment as their boundary. <br>
+
+i.e. when each polygon is enclosed by 1 closed segment only. </p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" colspan="2">
+<p>InputSegmentMapName</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p></p> 
+
+</td>
+<td valign="top">
+<p>is the name of your input segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>&quot;<a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a>&quot;</p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to specify the (multiple) search strings to find the classes, IDs or values in the input segment map so that <i>only these segments</i> will be used for polygonization; in a mask, asterisks and question marks can be used as wild cards; the total mask needs to be surrounded by double quotes. </p>
+
+<p>If an empty mask is specified, as &quot;&quot;, or if no mask is specified, all segments will be polygonized. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p><i>MethodTopo</i></p>
+
+</td>
+<td valign="top">
+<p><i>LabelPntMap</i> | <span class=courier>unique</span> | <i>domain</i> </p>
+
+<p>is an optional parameter to specify how the polygons should be named during topological polygonization; parameters are explained below. If <i>MethodTopo</i> is not specified, the <span class=courier>Unique</span> method will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=leftmargin1><i>LabelPntMap</i></p>
+
+</td>
+<td valign="top">
+
+<p>is the name of the point map which contains the labels; polygons will be named according to these labels. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=leftmargin1><span class=courier>unique</span></p>
+
+</td>
+<td valign="top">
+<p>parameter to specify that polygons should obtain unique IDs as Pol 1, Pol 2 etc. (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=leftmargin1><i>domain</i></p>
+
+</td>
+<td valign="top">
+
+<p>this option is mainly used when the <span class=arial>Domain</span> option is selected during polygonization in the Segment editor (see <a href="../ilwismen/segment_editor_polygonize.htm">Segment editor : Polygonize</a>). <i>Domain</i> is the name of an existing domain which should be linked to the output polygon map. In the output polygon map, the polygons will not have names yet; after polygonization, you need to assign names to the polygons manually, i.e. edit the polygon map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p><i>MethodNonTopo</i></p>
+
+</td>
+<td valign="top">
+
+<p><span class=courier>segments</span> | <i>LabelPntMap</i> | <span class=courier>unique</span> | <i>domain</i> </p>
+
+<p>is an optional parameter to specify how the polygons should be named during non-topological polygonization, parameters are explained below. If <i>MethodNonTopo</i> is not specified, the <span class=courier>Unique</span> method will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=leftmargin1><span class=courier>segments</span></p>
+
+</td>
+<td valign="top">
+<p>is the parameter to specify that each polygon should be named according to the code of the segment which encloses the polygon. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=leftmargin1><i>LabelPntMap</i></p>
+
+</td>
+<td valign="top">
+<p>see above.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=leftmargin1><span class=courier>unique</span></p>                                
+
+</td>
+<td valign="top">
+<p>see above.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=leftmargin1><i>domain</i></p>
+
+</td>
+<td valign="top">
+<p>see above.</p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=courier>Auto</p>
+
+</td>
+<td valign="top">
+<p>only for topological polygonization: optional parameter to automatically correct erroneous segments in the input map: deletes false polygons, deletes segments with dead ends, insert nodes when needed. If this parameter is not specified, polygonization will stop when an error is encountered in the input segment map. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=defnewpar>Furthermore, when the <span class=courier>Unique</span> method is used, the names for the output polygons will be stored by the output polygon map, i.e. the output map will use a <span class=courier>UniqueID</span> domain (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>).</p>
+
+<p class=kopje>Examples topological polygonization: </p>
+
+<p class=calc0linsp03befaft>POLMAP1 = PolygonMapFromSegment(MySegMap, , MyLabels)</p>
+
+<p> All segments in segment map <span class=courier>MySegMap</span> will be polygonized and polygons will be named according to the label points in point map <span class=courier>MyLabels</span>. The output polygon map will be called POLMAP1. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=calc0linsp03befaft>POLMAP2 = PolygonMapFromSegment(MySegMap, &quot;Land*&quot;, MyLabels)</p>
+
+<p> From segment map <span class=courier>MySegMap</span>, segments which have a code that starts with <span class=courier>Land</span> will be polygonized and polygons will be named according to the label points in point map <span class=courier>MyLabels</span>. The output polygon map will be called POLMAP2. </p>
+
+<p class=kopje>Example non-topological polygonization: </p>
+
+<p class=calc0linsp03befaft>POLMAP3 = PolygonMapFromSegmentNonTopo(MySegMap, , segments)</p>
+
+<p> All segments in segment map <span class=courier>MySegMap</span> will be polygonized and each polygon will be named according the name of the segment which encloses the polygon. The output polygon map will be called POLMAP3. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segments_to_polygons_functionality.htm">Segments to polygons : functionality</a></p>
+
+<!--<p class=defnewpar>*******</p>
+
+<table>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, <span class=courier>&quot;&quot;</span>, <span class=courier>Auto</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, <span class=courier>&quot;&quot;</span>, )</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, <span class=courier>&quot;&quot;</span>, LabelPointMap, <span class=courier>Auto</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, <span class=courier>&quot;</span>mask<span class=courier>&quot;</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, <span class=courier>&quot;</span>mask<span class=courier>&quot;</span>, <span class=courier>Auto</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, <span class=courier>&quot;</span>mask<span class=courier>&quot;</span>, LabelPointMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegment</span>(InputSegmentMap, <span class=courier>&quot;</span>mask<span class=courier>&quot;</span>, LabelPointMap, <span class=courier>Auto</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegmentNonTopo</span>(InputSegmentMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegmentNonTopo</span>(InputSegmentMap, &quot;mask&quot;</span>) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegmentNonTopo</span>(InputSegmentMap, &quot;mask&quot;, <i>MethodNonTopo</i>) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapFromSegmentNonTopo</span>(InputSegmentMap, , <i>MethodNonTopo</i>) </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>PolygonMapFromSegmentNonTopo</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=nospacetop></p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>is the command to start the Segments to Polygons operation if the segment structure is non-topological.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p><i>MethodNonTopo</i></p>
+
+</td>
+<td valign="top">
+
+<p><span class=courier>segments</span> | <i>LabelPntMap</i> | <span class=courier>unique</span></p>
+
+<p>is an optional parameter to specify how the polygons should be named, see below. If the <i>Method</i> is not specified, the <span class=courier>unique</span> method will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=leftmargin1><span class=courier>segments</span></p>
+
+</td>
+<td valign="top">
+<p>is the parameter to specify that each polygon should be named according to the code of the segment which encloses the polygon. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=leftmargin1><i>LabelPntMap</i></p>
+
+</td>
+<td valign="top">
+<p>is the name of the point map which contains the labels; polygons will be named according to these labels. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=leftmargin1><span class=courier>unique</span></p>                                
+
+</td>
+<td valign="top">
+<p>is the parameter to specify that polygons should obtain unique IDs as Pol 1, Pol 2 etc. (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </p>
+
+</td>
+</tr>
+</table>
+
+<p>For other parameters, see above. </p> -->
+
+
+
+</body

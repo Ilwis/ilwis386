@@ -1,0 +1,158 @@
+<html>
+
+<head>
+<title>Pattern analysis : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Pattern analysis">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Pattern analysis</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Data in a point map represent spatial occurrence of a particular phenomenon. To acquire knowledge about the occurrence of the phenomenon, the spatial distribution of the points in the map can be examined. Point pattern analysis is a technique that is used to obtain information about the arrangement of point data in space, to be able to make a statement about the occurrence of certain patterns. </p>
+
+<p class=defnewpar>Three types of patterns can be distinguished: </p>
+
+<ul>
+
+<li>	In a situation of <i>complete spatial randomness</i> (CSR), no correlation exists between locations of points. </li>
+
+<li>	In a <i>clustered pattern</i>, subgroups of points tend to be significantly closer to each other than to other subgroups of points. </li>
+
+<li>	In a <i>regular pattern</i>, distances between adjacent points tend to be further apart than for CSR. The pattern under consideration is compared to the situation of CSR. If point items tend to attract each other, and there is environmental heterogeneity, one can call the pattern 'grouped'. On the other hand, if individual point items tend to repel each other, and points are more spread out than in CSR, one may call the pattern 'regular'.</li>
+
+</ul>
+
+<p class=defnewpar>There are basically two different techniques; the location of points can be studied:</p>
+
+<ul>
+
+<li>	with reference to the area, i.e. <i>measures of dispersion</i>, or </li>
+
+<li>	with respect to each other, i.e. <i>measures of arrangement</i>.</li>
+
+</ul>
+
+<p class=kopje>Measures of arrangement:</p>
+
+<p>Measures of arrangement are techniques that examine characteristics of the locations of points relative to other points in the pattern. In this technique measured frequencies of occurrences of <i>reflexive nearest neighbours</i> (RNN) are compared with expected frequencies of occurrences in a situation of CSR. The CSR is simulated for the same area and the same number of points. Two points are considered first order RNN if they are each other's nearest neighbour. This definition can be extended to higher orders; second order RNNs are points that are each others second-nearest neighbours etc. The frequencies are calculated for RNNs of first to sixth order.</p>
+
+<p class=defnewpar>Boots &amp; Getis (1988, p. 69) remark that 'most researchers suggest that more higher order values in excess of CSR expectations indicate measure of regularity in arrangement of points, whereas lower empirical values imply elements of grouping in the pattern'. If more (first order) RNNs occur than is expected in CSR, it can be concluded that isolated and relatively uniformly arranged couples exist.</p>
+
+<p class=kopje>Measures of dispersion:</p>
+
+<p>Measures of dispersion are techniques that examine characteristics of the locations of points with respect to the area e.g. the pattern is analyzed by calculating distances between individual points, and comparing these with the distances that would be found in a CSR. In this technique the mean distance  between RNNs are tested against the expected distances in CSR. If the individual points are closer than they would be for CSR, this indicates a clustered pattern. If, on the other hand, individual points are further apart than they would be in CSR, a more regular pattern is assumed.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>An input point map is required with at least two points which do not have the undefined value. </p>
+
+<p class=kopje>Output table:</p>
+
+<p>An output table with domain <span class=courier>None</span> is created. </p>
+
+<p class=defnewpar>The output table contains the following information:</p>
+
+<p class=defnewpar><b>Measures of dispersion</b></p>
+
+<p>In the output table, in which the mean distance between RNNs are tested against the expected distances in a (simulated) CRS, eight columns are stored: </p>
+
+<ul>
+
+<li>	Column <span class=courier>Distance</span> lists distances. These distances should be considered as the distance from any point in the input point map, i.e. a kind of search radius;</li>
+
+<li>	Column <span class=courier>Prob1Pnt</span> lists the probability that within a certain distance (column <span class=courier>Distance</span>) of any point, at least one other point will be found, i.e. the probability that the nearest neighbour of any point list within this distance; </li>
+
+<li>	Column <span class=courier>Prob2Pnt</span> lists the probability that, within that distance, from any point, at least two other points will be found;</li>
+
+<li>	The same goes for columns <span class=courier>Prob3Pnt</span>, <span class=courier>Prob4Pnt</span>, <span class=courier>Prob5Pnt</span> and <span class=courier>Prob6Pnt</span>;</li>
+
+<li>	For a dataset of <i>n</i> points, <span class=courier>ProbAllPnt</span> is the summation of <span class=courier>Prob1Pnt</span> + <span class=courier>Prob2Pnt</span> + .. + <span class=courier>Probn-1Pnt</span>, divided by (<i>n</i> - 1); this is the probability that a randomly selected point pair from this point map has a separation less than the given distance.</li>
+
+</ul>
+
+<p class=defnewpar>The probabilities listed in the output table are in fact the <i>relative frequencies</i> drawn from the input point map, and are thus empirical values. If for a given distance, say 3.6m, the entry in column <span class=courier>Prob3Pnt</span> is <span class=courier>0.43</span>, it means that for 43% of all points in the input point map, 3 nearest neighbours can be found within a radius of 3.6m. </p> 
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>In the output table, the columns <span class=courier>Prob</span><span class=courier><i>n</i></span><span class=courier>Pnt</span> cannot be interpreted easily without more information. The user is encouraged to create other datasets (with an equal amount of points, in about the same area) in which the points are randomly distributed, e.g. by using for instance the RND() function in TabCalc, and regularly distributed.</li>
+
+<li>To study the differences between the three datasets (the original one and the two special ones), graphs can be drawn: choose <span class=arial><a href="../ilwismen/create_a_graph.htm">Create Graph</a></span> from the <a href="../ilwis/table_window_menu_commands.htm">File menu</a> in the table window; display <span class=courier>Distance</span> against <span class=courier>Prob<i>n</i>Pnt</span>.</li>
+
+</ul>
+
+<p class=defnewpar><b>Measures of arrangement</b></p>
+
+<p>The <span class=arial>Additional Info</span> tab in the <a href="../ilwismen/table_properties.htm">Properties</a> sheet of the output table contains additional information displayed in two tables, both with columns Order, Observed value, and Assumed with CSR.</p>
+
+<p class=defnewpar>The first table lists the order of the reflexive nearest neighbours (nearest, second nearest, etc.), the observed number of times (frequency) that such a pair is found in the dataset, and the number of times this would happen in the situation of CSR (expected frequency). </p>
+
+<ul>
+
+<li>If the observed number of pairs is much larger than in CSR, this indicates that the points are not randomly distributed, instead they cluster. </li>
+
+<li>If the observed number of pairs is smaller than in CSR, the points are distributed regularly. </li>
+
+</ul>
+
+<p class=defnewpar>The second table lists the mean distance to the reflexive nearest neighbour for every order, and the mean distance in a CSR. </p>
+
+<ul>
+
+<li>If the mean distance for the data set is much smaller than the one for CSR, the points tend to cluster. </li>
+
+<li>If the mean distance is larger than in CSR, the point distribution is more regular. </li>
+
+</ul>
+
+<p class=kopje>Advantages/disadvantages of dispersion vs. arrangement:</p>
+
+<p>The advantages of measurements of arrangement are:</p>
+
+<ol>
+
+<li>	The technique is density free, i.e. no estimates have to be made, for example the expected number of points per quadrant;</li>
+
+<li>	The technique is free of edge effects, because the arrangement of points with respect to each other is studied rather than with respect to the area.</li>
+
+</ol>
+
+<p class=defnewpar>The advantages of the dispersion technique are:</p>
+
+<ol>
+
+<li>	It is more rigorous than the arrangement technique, because it is more sensitive to certain differences in some pattern characteristics. For arrangement, identical values may sometimes be expected for patterns that are different in some way;</li>
+
+<li>	The statistical theory for dispersion is better developed, so that this method is less subjective.</li>
+
+</ol>
+
+<p class=defnewpar>Note that higher order RNN analysis (refined analysis) might give more information than first order analysis alone; take the example of couples on a dance floor; the distance to the first order RNN will be significantly less than in CSR, while higher order RNN distances will be higher.</p>
+
+<p class=kopje>Reference:</p>
+
+<ul>
+
+<li>	Boots, B.N. &amp; A. Getis, 1988, Point Pattern Analysis. Sage University Scientific Geography Series no. 8. Sage Publications,
+  Beverly Hills.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="pattern_analysis_examples.htm">Pattern Analysis : examples</a></p>
+
+<p class=seealsolinks><a href="pattern_analysis_dialog_box.htm">Pattern Analysis : dialog box</a></p>
+
+<p class=seealsolinks><a href="pattern_analysis_command_line.htm">Pattern Analysis : command line</a></p>
+
+<p class=seealsolinks><a href="pattern_analysis_algorithm.htm">Pattern Analysis : algorithm</a></p>
+
+</body

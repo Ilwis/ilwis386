@@ -1,0 +1,151 @@
+<html>
+
+<head>
+<title>Setup Digitizer - Size, Resolution, Final Check</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Setup digitizer, Digitizer setup">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Setup Digitizer wizard</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Size, Resolution and Final Check</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="digitizer_setup_digitizer_autodetect.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="../ilwis/main_window_menu_commands.htm">Finish</a>&nbsp;&gt;</td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+ 
+<!--<hr>-->
+
+<p class=defnewpar>This page allows you to check the behaviour of received digitizer coordinates, to specify the resolution of digitizer tablet (as configured), to specify the size of your digitizer tablet and to check size and resolution feedback. </p>
+
+<p class=kopje>Check behaviour of digitizer coordinates and digitizer buttons: </p>
+
+<p>At the top of this page:</p>
+
+<ul>
+
+<li>	check whether all digitizer buttons work (press buttons 0,1,2,3): <br>
+
+        after <span class=functionexpl>Button:</span> you should see the number of the button that you press on the digitizer cursor,</li>
+
+<li>	check whether the <i>left hand</i> X-value increases by moving the digitizer cursor to the right, </li>
+
+<li>	check whether the <i>left hand</i> Y-value increases by moving the digitizer cursor up. </li>
+
+</ul>
+
+<p class=defnewpar>If this is the case, you have communication and the Automatic Detection has succeeded. You may proceed to fill out remaining options on this page, see below.</p>
+
+<p class=tip>Mind:</p>
+
+<p class=tiptext>If you get any unexpected behaviour, you don't have a proper communication between digitizer tablet and your computer. The following combination of problems may occur: </p>
+
+<ul class=tipul>
+
+<li>the digitizer settings for (Baud Rate, Parity, Data Bits, Stop Bits) and the specified port settings may not match; </li>
+
+<li>the digitizer may not send coordinates in Run Mode; </li>
+
+<li>the digitizer may not be configured to send coordinates in a proper ASCII format. </li>
+
+</ul>
+
+<p class=tiptext>To fix your problems, press the <span class=arial>Back</span> button and read the <a href="digitizer_setup_digitizer_autodetect.htm#fixing_digitizer_problems">Trouble shooting</a> section in Setup Digitizer - Automatic Detection.</p>
+
+<p class=diakopje>Page options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Metric Coordinates:</p>
+
+</td>
+</tr>
+<tr>
+<td width="60">&nbsp;
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select this check box if during the configuration of the digitizer tablet, you chose a certain number of <i>lines per mm</i> for the Resolution of the tablet. </p>
+
+<p class=diabox>Clear this check box if you chose to use certain number of <i>lines per inch</i> for the Resolution of the tablet. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Lines per mm/inch:</p>
+
+</td>
+</tr>
+<tr>
+<td>&nbsp;
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Type a value for the number of lines per mm (or per inch) as used for the Resolution during the configuration of the digitizer tablet. Only when you use the correct Resolution, you will see correct feedback on the Scale of the map on the digitizer in the Map Reference - Digitizer Control Points dialog box. </p>
+
+<p class=diabox>If you used 1000 lines per inch on the digitizer tablet, you can clear the Metric System check box, fill out 1000 for the resolution, then select the Metric check box again: the value 1000 lines per inch will be automatically converted into 39.37079 lines per mm.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>X-size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the size of the digitizer tablet in X-direction (in mm or in inches).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Y-size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the size of the digitizer tablet in Y-direction (in mm or in inches).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Check tablet size and tablet resolution feedback: </p>
+
+<p>Check the behaviour of the X Y values on the <i>right hand</i> side at the top of this page:</p>
+
+<ul>
+
+<li class=ls01be>	Locate the digitizer cursor in the lower left corner of the digitizer tablet: <br>
+
+        the <i>right hand</i> X and Y values should be similar to 0, 0. </li>
+
+<li class=ls01be>	Locate the digitizer cursor in the upper right corner of the digitizer tablet: <br>
+
+        the <i>right hand</i> X and Y values should be similar to the size of the digitizer. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext>When the feedback is correct, click the <span class=arial>Finish</span> button. You have successfully completed the digitizer setup. Your digitizer is ready for use. On the File menu of the Main window, a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7"> will appear in front of the <span class=arial>Setup Digitizer</a> command. </p>
+
+<p class=kopje>Starting to digitize a map: </p>
+
+<p>The next step is to establish a relationship between the coordinates sent by the digitizer and the coordinates of your paper map on the digitizer. This process is called Map Reference. In the Main window, open the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> and choose <span class=arial>Map Reference</span>. </p>
+
+<p class=defnewpar>First, select a coordinate system in the <a href="digitizer_map_referencing_coordsys.htm">Map Reference - Coordinate System</a> dialog box; then establish a relation between the digitizer and the map on the tablet in the <a href="digitizer_map_referencing_dig_ctrl_points.htm">Map Reference - Digitizer Control Points</a> dialog box.</p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_set_up_a_digitizer_and_start_digitizing.htm">How to setup a digitizer and start digitizing</a></p>
+
+<p class=seealsolinks><a href="digitizer_map_referencing_coordsys.htm">Map Reference - Coordinate System</a></p>
+
+<p class=seealsolinks><a href="digitizer_map_referencing_dig_ctrl_points.htm">Map Reference - Digitizer Control Points</a></p>
+
+</body

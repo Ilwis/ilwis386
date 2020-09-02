@@ -1,0 +1,69 @@
+<html>
+
+<head>
+<title>How to calculate with undefineds in maps and tables</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to calculate ..., Calculate ..., Undefined values, IFF, ISUNDEF, IFUNDEF, IFNOTUNDEF">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to calculate</h1>
+
+<h1 class=secondline>with undefineds in maps and tables</h1>
+
+<p class=defnewpar>You might wish to:</p>
+
+<ul>
+	<li>test for undefined values, class names or IDs in maps or columns and assign those another value, class name or  ID, or </li>
+	<li>assign undefined values, class names or IDs to certain existing values, classes or IDs. </li>
+</ul>
+
+<p class=kopje>Testing for undefineds:</p>
+
+<p>To test for undefined values, use the <span class=courier><a href="calc_isundef.htm">ISUNDEF</a></span> function. The
+<span class=courier>ISUNDEF</span> function tests whether <i>a</i> is undefined. Argument <i>a </i>can be the outcome of an expression or simply a map or column name. Below, the
+<span class=courier>ISUNDEF</span> function is combined with a conditional <span class=courier>IFF</span>.</p>
+
+<p class=calc00>Result1 = IFF (ISUNDEF(Landuse), &quot;Mountains&quot;, Landuse)</p>
+
+<p class=calc00>Result2 = IFF (ISUNDEF(Population), 1000, Population)</p>
+
+<p class=defnewpar>First formula (on a domain Class map or column):</p>
+
+<p>If a pixel in map <span class=courier>Landuse</span> is undefined, then class name &quot;<span class=courier>Mountains</span>&quot; is assigned to this pixel in
+map <span class=courier>Result1</span>; 
+else the original class name is assigned. Same for fields in column <span class=courier>Landuse</span>.</p>
+
+<p class=defnewpar>Second formula (on a domain Value map or column): </p>
+
+<p>If a pixel of map <span class=courier>Population</span> is undefined, then value
+<span class=courier>1000</span> is assigned to this pixel in map <span class=courier>Result2</span>; else the original population value is assigned.
+Same for fields in column <span class=courier>Landuse</span>.</p>
+
+<p>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip:</span> You can also use the <a href="calc_ifundef.htm"><span class=courier>IFUNDEF</span></a> function.</p>
+
+<p class=kopje>Assigning undefined values:</p>
+
+<p>To assign undefined values, use a question mark when the output domain is a domain Value, and use a question mark in between double quotes when the output domain is a domain Class or ID.&nbsp;&nbsp;&nbsp; </p>
+
+<p class=calc00>Result3 = IFF(Landuse = &quot;Mountains&quot;, &quot;?&quot;, Landuse)</p>
+
+<p class=calc00>Result4 = IFF(Population = 1000, ?, Population)</p>
+
+<p class=defnewpar>Third formula (output domain Class or ID):</p>
+
+<p>If a pixel in map <span class=courier>Landuse</span> has class name &quot;<span class=courier>Mountains</span>&quot;, then undefined is assigned to this pixel in map <span class=courier>Result3</span>; else the original class name is assigned. Same for fields in column <span class=courier>Landuse</span>.</p>
+
+<p class=defnewpar>Fourth formula (output domain Value): </p>
+
+<p>If a pixel in map <span class=courier>Population</span> has value <span class=courier>1000</span>, then undefined is assigned to this pixel in map <span class=courier>Result4</span>; else the original <span class=courier>Population</span> value is assigned. Same for fields in column <span class=courier>Landuse</span>.</p>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="calc_iff.htm">IFF</a></p>
+<p class=seealsolinks><a href="calc_isundef.htm">ISUNDEF</a></p>
+<p class=seealsolinks><a href="calc_ifundef.htm">IFUNDEF</a></p>
+<p class=seealsolinks><a href="calc_ifnotundef.htm">IFNOTUNDEF</a></p>
+</body

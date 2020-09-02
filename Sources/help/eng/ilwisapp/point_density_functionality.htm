@@ -1,0 +1,77 @@
+<html>
+
+<head>
+<title>Point density : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point density">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Point density</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Point Density operation rasterizes a point map. For each output pixel, the number of points with a class name, ID or value located in the output pixel is <i>counted</i>: this is the output value for the pixel. When using the command line, you can also <i>sum</i> the values of points (or of point attributes). This operation can be used to examine the regional distribution of points or point values. </p>
+
+<p class=defnewpar>During this operation, you have to specify a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> for the output raster map. It is advised to use a georeference in which the pixels are rather large, i.e. at least large enough to contain several points. When you choose a large pixel size, the points are aggregated over a larger area.</p>
+
+<p class=defnewpar>Furthermore, you have to specify the point size for the output map. Point size 1 means that each point is counted in 1 pixel in the output map. Point size 2 means that each point is counted in 2*2 pixels in the output map, etc. When you use a point size larger than 1, the output raster map will have a smoother appearance.</p>
+
+<p class=kopje>Example:</p>
+
+<p>Suppose you have a point map in which each point represents one incidence of a forest-fire or an illness, etc. You can use the Point density operation to aggregate these incidences on square kilometers, on hectares, etc. This gives you quantitative information on the incidences per area.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special requirements for the input point map. </p>
+
+<p>Points which are undefined, i.e. which have no class name, ID or value, will be ignored. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The default domain for the output raster map is the system domain <span class=courier>Count</span> but you can also select another domain or create a new domain. </p>
+
+<p>The <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> for the output map has to be selected or created. When this is the first time you aggregate pixels, you should create a new georeference corners in which the pixels are large enough to contain a number of points. The georeference for the raster map may use a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that is different from coordinate system of the input point map but a conversion between both coordinate systems must be possible. Georeference <span class=courier>None</span> cannot be selected for the output map.</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	The <a href="..//ilwisapp/popup/aggregate_map_popup.htm" onClick="return popup(this, 'notes')" >Aggregate map</a> operation has similar functionality for raster maps and contains a number of different aggregation functions.</li>
+
+<li>	On the command line, you can also use sum the values of the points that are rasterized by using the <span class=courier>MapRasterizePointSum</span> expression. For more information, see <a href="point_density_command_line.htm">Point density : command line</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="point_density_dialog_box.htm">Point density : dialog box</a></p>
+
+<p class=seealsolinks><a href="point_density_command_line.htm">Point density : command line</a></p>
+
+<p class=seealsolinks><a href="point_density_algorithm.htm">Point density : algorithm</a></p>
+
+<p class=seealsolinks><a href="points_to_raster.htm">Points to raster</a></p>
+
+<p class=seealsolinks><a href="aggregate.htm">Aggregate map</a></p>
+
+</body

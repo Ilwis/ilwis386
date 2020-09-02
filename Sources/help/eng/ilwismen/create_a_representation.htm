@@ -1,0 +1,176 @@
+<html>
+
+<head>
+<title>Create a representation</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Representation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a representation</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Create a new <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> for an existing <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>. </p>
+
+<p>When you display a map with such a domain, the newly created representation is selectable in the <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> dialog box of the map. </p>
+
+<p class=defnewpar>This dialog box appears when creating a new representation:</p>
+
+<ul>
+
+<li>	by opening the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> of the Main window and choosing the <span class=arial>Create Representation</span> command, </li>
+
+<li>	by opening the <span class=arial>Create</span> item in the Operation-tree, and double-clicking the <span class=arial>New Representation</span> item, </li>
+
+<li>	by double-clicking the <span class=arial>New Representation</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, </li>
+
+<li>	when in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, you right-click a class, group or value domain, and choose the <span class=arial>Create Representation</span> item from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, </li>
+
+<li>	when in a <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a map with a class, group or value domain, you click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create representation button</a>. The domain of the map, i.e. the domain for which this representation should be created, is already filled out.</li>
+
+<li>	when in the <a href="../ilwismen/domain_properties.htm">Domain Properties</a> sheet of a class, group or value domain, on the Domain tab, you click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create representation button</a>. The domain for which this representation should be created, is already filled out.</li>
+
+<li>	when in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> sheet of a map with a class, group or value domain, on the Map tab, you right-click the domain of a map and select the <span class=arial>Create Representation</span> command. The domain for which this representation should be created, is already filled out.</li>
+
+
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Representation name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the representation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the representation. The description is visible on the status bar of the Main window when moving the mouse pointer over the representation in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> for which you want to create this representation. For more information, see below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxleft1>Use percentages:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you chose the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>, select this checkbox when you want to create a <i>representation gradual</i> which shows values as percentages. 
+
+Clear this checkbox when you want to create a <i>representation value</i> which shows values as values.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Representation types:</p>
+
+<ul>
+
+<li>A <b>representation class</b> will be created when you select a class or group domain. <br>
+
+In the <a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor</a> you can assign colors to the <i>classes</i>. </li>
+
+<li>A <b>representation value</b> will be created when you select:
+
+        <ul>
+
+        <li>a user-defined value domain, </li>
+        
+        <li>the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a> while you <i>clear</i> the <span class=arial>Use Percentages</span> checkbox, or </li>
+
+        <li>one of the other <a href="..//ilwis/popup/yy_system_domain_value_all_popup.htm" onClick="return popup(this, 'notes')" >system value domains</a> for instance system domain <span class=courier>Image</span>. </li>
+        
+        </ul>
+
+In the <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a> you can assign colors to specific <i>values</i> by inserting and editing limits, etc. </li>
+
+<li>A <b>representation gradual</b> will be created when you select the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span> while you <i>select</i> the <span class=arial>Use Percentages</span> checkbox. <br>
+
+In the <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a> you can assign colors to <i>percentage values</i> by inserting and editing limits, etc.</li>
+
+A representation gradual can be used to display any <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. </li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>The easiest way to create a representation for a map with a certain domain is to open the <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of that map and then click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box. </li>
+
+<li>Default representations for non-system domains:</li>
+
+        <ul class=tipul>
+        
+        <li>A new representation class will automatically become the default representation for the selected class or group domain. The representation is linked to the selected domain. </li>
+
+        <li>A new representation value will only become the default representation if you selected a user-defined value domain. The representation is linked to the selected domain. </li>
+
+        </ul>
+
+<p class=tiptext>You can view and/or change the default representation of class and group domains and of user-defined value domains in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> of the domain.</p>
+
+<li>System domains are not editable and they therefore have a fixed default representation. </li>
+
+        <ul class=tipul>
+
+        <li>For system domains <span class=courier>Value</span> and <span class=courier>Distance</span>, the default representation is representation gradual <span class=courier>Pseudo</span>. </li>
+
+        <li>For all other system value domains, the default representation is representation gradual <span class=courier>Gray</span>.</li>
+
+        </ul>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representations</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_representations.htm">How to create a representation</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_representations.htm">How to edit a representation</a></p>
+
+<p class=seealsolinks><a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor : functionality</a></p>
+
+</body

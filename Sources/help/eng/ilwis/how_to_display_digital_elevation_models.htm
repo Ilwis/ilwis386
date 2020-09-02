@@ -1,0 +1,193 @@
+<html>
+
+<head>
+<title>How to display Digital Elevation Models</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Display ..., Digital Elevation Model, DEM, 3D view, How to display ..., Display 3D, SHADOW">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to display </h1>
+
+<h1 class=secondline>Digital Elevation Models</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A (digital) representation of relief over space is known as a digital elevation model (DEM). By relating any map with the corresponding terrain surface in a 3D model, you can discover and understand relations between spatial data sets. For example, by draping a land use map over the height values of a 3D model, you can see where your areas of interest are located: on slopes, on flat areas, in the lower areas, in the mountains, etc. </p>
+
+<p>Although Display 3D was originally developed to model relief, it can of course also be used to model the continuous variation of any other value map as a surface (e.g. concentration values, land values).</p>
+
+<p class=defnewpar>To obtain a Digital Elevation model, you can digitize contour lines and assign height values to the segments in the segment editor. Then use the <a href="..//ilwisapp/popup/contour_interpolation_popup.htm" onClick="return popup(this, 'notes')" >Contour Interpolation</a> operation. The output is a DEM, also called a height map. For more information, see <a href="how_to_calculate_digital_elevation_models.htm">How to calculate a Digital Elevation Model</a>. </p>
+
+<p class=kopje>1.  Using the Shadow filter:</p>
+
+<p>An easy method to get a general impression of your relief is to apply the <span class=courier>Shadow</span> filter on your DEM with the <a href="..//ilwis/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a> operation. When you display the result in a map window, you can already see the relief coming out of the map. </p>
+
+<p class=defnewpar>To start the Filter operation:</p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">Operations menu</a> in the Main window, select <span class=arial>Image Processing, Filter</span>, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Image Processing</span> item and double-click the <span class=arial>Filter</span> operation, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Filter</span> operation, or</li>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click your DEM with the <i>right</i> mouse button, and select <span class=arial>Image Processing, Filter</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p>The <a href="../ilwisapp/filter_dialog_box.htm">Filtering</a> dialog box appears. </p>
+
+<p class=defnewpar>In the Filtering dialog box:</p>
+
+<ul>
+
+<li>	select the <span class=courier>Shadow</span> filter from the <span class=arial>Filter Name</span> list box, </li>
+
+<li>	type a name for the output map, </li>
+
+<li> 	for the best result, modify the value range and the precision for the output map, so that a 1 or 2 byte map will be created,</li>
+
+<li>	press OK. </li>
+
+</ul>
+
+<p class=defnewpar>When you display the output map in a map window, choose <span class=arial>Representation</span> <span class=courier>Gray</span>; additionally you can add the segment map with the contour lines and display these in one color (e.g. light brown). </p>
+
+<p class=defnewpar>When the output map uses 4 or 8 bytes per pixel, you may first calculate a histogram of the filtered map with the <a href="..//ilwisapp/popup/histogram_operation_popup.htm" onClick="return popup(this, 'notes')" >Histogram</a> operation to enhance the display. </p>
+
+<p class=kopje>2.  Creating a three dimensional view:</p>
+
+<p>Another method is to create a 3D view out of your DEM with the <a href="..//ilwisapp/popup/display3d_popup.htm" onClick="return popup(this, 'notes')" >Display 3D</a> operation; you create a georeference3D in the <a href="..//ilwis/popup/georeference_3d_editor_popup.htm" onClick="return popup(this, 'notes')" >georeference 3D editor</a>. </p>
+
+<p class=defnewpar>To start the Display 3D operation:</p>
+
+<ul>
+
+<li>	select <span class=arial>Visualization, Display 3D</span> from the Operations menu in the Main window, or </li>
+
+<li>	in the Operation-tree, open the <span class=arial>Visualization</span> item, and double-click the <span class=arial>Display 3D</span> operation. </li>
+
+<li>	in the Operation-list, double-click the <span class=arial>Display 3D</span> item. </li>
+
+</ul>
+
+<p>The <a href="../ilwismen/display_3d.htm">Display 3D</a> dialog box appears. </p>
+
+<p class=defnewpar>In the Display 3D dialog box: </p>
+
+<ul>
+
+<li>	select an existing georef3D from the drop-down list, or </li>
+
+<li>	click the create button to create a new georeference 3D (a dialog box follows in which you have to specify the name of the DEM, then you return to this dialog box).</li>
+
+</ul>
+
+<p>The <a href="../ilwismen/display_options_3d_grid.htm">Display Options - 3D Grid</a> box appears.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<p class=leftmargin1>(When you already have a georeference 3D, you can open it by double-clicking it in the Catalog, or in the Catalog, click the georeference 3D with the right mouse button, and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. The Display Options - 3D Grid box appears.)</p>
+
+<p class=defnewpar>In the <span class=arial>Display Options - 3D Grid</span> dialog box, you can specify how the 3D view should be displayed:</p>
+
+<ul>
+
+<li>	using 3D grid lines in X and Y directions, </li>
+
+<li>	using a raster map (satellite image, shadow map, thematic map, scanned photograph) draped over your height values,</li>
+
+<li>	using both a raster map draped over your height values, and 3D grid lines. </li>
+
+</ul>
+
+<p>The DEM is displayed in three dimensions in a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>. </p>
+
+<p class=defnewpar>To modify the 3D view (i.e. the georeference 3D):</p>
+
+<ul>
+
+<li>	choose <span class=arial>Georeference</span> from the Edit menu in the map window.</li>
+
+</ul>
+
+<p>The <a href="..//ilwis/popup/georeference_3d_editor_popup.htm" onClick="return popup(this, 'notes')" >Georeference 3D editor</a> is opened. 	</p>
+
+<p class=defnewpar>The Georeference 3D editor mainly consists of one large <a href="../ilwismen/georeference_3d_editor_edit.htm">Georeference 3D dialog box</a> in which you can specify parameters (altitude, rotation, distance, vertical exaggeration, etc.) to define the perspective of the observer in relation to the 3D model. Some examples of the effects of changing parameters in the dialog box are presented in <a href="georeference_3d_editor_functionality.htm">Georeference 3D editor : functionality</a>.   	</p>
+
+<p class=defnewpar>When finished editing the 3D view, you can exit the editor and return to the map window. If you like, you can add any other vector map or annotation to this map window. You can save the 3D view in the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>.  </p>
+
+<p class=kopje>3.  Combination of a 3D drape and a Shadow map:</p>
+
+<p>A simple and nice 3D view of a Digital Elevation Model can be obtained by using the output map of the DEM filtered with the Shadow filter as a raster drape over the height values and by overlaying the contour segments on the 3D view.  </p>
+
+<p class=defnewpar>Start the Display 3D operation and create a suitable georeference 3D with the Georeference 3D editor (see above). </p>
+
+<p class=defnewpar>In the <span class=arial>Display Options - 3D Grid</span> dialog box:</p>
+
+<ul>
+
+<li>	clear the <span class=arial>Grid</span> check box,</li>
+
+<li>	select the <span class=arial>Raster Drape</span> check box,</li>
+
+<li>	select the filtered Shadow map in the <span class=arial>Raster Drape</span> list box,</li>
+
+<li>	press OK.</li>
+
+</ul>
+
+<p>The 3D view appears in a map window. </p>
+
+<p class=defnewpar><a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >Drag</a> the segment map with the contour lines from the Catalog to the map window. The <span class=arial>Display Options - Segment Map</span> dialog box appears.</p>
+
+<p class=defnewpar>In the <span class=arial>Display Options - Segment Map</span> dialog box:</p>
+
+<ul>
+
+<li>	select single color, choose for example the color brown, </li>
+
+<li>	press OK. </li>
+
+</ul>
+
+<p>The Shadow map is displayed in three dimensions in the map window and the segment map with the contours is overlaid on the 3D view. </p>
+
+<p class=defnewpar>Then, to save your 3D view (incl. contour lines),</p>
+
+<ul>
+
+<li>	from the File menu in the map window , choose <span class=arial>Save View</span>. </li>
+
+</ul>
+
+<p class=kopje>4.  Resampling a map to a georef 3D:</p>
+
+<p>Lastly, to permanently display a raster map in as a 3D view, use the <a href="..//ilwisapp/popup/apply_3d_popup.htm" onClick="return popup(this, 'notes')" >Apply 3D</a> operation. This operation resamples a raster map according to a georeference 3D. When you create a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> of raster maps that are the outcome of an Apply 3D operation (for instance depicting the same area in three dimensions but from different angles), and display this map list as a <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>, you can obtain a kind of rotating DEM with raster drape.  </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/filter.htm">Filter operation</a></p>
+
+<p class=seealsolinks><a href="georeference_3d_editor_functionality.htm">Georeference 3D editor</a></p>
+
+</body

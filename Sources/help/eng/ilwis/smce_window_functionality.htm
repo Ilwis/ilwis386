@@ -1,0 +1,526 @@
+<html>
+
+<head>
+<title>SMCE window : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Spatial Multi-Criteria Evaluation (SMCE), SMCE">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>SMCE window</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Spatial Multi-Criteria Evaluation (SMCE) application assists and guides a user in doing  Multi-Criteria Evaluation (MCE) in a spatial way. The input for the application is a number of maps of a certain area (so-called 'criteria' or 'effects'), and a <a href="..//ilwis/popup/objects_criteria_trees_popup.htm" onClick="return popup(this, 'notes')" >criteria tree</a> that contains the way criteria are grouped, standardized and weighed. The output of SMCE consists of one or more maps of the same area (the so-called 'composite index maps') that indicate the extent to which criteria are met or not in different areas, and thereby support planning and/or decision-making.</p>
+
+<p class=defnewpar>The user can easily try out various criteria, see why an output composite index map has high or low values of achievement by criteria at a certain location, and thus uncover reasons that lead to significantly different composite index maps (which may lead to different decisions). </p>
+
+<p class=defnewpar>
+
+<a href="#start_smce"><span class=bookmark>Starting with Spatial Multi-Criteria Evaluation (SMCE)</span></a><br>
+
+<a href="#problem_definition"><span class=bookmark>Using the Problem Definition mode</span></a><br>
+
+<a href="#analysis"><span class=bookmark>Using the Multi-Criteria Analysis mode</span></a><br>
+
+<a href="#output"><span class=bookmark>Calculation of output map(s)</span></a><br>
+
+<a href="#classify"><span class=bookmark>Classifying or slicing the Composite Index maps</span></a></p>
+
+<h2 id="start_smce">Starting with Spatial Multi-Criteria Evaluation (SMCE)</h2>
+
+<p class=kopjeaftertitlesub>SMCE process:</p>
+<p>The part of the Spatial Multi-Criteria Evaluation (SMCE) process covered by this application can be summarized as follows:</p>
+
+<ol>
+<li>Identification of the main goal.</li>
+<li>Identification of a hierarchy of sub goals.</li>
+<li>Identification of criteria or effects, which measure the performance of the sub goals.</li>
+<li>Creating and filling a criteria tree, which represents the hierarchy of the main goal, any sub goals, and the criteria. </li>
+<li>Identification of alternatives to be evaluated.</li>
+<li>Assignment of input maps to criteria for each alternative.</li>
+<li>Determination of a standardization method per criterion.</li>
+<li>Weighing of criteria in the criteria tree.</li>
+<li>Calculation of the Composite Index maps and visualization.</li>
+<li>Inspecting the values in the Composite Index maps.</li>
+<li>Classifying or slicing the Composite Index maps and visualization.</li>
+<li>Calculation of Shape Index and/or Connectivity Index.</li>
+</ol>
+
+<p class=kopje>To start the SMCE application:</p>
+<p>To start the  Spatial Multi-Criteria Evaluation operation:</p>
+
+<ul>
+<li>choose <span class=arial>Raster Operations, Spatial Multi-Criteria Evaluation</span> from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> in the Main window, </li>
+<li>expand the <span class=arial>Raster Operations</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, and double-click the <span class=arial>Spatial Multi-Criteria Evaluation</span> item,</li>
+<li>double-click the <span class=arial>Spatial Multi-Criteria Evaluation</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>.</li>
+</ul>
+
+<p class=defnewpar>A wizard appears that assists the user in creating a new criteria tree for:</p>
+
+<ul>
+<li>Problem Analysis,</li>
+<li>Design of Alternatives,</li>
+<li>Decision Making from alternative options.</li>
+</ul>
+
+<p class=defnewpar>For more information refer to <a href="../ilwismen/smce_window_new.htm">SMCE window : Create a new criteria tree</a>.</p>
+
+<p class=kopje>Modes:</p>
+
+<p>The SMCE application has two operation modes:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ol>
+
+<li class=ls01be><a href="..//ilwismen/popup/smce_window_problem_definition_mode_popup.htm" onClick="return popup(this, 'notes')" >Problem Definition mode</a>: </li>
+
+	<p class=linespacing03before>By default, the application starts in Problem Definition mode. In this mode, the user can create and fill the criteria tree: </p>
+
+	<ul>
+
+	<li>add (groups of) criteria, </li>	
+	
+	<li>select the appropriate criteria maps (input data), </li>
+
+	<li>specify output map names for the main goal and optional sub goals, and </li>
+	
+	<li>decide about the number and the names of the alternative situations. </li>
+
+	</ul>
+
+	<p class=linespacing03before>When this phase is completed, the tree can be fixed and the application can be set to Multi-Criteria Analysis mode. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li class=ls01be><a href="..//ilwismen/popup/smce_window_multicriteria_analysis_mode_popup.htm" onClick="return popup(this, 'notes')" >Multi-Criteria Analysis mode</a>:</li>
+
+	<p class=linespacing03before>In this mode, the structure of the criteria tree cannot be changed anymore. </p>
+	
+	<p class=linespacing03before>Instead, you can: </p>
+	
+	<ul>
+	
+	<li>standardize the input maps/attribute columns, </li>
+	
+	<li>assign weights to factors and to groups of factors, and </li>
+	
+	<li>generate output maps. </li>
+
+	</ul>
+
+</ol>
+
+<h2 id="problem_definition">Using the <img src="../images/smce_problem_definition_icon.gif" align=bottom width="23" height="23"> Problem Definition mode</h2>
+
+<p class=kopje>Creating a criteria tree:</p>
+
+<p>The <a href="..//ilwis/popup/objects_criteria_trees_popup.htm" onClick="return popup(this, 'notes')" >criteria tree</a> is a tree whose root is the main goal defined by the user, and whose leafs are the criteria that together evaluate the performance of this main goal. 
+
+The branches divide the main goal into partial goals, and subdivide partial goals. 
+
+The smallest criteria tree thinkable is a tree where the main goal itself is a criterion. 
+
+For more information, see <a href="../ilwis/ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a>.</p>
+  
+<p class=defnewpar>Before starting to design a criteria tree it should be clear which factors/constraints contribute to the main goal, what kind of map material is available and what the quality of the map material is.</p>
+
+<p class=defnewpar>To create and fill a criteria tree, you can use <a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a>, with which you can: </p>
+
+	<ul>
+	<li>specify a name for the main goal, </li>
+	<li>insert optional groups (i.e. sub goals), </li>
+	<li>insert <a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a>, </li>
+	<li>insert <a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >constraints</a>, </li>
+	<li>select an appropriate input map or an attribute column (the input data) for each factor and for each constraint, </li>
+	<li>decide about the number of alternatives to be evaluated, </li>
+	<li>specify the output map name(s) for the main goal, and optionally specify names for any sub goal(s). </li>
+	</ul>	
+
+
+<p class=defnewpar>To insert new groups, factors or constraints: </p>
+
+<ul>
+
+<li>make sure you are in the Problem Definition mode, </li>
+
+<li>select the main goal or select the sub goal under which you wish to insert your new group, factor or constraint, </li>
+
+<li>select the <span class=arial>Insert</span> command on the <a href="../ilwis/smce_window_menu_commands.htm">Edit menu</a>, or 
+use the following buttons in the toolbar: 
+<a href="../ilwismen/smce_window_insert_group.htm"><img src="../images/smce_insert_group_icon.gif" title="Insert Group" border="0" align=bottom width="23" height="23"></a> 
+<a href="../ilwismen/smce_window_insert_factor.htm"><img src="../images/smce_insert_factor_icon.gif" title="Insert Factor" border="0" align=bottom width="23" height="23"></a> 
+<a href="../ilwismen/smce_window_insert_constraint.htm"><img src="../images/smce_insert_constraint_icon.gif" title="Insert Constraint" border="0" align=bottom width="23" height="23"></a>. </li>  
+
+</ul>
+
+<p>The <a href="../ilwismen/smce_window_insert_group.htm"><span class=arial>Insert Group</span></a>, <a href="../ilwismen/smce_window_insert_factor.htm"><span class=arial>Insert Factor</span></a> or <a href="../ilwismen/smce_window_insert_constraint.htm"><span class=arial>Insert Constraint</span></a> dialog box will appear. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>Constraints can only be added under the main goal of a criteria tree. </p>
+
+<p class=defnewpar>The application automatically evaluates the tree against some
+  completeness restrictions and warns the user accordingly. If the tree is incomplete,
+  e.g. when a group was defined but no children were added under that group,
+  the items violating the tree's completeness will be marked by a red background
+  color, in order to attract the user's attention.</p>
+
+<p class=defnewpar>For more information, refer to <a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a>. </p>
+
+<p class=kopje>General input map requirements:</p>
+
+<p>For each factor and for each constraint, an input map or an input attribute column has to be selected. </p>
+
+<ul>
+
+<li>All input maps must be <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a> with the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>. </li>
+
+<li>The input maps or the input attribute columns may use any of the following <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> types: any value domain, any class domain or <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Bool</span></a>. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>If you have other types of input maps (for instance vector maps, maps with another domain type, and maps with a different georeference), these need to be converted (rasterized, resampled, etc.) before they can be used in the Spatial Multi-Criteria Evaluation operation.</p>
+	
+
+<p class=kopje>Multiple alternatives:</p>
+
+<p>The user determines the number of alternatives to be evaluated. When doing a Problem Analysis or when Designing Alternatives, by default you will need only one input map per criterion.</p>
+
+<p class=defnewpar>The user can also indicate that more than one alternative should be handled by the criteria tree, i.e. doing a Decision Making. Using multiple alternatives means that by using a single criteria tree, various input data can be used in the calculation, and the different output maps can be compared to each other. For each alternative, there will thus be a separate set of input maps and a separate output map. </p>
+
+<p class=defnewpar>To use multiple alternatives: </p>
+
+	<ul>
+
+	<li>To set the number of alternatives, choose <a href="../ilwismen/smce_window_alternatives.htm"><span class=arial>Alternatives</span></a> from the <a href="../ilwis/smce_window_menu_commands.htm">Edit menu</a>, or click the <span class=arial>Alternatives</span> button <img src="../images/smce_alternatives_icon.gif" align=bottom width="23" height="23"> in the toolbar. </li>
+
+	<li>For each criterion and for each alternative, select an input map. </li>
+
+   	<li>Input maps used for the same criterion should use the <i>same domain</i>. </li>
+
+	</ul>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>Various alternatives are not completely independent from one another: </p>
+
+	<ul class=tipul>
+	<li>When working with multiple alternatives next to each other, using a single criteria tree, 
+		during the standardization process, the values in a criterion will be standardized according 
+		to the input maps of <i>all</i> alternatives. </li>
+	<li>If you copy an existing criteria tree and assign a new set of input maps to the criteria, 
+		then standardization will only take the current alternative into account. </li>
+    </ul>
+	
+<h2 id="analysis">Using the <img src="../images/smce_multicriteria_analysis_icon.gif" align=bottom width="23" height="23"> Multi-Criteria Analysis mode</h2>
+
+<p>When you finished editing the structure of the criteria tree, you can switch to Multi-Criteria Analysis mode. This brings up a new set of restrictions that have to be satisfied before the calculation of the overall output map can be performed.</p>
+
+<ol>
+  <li>All <a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a> and all <a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >constraints</a> should be standardized, i.e. each possible value in an input map should be standardized to a value between 0 and 1. </li>
+  <li>All groups containing more than one factor should be weighed. </li>
+  <li>The name of the overall output map should be defined before it can be calculated. </li>
+</ol>
+  
+<p class=defnewpar>Items that do not satisfy the requirements will be marked
+  with a red background color to attract the user's attention. Initially, most
+  items of the criteria tree will be marked.</p>
+
+<p class=kopje>Standardization:</p>
+
+<p>The values in the various input maps most probably have different meanings, and are probably expressed in different units of measurement (e.g. distance maps, costs, age, etc.). In order to compare criteria with each other, all values need to be standardized, i.e. transformed to the same unit of measurement (from 0 to 1). Depending on the domain type of an input map, a dialog box will be shown in which you can specify how exactly the values of a map should be converted to values between 0 and 1.</p>
+
+<p class=defnewpar>To start standardizing an input map or input attribute column:</p>
+
+<ul>
+
+<li>make sure you are in the Multi-Criteria Analysis mode; </li>
+
+<li>select the input map or input attribute column you wish to standardize; </li>
+
+<li>select <span class=arial><a href="../ilwismen/smce_window_standardize.htm">Standardize</a></span> from the <a href="smce_window_menu_commands.htm">Analysis menu</a>, or 
+	click the <span class=arial>Standardize</span> button <a href="../ilwismen/smce_window_standardize.htm"><img src="../images/smce_standardize_icon.gif" title="Standardize" border="0" align=bottom width="23" height="23"></a> in the toolbar. </li>
+
+</ul>
+
+<p class=defnewpar>Depending on the domain type of the selected input map or attribute column, one of the following dialog boxes will appear: </p>
+
+<ul>
+
+  <li class=ls01be><a href="../ilwismen/smce_window_standardize_value.htm">Standardize Value Input</a>: the user must select one of the following linear standardization functions:</li>
+	<ul>
+	<li>maximum standardization,  to standardize the input values by dividing them by the maximum value of the map.</li>
+	<li>interval standardization,  to standardize the input values with a linear function that uses the minimum value and the maximum value of	the map.<br>
+    <li>goal standardization,  to standardize the input values with a linear function that uses a specified minimum and maximum value.</li>
+	</ul>
+
+  <li class=ls01be><a href="../ilwismen/smce_window_standardize_boolean.htm">Standardize Boolean Input</a>: 
+  	the user can directly specify a value between 0 and 1 for 'True' values, and similarly specify a value for 'False' values. <br>
+	In case of a <i>constraint</i>, options are simplified: you only need to specify the condition that should be met, which will allow any further calculation with the pixel. </li>
+
+  <li class=ls01be><a href="../ilwismen/smce_window_standardize_class.htm">Standardize Class Input</a>: 
+  	the user needs to select a column in a table; the column should list a value between 0 and 1 for every domain item, i.e. for each class in the map.</li>
+
+</ul>
+
+<p class=defnewpar>For more information, refer to <a href="../ilwismen/smce_window_standardize.htm">SMCE window : Standardize</a>. </p>
+
+<p class=kopje>Weighing:</p>
+
+<p>When the main goal contains multiple factors and optional sub goals, then the main goal needs to be weighed in order to indicate the relative importance of the factors (and optional sub goals) it contains, with respect to the main goal. </p>
+
+<p class=defnewpar>Similarly, when a sub goal (group) contains multiple factors and more optional sub goals, then the sub goal needs to be weighed in order to indicate the relative importance of the factors (and optional sub goals) it contains, with respect to the sub goal. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+<li>Weights are always numbers between 0 and 1. Weights cannot be negative. </li>
+<li>For the factors within a group, the sum of the weights of the factors equals 1. When a group only has one child, this child automatically obtains weight 1.</li>
+<li>Constraints are not considered during weighing. </li>
+</ul>
+
+<p class=defnewpar>To start weighing multiple factors and optional groups under the main goal or under a sub goal:</p>
+
+<ul>
+
+<li>make sure you are in the Multi-Criteria Analysis mode; </li>
+
+<li>select the main goal, which contains multiple factors (and optional sub goals) that you wish to weigh, or <br>
+	select a sub goal (group), which contains multiple factors (and optional sub groups) that you wish to weigh; </li>
+
+<li>select <span class=arial><a href="../ilwismen/smce_window_weigh.htm">Weigh</a></span> from the <a href="smce_window_menu_commands.htm">Analysis menu</a>, or 
+	click the <span class=arial>Weigh</span> button <a href="../ilwismen/smce_window_weigh.htm"><img src="../images/smce_weigh_icon.gif" title="Weigh" border="0" align=bottom width="23" height="23"></a> in the toolbar. </li>
+
+</ul>
+
+<p class=linespacing03before>A small <a href="../ilwismen/smce_window_weigh.htm">Weigh</a> dialog box will appear in which you can select a weigh method. </p>
+
+<p class=defnewpar>The following weigh methods are available: </p>
+
+<ul>
+<li><a href="../ilwismen/smce_window_weigh_direct.htm">Direct</a>: 
+	the user specifies a value for the relative importance of each factor himself. Weights are automatically normalized.</li>
+<li><a href="../ilwismen/smce_window_weigh_pairwise.htm">Pairwise Comparison</a>: 
+	the user goes through all unique pairs and assigns Saaty weights, i.e. user specifies the relative importance for each pair of factors in fixed phrases or with a slide bar. From these weights, normalized weights are calculated.</li>
+<li><a href="../ilwismen/smce_window_weigh_rank_order.htm">Rank Order</a>: 
+	the user specifies the rank-order of the relative importance of all factors, either using the rank sum method or the expected value method. From the specified rank-order, normalized weights are calculated.</li>
+</ul>
+
+<p class=defnewpar>For more information, refer to <a href="../ilwismen/smce_window_weigh.htm">SMCE window : Weigh</a> or refer to <a href="../ilwismen/smce_window_weigh_methods_additional_info.htm">SMCE window : Weigh methods (additional info)</a>. </p>
+
+<h2 id="output">Calculation of output map(s)</h2>
+
+<p>Calculation of output maps is only possible when all input is defined and no values are out of range. </p>
+
+<p class=defnewpar>To start calculating <i>all output maps</i> for the main goal:</p>
+
+<ul>
+
+<li class=ls01be>make sure you are in the Multi-Criteria Analysis mode; </li>
+
+<li>select the <img src="../images/criteria_tree_main_goal.gif" width="21" height="15"> main goal; </li>
+
+<li>select <span class=arial><a href="../ilwismen/smce_window_all_composite_index_maps.htm">Generate All Maps</a></span> from the <a href="smce_window_menu_commands.htm">Generate menu</a>, or 
+	click the <span class=arial>Generate All Maps</span> button <a href="../ilwismen/smce_window_all_composite_index_maps.htm"><img src="../images/smce_generate_all_composite_index_maps_icon.gif" title="Generate All Maps" border="0" align=bottom width="23" height="23"></a> in the toolbar. </li>
+
+</ul>
+
+<p class=kopje>Result(s):</p>
+
+<ul>
+
+<li>When only one 'alternative' is used: the output map for the main goal will be calculated, as well as underlying maps for optional sub goals. </li>
+
+<li>When multiple alternatives are used: output maps will be calculated for every alternative, as well as underlying maps for optional sub goals. </li>
+
+<li>Output maps are also called composite index maps. </li>
+
+<li>Output maps contain the accumulated suitability for all criteria, standardized and weighed as specified in the criteria tree. </li>
+
+<li>Output maps have values between 0 and 1 (domain <span class=courier><a href="..//ilwis/popup/yy_system_domain_nilto1_popup.htm" onClick="return popup(this, 'notes')" >NILto1</a></span>): </li>
+
+	<ul>
+	
+	<li>pixels with values near 0 represent unsuitable areas, and </li>
+	
+	<li>pixels with values near 1 represent highly suitable areas.</li>
+
+	</ul>
+
+</ul>
+
+<p class=defnewpar>The output map is a combination of all input. In other words,
+  the output map is the result of the weighted-sum formulas and the standardization
+  formulas. However, areas that were classified as 'impossible' in Constraints, 
+  are propagated to the resulting composite index map: these areas will obtain 
+  suitability 0.</p>
+
+<p class=kopje>To calculate a single (intermediate) output map:</p>
+
+<ul>
+
+<li>If you use sub goals (groups), assign output map names to the groups; </li>
+
+<li>make sure you are in the Multi-Criteria Analysis mode; </li>
+
+<li>select the output map name of a group which you wish to calculate, or<br>
+	select the final output map of a certain alternative; <br>
+	in other words, select one of the green boxes/place holders in the criteria tree viewer; </li>
+
+<li>select <span class=arial><a href="../ilwismen/smce_window_generate_selected_map.htm">Generate Selected Maps</a></span> from the <a href="smce_window_menu_commands.htm">Generate menu</a>, or 
+	click the <span class=arial>Generate Selected Maps</span> button <a href="../ilwismen/smce_window_generate_selected_map.htm"><img src="../images/smce_generate_selected_map_icon.gif" title="Generate Selected Maps" border="0" align=bottom width="23" height="23"></a> in the toolbar. </li>
+
+</ul>
+
+<h2 id="classify">Classifying or slicing the Composite Index maps</h2>
+
+<p class=kopjeaftertitlesub>Inspecting the values in the Composite Index maps:</p>
+
+<p>Optionally, before you actually slice or classify the values in the output Composite Index maps, you can inspect the values in the maps with Histogram or Aggregate Values. </p>
+
+<ol>
+
+<p class=emptyline>&nbsp;</p>
+
+    <li>Histogram:</li>
+
+        <p>To get a general idea of the values in the SMCE output maps, use Histogram: </p>
+
+        <ul>
+
+        <li>select the <img src="../images/criteria_tree_main_goal.gif" width="21" height="15">main goal; </li>
+
+        <li>select <span class=arial><a href="../ilwismen/smce_window_histogram.htm">Histogram</a></span> from the <a href="smce_window_menu_commands.htm">Generate menu</a>, or 
+
+	        click the <span class=arial>Histogram</span> button <a href="../ilwismen/smce_window_histogram.htm"><img src="../images/smce_show_hist_icon.gif" title="Histogram" border="0" align=bottom width="23" height="23"></a> in the toolbar. </li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;</p>
+
+    <li>Aggregate Values:</li>
+
+        <p>To calculate the minimum, maximum, sum and average for the SMCE output maps, use Aggregate Values: </p>
+
+        <ul>
+
+        <li>select the <img src="../images/criteria_tree_main_goal.gif" width="21" height="15">main goal; </li>
+
+        <li>select <span class=arial><a href="../ilwismen/smce_window_aggregate_values.htm">Aggregate Values</a></span> from the <a href="smce_window_menu_commands.htm">Generate menu</a>, or 
+
+	        click the <span class=arial>Aggregate Values</span> button <a href="../ilwismen/smce_window_aggregate_values.htm"><img src="../images/smce_aggr_vals_icon.gif" title="Aggregate Values" border="0" align=bottom width="23" height="23"></a> in the toolbar. </li>
+
+    	</ul>
+
+</ol>
+
+<p class=defnewpar>Inspection of the histograms and the results of Aggregate Values may help you to decide on desired boundary values for Slicing. </p>
+
+<p class=kopje>Slice:</p>
+
+<p>Slicing will classify or slice the values in the SMCE output maps into a limited number of classes. 
+
+By default, you will obtain a number of default classes with default boundary values. 
+
+When you wish to accentuate certain areas, you can use your own desired boundary values, and adapt the output class names. </p>
+
+<ol>
+
+<li>
+	<p class=defnewpar>To start Slice: </p>
+
+	<ul>
+
+	<li>select the <img src="../images/criteria_tree_main_goal.gif" width="21" height="15">main goal; </li>
+
+	<li>select <span class=arial><a href="../ilwismen/smce_window_slice.htm">Slice ...</a></span> from the <a href="smce_window_menu_commands.htm">Generate menu</a>, or 
+
+    	click the <span class=arial>Slice</span> button <a href="../ilwismen/smce_window_slice.htm"><img src="../images/smce_slice_icon.gif" title="Slice" border="0" align=bottom width="23" height="23"></a> in the toolbar. </li>
+
+	</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>The output maps of Slice can be shown using Show Sliced: </li>
+
+	<ul>
+
+	<li>select the <img src="../images/criteria_tree_main_goal.gif" width="21" height="15">main goal; </li>
+
+	<li>select <span class=arial><a href="../ilwismen/smce_window_show_sliced.htm">Slice ...</a></span> from the <a href="smce_window_menu_commands.htm">Generate menu</a>, or 
+
+	    click the <span class=arial>Slice</span> button <a href="../ilwismen/smce_window_show_sliced.htm"><img src="../images/smce_show_sliced_icon.gif" title="Show Sliced" border="0" align=bottom width="23" height="23"></a> in the toolbar. </li>
+
+	</ul>
+
+</ol>
+
+<p class=kopje>Calculating Shape Index and Connectivity Index: </p>
+
+<p>Optionally, you can inspect the histograms of the slices maps with Histogram Sliced: </p>
+
+	<ul>
+
+	<li>select the <img src="../images/criteria_tree_main_goal.gif" width="21" height="15">main goal; </li>
+
+	<li>select <span class=arial><a href="../ilwismen/smce_window_histogram_sliced.htm">Histograms Sliced</a></span> from the <a href="smce_window_menu_commands.htm">Generate menu</a>, or 
+
+	    click the <span class=arial>Slice</span> button <a href="../ilwismen/smce_window_histogram_sliced.htm"><img src="../images/smce_show_hist_sliced_icon.gif" title="Show Histograms Sliced" border="0" align=bottom width="23" height="23"></a> in the toolbar. </li>
+
+	</ul>
+
+<p class=defnewpar>Finally, you can calculate the Shape Index and the Connectivity Index of the sliced output maps with Aggregate Values Sliced: </p>
+
+	<ul>
+
+	<li>select the <img src="../images/criteria_tree_main_goal.gif" width="21" height="15">main goal; </li>
+
+	<li>select <span class=arial><a href="../ilwismen/smce_window_aggregate_values_sliced.htm">Aggregate Values Sliced</a></span> from the <a href="smce_window_menu_commands.htm">Generate menu</a>, or 
+
+	    click the <span class=arial>Slice</span> button <a href="../ilwismen/smce_window_aggregate_values_sliced.htm"><img src="../images/smce_aggr_vals_sliced_icon.gif" title="Show Sliced" border="0" align=bottom width="23" height="23"></a> in the toolbar. </li>
+
+	</ul>
+
+<h3>References</h3>
+
+<ul>
+
+<li>Janssen, R, and Van Herwijnen, M. (1994) Multiobjective decision support for environmental management + DEFINITE DEcisions on an FINITE set of alternatives : demonstration disks and instruction. Kluwer Academic Publishers, Dordrecht (Netherlands). 232 p., 16 p. + two 3,5&quot; disks. ISBN 0-7923-1908-7.</li>
+
+<li>Saaty, T. (1980) The Analytical Hierarchy Process. New York, McGraw Hill. </li>
+
+<li>Sharifi, M.A. and Retsios, V. (2003) Site selection for waste disposal through spatial multiple criteria decision analysis. In: Proceedings of the 3rd International conference on decision support for telecommunications and information society DSTIS, 4-6 September 2003, Warsaw, Poland. 15 pp. - Includes a case study. <a href="http://www.itc.nl/library/Papers_2003/non_peer_conf/sharifi.pdf">Download/view PDF (344 KB)</a></li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="smce_window_status_bar.htm">SMCE window : status bar</a></p>
+<p class=seealsolinks><a href="smce_window_menu_commands.htm">SMCE window : menu commands</a></p>
+<p class=seealsolinks><a href="ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a></p>
+
+</body

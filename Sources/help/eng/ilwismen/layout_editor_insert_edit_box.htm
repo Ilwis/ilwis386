@@ -1,0 +1,277 @@
+<html>
+
+<head>
+<title>Insert/Edit Box in layout</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Box, Layout editor, Layouts, Add ..., Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert/Edit Box</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Insert or edit a <a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >box</a> in your <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>.
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>To obtain <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >borders around a map view</a>, select a map view in your layout and use the <span class=arial>Map Border</span> button <img src="../images/annborder.gif" align=bottom width="22" height="22"> or the <span class=arial><a href="layout_editor_insert_edit_map_border_neatline.htm">Map Border</a></span> command on the <a href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a>; use the <span class=arial>Neatline</span> tab and/or the <span class=arial>Outline</span> tab.</li>
+
+<li>To obtain a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a>, choose the <span class=arial><a href="..//ilwismen/popup/layout_editor_page_border_popup.htm" onClick="return popup(this, 'notes')" >Page Border</a></span> command on the <a href="../ilwis/layout_editor_menu_commands.htm">Edit menu</a>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Line type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a line type for the box lines: Single, Dot, Dash, Dash dot, Dash dot dot, Blocked or Symbol (see below).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the box lines. To define your own color, select the 'Custom' item at the bottom of the list or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>; the Windows <a href="custom_colors.htm">Color</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><span class=arial>Symbol</span> button:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line type Symbol: click the Symbol button to select a symbol type (= symbol font), a symbol, a symbol size, etc. You can use simple symbols or a symbol from any installed symbol font. The <a href="../ilwismen/representation_class_editor_line_symbols_on_segments.htm">Line Symbols</a> dialog box will appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Support line:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line types Single, Dot, Dash, Dash dot, Dash dot dot and Symbol; select this check box when you wish to use an extra support line; the box will then be drawn 'on top' of the support line. </p>
+
+<p class=diabox>Clear this check box when only the box lines should be drawn. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Background color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for a support line or select the second color for a blocked line. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Line width (mm):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line types Single, Double, Triple and Blocked: type a value for the width of the box lines (both on screen and on printer). Line width 0 means: a width of 1 pixel on the screen, and a width of 1 dot on a printer, i.e. as fine as possible (hair line). Values larger than 0 are in mm. </p>
+
+<p class=diabox>Line types Dot, Dash, Dash dot, Dash dot dot will always be displayed with a width of 1 pixel on the screen, and printed a width of 1 dot on a printer, i.e. as fine as possible (hair line). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Block distance (mm):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line type Blocked: type a value for the distance between the blocks (mm).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Symbol distance (mm):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line type Symbol: specify a value for the distance between the symbols.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Fill color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you wish to fill the box with a color; and select a fill color. </p> 
+
+<p class=diabox>Clear this check box when you wish to obtain only box lines; the inside part of the box will be transparent. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Examples:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex1.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Red; Line type Single; No Support line; Line width 0.0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex2.gif" align=bottom width="115" height="6"></p>
+
+</td>
+<td valign="top">
+<p>Color Red; Line type Single; No Support line; Line width 1.0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex3.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Red; Line type Double; No Support line; Background color White; Line width 0.5</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex4.gif" align=bottom width="115" height="7"></p>
+
+</td>
+<td valign="top">
+<p>Color Red; Line type Triple; No Support line; Background color Yellow; Line width 1.5</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex5.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Black; Line type Dot; No Support line</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex6.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Black; Line type Dash dot; Support line; Background color Yellow; Line width 1.3</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex7.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Black; Line type Blocked; Background color White; Line width 1.0; Block distance 5</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex8.gif" align=bottom width="115" height="9"></p>
+
+</td>
+<td valign="top">
+<p>Color Black; Line type Symbol; Symbol type Symbol; Size 15; Rotation 0; No Support line; Symbol distance 6</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex8a.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Red; Line type Symbol; Symbol type Simple; Symbol Circle; Symbol Size 4; Symbol Fill color Red; Symbol Line width 1; Support line; Background color Red; Line width 0.3; Symbol distance 5</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex9.gif" align=bottom width="115" height="16"></p>
+
+</td>
+<td valign="top">
+<p>Color Blue; Line type Symbol; Symbol type Windings; Size 20; Rotation 0; No Support line; Symbol distance 8</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	You can add as many boxes to a layout as you like. </li>
+
+<li>	In the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >Layout editor</a>, a box can be sized by <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> one of the <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of a selected box to a new position. The mouse pointer changes into a double-sided arrow when at the right position to start dragging. </li>
+
+<li>	To store annotation, you need to save the layout. Open the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a> and choose the <span class=arial><a href="../ilwismen/layout_editor_save_layout.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/layout_editor_save_layout_as.htm">Save As</a></span> command. You can also click in the white space of your layout, and click the <span class=arial>Save</span> button in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>. </li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+</body

@@ -1,0 +1,166 @@
+<html>
+
+<head>
+<title>Anisotropic Kriging : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Anisotropic Kriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Anisotropic Kriging</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Incorporating geometric anisotropy in the Kriging procedure is simply a matter of applying an affine transformation to the distances. An affine transformation keeps point distances in one direction unchanged and stretches distances in the direction perpendicular to it. In theory the procedure is as follows:</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p>1.</p>
+
+</td>
+<td valign="top">
+<p>The first step is a rotation of the x-axis to a position parallel to the presumed major or primary axis of anisotropy:</p>
+
+<p><img src="../images/anis1.gif" align=bottom width="91" height="41"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>where:</p>
+
+<p><img src="../images/anis2.gif" align=bottom width="120" height="40"></p>
+
+<p><span class=symbol>a</span> = rotation angle</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>In the direction of this major axis it is supposed that a semi-variogram model with range R1 is applicable. At right angles to this direction a semi-variogram model with shorter range R2 is supposed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p>2.</p>
+
+</td>
+<td valign="top">
+<p>The second step is the transformation of the ellipse into a circle:</p>
+
+<p><img src="../images/anis3.gif" align=bottom width="100" height="42"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>where:</p>
+
+<p><img src="../images/anis4.gif" align=bottom width="67" height="40"></p>
+
+<p>r = anisotropy angle</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>The anisotropy ratio r = R1/R2 defines the scale factor that is used to stretch the minor axis to a size similar to the major axis. In this case all points belonging to an ellipse defined by the anisotropy axis R1 and R2 will be transformed to a circle with radius R1.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p>3.</p>
+
+</td>
+<td valign="top">
+<p>Finally, geometric anisotropy can be described with an isotropic model according to: </p>
+
+<p><img src="../images/anis5.gif" align=bottom width="287" height="27"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before>where:</p>
+
+<p><span class=symbol>g</span>(<b>h</b>) = semi-variogram value</p>
+
+<p>||<b>x</b>||  = length of separation vector </p>
+
+<p><img src="../images/anis7.gif" align=bottom width="57" height="38"></p>
+
+<p><b>x<sup>T</sup></b>   = ( x   y )</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Apart from the distance matrix, the transformed distances used for defining the search radius and the sorting of points nearest to the visited pixel, the Anisotropic Kriging algorithm is equal to the Ordinary Kriging operation. For more information, see <a href="kriging_algorithm.htm">Kriging : algorithm</a>.</p>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>	Burrough, P.A. 1986. Principles of Geographical Information Systems for Land Resources Assessment. Oxford University Press. 194 pp.</li>
+
+<li>	Burrough, P.A. and R.A. McDonnell 1998. Principles of Geographical Information Systems. Oxford University Press. 330 pp.</li>
+
+<li>	Pebesma, E.J. 1996. Mapping Groundwater Quality in the Netherlands. KNAG/Faculteit Ruimtelijke Wetenschappen, Utrecht University. 128 pp.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="anisotropic_kriging_functionality.htm">Anisotropic Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="kriging_algorithm.htm">Kriging : algorithm</a></p>
+
+</body

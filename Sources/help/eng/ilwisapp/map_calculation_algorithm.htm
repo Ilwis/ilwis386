@@ -1,0 +1,149 @@
+<html>
+
+<head>
+<title>Map calculation : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map calculation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map calculation</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Your map calculation formula is processed in the following simplified way:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ol>
+
+<li>	Tokenizer: </li>
+
+        <ul>
+
+        <li>	breaks the expression into tokens such as special characters (e.g. brackets, commas, <span class=courier>+</span>, <span class=courier>*</span>, <span class=courier>/</span>, <span class=courier>&lt;</span>, <span class=courier>&gt;</span>, <span class=courier>=</span>), composed tokens (e.g. <span class=courier>&lt;=</span>, <span class=courier>lt</span>, <span class=courier>&gt;=</span>, <span class=courier>gt</span>), strings, and values,</li>
+
+        <li>	feeds the result to the parser.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	Parser: </li>
+
+        <ul>
+
+        <li>	performs a simple syntax check on the tokens, for instance a check on the correct number of brackets,</li>
+
+        <li>	translates the tokens into map names, tables names, column names, constants, operators (<span class=courier>+</span>, <span class=courier>*</span>), functions, variables, brackets, etc.</li>
+
+        <li>	feeds the result to code generator.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	Code generator: </li>
+
+        <ul>
+
+        <li>	performs an indepth syntax check, for instance a check on the number and type of parameters for all functions and operators used, </li>
+
+        <li>	determines the output domain, value range and georeference, </li>
+
+        <li>	creates an instruction stack. </li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li> 	Calculator:</li>
+
+        <ul>
+
+        <li>	for each line of the maps carries out all instructions on the stack.</li>
+
+        </ul>
+
+<p class=leftmargininlist>	For effiency reasons, the process is done line by line. This has the same result as when the instructions were carried out pixel by pixel.</p>
+
+</ol>
+
+<p class=kopje>Example 1:</p>
+
+<p class=calc0>OUTMAP = a+1</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+<p>Stack contains following instructions: </p>
+
+<p>load a</p>
+
+<p>const 1</p>
+
+<p>operator add</p>
+
+<p>store</p>
+
+<p class=kopje>Example 2:</p>
+
+<p class=calc0>OUTMAP = (a+1) * (b+2)</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+<p>Stack contains following instructions: </p>
+
+<p>load a</p>
+
+<p>const 1</p>
+
+<p>operator add</p>
+
+<p>load b</p>
+
+<p>const 2</p>
+
+<p>operator add</p>
+
+<p>operator multiply</p>
+
+<p>store</p>
+
+<p class=kopje>Example 3:</p>
+
+<p class=calc0>OUTMAP = iff(landuse=&quot;arable&quot;) and (slope&lt;=20), &quot;suitable&quot;, &quot;not suitable&quot;)</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>Stack contains following instructions: </p>
+
+<p>load landuse</p>
+
+<p>const &quot;arable&quot;</p>
+
+<p>equal</p>
+
+<p>load slope</p>
+
+<p>const 20</p>
+
+<p>less than or equal</p>
+
+<p>and</p>
+
+<p>const &quot;suitable&quot;</p>
+
+<p>const &quot;not suitable&quot;</p>
+
+<p>call iff</p>
+
+<p>store</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/calc.htm">Map Calculation</a></p>
+
+</body

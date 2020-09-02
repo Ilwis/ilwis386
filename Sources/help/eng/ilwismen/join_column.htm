@@ -1,0 +1,92 @@
+<html>
+
+<head>
+<title>Join column wizard</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Columns, Join columns, Column operations, Table window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table bgcolor="#006699" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Join Column wizard</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Table window, Columns menu</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Select Table and Column</h1></td>
+<td class=menucommand><a class=menlink2 href="join_column_join_method.htm">Next</a>&nbsp;&gt;</td>
+</tr>
+<tr><td bgcolor="FFFFFF" colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Join Column wizard guides you to join a column from another table into the current table. </p>
+
+<p class=defnewpar>On this first page of the wizard you should select the table and the column that you wish to join into the current table. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the table from which you wish to join data.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the column in that table which contains the data that you wish to join.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>A join is possible when the current table, or one of its columns, uses a Class or ID <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> that is also used either by the selected table or by one of the columns in the selected table. The two tables or their columns thus need to use a common Class or ID domain. This is called the key: a link between the two tables can be established so that a join can take place. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>When it is found that a join is possible, you can click the <span class=arial>Next</span> button and continue on the <b><a href="join_column_join_method.htm">Join method</a></b> page. </p>
+
+<li>When the two tables are found to have no domain in common, the wizard will display an error message. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip:</span> Experienced users may also join columns from other tables by typing an expression on the TabCalc command line. For more information, see <a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a>. This topic also provides some examples, both for using the wizard and for using the command line. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="join_column_join_method.htm">Join Column wizard - Join method</a></p>
+
+<p class=seealsolinks><a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a></p>
+
+</body

@@ -1,0 +1,119 @@
+<html>
+
+<head>
+<title>CoKriging : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="CoKriging, Error map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>CoKriging</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>CoKriging can be seen as a <a href="point_interpolation.htm">point interpolation</a>, which requires a point map as input and which returns a raster map with estimations and optionally an error map. CoKriging is a multivariate variant of the Ordinary <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation: CoKriging calculates estimates or predictions for a poorly sampled variable (the predictand) with help of a well-sampled variable (the covariable). The variables should be highly correlated (positive or negative).</p>
+
+<p class=defnewpar>Situations where CoKriging might be considered are (Van der Meer 1993):</p>
+
+<ul>
+
+<li>	A variable is poorly sampled but correlates highly with a second variable that is much better sampled (also better in the sense of more precise). One can take advantage of this correlation to improve estimation of the undersampled variable. </li>
+
+<li>	A variable exhibits low spatial correlation, but correlates highly with the one that shows relatively high continuity. Again, the observed values of the second variable may help to improve estimates (predictions) of the first variable, particularly if the first one is undersampled. </li>
+
+</ul>
+
+<p class=kopje>Preparation and input parameters:</p>
+
+<ul>
+
+<li>	First, perform the <a href="cross_variogram_functionality.htm">Cross Variogram</a> operation. </li>
+
+<li>	The output table of Cross Variogram will contain two columns with experimental semi-variogram values and one column with experimental cross-variogram values for the combination of both variables. </li>
+
+<li>	You need to find semi-variogram models for both columns with experimental semi-variogram values and a cross-variogram model for the column with experimental cross-variogram values (see <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>). You may use different <i>types</i> of models and different values for the <i>sill</i>, <i>range</i> and <i>nugget</i> for all three models. To get good results in CoKriging, the models must fulfill the Cauchy-Schwarz condition. For more information, see the <a href="cross_variogram_algorithm.htm">Cross Variogram : algorithm</a>.</li>
+
+</ul>
+
+<p class=defnewpar>Besides an input map, you need to specify the following parameters for CoKriging:</p>
+
+<ul>
+
+<li>	a <i>semi-variogram model for the predictand</i>, </li>
+
+<li>	a <i>semi-variogram model for the covariable</i> and </li>
+
+<li>	a <i>cross-variogram model for the combination of both variables</i>. </li>
+
+</ul>
+
+<p class=defnewpar>Furthermore, you need to specify a <i>limiting distance</i> or search radius, optionally a <i>minimum and maximum number of points</i> within the limiting distance that should be taken into account in the calculation of an output pixel value, and a method to deal with (almost) <i>coinciding points</i>. These options are the same as in Ordinary <a href="kriging_functionality.htm">Kriging</a>.</p>
+
+<p class=defnewpar>For more information on preparations and input parameters, see <a href="cross_variogram_functionality.htm">Cross Variogram : functionality</a> or <a href="../ilwis/how_to_use_kriging.htm">How to use Kriging</a>.</p>
+
+<p class=kopje>Spherical distance:</p>
+
+<p>Optionally, you can choose to calculate with <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distances</a>, i.e. distances calculated over the sphere using the projection that is specified in the coordinate system used by the georeference of the output raster map. It is advised to use this spherical distance option for maps that comprise large areas (countries or regions) and for maps that use LatLon coordinates. In more general terms, spherical distance should be used when there are 'large' scale differences within a map as a consequence of projecting the globe-shaped earth surface onto a plane. </p>
+
+<p>When the spherical distance option is not used, distances will be calculated in a plane as Euclidean distances. </p>
+
+<p>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip:</span> When you used the spherical distance option in the <a href="..//ilwisapp/popup/cross_variogram_popup.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a> operation, it is advised to also use the spherical distance option in the CoKriging operation. </p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>You can generally select the point map (ID domain) which you used in Cross Variogram. The point map has a linked attribute table which contains at least two <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value columns</a>. You can also use two separate input point maps with a value domain, or attribute columns from separate tables, etc.</p>
+
+<p class=defnewpar>When using the <i>dialog box</i>, there is a limitation of a maximum of 100 valid input point values within each limiting distance (search radius). This limitation is not present when using the command line. </p>
+
+<p class=kopje>Domain and georeference of output raster maps:</p>
+
+<p>The output raster map containing the Kriging estimates or predictions uses the same value domain as the input point map or the attribute columns. The <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> can be adjusted for the output map; it is advised to choose a wider value range for the output map than the input value range. </p>
+
+<p class=defnewpar>The georeference for the output Kriging map has to be selected or created; you can usually select an existing georeference corners. </p>
+
+<p class=defnewpar>Optionally, an output error map can be created which will contain the standard errors of the estimates, i.e. the square root of the error variance. The error map will obtain the same name as specified for the output Kriging map, followed by the string <span class=courier>_Error</span>. The output error map will use the same domain and the same georeference as the output Kriging map with the predictions. </p>
+
+<p class=kopje>Confidence interval maps:</p>
+
+<p>From the combination of a Kriged output map containing the estimates and its output error map, you can create confidence interval maps by using some MapCalc statements. For more information, see <a href="../ilwis/how_to_calculate_confidence_interval_maps.htm">How to calculate confidence interval maps</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cokriging_dialog_box.htm">CoKriging : dialog box</a></p>
+
+<p class=seealsolinks><a href="cokriging_command_line.htm">CoKriging : command line</a></p>
+
+<p class=seealsolinks><a href="cokriging_algorithm.htm">CoKriging : algorithm</a></p>
+
+<p class=seealsolinks><a href="point_interpolation.htm">Point interpolation</a></p>
+
+<p class=seealsolinks><a href="cross_variogram_functionality.htm">Cross Variogram : functionality</a></p>
+
+<p class=seealsolinks><a href="kriging_functionality.htm">(Ordinary) Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_use_kriging.htm">How to use Kriging</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_confidence_interval_maps.htm">How to calculate confidence interval maps</a></p>
+
+</body

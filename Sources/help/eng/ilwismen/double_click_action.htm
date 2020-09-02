@@ -1,0 +1,101 @@
+<html>
+
+<head>
+<title>Double-click action in a map window</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Double-click action in a map window, Attributes, Edit attributes, Edit representation, Representation, Execute action, Action, Map window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Layers menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Double-Click Action</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Select the action to be performed when double-clicking a mapping unit in a domain Class map or an element in domain ID map which is displayed in the map window. The double-click action works on point, segment, polygon and raster maps. </p>
+
+<p class=defnewpar>First, you must make sure that the <span class=arial>Info</span> check box has been selected for the <a href="..//ilwis/popup/layers_data_layers_popup.htm" onClick="return popup(this, 'notes')" >data layer</a> you wish to use. You can select the <span class=arial>Info</span> check box in the layer's <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box.  </p>
+
+<p class=defnewpar>On a double-click, it is attempted to find the (defined) class name or ID of the mapping unit that was double-clicked. When multiple data layers with a selected <span class=arial>Info</span> check box are displayed, all data layers will be searched from top to bottom. You can see the class name or ID that will be found by pressing the left mouse button in the map window (Info). </p>
+
+<p class=emptyline>&nbsp;
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/optbullet.gif" width="4" height="6">&nbsp;Attributes:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to view and/or edit the attributes of a mapping unit or element when you double-click it. The map should have a Class or an ID domain, and an attribute table should be linked to the map or to the domain of the map. </p>
+
+<p class=diabox>If a class name or an identifier is found, then the attributes of this class or identifier are shown in a separate window. You can also edit the attributes there. If no class name or ID is found, or if no attribute table is found nothing happens. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/optbullet.gif" width="4" height="6">&nbsp;Representation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to edit the representation (colors, line width, patterns, etc.) of a mapping unit when you double-click it. The map should have a Class domain. </p>
+
+<p class=diabox>If a class name is found, then an Edit Representation item dialog box appears in which you can select another color, etc. for the class. Changes will be directly applied in the map window. If no class name is found, nothing happens.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/optbullet.gif" width="4" height="6">&nbsp;Execute Action:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to execute an action when you double-click a certain mapping unit or element in a displayed map. The map should have a Class or ID domain, and an attribute table should be linked to the map or to the domain of the map. Furthermore, the attribute table should contain a column named <span class=courier>Action</span> (using the <span class=courier><a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >String</a></span> domain). </p>
+
+<p class=diabox>In this <span class=courier>Action</span> column, and for the classes or the ID which should execute a certain action when double-clicked in a map window, you should have specified:</p>
+
+<ul class=diaul>
+
+<li>	the map name or the table name (including path and extension .MPR, .MPA, .MPS, .MPP, .TBT) that should be opened, or</li>
+
+<li>	the file name of the GIF image, picture, sound or video (including path and extension) that you wish to see/hear. </li>
+
+</ul>
+
+<p class=diabox>For any registered file type in Windows, the program will be used that is specified for the default 'Open' action of that registered file type (for more information, see the Windows Help). Native ILWIS extensions are automatically registered to be opened with ILWIS. If, on a double-click, a class name or identifier is found, then the specified map, table, GIF image, bitmap, photograph of the site (.TIF etc.) will be shown, or the specified sound or video will be played, etc. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality_advanced.htm">Map window : functionality (advanced)</a></p>
+
+</body

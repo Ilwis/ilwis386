@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>polygons to segments popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Polygons to segments</p>
+
+<p>The <a href="..//ilwisapp/polygons_to_segments.htm" onClick="return popup(this, 'notes')" >Polygons to segments</a> operation extracts polygon boundaries and creates a segment map out of them. By default, the operation extracts segments from all polygon boundaries of the input map. A <a href="../../ilwis/sec/mask_sec.htm">mask</a> can be specified to extract segments of specific polygons. </p>
+
+<p class=linespacing03before>You can choose whether to assign a single name 'Boundary' to all output segments, or to assign unique names (like 'Boundary 1', 'Boundary 2', etc.) to the output segments. In the latter case, an attribute table will be created for the output map which contains the original polygon names or values on either side of an extracted segment as well the lengths of the extracted segments. </p>
+
+<p class=linespacing03before>The operation might be useful when you want to edit/update boundaries of polygons. </p>
+
+</body

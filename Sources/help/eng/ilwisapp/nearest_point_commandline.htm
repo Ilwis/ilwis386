@@ -1,0 +1,169 @@
+<html>
+
+<head>
+<title>Nearest point : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Nearest point, MapNearestPoint">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Nearest point</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/nearest_point_popup.htm" onClick="return popup(this, 'notes')" >Nearest Point</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapNearestPoint</span>(InputPointMap, Georeference)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapNearestPoint</span>(InputPointMap, Georeference, <span class=courier>plane</span> | <span class=courier>sphere</span>)</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapNearestPoint</span>(InputPointMap.Column, Georeference)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapNearestPoint</span>(InputPointMap.Column, Georeference, <span class=courier>plane</span> | <span class=courier>sphere</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapNearestPoint</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Nearest Point operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPointMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map (any domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPointMap.Column</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map (class or ID) which has a <i>linked</i> attribute table, and the name of a column (any domain) in this attribute table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Georeference</p>
+
+</td>
+<td valign="top">
+<p>is the name of an existing georeference that should be used for the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><span class=courier>plane</span> | <span class=courier>sphere</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >sphere</a> by using the projection of the coordinate system as used by the georeference of the output raster map (<span class=courier>sphere</span>). If not specified, distances will be calculated in a plane. </p>
+
+</td>
+</tr>
+
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/nearest_point_functionality_algorithm.htm">Nearest point : functionality / algorithm</a></p>
+
+</body

@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>pattern analysis popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Pattern Analysis</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/pattern_analysis.htm" onClick="return popup(this, 'notes')" >Pattern analysis</a> operation is a tool to obtain information on the spatial distribution of points in a point map. The output table contains six columns with the probabilities of finding 1 point (<span class=courier>Prob1Pnt</span>) within a certain distance from any point in your input map, then 2 points (<span class=courier>Prob2Pnt</span>), 3 points (<span class=courier>Prob3Pnt</span>), etc. Another column (<span class=courier>ProbAllPnt</span>) contains the sum of <span class=courier>Prob1Pnt</span>, <span class=courier>Prob2Pnt</span>, ..., <span class=courier>Prob(n-1)</span>, in which <span class=courier>n</span> is the number of points in the input map.</p>
+
+<p>By inspecting the graphs of distances against probabilities, you may recognize distribution patterns of your points like random, clustered, regular, paired etc. </p>
+
+</body

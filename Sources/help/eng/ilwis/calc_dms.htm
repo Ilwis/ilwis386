@@ -1,0 +1,133 @@
+<html>
+
+<head>
+<title>DMS</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="DMS, Coordinate conversion functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>DMS( ) function</h1>
+
+<p class=defnewpar>Converts decimal degrees to a string with degrees, minutes, seconds.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>DMS</span>(<i>Value</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>Value</i></td>
+	<td valign="top">is a value in degrees</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>DMS</span>   returns:</td>
+	<td valign="top">a string with degrees, minutes, seconds, as DDD°MM'SS&quot;</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>String</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The <span class=courier>DMS</span> function is the inverse of the <span class=courier><a href="calc_degree.htm">DEGREE</a></span> function.</li>
+	<li>A negative input value will result in an output with a minus sign.</li>
+	<li>To obtain a string which indicates the latitude (N or S) or the longitude (E or W), use the <a href="calc_lat.htm"><span class=courier>LAT</span></a> or the <a href="calc_lon.htm"><span class=courier>LON</span></a> function.</li>
+	<li>When the input value is undefined, the output will also be undefined.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p> <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="120"><p class=calc00>? DMS(-7.5050)</p></td>
+	<td><p>returns -7°30'18.000"</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = DMS(InCol)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>25.0000</p></td>
+	<td valign="top"><p class=t1r>25°00'00.000&quot;</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-25.0000</p></td>
+	<td valign="top"><p class=t1r>-25°00'00.000&quot;</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>45.0000</p></td>
+	<td valign="top"><p class=t1r>45°00'00.000&quot;</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>45.1250</p></td>
+	<td valign="top"><p class=t1r>45°07'30.000&quot;</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>45.2500</p></td>
+	<td valign="top"><p class=t1r>45°15'00.000&quot;</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>45.5000</p></td>
+	<td valign="top"><p class=t1r>45°30'00.000&quot;</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>45.7500</p></td>
+	<td valign="top"><p class=t1r>45°45'00.000&quot;</p></td>
+</tr>
+</table>
+
+<p class=Seealso>aSee also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="60"><a href="calc_degree.htm">DEGREE</a></td>
+	<td valign="top"><a href="calc_lat.htm">LAT</a></td>
+</tr>
+<tr>
+	<td valign="top" width="60"><a href="calc_sec.htm">SEC</a></td>
+	<td valign="top"><a href="calc_lon.htm">LON</a></td>
+</tr>
+</table>
+</body

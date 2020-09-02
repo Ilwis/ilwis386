@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>area numbering popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Area numbering</p>
+
+<p><a href="..//ilwisapp/areanumbering.htm" onClick="return popup(this, 'notes')" >Area numbering</a> is a raster operation which assigns unique identifiers to pixels with the same class names or values that are horizontally, vertically or diagonally connected. </p>
+
+<p class=linespacing03before>The output of Area numbering is a map in which these connected areas are codified as Area 1, Area 2, etc. Furthermore, an attribute table is created for the output map. The table contains the new IDs; the class names, IDs, or values of the original mapping units; and the size (npix and area) of the unique output units. </p>
+
+<p class=linespacing03before>Area numbering can be used to make a decision based on the size of individual groups of pixels with the same class name or value (uniquely identified areas) instead of on all pixels with the same class name or value.</p>
+
+</body

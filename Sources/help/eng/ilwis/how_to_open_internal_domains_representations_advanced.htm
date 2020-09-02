@@ -1,0 +1,175 @@
+<html>
+
+<head>
+<title>How to open internal domains/representations (advanced)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Internal domains (advanced), Internal representations (advanced), How to open (advanced), Open as ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to open </h1>
+
+<h1 class=secondline>internal domains/represenations (Advanced)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Some operations create an internal domain for the output map of the operation. For some operations this happens automatically; for other operations you can specify whether to store the output domain as a separate object, or have the output domain stored by the output map (internal domain). </p>
+
+<p class=defnewpar>When an internal Class domain or an internal Picture domain is created, then also an internal representation is created. Internal representations are stored by the output map and not as a separate object. </p>
+
+<p class=defnewpar>The software provides the possibility of using internal domains and internal representations to reduce the number of domains and representations shown in the Catalog.</p>
+
+<p class=kopje>Operations which always create an internal domain for the output map:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p><a href="..//ilwisapp/popup/area_numbering_popup.htm" onClick="return popup(this, 'notes')" >Area Numbering</a>:</p>
+
+</td>
+<td valign="top">
+<p>Both the output map and its attribute table will use an internal <span class=courier>UniqueID</span> domain; domain items are named 'Area 1', 'Area 2', etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p><a href="..//ilwisapp/popup/cluster_popup.htm" onClick="return popup(this, 'notes')" >Cluster</a>:</p>
+
+</td>
+<td valign="top">
+<p>Both the output map and its optional attribute table will use an internal Class domain and internal representation. Domain items are named 'Cluster 1', 'Cluster 2', etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p><a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >Color Composite</a>:</p>
+
+</td>
+<td valign="top">
+<p>When using the Dynamic/Heckbert option: internal Picture domain and internal representation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p><a href="..//ilwisapp/popup/glue_raster_maps_popup.htm" onClick="return popup(this, 'notes')" >Glue Raster Maps</a>:</p>
+
+</td>
+<td valign="top">
+<p>When merging two Pictures: internal Picture domain and internal representation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p><a href="..//ilwisapp/popup/polygons_to_segments_popup.htm" onClick="return popup(this, 'notes')" >Polygons to Segments</a>:</p>
+
+</td>
+<td valign="top">
+<p>When the Single Name option is used and when the input map has a class domain: internal class domain which contains only one item called 'Boundary'. </p>
+
+<p>When the Single Name option is used and when the input map has an ID domain: internal ID domain which contains only one item called 'Boundary'. </p>
+
+<p>When the Unique Names option is used, the output map and the attribute table will use an internally defined <span class=courier>UniqueID</span> domain containing several items like 'Boundary 1', 'Boundary 2', etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p><a href="..//ilwisapp/popup/raster_to_segments_popup.htm" onClick="return popup(this, 'notes')" >Raster to Segments</a>:</p>
+
+</td>
+<td valign="top">
+<p>When the Single Name option is used and when the input map has a class domain: internal class domain which contains only one item called 'Boundaries'. </p>
+
+<p>When the Single Name option is used and when the input map has an ID domain: internal ID domain which contains only one item called 'Boundary'. </p>
+
+<p>When the Unique Names option is used, the output map and the attribute table will use an internally defined <span class=courier>UniqueID</span> domain containing several items like 'Boundary 1', 'Boundary 2', etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p><a href="..//ilwisapp/popup/unique_id_popup.htm" onClick="return popup(this, 'notes')" >Unique ID</a>:</p>
+
+</td>
+<td valign="top">
+<p>Both the output map and its attribute table will use an internal <span class=courier>UniqueID</span> domain. Domain items are either user-defined by a specified prefix, or when no prefix is specified: 'Pol 1', 'Pol 2', etc. when performed on a polygon map; 'Seg 1', 'Seg 2', etc. when performed on a segment map; 'Pnt 1', 'Pnt 2', etc. when performed on a point map .</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Operations which optionally create an internal domain for the output map:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p><a href="..//ilwisapp/popup/glue_raster_maps_popup.htm" onClick="return popup(this, 'notes')" >Glue Raster Maps</a>, <a href="..//ilwisapp/popup/glue_segment_maps_popup.htm" onClick="return popup(this, 'notes')" >Glue Segment Maps</a>, <a href="..//ilwisapp/popup/glue_point_maps_popup.htm" onClick="return popup(this, 'notes')" >Glue Point Maps</a>:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p></p>
+
+</td>
+<td valign="top">
+<p>When merging maps with different Class domains: new Class domain or internal Class domain with internal representation. Output domain contains all class names of all input maps.</p>
+
+<p>When merging maps with different ID domains: new ID domain or internal ID domain. Output domain contains all IDs of all input maps. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p><a href="..//ilwisapp/popup/segments_to_polygons_popup.htm" onClick="return popup(this, 'notes')" >Segments to Polygons</a>:</p>
+
+</td>
+<td valign="top">
+<p>When not using the Label Points option in the operation's dialog box: internal ID domain. </p>
+
+<p>When using the option Auto Identifiers option in the segment editor: internal ID domain. Domain items are named 'Pol 1', 'Pol 2', etc.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>To view or edit an internal domain/representation:</p>
+
+<ul>
+
+<li>	Display the output map of the operation in a map window, open the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window and choose <span class=arial>Domain</span> or <span class=arial>Representation</span>. </li>
+
+<li>	Click the output map of the operation with the right mouse button in the Catalog, then choose <span class=arial>Open as Domain</span> or <span class=arial>Open as Representation</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=defnewpar>You can display and edit internal domains and representations in the same way as normal domains and representations.</p>
+
+<p>Internal domains/representations do not have their own Properties dialog box and cannot be opened as a table.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+</body

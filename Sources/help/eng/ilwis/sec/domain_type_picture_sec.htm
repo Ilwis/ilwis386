@@ -1,0 +1,52 @@
+<html>
+
+<head>
+<title>Domain type : Picture</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Domain type Picture</p>
+
+<p>Picture domains are designed for raster maps which use a maximum of 256 different colors. You should use a picture domain for example for scanned pictures, i.e. when a raster map contains merely colors and when the pixels do <i>not</i> have a meaning in the sense of classes or values.</p>
+
+<p>A picture domain can only be used by raster maps. </p>
+
+<p class=linespacing03before>The colors in a picture domain are defined by Red, Green and Blue values, each ranging from 0 to 255. For example, orange is defined by (255, 128, 0) meaning 255 Red, 128 Green and 0 Blue. </p>
+
+<p class=linespacing03before>You can convert a picture domain to a <a href="../../ilwis/sec/domain_class_sec.htm">class domain</a>: in the <a href="../../ilwis/popup/object_properties_popup.htm">Properties</a> dialog box of a picture domain, click the <span class=arial>Convert to classes</span> button.</p>
+
+<p class=kopje>Examples:</p>
+
+<ul>
+
+<li>	The output of a Color Composite operation is a domain Picture map; the pixels in a color composite represent colors, not values.</li>
+
+<li>	Scanned color photographs (scanned in 256 colors).</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_domains.htm" onClick="return popup(this, 'notes')" >Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</a></p>
+
+</body

@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>raster to segments popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Raster to Segments</p>
+
+<p>The <a href="..//ilwisapp/raster_to_segments.htm" onClick="return popup(this, 'notes')" >Raster to Segments</a> operation extracts segments from the boundaries of mapping units in a raster map. You can choose to extract segments from 4-connected or 8-connected areas, and to smooth output segments or not. </p>
+
+<p class=linespacing03before>Furthermore, you can choose to assign a single name 'Boundaries' to all output segments or to assign unique names like 'Boundary 1', 'Boundary 2', etc. to the output segments. In the latter case, an attribute table will be created for the output map which contains the original mapping unit names or values on either side of an extracted segment as well the lengths of the extracted segments. </p>
+
+</body

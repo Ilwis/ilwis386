@@ -1,0 +1,39 @@
+<html>
+
+<head>
+<title>Object dependent data objects popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Dependent data objects</p>
+
+<p class=linespacing03after><a href=HREF="popupbasic.html" onClick="return popup(this, 'notes')">Dependent maps, tables or columns</a> are the result of a <a href="y_calculation_popup.htm">calculation</a> (in which you used the definition sign =) or another <a href="y_operation_popup.htm">operation</a>. The complete <a href="command_line_main_expressions_popup.htm">expression</a> by which dependent output objects are created is stored by the output maps, tables and columns as the object's <a href="../../ilwis/popup/object_definition_popup.htm">definition</a>. Dependent data objects thus know how they were created and on which input data they depend.</p>
+
+<p class=linespacing03after>Based on the definition, dependent data objects can be made up-to-date in case input objects on which they depend have changed. When the definition of a dependent raster map or a dependent column is a MapCalc or TabCalc formula, you can even change the expression itself. </p>
+
+<p class=linespacing03after>For dependent maps and tables, the definition is stored in a map's or table's <a href="object_definition_files_popup.htm">object definition file</a>. In principle, only the object definition file is stored on disk. When a dependent map or table is displayed, the data file is automatically calculated and stored on disk. The definition of a dependent column is stored in the object definition file of the table; dependent columns are always calculated.</p>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_dependent_data_objects.htm" onClick="return popup(this, 'notes')" >Basic concepts : dependent data objects</a> </p>
+
+</body

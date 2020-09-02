@@ -1,0 +1,144 @@
+<html>
+
+<head>
+<title>Join column wizard - Join method</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Columns, Join columns, Column operations, Table window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table bgcolor="#006699" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Join Column wizard</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Join method</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="join_column.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="join_column_link_between_tables.htm">Next</a>&nbsp;&gt;</td>
+</tr>
+<tr><td bgcolor="FFFFFF" colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>This second page of the Join Column wizard lists the possibilities for joining based on a comparison of the domains that exist or are used by the two tables and their columns. Remember that the two tables including their columns should at least share one common domain, the key. The key through which a join can be performed should be a common class or ID domain. </p>
+
+<p class=defnewpar>On this page you need to choose the join method you wish to use. In principle, there are four methods to join, see below. The wizard will help you to make the correct choice. </p>
+
+<ul>
+
+<li>The Join method page of the wizard shows possible join methods between the two tables in <b>black</b>. </li>
+
+<li>Join methods which are <i>not</i> possible between the two tables are automatically <span class=grayish>grayed out</span> by the wizard. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<p class=diabox>The four possible join methods and the options on this page are:</p>
+
+<ol class=diaol>
+
+<p class=emptyline>&nbsp;</p>
+
+<li><span class=arial><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Use Domain of current table (key1) and use Domain of selected table (key2) </span> </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+        <p class=diabox>You can use this method when the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domains</a> of the two tables are the same; the tables have a <b>1 to 1</b> relation. The link between the two tables will be made through the common domain of both tables. </p>
+
+        <p class=diabox>When you click the <span class=arial>Next</span> button, the wizard will continue with the <b><a href="join_column_output_column.htm">Specify output column name</a></b> page. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>	<span class=arial><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Choose key Column from current table (key1) and use Domain of selected table (key2) </span> </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+        <p class=diabox>You can use this method when the domain of a column in the current table is the same as the domain of the selected table; the current table has a <b>many to 1</b> relation with the selected table. The link between the two tables will be made through the domain of a column in the current table (key1) and through the domain of the selected table (key2). </p>
+
+        <p class=diabox>When you click the <span class=arial>Next</span> button, the wizard will continue with the <b><a href="join_column_link_between_tables.htm">Link between tables</a></b> page, on which you need to select a column from the current table (key1) to create the link between the two tables. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>	<span class=arial><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Use Domain of current table (key1) and choose key Column from selected table (key2) </span> </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+        <p class=diabox>You can use this method when the domain of the current table is the same as the domain of a column in the selected table; the current table possibly has a <b>1 to many</b> relation with the selected table. The link between the two tables will be made through the domain of the current table (key1) and through the domain of a column in the selected table (key2). </p>
+
+        <p class=diabox>When you click the <span class=arial>Next</span> button, the wizard will continue with the <b><a href="join_column_link_between_tables.htm">Link between tables</a></b> page, on which you need to select a column from the selected table (key2) to create the link between the two tables. </p>
+
+        <ul class=diaul>
+
+        <li>Furthermore, if the classes, IDs, or values of the specified key column in the selected table (key2) are <i>not unique</i>, the values that you wish to join need to be aggregated. </li>
+
+        <p class=diabox>Then, later on, the <b><a href="join_column_aggregation_method.htm">Aggregation method</a></b> page of the wizard will appear, in which you can select an <a href="..//ilwis/popup/aggregation_functions_popup.htm" onClick="return popup(this, 'notes')" >aggregation function</a> and, optionally a weight column. </p>
+
+        <li>If no aggregation is needed, the Aggregation method page will not appear. </li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>	<span class=arial><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Choose key Column from current table (key1) and choose key Column from selected table (key2) </span> </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+        <p class=diabox>You can use this method when the domain of a column in the current table is the same as a domain of a column in the table from which you want to obtain data; the current table possibly has a <b>many to many</b> relation to the selected table. The link between the two tables will be made through the domain of a column in the current table (key1) and through the domain of a column in the selected table (key2). </p>
+
+        <p class=diabox>When you click the <span class=arial>Next</span> button, the wizard will continue with the <b><a href="join_column_link_between_tables.htm">Link between tables</a></b> page, on which you need to select a column both from the current table (key1) and from the selected table (key2) to create the link between the two tables. </p>
+
+        <ul class=diaul>
+
+        <li>Furthermore, if the classes, IDs, or values of the specified key column in the selected table (key2) are <i>not unique</i>, the values that you wish to join need to be aggregated. </li>
+
+        <p class=diabox>Then, later on, the <b><a href="join_column_aggregation_method.htm">Aggregation method</a></b> page of the wizard will appear, in which you can select an <a href="..//ilwis/popup/aggregation_functions_popup.htm" onClick="return popup(this, 'notes')" >aggregation function</a> and, optionally a weight column. </p>
+
+        <li>If no aggregation is needed, the Aggregation method page will not appear. </li>
+
+        </ul>
+
+</ol>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>When you click the <span class=arial>Next</span> button: </p>
+
+<ul>
+
+<li>If you selected the first option, you will directly continue on the <b><a href="join_column_output_column.htm">Specify output column name</a></b> page. </li>
+
+<li>If you selected one of the other options, you will continue on the <b><a href="join_column_link_between_tables.htm">Link between tables</a></b> page. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip:</span> Experienced users may also join columns from other tables by typing an expression on the TabCalc command line. For more information, see <a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a>. This topic also provides some examples, both for using the wizard and for using the command line. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="join_column_link_between_tables.htm">Join Column wizard - Link between tables</a></p>
+
+<p class=seealsolinks><a href="join_column_output_column.htm">Join Column wizard - Output column name</a></p>
+
+<p class=seealsolinks><a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a></p>
+
+</body

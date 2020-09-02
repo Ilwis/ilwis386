@@ -1,0 +1,603 @@
+<html>
+
+<head>
+<title>Graph window : Graph Management</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Graph window, Graph Management, Graphs">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Graph window</h1>
+
+<h1 class=secondline>Graph Management</h1>
+ 
+<!--<hr>-->
+
+<p class=defnewpar>The Graph Management pane is by default located along the left hand side of a <a href="..//ilwis/popup/graph_window_popup.htm" onClick="return popup(this, 'notes')" >graph window</a>. It lists the table from which the graph was created, the X-axis, Y-axes (left and right) and all graph layers that were added to the current graph window. </p>
+
+<p class=defnewpar>The upper part of the Graph Management pane contains information on the title of the graph, the legend of the graph, the table from which the graph was created, and the X-axis, Y-axis (left) and Y-axis (right). All items are editable, except for the table name. </p>
+
+<p class=defnewpar>Graph layers are listed at the lower part of the Graph Management pane. They are preceded by a check box to show or hide the layer (show <img src="../images/layeron.gif" align=bottom width="14" height="12"> or hide <img src="../images/layeroff.gif" align=bottom width="14" height="12">). You can modify the name of each graph layer and the appearance of each graph layer. </p>
+
+<p class=defnewpar>In short, the Graph Management pane allows you: </p>
+
+<table>
+<tr>
+<td valign="top" width="144">
+<p><img src="../images/abconly.gif" align=bottom width="14" height="7">&nbsp;<span class=tahoma> Title</span>: </p>
+
+</td>
+<td valign="top">
+<p>To edit the title of the graph. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><img src="../images/graphlegendnotext.gif" align=bottom width="13" height="14">&nbsp;<span class=tahoma> Legend</span>: </p>
+
+</td>
+<td valign="top">
+<p>To show or hide the legend of the graph.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><img src="../images/table.gif" align=bottom width="13" height="14">&nbsp;<span class=tahoma> Table</span>: </p>
+
+</td>
+<td valign="top">
+<p>To open the table from which the graph was created. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><img src="../images/graphaxisonly.gif" align=bottom width="15" height="15">&nbsp;<span class=tahoma> X-Axis, Y-axis</span>: </p>
+
+</td>
+<td valign="top">
+<p>To edit the appearance of the X-Axis, Y-axis Left or Y-Axis Right (including a description of the axes and grid lines). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><img src="../images/graphtextyaxisright.gif" align=bottom width="34" height="12">&nbsp;<span class=tahoma> Axis Text</span>: </p>
+
+</td>
+<td valign="top">
+<p>To edit the additional text describing an axis. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><img src="../images/graphmaxvalaxis.gif" align=bottom width="61" height="14">&nbsp;<span class=tahoma> Min/Max value</span>: </p>
+
+</td>
+<td valign="top">
+<p>To change the minimum and maximum value used on an axis. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><img src="../images/graphlayerline.gif" align=bottom width="127" height="12"> </p>
+
+<p><img src="../images/graphlayersymb.gif" align=bottom width="127" height="12"> </p>
+
+</td>
+<td valign="top">
+<p>To show/hide a graph layer and to change the display options of a graph layer. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Individual graph layers can be switched on <img src="../images/layeron.gif" align=bottom width="14" height="12"> or off <img src="../images/layeroff.gif" align=bottom width="14" height="12">; also the legend can be switched on or off. </p>
+
+<p class=defnewpar>The right mouse button can for instance be used to remove a graph layer, or to add another graph layer.</p>
+
+<p class=defnewpar>You can move the Graph Management pane and dock it along the right hand side or the left hand side of a graph window; you can also make the Graph Management pane floating. The Graph Management pane can be hidden or shown with the <span class=arial>Graph Management</span> command on the <a href="../ilwis/graph_window_menu_commands.htm">View menu</a>. Some of the actions that are available via the Graph Management pane are also available in the graph window itself or via the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<h2>Functionality</h2>
+
+<p class=defnewpar>The functionality is described in three small sections: </p>
+
+<p><a href="#title_legend_table"><span class=bookmark>1. Title, legend, table</span></a></p>
+
+<p><a href="#axes"><span class=bookmark>2. Axes</span></a></p>
+
+<p><a href="#graph_layers"><span class=bookmark>3. Graph layers</span></a></p>
+
+<p>You can furthermore refer to the <a href="#example_graph"><span class=bookmark>Example</span></a> below. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p id="title_legend_table" class=kopjeboldnound>1. Title, legend, table</p>
+
+<p class=kopjeaftertitlesub>To edit the title of the graph: </p>
+
+<ul>
+
+<li>Double-click the <i>first</i> <img src="../images/abconly.gif" align=bottom width="14" height="7"> <span class=tahoma>Text</span> item in the Graph Management pane, i.e. the item just below the <img src="../images/graphmanicon.gif" align=bottom width="15" height="15"> <span class=tahoma>Graph</span> item. </li>
+
+<li>The <a href="../ilwismen/graph_window_options_title.htm">Title</a> dialog box will appear. </li>
+
+</ul>
+
+<p class=defnewpar>Settings include text of title, font, font size, etc. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To edit the title of a graph, you can also directly double-click the title in the graph window itself. </p>
+
+<p class=kopje>To hide or show the legend in the graph window:</p>
+
+<ul>
+
+<li>Click the <img src="../images/layeron.gif" align=bottom width="14" height="12"> show or <img src="../images/layeroff.gif" align=bottom width="14" height="12"> hide check box in front of the <img src="../images/graphlegendnotext.gif" align=bottom width="13" height="14"> <span class=tahoma>Legend</span> item (toggle). </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To move the legend in a graph window, click the legend in the graph window and drag it to another position. </p>
+
+<p class=kopje>To open the table from which the graph was created: </p>
+
+<ul>
+
+<li>Double-click the <img src="../images/table.gif" align=bottom width="13" height="14"> <span class=tahoma>Table</span> item. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p id="axes" class=kopjeboldnound>2. Axes</p>
+
+<p class=kopjeaftertitlesub>To change the settings of the X-axis or Y-axis (left or right)</p>
+
+<ul>
+
+<li>Double-click one of the following items: </li>
+
+        <table cellspacing=0>
+
+        <tr>
+        <td valign="top" width="108">
+        <img src="../images/graphxaxis.gif" align=bottom width="61" height="15">
+
+        </td>
+        <td valign="top">
+        <p>to modify the X-axis; the <a href="../ilwismen/graph_window_options_x_axis.htm">X-axis</a> dialog box will appear. </p>        
+
+        </td>
+        </tr>        
+        <tr>
+        <td valign="top">
+        <img src="../images/graphyaxisleft.gif" align=bottom width="74" height="16">
+
+        </td>
+        <td valign="top">
+        <p>to modify the Y-axis (left); the <a href="../ilwismen/graph_window_options_y_axis_left.htm">Y-axis (left)</a> dialog box will appear. </p>
+
+        </td>
+        </tr>        
+        <tr>
+        <td valign="top">
+        <img src="../images/graphyaxisright.gif" align=bottom width="95" height="15">
+
+        </td>
+        <td valign="top">
+        <p>to modify the Y-axis (right); the <a href="../ilwismen/graph_window_options_y_axis_right.htm">Y-axis (right)</a> dialog box will appear. </p>
+
+        <p>Click the check box to show <img src="../images/layeron.gif" align=bottom width="14" height="12"> or to hide <img src="../images/layeroff.gif" align=bottom width="14" height="12"> a Y-axis on the right of the graph in the graph window (toggle).</p>
+        
+        </td>
+        </tr>
+        </table>
+
+</ul>
+
+<p class=defnewpar>Settings include among others additional text for an axis, axis type (linear, logarithmic, or normal probability), minimum and maximum values used by an axis, interval, grid lines, font and font size. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>To change the settings of the axes, you can also directly double-click an axis in the graph window itself. </li>
+
+<li>For examples of different types of axes, see <a href="graph_window_examples_of_graphs.htm">Graph window : examples of graphs</a>. </li>
+
+</ul>
+
+<p class=kopje>To change the values used on the X-axis or the Y-axis (left or right): </p>
+
+<ul>
+
+<li>Double-click one of the values listed below the <img src="../images/graphaxisonly.gif" align=bottom width="15" height="15"> <span class=tahoma>X-Axis</span> item, the <img src="../images/graphaxisonly.gif" align=bottom width="15" height="15"> <span class=tahoma>Y-Axis Left</span> item, or the <img src="../images/graphaxisonly.gif" align=bottom width="15" height="15"> <span class=tahoma>Y-Axis Right</span> item. </li>
+
+<li>You can type another minimum or maximum value to be used for the axis without dialog box. </li>
+
+</ul>
+
+<p class=kopje>To edit the additional text for an axis: </p>
+
+<ul>
+
+<li>Double-click the <img src="../images/abconly.gif" align=bottom width="14" height="7"> text item listed below the <img src="../images/graphaxisonly.gif" align=bottom width="15" height="15"> <span class=tahoma>X-Axis</span> item, the <img src="../images/graphaxisonly.gif" align=bottom width="15" height="15"> <span class=tahoma>Y-Axis Left</span> item, or the <img src="../images/graphaxisonly.gif" align=bottom width="15" height="15"> <span class=tahoma>Y-Axis Right</span> item. </li>
+
+<li>You can type another text describing the axis without dialog box. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p id="graph_layers" class=kopjeboldnound>3. Graph layers</p>
+
+<p class=kopjeaftertitlesub>To show or hide a graph layer: </p>
+
+<ul>
+
+<li>Click the <img src="../images/layeron.gif" align=bottom width="14" height="12"> show or <img src="../images/layeroff.gif" align=bottom width="14" height="12"> hide check box in front of a graph layer (toggle). </li>
+
+</ul>
+
+<p class=kopje>To modify the appearance of a graph layer:</p>
+
+<ul>
+
+<li>Double-click a graph layer in the Graph Management pane.</li>
+
+<li>Depending on whether you double-clicked a graph from columns, a graph from formula, a least squares fit, a semi-variogram model, or a rose diagram: </li>
+
+        <ul>
+
+        <li>the <a href="../ilwismen/graph_window_options_graph_from_columns.htm">Graph Options - Graph from Columns</a> dialog box will appear. </li>
+
+        <li>the <a href="../ilwismen/graph_window_options_graph_from_formula.htm">Graph Options - Graph from Formula</a> dialog box will appear; </li>
+
+        <li>the <a href="../ilwismen/graph_window_options_graph_least_squares_fit.htm">Graph Options - Least Squares Fit</a> dialog box will appear. </li>
+
+        <li>the <a href="../ilwismen/graph_window_options_semivariogram_model.htm">Graph Options - Semi-variogram Model</a> dialog box will appear, </li>
+
+        <li>the <a href="../ilwismen/graph_window_options_rose_diagram.htm">Graph Options - Rose diagram</a> dialog box will appear. </li>
+
+        </ul>
+
+</ul>
+
+<p class=defnewpar>Settings include name of the graph layer, symbol type, size, line type, color, etc. </p>
+
+<p class=kopje>To add a graph layer:</p>
+
+<ul>
+
+<li>Use the right mouse button in the white space of the Graph Management pane, and </li>
+
+<li>choose <span class=arial>Add Graph</span> from the context-sensitive menu. </li>
+
+<li>Depending on whether you selected to add a graph from columns, a graph from formula, a least squares fit or a semi-variogram model: </li>
+
+        <ul>
+
+        <li>the <a href="../ilwismen/graph_window_add_graph_from_columns.htm">Add Graph from Columns</a> dialog box will appear, </li>
+
+        <li>the <a href="../ilwismen/graph_window_add_graph_from_formula.htm">Add Graph from Formula</a> dialog box will appear, </li>
+
+        <li>the <a href="../ilwismen/graph_window_add_graph_least_squares_fit.htm">Add Graph Least Squares Fit</a> dialog box will appear, </li>
+
+        <li>the <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Add Semi-variogram Model</a> dialog box will appear. </li>
+
+        </ul>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span> To add a graph layer to the graph window, you can also use the <span class=arial>Add Graph</span> command on the <a href="graph_window_menu_commands.htm">Edit menu</a>, or the <span class=arial>Add Graph</span> <img src="../images/add_graph_layer.gif" align=bottom width="36" height="22"> button in the <a href="graph_window_toolbar.htm">toolbar</a>. </p>
+
+<p class=kopje>To change the order of graph layers: </p>
+
+<ul>
+
+<li><a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >Drag</a> a graph layer to another position in the list. </li>
+
+</ul>
+
+<p class=kopje>To remove a graph layer:</p>
+
+<ul>
+
+<li>Use the right mouse button on a graph layer, and </li>
+
+<li>choose <span class=arial>Remove Layer</span> from the context-sensitive menu. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span> To remove a graph layer from a graph window, you can also use the <span class=arial>Remove Layer</span> command on the <a href="graph_window_menu_commands.htm">Edit menu</a>, or the <span class=arial>Remove Layer</span> <img src="../images/remlayer.gif" align=bottom width="22" height="22"> button in the <a href="graph_window_toolbar.htm">toolbar</a>. </p>
+
+<h2 id="example_graph">Example</h2>
+
+<p>The functionality of the Graph Management pane will be demonstrated by an example shown in the graph window below. The graph window shows: </p>
+
+<ul>
+
+<li>points of columns 'val' (a column with values) and 'val2' (another column with values),  </li>
+
+<li>a least squares graph as a line. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/graph3.gif" align=bottom width="733" height="470"> </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=60>
+<img src="../images/graphtitle.gif" align=bottom width="65" height="9">
+
+</td>
+<td valign="top">
+<p><b>Title</b>: Double-click to edit the title of the graph, select a font, font size etc. for the title in the <a href="../ilwismen/graph_window_options_title.htm">Title</a> dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphlegend.gif" align=bottom width="73" height="14">
+
+</td>
+<td valign="top">
+<p><b>Legend</b>: Click the check box to show <img src="../images/layeron.gif" align=bottom width="14" height="12"> the legend in the graph window, or to hide <img src="../images/layeroff.gif" align=bottom width="14" height="12"> the legend from the graph window (toggle).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphtable.gif" align=bottom width="84" height="14">
+
+</td>
+<td valign="top">
+<p><b>Table name</b>: Double-click to open the table from which the graph was created, or click with the right mouse button and choose <span class=arial>Open</span> from the context-sensitive menu. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphxaxis.gif" align=bottom width="61" height="15">
+
+</td>
+<td valign="top">
+<p><b>X-axis</b>: Double-click to change the settings of the X-axis in the <a href="../ilwismen/graph_window_options_x_axis.htm">X-axis</a> dialog box. Settings include among others axis text, type of axis (linear, logarithmic, normal probability), minimum and maximum values used by the axis, interval, grid lines, font and font size.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphtextaxis.gif" align=bottom width="61" height="13">
+
+</td>
+<td valign="top">
+<p>Text: Double-click to directly change the additional text describing the X-axis. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphminvalaxis.gif" align=bottom width="61" height="14">
+
+</td>
+<td valign="top">
+<p>Minimum value: Double-click to directly change the minimum value for the X-axis. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphmaxvalaxis.gif" align=bottom width="61" height="14">
+
+</td>
+<td valign="top">
+<p>Maximum value: Double-click to directly change the maximum value for the X-axis. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphyaxisleft.gif" align=bottom width="74" height="16">
+
+</td>
+<td valign="top">
+<p><b>Y-axis (left)</b>: Double-click to change the settings of the Y-axis (displayed on the left of the graph) in the <a href="../ilwismen/graph_window_options_y_axis_left.htm">Y-axis (left)</a> dialog box. Settings include among others axis text, type of axis (linear, logarithmic, normal probability), minimum and maximum values used by the axis, interval, grid lines, font and font size.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphtextyaxis.gif" align=bottom width="68" height="12">
+
+</td>
+<td valign="top">
+<p>Text: Double-click to directly change the additional text describing the Y-axis. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphminvalaxis.gif" align=bottom width="61" height="14">
+
+</td>
+<td valign="top">
+<p>Minimum value: Double-click to directly change the minimum value for the Y-axis. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphmaxvalyaxis.gif" align=bottom width="79" height="13">
+
+</td>
+<td valign="top">
+<p>Maximum value: Double-click to directly change the maximum value for the Y-axis. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphyaxisright.gif" align=bottom width="95" height="15">
+
+</td>
+<td valign="top">
+<p><b>Y-axis (right)</b>: </p>
+
+<p>Click the check box to show <img src="../images/layeron.gif" align=bottom width="14" height="12"> or to hide <img src="../images/layeroff.gif" align=bottom width="14" height="12"> a Y-axis on the right of the graph in the graph window (toggle).</p>
+
+<p>Double-click to change the settings of the Y-axis (displayed on the right of the graph) in the <a href="../ilwismen/graph_window_options_y_axis_right.htm">Y-axis (right)</a> dialog box. Settings include among others axis text, type of axis (linear, logarithmic, normal probability), minimum and maximum values used by the axis, interval, grid lines, font and font size.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphtextyaxisright.gif" align=bottom width="34" height="12">
+
+</td>
+<td valign="top">
+<p>Text: Double-click to directly change the additional text describing the Y-axis on the right. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphminvalaxis.gif" align=bottom width="61" height="14">
+
+</td>
+<td valign="top">
+<p>Minimum value: Double-click to directly change the minimum value for the Y-axis on the right. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphmaxvalyaxis.gif" align=bottom width="79" height="13">
+
+</td>
+<td valign="top">
+<p>Maximum value: Double-click to directly change the maximum value for the Y-axis on the right. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top">
+<p><img src="../images/graphlayerlsq.gif" align=bottom width="190" height="12"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p><b><i>Graph layer</i></b>: Double-click to change the display options of this graph layer. </p>
+
+<p>As this layer is a least squares fit, the <a href="../ilwismen/graph_window_options_graph_least_squares_fit.htm">Graph Options - Least Squares Fit</a> dialog box will appear. Settings include among others name of the graph layer, line type, color, line width, and function used to calculate the least squares fit. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphcolumns.gif" align=bottom width="63" height="30">
+
+</td>
+<td valign="top">
+<p>Columns: The name of the columns in the table from which this least squares fit was calculated. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top">
+<img src="../images/graphlayercol.gif" align=bottom width="101" height="12">
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p><b><i>Graph layer</i></b>: Double-click to change the display options of this graph layer. </p>
+
+<p>As this layer is a point graph from two columns in the table, the <a href="../ilwismen/graph_window_options_graph_from_columns.htm">Graph Options - Graph from Columns</a> dialog box will appear. Settings include among others name of the graph layer, graph type (line, bar, points), symbol type or line type, color, size, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<img src="../images/graphcolumns.gif" align=bottom width="63" height="30">
+
+</td>
+<td valign="top">
+<p>Columns: The name of the columns in the table that are shown as points in this graph layer. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To add a graph layer to the graph window, you can also use the <span class=arial>Add Graph</span> command on the <a href="graph_window_menu_commands.htm">Edit menu</a>, or the <span class=arial>Add Graph</span> button in the <a href="graph_window_toolbar.htm">toolbar</a>. </li>
+
+<li>To edit the title of a graph, you can also directly double-click the title in the graph window itself. </li>
+
+<li>To change the settings of the axes, you can also directly double-click an axis in the graph window itself. </li>
+
+<li>To remove a graph layer from a graph window, you can also use the <span class=arial>Remove Layer</span> command on the <a href="graph_window_menu_commands.htm">Edit menu</a>, or the <span class=arial>Remove Layer</span> button in the <a href="graph_window_toolbar.htm">toolbar</a>.</li>
+
+</ul>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="graph_window_functionality.htm">Graph window : functionality</a></p>
+
+<p class=seealsolinks><a href="graph_window_examples_of_graphs.htm">Graph window : examples of graphs</a></p>
+
+<p class=seealsolinks><a href="graph_window_toolbar.htm">Graph window : toolbar</a></p>
+
+<p class=seealsolinks><a href="graph_window_menu_commands.htm">Graph window : menu commands</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_graphs.htm">ILWIS objects : graphs</a></p>
+
+</body

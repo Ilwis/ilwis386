@@ -1,0 +1,95 @@
+<html>
+
+<head>
+<title>Add record</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Add ..., Records">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Add Record</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Add a single new record to a table which uses <a href="..//ilwis/popup/yy_system_domain_none_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>None</span></a>. </p>
+
+<p class=defnewpar>The new record will appear at the bottom of the table. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To add a record to an <a href="../ilwis/basic_concepts_attribute_tables.htm">attribute table</a>, you should add a new class name or ID to the Class or ID <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> that is used by the table and by the map. The new domain item is then directly shown in the table. </li>
+
+<li>When pasting into a table with system domain <span class=courier>None</span>, and when nothing is selected in the table, then the clipboard contents will be <i>appended</i> in new records at the bottom of the table. For more information, refer to <a href="paste_table_data_into_table_window.htm">Table window : Paste</a>. </li>
+
+</ul>
+
+<p class=kopje>Command line syntax:</p>
+
+<p>If you like, you can also add one or more records to a table with system domain <span class=courier>None</span>, by typing a command on the command line of a table window: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table>
+<tr>
+<td valign="top" width="96">
+<p><span class=courier>addrecord</span></p>
+
+</td>
+<td valign="top">
+<p>to add a single record to the table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><span class=courier>addrecord</span> <i>nr</i></p>
+
+</td>
+<td valign="top">
+<p>to add a specified number of records to the table. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_toolbar.htm">Table window : toolbar</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_menu_commands.htm">Table window : menu commands</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_commands.htm#table_window_commands">Appendices : ILWIS commands, section table window</a>
+</p>
+
+</body

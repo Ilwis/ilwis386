@@ -1,0 +1,67 @@
+<html>
+
+<head>
+<title>MapCalc : map lists (advanced)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map lists, Map calculation, Calculation, Calculate (advanced) ..., Command line, MapListApplic">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>Calculating with map lists</h1>
+
+<p class=kopje>Map Calculation:</p>
+<p>To apply a MapCalc formula on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, you can type a map list expression on the command line of the Main window. For instance, if the regular MapCalc formula on <i>InMap</i> reads: </p>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=leftmargin06><span class=calccommline><span class=courier>OutMap = SQ(</span><i>InMap</i><span class=courier>) + 10</span>  </p>
+<p class=emptylinehalf>&nbsp;</p>
+<p>Then, the map list expression to use the formula on all input maps in a map list <i>InMapList</i> reads: </p>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=leftmargin06><span class=calccommline><span class=courier>OutMapList = MapListApplic(</span><i>InMapList</i><span class=courier>, &quot;SQ(##) + 10&quot;)</span>  </p>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=leftmargin06>where <span class=courier>##</span> represents the individual raster maps in the map list. </p>
+<p class=linespacing03before>The output map list is a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent object</a>. When the output map list is opened, the dependent output raster maps will be defined and calculated. The output raster maps of the map list will obtain the same name as the output map list, followed by _1, _2, _3, etc. For more information, refer to
+<a href="ilwis_objects_map_lists.htm">ILWIS objects : Map lists</a>.</p>
+<p class=kopje>Operations:</p>
+<p>Similarly, operations that use a raster map as input and produce a raster map as output, can also be performed on all raster maps of an input map list. You can choose the input map list in the dialog box of the operation but you can also type an expression on the command line of the Main window. The general syntax of map list expressions for operations is: </p>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=leftmargin06><span class=calccommline><span class=courier>OutMapList = MapListApplic(</span><i>InMapList</i>, <span class=courier>Map</span><i>Operation</i><span class=courier>(##</span>, <i>other parameters</i><span class=courier>))</span> </p>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=leftmargin06>where <span class=courier>##</span> represents the individual raster maps in the map list. </p>
+<p class=linespacing03before>The output map list is a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent object</a>. When the output map list is opened, the dependent output raster maps will be defined and calculated. The output raster maps of the map list will obtain the same name as the output map list, followed by _1, _2, _3, etc. For more information refer to <a href="../ilwisapp/aggregate_command_line2.htm">Aggregate Map : command line (2)</a>, <a href="../ilwisapp/filter_command_line2.htm">Filter : command line (2)</a>, <a href="../ilwisapp/stretch_command_line2.htm">Stretch : command line (2)</a>, <a href="../ilwisapp/densify_commandline2.htm">Densify : command line (2)</a>, <a href="../ilwisapp/resample_command_line2.htm">Resample : command line (2)</a>, <a href="../ilwisapp/submap_of_raster_map_commandline2.htm">Sub-Map of raster map : command line (2)</a>, or <a href="../ilwisapp/mirror_rotate_commandline2.htm">Mirror/Rotate : command line (2)</a>. </p>
+<p class=emptyline>&nbsp;</p>
+<p class=kopje>Map lists from General Raster Import:</p>
+<p>In case the map list is the result of <a href="../ilwismen/import_general_raster.htm">Import General Raster</a> using the option <span class=arial>Use Data in Original Format</span> and <span class=arial>without the creation of separate maps</span>, then the object definition file will only contain a reference to the original non-ILWIS file and there will be no separate ILWIS raster maps stored on disk. When such a map list is opened, the first band is called 'band 1', the second 'band 2', etc. </p>
+<p>On the command line, the first band of such a map list can be addressed as <i>maplistname.mpl:1</i>, the second band as <i>maplistname.mpl:2</i>, etc. To calculate with such maps on the command line, you can use for instance expressions like: </p>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=leftmargin06><span class=calccommline><span class=courier>OUT = MyMapList:1 + MyMapList:2</span></p>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=leftmargin06><span class=calccommline><span class=courier>OUT = 'My Map List'.mpl:1 + 'My Map List'.mpl:2</span>.</p>
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="how_to_create_map_lists.htm">How to create a map list</a></p>
+<p class=seealsolinks><a href="how_to_edit_map_lists.htm">How to edit a map list</a></p>
+<p class=seealsolinks><a href="ilwis_objects_raster_maps.htm">ILWIS objects : raster maps</a></p>
+<p class=seealsolinks><a href="ilwis_objects_map_lists.htm">ILWIS objects : map lists</a></p>
+<p class=seealsolinks><a href="../ilwisapp/ilwis_operations.htm">ILWIS operations</a></p>
+
+</body

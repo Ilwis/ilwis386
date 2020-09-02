@@ -1,0 +1,583 @@
+<html>
+
+<head>
+<title>Table window : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Table window</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A table window displays a <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >table</a>. In a table window, you can view and edit table data, and you can calculate with your table data. </p>
+
+<p class=defnewpar>A table window consists of:</p>
+
+<ul>
+
+<li>a table viewer which displays the table data, </li> 
+
+<li>a <a href="table_window_menu_commands.htm">menu bar</a>, </li>
+
+<li>a <a href="table_window_toolbar.htm">toolbar</a>, </li>
+
+<li>a <a href="table_window_command_line.htm">command line</a> on which you can type your <a href="calc.htm">table calculation</a> statements, </li>
+
+<li>a <a href="table_window_statistics_pane.htm">statistics pane</a>, at the bottom of a table window, to view the minimum, maximum, average, standard deviation and sum of values in a value column, </li>
+
+<li>a <a href="table_window_record_view_pane.htm">record view</a> (dockable window) in which you can display table data record by record, </li>
+
+<li>a <a href="table_window_status_bar.htm">status bar</a>, at the bottom of a table window, which gives short information on highlighted menu commands, and for certain mouse positions. </li>
+
+</ul>
+
+<p>Furthermore, a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> is available. </p>
+
+<p class=defnewpar>The remainder of this topic is divided into the following sections:</p>
+
+<ul> 
+
+<li><a href="#showtabledata"><span class=bookmark>Showing table data</span></a></li>
+
+
+<li><a href="#basicactionstablewindow"><span class=bookmark>Basic actions in a table window</span></a></li>
+
+<li><a href="#edittabledata"><span class=bookmark>Editing table data</span></a></li>
+
+<li><a href="#calcwithtabledata"><span class=bookmark>Calculating with table data</span></a></li>
+
+<li><a href="#otherfunctablewindow"><span class=bookmark>Other functionality of a table window</span></a></li>
+
+</ul>
+
+<h2 id="showtabledata">Showing table data </h2>
+
+<p class=kopjeaftertitlesub>Contents of the table viewer:</p>
+
+<p>The table viewer displays the contents of your table. A table consists of <a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >columns</a>, records and fields. Schematically, this looks like: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/tableexample.gif" align=bottom width="257" height="76"></p>
+
+<p class=defnewpar><b>Record names</b> or <b>record numbers</b> appear on (gray) record buttons that are arranged along the left side of the table. </p>
+
+<ul>
+
+        <li>Record names are shown when the table is an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>; the record buttons list the class names or IDs of the map to which this table relates. </li>
+
+        <li>Record numbers are shown when the table is not an attribute table, i.e. when the domain of the table is <a href="..//ilwis/popup/yy_system_domain_none_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>None</span></a>. Such tables are for instance the result of an <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>. </li>
+
+</ul>
+
+<p class=defnewpar><b>Column names</b> appear on (gray) column buttons, also called column headers, arranged along the top of the table viewer. </p>
+
+<p class=defnewpar>The record buttons and column headers in a table window are sensitive to clicking, double-clicking and <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag-and-drop</a> actions. </p>
+
+<p class=defnewpar>In general, a table window displays a table. However, parts of the table viewer are also used when displaying a <a href="..//ilwis/popup/objects_histogram_popup.htm" onClick="return popup(this, 'notes')" >histogram</a>, a cross table, or a <a href="..//ilwis/popup/objects_table2dim_popup.htm" onClick="return popup(this, 'notes')" >two-dimensional table</a>, or when opening the <a href="..//ilwis/popup/georeference_tiepoints_editor_popup.htm" onClick="return popup(this, 'notes')" >georefence tiepoints editor</a> or the <a href="..//ilwis/popup/coordinate_system_tiepoint_editor_popup.htm" onClick="return popup(this, 'notes')" >coordinate system tiepoints editor</a>. </p> 
+
+<p>Advanced users may also open objects as a table which are internally stored as tables, such as: point maps; class, ID, and picture domains; class representations; georeference tiepoints. You can then edit and calculate with the table-owned columns. For more information, see <a href="how_to_open_objects_as_a_table_advanced.htm">How to open objects as a table</a>.</p>
+
+<p class=defnewpar>For more information on creating new tables, see <a href="how_to_create_tables.htm">How to create a table</a>. </p>
+
+<p>To display existing tables in a table window, see <a href="how_to_display_maps_and_tables.htm">How to display maps and tables</a>. </p>
+
+</ul>
+
+<p class=kopje>Statistics pane, to view statistics of value columns:</p>
+
+<p>The <a href="table_window_statistics_pane.htm">statistics pane</a> can be shown in a split window at the bottom of the table window. It shows for every value column: minimum, maximum, average, standard deviation and sum of the values in the value column. </p>
+
+<p class=defnewpar>To switch on the statistics pane: </p>
+
+<ul>
+
+<li>choose <span class=arial>Statistics Pane</span> from the <a href="table_window_menu_commands.htm">View menu</a>. </li>
+
+</ul>
+
+<p class=defnewpar>For more information, refer to <a href="table_window_statistics_pane.htm">Table window : statistics pane</a>. </p>
+
+<p class=kopje>Record View, to view table data record by record:</p>
+
+<p><a href="table_window_record_view_pane.htm">Record View</a> can be used to display table data for a single specific record. </p>
+
+<p class=defnewpar>To switch on the Record View dockable window:</p>
+
+<ul>
+
+<li>	choose <span class=arial>Record View</span> from the <a href="table_window_menu_commands.htm">View menu</a>, or </li>
+
+<li>	click a specific record button in the table. </li>
+
+</ul>
+
+<p class=defnewpar>For more information, refer to <a href="table_window_record_view_pane.htm">Table window : record view</a>. </p>
+
+<p class=kopje>Setting the font for table windows: </p>
+
+<p>The font that is used in a table can be set in the Preferences: </p>
+
+<ul>
+
+<li>in the Main window, choose <span class=arial><a href="../ilwismen/main_window_preferences.htm">Preferences</a></span> from the <a href="main_window_menu_commands.htm">File menu</a>, </li>
+
+<li>open the <span class=arial>Font</span> item and click <span class=arial>Table Font</span>. </li>
+
+</ul>
+
+<h2 id="basicactionstablewindow">Basic actions in a table window </h2>
+
+<p><span class=kopje>Column Management:</span> <a href="../ilwismen/column_management.htm"><img src="../images/columnmanagement.gif" align=bottom width="45" height="17" border="none"></a> </p>
+
+<p>Column Management provides you with a simple interface to:</p>
+
+<ul>
+
+<li>	add and delete columns,</li>
+
+<li>	change the properties of a column: change the number of decimals shown for a value column, change the width of a column, or change the expression of a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent column</a>,</li>
+
+<li>	change the order of columns,</li>
+
+<li>	view whether dependent columns are up-to-date; if not, you can make columns up-to-date.</li>
+
+</ul>
+
+<p class=defnewpar>To open Column Management: </p>
+
+<ul>
+
+<li>click the Column Management button <a href="../ilwismen/column_management.htm"><img src="../images/columnmanagement.gif" align=bottom width="45" height="17" border="none"></a> at the upper left corner of the table viewer, or </li>
+
+<li>choose <span class=arial><a href="../ilwismen/column_management.htm">Column Management</a></span> from the <a href="table_window_menu_commands.htm">Columns menu</a>. </li>
+
+</ul>
+
+<p class=defnewpar>For more information, refer to <a href="../ilwismen/column_management.htm">Column Management</a> or to <a href="how_to_use_columns.htm">How to use columns</a>.</p>
+
+<p class=kopje>To go to a specific column or record:</p>
+
+<ul>
+
+<li>Choose <span class=arial><a href="../ilwismen/goto_column.htm">Goto Column</a></span> from the <a href="table_window_menu_commands.htm">Columns menu</a>. </li>
+
+        <p>Select a column and the table window will scroll to that column. </p>
+
+<li>Choose <span class=arial><a href="../ilwismen/goto_record.htm">Goto Record</a></span> from the <a href="table_window_menu_commands.htm">Records menu</a>. </li>
+
+        <p>Select a record and the table window will scroll to that record; the record will furthermore be shown in record view. </p>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <p class=tiptext><span class=tip>Tip: </span>To move to the first, previous, next, or last record, you can also use the <img src="../images/table_first_rec.gif" align=bottom width="22" height="22"> <img src="../images/table_prev_rec.gif" align=bottom width="22" height="22"> <img src="../images/table_next_rec.gif" align=bottom width="22" height="22"> <img src="../images/table_last_rec.gif" align=bottom width="22" height="22"> buttons in the <a href="table_window_toolbar.htm">toolbar</a>. </p>
+
+</ul>
+
+<p class=kopje>To add or delete columns:</p>
+
+<p>To add an editable column:</p>
+
+<ul>
+
+<li>click or double-click the column button to the right of the last existing column in the table viewer, </li>
+
+<li>choose <span class=arial><a href="../ilwismen/add_column_to_table.htm">Add Column</a></span> from the columns menu, or </li>
+
+<li>click the <span class=arial>Add Column</span> button in the <span class=arial><a href="../ilwismen/column_management.htm">Column Management</a></span> dialog box. </li>
+
+</ul>
+
+<p>For more information, refer to <a href="../ilwismen/add_column_to_table.htm">Add Column</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>You can also obtain new columns by typing a TabCalc formula on the command line of the table window. For more information, see section <a href="#calcwithtabledata"><span class=bookmark>Calculating with table data</span></a> below. </p>
+
+<p class=defnewpar>To delete one or more subsequent columns:</p>
+
+<ul>
+
+<li>click the column header of the first column of a sequence of columns you wish to delete, </li>
+
+<li>hold the <span class=arial>Shift</span> key down, and </li>
+
+<li>click the column header of the last column of a sequence of columns you wish to delete, and </li>
+
+<li>click the <span class=arial>Delete</span> button in the toolbar, or choose <span class=arial>Delete</span> from the Edit menu, or press the <span class=arial>Del</span> key on the keyboard. </li>
+
+</ul>
+
+<p class=defnewpar>For more information, refer to <a href="../ilwismen/delete_selection_from_table.htm">Table window: Clear/Delete</a>. </p>
+
+<p class=kopje>To change the width or to change the order of columns:</p>
+
+<p>To change the width of a column: </p>
+
+<ul>
+
+<li>position the mouse pointer at the end of a column, </li>
+
+<li>the mouse pointer will change into a double-sided arrow, </li>
+
+<li>drag the mouse pointer to the right to make the column wider, or drag the mouse pointer to left to make the column narrower. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/tablecolumnwidth.gif" align=bottom width="272" height="75"></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>To change the width of a column, you can also use <a href="../ilwismen/column_management.htm">Column Management</a> or <a href="../ilwismen/column_properties.htm">Column Properties</a>. </p>
+
+<p class=defnewpar>To move a column to another position:</p>
+
+<ul>
+
+<li>click the column header of the column you wish to move, and hold the left mouse button down, </li>
+
+<li>the mouse pointer will change into a column icon <img src="../images/columngray.gif" align=bottom width="13" height="14">, and </li>
+
+<li>drag the column to another position. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/tablecolumnmove.gif" align=bottom width="272" height="75"></p>
+
+<p class=kopje>To add and to delete records:</p>
+
+<p>If the table is an attribute table, the records in the table are part of a domain which is both used by the table and by the map to which the table refers. </p>
+
+<ul>
+
+<li>To <i>add</i> a record to an attribute table which uses a domain Class or ID, you have to add a class name or identifier to that domain in the Domain Class/ID editor. </li>
+
+<li>To <i>delete</i> a record from a table which uses a domain Class or ID, you have to delete an item from that domain in the domain Class/ID editor (not advised). </li>
+
+</ul>
+
+<p class=defnewpar>If the table is not an attribute table, but uses system domain None: </p>
+
+<ul>
+
+<li>to <i>add</i> a record, choose <span class=arial>Add Record</span> from the Edit menu, </li>
+
+<li>to <i>delete</i> one or more records, select a single record or select a sequence or records, then click the <span class=arial>Delete</span> button in the toolbar, or choose <span class=arial>Delete</span> from the Edit menu, or press the <span class=arial>Del</span> key on the keyboard. </li>
+
+</ul>
+
+<p class=kopje>To sort records:</p>
+
+<ul>
+
+<li>Choose <span class=arial><a href="../ilwismen/sort_records.htm">Sort</a></span> from the <a href="table_window_menu_commands.htm">Columns menu</a>.  </li>
+
+</ul>
+
+<p>The <a href="../ilwismen/sort_records.htm">Sort Records</a> dialog box will be opened. You can sort on the domain of the table or sort on a column of the table, either in ascending or descending order. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To sort on a column, you can also select a column, then click the selection with the right mouse button and choose <span class=arial>Sort Ascending</span> or <span class=arial>Sort Descending</span> from the context-sensitive menu. </p>
+
+<p class=kopje>To view the properties of the table or the properties of a column:</p>
+
+<p>To view the properties of the table: </p>
+
+<ul>
+
+<li>choose <span class=arial><a href="../ilwismen/table_properties.htm">Properties</a></span> from the File menu. </li>
+
+</ul>
+
+<p>The <a href="../ilwismen/table_properties.htm">Table Properties</a> sheet will be opened. </p>
+
+<p class=defnewpar>To view the properties of a column:</p>
+
+<ul>
+
+<li>double-click a column header, </li>
+
+<li>select a column, and click the <span class=arial>Properties</span> button <img src="../images/prop.gif" align=bottom width="22" height="22"> in the toolbar, or </li>
+
+<li>select a column, click the selection with the right mouse button and choose <span class=arial>Properties</span> from the context-sensitive menu. </li>
+
+</ul>
+
+<p>The <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box will be opened. </p>
+
+<h2 id="edittabledata">Editing table data</h2>
+
+<p class=kopjeaftertitlesub>To edit a table:</p>
+
+<p>Fields of editable columns, i.e. columns which are not <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> nor read-only, can be edited directly in the table viewer, but also in record view. </p>
+
+<ul>
+
+<li>For fields in columns that use a value or identifier domain, you can select a field by clicking it with the mouse pointer and directly start typing. </li>
+
+<li>For fields in columns that use a class domain, you can select a field and then select a class name from the drop-down list. </li>
+
+</ul>
+
+<p>For more information, see <a href="how_to_edit_tables.htm">How to edit a table</a>. </p>
+
+<p class=defnewpar>If you wish to edit many single fields in the table, it is advised not to use the <span class=arial>Enter</span> key on the keyboard, instead:</p>
+
+<ul>
+
+<li>	press the <span class=arial>Down Arrow</span> or <span class=arial>Up Arrow</span> keys, <br>to move <i>downward</i> or to move <i>upward</i> in the table to edit other fields; </li>
+
+<li>	press the <span class=arial>Tab</span> key, <br>to move to the <i>right</i> in a table to edit other fields; </li>
+
+<li>	press the <span class=arial>Shift+Tab</span> keys, <br>to move to the <i>left</i> in a table to edit other fields.</li>
+
+</ul>
+
+<p>Whenever you move to another field, the previously edited field is directly stored on disk. </p>
+
+<p class=defnewpar>As long as the 'Edit box' is open, you can still press <span class=arial>Esc</span> to undo an edit action. After you pressed the <span class=arial>Enter</span> key, or the <span class=arial>Arrow Up</span>, <span class=arial>Arrow Down</span>, <span class=arial>Tab</span>, or <span class=arial>Shift+Tab</span> keys, the edit action is completed and the change is stored. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>You cannot edit: </p>
+
+<ul class=tipul>
+
+<li>fields of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> columns, which contain the results of a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculation</a> or a column operation, </li>
+
+<li>fields in a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> table, where the table is the result of an <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>, or </li>
+
+<li>fields of read-only columns. </li>
+
+<p>For more information, see <a href="ilwis_objects_columns.htm">ILWIS objects : columns</a>.</p>
+
+</ul>
+
+<p class=defnewpar>In the table viewer, you can not only edit single fields, but you can also edit the values of blocks of fields in a single column, or the values of multiple fields in one or more records in multiple columns. </p>
+
+<ul>
+
+<li>Select one or more fields, or one or more records, </li>
+
+<li>click the selection with the right mouse button, and </li>
+
+<li>choose <span class=arial>Edit</span> for instance from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p>The <a href="../ilwismen/table_window_edit_single_column.htm">Edit fields in a single column</a> or the <a href="../ilwismen/table_window_edit_multiple_columns.htm">Edit fields in multiple columns</a> dialog box will appear. </p>
+
+<p class=defnewpar>All editing changes are directly stored on disk. You cannot undo an editing action. </p>
+
+<h2 id="calcwithtabledata">Calculating with table data</h2>
+
+<p class=kopjeaftertitlesub>Column calculations:</p>
+
+<p>A very important feature of a table window is its <a href="..//ilwis/popup/command_line_table_window_popup.htm" onClick="return popup(this, 'notes')" >command line</a> through which calculations can be performed. The available MapCalc and TabCalc operators and functions are extensively described, including examples, in the <a href="calc.htm">Map and Table Calculation</a> section. </p>
+
+<p class=defnewpar>To calculate with columns, type a tabcalc formula on the command line of the table window. A very simple calculation may read: </p>
+
+<p class=calc0>OutColumn = Column1 + Column2</p>
+
+<p>When the definition symbol (=) is used, calculations will result in <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent columns</a>. </p>
+
+<p>Besides some 50 available internal TabCalc functions, you can also define your own functions. </p>
+
+<p class=kopje>Pocket line calculator:</p>
+
+<p>Optionally, you can use the command line as a <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >pocket line calcalator</a>: start an expression by a questionmark. You will then calculate a single value, which will be displayed in a message box and you will not obtain an output column. </p>
+
+<p class=kopje>Column operations: </p>
+
+<p>You can also use the command line to perform an aggregation or a join, to calculate a cumulative sum or other statistics, to perform a least squares fit, to calculate semi-variogram values according to a semi-variogram model, or to classify column values (slicing). However, at first sight, the required syntax may seem rather complicated. It may therefore be easier to use the <span class=arial>Aggregate</span>, <span class=arial>Join</span>, <span class=arial>Cumulative</span>, <span class=arial>Statistics</span>, <span class=arial>Least Squares</span>, <span class=arial>Semi-variogram</span> or <span class=arial>Column Slicing</span> commands on the <a href="table_window_menu_commands.htm">Columns menu</a>. The appearing dialog box, or the Join wizard, will then produce the necessary syntax for you. </p>
+
+<p class=kopje>Making dependent columns up-to-date:</p>
+
+<p>When you edit values in one or more source columns, the values of dependent columns (which may use the values of these source columns as input) are not automatically recalculated or made up-to-date. </p>
+
+<p class=defnewpar>To recalculate all dependent columns in the table: </p>
+
+<ul>
+
+<li>click the <span class=arial>Update All Columns</span> button <img src="../images/table_update_all_cols.gif" align=bottom width="22" height="22"> in the <a href="table_window_toolbar.htm">toolbar</a>, or </li>
+
+<li>choose <span class=arial><a href="../ilwismen/update_all_columns.htm">Update All Columns</a></span> from the Columns menu. </li>
+
+</ul>
+
+<p class=defnewpar>When you used the assignment symbol (:=) in calculations, the output of the calculation will be an editable source column again. These cannot be recalculated when input has changed. </p>
+
+<h2 id="otherfunctablewindow">Other functionality of a table window</h2>
+
+<p class=kopjeaftertitlesub>To copy (part of) the table into the clipboard:</p>
+
+<ul>
+
+<li>Select the part of the table which you wish to copy to the clipboard, and </li>
+
+        <ul>
+
+        <li>choose <span class=arial><a href="../ilwismen/copy_table_selection_to_clipboard.htm">Copy</a></span> from the <a href="table_window_menu_commands.htm">Edit menu</a>, or </li>
+
+        <li>click the <span class=arial>Copy</span> button <img src="../images/copy.gif" align=bottom width="22" height="22"> in the <a href="table_window_toolbar.htm">toolbar</a>, or </li>
+
+        <li>press the <span class=arial>Ctrl+C</span> keys on the keyboard, or </li>
+
+        <li>click the selection with the right mouse button, and choose <span class=arial>Copy</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+        </ul>
+
+</ul>
+
+<p>For more information and examples, refer to <a href="../ilwismen/copy_table_selection_to_clipboard.htm">Table window : Copy</a>. 
+
+<p class=defnewpar>You can use the <span class=arial>Paste</span> option in the same table or another ILWIS table, or in another Windows application to paste the copied part into the other application. For more information on and examples of pasting into ILWIS tables, refer to <a href="../ilwismen/paste_table_data_into_table_window.htm">Table window : Paste</a>. 
+
+<p class=kopje>To print a table:</p>
+
+<ul>
+
+<li>Choose <span class=arial><a href="../ilwismen/print_table.htm">Print</a></span> from the <a href="table_window_menu_commands.htm">File menu</a> in a table, or </li>
+
+<li>click the <span class=arial>Print</span> button <img src="../images/print.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/table_window_toolbar.htm">toolbar</a>. </li>
+
+</ul>
+
+<p>You can print the entire table or a selection of the table, and you can select the font for printing.</p>
+
+<p class=kopje>Join, Aggregate, Statistics etc. through the Columns menu:</p>
+
+<p>To perform a join or an aggregation, to calculate a cumulative sum or other statistics, to perform a least squares fit, to calculate semi-variogram values according to a semi-variogram model, or to classify column values (slicing), you can use the corresponding commands on the <a href="table_window_menu_commands.htm">Columns menu</a>. </p>
+
+<p class=defnewpar>By filling out the appearing <a href="../ilwismen/join_column.htm">Join wizard</a>, or the <a href="../ilwismen/aggregate_column.htm">Aggregate</a>, <a href="../ilwismen/cumulative_column.htm">Cumulative</a>, <a href="../ilwismen/column_statistics.htm">Statistics</a>, <a href="../ilwismen/least_squares_fit.htm">Least Squares Fit</a>, <a href="../ilwismen/column_semivariogram.htm">Semi-variogram</a> or <a href="../ilwismen/column_slicing.htm">Column Slicing</a> dialog box, the necessary syntax will be produced for you, and the results will be calculated. </p>
+
+<p class=kopje>Graphs:</p>
+
+<p>From a table window, you can create <a href="..//ilwis/popup/objects_graph_popup.htm" onClick="return popup(this, 'notes')" >graphs</a>. You can either: </p>
+
+<ul>
+
+<li>create a graph from columns (i.e. from the values in two columns in the table) and later on, optionally, add other graphs from columns, graphs from formula, graphs by least squares fit, or semi-variogram models, or </li>
+
+<li>create a rose diagram (to plot directions or angles against a Y-value) and later on, optionally, add other rose diagrams.  </li>
+
+</ul>
+
+<p>Graphs are shown in a <a href="graph_window.htm">graph window</a>. </p>
+
+<p class=defnewpar>To create a graph: </p>
+
+<ul>
+
+<li>choose <span class=arial><a href="../ilwismen/create_a_graph.htm">Create Graph</a></span> or <span class=arial><a href="../ilwismen/create_a_rose_diagram.htm">Create Rose Diagram</a></span> from the File menu in a table window, or the Main window, </li>
+
+<li>choose <span class=arial>New Graph</span> from the File menu in an existing graph window, or </li>
+
+<li>click a table in a Catalog with the right mouse button and choose <span class=arial><a href="../ilwismen/create_a_graph.htm">Create Graph</a></span> or <span class=arial><a href="../ilwismen/create_a_rose_diagram.htm">Create Rose Diagram</a></span> from the context-sensitive menu. </li>
+
+</ul>
+
+<p class=defnewpar>For more information, refer to <a href="graph_window_functionality.htm">Graph window : functionality</a>, <a href="graph_window_examples_of_graphs.htm">Graph window : examples of graphs</a>, <a href="graph_window_graph_management.htm">Graph window : Graph management</a>. </p>
+
+<p class=kopje>Confusion matrix:</p>
+
+<p>To assess the accuracy of an image classification, you can cross a raster map containing extra ground thruth information with your classification result. When you display the cross table, you can display a confusion matrix: choose the <a href="../ilwismen/confusion_matrix.htm"><span class=arial>Confusion matrix</a></span> command from the <a href="table_window_menu_commands.htm">View menu</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="216">
+<p class=seealsolinks><a href="table_window_statistics_pane.htm">Table window : statistics pane</a></p>
+
+</td>
+<td valign="top">
+<p class=seealsolinks><a href="ilwis_objects_tables.htm">ILWIS objects : tables</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=seealsolinks><a href="table_window_record_view_pane.htm">Table window : record view</a></p>
+
+</td>
+<td valign="top">
+<p class=seealsolinks><a href="ilwis_objects_columns.htm">ILWIS objects : columns</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=seealsolinks><a href="table_window_toolbar.htm">Table window : toolbar</a></p>
+
+</td>
+<td valign="top">
+<p class=seealsolinks><a href="how_to_create_tables.htm">How to create a table</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=seealsolinks><a href="table_window_command_line.htm">Table window : command line</a></p>
+
+</td>
+<td valign="top">
+<p class=seealsolinks><a href="how_to_add_a_column_to_a_table.htm">How to add a column to a table</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=seealsolinks><a href="table_window_menu_commands.htm">Table window : menu commands</a></p>
+
+</td>
+<td valign="top">
+<p class=seealsolinks><a href="how_to_use_columns.htm">How to use columns</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=seealsolinks><a href="table_window_mouse_functions.htm">Table window : mouse functions</a></p>
+
+</td>
+<td valign="top">
+<p class=seealsolinks>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=seealsolinks><a href="table_window_status_bar.htm">Table window : status bar</a></p>
+
+</td>
+</tr>
+</table>
+
+</body

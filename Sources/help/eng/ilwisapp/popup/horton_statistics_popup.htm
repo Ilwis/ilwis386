@@ -1,0 +1,54 @@
+<html>
+
+<head>
+<title>horton statistics popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Horton Statistics</p>
+
+<p class="defnewpar">The <a href="..//ilwisapp/horton_statistics.htm" onClick="return popup(this, 'notes')" >Horton Statistics</a> operation calculates for each (Strahler) stream order number and for each merged catchment: </p> 
+
+<ul>
+<li class="ls01be">the number of streams, </li>
+<li class="ls01be">the average stream length (km), and </li>
+<li class="ls01be">the average area of catchments (km<sup>2</sup>), and </li>
+<li class="ls01be">expected values for these by means of a least squares fit. </li>
+</ul>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<p class="defnewpar">The output is stored in a table which can be used to construct so-called Horton plots in a graph window. </p>
+
+<p class="defnewpar">Horton plots enable you to inspect the regularity of your extracted stream network based on the (Strahler) stream order numbers, and may serve as a quality control indicator for the entire stream network extraction process. It is expected that: </p>
+<ul>
+<li class="ls01be">the number of streams show a relative decrease for subsequent Strahler order numbers, </li>
+<li class="ls01be">the length of streams and the catchment areas show a relative increase for subsequent Strahler order numbers. </li>
+</ul>
+
+<p class="defnewpar">As input is required: </p>
+<ul>
+<li>the output of a previous Catchment extraction operation, </li>
+<li>the output of a previous Catchment merge operation, </li>
+<li>the output of a previous Drainage network ordering operation. </li>
+</ul>
+
+</body

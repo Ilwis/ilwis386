@@ -1,0 +1,61 @@
+<html>
+
+<head>
+<title>Basic concepts : window types</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Basic concepts, ILWIS window types">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Basic concepts</h1>
+
+<h1 class=secondline>ILWIS window types</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Basically, there are four ILWIS window types: the <b>Main window</b>,<b> map windows</b>,<b> table windows</b> and the <b>pixel info window</b>. </p>
+
+<p class=defnewpar>The <a href="../ilwis/main_window.htm">Main window</a> is the window which is opened when ILWIS is started. The Main window consists of: </p>
+
+<ul>
+
+<li> 	a <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >Command line</a> on which you can type commands to display objects, map calculation formulae, expressions to perform complete operations, run scripts, etc.;</li>
+
+<li>	one or more <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalogs</a> which display the objects available in a certain directory, the raster maps in a map list or the objects in an object-collection; you can for instance drag a map from the Catalog to an existing map window, or to an operation in the Operation-tree or the Operation-list;</li>
+
+<li>	a <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> and an <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, and the <a href="main_window_menu_commands.htm">Operations menu</a> which list all ILWIS operations; and</li>
+
+<li>	a <a href="..//ilwis/popup/navigator_popup.htm" onClick="return popup(this, 'notes')" >Navigator</a> to go to other drives or directories.</li>
+
+</ul>
+
+<p class=defnewpar>A <a href="../ilwis/map_window.htm">map window</a> displays one or more maps with grid lines, graticules or annotation text layers. You can open as many map windows as you like. When a raster map is displayed, you can display other point, segment or polygon maps on top of this raster map; add annotation; zoom in and out; and pan or scroll through the map if the map does not fit in the map window. To add or remove layers,  to change the order of layers or to change the display options of a layer, you can use the Layer Management pane. To see the value or meaning of a pixel, point, segment, or polygon displayed in a map window, press the left mouse button (info). When the displayed map has an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>, you can double-click in the map window to see and edit the attributes. Furthermore, all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> can be displayed one after the other in a map window as a <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>. </p>
+
+<p>The contents of a map window can be saved as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. From a map view, you can create a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> to which you can and add annotation. </p>
+
+<p>You can use the <a href="..//ilwis/popup/editors_popup.htm" onClick="return popup(this, 'notes')" >map editors</a> to edit positions, values or meanings of points, segments, polygons and pixels. </p>
+
+<p class=defnewpar>A <a href="../ilwis/table_window.htm">table window</a> displays a table and allows you to edit the table. You can open as many table windows as you like. A table can be shown as a whole, or record by record. When the table does not fit in the table window, scroll bars are provided. Fields in a table can be edited by clicking them. The width of a column and the order of columns can easily be changed. On the <a href="..//ilwis/popup/command_line_table_window_popup.htm" onClick="return popup(this, 'notes')" >command line in a table window</a>, you can enter table calculation statements. Besides table calculations, you can perform joins between tables, aggregations and a least squares fit. From a table window, you can create graphs in a graph window. Also histograms are presented in a kind of table window; you can calculate with the columns of the histogram. Advanced users may also wish to open point maps, class/ID/picture domains or class representations a table; you can perform special calculation with the coordinates, colors, etc. </p>
+
+<p class=defnewpar>In the <a href="../ilwis/pixel_information_window.htm">pixel info window</a>, you can see the values or meanings of multiple maps and attribute values stored the attribute tables of the maps at the current position of the mouse pointer in a map window. </p>
+
+<p class=defnewpar>Map windows, table windows and the pixel information window are called data windows because they can display <a href="ilwis_objects_data_objects.htm">data objects</a>.</p>
+
+</body

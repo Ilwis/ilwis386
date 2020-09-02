@@ -1,0 +1,281 @@
+<html>
+
+<head>
+<title>%K</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="%K, Predefined variables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>Predefined variable %K</h1>
+
+<p class=defnewpar>Variable to calculate with the class names or IDs of the domain of a table.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>%K</span></p>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li><span class=courier>K</span> stands for Key column. </li>
+	<li>The table is supposed to use a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a>,
+      <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a>, <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" > group</a> or
+      <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" > Bool</a> domain. </li>
+	<li>Normally, column calculations are performed on all records of specified column names. To calculate with specific records of a table using a Class, ID, group or Bool domain, specify [<span class=courier>%K</span>] as an index behind the output column name in an expression. <span class=courier>%K</span> can be replaced by a class name, ID, etc. in double quotes.
+	<table cellspacing="0">
+      <tr>
+        <td valign="top" width="175"><p>Column[<i>expr</i>]</p></td>
+        <td valign="top"><p>to use values of a column indexed by record values, class names or IDs</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="175"><p>Table.Column[<i>expr</i>]</p></td>
+        <td vAlign="top"><p>to use values of a column in another table, indexed by record values, class names or IDs</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="175"><p>Table.Ext.Column[<i>expr</i>]</p></td>
+        <td vAlign="top"><p>to use values of a column in a table with another extension than <span class=courier>.tbt</span> (e.g. <span class=courier>.his</span>), indexed by record values, class names or IDs.</p></td>
+      </tr>
+  	</table>
+  	In between the square brackets, you can write an expression <i>expr</i> containing <span class=courier>%K</span>.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+<p class=kopjeaftertitlesub>TabCalc example:</p>
+
+<p class=calc00>OutCol1 = %K</p>
+<p class=calc00>OutCol2 = NAME(%K)</p>
+<p class=calc00>OutCol3 = CODE(%K)</p>
+<p class=calc00>OutCol4 = IFF(%K=&quot;Vacant&quot;,0,Population)</p>
+<p class=calc00>OutCol5{dom=value;vr=0:1000:1}:=?</p>
+<p class=calc00>OutCol5[&quot;Vacant&quot;]:=0</p>
+<p class=calc00>OutCol5[&quot;Residential&quot;]:=500</p>
+<p class="emptylinehalf">&nbsp;</p>
+<table cellspacing="0">
+</table>
+<table>
+<tr>
+	<td valign="top"><p class="tcolh">Domain</p></td>
+	<td valign="top"><p class="tcolh">Population</p></td>
+	<td valign="top"><p class="tcolh">OutCol1</p></td>
+	<td valign="top"><p class="tcolh">OutCol2</p></td>
+	<td valign="top"><p class="tcolh">OutCol3</p></td>
+	<td valign="top"><p class="tcolhr">OutCol4</p></td>
+	<td valign="top"><p class="tcolhr">OutCol5</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class="t1">Vacant</p></td>
+	<td valign="top"><p class="t1">100</p></td>
+	<td valign="top"><p class="t1">Vacant</p></td>
+	<td valign="top"><p class="t1">Vacant</p></td>
+	<td valign="top"><p class="t1">V</p></td>
+	<td valign="top"><p class="t1r">0</p></td>
+	<td valign="top"><p class="t1r">0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class="t1">Residential</p></td>
+	<td valign="top"><p class="t1">500</p></td>
+	<td valign="top"><p class="t1">Residential</p></td>
+	<td valign="top"><p class="t1">Residential</p></td>
+	<td valign="top"><p class="t1">R</p></td>
+	<td valign="top"><p class="t1r">500</p></td>
+	<td valign="top"><p class="t1r">500</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class="t1">Industrial</p></td>
+	<td valign="top"><p class="t1">250</p></td>
+	<td valign="top"><p class="t1">Industrial</p></td>
+	<td valign="top"><p class="t1">Industrial</p></td>
+	<td valign="top"><p class="t1">D</p></td>
+	<td valign="top"><p class="t1r">250</p></td>
+	<td valign="top"><p class="t1r">?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class="t1">Institutional</p></td>
+	<td valign="top"><p class="t1">50</p></td>
+	<td valign="top"><p class="t1">Institutional</p></td>
+	<td valign="top"><p class="t1">Institutional</p></td>
+	<td valign="top"><p class="t1">S</p></td>
+	<td valign="top"><p class="t1r">50</p></td>
+	<td valign="top"><p class="t1r">?</p></td>
+</tr>
+</table>
+<p class="emptyline">&nbsp;&nbsp;</p>
+<ul>
+	<li>Column <span class="courier">OutCol1</span> contains the names of the domain, that is used by the table. The column uses the same domain as the table.</li>
+	<li>Column <span class="courier">OutCol2</span> contains the names of the items in the domain of the table; the column uses the system <span class="courier">String</span> domain.</li>
+	<li>Column <span class="courier">OutCol3</span> contains the codes of the items in the domain of the table; the column uses the system <span class="courier">String</span> domain.</li>
+	<li>Column <span class="courier">OutCol4</span> contains value <span class=courier>0</span> if the record is &quot;<span class=courier>Vacant</span>&quot; else it contains the values of column <span class=courier>Population</span>.</li>
+	<li>Column <span class=courier>OutCol5</span> is created as an editable column. The <span class=courier>Residential</span> record of this column is assigned value <span class=courier>500</span>; the <span class=courier>Vacant</span> record is assigned value <span class=courier>0</span>.</li>
+</ul>
+<p class="kopje">TabCalc example using two different tables:</p>
+<p>Suppose we have a table <span class=courier>Province</span> that contains information about the amount of products available in
+provinces. Further, we have a table <span class=courier>ProductPrice</span> with product prices. To obtain the yield of wood per province, multiply column <span class=courier>Wood</span> in table <span class=courier>Landuse</span> with the cell containing the wood price in column <span class=courier>Price</span> of table <span class=courier>ProductPrice</span>.</p>
+<p class="calc0linsp03befaft">WoodPrice = ProductPrice.Price[&quot;Wood&quot;] *
+Province.Wood</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" colspan="4"><p class="th">Province.tbt</p></td>
+    <td valign="top" colspan="3"><p class="th">ProductPrice.tbt</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="tcolh">Dom.<br>Province</p></td>
+    <td valign="top" width="55"><p class="tcolhr"><br>Wood</p></td>
+    <td valign="top" width="55"><p class="tcolhr"><br>Fodder</p></td>
+    <td valign="top" width="20"></td>
+    <td valign="top" width="45"><p class="tcolh">Dom.<br>Product</p></td>
+    <td valign="top"><p class="tcolhr"><br>Price</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Province1</p></td>
+    <td valign="top" width="55"><p class="t1r">100</p></td>
+    <td valign="top" width="55"><p class="t1r">150</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1">Wood</p></td>
+    <td valign="top"><p class="t1r">10</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Province2</p></td>
+    <td valign="top" width="55"><p class="t1r">200</p></td>
+    <td valign="top" width="55"><p class="t1r">600</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1">Fodder</p></td>
+    <td valign="top"><p class="t1r">30</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Province3</p></td>
+    <td valign="top" width="55"><p class="t1r">500</p></td>
+    <td valign="top" width="55"><p class="t1r">50</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1">...</p></td>
+    <td valign="top"><p class="t1r">...</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Province4</p></td>
+    <td valign="top" width="55"><p class="t1r">400</p></td>
+    <td valign="top" width="55"><p class="t1r">75</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"></td>
+    <td valign="top"></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Province5</p></td>
+    <td valign="top" width="55"><p class="t1r">200</p></td>
+    <td valign="top" width="55"><p class="t1r">100</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"></td>
+    <td valign="top"></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">...</p></td>
+    <td valign="top" width="55"><p class="t1r">...</p></td>
+    <td valign="top" width="55"><p class="t1r">...</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"></td>
+    <td valign="top"></td>
+  </tr>
+</table>
+
+<p class="emptyline">&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+    <td valign="top" colspan="3"><p class="th">Province.tbt</p></td>
+</tr>
+<tr>
+    <td valign="top"><p class="tcolh">Dom.<br>Province</p></td>
+    <td valign="top"><p class="tcolhr"><br>Wood</p></td>
+    <td valign="top"><p class="tcolhr"><br>Fodder</p></td>
+    <td valign="top"><p class="tcolhr"><br>WoodPrice</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">Province1</p></td>
+    <td valign="top"><p class="t1r">100</p></td>
+    <td valign="top"><p class="t1r">150</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">Province2</p></td>
+    <td valign="top"><p class="t1r">200</p></td>
+    <td valign="top"><p class="t1r">600</p></td>
+    <td valign="top"><p class="t1r">2000</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">Province3</p></td>
+    <td valign="top"><p class="t1r">500</p></td>
+    <td valign="top"><p class="t1r">50</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+  </tr>
+<tr>
+    <td valign="top"><p class="t1">Province4</p></td>
+    <td valign="top"><p class="t1r">400</p></td>
+    <td valign="top"><p class="t1r">75</p></td>
+    <td valign="top"><p class="t1r">4000</p></td>
+</tr>
+  <tr>
+    <td valign="top"><p class="t1">Province5</p></td>
+    <td valign="top"><p class="t1r">200</p></td>
+    <td valign="top"><p class="t1r">100</p></td>
+    <td valign="top"><p class="t1r">2000</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">...</p></td>
+    <td valign="top"><p class="t1r">...</p></td>
+    <td valign="top"><p class="t1r">...</p></td>
+    <td valign="top"><p class="t1r">...</p></td>
+  </tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>When using data from different tables all table names have to be fully
+specified in the TabCalc expression.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_x.htm">%X</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_y.htm">%Y</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_l.htm">%L</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_c.htm">%C</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_k.htm">%K</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_d.htm">%D</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_p.htm">%P</a></p></td>
+</tr>
+</table>
+
+</body

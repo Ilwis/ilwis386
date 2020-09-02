@@ -1,0 +1,194 @@
+<html>
+
+<head>
+<title>Segments to polygons : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segments to polygons">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segments to polygons</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Segments to Polygons operation automatically polygonizes a supposedly error free segment map. The operation is designed to be used after you have imported vector files from another package. All segments in the segment map must be connected to other segments or to themselves (islands) by nodes; dead ends, self overlap and/or intersections are not allowed. A <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> can be specified to polygonize specific segments. </p>
+
+<p class=defnewpar>A polygon is a list of a linked segments representing the (complete) boundary of an area. Provinces, soil units, cadastral lots and other mapping units can be stored as polygons. Polygon maps are generally used as a stepping stone to raster maps. </p>
+
+<p class=defnewpar>A segment map may contain different classes or IDs representing different 'layers'. From each segment class name/ID and from sets of class names/IDs, you can create different polygon maps. By selecting a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> the user specifies the segment class names/IDs that are to be used to create a polygon map. </p>
+
+<p class=kopje>Topological polygonization vs. non-topological polygonization: </p>
+
+<p>When using the Segments to Polygons operation, you can choose whether use topological polygonization or non-topological polygonization. </p>
+
+<p class=defnewpar>You should select topological polygonization when: </p>
+
+<ul>
+
+<li>you digitized the segments in ILWIS, </li>
+
+<li>you wish to polygonize imported segments and when you are sure that each segment can be used both to define the boundary of a polygon to its left and a polygon to its right (topological structure). </li>
+
+</ul>
+
+<p>Before the segments will be polygonized, they are first checked on dead ends, self overlap and intersections, see below. </p>
+
+<p class=defnewpar>You should select non-topological polygonization when: </p>
+
+<ul>
+
+<li>you imported non-topological polygons (e.g. DXF) into ILWIS earlier on, and now wish to polygonize the segment map which is the result of the import. In this type of segment maps, each segment has only 1 node (serving both as begin node and as end node), and each segment encloses exactly 1 polygon. Neighbouring polygons thus do not share the same segment as their boundary (non-topological structure). </li>
+
+</ul>
+
+<p>Only segments with a single node will be polygonized. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>You can check the structure of the segment map for instance by: </p>
+
+<ol class=tipol>
+
+<li>Open the segment map you wish to check in the Segment editor; </li>
+
+<li>Select a segment: </li>
+
+        <ul class=tipul>
+
+        <li>if the segment is just a part of the boundary of a complete future polygon, you may have the topological structure; </li>
+
+        <li>if the segment seems a nice boundary of a complete future polygon, you may have the non-topological structure as meant above; </li>
+
+        </ul>
+
+<p>Check for some other segments as well. </p>
+
+<li>Go to Move Points mode and zoom in a bit. <br>
+
+Take a node and move it a bit away, then redraw the map: </li>
+
+        <ul class=tipul>
+        
+        <li>if the segment just seems relocated and no other line appears on the previous position, you may have the topological structure; </li>
+
+        <li>if the moved segment is relocated but when also another line appears on the position from where you just moved the segment (segment seems to be 'double'), you may have the non-topological structure as meant above. </li>
+
+        </ul>
+
+<li>When the checks and criteria in steps 2 and 3 are true for the same thing (either topological or non-topological), you can draw the conclusion. </li>
+
+<li>When you have the non-topological structure of 1 node per segment, the segment check <span class=arial>Closed Segments</span> in the segment editor should not give any errors. </li>
+
+<li>Don't forget to <span class=arial><a href="../ilwismen/segment_editor_undo_all_changes.htm">Undo All Changes</a></span> in the segment editor; then close the editor. </li>
+
+</ol>
+
+<p class=kopje>Segment check during topological polygonization: </p>
+
+<p>Prior to the actual topological polygon creation, segments are checked for possible topological errors. Segment checking is carried out in three steps:</p>
+
+<ul>
+
+<li>	Self overlap check: to check whether a segment crosses itself (finding flase polygons);</li>
+
+<li>	Dead ends check: to check whether begin and end nodes of segments are properly snapped to other nodes;</li>
+
+<li>	Intersections check: to check whether different segments which cross each other have a node at the intersection.</li>
+
+</ul>
+
+<p class=defnewpar>Optionally, you can use the Auto Correction option to automatically remove any errors that may be encountered during the Check Segment phase:</p>
+
+<ul>
+
+<li>	false polygons will be automatically deleted;</li>
+
+<li>	segments which exactly overlay another segment will be deleted;</li>
+
+<li>	dead end segments will be deleted;</li>
+
+<li>	crossing segments will be split and snapped to each other.</li>
+
+</ul>
+
+<p>Erroneous segments will only be deleted from a temporary copy of the input segment map, not from the input segment map itself. </p>
+
+<p>If Auto Correction is not selected, the program will stop with an error message when a topological error is encountered.</p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>As the user has no control over the Auto Correction procedure, it is advised to polygonize segments within the <a href="../ilwis/segment_editor_functionality.htm">Segment editor</a> where you can correct errors yourself.</p>
+
+
+<p class=kopje>Naming the polygons: </p>
+
+<p>Polygons can be named using different methods:</p>
+
+<ul>
+
+<li>	Label Points: you need to specify a point map which contains the label points for the polygons. Each polygon will obtain the class name, ID or value of the point that is found to be located in a polygon. </li>
+
+<li>	Unique Identifiers: the polygons will be automatically and sequentially named as Pol 1, Pol 2, etc. These polygon names will be stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal <span class=courier>UniqueID</span> domain</a>). </li>
+
+<li>    Segment Codes (only available for non-topological polygonization): each polygon will obtain the name of the segment which encloses that polygon. </li>
+
+<li>    Domain (mainly used when segments are polygonized from within the segment editor): the user has to specify a domain which will be linked to the output polygon map. The output polygons will not have names yet. After polygonization, you need to assign names to the polygons manually, i.e. edit the polygon map. For more information, see <a href="../ilwismen/segment_editor_polygonize.htm">Segment editor : polygonize</a>. </li>
+
+</ul>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special requirements for the input segment map. </p>
+
+<p class=defnewpar>If the Label Points option is selected, the point map with the labels and the segment map should use the same or a compatible coordinate system. When the coordinate systems of the input maps are different (e.g. different projections) but compatible, the point coordinates will be transformed to the coordinate system of the segment map.</p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>Domain of output polygon map: </p>
+
+<ul>
+
+<li>When the Label Points option is used, the output polygon map will use the same domain as the specified point map containing the labels. </li>
+
+<li>When the Unique Identifiers option is used, the Unique IDs will be stored by the output map, i.e. the output map will use an <a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal <span class=courier>Unique ID</span> domain</a>.  For more information on internal domains, see <a href="../ilwis/how_to_open_internal_domains_representations_advanced.htm">How to open and edit internal domains</a>. </li>
+
+<li>When the Segments option is used, the output polygon map will use the same domain as the input segment map. </li>
+
+<li>When, in the segment editor, the Domain option is used, the output polygon map will use the specified domain. </li>
+
+</ul>
+
+<p class=defnewpar>The output polygon map will use the same coordinate system as the input segment map. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segments_to_polygons_dialog_box.htm">Segments to polygons : dialog box</a></p>
+
+<p class=seealsolinks><a href="segments_to_polygons_command_line.htm">Segments to polygons : command line</a></p>
+
+<p class=seealsolinks><a href="segments_to_polygons_algorithm.htm">Segments to polygons : algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_check_segments.htm">Segment editor : check segments</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_polygonize.htm">Segment editor : polygonize</a></p>
+
+</body

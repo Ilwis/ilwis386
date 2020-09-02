@@ -1,0 +1,171 @@
+<html>
+
+<head>
+<title>RIGHT</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="RIGHT, String functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>RIGHT( ) function</h1>
+
+<p class=defnewpar>Returns a number of characters of a string, counting from the end of the string.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>RIGHT</span>(<i>String</i>, <i>Value</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>String</i></td>
+	<td valign="top">is a string</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> or <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> domain, or <a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >system domain
+      <span class=courier>String</span></a></td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>Value</i></td>
+	<td valign="top">is the number of characters that should be returned</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Value range:</td>
+	<td valign="top">&gt;=0</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>RIGHT</span>  returns:</td>
+	<td valign="top">a string</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>String</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>If <i>Value</i> is greater than the length of the input string, the <span class=courier>RIGHT</span> function returns the entire
+      string.</li>
+	<li>If <i>Value</i> is not an integer value, it is rounded off.</li>
+	<li>When one of the input parameters is undefined, or when both input parameters are undefined, the output will also be undefined.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="185"><p class=calc00>? RIGHT(&quot;Landuse&quot;,3.5)</p></td>
+	<td><p>returns duse</p></td>
+</tr>
+<tr>
+	<td width="185"><p class=calc00>? RIGHT(&quot;Industrial&quot;,6)</p>
+	<td><p>returns strial</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = RIGHT(InCol,6)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolh>InCol</p></td>
+	<td valign="top"><p class=tcolh>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Institutional</p></td>
+	<td valign="top"><p class=t1>tional</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Commercial</p></td>
+	<td valign="top"><p class=t1>ercial</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Residential</p></td>
+	<td valign="top"><p class=t1>ential</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>?</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Industrial</p></td>
+	<td valign="top"><p class=t1>strial</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Recreational</p></td>
+	<td valign="top"><p class="t1">tional</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Transport</p></td>
+	<td valign="top"><p class=t1>nsport</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Airport</p></td>
+	<td valign="top"><p class=t1>irport</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Water</p></td>
+	<td valign="top"><p class=t1>Water</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_left.htm">LEFT</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strlt.htm">STRLT</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_in.htm">IN</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_sub.htm">SUB</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strle.htm">STRLE</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_inmask.htm">INMASK</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_length.htm">LENGTH</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strgt.htm">STRGT</a></p></td>
+	<td valign="top"><p class=seealsolinks></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_strpos.htm">STRPOS</a></p></td>
+	<td valign="top" width="60"><a href="calc_strge.htm">STRGE</a></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

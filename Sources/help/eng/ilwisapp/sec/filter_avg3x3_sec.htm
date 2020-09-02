@@ -1,0 +1,164 @@
+<html>
+
+<head>
+<title>filter avg3x3 sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>AVG3x3 filter</p>
+
+<p>The standard average or smooth filter is a standard <a href="../popup/filter_linear_filter_popup.htm">linear filter</a> which works in a 3 by 3 environment. The values in the matrix are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>1</p>
+
+</td>
+</tr>
+</table>
+
+<p class=leftmargin06>Gain factor  = 1/9 = 0.111111</p>
+
+<p class=defnewpar>When 9 values in an input map are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>17</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>22</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>18</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>21</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>15</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>18</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>17</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>20</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>23</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The filter calculates: </p>
+
+<p><span class=courier>(1*17 + 1*22 + 1*18 + 1*21 + 1*15 + 1*18 + 1*17 + 1*21 + 1*23) * 0.111111 = 19</span></p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p>The output value assigned to the central pixel is 19 (the value in the input map was 15) .</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_types_linear_filters.htm" onClick="return popup(this, 'notes')" >Filter types : linear filters</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_user_defined_average_filters.htm" onClick="return popup(this, 'notes')" >Filters : user-defined average filters</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_user_defined_linear_filters.htm" onClick="return popup(this, 'notes')" >Filters : user-defined linear filters</a></p>
+
+</body

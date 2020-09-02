@@ -1,0 +1,38 @@
+<html>
+
+<head>
+<title>objects-table2dim popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Two-dimensional tables&nbsp;&nbsp;&nbsp;<img src="../../images/tb2.gif" align=bottom width="14" height="14"></p>
+
+<p>A <a href="..//ilwis/ilwis_objects_two_dimensional_tables.htm" onClick="return popup(this, 'notes')" >two-dimensional table</a> is used to combine or reclassify two raster maps with a class or ID domain. It defines a value for each possible combination of input classes or IDs.</p>
+
+<p class=linespacing03before>A two-dimensional table view consists of rows which represent one domain and of columns which represent another domain. In the two-dimensional table, you have to assign a value, class name or ID to the fields which represent the combination of these domains. </p>
+
+<p class=linespacing03before>When you apply the two-dimensional table on the <a href="command_line_main_window_popup.htm">command line</a> of the Main window, you need two input raster maps which have the domains as used by the two-dimensional table, the output raster map then contains the values, classes or IDs that you entered in the fields of the two-dimensional table.</p>
+
+<p class=seealso>See also: </p>
+
+<p class=seelalsolinks><a href="..//ilwis/calc_classifying_two_maps_with_a_two_dimensional_table.htm" onClick="return popup(this, 'notes')" >Map Calculation : classifying maps according to a two-dimensional table</a></p>
+
+</body

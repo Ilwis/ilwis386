@@ -1,0 +1,97 @@
+<html>
+
+<head>
+<title>filter rank order sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Example rank order filters</p>
+
+<p>An example of <a href="..//ilwisapp/filters_types_rank_order_and_median_filters.htm" onClick="return popup(this, 'notes')" >rank order filters</a>, is for example the standard MED3x3 filter. </p>
+
+<p class=linespacing01before>When 9 pixel values encountered in the input map are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;9</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>12</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;9</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>11</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;5</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;7</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;8</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;8</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>13</p>
+
+</td>
+</tr>
+</table>
+
+<p>The MED3x3 filter orders these 9 values from small to large as:</p>
+
+<p class=calc0linsp03befaft>5,7,8,8,<span class=courier><b>9</b></span>,9,11,12,13</p>
+
+<p>and the value at rank order 5 is assigned to the pixel in the output map: 9.</p>
+
+<p class=defnewpar>You can also create your own <a href="..//ilwisapp/filters_user_defined_rank_order_and_median_filters.htm" onClick="return popup(this, 'notes')" >user-defined rank order filters</a> (defining filter size, rank order number that determines the output value, and optionally a threshold value). </p>
+
+</body

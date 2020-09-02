@@ -1,0 +1,114 @@
+<html>
+
+<head>
+<title>Check segments : Code consistency</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Check segments, Code consistency in segments">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Segment editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/segment_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Check segments - Code consistency</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Checks whether segments that are connected to each other by a node have the same value. This option is designed to check whether for instance a contour line, which consists of multiple consecutive segments, has one height code. To polygonize segments, this option is not necessary.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >Mask</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to check a specific selection of segments. Subsequently, specify the multiple search strings to check only those segments. Clear this check box to check all segments.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Start at Begin: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Start the check with the first segment. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Start at Number:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Start the check with any segment. Subsequently, type the (internal) segment number where the check should start. Previous segments will be skipped.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If a node is found to which segments are connected with different codes:</p>
+
+<ul>
+
+<li>	the node is marked on the map with a red square; </li>
+
+<li>	a message box appears stating the code of the segment with the error and the (internal) number of that segment, asking you to zoom in on the error or not. </li>
+
+<p class=linespacing03before>Whether you let the program zoom in automatically or not, you have to correct the error manually, for instance by using <a href="segment_editor_select_mode.htm">Select Mode</a>. </p>
+
+</ul>
+
+<p class=defnewpar>After a manual correction, you have to restart the check yourself. </p>
+
+<p class=defnewpar>If no errors are encountered for this check, a message will appear stating that the segments are OK. </p>
+
+<p class=tip>Tip: </p>
+
+<ul class=tipul>
+
+<li>After using the Code Consistency check, it is advised to use the <a href="../ilwisapp/tunnel_segments_functionality_algorithm.htm">Tunnel segments</a> operation to remove the redundant nodes that connect two segments of the same code. </li>
+
+        <p>In Tunnel Segments, you should use a tunnel width of 0 to obtain an exact copy of your segments, and select the <span class=arial>Remove Redundant Nodes</span> option. </li>
+
+<li>The <a href="segment_editor_remove_redundant_nodes.htm">Remove redundant nodes</a> option in the segment editor does <i>not</i> check whether two segments on both sides of a node have the same code. When a node is found which connects only two segments, then these segments will simply be merged and will obtain the code of the first segment encountered. </li>
+
+</ul>
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_check_segments.htm">Segment editor : Check segments</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/tunnel_segments_functionality_algorithm.htm">Tunnel segments : functionality / algorithm</a> </p> 
+
+</body

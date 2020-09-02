@@ -1,0 +1,65 @@
+<html>
+
+<head>
+<title>filter outbnd4 sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>OUTBND4  filter</p>
+
+<p>Outer boundary of 4-connected pixels. The OUTBND4 filter is a standard <a href="../popup/filter_binary_filter_popup.htm">binary filter</a> which works in a 3x3 environment. </p>
+
+<p class=defnewpar>When a true center pixel has one or more horizontal or vertical false neighbours, the true center pixel is assigned 0 and the false neighbours are assigned 1. </p>
+
+<p class=defnewpar>Using this filter results in an 8-connected outline around groups of false pixels which were true in the input map.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=226>
+<p>Input:</p>
+
+</td>
+<td valign="top" width=226>
+<p>Output:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=226>
+<p class=linespacing01before><img src="../../images/inputf.gif" align=bottom width="200" height="200"></p>
+
+</td>
+<td valign="top" width=226>
+<p class=linespacing01before><img src="../../images/out4.gif" align=bottom width="200" height="200"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../../ilwisapp/sec/filter_binary_filter_sec.htm">Example of binary filters</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_types_binary_filters.htm" onClick="return popup(this, 'notes')" >Filter types : binary filters</a></p>
+
+</body

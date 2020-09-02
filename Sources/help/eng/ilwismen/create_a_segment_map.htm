@@ -1,0 +1,162 @@
+<html>
+
+<head>
+<title>Create a segment map</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Segment maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a segment map</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment map</a> is created in order to obtain digital <b>line</b> features. To obtain digital <b>area</b> features (polygons), you should also first digitize the lines in a segment map, and then you should use the Polygonize option in the segment editor. In the segment editor, you can use the digitizer but you can also create a segment map with the mouse. </p>
+
+<p class=defnewpar>This dialog box appears when creating a new segment map:</p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> of the Main window, choose the <span class=arial>Create Segment Map</span> command, or </li>
+
+<li>	by double-clicking the <span class=arial>New SegMap</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or </li>
+
+<li>	from the <a href="../ilwis/map_window_menu_commands.htm">File menu</a> in an existing map window, choose the <span class=arial>Create Segment Map</span> command. Known parameters such as coordinate system and map boundaries are already filled out. This ensures that the new segment map will fit on the map(s) displayed in the map window. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Map name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the map. The description of a map appears in the title bar when the map is displayed. Further, the description is visible on the status bar of the Main window when moving the mouse pointer over the map in the Catalog. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Coordinate system:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> for the map; open the list box by clicking it. Or create a new coordinate system by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>: the <a href="create_a_coordinate_system.htm">Create Coordinate System</a> dialog box follows.</p>
+
+<p class=diabox>When you work with multiple maps of the same area, you should use the same coordinate system for these maps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><a href="..//ilwis/popup/coordinate_boundary_popup.htm" onClick="return popup(this, 'notes')" >Boundaries of map</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the minimum and maximum X and Y coordinates for the map. </p>
+
+<ul class=diaul>
+
+<li>With the minimum XY-coordinate, the XY-coordinate of the <i>lower left</i> corner of the map is meant; </li>
+
+<li>with the maximum XY-coordinate, the XY-coordinate of the <i>upper right</i> corner of the map is meant. </li>
+
+</ul>
+
+<p class=diabox>The four boundary values determine the outermost coordinate values of the new map; the map cannot contain coordinates outside these values. </p>
+
+<p class=diabox>When you selected an existing coordinate system, the corners of the coordinate system are set as the default boundary values for this map. If the new map is just a part (e.g. one map sheet) of the total coordinate system, you should make the boundary values fit to the new map and not to the coordinate system.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> for the map; open the list box by clicking it. Or create a new domain by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22">: the <a href="create_a_domain.htm">Create Domain</a> dialog box follows. A domain contains the set of valid IDs, class names or values in a map. </p>
+
+<p class=diabox>When creating more maps of the same theme, or when creating maps that contain the same class names, IDs or values as an existing map, select the same domain as used before.  You can always add extra class names or IDs to an existing class or ID domain. Not every class name, ID or value present in a domain, needs to be used in the maps that use that domain. A <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> can be linked to a domain, so that maps using the same domain can be displayed with the same colors.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <a href="../ilwis/segment_editor_functionality.htm">Segment editor</a> is started: use a digitizer or the mouse to to insert segments, and assign class names, IDs, or values to the segments. </p>
+
+<p class=tip>Additional information:</p>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext><u>Map boundaries:</u> It is advised to use map boundary values (Xmin, Ymin, Xmax and Ymax) according to the map rather than to a selected coordinate system. </p>
+
+<p class=tipemptyline>&nbsp;</p>
+
+<p class=tiptext><u>Domain:</u> The <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of a segment map defines the kind of codes that are used to name the segments:</p>
+
+<ul class=tipul>
+
+<li>	(use or) create a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a> when the segments in the map belong to classes which occur in several places in the map, e.g. roads: primary roads, secondary roads, etc.,</li>
+
+<li>	(use or) create an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a> when the segments in the map can be uniquely named, when the segments in your map are uniquely identified, e.g. individual pipe lines P8236, P9234, P9845, etc., or</li>
+
+<li>	(use or) create a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a> when the segments in the map represent measurable values, e.g. height values in a contour map.</li>
+
+</ul>
+
+<p class=tipemptyline>&nbsp;</p>
+
+<p class=tiptext>It is advised to select the same domains as far as possible, for example when: </p>
+
+<ul class=tipul>
+
+<li>	creating more segments maps of the same theme (Class), </li>
+
+<li>	creating more segment maps containing the same IDs, </li>
+
+<li>	creating more segment maps containing the same kind of values, or </li>
+
+<li>	creating segment maps of different years but of the same theme, or with the same class names, IDs or values. </li>
+
+</ul>
+
+<p class=tiptext>For more information on domains, see <a href="../ilwis/basic_concepts_before_creating_maps_and_tables.htm">Basic concepts : before creating maps and tables</a> and <a href="../ilwis/basic_concepts_domains.htm">Basic concepts : domains</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_segment_maps.htm">ILWIS objects : segment maps</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+</body

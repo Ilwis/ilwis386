@@ -94,6 +94,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapListFiltering", "Project
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Services", "Projects\Services\Services.vcproj", "{2608FBD3-A680-4386-A04E-1384DF2B5234}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "help", "Projects\help\help\help.vcproj", "{3E5A42CC-255E-4D5E-89BD-292DE60909AB}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -216,6 +218,10 @@ Global
 		{2608FBD3-A680-4386-A04E-1384DF2B5234}.Debug|Win32.Build.0 = Debug|Win32
 		{2608FBD3-A680-4386-A04E-1384DF2B5234}.Release|Win32.ActiveCfg = Release|Win32
 		{2608FBD3-A680-4386-A04E-1384DF2B5234}.Release|Win32.Build.0 = Release|Win32
+		{3E5A42CC-255E-4D5E-89BD-292DE60909AB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3E5A42CC-255E-4D5E-89BD-292DE60909AB}.Debug|Win32.Build.0 = Debug|Win32
+		{3E5A42CC-255E-4D5E-89BD-292DE60909AB}.Release|Win32.ActiveCfg = Release|Win32
+		{3E5A42CC-255E-4D5E-89BD-292DE60909AB}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

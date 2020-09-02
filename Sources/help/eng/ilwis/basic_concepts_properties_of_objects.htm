@@ -1,0 +1,148 @@
+<html>
+
+<head>
+<title>Basic concepts : properties of objects</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Properties of objects, Basic concepts, Object properties">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Basic concepts</h1>
+
+<h1 class=secondline>Properties of objects</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Property sheet of a map, table or column or any other ILWIS object shows you important information on the object. In fact, an object's Property sheet is listing the information that is stored in an object's <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> and that is relevant to the user. </p>
+
+<p class=defnewpar>A <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Property sheet</a> lists: </p>
+
+<ul>
+
+<li>	object type, object name and its date, time and size,</li>
+
+<li>	whether the object is read-only or not,</li>
+
+<li>	the description of the object,</li>
+
+<li>	other objects that this object uses, e.g. the domain of a map, table or column; the georeference of a raster map; the coordinate system of a point, segment or polygon map, etc., see also <a href="appendices_relations_between_ilwis_objects.htm">Appendices : relations between ILWIS objects</a>;</li>
+
+<li>	objects that use the current object,</li>
+
+<li>	for maps and domains, whether an attribute table is linked to the map or the domain, </li>
+
+<li>	some additional information on the object, e.g. the number of segments in a segment map, and the number of lines and columns and the pixel size in a raster map, and the number of records and columns in a table, etc.,</li>
+
+<li>	whether a map, table or column is <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> or not, see also <a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a>;</li>
+
+<li>	for dependent maps, tables and columns, the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >definition</a> of the object, i.e. the expression by which the current object was created,</li>
+
+<li>	for dependent maps, tables and columns, whether the object is up-to-date or not,</li>
+
+<li>	for dependent maps, tables and columns, the objects on which the dependent object depends,</li>
+
+<li>	for raster maps, whether the map is stored using 1 bit, or 1, 2, 4, or 8 bytes per pixel.</li>
+
+</ul>
+
+<p class=defnewpar>Further, a number of the following buttons may be available: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=arial>Used By:</p>
+
+</td>
+<td valign="top">
+<p>Click this button to see by which other objects the current object is used.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=arial>Make Up-to-date:</p>
+
+</td>
+<td valign="top">
+<p>For dependent data objects of which the input data has changed: click this button to redefine the dependent output object. See also <a href="../ilwis/how_to_make_dependent_data_objects_up_to_date.htm">How to make dependent data objects up-to-date</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=arial>Edit Definition:</p>
+
+</td>
+<td valign="top">
+<p>For dependent raster maps that are the result of a map calculation (MapCalculate), click this button to modify the map calculation formula by which this map was created. The definition of  a dependent column that is the result of a table calculation (ColumnCalculate), can be directly edited in the Properties dialog box of the column. See also <a href="../ilwis/how_to_change_the_definition_of_a_dependent_data_object.htm">How to change the definition of a dependent data object</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=arial>Break Dependency Link:</p>
+
+</td>
+<td valign="top">
+<p>For dependent data objects: click this button to break the dependency links between the current dependent object and the objects it depends on. After breaking dependency links of a dependent map, table or column, the map, table, or column becomes editable. See also <a href="../ilwis/how_to_break_dependency_links.htm">How to break dependency links</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=arial>Release Disk Space:</p>
+
+</td>
+<td valign="top">
+<p>For dependent data objects with a calculated data file: click this button to delete calculated data files. Only the object definition file that contains the expression by which the object is defined remains. See also <a href="how_to_release_disk_space.htm">How to release disk space</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=arial>Calculate:</p>
+
+</td>
+<td valign="top">
+<p>For dependent data objects without a calculated data file: click this button to execute the expression by which this object was created and store the calculated data file on disk. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=arial>Additional Info:</p>
+
+</td>
+<td valign="top">
+<p>For objects that have extra information.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Advanced users may wish to change some relations between the current editable object and other objects that the current object uses, such as domain, georeference, coordinate system, etc. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit the properties of an object</a></p>
+
+<p class=seealsolinks><a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Property sheets</a></p>
+
+</body

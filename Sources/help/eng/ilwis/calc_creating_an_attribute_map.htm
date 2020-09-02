@@ -1,0 +1,162 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>MapCalc : attribute map</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map calculation, Calculation, MapCalculate, Command line, Attribute map of raster map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map calculation</h1>
+<h1 class=secondline>Creating an attribute map</h1>
+
+<p class=defnewpar>Maps of the domain type Class, ID or Group can have an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> with additional information on the elements in the map. An attribute table must use the same domain Class, ID or Group as the map(s) to which it refers. The domain provides the relational link between the table and the map. Therefore, the attributes in a column in an attribute table, can be put in a map, a so-called attribute map.&nbsp; </p>
+
+<p class=defnewpar>You can also directly create an attribute map of a raster map by typing one of the following statements on the command line of the Main window: </p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax>OutMap = <i>InMap</i>.<i>InColumn</i><br>
+OutMap	= <i>InMap</i>.<i>InTable</i>.<i>InColumn</i></p>
+
+<p class=defnewpar>where:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width=100><p>OutMap</p></td>
+	<td valign="top"><p>is the name of your output raster map.</p></td>
+</tr>
+<tr>
+	<td valign="top" width=100><p><i>InMap</i></p></td>
+	<td valign="top"><p>is the name of your input raster map (domain Class map or domain ID map).</p></td>
+</tr>
+<tr>
+	<td valign="top" width=100><p><i>InTable</i></p></td>
+	<td valign="top"><p>is the name of a table (using same domain as input map).</p></td>
+</tr>
+<tr>
+	<td valign="top" width=100><p><i>InColumn</i></p></td>
+	<td valign="top"><p>is the name of a column.</p></td>
+</tr>
+</table>
+
+<p class=tip>Notes: </p>
+<ul class=tipul>
+	<li>The first statement only works when an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> is linked to the input map or to the domain of the input map (see <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> or <a href="../ilwismen/domain_properties.htm">Domain Properties</a>). </li>
+	<li>For the second statement, the table does not have to be linked to the map. However the
+      statement only works when the domain that is used by the table is the same as
+      the domain that is used by the map.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>The <a href="..//ilwisapp/popup/attribute_map_of_raster_map_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of raster map</a> operation provides the same functionality as the statements above.</li>
+	<li>To create attribute maps from polygon, segment or point maps with an attribute table: use the <a href="..//ilwisapp/popup/attribute_map_of_polygons_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of polygon map</a>, <a href="..//ilwisapp/popup/attribute_map_of_segments_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of segment map</a> or <a href="..//ilwisapp/popup/attribute_map_of_points_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of point map</a> operations.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated.</li>
+</ul>
+
+<p class=calctitle>Example</p>
+<p>In the following example a <span class=courier>Landuse</span> map is used showing the geographical position of five landuse classes. In the attribute table <span class=courier>Landuse</span> there is a column <span class=courier>Landuse</span> with the description of the landuse classes and a column <span class=courier>CommValue</span> with the commercial value per landuse class. A new map <span class=courier>LandValue</span> is created showing the commercial value per landuse class.
+<p class=calc0>LandValue = Landuse.CommValue</p>
+<p class=defnewpar>This formula works in this example because the atrribute table is linked to the domain of the input map. You may also use the expressions:</p>
+<p class=calc0>LandValue = Landuse.Landuse.CommValue</p>
+<p class=calc00>LandValue = MapAttribute(Landuse,CommValue)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class="courier">Landuse</p></td>
+	<td><p class="courier">LandValue</p></td>
+</tr>
+<tr>
+	<td><table class="calcpict" cellspacing="0" cellpadding="0" width="130">
+<tr>
+   <td class="calcpict" width="36">INS</td>
+   <td class="calcpict" width="40">COM</td>
+   <td class="calcpict" width="38">RES</td>
+</tr>
+<tr>
+   <td class="calcpict" width="36">INS</td>
+   <td class="calcpict" width="40">REC</td>
+   <td class="calcpict" width="38">RES</td>
+</tr>
+<tr>
+   <td class="calcpict" width="36">COM</td>
+   <td class="calcpict" width="40">IND</td>
+   <td class="calcpict" width="38">IND</td>
+</tr>
+</table>
+</td>
+<td>
+<table class="calcpict" cellspacing="0" cellpadding="0">
+<tr>
+	<td class="calcpict">30</td>	
+	<td class="calcpict">40</td>
+	<td class="calcpict">20</td>
+</tr>
+<tr>
+	<td class="calcpict">30</td>
+   	<td class="calcpict">10</td>
+   	<td class="calcpict">20</td>
+</tr>
+<tr>
+ 	<td class="calcpict">40</td>
+   	<td class="calcpict">50</td>
+   	<td class="calcpict">50</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<table>
+<tr>
+	<td valign="top"><p class=th>Landuse.tbt</p></td>
+</tr>
+</table>
+<table>
+<tr>
+	<td valign="top"><p class=tcolh>Landuse</p></td>
+	<td valign="top"><p class=tcolhr>CommValue</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Institutional</p></td>
+	<td valign="top"><p class=t1r>30</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Commercial</p></td>
+	<td valign="top"><p class=t1r>40</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Residential</p></td>
+	<td valign="top"><p class=t1r>20</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Industrial</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Recreational</p></td>
+	<td valign="top"><p class=t1r>10</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="how_to_create_attribute_maps.htm">How to create attribute maps</a></p>
+<p class=seealsolinks><a href="../ilwisapp/attribute_map_of_raster_map.htm">Attribute map of raster map</a></p>
+
+</body

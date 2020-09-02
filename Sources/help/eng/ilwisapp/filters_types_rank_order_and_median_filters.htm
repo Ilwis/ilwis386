@@ -1,0 +1,61 @@
+<html>
+
+<head>
+<title>Filter types : rank order and median filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filter types, Rank order filters, Median filters, MED3x3, MED5x5">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="70%"><h1 class=firstline>Filter types</h1></td>
+<td rowspan="2" class=menucommand><a class=menlink href=JavaScript:__ilwisapp__sec__filter_rank_order_sec.Click()>Example rank order filters</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Rank order and median filters</h1></td>
+</tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Rank order filters have a certain size, but do not have any matrix values nor a gain factor. A rank order filter of size 3x3 for example, examines 9 pixel values of the input map at a time, sorts the values from small to large, and selects for the output value that value which is encountered at a certain rank order number. So one value of the pixel values examined becomes the output value, without any calculation performed on the values itself.</p>
+
+<p>When a threshold is set, the value of the center pixel will only be replaced with the new value if the difference between the original and new value is smaller than or equal to the threshold.</p>
+
+<p class=kopje>Standard rank order filters:</p>
+
+<p>Standard rank order filters are the median filters: <a href="..//ilwisapp/sec/filter_med3x3_sec.htm" onClick="return popup(this, 'notes')" >MED3x3</a>, <a href="..//ilwisapp/sec/filter_med5x5_sec.htm" onClick="return popup(this, 'notes')" >MED5x5</a>. For each 9 pixels considered, the MED3 filter always assigns the value of rank 5 to the center pixel in the output map. For each 25 pixels considered, the MED5 filter always assigns the value of rank 13 to the center pixel in the output map. The median filters can for instance be used to smooth an image.</p>
+
+<p class=kopje>User-defined rank order and median filters:</p>
+
+<p>In the Filter dialog box as well as on the command line, you can define your own rank order filter and median filter. For a rank order filter, specify the size of the filter, the rank order number and an optional threshold. In this way you can obtain for example the <b>minimum</b> or <b>maximum</b> value of a number of pixels. For median filters, specify the size of the filter and an optional threshold. For more information and some examples, refer to <a href="../ilwisapp/filters_user_defined_rank_order_and_median_filters.htm">User-defined rank order and median filters</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filters_standard_filters.htm">Filters : standard filters</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_user_defined_rank_order_and_median_filters.htm">Filters : user-defined rank order and median filters</a></p>
+
+<p class=seealsolinks><a href="filter.htm">Filter (operation)</a></p>
+
+</body

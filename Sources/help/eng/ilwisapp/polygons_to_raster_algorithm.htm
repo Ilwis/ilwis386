@@ -1,0 +1,63 @@
+<html>
+
+<head>
+<title>Polygons to raster : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygons to raster">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Polygons to raster</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Polygons to raster operation rasterizes a polygon map. The output raster map always uses the same domain as the input segment map. The user has to specify the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> for the output raster map. </p>
+
+<p class=kopje>Process:</p>
+
+<p>For each polygon, the corresponding pixels in the raster map are found; these pixels are assigned the class name, ID or value of the polygon. </p>
+
+<p>Other pixels obtain the undefined value.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	The pixel size indicated in the georeference for the output map, has a large influence on the size (in bytes) of the output raster map. Mind that rasterizing on a pixel size of 10 m instead of 50 m increases the size of the raster map by a factor 25.</li>
+
+<li>	If you want to rasterize only a portion of your polygon map, you can select or create a georeference that does not cover the total area of your polygon map during rasterization. </li>
+
+</ul>
+
+<p class=kopje>For ILWIS 1.4 users:</p>
+
+<ul>
+
+<li>	During rasterization, an .INF table is not produced anymore. To know the area of polygons, length of segments, nr. of points etc., you can calculate the histogram of a polygon, segment or point map with the <a href="..//ilwisapp/popup/histogram_operation_popup.htm" onClick="return popup(this, 'notes')" >Histogram</a> operation.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="polygons_to_raster_functionality.htm">Polygons to raster : functionality</a></p>
+
+</body

@@ -1,0 +1,207 @@
+<html>
+
+<head>
+<title>Glue raster maps : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Glue raster maps, Merge raster maps, MapGlue">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Glue raster maps</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/glue_raster_maps_popup.htm" onClick="return popup(this, 'notes')" >Glue raster maps</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapGlue</span>(FirstInputMapName, SecondInputMapName [, <i>MoreInput Maps</i>])</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapGlue</span>(FirstInputMapName, SecondInputMapName [, <i>MoreInput Maps</i>] , <span class=courier>Replace</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapGlue</span>(FirstInputMapName, SecondInputMapName [, <i>MoreInput Maps</i>] , <i>NewDomain</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapGlue</span>(FirstInputMapName, SecondInputMapName [, <i>MoreInput Maps</i>] , <i>NewDomain</i>, <span class=courier>Replace</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapGlue</span>(<i>Georeference</i><span class=courier>.grf</span>, FirstInputMapName, SecondInputMapName [, <i>MoreInput Maps</i>] [, <i>NewDomain</i>] [, <span class=courier>Replace</span>])</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output raster map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapGlue</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Glue raster maps operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>Georeference</i><span class=courier>.grf</span></p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to specify the name of an existing georeference that you wish to use as the georeference for the output raster map. When you wish to use an existing georeference, it is required to specify the extension <span class=courier>.grf</span>. </p>
+
+<p>If the parameter is not specified, the system will create a new georeference for the output map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>FirstInputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of the first input raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>SecondInputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of the second input raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>MoreInputMaps</i></p>
+
+</td>
+<td valign="top">
+<p>optionally, you can specify more input raster map names, delimited by commas. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Replace</p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to use for overlapping pixels the values, class names, IDs or colors of the last input map. When this parameter is not used, then the values, class names, IDs or colors of the first input map will be used for overlapping pixels.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>NewDomain</i></p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter in case of merging Class or ID maps that do not have the same domain, to specify a name for the new output domain in which all input domain items will be merged. When input Class or ID domains are not the same and this parameter is not specified, the new output domain in which all input domain items are merged will be stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>On the command line, you can specify as many input raster maps as you like; i.e. you can merge as many raster maps as you like. When using the dialog box of this operation, only two, three or four input maps can be merged at a time. </p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=defnewpar>Furthermore, if no existing georeference is specified, a georeference submap is created with the same name as the output map. In case Class or ID maps are merged which do not have the same domain, and the <i>NewDomain</i> parameter is used, a new output domain is also created. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="glue_raster_maps_functionality.htm">Glue raster maps : functionality</a></p>
+
+</body

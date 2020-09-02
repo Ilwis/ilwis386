@@ -1,0 +1,240 @@
+<html>
+
+<head>
+<title>MAPCOLOR</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="MAPCOLOR, Color functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>MAPCOLOR( ) function</h1>
+
+<p class=defnewpar>Returns the (R,G,B) colors of a certain pixel of a raster map
+<i>RasterMap</i>, from the map's default representation (class or value).&nbsp;</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>MAPCOLOR</span>(<i>RasterMap</i>)<br><span class=courier>MAPCOLOR</span>(<i>RasterMap</i>, <i>RowNr</i>, <i>ColumNr</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><i>RasterMap</i></td>
+	<td valign="top">is a raster map</td>
+</tr>
+<tr>
+	<td width="110" valign="top"><i>RowNr</i></td>
+	<td valign="top">is the row number of a certain pixel</td>
+</tr>
+<tr>
+	<td width="110" valign="top"><i>ColumnNr</i></td>
+	<td valign="top">is the column number of a certain pixel</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><span class=courier>MAPCOLOR</span> returns:</td>
+	<td valign="top">a color</td>
+</tr>
+<tr>
+	<td width="110" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Color</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The <span class=courier>MAPCOLOR</span>(<i>RasterMap</i>) function can only be used on the command line of the Main window; it cannot be used on the command line of a table window.</li>
+	<li>The <span class=courier>MAPCOLOR</span> function can be used to <i> retrieve</i> colors from a representation class or from a representation value used by the domain class or value of a raster map and <i> assign</i> this to e.g. an output raster map. The function can thus be used to convert a raster map to the <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Color</span></a> domain, see also <a href="how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a>.</li>
+	<li>When the input value is undefined, the output will be (0, 0, 0), i.e. black. To convert the black color in the output map, due to undefineds in the input, use e.g.: <span class=courier>ColorMap2 = IFUNDEF(Landuse,<a href="calc_color.htm">COLOR</a>(255,255,255),ColorMap)</span></li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class="calctitle">Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator example:</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" width="190"><p class="calc00">? MAPCOLOR(DEM,150,200)</p></td>
+    <td valign="top">retrieves the color of map <span class=courier>DEM</span> at row 150 and column 200,
+      e.g. (255, 89, 16)</td>
+  </tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p>To convert raster map <span class=courier>Landuse</span> (class domain <span class=courier>Landuse</span>, using representation class <span class=courier>Landuse</span>) to a raster map <span class=courier>LandColor</span> with the <span class=courier>Color</span> domain:</p>
+<p class=calc0linsp03befaft>LandColor = MAPCOLOR(Landuse)</p>
+
+<table>
+<tr>
+	<td><p class=th>Landuse.rpr</p></td>
+</tr>
+</table>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" width="70"><p class="tcolh">Landunit</p></td>
+    <td valign="top" width="85"><p class="tcolh">Colorname</p></td>
+    <td valign="top"><p class="tcolhr">Color</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Agriculture</p></td>
+    <td valign="top" width="85"><p class="t1">Yellow</p></td>
+    <td valign="top"><p class="t1r">(255, 255, 0)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Airport</p></td>
+    <td valign="top" width="85"><p class="t1">Red</p></td>
+    <td valign="top"><p class="t1r">(255, 0, 0)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Bare soils</p></td>
+    <td valign="top" width="85"><p class="t1">Brown</p></td>
+    <td valign="top"><p class="t1r">(164, 40, 40)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Forest</p></td>
+    <td valign="top" width="85"><p class="t1">Forest Green</p></td>
+    <td valign="top"><p class="t1r">(48, 128, 76)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Grass</p></td>
+    <td valign="top" width="85"><p class="t1">Yellow Green</p></td>
+    <td valign="top"><p class="t1r">(98, 98, 98)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Lake</p></td>
+    <td valign="top" width="85"><p class="t1">Blue</p></td>
+    <td valign="top"><p class="t1r">(0, 0, 255)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Riverbed</p></td>
+    <td valign="top" width="85"><p class="t1">Cyan</p></td>
+    <td valign="top"><p class="t1r">(0, 255, 255)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Rocks</p></td>
+    <td valign="top" width="85"><p class="t1">Gray</p></td>
+    <td valign="top"><p class="t1r">(128, 128, 128)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Shrubs</p></td>
+    <td valign="top" width="85"><p class="t1">Magenta</p></td>
+    <td valign="top"><p class="t1r">(255, 0, 255)</p></td>
+  </tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+<table>
+  <tr>
+    <td><p class=courier>Landuse</p></td>
+    <td><p class=courier>LandColor</p></td>
+  </tr>
+  <tr>
+    <td>
+      <table class=calcpict cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="calcpict">Forest</td>
+          <td class="calcpict">Forest</td>
+          <td class="calcpict">Rocks</td>
+        </tr>
+        <tr>
+          <td class="calcpict">Shrubs</td>
+          <td class="calcpict">Lake</td>
+          <td class="calcpict">Grass</td>
+        </tr>
+        <tr>
+          <td class="calcpict">?</td>
+          <td class="calcpict">Grass</td>
+          <td class="calcpict">Airport</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table class="calcpictlarge" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="calcpictlarge">(48,128,76)</td>
+          <td class="calcpictlarge">(48,128,76)</td>
+          <td class="calcpictlarge">(128,128,128)</td>
+        </tr>
+        <tr>
+          <td class="calcpictlarge">(255,0,255)</td>
+          <td class="calcpictlarge">(0,0,255)</td>
+          <td class="calcpictlarge">(98,98,98)</td>
+        </tr>
+        <tr>
+          <td class="calcpictlarge">(0,0,0)</td>
+          <td class="calcpictlarge">(98,98,98)</td>
+          <td class="calcpictlarge">(255,0,0)</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+
+
+
+<!--<p class=defnewpar>The class map <span class=courier>Landuse</span> is converted to map
+<span class=courier>ColorMap</span> having a color domain.
+<ul>
+	<li>The pixels which had land use <span class=courier>Forest</span> and which where <span class=courier>Forest Green</span> in map <span class=courier>Landuse</span>, still have the color forest green in the new map but show now the contribution 48 red, 128 green and 76 blue.</li>
+	<li>The pixels which had land use <span class=courier>Rocks</span> and which where <span class=courier>Gray</span> in map <span class=courier>Landuse</span>, still have the color gray in the new map but show now the contribution 128 red, 128 green and 128 blue.</li>
+	<li>The pixels which had land use <span class=courier>Shrubs</span> and which where <span class=courier>Magenta</span> in map <span class=courier>Landuse</span>, still have the color magenta in the new map but show now the contribution 255 red, 0 green and 255 blue.</li>
+	<li>The pixels which had land use <span class=courier>Lake</span> and which where <span class=courier>Blue</span> in map <span class=courier>Landuse</span>, still have the color blue in the new map but show now the contribution 0 red, 0 green and 255 blue.</li>
+	<li>The pixels which had land use <span class=courier>Grass</span> and which where <span class=courier>Yellow Green</span> in map <span class=courier>Landuse</span>, still have the color yellow green in the new map but show now the contribution 98 red, 98 green and 98 blue, and.</li>
+	<li>Finally, land use <span class=courier>Airport</span> had the color <span class=courier>Red</span> in map <span class=courier>Landuse</span>, still has the color red in the new map but show now the contribution 255 red, 0 green and 0 blue.</li>
+</ul>-->
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="70"><a href="calc_color.htm">COLOR</a></td>
+	<td valign="top" width="70"><a href="calc_clrgreen.htm">CLRGREEN</a></td>
+	<td valign="top" width="85"><a href="calc_clryellow.htm">CLRYELLOW</a></td>
+	<td valign="top"><a href="calc_clrhue.htm">CLRHUE</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70"><a href="calc_mapcolor.htm">MAPCOLOR</a></td>
+	<td valign="top" width="70"><a href="calc_clrblue.htm">CLRBLUE</a></td>
+	<td valign="top" width="85"><a href="calc_clrmagenta.htm">CLRMAGENTA</a></td>
+	<td valign="top"><a href="calc_clrsat.htm">CLRSAT</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70"><a href="calc_rprcolor.htm">RPRCOLOR</a></td>
+	<td valign="top" width="70"></td>
+	<td valign="top" width="85"><a href="calc_clrcyan.htm">CLRCYAN</a></td>
+	<td valign="top"><a href="calc_clrintens.htm">CLRINTENS</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70">&nbsp;</td>
+	<td valign="top" width="70">&nbsp;</td>
+	<td valign="top" width="85"><a href="calc_clrgrey.htm">CLRGREY</a></td>
+	<td valign="top"><a href="calc_colorhsi.htm">COLORHSI</a></td>
+</tr>
+</table>
+
+</body

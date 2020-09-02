@@ -1,0 +1,72 @@
+<html>
+
+<head>
+<title>Histogram : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Histogram">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Histogram</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Histogram operation calculates the histogram of a raster, polygon, segment or point map. Histograms list frequency information on the values, classes, or IDs in your map. </p>
+
+<p class=defnewpar>The results are shown in a histogram window as a table and as a graph. </p>
+
+<p class=defnewpar>Histograms of Value raster maps also contain summary information such as mean, standard deviation, and percentage intervals. The summary information is available in a histogram window as well as in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> of the histogram. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Input map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input raster, polygon, segment or point map. Open the list box and select the desired input map, or drag a raster, polygon, segment or point map directly from the Catalog into this box. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The output histogram always obtains the same <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> as the input map. 
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> histogram will be defined, calculated and displayed in a table window. When you click the <b>Define</b> button, the histogram will only be defined; if necessary, it will be calculated later, for instance when the histogram is opened to be displayed. </p>
+
+<p class=tip>Notes: </p>
+
+<ul class=tipul>
+
+<li>For raster maps that are stored using 1 or 2 bytes per pixel, a histogram will automatically be calculated when required. Thus, for such raster maps there is no need to perform the Histogram operation separately. </li>
+
+<li>You can use the Histogram operation to calculate histograms for raster maps stored with 4 or 8 bytes per pixel, and to calculate histograms for polygon, segment or point maps. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="histogram_functionality.htm">Histogram : functionality</a></p>
+
+</body

@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>filter linear filter popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Linear (convolution) filters</p>
+
+<p><a href="..//ilwisapp/filters_types_linear_filters.htm" onClick="return popup(this, 'notes')" >Linear convolution filters</a> consist of a matrix with values and a gain factor. When a linear filter of size 3x3 is used, the 9 matrix values are multiplied with 9 pixel values in the input raster map, this is summed and then multiplied with the gain factor. The result is assigned to the center pixel in the output map. </p>
+
+<p class=defnewpar>Standard linear filters are: <a href="../../ilwisapp/sec/filter_avg3x3_sec.htm">AVG3x3</a>, <a href="../../ilwisapp/sec/filter_edgesenh_sec.htm">EDGESENH</a>, <a href="../../ilwisapp/sec/filter_laplace_sec.htm">LAPLACE</a>, <a href="../../ilwisapp/sec/filter_shadow_sec.htm">SHADOW</a>. The gradient filters are also linear filters: <a href="../../ilwisapp/sec/filter_dfdx_sec.htm">DFDX</a>, <a href="../../ilwisapp/sec/filter_dfdy_sec.htm">DFDY</a>, <a href="../../ilwisapp/sec/filter_dfddn_sec.htm">DFDDN</a>, <a href="../../ilwisapp/sec/filter_dfdup_sec.htm">DFDUP</a>, <a href="../../ilwisapp/sec/filter_d2fdx2_sec.htm">D2FDX2</a>, <a href="../../ilwisapp/sec/filter_d2fdy2_sec.htm">D2FDY2</a>, <a href="../../ilwisapp/sec/filter_d2fdxdy_sec.htm">D2FDXDY</a>. For technical information on gradient filters, see <a href="..//ilwisapp/filters_types_gradient_or_derivative_filters_technical_information.htm" onClick="return popup(this, 'notes')" >Filters: gradient or derivatitve filters</a>. </p>
+
+<p class=defnewpar>Furthermore, <a href="..//ilwisapp/filters_user_defined_linear_filters.htm" onClick="return popup(this, 'notes')" >user-defined linear filters</a> may be created and stored on disk: specify filter size, matrix values, and gain factor. You can also use <a href="..//ilwisapp/filters_user_defined_average_filters.htm" onClick="return popup(this, 'notes')" >user-defined average filters</a>:specify the filter size.</p>
+
+</body

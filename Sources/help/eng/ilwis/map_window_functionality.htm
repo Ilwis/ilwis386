@@ -1,0 +1,289 @@
+<html>
+
+<head>
+<title>Map window : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map window, Layers, Info, Display by attribute, Transparency">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map window</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A map window may display one or more <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a>, <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a>, <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a>, and/or <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a>. Maps that are displayed in a map window are called <a href="..//ilwis/popup/layers_data_layers_popup.htm" onClick="return popup(this, 'notes')" >data layers</a>. The legend of each map is automatically displayed in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of a map window.</p>
+
+<p class=defnewpar>A map window can also display three images of a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> as an <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >interactive color composite</a>, or all maps of a map list as a <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>. </p>
+
+<p class=defnewpar>You can also create an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text object</a> which usually contains the labels of a point, segment or polygon map. You can add multiple Annotation Text objects to a map window. </p>
+
+<p class=defnewpar>Furthermore, you can add <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a> as a layer to a map window. </p>
+
+<p class=defnewpar>A map window displaying one or more maps, annotation text layers, optional grid lines and graticules can be saved as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. Map views can be added to a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> which is used to make a final composition before printing. </p>
+
+<p>To a layout, you can then add further <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> such as <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legends</a>, <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map borders</a> including ticks and coordinates for grid lines or a graticule, <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >north arrows</a>, <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bars and scale texts</a>, <a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a> (such as a title), <a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >boxes</a>, <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmaps</a> and <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >pictures</a>, and a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a>. </p>
+
+<p class=defnewpar>A map window consists of a viewer which displays the map(s) and additional layers, a <a href="map_window_layer_management.htm">Layer Management</a> pane, an <a href="map_window_overview_window.htm">overview window</a>, a <a href="map_window_menu_commands.htm">menu bar</a>, a <a href="..//ilwis/popup/context_sensitive_menu_map.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, a <a href="map_window_toolbar.htm">toolbar</a> and a <a href="map_window_status_bar.htm">status bar</a>. Besides displaying, you can also <a href="editors_introduction_to_map_editors.htm">edit maps</a> in a map window.</p>
+
+<p class=kopje>To open a new map window:</p>
+
+<p>A new map window is automatically opened when you open a map: </p>
+
+<ul>
+
+<li>open the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, and choose the <span class=arial>Open</span> command, or </li>
+
+<li>double-click a <img src="../images/rasmap.gif" align=bottom width="16" height="12"> raster map, a <img src="../images/polmap.gif" align=bottom width="16" height="12"> polygon map, a <img src="../images/segmap.gif" align=bottom width="16" height="12"> segment map, or a <img src="../images/pointmap.gif" align=bottom width="16" height="12"> point map in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </li>
+
+</ul>
+
+<p class=linespacing03before>Before a map is actually displayed, some <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> have to be specified in a Display Options dialog box. </p>
+
+<p>You can also use the <span class=arial>Open Map</span> button <img src="../images/showmap.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/main_window_standard_toolbar.htm">toolbar of the Main window</a>, or use the <span class=arial>Show</span> command in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>. For more information, see also <a href="how_to_open_objects.htm">How to open objects</a> or <a href="how_to_display_maps_and_tables.htm">How to display maps and tables</a>. <p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>If you like, you can choose not to show Display Options dialog boxes: use the <a href="../ilwismen/main_window_preferences.htm">Preferences</a> command on the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window, and choose <span class=arial>Map window, Display</span>. For each map type, you can specify whether or not you wish to obtain a Display Options dialog box when a map is opened. If no Display Options dialog boxes are used, maps will be displayed with their default settings. </li>
+
+<li>In the <a href="../ilwismen/main_window_preferences.htm">Preferences</a> (<span class=arial>Map window, Display, Position and Size)</span>, you can also specify a fixed size or a fixed position for all map windows to be opened. </li>
+
+<li>To speed up the display of large raster map, for instance maps that have more than a few thousand lines and columns, you can create pyramid layers. For more information, refer to <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">ILWIS objects : Raster maps - Pyramid layers</a>.</li>
+
+</ul>
+
+<p class=kopje>To display multiple layers in a map window:</p>
+
+<p>You can add several <a href="..//ilwis/popup/layers_popup.htm" onClick="return popup(this, 'notes')" >layers</a> to a map window by using the <span class=arial><a href="../ilwismen/add_layer_to_map_window.htm">Add Layer</span></a> command from the <a href="map_window_menu_commands.htm">Layers menu</a>, or by clicking the <span class=arial>Add Layer</span> button <img src="../images/addlayer.gif" align=bottom width="22" height="22"> in the <a href="map_window_toolbar.htm">toolbar</a> of the map window. You can add a raster map, a polygon map, a segment map, a point map, a map list or an existing annotation text object to the map window. </p>
+
+<p>When you add a map list to a map window, you can choose to display the map list as a color composite, or as a slide show. </p>
+
+<p class=defnewpar>To add grid lines or a graticule, you can choose the <span class=arial><a href="../ilwismen/display_options_grid_lines.htm">Add Grid Lines</a></span>, or the <span class=arial><a href="../ilwismen/display_options_graticule.htm">Add Graticule</a></span> command from the <span class=arial>Layers</span> menu. </p>
+
+<p class=defnewpar>For each new layer to be displayed in the map window, <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> have to be specified. In the Display Options dialog box of maps that have an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>, you can choose to display a map by one of its attributes. Any layer that is added to a map window is also added to the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of the map window. </p> 
+
+<p class=defnewpar>Layers that are added to a map window will be displayed on top of the other layers that are already displayed. When a map window already displays a raster map, you can only add another raster layer (or a map list) when the raster maps use the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>. You can use the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation to transform a raster map to another georeference. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>For more information on adding layers to a map window, see also <a href="how_to_add_extra_layers_to_a_map_window.htm">How to add extra layers to a map window</a>. </li>
+
+<li>To temporarily hide layers or to remove layers, see <a href="../ilwis/map_window_layer_management.htm">Map window : Layer Management</a>. </li>
+
+<li>For more information on working with layers, see <a href="how_to_use_layers_in_a_map_window.htm">How to use layers in a map window</a>. </li>
+
+</ul>
+
+<p class=kopje>Displaying layers with transparency:</p>
+
+<p>In the Display Options dialog box of a layer, you can specify whether a layer has to be displayed with a certain transparency. In this manner, you can display (partly transparent) thematic information on top of images, a shadow map etc. and view both types of information simultaneously. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>First display a map that you wish to use as background (without Transparency). </li>
+
+<li>Then, add one or more other vector or raster layers; you can select the Transparency check box in the layer's Display Options dialog box. </li>
+
+</ul>
+
+<p>Click the following link for an <a href="..//ilwis/popup/map_window_transparent_layers_example.htm" onClick="return popup(this, 'notes')" >Example of transparent layers</a>. </p>
+
+<p class=defnewpar>Technically spoken, transparency is obtained by using the standard Windows method of AlphaBlending. The method is not available for Windows 95 or Windows NT. Transparent layers are thus only possible in Windows 98, Windows 2000, Windows ME or Windows XP; furthermore, the Display Settings of your screen must be set to 32 bit (True Color). </p>
+
+<p class=tip>Mind: </p>
+
+<p class=tiptext>It is not possible to display map views with transparent layers in a layout, nor to print any transparent layers. </p>
+
+<p class=kopje>To get Info on maps and attributes:</p>
+
+<p>When you press the left mouse button at a position of interest in the map window, you will obtain information on a map and optionally of the attributes. </p>
+
+<ul>
+
+<li>When, for example, a satellite image is displayed in the map window, you will see the pixel value at the current mouse position. </li>
+
+<li>When a rasterized polygon map is displayed that contains for example land use classes, you will see the names of the land use classes. </li>
+
+<li>Similarly, when pointing to a polygon, segment or point in a map window, the name or value of the polygon, segment or point is displayed. </li>
+
+</ul>
+
+<p class=defnewpar>To obtain information on a data layer it is necessary that the <span class=arial>Info</span> check box in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of the layer is selected. In the <a href="map_window_layer_management.htm">Layer Management</a> pane, the layer will then be preceded by a small <img src="../images/layerinfo.gif" align=bottom width="5" height="11">. By pressing the left mouse button in the map window, you will obtain 'Info' on the <i>top</i> layer of which the <span class=arial>Info</span> check box has been selected. When a map is shown by one of its attribute values, 'Info' shows the class name or identifier <i>and</i> the attribute value of this class or identifier.</p>
+
+<p class=defnewpar>When multiple maps are displayed, a search will be performed at the position of the mouse pointer through all layers (from top to bottom) that are displayed, and of which the <span class=arial>Info</span> check box has been selected. When in the first layer a class name, identifier, value or a color is found, it is displayed next to the mouse pointer. When an undefined value is found, the search continues in the next layer. If in a raster map no class name, identifier, value or color is found, a question mark is shown. If in a vector map no class name, identifier, or value is found, nothing is shown.</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li> You can increase or decrease the number of characters shown by 'Info' in a map window and in the map editors by setting the 'width' in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of the domain. The default width for a class domain is 15, the default width for an identifier domain is 6.</li>
+
+<li> For value raster maps, it is advised to select the <span class=arial>Interpolation</span> check box in the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> sheet; you will then obtain interpolated value information on sub-pixel level. </li>
+
+<li> To inspect the meanings and/or values of multiple maps and their attribute data, you can add multiple maps to a <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel information window</a>.</li>
+
+</ul>
+
+<p class=kopje>Double-click action, e.g. to view/edit attributes: </p>
+
+<p>When an attribute table is linked to a map or its <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> (class or ID domain), you can double-click at a position of interest in the map window and directly view and/or edit the attributes as stored in the <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>. </p>
+
+<p class=defnewpar>Double-click can also be used to edit the representation of the classes in a map with a class domain, and to open other maps, tables, (GIF) images, sounds or videos, etc. i.e. via an <span class=courier>Action</span> column in the map's attribute table. </p> 
+
+<p class=defnewpar>The action that will be performed on a double-click is determined by the <a href="../ilwismen/double_click_action.htm"><span class=arial>Double-Click Action</a></span> command on the <a href="map_window_menu_commands.htm">Layers menu</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>For more information, see also <a href="map_window_functionality_advanced.htm">Map window : functionality (advanced)</a>. </p>
+
+<p class=kopje>To zoom in and out on maps, and pan:</p>
+
+<p>To zoom in on a map, you can use for instance the <span class=arial><a href="../ilwismen/zoom_in_on_maps.htm">Zoom In</a></span> command on the <a href="map_window_menu_commands.htm">Options menu</a>, or you can click the <span class=arial>Zoom In</span> button <img src="../images/zoomin.gif" align=bottom width="22" height="22"> in the <a href="map_window_toolbar.htm">toolbar</a>. To zoom in on a certain area or position, you can also use the <a href="map_window_overview_window.htm">overview window</a>. </p>
+
+<p>If you zoom in very deeply on a raster map and when the <span class=arial>Text</span> check box has been selected in the map's Display Options dialog box, the values or meanings of pixels will appear inside the pixels of your map. </p>
+
+<p class=defnewpar>When zoomed in, you can use the <span class=arial><a href="..//ilwismen/popup/map_window_pan_popup.htm" onClick="return popup(this, 'notes')" >Pan</a></span> command from the Options menu or the <span class=arial>Pan</span> button <img src="../images/pan.gif" align=bottom width="22" height="22"> to roam through your map(s), or use the scroll bars. </p>
+
+<p class=defnewpar>To zoom out or to (re)display the entire map, you can use for instance the <span class=arial><a href="..//ilwismen/popup/options_zoomout_popup.htm" onClick="return popup(this, 'notes')" >Zoom Out</a></span> or the <span class=arial><a href="..//ilwismen/popup/map_window_entire_map_popup.htm" onClick="return popup(this, 'notes')" >Entire Map</a></span> commands on the Options menu, or click the <span class=arial>Zoom Out</span> button <img src="../images/zoomout.gif" align=bottom width="22" height="22">, or the <span class=arial>Entire Map</span> button <img src="../images/entirmap.gif" align=bottom width="22" height="22"> in the toolbar. </p>
+
+<p class=defnewpar>If you wish to display a raster map without any zooming, you can use the <span class=arial><a href="..//ilwismen/popup/options_no_zoom_popup.htm" onClick="return popup(this, 'notes')" >No Zoom</a></span> command on the Options menu. </p>
+
+<p class=defnewpar>To switch off <span class=arial>Zoom In</span>, <span class=arial>Zoom Out</span>, <span class=arial>Pan</span> or <span class=arial>Measure Distance</span> mode and return to normal pointing mode, choose the <span class=arial><a href="..//ilwismen/popup/map_window_normal_popup.htm" onClick="return popup(this, 'notes')" >Normal</a></span> command from the Options menu or click the <span class=arial>Normal</span> button <img src="../images/normal.gif" align=bottom width="22" height="22"> in the toolbar. The mouse pointer will change back into a normal pointer. You can also press the <span class=arial>Esc</span> key or the <span class=arial>Ctrl+N</span> keys on the keyboard to return to <span class=arial>Normal</span> mode. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>The <a href="map_window_overview_window.htm">overview window</a> provides an overview of the entire area of the maps that were added to the map window. You can use the overview window to quickly zoom in on a certain area, and it may help to orient yourself on the position of the area on which you zoomed in and that is currently shown by the map window. </li> 
+
+<li>For more information on zooming, see also <a href="map_window_toolbar.htm">Map window : toolbar</a>, and/or <a href="../ilwismen/zoom_in_on_maps.htm">Zoom In</a>. </li>
+
+</ul>
+
+<p class=kopje>To change a representation:</p>
+
+<p>If you are not satisfied with the current colors, hatching, line types, symbols, etc. of a map in your map window:</p>
+
+<ul>
+
+<li>	open the Display Options dialog box of the map and select another <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a>, or create a new one yourself, or</li>
+
+<li>	double-click the word 'Legend' of a map in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane, or </li>
+
+<li>    if you wish to edit the color etc. of a class in a map with a class domain, double-click the class or its color as listed in the Legend of the map in the Layer Management pane. </li>
+
+</ul>
+
+<p>    When the map window displays a map which uses a user-defined representation, you can also open Edit menu and choose <span class=arial><a href="../ilwismen/edit_representation.htm">Representation</a></span>. </p>
+
+<p class=linespacing03before>Depending on the domain used by the map, the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >representation Class editor</a> or the <a href="..//ilwis/popup/representation_value_gradual_editor_popup.htm" onClick="return popup(this, 'notes')" >representation Value/Gradual editor</a> will be opened. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>When a map uses a <a href="..//ilwis/sec/y_system_domains_sec.htm" onClick="return popup(this, 'notes')" >system domain</a> and a <a href="..//ilwis/sec/y_system_representations_sec.htm" onClick="return popup(this, 'notes')" >system representation</a>, the representation cannot be edited. You can create a new, custom representation for the map through the map's Display Options dialog box. </li>
+
+<li>For maps with a Class domain, you can also set the <a href="../ilwismen/double_click_action.htm">Double-click action</a> to <span class=arial>Representation</span> (<a href="map_window_menu_commands.htm">Layers menu</a>); double-clicking in the window then allows you to edit colors directly.</li>
+
+<li>For maps with a Bool domain, you can set the default colors for True and False through the <a href="../ilwismen/main_window_preferences.htm">Preferences</a> command on the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> of the Main window. </li>
+
+<li>For more information, see also <a href="ilwis_objects_representations.htm">ILWIS objects : representations</a> or <a href="how_to_use_representations.htm">How to use representations</a>. 
+
+</ul>
+
+<p class=kopje>Other functionality:</p>
+
+<ul>
+
+<li>    The scale on which the maps in a map window are displayed can be set in the Scale control. The Scale control is by default located next to the toolbar. </li>
+
+<li>    To display certain layers only on certain scales, you can use the <span class=arial>Scale Limit</span> check box in the Display Options dialog box of a layer. </li>
+
+<li>    When the map window is displaying a raster map or a map list as a color composite, you can show the histogram(s) of the raster map(s) by using the <span class=arial>Show Histogram</span> command on the <a href="map_window_menu_commands.htm">Options menu</a>. </li>
+
+<li>	The distance and angle between two points in a map window can be measured by selecting the <span class=arial><a href="../ilwismen/measure_distance.htm">Measure Distance</a></span> command from the Options menu or by clicking the <span class=arial>Measure Distance</span> button <img src="../images/dist.gif" align=bottom width="22" height="22"> in the <a href="map_window_toolbar.htm">toolbar</a>.</li>
+
+<li>	The background color of undefined parts in maps displayed in a map window can be changed by selecting <span class=arial><a href="../ilwismen/background_color.htm">Background Color</a></span> from the <a href="map_window_menu_commands.htm">Layers menu</a>. </li>
+
+        <p class=tiptext>The color of the map window background itself, i.e. the space outside the map(s) displayed in a map window (by default dark gray), can be changed by adapting the Windows Display/Appearance Settings. On the <span class=arial>Appearance</span> tab of the Windows <span class=arial>Display Properties</span> sheet, choose another color for <span class=arial>Application Background</span>. </p>
+
+<li>	The size of a map window can be increased or decreased by selecting the <span class=arial>Extend Window</span> command from the <a href="map_window_menu_commands.htm">Options menu</a>. </li>
+
+<li>	The coordinate system or georeference used by a map window can be changed by selecting <span class=arial>Coordinate System</span> from the Options menu. This is useful to display map(s) with different <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate systems</a>.</li>
+
+</ul>
+
+<p class=kopje>To edit maps:</p>
+
+<p>To edit maps you can start one of the <a href="editors_introduction_to_map_editors.htm">editors</a>. 
+
+In raster, polygon, segment and point maps, you can edit the IDs, class names or values in these maps, depending on the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map. 
+
+You can insert new segments or new points with or without using the digitizer. You can check segments and polygonize them. 
+
+Furthermore, in point maps, points can be moved to a new position; and in segment maps, the position of coordinates within segments can be edited. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span><a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent maps</a> cannot be edited until you <a href="../ilwis/how_to_break_dependency_links.htm">break the dependency links</a> in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> sheet of the dependent map.</p>
+
+<p class=kopje>To save multiple layers as a view and to create a layout:</p>
+
+<p>You can save the layers in a map window, their display settings, as well as the scale of the map window, and the position of the layers in the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. Use the <span class=arial>Save</span> button <img src="../images/save.gif" align=bottom width="22" height="22"> in the toolbar, or choose the <span class=arial><a href="../ilwismen/save_view.htm">Save View</a></span> or the <span class=arial><a href="../ilwismen/save_view_as.htm">Save View As</a></span> commands from the File menu. </p>
+
+<p>When a map view is opened later, all the layers in the map view are directly displayed in one map window without any display options being asked. </p>
+
+<p class=defnewpar>Furthermore, you need one or more map views if you wish to create a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> to print your map(s). To create a layout, choose <span class=arial><a href="../ilwismen/create_a_layout.htm">Create Layout</a></span> from the File menu in the map window. If the layers in the map window still need to be saved, you will be asked to do so. Then the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a> will be opened. To a layout, you can add one or more map views, and additional <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="basic_concepts_layers_in_a_map_window.htm">Basic concepts : layers in a map window</a></p>
+
+<p class=seealsolinks><a href="basic_concepts_map_views_and_layouts.htm">Basic concepts : map views and layouts</a></p>
+
+<p class=seealsolinks><a href="basic_concepts_domains.htm">Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="how_to_display_maps_and_tables.htm">How to basics: display maps and zoom</a></p>
+
+<p class=seealsolinks><a href="how_to_use_layers_in_a_map_window.htm">How to use layers in a map window</a></p>
+
+<p class=seealsolinks><a href="map_window_functionality_advanced.htm">Map window : functionality (advanced)</a></p>
+
+<p class=seealsolinks><a href="map_window_layer_management.htm">Map window : Layer Management</a></p>
+
+<p class=seealsolinks><a href="map_window_overview_window.htm">Map window : overview window</a></p>
+
+<p class=seealsolinks><a href="map_window_toolbar.htm">Map window : toolbar</a></p>
+
+<p class=seealsolinks><a href="map_window_menu_commands.htm">Map window : menu commands</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_map_views.htm">ILWIS objects : map views</a></p>
+
+</body

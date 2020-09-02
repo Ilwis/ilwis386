@@ -1,0 +1,437 @@
+<html>
+
+<head>
+<title>Main window : Catalog(s)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catalog, Main window, Multiple Catalogs, Data management, List View, Details View, Sort objects by ..., Show ..., Query, Predefined Catalog queries">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Main window</h1>
+
+<h1 class=secondline>Catalog(s)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The large right-central part of the <a href="..//ilwis/popup/main_window_popup.htm" onClick="return popup(this, 'notes')" >Main window</a> may show one or more Catalogs. </p>
+
+<p class=defnewpar>A Catalog provides an overview of:
+
+<ul>
+
+<li>the <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >ILWIS objects</a> in a directory, </p>
+
+<li>the raster maps that are available in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, </li>
+
+<li>the objects that are available in an <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object-collection</a>. </li>
+
+</ul>
+
+<p class=kopje>Objects and icons: </p>
+
+<p>The ILWIS object types and their icons that can be shown in a Catalog are: </p>
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top">
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rasmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/polmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/segmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/pointmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/table.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >tables</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/mpl.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map lists</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/objcol.gif" align=bottom width="15" height="13"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collections</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/mpv.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views </a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/layout.gif" align=bottom width="12" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layouts</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/anntxt.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text objects</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/domain.gif" align=bottom width="16" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domains</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rpr.gif" align=bottom width="16" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representations</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/georef.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeferences</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/coordsy.gif" align=bottom width="15" height="15"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinates systems</a></p>
+
+</td>
+</tr>
+</table> 
+</td><!--end LEFT column-->
+
+<td valign="top">
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hist.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_raster_popup.htm" onClick="return popup(this, 'notes')" >histograms of raster maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hispol.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_polygon_popup.htm" onClick="return popup(this, 'notes')" >histograms of polygon maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hisseg.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_segment_popup.htm" onClick="return popup(this, 'notes')" >histograms of segment maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hispnt.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_point_popup.htm" onClick="return popup(this, 'notes')" >histograms of point maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/sample.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample sets</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/tb2.gif" align=bottom width="14" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_table2dim_popup.htm" onClick="return popup(this, 'notes')" >two-dimensional tables</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/matrix.gif" align=bottom width="16" height="13"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_matrices_popup.htm" onClick="return popup(this, 'notes')" >matrices</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/filt.gif" align=bottom width="13" height="13"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_filters_popup.htm" onClick="return popup(this, 'notes')" >(user-defined) filters</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/func.gif" align=bottom width="15" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_userdef_functions_popup.htm" onClick="return popup(this, 'notes')" >user-defined functions</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/script.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a></p>
+
+</td>
+</tr>
+</table>
+</td> <!--end right column-->
+</tr>
+</table>
+
+<p class=defnewpar>Also <img src="../images/drive.gif" align=bottom width="16" height="12"> drives and <img src="../images/dir.gif" align=bottom width="14" height="12"> directories can be shown. To see foreign file types in a Catalog, i.e. files with non-ILWIS extensions, use the <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog, Object Selection tab</a>. </p>
+
+<p class=defnewpar>To get Help on a certain object type, click the object in a Catalog with the <i>right</i> mouse button, and choose Help from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<p class=kopje>List View and Details View: </p>
+
+<p>In ILWIS 3, you can choose to see the objects in a Catalog listed in: </p>
+
+<ul>
+
+<li class=linespacing01before><a href="../ilwismen/catalog_list_view.htm">List View</a>: simple list of object names and icons, </li>
+
+<li class=linespacing01before><a href="../ilwismen/catalog_details_view.htm">Details View</a>: detailed information for each object. </li>
+
+</ul>
+
+<p class=defnewpar>You can use the <span class=arial>List</span> and the <span class=arial>Details</span> commands on the <a href="main_window_menu_commands.htm">View menu</a> of the Main window, but you can also use the <span class=arial>List</span> button <img src="../images/catlist.gif" width="22" height="22"> or the <span class=arial>Details</span> button <img src="../images/catdetails.gif" width="22" height="22"> in the <a href="main_window_standard_toolbar.htm">standard toolbar</a> of the Main window. </p>
+
+<p class=kopje>Visible object types, sorting objects, querying for objects: </p>
+
+<p linesp03befafter>Furthermore, in each Catalog, you can specify: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li class=linespacing03before>the visible object types, </li>
+
+<p> see <a href="../ilwismen/catalog_show.htm">Catalog - Show</a>, <a href="../ilwis/main_window_object_selection_toolbar.htm">Main window : object selection toolbar</a> or <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog, Object Selection tab</a>, </p>
+
+<li class=linespacing03before>the sorting method of objects,  </li>
+
+<p> see <a href="../ilwismen/catalog_sort_by.htm">Catalog - Sort By</a> or <a href="../ilwismen/catalog_details_view.htm">Details View</a>, </p>
+
+<li class=linespacing03before>a query to search for specific objects, </li>
+
+<p> see <a href="../ilwismen/catalog_predefined_query.htm">Catalog - Queries</a> or <a href="../ilwismen/customize_catalog_query.htm">Customize Catalog, Query tab</a>. </p>
+
+</ul>
+
+<p class=defnewpar>For more information, see also the <a href="../ilwismen/catalog_list_view.htm">List View</a> and <a href="../ilwismen/catalog_details_view.htm">Details View</a> topics. </p>
+
+<p class=kopje>Multiple Catalogs: </p>
+
+<p>To open another new Catalog, you can choose the <a href="../ilwismen/new_catalog.htm"><span class=arial>New Catalog</span></a> command from the <a href="main_window_menu_commands.htm">Window menu</a> in the Main window, or click the <img src="../images/catopennew.gif" width="22" height="22"> <span class=arial>New Catalog</span> button in the <a href="main_window_standard_toolbar.htm">standard toolbar</a> of the Main window. Multiple Catalogs may give you a better overview of your data in several directories or in several object collections, etc. You can also easily copy objects from one Catalog (directory, object collection) to another by dragging. </p>
+
+
+<!--<p class=kopje>Specifying visible object types: </p>
+
+<p>For each Catalog, you can specify which object types you wish to see in that Catalog. To specify the object types, you can use for instance the <a href="../ilwis/main_window_object_selection_toolbar.htm">object selection toolbar</a>, the <a href="../ilwismen/catalog_show.htm"><span class=arial>Show</span></a> commmand on the <a href="main_window_menu_commands.htm"><span class=arial>View</span> menu</a>, or the <a href="../ilwismen/customize_catalog_selection.htm"><span class=arial>Customize Catalog</span>, Selection tab</a>. </p> 
+
+<p class=kopje>Sorting objects: </p>
+
+<p> In each Catalog, you can order the objects alphabetically, by type, by modification type, etc. For more information, see <a href="main_window_menu_commands.htm"><span class=arial>View</span> menu</a>, <a href="../ilwismen/catalog_sort_by.htm">Sort By ...</a>. In <a href="../ilwismen/catalog_details_view.htm">Details View</a>, you can also click the column headers to sort objects. </p> 
+
+<p class=kopje>Searching for certain objects: </p>
+
+<p>When you want to search for certain objects, e.g. objects of a certain type, objects with a certain name, object which use a certain domain or geoereference type or which use a certain domain or geoereference you can use predefined queries (View menu, Catalog Query) or contruct a query yourself (Customize Catalog, Query tab). The query that is in use is shown in the status bar. </p>
+
+-->
+
+<p class=kopje>Using a Catalog: </p>
+
+<p>A Catalog is mainly used for the following actions:
+
+<ul>
+
+<li class=linespacing01before> <i>move the mouse pointer over an object</i> in a Catalog: <br>
+
+        the <a href="main_window_status_bar.htm">status bar</a> displays the description of that object, and whether an object is dependent (D), calculated (C) and/or up-to-date (U); </li>
+
+<li class=linespacing01before> <i>double-click an object</i> in a Catalog: <br>
+
+        the object is opened and displayed in a new window; if you open a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent object</a> which has not been calculated yet, the object will first be calculated;</li>
+
+<li class=linespacing01before> <i>click the right mouse button</i> on an object in a Catalog: <br>
+
+        a <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> appears from which you can choose a command or an <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>,</li>
+
+<li class=linespacing01before> <i>drag</i> one or more raster, polygon, segment or point maps from a Catalog to a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a> or to a <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel information window</a>: <br>
+
+        the object(s) are added to that map window or that pixel info window,</li>
+
+<li class=linespacing01before> <i>drag</i> a compatible georeference or coordinate system from a Catalog to a map window which does not have a raster map yet: <br>
+
+        the map window will temporarily use that georeference or coordinate system;  </li>
+
+<li class=linespacing01before> <i>drag</i> a compatible coordinate system from a Catalog to a pixel info window: <br>
+
+        the coordinate system will be added to the pixel info window; you can thus read coordinates in the new coordinate system as well; </li>
+
+<li class=linespacing01before> <i>drag</i> one or more objects from one Catalog to another: <br>
+
+        the selected objects are copied to the other Catalog; </li>
+
+<li class=linespacing01before> <i>drag</i> a map or table from a Catalog to an operation in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>: <br>
+
+        the dialog box of that operation is opened and the input map or table name already filled out; </li>
+
+<li class=linespacing01before> <i>drag</i> a map or table from a Catalog to a <a href="..//ilwis/popup/win_drop_down_list_boxes.htm" onClick="return popup(this, 'notes')" >drop-down list box</a> in a dialog box of an operation: <br>
+        
+        the object is filled out in the field of the dialog box. </li>
+
+</ul>
+
+<p class=kopje>Other functionality: </p>
+
+<ul>
+
+<li>To refresh the contents of a Catalog, choose the <a href="..//ilwismen/popup/main_window_refresh_popup.htm" onClick="return popup(this, 'notes')" >Refresh</a> command from the Window menu, or press the <span class=arial>F5</span> key on the keyboard.</li>
+
+<li>To arrange Catalogs, choose the <a href="..//ilwismen/popup/main_window_arrange_catalogs_popup.htm" onClick="return popup(this, 'notes')" >Arrange Catalogs</a> command from the Window menu. </li>
+
+<li>To close all Catalogs, choose the <a href="..//ilwismen/popup/main_window_close_all_catalogs_popup.htm" onClick="return popup(this, 'notes')" >Close All Catalogs</a> command from the Window menu. </li>
+
+</ul>
+
+
+<p class=defnewpar>The settings of each Catalog are stored in the registry when a Catalog is closed. </p>
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_objects_and_icons.htm">Basic concepts : ILWIS objects</a></p>
+
+<p class=seealsolinks><a href="how_to_use_the_catalog.htm">How to use a Catalog</a></p>
+
+<p class=seealsolinks><a href="how_to_customize_the_catalog.htm">How to customize a Catalog</a></p>
+
+<p class=seealsolinks><a href="../ilwis/main_window_operation_list.htm">Operation-tree and Operation-list</a></p>
+
+</body

@@ -1,0 +1,98 @@
+<html>
+
+<head>
+<title>Polygons to points : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygons to points">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Polygon to points</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Polygons to points operation creates a point for each polygon in the polygon map. Each point obtains the class name, ID, or value of the corresponding polygon. In this way, polygon label points are created. Optionally, you can also obtain label points for polygons which have no class name, no ID or no value, i.e. for undefined polygons.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input polygon map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input polygon map. Open the list box and select the desired input map, or drag a polygon map directly from the Catalog into this box. No special input map requirements.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Label points:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For each polygon, a point is created in the output map. The points are located inside the corresponding polygons.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Include undefineds:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the label point file should also contain points for polygons without a class name, ID or value, i.e. for undefined polygons.</p>
+
+<p class=diabox>Clear this check box when you only want to obtain label points for polygons that have a class name, ID or value.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output point map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output point map that will contain the polygon label points.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary, the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="polygons_to_points_functionality.htm">Polygons to points : functionality</a></p>
+
+</body

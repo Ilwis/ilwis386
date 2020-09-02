@@ -1,0 +1,162 @@
+<html>
+
+<head>
+<title>Georef Tiepoints editor : toolbar</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Georeference Tiepoints editor, Toolbar, Tiepoint editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Georeference Tiepoints editor</h1>
+
+<h1 class=secondline>Toolbar</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwis/popup/button_bar_popup.htm" onClick="return popup(this, 'notes')" >toolbar</a> of the georeference tiepoints editor largely resembles the toolbar of a map window but there are some extra buttons to add a tiepoint, to delete a tiepoint, to choose a transformation method and to exit the editor.</p>
+
+<p class=linespacing03before><img src="../images/bbtiep.gif" align=bottom width="283" height="24"></p>
+
+<p class=defnewpar>The following actions can be performed:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p><img src="../images/entirmap.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=113>
+<p>Entire Map:</p>
+
+</td>
+<td valign="top">
+<p>Displays the entire map in the map window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p><img src="../images/zoomin.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=113>
+<p>Zoom In:</p>
+
+</td>
+<td valign="top">
+<p>Zooms in on a selected spot or area in the map. The mouse pointer changes into a magnifying-glass. Click to zoom in on a spot of interest, or drag the pointer from one corner of interest to another (the mouse pointer changes into a little box).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p><img src="../images/zoomout.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=113>
+<p>Zoom Out:</p>
+
+</td>
+<td valign="top">
+<p>Zooms out directly from the center of the displayed map with a factor 2. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p><img src="../images/redraw.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=113>
+<p>Redraw:</p>
+
+</td>
+<td valign="top">
+<p>Redraws the contents of the map window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p><img src="../images/tpadd.gif" align=bottom width="28" height="24"></p>
+
+</td>
+<td valign="top" width=113>
+<p>Add tiepoint:</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/georeference_tiepoints_editor_add_tiepoint.htm">Add Tiepoint</a> dialog box in which you can enter Row and Column numbers and XY-coordinates for a new tiepoint from the keyboard. You can also add tiepoints by clicking in the map window, or by typing the Row and Column numbers and XY-coordinates directly in the tiepoint table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p><img src="../images/tpdel.gif" align=bottom width="28" height="24"></p>
+
+</td>
+<td valign="top" width=113>
+<p>Delete tiepoint:</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/georeference_tiepoints_editor_delete_tiepoint.htm">Delete Tiepoint</a> dialog box in which you can specify the number of the tiepoint you want to delete. You can also delete one or more tiepoints by selecting records in the tiepoint table, then press the <span class=arial>Del</span> key on the keyboard or choose <span class=arial>Delete</span> from the <a href="..//ilwismen/sec2/georeference_tiepoints_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p><img src="../images/tptran.gif" align=bottom width="28" height="24"></p>
+
+</td>
+<td valign="top" width=113>
+<p>Transformation method:</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/georeference_tiepoints_editor_transformation.htm">Transformation</a> dialog box in which you can select a transformation method with which the relation between Row and Column values and the XY-coordinates of your tiepoints should be calculated. This button is only available when editing a georef tiepoints.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p><img src="../images/ed_stoped.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=113>
+<p>Exit editor:</p>
+
+</td>
+<td valign="top">
+<p>Leaves the editor and keeps all changes.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The toolbar can be hidden or shown with the <span class=arial>Toolbar</span> command on the <a href="map_window_menu_commands.htm">Options menu</a>. If the action of a certain button cannot be performed at a certain moment, the button appears gray.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="georeference_tiepoints_editor.htm">Georeference Tiepoints editor : functionality</a></p>
+
+<p class=seealsolinks><a href="georeference_tiepoints_editor_menu_commands.htm">Georeference Tiepoints editor : menu commands</a></p>
+
+</body

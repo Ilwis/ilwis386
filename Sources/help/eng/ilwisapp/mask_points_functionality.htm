@@ -1,0 +1,99 @@
+<html>
+
+<head>
+<title>Mask points : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Mask points">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Mask points</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Mask Points operation allows you to selectively copy points of an input point map into a new output point map. The user has to specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> to select and retrieve the class names, IDs or values of the points that are to be copied. </p>
+
+<p class=defnewpar>By specifying a mask, you can search for points with a certain class name, ID or value. A mask is in fact a simple query to find (retrieve), display or use only those points in a map that have certain class names, identifiers or values. A mask contains one or more search strings in which wild cards, asterisks (<span class=courier>*</span>) and question marks (<span class=courier>?</span>), are allowed. You can enter as many search strings in a mask as you like; separate the strings by commas.</p>
+
+<p class=kopje>Mask syntax:</p>
+
+<ul>
+
+<li>	search strings in a mask are compared with the classes, IDs or values of the domain of a map; when a map uses a class or ID domain and the classes or IDs have codes, the mask works on the codes <i>and</i> on the names <i>and</i> on the combination of codes and names,</li>
+
+<li>	to find/retrieve one specific class name, identifier or value: type that class name, ID or identifier in the mask, </li>
+
+<li>	to find/retrieve multiple class names, identifiers or values: separate the different class names, identifiers or values in the mask by commas (it does not matter whether you use spaces before or after a comma) </li>
+
+<li>	you can use asterisks as wild cards to replace zero or more characters in class names, IDs or values, for example <span class=courier>road*,riv*</span> or  <span class=courier>1*,2*,3*</span> , or even <span class=courier>*25,*50,*75,*00</span>, or <span class=courier>A*b*,D*g*</span></li>
+
+<li>	you can use question marks as wild cards to replace single characters in class names, identifiers or values, for example <span class=courier>Ab?,D?,Gl?</span> or <span class=courier>?p,??i</span>, or <span class=courier>A*b??</span>,<span class=courier>D*g??</span></li>
+
+<li>	in a dialog box, you should not use quotes around class names, identifiers or values,</li>
+
+<li>	on the command line, you must use double quotes around the complete mask.</li>
+
+</ul>
+
+<p class=kopje>Examples:</p>
+
+<ul>
+
+<li>	When a point map contains topographic features, and you want to copy points with class names ‘city’ and ‘mountain peak’; use as mask: <span class=courier>city, mountain peak</span></li>
+
+<li>	When a point map contains bore holes identified by IDs between 100 and 999, and you want to copy the points with an ID that starts with a 1, e.g. IDs 101, 102, 103, etc.; use as mask: <span class=courier>1*</span></li>
+
+<li>	When a point map contains information on precipitation in milimeters, and you want to copy the points with a precipitation between 400 and 600; use as mask: <span class=courier>4*,5*,6*</span></li>
+
+</ul>
+
+<p>For more information, see <a href="../ilwis/how_to_use_masks.htm">How to use masks</a>.</p>
+
+<p class=kopje>Requirements for input point map:</p>
+
+<p>No special input map requirements. </p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The output point map uses the same domain as the input point map.</p>
+
+<p>The output point map uses the same coordinate system and coordinate boundaries as the input point map.</p>
+
+<p class=tip>Tip:</p>
+
+<ul class=tipul>
+
+<li>	This operation creates a new point map. You can also display specific points of a point map in a  map window without creating a new point map: select the Mask check box on the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of the point map which appears when you open the point map. Then, specify the mask, i.e. the class names, identifiers or values of the points that you want to display. </li>
+
+<li>	To copy a certain area of a point map into a new point map, see <a href="..//ilwisapp/popup/sub_map_points_popup.htm" onClick="return popup(this, 'notes')" >Sub-map of point map</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="mask_points_dialog_box.htm">Mask points : dialog box</a></p>
+
+<p class=seealsolinks><a href="mask_points_command_line.htm">Mask points : command line</a></p>
+
+<p class=seealsolinks><a href="mask_points_algorithm.htm">Mask points : algorithm</a></p>
+
+</body

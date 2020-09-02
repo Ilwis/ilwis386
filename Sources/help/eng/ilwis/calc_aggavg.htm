@@ -1,0 +1,385 @@
+<html>
+
+<head>
+<title>AGGAVG or ColumnAggregateAvg</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="AGGAVG, ColumnAggregateAvg, Aggregate functions, Average">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>AGGAVG( ) or ColumnAggregateAvg() function</h1>
+
+<p class=defnewpar>Returns the average of an entire column, the averages per group, the weighted average of an entire column, or weighted averages per group.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>AGGAVG</span>(<i>ValueColumn</i>)<br>
+<span class=courier>AGGAVG</span>(<i>ValueColumn</i>, <i>Group</i>)<br>
+<span class=courier>AGGAVG</span>(<i>ValueColumn</i>, , <i>Weight</i>)<br>
+<span class=courier>AGGAVG</span>(<i>ValueColumn</i>, <i>Group</i>, <i>Weight</i>)<br>
+<span class=courier>ColumnAggregateAvg</span>(<i>ValueColumn</i>)<br>
+<span class=courier>ColumnAggregateAvg</span>(<i>ValueColumn</i>, <i>Group</i>)<br>
+<span class=courier>ColumnAggregateAvg</span>(<i>ValueColumn</i>, , <i>Weight</i>)<br>
+<span class=courier>ColumnAggregateAvg</span>(<i>ValueColumn</i>, <i>Group</i>, <i>Weight</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>ValueColumn</i></td>
+	<td valign="top">is a value column</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>Group</i></td>
+	<td valign="top">is the 'group by' column</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a>, <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a>, <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >Group</a> 
+      or <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>Weight</i></td>
+	<td valign="top">is the weight column</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+    <td colspan="2" valign="top">
+        <p><span class=courier>AGGAVG</span>(<i>ValueColumn</i>) or <span class=courier>ColumnAggregateAvg</span>(<i>ValueColumn</i>)</p></td>
+ </tr>
+ <tr>
+    <td width="40" valign="top"><p class=nospacetop>returns:</p></td>
+    <td valign="top"><p class=nospacetop>the average value of a column</p></td>
+</tr>
+<tr>
+	<td width="40" valign="top"><p>Domain:</p></td>
+	<td valign="top"><p>the value domain of the input column</p></td>
+</tr>
+<tr>
+    <td colspan="2" valign="top">
+        <p class=emptylinehalf>&nbsp;</p>
+        <p><span class=courier>AGGAVG</span>(<i>ValueColumn</i>, <i>Group</i>) or <span class=courier>ColumnAggregateAvg</span>(<i>ValueColumn</i>, <i>Group</i>) </p></td>
+ </tr>
+ <tr>
+    <td width="40" valign="top"><p class=nospacetop>returns:</p></td>
+    <td valign="top"><p class=nospacetop>&nbsp;average values per group</p></td>
+</tr>
+<tr>
+	<td width="40" valign="top"><p>Domain:</p></td>
+	<td valign="top"><p>the value domain of the input column</p></td>
+</tr>
+<tr>
+    <td colspan="2" valign="top">
+        <p class=emptylinehalf>&nbsp;</p>
+        <p><span class=courier>AGGAVG</span>(<i>ValueColumn</i>, , <i>Weight</i>) or <span class=courier>ColumnAggregateAvg</span>(<i>ValueColumn</i>, , <i>Weight</i>) </p></td>
+ </tr>
+ <tr>
+    <td width="40" valign="top"><p class=nospacetop>returns:</p></td>
+    <td valign="top"><p class=nospacetop>a weighted average value</p></td>
+</tr>
+<tr>
+	<td width="40" valign="top"><p>Domain:</p></td>
+	<td valign="top"><p>the value domain of the input column</p></td>
+</tr>
+<tr>
+    <td colspan="2" valign="top">
+        <p class=emptylinehalf>&nbsp;</p>
+        <p><span class=courier>AGGAVG</span>(<i>ValueColumn</i>, <i>Group</i>, <i>Weight</i>) or <span class=courier>ColumnAggregateAvg</span>(<i>ValueColumn</i>, <i>Group</i>, <i>Weight</i>) </p></td>
+ </tr>
+ <tr>
+    <td width="40" valign="top"><p class=nospacetop>returns</p></td>
+    <td valign="top"><p class=nospacetop>weighted average values per group</p></td>
+</tr>
+<tr>
+	<td width="40" valign="top"><p>Domain:</p></td>
+	<td valign="top"><p>the value domain of the input column</p></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The <span class=courier>AGGAVG</span> and the <span class=courier>ColumnAggregateAvg</span> function are aliases of each other. These functions can be used both in a table window and in scripts. </li>
+	<li>A 'group by' column can be specified when you perform an aggregation within one table. A 'group by' column must be specified when you perform an aggregation during a join.</li>
+	<li>When no weight column is specified, all data gets the same weight value, i.e. weight 1.</li>
+	<li>The function parameters refer to nothing else than column names. This means that within the brackets no other expressions can be used.</li>
+        <li>Any undefined values in the input column are excluded from the calculation.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+        <li>On the command line of a table window, you may also use the <span class=courier><a href="calc_avg.htm">AVG</span></a> function. </li>
+
+        <li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</li>
+
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>TabCalc example:</p>
+<p class=calc00>OutCol1 = AGGAVG(Area)</p>
+<p class=calc00>OutCol2 = AGGAVG(Area,Landuse)</p>
+<p class=calc00>OutCol3 = AGGAVG(Area,,Weights)</p>
+<p class=calc00>OutCol4 = AGGAVG(Area,Landuse,Weights)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top"><p class="tcolhr">Parcel</p></td>
+    <td valign="top"><p class="tcolh">Landuse</p></td>
+    <td valign="top"><p class="tcolhr">Area</p></td>
+    <td valign="top"><p class="tcolhr">Weights</p></td>
+    <td valign="top"><p class="tcolhr">OutCol1</p></td>
+    <td valign="top"><p class="tcolhr">OutCol2</p></td>
+    <td valign="top"><p class="tcolhr">OutCol3</p></td>
+    <td valign="top"><p class="tcolhr">OutCol4</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">00123</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">4000</p></td>
+    <td valign="top"><p class="t1r">2</p></td>
+    <td valign="top"><p class="t1r">10000</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+    <td valign="top"><p class="t1r">10818</p></td>
+    <td valign="top"><p class="t1r">4800</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">00124</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">3500</p></td>
+    <td valign="top"><p class="t1r">1</p></td>
+    <td valign="top"><p class="t1r">10000</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+    <td valign="top"><p class="t1r">10818</p></td>
+    <td valign="top"><p class="t1r">4800</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">00125</p></td>
+    <td valign="top"><p class="t1">Commercial</p></td>
+    <td valign="top"><p class="t1r">17500</p></td>
+    <td valign="top"><p class="t1r">4</p></td>
+    <td valign="top"><p class="t1r">10000</p></td>
+    <td valign="top"><p class="t1r">17500</p></td>
+    <td valign="top"><p class="t1r">10818</p></td>
+    <td valign="top"><p class="t1r">17500</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">00126</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">7500</p></td>
+    <td valign="top"><p class="t1r">1</p></td>
+    <td valign="top"><p class="t1r">10000</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+    <td valign="top"><p class="t1r">10818</p></td>
+    <td valign="top"><p class="t1r">4800</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">00127</p></td>
+    <td valign="top"><p class="t1">Industrial</p></td>
+    <td valign="top"><p class="t1r">20000</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+    <td valign="top"><p class="t1r">10000</p></td>
+    <td valign="top"><p class="t1r">20000</p></td>
+    <td valign="top"><p class="t1r">10818</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">01272</p></td>
+    <td valign="top"><p class="t1">Institutional</p></td>
+    <td valign="top"><p class="t1r">12500</p></td>
+    <td valign="top"><p class="t1r">2</p></td>
+    <td valign="top"><p class="t1r">10000</p></td>
+    <td valign="top"><p class="t1r">12500</p></td>
+    <td valign="top"><p class="t1r">10818</p></td>
+    <td valign="top"><p class="t1r">12500</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">04625</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+    <td valign="top"><p class="t1r">1</p></td>
+    <td valign="top"><p class="t1r">10000</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+    <td valign="top"><p class="t1r">10818</p></td>
+    <td valign="top"><p class="t1r">4800</p></td>
+  </tr>
+</table>
+<p class=emptylinehalf>&nbsp;</p>
+<ul>
+	<li>Column <span class=courier>OutCol1</span> contains the average of the area of all parcels.</li>
+	<li>Column <span class=courier>OutCol2</span> contains the averages of parcel areas per land use class. E.g. for class <span class=courier>Residential</span>: (4000+3500+7500+5000) / 4 = 5000.
+	<li>Column <span class=courier>OutCol3</span> contains the weighted average of the area of all parcels, i.e. (4000*2+3500*1+17500*4+7500*1+20000*?+12500*2+5000*1) / (2+1+4+1+2+1).</li>
+	<li>Column <span class=courier>OutCol4</span> contains the weighted averages of parcel areas per landuse class. E.g. for class <span class=courier>Residential</span>: (4000*2+3500*1+7500*1+5000*1) / (2+1+1+1) = 4800.</li>
+</ul>
+
+<p class="kopje">Advanced example</p>
+<p>Use the following syntax to write output values from a table <span class=courier>Parcel</span> into in a new column of another existing table <span class=courier>Landuse</span>:</p>
+<p class="calc0linsp03befaft">Landuse.AvgParSize = AGGAVG(Parcel.Area,Parcel.Landuse)</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" colspan="3"><p class="th">Landuse.tbt</p></td>
+    <td valign="top" colspan="3"><p class="th">Parcel.tbt</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="tcolh">Dom.<br>Landuse</p></td>
+    <td valign="top" width="55"><p class="tcolhr"><br>AnyInfo</p></td>
+    <td valign="top" width="20"></td>
+    <td valign="top" width="45"><p class="tcolh">Dom.<br>Parcel</p></td>
+    <td valign="top" width="70"><p class="tcolh"><br>Landuse</p></td>
+    <td valign="top"><p class="tcolhr"><br>Area</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Residential</p></td>
+    <td valign="top" width="55"><p class="t1r">1000</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1r">00123</p></td>
+    <td valign="top" width="70"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">4000</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Commercial</p></td>
+    <td valign="top" width="55"><p class="t1r">2000</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1r">00124</p></td>
+    <td valign="top" width="70"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">3500</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Industrial</p></td>
+    <td valign="top" width="55"><p class="t1r">5000</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1r">00125</p></td>
+    <td valign="top" width="70"><p class="t1">Commercial</p></td>
+    <td valign="top"><p class="t1r">17500</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Institutional</p></td>
+    <td valign="top" width="55"><p class="t1r">4000</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1r">00126</p></td>
+    <td valign="top" width="70"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">7500</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">....</p></td>
+    <td valign="top" width="55"><p class="t1r">...</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1r">00127</p></td>
+    <td valign="top" width="70"><p class="t1">Industrial</p></td>
+    <td valign="top"><p class="t1r">20000</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1r"></p></td>
+    <td valign="top" width="55"><p class="t1r"></p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1r">01272</p></td>
+    <td valign="top" width="70"><p class="t1">Institutional</p></td>
+    <td valign="top"><p class="t1r">12500</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1r"></p></td>
+    <td valign="top" width="55"><p class="t1r"></p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1r">04625</p></td>
+    <td valign="top" width="70"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+  </tr>
+</table>
+
+<p class="emptyline">&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+    <td valign="top" colspan="3"><p class="th">Landuse.tbt after aggregation</p></td>
+</tr>
+<tr>
+    <td valign="top"><p class="tcolh">Dom.<br>Landuse</p></td>
+    <td valign="top"><p class="tcolhr"><br>AnyInfo</p></td>
+    <td valign="top"><p class="tcolhr"><br>AvgParSize</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">Commercial</p></td>
+    <td valign="top"><p class="t1r">2000</p></td>
+    <td valign="top"><p class="t1r">17500</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">Industrial</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+    <td valign="top"><p class="t1r">20000</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">Institutional</p></td>
+    <td valign="top"><p class="t1r">4000</p></td>
+    <td valign="top"><p class="t1r">12500</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">...</p></td>
+    <td valign="top"><p class="t1r">...</p></td>
+    <td valign="top"><p class="t1r">...</p></td>
+  </tr>
+</table>
+
+<p class="defnewpar">The average value of column <span class="courier">Area</span> in table <span class="courier">Parcel</span> grouped by <span class="courier">Landuse</span>, is written into column <span class="courier">AvgParSize</span> in table <span class="courier">Landuse.</span></p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="80"><p class=seealsolinks><a href="calc_aggmin.htm">AGGMIN</a></p></td>
+	<td valign="top" width="80"><p class=seealsolinks><a href="calc_aggmed.htm">AGGMED</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_aggcnt.htm">AGGCNT</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><p class=seealsolinks><a href="calc_aggmax.htm">AGGMAX</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_aggprd.htm">AGGPRD</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_avg.htm">AVG</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><p class=seealsolinks><a href="calc_aggsum.htm">AGGSUM</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_aggstd.htm">AGGSTD</a></p></td>
+</tr>
+<tr>
+<td colspan="3" valign="top">
+<p class=seealsolinks><a href="../ilwismen/aggregate_column.htm">Aggregate Column</a> (dialog box)</p>
+
+</td>
+</tr>
+</table>
+
+</body

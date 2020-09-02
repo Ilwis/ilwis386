@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>kriging popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Kriging</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/kriging.htm" onClick="return popup(this, 'notes')" >Kriging</a> can be seen as a <a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" >point interpolation</a> which requires a point map as input and returns a raster map with estimations and optionally an error map. The estimations are weighted averaged input point values, similar to the <a href="../../ilwisapp/popup/moving_average_popup.htm">Moving Average</a> operation. The weight factors in Kriging are determined by using a user-specified semi-variogram model (based on the output of the <a href="../../ilwisapp/popup/spatial_correlation_popup.htm">Spatial correlation</a> operation), the distribution of input points, and are calculated in such a way that they minimize the estimation error in each output pixel. The estimated or predicted values are thus a linear combination of the input values and have a minimum estimation error. Two methods are available: Simple Kriging and Ordinary Kriging. The optional error map contains the standard errors of the estimates.</p>
+
+<p>Besides Simple and Ordinary Kriging, you can also use the operations <a href="anisotropic_kriging_popup.htm">Anisotropic Kriging</a>, <a href="../../ilwisapp/popup/universal_kriging_popup.htm">Universal Kriging</a>, <a href="cokriging_popup.htm">CoKriging</a>, or <a href="kriging_from_raster_popup.htm">Kriging from Raster</a>.</p>
+
+</body

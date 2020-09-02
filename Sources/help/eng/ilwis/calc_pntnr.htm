@@ -1,0 +1,164 @@
+<html>
+
+<head>
+<title>PNTNR</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="PNTNR, Point functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>PNTNR( ) function</h1>
+
+<p class=defnewpar>Returns the record number of the point with the name or value <i>PointName</i> in point map <i>PointMap</i>.&nbsp;</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>PNTNR</span>(<i>PointMap, </i>&quot;<i>PointName</i>&quot;)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>PointMap</i></td>
+	<td valign="top">is a point map</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>PointName</i></td>
+	<td valign="top">is a point name or a point value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top"> domain of the <i>PointMap</i></td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>PNTNR</span> returns:</td>
+	<td valign="top">a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>By opening the point map as table you can find the point number (i.e. the record number in the table) of individual points.</li>
+	<li>If &quot;<i>PointName</i>&quot; is not unique, the last valid record number is returned.</li>
+	<li>When one of the input parameters is undefined, or when both input parameters are undefined, the output will also be undefined.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>This function may be handy to use in <a href="..//ilwis/popup/dde_popup.htm" onClick="return popup(this, 'notes')" >DDE</a> applications.</li>
+	<li>The result of this function is often used as second parameter in <a href="calc_pntval.htm"><span class=courier>PNTVAL</span></a>, <a href="calc_pntcrd.htm"><span class=courier>PNTCRD</span></a>, etc.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p>
+<a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a>, <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+<p class=kopjeaftertitlesub>Pocket line calculator example:</p>
+<p>Point map <span class=courier>Rainfall</span> stores rainfall values of rainfall station located in the area of Cochabamba (Bolivia). To retrieve the point number of a certain rainfall station:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="290"><p class=calc00>? PNTNR(Rainfall, &quot;Laguna Santa Rosa&quot;)</p></td>
+	<td><p valign="top">returns e.g. 3</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc examples:</p>
+<p class=calc00>OutCol1 = PNTNR(Rainfall,&quot;Laguna Santa Rosa&quot;)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=th>Rainfall.mpp opened as table</p></td>
+</tr>
+</table>
+<table cellspacing=0>
+<table>
+<tr>
+	<td valign="top"><p class=tcolhr>Recordnr</p></td>
+	<td valign="top"><p class=tcolh>Name</p></td>
+	<td valign="top"><p class=tcolhr>Coordinate</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1>UMSS</p></td>
+	<td valign="top"><p class=t1r>(803429.00, 8074631.00)</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1>Taquina</p></td>
+	<td valign="top"><p class=t1r>(799748.00, 8082415.00)</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1>Laguna Santa Rosa</p></td>
+	<td valign="top"><p class=t1r>(803511.00, 8087422.00)</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1>Laguna Totura</p></td>
+	<td valign="top"><p class=t1r>(801281.00, 8088967.00)</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1>PROMIC</p></td>
+	<td valign="top"><p class=t1r>(802613.00, 8080483.00)</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1>Aro Caqua</p></td>
+	<td valign="top"><p class=t1r>(806816.00, 8076585.00)</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1>Colca Pithua</p></td>
+	<td valign="top"><p class=t1r>(797465.00, 8078352.00)</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>8</p></td>
+	<td valign="top"><p class=t1>Cerro MachaMach</p></td>
+	<td valign="top"><p class=t1r>(796346.00, 8087736.00)</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>9</p></td>
+	<td valign="top"><p class=t1>Laguna WaraWara</p></td>
+	<td valign="top"><p class=t1r>(806042.00, 8085414.00)</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_pntval.htm">PNTVAL</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_pntcrd.htm">PNTCRD</a></p></td>
+</tr>
+</table>
+
+</body

@@ -1,0 +1,106 @@
+<html>
+
+<head>
+<title>Add layer to map window</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Add ..., Layers, Map window, Raster maps, Polygon maps, Segment maps, Point maps, Map lists, Annotation Text">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window  </h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Layers menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Add Layer</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Add a <a href="..//ilwis/popup/layers_data_layers_popup.htm" onClick="return popup(this, 'notes')" >data layer</a> (raster map, polygon map, segment map, point map or a map list to be displayed as a color composite) or an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text layer</a> to the current map window. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="96">
+<p class=diabox>Select layer:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the object that you wish to add as a layer to the current map window: </p>
+<p><img src="../images/rasmap.gif" align=bottom width="16" height="12"> a <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a>, </p>
+<p><img src="../images/polmap.gif" align=bottom width="16" height="12"> a <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon map</a>, </p>
+<p><img src="../images/segmap.gif" align=bottom width="16" height="12"> a <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment map</a>, </p>
+<p><img src="../images/pointmap.gif" align=bottom width="16" height="12"> a <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point map</a>, </p>
+<p><img src="../images/mpl.gif" align=bottom width="16" height="12"> a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, or </p>
+<p><img src="../images/anntxt.gif" align=bottom width="16" height="12"> an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text object</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="96">
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="96">
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+
+<p class=defnewpar>Depending on the type of object you selected, a <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options dialog box</a> will be opened in which you can specify the <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> for the selected layer.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>    When a map window already displays a raster map (or a map list) and you wish to add another raster map (or map list) to the map window, the selected raster map (or map list) can only be added to the map window when it uses the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> as the raster map(s) that are already displayed. </li>
+
+<li>	You can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >one or more</a> maps, map lists or annotation text layers from a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> or from Windows Explorer to the desired map window with the mouse. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_add_extra_layers_to_a_map_window.htm">How to add extra layers to a map window</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_use_layers_in_a_map_window.htm">How to use layers in a map window</a></p>
+
+</body

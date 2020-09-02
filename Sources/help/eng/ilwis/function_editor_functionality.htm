@@ -1,0 +1,284 @@
+<html>
+
+<head>
+<title>Function editor : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Function editor, Edit function, Editors, Edit ..., Functions, User-defined functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Function editor</h1>
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The function editor allows you to <i>view</i> and/or <i>edit</i>
+user-defined <a href="..//ilwis/popup/objects_userdef_functions_popup.htm" onClick="return popup(this, 'notes')" >functions</a>. A user-defined function generally contains of a
+combination of:</p>
+
+<ul>
+<li>existing MapCalc/TabCalc operators and functions, and</li>
+<li>user-defined parameters which represent maps and/or columns on which the function will be applied later on.</li>
+</ul>
+
+<p class=defnewpar>With the editor you can for example:</p>
+
+<ul>
+<li>modify the function,</li>
+<li>change the domain types of input parameters for the function as well as the domain of the output map or column, or</li>
+<li>add remarks.</li>
+</ul>
+
+<p class=kopje>To open the function editor:</p>
+<p>The function editor automatically opens when you create a new <a href="ilwis_objects_functions.htm">function</a>
+in the <a href="../ilwismen/create_a_function.htm">Create Function</a> dialog box.&nbsp;The function editor is also opened when you edit
+an existing function, e.g. by double-clicking a function in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. For other
+methods, see <a href="how_to_edit_objects.htm">How to edit objects</a>.</p> 
+
+<p class=kopje>Parts of the function editor:</p>
+<p>The function editor has a <a href="function_editor_menu_commands.htm">menu bar</a>, a description bar, a <a href="function_editor_toolbar.htm">toolbar</a>,
+a text pane where the function is defined, and a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.&nbsp;</p>
+
+<p class=defnewpar>The description bar and the toolbar can be moved and <i>docked</i> along an edge of the window. You can also make them floating. You can hide or show the description bar, the toolbar and the status bar via the commands on
+the <a href="function_editor_menu_commands.htm">View menu</a>. These settings as well as the size of the window etc. are stored per
+function in the registry. The function that is closed last thus determines the appearance of any newly opened
+function.</p>
+
+<p class=kopje>Function syntax:</p>
+<p>In the text pane, the function is listed as defined in the <a href="../ilwismen/create_a_function.htm">Create
+Function</a> dialog box. A user-defined function may contain any combination of
+MapCalc/TabCalc operators and functions and may use parameters representing maps
+or columns. The syntax for a function with parameters is:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class="calccommline"><span class="courier">Function </span>FunctionName (<i>ParamDomainType</i> Param [,<i>ParamDomainType</i>  Param]) : <i>OutputDomain</i></p>
+
+<p class="calccommline"><span class="courier">Begin</span></p>
+
+<p class="calccommline"><span class="courier">&nbsp;&nbsp;Return</span>&nbsp;&nbsp;<i>Expression</i>;</p>
+
+<p class="calccommline"><span class="courier">End</span>;</p>
+
+<p class="defnewpar">Where:</p>
+
+<table border="0" cellpadding="0" cellspacing="0" class=diabox>
+  <tr>
+    <td width="135" valign="top">FunctionName</td>
+    <td>is the <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> of the function as specified in the Create Function dialog box.</td>
+  </tr>
+  <tr>
+    <td width="135" valign="top"><i>ParamDomainType</i></td>
+    <td>is the domain type of an input parameter. You can use either
+      <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> | <a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >String</a> | Coord | Color | <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a>.
+      By default, the domain type of input parameters is set to Value.
+<ul>
+      <li>Choose Value when input maps or columns use a Value domain, </li>
+
+      <li>choose String when input maps or columns use a Class or ID domain or when columns use the String domain, </li>
+
+      <li>choose Coord when input columns use the Coord domain (X,Y), </li>
+
+      <li>choose Color when input maps or columns use the Color domain, </li>
+
+      <li>choose Bool when input maps or columns use the Bool, the YesNo, or the Bit domain. </li>
+
+</ul>
+
+  </td>
+  </tr>
+  <tr>
+    <td width="135" valign="top">Param</td>
+    <td>is the name of an input parameter. 
+
+        <br>Parameter names:
+        
+        <ul>
+
+        <li>must start with a character from A to Z, </li>
+
+        <li>may contain characters from A to Z, digits 0 to 9, and underscores, </li>
+
+        <li>may be longer than 8 characters. </li>
+
+        </ul>
+    </td>
+  </tr>
+  <tr>
+    <td width="135" valign="top"><i>OutputDomain</i></td>
+    <td>is the domain that should be used for the output object (a
+      column or a map) of the function. You can choose any domain available in your data set as
+      well as system domain Coord. By default, the output domain is set to the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system Value domain</a>.
+      When you choose a value output domain, the value range is determined by
+      the selected domain.</td>
+  </tr>
+  <tr>
+    <td width="135" valign="top"><i>Expression</i></td>
+    <td>is the expression that the function should perform, as defined before in the <a href="../ilwismen/create_a_function.htm">Create Function</a> dialog box.</td>
+  </tr>
+</table>
+
+<p class=tip>Mind: </p>
+
+<ul class=tipul>
+
+<li>When a function is created, the domain type of all input parameters <i>ParamDomainType</i>, and the output domain <i>OutputDomain</i> for the function are by default set to <span class=functionexpl>Value</span>. </li>
+
+<li>In case your input parameters use <i>another</i> domain type than domain type Value, or if the output domain of the function is another domain than system domain Value, you need to <i>change</i> the word(s) <span class=functionexpl>Value</span> yourself in the appropriate place(s). </li>
+
+<li>In other words, you must make sure that the domain type of each parameter and the output domain of the function are correctly declared. </li>
+
+</ul>
+
+<p class="tip">Tips:</p>
+
+<ol class="tipol">
+
+<li>You can add remarks in a function by starting a line with <span class=courier>rem</span> or <span class=courier>//</span> as in:<br>
+
+<span class=courier>rem This is a remark.</span><br>
+
+<span class=courier>// This is a remark.</span> </li>
+
+<li>For examples of functions, see <a href="calc_creating_and_applying_user_defined_functions.htm">Map calculation : creating and applying user-defined functions</a>, <a href="calc_creating_and_applying_user_defined_functions.htm">Table calculation : creating and applying user-defined functions</a> or <a href="calc_user_defined_functions_advanced.htm">Map and Table calculation : user-defined functions (advanced)</a>.</li>
+
+</ol>
+
+<p class="defnewpar">Although it is not common, you may define functions without any parameters. The syntax for such a function is:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class="calccommline"><span class="courier">Function </span>FunctionName() : <i>OutputDomain</i></p>
+
+<p class="calccommline"><span class="courier">Begin</span></p>
+
+<p class="calccommline"><span class="courier">Return</span>  <i>Expression</i>;</p>
+
+<p class="calccommline"><span class="courier">End</span>;</p>
+
+<h2>Using the function editor</h2>
+<p>The function editor is a simple text editor similar to Notepad and WordPad.</p>
+ <p class=kopje>To cut, copy, paste and delete selections within the function editor:</p>
+<p>You can cut, copy, paste and delete texts in the same way as in a text editor:</p>
+<p>&nbsp;</p>
+<ul>
+  <li>Use the <span class=arial>Cut</span>, <span class=arial>Copy</span>,
+<span class=arial>Paste</span>, or <span class=arial>Delete</span>  commands from the
+    <a href="function_editor_menu_commands.htm">Edit
+    menu</a>, or</li>
+  <li>Use the <img border="0" src="../images/cut.gif" width="22" height="22"> <img border="0" src="../images/copy.gif" width="22" height="22"> <img border="0" src="../images/paste.gif" width="22" height="22">
+    buttons in the toolbar, or</li>
+  <li>Use the <span class=arial>Cut</span>, <span class=arial>Copy</span>,
+<span class=arial>Paste</span>, or <span class=arial>Delete</span> commands from the context-sensitive
+    menu, or</li>
+  <li>Use the <span class=arial>Ctrl+X</span>, <span class=arial>Ctrl+C</span>, <span class=arial>Ctrl+V</span>
+    or the <span class=arial>Delete</span> key(s) on the keyboard.</li>
+</ul>
+
+<p class=kopje>To reverse the last action:</p>
+<ul>
+  <li>Open the Edit menu and select the <span class=arial>Undo </span>command, or</li>
+  <li>Click the right-mouse button, and choose <span class=arial>Undo</span>
+    from the context-sensitive menu.</li>
+</ul>
+
+<p class=linespacing03before>The Undo command regards typing, cut, paste and delete. Using Undo more than once makes the previous Undo action undone.</p>
+
+<p class=kopje>To search for and/or replace certain characters or text:</p>
+You can search and replace texts in the same way as in a text editor:
+<ul>
+  <li>Use the <span class=arial>Find</span> or <span class=arial>Replace</span>  commands from the Edit
+    menu, or</li>
+  <li>Use the <img border="0" src="../images/find.gif" width="22" height="22">
+    <span class=arial>Find</span> button in the toolbar.</li>
+</ul>
+
+ <p class=kopje>To save a function:</p>
+<ul>
+  <li>Open the File menu and select the <span class=arial>Save</span> command, or</li>
+  <li>Click the <img border="0" src="../images/save.gif" width="22" height="22">
+    <span class=arial>Save</span> button in the toolbar.</li>
+</ul>
+<p class=linespacing03before>The syntax of a user-defined function is checked at the moment the function
+is saved. If there are syntax errors, an error message appears
+and the function will not be saved.</p>
+
+<p class=kopje>To save a function with a different name and/or location:</p>
+<ul>
+  <li>Open the File menu and select the <span class=arial>Save As</span> 
+    command.</li>
+</ul>
+<p class=linespacing03before>The Save As dialog appears in which you can specify a name and a
+location for the function.</p>
+
+<p class=kopje>To print a function or a selection of a function:</p>
+<ul>
+  <li>Open the File menu and select the <span class=arial>Print</span> command, or</li>
+  <li>Click the <img border="0" src="../images/print.gif" width="22" height="22">
+    <span class=arial>Print</span> button in the toolbar.</li>
+</ul>
+<p class=linespacing03before>The Print dialog box appears in which you can select your printing options, such as the name of the printer, the number of copies, etc.</p>
+
+<p class=kopje>To select the whole function:</p>
+<ul>
+  <li>Open the <a href="function_editor_menu_commands.htm"> Edit menu</a> and choose the <span class=arial>Select All</span>
+    command, or</li>
+  <li>Click the right-mouse button, and choose <span class=arial>Select All</span>
+    from the context-sensitive menu.</li>
+</ul>
+<p class=linespacing03before>You can now copy the function contents to the clipboard and paste it for instance in a document.</p>
+
+<p class=kopje>To open the function properties:</p>
+<ul>
+  <li>Open the Edit menu and select the <span class=arial>Properties</span> command,
+    or</li>
+  <li>Click the <img border="0" src="../images/prop.gif" width="22" height="22">
+    <span class=arial>Properties</span>  button in the toolbar.</li>
+</ul>
+<p class=linespacing03before>The <a href="../ilwismen/function_properties.htm">Function Properties</a> sheet will be opened.</p>
+
+<p class="kopje">To open another function:</p>
+<ul>
+  <li>Open the <a href="function_editor_menu_commands.htm"> File menu</a> and select the <span class=arial>Open</span> command, or</li>
+  <li>Click the <img border="0" src="../images/open.gif" width="22" height="22">
+    <span class=arial>Open</span> button in the toolbar.</li>
+</ul>
+<p class=linespacing03before>The Open dialog box appears in which you can select the function that you want to open.
+  
+<p class=kopje>To exit the function editor:</p>
+<ul>
+  <li>Open the File menu and select the <span class=arial>Exit</span> command, or</li>
+  <li>Click the <span class=arial>Close</span> button.</li>
+</ul>
+
+<p class=linespacing03before>If the function contains any unsaved changes, you are prompted to save
+the function before the editor is closed. If there are syntax errors in the function, an error message appears
+and the function editor remains open.</p>
+<p class="Seealso">See also:</p>
+<p class="seealsolinks"> <a href="function_editor_toolbar.htm">Function editor : toolbar</a></p>
+<p class="seealsolinks"> <a href="function_editor_menu_commands.htm">Function editor : menu commands</a></p>
+<p class="seealsolinks"> <a href="../ilwismen/create_a_function.htm">Create a function</a></p>
+<p class="seealsolinks"><a href="ilwis_objects_functions.htm">ILWIS objects : functions</a></p>
+<p class="seealsolinks"><a href="calc_creating_and_applying_user_defined_functions.htm">Map calculation : creating and applying user-defined functions</a></p>
+<p class="seealsolinks"><a href="calc_creating_and_applying_user_defined_functions.htm">Table calculation : creating and applying user-defined functions</a></p>
+<p class="seealsolinks"><a href="calc_user_defined_functions_advanced.htm">Map and
+Table calculation : user-defined functions (advanced)</a></p>
+
+</body

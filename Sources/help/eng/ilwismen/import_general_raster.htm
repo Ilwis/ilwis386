@@ -1,0 +1,543 @@
+<html>
+
+<head>
+<title>Import General Raster</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Import, ILWIS import, Map import, General Raster import, Satellite images">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Main window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="3"><h1 class=secondline>Import</h1></td>
+</tr>
+<tr>
+<td><h1 class=firsttabnotactive><a class=othertab href="import_map.htm">Import Map</a></h1>
+</td>
+<td><h1 class=thistab><a class=thistab href="import_general_raster.htm">Import General Raster</a></h1>
+</td>
+<td><h1 class=othertab><a class=othertab href="import_table_input_table_name.htm">Import Table Wizard</a></h1>
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+ 
+<!--<hr>-->
+
+<p>Import a (set of) raster map(s), usually satellite images, of which the format is not directly supported by ILWIS Map Import. </p>
+
+<p class=defnewpar>This option does not automatically read the header line of the file which normally contains information about the map's dimensions, coordinates, data type, etc. The user is asked to enter required information manually, therefore you should have some knowledge about the header size and the structure of the file. The Import General Raster option only reads pixel values, and creates one or more <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a> with the <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" >system Image domain</a> or the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system Value domain</a>, and generally also a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. </p>
+
+<p class=defnewpar>The dialog boxes described below appear when you select <span class=arial>Import General Raster</span> from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window, in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>. In the Import dialog box, the Import Format is then directly set to <span class=arial>Use General Raster Import</span>. </p>
+
+<p>You can also select the Import Format <span class=arial>Use General Raster Import</span> yourself in the Import dialog box. </p>
+
+<p class=defnewpar>When you wish to import <i>multiple general raster files</i>, it is advised to type an Import expression on the command line or to write a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> with Import expressions. The Import expressions are described in <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#generalrasterimport_commandline">Appendices : ILWIS script language (syntax), section Import General Raster</a>. </p>
+
+<p class=diakopje><b>Import</b> dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Select a file:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the file that you wish to import. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Import format:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><img src="../images/rasmap.gif" align=top width="16" height="12">&nbsp;&nbsp;<b>Use General Raster Import</b></p>
+
+<p class=diabox><span class=tiptext>When you select another Import format, please refer to the other Import topics in the Help; you can click one of the links in the header of this topic. </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output file name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a name for the output ILWIS <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> or the <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. Do not specify an extension for the ILWIS object; ILWIS will add its own extensions. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>After selecting a file, the Import General Raster dialog box is opened; which is described below. </p>
+
+<p class=diakopje><b>Import General Raster</b> dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="96">
+<p class=diabox>Header size: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the number of bytes of the header. Before starting to read the pixel values, the program will skip this specified number of bytes that are supposed to be the header. </p>
+
+<p class=diabox>If the header size is unknown, specify 0 as size. After conversion, study the image on the screen. Count the numbers of pixels on the first line that have a signature which is different from the rest of the image: this is probably the header. The number of pixels corresponds to the header size.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan=2 valign="top">
+<p class=diabox>Number of bands:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Type a value for the number of bands that are stored in the file.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan=2 valign="top">
+<p class=diabox>Number of columns:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="96">
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Type a value for the number of columns that should appear in the raster map. If the number of columns of the image is unknown, specify, for a byte map, the square root of the number of bytes the image occupies, or a round value there about. This assumes that the image is square. If the image is an integer image (i.e. 2 bytes are used to store one pixel value), the value should be the square root of half the number of bytes. Still, this is likely to yield a distorted image. If the image shows a certain left skewness, the specified number of columns is probably too large. Try again with a smaller number of columns. If the image is skewed to the right, try the other way around.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="96">
+<p class=diabox>Pixel structure:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the type of values that are stored per pixel.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Bit:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Interpret each bit in the input file as an output pixel value. Each output pixel value will have either value 0 (False) or 1 (True). Bit maps are useful to store simple maps, for instance maps indicating occurrences of any item, a condition being fulfilled (yes or no, true or false, occurrence or no occurrence).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Byte:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Interpret each byte (8 bits) in the input file as an output pixel value. The output pixel values will range from 0 to 255. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan=2 valign="top">
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Integer numbers:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Interpret each 1, 2, or 4 bytes in the input file as an output pixel value and consider this value as a whole value. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan=2 valign="top">
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Floating point numbers (IEEE):</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Interpret each 4 bytes (floats) or 8 bytes (doubles) in the input file as an output pixel value and consider this value as a floating point value according to the IEEE standard.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan=2 valign="top">
+<p class=diaboxleft1>Number of bytes per pixel:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select how many bytes per pixel are used in the input file to store the values in the map. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan=2 valign="top">
+<p class=diaboxleft1>High Endian Byte Order:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>In case of using 2, 4 or 8 bytes per pixel: select this check box, when the input file is using Motorola type ordering (highest byte first) instead of Intel. You should select High Endian Byte Order when the input file was for instance created on a Unix or Apple system.</p>
+
+<p class=diabox>Clear this check box when the file uses the Intel byte order. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="96">
+<p class=diabox>File structure:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case the input file stores <i>multiple bands</i>, select how the values of the bands are stored: </p>
+
+</td>
+</tr>
+<tr>
+<td colspan=2 valign="top">
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Band Interleaved (BIL):</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="96">
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>The input file stores <i>lines</i> of different bands one after the other; i.e. after a possible header, the input file contains the <i>first line</i> of the first band, followed by the <i>first line</i> of the second band, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan=2 valign="top">
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Band Sequential (BSQ):</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>The input file stores <i>entire bands</i> one after the other; i.e. after a possible header, the input file contains the <i>entire first band</i>, followed by the <i>entire second band</i>, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan=2 valign="top">
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Pixel Interleaved (BIP):</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>The input file stores <i>pixels</i> of different bands one after the other; i.e. after a possible header, the input file contains the <i>first pixel</i> of the first band, followed by the <i>first pixel</i> of the second band, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan=2>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Use data file in original format:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select this option to only create the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition files</a> in ILWIS storing information on the size of the map, the kind of values in the map, etc. while the <i>original data file(s)</i> will be used to display and calculate with the maps. </p>
+
+<ul class=diaul>
+
+<li>When importing a file that contains a single band (<span class=arial>Number of Bands</span> = 1), </li>
+
+        <p>an object definition file for a raster map (.MPR) will be created. </p>
+
+<li>When importing a file that contains multiple bands (<span class=arial>Number of Bands</span> &gt;= 2), </li>
+
+        <p>an object definition file for a map list (.MPL) will be created; </p>
+
+        <p>depending on the check box <span class=arial>Create Separate Maps</span>, also object definition files for the raster maps (.MPR) may be created. </p>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td colspan=2 valign="top">
+<p class=diaboxleft1>Create separate maps:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>When importing a file containing <i>multiple bands</i>: </p>
+
+<ul class=diaul>
+
+<li>select this check box to obtain besides the map list (.MPL) also separate raster maps (.MPR). </li>
+
+<li>clear this check box to obtain only a map list (.MPL); the original data will be used for the raster maps in the map list. It is advised to clear the check box when your map list contains very many raster maps. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan=2>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Convert to ILWIS data format:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select this option to create the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition files</a> as well as <i>data files</i> that actually store the values of the map(s). </p>
+
+<ul class=diaul>
+
+<li>When importing a file containing a single band (<span class=arial>Number of Bands</span>  = 1), </li>
+
+        <p>an object definition file for a raster map (.MPR) and a data file for a raster map (.MP#) will be created. </p>
+
+<li>When importing a file containing multiple bands (<span class=arial>Number of Bands</span>  &gt;= 2), </li>
+
+        <p>an object definition file for a map list (.MPL), object definition files for the raster maps (.MPR) in the map list, and data files for the raster maps (.MP#) will be created. </p>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Output name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output ILWIS 3 object(s) or type the desired output object name yourself. The name you type here will have precedence over the output file name typed before in the Import dialog box.</p>
+
+<ul class=diaul>
+
+<li>When importing only one raster map (Number of Bands = 1, Use As, or Convert): </li>
+
+        <p>the output raster map will have the specified output name. </p>
+
+<li>When importing only a map list map (Number of Bands &gt;= 2, Use As, No separate maps): </li>
+
+        <p>the output map list will have the specified output name. The bands in the map list will be automatically called 'band 1', 'band 2', etc. You can calculate with the bands by addressing them as <i>maplistname</i>:<i>bandnumber</i> as for instance in <span class=courier>OUT = MyMapList:1 + MyMapList:2</span></p>
+
+<li>When importing a map list map and creating separate raster maps (Number of Bands &gt;= 2, Use As &amp; Separate maps, or Convert): </li>
+
+        <p>the output map list will have the specified output name, the output raster maps will have the specified output name directly followed by a band number, for instance as Out1, Out2, etc.</p>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="96">
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output raster map or the output map list. </p>
+
+</td>
+</tr>
+</table>
+
+<h2>Additional information</h2>
+
+<table cellspacing=0 width="100%" border="1">
+<tr>
+<td>
+<p>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=th>Use&nbsp;As<br>no&nbsp;separate&nbsp;maps</p>
+
+</td>
+<td valign="top">
+<p class=th>Use&nbsp;As<br>separate&nbsp;maps</p>
+
+</td>
+<td valign="top">
+<p class=th>Convert</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=th>Nr&nbsp;of&nbsp;Bands&nbsp;=&nbsp;1</p>
+
+</td>
+<td valign="top">
+<p class=t1>single&nbsp;raster&nbsp;map&nbsp;<i>output</i>.MPR</p>
+
+</td>
+<td valign="top">
+<p>-</p>
+
+</td>
+<td valign="top">
+<p class=t1>single&nbsp;raster&nbsp;map <i>output</i>.MPR</p>
+<p class=t1>single&nbsp;data&nbsp;file <i>output</i>.MP#</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=th>Nr&nbsp;of&nbsp;Bands&nbsp;&gt;=&nbsp;2</p>
+
+</td>
+<td valign="top">
+<p class=t1>single&nbsp;map&nbsp;list <i>output</i>.MPL</p>
+<p class=t1>virtual&nbsp;raster&nbsp;maps in&nbsp;map&nbsp;list&nbsp;as <i>output</i>:<i>nr</i></p>
+
+</td>
+<td valign="top">
+<p class=t1>single&nbsp;map&nbsp;list <i>output</i>.MPL</p>
+<p class=t1>multiple&nbsp;raster&nbsp;maps <i>output</i><i>nr</i>.MPR</p>
+
+</td>
+<td valign="top">
+<p class=t1>single&nbsp;map&nbsp;list <i>output</i>.MPL</p>
+<p class=t1>multiple&nbsp;raster&nbsp;maps <i>output</i><i>nr</i>.MPR</p>
+<p class=t1>multiple&nbsp;raster&nbsp;data&nbsp;files <i>output</i><i>nr</i>.MP#</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To show external files in a Catalog: </p>
+
+<ul class=tipul>
+
+<li>   Open the <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog</a> sheet,</li>
+
+<li>   On the <span class=arial>Selection</span> tab, specify the external extension(s) you wish to see in the <span class=arial>External file extensions</span> text box. 
+
+        <ul class=tipul>
+
+        <li>Extensions can be specified with and without dot in front of the extension. </li>
+
+        <li>Multiple file extensions should be separated with a semicolon, for instance as in <span class=courier>dbf;tif</span> or as in <span class=courier>.dbf;.tif</span> </li>
+
+        <p><span class=tipnospace>Mind: </span>It is not allowed to use any spaces between multiple file extensions.</p>
+
+        </ul>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects.htm">ILWIS objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_map_lists.htm">ILWIS objects : map lists</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_raster_maps.htm">ILWIS objects : raster maps</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_import_data.htm">How to import data</a></p>
+
+<p class=seealsolinks><a href="import_map.htm">ILWIS Map Import</a></p>
+
+<p class=seealsolinks><a href="import_table_input_table_name.htm">Import Table wizard</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#import_commandline">Appendices : ILWIS script language (syntax), section Import expressions</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#generalrasterimport_commandline">Appendices : ILWIS script language (syntax), section General Raster Import</a></p>
+
+</body

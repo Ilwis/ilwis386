@@ -1,0 +1,76 @@
+<html>
+
+<head>
+<title>Segment direction histogram : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment direction histogram">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segment direction histogram</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Segment direction histogram operation calculates directions and lengths within segments, i.e. between all stored coordinates of the segments. The output is a table with directions from 0 to 179° and the length and number of the segment parts in that direction. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Input segment map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input segment map. Open the list box and select the desired input map, or drag a segment map directly from the Catalog into this box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output table, i.e. the output histogram, that will contain the direction, length and frequency of the segments in the input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output histogram. The description will appear in the status bar of the Main window when moving the mouse pointer over the histogram in a Catalog, and in the title bar of a histogram window when the output histogram is displayed. If no description is supplied, the output histogram will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> (the histogram) will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output table will only be defined; if necessary, the histogram will be calculated later, for instance when the histogram is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segment_direction_histogram_functionality.htm">Segment direction histogram : functionality</a></p>
+
+</body

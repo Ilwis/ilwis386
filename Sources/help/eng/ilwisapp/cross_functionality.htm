@@ -1,0 +1,464 @@
+<html>
+
+<head>
+<title>Cross : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cross">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Cross </h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Cross operation performs an overlay of two raster maps. Pixels on the same positions in both maps are compared; the occurring combinations of class names, identifiers or values of pixels in the first input map and those of pixels in the second input map are stored. These combinations give an output cross map and a cross table. The cross table includes the combinations of input values, classes or IDs, the number of pixels that occur for each combination and the area for each combination. </p>
+
+<p class=kopje>Input map requirements:</p>
+
+<ul>
+
+<li>	Both maps should have the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>. </li>
+
+<li>	No restrictions on domain types.</li>
+
+</ul>
+
+<p class=kopje>Domain and georeference of output map and table:</p>
+
+<p>Cross creates an Identifier domain for the output map and table. This output domain obtains the same name as the output map and is filled with the combinations of class names, IDs or values or colors of both input maps. </p>
+
+<p>When an input map has a class or ID domain in which the class names or IDs have <i>codes</i>, then these codes will appear in the output domain. </p>
+
+<!--<p>When crossing two <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>, or maps with very many classes or IDs, the number of combinations of input map values may be larger than 16000. In this case, the output cross domain (and the cross table) will be created as usual containing all combinations but the cross domain will <i>not</i> be sorted. The cross table records may therefore seem to appear in an illogical order. However, when you open the output cross table, you can sort on columns, calculate with columns and perform <a href="../ilwismen/aggregate_column.htm">column aggregations</a> as usual. </p>-->
+
+<p>An output cross map uses the same georeference as the input maps.</p>
+
+<p class=kopje>Example:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>Input map 1:</p>
+
+</td>
+<td valign="top" width=151>
+<p>Input map 2:</p>
+
+</td>
+<td valign="top">
+<p>Output cross map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/map1.gif" align=bottom width="85" height="85"></p>
+
+</td>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/map2.gif" align=bottom width="85" height="85"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/map3.gif" align=bottom width="85" height="85"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In the picture of the output map above, read B<span class=courier>*</span>S instead of BS, etc.</p>
+
+<p class=defnewpar>Output cross table:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=56>
+<p class=tcolh>Domain</p>
+
+</td>
+<td valign="top" width=56>
+<p class=tcolh>Map1</p>
+
+</td>
+<td valign="top" width=56>
+<p class=tcolh>Map2</p>
+
+</td>
+<td valign="top" width=56>
+<p class=tcolh>NPix</p>
+
+</td>
+<td valign="top">
+<p class=tcolh>Area</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1> A * R</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>A</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>R</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>3</p>
+
+</td>
+<td valign="top">
+<p class=t1>.....</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1> A * T</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>A</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>T</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>2</p>
+
+</td>
+<td valign="top">
+<p class=t1>.....</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1> B * S</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>B</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>S</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>2</p>
+
+</td>
+<td valign="top">
+<p class=t1>.....</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1> B * T</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>B</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>T</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>1</p>
+
+</td>
+<td valign="top">
+<p class=t1>.....</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1> C * R</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>C</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>R</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>1</p>
+
+</td>
+<td valign="top">
+<p class=t1>.....</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1> C * S</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>C</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>S</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>3</p>
+
+</td>
+<td valign="top">
+<p class=t1>.....</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1> C * T</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>C</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>T</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>1</p>
+
+</td>
+<td valign="top">
+<p class=t1>.....</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1> D * S</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>D</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>S</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>2</p>
+
+</td>
+<td valign="top">
+<p class=t1>.....</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1> D * T</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>D</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>T</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>1</p>
+
+</td>
+<td valign="top">
+<p class=t1>.....</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The cross table lists:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p>Domain</p>
+
+</td>
+<td valign="top">
+<p>the combination of class names, identifiers, values or group names of the first map with the second map's class names, IDs or values is returned as the output domain for the cross table. If class names or IDs in an input map have codes, then these codes will appear in the output domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Map1</p>
+
+</td>
+<td valign="top">
+<p>the class names, identifiers, or values of pixels in the first input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Map2</p>
+
+</td>
+<td valign="top">
+<p>the class names, identifiers, or values of pixels in the second input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>NPix</p>
+
+</td>
+<td valign="top">
+<p>the number of pixels that occur as a combination.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Area</p>
+
+</td>
+<td valign="top">
+<p>the areas of the combinations as: NPix <span class=courier>*</span> pixel size <span class=courier>*</span> pixel size.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you open a cross table, you can sort on columns, <a href="../ilwis/calc.htm">calculate with columns</a> and perform <a href="../ilwismen/aggregate_column.htm">column aggregations</a> as usual. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>When the input maps of a cross used a class or ID domain, the output cross table can also be shown as a matrix. Open the output cross table and choose <span class=arial>Confusion Matrix</span> from the <a href="../ilwis/table_window_menu_commands.htm">Options menu</a> of the table window. The matrix will show the number of pixels (NPix) as found for each combination, and the total number of pixels for each class/ID of the first input map. </p>
+
+<table class=tiptext width="100%">
+<tr>
+<td>
+
+<table cellspacing="0">
+
+<tr class=rowborder>
+
+<td class=bordercell1 valign="top" width="25">&nbsp;</td>
+
+<td class=borderhor valign="top" width="25">R</td>
+
+<td class=borderhor valign="top" width="25">S</td>
+
+<td class=borderhor valign="top" width="25">T</td>
+
+<td class=borderhor valign="top" width="45">Totals</td>
+
+</tr>
+<tr class=bordervert>
+
+<td class=bordervert valign="top">A</td>
+<td class=matval valign="top">3</td>
+<td class=matval valign="top">0</td>
+<td class=matval valign="top">2</td>
+<td class=matval valign="top">5</td>
+
+</tr>
+<tr class=bordervert>
+
+<td class=bordervert valign="top">B</td>
+
+<td class=matval valign="top">0</td>
+
+<td class=matval valign="top">2</td>
+
+<td class=matval valign="top">1</td>
+
+<td class=matval valign="top">3</td>
+
+</tr>
+<tr class=bordervert>
+
+<td class=bordervert valign="top">C</td>
+
+<td class=matval valign="top">1</td>
+
+<td class=matval valign="top">3</td>
+
+<td class=matval valign="top">1</td>
+
+<td class=matval valign="top">5</td>
+
+</tr>
+
+<tr class=bordervert>
+
+<td class=bordervert valign="top">D</td>
+
+<td class=matval valign="top">0</td>
+
+<td class=matval valign="top">2</td>
+
+<td class=matval valign="top">1</td>
+
+<td class=matval valign="top">3</td>
+
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Combinations with undefined values:</p>
+
+<p>When you use the Cross operation through the Cross dialog box, combinations with undefined values will by default <i>not</i> appear in the output cross table, i.e. undefined values are ignored. If an output cross table should also list combinations with undefined values, clear one or both of the Ignore Undefs check boxes in the dialog box.</p>
+
+<p>The combination Undefined value in the first input map and Undefined value in the second input map will never be listed.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cross_dialogbox.htm">Cross : dialog box</a></p>
+
+<p class=seealsolinks><a href="cross_commandline.htm">Cross : command line</a></p>
+
+<p class=seealsolinks><a href="cross_algorithm.htm">Cross : algorithm</a></p>
+
+</body

@@ -1,0 +1,106 @@
+<html>
+
+<head>
+<title>Create a georeference 3D</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create georeference, Georeference">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a georeference 3D</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Create a georeference 3D in order to obtain a three-dimensional view of your study area; a Digital Terrain Model (DTM) also called a Digital Elevation Mode (DEM) is required. For more information on obtaining a DTM/DEM, see <a href="../ilwis/how_to_calculate_digital_elevation_models.htm">How to calculate a Digital Elevation Model</a>. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create georeference button</a> in the <span class=arial>Display 3D</span> dialog box or in the <span class=arial>Apply 3D</span> dialog box.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Georeference name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the georeference 3D. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the georeference. The description is visible on the status bar of the Main window when moving the mouse pointer over the georeference in the Catalog. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Rows   Columns:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type values for the size of the georeference 3D. During Display 3D, the map window will use the same width/height ratio. The Apply 3D operation will produce a map with these dimensions.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>DTM:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a raster map with height values (Digital Terrain Model/Digital Elevation Model) from which the three-dimensional picture should be constructed. For more information on creating a DTM/DEM, see <a href="../ilwis/how_to_calculate_digital_elevation_models.htm">How to calculate a Digital Elevation Model</a>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>By creating a georeference 3D, the size of the window in which the 3D view will be displayed and the name of the DEM/DTM to use are specified. Also, some default 3D view parameters are assigned but these are not visible to the user at this point. These parameters such as view angle, height scaling and rotations can be edited when you display the 3D view and open the Georeference 3D editor. </p>
+
+<p class=defnewpar>When you click the OK button, the <a href="display_3d.htm">Display 3D</a> dialog box or the Apply 3D dialog box is re-activated.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_3d_views.htm">How to create a 3D view</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeference</a></p>
+
+</body

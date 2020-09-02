@@ -1,0 +1,135 @@
+<html>
+
+<head>
+<title>ILWIS objects : matrices</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Matrices, ILWIS objects, Special objects, MAT">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Matrices&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/matrix.gif" align=bottom width="16" height="13"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>In ILWIS, there are four Statistical operations which calculate a matrix: </p>
+
+<ul>
+
+<li>	covariance matrix by the <a href="..//ilwisapp/popup/variance_covariance_matrix_popup.htm" onClick="return popup(this, 'notes')" >Variance-Covariance matrix</a> operation;</li>
+
+<li>	correlation matrix by the <a href="..//ilwisapp/popup/correlation_matrix_popup.htm" onClick="return popup(this, 'notes')" >Correlation matrix</a> operation;</li>
+
+<li>	covariance matrix and matrix of eigenvectors by the <a href="..//ilwisapp/popup/principle_components_popup.htm" onClick="return popup(this, 'notes')" >Principal Component</a> operation;</li>
+
+<li>	correlation matrix and matrix of eigenvectors by the <a href="..//ilwisapp/popup/factor_analysis_popup.htm" onClick="return popup(this, 'notes')" >Factor Analysis</a> operation. </li>
+
+</ul>
+
+<p>All these operations can be found on the <a href="main_window_menu_commands.htm">Operations menu</a>, <span class=arial>Statistics, Map List</span>. As the matrices are the result of an operation, the matrices cannot be edited.</p>
+
+<p class=defnewpar>Furthermore, </p>
+
+<ul>
+
+<li>you can calculate a <a href="..//ilwis/popup/confusion_matrix_popup.htm" onClick="return popup(this, 'notes')" >confusion matrix</a> after an image <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >classification</a>. For more information, see <a href="../ilwismen/confusion_matrix.htm">Table window : Confusion matrix</a> or <a href="../ilwis/how_to_calculate_confusion_matrix.htm">How to calculate a confusion matrix</a>. </li>
+
+<li>you can show an output cross table as a matrix when the input maps of the <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a> operation used a class or ID domain. For more information, see <a href="../ilwisapp/cross_functionality.htm">Cross : functionality</a>. </li>
+
+</ul>
+
+<p class=kopje>Names of matrices:</p>
+
+<p>When performing the Variance-Covariance operation or the Correlation operation, the matrix is not stored as a separate object; the matrix is stored in the input map list.</p>
+
+<p class=defnewpar>When performing the Principal Component or Factor analysis operation, you can specify a name for the matrix yourself; the output map list which will contain the transformed output maps will obtain the same name as the matrix. </p>
+
+<p class=defnewpar>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To display a matrix:</p>
+
+<p>To display a covariance matrix, perform the Variance-Covariance operation.</p>
+
+<p>To display a correlation matrix, perform the Correlation operation. </p>
+
+<p class=defnewpar>To display the output matrices of the Principal Component and Factor Analysis operations:</p>
+
+<ul>
+
+<li>    click the <span class=arial>Show</span> button in the dialog box of the Principal Component and Factor Analysis operation, or </li>
+
+<li>	double-click a matrix in a Catalog, or </li>
+
+<li>	use the right mouse button on a matrix in a Catalog, and select <span class=arial>Open</span> from the context-sensitive menu, or </li>
+
+<li>	from the File menu in the Main window, choose <span class=arial>Open</span> and select a matrix.</li>
+
+</ul>
+
+<p class=defnewpar>The matrix will be calculated as soon as it is shown for the first time in a matrix window. The matrix window also displays some <span class=arial>Additional Info</span>. </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>A matrix consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.MAT).</p>
+
+<p class=defnewpar>By viewing the properties of a matrix, you can see on which map list the matrix depends, etc. When the matrix has been calculated, you can also view <span class=arial>Additional Info</span>. For more information, see the <a href="../ilwismen/matrix_properties.htm">Matrix Properties</a> sheet. </p>
+
+<p class=linespacing01before>Variance-covariance matrix:</p>
+
+<p class=leftmargin1>Shows the variance within each map/band and the covariance between all map/band pairs in the input map list. The mean and standard deviation of each input map are also shown. In the <a href="../ilwismen/map_list_properties.htm">properties of the input map list</a>, the <a href="..//ilwis/popup/optimum_index_factor_popup.htm" onClick="return popup(this, 'notes')" >Optimum Index Factors (OIF)</a> are listed.</p>
+
+<p class=linespacing01before>Correlation matrix:</p>
+
+<p class=leftmargin1>Shows the correlation between all map/band pairs in the input map list. The mean and standard deviation of each input map are also shown. In the properties of the input map list the Optimum Index Factors (OIF) are listed.</p>
+
+<p class=linespacing01before>Principal component matrix:</p>
+
+<p class=leftmargin1>Stores eigenvectors for the new output maps (axes) and the percentages of total variance contributed by each eigenvalue. The operation creates (defines) an output matrix and an output map list simultaneously. When the output map list is opened (calculated), the output raster maps are created and calculated. </p>
+
+<p class=linespacing01before>Factor analysis matrix:</p>
+
+<p class=leftmargin1>Stores eigenvectors for the new output maps (axes) and the percentages of total variance contributed by each eigenvalue. The operation creates (defines) an output matrix and an output map list simultaneously. When the output map list is opened (calculated), the output raster maps are created and calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/variance_covariance_matrix.htm">Variance-Covariance matrix</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/correlation_matrix.htm">Correlation matrix</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/principal_component_analysis.htm">Principal Component Analysis</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/factor_analysis.htm">Factor analysis</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_optimum_index_factor_oif.htm">How to calculate Optimum Index Factor (OIF)</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/confusion_matrix.htm">Table window : Confusion matrix</a></p> 
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_confusion_matrix.htm">How to calculate a confusion matrix</a></p>
+
+</body

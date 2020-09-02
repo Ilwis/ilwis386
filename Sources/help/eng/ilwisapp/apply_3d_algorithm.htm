@@ -1,0 +1,55 @@
+<html>
+
+<head>
+<title>Apply 3D : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Apply 3D">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Apply 3D</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Apply 3D operation resamples an input raster map according to a georeference 3D. This enables you to permanently and quickly display the output raster map in three dimensions, i.e. as a 3D view. </p>
+
+<p class=defnewpar>You can create a georeference 3D with <a href="..//ilwisapp/popup/display3d_popup.htm" onClick="return popup(this, 'notes')" >Display 3D</a>; a Digital Elevation Model is required and you have to specify 3D view parameters using the Georeference 3D editor.</p>
+
+<p class=defnewpar>The operation is based on the display of a 3D view in a map window. For each pixel in each row of the input raster map, the position of its four corners is determined in the 3D view and the area between the four corners is filled with the class name or value of the raster drape. </p>
+
+<p>The order of drawing is determined by the orientation of the 3D view:</p>
+
+<ul>
+
+<li>	Rows or pixels that are farthest away from the observer are drawn first. </li>
+
+<li>	Pixels that are closer to the observer are drawn later and consequently hide previously drawn pixels which are higher than previously drawn pixels.</li>
+
+</ul>
+
+<p class=defnewpar>If the coordinate system of the input map and the input georeference 3D are different but compatible, an automatic coordinate transformation is performed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="apply_3d_functionality.htm">Apply 3D : functionality</a></p>
+
+</body

@@ -1,0 +1,121 @@
+<html>
+
+<head>
+<title>SMCE window : menu commands</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Spatial Multi-Criteria Evaluation (SMCE), SMCE, Menu commands">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<a id="top">
+<h1 class=firstline>SMCE window</h1>
+
+<h1 class=secondline>Menu commands</h1>
+</a>
+<!--<hr>-->
+
+<table class=menupage border="0" cellspacing="0" width="100%" cellpadding="1">
+<tr bgcolor="#CCCCCC">
+
+<!--FILE MENU -->
+
+<td valign="top" width="20%" align="left" nowrap>&nbsp;<span class=menuheading><u>F</u>ile</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/smce_window_new.htm"><u>N</u>ew</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_open_criteria_tree.htm"><u>O</u>pen ...</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_save.htm"><u>S</u>ave</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_save_as.htm">Save <u>A</u>s ...</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<!--&nbsp;<a href="../ilwismen/smce_window_print.htm"><u>P</u>rint ...</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_print_preview.htm">Print Preview</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_print_setup.htm">Print Setup</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br>--> 
+&nbsp;<a href="..//ilwismen/popup/smce_window_exit_popup.htm" onClick="return popup(this, 'notes')" >E<u>x</u>it</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<!--EDIT MENU -->
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>E</u>dit</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br>
+&nbsp;<a onclick="doExpand(exp1,link1)" href="#top"><u>I</u>nsert  <img src="../images/menuarrt.gif" align="bottom" id="link1" border=0 width="9" height="13"></a> <br>
+<DIV ID="exp1" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/smce_window_insert_group.htm"><u>G</u>roup ...</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/smce_window_insert_factor.htm"><u>F</u>actor ...</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/smce_window_insert_constraint.htm"><u>C</u>onstraint ...</a> <br>
+</div>
+&nbsp;<a href="../ilwismen/smce_window_edit.htm"><u>E</u>dit</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_delete.htm"><u>D</u>elete</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_alternatives.htm"><u>A</u>lternatives</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<!--MODE MENU -->
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>M</u>ode</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="..//ilwismen/popup/smce_window_problem_definition_mode_popup.htm" onClick="return popup(this, 'notes')" ><u>P</u>roblem Definition</a><br>
+&nbsp;&nbsp;<a href="..//ilwismen/popup/smce_window_multicriteria_analysis_mode_popup.htm" onClick="return popup(this, 'notes')" ><u>M</u>ulticriteria Analysis</a><br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<!--ANALYSIS MENU -->
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>A</u>nalysis</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/smce_window_standardize.htm"><u>S</u>tandardize ...</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_weigh.htm"><u>W</u>eigh ...</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<!--GENERATE MENU-->
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>G</u>enerate</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/smce_window_generate_selected_map.htm"><u>S</u>elected Maps ...</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_all_composite_index_maps.htm"><u>A</u>ll Maps ...</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/smce_window_histogram.htm"><u>H</u>istogram</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_aggregate_values.htm">A<u>g</u>gregate Values</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_slice.htm">S<u>l</u>ice ...</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_show_sliced.htm">Sh<u>o</u>w Sliced</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_histogram_sliced.htm">H<u>i</u>stogram Sliced</a> <br>
+&nbsp;<a href="../ilwismen/smce_window_aggregate_values_sliced.htm">Aggregate Values Sli<u>c</u>ed</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<!--VIEW MENU-->
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>V</u>iew</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/smce_window_toolbar_popup.htm" onClick="return popup(this, 'notes')" ><u>T</u>oolbar</a> <br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/smce_window_status_bar_popup.htm" onClick="return popup(this, 'notes')" >Status Bar</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+</tr>
+</table>
+
+</body

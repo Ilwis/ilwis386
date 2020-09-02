@@ -1,0 +1,52 @@
+<html>
+
+<head>
+<title>Import TIFF - Additional info on GeoTiff (sec)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Import TIFF - Additional info on GeoTiff</p>
+
+<p class=kopjeaftertitlesub>Determination of the georeference:</p>
+
+<p>When a GeoTiff file contains tiepoint information, ILWIS will be able to establish the geometric relation between map pixels (rows and columns) and coordinates (X,Y). In ILWIS this is stored by a <a href="../../ilwis/popup/objects_georeference_popup.htm">georeference</a> (.GRF). </p>
+
+<p class=defnewpar>Three possible cases are handled while importing GeoTiff files:</p>
+
+<ol>
+
+<li>	Given: the pixel scale in X and Y-direction in meters and X, Y-coordinates of 1 tiepoint. A GeoRefCorners is created with RowCol size equal to the Tiff map size. Limiting coordinates cMin, cMax are calculated such that the tiepoint coincides with the correct pixel position of it.</li>
+
+<li>	Given: X,Y-coordinates of 2 tiepoints (pixel size computed by ILWIS). When X scale and/or Y scale are given as well, they will be disregarded. A GeoRefCorners is created with RowCol size equal to the Tiff map size. Limiting coordinates cMin, cMax are calculated assuming that both tiepoints lie in upper left and lower right opposite corners.</li>
+
+<li>	Given: X,Y-coordinates of 3 or more tiepoints. A GeoRefTiepoints is created during import, with affine transformation by default, which can be modified by the user if so desired. The Georeference Tiepoints editor allows you to judge the accuracy of the given points.</li>
+
+</ol>
+
+<p class=kopje>Determination of map projection information:</p>
+
+<p>A GeoTiff file can contain so called GeoKeys. These are tags pointing to data in the file concerning the definition of a projection like:</p>
+
+<ul>
+
+<li>	Geographic (latlon), Projected (X,Y) or Geocentric (X,Y,Z) coordinate model,</li>
+
+<li>	Units of measurement,</li>
+
+<li>	Ellipsoid used,</li>
+
+<li>	Datum used,</li>
+
+<li>	Projection Forward and Backward equations,</li>
+
+<li>	Projection Parameters (Central Meridian, Scale Factor, False Origin etc.).</li>
+
+</ul>
+
+<p class=defnewpar>In ILWIS, such information is stored in a <a href="../../ilwis/popup/objects_coordinate_system_popup.htm">coordinate system</a> (.CSY). All text information as found in the Tiff file regarding GeoKeys will be written into the <b>Description field</b> of the new coordinate system. You need to edit this coordinate system yourself in the <span class=arial>Edit Coordinate System</span> dialog box, and specify projection parameters and datum, etc. as found in the description.</p>
+
+<p class=defnewpar>When the coordinate system type is Geographic (Latlon), the ILWIS system coordinate system <span class=courier>LatLon.csy</span> will be used.</p>
+
+</body

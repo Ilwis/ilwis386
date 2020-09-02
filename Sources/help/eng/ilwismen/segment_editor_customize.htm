@@ -1,0 +1,232 @@
+<html>
+
+<head>
+<title>Segment editor : Customize</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Customize ..., Segment editor, How to customize ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Segment editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/segment_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Customize</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Customize the manner in which segments are displayed in the <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >segment editor</a> and/or customize the behaviour of the segment editor itself.</p>
+
+<p class=defnewpar>This dialog box appears when in the Segment editor:</p>
+
+<ul>
+
+<li>	you selected <span class=arial>Customize</span> from the File menu, or</li>
+
+<li>	you selected <span class=arial>Customize</span> from the <a href="..//ilwis/popup/context_sensitive_menu_editors.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Color digitizer cursor:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color in which the digitizer cursor should be displayed in the segment editor; open the list box by clicking it. To create your own custom color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select Custom at the bottom of the drop-down list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Autosnap:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to automatically snap the begin node and end node of a newly inserted segment (using the mouse) to existing nodes or to existing segments, provided that the distance to the existing node or segment is less than the snap tolerance.</p>
+
+<p class=diabox>Clear this check box if newly inserted segments should not be automatically snapped to existing nodes or existing segments. If you clear this check box, use the <span class=arial>Shift</span> key to snap to an existing node, and use the <span class=arial>Ctrl</span> key to split an existing segment and snap to the newly created node. For more information, see <a href="../ilwis/appendices_mouse_functions.htm">Appendices : mouse functions</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Show nodes:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to show the nodes of segments when in <a href="segment_editor_select_mode.htm">Select mode</a> and <a href="segment_editor_insert_mode.htm">Insert mode</a>. When you are in <a href="segment_editor_move_points_mode.htm">Move Points mode</a>, segment nodes and intermediate points within segments are always shown.</p>
+
+<p class=diabox>Clear this check box when segment nodes should not be visible in Select mode and Insert mode.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwismen/popup/segment_editor_customize_snap_tolerance_popup.htm" onClick="return popup(this, 'notes')" >Snap tolerance (m)</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Enter a value for the distance interval in which snapping between newly inserted segments and existing ones is allowed. </p>
+
+<p class=diabox>When you insert a new segment and try to snap to an existing segment, the snap(/split) is performed when the distance between the two is <i>smaller</i> than the specified snap tolerance.</p>
+
+<p class=diabox>The smaller you choose the snap tolerance, the more difficult it is to snap to existing nodes or segments. </p>
+
+<p class=diabox>When working with a <i>digitizer</i>, the Snap tolerance is specified in meters. The snap/split distance is then independent from any zooming. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwismen/popup/segment_editor_customize_snap_tolerance_popup.htm" onClick="return popup(this, 'notes')" >Snap tolerance (pixels)</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Similar to the above. When working with the <i>mouse</i>, the Snap tolerance is specified in screen pixels. The snap/split distance then varies with zooming. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwismen/popup/segment_editor_customize_tunnel_tolerance_popup.htm" onClick="return popup(this, 'notes')" >Tunnel tolerance</a> (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Enter a value for the radius of the tunnel (in meters) that should be used for tunneling consecutive intermediate points within each segment while inserting new segments. When inserting new segments, intermediate points received while keeping the left mouse button or the digitizer cursor down (stream mode) are only stored when they fall outside the consecutive tunnels.	</p>
+
+<p class=diabox>The smaller you choose the tunnel tolerance, the more precise the coordinates within segments are stored, the more coordinates will be stored within segments and the less smooth segments will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Normal color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the segments, nodes and intermediate points within segments in this segment map. This color is used to display the segments in the segment editor when you choose the 'Normal' option below. To create your own custom color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select Custom at the bottom of the drop-down list.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Retouch color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the segments, nodes and intermediate points within segments when moving a node or an intermediate point to another position in Move Points mode. To create your own custom color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select Custom at the bottom of the drop-down list.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Deleted color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color to show deleted segments when using the <a href="../ilwismen/segment_editor_undelete_segments.htm">Undelete Segments</a> option. To create your own custom color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select Custom at the bottom of the drop-down list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Find undef color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color in which undefined segments (i.e. segments without value, class name or ID) should be displayed in case you use <span class=arial><a href="segment_editor_find_undefineds.htm">Find Undefineds</a></span> from the <a href="../ilwis/segment_editor_menu_commands.htm">Edit menu</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Segment colors:</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Normal:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Display the segments in the segment map that you are editing in the color that you selected above for 'Normal color'. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For domain class and value segment maps, display the segments in the segment map that you are editing in the colors according to the <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> that is linked to the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> used by this map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Primary colors:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Display the segments in the segment map that you are editing in 31 different colors. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	If you changed colors and the segment editor does not respond immediately, you may redraw the map by clicking the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22"> or pressing the <span class=arial>F5</span> key on the keyboard. </li>
+
+<li>	Tunneling can also be performed as an operation on a segment map, see <a href="../ilwisapp/tunnel_segments_functionality_algorithm.htm">Tunnel Segments</a>. With the Tunnel Segments operation, you can also remove redundant nodes.</li>
+
+<li>	For more information on the use of mouse clicks in combination with keyboard keys in the segment editor, see <a href="../ilwis/appendices_keyboard_shortcuts.htm">Appendices : keyboard shortcuts</a> and <a href="../ilwis/appendices_mouse_functions.htm">Appendices : mouse functions</a>.</li>
+
+</ul>
+
+<p class=defnewpar>Settings are automatically stored in the registry. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_toolbar.htm">Segment editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_menu_commands.htm">Segment editor : menu commands</a></p>
+
+</body

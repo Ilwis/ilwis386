@@ -1,0 +1,74 @@
+<html>
+
+<head>
+<title>SMCE window : Histogram Sliced</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Histogram Sliced">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Generate menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Histogram Sliced</span>&nbsp;&nbsp;&nbsp;<img src="../images/smce_show_hist_sliced_icon.gif" align=bottom width="23" height="23"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class="defnewpar">Show the <a href="..//ilwis/popup/objects_histogram_raster_popup.htm" onClick="return popup(this, 'notes')" >histogram(s)</a> of the currently selected sliced output map(s). </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+<li>When you select the main goal and press the <span class=arial>Histogram Sliced</span> button, the histograms of the sliced SMCE output maps will be calculated and shown. </li>
+<li>When you select a sub goal with named output maps and press the <span class=arial>Histogram Sliced</span> button, the histograms of the sliced output maps of the sub goal will be calculated and shown. </li>
+<li>When you select a single output map and press the <span class=arial>Histogram Sliced</span> button, the histogram of the selected sliced map will be calculated and shown. </li>
+</ul>
+
+<p class="defnewpar">After selecting the main goal, a sub goal or a single map in the criteria tree viewer, 
+you can use: </p>
+<ul>
+<li>the <span class=arial>Histogram Sliced</span> button in the <a href="../ilwis/smce_window_toolbar.htm">toolbar</a>, </li>
+<li>the <span class=arial>Histogram Sliced</span> command from the <a href="../ilwis/smce_window_menu_commands.htm">Generate</a> menu, or </li>
+<li>the <span class=arial>Histogram Sliced</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+</ul>
+
+<p class=tip>Notes:</p>
+<ul class="tipul">
+<li><span class=arial>Histogram Sliced</span> is not available when the SMCE output maps have not been sliced. </li>
+<li><span class=arial>Histogram Sliced</span> will force the calculation of sliced SMCE output maps when 'Define' was used during slicing. </li>
+<li><span class=arial>Histogram Sliced</span> will calculate the histogram of a sliced map if the histogram is not available yet. </li>
+</ul>
+     
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="../ilwisapp/histogram_functionality.htm">Histogram operation : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/table_window_menu_commands.htm">Table window : menu commands</a></p>
+
+</body

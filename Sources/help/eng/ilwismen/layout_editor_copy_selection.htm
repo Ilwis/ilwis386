@@ -1,0 +1,236 @@
+<html>
+
+<head>
+<title>Layout editor : Copy</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Copy to clipboard, Layout editor, Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Copy to clipboard</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Copies a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> or a selected <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> element from the <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> to clipboard as text, <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >picture</a> or <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmap</a>. </p>
+
+<p class=defnewpar>Copied map views and annotation can be pasted into other Windows applications which use text, pictures or bitmaps.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>Only one <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> or one <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> element can be copied at a time. </li>
+
+<li>When copying a map view to clipboard, the entire map view will be copied, regardless whether you have zoomed in on a part of the map view or not. </li>
+
+</ul>
+
+<p class=kopje>To select a map view or an annotation element:</p>
+
+<ul>
+
+<li>	click a map view or an annotation element in the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a> or in the Layout Management pane.</li>
+
+</ul>
+
+<p class=kopje>To copy:</p>
+
+<ul>
+
+<li>	select a map view or an annotation element, and: </li>
+
+        <ul>
+
+        <li>select <span class=arial>Copy</span> from the Edit menu, or</li>
+
+        <li>click the <span class=arial>Copy</span> button <img src="../images/copy.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a> of the layout editor,</li>
+
+        <li>press the <span class=arial>Ctrl+C</span> keys on the keyboard.</li>
+
+        </ul>
+
+</ul>
+
+<p class=kopje>Format in clipboard: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign=top width=120>
+<p>Object in</p>
+<p>layout editor:</p>
+
+</td>
+<td valign=top width=120>
+<p>Format in clipboard</p>
+<p>after Copy:</p>
+
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >Map view</a></p>
+
+</td>
+<td>
+<p>Picture</p>
+
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >Text</a></p>
+
+</td>
+<td>
+<p>Text</p>
+
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >Box</a></p>
+
+</td>
+<td>
+<p>Picture</p>
+
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >Picture</a></p>
+              
+</td>
+<td>
+<p>Picture</p>
+
+</td>
+</tr>
+</td>
+<td>
+<p><a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >Bitmap</a></p>
+
+</td>
+<td>
+<p>Bitmap</p>
+
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >Legend</a></p>
+
+</td>
+<td>
+<p>Picture</p>
+
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >Map Border</a></p>
+
+</td>
+<td>
+<p>Picture</p>
+
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >North Arrow</a></p>
+
+</td>
+<td>
+<p>Picture</p>
+
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >Scale Bar</a></p>
+
+</td>
+<td>
+<p>Picture</p>
+
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >Scale Text</a></p>
+
+</td>
+<td>
+<p>Text</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>Afer pasting, you may need to resize the pasted pictures, bitmaps or text. To resize an object, you can select an object and drag its <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a>; you can also adapt the width and height values in the Layout Management pane. </li>
+
+<li>It is not a very good idea to copy and paste annotation elements from one layout into another layout: as most objects are copied as pictures, the meaning of coordinates, sizes of a scale bar, etc. will get lost. </li>
+
+        <p>When you wish to create a layout which should look almost exactly as another layout, it is therefore advised to: </p>
+
+        <ul class=tipul>
+
+        <li>save the layout with another name using <span class=arial><a href="layout_editor_save_layout_as.htm">Save As</a></span>; </li>
+
+        <li>in the new layout, replace map views if required: select a map view, then click it with the right mouse button and choose <span class=arial><a href="layout_editor_replace_map_view.htm">Replace Map View</a></span> from the <a href="../ilwis/layout_editor_context_sensitive_menu.htm">context-sensitive menu</a>; </li>
+
+        <li>in the new layout, edit annotation elements if required: double-click the annotation element you wish to edit. </li>
+
+        </ul>
+
+        <p>For more information, see <a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a>. </p>
+
+<li>	To copy the whole layout editor window including the window borders, title bar, menu bar, toolbar, status bar, etc.: press <span class=arial>Alt+PrintScrn</span> on the keyboard. </li>
+
+        <p>The layout editor window will be copied as a <i>bitmap</i> to the clipboard. </p>
+
+<li>	You can use Windows' Clipboard Viewer to inspect the current contents of the clipboard.</li>
+
+<li>    To store a complete layout as a bitmap on disk, use the <span class=arial><a href="layout_editor_export_to_bitmap.htm">Export to Bitmap</a></span> command on the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="copy_map_window_to_clipboard.htm">Map window : copy to clipboard</a></p>
+
+</body

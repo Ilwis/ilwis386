@@ -1,0 +1,376 @@
+<html>
+
+<head>
+<title>Optimum Index Factor : functionality/algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Optimum Index Factor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Optimum Index Factor</h1>
+
+<h1 class=secondline>Functionality / Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Optimum Index Factor (OIF) is a statistic value that can be used to select the optimum combination of three bands in a satellite image with which you want to create a color composite. The optimum combination of bands out of all possible 3-band combinations is the one with the highest amount of 'information' (= highest sum of standard deviations), with the least amount of duplication (lowest correlation among band pairs). </p>
+
+<p class=kopje>Preparation:</p>
+
+<ul>
+
+<li>	Create a map list which contains the multi-spectral bands of your satellite image.</li>
+
+<li>	Calculate a <a href="..//ilwisapp/popup/variance_covariance_matrix_popup.htm" onClick="return popup(this, 'notes')" >variance-covariance matrix</a> or a <a href="..//ilwisapp/popup/correlation_matrix_popup.htm" onClick="return popup(this, 'notes')" >correlation matrix</a> of this map list.</li>
+
+<li>	Open the Properties dialog box of your map list and click the <span class=arial>Additional Info</span> button. </li>
+
+</ul>
+
+<p>The ranked OIF values are shown with the corresponding band combinations. For more information, refer to <a href="../ilwis/how_to_calculate_optimum_index_factor_oif.htm">How to calculate Optimum Index Factor</a>. </p>
+
+<p class=kopje>Example:</p>
+
+<p>Consider an input map list containing 7 bands, named <span class=courier>tmb1</span>, <span class=courier>tmb2</span>, ... <span class=courier>tmb7</span>. For each combination of three bands in the map list, OIF values are calculated through a simple formula which uses the standard deviations of the bands and correlation coefficients between band pairs (see algorithm below). The OIF values may read: </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=th>OIF Index Highest Ranking</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=30>
+<p class=t1>1:</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb4</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb5</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb6</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>(29.04)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p class=t1>2:</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb1</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb5</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb6</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>(28.58)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p class=t1>3:</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb3</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb5</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb6</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>(27.98)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p class=t1>4:</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb5</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb6</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb7</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>(26.67)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p class=t1>5:</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb1</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb4</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb5</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>(26.42)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p class=t1>6:</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb2</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb5</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>tmb6</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>(26.01)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The OIF values suggest that from the 7 bands in the map list, the combination of bands <span class=courier>tmb4</span>, <span class=courier>tmb5</span> and <span class=courier>tmb6</span> is the best statistical choice to create a color composite. </p>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+
+<li>	By using the three bands with the highest OIF value for a color composite, it is not implied that you will create the 'best' color composite since this greatly depends on the purpose of your work. </li>
+
+<li>	'Noise' (such as dropouts) in one of the input bands is considered as high variance, hence this band will appear in all high ranking combinations.</li>
+
+</ul>
+
+<p class=kopje>Input requirements:</p>
+
+<p>To calculate Optimum Index Factors, a map list is required which contains at least 3 raster maps; the raster maps must all use the <span class=courier>Image</span> domain or the same value domain, and they must have the same georeference. Furthermore, it is necessary that a <a href="..//ilwisapp/popup/correlation_matrix_popup.htm" onClick="return popup(this, 'notes')" >correlation matrix</a> or a <a href="..//ilwisapp/popup/variance_covariance_matrix_popup.htm" onClick="return popup(this, 'notes')" >variance-covariance matrix</a> has been calculated for the map list; this will provide the standard deviations and correlation coefficients which are required for the OIF calculation. </p>
+
+<p>For more information, refer to <a href="../ilwis/how_to_calculate_optimum_index_factor_oif.htm">How to calculate Optimum Index Factor</a>.</p>
+
+<p class=kopje>Output OIF values:</p>
+
+<p>After a variance-covariance matrix or a correlation matrix has been calculated for the input map list, you can display the ranked OIF values and corresponding band combinations by clicking the <span class=arial>Additional Info</span> button in the Properties dialog box of the input map list. </p>
+
+<p>The OIF values are stored in the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the map list (.MPL). </p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>It is not possible to calculate OIF values from the command line. </p>
+
+<p class=kopje>Algorithm:</p>
+
+<ol>
+
+<li>	First the number of possible combinations of three bands within the map list is determined as:</li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06><img src="../images/combina.gif" align=bottom width="120" height="36"></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargininlist>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p>N</p>
+
+</td>
+<td valign="top">
+<p>is the total number of bands in the map list.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=leftmargininlist>For 3 bands, there is only 1 combination; </p>
+
+<p class=leftmargininlist>for 4 bands, there are 4 combinations; </p>
+
+<p class=leftmargininlist>for 5 bands, there are 10 combinations; </p>
+
+<p class=leftmargininlist>for 6 bands there are 20 combinations; and </p>
+
+<p class=leftmargininlist>for 7 bands, there are 35 combinations.</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<li>	Then, for each combination of three bands, the OIF is calculated as:</li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06><img src="../images/oif.gif" align=bottom width="227" height="45"></p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p class=leftmargininlist>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p>Std<sub><i>i</i></sub></p>
+
+</td>
+<td valign="top">
+<p>standard deviation of band i</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p>Std<sub><i>j</i></sub></p>
+
+</td>
+<td valign="top">
+<p>standard deviation of band j </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p>Std<sub><i>k</i></sub></p>
+
+</td>
+<td valign="top">
+<p>standard deviation of band k</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p>Corr<sub><i>ij</i></sub></p>
+
+</td>
+<td valign="top">
+<p>correlation coefficient of band i and band j</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p>Corr<sub><i>ik</i></sub></p>
+
+</td>
+<td valign="top">
+<p>correlation coefficient of band i and band k</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p>Corr<sub><i>jk</i></sub></p>
+
+</td>
+<td valign="top">
+<p>correlation coefficient of band j and band k</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp; </p>
+
+<li>	Finally, the OIF values are ranked.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_optimum_index_factor_oif.htm">How to calculate Optimum Index Factor</a></p>
+
+<p class=seealsolinks><a href="variance_covariance_matrix.htm">Variance-Covariance matrix</a></p>
+
+<p class=seealsolinks><a href="correlation_matrix.htm">Correlation matrix</a></p>
+
+</body

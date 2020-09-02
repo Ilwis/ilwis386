@@ -1,0 +1,605 @@
+<html>
+
+<head>
+<title>Distance calculation : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Distance calculation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Distance calculation</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The distance calculation is a process in which for each pixel the distance to its neighbouring pixels is calculated using a 3 <span class=courier>*</span> 3 matrix with the following values:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=30>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>7</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>5</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>7</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>5</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>5</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>7</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>5</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>7</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<p>7/5 is a good approximation of <span class=symbol>&Ouml;</span>2, and <span class=symbol>&Ouml;</span>2 is the distance between two diagonally connected pixels when the raster cell size is 1. Figure 1 presents the raw distance values as calculated by the distance program. To obtain distance values in meters, these raw values are divided by 5 and multiplied by the pixel size and a correction factor.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<p><img src="../images/dist1.gif" align=bottom width="181" height="181"></p>
+
+<p class=captionfig>Fig. 1:	Raw distance values as calculated by the distance program when no weight map is used. These values are divided by 5 and multiplied by the pixel size and a correction factor.</p>
+
+<p class=kopjeaftertitlesub>Initialization:</p>
+
+<p>All source pixels obtain distance value 0; all other pixels obtain a value distance value that is infinetely large. </p>
+
+<p class=kopje>Recursive process:</p>
+
+<p>For each pixel (column by column, line by line):</p>
+
+<ul>
+
+<li>	for each diagonal neighbour, the test distance of the centre pixel is set to the current distance value of the neighbour plus seven; </li>
+
+        <ul>
+
+        <li>	if this test distance is smaller than the actual distance value of the centre pixel, than the actual distance value of the centre pixel is replaced by the test distance.</li>
+
+        </ul>
+
+<li>	for all horizontal and vertical neightbours, the test distance of the centre pixel is set to the current distance value of the neighbour plus five;</li>
+
+        <ul>
+
+        <li>	if this test distance is smaller than the actual distance value of the centre pixel, than the actual distance value of the centre pixel is replaced by the test distance.</li>
+
+        </ul>
+
+</ul>
+
+<p>If a weight map is used, the test distances are multiplied by the weight values found in the weight map. </p>
+
+<p>This is a recursive process in which the output file has to be scanned forward and backward until no more changes occur. </p>
+
+<p>Then a final computation is performed taking into account the pixel size of the map so that the final output values are in meters; further the output values are multiplied by a correction factor to reduce overall errors, see Table 1 below.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<p class=captionfig>Tbl 1:	Table 1 presents the results of a distance calculation for a map as presented in Figure 1. This table shows the use of the correction factor which reduces the overall error in calculated distance values. <br>
+Column <u>raw distance</u> presents raw distance values as used in Figure 1; <br>
+column raw distance/5 presents the result of the distance calculation after dividing the raw distance values by 5; column <u>Euclidian distance</u> presents distance values as they should be; column <u>Error before correction</u> shows the error of the distance calculation when not performing the correction as 100<span class=courier><small>*</small></span>(raw distance/5)/Euclidian distance; column <u>Corrected distance</u> presents distance values after the correction as (raw distance/5)<span class=courier><small>*</small></span>0.968; column <u>Error after correction</u> shows the error of the distance calculation after the correction is performed as 100<span class=courier><small>*</small></span>Corrected distance/Euclidian distance. See that column Error before correction gives errors up to 7.5% while column Error after correction only gives errors up to 4.5%.</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p class=tcolh>Raw distance</p>
+
+</td>
+<td valign="top" width=75>
+<p class=tcolh>Raw distance / 5</p>
+
+</td>
+<td valign="top" width=75>
+<p class=tcolh>Euclidian distance</p>
+
+</td>
+<td valign="top" width=75>
+<p class=tcolh>Error before correction (%)</p>
+
+</td>
+<td valign="top" width=75>
+<p class=tcolh>Corrected distance</p>
+
+</td>
+<td valign="top" width=75>
+<p class=tcolh>Error after correction (%)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>5.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>1.000000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>1.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>0.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>0.97</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>-3.200</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>7.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>1.400000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>1.414</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>-1.005</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>1.36</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>-4.173</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>10.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.000000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>0.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>1.94</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>-3.200</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>12.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.400000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.236</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>7.331</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.32</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.897</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>14.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.800000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.828</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>-1.005</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.71</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>-4.173</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>15.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.000000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>0.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.90</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>-3.200</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>17.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.400000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.162</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>7.517</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.29</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.077</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>19.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.800000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.606</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.393</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.68</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.020</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>20.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.000000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>0.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.87</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>-3.200</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>21.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.200000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.243</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>-1.005</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.07</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>-4.173</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>22.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.400000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.123</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>6.716</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.26</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.301</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>24.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.800000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.472</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>7.331</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.65</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3.897</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>25.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.000000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>0.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.84</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>-3.200</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>26.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.200000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.03</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>0.672</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>27.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.400000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.099</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.903</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.23</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.514</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>29.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.800000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.385</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>7.703</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.61</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4.257</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>31.000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>6.200000</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5.831</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>6.329</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>6.00</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2.927</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Note that, due to the raster approximation, for horizontal and vertical lines of 0° or 90°, the calculated distances are around 3% too small, for diagonal lines of 45°, the calculated distances are around 4% too small, and that for lines of 22.5° and 67.5° the distances are around 4% too large. Distances along all other lines have smaller errors. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="distance_calculation_functionality.htm">Distance calculation : functionality</a></p>
+
+</body

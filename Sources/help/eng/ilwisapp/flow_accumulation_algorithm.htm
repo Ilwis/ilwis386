@@ -1,0 +1,95 @@
+<html>
+
+<head>
+<title>Flow accumulation : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Flow accumulation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Flow accumulation</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The accumulated flow value for each pixel is calculated using a recursive function. </p>
+
+<p>When a pixel has neighboring pixels pointing to itself, 
+the values of these neighbours are accumulated, including the value of the pixel itself. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>The calculation is initialized by calling the recursive function for the outlet pixel. </li>
+
+<li>The function then recursively calls itself for all pixels that flow to the outlet pixel. </li>
+
+<li>The recursion stops when a pixel is reached that has no more neighbour pixels that flow into it. </li>
+
+</ul>
+
+<!--
+<p class=kopje>Example:</p>
+
+<p><b>Sorry, pictures below do not describe algorithm yet!</b></p>
+
+<p class=defnewpar>The pictures below show the input map, the temporary map at start, the situation after the 3rd, 4th, 5th, and 6th row are finished, and the final output flow accumulation map. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td width="150">Input map = Output flow direction map</td>
+
+<td width="150">Temporary map,<br>start</td>
+
+<td width="150">Temporary map,<br>3rd row finished</td>
+
+<td width="150">Temporary map,<br>4th row finished</td>
+
+</tr>
+<tr>
+
+<td><img src="../images/flowacc_ex1.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowacc_ex2.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowacc_ex3.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowacc_ex4.gif" height="125" width="125"></td>
+
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+
+<td width="150">Temporary map,<br>5th row finished</td>
+
+<td width="150">Temporary map,<br>6th row finished</td>
+
+<td width="150">Output flow accumulation map</td>
+
+</tr>
+<tr>
+
+<td><img src="../images/flowacc_ex5.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowacc_ex6.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowacc_count.gif" height="125" width="125"></td>
+
+</tr>
+</table>
+-->
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="flow_accumulation_functionality.htm">Flow accumulation : functionality</a></p>
+
+</body

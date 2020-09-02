@@ -1,0 +1,331 @@
+<html>
+
+<head>
+<title>Create a georeference</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Georeference, Create georeference, Coordinates">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a georeference</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Create a new <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> for <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a>. A georeference determines the relation between row and column numbers in a raster map and XY-coordinates. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose the <span class=arial>Create Georeference</span> command from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window, or</li>
+
+<li>	when you double-click the <span class=arial>New GeoRef</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>. </li>
+
+</ul>
+
+<p class=defnewpar>This dialog box can be used to create:</p>
+
+<ul>
+
+<li class=ls01af>	a georeference <b>corners</b>: to be used during rasterize operations, or as a North-oriented georeference to which you want to <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >resample</a> raster maps, or</li>
+
+<li class=ls01af>	a georeference <b>tiepoints</b>: to add coordinates to a satellite image or a scanned photograph without using a DTM, or</li>
+
+<li class=ls01af>	a georeference <b>direct linear</b>: to add coordinates to a scanned photograph while using a DTM, or</li>
+
+<li class=ls01af>	a georeference <b>orthophoto</b>: to add coordinates to a scanned aerial photograph while using a DTM and camera parameters, or</li>
+
+<li class=ls01af>	a georeference <b>3D</b>: to obtain a three-dimensional view of your study area.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Georeference name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the georeference. In case of a georeference which will be used for multiple raster maps of the same size and of the same area, it is advised to enter a georeference name that applies to all maps (e.g. the name of the study area).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the georeference. The description is visible on the status bar of the Main window when moving the mouse pointer over the georeference in the Catalog. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Georef Corners:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select Georef Corners to create a North-oriented georeference, for example when rasterizing point, segment or polygon maps, or for the output of a Resampling operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Georef Tiepoints:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select Georef Tiepoints when you want to add coordinates to a satellite image or to a scanned photograph and when you do not have a DTM. This type of georeference can be used to add coordinates to satellite imagery and for subsequent <a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen digitizing</a> or to <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >resample</a> the image to another georeference (e.g. to a georef corners). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Georef Direct Linear:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select Georef Direct Linear when you want to add coordinates to a scanned photograph which was taken with a normal camera, and when you have an existing DTM to also correct for tilt and relief displacement (Direct Linear Transformation). This type of georeference can for instance be used to add coordinates to small format aerial photographs and for subsequent <a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen digitizing</a> or to <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >resample</a> the photograph to another georeference (e.g. to a georef corners). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Georef OrthoPhoto:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select Georef Orthophoto when you want to add coordinates to a scanned aerial photograph with fiducial marks, taken with a photogrammetric camera with known principal distance, and when you have an existing DTM to also correct for tilt and relief displacement (Differential rectification). This type of georeference can be used to add coordinates to professional near vertical aerial photographs and further <a href="..//ilwis/popup/monoplotting_popup.htm" onClick="return popup(this, 'notes')" >monoplotting</a> on the photograph or for creating an <a href="..//ilwis/popup/orthophoto_popup.htm" onClick="return popup(this, 'notes')" >orthophoto</a> (<a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >resampling</a>).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Georef 3D display:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select Georef 3D when you want to make a three-dimensional picture of your study area using a Digital Elevation Model.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>For Georef Corners:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Coordinate system:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> in which this georeference fits. If you do not have a coordinate system yet, it is advised to create one first. To create a coordinate system, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> next to this list box or select the Create Coordinate System command from the File menu in the Main window: the <a href="create_a_coordinate_system.htm">Create Coordinate System</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Pixel size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a pixel size for the new raster map. When you specify for instance 20, the size of each pixel in the raster map will be 20 x 20 m.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Map boundaries:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When an existing coordinate system is selected, the boundary Xmin, Ymin, Xmax and Ymax values of the map are already filled out as defaults. Or type the minimum and maximum X and Y values yourself.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Centers:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if the four boundary values (Xmin, Ymin, Xmax, Ymax) of this map should refer to the <b>centers</b> of the four corner pixels of the map. <br>
+Clear this check box if the four boundary values should refer to the outer <b>corners</b> of the four corner pixels of this map.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>See also the <span class=tipnospace>Georeference Corners Tip</span> below.</p>
+
+<p class=kopje>For Georef Tiepoints:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Coordinate system:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> in which this georeference fits. If you do not have a coordinate system yet, it is advised to create one first. To create a coordinate system, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select the Create Coordinate System command from the File menu in the Main window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Background Map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> (advised for satellite images), a single band of a satellite image, a color composite, or a scanned photograph that will be displayed in the Tiepoint editor and on which you will position the tiepoints. The background map will directly use the georeference which you are creating. </p>
+
+<p>When you use a map list as a background map, and when the georeference is opened, the map list will be shown as an <a href="../ilwismen/display_options_map_list_as_color_composite.htm">interactive color composite</a>. After adding tiepoints, the newly created georeference tiepoints is automatically added to all raster maps in the map list. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>For more information, see the <span class=tipnospace>Georeference Tiepoints Tip</span> below, <a href="../ilwis/how_to_add_coordinates_to_an_image_color_composite_scanned_photo.htm">How to add coordinates to an image</a>, or <a href="../ilwis/how_to_screen_digitize.htm">How to screen digitize</a>. </p>
+
+<p class=kopje>For Georef DirectLinear and Georef OrthoPhoto:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Background Map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the scanned aerial photograph that will be displayed in the Tiepoint editor and on which you will position the tiepoints. The background map will directly use the georeference which you are creating. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>DTM:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing Digital Terrain Model (DTM), also called a Digital Elevation Model (DEM), from which the height values will be used. Pixel size and accuracy of the DTM are of great importance. </p>
+
+<p class=tiptext><span class=tipnospace>Tip: </span>For a correct behaviour of a georef direct linear or a georef orthophoto, it is essential that you have marked the 'Interpolation' check box in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of your DTM raster map. For more information, refer to the <a href="raster_map_properties.htm">Raster Map Properties</a> dialog box. Furthermore, the tiepoints of a georef direct linear may not be coplanar, i.e. lie in one (tilted) plane. For more information, see <a href="../ilwis/ilwis_objects_georeference_direct_linear_non_coplanarity_of_tiepoints.htm">ILWIS objects: georeference direct linear</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>For more information, see <a href="../ilwis/how_to_screen_digitize.htm">How to screen digitize</a>, <a href="../ilwis/how_to_monoplot.htm">How to monoplot</a> and <a href="../ilwis/how_to_create_orthophoto.htm">How to create an orthophoto</a>. </p>
+
+<p class=kopje>For Georef 3D:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Rows   Columns:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type values for the size of the map window in which the three-dimensional view will be displayed or accept the default values. Values refer to screen pixels. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>DTM:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a raster map with height values (Digital Terrain Model or Digital Elevation Model) which is used to construct the three-dimensional view. For more information on creating a DTM/DEM and a 3D view, see <a href="../ilwis/how_to_calculate_digital_elevation_models.htm">How to calculate a Digital Elevation Model</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>For more information, see also <a href="../ilwis/how_to_create_3d_views.htm">How to create a 3D view</a>.</p>
+
+<p class=kopje>Next dialog boxes:</p>
+
+<ul>
+
+<li>	When creating a Georef Corners, specify all parameters in this dialog box.</li>
+
+<li>	When creating a Georef Tiepoints or a Georef DirectLinear, the <a href="../ilwis/georeference_tiepoints_editor.htm">Tiepoint editor</a> will be opened. When creating a Georef OrthoPhoto, first the <a href="../ilwismen/georef_ortho_locate_fiducial_marks.htm">Locate Fiducial Marks</a> dialog box will appear, then the Tiepoint editor will be opened.</li>
+
+<p class=leftmargininlist>	In the Tiepoint editor, you can insert tiepoints, also called ground control points, which establish relationships between map pixels (row,col) and XY- or XYZ-coordinates. </p>
+
+<li>	When creating a Georef 3D, first the <a href="display_options_3d_grid.htm">Display Options - 3D Grid</a> dialog box will appear, then the <a href="../ilwis/georeference_3d_editor_functionality.htm">Georeference 3D editor</a> will be opened.</li>
+
+</ul>
+
+<p class=tip>Georeference Corners Tip:</p>
+
+<p class=tiptext>This dialog box asks for minimum and maximum map boundary values and for a pixel size: the combination of these determines the total number of rows and columns thus the total number of pixels in the raster map. </p>
+
+<p class=tiptext>It is a good idea to spend some time thinking over the right pixel size for your work: </p>
+
+<ul class=tipul>
+
+<li>	choosing a small pixel size brings more detail in your rasterized map(s),</li>
+
+<li>	choosing a small pixel size results in raster maps of increased size (more rows and columns); to be exact: reducing the pixel size by 5, increases the map size on disk by 25,</li>
+
+<li>	operations on large raster maps take more time.</li>
+
+</ul>
+
+<p class=tip>Georeference Tiepoints Tip:</p>
+
+<ul class=tipul>
+
+<li>By selecting a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> as the background map for a Georef Tiepoints, the newly created georef tiepoints will automatically be added to all raster maps in the maplist. This is handy in case you work with satellite imagery with multiple bands. </li>
+
+<li>When you selected a single raster map as background map for a Georef Tiepoints, you have to manually add the newly create Georef Tiepoints to <i>all other bands of the satellite image</i> (same map size, same area) after you finished adding tiepoints. </li>
+
+        <ul class=tipul>
+
+        <li>The easiest way to do this is to create a map list of all bands, then open the <a href="../ilwismen/map_list_properties.htm">Property sheet of the map list</a>, and select the Georeference Tiepoints you just created: the newly created Georef Tiepoints will automatically be added to all raster maps in the maplist. </li>
+
+        <li>You can also open the <a href="raster_map_properties.htm">Property sheets of all other bands</a>, and select the newly created Georef Tiepoints for each band separately. </li>
+
+        </ul>        
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a></p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_3d_editor_functionality.htm">Georeference 3D editor</a></p>
+
+</body

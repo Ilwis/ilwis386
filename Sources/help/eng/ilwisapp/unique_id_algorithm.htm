@@ -1,0 +1,45 @@
+<html>
+
+<head>
+<title>Unique ID : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Unique ID">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Unique ID</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>First, the contents of the input point, segment or polygon map into a temporary output point, segment or polygon map. In case of point and polygon maps, the geographic information will be exactly the same; in case of segment maps, the deleted segments will not be copied to the new map. </p>
+
+<p class=defnewpar>Then, a unique ID is assigned to each point, segment or polygon in the output map. This is done according to the storage sequence of the points, segments or polygons in the input map. </p>
+
+<p class=defnewpar>Furthermore, an attribute table is created. For each output ID, the original class name, ID, or value of the input map is listed; and if necessary, the areas of output polygons, or the lengths of output segments are calculated. </p>
+
+<p class=defnewpar>The output IDs are stored by the output map in a <span class=courier>UniqueID</span> domain (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>).
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="unique_id_functionality.htm">Unique ID : functionality</a></p>
+
+</body

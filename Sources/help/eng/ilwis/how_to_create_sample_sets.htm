@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<title>How to create sample sets</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sample sets, Sampling, Create ..., How to create ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to create</h1>
+
+<h1 class=secondline>a sample set for image classification</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To perform an image classification, a <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> has to be created. Then, you can <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sample</a> training pixels: assign class names to groups of pixels with similar spectral values and that are supposed to represent a known feature on the ground.  </p>
+
+<p class=defnewpar>A sample set consists of: </p>
+
+<ul>
+
+<li>	a reference to a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, that is the set of images you want to classify in a later stage; the images in the map list are used to extract sample statistics during sampling and display these in feature spaces,</li>
+
+<li>	a reference to a class domain, that is the collection of class names that you want to assign to your training pixels,</li>
+
+<li>	a reference to a sample set raster map which is automatically created and obtains the same name as the sample set; this map contains the locations of the training pixels and the class names assigned to them.</li>
+
+<li>	when your graphics board is configured to use 256 colors, a reference to a background map, that is the map on which you can locate your training pixels; this background map can for instance be a color composite.</li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When your graphics board is configured to use more than 256 colors, you will use an <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >interactive color composite</a>; then, a background map on disk is not used. For more information, refer to <a href="how_to_create_color_composites.htm">How to create a color composite</a>.</p>
+
+<p class=kopje>To create a sample set:</p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, choose <span class=arial>Create Sample Set</span>, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Create</span> item, and double-click the <span class=arial>New SmplSet</span> item,  </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the item <span class=arial>New SmplSet</span>, or</li>
+                                                                                                                                                         
+<li>	from the <a href="main_window_menu_commands.htm">Operations menu</a> in the Main window, choose <span class=arial>Image Processing, Sample</span>, or </li>
+
+<li>	in the Operation-tree, open the <span class=arial>Image Processing</span> item, and double-click the <span class=arial>Sample Map</span> item, or </li>
+
+<li>	in the Operation-list, double-click the <span class=arial>Sample Map</span> item. </li>
+
+</ul>
+
+<p class=defnewpar>By the first two actions, the <a href="../ilwismen/create_a_sample_set.htm">Create Sample Set</a> dialog box will appear. In the this dialog box, you can specify the sample set's name, and the domain, map list, and background map that you want to use during sampling.</p>
+
+<p>By the last two actions, the <a href="../ilwismen/sampling.htm">Sampling</a> dialog box appears in which you can select an existing sample set, for instance to add more training pixels, but you can also create a new sample set by clicking the little <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. If the create button is used, the Create Sample Set dialog box will follow. </p>
+
+<p class=defnewpar>When everything is OK, the <a href="sample_set_editor_functionality1.htm">sample set editor</a> is started which allows you to select training pixels, show feature spaces, etc.</p>
+
+<p class=defnewpar>See also:</p>
+
+<p class=seealsolinks><a href="ilwis_objects_sample_sets.htm">ILWIS objects : sample sets</a></p>
+
+<p class=seealsolinks><a href="how_to_create_map_lists.htm">How to create a map list</a></p>
+
+<p class=seealsolinks><a href="how_to_create_color_composites.htm">How to create a color composite</a></p>
+
+<p class=seealsolinks><a href="sample_set_editor_functionality1.htm">Sample set editor</a></p>
+
+</body

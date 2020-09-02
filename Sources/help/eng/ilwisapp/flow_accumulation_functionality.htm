@@ -1,0 +1,121 @@
+<html>
+
+<head>
+<title>Flow accumulation : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Flow accumulation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Flow accumulation</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Flow accumulation operation performs a cumulative count of the number of pixels that naturally drain into outlets. The operation can be used to find the drainage pattern of a terrain. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>As input the operation uses the output map of the <a href="flow_direction_functionality.htm">Flow direction</a> operation. </li>
+
+<li>The output map contains cumulative hydrologic flow values that represent the number of input pixels which contribute any water to any outlets (or sinks if these have not been removed); the outlets of the largest streams, rivers etc. will have the largest values. </li>
+
+</ul>
+
+<p class=kopje>Example:</p>
+
+<p>The <a href="flow_direction_functionality.htm">Flow direction</a> operation determines the natural drainage direction for every pixel in a Digital Elevation Model (DEM). 
+Based on the output Flow direction map, the Flow accumulation operation counts the total number of pixels that will drain into outlets. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td width="150">Calculating flow directions from a DEM <br>(steepest slope)</td>
+
+<td width="150" valign="bottom">Output flow direction map</td>
+
+<td width="150" valign="bottom">Calculating flow accumulation</td>
+
+<td width="150" valign="bottom">Output flow accumulation map</td>
+</tr>
+<tr>
+<td><img src="../images/flowacc_steep.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowacc_dir_outsteep.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowacc_count.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowacc_outsteep.gif" height="125" width="125"></td>
+
+</tr>
+</table>
+
+<p class=defnewpar>For more information, see <a href="flow_accumulation_algorithm.htm">Flow accumulation : algorithm</a>.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input map should be a raster map that is produced by the <a href="flow_direction_functionality.htm">Flow direction</a> operation, i.e. a raster map using <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>FlowDirection</span></a>. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output raster map will always use <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a>. The operation sets the value range of the output map from 0 to 999999999, and sets the step size to 1. </p>
+
+<p>The output raster map uses the same georeference as the input raster map. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>When displaying an output Flow accumulation map, you can use <span class=arial>Logarithmic Stretching</span> in the <a href="../ilwismen/display_options_raster_domain_value.htm">Display Options</a> dialog box of the raster map. </li>
+
+<li>The output Flow accumulation map is by default displayed using <a href="..//ilwis/sec/y_system_representations_sec.htm" onClick="return popup(this, 'notes')" >system representation Pseudo</a>. If you wish, you can also create your own representation. </li>
+
+<li>To show, from an output Flow accumulation map e.g. named <span class=courier>outmap</span>, only the pixels that receive water from for instance 25 or more input pixels, you can use MapCalc on the command line. Type for instance: </li>
+
+<table>
+<tr>
+<td width="57%"><span class=calc0>out25a = outmap &gt;= 25</span></td>
+<td>&nbsp;</td>
+<td width="43%">(<span class=courier>out25a</span> with default domain Bool)</td>
+</tr>
+<tr>
+<td><span class=calc0>out25b = iff(outmap &gt;= 25, outmap, ?)</span></td>
+<td>&nbsp;</td>
+<td>(<span class=courier>out25b</span> with default domain Value)</td>
+</tr>
+</table>
+
+</ul>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="flow_accumulation_dialogbox.htm">Flow accumulation : dialog box</a></p>
+
+<p class=seealsolinks><a href="flow_accumulation_commandline.htm">Flow accumulation : command line</a></p>
+
+<p class=seealsolinks><a href="flow_accumulation_algorithm.htm">Flow accumulation : algorithm</a></p>
+
+<p class=seealsolinks><a href="flow_direction_functionality.htm">Flow direction : functionality</a></p>
+
+</body

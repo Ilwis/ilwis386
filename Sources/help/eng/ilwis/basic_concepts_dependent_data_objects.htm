@@ -1,0 +1,63 @@
+<html>
+
+<head>
+<title>Basic concepts : dependent data objects</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Basic concepts, Dependent data objects">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Basic concepts</h1>
+
+<h1 class=secondline>Dependent data objects </h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Dependent maps, tables and columns are the result of a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculation</a> with MapCalc or TabCalc (in which you used the definition sign =) or the result of another <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>. The complete <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >expression</a> by which dependent output objects are created is stored by the output maps, tables and columns as their <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a>. Dependent data objects thus know how they were created and on which input data they depend.</p>
+
+<p class=kopje>Example:</p>
+
+<p>You digitized roads as segments, you rasterized the segment map and then performed the Distance operation: you obtain a raster map with distances to the nearest road. Both the rasterized segment map and the output map of the Distance operation are dependent maps. When you edit the segment map later and added for instance new roads, it is obvious that both the rasterized segment map and the output distance map need to be updated according to the new situation, i.e. the dependent maps need to be recalculated.</p>
+
+<p class=kopje>Advantages of working with dependent data objects:</p>
+
+<p class=linespacing01before><i>Easy update</i>: when you have new information and you accordingly edited input maps, tables or columns, the dependent output maps, tables or columns can be recalculated as the system can execute their definition again. There is thus no need to repeat operations and choose input and output objects again: you can simply press the <span class=arial>Make Up-to-Date</span> button in the <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Properties</a> sheet of a dependent output map, table or column. </p>
+
+<p class=defnewpar><i>Easy change of calculation formulas</i>: MapCalculate and ColumnCalculate formulas that are stored as the definition of dependent raster maps and columns can be modified in the Properties sheet of such a map or column. This enables you to quickly change calculation formulas and see results displayed in the same raster map or column. The need to create new maps and columns for each similar calculation is thus reduced. To edit the MapCalc formula by which a dependent raster map is created: press the <span class=arial>Edit Definition</span> button in the Properties sheet of the raster map. The TabCalc formula of a dependent column can directly be edited in the Properties sheet of the column. </p>
+
+<p class=defnewpar><i>Minimum use of disk space</i>: when you perform a calculation or another operation, the outcome is a dependent map or table and in principle only the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the dependent map (.MPR, .MPA, .MPS, .MPP) or table (.TBT) is stored on disk. Object definition files are small ASCII files and they store amongst others the expression by which the output object is created and contain a reference to the output data file(s). You can directly continue to perform calculations and/or operations on the dependent objects that do not have calculated data files yet. The data files which may need a lot of disk space are automatically calculated and stored on disk when the map or table is displayed, i.e. when needed. In most cases, also the pixel information window can even show results of dependent raster maps that do not have calculated data files yet. The pixel information is able to calculate output values of pixels on the fly. </p>
+
+<p class=defnewpar>For dependent maps and tables that already have stored data files, you can delete the data files that are not needed immediately. As long as the object definition file of a dependent object remains, the data files can always be recalculated. To release disk space: press the <span class=arial>Release Disk Space</span> button in the Properties sheet of a dependent map or table. </p>
+
+<p class=defnewpar>To protect the results of calculations or operations, you cannot directly edit dependent maps, columns in dependent tables, or dependent columns. In case you do want to edit a dependent map or column, you first have to break the dependency link between the dependent map or column and its input data. To break dependencies: press the <span class=arial>Break Dependency Link</span> button in the Properties sheet of dependent map or dependent column. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a></p>
+
+<p class=seealsolinks><a href="how_to_make_dependent_data_objects_up_to_date.htm">How to make dependent data objects up-to-date</a></p>
+
+<p class=seealsolinks><a href="how_to_change_the_definition_of_a_dependent_data_object.htm">How to change the definition of calculated data objects</a></p>
+
+<p class=seealsolinks><a href="how_to_release_disk_space.htm">How to release disk space</a></p>
+
+<p class=seealsolinks><a href="how_to_break_dependency_links.htm">How to break dependency links</a></p>
+
+</body

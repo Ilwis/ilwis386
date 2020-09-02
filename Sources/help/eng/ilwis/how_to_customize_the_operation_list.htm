@@ -1,0 +1,264 @@
+<html>
+
+<head>
+<title>How to customize the Operation-tree, the Operation-list and the Operations menu</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Main window, Operation-tree, Operation-list, Customize ..., How to customize ..., Scripts, Tools, Script directories, Script folders, Tools directories, Tools folders, Extend the Operations menu, Change the Operations menu, Operations menu, External applications, Menu customization">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to customize ...</h1>
+
+<h1 class=secondline>the Operation-tree, the Operation-list and the Operations menu</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> and the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a> contain a list of all ILWIS operations and some other commands (New, Show, Edit).</p>
+
+<p class=kopje>To hide or show the Operation-tree and the Operation-list:</p>
+
+<ul>
+
+<li>   On the <a href="main_window_menu_commands.htm">View menu</a> in the Main window, look for the Operation-list/Navigator command: </li>
+
+        <ul>
+
+        <li>if a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7"> appears in front of this menu command, the Operation-tree, Operation-list and the Navigator are displayed. </li>
+
+        <p>To hide the Operation-tree, Operation-list and Navigator, click the Operation-list/Navigator command on the View menu;</p>
+
+        <li>if no check mark appears in front of the 'Operation-list/Navigator' command, the Operation-tree, Operation-list and Navigator are hidden. </li>
+
+        <p>To show the Operation-tree, Operation-list and Navigator, click the Operation-list/Navigator command on the View menu.</p>
+
+        </ul>
+
+</ul>
+
+<h3>To add scripts to the Operation-tree/Operation-list and to the Operations menu of the Main window</h3>
+
+<p>ILWIS <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a> can be added to the Operation-tree, the Operation-list and to the Operations menu of the Main window, so that the scripts will always be available. </p>
+
+<p class=kopje>Using a fixed <span class="courier">Scripts</span> folder within the ILWIS program folder:</p>
+
+<p>If you have access to the folder where the ILWIS program is located, i.e. the folder where the ILWIS executable is located, 
+
+you can add a subfolder/subdirectory called <span class="courier">Scripts</span> in which you can place one or more scripts. 
+
+When you restart ILWIS, the scripts found in the <span class="courier">Scripts</span> folder will appear in 
+
+the Operation-list, in the Script section of the Operation-tree, and as a Script section on the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a>. </p>
+
+<p class=kopje id="scripts">Specifying one or more user-defined Script folders:</p>
+
+<p>Scripts can also be located in other folders than in a fixed <span class="courier">Scripts</span> folder. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>In the <a href="../ilwismen/main_window_preferences.htm">Preferences</a> (section Directories), specify one or more Script folders/directories where commonly used scripts are located. When multiple folders are specified, separate the folders by semicolons <span class="courier">;</span></li>
+
+<li>Make sure that the required scripts (<span class="courier">.isl</span> and <span class="courier">.isf</span> files) are actually available in the specified Script folders/directories. </li>
+
+<li>Close and reopen ILWIS. </li>
+
+</ul>
+
+<p class=defnewpar>The scripts that are available in the specified Script folders/directories will appear: </p>
+
+<ul>
+
+<li>in the Operation-list, </li>
+
+<li>in the Script section of the Operation-tree, and </li>
+
+<li>as a Script section on the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a>. </li>
+
+</ul>
+
+
+<h3>To add external applications to the Operation-tree/Operation-list and to the Operations menu of the Main window</h3>
+
+<p>Similarly, external programs or executables (<span class="courier">.exe</span>, <span class="courier">.com</span>, <span class="courier">.bat</span>), 
+	shortcuts (<span class="courier">.lnk</span>) either to Windows applications or to files of registered applications, 
+	and external files of a <i>registered file type</i> (for instance <span class="courier">.doc</span>, <span class="courier">.txt</span>, <span class="courier">.pdf</span>, <span class="courier">.xls</span>, <span class="courier">.ppt</span>, <span class="courier">.pps</span>, <span class="courier">.gif</span>, <span class="courier">.bmp</span>, etc. ) can be made available in the Operation-tree, the Operation-list and on the Operations menu of the Main window. </p>
+
+<p class=kopje>Using a fixed <span class="courier">Tools</span> folder within the ILWIS program folder:</p>
+
+<p>If you have access to the folder where the ILWIS program is located, i.e. the folder where the ILWIS executable is located, 
+
+you can add a subfolder/subdirectory called <span class="courier">Tools</span> in which you can place one or more external tools. 
+
+When you restart ILWIS, the tools found in the <span class="courier">Tools</span> folder will appear in 
+
+the Operation-list, in the Tools section of the Operation-tree, and as a Tools section on the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a>. </p>
+
+<p class=kopje id="tools">Specifying one or more user-defined Tools folders:</p>
+
+<p>External tools, shortcuts or files may also be located in other folders than in a fixed <span class="courier">Tools</span> folder. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>In the <a href="../ilwismen/main_window_preferences.htm">Preferences</a> (section Directories), specify one or more Tools folders/directories where commonly used tools are located. When multiple folders are specified, separate the folders by semicolons <span class="courier">;</span></li>
+
+<li>Make sure that the required programs, shortcuts, and/or other files or documents etc. are actually available in the specified Tools folders/directories. </li>
+
+<li>Close and reopen ILWIS. </li>
+
+</ul>
+
+<p class=defnewpar>The external programs, the shortcuts, and/or any other registered files that are available in the specified Tools folders/directories, will appear: </p>
+
+<ul>
+
+<li>in the Operation-list, </li>
+
+<li>in the <span class=arial>Tools</span> section of the Operation-tree, and </li>
+
+<li>as a <span class=arial>Tools</span> section on the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a>. </li>
+
+</ul>
+
+<p class="tip">Mind: </p>
+
+<ul class=tipul>
+<li>A shortcut to a Windows application should point to the correct location of that Windows application. </li>
+<li>A shortcut to a document or file of a registered Windows application should point to the correct location of that file or document. </li>
+<li>To inspect which are the registered file types on your system, use Windows' Control Panel, Folder Options, File Types. </li>
+</ul>
+
+<h3>Advanced (<span class="courier">action.def</span>)</h3>
+
+<p>To further customize the Operations menu, the Operation-list and the Operation-tree, advanced users may wish to modify the ILWIS <span class="courier">action.def</span> file, or to create their own <span class="courier">action.def</span> file that either replaces the ILWIS <span class="courier">action.def</span> file or that is used in addition to the ILWIS <span class="courier">action.def</span>. </p>
+
+<p class="defnewpar">In short, the <span class="courier">action.def</span> file lists the operations that are available on the Operations menu, in the Operation-tree and the Operation-list, and the manner in which these operations are arranged. </p>
+
+<p class="defnewpar">The <span class="courier">action.def</span> file can be edited for instance with Notepad; the meaning of the entries in the file are shortly described at the top of the file; entries are space-delimited. </p>
+
+<p class="kopje">Modifying the ILWIS <span class="courier">action.def</span> file:</p>
+
+<p>If you have access to the folder where the ILWIS program is located, i.e. the folder where the ILWIS executable is located, 
+	
+	you may edit, at your own risk, the ILWIS <span class="courier">action.def</span> file. For safety reasons, it is advised to make a copy of the original <span class="courier">action.def</span> file first! </p>
+
+<p class="kopje">Creating your own <span class="courier">action.def</span> file (replacing the ILWIS <span class="courier">action.def</span> file):</p>
+
+<ul>
+
+<li>Create an <span class="courier">action.def</span> file yourself; the file should use the same structure as the ILWIS <span class="courier">action.def</span> file.</li>
+
+<li>Open the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>, and under <span class="arial">Directories</span>, select a Startup directory. As the Startup directory, it is probably handy to select the directory where your default data is located. </li>
+
+<li>Make sure that your <span class="courier">action.def</span> is located in the specified Startup directory. </li>
+
+<li>Make sure that all ILWIS Catalogs are closed, then close and restart ILWIS. </li>
+
+</ul>
+
+<p class="tip">Tips: </p>
+
+<ul class="tipul">
+
+<li>For more information, see also <a href="../ilwis/how_to_change_the_working_or_start_up_directory.htm">How to change the working or startup directory</a>. </li>
+
+<li>Alternatively, you can also locate your <span class="courier">action.def</span> in the 'Start in' property of the ILWIS shortcut on your desktop. </li>
+
+</ul>
+
+<p class="kopje">Creating your own <span class="courier">action.def</span> file (used in combination with the ILWIS <span class="courier">action.def</span> file):</p>
+
+<ul>
+
+<li>Create an <span class="courier">action.def</span> file yourself; the file should use the same structure as the ILWIS <span class="courier">action.def</span> file.</li>
+
+<li>Make sure that your <span class="courier">action.def</span> file is located in a subfolder of the ILWIS program folder, i.e. a subfolder of the folder where the ILWIS executable is located.</li>
+
+<li>Close and restart ILWIS. </li>
+
+</ul>
+
+<p class="defnewpar">The entries in your own <span class="courier">action.def</span> will be listed below the regular ILWIS operations in the Operation-list, the Operation tree and the Operations menu. </p>
+
+<p class="kopje">Adding external applications to the <span class="courier">action.def</span> file and optionally use parameters for an external application: </p>
+
+<p>To add an external application to an <span class="courier">action.def</span>, use the following syntax for the <i>command</i> entry in the <span class="courier">action.def</span>: </p>
+
+<ul>
+
+<li>Start the command with ! to start an external application, when <i>ILWIS should wait</i> until the external application has been closed. </li>
+
+<li>Start the command with !! to start an external application, when <i>you wish to use ILWIS</i> when the external application is open. </li>
+
+<li>Use single quotes around the external program, shortcut or file, if you are using long file names or paths; include any paths and extensions within the single quotes. </li>
+
+<li>Use '<span class="courier">.\</span><i>AnyProgram.exe</i>' if you wish to use a program located in the same folder as your <span class="courier">action.def</span> file. </li>
+
+<li>Enclose the entire command in double quotes.</li>
+
+</ul>
+
+<p class="defnewpar">For more information on using commands and search paths for external applications, etc., see <a href="../ilwis/appendices_ilwis_commands.htm#other_commands_expressions">Appendices : ILWIS commands</a>, section 
+<a href="../ilwis/appendices_ilwis_commands.htm#other_commands_expressions"><span class="bookmark">Other commands and expressions</span></a>. </p>
+
+<p class="tip">Examples: </p>
+
+<ul class="tipul">
+
+<li>To start Notepad, located in C:\Windows: <br />
+
+&quot;My menu&quot;&nbsp;&nbsp;&quot;&quot;&nbsp;&nbsp;&quot;My menu command&quot;&nbsp;&nbsp;&quot;My operation in the Operation&#8211;list&quot;&nbsp;&nbsp;Exe16Ico&nbsp;&nbsp;&quot;&quot; &nbsp;&quot;!!'C:\Windows\notepad.exe'&quot; &nbsp;-&nbsp; &quot;Status&nbsp;line:&nbsp;start&nbsp;Notepad&quot;</li>
+
+<li class="ls01be">To open text file D:\My File.txt with the program that by default opens such files (Notepad): <br>
+
+&quot;My menu&quot;&nbsp;&nbsp;&quot;&quot;&nbsp;&nbsp;&quot;My menu command&quot;&nbsp;&nbsp;&quot;My operation in the Operation&#8211;list&quot;&nbsp;&nbsp;Exe16Ico&nbsp;&nbsp;&quot;&quot; &nbsp;&quot;!!'D:\My&nbsp;file.txt'&quot; &nbsp;-&nbsp; &quot;Status&nbsp;line:&nbsp;open&nbsp;my&nbsp;text&nbsp;file&quot;</li>
+
+<li class="ls01be">To open text file D:\My File.txt with Notepad: <br>
+
+&quot;My menu&quot;&nbsp;&nbsp;&quot;&quot;&nbsp;&nbsp;&quot;My menu command&quot;&nbsp;&nbsp;&quot;My operation in the Operation&#8211;list&quot;&nbsp;&nbsp;Exe16Ico&nbsp;&nbsp;&quot;&quot; &nbsp;&quot;!!'C:\windows\notepad.exe'&nbsp;'D:\My file.txt'&quot; &nbsp;-&nbsp; &quot;Status&nbsp;line:&nbsp;open&nbsp;my&nbsp;file&nbsp;with&nbsp;my&nbsp;program&quot;</li>
+
+<li class="ls01be">To start Notepad via a shortcut to Notepad, the shortcut is located in D:\My Folder: <br>
+
+&quot;My menu&quot;&nbsp;&nbsp;&quot;&quot;&nbsp;&nbsp;&quot;My menu command&quot;&nbsp;&nbsp;&quot;My operation in the Operation&#8211;list&quot;&nbsp;&nbsp;Exe16Ico&nbsp;&nbsp;&quot;&quot; &nbsp;&quot;!!'D:\My&nbsp;Folder\shortcut&nbsp;to&nbsp;notepad.exe.lnk'&quot; &nbsp;-&nbsp; &quot;Status&nbsp;line:&nbsp;start&nbsp;Notepad&nbsp;via&nbsp;a&nbsp;shortcut&nbsp;located&nbsp;in&nbsp;D:\My&nbsp;Folder&quot;</li>
+			
+</ul>
+
+<p class="emptyline">&nbsp;</p>
+
+<ul>
+<li>Names for menus and submenus are free.</li>
+<li>To use a submenu, see the description at the top of the <span class="courier">action.def</span> file itself. </li>
+<li>The name of an operation as it should appear on a menu (menu command) and the name of the operation as it should appear in the Operation-list and Operation-tree are free. </li>
+<li>For the icon, use one of the internal ILWIS icons listed in the ILWIS <span class="courier">action.def</span>.</li>
+<li>Specify a minus - for the Help topic number. </li>
+<li>Text to appear on the status line when the menu command is active, is free. </li>
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/main_window_operation_list.htm">Main window : Operation-tree and Operation-list</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/main_window_preferences.htm">Main window : Preferences</a></p>
+
+<p class="seealsolinks"><a href="../ilwis/appendices_ilwis_commands.htm#other_commands_expressions">Appendices : ILWIS commands, section Other commands and expressions</a></p>
+
+</body

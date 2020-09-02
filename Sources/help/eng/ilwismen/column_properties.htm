@@ -1,0 +1,364 @@
+<html>
+
+<head>
+<title>Column properties</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Columns, Column Properties, Recalculate column, Properties of objects, Calculate ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Table window</h1>
+
+<h1 class=secondline>Column Properties</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Column Properties dialog box lists all kind of important information on a selected <a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >column</a>. In fact, all relevant information on this column as stored in the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the table to which this column belongs is displayed. </p>
+
+<p class=defnewpar>Properties dialog boxes are designed to handle properties of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent objects</a>. For more information, refer to <a href="../ilwis/basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a>.</p>
+
+<p class=defnewpar>Furthermore, you can always change the position of the column in the table, or change the width of the column. For columns that are the result of a TabCalc formula, you can edit the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition or expression</a>. For value columns, you can also set or change the number of decimals with which the column values are shown.</p>
+
+<p class=defnewpar>The Column Properties dialog box appears:</p>
+
+<ul>
+
+<li>	after you type a TabCalc statement on the command line of a table window; </li>
+
+<li>	when you double-click a column header in a table;</li>
+
+<li>    when you select a column in the table by clicking its header, and subsequently click the <span class=arial>Properties</span> button <img border="0" src="../images/prop.gif" width="22" height="22"> in the toolbar of the table window; </li>
+
+<li>	when you select a column in the <a href="column_management.htm">Column Management</a> dialog box, and subsequently click the <span class=arial>Properties</span> button in that dialog box.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Column type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Column</b> &quot;column name&quot;:  the column is an editable source column. </p>
+
+<p class=diabox>Also, when the column is part of a dependent table and stores results of an operation (column is table owned).</p>
+
+<p class=diabox><b>Column Calculate</b> &quot;column name&quot;: the column is the result of a TabCalc formula without using aggregations, joins, cumulative or a least squares fit (dependent column).</p>
+
+<p class=diabox><b>Dependent column</b> &quot;column name&quot;: the column is the result of a column operation, i.e. aggregation, join, cumulative, least squares fit (dependent column).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object date and time:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Date and time when this column was last changed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Column is table owned:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For a column that is part of a dependent table, i.e. the column stores the result of an operation, it is stated that this column is table-owned. Table-owned columns are always read only and cannot be edited. For more information, see <a href="../ilwis/ilwis_objects_columns.htm">ILWIS objects : columns</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Read-only:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For columns that are not table owned: select this check box when you want that the fields in this column are read-only and thus not editable. Clear this check box when the fields in the column should not be read-only.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Expression:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For dependent columns, the expression by which this column is created, i.e. the column definition. For Column Calculate columns, you can edit the TabCalc formula by which this column is created.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >Domain</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>While calculating with columns (TabCalc or column operations), accept the default domain for the output column, or select or <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> a domain which reflects the values that you want to store in this column. When calculating with value columns, you can generally accept the default system Value domain. </p>
+
+<p class=diabox>For table-owned columns and for read-only columns, the name and type of the domain used by this column is merely shown. </p>
+
+<p class=diabox>For source columns, you can change the domain of this column (advanced). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Defaults:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For Column Calculate columns, click this button to obtain a default domain, and for value domains, a default value range and precision. Or when you changed the default domain, value range or precision, click this button to obtain the defaults again.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >Value Range</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>While calculating with columns (TabCalc or column operations) and when the column uses a value domain, accept the default value range used to store the values in this column, or specify your own range of possible values for the column (a liberal estimate will do). </p>
+
+<p class=diabox>For source columns using a value domain, you can edit the value range of the column. </p>
+
+<p class=diabox>For table-owned columns and for read-only columns using a value domain, the value range of the column is merely shown.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >Precision</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>While calculating with columns (TabCalc or column operations) and when the column uses a value domain, accept the default precision used to store the values in this column, or specify your own precision for the column. </p>
+
+<p class=diabox>For source columns using a value domain, you can edit the precision of the column. </p>
+
+<p class=diabox>For table-owned columns and for read-only columns using a value domain, the precision of the column is merely shown.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Minimum/Maximum:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If this column uses a value domain, the minimum and maximum values as occurring in this column are listed.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>For dependent columns:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Depends on:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The names of columns on which this column depends.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Up-to-date or not:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Lists whether this column is up-to-date or not. If not, the name of the column which was changed last is shown including that column's date and time. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>For all columns:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Position:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept or change the position of the column in the table. Position 3 means that this is the third column in the table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Width:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept or change the width of the column.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Decimals:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of a value column: accept or change the number of decimals used to show this column. You can always change this option to show the values in a column with more decimals or with fewer decimals.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Description of the column; freely editable for source columns and dependent columns. The description of a column appears on the status bar of a table window when moving the mouse pointer over fields of the column or over the column name. Furthermore, column descriptions appear in the Column Management dialog box. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>Handling properties of dependent columns:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Make Up-to-Date</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When the column is <i>not</i> up-to-date anymore, </p>
+
+<p class=diabox>i.e. when one or more columns on which this column depends have been changed: </p>
+
+<ul class=diaul>
+
+<li>click this button to check all columns on which this column depends, see if these are up-to-date, if not, check all columns below, etc., </li>
+
+<li>recalculate all changed columns on which this column depends, and finally recalculate this column using all new changed columns.</li>
+
+</ul>
+
+<p class=diabox>To make all columns of the table up-to-date, you can also select the <span class=arial>Update All Columns</span> command on the <a href="../ilwis/table_window_menu_commands.htm">Columns menu</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Break Dependency Link</span>:</p>
+
+</td>
+<td valign="top">
+
+<p class=diabox>Whether this column is Up-to-Date or not: </p>
+
+<ul class=diaul>
+
+<li>click this button to break the dependency link between this column and the columns on which it depends. This column will become an editable source column.</li>
+
+</ul>
+
+<p class=diabox>Do not break the dependency link if you wish to be able to update this column in a later stage on the basis of changed input columns.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Additional Info:</span></p>
+
+</td>
+<td valign="top">
+<p class=diabox>When a dependent column is the result of a <a href="../ilwismen/least_squares_fit.htm">Least Squares Fit</a> column operation: click this button to see the resulting least squares fit formula.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>For string columns:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Create new domain from Strings</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Click this button to convert the strings in this column into a classes or IDs of a class or ID domain. A <a href="create_domain_class_or_id_from_string_column.htm">Create Domain from Strings</a> dialog box will appear in which you can specify a new class or ID domain.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	For more information on the operators and functions that can be used in a TabCalc formula, refer to <a href="../ilwis/calc.htm">Table Calculation</a>.</li>
+
+<li>	When working with <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value columns</a>, you can generally accept the <b>default</b> value domain. You only need to select or create a user-defined value domain when the values have a specific meaning for which you have or want to create a meaningful representation. </li>
+
+<li>	To change the order of columns, you can use <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag and drop</a> in the table window itself. In the table window, click a column name and hold the mouse button down, the mouse pointer changes into a column icon <img src="../images/column.gif" align=bottom width="13" height="14">, drag the column to a new position in the table, then release the left mouse button. </li>
+
+<li>	To change the width of a column, you can also <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >drag</a> the line which separates column names to the left or to the right. The mouse pointer changes into a double-sided arrow when you are at the right position to start dragging. </li>
+
+<li>    To print or to copy the contents of Column Properties dialog box to the clipboard, choose <span class=arial>Print</span> or <span class=arial>Copy</span> from the <a href="../ilwis/windows_features_control_menu.htm">Control menu</a>. </li>
+
+</ul>
+
+<p class=tip>Note: </p>
+
+<ul class=tipul>
+
+  <li>ILWIS uses its internal defaults to determine whether the internal calculation will be performed in integers or in reals. <br>In general it can be said, that:</p>
+  	<ul>
+		<li>when the input consists of integers, the internal calculation will also be performed in integers; </li>
+		<li>when the input consists of reals, the internal calculation will also be performed in reals. </li>
+	</ul>
+
+  <p class=linespacing01before>Any user specification of the desired output domain and value range can only limit the results from the internal calculation. It is thus not possible, that when all input is in integers, to obtain output in reals by using a precision smaller than 1, for instance by using <span class=calc0>OUT{dom=Value;vr=0:10000:0.001} = ...</span>. </p>
+
+</ul>
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_dependent_data_objects.htm">Basic concepts : dependent objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_columns.htm">ILWIS objects : columns</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/calc.htm">Table Calculation</a></p>
+
+</body

@@ -1,0 +1,89 @@
+<html>
+
+<head>
+<title>How to edit point, segment, polygon and raster maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to edit ..., Edit ..., Raster maps, Segment maps, Polygon maps, Point maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to edit ...</h1>
+
+<h1 class=secondline>point, segment, polygon and raster maps</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In a map window, map editors can be used to edit features of raster, polygon, segment or point maps. </p>
+
+<ul>
+
+<li>	In a raster map, the class names, IDs, or values of selected pixels can be edited;</li>
+
+<li>	In a polygon map, the class names, IDs, or values of selected polygons can be edited, labels can be created from polygons, labels can be applied to polygons and segment can be extracted from polygons;</li>
+
+<li>	In a segment map, new segments can be inserted and existing ones can be deleted, the codes of segments can be edited, and the shape of a segment can be changed; </li>
+
+<li>	In a point map, new points can be inserted and existing ones can be deleted, the class names, IDs, or values of selected points can be edited, and points can be moved to a new position.</li>
+
+</ul>
+
+<p>You can use a digitizer but you can also use the mouse pointer.</p>
+
+<p class=kopje>To start a map editor:</p>
+
+<ul>
+
+<li>	in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, select a map, and choose <span class=arial>Edit Object</span> from the <a href="main_window_menu_commands.htm">Edit menu</a> of the Main window, or </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Edit</span> item, and select a map, or</li>
+
+<li>	in a Catalog, click with the right mouse button on a map and choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or</li>
+
+<li>	display a map in a map window, open the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window, choose <span class=arial>Edit Layer</span>, select the map layer you want to edit, or</li>
+
+<li>	display a map in a map window, open the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window, choose <span class=arial>Edit Other Map</span>, and select the editor you want to use and the map you want to edit.</li>
+
+</ul>
+
+<p>When an editor is started, the mouse pointer appears as a hand.</p>
+
+<p class=defnewpar>In the editors, press F1 to obtain Help on that editor, or choose the <span class=arial>Help on this window</span> command on the Help menu. </p>
+
+<p class=defnewpar>To use a digitizer, refer to <a href="how_to_set_up_a_digitizer_and_start_digitizing.htm">How to setup a digitizer and start digitizing</a>, <a href="../ilwismen/point_editor_digitizer.htm">Point editor : Digitizer</a>, <a href="../ilwismen/segment_editor_digitizer.htm">Segment editor : Digitizer</a>, <a href="../ilwismen/polygon_editor_digitizer.htm">Polygon editor : Digitizer</a>. </p>
+
+<p class=tip>Mind:</p>
+
+<p class=tiptext><a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent maps</a> and maps marked as read-only cannot be edited; also maps using a Picture domain or a Color domain cannot be edited. When you want to edit a dependent map, you first have to <a href="../ilwis/how_to_break_dependency_links.htm">break the dependency links</a> of the map in the map's <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >properties</a> sheet. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="point_editor_functionality.htm">Point editor : functionality</a></p>
+
+<p class=seealsolinks><a href="segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="polygon_editor_functionality.htm">Polygon editor : functionality</a></p>
+
+<p class=seealsolinks><a href="pixel_editor_functionality.htm">Pixel editor : functionality</a></p>
+
+<p class=seealsolinks><a href="how_to_set_up_a_digitizer_and_start_digitizing.htm">How to setup a digitizer and start digitizing</a></p>
+
+<p class=seealsolinks><a href="how_to_create_polygon_maps.htm">How to create a polygon map</a></p>
+
+</body

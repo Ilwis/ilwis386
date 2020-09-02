@@ -1,0 +1,130 @@
+<html>
+
+<head>
+<title>Point editor : Insert new point</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point editor, Insert points, Edit point map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Point editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/point_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert new point</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Insert a new point and select a class name, ID, or value for the new point. </p>
+
+<p class=defnewpar>Each time that you insert a new point, a small list or a small text box will appear asking for the class name, ID, or value of the new point. </p>
+
+<p class=defnewpar>The text box will appear: </p>
+
+<ul>
+
+<li>	after you finished inserting a new point with the <i>digitizer</i>, or</li>
+
+<li>	after you finished inserting a new point with the <i>mouse</i> in <span class=arial><a href="point_editor_insert_mode.htm">Insert mode</a></span>. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>For more information on: 
+
+<ul>
+
+<li>using the digitizer, refer to <a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a>, section <a href="../ilwis/point_editor_functionality.htm#pnteddigitizer"><span class=bookmark>Working with the digitizer</span></a>. </li>
+
+<li>using the mouse, refer to the same topic, section <a href="../ilwis/point_editor_functionality.htm#pntedmouse"><span class=bookmark>Working with the mouse</span></a>. </li>
+
+</ul>
+
+<p class=kopje>Class names, IDs, values, etc. </p>
+
+<ul>
+
+<li class=linespacing01before>For a map using a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>: select an existing class name from the list. The class name that was selected last will be used as default for the next point. </li>
+
+        <p>To assign a new class name: select <b>&lt;new&gt;</b> from the list, then type the new class name, and, optionally, type a class code and choose a color for the new class.</li>
+
+        <p>A new class name will be automatically added to the class domain. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a>: type an ID for the single selected point in the text box. </li>
+
+        <p>When an ID is assigned that already exists in the map, a question is asked whether you wish to use the same ID again or not. </p>
+
+        <p>A new ID will be automatically added to the ID domain. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>: type a value. The value that was typed last will be used as default for the next point. </li>
+
+        <p>The value should fall inside the minimum and maximum value of the value domain used by the map. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using a <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool domain</a>: every newly inserted point is set to <span class=courier>True</span>. </li>
+
+<li>For a map using a <span class=arial>UniqueID</span> domain, you can type a <span class=courier>Name</span> in the Attribute window. The <span class=courier>Names</span> will be available as a <span class=courier><a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >String</a></span> column in the attribute table of the map. In the attribute table, the <span class=courier>Name</span> column can be easily converted to a regular Class or ID column through the <a href="column_properties.htm">Column Properties</a> dialog box of the column by clicking the <span class=arial><a href="create_domain_class_or_id_from_string_column.htm">Create new domain from Strings</a></span> button. </p>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>When you choose or type a '?' question mark, the point will not get a class name, ID, or value; it will have the undefined value. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>Point codes are important when digitizing point data. </li>
+
+<li>Point codes are also important when digitizing label points that will be the names or IDs of future polygons. </li>
+
+<li>To <span class=arial>Edit</span> the names, values etc. of existing points, see <a href="point_editor_edit_selection.htm">Point editor : Edit</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_toolbar.htm">Point editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_menu_commands.htm">Point editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/point_editor_digitizer.htm">Point editor : Digitizer</a></p>
+
+<p class=seealsolinks><a href="point_editor_insert_mode.htm">Point editor : Insert mode</a></p>
+
+<p class=seealsolinks><a href="point_editor_edit_selection.htm">Point editor : Edit</a></p>
+
+</body

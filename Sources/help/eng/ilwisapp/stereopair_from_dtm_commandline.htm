@@ -1,0 +1,248 @@
+<html>
+
+<head>
+<title>Stereo pair from DTM : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stereo pair from DTM, StereoPairFromDTM">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Stereo pair from DTM</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/stereopair_from_dtm_popup.htm" onClick="return popup(this, 'notes')" >Stereo pair from DTM</a> operation can be directly executed by typing the following expression on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=108>
+<p class=calccommlinetable>OUTSTEREOPAIR</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>StereoPairFromDTM</span>(InputMapName, DTM)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=108>
+<p class=calccommlinetable>OUTSTEREOPAIR</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>StereoPairFromDTM</span>(InputMapName, DTM [, <i>Look angle</i> [, <i>Reference height</i> [, <i>Look modus</i> [, <i>Resample modus</i>]]]]&nbsp;)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="144">
+<p>OUTSTEREOPAIR</p>
+
+</td>
+<td valign="top">
+<p>The name of the output stereo pair. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=courier>StereoPairFromDTM</p>
+
+</td>
+<td valign="top">
+<p>The command to start the Stereo pair from DTM operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>The name of your input raster map (any domain) from which you wish to create a stereo pair.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p>DTM</p>
+
+</td>
+<td valign="top">
+<p>The name of your DTM, i.e. a raster map with any <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value</a> domain, i.e. also maps with the <span class=courier>Image</span> domain, the <span class=courier>Byte</span> domain etc. are allowed.</p>
+
+<p>If you wish to use attribute values of a class map etc. as 'height' value, you can use: <i>tablename.columnname</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p><i>Look angle</i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter; specify a value between 0 and 90&deg; for the total angle of 'projection' of the two output raster maps which together will form the output stereo pair. For more information, refer to <a href="stereopair_from_dtm_functionality.htm">Stereo pair from DTM : functionality</a>. </p>
+
+<p>When the <i>Look angle</i> is not specified, <span class=courier>30</span>&deg; will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p><i>Reference height</i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter to specify a height value (of your DTM) that should appear at 'ground' level of your monitor when inspecting the stereo pair. Larger height values in the DTM will appear 'outside of your monitor'; smaller height values in the DTM will appear 'inside your monitor'. </p>
+
+<p>When the <i>Reference height</i> is not specified, a default value will be calculated from the minimum and maximum height value as found in the DTM, i.e. (min + max) / 2 . </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p><i>Look modus</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Left | Both | Right</p>
+
+<p>Optional parameter to specify how the <i>Look angle</i> should be divided over the two output raster maps that will form the stereo pair. </p>
+
+<p>Select either <span class="courier">Left</span>, <span class="courier">Both</span> or <span class="courier">Right</span>. When the <i>Look modus</i> is not specified, <span class=courier>Both</span> will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=leftmargin1><span class="courier">Left</span></p>
+
+</td>
+<td valign="top">
+<p>The left output raster map will be 'projected' using the total <i>Look angle</i>; the right output raster map will be 'projected' vertically. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=leftmargin1><span class="courier">Both</span></p>
+
+</td>
+<td valign="top">
+<p>The left and the right output raster map will each be 'projected' using half the <i>Look angle</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=leftmargin1><span class="courier">Right</span></p>
+
+</td>
+<td valign="top">
+<p>The left output raster map will be 'projected' vertically; the right output raster map will be 'projected' using the total <i>Look angle</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p><i>Resample modus</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Fast | Accurate</p>
+<p>Optional parameter to specify the resampling method. Select either <span class="courier">Fast</span> or <span class="courier">Accurate</span>. When the <i>Resample modus</i> is not specified, <span class=courier>Fast</span> will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=leftmargin1><span class="courier">Fast</span></p>
+
+</td>
+<td valign="top">
+<p>Parameter for quick resampling. Resampling is input-driven (the estimated position of output pixels is less accurate) and biased (nearest neighbour). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=leftmargin1><span class="courier">Accurate</span></p>
+
+</td>
+<td valign="top">
+<p>Parameter for slow but accurate resampling. Resampling is output-driven just as the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation; <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a> and maps with the <span class=courier>Color</span> domain are resampled using <a href="..//ilwisapp/popup/bilinear_interpolation_popup.htm" onClick="return popup(this, 'notes')" >bilinear interpolation</a>; other maps are resampled using nearest neighbour. </p>
+
+<p class=tiptext><span class=tip>Tip: </span>For more information on accurate resampling methods, see <a href="resample_algorithm.htm">Resample : algorithm</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Syntax tips:</p>
+
+<ul class="tipul">
+
+<li>If you leave out one or more optional intermediate parameters, you can type nothing or a space; however, you still must use commas to separate empty parameters. </li>
+
+<li>Furthermore, before the last closing bracket <span class=courier>)</span>, a comma is not allowed. When you wish to omit one or more optional parameters at the end of the syntax, just leave them out. In other words, do not end with an empty parameter. </li>
+
+<li>Square brackets [] should not be typed; they are only used to indicate that a parameter is optional. </li>
+
+<li>Vertical bars <span class=courier>|</span> should not be typed; they are only used to indicate a choice. </li>
+
+</ul>
+
+<p class="defnewpar">The following objects will be created:</p>
+
+<ul>
+
+<li>A stereo pair. </li>
+
+<li>The stereo pair will contain two raster maps with the same name as the output stereo pair, followed by <span class="courier">_Left</span> and <span class=courier>_Right</span>. These raster maps are the output of resampling. </li>
+
+<li>The output raster maps will each use a georeference of type GeorefStereoMate. The georeference of the left-hand output map has the same name as the left-hand raster map; the georeference of the right-hand output map has the same name as the right-hand raster map. </li>
+
+</ul>
+
+<p class=defnewpar>The two output raster maps, which together form the stereo pair, are always editable; their dependency links are automatically broken. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="stereopair_from_dtm_functionality.htm">Stereo pair from DTM : functionality</a></p>
+
+</body

@@ -1,0 +1,472 @@
+<html>
+
+<head>
+<title>Histogram : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Histogram">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Histogram</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Histogram operation calculates the histogram of a raster, polygon, segment or point map. Histograms list frequency information on the values, classes, or IDs in your map. Results are presented in a histogram window, both as a table and as a graph. Summary information of a histogram of a raster map which uses a value or the Image domain, can be viewed in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of the histogram: mean, standard deviation, median, predominant, undefineds and percentage intervals. </p>
+
+<p class=defnewpar>Histograms of raster maps that are stored using 1 or 2 bytes per pixel are automatically calculated when needed. Thus, there is no need to perform the Histogram operation separately. You can use this operation to calculate histograms of raster maps stored with 4 or 8 bytes per pixel and to calculate histograms of polygon, segment or point maps.</p>
+
+<p class=defnewpar>A <b>raster histogram</b> lists the number of pixels, the percentages, and the areas per value, class or ID. For <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a> (map which use a value, the image, the bit or a bool domain), also the cumulative number of pixels and cumulative percentages are calculated. Further, </p>
+
+<ul>
+
+<li>	if the input map is an image, the percentages of the total number of pixels excluding pixels with value zero are always calculated;</li>
+
+<li>	if the input map uses a bool or a value domain and if this map contains undefined values, the percentages of the total number of pixels excluding pixels with the undefined value are calculated;</li>
+
+<li>	if the input map uses a class or ID domain, the percentages of the total number of pixels excluding pixels with the undefined value are always calculated. </li>
+
+</ul>
+
+<p class=defnewpar>A <b>polygon histogram</b> lists the number of polygons, the perimeter and area of polygons per class, ID, or value. If the input polygon map is a value map, also the cumulative number of polygons, the cumulative perimeter and cumulative area are calculated. </p>
+
+<p class=defnewpar>A <b>segment histogram</b> lists the number of segments and their length per class, ID or value. If the input segment map is a value map, also the cumulative number of segments and the cumulative length are calculated. </p>
+
+<p class=defnewpar>A <b>point histogram</b> lists the number of points per class, ID or value. If the input point map is a value map, also the cumulative number of points are calculated. </p>
+
+<p class=defnewpar>In the histogram window, histograms are displayed both as a table and as a graph. To protect the results of the histogram calculation, the columns in a histogram are <i>not</i> editable (columns are table-owned and read-only), but you can calculate new columns from the existing ones by typing <a href="../ilwis/calc.htm">Table Calculation</a> formulas on the command line of the histogram window. </p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special input requirements; a histogram can be calculated for any kind of raster, polygon, segment or point map. </p>
+
+<p class=kopje>Domain of output histogram table:</p>
+
+<p>Always, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output histogram</a> is created with the same name as the input map. The extension of a histogram is determined by the type of input map: .HIS for raster maps, .HSA for polygon maps, .HSI for segment maps and .HSP for point maps.</p>
+
+<ul>
+
+<li>	When calculating the histogram of an image, the histogram also uses the <span class=courier>Image</span> domain: all values of the <span class=courier>Image</span> domain between 0 and 255 appear as records in the histogram table.</li>
+
+<li>	When calculating the histogram of a map which uses the <span class=courier>Bit</span> domain, the histogram also uses the <span class=courier>Bit</span> domain: all values of the <span class=courier>Bit</span> domain (0 and 1) appear as records in the histogram table.</li>
+
+<li>	When calculating the histogram of a map which uses a value domain, the histogram table obtains domain <span class=courier>None</span>. Occurring values in the input map appear in a column named <span class=courier>Value</span>, this column uses the same domain as the input map.</li>
+
+<li>	When calculating the histogram of a map which uses a <span class=courier>Bool</span> domain, the histogram table obtains domain <span class=courier>None</span>. Occurring values in the input map (<span class=courier>False</span> and <span class=courier>True</span>) appear in a column named <span class=courier>Value</span>, this column uses the same domain as the input map. </li>
+
+<li>	When calculating the histogram of a map which uses a class or ID domain, the histogram table uses the same domain as the input map. </li>
+
+<li>	When calculating the histogram of a map which uses a Picture domain, then the histogram uses the same domain as the input map: the colors appear as (Red,Green,Blue) values as records in the histogram table.</li>
+
+</ul>
+
+<p class=kopje>A <span class=DefaultStyle><u><b>raster histogram </b></u></span>contains the following columns:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><i>domain</i></p>
+
+</td>
+<td valign="top">
+<ul>
+
+<li>	if this is a histogram of a map which uses the <span class=courier>Image</span> domain, then all values between 0 and 255 appear as records in the histogram table;</li>
+
+<li>	if this is a histogram of a map which uses the <span class=courier>Bit</span> domain, then values 0 and 1 appear as records in the histogram table;</li>
+
+<li>	if this is a histogram of a map which uses a class or ID domain, then the class names or IDs appear as records in the histogram;</li>
+
+<li>	if this is a histogram of a map which uses a Picture domain, then the colors as (Red,Green,Blue) values appear as records in the histogram.</li>
+
+<li>	if this is a histogram of a map with any other domain, record numbers appear.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Value</p>
+
+</td>
+<td valign="top">
+<p>Column <span class=courier>Value</span> appears in histograms of maps which use a value domain, bool domain or the color domain: each occurring value in the map is listed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Npix</p>
+
+</td>
+<td valign="top">
+<p>The number of pixels with a certain value or meaning (pixel frequencies).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>NpixPct</p>
+
+</td>
+<td valign="top">
+<p>The relative amount of pixels with a certain value or meaning as a percentage of the total number of pixels in the map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>PctNotZero</p>
+
+</td>
+<td valign="top">
+<p>Column <span class=courier>PctNotZero</span> appears in histograms of images: the relative amount of pixels with a certain value as a percentage of the total number of pixels in the map that do not have value 0. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>PctNotUnd</p>
+
+</td>
+<td valign="top">
+<p>Column <span class=courier>PctNotUnd</span> appears in histograms of raster maps which use a class, ID, bool or value domain and when the maps actually contain undefined pixels: the relative amount of pixels with a certain value or meaning as a percentage of the total number of pixels in the map that are not undefined.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>NpixCum</p>
+
+</td>
+<td valign="top">
+<p>For histograms of images and value maps: the cumulative amount of pixels of pixels with this value or a smaller value.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>NpCumPct</p>
+
+</td>
+<td valign="top">
+<p>For histograms of images and value maps: the relative cumulative amount of pixels with this value or a smaller value as a percentage of the total number of pixels in the map (to determine for instance the 1%, 5%, 95%, 99% intervals).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Area</p>
+
+</td>
+<td valign="top">
+<p>The area of pixels with a certain value or meaning as: <span class=courier>npix*</span> pixel size <span class=courier>*</span> pixel size.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>A <span class=DefaultStyle><u><b>polygon histogram </b></u></span>contains the following columns:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><i>domain</i></p>
+
+</td>
+<td valign="top">
+<ul>
+
+<li>	if this is a histogram of a domain class or ID map, then the class names or IDs appear as domain entries in the histogram table;</li>
+
+<li>	if this is a histogram of another domain value map, then record numbers appear as domain entries in the histogram table.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Value</p>
+
+</td>
+<td valign="top">
+<p>Column <span class=courier>Value</span> only appears in histograms of maps which use a value domain or a bool domain: each occurring value in the map is listed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>NrPol</p>
+
+</td>
+<td valign="top">
+<p>The number of polygons with a certain value or meaning.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>NPolCum</p>
+
+</td>
+<td valign="top">
+<p>For polygon maps which use a value domain: the cumulative number of polygons with this value or a smaller value. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Perimeter</p>
+
+</td>
+<td valign="top">
+<p>The perimeter of polygons with a certain value or meaning.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>PerimeterCum</p>
+
+</td>
+<td valign="top">
+<p>For polygon maps which use a value domain: the cumulative perimeter of polygons with this value or a smaller value. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Area</p>
+
+</td>
+<td valign="top">
+<p>The area of polygons with a certain value or meaning.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>AreaCum</p>
+
+</td>
+<td valign="top">
+<p>For polygon maps which use a value domain: the cumulative area of polygons with this value or a smaller value.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>A <span class=DefaultStyle><u><b>segment histogram</b></u></span> contains the following columns: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><i>domain</i></p>
+
+</td>
+<td valign="top">
+<ul>
+
+<li>	if this is a histogram of a domain class or ID map, then the class names or IDs appear as domain entries in the histogram table;</li>
+
+<li>	if this is a histogram of another domain value map, then record numbers appear as domain entries in the histogram table.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Value</p>
+
+</td>
+<td valign="top">
+<p>Column <span class=courier>Value</span> only appears in histograms of maps which use a value domain or a bool domain: each occurring value in the map is listed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>NrSeg</p>
+
+</td>
+<td valign="top">
+<p>The number of segments with a certain value or meaning (segment frequencies).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>NrSegCum</p>
+
+</td>
+<td valign="top">
+<p>For segment maps which use a value domain: the cumulative number of segments with this value or a smaller value.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Length</p>
+
+</td>
+<td valign="top">
+<p>The length of segments with a certain value or meaning.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>LengthCum</p>
+
+</td>
+<td valign="top">
+<p>For segment maps which use a value domain: the cumulative length of segments with this value or a smaller value.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>A <span class=DefaultStyle><u><b>point histogram</b></u></span> contains the following columns:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><i>domain</i></p>
+
+</td>
+<td valign="top">
+<ul>
+
+<li>	if this is a histogram of a domain class or ID map, then the class names or IDs appear as domain entries in the histogram table; </li>
+
+<li>	if this is a histogram of another domain value map, then record numbers appear as domain entries in the histogram table.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><span class=courier>Value</span></p>
+
+</td>
+<td valign="top">
+<p>Column <span class=courier>Value</span> only appears in histograms of maps which use a value domain or a bool domain: each occurring value in the map is listed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><span class=courier>NrPnt</span></p>
+
+</td>
+<td valign="top">
+<p>The number of points with a certain value or meaning (point frequencies).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><span class=courier>NrPntCum</span></p>
+
+</td>
+<td valign="top">
+<p>For point maps which use a value domain: the cumulative number of points with this value or a smaller value. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	In the Catalog, the following icons are used:</li>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=tiptext><img src="../images/hist.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>for raster map histograms,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=tiptext><img src="../images/hispol.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>for polygon map histograms,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=tiptext><img src="../images/hisseg.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>for segment map histograms,</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=tiptext><img src="../images/hispnt.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>for point map histograms.</p>
+
+</td>
+</tr>
+</table>
+
+<li>	In an existing attribute table, you can easily join for instance the Area column of a histogram, for more information refer to  <a href="../ilwis/how_to_join_areas_from_a_histogram_to_an_attribute_table.htm">How to join areas from a histogram to an attribute table</a>.</li>
+
+<li>	To create a graph that shows several histograms, first join the necessary columns into one histogram or table. </li>
+
+<li>	To calculate the lengths of segments in a certain area, use the <a href="..//ilwisapp/popup/segment_density_popup.htm" onClick="return popup(this, 'notes')" >Segment Density</a> operation.</li>
+
+<li>	To calculate the directions of segments, use the <a href="..//ilwisapp/popup/segment_direction_histogram_popup.htm" onClick="return popup(this, 'notes')" >Segment Direction Histogram</a> operation.</li>
+
+<li>	To calculate the number of points in a certain area, use the <a href="..//ilwisapp/popup/point_density_popup.htm" onClick="return popup(this, 'notes')" >Point Density</a> operation.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="histogram_dialogbox.htm">Histogram : dialog box</a></p>
+
+<p class=seealsolinks><a href="histogram_commandline.htm">Histogram : command line</a></p>
+
+<p class=seealsolinks><a href="histogram_algorithm.htm">Histogram : algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_histograms.htm">ILWIS objects : histograms</a></p>
+
+</body

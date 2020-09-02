@@ -1,0 +1,54 @@
+<html>
+
+<head>
+<title>catchment extraction popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Catchment Extraction</p>
+
+<p>The <a href="..//ilwisapp/catchment_extraction.htm" onClick="return popup(this, 'notes')" >Catchment Extraction</a> operation constructs catchments; a catchment will be calculated for each stream found in the output map of the Drainage Network Ordering operation. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>the output raster map of the Drainage Network Ordering operation, </li>
+
+<li>the output raster map of the Flow Direction operation. </li>
+
+</ul>
+
+<p class="defnewpar">As output a raster map, a polygon map and an attribute table are produced which all use the ID domain of the input Drainage Network Ordering map. </p>
+
+<p class="defnewpar">The attribute table contains information on each catchment, such as: </p>
+
+<ul>
+
+<li>area and perimeter of the catchment, </li>
+
+<li>total upstream area, i.e. the area of all catchments that drain into this catchment, etc. </li>
+
+</ul>
+
+<p class=linespacing03after></p>
+
+</body

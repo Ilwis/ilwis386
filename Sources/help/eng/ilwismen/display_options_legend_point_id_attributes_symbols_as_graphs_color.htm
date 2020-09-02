@@ -1,0 +1,191 @@
+<html>
+
+<head>
+<title>Insert/Edit Legend (point ID + attributes, symbols as graphs: color)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Legend, Pie chart, Bar chart, Volume cubes, Points as graphs, Symbols, Symbols as graphs, Layout editor, Layouts, Add ..., Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert/Edit Legend (ID point map + attributes)</h1></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=thirdline>Symbols as graphs: color</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Insert or edit a size <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legend</a> for an ID point map with an attribute table where the points are represented as pie charts, bar charts or composed bars. The legend will be added to your <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>. </p>
+
+<p class=defnewpar>The legend will consist of a number of colored boxes, and accompanying texts. 
+
+<ul>
+
+<li>The colors used in the pie charts, bar charts, composed bars, or volume cubes, are determined by the colors that you assigned to these selected columns in the <a href="../ilwismen/symbols_as_graphs_id_point_map_with_attr_table.htm">Symbols as Graphs</a> dialog box. </li>
+
+<li>The texts are the names or the descriptions of the columns you selected to obtain graphs in the <a href="../ilwismen/symbols_as_graphs_id_point_map_with_attr_table.htm">Symbols as Graphs</a> dialog box. </li>
+
+</ul>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you displayed an ID point map with an attribute table, and</li>
+
+<li>	in the <a href="../ilwismen/display_options_point_map.htm">Display Options - Point Map</a> dialog box, you chose the Symbols as Graphs option, and clicked the <span class=arial>Details</span> button, and</li>
+
+<li>	in the <a href="../ilwismen/symbols_as_graphs_id_point_map_with_attr_table.htm">Symbols as Graphs</a> dialog box, you selected to display the map as pie charts, bar charts or composed bars, and,</li>
+
+<li>    you saved the map as a map view, </li>
+
+<li>    in the layout editor, you selected the map view and choose to add a color legend. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Number of columns:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the number of columns in which the legend should be displayed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Text:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select what kind of texts should be used in the legend. The texts explain the colors in the legend.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To obtain the names of the selected columns as legend texts.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To obtain the descriptions of the selected columns as legend texts. When a column does not have a description, there will be no legend text. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Font name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the <a href="..//ilwis/popup/font_popup.htm" onClick="return popup(this, 'notes')" >font</a> in which the legend texts should appear; you can select an installed font from the list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Font size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the font size (pt) in which your legend texts should appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Bold:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have legend texts appear in <b>bold</b>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Italic:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have legend texts appear in <i>italics</i>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>    To adapt the graphs themselves or to change the colors both in the point map and in the legend, or to change the order of the legend: </li>
+        
+        <ul>
+        
+        <li>double-click the map view containing the point map in the layout editor, </li>
+
+        <li>use the appearing <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane to adapt the display options of the point map; in the <a href="../ilwismen/symbols_as_graphs_id_point_map_with_attr_table.htm">Symbols as Graphs</a> dialog box, you can then specify other columns and other colors to be used in the graphs or change the order of the selected columns. </li>
+
+        </ul>
+
+        <p>Do not forget to save the changed map view. </p>
+
+<li>	In the Layout editor, a legend can be sized by <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> for instance one of the corner <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of a selected legend to a new position. The mouse pointer changes into a double-sided arrow when at the right position to start dragging. The box sizes and the font in which legend texts are displayed will be automatically adapted to the new size. </li>
+
+<li>	To store annotation, you need to save the layout. Open the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a> and choose the <span class=arial><a href="../ilwismen/layout_editor_save_layout.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/layout_editor_save_layout_as.htm">Save As</a></span> command. You can also click in the white space of your layout, and click the <span class=arial>Save</span> button in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>. </li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/display_options_point_map.htm">Display Options - Point Map</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/symbols_as_graphs_id_point_map_with_attr_table.htm">Symbols as Graphs</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/display_options_legend_point_id_attributes_symbols_as_graphs_size.htm">Legend - Symbols as Graphs, Size</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+</body

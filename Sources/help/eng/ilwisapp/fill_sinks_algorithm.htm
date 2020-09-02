@@ -1,0 +1,186 @@
+<html>
+
+<head>
+<title>Fill sinks : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Fill sinks">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Fill sinks</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Fill sinks operation removes local depressions from a DEM by replacing these local depressions by flat areas in the output DEM. </p>
+
+<p class=kopje>Process:</p>
+
+<ol>
+
+<li class=ls01be>Removal of depressions that consist of a <i>single pixel</i> (local pits, i.e. any pixel with a smaller height value than its 8 neighbouring pixels): </li>
+                
+        <p class=linespacing03before>When a single pixel is encountered that has a smaller height value than all of its 8 neighbours (Fig. 1a); </p>
+
+        <ul>
+
+        <li>then the height value of this pixel will be increased to the smallest value of its 8 neighbour pixels (Fig. 1b). </li>
+
+        </ul>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <table>
+        <tr>
+        <td width="200" valign="top">Figure 1a: Find a sink that consists of a single pixel (pixel in red). </td>
+        <td width="20">&nbsp;</td>
+        <td width="200" valign="top">Figure 1b: Assign to this pixel, the smallest value found among its 8 neighbour pixels (pixel in green). </td>
+        </tr>
+        <tr>
+        <td><img src="../images/fillsinks_algo_1a_insingle.gif" height="125" width="125"></td>
+        <td width="20">&nbsp;</td>
+        <td><img src="../images/fillsinks_algo_1b_outsingle.gif" height="125" width="125"></td>
+
+        </tr>
+        </table>
+
+        <p class=emptyline>&nbsp;</p>
+
+<li class=ls01be>Removal of depressions that consist of <i>multiple pixels</i> (i.e. any group of adjacent pixels where the pixels have smaller height values than all pixels that surround such a depression): </li>
+
+        <p class=kopje>General process:</p>
+                
+        <p>When a group of adjacent pixels is encountered where the pixels have smaller height values than all neighbours of this group; </p>
+
+        <ul>
+
+        <li>all pixels are determined that contribute to this depression; this is an iterative process, involving another 'ring' of neighbours when required, </li>
+
+        <li>the outlet for this depression is determined, </li>
+
+        <li>finally the height values of this depression will be increased to the smallest height value of a pixel </li>
+                
+                <ul>
+
+                <li>that is adjacent to the outlet for this depression/sink, and </li>
+
+                <li>that would contribute to the initial sink. </li>
+
+                </ul> 
+
+        </ul>
+
+        <p class=kopje>Detailed process:</p>
+
+        <ol class=abc>        
+
+        <li>Scan the DEM, from top to bottom and from left to right, to find the first pixel that is part of a sink area (Fig. 2a). </li>
+        
+        <p class=leftmargin06>In other words, find a pixel with lower or equal height value than all its 8 neighbours. </p>
+
+        <li>Determine all pixels that contribute to this particular sink (Fig. 2b). </li>
+
+        <p class=leftmargin06>In other words, find the catchment area of this sink; iterative process evaluating height values of outward neighbours. </p>
+
+        <li>Locate the outlet pixel for this sink and determine the value of the pixel just 'before' the outlet (Fig. 2c). </li>
+
+                <ul>
+
+                <li>For all pixels <i>within</i> the outer 'ring' of sink-catchment pixels (as found in the previous step), evaluate the values of their neighbouring pixels that are <i>outside</i> the ring of sink-catchment pixels. </li>
+
+                <li>Determine the neighbour (outside the ring) with the smallest value; this is the <b>outlet</b> pixel. </li>
+
+                </ul>
+
+                <p>Then:</p>
+        
+                <ul>
+
+                <li>From the outlet pixel, evaluate the values of neigbouring pixels that are <i>within</i> the ring of sink-catchment pixels. </li>
+
+                <li>Determine the neighbour (inside the ring) with the smallest value; this is the <b>pixel before the outlet</b>. </li>
+
+                <li>Keep the height value of this pixel in mind. </li>
+
+                </ul>
+
+        <li>For all pixels that contribute to this sink and that have a value smaller than the value that was kept in mind in step 2c, 
+                
+                assign these pixels the height value found in step 2c (Fig. 2d). </li>
+        
+        <p class=leftmargin06>In other words, sinks are 'filled up' so that flat areas are formed which will definitely have an outlet. </p>
+
+        <li>Mark all pixels of the catchment that was currently handled, so that these pixels will not be scanned again. </li>
+
+        <li>Continue scanning the DEM to find another initial sink. </li>
+
+        </ol>
+
+
+<li><p class=kopje>Additional rules:</p></li>
+
+        <p>The height values of the following pixels will <i>never</i> be changed in the output map:</p>
+
+        <ul>
+
+        <li>pixels at the border of the map,</li>
+        
+        <li>pixels that have the undefined value,</li>
+
+        <li>pixels that are adjacent to pixels with the undefined value. </li>
+
+        </ul>
+
+</ol>
+
+<p class=kopje>Figures explaining the detailed process of filling depressions of multiple pixels:</p>
+
+<table>
+<tr>
+<td width="250" valign="top">Figure 2a: Find first sink (pixel in black). </td>
+
+<td width="20">&nbsp;</td>
+
+<td width="250" valign="top">Figure 2b: Find all pixels that contribute to this sink (colored pixels). </td>
+
+</tr>
+<tr>
+<td width="250"><img src="../images/fillsinks_algo_2a.gif" width="228" height="228"></td>
+
+<td width="20">&nbsp;</td>
+
+<td width="250"><img src="../images/fillsinks_algo_2b.gif" width="228" height="228"></td>
+
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td width="250" valign="top">Figure 2c: Determine the outlet for this sink (pixel in black), and determine the pixel just before the outlet (pixel in blue). Keep the value of the pixel just before the outlet in mind (value 3). </td>
+
+<td width="20">&nbsp;</td>
+
+<td width="250" valign="top">Figure 2d: To all pixels that contribute to this sink and which have a smaller value than the value kept in mind in 2c, assign the height value kept in mind in 2c (pixels in black). </td>
+
+</tr>
+<tr>
+<td width="250"><img src="../images/fillsinks_algo_2c.gif" width="228" height="228"></td>
+
+<td width="20">&nbsp;</td>
+
+<td width="250"><img src="../images/fillsinks_algo_2d.gif" width="228" height="228"></td>
+</tr>
+
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="fill_sinks_functionality.htm">Fill sinks : functionality</a></p>
+
+</body

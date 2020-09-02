@@ -1,0 +1,62 @@
+<html>
+
+<head>
+<title>Logarithmic stretching</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Logarithmic stretching</p>
+
+<p class=linespacing03after>When displaying a value raster map with a representation gradual, e.g. representation Pseudo or representation Gray, you have the possibility
+to choose Logarithmic stretching in the raster map's <a href="..//ilwismen/display_options_raster_domain_value.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box. </p>
+
+<p class=linespacing03after>By using logarithmic stretching you can enhance the visualization of rather small values in the map; small values in the map will be mapped on a wide range of colors. 
+Large values will be displayed in similar colors; the majority of the values in the map are mapped on a short range of colors. </p>
+
+<p class=linespacing03after>The formula for Logarithmic stretching reads:</p>
+
+<p class=calc1>log(<i>x</i> - <i>min</i> + 1) / log(<i>max</i> - <i>min</i> + 1)</p>
+
+<p class=linespacing03after>where:</p>
+
+<table cellpadding=0 cellspacing=0>
+<tr>
+<td valign="top" width="76"><i>x</i>
+</td>
+<td valign="top">is a value in the map between <i>min</i> and <i>max</i></td>
+</tr>
+<tr>
+<td valign="top"><i>min</i></td>
+<td valign="top">is the minimum value specified in the <span class=arial>Stretch range</span>, i.e. a value in the map where stretching should start. <br>
+        Any values in the map that are smaller than the specified minimum <span class=arial>Stretch range</span> value will obtain the same color as the minimum <span class=arial>Stretch range</span> value. </td>
+</tr>
+<tr>
+<td valign="top"><i>max</i></td>
+<td valign="top">is the maximum value specified in the <span class=arial>Stretch range</span>, i.e. a value in the map where stretching should end. <br>
+        Any values in the map that are larger than the specified maximum <span class=arial>Stretch range</span> value will obtain the same color as the maximum <span class=arial>Stretch range</span> value. </td> </td>
+</tr>
+</table>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="..//ilwismen/display_options_raster_domain_value.htm" onClick="return popup(this, 'notes')" >Display Options - Raster map: domain Value</a></p>
+
+</body

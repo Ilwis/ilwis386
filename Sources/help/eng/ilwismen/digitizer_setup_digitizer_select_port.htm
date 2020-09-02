@@ -1,0 +1,155 @@
+<html>
+
+<head>
+<title>Setup Digitizer</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Setup digitizer, Digitizer setup, WinTab driver">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Setup Digitizer wizard</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">Main window, File menu</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Select Port</h1></td>
+<td class=menucommand><a class=menlink2 href="digitizer_setup_digitizer_port_settings.htm">Next</a>&nbsp;&gt;</td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Select the serial port to which you connected the digitizer or select to use an installed WinTab driver. </p>
+
+<p class=kopje>WinTab driver: </p>
+
+<p>Some of the larger manufacturers of digitizer tablets offer the standard WinTab digitizer driver for Windows on their web sites. The WinTab driver will take care of a correct communication between a digitizer and any software application (such as ILWIS). </p>
+
+<p class=defnewpar>The major advantages of using WinTab are: </p> 
+
+<ul>
+
+<li>an extremely easy digitizer setup, i.e. no knowledge required to establish communication between a digitizer tablet and your computer, and </li>
+
+<li>your digitizer can be used by multiple Windows applications, i.e. without the need of changing any settings on the digitizer tablet anymore as might normally be required for a particular application.  </li>
+
+</ul>
+
+<p class=defnewpar>Steps to take: </p>
+
+<ul>
+
+<li>Download and install the WinTab driver. </li>
+
+<li>In ILWIS, simply specify on this first page of the Setup Digitizer wizard that you are using the WinTab driver; all other pages of the Setup Digitizer wizard will be skipped. </li>
+
+</ul>
+
+<p>Your digitizer will now be ready for use. </p>
+
+<p class=defnewpar>The <span class=arial>Setup Digitizer</span> command on the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> of the Main window will be preceded by a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </p>
+
+
+<p class=kopje>Preparation when not using a WinTab driver: </p>
+
+<p>Before you can start to tell ILWIS how the communication between your digitizer and your computer will take place, you should already have configured your digitizer: Run mode, ASCII format, Data Rate, Resolution, Baud Rate, Parity, Data Bits, Stop Bits etc. For more information, please refer to your digitizer manual.</p>
+
+<ul>
+
+<li>	The digitizer must be configured in Run Mode, No Increment, No Prompt. </li>
+
+<li>	For the digitizer's Data Rate, we recommend 20 points per second. </li>
+
+<li>	For the Resolution, we recommend a figure of 10 lines per mm = 254 lines per inch or higher.</li>
+
+<li>	The digitizer must be configured to send information in ASCII. We recommend the format CalComp 2000-A also known as Summagraphics BitPad 2/1103 ASCII.</li>
+
+<li>	For the Baud Rate, we recommend 9600 or 19200. </li>
+
+<li>	For Parity, you can choose Even, Odd or None. </li>
+
+<li>	For Data Bits, you can choose 7 or 8.</li>
+
+<li>	For Stop Bits, you can choose 1 or 2.</li>
+
+</ul>
+
+<p class=defnewpar>Combinations of settings for Data Bits, Parity and Stop Bits that are often used are for example: </p>
+
+<ul>
+
+<li>Data bits 7, Parity Even, Stop Bits 2;</li>
+
+<li>Data bits 8, Parity None, Stop Bits 1.</li>
+
+</ul>
+
+<p> It is however not so important what you choose, as long as you use the <i>same settings</i> both for the configuration of the digitizer tablet itself and for the port settings! </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	When configuring the digitizer tablet, please make notes of the settings you use.</li>
+
+<li>	Up to this point, the digitizer settings are only valid on the digitizer end of the cable between your digitizer and your computer. </li>
+
+<li>    The crux of setting up a digitizer is that all settings used for the digitizer configuration <i>have to exactly match</i> the settings for selected port. </li>
+
+<li>    The port configuration is performed on the next page of the wizard. </li>
+
+</ul>
+
+<p class=diakopje>Page options:</p>
+
+<table cellspacing=0 cellpadding=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>None:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option if you don't have a digitizer. The point, segment and polygon editors will not show a digitizer menu. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>WinTab:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you installed the WinTab driver, select this option so that the WinTab driver will take care of the correct communication between your digitizer and your computer. You can directly click the <span class=arial>Finish</span> button. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>COM1, COM2, COM3, COM4:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you are not using an installed WinTab driver, select the serial port to which you connected the digitizer. You will have to specify settings on 3 more pages of the Setup Digitizer wizard. Click the <span class=arial>Next</span> button. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=diabox>After clicking the <span class=arial>Next</span> button, the <b><a href="digitizer_setup_digitizer_port_settings.htm">Setup Digitizer - Port Settings</a></b> page will appear. On that page, you must make sure that you specify exactly the same settings (exactly the same figures) for Baud Rate, Parity, Data Bits, and Stop Bits for the <i>port settings</i> as were used for the <i>digitizer tablet configuration</i>. </p>
+
+<p class=defnewpar>After specifying the serial port settings, the <b><a href="digitizer_setup_digitizer_autodetect.htm">Setup Digitizer - Automatic Detection</a></b> page will appear. If you have communication between digitizer and computer, you should be able to follow the Automatic Detection instructions on that page. It means that the settings for Baud Rate, Parity, Data Bits, Stop Bits as well as the required Run mode, ASCII Data Format, and Data Rate are OK, and that buttons on the digitizer cursor are recognized. </p>
+
+<p class=defnewpar>Finally, on the last page of the wizard, the <b><a href="../ilwismen/digitizer_setup_digitizer_size.htm">Setup Digitizer - Size, Resolution and Final Check</a></b> page will appear. There you can specify the size of the tablet, the Resolution you use, and you can check the correct behaviour of the buttons. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="digitizer_setup_digitizer_port_settings.htm">Setup Digitizer - Port Settings</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_set_up_a_digitizer_and_start_digitizing.htm">How to set up a digitizer</a></p>
+
+</body

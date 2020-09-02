@@ -1,0 +1,345 @@
+<html>
+
+<head>
+<title>SMCE window : Weigh methods (additional info)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Weigh, Weigh Rank Ordering, Weigh Pairwise Comparison">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>SMCE window</h1>
+<h1 class=secondline>Weigh methods (additional info)</h1>
+
+<!--<hr>-->
+
+<ol>
+
+<li><a href="#ranking"><span class=bookmark>Ranking methods for weight assessment</span></a></li>
+
+	<ol class="abc">
+
+	<li><a href="#expected_value"><span class=bookmark>Expected value method</span></a></li>
+
+	<li><a href="#rank_sum"><span class=bookmark>Rank sum method</span></a></li>
+	
+	</ol>
+
+<li><a href="#pairwise"><span class=bookmark>Pairwise comparison</span></a></li>
+
+</ol>
+
+
+<p class=kopje id="ranking">1. Ranking methods for weight assessment</p>
+
+<p>The set of weights of a problem with three criteria (c1, c2, c3) that are non-negative and add up to one is represented as triangle ABC in Figure 1. 
+
+If criterion c1 is more important than criterion c2 and criterion c2 is more important than criterion c3, then the set of feasible weights S equals the shaded triangle ADE in Figure 1. 
+
+This shows that the information contained in the ordering is substantial. From the set of weights that are non-negative and add up to 1, only 1/6 proves to remain feasible. </p>
+
+<img src="../images/smce_theory_figure1.gif" width="432" height="363">
+
+<p class=captionfig>Fig. 1:&nbsp;&nbsp;Feasible weights in a problem with three criteria (after Janssen, 1993). Shaded area W1&nbsp;&ge;&nbsp;W2&nbsp;&ge;&nbsp;W3.</p>
+
+<p class=kopje id="expected_value">1a. Expected value method</p>
+
+<p>The expected value in one method for using the information on the set <i>S</i> of feasible weights to produce quantitative weights.</p>
+
+<p class=defnewpar>The expected value method assumes that each set of weights that fits the rank order of criteria has equal probability. 
+
+The weight vector is calculated as the expected value of the feasible set. 
+
+In the shaded triangle ADE (set <i>S</i>) of Figure 1, the expected value is found as the centroid of this triangle (Figure 2). 
+
+This method results in a unique weight vector. 
+
+In combination with, for example, weighted summation it also results in a complete ranking of the alternatives.</p>
+
+<img src="../images/smce_theory_figure2.gif" width="228" height="170">
+
+<p class=captionfig>Fig. 2:&nbsp;&nbsp;Centroid of a triangle.</p>
+
+<p class=defnewpar>The expected value method calculates the weight, w<sub>k</sub>, for criterion k according to Formula 1 where n is the number of criteria. 
+
+The weights fit the rank order of criteria defined by set <i>S</i>, meaning that w1&nbsp;&ge;&nbsp;w2&nbsp;&ge;&nbsp;...&nbsp;&ge;&nbsp;w<sub>n</sub>&nbsp;&ge;&nbsp;0. </p>
+
+<table width="90%">
+<tr>
+<td valign="middle"><img src="../images/smce_theory_formula1.gif" width="159" height="46"></td>
+<td valign="middle"><p class="t1r">(Formula 1)</p></td>
+</tr>
+</table>
+
+<p class=defnewpar>Table 1 shows the weight vectors for various numbers of criteria according to Formula 1.</p>
+
+<p class=defnewpar>Table 1: Example of expected value of criterion weights. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tr>
+<td valign="top" width="25%" colspan="2"><p class="th">Number of criteria&nbsp;</p></td>
+<td valign="top" colspan="6"><p class="th">Expected value of criterion weights</p></td>
+</tr>
+<tr>
+<td valign="top" align="center"><u>N</u></td>
+<td></td>
+<td valign="top"><p class=tcolh>E(w1)</p></td>
+<td valign="top"><p class=tcolh>E(w2)</p></td>
+<td valign="top"><p class=tcolh>E(w3)</p></td>
+<td valign="top"><p class=tcolh>E(w4)</p></td>
+<td valign="top"><p class=tcolh>E(w5)</p></td>
+<td valign="top"><p class=tcolh>E(w6)</p></td>
+</tr>
+<tr>
+<td valign="top" align="center">2</td>
+<td></td>
+<td valign="top">0.75</td>
+<td valign="top">0.25</td>
+<td valign="top"></td>
+<td valign="top"></td>
+<td valign="top"></td>
+<td valign="top"></td>
+</tr>
+<tr>
+<td valign="top" align="center">3</td>
+<td></td>
+<td valign="top">0.61</td>
+<td valign="top">0.28</td>
+<td valign="top">0.11</td>
+<td valign="top"></td>
+<td valign="top"></td>
+<td valign="top"></td>
+</tr>
+<tr>
+<td valign="top" align="center">4</td>
+<td></td>
+<td valign="top">0.52</td>
+<td valign="top">0.27</td>
+<td valign="top">0.15</td>
+<td valign="top">0.06</td>
+<td valign="top"></td>
+<td valign="top"></td>
+</tr>
+<tr>
+<td valign="top" align="center">5</td>
+<td></td>
+<td valign="top">0.46</td>
+<td valign="top">0.26</td>
+<td valign="top">0.16</td>
+<td valign="top">0.09</td>
+<td valign="top">0.04</td>
+<td valign="top"></td>
+</tr>
+<tr>
+<td valign="top" align="center">6</td>
+<td></td>
+<td valign="top">0.41</td>
+<td valign="top">0.26</td>
+<td valign="top">0.16</td>
+<td valign="top">0.10</td>
+<td valign="top">0.06</td>
+<td valign="top">0.03</td>
+</tr>
+</table>
+
+<p class=kopje id="rank_sum">1b. Rank sum method</p>
+
+<p>Another method to generate numerical weights from a rank order of criteria is the rank sum method. This method calculates the weight, w<sub>k</sub>, for criterion k according to Formula 2 where n is the number of criteria. Again, the weights fit the rank order of criteria defined by set <i>S</i>, meaning that w1&nbsp;&ge;&nbsp;w2&nbsp;&ge;&nbsp;...&nbsp;&ge;&nbsp;w<sub>n</sub>&nbsp;&ge;&nbsp;0. </p>
+
+<table width="90%">
+<tr>
+<td valign="middle"><img src="../images/smce_theory_formula2.gif" width="116" height="65"></td>
+<td valign="middle"><p class="t1r">(Formula 2)</p></td></tr>
+</table>
+
+<p class=defnewpar>Table 2 shows the weight vectors for various numbers of criteria according to Formula 2.</p>
+
+<p class=defnewpar>Table 2: Example of criterion weights using rank sum method. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellpadding="0" cellspacing="0" width="100%" border="0">
+<tr>
+<td valign="top" width="25%" colspan="2"><p class="th">Number of criteria&nbsp;</p></td>
+<td valign="top" colspan="6"><p class="th">Criterion weights using rank sum method.</p></td>
+</tr>
+<tr>
+<td valign="top" align="center"><u>N</u></td>
+<td></td>
+<td valign="top"><p class=tcolh>w1</p></td>
+<td valign="top"><p class=tcolh>w2</p></td>
+<td valign="top"><p class=tcolh>w3</p></td>
+<td valign="top"><p class=tcolh>w4</p></td>
+<td valign="top"><p class=tcolh>w5</p></td>
+<td valign="top"><p class=tcolh>w6</p></td>
+</tr>
+<tr>
+<td valign="top" align="center">2</td>
+<td></td>
+<td valign="top">0.66</td>
+<td valign="top">0.33</td>
+<td valign="top"></td>
+<td valign="top"></td>
+<td valign="top"></td>
+<td valign="top"></td>
+</tr>
+<tr>
+<td valign="top" align="center">3</td>
+<td></td>
+<td valign="top">0.50</td>
+<td valign="top">0.33</td>
+<td valign="top">0.17</td>
+<td valign="top"></td>
+<td valign="top"></td>
+<td valign="top"></td>
+</tr>
+<tr>
+<td valign="top" align="center">4</td>
+<td></td>
+<td valign="top">0.40</td>
+<td valign="top">0.30</td>
+<td valign="top">0.20</td>
+<td valign="top">0.10</td>
+<td valign="top"></td>
+<td valign="top"></td>
+</tr>
+<tr>
+<td valign="top" align="center">5</td>
+<td></td>
+<td valign="top">0.33</td>
+<td valign="top">0.27</td>
+<td valign="top">0.20</td>
+<td valign="top">0.13</td>
+<td valign="top">0.07</td>
+<td valign="top"></td>
+</tr>
+<tr>
+<td valign="top" align="center">6</td>
+<td></td>
+<td valign="top">0.29</td>
+<td valign="top">0.24</td>
+<td valign="top">0.19</td>
+<td valign="top">0.14</td>
+<td valign="top">0.10</td>
+<td valign="top">0.05</td>
+</tr>
+</table>
+
+<p class="defnewpar">The rank sum method, combined with a multicriteria method, always leads to complete ranking. The rank order is not always in agreement with all the possible quantitative weights, the weights of set </i>S</i>, and is therefore not entirely certain.</p>
+
+<p class=kopje id="pairwise">2. Pairwise comparison</p>
+
+<p>Justification of priorities would be much easier if we use a less precise way of expressing judgments, such as words instead of numbers. Suppose we were to use words instead of numbers. Words are often easier to justify than numbers. For example, if you say that, with respect to corporate image, alternative A is 3 times more preferable than alternative B, can you justify why it is exactly 3? Why not 2.9, or 3.1? But if you said, instead, that A is 'moderately' more preferable than B, this can be justified with a variety of arguments, including, perhaps, some hard data.</p>
+
+<p class=defnewpar>The Analytical Hierarchy Process (AHP) is based on criteria that are measured on a ratio scale. In AHP the decision maker has to make a comparison for every pair of criteria: first qualitative and then quantitative on a scale from 1 to 9 to make the method operational. This scale is presented here for a binary relation:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td valign="top">Equally preferred</td>
+<td valign="top"><img src="../images/arrow_right2.gif" width="15" height="12">&nbsp;</td>
+<td valign="top">1</td>
+<td width="10%">&nbsp;</td>
+<td valign="top" colspan="3">&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">&nbsp;</td>
+<td>&nbsp;</td>
+<td valign="top">Very weak preference</td>
+<td valign="top"><img src="../images/arrow_right2.gif" width="15" height="12">&nbsp;</td>
+<td valign="top">2</td>
+</tr>
+<tr>
+<td valign="top">Weak preference</td>
+<td valign="top"><img src="../images/arrow_right2.gif" width="15" height="12">&nbsp;</td>
+<td valign="top">3</td>
+<td>&nbsp;</td>
+<td valign="top" colspan="3">&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">&nbsp;</td>
+<td>&nbsp;</td>
+<td valign="top">Rather strong preference</td>
+<td valign="top"><img src="../images/arrow_right2.gif" width="15" height="12">&nbsp;</td>
+<td valign="top">4</td>
+</tr>
+<tr>
+<td valign="top">Strong preference</td>
+<td valign="top"><img src="../images/arrow_right2.gif" width="15" height="12">&nbsp;</td>
+<td valign="top">5</td>
+<td>&nbsp;</td>
+<td valign="top" colspan="3">&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">&nbsp;</td>
+<td>&nbsp;</td>
+<td valign="top">More strong preference</td>
+<td valign="top"><img src="../images/arrow_right2.gif" width="15" height="12">&nbsp;</td>
+<td valign="top">6</td>
+</tr>
+<tr>
+<td valign="top">Demonstrable preference&nbsp;</td>
+<td valign="top"><img src="../images/arrow_right2.gif" width="15" height="12">&nbsp;</td>
+<td valign="top">7</td>
+<td>&nbsp;</td>
+<td valign="top" colspan="3">&nbsp;</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">&nbsp;</td>
+<td>&nbsp;</td>
+<td valign="top">More demonstrable preference&nbsp;</td>
+<td valign="top"><img src="../images/arrow_right2.gif" width="15" height="12">&nbsp;</td>
+<td valign="top">8</td>
+</tr>
+<tr>
+<td valign="top">Absolute preference</td>
+<td valign="top"><img src="../images/arrow_right2.gif" width="15" height="12">&nbsp;</td>
+<td valign="top">9</td>
+<td>&nbsp;</td>
+<td valign="top" colspan="3">&nbsp;</td>
+</tr>
+</table>
+
+<p class=defnewpar>The method then creates a matrix containing the pairwise comparison judgments for the criteria, from which a priority vector is derived of relative weights for these elements (the principal eigenvector of the matrix). 
+
+Moreover, due to the fact that more information than is necessary is retrieved from the decision maker, the method can deliver an inconsistency measure<sup>1</sup>. 
+
+This measure can be used to verify in what measure the judgments supplied are consistent. 
+
+The decision maker is totally consistent if for all sets of three criteria the triangular relationship holds<sup>2</sup>. 
+
+AHP is especially designed to assess weights within a hierarchical structure of the criteria. 
+
+However, due to the fast-growing number of pairwise comparisons it is not sensible to use the method for a large set of criteria. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ol>
+
+<li>Saaty T.L. and L.G. Vargas, 1984, Comparison of Eigenvalue and logarithmic least squares and least squares methods in estimating ratios. Mathematical modelling, Vol. 5, pp. 309-324.</li>
+
+<li>The triangular relationship for a set of three criteria c<sub>1</sub>, c<sub>2</sub> and c<sub>3</sub> holds if the equation r<sub>13</sub>&nbsp;=&nbsp;r<sub>12</sub>&nbsp;×&nbsp;r<sub>23</sub> holds, where r<sub>12</sub> is the quantitative judgment given by the decision maker. </li>
+
+</ol>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>Janssen, R, and Van Herwijnen, M. (1994) Multiobjective decision support for environmental management + DEFINITE DEcisions on an FINITE set of alternatives : demonstration disks and instruction. Kluwer Academic Publishers, Dordrecht (Netherlands). 232 p., 16 p. + two 3,5&quot; disks. ISBN 0-7923-1908-7</li>
+
+<li>Saaty, T. (1980) The Analytical Hierarchy Process. New York, McGraw Hill. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh.htm">SMCE window : Weigh</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh_direct.htm">SMCE window : Weigh - Direct Method</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh_pairwise.htm">SMCE window : Weigh - Pairwise Comparison</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh_rank_order.htm">SMCE window : Weigh - Rank Ordering</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+
+</body

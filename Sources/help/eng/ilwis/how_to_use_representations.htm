@@ -1,0 +1,156 @@
+<html>
+
+<head>
+<title>How to use representations</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to use representations</h1>
+
+<!--<hr>-->
+
+<h2>Representation types</h2>
+
+<p>Representations can be created and selected depending on the domain of the map. </p>
+
+<p>For maps with a class domain or group domain, you have to create and edit a user-defined representation Class (1). </p>
+
+<p>For maps with a value domain or the image domain, two types of representations are available: representation Value (2) and representation Gradual (3). </p>
+
+<p>Maps with a domain ID can only be displayed in 1, 7, 15, or 31 system colors. </p>
+
+<p class=kopje>1.   Representation Class:</p>
+
+<p>A representation Class is user-defined: colors have to specified for all classes in a certain class domain, see <a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor</a>. Each class is represented by a specific color. You can create multiple representations for the same domain.</p>
+
+<p class=kopje>2.   Representation Value:</p>
+
+<p>A representation Value is user-defined: colors can be specified for different values in a certain Value domain, see <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a>. You can specify the colors for the smallest and largest values in the domain and insert other breakpoints/limits as required. </p>
+
+<p>Each value is represented by a specific color. You can create multiple representations for the same domain.</p>
+
+<p class=kopje>3.   Representation Gradual:</p>
+
+<p>A number of system representations Gradual are available: </p>
+
+<ul>
+
+<li>	Gray: from black to white (default for images).</li>
+
+<li>	Inverse: from white to black.</li>
+
+<li>	Pseudo: from blue via green to red. </li>
+
+<li>	Red, Green, Blue, Yellow, Magenta, Cyan: from black to pure color. </li>
+
+<li>	ClrStp6, ClrStp8, ClrStp10, ClrStp12: 6, 8, 10, 12 times from black to a pure color; pure colors ranging from blue to magenta. Useful for DEMs, distance maps, etc. </li>
+
+</ul>
+
+<p class=defnewpar>A representation Gradual can also be user-defined. The domain of a representation Gradual is the system domain Value. Each value in the map is stretched to a percentage value between 0 and 100; each percentage value is represented by a specific color, see Representation Value/Gradual editor. You can specify the colors for 0% and 100% and insert other breakpoints/limits as required. Representations Gradual can be used for all maps with a value domain.</p>
+
+<h2>Domain and representation</h2>
+
+<p>All maps with the same domain are displayed with the same representation. Every domain is always linked to one representation.</p>
+
+<p class=defnewpar>To view which representation is currently used by a certain domain, or to select or to create a new representation, open the Display Options dialog box or the Domain Properties dialog box.</p>
+
+<p class=kopje>To obtain a Display Options dialog box:</p>
+
+<ul>
+
+<li>	in the Catalog, double-click a map, or</li>
+
+<li>	from the File menu in the Main window, choose Open, and select a map, or</li>
+
+<li>	in a map window, open the Layers menu, choose the Display Options command, and select the layer, or</li>
+
+<li>	in a map window, open the Layers menu, choose the Layer Management command, select the layer and click the Display Options button, or</li>
+
+<li>	in a map window, use the right mouse button, and select a layer from the context-sensitive menu.</li>
+
+</ul>
+
+<p class=kopje>To obtain a Domain Properties dialog box:</p>
+
+<ul>
+
+<li>	from the Edit menu of the Main window, choose Change Properties and select a domain Class, Group or Value, or </li>
+
+<li>	select a domain Class, Group or Value in the Catalog, use the right mouse button, and select Properties from the context-sensitive menu, or</li>
+
+<li>	in a domain Class editor, open the Edit menu, and choose the Properties command.</li>
+
+</ul>
+
+<h2>Using representations</h2>
+
+<p class=kopjeaftertitlesub>To create a new representation for a domain Class, Group, Value or Image:</p>
+
+<ul>
+
+<li>	in a Display Options dialog box of a domain Class, Group or Value map or an Image, click the little  <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> next to the representation list box, or </li>
+
+<li>	in a Domain Properties dialog box, create a new representation through the little create button, or </li>
+
+<li>	from the File menu of the Main window, choose <a href="../ilwismen/create_a_representation.htm">Create Representation</a>, or</li>
+
+<li>	in the Operation-list, double-click icon New Repr.</li>
+
+</ul>
+
+<p class=kopje>To link another representation to a domain:</p>
+
+<ul>
+
+<li>	in a Display Options dialog box of a domain Class, Group, Value map, or Image select another representation, or </li>
+
+<li>	in a Domain Properties dialog box, select another representation.</li>
+
+</ul>
+
+<p class=kopje>To edit an existing representation:</p>
+
+<ul>
+
+<li>	when a map with a domain Class, Group, Value or Image is displayed in a map window, open the Edit menu in the map window, choose Representation, or </li>
+
+<li>	when a map with a domain Class, Group, Value or Image is displayed in a map window, set the double-click action in the map window to Edit Representation, and double-click a unit in a domain class map, or</li>
+
+<li>	in the Catalog, double-click a user-defined representation, or</li>
+
+<li>	in the Catalog, double-click a domain Class, Group, or Value, then choose Representation from the Edit menu, or</li>
+
+<li>	in the domain Class/ID editor, open the Edit menu and choose the Representation command.</li>
+
+</ul>
+
+<p class=defnewpar>For more information on Representation editors, see <a href="../ilwis/how_to_edit_representations.htm">How to edit a representation</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representation</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_representations.htm">How to create a representation</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_representations.htm">How to edit a representation</a></p>
+
+</body

@@ -1,0 +1,580 @@
+<html>
+
+<head>
+<title>Customize Catalog - Query</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catalog, Customize ..., Main window, Predefined Catalog queries, Catalog queries, Query, Object query, Data management">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Main window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">View menu</a></td>
+</tr>
+<tr>
+<td colspan="3"><h1 class=secondline>Customize Catalog</h1></td>
+</tr>
+<tr>
+<td width="38%"><h1 class=firsttabnotactive><a class=othertab href="customize_catalog_selection.htm">Object Selection</a></h1>
+</td>
+<td width="31%"><h1 class=othertab><a class=othertab href="customize_catalog_details_view.htm">Details View</a></h1>
+</td>
+<td width="31%"><h1 class=thistab><a class=thistab href="customize_catalog_query.htm">Query</a></h1>
+</td>
+</tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Search for certain objects in a (directory) <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> and show only the objects that are the result of your query. You can select one of the predefined queries, but you can also construct a query yourself. </p>
+
+<p class=defnewpar>You can search for instance for objects that use domain type Class/ID, domain type Image, a certain domain (e.g. domain landuse), a certain georeference, etc. To find query results, ILWIS has to scan the contents of all <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition files</a> in the current Catalog. </p>
+
+<p>The query that is in use is shown in the <a href="../ilwis/main_window_status_bar.htm">status bar</a> of the Main window. </p>
+
+<p class=defnewpar>The Customize Catalog sheet appears:</p>
+
+<ul>
+
+<li>	when in the Main window, you choose the <span class=arial>Customize Catalog</a></span> command from the <span class=arial>View</span> menu, </li>
+
+<li>	when you click the <span class=arial>Customize Catalog</span> button <img src="../images/custcat.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/main_window_standard_toolbar.htm">standard toolbar</a> of the Main window, </li>
+
+<li>    when you click the right mouse button in the white space of a Catalog and choose the <span class=arial>Customize Catalog</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>Subsequently, click the <span class=arial>Query</span> tab.</p>
+
+<p class=diakopje>Page options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Catalog Queries:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select one of the <a href="#availquery"><span class=bookmark>Predefined Catalog Queries</span></a> (see below). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Query text box:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Construct a query yourself. For more information and examples, see <a href="#querysyntax"><span class=bookmark>Query Syntax</span></a> below. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Save:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Save a query. The query will be added to the existing Catalog Queries list.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Save as:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Save an existing query by another name. The query will be added to the existing Catalog Queries list.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Delete:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Delete an existing user-defined query. The query will be removed from the Catalog Queries list.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Queries are saved in the registry. The query that is applied will be shown on the <a href="../ilwis/main_window_status_bar.htm">status line</a> of the Main window. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To select a predefined query, you can also use the <span class=arial><a href="catalog_predefined_query.htm">Catalog Queries</a></span> command on the <span class=arial>View</span> menu. </li>
+
+<li>To view all objects again in a Catalog, type <span class=courier>dir</span> on the command line, or select predefined query <span class=arial>All</span>. </li>
+
+</ul>
+
+<p class=tip>Mind:</p>
+
+<ul class=tipul>
+
+<li>Settings on visible object types, sorting/ordering method and queries on objects are either applied to all new Catalogs that will be opened, or to the currently active Catalog only. This depends on whether you click the <span class=arial>Use current settings for new Catalogs</span> button or the <span class=arial>Use default settings for new Catalogs</span> button on the <a href="../ilwismen/customize_catalog_details_view.htm">Customize Catalog, Details View</a> page. </li>
+
+<li>Only those objects will be shown which match the selected object types <i>and</i> a used query. </li>
+
+</ul>
+
+<h2 id="querysyntax">Query Syntax</h2>
+
+<p>Query expressions use the following syntax (case-insensitive): </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0 padding-top=1 border=0>
+<tr>
+<td valign="top" width="180"><i>Query</i>
+</td>
+<td valign="top">
+<span class=syntax2><i>Term</i></span><span class=courier> | </span>
+<span class=syntax2><i>Term</i><span class=courier> and </span><i>Term</i></span> <span class=courier> | </span>
+<span class=syntax2><i>Term</i><span class=courier> or </span><i>Term</i></span> 
+</td>
+</tr>
+<tr>
+<td valign="top"><i>Term</i>
+</td>
+<td valign="top">
+<span class=syntax2><i>Object</i>.<i>Attribute</i> <i>Operator</i> <i>Value</i></span><span class=courier> | </span>
+<span class=syntax2><i>Attribute</i> <i>Operator</i> <i>Value</i></span><span class=courier> | </span>
+<span class=syntax2><i>Object</i>.<i>Term</i></span>
+</td>
+</tr>
+<tr>
+<td valign="top"><p class=defnewpar>where:</p>
+</td>
+</tr>
+<tr>
+<td valign="top"><i>Object</i>
+</td>
+<td valign="top">
+<span class=courier>IlwisObject </span>(all ILWIS objects)<span class=courier> | Map </span>(all maps: ras, pol, seg, pnt) |<br>
+<span class=courier>RasterMap | PolygonMap | SegmentMap | PointMap | Table | <br>
+MapList | ObjectCollection | MapView | Layout | AnnotationText | Graph |<br>
+Domain | Representation | GeoRef | CoordSystem | <br>
+RasHistogram | PolHistogram | SegHistogram | PntHistogram | SampleSet | StereoPair | Table2D | Matrix | Filter | Function | Script </span>
+</td>
+</tr>
+<tr>
+<td valign="top"><i>Attribute</i>
+</td>
+<td valign="top">
+<span class=courier> Name | Type | Time | Description | Version </span> (for all objects) <br>
+
+<span class=courier> Domain </span> (for all maps, tables and representations) <br>
+
+<span class=courier> Georef</span> (for raster maps)<br>
+
+<span class=courier> Representation</span> (for domains)<br>
+
+<span class=courier> Projection | Datum</span> (for coordinate systems)
+
+</td>
+</tr>
+<tr>
+<td valign="top"><i>Operator</i>
+</td>
+<td valign="top"><span class=courier>=&nbsp;&nbsp;|&nbsp;&nbsp;&lt;&gt;&nbsp;&nbsp;|&nbsp;&nbsp;&gt;=&nbsp;&nbsp;|&nbsp;&nbsp;&lt;=&nbsp;&nbsp;|&nbsp;&nbsp;&gt;&nbsp;&nbsp;|&nbsp;&nbsp;&lt;&nbsp;&nbsp;|&nbsp;&nbsp;contains</span> 
+
+</td>
+</tr>
+<!--<tr>
+<td valign="top"><i>Value</i>
+
+</td>
+
+<td valign="top"><i>any value, wildcards allowed</i><span class=courier> | </span><i>any string, wildcards allowed</i><span class=courier> | </span><br>
+        
+<i>row,col</i> (for raster maps while using <i>operator</i> <span class=courier> contains</span))<span class=courier> | </span> <br>
+
+<i>X,Y</i> (for all map types while using <i>operator</i> <span class=courier> contains</span)<span class=courier>  | </span> <br>
+
+<i>year:month:day</i><span class=courier> | </span><i>year:month:day:hour:sec</i><span class=courier> | </span> <br>
+
+<span class=courier>now-</span><i>X</i> (where <i>X</i> is the number of days before today)
+
+</td>
+</tr>-->
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td valign="top" width="180">
+<p><u><i>Object<span class=courier>.</span>Attribute</u> | <u>Attribute</i></u></p>
+
+</td>
+<td valign="top">
+<p><u>accepted <i>Values</i></u></p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><span class=courier>Name</span></p>
+
+</td>
+<td valign="top">
+<p><i>any string, wildcards allowed</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><i>Object</i><span class=courier>.Domain</span></p>
+
+</td>
+<td valign="top">
+<p><i>any string, wildcards allowed</i> (e.g. to find objects that use a certain domain)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><i>Object</i><span class=courier>.Representation</span></p>
+
+</td>
+<td valign="top">
+<p><i>any string, wildcards allowed</i> (e.g. to find objects that use a certain representation)</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><i>Object</i><span class=courier>.Georef</span></p>
+
+</td>
+<td valign="top">
+<p><i>any string, wildcards allowed</i> (e.g. to find objects that use a certain georeference)</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><i>Object</i><span class=courier>.CoordSystem</span></p>
+
+</td>
+<td valign="top">
+<p><i>any string, wildcards allowed</i> (e.g. to find objects that use a certain coordinate system)</p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><span class=courier>Type</span></p>
+
+</td>
+<td valign="top">
+<p><span class=courier>Map | RasterMap | PolygonMap | SegmentMap | PointMap | Table |<br>
+MapList | ObjectCollection | MapView | Layout | AnnotationText | Graph |<br>
+Domain | Representation | GeoRef | CoordSystem |<br>
+RasHistogram | PolHistogram | SegHistogram | PntHistogram | SampleSet | StereoPair | Table2D | Matrix | Filter | Function | Script |<br>
+Source | Dependent </span></p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top">
+<p><span class=courier>Domain.Type</span></p>
+
+</td>
+<td valign="top">
+<p><span class=courier>value | image | class| id | identifier</span></p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><span class=courier>Representation.Type</span></p>
+
+</td>
+<td valign="top">
+<p><span class=courier>rprclass | rprvalue | gradual</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><span class=courier>Georef.Type</span></p>
+
+</td>
+<td valign="top">
+<p><span class=courier>corners | tiepoints | georefctp</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><span class=courier>CoordSystem.Type</span></p>
+
+</td>
+<td valign="top">
+<p><span class=courier>projection | latlon</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><span class=courier>CoordSystem.Datum</span></p>
+
+</td>
+<td valign="top">
+<p><i>datum name as string, wildcards allowed</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><span class=courier>Time</span></p>
+
+</td>
+<td valign="top">
+<p><i>year:month:day</i><span class=courier> | </span><i>year:month:day:hour</i><span class=courier> | </span><i>year:month:day:sec</i><span class=courier> | <br>
+now-<i>x</i></span> (<span class=courier>now</span> means today, <i>x</i> in days before today)</p>
+
+</td>
+</tr>
+</tr>
+<tr>
+<td valign="top">
+<p><span class=courier>Version</span></p>
+
+</td>
+<td valign="top">
+<p><i>real value</i> (e.g. 2.1, 3.0)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td valign="top" width="180">
+<p><u><i>Term Operator</i></u></p>
+
+</td>
+<td valign="top">
+<p><u>accepted <i>Values</i></u></p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><i>map</i><span class=courier> contains</span></p>
+
+</td>
+<td valign="top">
+<p><i>real value, real value</i> (representating an XY-coordinate in a map)</p>
+<p><i>integer value, integer value</i> (representating a row,col position in a raster map)</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top">
+<p><span class=courier>Description contains</span></p>
+
+</td>
+<td valign="top">
+<p><i>any string, wildcards allowed</i></p>
+
+</td>
+</tr>
+</table>
+
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><u>Query examples:</u></p>
+
+<table class=tiptext border=0 cellspacing=0>
+<tr>
+<td valign="top" width="40%"><span class=courier>name=land*</span>
+</td>
+<td valign="top">shows all ILWIS objects that have a name starting with <span class=courier>Land</span>.
+</td>
+</tr>
+<tr>
+<td valign="top" width="40%"><span class=courier>name=*use</span>
+</td>
+<td valign="top">shows all ILWIS objects that have a name ending on <span class=courier>Use</span>.
+</td>
+</tr>
+<tr>
+<td valign="top"><span class=courier>map.name=land*</span>
+</td>
+<td valign="top">shows the raster, polygon, segment and point maps that start with <span class=courier>Land</span>.
+</td>
+</tr>
+<tr>
+<td valign="top"><span class=courier>map.domain=landuse</span>
+</td>
+<td valign="top">shows the raster, polygon, segment and point maps that use domain <span class=courier>Landuse</span>.
+</td>
+</tr>
+<tr>
+<td valign="top"><span class=courier>map.domain.type=image</span>
+</td>
+<td valign="top">shows the maps that use domain type <span class=courier>Image</span>.
+</td>
+</tr>
+<tr>
+<td valign="top"><span class=courier>rastermap.georef.type=corners
+</td>
+<td valign="top">shows all raster maps with a georeference corners
+</td>
+</tr>
+<tr>
+<td valign="top"><span class=courier>coordsystem.projection=&quot;utm&quot;</span>
+</td>
+<td valign="top">shows all coordinate systems that use a UTM projection.
+</td>
+</tr>
+<tr>
+<td valign="top"><span class=courier>map.coordsystem.projection=&quot;utm&quot;</span>
+</td>
+<td valign="top">shows all maps (ras, pol, seg, pnt) that make use of a coordinate system with a UTM projection.
+</td>
+</tr>
+<tr>
+<td valign="top"><span class=courier>map.description contains DEM </span>
+</td>
+<td valign="top">shows the raster, polygon, segment and point maps maps that have a description which contains the string DEM.
+</td>
+</tr>
+<tr>
+<td valign="top"><span class=courier>time > now-1</span>
+</td>
+<td valign="top">shows the objects that were modified after yesterday (thus today).
+</td>
+</tr>
+<tr>
+<td valign="top"><span class=courier>time >= 2000:01:01</span>
+</td>
+<td valign="top">shows the objects that were modified from the 1st of January of the year 2000 onwards.
+</td>
+</tr>
+<tr>
+<td valign="top"><span class=courier>domain.time >= 2000:01:01</span>
+</td>
+<td valign="top">shows the domains that were modified from the 1st of January of the year 2000 onwards.
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=defnewpar>The <i>Query</i> syntax as selected or as typed into the Query text box in this dialog box, will be sent to the command line as:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=syntax><span class=courier>dir </span><i>Query</i> </p>
+
+<h2 id="availquery">Predefined Catalog Queries</h2>
+
+<table border=0 cellspacing=0>
+<tr>
+<td valign="top" width="40%">
+<p>All</p>
+
+</td>
+<td valign="top">
+<span class=courier>&nbsp;</span>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>All objects made today</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>time &gt; now-1</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Maps with domain class or id</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>map.domain.type=class or map.domain.type=identifier</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Maps with domain image</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>map.domain.type=image</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Maps with domain value</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>map.domain.type=value</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Maps with georef corners</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>map.georef.type=georefcorners</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Maps with georef tiepoints</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>map.georef.type=georefctp</span></p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="catalog_predefined_query.htm">Catalog - Predefined Query</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/main_window_catalog.htm">Main window : Catalog</a> </p>
+
+</body

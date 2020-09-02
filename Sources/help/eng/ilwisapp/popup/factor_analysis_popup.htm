@@ -1,0 +1,30 @@
+<html>
+
+<head>
+<title>factor analysis popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Factor Analysis</p>
+
+<p>The <a href="..//ilwisapp/factor_analysis.htm" onClick="return popup(this, 'notes')" >Factor analysis operation</a> is used to uncover relationships among many variables (as found in a set of raster maps in a map list) and to reduce the amount of data needed to define the relationships. With Factor analysis each variable is transformed into a linear combination of orthogonal common factors (output raster maps) with decreasing variation. The linear transformation assumes the factors will explain all of the correlation in each variable. Hence each factor (output raster map) carries different information which is uncorrelated with other factors. </p>
+
+</body

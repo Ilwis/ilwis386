@@ -1,0 +1,149 @@
+<html>
+
+<head>
+<title>Drainage network ordering : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Drainage network ordering, MapDrainageNetworkOrdering">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Drainage network ordering</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage Network Ordering</a> operation can be directly executed by typing the following expression on the command line of the Main window: </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width="68">
+<p class=calccommline>OUTNAME</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDrainageNetwOrkordering</span>(<i>DEM_rasmap</i>, <i>flowdir_rasmap</i>, <i>drainnetwork_rasmap</i>, <i>minLength</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTNAME</p>
+
+</td>
+<td valign="top">
+<p>is an output name that will be used for the output raster map, the output segment map and the output attribute table. The output maps will contain stream ordered drainages; each stream is identified by its own ID; the output attribute table will contain information on each stream. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>MapDrainageNetworkOrdering</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+
+</td>
+<td valign="top">
+<p>is the command to start the Drainage Network Ordering operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>DEM_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster map that contains height values, i.e. a raster map with a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster that is the outcome of the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow Direction</a> operation, i.e. a raster map with <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>drainnetwork_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster that is the outcome of the <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage Network Extraction</a> operation, i.e. a raster map with a <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >Bool domain</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>flowacc_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster map that is the outcome of the <a href="..//ilwisapp/popup/flow_accumulation_popup.htm" onClick="return popup(this, 'notes')" >Flow accumulation</a> operation, i.e. a raster map with a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>minLength</i></p>
+
+</td>
+<td valign="top">
+<p>is a value for the minimum length (in m) that drainage segments should have to remain in the drainage network output maps (real value &ge; 0). </p>
+
+<p>If the condition is met, this drainage line is kept in the output maps and in the attribute table; else it is deleted. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class="defnewpar">Furthermore, an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a> will be created with the same name as the output maps and the output attribute table; the output maps and the output attribute table will use this domain. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="drainage_network_ordering_functionality.htm">Drainage network ordering : functionality</a></p>
+
+<p class=seealsolinks><a href="drainage_network_ordering_dialog_box.htm">Drainage network ordering : dialog box</a></p>
+
+<p class=seealsolinks><a href="drainage_network_ordering_algorithm.htm">Drainage network ordering : algorithm</a></p>
+
+
+</body

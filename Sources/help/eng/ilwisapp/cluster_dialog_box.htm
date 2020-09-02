@@ -1,0 +1,112 @@
+<html>
+
+<head>
+<title>Cluster : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cluster">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Cluster</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Clustering, or unsupervised classification, is a rather quick process in which image data is grouped into spectral clusters based on the statistical properties of all pixel values. It is an automated classification approach with a maximum of 4 input bands.</p>
+
+<p class=defnewpar>Optionally, an attribute table can be created for the output map. The table will contain statistical information on the output clusters: the average, predominant and minimum and maximum value of each cluster as found in the input bands. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Number of input maps:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the number of input bands to be used in the cluster analysis (1, 2, 3, or 4). For the selected number of input  bands, a number of Input Map list boxes appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input maps:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the input raster maps. Open each list box and select the desired input map, or drag raster maps directly from the Catalog into the list boxes. All input maps should use <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" >domain <span class=courier>Image</a></span>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Number of clusters:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the number of clusters that should be created. You can create between 2 and 60 clusters. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the desired number of clusters after the unsupervised classification.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you wish to obtain an attribute table which will contain for each output cluster the average, predominant and minimum and maximum value of each input band. Subsequently, type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output table. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=defnewpar>Optionally, an output attribute table can be defined. </p>
+
+<p class=defnewpar>The output cluster names (<span class=courier>Cluster 1</span>, <span class=courier>Cluster 2</span>, etc.) which are used in the output map as well as in the optional attribute table are stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal class domain</a>).</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cluster_functionality.htm">Cluster : functionality</a></p>
+
+</body

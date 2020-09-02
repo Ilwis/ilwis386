@@ -1,0 +1,186 @@
+<html>
+
+<head>
+<title>Object collection properties</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Properties of objects, Object collections, Database collections">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Object Collection Properties</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Object Collection Properties sheet lists all kind of important information on a selected <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collection</a>. In fact, all relevant information that is stored in the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the object collection is displayed. For more information, refer to <a href="../ilwis/basic_concepts_properties_of_objects.htm">Basic concepts : Properties of objects</a>. </p>
+
+<p class=defnewpar>When the object collection is a <a href="..//ilwis/popup/objects_database_collection_popup.htm" onClick="return popup(this, 'notes')" >database collection</a>, which is a special form of an object collection, this Property sheet lists the properties of the database collection. </p>
+
+<p class=defnewpar>This Properties sheet appears:</p>
+
+<ul>
+
+<li>	when you click an object collection or a database collection in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> with the right mouse button, and choose <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>; </li>
+
+<li>	when you select an object collection or a database collection in a Catalog, and choose <span class=arial>Properties</span> from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> in the Main window. </li>
+
+</ul>
+
+<table cellspacing=0>
+<tr>
+<td colspan="2">
+<p class=diakopje>General tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Object Collection</b> &quot;Name&quot;, or <b>Database Collection</b> &quot;Name&quot;. When you click this flat button, the object collection or database collection will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Location:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The path and directory where this object is stored. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object date and time:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Date and time when this object was last changed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Total size of this object collection or database collection (.IOC) on disk in bytes. This does not include any objects which are part of the object collection or database collection. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Read only:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if this object collection should be read-only. You are then not allowed to edit or delete the object collection. Clear this check box if you want to be able to edit the object collection.</p>
+
+<p class=diabox>For database collections: you are never allowed to add any tables to, or to delete any tables from, the database collection. If a database collection is read-only, you cannot delete the database collection itself. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, change the description of this object collection or this database collection. The description of an object collection appears in the title bar when the object collection is displayed. Furthermore, the description of an object collection or a database collection is visible on the status bar of the Main window when moving the mouse pointer over the object collection or database collection in a Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>Contains tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Object Collection</b> &quot;Name&quot;, or <b>Database Collection</b> &quot;Name&quot;. When you click this flat button, the object collection or database collection will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Objects in container:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The ILWIS objects that are stored by this object collection are listed. Other objects that are also part of this object collection may be used in their native format (these are not listed). </p>
+
+<p class=diabox>For database collections: the tables that are part of the database collection are listed. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>Used By tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Object Collection</b> &quot;Name&quot;, or <b>Database Collection</b> &quot;Name&quot;. When you click this flat button, the object collection or database collection will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Used By:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In a tree view, it is listed by which other objects this object collection or this database collection is used. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>    To print or to copy the contents of all Property pages to the clipboard, choose <span class=arial>Print</span> or <span class=arial>Copy</span> from the <a href="../ilwis/windows_features_control_menu.htm">Control menu</a>. </li>
+
+<li>    To print or to copy the contents of the currently active Property tab to the clipboard, click with the right mouse button in the white space of the Property page and choose <span class=arial>Print</span> or <span class=arial>Copy</span> from the context-sensitive menu. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_object_collections.htm">ILWIS objects : object collections</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a></p>
+
+</body

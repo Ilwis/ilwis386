@@ -1,0 +1,126 @@
+<html>
+
+<head>
+<title>Segment density : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment density">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segment density</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Segment Density operation rasterizes a segment map. For each output pixel, the total length of all segment parts within the boundaries of the pixel is <i>summed</i>: this is the output value for the pixel. By using a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a>, you can specify the elements of the input map that are to be used in the calculation. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Input segment map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input segment map. Open the list box and select the desired input map, or drag a map directly from the Catalog into this box. No special input map requirements.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox><a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >Mask</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type (multiple) search strings to find the segments in the input map that you want to use in the calculation. If all segments should be taken into account, accept the default mask <span class=courier>*</span>. For more information on masks, see <a href="mask_segments_functionality.htm">Mask segments : functionality</a> or <a href="../ilwis/how_to_use_masks.htm">How to use masks</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the summed lengths of segments found in each output pixel.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Georeference:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing georeference or create <img src="../images/crea.gif" align=bottom width="17" height="22"> a new georeference corners.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >domain <span class=courier>Value</a></span>, or select an existing value domain, or create a new value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> for the output map, or specify the value range yourself.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> for the output map, or specify the precision yourself.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary, the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segment_density_functionality.htm">Segment density : functionality</a></p>
+
+</body

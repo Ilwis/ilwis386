@@ -1,0 +1,334 @@
+<html>
+
+<head>
+<title>Map window : Layer Management</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Layer Management, Layers, Map window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map window</h1>
+
+<h1 class=secondline>Layer Management</h1>
+ 
+<!--<hr>-->
+
+<p class=defnewpar>The Layer Management is by default located along the left hand side of a map window. It lists the <a href="..//ilwis/popup/layers_popup.htm" onClick="return popup(this, 'notes')" >layers</a> that were added to the current map window. For maps, the Layer Management pane offers a tree structure, to view the properties of the map and the objects used by the map, the legend of a map, etc.  </p>
+
+<h2>Introduction</h2>
+
+<p>In the Layer Management pane, all layers are preceded by their icon: </p>
+
+<table cellspacing="0" width="90%">
+<tr>
+<td width="30%"> 
+<table cellspacing="0">
+<tr>
+<td valign="top" width=22>
+<img src="../images/rasmap.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+raster maps, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/polmap.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+polygon maps, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/segmap.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+segment maps, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/pointmap.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+point maps, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/mpl.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+map lists, 
+</td>
+</tr>
+</table>
+
+</td>
+
+<td width="40%">
+<table cellspacing="0">
+<tr>
+<td valign="top" width=22>
+<img src="../images/gridmapw.gif" align=bottom width="14" height="14"> 
+</td>
+<td valign="top">
+grid lines, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/gratmapw.gif" align=bottom width="13" height="13"> 
+</td>
+<td valign="top">
+graticules, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/anntxt.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+annotation text layers. 
+</td>
+</tr>
+</table>
+</td>
+</table>
+
+<p>For maps, the name of the map is displayed as well as the map's description.</p>
+
+<p class=defnewpar>Each layer is preceded by a check box which indicates whether the layer is displayed or not: </p>
+
+<table cellspacing=0>
+
+<tr>
+<td valign="top" width=22>
+<img src="../images/layeron.gif" align=bottom width="14" height="12">
+</td>
+<td valign="top">
+this layer is displayed in the map window.
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/layeroff.gif" align=bottom width="14" height="12">
+</td>
+<td valign="top">
+this layer is not displayed in the map window. 
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>A map is preceded by a small <img src="../images/layerinfo.gif" align=bottom width="5" height="11"> when, in the map's <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box, the <span class=arial>Info</span> check box has been selected. </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<img src="../images/layerinfo.gif" align=bottom width="5" height="11"> 
+</td>
+<td valign="top">
+<p>for this map you will obtain Info on a point, segment, polygon or pixel when you press the left mouse button in the map window. </p>
+</td>
+</tr>
+</table>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=defnewpar>For maps that were added to the map window, you will find the properties of the map in the Layer Management pane: </p>
+
+<p><img src="../images/laymanprop.gif" align=bottom width="83" height="14"> </p>
+
+<p>By clicking the + sign in front of the word 'Properties', the Properties will be expanded; you will see the objects that are used by the map. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>For maps that were added to the map window, you will find the legend of the map in the Layer Management pane: </p>
+
+<p><img src="../images/laymanleg.gif" align=bottom width="72" height="14"> </p>
+
+<p>Depending on the domain used by the map, by default, the legend shows all class names and their colors (hatching, line type, symbol, etc.), or a limited number of values and their colors. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>You can move the Layer Management pane and dock it along the right hand side or the left hand side of a map window; you can also make the Layer Management pane floating. The Layer Management pane can be hidden or shown with the <span class=arial>Layer Management</span> command on the <a href="../ilwis/map_window_menu_commands.htm">Options menu</a>. Some of the actions that are available via the Layer Management pane are also available via the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<h2>Functionality of Layer Management</h2>
+
+<p>For layers that were added to the map window, the Layer Management pane allows you:</p>
+
+<ul>
+
+<li>	to show or hide a layer, </li>
+
+<li>	to change the display options of a layer, </li>
+
+<li>	to change the order in which layers are drawn,</li>
+
+<li>    to open the properties of a map, </li>
+
+<li>    to view the objects used by a map, </li>
+
+<li>    to open and/or edit the legend of a map, </li>
+
+<li>    to edit a legend item (for maps with a class domain), </li>
+
+<li>	to add a layer, </li>
+
+<li>	to remove a layer, </li>
+
+<li>	to edit a map (for maps which are not dependent).</li>
+
+</ul>
+
+<p class=kopje>To show or hide layers: </p>
+
+<ul>
+
+<li>Click the <img src="../images/layeroff.gif" align=bottom width="14" height="12"> or the <img src="../images/layeron.gif" align=bottom width="14" height="12"> check box to toggle between showing or hiding a layer. </li>
+
+</ul>
+
+<p class=kopje>To change the display options of a layer: </p>
+
+<ul>
+
+<li>Double-click a layer in the Layer Management pane. </li>
+
+<li>Click a layer with the right mouse button in the Layer Management pane, and choose <span class=arial>Display Options</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=linespacing03before>A <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box will appear. </p>
+
+<p class=kopje>To change the order in which layers are drawn: </p>
+
+<ul>
+
+<li>Select a layer in the Layer Management pane and <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> it to another position in the list. </li>
+
+</ul>
+
+<p class=linespacing03before>The layer which appears at the top of the list in Layer Management will be drawn last in the map window (=on top). </p>
+
+<p class=kopje>To open the properties of a map: </p>
+
+<ul>
+
+<li>Double-click the word 'Properties' of a map in the Layer Management pane. </li>
+
+<li>Click a layer with the right mouse button in the Layer Management pane, and choose <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=linespacing03before>A <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Properties sheet</a> will be opened. </p>
+
+<p class=kopje>To view the objects used by a map: </p>
+
+<ul>
+
+<li>Expand the Properties of a map in the Layer Management pane by clicking the + button in front of the word 'Properties'. </li>
+
+</ul>
+
+<p class=linespacing03before>You can double-click the objects to open and/or edit them. </p>
+
+<p class=kopje>To open and/or edit the legend of a map: </p>
+
+<ul>
+
+<li>Double-click the word 'Legend' of a map in the Layer Management pane. </li>
+
+</ul>
+
+<p class=linespacing03before>Depending on the domain used by the map, the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >representation Class editor</a> or the <a href="..//ilwis/popup/representation_value_gradual_editor_popup.htm" onClick="return popup(this, 'notes')" >representation Value/Gradual editor</a> will be opened. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>When a map uses a <a href="..//ilwis/sec/y_system_domains_sec.htm" onClick="return popup(this, 'notes')" >system domain</a> and a <a href="..//ilwis/sec/y_system_representations_sec.htm" onClick="return popup(this, 'notes')" >system representation</a>, you cannot edit the map's representation. You can create a new, custom representation in the map's Display Options dialog box. </p>
+
+<p class=kopje>To edit a legend item (for maps with a class domain): </p>
+
+<ul>
+
+<li>Double-click a class or a color listed in the Legend of a map in the Layer Management pane. </li>
+
+</ul>
+
+<p class=kopje>To add other maps to a map window:</p>
+
+<p>To add an existing raster, polygon, segment, or point map to a map window, or to add a map list, or an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text layer</a>: </p>
+
+<ul>
+
+<li>Click with the right mouse button in the white space of the Layer Management pane, and choose <span class=arial>Add Layer</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="../ilwismen/add_layer_to_map_window.htm">Add Layer</a> dialog box will appear. </p>
+
+<p>You can also use the <span class=arial>Add Layer</span> <img src="../images/addlayer.gif" align=bottom width="22" height="22"> button in <a href="map_window_toolbar.htm">toolbar</a> of the map window; press the <span class=arial>Ins</span> key on the keyboard; or <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag and drop</a> <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >multiple maps</a> from a Catalog or from Windows Explorer into a map window. </p>
+
+<p class=kopje>To add grid lines or a graticule:</p>
+
+<p>To add grid lines or a graticule to a map window: </p>
+
+<ul>
+
+<li>Click with the right mouse button in the white space of the Layer Management pane, and choose <span class=arial>Add Grid Lines</span> or <span class=arial>Add Graticule</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="../ilwismen/display_options_grid_lines.htm">Display Options - Grid Lines</a> dialog box or the <a href="../ilwismen/display_options_graticule.htm">Display Options - Graticule</a> dialog box will appear. </p>
+
+<p class=kopje>To remove a layer: </p>
+
+<ul>
+
+<li>Click with the right mouse button on a layer in the Layer Management pane, and choose <span class=arial>Remove Layer</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=linespacing03before>You can also select a layer in the Layer Management pane and use the <span class=arial>Remove Layer</span> <img src="../images/remlayer.gif" align=bottom width="22" height="22"> button in <a href="map_window_toolbar.htm">toolbar</a> of the map window. </p>
+
+<p class=kopje>To edit a map (for maps which are not dependent): </p>
+
+<ul>
+
+<li>Click a map with the right mouse button in the Layer Management pane, and choose <span class=arial>Edit Layer</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=linespacing03before>For more information, refer to <a href="../ilwismen/edit_layer.htm">Map window : Edit layer</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="map_window_overview_window.htm">Map window : overview window</a></p>
+
+<p class=seealsolinks><a href="map_window_toolbar.htm">Map window : toolbar</a></p>
+
+<p class=seealsolinks><a href="map_window_menu_commands.htm">Map window : menu commands</a></p>
+
+<p class=seealsolinks><a href="how_to_use_layers_in_a_map_window.htm">How to use layers in a map window</a></p>
+
+<p></p>
+
+</body

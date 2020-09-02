@@ -1,0 +1,364 @@
+<html>
+
+<head>
+<title>MapCalc/TabCalc : functional overview of operators and functions</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Main window, Table window, Command line, Map calculation, Table calculation, Calculation, MapCalculate, ColumnCalculate, Overview of operators and functions, Arithmetic operators, Logical operators, Relational operators, Aggregate functions, Angular functions, Classify, CLFY, Color functions, Conditional IFF function, Coordinate conversion functions, Coordinate functions, Data property functions, Exponential functions, Hyperbolic functions, INRANGE, Logarithmic functions, NDVI, Point functions, Predefined values, Predefined variables, Random functions, Rounding functions, Sign functions, Statistical functions, String conversion functions, String functions, Trigonometric functions, Undefined functions, Functions, Quick reference for ILWIS calculations">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+
+<h1 class=secondline>Functional overview of operators and functions</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar><b>Operators</b></p>
+
+
+<table cellspacing="0">
+<tr>
+<td>
+<p><a href="#arithmetic_operators">Arithmetic operators</a></p>
+<p><a href="#logical_operators">Logical operators</a></p>
+<p><a href="#relational_operators">Relational operators</a></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar><b>Functions</b></p>
+
+<table cellspacing="0">
+<tr>
+<td width="200">
+<p><a href="#aggregate_functions">Aggregate functions</a></p>
+<p><a href="#angular_functions">Angular functions</a></p>
+<p><a href="#classify_function">Classify function</a></p>
+<p><a href="#color_functions">Color functions</a></p>
+<p><a href="#conditional_iff_function">Conditional IFF function</a></p>
+<p><a href="#coordinate_conversion_functions">Coordinate conversion functions</a></p>
+<p><a href="#coordinate_functions">Coordinate functions</a></p>
+<p><a href="#data_property_functions">Data property functions</a></p>
+<p><a href="#exponential_functions">Exponential functions</a></p>
+<p><a href="#hyperbolic_functions">Hyperbolic functions</a></p>
+<p><a href="#inrange_function">Inrange function</a></p>
+<p><a href="#logarithmic_functions">Logarithmic functions</a></p>
+</td>
+<td>
+<p><a href="#ndvi_function">NDVI function</a></p>
+<p><a href="#point_functions">Point functions</a></p>
+<p><a href="#predefined_values">Predefined values</a></p>
+<p><a href="#predefined_variables">Predefined variables</a></p>
+<p><a href="#random_functions">Random functions</a></p>
+<p><a href="#rounding_functions">Rounding functions</a></p>
+<p><a href="#sign_functions">Sign functions</a></p>
+<p><a href="#statistical_functions">Statistical functions</a></p>
+<p><a href="#string_conversion_functions">String conversion functions</a></p>
+<p><a href="#string_functions">String functions</a></p>
+<p><a href="#trigonometric_functions">Trigonometric functions</a></p>
+<p><a href="#undefined_functions">Undefined functions</a></p>
+
+</td>
+</tr>
+</table>
+
+
+<h2>Operators</h2>
+
+<p class=kopjeboldnound><a id="arithmetic_operators">Arithmetic operators</a></p>
+<p>
+<a href="calc_addition_operator.htm">+</a><br>
+<a href="calc_subtraction_operator.htm">-</a><br>
+<a href="calc_multiplication_operator.htm">*</a><br>
+<a href="calc_division_operator.htm">/</a><br>
+<a href="calc_exponential_operator.htm">^</a><br>
+<a href="calc_modulus_operator.htm">MOD</a><br>
+<a href="calc_integer_division_operator.htm">DIV</a>
+</p>
+
+<p class=kopjeboldnound><a id="logical_operators">Logical operators</a></p>
+<p>
+<a href="calc_and_operator.htm">AND</a><br>
+<a href="calc_or_operator.htm">OR</a><br>
+<a href="calc_xor_operator.htm">XOR</a><br>
+<a href="calc_not_operator.htm">NOT</a>
+</p>
+
+<p class=kopjeboldnound><a id="relational_operators">Relational operators</a></p>
+<table>
+<tr>
+	<td><a href="calc_eq_operator.htm">=</a></td>
+	<td>or <a href="calc_eq_operator.htm">EQ</a></td>
+</tr>
+<tr>
+	<td><a href="calc_lt_operator.htm">&lt;</a></td>
+	<td>or <a href="calc_lt_operator.htm">LT</a></td>
+</tr>
+<tr>
+	<td><a href="calc_le_operator.htm">&lt;=</a></td>
+	<td>or <a href="calc_le_operator.htm">LE</a></td>
+</tr>
+<tr>
+	<td><a href="calc_gt_operator.htm">&gt;</a></td>
+	<td>or <a href="calc_gt_operator.htm">GT</a></td>
+</tr>
+<tr>
+	<td><a href="calc_ge_operator.htm">&gt;=</a></td>
+	<td>or <a href="calc_ge_operator.htm">GE</a></td>
+</tr>
+<tr>
+	<td><a href="calc_ne_operator.htm">&lt;&gt;</a></td>
+	<td>or <a href="calc_ne_operator.htm">NE</a></td>
+</tr>
+</table>
+
+<h2>Functions</h2>
+
+<p class=kopjeboldnound><a id="aggregate_functions">Aggregate functions</a></p>
+<p>
+<a href="calc_aggavg.htm">AGGAVG</a><br>
+<a href="calc_aggcnt.htm">AGGCNT</a><br>
+<a href="calc_aggmin.htm">AGGMIN</a><br>
+<a href="calc_aggmed.htm">AGGMED</a><br>
+<a href="calc_aggmax.htm">AGGMAX</a><br>
+<a href="calc_aggprd.htm">AGGPRD</a><br>
+<a href="calc_aggstd.htm">AGGSTD</a><br>
+<a href="calc_aggsum.htm">AGGSUM</a>
+</p>
+
+<p class=kopjeboldnound><a id="angular_functions">Angular functions</a></p>
+<p>
+<a href="calc_degrad.htm">DEGRAD</a><br>
+<a href="calc_raddeg.htm">RADDEG</a>
+</p>
+
+<p class=kopjeboldnound><a id="classify_function">Classify function</a></p>
+
+<p><a href="calc_clfy.htm">CLFY</a></p>
+
+<p class=kopjeboldnound><a id="color_functions">Color functions</a></p>
+<p>
+<a href="calc_clrred.htm">CLRRED</a><br>
+<a href="calc_clrgreen.htm">CLRGREEN</a><br>
+<a href="calc_clrblue.htm">CLRBLUE</a><br>
+<a href="calc_clryellow.htm">CLRYELLOW</a><br>
+<a href="calc_clrmagenta.htm">CLRMAGENTA</a><br>
+<a href="calc_clrcyan.htm">CLRCYAN</a><br>
+<a href="calc_clrgrey.htm">CLRGREY</a><br>
+<a href="calc_clrhue.htm">CLRHUE</a><br>
+<a href="calc_clrsat.htm">CLRSAT</a><br>
+<a href="calc_clrintens.htm">CLRINTENS</a><br>
+<a href="calc_color.htm">COLOR</a><br>
+<a href="calc_colorhsi.htm">COLORHSI</a><br>
+<a href="calc_mapcolor.htm">MAPCOLOR</a><br>
+<a href="calc_rprcolor.htm">RPRCOLOR</a>
+</p>
+
+<p class=kopjeboldnound><a id="conditional_iff_function">Conditional IFF function</a></p>
+<p>
+<a href="calc_iff.htm">IFF</a>
+</p>
+
+<p class=kopjeboldnound><a id="coordinate_conversion_functions">Coordinate conversion functions</a></p>
+<p>
+<a href="calc_dms.htm">DMS</a><br>
+<a href="calc_degree.htm">DEGREE</a><br>
+<a href="calc_lat.htm">LAT</a><br>
+<a href="calc_lon.htm">LON</a><br>
+<a href="calc_sec.htm">SEC</a>
+</p>
+
+<p class=kopjeboldnound><a id="coordinate_functions">Coordinate functions</a></p>
+<p>
+<a href="calc_coord.htm">COORD</a><br>
+<a href="calc_crdx.htm">CRDX</a><br>
+<a href="calc_crdy.htm">CRDY</a><br>
+<a href="calc_dist.htm">DIST</a><br>
+<a href="calc_dist2.htm">DIST2</a><br>
+<a href="calc_mapcol.htm">MAPCOL</a><br>
+<a href="calc_mapcrd.htm">MAPCRD</a><br>
+<a href="calc_maprow.htm">MAPROW</a><br>
+<a href="calc_mapvalue.htm">MAPVALUE</a><br>
+<a href="calc_maxcrdx.htm">MAXCRDX</a><br>
+<a href="calc_maxcrdy.htm">MAXCRDY</a><br>
+<a href="calc_mincrdx.htm">MINCRDX</a><br>
+<a href="calc_mincrdy.htm">MINCRDY</a><br>
+<a href="calc_rasvalue.htm">RASVALUE</a><br>
+<a href="calc_transform.htm">TRANSFORM</a>
+</p>
+
+<p class=kopjeboldnound><a id="data_property_functions">Data property functions</a></p>
+<p>
+<a href="calc_mapmax.htm">MAPMAX</a><br>
+<a href="calc_mapmin.htm">MAPMIN</a><br>
+<a href="calc_mapcols.htm">MAPCOLS</a><br>
+<a href="calc_maprows.htm">MAPROWS</a><br>
+<a href="calc_pixarea.htm">PIXAREA</a><br>
+<a href="calc_pixsize.htm">PIXSIZE</a><br>
+<a href="calc_tblcols.htm">TBLCOLS</a><br>
+<a href="calc_tblrecs.htm">TBLRECS</a><br>
+<a href="calc_tblvalue.htm">TBLVALUE</a>
+</p>
+
+<p class=kopjeboldnound><a id="exponential_functions">Exponential functions</a></p>
+<p>
+<a href="calc_exp.htm">EXP</a><br>
+<a href="calc_hyp.htm">HYP</a><br>
+<a href="calc_pow.htm">POW</a><br>
+<a href="calc_sq.htm">SQ</a><br>
+<a href="calc_sqrt.htm">SQRT</a><br>
+<a href="..//ilwis/popup/calc_laws_of_exponents_popup.htm" onClick="return popup(this, 'notes')" >Laws of exponents</a>
+</p>
+
+<p class=kopjeboldnound><a id="hyperbolic_functions">Hyperbolic functions</a></p>
+<p>
+<a href="calc_sinh.htm">SINH</a><br>
+<a href="calc_cosh.htm">COSH</a><br>
+<a href="calc_tanh.htm">TANH</a>
+</p>
+
+<p class=kopjeboldnound><a id="inrange_function">Inrange function</a></p>
+<p>
+<a href="calc_inrange.htm">INRANGE</a>
+</p>
+
+<p class=kopjeboldnound><a id="logarithmic_functions">Logarithmic functions</a></p>
+<p>
+<a href="calc_log.htm">LOG</a><br>
+<a href="calc_ln.htm">LN</a><br>
+<a href="..//ilwis/popup/calc_laws_of_logarithms_popup.htm" onClick="return popup(this, 'notes')" >Laws of logarithms</a>
+</p>
+
+<p class=kopjeboldnound><a id="ndvi_function">NDVI function</a></p>
+<p>
+<a href="calc_ndvi.htm">NDVI</a>
+</p>
+
+<p class=kopjeboldnound><a id="point_functions">Point functions</a></p>
+<p>
+<a href="calc_pntcrd.htm">PNTCRD</a><br>
+<a href="calc_pntnr.htm">PNTNR</a><br>
+<a href="calc_pntval.htm">PNTVAL</a>
+</p>
+
+<p class=kopjeboldnound><a id="predefined_values">Predefined values</a></p>
+<p>
+<a href="calc_predefined_values.htm">EXP(1)</a><br>
+<a href="calc_predefined_values.htm">FALSE</a><br>
+<a href="calc_predefined_values.htm">PI</a><br>
+<a href="calc_predefined_values.htm">PI2</a><br>
+<a href="calc_predefined_values.htm">PIDIV2</a><br>
+<a href="calc_predefined_values.htm">PIDIV4</a><br>
+<a href="calc_predefined_values.htm">TRUE</a>
+</p>
+
+<p class=kopjeboldnound><a id="predefined_variables">Predefined variables</a></p>
+<p>
+<a href="calc_predefined_variable_c.htm">%C</a><br>
+<a href="calc_predefined_variable_d.htm">%D</a><br>
+<a href="calc_predefined_variable_k.htm">%K</a><br>
+<a href="calc_predefined_variable_l.htm">%L</a><br>
+<a href="calc_predefined_variable_p.htm">%P</a><br>
+<a href="calc_predefined_variable_r.htm">%R</a><br>
+<a href="calc_predefined_variable_x.htm">%X</a><br>
+<a href="calc_predefined_variable_y.htm">%Y</a>
+</p>
+
+<p class=kopjeboldnound><a id="random_functions">Random functions</a></p>
+<p>
+<a href="calc_rnd.htm">RND</a>
+</p>
+
+<p class=kopjeboldnound><a id="rounding_functions">Rounding functions</a></p>
+<p>
+<a href="calc_ceil.htm">CEIL</a><br>
+<a href="calc_floor.htm">FLOOR</a><br>
+<a href="calc_round.htm">ROUND</a>
+</p>
+
+<p class=kopjeboldnound><a id="sign_functions">Sign functions</a></p>
+<p>
+<a href="calc_abs.htm">ABS</a><br>
+<a href="calc_neg.htm">NEG or -(a)</a><br>
+<a href="calc_sgn.htm">SGN</a>
+</p>
+
+<p class=kopjeboldnound><a id="statistical_functions">Statistical functions</a></p>
+<p>
+<a href="calc_avg.htm">AVG</a><br>
+<a href="calc_chisquare.htm">CHISQUARE</a><br>
+<a href="calc_cnt.htm">CNT</a><br>
+<a href="calc_corr.htm">CORR</a><br>
+<a href="calc_cov.htm">COVAR</a> or <a href="calc_cov.htm">COV</a><br>
+<a href="calc_cum.htm">CUM</a><br>
+<a href="calc_max.htm">MAX</a><br>
+<a href="calc_min.htm">MIN</a><br>
+<a href="calc_std.htm">STD</a> or <a href="calc_std.htm">STDEV</a><br>
+<a href="calc_stderr.htm">STERR</a><br>
+<a href="calc_sum.htm">SUM</a><br>
+<a href="calc_ttest.htm">TTEST</a><br>
+<a href="calc_var.htm">VAR</a>
+</p>
+
+<p class=kopjeboldnound><a id="string_conversion_functions">String conversion functions</a></p>
+<p>
+<a href="calc_code.htm">CODE</a><br>
+<a href="calc_name.htm">NAME</a><br>
+<a href="calc_string.htm">STRING</a><br>
+<a href="calc_value.htm">VALUE</a>
+</p>
+
+<p class=kopjeboldnound><a id="string_functions">String functions</a></p>
+<p>
+<a href="calc_in.htm">IN</a><br>
+<a href="calc_inmask.htm">INMASK</a><br>
+<a href="calc_left.htm">LEFT</a><br>
+<a href="calc_length.htm">LENGTH</a><br>
+<a href="calc_right.htm">RIGHT</a><br>
+<a href="calc_strle.htm">STRLE</a><br>
+<a href="calc_strlt.htm">STRLT</a><br>
+<a href="calc_strge.htm">STRGE</a><br>
+<a href="calc_strgt.htm">STRGT</a><br>
+<a href="calc_strpos.htm">STRPOS</a><br>
+<a href="calc_sub.htm">SUB</a>
+</p>
+
+<p class=kopjeboldnound><a id="trigonometric_functions">Trigonometric functions</a></p>
+<p>
+<a href="calc_sin.htm">SIN</a><br>
+<a href="calc_cos.htm">COS</a><br>
+<a href="calc_tan.htm">TAN</a><br>
+<a href="calc_asin.htm">ASIN</a><br>
+<a href="calc_acos.htm">ACOS</a><br>
+<a href="calc_atan.htm">ATAN</a><br>
+<a href="calc_atan2.htm">ATAN2</a>
+</p>
+
+<p class=kopjeboldnound><a id="undefined_functions">Undefined functions</a></p>
+<p>
+<a href="calc_ifnotundef.htm">IFNOTUNDEF</a><br>
+<a href="calc_ifundef.htm">IFUNDEF</a><br>
+<a href="calc_isundef.htm">ISUNDEF</a><br>
+<a href="calc_assign_undefined_values.htm">Assigning undefined values</a>
+</p>
+
+</body

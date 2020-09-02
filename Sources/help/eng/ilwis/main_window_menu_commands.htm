@@ -1,0 +1,391 @@
+<html><head>
+<title>Main window : menu commands </title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Main window, Menu commands, Operations menu">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<!--last expand nr used: 35 (DEM hydro-processing)-->
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<a id="top">
+<h1 class=firstline>Main window</h1>
+<h1 class=secondline>Menu commands</h1>
+</a>
+
+<table class=menupage border="0" cellspacing="0" width="100%" cellpadding="1">
+<tr bgcolor="#CCCCCC">
+
+<td valign="top" width="20%" align="left" nowrap>&nbsp;<span class=menuheading><u>F</u>ile</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp1,link1)" href="#top"><u>C</u>reate <img src="../images/menuarrt.gif" align="bottom" id="link1" border=0 width="9" height="13"></a><br>
+<DIV ID="exp1" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_point_map.htm">P<u>o</u>int map ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_segment_map.htm"><u>S</u>egment map ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_raster_map.htm"><u>R</u>aster map ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_table.htm"><u>T</u>able ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_map_list.htm">Map <u>L</u>ist ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_an_object_collection.htm">Ob<u>j</u>ect Collection ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_layout.htm">La<u>y</u>out ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_graph.htm">Gra<u>p</u>h ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_domain.htm"><u>D</u>omain ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_representation.htm">R<u>e</u>presentation ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_georeference.htm"><u>G</u>eoreference ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_coordinate_system.htm"><u>C</u>oordinate System ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_sample_set.htm">Sa<u>m</u>ple Set ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_two_dimensional_table.htm"><u>2</u> Dimensional Table ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_filter.htm"><u>F</u>ilter</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_a_function.htm">F<u>u</u>nction</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="script_editor_functionality.htm">Scr<u>i</u>pt</a>
+</div>
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/open_show_map_or_other_object.htm"><u>O</u>pen ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/open_show_object_as_table.htm">Open As <u>T</u>able ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/open_pixel_information_popup.htm" onClick="return popup(this, 'notes')" >Open Pixel <u>I</u>nformation</a><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/create_pyramid_files.htm">Create Pyramid Layers</a><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/main_window_preferences.htm"><u>P</u>references</a><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="../ilwismen/digitizer_setup_digitizer_select_port.htm"><u>S</u>etup Digitizer</a><br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="../ilwismen/digitizer_map_referencing_coordsys.htm">Map <u>R</u>eference</a><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp21,link21)" href="#top"><u>I</u>mport <img src="../images/menuarrt.gif" align="bottom" id="link21" border=0 width="9" height="13"></a><br>
+<DIV ID="exp21" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/import_map.htm"><u>M</u>ap</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/import_table_input_table_name.htm"><u>T</u>able</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/import_general_raster.htm">General <u>R</u>aster</a><br>
+</div>
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/export.htm"><u>E</u>xport ...</a><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/exit_ilwis_popup.htm" onClick="return popup(this, 'notes')" >E<u>x</u>it</a><br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<td valign="top" width="17%" align="left" nowrap>&nbsp;<span class=menuheading><u>E</u>dit</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="..//ilwismen/popup/main_window_copy_popup.htm" onClick="return popup(this, 'notes')" ><u>C</u>opy</a><br>
+&nbsp;<a href="../ilwismen/copy_object_to.htm">Copy Object <u>T</u>o ...</a><br>
+&nbsp;<a href="..//ilwismen/popup/main_window_paste_popup.htm" onClick="return popup(this, 'notes')" ><u>P</u>aste</a><br>
+&nbsp;<a href="..//ilwismen/popup/main_window_delete_popup.htm" onClick="return popup(this, 'notes')" ><u>D</u>elete</a><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="..//ilwismen/popup/main_window_select_all_popup.htm" onClick="return popup(this, 'notes')" >Select <u>A</u>ll</a><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/edit_object.htm"><u>E</u>dit Object</a><br>
+&nbsp;<a href="../ilwismen/view_edit_properties_of.htm">P<u>r</u>operties ...</a><br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<td align="left" valign="top" width="23%" nowrap>&nbsp;<span class=menuheading>O<u>p</u>erations</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+&nbsp;<a onclick="doExpand(exp2,link2)" href="#top">Visuali<u>z</u>ation <img src="../images/menuarrt.gif" align="bottom" id="link2" border=0 width="9" height="13"></a><br>
+<DIV ID="exp2" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/open_show_map_or_other_object.htm"><u>S</u>how Map ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/open_show_map_or_other_object.htm">Show <u>T</u>able ...</a><br>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp3,link3)" href="#top">Show Map<u>L</u>ist ...<img src="../images/menuarrt.gif" align="bottom" id="link3" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp3" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/open_show_map_list_as_color_composite.htm">as <u>C</u>olor Composite</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/open_show_map_list_as_slide_show.htm">as <u>S</u>lide Show</a>
+        </div>
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/display_3d.htm"><u>D</u>isplay 3D ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/apply_3d.htm"><u>A</u>pply 3D ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/anaglyph.htm"><u>A</u>naglyph ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/stereoscope.htm"><u>S</u>tereoscope ...</a>
+</div>
+
+&nbsp;<a onclick="doExpand(exp4,link4)" href="#top"><u>R</u>aster Operations <img src="../images/menuarrt.gif" align="bottom" id="link4" border=0 width="9" height="13"></a><br>
+<DIV ID="exp4" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/map_calculation.htm"><u>M</u>ap Calculate ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/attribute_map_of_raster_map_functionality.htm"><u>A</u>ttribute Map ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/cross_functionality.htm"><u>C</u>ross ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/aggregate_functionality.htm"><u>A</u>ggregate Map ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/distance_calculation_functionality.htm"><u>D</u>istance ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/iteration_functionality.htm"><u>I</u>teration ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/areanumbering_functionality.htm">Area <u>N</u>umbering ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/submap_of_point_map_functionality.htm"><u>S</u>ub Map ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/glue_raster_maps_functionality.htm"><u>G</u>lue Maps ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/mirror_rotate_functionality.htm">Mirror <u>R</u>otate ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwis/smce_window.htm">Spatial Multi-Criteria <u>E</u>valuation ...</a>
+</div>
+
+&nbsp;<a onclick="doExpand(exp5,link5)" href="#top">Image <u>P</u>rocessing <img src="../images/menuarrt.gif" align="bottom" id="link5" border=0 width="9" height="13"></a><br>
+<DIV ID="exp5" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/filter_functionality.htm"><u>F</u>ilter ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/stretch_functionality.htm"><u>S</u>tretch ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/slicing_functionality.htm">S<u>l</u>icing ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/color_separation_functionality.htm">Color Separation ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/color_composite_functionality.htm">Color Composite ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/cluster_functionality.htm">Cluster ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/sampling.htm">S<u>a</u>mple ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/classify_functionality.htm"><u>C</u>lassify ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/resample_functionality.htm"><u>R</u>esample ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/epipolar_stereopair.htm"><u>E</u>pipolar Stereo Pair ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/stereopair_from_dtm.htm">Stereo Pair from DTM ...</a>
+</div>
+
+&nbsp;<a onclick="doExpand(exp6,link6)" href="#top"><u>S</u>tatistics <img src="../images/menuarrt.gif" align="bottom" id="link6" border=0 width="9" height="13"></a><br>
+<DIV ID="exp6" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/histogram_functionality.htm"><u>H</u>istogram ...</a><br>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp7,link7)" href="#top"><u>R</u>aster <img src="../images/menuarrt.gif" align="bottom" id="link7" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp7" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/auto_correlation_semivariance_functionality.htm"><u>A</u>utocorrelation ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/variogram_surface_functionality.htm"><u>V</u>ariogram Surface ...</a><br>
+        </div>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp8,link8)" href="#top"><u>M</u>ap List <img src="../images/menuarrt.gif" align="bottom" id="link8" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp8" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/principal_component_analysis_functionality.htm"><u>P</u>rincipal Components ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/factor_analysis_functionality.htm"><u>F</u>actor Analysis ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/variance_covariance_matrix_functionality.htm"><u>V</u>ariance Covariance ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/correlation_matrix_functionality.htm"><u>C</u>orrelation Matrix ...</a><br>
+        </div>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp9,link9)" href="#top"><u>P</u>olygons <img src="../images/menuarrt.gif" align="bottom" id="link9" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp9" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/neighbour_polygons_functionality.htm"><u>N</u>eighbour Polygons ...</a><br>
+        </div>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp10,link10)" href="#top"><u>S</u>egments <img src="../images/menuarrt.gif" align="bottom" id="link10" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp10" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/segment_direction_histogram_functionality.htm"><u>D</u>irection Histogram ...</a><br>
+        </div>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp11,link11)" href="#top">P<u>o</u>ints <img src="../images/menuarrt.gif" align="bottom" id="link11" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp11" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/spatial_correlation_functionality.htm"><u>S</u>patial Correlation ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/variogram_surface_functionality.htm"><u>V</u>ariogram Surface ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/cross_variogram_functionality.htm"><u>C</u>ross Variogram ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/pattern_analysis_functionality.htm">P<u>a</u>ttern Analysis ...</a><br>
+        </div>
+</div>
+
+&nbsp;<a onclick="doExpand(exp12,link12)" href="#top"><u>I</u>nterpolation <img src="../images/menuarrt.gif" align="bottom" id="link12" border=0 width="9" height="13"></a><br>
+<DIV ID="exp12" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/densify_functionality.htm"><u>D</u>ensify Map ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/kriging_from_raster_functionality.htm"><u>K</u>riging From Raster ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/contour_interpolation_functionality.htm"><u>C</u>ontour Interpolation ...</a><br>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp13,link13)" href="#top"><u>P</u>oint Interpolation <img src="../images/menuarrt.gif" align="bottom" id="link13" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp13" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/nearest_point_functionality_algorithm.htm"><u>N</u>earest Point ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/moving_average_functionality.htm">Moving <u>A</u>verage ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/trend_surface_functionality.htm"><u>T</u>rend Surface ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/moving_surface_functionality.htm">Moving <u>S</u>urface ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/kriging_functionality.htm"><u>K</u>riging ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/anisotropic_kriging_functionality.htm"><u>A</u>nisotropic Kriging ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/universal_kriging_functionality.htm"><u>U</u>niversal Kriging ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/cokriging_functionality.htm"><u>C</u>oKriging ...</a>
+        </div>
+</div>
+
+&nbsp;<a onclick="doExpand(exp14,link14)" href="#top"><u>V</u>ector Operations <img src="../images/menuarrt.gif" align="bottom" id="link14" border=0 width="9" height="13"></a><br>
+<DIV ID="exp14" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/unique_id_functionality.htm"><u>U</u>nique ID ...</a><br>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp15,link15)" href="#top"><u>P</u>olygons <img src="../images/menuarrt.gif" align="bottom" id="link15" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp15" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/attribute_map_of_polygon_map_functionality.htm"><u>A</u>ttribute Map</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/mask_polygons_functionality.htm"><u>M</u>ask Polygons</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/assign_labels_to_polygons_functionality.htm">Assign <u>L</u>abels</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/transform_polygon_map_functionality_algorithm.htm"><u>T</u>ransform Polygons</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/id_grid_map_functionality.htm">ID Grid Map</a>
+        </div>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp16,link16)" href="#top"><u>S</u>egments <img src="../images/menuarrt.gif" align="bottom" id="link16" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp16" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/attribute_map_of_segment_map_functionality.htm"><u>A</u>ttribute Map</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/mask_segments_functionality.htm"><u>M</u>ask Segments</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/assign_labels_to_segments_functionality.htm">Assign <u>L</u>abels</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/submap_of_segment_map_functionality.htm"><u>S</u>ub Map</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/glue_segment_maps_functionality.htm"><u>G</u>lue Maps</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/densify_segment_coordinates_functionality_algorithm.htm"><u>D</u>ensify Coordinates</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/transform_segment_map_functionality_algorithm.htm"><u>T</u>ransform Segments</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/tunnel_segments_functionality_algorithm.htm">T<u>u</u>nneling</a>
+        </div>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp17,link17)" href="#top">P<u>o</u>ints <img src="../images/menuarrt.gif" align="bottom" id="link17" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp17" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/attribute_map_of_point_map_functionality.htm"><u>A</u>ttribute Map</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/mask_points_functionality.htm"><u>M</u>ask Points</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/submap_of_point_map_functionality.htm"><u>S</u>ub Map</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/glue_point_maps_functionality.htm"><u>G</u>lue Maps</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/transform_point_map_functionality_algorithm.htm"><u>T</u>ransform Points</a>
+        </div>
+
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp28,link28)" href="#top">Coordinates <img src="../images/menuarrt.gif" align="bottom" id="link28" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp28" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/transform_coordinates.htm">Transform <u>C</u>oordinates</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/find_datum_trans_params_inputpage.htm">Find <u>D</u>atum Parameters</a>
+		</div>
+</div>
+
+&nbsp;<a onclick="doExpand(exp18,link18)" href="#top">R<u>a</u>sterize <img src="../images/menuarrt.gif" align="bottom" id="link18" border=0 width="9" height="13"></a><br>
+<DIV ID="exp18" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/polygons_to_raster_functionality.htm"><u>P</u>olygons to Raster ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/segments_to_raster_functionality.htm"><u>S</u>egments to Raster ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/segment_density_functionality.htm">Segment <u>D</u>ensity ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/points_to_raster_functionality.htm">P<u>o</u>ints to Raster ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/point_density_functionality.htm">Point <u>D</u>ensity ...</a></div>
+
+&nbsp;<a onclick="doExpand(exp19,link19)" href="#top">V<u>e</u>ctorize <img src="../images/menuarrt.gif" align="bottom" id="link19" border=0 width="9" height="13"></a><br>
+<DIV ID="exp19" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/raster_to_polygons_functionality.htm"><u>R</u>aster to Polygons ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/raster_to_segments_functionality.htm"><u>R</u>aster to Segments ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/raster_to_points_functionality.htm"><u>R</u>aster to Points ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/polygons_to_segments_functionality_algorithm.htm"><u>P</u>olygons to Segments ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/polygons_to_points_functionality.htm"><u>P</u>olygons to Points ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/segments_to_polygons_functionality.htm"><u>S</u>egments to Polygons ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/segments_to_points_functionality.htm"><u>S</u>egments to Points ...</a>
+</div>
+
+&nbsp;<a onclick="doExpand(exp20,link20)" href="#top"><u>T</u>able Operations <img src="../images/menuarrt.gif" align="bottom" id="link20" border=0 width="9" height="13"></a><br>
+<DIV ID="exp20" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/transpose_table_functionality.htm"><u>T</u>ranspose Table ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/change_domain_of_table_functionality_algorithm.htm"><u>C</u>hange Domain of Table ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/table_to_point_map_functionality_algorithm.htm">Table to P<u>o</u>int Map ...</a><br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/glue_tables_functionality_algorithm.htm"><u>G</u>lue Tables ...</a>
+</div>
+
+&nbsp;<a onclick="doExpand(exp27,link27)" href="#top">DEM Hydro-Processing <img src="../images/menuarrt.gif" align="bottom" id="link27" border=0 width="9" height="13"></a><br>
+<DIV ID="exp27" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/dem_visualization.htm">DEM Visualization ...</a><br>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp31,link31)" href="#top">Flow Determination <img src="../images/menuarrt.gif" align="bottom" id="link31" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp31" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/fill_sinks_functionality.htm">Fill <u>S</u>inks ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/flow_direction_functionality.htm">Flow <u>D</u>irection ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/flow_accumulation_functionality.htm">Flow <u>A</u>ccumulation ...</a><br>
+		</div>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp32,link32)" href="#top">Flow Modification <img src="../images/menuarrt.gif" align="bottom" id="link32" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp32" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/dem_optimization_functionality.htm">DEM <u>O</u>ptimization ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/topological_optimization_functionality.htm">Topological Optimization ...</a><br>
+	</div>
+&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/variable_threshold_computation_functionality.htm">Variable threshold computation ...</a><br>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp33,link33)" href="#top">Network and Catchment Extraction <img src="../images/menuarrt.gif" align="bottom" id="link33" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp33" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/drainage_network_extraction_functionality.htm">Drainage network extraction ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/drainage_network_ordering_functionality.htm">Drainage network ordering ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/catchment_extraction_functionality.htm">Catchment extraction ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/catchment_merge_functionality.htm">Catchment merge ...</a><br>
+		</div>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp34,link34)" href="#top">Compound Parameter Extraction <img src="../images/menuarrt.gif" align="bottom" id="link34" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp34" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/overland_flow_length_functionality.htm">Overland flow length ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/compound_parameter_extraction.htm">Compound Index Calculation ...</a><br>
+		</div>
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp35,link35)" href="#top">Statistical Parameter Extraction <img src="../images/menuarrt.gif" align="bottom" id="link35" border=0 width="9" height="13"></a><br>
+        <DIV ID="exp35" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/horton_statistics_functionality.htm">Horton Statistics ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/aggregate_statistics.htm">Aggregate Statistics ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/cumulative_hypsometric_curve.htm">Cumulative Hypsometric Curve ...</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwisapp/class_coverage_statistics.htm">Class Coverage Statistics ...</a><br>
+		</div>
+</div>
+&nbsp;<a onclick="doExpand(exp29,link29)" href="#top">Script <img src="../images/menuarrt.gif" align="bottom" id="link29" border=0 width="9" height="13"></a><br>
+<DIV ID="exp29" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwis/how_to_customize_the_operation_list.htm#scripts"><i>Additional scripts</i></a><br>
+</div>
+
+&nbsp;<a onclick="doExpand(exp30,link30)" href="#top">Tools <img src="../images/menuarrt.gif" align="bottom" id="link30" border=0 width="9" height="13"></a><br>
+<DIV ID="exp30" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<a href="../ilwis/how_to_customize_the_operation_list.htm#tools"><i>Additional external tools</i></a><br>
+</div>
+
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>V</u>iew</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="../ilwismen/catalog_list_view.htm"><u>L</u>ist</a><br>
+<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="../ilwismen/catalog_details_view.htm"><u>D</u>etails</a><br>
+
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+&nbsp;&nbsp;<a href="../ilwismen/customize_catalog_selection.htm"><u>C</u>ustomize Catalog ...</a><br>
+
+&nbsp;&nbsp;<a onclick="doExpand(exp24,link24)" href="#top"><u>S</u>how <img src="../images/menuarrt.gif" align="bottom" id="link24" border=0 width="9" height="13"></a><br>
+<DIV ID="exp24" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="../ilwismen/catalog_show.htm">Maps and tables</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="../ilwismen/catalog_show.htm">All data objects</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="../ilwismen/catalog_show.htm">All objects</a><br>
+</div>
+&nbsp;&nbsp;<a onclick="doExpand(exp25,link25)" href="#top">Sort <u>B</u>y <img src="../images/menuarrt.gif" align="bottom" id="link25" border=0 width="9" height="13"></a><br>
+<DIV ID="exp25" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="../ilwismen/catalog_sort_by.htm">Name</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="../ilwismen/catalog_sort_by.htm">Type</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="../ilwismen/catalog_sort_by.htm">Modified</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/catalog_sort_by.htm">Etc.</a>
+</div>
+&nbsp;&nbsp;<a onclick="doExpand(exp26,link26)" href="#top">Catalog <u>Q</u>ueries <img src="../images/menuarrt.gif" align="bottom" id="link26" border=0 width="9" height="13"></a><br>
+<DIV ID="exp26" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="../ilwismen/catalog_predefined_query.htm">All</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="../ilwismen/catalog_predefined_query.htm">All objects made today</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/catalog_predefined_query.htm">Etc.</a>
+</div>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_toolbar_main_popup.htm" onClick="return popup(this, 'notes')" >S<u>t</u>andard Toolbar</a><br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_toolbar_main_objsel_popup.htm" onClick="return popup(this, 'notes')" >Object Selection Toolbar</a><br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_operation_list_popup.htm" onClick="return popup(this, 'notes')" ><u>O</u>peration-List/Navigator</a><br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_command_line_main_popup.htm" onClick="return popup(this, 'notes')" >Co<u>m</u>mand Line</a><br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_status_bar_main_popup.htm" onClick="return popup(this, 'notes')" >Status Bar</a><br>
+
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>W</u>indow</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/new_catalog.htm"><u>N</u>ew Catalog</a><br>
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/main_window_refresh_popup.htm" onClick="return popup(this, 'notes')" ><u>R</u>efresh</a><br>
+
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp23,link23)" href="#top"><u>A</u>rrange Catalogs <img src="../images/menuarrt.gif" align="bottom" id="link23" border=0 width="9" height="13"></a><br>
+<DIV ID="exp23" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="..//ilwismen/popup/main_window_arrange_catalogs_popup.htm" onClick="return popup(this, 'notes')" ><u>C</u>ascade</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="..//ilwismen/popup/main_window_arrange_catalogs_popup.htm" onClick="return popup(this, 'notes')" >Tile <u>H</u>orizontally</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13"><a href="..//ilwismen/popup/main_window_arrange_catalogs_popup.htm" onClick="return popup(this, 'notes')" >Tile <u>V</u>ertically</a><br>
+</div>
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/main_window_close_all_catalogs_popup.htm" onClick="return popup(this, 'notes')" ><u>C</u>lose All Catalogs</a><br>
+
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp22,link22)" href="#top"><u>D</u>ata Windows <img src="../images/menuarrt.gif" align="bottom" id="link22" border=0 width="9" height="13"></a><br>
+<DIV ID="exp22" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/main_window_data_windows_close_minimize_restore_all_popup.htm" onClick="return popup(this, 'notes')" ><u>C</u>lose All</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/main_window_data_windows_close_minimize_restore_all_popup.htm" onClick="return popup(this, 'notes')" ><u>M</u>inimize All</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/main_window_data_windows_close_minimize_restore_all_popup.htm" onClick="return popup(this, 'notes')" ><u>R</u>estore All</a><br>
+</div>
+
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/main_window_switch_to_catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog 1</a><br>
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/main_window_switch_to_catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog 2</a><br>
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/main_window_switch_to_catalog_popup.htm" onClick="return popup(this, 'notes')" >Object Collection &quot;OBC&quot;</a><br>
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/main_window_switch_to_catalog_popup.htm" onClick="return popup(this, 'notes')" >Map List &quot;SPOT99&quot;</a><br>
+&nbsp;&nbsp;&nbsp;Etc.<br>
+
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+</tr>
+</table>
+
+</body

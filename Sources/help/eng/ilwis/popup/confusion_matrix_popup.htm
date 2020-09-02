@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>confusion matrix popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Confusion matrix</p>
+
+<p class=linespacing03after>To access the accuracy of an image classification, it is common practice to create a <a href="..//ilwismen/confusion_matrix.htm" onClick="return popup(this, 'notes')" >confusion matrix</a>. In a confusion matrix, your classification results are compared to additional ground truth information.</p>
+
+<p class=linespacing03after>To obtain a confusion matrix, you require a raster map with ground truth information (which has not been used to train the classifier); cross this map with your classification result, and display the cross table; finally, choose the <span class=arial><a href="..//ilwismen/confusion_matrix.htm" onClick="return popup(this, 'notes')" >Confusion matrix</a></span> command from the View menu in the table window. </p>
+
+<p class=linespacing03after>For more information, refer to <a href="..//ilwis/how_to_calculate_confusion_matrix.htm" onClick="return popup(this, 'notes')" >How to calculate a confusion matrix</a>. 
+
+</body

@@ -1,0 +1,245 @@
+<html>
+
+<head>
+<title>Import Table wizard - View File (only for ASCII tables)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table import, Import table wizard">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table class=headingblue cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Import Table wizard</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">Main window, File menu</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>View File (ASCII tables only)</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="import_table_select_table_format.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="import_table_edit_column_details.htm">Next</a>&nbsp;&gt;
+</tr>
+</table>
+
+<!--<hr>-->
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>This page is only shown when you are importing: </p>
+
+<p class=tiptext><span class=emptylinehalf>&nbsp;</span></p>
+
+<ul class=tipul>
+
+<li>an ASCII table in ILWIS 1.4 format, 
+
+<li>an ASCII table in comma delimited format, </li>
+
+<li>an ASCII table in space delimited format, or </li>
+
+<li>an ASCII table in fixed format. </li>
+
+</ul>
+
+<p class=tiptext><span class=emptylinehalf>&nbsp;</span></p>
+
+<p class=tiptext>When importing a dBase DBF file, this page is skipped; you can click <span class=arial>Next</span> at the top of this page. </p>
+
+<p class=diakopje>Page options:</p>
+
+<p class=diabox>The first 100 lines of the ASCII file are shown in a list box. </p>
+
+<p class=defnewpar>You can use this page to inspect the contents of your ASCII table. </p>
+
+<ul>
+
+<li>You can determine for instance whether you selected the correct format on the previous page (see the <a href="#additional_info"><span class=bookmark>Additional information</span></a> below). </li>
+
+<li>For Fixed format, you can count the number of characters used by a column; this is necessary for the next page. </li>
+
+</ul>
+
+<p>If you wish to change the format that should be used to import the file, click the <span class=arial>Back</span> button; on the <a href="import_table_select_table_format.htm">Select Table Format</a> page, select another format; then click the <span class=arial>Next</span> button to return to this <span class=arial>View File</span> page again. </p>
+
+<p class=defnewpar>After clicking the <span class=arial>Next</span> button, the <b><a href="../ilwismen/import_table_edit_column_details.htm">Import Table - Edit Column Details</a></b> can be used to specify the name and type of domain for each column, and, optionally, specify a domain for the table. </p>
+
+<h2 id="additional_info">Additional information</h2>
+
+<p class=kopjeaftertitlesub>ILWIS 1.4 format:</p>
+
+<p>A file that is in ILWIS 1.4 table format may look like: </p> 
+
+<table cellspacing=1>
+<tr>
+<td>
+<p class=courier>col1#&nbsp;col2$&nbsp;col3%&nbsp;col4&amp;&nbsp;#1</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>45&nbsp;abc&nbsp;999&nbsp;0.045</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>44&nbsp;defghij&nbsp;25&nbsp;0.061</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>48&nbsp;xxyyz&nbsp;31&nbsp;0.075</p>
+</td>
+</tr>
+</table>
+
+<p class=linespacing03before>The first line is a header which defines the column types, and sets the record numbers: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p><i>colname</i><span class=courier>$</span></p>
+
+</td>
+<td valign="top">
+<p>column stores any strings or characters</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><i>colname</i><span class=courier>#</span></p>
+
+</td>
+<td valign="top">
+<p>column stores byte values (whole positive numbers between 0 and 255)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><i>colname</i><span class=courier>%</span></p>
+
+</td>
+<td valign="top">
+<p>column stores integer values (whole numbers between -32766 and 32767)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><i>colname</i><span class=courier>!</span></p>
+
+</td>
+<td valign="top">
+<p>column stores long integer values (whole numbers between - 2 billion to 2 billion)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><i>colname</i><span class=courier>&amp;</span></p>
+
+</td>
+<td valign="top">
+<p>column stores real values (values with decimals)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><span class=courier>#</span><i>number</i></p>
+
+</td>
+<td valign="top">
+<p>the offset of the record numbers in the table, <span class=courier>#1</span> means that the first record is record number <span class=courier>1</span>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In a record, a field is separated from a next field by a space. </p>
+
+<p class=kopje>Comma delimited format:</p>
+
+<p>A file that is comma delimited may look like: </p> 
+
+<table cellspacing=1>
+<tr>
+<td>
+<p class=courier>1,45,abc,999,0.045</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>2,44,defghij,25,0.061</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>3,48,xxyyz,31,0.075</p>
+</td>
+</tr>
+</table>
+
+<p class=linespacing03before>In a record, a field is separated from a next field by a comma. </p>
+
+<p class=kopje>Space delimited format:</p>
+
+<p>A file that is space delimited may look like: </p> 
+
+<table cellspacing=1>
+<tr>
+<td>
+<p class=courier>1&nbsp;45&nbsp;abc&nbsp;999&nbsp;0.045</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>2&nbsp;44&nbsp;defghij&nbsp;25&nbsp;0.061</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>3&nbsp;48&nbsp;xxyyz&nbsp;31&nbsp;0.075</p>
+</td>
+</tr>
+</table>
+
+<p class=linespacing03before>In a record, a field is separated from a next field by (at least) one space or (at least) one tab. </p>
+
+<p class=kopje>Fixed format (Standard format):</p>
+
+<p>A file that is in fixed format (also called standard format) may look like: </p> 
+
+<table cellspacing=1>
+<tr>
+<td>
+<p class=courier>1&nbsp;45&nbsp;abc&nbsp;&nbsp;&nbsp;&nbsp;999&nbsp;0.0450.4</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>2&nbsp;44&nbsp;defghij&nbsp;25&nbsp;0.0610.5</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=courier>3&nbsp;48&nbsp;xxyyz&nbsp;&nbsp;&nbsp;31&nbsp;0.0750.7</p>
+</td>
+</tr>
+</table>
+<p class=linespacing03before>In every record, a certain field starts at the same specific position. Positions without information are supposed to be filled with spaces. </p>
+
+<p>As you can see, subsequent fields are not necessarily separated from one another by a separator (last 2 'columns'). </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/import_table_edit_column_details.htm">Import Table - Edit Column Details</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_import_data.htm">How to import data</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwistableimport_commandline">Appendices : ILWIS script language (syntax), section ILWIS Table import</a></p>
+
+</body

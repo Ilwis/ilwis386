@@ -1,0 +1,194 @@
+<html>
+
+<head>
+<title>Area numbering : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Area numbering, 8-connected, 4-connected">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Area numbering</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Area numbering assigns unique pixel values in an output map for connected areas (areas consisting of pixels with the same value, class name, or ID) in an input map. Area numbering breaks down mapping units which may occur in several places in your input map (e.g. a province including some islands, all having the same pixel value), into uniquely codified connected areas (e.g. the mainland and each island separately codified.)</p>
+
+<p class=defnewpar>The output of Area numbering is a map in which these connected areas are codified as Area 1, Area 2, etc. Furthermore, an attribute table is created for the output map. The table contains the new IDs; the class names, IDs, or values of the original mapping units; and the size (npix and area) of the unique output units. </p>
+
+<p class=defnewpar>The uniquely codified areas may be useful:</p>
+
+<ul>
+
+<li>	if you want to perform a cross operation with another map and you want to distinguish each connected area separately instead of mapping units, or</li>
+
+<li>	if you want to add special attribute information to each connected area, instead of to the mapping units.</li>
+
+</ul>
+
+<p id="eightfourconnected" class=kopje>4-connectivity versus 8-connectivity:</p>
+
+<p>Area numbering can recognise connected areas either as:</p>
+
+<ul>
+
+<li>	pixels with the same pixel value which are horizontally or vertically connected to each other (4-connected), or as</li>
+
+<li>	pixels with the same pixel value which are horizontally, vertically or diagonally connected to each other (8-connected).</li>
+
+</ul>
+
+<p class=defnewpar>Below, a representation of 4 and 8-connectivity is presented; the program is looking at 4 or at 8 neighbours.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>4-connectivity:</p>
+
+</td>
+<td valign="top">
+<p>8-connectivity:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/4connect.gif" align=bottom width="64" height="64"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/8connenc.gif" align=bottom width="64" height="64"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Using 4-connectivity results in 4-connected areas in the output map, using 8-connectivity results in 8-connected areas in the output map. Using 8-connectivity results in a smaller number of connected areas and smoother boundaries of these areas. </p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>In the dialog box, you can only select raster maps with a class, ID, or <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >Bool</a> domain. </p>
+
+<p>On the command line, there are no special requirements for the input map.</p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output map and the attribute table will use an internally defined <span class=courier>UniqueID</span> domain; the IDs have names like Area 1, Area 2, etc. The domain is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </p>
+
+<p>The output map uses the same georeference as the input map. </p>
+
+<p class=kopje>Attribute table for output map:</p>
+
+<p>An attribute table will be automatically created for the output map. The table contains the new IDs; the class names, IDs, or values of the original mapping units; and the size (npix and area) of the unique output units. </p>
+
+<p class=kopje>Example area numbering 4-connected:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>Input map:</p>
+
+</td>
+<td valign="top">
+<p>Output map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/arntmp.gif" align=bottom width="127" height="127"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/arntmp2.gif" align=bottom width="127" height="127"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The order of the numbering in the output map is defined as from left to right line by line, and from top to bottom.</p>
+
+<ul>
+
+<li>	Using 4-connectivity results in 4-connected areas in the output map.</li>
+
+<li>	Mapping unit 5 of the input map is divided into three 4-connected areas in the output map (3, 6, 7) because only horizontal and vertical neighbours were valid to construct new areas.</li>
+
+<li>	Mapping unit 8 of the input map is divided into three connected areas in the output map (1, 5, 8) because the individual parts are not neighbouring each other.</li>
+
+</ul>
+
+<p class=kopje>Example area numbering 8-connected:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>Input map:</p>
+
+</td>
+<td valign="top">
+<p>Output map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/arntmp.gif" align=bottom width="127" height="127"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/arntmp3.gif" align=bottom width="127" height="127"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The order of the numbering in the output map is defined as from left to right line by line, and from top to bottom.</p>
+
+<ul>
+
+<li> Using 8-connectivity results in 8-connected areas in the output map. </li>
+
+<li> Mapping unit 5 in the input map remains one 8-connected area in the output map (3) because horizontal, vertical and diagonal neighbours were valid to construct new areas. </li>
+
+<li> Mapping unit 8 in the input map is divided into three areas in the output map (1, 5, 6) because the individual parts are not neighbouring each other.</li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>For more information on internal domains and representations, refer to <a href="../ilwis/how_to_open_internal_domains_representations_advanced.htm">How to open internal domains/representations</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="areanumbering_dialogbox.htm">Area numbering : dialog box</a></p>
+
+<p class=seealsolinks><a href="areanumbering_commandline.htm">Area numbering : command line</a></p>
+
+<p class=seealsolinks><a href="areanumbering_algorithm.htm">Area numbering : algorithm</a></p>
+
+</body

@@ -1,0 +1,82 @@
+<html>
+
+<head>
+<title>SMCE window : Generate All Maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Generate, Composite Index maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Generate menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Generate All Maps</span>&nbsp;&nbsp;&nbsp;<img src="../images/smce_generate_all_composite_index_maps_icon.gif" align="bottom" width="23" height="23"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Generate all composite index maps, i.e. the SMCE output maps for all alternatives, including all intermediate maps. 
+	
+	A composite index map contains the accumulated suitability for all criteria, standardized and weighed as specified in the criteria tree. </p>
+
+<p class=defnewpar>Composite index maps have values between 0 and 1: </p>
+	<ul>
+		<li>pixels with values near 0 represent unsuitable areas, </li>
+		<li>pixels with values near 1 represent suitable areas.</li>
+	</ul>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+	<li>when you choose <span class=arial>All Maps</span> from the <a href="../ilwis/smce_window_menu_commands.htm">Generate menu</a> in the SMCE window;</li>
+	<li>when you click the <span class=arial>Generate All Maps</span> button in the <a href="../ilwis/smce_window_toolbar.htm">toolbar</a> of the SMCE window.</li>
+	
+</ul>                                                                                                                                                                                                                                                                                                                                
+<p class=diakopje>Dialog box options:</p>
+<table cellspacing=0>
+  <tr>
+    <td valign="top" width=144><p class=diabox>Show after calculation:</p></td>
+
+    <td valign="top"><p class=diabox>Select this check box if you wish to show all intermediate maps and all output Composite Index maps immediately after calculation. By default the check box is selected.<br>
+	
+		Clear this check box to only calculate the maps. </p></td>
+  </tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>To calculate a single output map or to calculate the intermediate maps of a certain subgoal, use <a href="../ilwismen/smce_window_generate_selected_map.htm">Generate Selected Maps</a>.</p>
+
+<p class=defnewpar>Composite Index maps (SMCE output maps) use <a href="..//ilwis/popup/yy_system_domain_nilto1_popup.htm" onClick="return popup(this, 'notes')" >system domain Nilto1</a> and a matching representation from red (0, unsuitable) to green (1, suitable). </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a></p>
+
+</body

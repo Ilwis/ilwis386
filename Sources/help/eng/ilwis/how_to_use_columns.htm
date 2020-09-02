@@ -1,0 +1,151 @@
+<html>
+
+<head>
+<title>How to use columns</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to use ..., Columns, Use ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to use columns</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A table is dispalyed in a <a href="..//ilwis/popup/table_window_popup.htm" onClick="return popup(this, 'notes')" >table window</a>. </p>
+
+<p class=defnewpar>A table consists of <a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >columns</a>, records and fields. Schematically, this looks like: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/tableexample.gif" align=bottom width="257" height="76"></p>
+
+<p class=defnewpar><b>Record names</b> or <b>record numbers</b> appear on (gray) record buttons that are arranged along the left side of the table. </p>
+
+<p class=defnewpar><b>Column names</b> appear on (gray) column buttons, also called column headers, arranged along the top of the table viewer. </p>
+
+<p class=kopje>To add a column to a table:</p>
+
+<p>To add a column to a table, see <a href="how_to_add_a_column_to_a_table.htm">How to add a column to a table</a>.</p>
+
+<p class=kopje>To delete one or more columns from a table:</p>
+
+<p>To delete one or more columns from a table, see <a href="../ilwismen/delete_selection_from_table.htm">Table window : Delete</a>.</p>
+
+<p class=kopje>To rename a column:</p>
+
+<p>Columns cannot be renamed.</p>
+
+<p class=kopje>To change the width of columns:</p>
+
+<ul>
+
+<li>position the mouse pointer at the end of a column, </li>
+
+<li>the mouse pointer will change into a double-sided arrow, </li>
+
+<li>drag the mouse pointer to the right to make the column wider, or drag the mouse pointer to left to make the column narrower. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/tablecolumnwidth.gif" align=bottom width="272" height="75"></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>You can also use the <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box. </p>
+
+<p class=kopje>To change the order of columns:</p>
+
+<ul>
+
+<li>click the column header of the column you wish to move, and hold the left mouse button down, </li>
+
+<li>the mouse pointer will change into a column icon <img src="../images/columngray.gif" align=bottom width="13" height="14">, and </li>
+
+<li>drag the column to another position. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/tablecolumnmove.gif" align=bottom width="272" height="75"></p>
+
+<p class=defnewpar>You can also use the <a href="../ilwismen/column_management.htm">Column Management</a> dialog box where you can drag columns to another position in the list. </p>
+
+<p class=kopje>To sort a table on the values in a column:</p>
+
+<ul>
+
+<li>choose <span class=arial><a href="../ilwismen/sort_records.htm">Sort</a></span> from the <a href="table_window_menu_commands.htm">Columns menu</a>, or </li>
+
+<li>select a column by clicking a column header, then click the selection with the right mouse button and choose <span class=arial>Sort Ascending</span> or <span class=arial>Sort Descending</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p>The <a href="../ilwismen/sort_records.htm">Sort Records</a> dialog box will be opened. You can sort on the domain of the table or sort on a column of the table, either in ascending or descending order. </p>
+
+<p class=kopje>To view and/or change the properties of a column:</p>
+
+<ul>
+
+<li>double-click a column header, </li>
+
+<li>select a column, and click the <span class=arial>Properties</span> button <img src="../images/prop.gif" align=bottom width="22" height="22"> in the toolbar, or </li>
+
+<li>select a column, click the selection with the right mouse button and choose <span class=arial>Properties</span> from the context-sensitive menu. </li>
+
+</ul>
+
+<p>The <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box will be opened. </p>
+
+<p class=defnewpar>You can also use the <a href="../ilwismen/column_management.htm">Column Management</a> dialog box to open a Column Properties dialog box. </p>
+
+<p class=kopje>To recalculate all columns:</p>
+
+<p><a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent columns</a> are not up-to-date anymore after you edited fields in columns on which the dependent columns depend. </p>
+
+<p class=defnewpar>To update all dependent columns in a table: </p>
+
+<ul>
+
+<li>click the <span class=arial>Update All Columns</span> button <img src="../images/table_update_all_cols.gif" align=bottom width="22" height="22"> in the <a href="table_window_toolbar.htm">toolbar</a>, or </li>
+
+<li>choose <span class=arial><a href="../ilwismen/update_all_columns.htm">Update All Columns</a></span> from the <a href="table_window_menu_commands.htm">Columns menu</a>. </li>
+
+</ul>
+
+<p class=kopje>To copy columns to the clipboard:</p>
+
+<p>To copy table data to the clipboard, see <a href="../ilwismen/copy_table_selection_to_clipboard.htm">Table window : Copy</a>. </p>
+
+<p class=kopje>To paste something from the clipboard into a column:</p>
+
+<p>To paste data from the clipboard into a table, see <a href="../ilwismen/paste_table_data_into_table_window.htm">Table window : Paste</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_toolbar.htm">Table window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_menu_commands.htm">Table window : menu commands</a></p>
+
+</body

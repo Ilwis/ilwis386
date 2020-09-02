@@ -1,0 +1,266 @@
+<html>
+
+<head>
+<title>Cross : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cross, MapCross, TableCross">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Cross</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar><a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a> can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableCross</span>(FirstInputMap, SecondInputMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableCross</span>(FirstInputMap, SecondInputMap, OUTMAP)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable></p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable></p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableCross</span>(FirstInputMap, SecondInputMap [, OUTMAP] , <span class=courier>IgnoreUndefs</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableCross</span>(FirstInputMap, SecondInputMap [, OUTMAP] , <span class=courier>IgnoreUndef1</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableCross</span>(FirstInputMap, SecondInputMap [, OUTMAP] , <span class=courier>IgnoreUndef2</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTTABLE</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output cross table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to create an output cross map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>TableCross</p>
+
+</td>
+<td valign="top">
+<p>is the command to start cross and produce an output cross table (optionally with an output cross map).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>FirstInputMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of your first input raster map (any domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>SecondInputMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of your second input raster map (any domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>IgnoreUndefs</p>
+
+</td>
+<td valign="top">
+<p>an optional parameter to ignore undefined values in both maps; in the output cross table combinations with undefined values will not appear. <br>
+When the parameter is not used, the output cross table will also show combinations with undefined values.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>IgnoreUndef1</p>
+
+</td>
+<td valign="top">
+<p>an optional parameter to ignore undefined values of the first input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>IgnoreUndef2</p>
+
+</td>
+<td valign="top">
+<p>an optional parameter to ignore undefined values of the second input map.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Alias:</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCross</span>(FirstInputMap, SecondInputMap, OUTTABLE)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output cross map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapCross</p>
+
+</td>
+<td valign="top">
+<p>is the command to start cross and produce an output cross map and an output cross table.</p>
+
+</td>
+</tr>
+</table>
+
+<p>For other parameters, see above.</p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> and/or a dependent map are created; when the assignment symbol := is used, dependency links are immediately broken after the output table and/or map have been calculated.</p>
+
+<p class=defnewpar>Furthermore, an ID domain is created (same name as cross table) which contains the combinations of domain items of both input maps. When an input map has a class or ID domain in which the class names or IDs have <i>codes</i>, then these codes will appear in the output domain.</p>
+
+<!--<p>When crossing two <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>, or maps with very many classes or IDs, the number of combinations of input map values may be larger than 16000. In this case, the output cross domain will <i>not</i> be sorted. When you open the output cross table, you can sort on columns, calculate with columns and perform column aggregations as usual.</p>-->
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cross_functionality.htm">Cross : functionality</a></p>
+
+</body

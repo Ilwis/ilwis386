@@ -1,0 +1,517 @@
+<html>
+
+<head>
+<title>ILWIS objects : coordinate system</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Coordinate system, ILWIS objects, Service objects, Projections, Coordinates, CSY">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Coordinate system&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/coordsy.gif" align=bottom width="15" height="15"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A coordinate system contains information on the kind of coordinates you are using in your maps; you may for instance use user-defined coordinates, coordinates defined by a national standard or coordinates of a certain UTM zone. A coordinate system defines the possible XY- or LatLon-coordinates that can be used in your maps. </p>
+
+<p class=defnewpar>Point, segment and polygon maps always have a coordinate system. Raster maps have a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> which uses a coordinate system. A coordinate system is a <a href="ilwis_objects_service_objects.htm">service object</a> for point, segment and polygon maps, and for georeferences of raster maps. </p>
+
+<p class=defnewpar>In ILWIS, XY-coordinates are supposed to be in meters and the 90<span class=symbollarger>°</span> angle between the positive X-axis and the positive Y-axis is counter-clockwise.</p>
+
+<p class=kopje>Coordinate system types:</p>
+
+<p>There are five main types of coordinate systems:</p>
+
+<ul>
+
+<li>	<b>coordinate system boundary only</b>: to define XY-coordinates for maps by only specifying the boundaries of your study area. This type of coordinate system should only be used when you are sure that you will not use projections at all; furthermore, <i>maps using a coordinate system boundary only, cannot be transformed into any other coordinate system.</i></li>
+
+<li>	<b>coordinate system projection</b>: to define XY-coordinates for maps by specifying the boundaries of your study area and when you want to have the possibility to add projection information, ellipsoid information and/or datum information. You can add the projection information later on or right away. Maps with different coordinate systems and different projections can be transformed into one another.</li>
+
+<li>	<b>coordinate system latlon</b>: to define LatLon-coordinates for maps by specifying the boundaries of your study area in Latitudes and Longitudes and when you want to have the possibility to add ellipsoid information and/or datum information. You can add the ellipsoid information and/or datum information later on or right away. </li>
+
+        <p>Coordinate systems of type latlon are suitable to store data; for display and/or printing purposes (map view and layout), it is advised to use a coordinate system of type projection in a map window. </p>
+
+<li>	<b>coordinate system formula</b>: when you obtained data which is using different XY-coordinates than the coordinate system of your project, and when you know the relation between the two coordinate systems. You can create a coordinate system formula for maps with artificial coordinates, i.e. starting at (0,0) or digitized in millimeters. The coordinate system formula uses a 'related' coordinate system; this is the coordinate system with correct coordinates. When you have defined the formula and when the map with artificial coordinates uses the newly created coordinate system formula, then you can transform the map to the correct coordinate system.</li>
+
+<li>	<b>coordinate system tiepoints</b>: when you obtained data which is using different XY-coordinates than the coordinate system of your project, and when you do not know the relation between the two coordinate systems. You can create a coordinate system tiepoints for maps with artificial coordinates, i.e. starting at (0,0) or digitized in millimeters. The coordinate system tiepoints uses a 'related' coordinate system; this is the coordinate system with correct coordinates. When you have specified the tiepoints and transformation method, and when the map with artificial coordinates uses the newly created coordinate system tiepoints, then you can transform the map to the correct coordinate system.</li>
+
+</ul>
+
+<p class=defnewpar>Furthermore, two coordinate systems are available in the <span class=courier>\SYSTEM</span> directory:</p>
+
+<ul>
+
+<li>	coordinate system <span class=courier>Unknown</span>: when you do not care about coordinates.</li>
+
+<li>	coordinate system <span class=courier>LatLon</span>: when you obtained raster or vector data which are supposed to use LatLon-coordinates on a sphere (world-wide).</li>
+
+</ul>
+
+<p class=defnewpar>Finally, a coordinate system differential (for a georeference differential) is internally defined by the <a href="..//ilwisapp/popup/variogram_surface_popup.htm" onClick="return popup(this, 'notes')" >Variogram surface</a> operation; it is thus not available on disk. This coordinate system is incompatible with any other coordinate system.</p>
+
+<p class=kopje>General use of coordinate systems:</p>
+
+<ul>
+
+<li class=ls01be>	For general analysis purposes, it is advised to use <b>one</b> coordinate system for all your maps. This coordinate system should be wide enough to cover all X- and Y-coordinates that should be stored in your maps. </li>
+
+<li class=ls01be>	Coordinate systems enable you to <a href="..//ilwis/popup/transform_operations_popup.htm" onClick="return popup(this, 'notes')" >transform</a> vector maps from one coordinate system to the other. There are 3 possibilities:</li>
+
+        <ul>
+
+        <li>	When maps use a coordinate system projection or a coordinate system latlon and when this coordinate system actually contains projection, ellipsoid or datum information, then you can transform the map to any other coordinate system of type projection or latlon which contains projection, ellipsoid or datum information. </li>
+
+        <li>	When maps use a coordinate system formula (which uses a related coordinate system with correct coordinates), then you can transform the map to the related coordinate system. </li>
+
+        <li>	When maps use a coordinate system tiepoints (which uses a related coordinate system with correct coordinates), then you can transform the map to the related coordinate system. </li>
+
+        </ul>
+
+<li class=ls01be>	A map window has the capability to transform vector maps on the fly or temporarily. When a point, segment or polygon map with a certain coordinate system is displayed in a map window, you can drag or add another coordinate system to the map window. If a transformation between both coordinate systems is possible, the map window will use the newly added coordinate system; the vector maps displayed by the map window will be shown in the new coordinate system, i.e. the maps are temporarily transformed.</li>
+
+<li class=ls01be>	When you use pixel information and the map is currently using one coordinate system, you can add another coordinate system to the pixel info window. When a transformation is possible between both coordinate systems, the pixel information window will also show you the coordinates in the new coordinate system. The pixel information window can also retrieve information from maps with another 'transformable' coordinate system. </li>
+
+<li class=ls01be>	The following maps can be displayed with a <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticule</a>:</li>
+
+        <ul>
+
+        <li>	maps which use a coordinate system projection with a projection,</li>
+
+        <li>	maps which use a coordinate system latlon,</li>
+
+        <li>	maps which use a coordinate system formula, where the related coordsys is a coordsys projection with a projection or a coordsys latlon,</li>
+
+        <li>	maps which use a coordinate system tiepoints, where the related coordsys is a coordsys projection with a projection or a coordsys latlon. </li>
+
+        </ul>
+
+<li class=ls01be>    When resampling raster maps from one georeference to another georeference which uses another coordinate system, then a transformation is automatically performed. </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When you receive data in different projections (and you have created correct coordinate systems with correct projections for these maps), it is advised to use the <a href="..//ilwis/popup/transform_operations_popup.htm" onClick="return popup(this, 'notes')" >Transform</a> operations to transform vector data from the current coordinate system into one other coordinate system, or to use the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation to resample pixels of a raster map the current georeference into one other georeference (with another coordinate system).</p>
+
+<p class=kopje>Names of coordinate systems:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a coordinate system:</p>
+
+<p>To create a coordinate system, you can select the <span class=arial>Create Coordinate System</span> command on the <a href="main_window_menu_commands.htm">File menu</a> of the Main window or double-click the <span class=arial>NewCrdSys</span> item in the Operation-list. The <a href="../ilwismen/create_a_coordinate_system.htm">Create Coordinate System</a> dialog box will appear: you can create any type of coordinate system.</p>
+
+<p class=defnewpar>When one or more vector maps which do not have correct coordinates yet are displayed in a map window, you can also select the <span class=arial>Create Coordinate System</span> command on the <a href="map_window_menu_commands.htm">File menu</a> of the map window. The <a href="../ilwismen/create_a_coordinate_system_in_map_window.htm">Create Coordinate System (in map window)</a> dialog box will appear: you can create a coordinate system formula or a coordinate system tiepoints. </p>
+
+<p class=defnewpar>Other ways to create a coordinate system are:</p>
+
+<ul>
+
+<li>	by clicking the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> in the dialog box when creating a point, segment or polygon map, or a georeference, </li>
+
+<li>	by opening the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of a vector map: click the Edit button in the Properties dialog box and click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> in the subsequent Edit Properties dialog box. </li>
+
+</ul>
+
+<p class=defnewpar>For more information, refer to the <a href="../ilwismen/create_a_coordinate_system.htm">Create Coordinate System</a> dialog box. It is advised that within one project, all maps use the same coordinate system.</p>
+
+<p class=kopje>To view or edit a coordinate system:</p>
+
+<p>The easiest way to view and/or edit an existing coordinate system, is to double-click a coordinate system in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. When one or more raster and/or vector maps are displayed in a map window, you can also open the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window and choose <span class=arial>Coordinate System</span>. </p>
+
+<p class=defnewpar>Depending on the type of coordinate system you open (or the type of coordinate system that is currently used by the map window), a dialog box will appear or an appropriate editor will be opened:</p>
+
+<ul>
+
+<li>	for a coordsys <b>boundary only</b>: the <a href="../ilwismen/edit_coordinate_system_boundary_only.htm">Edit Coordinate System Boundary Only</a> dialog box will appear;</li>
+
+<li>	for a coordsys <b>projection</b>: the <a href="../ilwismen/edit_coordinate_system_projection.htm">Edit Coordinate System Projection</a> dialog box will appear;</li>
+
+<li>	for a coordsys <b>latlon</b>: the <a href="../ilwismen/edit_coordinate_system_latlon.htm">Edit Coordinate System LatLon</a> dialog box will appear;</li>
+
+<li>	for a coordsys <b>formula</b>: the <a href="../ilwismen/edit_coordinate_system_formula.htm">Edit Coordinate System Formula</a> dialog box will appear;</li>
+
+<li>	for a coordsys <b>tiepoints</b>: the <a href="coordinate_system_tiepoints_editor_functionality.htm">Coordinate System Tiepoints editor</a> will be opened.</li>
+
+</ul>
+
+<p class=defnewpar>Of course, to open and edit a coordinate system, you can also click a coordinate system with the right mouse button in the Catalog and choose Open from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, use the Edit Object command on the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window, double-click the Edit item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, etc. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	To view which coordinate system is used by a georeference of a raster map or by a point, segment or polygon map, check the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a georeference or the properties of a point, segment or polygon map.</li>
+
+<li>	Advanced users may wish to open a coordinate system tiepoints as a table. For more information, see <a href="how_to_open_objects_as_a_table_advanced.htm">How to open objects as a table</a>.</li>
+
+</ul>
+
+<p class=kopje>Technical information:</p>
+
+<p>A coordinate system consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.CSY);  in case of a coordsys tiepoints also a binary data file (.CS#) is available. The object definition file stores the coordinate boundaries and, if available, projection information, a formula, etc.</p>
+
+<p class=defnewpar>By viewing the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a coordinate system, you can see for instance the type of the coordinate system, the boundary coordinates of the coordinate system, and find out by which vector maps and by which georeferences this coordinate system is used. For a coordinate system formula and a coordinate system tiepoints, also the related coordinate system is listed. Furthermore, for a coordinate system tiepoints, you can find the transformation results by clicking the Additional Info button.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/create_a_coordinate_system.htm">Create coordinate system</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/create_a_coordinate_system_in_map_window.htm">Create a coordinate system (in map window)</a></p>
+
+<h2><a name="introproj">Introduction on Projections</a></h2>
+
+<p>A projection defines the relation between the map coordinates (X,Y) and the geographic coordinates latitude and longitude (<span class=symbol>f</span>, <span class=symbol>l</span>). </p>
+
+<p class=defnewpar>The Earth's surface is curved, however in maps it is presented as a flat surface. Therefore, the display of an area on a map will always lead to some deformation or distortion; there is no 'perfect' projection. If you show only a small part of the Earth, like a town, the distortion will be almost insignificant. If, on the other hand, a map shows a continent, deformations and distortions will be a major problem. To correctly represent the curved Earth's surface on a flat map, you need a special projection. The geographic coordinates are converted to a metric coordinate system, measuring the X- and Y-directions in meters. Each  projection has unique equations for the transformation from geographic to metric coordinates and vice versa. </p>
+
+<p class=defnewpar>Because of the earth's rotation, the shape of the earth is not a perfect sphere. The earth is flattened towards the poles: the equatorial axis (diameter of the equator circle) is longer than the polar axis. The shape of the earth can be represented by an ellipsoid, or as it is sometimes called, a spheroid (shapes that are generated by revolving an ellipsis around its minor axis). The choice of the ellipsoid which fits best a certain region of the earth surface to be mapped depends on the surface curvature and geoid undulations in that region. Hence every country has its own 'best fit' ellipsoid.</p>
+
+<p class=kopjeboldnound>General characteristics of projections</p>
+
+<p class=kopjeaftertitlesub>Projection types:</p>
+
+<p>Based on the shape of the projection surface, one can classify the projections in azimuthal, conical and cylindrical projections. Therefore, the cone or cylinder needs to be 'unrolled' to form a plane map.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p>1.</p>
+
+</td>
+<td valign="top">
+<p>Cylindrical projections:</p>
+
+<p>Cylindrical projections may be imagined as the projection to a plane that is wrapped around the globe in the form of a cylinder (see Figure 1). After unrolling, the outline of the world map would be rectangular in shape; the meridians are parallel straight lines which cross at right angles by straight parallel lines of latitude. Together, these lines are called the '<a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticule</a>'. Examples: Mercator, Plate Carree.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p><img src="../images/cylunf.gif" align=bottom width="220" height="120"></p>
+
+<p class=captionfig>Figure 1: Principle of cylindrical projections.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p>2.</p>
+
+</td>
+<td valign="top">
+<p>Azimuthal projections:</p>
+
+<p>Azimuthal projections may be imagined as the projection on a plane tangent to the globe (Figure 2). The characteristic outline of the world map would be circular. If the pole is the central point, the meridians are straight lines, spaced at their true angles intersecting at this center point. Parallels are represented as concentric circles. Examples: Gnomonic, Stereographic.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p><img src="../images/azimunf.gif" align=bottom width="145" height="85"></p>
+
+<p class=captionfig>Figure 2: Principle of azimuthal projections.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p>3.</p>
+
+</td>
+<td valign="top">
+<p>Conical projections:</p>
+
+<p>Conical projections may be imagined as the projection to a plane that is wrapped like a cone around the globe (Figure 3). After unrolling the outline of the world would be fan shaped. The meridians are represented as straight lines and parallels as concentric circles. Only the parallels where the cone touches the globe have the same length as on earth.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p><img src="../images/conunf.gif" align=bottom width="250" height="135"></p>
+
+<p class=captionfig>Figure 3: Principle of conical projections.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Aspect:</p>
+
+<p>Furthermore, projections can be subdivided according to the direction in which a cylinder, plane or cone is oriented with respect to the globe, the so-called aspect. In the text above, it is assumed that the projection only touches the Earth. However, it is also possible to use a secant cylinder, plane or cone which intersects the sphere. Figures 4, 5, and 6 show some aspect types for different types of projections. </p>
+
+<ul>
+
+<li>	For cylindrical projections a normal aspect is a cylinder that touches the equator. A transverse aspect is a cylinder that touches a pair of opposite meridians. </li>
+
+<li>	Similarly the normal and secant aspects of azimuthal projections can be visualized. </li>
+
+<li>	The aspect may also be oblique; in that case the cylinder, plane or cone is not horizontally or vertically oriented, but something in between.</li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p><img src="../images/cylas.gif" align=bottom width="433" height="129"></p>
+
+<p class=captionfig>Fig 4: Different aspects for cylindrical projections.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top" width=189>
+<p><img src="../images/azimas.gif" align=bottom width="245" height="109"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top" width=189>
+<p class=captionfig>Fig. 5: Different aspects for azimuthal projections.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+<td valign="top">
+<p><img src="../images/conasp.gif" align=bottom width="350" height="150"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=captionfig>Fig 6: Different aspects for conical projections.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Projection characteristics:</p>
+
+<p>As mentioned before a map projection always results in some deformation or distortion. Depending on the type of projection, these distortions will be different. This is indicated by the characteristics of a projection: </p>
+
+<ul>
+
+<li>	<a href="..//ilwis/popup/projection_conformal_popup.htm" onClick="return popup(this, 'notes')" >Conformality</a>: a conformal map is one in which all angles are indicated correctly. Angles between two directions in a map with a conformal projection and between two points on Earth are the same. As all angles are maintained, the shape of small areas is also preserved. Examples: Mercator, Stereographic.</li>
+
+<li>	<a href="..//ilwis/popup/projections_equal_area_popup.htm" onClick="return popup(this, 'notes')" >Equal area</a> / Equivalence: the areas of all regions are shown in the same proportion to their true areas. Shape, scale and angles must be distorted. Examples: Mollweide, Sinusoidal.</li>
+
+<li>	<a href="..//ilwis/popup/projection_equidistant_popup.htm" onClick="return popup(this, 'notes')" >Equidistance</a>: an equidistant map has the characteristic that scale remains true along one or more lines in the map. </li>
+
+</ul>
+
+<p class=kopje>Available projections:</p>
+
+<p>Map projections are named according to the class, the aspect, the property, the name of the originator and the nature of any modification. For an overview of available projections, refer to the <a href="../ilwismen/select_projection.htm">Select Projection</a> dialog box. For hints on what projection to use, refer to <a href="../ilwismen/projections_suggested_projections.htm">Suggested projections</a>.</p>
+
+<h2><a name="csyform">Coordinate system Formula</a></h2>
+
+<p>You can create a coordinate system formula for maps with artificial coordinates, i.e. starting at (0,0) or digitized in millimeters. The coordinate system formula uses a 'related' coordinate system; this is the coordinate system with correct coordinates. When you have defined the formula and when the map with artificial coordinates uses the newly created coordinate system formula, then you can transform the map to the correct coordinate system.</p>
+
+<p class=kopje>Transformation formulae:</p>
+
+<p>In the formulae below, <img src="../images/inxy.gif" align=bottom width="25" height="38"> is used for the related coordinates, <img src="../images/outxy.gif" align=bottom width="45" height="38"> for the coordinates of the coordsys formula which you are creating, <img src="../images/originxy.gif" align=bottom width="32" height="40"> for the origin in the related coordsys, and <img src="../images/origout.gif" align=bottom width="33" height="40"> for the origin of the coordsys formula which you are creating.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+
+<tr>
+<td valign="top" width=151>
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</tr>
+
+<tr>
+<td valign="top" width=151>
+<p>Conformal:</p>
+
+</td>
+<td valign="top">
+<p><img src="../images/conform.gif" align=bottom width="260" height="40"></p>
+
+<p>k = scaling factor</p>
+
+<p><span class=symbol>f</span> = rotation angle</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=151>
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</tr>
+
+<tr>
+<td valign="top" width=151>
+<p>Differential scaling:</p>
+
+</td>
+<td valign="top">
+<p><img src="../images/diffscal.gif" align=bottom width="200" height="40"></p>
+
+<p>k1 = X-scaling</p>
+
+<p>k2 = Y-scaling</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=151>
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</tr>
+
+<tr>
+<td valign="top" width=151>
+<p>Skew along X-axis:</p>
+
+</td>
+<td valign="top">
+<p><img src="../images/skewx.gif" align=bottom width="218" height="40"></p>
+
+<p><span class=symbol>a</span> = skew angle in X-direction</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=151>
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</tr>
+
+<tr>
+<td valign="top" width=151>
+<p>Skew along Y-axis:</p>
+
+</td>
+<td valign="top">
+<p><img src="../images/skewy.gif" align=bottom width="220" height="40"></p>
+
+<p><span class=symbol>b</span> = skew angle in Y-direction</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=151>
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</tr>
+
+<tr>
+<td valign="top" width=151>
+<p>Affine:</p>
+
+</td>
+<td valign="top">
+<p><img src="../images/affine.gif" align=bottom width="220" height="40"></p>
+
+<p>a11, a12, a21, a22 = matrix coefficients</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=151>
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</td>
+<td valign="top">
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+</tr>
+
+<tr>
+<td valign="top" width=151>
+<p>User-defined expression:</p>
+
+</td>
+<td valign="top">
+<p>Xout = f<sub>x </sub>(x - x<sub>0</sub>, y - y<sub>0</sub>) + X<sub>0</sub></p>
+
+<p>Yout = f<sub>y </sub>(x - x<sub>0</sub>, y - y<sub>0</sub>) + Y<sub>0</sub></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For more information, see the <a href="../ilwismen/edit_coordinate_system_formula.htm">Edit Coordinate System Formula</a> dialog box.</p>
+
+</body

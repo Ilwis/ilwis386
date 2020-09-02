@@ -1,0 +1,116 @@
+<html>
+
+<head>
+<title>Segments to points : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segments to points">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segments to points</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Segments to points operation creates a point map from a segment map. The output point map can contain either:</p>
+
+<ul>
+
+<li>	a point for each node in the segment map, or</li>
+
+<li>	points at a regular distance along the segments in the segment map, or</li>
+
+<li>	points for all stored coordinates in the segment map.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=124>
+<p class=diabox>Input segment map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input segment map. Open the list box and select the desired input map, or drag a segment map directly from the Catalog into this box. No special input map requirements.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Only nodes:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option button if you want to obtain all the segment nodes as points.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Distance:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option button if you want to obtain coordinates at a regular distance along segments, and type a value for the distance interval (in meters); real value &gt; 0.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  All points:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option button if you want to obtain the segment nodes and intermediate coordinates as points.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=diabox>Output point map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output point map that will contain the segment label points. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary, the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segments_to_points_functionality.htm">Segments to points : functionality</a></p>
+
+</body

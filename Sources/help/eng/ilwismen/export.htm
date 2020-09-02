@@ -1,0 +1,675 @@
+<html>
+
+<head>
+<title>Export</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Export, ILWIS export, Map export, Table export, Histogram export, Coordinate system export, ASC, ASCII, Bitmap, BMP, Atlas, BNA, AutoCad, DXF, Arc/Info, E00, LIN, PTS, Erdas, GIS (Erdas format), LAN, GIF, IDA, IMG (format), Idrisi, DOC (Idrisi format), Arc/View, Shape files, SHP, InfoCam, SEQ, SMT (ILWIS 1.x ASCII vector format), TIFF, GeoTIFF, ILWIS 3 formats, ILWIS 1.4 formats, MPD (ILWIS 1.4 raster format), TBL (ILWIS 1.4 table format), dBase, DBF, ArcGIS, PRJ, Delimited, Comma delimited, Space delimited, Fixed format, Standard format, SDF, Postscript">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Main&nbsp;window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Export</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Export a selected ILWIS 3 map, table, histogram or coordinate
+system to ILWIS 2 or to the format of another software package.</p>
+
+<p class=defnewpar>For raster maps, you can use ILWIS export. For more information, see below. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Select an object:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the ILWIS object which you want to export. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Export format:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the format to which you want to export.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output file name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a name for the output file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>With this dialog box, you can export a single selected object to one of the formats described below. </li>
+
+<li>In case you need to export <i>multiple objects</i>, it is advised to type an Export expression on the command line or to write a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> with Export expressions. The Export expressions are described in <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#export_commandline">Appendices : ILWIS script language (syntax), section Export expressions</a>. </li>
+
+<p>By using the command line or a script, you also have the possibility to export ILWIS objects which are internally stored as a table such as
+2-dimensional tables, domain class, representation class, georeference tiepoints, and coordinate system tiepoints.</p>
+
+</ul>
+
+<h2>Supported Export formats</h2>
+
+<p class=defnewpar>The supported export formats are described in a number of sections below:</p>
+
+<p><a href="#ilwis_export"><span class=bookmark>1. ILWIS export</span></a></p>
+
+<p class=leftmargin06><a href="#raster_export"><span class=bookmark>1a. Raster export</span></a> </p>
+
+<p class=leftmargin06><a href="#vector_export"><span class=bookmark>1b. Vector export</span></a> </p>
+
+<p class=leftmargin06><a href="#table_export"><span class=bookmark>1c. Table and
+histogram export</span></a> </p>
+
+<p class=leftmargin06><a href="#coordinate_system_export"><span class=bookmark>1d. Coordinate system export</span></a> </p>
+
+<p><a href="#export_tips"><span class=bookmark>2. Tips: using clipboard and exporting layouts</span></a></p>
+
+
+<h2 id="ilwis_export">1.  ILWIS export</h2>
+
+<h3 id="raster_export">1a.  Exporting raster maps</h3>
+
+<p class=linespacing03after>Export raster maps in the ILWIS raster format to a number of other formats.</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Arc/Info ASCII:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports to Arc/Info non-compressed ASCII format (extension .ASC).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Erdas GIS:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports to Erdas .GIS format. </p>
+
+<p class=diabox>The Erdas-LAN and Erdas-GIS formats can only handle North-oriented maps. </p>
+
+<p class=diabox>The output consists of a .GIS file which contains the raster map, and, in case you exported a raster map with a class domain, a  .TRL file which contains class and representation information. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Erdas LAN:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports a series of images in an ILWIS <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> or a single raster map to the Erdas .LAN format. </p>
+
+<p class=diabox>The Erdas-LAN and Erdas-GIS formats can only handle North-oriented maps. </p>
+
+<p class=diabox>Furthermore, the Erdas-LAN format can only contain positive integers. This means that the ILWIS raster map(s) must use a class, ID domain or value domain; in case of a value domain, the values must be between 0 and (maximum) 32767, and the precision must be 1.</p>
+
+<p class=diabox>The output file contains a header (according to the Erdas .LAN format) with a description of the data that follows in the same file. In case you exported raster map with a class domain, also a trailer file (extension .TRL) will be written. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>IDA image IMG:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports to IDA (Image Display and Analysis) image format (extension .IMG). IDA claims compatibility with the Terramar Micro-Image System. Image type and projection are set to 0, resp. generic and none.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Idrisi IMG/DOC:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports to Idrisi format (extensions .DOC, .IMG, and optionally .PAL) </p>
+
+<p class=diabox>The ILWIS raster map can have a class domain, an ID domain (only less than 32767 items allowed in Idrisi), the Image domain or a value domain. Furthermore, the ILWIS raster map must be north-oriented.</p>
+
+<p class=diabox>When exporting ILWIS value maps stored using 4 or 8 bytes per pixel, there is a possible loss of accuracy as Idrisi only supports floats (4 bytes per pixel).</p>
+
+<p class=diabox>The output consists of an Idrisi .DOC file which contains ASCII information on the map's store type, numbers of rows and columns, coordinates, etc., and a binary .IMG file which contains the actual map data. </p>
+
+<p class=diabox>When you export an ILWIS raster map with a class or ID domain, and the domain contains less than 255 items, then all class names or IDs are available in Idrisi as categories. </p>
+
+<p class=diabox>In case you export an ILWIS map with a class domain or a picture domain, also a file with color information (.PAL) is created. In Idrisi, this file must be translated into the internal Idrisi format with the palette workshop: read in as .PAL, and Save As .SMP.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>ILWIS 1.4:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports to ILWIS 1.4 format (extensions .MPD, .MPI, and optionally .INF and .COL). <span class=tiptext><span class=tip>Mind: </span>ILWIS 1.4 map names may not be longer than 8 characters. </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>ILWIS ASCII:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports to ILWIS ASCII format (extension .ASC). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>TIFF (GeoTiff):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports to Tagged Interchange File format (extension .TIF). </p>
+
+<p class=diabox>Any ILWIS raster map can be exported to TIFF format:</p>
+
+<ul class=diaul>
+
+<li>	When exporting a raster map with the <u>Bit</u> domain, the TIFF file is stored using 1 bit per pixel. Value 0 is represented by black and value 1 is represented by white. </li>
+
+<li>	When exporting a raster map with a <u>Bool</u> domain, the TIFF file is stored using 8 bits per pixel. Colors will be available for True, False and Undefined values.</li>
+
+<li>	When exporting a raster map with the <u>Image</u> domain, a <u>picture</u> domain, a <u>class</u> domain, an <u>ID</u> domain (with less than 256 IDs), or a <u>value</u> domain where the values are between 0 and 255 (and precision 1), i.e. when the ILWIS map is stored using 1 byte per pixel, then the TIFF file is stored using 8 bits per pixel and colors will be available for all values. </li>
+
+        <ul class=diaul>
+
+        <li>	For maps which use a Picture domain, colors in the TIFF file are taken from this Picture domain; </li>
+
+        <li>	For maps which use a Class domain, colors are taken from the representation Class that is currently linked to the class domain;</li>
+
+        <li>	For maps which use the Image domain, colors are taken from representation Gray;</li>
+
+        <li>	For maps which use use an ID domain, a number of primary colors are used;</li>
+
+        <li>	For maps which use a value domain, colors are taken from the representation value or gradual.</li>
+
+        </ul>
+
+<li>	When exporting raster maps with the <u>Color</u> domain, then the TIFF file is stored using 24 bits per pixel.</li>
+
+<li>	When exporting raster maps which use an <u>ID</u> domain which contains more than 256 IDs, then the TIFF file is stored using 24 bits per pixel. For each value, a color will be created by first filling the Red plane from 0 to 255, then filling the Green plane from 0 to 255 and finally filling the Blue plane from 0 to 255. These colors may thus not correspond to the colors your ILWIS maps.</li>
+
+<li>	When exporting raster maps which use a <u>value</u> domain where the values are not in the range between 0 and 255 and/or when the precision &lt;&gt; 1, i.e. ILWIS map is stored using 2, 4 or 8 bytes per pixel, then the TIFF file is stored using 24 bits per pixel. For each value, a color will be created. </li>
+
+</ul>
+
+<p class=diabox>Furthermore, information found in the raster map's georeference will be written into the regular GeoTiff tags, and information from the coordinate system will be written in string format in the GeoTiff citation tag.</p>
+
+<p class=diabox>The output file is an uncompressed TIFF file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Windows Bitmap BMP:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Exports to Microsoft Windows bitmap format (extension .BMP). Any ILWIS raster map (domain Bit, Bool, Class, ID,  Picture, Image, Value, Color) can be exported to a Windows bitmap. The procedure is similar to TIFF export.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Notes: </p>
+
+<ul class=tipul>
+
+<li>	Pixels with the undefined value will usually obtain color black in the export result.</li>
+
+<li>	Coordinates of north-oriented raster maps can be stored by the following formats: Erdas GIS, Erdas LAN, Idrisi IMG/DOC, ILWIS 1.4, and TIFF/GeoTIFF.</li>
+
+<li>	Coordinates of raster maps with a <i>georeference tiepoints</i>, can only be stored by the TIFF/GeoTiff format. However, non North-oriented raster maps are generally not supported by other GIS/RS packages. </li>
+
+<li>	For information about the structure of the different formats mentioned in this section, please refer to the manuals of the corresponding software packages.</li>
+
+</ul>
+
+<h3 id="vector_export">1b.  Exporting vector maps</h3>
+
+<p class=linespacing03after>Exports vector maps in ILWIS format to vector maps in several other formats.</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Arc/Info E00 file:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Exports an ILWIS point, segment, or polygon map to an Arc/Info file in interchange format (extension .E00). </p>
+
+<p class=diabox>When exporting a point map, the output file will contain information on points (Arc/Info: Labels). </p>
+
+<p class=diabox>When exporting a segment map, the output file will contain information on segments (Arc/Info: Arcs). </p>
+
+<p class=diabox>When exporting a polygon map, the output file will contain information on segments and polygon label points.</p>
+
+<p class=diabox>Furthermore, the .E00 file will always contain a section with attribute information: .AAT for segments, .PAT both for polygons and points. This section lists for instance the class names, IDs, or values as used by the domain of the exported ILWIS map, and, in case the exported ILWIS map used an attribute table, also the attributes will appear.</p>
+
+<p class=diabox>When you export an ILWIS polygon map, the polygons will be transferred as segments and polygon labels. To recreate the polygons in Arc/Info, use the Arc/Info Build command after you have imported the .E00 file into a coverage. Attribute information will be retained. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Arc/Info ASCII vector LIN:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Exports an ILWIS segment map to an ASCII Arc/Info file (extension .LIN). </p>
+
+<p class=diabox>When the ILWIS segment codes are whole positive numbers, then these will be used as the IDs in Arc/Info. In other cases, a sequential number will be assigned to the individual segments. To obtain the lines in Arc/Info, you have to use the Generate command.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Arc/Info Generate PTS:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Exports an ILWIS point map to an ASCII Arc/Info file (extension .PTS).</p>
+
+<p class=diabox>To obtain the points in Arc/Info, you have to use the Generate command.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Arc/View Shape file SHP:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Exports an ILWIS point, segment or polygon map to files in Arc/View format (extensions .SHP, SHX, .DBF).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Atlas segments BNA:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports an ILWIS segment map to a file in Atlas/Mapedit format (extension .BNA). </p>
+
+<p class=diabox>The code of a segment is used to name a segment.</p>
+
+<p class=diabox>Also IDA (Image Display and Analysis) vector maps claims compatibility with the .BNA format.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>AutoCad DXF:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports an ILWIS point, segment, or polygon map to a file in AutoCAD Drawing Exchange Format (extension .DXF). </p>
+
+<p class=diabox>The code of each segment is assigned to attribute 8.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>ILWIS ASCII segments SMT:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Exports an ILWIS segment map to the ASCII ILWIS 1.x SegMenT-list format (extension .SMT). </p>
+
+<p class=diabox>The .SMT file lists for every segment, the segment's class names, IDs, or value and the segment's coordinates.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" wisth="120">
+<p class=diabox>ILWIS version 1.4:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports an ILWIS 3 point or segment map to an ILWIS 1.4 point or segment map. For the output file name, you should type a <i>new</i> map name; there is no check whether the output map name already exists. <span class=tiptext><span class=tip>Mind: </span>ILWIS 1.4 map names may not be longer than 8 characters. </span></p>
+
+<p class=diabox>Extensions: .PNT for point tables and .SEG etc. for segments maps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" wisth="120">
+<p class=diabox>ILWIS version 2.x:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports an ILWIS 3 point, segment or polygon map to an ILWIS 2 point, segment or polygon map. For the output file name, you should type a <i>new</i> map name; there is no check whether the output map name already exists. <span class=tiptext><span class=tip>Mind: </span>ILWIS 2 map names may not be longer than 8 characters. </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Infocam Sequential SEQ:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Exports an ILWIS point, segment and polygon maps to an Infocam separate SEQ files. Each vector file will be translated to one SEQ file. The values of the elements of the maps are retrieved from the domain. The coordinates of the elements of the map must be smaller than 1.000.000, because Infocam does not allow larger coordinates.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>For information about the structure of the different formats mentioned in this section, please refer to the manuals of the corresponding software packages.</p>
+
+<h3 id="table_export">1c.  Exporting tables and histograms</h3>
+
+<p class=linespacing03after>Exports an ILWIS table or an ILWIS point, segment or polygon histogram to one of the following formats:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>dBase III/IV table DBF:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Exports an ILWIS table or histogram to a dBase III/IV file (extension .DBF).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>dBase SDF table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports an ILWIS table or histogram to an ASCII dBase-SDF file (extension .SDF). This format is also known as Standard format, or Fixed format.</p>
+
+<p class=diabox>When exporting with Export 1.4; Enter width of columns: the number of characters for each column to define the length of a record is asked for.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Delimited Text TXT:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Exports an ILWIS table or histogram to an ASCII Comma Delimited file (extension .TXT).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>ILWIS version 1.4 format:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Exports an ILWIS 3 table to ILWIS 1.4 format. Histograms cannot be exported. For the output file name, you should type a <i>new</i> table name; there is no check whether the output table name already exists. <span class=tiptext><span class=tip>Mind: </span>ILWIS 1.4 table names may not be longer than 8 characters. </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>ILWIS version 2.x format:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Exports an ILWIS 3 table to ILWIS 2 format. Histograms cannot be exported. This can be used to export tables which contain columns that use a coordinate system as domain. <span class=tiptext><span class=tip>Mind: </span>ILWIS 2 table names may not be longer than 8 characters. </span></p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+
+<li>	For the structure of the different formats mentioned in this section,
+  please refer to the manuals of the corresponding software packages.</li>
+
+<li>	Make sure that the maximum values in your columns do not exceed the
+  maxima set for the comparable ILWIS column types.</li>
+
+</ul>
+
+<h3 id="coordinate_system_export">1d.  Exporting coordinate systems</h3>
+
+<p class=linespacing03after>Exports an ILWIS coordinate system to an:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>ESRI ArcGIS&nbsp;.prj file:</p></td>
+</td>
+<td valign="top" height="14">
+<p class=diaboxnospacetop>Exports an ILWIS coordinate system projection or an ILWIS coordinate system latlon to an ESRI ArcGIS projection file (.PRJ). An ILWIS coordinate system should have an ellipsoid WGS 84 or an ellipsoid and a datum.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>For information about the structure of the ESRI ArcGIS
+projection file mentioned in this section, please refer to the manuals of the corresponding software
+package.</p>
+
+<h2 id="export_tips">2. Tips: using clipboard and exporting layouts</h2>
+
+<ol>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	You can use <b>Export</b> as described above to convert your ILWIS GIS and Remote Sensing data to a format which is readable by other GIS and Remote Sensing software packages. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	You can use the <b>clipboard</b> to <i>copy</i> ILWIS maps, tables, etc. as a <i><a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >picture</a></i>, a <i><a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmap</a></i> or as <i>text</i> to the clipboard and then <i>paste</i> them into another Windows application (such as Word, PaintShop, CorelDraw, etc.): </li>
+
+        <ul>
+
+        <li>	display one or more maps or a map view in a map window,</li>
+
+        <li>	from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a>, choose the <span class=arial><a href="copy_map_window_to_clipboard.htm">Copy</a></span> command, </li>
+
+        <li>	the contents of the map window will be copied as a <i>picture</i> to the clipboard,</li>
+
+        <li>	you can then paste this into another Windows application.</li>
+
+	</ul>
+		
+	<p class=linespacing01before>The <span class=arial>Copy</span> command is available in most ILWIS windows, e.g. a table window. </p>
+
+<p class=emptylinehalf>&nbsp;</p>		
+
+<li>	To copy a complete map or table window as a <i>bitmap</i> to the <b>clipboard</b> (including window borders, menu bar, toolbar, status bar etc.), press <span class=arial>Alt+PrintScrn</span> on the keyboard. </li>
+
+	<p class=linespacing01before>You can then paste this into another Windows application. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>   You can <b>export a layout as a bitmap</b> in the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a>. The <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> may include one or more <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a> and <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a>. </li>
+
+        <p class=linespacing01before>For more information, refer to <a href="layout_editor_export_to_bitmap.htm">Layout editor : export to bitmap</a>.</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	To <b>'export' a layout to Postscript</b> format:</li>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <p>To install a Postscript printer: </p>
+
+        <ul>
+
+        <li>	From the Windows Start menu, choose Settings, Printers. Double-click the Add Printer icon. </li>
+        
+        <li>	Select Local Printer.</li>
+
+        <li>	Choose any Postscript printer.</li>
+
+        <li>	Instead of choosing a printer port, choose FILE:</li>
+
+        <li>	Type a name by which you want to recognize this 'printer'.</li>
+
+        <li>	Do not ask for a test page.</li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+		<p>Create a layout to which you add your map views, and annotation, and in the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a> :</p>
+
+        <ul>
+
+        <li>	Choose File Print,</li>
+
+        <li>	Select the Postscript 'printer' and select the Print To File checkbox.</li>
+
+        <li>	Then print by clicking OK.</li>
+
+        </ul>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_export_data.htm">How to export data</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#export_commandline">Appendices : ILWIS script language, section Export expressions</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwisexport_commandline">Appendices : ILWIS script language, section ILWIS Export</a></p>
+
+</body

@@ -1,0 +1,426 @@
+<html>
+
+<head>
+<title>Column statistics</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Statistics, Columns, Column statistics, Minimum, Maximum, Average, Sum, Standard deviation, Standard error, Variance, Covariance, Correlation, t-test, Chi-square test">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Columns menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Column Statistics</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Calculate statistical values using one or two columns or perform a statistical analysis. The outcomes will be shown in a message box on the screen. </p>
+
+<p class=defnewpar>You can calculate:</p>
+
+<ul>
+
+<li>	statistics on a single column: Average, Minimum, Maximum, Sum, Count, Standard Deviation, Standard Error, and Variance;</li>
+
+<li>	statistics on two columns: Correlation and Covariance;</li>
+
+<li>	statistical analysis: Student's <i>t</i>-test and a <img src="../images/stchisq.gif" align=bottom width="16" height="16">-test.</li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>By opening the <a href="../ilwis/table_window_statistics_pane.htm">Statistics Pane</a> of a table, you can already view the minimum, maximum, average, standard deviation and sum for each column. To open the Statistics pane, choose <span class=arial>Statistics Pane</span> from the <a href="../ilwis/table_window_menu_commands.htm">View menu</a> of the table window. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Function:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a statistical function. The following functions are available: Average, Minimum, Maximum, Sum, Count, Standard Deviation, Correlation, Variance, Covariance, Standard Error, t-test and <img src="../images/stchisq.gif" align=bottom width="16" height="16">-test.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the column for which you want to calculate the statistics. The input column should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value column</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>2nd Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When using the Correlation or Covariance function, select a second column which is independent from the first column.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>True value:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When using the <i>t</i>-test, type the true value of your variable, i.e. the value to which your variable stochastically converges (<span class=symbol>m</span>). The output value of the <i>t</i>-test has to be looked up in a table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Expected:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When using the <img src="../images/stchisq.gif" align=bottom width="16" height="16">-test, select the column with the expected values. The output value of the <img src="../images/stchisq.gif" align=bottom width="16" height="16">-test has to be looked up in a table.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips: </p>
+
+<ol class=tipol>
+
+<li>	To obtain statistical answers in an <i>output column</i>:</li>
+
+        <ul class=tipul>
+
+        <li>	after you clicked OK in the Column Statistics dialog box, an expression appears on the command line of the table window;</li>
+
+        <li>	you can always retrieve expressions by using the <a href="..//ilwis/popup/history_popup.htm" onClick="return popup(this, 'notes')" >history</a> of the command line, for instance by pressing the <span class=arial>Arrow Up</span> key on your keyboard;</li>
+
+        <li>	replace the question mark in the expression with a column name following by the definition sign. For example, change the expression on the command line:</li>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=54>
+<p class=tiptext>from:</p>
+
+</td>
+<td valign="top">
+<p class=tiptext><span class=courier>? AVG(MyColumn)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=54>
+<p class=tiptext>to:</p>
+
+</td>
+<td valign="top">
+<p class=tiptext><span class=courier>OUTCOL = AVG(MyColumn)</span></p>
+
+</td>
+</tr>
+</table>
+
+        </ul>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>The Average, Minimum, Maximum, Sum, Count and Standard Deviation functions are also available through the <a href="aggregate_column.htm">Aggregate Column</a> dialog box, i.e. in <a href="../ilwis/calc_aaf.htm#aggregate_functions">Aggregate functions</a>. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>The Count function counts, in a column, the number of fields which have a valid value. Any fields in the column that have the undefined value (a questionmark) are skipped. </p>
+
+        <p>The Count function accepts columns with a Value or a Bool domain. <!--; it does not accept columns with a Class, ID or String domain. --></li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li> The statistics are calculated according to the following formulae:</li>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=linespacing03before>Average:</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter><img src="../images/stavg.gif" align=bottom width="68" height="39"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=linespacing03before>Standard deviation:</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter><img src="../images/ststdev.gif" align=bottom width="128" height="44"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=linespacing03before>Correlation:</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter><img src="../images/stcorryz.gif" align=bottom width="61" height="41"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=linespacing03before>Variance:</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter><img src="../images/stvar.gif" align=bottom width="130" height="36"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=linespacing03before>Covariance:</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter><img src="../images/stcovyz.gif" align=bottom width="176" height="39"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=linespacing03before>Standard error:</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter><img src="../images/ststerr.gif" align=bottom width="46" height="29"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=linespacing03before>Student's t-test:</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter><img src="../images/stttest.gif" align=bottom width="68" height="40"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=linespacing03before><img src="../images/stchisq.gif" align=bottom width="16" height="16"> test:</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter><img src="../images/stchisqt.gif" align=bottom width="109" height="43"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp;  </p>
+
+<li> The TabCalc syntax for the command line is:</li>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier><a href="../ilwis/calc_avg.htm">AVG</a>(</span><i>col</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>calculate the average of column <i>col</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier><a href="../ilwis/calc_min.htm">MIN</a>(</span><i>col</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>calculate the minimum of column <i>col</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier><a href="../ilwis/calc_max.htm">MAX</a>(</span><i>col</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>calculate the maximum of column <i>col</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier><a href="../ilwis/calc_sum.htm">SUM</a>(</span><i>col</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>calculate the sum of column <i>col</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier><a href="../ilwis/calc_cnt.htm">CNT</a>(</span><i>col</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>count the number of times that the values in <i>col</i> are not undefined</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier><a href="../ilwis/calc_std.htm">STD</a>(</span><i>col</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>calculate the standard deviation of column <i>col</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier>STDEV(</span><i>col</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>calculate the standard deviation of column <i>col</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier><a href="../ilwis/calc_stderr.htm">STDERR</a>(</span><i>col</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>calculate the standard error of column <i>col</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier><a href="../ilwis/calc_var.htm">VAR</a>(</span><i>col</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>calculate the variance of column <i>col</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier><a href="../ilwis/calc_cov.htm">COV</a>(</span><i>col1, col2</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>calculate the covariance of column <i>col1</i> and column <i>col2</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier>COVAR(</span><i>col1, col2</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>calculate the covariance of column <i>col1</i> and column <i>col2</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=tiptext><span class=courier><a href="../ilwis/calc_corr.htm">CORR</a>(</span><i>col1, col2</i><span class=courier>)</span></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>calculate the correlation between column <i>col1</i> and column <i>col2</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=tiptext><span class=courier><a href="../ilwis/calc_ttest.htm">TTEST</a>(</span><i>TrueValue, col</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>perform a Student's <i>t</i>-test on column <i>col</i> where <i>TrueValue</i> is the value to which the mean of your variable stochastically converges (<span class=symbol>m</span>).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=tiptext><span class=courier><a href="../ilwis/calc_chisquare.htm">CHISQUARE</a>(</span><i>col, colExpValue</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=tiptext>perform a <img src="../images/stchisq.gif" align=bottom width="16" height="16"> -test on the observed values (f<sub>i</sub>) in enumerated column <i>col</i> where <i>colExpValue</i> is the column with the expected values (F<sub>i</sub>).</p>
+
+</td>
+</tr>
+</table>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_statistics_pane.htm">Table window : statistics pane</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_command_line.htm">Table window : command line</a></p>
+
+<p class=seealsolinks><a href="../ilwis/calc.htm">Table calculation</a></p>
+
+<p class=seealsolinks><a href="aggregate_column.htm">Aggregate column</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwis/calc_aaf.htm#aggregate_functions">Aggregate functions</a></p>
+
+</body

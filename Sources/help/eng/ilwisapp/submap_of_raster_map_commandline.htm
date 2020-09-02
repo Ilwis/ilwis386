@@ -1,0 +1,377 @@
+<html>
+
+<head>
+<title>Sub-map of raster map : command line (1)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sub-map of raster map, MapSubMap">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Sub-map of raster map</h1>
+
+<h1 class=secondline>Command line (1)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/sub_map_raster_popup.htm" onClick="return popup(this, 'notes')" >sub-map of raster map</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapSubMap</span>(InputRasterMap, <i>start row</i>, <i>start col</i>, <i>nr rows</i>, <i>nr cols</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapSubMap</span>(InputRasterMap, <i>start row</i>, <i>start col</i>, <i>nr rows</i>, <i>nr cols</i>, NewGeoref)</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapSubMapCorners</span>(InputRasterMap, <i>start row</i>, <i>start col</i>, <i>end row</i>, <i>end col</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapSubMapCorners</span>(InputRasterMap, <i>start row</i>, <i>start col</i>, <i>end row</i>, <i>end col</i>, NewGeoref)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapSubMapCoords</span>(InputRasterMap, <i>start X-coord</i>, <i>start Y-coord</i>, <i>end X-coord</i>, <i>end Y-coord</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapSubMapCoords</span>(InputRasterMap, <i>start X-coord</i>, <i>start Y-coord</i>, <i>end X-coord</i>, <i>end Y-coord</i>, NewGeoref)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapSubMap</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the sub-map of raster map operation; 
+
+<br>specify the start line and column number and the amount of rows and columns that should be copied. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapSubMapCorners</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the sub-map of raster map operation; 
+
+<br>specify the start line and column number and the end line and end column number. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapSubMapCoords</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the sub-map of raster map operation; 
+
+<br>specify the start X- and Y-coordinate and the end X- and Y-coordinate. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>InputRasterMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>NewGeoref</p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to specify a name for the output georeference; if not specified, the output georeference will obtain the same name as the output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier><u>For MapSubmap:</u></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>start row</i></p>
+
+</td>
+<td valign="top">
+<p>is the line number in the input map where copying should start (top row).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>start col</i></p>
+
+</td>
+<td valign="top">
+<p>is the column number in the input map where copying should start (left col).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>nr rows</i></p>
+
+</td>
+<td valign="top">
+<p>are the number of rows that are to be copied from the input map starting from '<i>start row</i>'.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>nr cols</i></p>
+
+</td>
+<td valign="top">
+<p>are the number of columns that are to be copied from the input map starting from '<i>start col</i>'.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier><u>For MapSubmapCorners:</u></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>start row</i></p>
+
+</td>
+<td valign="top">
+<p>is the line number in the input map where copying should start (top row).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>start col</i></p>
+
+</td>
+<td valign="top">
+<p>is the column number in the input map where copying should start (left col).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>end row</i></p>
+
+</td>
+<td valign="top">
+<p>is the line number in the input map where copying should end (bottom row).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>end col</i></p>
+
+</td>
+<td valign="top">
+<p>is the column number in the input map where copying should end (right col).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier><u>For MapSubmapCoords:</u></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>start X-coord</i></p>
+
+</td>
+<td valign="top">
+<p>is the X-coordinate in the input map where copying should start (left X or right X).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>start Y-coord</i></p>
+
+</td>
+<td valign="top">
+<p>is the Y-coordinate in the input map where copying should start (top Y or bottom Y).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>end X-coord</i></p>
+
+</td>
+<td valign="top">
+<p>is the X-coordinate in the input map where copying should end; the X-coord opposite to '<i>start X-coord</i>'. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>end Y-coord</i></p>
+
+</td>
+<td valign="top">
+<p>is the Y-coordinate in the input map where copying should end; the Y-coord opposite to '<i>start Y-coord</i>'. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To use this operation on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, see <a href="submap_of_raster_map_commandline2.htm">Sub-map of raster map : command line (2)</a>. </p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=defnewpar>Furthermore, a georeference is created with the same name as the output map, unless you specify a new georeference name yourself. </p>
+
+<ul>
+
+<li> When the <span class=courier>MapSubMap</span> command is used, a georeference of type SubMap is created; </li>
+
+<li> When the <span class=courier>MapSubMapCorners</span> command is used, a georeference of type SubMapCorners is created; </li>
+
+<li> When the <span class=courier>MapSubMapCoords</span> command is used, a georeference of type SubMapCoords is created; </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="submap_of_raster_map_commandline2.htm">Sub-map of raster map : command line (2)</a></p>
+
+<p class=seealsolinks><a href="submap_of_raster_map_functionality_algorithm.htm">Sub-map of raster map : functionality / algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a></p>
+</body

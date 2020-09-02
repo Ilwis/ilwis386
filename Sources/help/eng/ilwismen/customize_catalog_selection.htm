@@ -1,0 +1,196 @@
+<html>
+
+<head>
+<title>Customize Catalog - Object Selection</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catalog, Customize ..., Main window, Show ..., Object selection, External file types, Foreign file types, Data management">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Main window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">View menu</a></td>
+</tr>
+<tr>
+<td colspan="3"><h1 class=secondline>Customize Catalog</h1></td>
+</tr>
+<tr>
+<td width="38%"><h1 class=firsttabactive><a class=thistab href="customize_catalog_selection.htm">Object Selection</a></h1>
+</td>
+<td width="31%"><h1 class=othertab><a class=othertab href="customize_catalog_details_view.htm">Details View</a></h1>
+</td>
+<td width="31%"><h1 class=othertab><a class=othertab href="customize_catalog_query.htm">Query</a></h1>
+</td>
+</tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Select the <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >object types</a> that should be shown in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. Furthermore, you can choose to show or hide <a href="..//ilwis/popup/objects_system_objects.htm" onClick="return popup(this, 'notes')" >system objects</a> in a Catalog, show or hide objects that are part of an <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collection</a> from a directory Catalog, and you can specify which external file formats you would like to see in a Catalog. </p>
+
+<p class=defnewpar>The Customize Catalog sheet appears:</p>
+
+<ul>
+
+<li>	when in the Main window, you choose the <span class=arial>Customize Catalog</a></span> command from the <span class=arial>View</span> menu, </li>
+
+<li>	when you click the <span class=arial>Customize Catalog</span> button <img src="../images/custcat.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/main_window_standard_toolbar.htm">standard toolbar</a> of the Main window, </li>
+
+<li>    when you click the right mouse button in the white space of a Catalog and choose the <span class=arial>Customize Catalog</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>The <span class=arial>Object Selection</span> page is the default page of this sheet.</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>To specify visible objects in a Catalog, you can also use the <a href="../ilwis/main_window_object_selection_toolbar.htm">object selection toolbar</a> in the Main window. </li>
+
+<li>To select groups of objects, you can also use the <span class=arial><a href="catalog_show.htm">Show</a></span> command on the <span class=arial>View</span> menu. </li>
+
+</ul>
+
+<p class=diakopje>Page options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object types:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the type(s) of <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >objects</a> to be shown in this Catalog. Use the scroll bar in this list box to see more ILWIS object types. For more information on how to select a number of object types, see <a href="#selectmulitpleinlist"><span class=bookmark>below</span></a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Include system objects:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you wish <a href="..//ilwis/popup/objects_system_objects.htm" onClick="return popup(this, 'notes')" >system objects</a> to be shown in this Catalog. Clear this check box if you wish to hide system objects.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top">
+<p class=diabox>Hide objects which are member of an object collection:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select this checkbox when objects that are part of an <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collection</a> should not be visible in a normal directory Catalog; these objects will only be shown when you open the object collection.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>External file extensions:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify one or more file extensions of non-ILWIS files that you wish to show in a Catalog. </p>
+
+<p class=diabox>Multiple file extensions can be specified as <span class=courier>dbf;tif;mdb</span> or as <span class=courier>.dbf;.tif;.mdb</span> &nbsp;<span class=tipnospace>Mind:</span><span class=tiptext> It is not allowed to use any spaces.</span> </p>
+
+<ul>
+
+<li>Databases that consist of a file (such as dBase or Access) and contain one or more tables, can also be 'opened' (<i>in a Use As</i> manner) by double-clicking the file in the Catalog. In the background, an object definition file for a database collection will be created, while the original external data file remains on disk. </li>
+
+<li>Table data can also be imported using the Import Table wizard. </li>
+
+</ul>
+
+<p class=diabox>For more information on import, see <a href="../ilwis/how_to_import_data.htm">How to import data</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Mind:</p>
+
+<ul class=tipul>
+
+<li>Settings on visible object types, sorting/ordering method and queries on objects are either applied to all new Catalogs that will be opened, or to the currently active Catalog only. This depends on whether you click the <span class=arial>Use current settings for new Catalogs</span> button or the <span class=arial>Use default settings for new Catalogs</span> button on the <a href="../ilwismen/customize_catalog_details_view.htm">Customize Catalog, Details View</a> page. </li>
+
+<li>Only those objects will be shown which match the selected object types <i>and</i> a used query. </li>
+
+</ul>
+
+<h2 id="selectmulitpleinlist">Selecting multiple object types</h2>
+
+<p class=kopjeaftertitlesub>To select two or more items in sequence:</p>
+
+<ul>
+
+<li>	click the first object type you want to select, </li>
+
+<li>	keep the left mouse button down, and </li>
+
+<li>	move the mouse pointer to the last object type you want to select, </li>
+
+<li>	then release the left mouse button;</li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	click the first object type you want to select,</li>
+
+<li>	press and hold down the <span class=arial>Shift</span> key while you click the last object type of the group.</li>
+
+</ul>
+
+<p class=kopje>To select two or more items out of sequence:</p>
+
+<ul>
+
+<li>	press and hold down the <span class=arial>Ctrl</span> key while you click each object type.</li>
+
+</ul>
+
+<p class=kopje>To cancel a selected object type:</p>
+
+<ul>
+
+<li>	press and hold down the <span class=arial>Ctrl</span> key while you click a selected object type.</li>
+
+</ul>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/main_window_object_selection_toolbar.htm">Main window : Object Selection toolbar</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/main_window_catalog.htm">Main window : Catalog</a> </p>
+
+</body

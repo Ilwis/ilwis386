@@ -1,0 +1,311 @@
+<html>
+
+<head>
+<title>Find datum transformation parameters - Method page</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Datum transformation parameters, Find datum parameters, Coordinate system, Datum, Geodetic datum, User-defined datums, Geo-centric datum shifts, Molodensky datum transformation, Bursa Wolf datum transformation, Molodensky Badekas datum transformation, WGS 84">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table bgcolor="#006699" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Find datum transformation parameters</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Select transformation method</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="find_datum_trans_params_inputpage.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="find_datum_trans_params_outputpage.htm">Next</a>&nbsp;&gt;</td>
+</tr>
+<tr><td bgcolor="FFFFFF" colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>This second page of the Datum transformation parameters wizard allows you to choose the method you wish to use to calculate the datum transformation parameters between the two sets of control points. </p>
+
+<p class=defnewpar>The concept of each calculation method is shortly explained<!--; at the bottom of this page, some schemes are presented for all conversions taking place-->. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+
+<tr>
+<td colspan="2"><p class=diabox><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Geo-centric datum shift:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60><p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top"><p class=diaboxnospacetop>Calculates the translation vector (dX, dY, dZ, i.e. differences in geocentric coordinates in meters) between: </p>
+
+	<ul class=diaul>
+	<li>the centroid of all point-coordinates in the first point map, using a local (unknown) datum, </li>
+    <li>and the centroid of all point-coordinates in the second point map, using a global datum (preferably WGS 84), </li>
+	</ul>
+	
+	<p class=diabox>so that the point-coordinates of the first point map can be transformed to the second.</p>	
+
+</td>
+</tr>
+<tr>
+<td colspan="2"><p class=diabox><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Molodensky:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60><p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top"><p class=diaboxnospacetop>Calculates the translation vector (dX, dY, dZ, i.e. differences in geocentric coordinates in meters) between: </p>
+
+	<ul class=diaul>
+	<li>the centroid of all point-coordinates in the first point map, using a local (unknown) datum, </li>
+    <li>and the centroid of all point-coordinates in the second point map, using a global datum (preferably WGS 84), </li>
+	<li>and inverts the Molodensky transformation equations and avoids the use of geocentric coordinates, </li>
+	</ul>
+
+	<p class=diabox>so that the point-coordinates of the first point map can be transformed to the second.</p>	
+
+</td>
+</tr>
+<tr>
+<td colspan="2"><p class=diabox><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Bursa Wolf: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60><p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top"><p class=diaboxnospacetop>Calculates translations (dX, dY, dZ, i.e. differences in geocentric coordinates in meters), calculates rotations (Rot X, Rot Y, Rot Z in microradians and in arc seconds), and calculates the scale difference factor (dScale) between: </p>
+
+	<ul class=diaul>
+	<li>all point-coordinates in the first point map, using a local (unknown) datum, </li>
+    <li>and all point-coordinates in the second point map, using a global datum (preferably WGS 84), </li>
+	<li>using the center of the ellipsoid as the rotation center (pivot), </li>
+	</ul>
+	
+	<p class=diabox>so that the point-coordinates of the first point map can be transformed to the second.</p>	
+
+</td>
+</tr>
+<tr>
+<td colspan="2"><p class=diabox>Compute scale and rotations first:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60><p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top"><p class=diaboxnospacetop>When you selected the Bursa Wolf or the Molodensky Badekas method: </p>
+
+	<ul class=diaul>
+
+	<li>Select this check box to have the scale factor and the rotations calculated first to obtain more accurate scale and rotation parameters (independent of the stochastic errors in the translations). </li>
+
+	<li>Clear this check box to have the translation vector calculated first. </li>
+
+	</ul>
+
+</td>
+</tr>
+<tr>
+<td colspan="2"><p class=diabox><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Molodensky Badekas: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60><p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top"><p class=diaboxnospacetop>Calculates translations (dX, dY, dZ, i.e. differences in geocentric coordinates), calculates rotations (Rot X, Rot Y, Rot Z in microradians and in arc seconds), and calculates the scale factor (dScale) between:</p>
+
+	<ul class=diaul>
+	<li>all point-coordinates in the first point map, using a local (unknown) datum, </li>
+    <li>and all point-coordinates in the second point map, using a global datum (preferably WGS 84), </li>
+	<li>using a user-defined centroid (in X, Y, Z as geocentric coordinates) on the ellipsoid of the first point map as the rotation center (pivot), </li>
+	</ul>
+	
+	<p class=diabox>so that the point-coordinates of the first point map can be transformed to the second.</p>	
+
+</td>
+</tr>
+<tr>
+<td colspan="2"><p class=diabox>Xo, Yo, Zo:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60><p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top"><p class=diaboxnospacetop>When you selected the Molodensky Badekas method, you must specify a rotation center. </p>
+
+	<ul class=diaul>
+
+	<li>As defaults, the centroids of the X, Y, Z geocentric coordinates on the ellipsoid of the first point map are given. </li>
+
+	<li>If you wish, you can overrule these defaults, and specify your own Xo, Yo, Zo geocentric coordinates (on the ellipsoid of the first point map) as the rotation center. </li>
+
+	</ul>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <span class=arial>Next</span> button, you will go to the <b><a href="find_datum_trans_params_outputpage.htm">Output page</a></b> where you can inspect, and optionally save, the calculated datum transformation parameters. </li>
+
+<h2>Additional information</h2>
+
+<p>The general process of the calculations is presented below. Conversions take place between map coordinates, latlon coordinates on the (local) ellipsoid, and geocentric coordinates. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table border="1" cellpadding="4" cellspacing="0">
+<tr>
+<td>
+	<table cellpadding="1">
+	<tr>
+	<td><i>x<sub>1 </sub>, y<sub>1 </sub>, z<sub>1 </sub></i></td>
+	<td colspan="4">(map coords on certain ellipsoid with unknown datum)</td>
+	</tr>
+	<tr>
+	<td valign="top" class="larger"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&darr;</strong></td>
+	<td>(inverse projection)</td>
+	<td>&nbsp;</td>
+	<td colspan="2">&nbsp;</td>
+	</tr>
+	<tr>
+	<td><i><span class=symbollarger>j</span><sub>1 </sub>,&nbsp;<span class=symbollarger>l</span><sub>1 </sub>,&nbsp;h<sub>1 </sub></i></td>
+	<td width="35%">(latlon coords on certain ellipsoid, with unknown datum)</td>
+	<td valign="top" class="larger"><strong>&nbsp;&nbsp;&nbsp;&rarr;&nbsp;&nbsp;&nbsp;</strong></td>
+	<td><i>X<sub>1 </sub>,&nbsp;Y<sub>1 </sub>,&nbsp;Z<sub>1 </sub></i></td>
+	<td>(geocentric coords with unknown datum)</td>
+	</tr>
+	<tr>
+	<td class="larger"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&darr;</strong></td>
+	<td>&nbsp;</td>
+   	<td>&nbsp;</td>
+	<td class="larger" colspan="2"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&darr;</strong></td>
+	</tr>
+	<tr>
+	<td colspan="2">Actual calculation<br />for Molodensky</td>
+   	<td>&nbsp;</td>
+	<td colspan="2">Actual calculation<br />for Geo-centric shift, <br>Bursa&nbsp;Wolf and Molodensky&nbsp;Badekas</td>
+	</tr>
+	<tr>
+	<td class="larger"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&uarr;</strong></td>
+	<td>&nbsp;</td>
+    <td>&nbsp;</td>
+	<td class="larger" colspan="2"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&uarr;</strong></td>
+	</tr>
+	<tr>
+	<td><i><span class=symbollarger>j</span><sub>2 </sub>,&nbsp;<span class=symbollarger>l</span><sub>2 </sub>,&nbsp;h<sub>2 </sub></i></td>
+	<td>(latlon coords with WGS84 datum)</td>
+	<td valign="top" class="larger"><strong>&nbsp;&nbsp;&nbsp;&rarr;&nbsp;&nbsp;&nbsp;</strong></td>
+	<td><i>X<sub>2 </sub>,&nbsp;Y<sub>2 </sub>,&nbsp;Z<sub>2 </sub></i></td>
+	<td>(geocentric coords with WGS 84 datum)</td>
+	</tr>
+	<tr>
+	<td valign="top" class="larger"><strong>&nbsp;&nbsp;&nbsp;&nbsp;&uarr;</strong></td>
+	<td>(inverse projection)</td>
+    <td>&nbsp;</td>
+	<td colspan="2">&nbsp;</td>
+	</tr>
+	<tr>
+	<td><i>x<sub>2 </sub>,&nbsp;y<sub>2 </sub>,&nbsp;z<sub>2 </sub></i></td>
+	<td colspan="4">(map coords using WGS 84 datum)</td>
+	</tr>
+	</table>
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>Geocentric coordinates are XYZ coordinates (in meters) where the center of the earth is taken as 0,0,0. Figure 1 below shows the octant of the world where the XYZ-geocentric coordinates are positive. </p>
+
+<ul>
+
+<li class=ls01be>The XY plane is the equator plane. The line between the Z-axis and the X-axis is the Greenwich 0° meridian; the line between the Z-axis and the Y-axis is the meridian of 90° East. </li>
+
+<li><span class=symbollarger>j</span> is the geodetic latitude; <span class=symbollarger>l</span> is the geographic longitude. </li>
+
+	<p>The geodetic latitude is larger than the geographic latitude due to the ellipsoidal flattening as the perpendicular onto the ellipsoid does not pass through the center of the ellipsoid. </p>
+
+<li class=ls01be>The red point is a point in the terrain with a measured height; the green point is a point on the earth surface with ellipsoidal height zero. </li>
+
+<li>In many texts on GIS and geodesy, this spherical ellipsoidal shape, obtained by turning an ellipse about its shortest axis b, is called a 'spheroid'. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<img src="../images/datum_trans_geocentriccoords.gif" width="217" height="183">
+
+<p class=captionfig>Fig. 1:&nbsp;&nbsp;Relation between geocentric coordinates (X, Y, Z) and geographic coordinates (<span class=symbollarger>j</span> latitude, <span class=symbollarger>l</span> longitude). </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>The formula to perform the Bursa Wolf datum transformation reads: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<img src="../images/datum_trans_bursawolf.gif" width="344" height="75">
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>The formula to perform the Molodensky Badekas datum transformation reads: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<img src="../images/datum_trans_molodenskybadekas.gif" width="373" height="75">
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>where:</p>
+
+<table cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width="96"><i>t<sub>x </sub>, t<sub>y </sub>, t<sub>z </sub></i>
+</td>
+<td valign="baseline">are the translations between both datums (in geocentric coordinates). 
+</td>
+</tr>
+<tr>
+<td valign="top"><i><span class=symbollarger>a</span>, <span class=symbollarger>b</span>, <span class=symbollarger>g</span></i>
+</td>
+<td valign="baseline">are the rotation angles between both datums; rotations about the X, Y and Z axes respectively. On the Output page, <i><span class=symbollarger>a</span>, <span class=symbollarger>b</span>, <span class=symbollarger>g</span></i> are called Rot X, Rot Y, and Rot Z. 
+</td>
+</tr>
+<tr>
+<td valign="top"><i><span class=symbollarger>d</span></i>
+</td>
+<td valign="baseline">is the scale difference between both datums. On the Output page, <i><span class=symbollarger>d</span></i> is called dScale. 
+</td>
+</tr>
+<tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+<tr>
+<td valign="top"><i>X<sub>0 </sub>, Y<sub>0 </sub>, Z<sub>0 </sub></i>
+</td>
+<td valign="baseline">is the rotation center of the local datum (in geocentric coordinates). 
+</td>
+</tr>
+<tr>
+<td valign="top"><i>I, II</i>
+</td>
+<td valign="baseline">are the local and global datum respectively (geocentric coordinates). 
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="find_datum_trans_params_inputpage.htm">Find datum transformation parameters - Input page</a></p>
+
+<p class=seealsolinks><a href="find_datum_trans_params_outputpage.htm">Find datum transformation parameters - Output page</a></p>
+
+</body

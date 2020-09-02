@@ -1,0 +1,282 @@
+<html>
+
+<head>
+<title>How to calculate flooded area and water volume (advanced)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Neighbourhood operations, Calculate (advanced) ..., Flooded area, Water volume, How to calculate ..., Iteration">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to calculate flooded area and water volume</h1>
+
+<h1 class=secondline>after construction of a dam (example)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>When a dam is constructed in a valley, an area upstream will be flooded up to a certain water level. To determine the exact area to be flooded you can use neighbourhood operations in ILWIS. Then, you can also calculate the volume of the water body. </p>
+
+<h2>Preparations</h2>
+
+<ol>
+
+<li>	The first step is determination of the dam site, dam altitude, freeboard and the designed water level <i>h</i>. <br>
+In this example, the upper side of the dam will be at an altitude of 3360 m; the freeboard of the dam is 20 m; the actual water level will be at 3340 m altitude.</li>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	A Digital Elevation Model (DEM) of the area should be available. For more information, see <a href="how_to_calculate_digital_elevation_models.htm">How to calculate a DEM</a>.</li>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	Then, make a raster map showing the exact location of the dam. To do so, start with displaying the DEM and  use the pixel editor to create a new raster map. Choose in the menu of the map window <span class=arial>File, Create, Create Raster Map</span>.</li>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	The <a href="../ilwismen/create_a_raster_map.htm">Create Raster Map</a> dialog box appears:</p>
+
+        <ul>
+
+        <li>	Fill in the new map name (e.g. <span class=courier>DAM</span>);</li>
+
+        <li>	Choose the <span class=arial>Georeference</span> which is used in the DEM (accept the default);</li>
+
+        <li>	Select the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system <span class=courier>Value</span> domain</a>; then click OK. </li>
+
+        </ul>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	The Pixel editor is opened. Zoom in on the area where you want to build the dam. Then select pixels which will form the dam in map <span class=courier>DAM</span>. The pixels indicating the dam should be properly 4-connected (see figures below). When pixels are only 8-connected, pixels at the opposite side of the dam are also used in the calculation later on.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p class=courier></p>
+
+</td>
+<td valign="top" width=151>
+<p class=courier>wrong:</p>
+
+</td>
+<td valign="top">
+<p class=courier>correct:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=151>
+<p><img src="../images/mc66.gif" align=bottom width="105" height="84"></p>
+
+</td>
+<td valign="top">
+<p><img src="../images/mc67.gif" align=bottom width="105" height="84"></p>
+
+</td>
+</tr>
+</table>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	Use the left mouse button to select the pixels while you hold down the <span class=arial>Ctrl</span> key of the keyboard. When the correct pixels are selected, give the dam the value of the altitude of the top of the dam (in this example 3360).</p>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	To combine the DEM and the raster map <span class=courier>DAM</span>, type on the command line of the Main window: </li>
+
+        <p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+        <p class=calc1>DEMNEW = <a href="calc_ifundef.htm">IFUNDEF</a>(DAM,DEM, DAM)</p>
+
+        <p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	This means that if a pixel in map <span class=courier>DAM</span> is undefined, the value of the DEM is assigned, else the value given in map <span class=courier>DAM</span>. Thus the altitude of the dam (in this example 3360m) is included in the Digital Elevation Model.</p>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	Display the output map <span class=courier>DEMNEW</span> to force calculation.</p>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	To determine the area that will be flooded you need to create a map indicating one pixel in this area. Using neighbourhood operations this pixel acts as the starting point for the calculation. Use the pixel editor to create the new raster map. <br>
+        First, display map <span class=courier>DEMNEW</span> and choose <span class=arial>File, Create, Create Raster Map</span> from the menu in the map window. </li>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	Then fill out the Create Raster Map dialog box: </p>
+
+        <ul>
+
+        <li>	In this example, type <span class=courier>START</span> for name of the new raster map;</li>
+
+        <li>	Select the same georeference as was used in <span class=courier>DEMNEW</span>; </li>
+
+        <li>	Select the <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system <span class=courier>Bool</span> domain</a>. </li>
+
+        </ul>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	Select a pixel in the area which will be flooded, double-click this pixel and mark it '<span class=courier>True</span>'. </p>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	Leave the pixel editor: the map <span class=courier>START</span> has only one defined pixel, the rest is undefined. <br>
+                Display the map <span class=courier>START</span> to force calculation.</p>
+
+<h2 class=left0>Calculating the flooded area</h2>
+
+<li>	Now the actual calculation of the area can be performed. Iteration with propagation is used until there are no changes anymore in any of the pixel values. In this example, the upper side of the dam was at an altitude of 3360 m; the freeboard of the dam is 20 m; the actual water level is at 3340 m altitude.</li>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	To start the calculation, double-click the <span class=arial>Iteration</span> item in the Operation-list. </p>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	The <a href="../ilwisapp/iteration_dialog_box.htm">Iteration dialog box</a> appears:</p>
+
+        <ul>
+
+        <li>	For <span class=arial>Start Map</span>, select <span class=courier>START</span>. </li>
+
+        <li>	Type for the <span class=arial>Expression</span>:</li>
+
+        </ul>
+
+        <p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+        <p class=calc1>IFF (DEMNEW &gt; 3340, START, <a href="calc_special_neighbourhood_operations_and_iterations.htm#NBMAX">NBMAX</a>(START#))</p>
+
+        <p class=emptylinehalf>&nbsp;&nbsp;  </p>
+
+        <p class=leftmargininlist> This means: if the altitude in the new Digital Elevation Model is higher than 3340 m (the desired water level), then return the pixel values of raster map <span class=courier>START</span> (which are undefined). Else, assign the maximum value of the neighbouring pixels found in raster map <span class=courier>START</span>. <br>
+        In the first iteration there is only one starting pixel which is 'True'. Then in every next iteration, the neighbours of the True pixel(s) will be assigned True as will, as long as these pixels have an altitude less than 3340 m. </p>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <ul>
+
+        <li>	Accept the default <span class=arial>Until No changes</span> as the <span class=arial>Stop criterium</span>;</li>
+
+        <li>	Keep the option <span class=arial>Propagation</span> selected because then the new pixel value is immediately used in the calculation of the next line;</li>
+
+        <li>	Type <span class=courier>FLOODED</span> as the name of output raster map;</li>
+
+        <li>	Select the <span class=arial>Show</span> check box;</li>
+
+        <li>	Select the system <span class=courier>Bool</span> domain;</li>
+
+        <li>	Then click OK.</li>
+
+        </ul>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	The calculation starts, then the Display Options dialog box of the output map <span class=courier>FLOODED</span> appears. Accept the default display options, the area which will be flooded appears on the screen (True values, other pixels are undefined).</li>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	To find out the size of the flooded area you calculate a histogram by double clicking the <a href="..//ilwisapp/popup/histogram_operation_popup.htm" onClick="return popup(this, 'notes')" >Histogram</a> item in the Operation-list; select map <span class=courier>FLOODED</span>. You can read the size of the area which is flooded (<span class=courier>True</span>) from the histogram table. </li>
+
+<h2 class=left0>Calculating the water volume</h2>
+
+<li>	The next step is the calculation of the volume of the water body. </li>
+
+        <p class=leftmargininlist>	Therefore, you can <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a> the newly calculated map <span class=courier>FLOODED</span> with map <span class=courier>DEMNEW</span>. The crossing of two value maps may be a relatively time consuming process. </p>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	To reduce calculation time and the size of the output cross table, you can create another DEM which only shows the original height values of the area that will be flooded, while all other pixels have the undefined value. To do so, type the following expression on the command line of the Main window:</p>
+
+        <p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+        <p class=calc1>DEMSMALL = IFF(FLOODED, DEMNEW, ?)</p>
+
+        <p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	This means that for the flooded area the values of the DEM will be used, while all other pixels are assigned the undefined value; these undefined values are not taken into account in the cross operation.</p>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	To start the Cross operation, double-click <span class=arial>Cross</span> in the Operation-list. <br>
+        The <a href="../ilwisapp/cross_dialogbox.htm">Cross dialog box</a> appears. </li>
+
+        <ul>
+
+        <li>	Select for the first map <span class=courier>FLOODED</span>;</li>
+
+        <li>	Select for the second map <span class=courier>DEMSMALL</span>;</li>
+
+        <li>	Type <span class=courier>FLOODDAM</span> as the name for the output cross table;</li>
+
+        <li>	Select the <span class=arial>Show</span> check box. </li>
+
+        <li>	Do not select the <span class=arial>Output Map</span> check box.</li>
+
+        <li>	Click OK. </li>
+
+        </ul>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	The cross table is calculated and is displayed on the screen. It shows the combinations of input values of the map <span class=courier>FLOODED</span> and the map <span class=courier>DEMSMALL</span>, the number of pixels that occur for each combination and the area for each combination.</p>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	In the cross table, you can calculate the water depths by subtracting the altitude given in column <span class=courier>DEMSMALL</span> from the planned water level (3340 m). <br>
+        Type the command line of the table window:</li>
+
+        <p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+        <p class=calc1>DEPTH = 3340 - DEMSMALL</p>
+
+        <p class=emptyline>&nbsp;&nbsp;  </p>
+
+        <p class=leftmargininlist>	Then calculate the volumes of the depths as follows:</p>
+
+        <p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+        <p class=calc1>VOL = DEPTH * Area</p>
+
+        <p class=emptyline>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	Finally, sum all volumes of all different water depths together. This can be done using the aggregation function <a href="calc_aggsum.htm"><span class=courier>AGGSUM</span></a>.</p>
+
+        <p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+        <p class=calc1>SUM = AGGSUM (VOL)</p>
+
+        <p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+        <p class=leftmargininlist>	Column <span class=courier>SUM</span> shows the total volume of water in cubic meters for the entire area which will be flooded after creating the dam.</p>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="calc_special_neighbourhood_operations_and_iterations.htm">Map calculation : neighbourhood operations &amp; iterations</a></p>
+
+</body

@@ -1,0 +1,69 @@
+<html>
+
+<head>
+<title>Segment density : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment density">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segment density</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Segment Density operation, also called Lineament Density, rasterizes a segment map. For each output pixel, the total length of all segment parts within the boundaries of the pixel is <i>summed</i>: this is the output value for the pixel. </p>
+
+<p class=defnewpar>During this operation, you have to specify a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> for the output raster map. It is advised to use a georeference in which the pixels are rather large, i.e. at least large enough to contain parts of several segments. When you choose a large pixel size, the segments are aggregated over a larger area. Furthermore, by using a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a>, you can specify the elements of the input map that are to be used in the calculation.</p>
+
+<p class=kopje>Example:</p>
+
+<p>When you have a segment map with geological faults, you can calculate the lenght of faults per square km, per 100 square km, etc. Similarly, you can calculate the length of roads or rivers per area. </p>
+
+<p class=kopje>Mask:</p>
+
+<p>By specifying a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a>, you can search for segments with a certain class name, ID or value. Then only these segments will be used in the calculation of the output map. A mask is in fact a simple query to find (retrieve), display or use only those segments in a map that have certain class names, identifiers or values. A mask contains one or more search strings in which wild cards, asterisks (<span class=courier>*</span>) and question marks (<span class=courier>?</span>), are allowed. You can enter as many search strings in a mask as you like; separate the strings by commas.</p>
+
+<p>For more information on masks, see <a href="mask_segments_functionality.htm">Mask segments : functionality</a> or <a href="../ilwis/how_to_use_masks.htm">How to use masks</a>.</p>
+
+<p class=kopje>Requirements for the input map:</p>
+
+<p>No special requirements for the input segment map.</p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The default domain for the output raster map is the system domain <span class=courier>Value</span> but you can also select another domain or create a new domain. </p>
+
+<p>The <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> for the output map has to be selected or created. When this is the first time you aggregate pixels, you should create a new georeference corners in which the pixels are large enough to contain a number of segments. The georeference for the raster map may use a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that is different from coordinate system of the input point map but a conversion between both coordinate systems must be possible. Georeference <span class=courier>None</span> cannot be selected for the output map.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>The <a href="..//ilwisapp/popup/aggregate_map_popup.htm" onClick="return popup(this, 'notes')" >Aggregate raster map</a> operation has similar functionality for raster maps and contains a number of different aggregation functions.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segment_density_dialog_box.htm">Segment density : dialog box</a></p>
+
+<p class=seealsolinks><a href="segment_density_command_line.htm">Segment density : command line</a></p>
+
+<p class=seealsolinks><a href="segment_density_algorithm.htm">Segment density : algorithm</a></p>
+
+</body

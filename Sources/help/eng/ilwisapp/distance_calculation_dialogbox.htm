@@ -1,0 +1,132 @@
+<html>
+
+<head>
+<title>Distance calculation : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Distance calculation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Distance calculation</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Create a distance map or a travel time map. For information about input map requirements, see <a href="distance_calculation_functionality.htm">Distance calculation : functionality</a>.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox><a href="..//ilwisapp/popup/distance_calculation_source_map_popup.htm" onClick="return popup(this, 'notes')" >Source map</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the raster map that contains the source pixels. Open the drop-down list box and select a map, or directly drag a map from the Catalog into this box. In the Distance calculation dialog box, a source map can be any raster map with a class or ID domain. On the command line, you can also use raster maps with a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox><a href="..//ilwisapp/popup/distance_calculation_weight_map_popup.htm" onClick="return popup(this, 'notes')" >Weight map</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you do not have equal accessibility in the map, subsequently select the raster map that contains weigth values. Clear this check box if no weight values are to be used (equal accessibility).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Output map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the calculated distances (in meters) towards the source pixels. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/yy_system_domain_distance_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Distance</a></span>, or select or create <img src="../images/crea.gif" align=bottom width="17" height="22"> your own output value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, or specify your own range of possible values in the output map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of output values, or specify your own precision. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Thiessen map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to calculate a Thiessen map. Subsequently, type a name for the output Thiessen map.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output distance map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output distance map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=linespacing03before>Optionally, a Thiessen map can be defined. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="distance_calculation_functionality.htm">Distance calculation : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/distance_calculation_travel_time_map.htm">Distance calculation : travel time map</a></p>
+
+<p class=seealsolinks><a href="distance_calculation_thiessen_map.htm">Distance calculation : Thiessen map</a></p>
+
+</body

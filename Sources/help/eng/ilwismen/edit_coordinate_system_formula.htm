@@ -1,0 +1,468 @@
+<html>
+
+<head>
+<title>Edit coordinate system formula</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Edit Coordinate System Formula</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>View and/or edit a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> formula. A coordinate system defines the XY-coordinates in your maps; a coordinate system formula is  based on another coordinate system and a user-defined formula. </p>
+
+<p>Coordinate systems are used by polygon, segment and point maps, and by the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of a raster map. It is advised to use one coordinate system for all the maps in your project. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when in the <a href="../ilwismen/create_a_coordinate_system.htm">Create Coordinate System</a> dialog box, you selected to create a coordinate system of the type formula, </li>
+
+<li>	when in the <a href="../ilwismen/create_a_coordinate_system_in_map_window.htm">Create Coordinate System (in map window)</a> dialog box, you selected to create a coordinate system of the type formula, </li>
+
+<li>	when in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, you double-click a coordinate system of the type formula,</li>
+
+<li>	when in the Catalog, you press the right mouse button on a coordinate system of the type formula, and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, </li>
+
+<li>	when a map window currently uses a coordinate system of the type formula, and you choose <span class=arial>Coordinate System</span> from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in the map window.</li>
+
+</ul>
+
+<p class=defnewpar>Specify the formula that should be applied on an input coordinate system (= related coordinate system), and specify the boundary XY-coordinates for the coordinate system that you are creating (artificial coordinates).</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the coordinate system. The description is visible on the status bar of the Main window when moving the mouse pointer over the coordinate system in the Catalog. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Min X, Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the minimum X-coordinate and the minimum Y-coordinate for this coordinate system (artificial coordinates). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Max X, Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the maximum X-coordinate and the maximum Y-coordinate for this coordinate system (artificial coordinates). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Defaults</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>First, fill out parameters for your formula.</p>
+
+<p class=diabox>Then, you can click the <span class=arial>Defaults</span> button and see how the coordinate boundaries of the related coordinate system map/fit with the coordinates of the current coordsys formula.</p>
+
+<p class=diabox>The boundary values are calculated by applying the current formula as defined by this dialog box on the related coordinate system. In this way, you can check whether your formula results in the current (artificial) boundary coordinates.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>The boundary values will only be used to determine:</p>
+
+<ul class=diaul>
+
+<li>	default map coordinate boundaries for vector maps, and </li>
+
+<li>	default coordinate boundaries for a georeference for raster maps.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Related coordsys:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the coordinate system with the correct coordinates. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Related origin:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The coordinates of the origin of the related coordinate system, i.e. the input coordinate system. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Target origin:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The coordinates of the origin of the target coordinate system, i.e. the current coord sys formula. </p>
+
+<p class=diabox>The text boxes for Related origin and Target origin together define a shift or <i>translation</i> of the origin. Example: To make an origin shift of 1000 to the right and 1000 up, specifying 0, 0 for the Related origin boxes and 1000, 1000 for the target origin.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In the formulae below, <img src="../images/inxy.gif" align=bottom width="25" height="38"> is used for the related coordinates, <img src="../images/outxy.gif" align=bottom width="45" height="38"> for the coordinates of the coordsys formula which you are editing, <img src="../images/originxy.gif" align=bottom width="32" height="40"> for the origin in the related coordsys, <img src="../images/origout.gif" align=bottom width="33" height="40"> for the origin of the coordsys formula which you are editing.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Affine transformation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the option affine transformation when you want to construct an affine transformation formula. You can select a method and specify various parameters to obtain a translation (shifted origin) and/or a rotation and/or a scale factor, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Conformal:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>A transformation which is equal for both the X-coordinates and the Y-coordinates.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Scaling:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a scale factor or <i>multiplication factor</i> with which all coordinates will be multiplied.</p>
+
+<p class=diabox>A scale factor of 1 returns the same coordinates; a scale factor of 0.5 divides your coordinates by 2; a scale factor of 2 multiplies your coordinates by 2; a scale factor of -1 reflects the coordinates in the origin.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Rotation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify an angle in degrees for a <i>rotation</i> of the coordinate system. Rotation is clockwise about the origin of the input coordinate system.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>The complete formula for a conformal transformation reads:</p>
+
+<p class=diabox><img src="../images/conform.gif" align=bottom width="260" height="40"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Differential scaling:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Transformation which allows different scale / multiplication factors for the X-coordinates and for the Y-coordinates. </p>
+
+<p class=diabox>When you do not shift the origin, the formulas are:</p>
+
+<p class=diabox>X<sub>out</sub> = k<sub>1</sub> * X<sub>in</sub></p>
+
+<p class=diabox>Y<sub>out</sub> = k<sub>2</sub> * Y<sub>in</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>X-scaling:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a scale factor or multiplication factor (k<sub>1</sub>) with which all X-coordinates will be multiplied.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Y-scaling:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a scale factor or multiplication factor (k<sub>2</sub>) with which all Y-coordinates will be multiplied.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>The complete formula reads:</p>
+
+<p class=diabox><img src="../images/diffscal.gif" align=bottom width="200" height="40"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Skew along X-axis:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Transformation in which X-coordinates will be stretched, while Y-coordinates remain the same. (A square becomes a parallellogram.)</p>
+
+<p class=diabox>When you do not shift the origin, the formulas are:</p>
+
+<p class=diabox>X<sub>out</sub> = X<sub>in</sub> + Y<sub>in </sub><span class=courier>*</span> tan<span class=symbol>a</span></p>
+
+<p class=diabox>Y<sub>out</sub> = Y<sub>in</sub></p>
+
+<p class=diabox>Specify a clockwise angle (-90&lt;angle&lt;90) in degrees.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>The complete formula reads:</p>
+
+<p class=diabox><img src="../images/skewx.gif" align=bottom width="218" height="40"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Skew along Y-axis:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>X<sub>out</sub> = X<sub>in</sub></p>
+
+<p class=diabox>Y<sub>out</sub> = Y<sub>in</sub> + X<sub>in </sub><span class=courier>*</span> tan<span class=symbol>a</span></p>
+
+<p class=diabox>The complete formula inclusive a translation reads:</p>
+
+<p class=diabox><img src="../images/skewy.gif" align=bottom width="220" height="40"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Matrix coefficients:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For advanced users: specify matrix coefficients by which the input coordinates will be multiplied.</p>
+
+<p class=diabox>The complete formula reads:</p>
+
+<p class=diabox><img src="../images/affine.gif" align=bottom width="220" height="40"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  User-defined expression:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the option user-defined expression when you want to type in a formula which establish relations for XY-coordinates of the input or related coordinate system and the desired output XY-coordinates of the coordinate system formula that you are creating. Optionally, you can also specify the inverse formulae. This option to specify a user-defined expression can be used to create a coordinate system from a coordinate system projection, when you know ellipsoidal or datum formulae to go from one system to the other.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>out X =</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a formula which defines the relation between desired output X-coordinates (this coordsys formula) and input XY-coordinates (the related coordsys). The parameter for the X-coordinates is X, the parameter for the Y-coordinates is Y. Furthermore, you can use any ILWIS function just as in MapCalc or TabCalc on the command line.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>out Y =</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a formula which defines the relation between desired output Y-coordinates and input XY-coordinates. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Inverse Formulae</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you want to specify the inverse formulae. There is no check on whether the inverse formula supplied by the user is really the inverse of the formulae above. Use with care.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>inv X = </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a formula which defines the inverse formula. </p>
+
+<p class=diabox>The input XY's for this formula are coordinates from this coordinate system formula (artificial coordinates).</p>
+
+<p class=diabox>The resulting X is a coordinate of the related coordinate system.</p>
+
+<p class=diabox>The parameter for the X-coordinates is X; the parameter for the Y-coordinates is Y. Furthermore, you can use any ILWIS function just as in MapCalc or TabCalc on the command line.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>inv Y = </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a formula which defines the inverse formula. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	Once you have created a correct coordinate system, it is advised to make it read-only in the <a href="coordinate_system_properties.htm">Coordinate System Properties</a> sheet.</li>
+
+<li>	To change the coordinates of maps from one coordinate system to another coordinate system, use the <b>Transform Points, Transform Segments or Transform Polygons</b> operation. The input vector map can have the coordinate system with the artificial coordinates. Transform the map to the coordinate system formula which you just created. </li>
+
+<li>	To transform coordinates of raster maps from one georeference to another georeference (which has for instance another coordsys), use the <b>Resample</b> operation.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate system</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/transform_point_map.htm">Transform point map</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/transform_segment_map.htm">Transform segment map</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/transform_polygon_map.htm">Transform polygon map</a></p>
+
+</body

@@ -1,0 +1,170 @@
+<html>
+
+<head>
+<title>VAR</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="VAR, Statistical functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>VAR( ) function</h1>
+
+<p class=defnewpar>Returns the variance of a value column.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>VAR</span>(<i>ValueColumn</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>ValueColumn</i></td>
+	<td valign="top">is a value column</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>VAR</span>   returns:</td>
+	<td valign="top">a real value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The variance is calculated according to the following formula:</li>
+<table cellspacing=0>
+<tr>
+<td valign="top"><img border="0" src="../images/stvar.gif" align=bottom width="130" height="36">
+</td>
+</tr>
+</table>
+	<li>The <span class=courier>VAR</span> function can only be used on the command line of the table window; it cannot be used on the command line of the Main window.</li>
+	<li>The <span class="courier">VAR</span> function can also be performed
+      through a dialog box, see <a href="../ilwismen/column_statistics.htm">Column
+      Statistics</a>.</li>
+	<li>When the input value is undefined, the record will be excluded from the calculation.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>The smaller the variance, the less the values vary from the average.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >TabCalc pocket line calculator</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>TabCalc example:</p>
+<p class=calc00>OutCol = VAR(InCol)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-5</p></td>
+	<td valign="top"><p class=t1r>34.286</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-2</p></td>
+	<td valign="top"><p class=t1r>34.286</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-1</p></td>
+	<td valign="top"><p class=t1r>34.286</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>34.286</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>34.286</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>34.286</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>8</p></td>
+	<td valign="top"><p class=t1r>34.286</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>9</p></td>
+	<td valign="top"><p class=t1r>34.286</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>11</p></td>
+	<td valign="top"><p class=t1r>34.286</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc pocket line calculator example:</p>
+<table cellspacing=0>
+<tr>
+	<td width="150"><p class=calc00>? VAR(InCol)</p></td>
+	<td><p>returns 34.286</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_min.htm">MIN</a></p></td>
+	<td valign="top" width="50"><a href="calc_cnt.htm">CNT</a></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_stderr.htm">STDERR</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_ttest.htm">TTEST</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_max.htm">MAX</a></p></td>
+	<td valign="top" width="50"><a href="calc_avg.htm">AVG</a></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_cov.htm">COV</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_chisquare.htm">CHISQUARE</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_sum.htm">SUM</a></p></td>
+	<td valign="top" width="50"><a href="calc_std.htm">STD</a></td>
+	<td valign="top" width="60"><a href="calc_cov.htm">COVAR</a></td>
+	<td valign="top"><a href="../ilwismen/column_statistics.htm">Column
+      Statistics</a></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_cum.htm">CUM</a></p></td>
+	<td valign="top" width="50"><a href="calc_std.htm">STDEV</a></td>
+	<td valign="top" width="60"><a href="calc_corr.htm">CORR</a></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

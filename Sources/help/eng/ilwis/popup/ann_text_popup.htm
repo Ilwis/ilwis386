@@ -1,0 +1,64 @@
+<html>
+
+<head>
+<title>ann text popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Texts&nbsp;&nbsp;&nbsp;<img src="../../images/annsitxt.gif" align=bottom width="22" height="22"></p>
+
+<p>Texts, such as for instance a title or some other textual information, can be added to a <a href="objects_layout_popup.htm">layout</a> in the <a href="layout_editor_popup.htm">layout editor</a>. </p>
+
+<p class=linespacing03before>A layout is a virtual sheet of paper on which you can add one or more <a href="objects_map_view_popup.htm">map views</a> (each containing one or more maps and optional <a href="ann_grid_lines_popup.htm">grid lines</a>, <a href="ann_graticule_popup.htm">graticules</a> and/or <a href="annotation_text_popup.htm">annotation text layers</a>), and additional <a href="layers_annotation_layers_popup.htm">annotation</a>. </p>
+
+<p class=defnewpar>In the layout editor, each text has to be typed into an <a href="..//ilwismen/layout_editor_insert_edit_text.htm" onClick="return popup(this, 'notes')" >Insert/Edit Text</a> dialog box. </p>
+
+<ul>
+
+<li>The text may actually consist of multiple text lines; use the <span class=arial>Enter</span> key or the <span class=arial>Shift+Enter</span> key. </li>
+
+<li>Furthermore, you may rotate a text, specify a font, a color, etc. </li>
+
+<li>Each text can be dragged to a <i>certain position</i>. </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext> When you want to obtain label-like texts for all points, segment or polygons of a map, or when you want to store multiple texts at <i>multiple positions</i>, it is advised to create an <a href="../../ilwis/popup/annotation_text_popup.htm">Annotation Text object</a>. </p>
+
+<ul class=tipul>
+
+<li>In a map window, open the <a href="..//ilwis/map_window_menu_commands.htm" onClick="return popup(this, 'notes')" >File menu</a> and choose <span class=arial>Create Annotation Text</span>. The <a href="..//ilwismen/create_an_annotation_text_object.htm" onClick="return popup(this, 'notes')" >Create Annotation Text</a> dialog box will appear, in which you can choose to use a map on which the texts/labels should be based. </li>
+
+<li>Then, in the <a href="annotation_text_editor_popup.htm">Annotation Text editor</a>, you can easily reposition selected texts, and you can specify fonts, font sizes, appearance (bold, italics, underline), colors, rotations, etc. Texts in an Annotation Text object can only consist of one line. </li> 
+
+</ul>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="..//ilwis/layout_editor_functionality.htm" onClick="return popup(this, 'notes')" >Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/annotation_text_editor_functionality.htm" onClick="return popup(this, 'notes')" >Annotation Text editor editor : functionality</a></p>
+
+
+
+</body

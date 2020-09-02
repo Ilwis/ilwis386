@@ -1,0 +1,202 @@
+<html>
+
+<head>
+<title>ILWIS objects : map lists</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS objects, Map lists, Container objects, Time series, Satellite images, MapListApplic, MPL">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Map lists&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/mpl.gif" align=bottom width="16" height="12"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A map list is a <a href="ilwis_objects_container_objects.htm">container object</a> which stores the names of <b>a set of raster maps</b>, for example of the multi-spectral bands of a satellite image that you want to classify. A map list may also store the names of several raster maps of a time series which you can display as a slide show. All <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a> in a map list must have the same the same <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> and <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>. </p>
+
+<p class=defnewpar>A map list is used:</p>
+
+<ul>
+
+<li>	for <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a> and <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >image classification</a>,</li>
+
+<li>	for the creation of interactive <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >color composites</a>,</li>
+
+<li>	for a <a href="..//ilwisapp/popup/principle_components_popup.htm" onClick="return popup(this, 'notes')" >principal components analysis</a> or <a href="..//ilwisapp/popup/factor_analysis_popup.htm" onClick="return popup(this, 'notes')" >factor analysis</a>,</li>
+
+<li>	for the calculation of multiband statistics (<a href="..//ilwisapp/popup/variance_covariance_matrix_popup.htm" onClick="return popup(this, 'notes')" >variance-covariance matrix</a> or <a href="..//ilwisapp/popup/correlation_matrix_popup.htm" onClick="return popup(this, 'notes')" >correlation matrix</a>),</li>
+
+<li>	to present temporal changes in maps; make a time-series by combining several maps of the same theme but of for instance different years into a map list and show the map list as a <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>.</li>
+
+</ul>
+
+<p class=defnewpar>Furthermore, you can apply a MapCalc formula or an operation on all raster maps in a map list:</p>
+
+<ul>
+
+<li>    the MapCalc formula will be applied to all raster maps in the map list, or</li>
+
+<li>    the operations that can use a map list as input are: <a href="..//ilwisapp/popup/aggregate_map_popup.htm" onClick="return popup(this, 'notes')" >Aggregate Map</a>, <a href="..//ilwisapp/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a>, <a href="..//ilwisapp/popup/stretch_popup.htm" onClick="return popup(this, 'notes')" >Stretch</a>, <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a>, <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a>, <a href="..//ilwisapp/popup/sub_map_raster_popup.htm" onClick="return popup(this, 'notes')" >Sub-Map of raster map</a>, and <a href="..//ilwisapp/popup/mirror_rotate_popup.htm" onClick="return popup(this, 'notes')" >Mirror/Rotate</a>.</li>
+
+</ul>
+
+<p class=defnewpar>Another type of map lists can be obtained through <a href="../ilwismen/import_general_raster.htm">Import General Raster</a>. When the image to be imported contains information on multiple bands, and when you use the options <span class=arial>Use data in original format</span>, without the creation of separate maps, you obtain a map list which only consists of an <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.MPL). When needed, the actual data will be read on the fly from the original non-converted image. </p>
+
+<p class=kopje>Names of map lists:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a map list:</p>
+
+<p>To create a map list, open the <a href="main_window_menu_commands.htm">File menu</a> in the Main window and select the <span class=arial>Create Map List</span> command. You can also expand the <span class=arial>Create</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> and double-click the <span class=arial>New Map List</span> command, or double-click the <span class=arial>New Map List</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>. Furthermore, you can also create a map list when you start an operation which requires a map list as input, and click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> in the operation's dialog box. </p>
+
+<p class=defnewpar>In the appearing <a href="../ilwismen/create_a_map_list.htm">Create Map List</a> dialog box, enter a name and description for the map list, and select the raster maps you wish to add to the map list. Remember that all raster maps in a map list should use the same domain and the same georeference. </p>
+
+<p class=kopje>To open a map list:</p>
+
+<p>You can open a map list by double-clicking a map list in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. A special kind of Catalog will be opened which lists all raster maps in your map list; this is called the map list editor. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>To display an individual raster map, double-click the raster map in the map list editor. </li>
+
+<li>To open the map list as an <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >interactive color composite</a>, click the <span class=arial>Open as Color Composite</span> button <img src="../images/showmap.gif" align=bottom width="22" height="22"> in the map list editor. The raster maps should use the <span class=courier>Image</span> domain or another value domain. </li>
+
+<li>To open the map list as a <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>, click the <span class=arial>Open as Slide Show</span> button <img src="../images/slidefilm.gif" align=bottom width="22" height="22"> in the map list editor. </li>
+
+</ul>
+
+<p class=defnewpar>To open a map list as a color composite or as a slide show, you can also use the right mouse button on a map list in a normal Catalog, and choose <span class=arial>Visualization, as Color Composite</span> or <span class=arial>Visualization, as Slide Show</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. You can of course also use the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> , the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a> in the Main window.</p>
+
+<p class=defnewpar>When you display a map list as an interactive color composite, you can select which maps of the map list should be used in the color composite and you can specify the stretch ranges for each of the selected maps. By changing the display options of the map list, you can easily change the color composite. This is very suitable for <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a> and <a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >on-screen digitizing</a>. For more information, refer to <a href="how_to_create_color_composites.htm">How to create a color composite</a>.</p>
+
+<p class=defnewpar>When you display a map list as a slide show, one map after the other will be shown in the same map window. This is very suitable to display a time series. For more information on slide shows, see <a href="../ilwis/how_to_display_a_map_list_as_a_slide_show.htm">How to display a map list as a slide show</a> or <a href="../ilwismen/open_show_map_list_as_slide_show.htm">Open map list as slide show</a>.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To speed up the display of large raster maps e.g. maps consisting of a few thousand lines and columns or more, you can create Pyramid layers. For more information, refer to <a href="ilwis_objects_raster_maps_pyramids.htm">ILWIS objects : Raster maps - Pyramid layers</a>. </p>
+
+<p class=kopje>To edit a map list:</p>
+
+<p>To edit a map list, either double-click a map list in a Catalog, or select one or more map lists in a Catalog and choose <span class=arial>Edit Object</span> from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> in the Main window, or use the right mouse button on one or more selected map lists in a Catalog and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<p class=defnewpar>In the appearing Map List editor window, you can: </p>
+
+<ul>
+
+<li>add other raster maps to your map list for instance by using the <span class=arial>Add Raster Map</span> <img src="../images/mpladdmap.gif" align=bottom width="22" height="22"> button; </li>
+
+<li>remove maps from the map list for instance by using the <span class=arial>Remove Raster Map(s)</span> <img src="../images/mplremovmap.gif" align=bottom width="22" height="22"> button; </li>
+
+<li>change the order of maps in the map list (for slide shows) by dragging a map to another position. </li>
+
+</ul>
+
+<p>For more information, refer to <a href="how_to_edit_map_lists.htm">How to edit a map list</a>.
+
+<p class=kopje>Calculating with map lists/Operations on map lists:</p>
+
+<ol>
+
+<li>Usually, you will create a map list during <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a> to obtain a <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> with which you can perform a supervised classification in a later stage. Sampling however is an interactive process and not a genuine operation.</li>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>To apply a MapCalc formula on all raster maps in a map list, you can type a map list expression on the command line of the Main window. For instance, if the regular MapCalc formula on <i>InMap</i> reads: </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06><span class=calccommline><span class=courier>OutMap = SQ(</span><i>InMap</i><span class=courier>) + 10</span>  </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>Then, the map list expression to use the formula on all input maps in a map list <i>InMapList</i> reads: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06><span class=calccommline><span class=courier>OutMapList = MapListApplic(</span><i>InMapList</i><span class=courier>, &quot;SQ(##) + 10&quot;)</span>  </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06>where <span class=courier>##</span> represents the individual raster maps in the map list. </p>
+
+<p class=linespacing03before>The output map list is a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent object</a>. When the output map list is opened, the dependent output raster maps will be defined and calculated. The output raster maps of the map list will obtain the same name as the output map list, followed by _1, _2, _3, etc. For more information, refer to Map Calculation : calculating with map lists. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>Similarly, operations that use a raster map as input and produce a raster map as output, can also be performed on all raster maps of an input map list. You can choose the input map list in the dialog box of the operation but you can also type an expression on the command line of the Main window. The general syntax of map list expressions for operations is: </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06><span class=calccommline><span class=courier>OutMapList = MapListApplic(</span><i>InMapList</i>, <span class=courier>Map</span><i>Operation</i><span class=courier>(##</span>, <i>other parameters</i><span class=courier>))</span> </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=leftmargin06>where <span class=courier>##</span> represents the individual raster maps in the map list. </p>
+
+<p class=linespacing03before>The output map list is a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent object</a>. When the output map list is opened, the dependent output raster maps will be defined and calculated. The output raster maps of the map list will obtain the same name as the output map list, followed by _1, _2, _3, etc. For more information refer to <a href="../ilwisapp/aggregate_command_line2.htm">Aggregate Map : command line (2)</a>, <a href="../ilwisapp/filter_command_line2.htm">Filter : command line (2)</a>, <a href="../ilwisapp/stretch_command_line2.htm">Stretch : command line (2)</a>, <a href="../ilwisapp/densify_commandline2.htm">Densify : command line (2)</a>, <a href="../ilwisapp/resample_command_line2.htm">Resample : command line (2)</a>, <a href="../ilwisapp/submap_of_raster_map_commandline2.htm">Sub-Map of raster map : command line (2)</a>, or <a href="../ilwisapp/mirror_rotate_commandline2.htm">Mirror/Rotate : command line (2)</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>Furthermore, when you perform a statistical operation on a map list, a <a href="..//ilwis/popup/objects_matrices_popup.htm" onClick="return popup(this, 'notes')" >matrix</a> is returned containing multivariate statistical information on the values of the different raster maps in the input map list. When you use the <a href="..//ilwisapp/popup/principle_components_popup.htm" onClick="return popup(this, 'notes')" >Principal Components</a> or the <a href="..//ilwisapp/popup/factor_analysis_popup.htm" onClick="return popup(this, 'notes')" >Factor Analysis</a> operation, you will obtain, besides the matrix, also an output map list with output raster maps. </li>
+
+</ol>
+
+<!--<p class=defnewpar>You can start an operation on a map list for instance by clicking a map list in a Catalog with the right mouse button, and choosing an operation from the context-sensitive menu. Subsequently, fill out the appearing dialog box of that operation and click the OK button; this generates an <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >ILWIS expression</a> on the command line. Output matrices and output raster maps that are obtained through an operation's dialog box are always <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a>; however output map lists are not dependent yet. Advanced users can type the complete ILWIS expressions on the command line of the Main window or create a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> to execute a series of expressions.</p>-->
+
+<p class=kopje>Technical information:</p>
+
+<p>A map list only consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.MPL). Normally, the object definition file contains further references to the raster maps that are included in the map list. </p>
+
+<p class=defnewpar>In case the map list is the result of <a href="../ilwismen/import_general_raster.htm">Import General Raster</a> using the option <span class=arial>Use Data in Original Format</span> and <span class=arial>without the creation of separate maps</span>, then the object definition file will only contain a reference to the original non-ILWIS file and there will be no separate ILWIS raster maps stored on disk. When such a map list is opened, the first band is called 'band 1', the second 'band 2', etc. </p>
+
+<p>On the command line, the first band of such a map list can be addressed as <i>maplistname.mpl:1</i>, the second band as <i>maplistname.mpl:2</i>, etc. To calculate with such maps on the command line, you can use for instance expressions like <span class=courier>OUT = MyMapList:1 + MyMapList:2</span> or <span class=courier>OUT = 'My Map List'.mpl:1 + 'My Map List'.mpl:2</span>.</p>
+
+<p class=defnewpar>By opening the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a map list, you can see georeference and the domain used by the maps in the map list, whether the map list is editable or dependent, calculated, etc. You can also see which raster maps the map list contains. For more information, see <a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a> or the <a href="../ilwismen/map_list_properties.htm">Map List Properties</a> sheet. </p>
+
+<p class=defnewpar>In case you calculated a variance-covariance matrix or a correlation matrix, the Properties sheet contains an extra Additional Info tab which shows you the <a href="..//ilwis/popup/optimum_index_factor_popup.htm" onClick="return popup(this, 'notes')" >Optimum Index Factor (OIF)</a> of combinations of three bands in the map list. For more information, see <a href="how_to_calculate_optimum_index_factor_oif.htm">How to calculate the Optimum Index Factor</a>. </p>
+
+<p class=kopje>Limitations:</p>
+
+<p>In principle, the maximum number of raster maps that can be included in a map list is 100 million. In practice however limitations will occur by available disk space. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="how_to_create_map_lists.htm">How to create a map list</a></p>
+
+<p class=seealsolinks><a href="how_to_edit_map_lists.htm">How to edit a map list</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_raster_maps.htm">ILWIS objects : raster maps</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/ilwis_operations.htm">ILWIS operations</a></p>
+
+</body

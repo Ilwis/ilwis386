@@ -1,0 +1,161 @@
+<html>
+
+<head>
+<title>Pixel info window : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Pixel information window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Pixel information window</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The pixel information window allows you to interactively inspect class names, IDs or values in multiple raster, polygon, segment and point maps with the same or a compatible <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>. When one map is displayed in a map window, the pixel information window is capable of retrieving values of <i>all maps</i> added to the pixel info window, at the position of the mouse pointer in the map window. In the same way, when you have an analog paper map on the digitizer and you performed MapReference, the pixel information window is capable of retrieving values of all maps added to the pixel info window, at the position of the digitizer cursor. </p>
+
+<p class=defnewpar>To the pixel information window, you can add raster maps, polygon maps, segment maps and point maps. When an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> is linked to one of those maps or to the domains of the maps, the attribute information is also shown. An example is provided in <a href="pixel_information_window_introduction.htm">Pixel information window : introduction</a>.</p>
+
+<p class=defnewpar>The pixel information window is used to gain an insight into your models. </p>
+
+<p class=kopje>Special functionality:</p>
+
+<p>When only the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent map</a> exists, i.e. when a dependent map has not been calculated yet and the data file of the dependent map does not yet exist, then pixel info is able to actually calculate output values on the fly. This is possible for all output maps of MapCalc, and for output maps of the Classify, Densify, Filter, Slicing and all Attribute Map operations.</p>
+
+<p class=kopje>Examples:</p>
+
+<ul>
+
+<li>	Create a number of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output maps</a> with MapCalc, use slightly different formulas, do not mark the 'Show' check box in the dialog boxes; display an input map in a map window; drag the dependent output maps to the pixel information window, and check the results of the formulas used in the different maps.</li>
+
+<li>	During <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >Sampling</a>, you can already create some <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output maps</a> with the <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >Classify</a> operation (various methods, various parameters) using the current sample set as input. When creating the dependent output maps, do not mark the Show check box in dialog boxes; just create the definition for the output maps. In this way the dependent output maps exist only by their object definition file and are not yet calculated and stored on disk. If you then add these dependent maps to the pixel info window, you can already see the results of classifying during sampling.</li>
+
+</ul>
+
+<p class=defnewpar>Working with dependent maps which merely exist by their object definition file saves calculation time and disk space. Only when the maps are displayed in a map window, the calculation starts and the output pixel values are stored on disk. </p>
+
+<p class=defnewpar>Furthermore, when for <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value raster maps</a> you marked the 'Interpolation' check box in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of a raster map, the Pixel info window will show interpolated values on sub-pixel level. For more information, refer to the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> dialog box. </p>
+
+<p class=kopje>General method to use Pixel Information:</p>
+
+<ul>
+
+<li>	display a map in a map window, </li>
+
+<li>	open the pixel information window, </li>
+
+<li>	add maps to the pixel info window (see below), </li>
+
+<li>	move the mouse pointer through the map window, or move the digitizer cursor over a referenced paper map on the digitizer.</li>
+
+</ul>
+
+<p class=defnewpar>The pixel info window will display:</p>
+
+<ul>
+
+<li>	the received XY-coordinate of the position of the mouse pointer in the map window, or of the digitizer cursor on the digitizer,</li>
+
+<li>	the retrieved class names, IDs, or values of the maps added to the pixel info window at that position,</li>
+
+<li>	attribute information of these class names and IDs found in the attribute tables.</li>
+
+</ul>
+
+<p class=defnewpar>The pixel info window either displays this information continuously for each position of the mouse pointer in the map window, or only when you click with the mouse pointer in the map window. This depends on the settings of the 'Continuous' check boxes in the <a href="../ilwismen/customize_the_pixel_information_window.htm">Customize Pixel Info</a> dialog box. </p>
+
+<p class=defnewpar>In case a map window only displays a raster map with georeference <span class=courier>None</span>, the pixel info window displays the Row and Column numbers of the actual mouse position.</p>
+
+<p class=kopje>To open the pixel information window:</p>
+
+<p>From the <a href="main_window_menu_commands.htm">File menu</a> in the <a href="..//ilwis/popup/main_window_popup.htm" onClick="return popup(this, 'notes')" >Main window</a> or a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>, choose <span class=arial>Open Pixel Information</span>. Or click the <span class=arial>Pixel Information</span> button in the <a href="main_window_standard_toolbar.htm">standard toolbar of the Main window</a>.</p>
+
+<p class=kopje>To add maps to the pixel information window:</p>
+
+<p>From the <a href="..//ilwismen/sec2/pixel_info_file_menu_sec2.htm" onClick="return popup(this, 'notes')" >File menu</a> of the pixel information window, choose the command <span class=arial>Add Map</span>.Then select the raster, polygon, segment and/or point maps which you want to add one by one. You can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> maps from the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> into the pixel information window. If an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> is linked to a map or to the domain of a map, the attribute information is also shown. You can check whether an attribute table is linked to a map or a domain in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the map or the domain.</p>
+
+<p class=kopje>To hide or show maps and attributes in the pixel info window:</p>
+
+<p>From the <a href="..//ilwismen/sec2/pixel_info_options_menu_sec2.htm" onClick="return popup(this, 'notes')" >Options menu</a>, choose <span class=arial>Customize</span>. You can also click on the upper left gray area in the pixel info window. The <a href="../ilwismen/customize_the_pixel_information_window.htm">Customize Pixel Info</a> dialog box appears which displays a list of maps, tables and columns. By clicking in this list, maps and columns can be (de-)selected; selected items appear highlighted and will be shown in the pixel info window.</p>
+
+<p class=kopje>Continuous information or only information at mouse clicks:</p>
+
+<p>You can choose to have the pixel information window continuously show information found at the mouse pointer position or only when you click the left mouse button in a map window. From the <a href="..//ilwismen/sec2/pixel_info_options_menu_sec2.htm" onClick="return popup(this, 'notes')" >Options menu</a> choose <span class=arial>Customize</span>. In the <a href="../ilwismen/customize_the_pixel_information_window.htm">Customize Pixel Info</a> dialog box, select the Continuous check box when the mouse pointer should continuously receive coordinates and retrieve information when it is positioned in a map window. Clear the check box when the mouse pointer should only receive coordinates and retrieve information at a click in the map window.</p>
+
+<p>In the Customize Pixel Info dialog box, you can also select to use a digitizer cursor continuously or not.</p>
+
+<p class=kopje>Detailed pixel info by using the keyboard:</p>
+
+<p>To move the mouse pointer in the map window and see the result in the Pixel info window, you can use the <span class=arial>Arrow</span> keys on the keyboard to move 1 screen pixel, or use the <span class=arial>Ctrl+Arrow</span> keys on the keyboard to move 10 screen pixels.</p>
+
+<p class=kopje>Retrieved information:</p>
+
+<ul>
+
+<li>	for raster maps: the class name, identifier or value of the pixel;</li>
+
+<li>	for polygon maps: the class name, identifier or value of the polygon;</li>
+
+<li>	for segment maps: the class name, identifier or value of the <i>nearest</i> segment;</li>
+
+<li>	for point maps: the class name, identifier or value of the point.</li>
+
+</ul>
+
+<p>If no class name, identifier or value is found in a pixel or polygon, undefined (?) is returned. Also, if in a point map you click outside a point, undefined is returned. </p>
+
+<p class=defnewpar>Further, </p>
+
+<ul>
+
+<li>	for maps using a Picture or Color domain, the color is returned as (Red, Green, Blue);</li>
+
+<li>	for maps using a Bool domain, True or False is returned;</li>
+
+<li>	for maps using a Bit domain, 0 or 1 is returned, etc.</li>
+
+</ul>
+
+<p class=kopje>Closing the pixel information window:</p>
+
+<p>Close the pixel information window by double-clicking the <a href="..//ilwis/popup/win_controlmenubox_popup.htm" onClick="return popup(this, 'notes')" >Control-menu box</a> in the upper-left corner of the window. Or click the Control-menu box: the Control menu is opened, choose <span class=arial>Close</span>. The size and position on the screen of the pixel information window is automatically saved in the <span class=courier>ILWISCFG.INI</span> file.</p>
+
+<p class=kopje>Advanced functionality: </p>
+
+<p>You can also add <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate systems</a> to the pixel information window. When a transformation is possible between the coordinate system of the current map and the added coordinate system, the pixel information window will show coordinates transformed to the new coordinate system, i.e. a transformation is performed on the fly. In this way you can already see the results of a transformation to another coordinate system <i>before</i> you actually perform this transformation, thus before using a <a href="..//ilwis/popup/transform_operations_popup.htm" onClick="return popup(this, 'notes')" >Transform</a> operation or the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation, and you can <i>compare</i> different coordinate systems with each other. </p>
+
+<p class=defnewpar>An example of adding multiple coordinate systems to a pixel information window is supplied in <a href="pixel_information_window_functionality_advanced.htm">Pixel information window : functionality (advanced)</a>.</p>
+
+<p class=kopje>Similar functionality:</p>
+
+<p>In the <b>pixel information window</b> you can get information on maps which are not necessarily displayed, and you can get attribute information from a table that is related to a map. </p>
+
+<p>With <b>map info</b> you can only get information on different <a href="..//ilwis/popup/layers_popup.htm" onClick="return popup(this, 'notes')" >data or annotation layers</a> which are displayed in one map window. For map info, press the left mouse button in a map window. Be sure that the <span class=arial>Info</span> check box on the layer's <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box is marked.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="pixel_information_window_introduction.htm">Pixel information : introduction</a></p>
+
+<p class=seealsolinks><a href="pixel_information_window_functionality_advanced.htm">Pixel information : functionality (advanced)</a></p>
+
+<p class=seealsolinks><a href="how_to_use_pixel_information.htm">How to use pixel information</a></p>
+
+</body

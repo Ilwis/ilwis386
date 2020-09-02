@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>cluster popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Cluster</p>
+
+<p><a href="..//ilwisapp/cluster.htm" onClick="return popup(this, 'notes')" >Clustering</a>, or unsupervised classification, is a rather quick process in which image data is grouped into spectral clusters based on the statistical properties of all pixel values. It is an automated classification approach with a maximum of 4 input bands.</p>
+
+<p class=linespacing03before>Optionally, an attribute table can be created for the output map. The table will contain statistical information on the output clusters: the average, predominant and minimum and maximum value of each cluster as found in the input bands. </p>
+
+</body

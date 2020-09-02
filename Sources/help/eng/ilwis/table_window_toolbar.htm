@@ -1,0 +1,230 @@
+<html>
+
+<head>
+<title>Table window : toolbar</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Toolbar, Button bar">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Table window</h1>
+
+<h1 class=secondline>Toolbar</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The toolbar of a table window provides <i>shortcuts</i> for some regularly used menu commands for instance to copy and paste, to print, to view the properties of a column, and to go to the first, the previous, a specific, the next, or the last record of the table.</p>
+
+<p class=defnewpar><img src="../images/bbtable.gif" align=bottom width="306" height="26"></p>
+
+<p class=defnewpar>When you leave the mouse pointer for a short period of time on top of a button, a tooltip will appear with the name of the button / the menu command that it will perform. Also the <a href="table_window_status_bar.htm">status bar</a> at the bottom of the window may provide you with a short explanation on the effect of using the button. </p>
+
+<p class=defnewpar>You can move the toolbar and dock it along an edge of the window; you can also make the toolbar floating. Some of the actions that are available via the toolbar are also available via the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<p class=defnewpar>The following actions can be performed:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing="1%" width="100%">
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/copy.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p><a href="../ilwismen/copy_table_selection_to_clipboard.htm">Copy</a>:</p>
+
+</td>
+<td valign="top">
+<p>Copies the contents of the selected field(s), column(s) or record(s) to the clipboard.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/paste.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p><a href="../ilwismen/paste_table_data_into_table_window.htm">Paste</a>:</p>
+
+</td>
+<td valign="top">
+<p>Pastes the contents of the clipboard into the selected field(s), or into the selected column(s) of the current table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/delete.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p><a href="../ilwismen/delete_selection_from_table.htm">Delete</a>:</p>
+
+</td>
+<td valign="top">
+<p>Clears the contents of the selected fields, or of the selected record(s), or deletes the selected column(s). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/print.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p><a href="../ilwismen/print_table.htm">Print</a>:</p>
+
+</td>
+<td valign="top">
+<p>Prints the whole table or a selection of the table. First, a <a href="../ilwismen/print_table.htm">Print Options</a> box will appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/prop.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p>Column Properties:</p>
+
+</td>
+<td valign="top">
+<p>When a column is selected: the <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box will appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/table_update_all_cols.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p><a href="../ilwismen/update_all_columns.htm">Update All Columns</a>:</p>
+
+</td>
+<td valign="top">
+<p>Updates the values of all <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> columns. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/table_graph.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p>Graph:</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/create_a_graph.htm">Create Graph</a> dialog box to create a new graph from columns in a new graph window. For more information on graphs, refer to <a href="graph_window_functionality.htm">Graph window : functionality</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/table_first_rec.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p>Goto First Record:</p>
+
+</td>
+<td valign="top">
+<p>Scrolls to the first record and slightly highlights this record. The record is furthermore shown in <a href="table_window_record_view_pane.htm">Record View</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/table_prev_rec.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p>Goto Previous Record:</p>
+
+</td>
+<td valign="top">
+<p>Scrolls to previous first record and slightly highlights this record. The record is furthermore shown in <a href="table_window_record_view_pane.htm">Record View</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/table_goto_rec.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p>Goto Record:</p>
+
+</td>
+<td valign="top">
+<p>Opens the <a href="../ilwismen/goto_record.htm">Goto Record</a> dialog box in which you can specify a record you wish to view. </p>
+
+<p>After clicking the <span class=arial>OK</span> button, the table will scroll to the specified record and will slightly highlight it. The record will also be shown in <a href="table_window_record_view_pane.htm">Record View</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/table_next_rec.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p>Goto Next Record:</p>
+
+</td>
+<td valign="top">
+<p>Scrolls to the next record and slightly highlights this record. The record is furthermore shown in <a href="table_window_record_view_pane.htm">Record View</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/table_last_rec.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="132">
+<p>Goto Last Record:</p>
+
+</td>
+<td valign="top">
+<p>Scrolls to the last record and slightly highlights this record. The record is furthermore shown in <a href="table_window_record_view_pane.htm">Record View</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The toolbar can be hidden or shown with the <span class=arial>Toolbar</span> command on the <a href="table_window_menu_commands.htm">View menu</a>. If the action of a certain button cannot be performed at a certain moment, the button appears gray.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="table_window_menu_commands.htm">Table window : menu commands</a></p>
+
+<p class=seealsolinks><a href="table_window_command_line.htm">Table window : command line</a></p>
+
+<p class=seealsolinks><a href="graph_window_functionality.htm">Graph window : functionality</a></p>
+
+</body

@@ -1,0 +1,168 @@
+<html>
+
+<head>
+<title>Variable threshold computation : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Variable threshold computation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Variable threshold computation</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class="defnewpar">The Variable threshold computation operation helps you to prepare a threshold map that can be used in the <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network extraction</a> operation. </p>
+
+<p class="defnewpar">You can base the threshold map on a height map (DEM), or on attribute values from an attribute table of a raster map with a class or ID domain (e.g. infiltration attribute values in a table linked to a geological unit map). </p>
+
+<p class="defnewpar">As a user, you have to: </p>
+
+<ul>
+
+<li>specify the size of a kernel or moving window, so that for the calculation of each output pixel, only 3 x 3 or 5 x 5, etc. input pixels will be considered; </li>
+
+<li>specify the number of desired output classes; </li>
+
+<li>specify a boundary value and a desired output value for each output class that you wish to obtain. </li>
+
+</ul>
+
+<p class="defnewpar">When height values are used as input, you can optionally obtain an internal relief map as additional output. </p>
+
+<p class="defnewpar">For more information on the calculations that will take place, refer to <a href="variable_threshold_computation_functionality.htm">Variable threshold computation : functionality</a>. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="119">
+<p class=diabox>Input DEM:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a>. Open the list box and select the desired input map, or directly drag a raster map from a Catalog into this box. </p>
+
+<p class=diabox>The input map is supposed to be a Digital Elevation Model (DEM). </p>
+
+<p class="diabox">You can also use a class or ID map and choose a (value) attribute column from the attribute table that is linked to this map. In this way, you can base the output threshold map for instance on infiltration (attribute) values of geological units (map), etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class="diabox">Filter size:</p>
+
+</td>
+<td valign="top">
+<p class="diabox">Type an <i>odd</i> value to define the filter size. When you use value 3, a 3 x 3 window will move over the map(s). </p>
+
+<p class="diabox">If an even value is entered, the program will increase the value with 1. If a value &lt; 3 is entered, the program will automatically use value 3. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class="diabox">Nr. of classes: </p>
+
+</td>
+<td valign="top">
+<p class="diabox">Select a value for the number of output 'classes' you wish to obtain. The output 'classes' are assigned the threshold values. </p>
+
+<p class="diabox">You can choose a value between 1 and 5. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class="diabox">Upper Bound:</p>
+
+</td>
+<td valign="top">
+<p class="diabox">In the first text box: specify an upper boundary value, i.e. any internal relief value smaller than or equal to this value will be assigned the threshold value. </p>
+
+<p class="diabox"><span class="tiptext"><span class="tip">Mind: </span>
+the last upper boundary value that you specify, in the lower left box, should be large enough to handle all internal relief values, otherwise some pixels may be assigned the undefined value. Specify for the last upper boundary value instance the maximum DEM value minus the minimum DEM value, or make a liberal estimate. </span>
+</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class="diabox">Threshold:</p>
+
+</td>
+<td valign="top">
+<p class="diabox">In the text box to the right of the Upper Bound text box: specify for this upper boundary value, the output threshold value that should be assigned. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the specified threshold values. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map or table in a Catalog, and in the title bar of a map or table window when the output map or table is displayed. If no description is supplied, the output map and the table will use their own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Create internal relief map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you also want to obtain an output map containing internal relief values. 
+
+The output internal relief map will obtain the same name as the output threshold map, followed by <span class="courier">__1</span>. </p>
+
+<p>Clear this check box, if you only wish to obtain an output threshold map. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output (threshold) map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output threshold map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p>Optionally, a second output map containing the internal relief values can be created.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="variable_threshold_computation_functionality.htm">Variable threshold computation : functionality</a></p>
+
+</body

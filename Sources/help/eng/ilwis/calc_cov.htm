@@ -1,0 +1,193 @@
+<html>
+
+<head>
+<title>COV or COVAR</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="COV, COVAR, Statistical functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>COV( ) or COVAR() function</h1>
+
+<p class=defnewpar>Returns the covariance of the values in <i>ColumnValue a</i> and in <i>ColumnValue b</i>.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>COV</span>(<i>ValueColumn a</i>, <i>ValueColumn b</i>)<br>
+<span class=courier>COVAR</span>(<i>ValueColumn a</i>, <i>ValueColumn b</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>ValueColumn a</i></td>
+	<td valign="top">is a value column</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>ValueColumn b</i></td>
+	<td valign="top">is another value column</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>COVAR</span>   returns:</td>
+	<td valign="top">a real value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The <span class=courier>COV</span> and the <span class=courier>COVAR</span> function are aliases of each other.</li>
+	<li>The covariance is calculated according to the following formula:</li>
+<table cellspacing=0>
+<tr>
+<td valign="top"><img border="0" src="../images/stcovyz.gif" align=bottom width="176" height="39"></td>
+</tr>
+</table>
+	<li>The <span class="courier">COV</span> or <span class=courier>COVAR</span> function can also be
+      performed through a dialog box, see <a href="../ilwismen/column_statistics.htm">Column
+      Statistics</a>.</li>
+	<li>When an input value is undefined, the record will be excluded from the calculation.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>Use the <span class=courier>COV</span> or <span class=courier>COVAR</span> function to determine the relationship between two data sets.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >TabCalc pocket line calculator</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>TabCalc example:</p>
+<p class=calc00>OutCol = COV(InColA,InColB)</p>
+<p class=calc00>OutCol = COVAR(InColA,InColB)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InColA</p></td>
+	<td valign="top"><p class=tcolhr>InColB</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1r>9</p></td>
+	<td valign="top"><p class=t1r>11.333</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1r>11.333</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1r>11.333</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class="t1r">0</td>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1r>11.333</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>12</p></td>
+	<td valign="top"><p class=t1r>11.333</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1r>15</p></td>
+	<td valign="top"><p class=t1r>11.333</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1r>17</p></td>
+	<td valign="top"><p class=t1r>11.333</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>11.333</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>8</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>11.333</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc pocket line calculator example:</p>
+<table cellspacing=0>
+<tr>
+	<td width=165><p class=calc00>? COV(InColA,InColB)</p></td>
+	<td><p>returns 11.333</p></td>
+</tr>
+<tr>
+	<td width=165><p class=calc00>? COVAR(InColA,InColB)</p></td>
+	<td><p>returns 11.333</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_min.htm">MIN</a></p></td>
+	<td valign="top" width="50"><a href="calc_cnt.htm">CNT</a></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_stderr.htm">STDERR</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_ttest.htm">TTEST</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_max.htm">MAX</a></p></td>
+	<td valign="top" width="50"><a href="calc_avg.htm">AVG</a></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_var.htm">VAR</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_chisquare.htm">CHISQUARE</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_sum.htm">SUM</a></p></td>
+	<td valign="top" width="50"><a href="calc_std.htm">STD</a></td>
+	<td valign="top" width="60"><a href="calc_corr.htm">CORR</a></td>
+	<td valign="top"><a href="../ilwismen/column_statistics.htm">Column
+      Statistics</a></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_cum.htm">CUM</a></p></td>
+	<td valign="top" width="50"><a href="calc_std.htm">STDEV</a></td>
+	<td valign="top" width="60"></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

@@ -1,0 +1,227 @@
+<html>
+
+<head>
+<title>Kriging : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Kriging, Error map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Kriging</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Kriging can be seen as a <a href="point_interpolation.htm">point interpolation</a> which requires a point map as input and returns a raster map with estimations and optionally an error map. The estimations are weighted averaged input point values, similar to the <a href="..//ilwisapp/popup/moving_average_popup.htm" onClick="return popup(this, 'notes')" >Moving Average</a> operation. The weight factors in Kriging are determined by using a user-specified semi-variogram model (based on the output of the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation), the distribution of input points, and are calculated in such a way that they minimize the estimation error in each output pixel. The estimated or predicted values are thus a linear combination of the input values and have a minimum estimation error. The optional error map contains the standard errors of the estimates. </p>
+
+<p class=defnewpar>Kriging is named after D.G. Krige, a South African mining engineer and pioneer in the application of statistical techniques to mine evaluation. The Kriging technique is derived from the theory of regionalized variables (Krige, Matheron). An advantage of Kriging (above other moving averages like inverse distance) is that it provides a measure of the probable error associated with the estimates.</p>
+
+<p class=kopje>Preparation:</p>
+
+<p>Besides an input point map, Kriging requires a semi-variogram model including the <i>type</i> of the model and values for the parameters <i>nugget</i>, <i>sill</i> and <i>range</i>; this can be obtained from the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. </p>
+
+<ul>
+
+<li>	Display the output table of Spatial correlation, and create a graph (i.e. a semi-variogram) in which you plot the semi-variance values against the distance classes. </li>
+
+<li>	Subsequently, model the semi-variogram: select a model like Spherical, Exponential, Gaussian, etc., and choose values for sill, nugget and range. This shows as a line in the graph through the points. </li>
+
+<li>	Superimpose trials of various models with various defining parameters in order to find the best approximation.</li>
+
+</ul>
+
+<p>For more information, see <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a>, <a href="../ilwisapp/spatial_correlation_functionality.htm#semivar"><span class=bookmark>section on Semi-variograms</a></span>, or <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>.</p>
+
+<p class=tip>General Kriging tips: </p>
+
+<ul class=tipul>
+
+<li>	When you have an input raster map instead of a point map you can use <a href="..//ilwisapp/popup/kriging_from_raster_popup.htm" onClick="return popup(this, 'notes')" >Kriging
+  from Raster</a> as interpolation technique.&nbsp; </li>
+
+<li>	When a global trend is apparent, it should be removed before Kriging. You could use the <a href="..//ilwisapp/popup/trend_surface_popup.htm" onClick="return popup(this, 'notes')" >Trend surface</a> operation and appropriate TabCalc subtractions. </li>
+
+<li>	To take a local trend into account, use <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial Correlation</a> and <a href="..//ilwisapp/popup/universal_kriging_popup.htm" onClick="return popup(this, 'notes')" >Universal Kriging</a>.</li>
+
+<li>	To take anisotropy into account, use <a href="..//ilwisapp/popup/variogram_surface_popup.htm" onClick="return popup(this, 'notes')" >Variogram Surface</a>, Spatial Correlation (bidirectional), and <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a>.</li>
+
+<li>	When you like to Krige a sparsely sampled variable with help of a well sampled variable, use <a href="..//ilwisapp/popup/cross_variogram_popup.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a> and <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a>.</li>
+
+</ul>
+
+<p class=tiptext>For more information, see <a href="../ilwis/how_to_use_kriging.htm">How to use Kriging</a>.</p>
+
+<p class=kopje>Methods:</p>
+
+<p>Two Kriging methods are available: Simple Kriging and Ordinary Kriging. </p>
+
+<ul>
+
+<li>	In <i>Simple Kriging</i>, all input points are used to calculate each output pixel value. Only one large matrix needs to be inverted to find the weight factors for all input points. </li>
+
+<li>	In <i>Ordinary Kriging</i>, you can influence the number of points that should be taken into account in the calculation of an output pixel value by specifying a limiting distance and a minimum and maximum number of points:</li>
+
+        <ul>
+
+        <li>	only the points that fall within the <i>limiting distance</i> to an output pixel will be used in the calculation for that output pixel value,</li>
+
+        <li>	within the limiting distance towards each output pixel, at least the specified <i>minimum number of points</i> should be found, otherwise the pixel will be assigned the undefined value.</li>
+
+        <li>	within the limiting distance towards each output pixel, only the specified <i>maximum number of points</i> will be taken into account; when more than the specified maximum number of points are found within the limiting distance, only the points which are nearest to the output pixel will be taken into account. </li>
+
+        </ul>
+
+<p class=leftmargininlist>	For each output pixel, a set of simultaneous equations needs to be solved to find the weight values for those points that contribute to the output value of the pixel.</p>
+
+</ul>
+
+<p class=defnewpar>In general, it can be said that the more points are used, the more reliable the estimation will be. </p>
+
+<p class=kopje>Removing duplicates or coinciding points:</p>
+
+<p>When you have multiple values for the same location or when point locations are very close to each other, i.e. when samples coincide, the Kriging system of equations becomes singular and cannot be solved.</p>
+
+<p>It is therefore advised to use the option Remove Duplicates which will automatically 'remove' any coinciding points. You can choose to either take the average value of coinciding points, or to take the value of the first (coinciding) point encountered only. By specifying a Tolerance, you can control the distance between points at which points are considered coinciding or not. When the distance between points is less than the specified tolerance, these points are considered coinciding; otherwise the points are considered distinct. </p>
+
+<p class=defnewpar>When your input data does contain coinciding points and when the Remove Duplicates option is not used, Simple Kriging will yield an error message, and Ordinary Kriging will assign the undefined value for all pixels to which the coinciding points make a contribution. </p>
+
+<p class=kopje>Spherical distance:</p>
+
+<p>Optionally, you can choose to calculate with <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distances</a>, i.e. distances calculated over the sphere using the projection that is specified in the coordinate system used by the georeference of the output raster map. It is advised to use this spherical distance option for maps that comprise large areas (countries or regions) and for maps that use LatLon coordinates. In more general terms, spherical distance should be used when there are 'large' scale differences within a map as a consequence of projecting the globe-shaped earth surface onto a plane. </p>
+
+<p>When the spherical distance option is not used, distances will be calculated in a plane as Euclidean distances. </p>
+
+<p>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip:</span> When you used the spherical distance option in the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial Correlation</a> operation, it is advised to also use the spherical distance option in the Kriging operation. </p>
+
+<p class=kopje>Error map:</p>
+
+<p>Optionally, an output error map can be created which contains the standard error of the estimate, i.e. the square root of the error variance. </p>
+
+<p class=defnewpar>The error variance in each estimated output pixel depends on:</p>
+
+<ul>
+
+<li>	the semi-variogram model including its parameters,</li>
+
+<li>	the spatial distribution of the input sample points, </li>
+
+<li>	the position of an output pixel with respect to the position of the input sample points.</li>
+
+</ul>
+
+<p class=defnewpar>A standard error which is larger than the original sample standard deviation denotes a rather unreliable prediction.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input point map is generally a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. You can also use a ID point map which is linked to an attribute table, and select a column with a value domain from the attribute table. Furthermore, you need to define a complete semi-variogram model.</p>
+
+<p class=defnewpar>Limitations: </p>
+
+<ul>
+
+<li>when using the <i>dialog box</i> for Simple Kriging, the input point map may not contain more than 100 valid input points; </li>
+
+<li>when using the <i>dialog box</i> for Ordinary Kriging, the maximum number of points that can be used within each limiting distance (search radius) is 100. </li>
+
+</ul>
+
+<p>These limitations are not applicable on the command line. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To speed up the calculation when using Ordinary Kriging and using a large number of points within each limiting distance, it is advised to first rasterize the point values and then to use the <a href="..//ilwisapp/popup/kriging_from_raster_popup.htm" onClick="return popup(this, 'notes')" >Kriging from Raster</a> operation. </p>
+
+<p class=kopje>Domain and georeference of output raster maps: </p>
+
+<p>The output raster map containing the Kriging estimates or predictions uses the same value domain as the input point map or the attribute column. The <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> can be adjusted for the output map; it is advised to choose a wider value range for the output map than the input value range. </p>
+
+<p class=defnewpar>The georeference for the output Kriging map has to be selected or created; you can usually select an existing georeference corners. </p>
+
+<p class=defnewpar>The optional output error map will obtain the same name as specified for the output Kriging map, followed by the string <span class=courier>_Error</span>. The output error map will use the same domain and the same georeference as the output Kriging map with the predictions. </p>
+
+<p class=kopje>Confidence interval maps:</p>
+
+<p>From the combination of a Kriged output map containing the estimates and its output error map, you can create confidence interval maps by using some MapCalc statements. For more information, see <a href="../ilwis/how_to_calculate_confidence_interval_maps.htm">How to calculate confidence interval maps</a>.</p>
+
+<p class=tip>Tip 1:</p>
+
+<p class=tiptext>When the output raster map shows undefined pixels, this can be due to several factors:</p>
+
+<ul class=tipul>
+
+<li>	There are coinciding points while you did not use the option Remove Duplicates.<br>
+Remedy: use the option Remove Duplicates, or change the tolerance. You can also remove duplicates yourself, e.g. by editing the point map in the point editor, by editing the point map as a table, or by editing the attribute table of the point map.</li>
+
+<li>	The value range of the output raster map is too narrow: because of extrapolation, certain output values may fall beyond the range limits and ILWIS converts them to undefined. <br>
+Remedy: extend the value range in the dialog box and compare the results.</li>
+
+<li>	The minimum number of points to be taken into account is too high in relation to the limiting distance, i.e. the minimum number of points specified are not found within the specified limiting distance. <br>
+Remedy: lower the minimum number of points and/or increase the limiting distance.</li>
+
+</ul>
+
+<p class=tip>Tip 2:</p>
+
+<p class=tiptext>The output can also become erratic because:</p>
+
+<ul class=tipul>
+
+<li>	The input points are too sparse in certain areas to ensure an estimate with small variance. <br>
+Remedy: increase limiting distance, find supplementary point data, investigate possible anisotropy.</li>
+
+<li>	The semi-variogram Range parameter is set incorrectly due to poor interpretation of a correct output of the Spatial correlation operation. This may occur when you chose the lag spacing in Spatial correlation far too large. <br>
+Remedy: Try another lag spacing and inspect the <span class=courier>NrPairs</span> column.</li>
+
+<li>	The semi-variogram model is incorrect: the geometric distribution of the sample points is unbalanced or the user is unaware of an existing anisotropy. There is perhaps an error in the range setting (horizontal scale in graph) or sill and/or nugget (vertical scale).</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="kriging_dialog_box.htm">Kriging : dialog box</a></p>
+
+<p class=seealsolinks><a href="kriging_command_line.htm">Kriging : command line</a></p>
+
+<p class=seealsolinks><a href="kriging_algorithm.htm">Kriging : algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/moving_average_functionality.htm">Moving average : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a></p>
+
+<p class=seealsolinks><a href="point_interpolation.htm">Point interpolation</a></p>
+
+<p class=seealsolinks><a href="anisotropic_kriging_functionality.htm">Anisotropic Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="universal_kriging_functionality.htm">Universal Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="cokriging_functionality.htm">CoKriging : functionality</a></p>
+
+<p class=seealsolinks><a href="kriging_from_raster_functionality.htm">Kriging from Raster : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_use_kriging.htm">How to use Kriging</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_confidence_interval_maps.htm">How to calculate confidence interval maps</a></p>
+
+</body

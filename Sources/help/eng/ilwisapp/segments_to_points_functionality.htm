@@ -1,0 +1,67 @@
+<html>
+
+<head>
+<title>Segments to points : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segments to points">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segments to points</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Segments to points operation creates a point map from a segment map. The output point map can contain either:</p>
+
+<ul>
+
+<li>	a point for each node in the segment map, or</li>
+
+<li>	points at a regular distance along the segments in the segment map; nodes are included regardless of the specified distance, or</li>
+
+<li>	points for all stored coordinates in the segment map.</li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To obtain the names, IDs or values of segments as <i>text</i>, it is advised to create an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text object</a> and base it on your segment map. You can edit font, color, and position of the texts in the <a href="..//ilwis/popup/annotation_text_editor_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text editor</a>. For more information, see <a href="../ilwis/ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a>.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special input map requirements.</p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The output point map uses the same domain as the input segment map. </p>
+
+<p>The output point map uses the same coordinate system and coordinate boundaries as the input segment map.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segments_to_points_dialogbox.htm">Segments to points : dialog box</a></p>
+
+<p class=seealsolinks><a href="segments_to_points_commandline.htm">Segments to points : command line</a></p>
+
+<p class=seealsolinks><a href="segments_to_points_algorithm.htm">Segments to points : algorithm</a></p>
+
+</body

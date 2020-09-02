@@ -1,0 +1,83 @@
+<html>
+
+<head>
+<title>Polygons to points : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygons to points">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Polygon to points</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Polygons to points operation creates a point for each polygon in the polygon map. Each point obtains the class name, ID, or value of the corresponding polygon. In this way, polygon label points are created. Optionally, you can also obtain label points for polygons which have no class name, no ID or no value, i.e. for undefined polygons.</p>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	By creating polygon label points which also contains label points for <i>undefined polygons</i>, you can easily find the polygons which do not yet have a correct class name, ID or value. To check whether there are any undefined polygons, you can open the output point map as a table.</li>
+
+<li>	When you want to edit label points of undefined polygons: </li>
+
+        <ul class=tipul>
+
+        <li>	Display the polygon map and in the Display Options dialog box of the polygon map, choose Boundaries Only;</li>
+
+        <li>	Display the point map which contains the polygon labels in the same map window (points for undefined polygons do not appear yet);</li>
+
+        <li>	In the map window, open the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a>, choose <span class=arial>Properties</span> and select the point map. In the appearing Point Map Properties dialog box, click the <span class=arial>Break Dependency Link </span>button; </li>
+
+        <li>	In the map window, open the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a>, choose <span class=arial>Edit Layer</span> and select the point map;</li>
+
+        <li>	The <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >point editor</a> will be started: all points and their class names, IDs or values will be shown including the label points for undefined polygons;</li>
+
+        <li>	Now, you can edit the points with the undefined value to a correct class name, ID or value (depending on the domain of the map). All changes are directly stored.</li>
+
+        <li>	When finished, you can repolygonize the segment map using the updated label point file; the class names, IDs or values found in the label point file will be used to assign class names, IDs or values to polygons.</li>
+
+        </ul>
+
+<li>	To obtain the names, IDs or values of polygons as <i>text</i> within polygons, it is advised to create an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text object</a> and base it on your polygon map. You can edit font, color, and position of the texts in the <a href="..//ilwis/popup/annotation_text_editor_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text editor</a>. For more information, see <a href="../ilwis/ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a>.</li>
+
+</ol>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special input map requirements.</p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The output point map uses the same domain as the input polygon map. </p>
+
+<p>The output point map uses the same coordinate system and coordinate boundaries as the input polygon map.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="polygons_to_points_dialogbox.htm">Polygons to points : dialog box</a></p>
+
+<p class=seealsolinks><a href="polygons_to_points_commandline.htm">Polygons to points : command line</a></p>
+
+<p class=seealsolinks><a href="polygons_to_points_algorithm.htm">Polygons to points : algorithm</a></p>
+
+</body

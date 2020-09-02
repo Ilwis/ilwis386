@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>Filter popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Filter</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/filter.htm" onClick="return popup(this, 'notes')" >Filtering</a> is an image processing technique which is used for example to sharpen an image, to detect line features, to remove noise from an image, etc. </p>
+
+<p class=linespacing03after>A filter is an odd sized matrix moving over a map and applying a certain function on the pixels it considers (e.g. the <span class=arial>avg3x3</span> filter considers 9 pixels at a time, until the whole map is done). The answer of the function is assigned to that pixel in the output map which was currently the at the center of the matrix. The output value for each pixel thus depends on the value of the pixel itself and on the values of its neighbours.</p>
+
+</body

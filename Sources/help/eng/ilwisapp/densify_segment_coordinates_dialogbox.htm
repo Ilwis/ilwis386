@@ -1,0 +1,88 @@
+<html>
+
+<head>
+<title>Densify segment coordinates : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Densify segment coordinates">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Densify segment coordinates</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Densify segment coordinates operation allows you to obtain more intermediate coordinates within segments. The segments of an input map are copied, and extra intermediate coordinates are added to the segments in the output map at a user-specified distance. </p>
+
+<p class=defnewpar>You can use the Densify segment coordinates operation separately before a <a href="..//ilwisapp/popup/transform_segments_popup.htm" onClick="return popup(this, 'notes')" >Transform segments</a> operation, but you can also use the <span class=arial>Densify coordinates</span> option within the <a href="..//ilwisapp/popup/transform_segments_popup.htm" onClick="return popup(this, 'notes')" >Transform segments</a> or the <a href="..//ilwisapp/popup/transform_polygons_popup.htm" onClick="return popup(this, 'notes')" >Transform polygons</a> operations. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input segment map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input segment map. Open the list box and select the desired input map, or drag a segment map directly from the Catalog into this box. No special input map requirements.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Distance:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the distance interval (in meters) at which you want to obtain extra intermediate coordinates within segments.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output segment map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output segment map that will contain the copied segments.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="densify_segment_coordinates_functionality_algorithm.htm">Densify segment coordinates : functionality / algorithm</a></p>
+
+</body

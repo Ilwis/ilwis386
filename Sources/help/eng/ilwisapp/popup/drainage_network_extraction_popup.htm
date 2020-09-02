@@ -1,0 +1,51 @@
+<html>
+
+<head>
+<title>drainage network extraction popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Drainage Network Extraction</p>
+
+<p>The <a href="..//ilwisapp/drainage_network_extraction.htm" onClick="return popup(this, 'notes')" >Drainage Network Extraction</a> operation extracts a basic drainage network (boolean raster map). </p>
+
+<p class="defnewpar">As input is required: the output raster map of the Flow Accumulation operation. </p>
+
+<p class="defnewpar">You can choose to use as additional input:</p>
+
+<ul>
+
+<li>a threshold value, to set a minimum for the number of pixels that should drain into a pixel that is examined; </li>
+
+<li>a threshold raster map, where pixels can have a threshold value based on e.g. their geological unit or height values; </li>
+
+	<ul>
+
+	<li>when using a threshold map, also the output map of a previous Flow Direction operation is required. </li>
+
+	</ul>
+</ul>
+
+<p class="defnewpar">When using a threshold map, the operation will furthermore fill possible gaps between drainage lines.</p>
+
+<p class="defnewpar">The output raster map will show the basic drainage as pixels with value True, while other pixels have value False. </p>
+
+</body

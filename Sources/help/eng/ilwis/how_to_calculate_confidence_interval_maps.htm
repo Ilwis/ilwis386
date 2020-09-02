@@ -1,0 +1,183 @@
+<html>
+
+<head>
+<title>How to calculate confidence interval maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Confidence interval maps, Calculate ..., How to calculate ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to calculate confidence interval maps</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>From the combination of a Kriged output map containing the estimates and its output error map, you can create confidence interval maps by using some MapCalc statements. </p>
+
+<p class=defnewpar>When the errors in the error map have a normal distribution, you can find critical values of confidence levels in a probability distribution table of a standard normal curve. </p>
+
+<p class=linespacing01after>In general, <img src="../images/muall.gif" align=bottom width="48" height="15">, where <img src="../images/muest.gif" align=bottom width="8" height="15"> is the Kriging estimation and <img src="../images/sigest.gif" align=bottom width="6" height="12"> is the estimated error (standard deviation). The multiplication factors <i>c</i> (critical value) for the estimated errors (<img src="../images/sigest.gif" align=bottom width="6" height="12">) in the error map for different one-sided confidence levels are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>Confidence level:</p>
+
+</td>
+<td valign="top" width=56>
+<p>90%</p>
+
+</td>
+<td valign="top" width=56>
+<p>95%</p>
+
+</td>
+<td valign="top" width=56>
+<p>97.5%</p>
+
+</td>
+<td valign="top" width=56>
+<p>99%</p>
+
+</td>
+<td valign="top">
+<p>99.5%</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Critical value <i>c</i>:</p>
+
+</td>
+<td valign="top" width=56>
+<p>1.282</p>
+
+</td>
+<td valign="top" width=56>
+<p>1.645</p>
+
+</td>
+<td valign="top" width=56>
+<p>1.960</p>
+
+</td>
+<td valign="top" width=56>
+<p>2.326</p>
+
+</td>
+<td valign="top">
+<p>2.576</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Example 1:</p>
+
+<p>When for example you want to test whether for a metal concentration level of e.g. 100 mg/m<sup>3</sup> (reference level), Kriged output values are outside the 98% confidence interval (after Pebesma 1996):</p>
+
+<ul>
+
+<li class=ls01be>	Create a class domain (called e.g. <span class=courier>Confi98</span>) with the classes <span class=courier>Lower</span>, <span class=courier>Upper</span> and <span class=courier>Uncertain</span>.</li>
+
+<li class=ls01be>	Type on the command line of the Main window:</li>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=calc0linsp03befaft></p>
+
+</td>
+<td valign="top" width=68>
+<p class=calc0linsp03befaft>Level100</p>
+
+</td>
+<td valign="top" width=22>
+<p class=calc0linsp03befaft>=</p>
+
+</td>
+<td valign="top">
+<p class=calc0linsp03befaft><a href="calc_iff.htm">IFF</a>(<i>Estim</i>&gt; 100 + 2*Error, &quot;Upper&quot;,
+IFF(<i>Estim</i>&lt; 100 - 2*<i>Error</i>, &quot;Lower&quot;, &quot;Uncertain&quot;))</p>
+
+</td>
+</tr>
+</table>
+
+<p class=leftmargininlist>	where <i>Estim</i> is the output Kriging map and <i>Error</i> is the output error map. </p>
+
+<p class=leftmargininlist>	In the <span class=arial>Raster Map Definition</span> dialog box, select your class domain <span class=courier>Confi98</span>. </p>
+
+</ul>
+
+<p class=defnewpar>Map <span class=courier>Level100</span> contains 3 classes: </p>
+
+<ul>
+
+<li>	pixels with class <span class=courier>Upper</span> have a metal concentration greater than 100 mg/m<sup>3</sup> with 98% certainty (polluted or mining possibilities),</li>
+
+<li>	pixels with class <span class=courier>Lower</span> have a metal concentration less than 100 mg/m<sup>3</sup> with 98% certainty,</li>
+
+<li>	while for pixels with class <span class=courier>Uncertain</span>, none of these conclusions may be drawn. </li>
+
+</ul>
+
+<p>You can edit the representation as you wish. </p>
+
+<p class=defnewpar>In the same way, you can choose another reference level, or another critical value for another confidence interval. </p>
+
+<p class=kopje>Example 2:</p>
+
+<p>Instead of creating for instance four different maps for four number of reference levels (e.g. for metal concentrations of 25, 50, 100 and 200 mg/m<sup>3</sup>), you can also make a combined confidence interval map which shows the actual values, i.e. the upper and lower boundaries, of a certain confidence interval.</p>
+
+<p class=defnewpar>Groups of pixels in the output confidence interval map will be shown as 2 'triangles' as if a group of pixels is divided along one of the diagonals of the groups. One half of the pixels in a group show the value of the lower boundary of the confidence interval and the other half show the value of the upper boundary of that confidence interval. In this example, each group of pixels consists of 4 lines and 3 columns. This is achieved by using the <a href="calc_modulus_operator.htm">MOD</a> (i.e. the modulus) function on the line numbers
+(<a href="calc_predefined_variable_l.htm">%L</a>) and column numbers (<a href="calc_predefined_variable_c.htm">%C</a>) of the map (see below). </p>
+
+<p class=defnewpar>Suppose you interested in the 98% confidence interval. You will thus use a multiplication factor (c) of 2 as above. </p>
+
+<ul>
+
+<li class=ls01be>	Create a user-defined value domain which ranges from 0 to 500. In fact, you should use a user-defined value domain which you also used for the output Kriging maps.</li>
+
+<li class=ls01be>	Type on the command line of the Main window:</li>
+
+        <p class=calc1>Upper = <i>Estim</i> + 2 * <i>Error</i></p>
+
+        <p class=calc1>Lower = <i>Estim</i> - 2 * <i>Error</i></p>
+
+        <p class=leftmargininlist>	where <i>Estim</i> is the output Kriging map and <i>Error</i> is the output error map. </p>
+
+        <p class=leftmargininlist01be>	In the <span class=arial>Raster Map Definition</span> dialog box, select for both maps your value domain. </p>
+
+<li class=ls01be>	Type on the command line of the Main window:</li>
+
+        <p class=calc1>Conf98 = iff((%L mod 4) - (%C mod 3) &lt;= 0, Upper, Lower)</p>
+
+<li class=ls01be>	By editing the representation of your value domain, you can assign the desired colors to the values and represent them as intervals, for instance &lt; 25, 25 - 50, 50 - 100, 100 - 200 and &gt; 200, etc. </li>
+
+</ul>
+
+<p class=defnewpar>Confidence interval map <span class=courier>Conf98</span> then shows 'triangles' of values for the upper and lower boundaries of the confidence interval. </p>
+
+<p class=defnewpar>To obtain a confidence interval map with larger 'triangles', you can use larger values for the modulus functions in the last MapCalc statement.</p>
+
+<p class=kopje>Reference:</p>
+
+<ul>
+
+<li>	Pebesma, E. J. 1996. Mapping Groundwater Quality in the Netherlands. KNAG/Faculteit Ruimtelijke Wetenschappen, Utrecht University. 128 pp.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/kriging_functionality.htm">Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/anisotropic_kriging_functionality.htm">Anisotropic Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/universal_kriging_functionality.htm">Universal Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/cokriging_functionality.htm">CoKriging : functionality</a></p>
+
+</body

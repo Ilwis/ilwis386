@@ -1,0 +1,44 @@
+<html>
+
+<head>
+<title>Change domain of table popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Change domain of table</p>
+
+<p>The <a href="..//ilwisapp/change_domain_of_table.htm" onClick="return popup(this, 'notes')" >Change domain of table</a> operation copies the contents of an input table to a new table; the new table will have another domain than the input table. </p>
+
+<p class=linespacing03before>For the domain of the output table, you can choose:</p>
+
+<ul>
+
+<li>	domain <span class=courier>None</span>;</li>
+
+<li>	an existing class or ID domain on disk;</li>
+
+<li>	a class or ID domain of a column in the input table when that column contains unique classes or IDs;</li>
+
+<li>	a class or ID domain of a column in the input table where the column does not contain unique classes or IDs and other column values need to be aggregated (average, minimum, maximum, sum, last value encountered).</li>
+
+</ul>
+
+</body

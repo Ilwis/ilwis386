@@ -1,0 +1,267 @@
+<html>
+
+<head>
+<title>Horton statistics : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Horton statistics, Least Squares Fit">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Horton statistics</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class="defnewpar">The Horton Statistics operation calculates for all streams with a certain (Strahler) stream order number <i>i</i>, located in merged catchment C&nbsp;with&nbsp;ID&nbsp;<i>x</i>:</p>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<ul>
+	<li class="ls01be">C<i>x</i>_N: the number of streams, </li>
+    <li class="ls01be">C<i>x</i>_L: the average stream length (km), </li>
+    <li class="ls01be">C<i>x</i>_A: the average area of catchments (km<sup>2</sup>), </li>
+<p class="emptylinehalf">&nbsp;</p>
+	<li class="ls01be">C<i>x</i>_N_LSq: expected values for C<i>x</i>_N by means of a least squares fit through C<i>x</i>_N, </li>
+	<li class="ls01be">C<i>x</i>_L_LSq: expected values for C<i>x</i>_L by means of a least squares fit through C<i>x</i>_L, </li>
+	<li class="ls01be">C<i>x</i>_A_LSq: expected values for C<i>x</i>_A by means of a least squares fit through C<i>x</i>_A.</li>
+</ul>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<p class="defnewpar">The output is stored in a table which can be used to construct so-called Horton plots in a <a href="..//ilwis/popup/graph_window_popup.htm" onClick="return popup(this, 'notes')" >graph window</a>. </p>
+
+<p class="defnewpar">Horton plots enable you to inspect the regularity of your extracted stream network based on the (Strahler) stream order numbers, and may serve as a quality control indicator for the entire stream network extraction process. It is expected that: </p>
+
+<ul>
+
+<li>the number of streams show a relative decrease for subsequent Strahler order numbers, </li>
+
+<li>the length of streams and the catchment areas show a relative increase for subsequent Strahler order numbers, </li>
+
+</ul>
+
+<p class="defnewpar">For more information on the actual creation of Horton plots, see the section <a href="#horton_plots_in_graph_window"><span class="bookmark">Construction of Horton plots in a graph window</span></a> below. </p>
+             
+<p class="kopje">Input map requirements: </p>
+
+<ul>
+
+<li>the output raster map and its linked attribute table of a previous <a href="..//ilwisapp/popup/catchment_extraction_popup.htm" onClick="return popup(this, 'notes')" >Catchment extraction</a> operation, </li>
+
+<li>the output raster map and its linked attribute table of a previous <a href="..//ilwisapp/popup/catchment_merge_popup.htm" onClick="return popup(this, 'notes')" >Catchment merge</a> operation, </li>
+
+<li>the output raster map and its linked attribute table of a previous <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation. </li>
+
+</ul>
+
+<p class="kopje">Domain of output table: </p>
+
+<p>A new ID domain will be created for the output table. The domain obtains the same name as the output table itself. The domain contains the Strahler order numbers as IDs. </p>
+
+<p class="kopje">Example of output table: </p>
+
+<p>When you used a merged catchment map containing a single catchment, and when the maximum Strahler Order value in your Drainage network ordering output table equals 4, the output table of the Horton Statistics operation may look like follows: </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<img src="../images/horton_table.gif" width="596" height="81">
+
+<p class="defnewpar">Columns starting with C represent the merged catchment(s); records represent the Strahler stream order numbers. </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="tiptext"><span class="tip">Note: </span>the C<i>x</i>_N_LSq, , C<i>x</i>_L_LSq, C<i>x</i>_A_LSq columns are currently incorrectly named: C<i>x</i>_RB, C<i>x</i>_RL, C<i>x</i>_RA. </p>
+
+<p class="kopje">Columns in the output table: </p>
+
+<p>If your merged catchments map contains more than a single catchment, the last three columns exist for every catchment; <i>x</i> represents a catchment number. </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top"><i>domain</i></td>
+<td valign="top">The IDs of the table's domain, every record (ID) represents a certain Strahler order number. </td>
+</tr>
+<tr>
+<td valign="top" width="72">Order</td>
+<td valign="top">The Strahler order numbers as values. This column usually contains the same values as the IDs of the table. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">C</span><i>x</i><span class="courier">_N</span></td>
+<td valign="top">The number of streams with a certain Strahler stream order number. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">C</span><i>x</i><span class="courier">_L</span></td>
+<td valign="top">The average length (km) of the streams with this Strahler order number. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">C</span><i>x</i><span class="courier">_A</span></td>
+<td valign="top">The average area (km<sup>2</sup>) of the catchments belonging to the streams with this Strahler order number. </td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptylinehalf">&nbsp;</p></td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">C</span><i>x</i><span class="courier">_N_LSq</span></td>
+<td valign="top">The expected number of streams with a certain Strahler stream order number. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">C</span><i>x</i><span class="courier">_L_LSq</span></td>
+<td valign="top">The expected average length (km) of the streams with this Strahler order number. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">C</span><i>x</i><span class="courier">_A_LSq</span></td>
+<td valign="top">The expected average area (km<sup>2</sup>) of the catchments belonging to the streams with this Strahler order number. </td>
+</tr>
+</table>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="tiptext"><span class="tip">Tip: </span>To calculate R<sub>B</sub>, R<sub>L</sub>, or R<sub>A</sub> values for subsequent order numbers, or for the regression lines, please refer to <a href="horton_statistics_algorithm.htm">Horton Statistics : algorithm</a>. </p>
+
+<p class="kopje">Implementation of Least Squares Fit within a Horton output table:</p>
+
+<ul>
+
+<li>When the total number of stream orders, i.e. the number of records in the Horton table, is <span class="symbollarger">£</span> 2, a least squares fit will not be calculated. </li>
+
+<li>When the total number of stream orders equals 4, the highest order is ignored during the least squares fit (i.e. values in the last record will not be taken into account). </li>
+
+<li>When the total number of stream orders is <span class="symbollarger">&#179;</span> 5, the lowest and highest orders are ignored during the least squares fit (i.e. values in the first and the last record in the table will not be taken into account.) </li>
+
+</ul>
+
+<h2 id="horton_plots_in_graph_window">Construction of Horton plots in a graph window</h2>
+
+<p class="defnewpar">The general idea is to construct a graph: </p>
+
+<ul>
+<li>with on the X-axis the Strahler stream order numbers, </li>
+<li>on a left logarithmic Y-axis: 
+	<ul>
+	<li>the number of streams per order number (C1_N), as points, </li>
+	<li>the expected values for the number of streams per order number by Least Squares Fit (C1_N_LSq), as a line, </li>
+	</ul>	
+<li>on a right logarithmic Y-axis:  </li>
+	<ul>
+	<li>the average stream length per order number (C1_L), as points, </li>
+	<li>the expected values for the average stream length per order number by Least Squares Fit (C1_L_LSq), as a line, </li>
+	<li>the average catchment area per order number (C1_A), as points, </li>
+	<li>the expected values for the average catchment area per order number by Least Squares Fit (C1_A_LSq), as a line. </li>
+	</ul>	
+</ul>
+<p>An example of Horton plots is shown below. </p>
+
+<p class="defnewpar">Suppose you only had a single catchment in your merged catchments map. </p>
+
+<p class="defnewpar">Open the output table to create the graphs. In the table window, choose <span class="arial">File, Create, Graph ...</span></p>
+
+<p class="emptyline">&nbsp;</p>
+
+<ol>
+
+<li>Add the points for the number of streams <span class="courier">C1_N</span>: </li>
+
+	<ul>
+	<li>In the <a href="../ilwismen/create_a_graph.htm">Create Graph</a> dialog box: </li>
+	    <ul>
+	    <li>accept the name of the current table, </li>
+	    <li>for the X-axis, accept the <span class="courier">Order</span> column, </li>
+	    <li>for the Y-axis, choose the <span class="courier">C1_N</span> column. </li>
+	</ul>
+	</ul>
+
+	<p class="emptyline">&nbsp;</p>
+
+<li>Adapt the Y-axis: </li>
+
+	<ul>
+	<li>From the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane, double-click <b>Y-axis left</b>: </li>
+		<ul>
+		<li>in the <a href="../ilwismen/graph_window_options_y_axis_left.htm">Y-axis (left)</a> dialog box: choose a <span class="arial">Logarithmic</span> axis type. </li>
+		<li>adapt the minimum and maximum values for the axis if required. </li>	
+		</ul>
+	</ul>
+
+<p class="emptyline">&nbsp;</p>
+
+<li>Add the expected values <span class="courier">C1_N_LSq</span>: </li>
+
+	<ul>
+	<li>From the Edit menu in the Graph window, choose <span class="arial">Add Graph from Columns</span>, or click the <span class=arial>Add Graph</span> button  <a href="../ilwismen/graph_window_add_graph_from_columns.htm"><img src="../images/add_graph_layer.gif" align=bottom width="36" height="22" border="0"></a> in the <a href="../ilwis/graph_window_toolbar.htm">toolbar</a> of the graph window. </li>
+	<li>In the <a href="../ilwismen/graph_window_add_graph_from_columns.htm">Add Graph from Columns</a> dialog box: </li>
+		<ul>
+		<li>accept the name of the current table, </li>
+		<li>for the X-axis, accept the <span class="courier">Order</span> column, </li>
+		<li>for the Y-axis, choose the <span class="courier">C1_N_LSq</span> column. </li>
+		</ul>
+	<li>Initially, this will be displayed as <i>points</i> in <i>yellow</i>...</li>
+	</ul>
+
+<p class="emptyline">&nbsp;</p>
+
+<li>Adapt the drawing of the expected values to a line graph and adapt the color to the same color as the points with empirical values:</li>
+	<ul>
+	<li>From the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane, double-click the graph layer <b>Order x C1_N_LSq</b>: </li>
+	<li>In the <a href="../ilwismen/graph_window_options_graph_from_columns.htm">Graph Options - Graph from Columns</a> dialog box: </li>
+		<ul>
+		<li>choose <span class="arial">Line</span>, </li>
+		<li>choose the same color as you used for the empirical point values <span class="courier">C1_N</span> from step 1. </li>
+		</ul>
+	</ul>
+
+<p class="emptyline">&nbsp;</p>
+
+<li>Repeat steps 1 to 4 above for the empirical stream length values <span class="courier">Order</span> x <span class="courier">C1_L</span>, and expected stream length values <span class="courier">Order</span> x <span class="courier">C1_L_LSq</span>. <br> 
+	Make sure that these values are bound to a <i>right-hand</i>, <i>logarithmic</i> Y-axis. </li>
+
+<p class="emptyline">&nbsp;</p>
+
+<li>Repeat steps 1 to 4 above for the empirical catchment area values <span class="courier">Order</span> x <span class="courier">C1_A</span>, and expected catchment area values <span class="courier">Order</span> x <span class="courier">C1_A_LSq</span>. <br> 
+	Make sure that these values are bound to a <i>right-hand</i>, <i>logarithmic</i> Y-axis. </li>
+
+</ol>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="defnewpar">The Horton plots will then look like follows: </p>
+
+<table cellspacing="0">
+<tr>
+<td valign="bottom"><img src="../images/hydro_horton.gif" width="330" height="267"></td>
+<td width="20">&nbsp;</td>
+<td valign="bottom"><img src="../images/hydro_horton_legend.gif" width="177" height="168"></td>
+</tr>
+</table>
+
+<p class="kopje">Reference: </p>
+
+<p>Ven te Chow, D.R. Maidment, L.W. Mays (1988) Applied hydrology. In: McGraw-Hill Series in Water Resources and Environmental Engineering. McGraw-Hill, New York. pp. 166-170. ISBN 0-07-010810-2. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="horton_statistics_dialog_box.htm">Horton statistics : dialog box</a></p>
+
+<p class=seealsolinks><a href="horton_statistics_command_line.htm">Horton statistics : command line</a></p>
+
+<p class=seealsolinks><a href="horton_statistics_algorithm.htm">Horton statistics : algorithm</a></p>
+
+</body

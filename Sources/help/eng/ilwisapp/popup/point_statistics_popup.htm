@@ -1,0 +1,38 @@
+<html>
+
+<head>
+<title>point statistics popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Point statistics</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/point_statistics.htm" onClick="return popup(this, 'notes')" >Point statistics</a> may help to get an impression of the nature of your point data for instance prior to a point interpolation or prior to kriging.</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/spatial_correlation.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> calculates spatial autocorrelation (as Moran's I), spatial variance (as Geary's c), and semi-variogram values <span class=symbol>g</span>(h) of pairs of point values where the points are at certain distances towards each other. The output of the spatial correlation operation can be displayed as a graph such as a semi-variogram. By modelling a semi-variogram, you can find the necessary input parameters, such as a model (spherical, exponential, etc.) and sill, range, and nugget values, for a kriging operation. </p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/variogram_surface.htm" onClick="return popup(this, 'notes')" >Variogram surface</a> operation calculates a surface of semi-variogram values where each cell (pixel) in the surface represents a directional distance class. The output surface, a raster map with a special kind of georeference, may help you to visualize possible <i>anisotropy</i> of your data and to determine the direction of the anisotropy axis. When there is anisotropy, it is advised to do the <a href="../../ilwisapp/popup/spatial_correlation_popup.htm">Spatial Correlation</a> operation in order to find the necessary input parameters, such as a model (spherical, exponential, etc.) and sill, range, and nugget values, for anisotropic kriging. </p>
+
+<p class=linespacing03after><a href="..//ilwisapp/cross_variogram.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a> calculates experimental semi-variogram values for <i>two variables</i> and cross-variogram values for the combination of both variables. From the output table of the Cross Variogram operation, you can create semi-variogram models for both variables and a cross-variogram model for the combination of the variables. All three models serve as input for the <a href="../../ilwisapp/popup/cokriging_popup.htm">CoKriging</a> operation. </p>
+
+<p><a href="..//ilwisapp/pattern_analysis.htm" onClick="return popup(this, 'notes')" >Pattern analysis</a> calculates probabilities of finding 1 point (<span class=courier>Prob1Pnt</span>) within a certain distance from any point in your input map, then 2 points (<span class=courier>Prob2Pnt</span>), 3 points (<span class=courier>Prob3Pnt</span>), etc. Another column (<span class=courier>ProbAllPnt</span>) contains the sum of <span class=courier>Prob1Pnt</span>, <span class=courier>Prob2Pnt</span>, ..., <span class=courier>Prob(n-1)</span>, in which <span class=courier>n</span> is the number of points in the input map. By inspecting the graphs of distances against probabilities, you may recognize distribution patterns of your points like random, clustered, regular, paired etc. </p>
+
+</body

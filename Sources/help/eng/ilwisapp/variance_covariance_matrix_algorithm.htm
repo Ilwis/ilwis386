@@ -1,0 +1,115 @@
+<html>
+
+<head>
+<title>Variance-Covariance matrix : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Variance-Covariance matrix">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Variance-Covariance matrix</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Variances and covariances are computed for M bands in the map list. The result is presented as a M x M covariance matrix. </p>
+
+<p class=defnewpar>The values of the covariance matrix are calculated according to the following formulae:</p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p><img src="../images/var.gif" align=bottom width="160" height="35"> </p>
+
+<p class=linespacing01before>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>x<sub>b</sub></p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>pixel values in map b.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>N</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>the number of pixels which are not undefined.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>and</p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p><img src="../images/covar.gif" align=bottom width="268" height="35"></p>
+
+<p class=linespacing01before>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p>x<sub>b1</sub></p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>pixel values in map b1.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>x<sub>b2</sub></p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>pixel values in map b2.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p>N</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>the number of pixels which are not undefined.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="variance_covariance_matrix_functionality.htm">Variance-Covariance matrix : functionality</a></p>
+
+</body

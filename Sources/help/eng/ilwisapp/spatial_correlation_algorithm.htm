@@ -1,0 +1,176 @@
+<html>
+
+<head>
+<title>Spatial correlation : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Spatial correlation, Semi-variogram (experimental)">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Spatial correlation</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>First, distances between all points are calculated. Distance classes are created for point pairs that are more or less at the same distance to each other. </p>
+
+<ul>
+
+<li>Distance classes are usually based on a user-specified lag spacing. </li>
+
+<li>By using the options 'omni directional' and <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distance</a>, all distances are calculated over the sphere using the projection of the coordinate system that is used by the input point map. </li>
+
+</ul>
+
+<p class=defnewpar>Then, for all point pairs within a distance group, the spatial autocorrelation, spatial variance and the experimental semi-variogram value is calculated. </p>
+
+<p class=defnewpar>In ILWIS, spatial autocorrelation between points is calculated as Moran's I (Odland):</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;  </p>
+
+<p class=leftmargin1><img src="../images/moran.gif" align=bottom width="162" height="38"></p>
+
+<p class=defnewpar>In ILWIS, the spatial variance is calculated as Geary's c (Odland):</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+<p class=leftmargin1><img src="../images/geary.gif" align=bottom width="150" height="38"></p>
+
+<p class=defnewpar>Semi-variogram values are defined as:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+<p class=leftmargin1><img src="../images/semivar.gif" align=bottom width="110" height="38"></p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p>z</p>
+
+</td>
+<td valign="top">
+<p>the value of a point</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><img src="../images/zavg.gif" align=bottom width="6" height="11"></p>
+
+</td>
+<td valign="top">
+<p>the average value of all available point values</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>(z<sub>i</sub> - <img src="../images/zavg.gif" align=bottom width="6" height="11"> )(z<sub>j</sub> - <img src="../images/zavg.gif" align=bottom width="6" height="11"> )</p>
+
+</td>
+<td valign="top">
+<p>the product of:</p>
+
+<p>the difference of the value of point i and the average value of all points, and </p>
+
+<p>the difference of the value of point j and the average value of all points</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>(z<sub>i</sub>-z<sub>j</sub>)<sup>2</sup></p>
+
+</td>
+<td valign="top">
+<p>the squared difference of the values of point i and point j; this is calculated for all point pairs within a distance class and then summed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>(zi- <img src="../images/zavg.gif" align=bottom width="6" height="11"> )<sup>2</sup></p>
+
+</td>
+<td valign="top">
+<p>the squared difference of the value of point i and the average value of all points; this is calculated for all points and then summed; this is a constant value (variance).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>n</p>
+
+</td>
+<td valign="top">
+<p>the total number of points </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>w<sub>ij</sub></p>
+
+</td>
+<td valign="top">
+<p>weight of a point pair. </p>
+
+<p>When using the <i>omnidirectional</i> method, w<sub>ij</sub> = 1 when a point pair belongs to a certain distance class, otherwise w<sub>ij</sub> = 0. </p>
+
+<p>When using the <i>bidirectional</i> method, w<sub>ij</sub> = 1 when a point pair belongs to a certain distance class and when within the direction, tolerance and bandwidth as specified by the user (see also Figure 1 in <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a>); otherwise w<sub>ij</sub> = 0. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p>In the numerators (top of a fraction) of these formulas, the weights assure that only the values of points that have a certain distance towards each other will be taken into account in the calculations for that distance class. </p>
+
+<p>In the denominators of these formulas (bottom of a fraction), i.e. in the standardization parts of the formulas, the weights count the number of valid point pairs within a distance class. </p>
+
+<p>All summations are from i=1 to n and from j=i+1 to n, thus every point pair is counted only once.</p>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>	Geary, R.C., 1954. The contiguity ratio and statistical mapping.</li>
+
+<li>	Moran, P.A.P., 1948. The interpretation of statistical maps.</li>
+
+<li>	Odland, J. 1988. Spatial autocorrelation. In: G.I. Thrall (Ed.), Sage University Scientific Geography Series no. 9. Sage Publications, Beverly Hills. 87 pp.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="kriging_functionality.htm">Kriging : functionality</a></p>
+
+</body

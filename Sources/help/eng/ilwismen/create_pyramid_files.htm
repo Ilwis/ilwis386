@@ -1,0 +1,81 @@
+<html>
+
+<head>
+<title>Create pyramid layers</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Pyramid layers">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Main window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Create Pyramid Layers</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Create pyramid layers for one or more raster maps. </p>
+
+<p class=defnewpar>Pyramid layers speed up the display of large raster maps in a map window, for instance when raster maps are larger than a few thousand lines and columns. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>If <i>no selection</i> is made in the current Catalog, then pyramid layers will be created for every raster map in the Catalog; </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>If one or more <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a> have been selected in the Catalog, then pyramid layers will only be created for the selected raster maps; </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>If one or more <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map lists</a> have been selected in the Catalog, then pyramid layers will only be created for the raster maps that are part of the selected raster map lists. </li>
+
+</ul>
+
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>You can also create Pyramid layers: </p>
+
+<ul class=tipul>
+
+<li>through the <a href="../ilwismen/main_window_preferences.htm">Preferences</a> command on the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> of the Main window: choose <span class=arial>Map window, Display, Raster maps</span>, and select the check box <span class=arial>Create Pyramid Layers by default</span>. </li>
+
+<li>through the <a href="raster_map_properties.htm">Properties of a raster map</a>, or through the <a href="map_list_properties.htm">Properties of a map list</a>, </li>
+
+<li>through the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a raster map, </li>
+
+<li>by typing a <span class=courier>CreatePyramidLayers</span> command on the command line of the Main window, or by using this command in a script (for more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#script_pyramids"><span class=bookmark>Creating/Deleting pyramid layers</span></a>). </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">ILWIS objects : Raster maps - Pyramid layers</a></p>
+
+</body

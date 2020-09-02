@@ -1,0 +1,192 @@
+<html>
+
+<head>
+<title>Distance calculation : travel time map</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Distance calculation, Travel time map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Distance calculation</h1>
+
+<h1 class=secondline>Travel time map</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>By calculating a travel time map, each pixel is assigned the time required to reach that pixel from user-specified source pixels, for example time to reach schools, villages etc.</p>
+
+<p class=defnewpar>A travel time map is created in three steps:</p>
+
+<ul>
+
+<li>	prepare a <a href="..//ilwisapp/popup/distance_calculation_popup.htm" onClick="return popup(this, 'notes')" >source map</a> and a <a href="..//ilwisapp/popup/distance_calculation_weight_map_popup.htm" onClick="return popup(this, 'notes')" >weight map</a>. The weight (resistance) factors in the weight map reflect the relative decrease of speed in less accessible terrains compared to the best accessible terrain (see example below);</li>
+
+<li>	perform a distance calculation using source and weight map; </li>
+
+<li>	perform a MapCalc calculation to convert the obtained output values to time units.</li>
+
+</ul>
+
+<p class=kopje>Input map requirements to create a travel time map:</p>
+
+<p><a href="..//ilwisapp/popup/distance_calculation_source_map_popup.htm" onClick="return popup(this, 'notes')" >Source map</a>: In the Distance calculation dialog box, a source map can be any raster map with a class domain or an ID domain. On the command line, you can also use raster maps with a value domain. All pixels in the source map that have a class name, ID or value are considered as sources. For all pixels that have the undefined value, a distance/travel time value is calculated.</p>
+
+<p class=defnewpar><a href="..//ilwisapp/popup/distance_calculation_weight_map_popup.htm" onClick="return popup(this, 'notes')" >Weight map</a>: In the weight map, weight factors simulate the difficulty of crossing pixels which form barriers such as rivers and mountain ridges. Weight factors represent a 'resistance' in the distance calculation. The higher the value of accessible pixels in the weight map, the higher the resulting output distance pixel values will be.</p>
+
+<p>When weight factors are used which are inversely proportional to the possible speed that can be obtained in the different mapping units, a relative time map is produced instead of a distance map. For instance, if the travel speeds in the table below are valid for crossing different Terrain Mapping Units, the displayed weight factors could define the pixel values of the different TMUs in the input weight map.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=th>Terrain Mapping Unit</p>
+
+</td>
+<td valign="top" width=119>
+<p class=th>maximum speed (Km/h)</p>
+
+</td>
+<td valign="top" width=119>
+<p class=th>weight factors in input weight map</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=t1>main road</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>70</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=t1>secondary road</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>35</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>2</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=t1>field</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>5</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>14</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=t1>normal forest</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>2.5</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>28</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=t1>dense forest</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>1</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>70</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=t1>river (inaccessible)</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>0</p>
+
+</td>
+<td valign="top" width=119>
+<p class=t1>-1</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Note that the weight factors are inversely proportional to the speed and that the largest speed is set to weight factor 1 (i.e. the weight factors have the unit h/km and a multiplication factor of 70 was used to obtain whole weight values).</p>
+
+<p class=kopje>Output 'distance' map:</p>
+
+<p>The values in the output 'distance' map are expressed in meters, related to weight factor 1. </p>
+
+<p>The output 'distance' map uses by default system domain Distance; the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> for the output map can be adjusted each time you perform the Distance operation. You can also create or use a value domain of your own. </p>
+
+<p>The output map uses the same georeference as the input maps.</p>
+
+<p class=kopje>Converting the output distance values to time units:</p>
+
+<p>The values in the output distance map are expressed in meters, related to weight factor 1. </p>
+
+<p>These output values should be converted to time units using a <a href="../ilwis/calc.htm">MapCalc expression</a>. </p>
+
+<p>Considering the example above where the maximum speed was 70 km/h, you could apply the following:</p>
+
+<ul>
+
+<li>	when the output distance values are divided by 70000 (m/h), the time in hours to reach each pixel is obtained,</li>
+
+<li>	when the output distance values are multiplied by 60 and divided by 70000, the time in minutes to reach each pixel is obtained,</li>
+
+<li>	when the output distance values are multiplied by 60<span class=courier>*</span>60 and divided by 70000, the time in seconds to reach each pixel is obtained.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="distance_calculation_functionality.htm">Distance calculation: functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_shortest_path.htm">How to calculate shortest path</a></p>
+
+</body

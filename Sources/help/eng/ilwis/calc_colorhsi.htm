@@ -1,0 +1,114 @@
+<html>
+
+<head>
+<title>COLORHSI</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="COLORHSI, Color functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>COLORHSI( ) function</h1>
+
+<p class=defnewpar>Returns a new (R,G,B) color from expressions resulting in values for Hue, Saturation and Intensity.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>COLORHSI</span>(<i>Hue</i>, <i>Saturation</i>, <i>Intensity</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><i>Hue</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="110" valign="top">Value range:</td>
+	<td valign="top">[0,240]</td>
+</tr>
+<tr>
+	<td width="110" valign="top"><i>Saturation</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="110" valign="top">Value range:</td>
+	<td valign="top">[0,240]</td>
+</tr>
+<tr>
+	<td width="110" valign="top"><i>Intensity</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="110" valign="top">Value range:</td>
+	<td valign="top">[0,240]</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><span class=courier>COLORHSI</span> returns:</td>
+	<td valign="top">a color</td>
+</tr>
+<tr>
+	<td width="110" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Color</span></a></td>
+</tr>
+</table>
+<p class=tip>Note:</p>
+<p class=tiptext>When the input value is undefined or outside the value range [0,240], the output will be
+(0,0,0).</p>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>,
+<a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="70"><a href="calc_color.htm">COLOR</a></td>
+	<td valign="top" width="70"><a href="calc_clrgreen.htm">CLRGREEN</a></td>
+	<td valign="top" width="85"><a href="calc_clryellow.htm">CLRYELLOW</a></td>
+	<td valign="top"><a href="calc_clrhue.htm">CLRHUE</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70"><a href="calc_mapcolor.htm">MAPCOLOR</a></td>
+	<td valign="top" width="70"><a href="calc_clrblue.htm">CLRBLUE</a></td>
+	<td valign="top" width="85"><a href="calc_clrmagenta.htm">CLRMAGENTA</a></td>
+	<td valign="top"><a href="calc_clrsat.htm">CLRSAT</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70"><a href="calc_rprcolor.htm">RPRCOLOR</a></td>
+	<td valign="top" width="70"></td>
+	<td valign="top" width="85"><a href="calc_clrcyan.htm">CLRCYAN</a></td>
+	<td valign="top"><a href="calc_clrintens.htm">CLRINTENS</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70">&nbsp;</td>
+	<td valign="top" width="70">&nbsp;</td>
+	<td valign="top" width="85"><a href="calc_clrgrey.htm">CLRGREY</a></td>
+	<td valign="top"><a href="calc_colorhsi.htm">COLORHSI</a></td>
+</tr>
+</table>
+
+</body

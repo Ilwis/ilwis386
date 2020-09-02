@@ -1,0 +1,128 @@
+<html>
+
+<head>
+<title>Topological optimization : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Topological optimization">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Topological optimization</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>When there are lakes in your study area, i.e. when your DEM and/or your flow direction map have undefined values, the Topological Optimization operation can improve the results of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation and a <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network extraction</a> operation to ensure a proper flow through this lake. </p>
+
+<p class="defnewpar">Before you can perform this operation, you must have prepared a segment map in which the segments connect the inlet(s) of a lake with the outlet(s) of lake (down flow). </p>
+
+<p class="defnewpar">As output, the operation delivers: </p>
+
+<ul>
+
+<li>a new continuous drainage network raster map, and </li>
+
+<li>a new flow direction raster map. </li>
+
+</ul>
+
+<p class="defnewpar">It is advised to perform this operation in two or more steps, for more information, refer to <a href="topological_optimization_functionality.htm">Topological optimization : functionality</a>. </p>
+
+<p class="defnewpar">The final output of this operation can serve as a new basis for the other hydrologic operations, e.g. to obtain new Strahler or Shreve order numbers, new catchments etc. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Drainage network map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> that contains a basic but incomplete drainage network. The input map should be an output map of a previous <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network extraction</a> operation, i.e. a map with system domain <span class="courier">Bool</span>. Open the list box and select the desired input map or map list, or directly drag a raster map or map list from a Catalog into this box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Flow direction map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a raster map that is the output of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Stream segment map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a segment map that contains one or more segments which connect the inlet(s) of lake(s) with the outlet(s) of lake(s). You should have prepared this segment map manually and beforehand. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain an updated drainage network. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Modified flow direction map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain updated flow directions. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="topological_optimization_functionality.htm">Topological optimization : functionality</a></p>
+
+</body

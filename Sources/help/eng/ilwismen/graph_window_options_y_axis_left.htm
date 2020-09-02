@@ -1,0 +1,204 @@
+<html>
+
+<head>
+<title>Y-axis (left)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Graph Options, Graph window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Graph window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/graph_window_graph_management.htm">Graph Management</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Y-axis (left)</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Modify the Y-axis as displayed on the left side of the graph window. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you double-click the <span class=arial>Y-axis Left</span> item in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane, </li>
+
+<li>	when you double-click the Y-axis as displayed on the left side of the graph in the graph window itself. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Axis text:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type explanatory text that should appear along the Y-axis of your graph. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Show grid:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you wish to have grid lines in your graph. </p>
+
+<p class=diabox>The grid lines will automatically be drawn for all ticks along the Y-axis, i.e. as specified for <span class=arial>Interval</span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Axis type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When using a value column for the Y-axis: </p> 
+
+<ul class=diabox>
+
+<li>Select <span class=arial>Linear</span> when you wish to use a normal Y-axis. </li>
+
+<li>Select <span class=arial>Logarithmic</span> when you wish to use a logarithmic Y-axis. </li>
+
+<li>Select <span class=arial>Normal Probability</span> when you wish to show cumulative frequencies (which range from 0 - 1 or from 0% to 100%) on the Y-axis, and (classified) observed values on the X-axis. If the sample data are in fact normally distributed, the resultant cumulative frequencies will appear as a straight line. </li>
+
+</ul>
+
+<p class=diabox>For examples of different types of axes, see <a href="graph_window_options_x_axis.htm">X-axis</a>, section <a href="graph_window_options_x_axis.htm#exampleaxes"><span class=bookmark>Examples</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Min&nbsp;&nbsp;Max:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When using a Linear or a Logarithmic Y-axis: </p>
+
+<p class=diabox>Specify the minimum and maximum value that should be used on the Y-axis. </p> 
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Interval: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>When using a Linear Y-axis: </p>
+
+<p class=diabox>Specify the interval at which values should be shown along the Y-axis. </p> 
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Text rotation: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the rotation of the <i>values</i> along the Y-axis. Rotation is expressed in degrees (anti-clock wise).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the <a href="..//ilwis/popup/font_popup.htm" onClick="return popup(this, 'notes')" >font</a> in which the explanatory text along the Y-axis should be displayed. You can select any installed True Type font. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the font size (pt) in which the explanatory text along the Y-axis should appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Bold:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have the explanatory text along the Y-axis appear in <b>bold</b>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Italic:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have the explanatory text along the Y-axis appear in <i>italics</i>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>To change the text along the Y-axis, or the minimum and maximum values used by the Y-axis, you can also double-click the text, minimum or maximum value in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane. </li>
+
+<li>To change the font settings of the <i>values</i> displayed along graph axes: </li>
+
+        <ul class=tipul>
+
+        <li>choose <span class=arial><a href="../ilwismen/main_window_preferences.htm">Preferences</a></span> from the File menu of the Main window, </li>
+
+        <li>then open the <span class=arial>Font</span> item and choose <span class=arial>Graphs Font</span>. </li>
+
+        </ul>
+
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_functionality.htm">Graph window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_graph_management.htm">Graph window : Graph Management</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_toolbar.htm">Graph window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_menu_commands.htm">Graph window : menu commands</a></p>
+
+</body

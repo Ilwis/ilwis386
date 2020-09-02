@@ -1,0 +1,380 @@
+<html>
+
+<head>
+<title>IN</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="IN, String functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>IN( ) function</h1>
+
+<p class=defnewpar>Tests whether <i>String b</i> is part of or equal to <i>String a</i>.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+
+<p class=syntax><span class=courier>IN</span>(<i>String a</i>, <i>String b</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>String a</i></td>
+	<td valign="top">is a string</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> or <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> domain or <a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>String</span></a></td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>String b</i></td>
+	<td valign="top">is a string</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> or <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> domain or <a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>String</span></a></td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>IN</span> returns:</td>
+	<td valign="top">a boolean value, i.e. True, False or undefined</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain
+      <span class=courier>Bool</span></a></td>
+</tr>
+</table>
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The <span class=courier>IN</span> function is similar to the <a href="calc_inmask.htm"><span class=courier>INMASK</span></a> function.</li>
+	<li>Strings of a class or ID domain or a string column must be enclosed by double quotes, e.g. &quot;MyClass&quot;.</li>
+	<li>The <span class=courier>IN</span> function does not accept wildcards in the input strings.</li>
+	<li>When one input string is undefined or both of the input strings are undefined, the output will also be undefined.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>For quick display purposes, you can also specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a
+      polygon, segment or point map.</li>
+	<li>For quick calculation results, it is advised to use boolean expressions
+      containing <b> complete</b> class names or IDs or their codes between quotes,
+      in combination with the <a href="calc_or_operator.htm"> OR</a> and/or <a href="calc_and_operator.htm"> AND</a> operators.
+      For example, the expression <span class="courier">OutMap=(Landuse=&quot;Agriculture&quot;)
+      OR (Landuse=&quot;Agriculture(irrigated)&quot;)</span> is calculated much
+      faster than the expression <span class="courier">OutMask =
+      INMASK(Landuse,&quot;Agri*&quot;)</span>.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>,
+<a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+
+<table cellspacing=0>
+<tr>
+	<td width="250"><p class=calc00>? IN(&quot;VeryLongString&quot;,&quot;Long&quot;)</p></td>
+	<td><p>returns True</p></td>
+</tr>
+<tr>
+	<td width="250"><p class=calc00>? IN(&quot;VeryLongString&quot;,&quot;long&quot;)</p>
+	<td><p>returns True</p></td>
+</tr>
+<tr>
+	<td width="250"><p class=calc00>? IN(&quot;ABC&quot;,&quot;123&quot;)</p>
+	<td><p>returns False</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+
+<p>Raster map <span class="courier">Geomorphology</span> uses class domain <span class="courier">Geomorphology</span>
+which contains among others the items &quot;<span class="courier">Glacial cirque</span>&quot;, &quot;<span class="courier">Glacial
+lake</span>&quot;, &quot;<span class="courier">Glacial slope</span>&quot; and &quot;<span class="courier">Glacial valley</span>&quot;. To find
+all areas that are glacial, type on the command line of the Main window:</p>
+<p class=calc0linsp03befaft>Glacial = IN(Geomorphology,&quot;Glacial&quot;)</p>
+
+<table>
+<tr>
+<td><p class=courier>Geomorphology</p></td>
+<td><p class=courier>Glacial</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>sf</td>
+    <td class=calcpict>gc</td>
+    <td class=calcpict>se</td>
+  </tr>
+  <tr>
+    <td class=calcpict>al</td>
+    <td class=calcpict>gs</td>
+    <td class=calcpict>gv</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>il</td>
+    <td class=calcpict>gl</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>True</td>
+    <td class=calcpict>False</td>
+  </tr>
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>True</td>
+    <td class=calcpict>True</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>True</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" colspan="2"><p class=th>Legend</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>al</p></td>
+	<td valign="top"><p class=t1>Active landslide</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>gc</p></td>
+	<td valign="top"><p class=t1>Glacial cirque</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>gl</p></td>
+	<td valign="top"><p class=t1>Glacial lake</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>gs</p></td>
+	<td valign="top"><p class=t1>Glacial slope</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>gv</p></td>
+	<td valign="top"><p class=t1>Glacial valley</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>il</p></td>
+	<td valign="top"><p class=t1>Infilled lake</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>ol</p></td>
+	<td valign="top"><p class=t1>Old landslide</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>se</p></td>
+	<td valign="top"><p class=t1>Slope with minor erosion</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>sf</p></td>
+	<td valign="top"><p class=t1>Steep slope near a fault</p></td>
+</tr>
+</table>
+
+<p class=defnewpar>Raster map <span class="courier">Geomorphology</span> has attribute table <span class="courier">Geomorphology</span>,
+in which class column <span class="courier">Zonation</span> contains several
+times the item &quot;<span class="courier">Steep slopes&quot;</span>.
+To find all areas with steep slopes in map <span class="courier">Geomorphology</span>,
+type on the command line of the <b> Main window</b>:</p>
+<p class=calc0linsp03befaft>Steep = IN(Geomorphology.zonation,&quot;Steep&quot;)</p>
+
+<p>Output map <span class="courier">Steep</span> will return <span class="courier">True</span> for
+all areas of
+the raster map <span class="courier">Geomorphology</span> where attribute column <span class="courier">Zonation</span>
+contains the string &quot;Steep&quot;; False will be returned for all other classes.</p>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc0>Glacial = IN(%K,&quot;Glacial&quot;)</p>
+<p class=calc0linsp03befaft>Steep = IN(Zonation,&quot;Steep&quot;)</p>
+
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolh>Domain<br>
+      Geomorphology</p></td>
+	<td valign="top"><p class=tcolh><br>
+      Zonation</p></td>
+	<td valign="top"><p class=tcolh><br>
+      Glacial</p></td>
+	<td valign="top"><p class=tcolh><br>
+      Steep</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1> Accumulation of debris on slope</p></td>
+	<td valign="top"><p class=t1>Steep slopes</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class="t1">Active landslide</td>
+	<td valign="top"><p class=t1>Steep slopes</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Alluvial fan (flooding possible)</p></td>
+	<td valign="top"><p class=t1>Alluvial fan</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Alluvial fan (no flooding possible)</p></td>
+	<td valign="top"><p class=t1>Alluvial fan</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Dipslope</p></td>
+	<td valign="top"><p class=t1>Highest part</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Face slope</p></td>
+	<td valign="top"><p class=t1>Highest part</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Flat area near a fault</p></td>
+	<td valign="top"><p class=t1>Steep slopes</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Glacial cirque</p></td>
+	<td valign="top"><p class=t1>Highest part</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Glacial lake</p></td>
+	<td valign="top"><p class=t1>Highest part</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Glacial slope</p></td>
+	<td valign="top"><p class=t1>Highest part</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Glacial valley</p></td>
+	<td valign="top"><p class=t1>Highest part</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Heavily eroded area</p></td>
+	<td valign="top"><p class=t1>Steep slopes</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Hills near a fault</p></td>
+	<td valign="top"><p class=t1>Steep slopes</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Infilled lake</p></td>
+	<td valign="top"><p class=t1>Flat area</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Old landslide</p></td>
+	<td valign="top"><p class=t1>Steep slopes</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Ridge</p></td>
+	<td valign="top"><p class=t1>Steep slopes</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Slope with minor erosion</p></td>
+	<td valign="top"><p class=t1>Steep slopes</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Steep slope near a fault</p></td>
+	<td valign="top"><p class=t1>Steep slopes</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Valley in alluvial fan</p></td>
+	<td valign="top"><p class=t1>Alluvial fan</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_left.htm">LEFT</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strlt.htm">STRLT</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_strpos.htm">STRPOS</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_right.htm">RIGHT</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strle.htm">STRLE</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_inmask.htm">INMASK</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_sub.htm">SUB</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strgt.htm">STRGT</a></p></td>
+	<td valign="top"><p class=seealsolinks></p></td>
+</tr>
+<tr>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_length.htm">LENGTH</a></p></td>
+	<td valign="top" width="60"><a href="calc_strge.htm">STRGE</a></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

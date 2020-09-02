@@ -1,0 +1,104 @@
+<html>
+
+<head>
+<title>Edit a Bool domain</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Domains, Edit domain, Bool domain">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Edit a Bool domain</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Edit the codes that are used for 'True' and 'False' by a user-defined Bool domain. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>    when in the <a href="../ilwismen/create_a_domain.htm">Create Domain</a> dialog box, you choose to create a Bool domain and click the OK button in that dialog box, </li>
+
+<li>	when you double-click a user-defined Bool domain in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>,</li>
+
+<li>	when you press the right mouse button on a user-defined Bool domain in a Catalog and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>,</li>
+
+<li>	when you select a user-defined Bool domain in a Catalog, and choose <span class=arial>Edit Object</span> from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> in the Main window. </li>
+
+<!--<li>	when you choose <span class=arial>Domain</span> from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in a map window and subsequently you select a layer that uses a Bool domain.</li>-->
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>You can change the description of the domain. The description is visible on the status bar of the Main window when moving the mouse pointer over the domain in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>'True' string:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>You can change code for 'True' values in maps and tables that use this Bool domain; the code will come up when pressing the left mouse button in a map window (<span class=arial>Info</span>), and in <a href="../ilwis/map_window_layer_management.htm">Layer Management</a>. <!--and in a legend of a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>.--> </p>
+
+<p class=diabox>You may use for instance code 'Suitable'. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>'False' string:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>You can change code for 'False' values in maps and tables that use this Bool domain. </p>
+
+<p class=diabox>You may use for instance code 'Not Suitable'. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To set default colors for 'True' and 'False' for a Bool domain, you can:</p>
+
+        <ul class=tipul>
+
+        <li> use the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>, or</li>
+
+        <li> use the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a Bool map.</li>
+
+        </ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+</body

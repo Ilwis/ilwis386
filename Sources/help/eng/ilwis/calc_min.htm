@@ -1,0 +1,299 @@
+<html>
+
+<head>
+<title>MIN</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="MIN, Statistical functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>MIN( ) function</h1>
+
+<p class=defnewpar>Returns the minimum value.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>MIN</span>(<i>ValueColumn</i>)<br>
+<span class=courier>MIN</span>(<i>Value a</i>, <i>Value b</i>)<br>
+<span class=courier>MIN</span>(<i>Value a</i>, <i>Value b</i>, <i>Value c</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>ValueColumn</i></td>
+	<td valign="top">is a value column</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>Value a</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>Value b</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>Value c</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>MIN</span>  returns:</td>
+	<td valign="top">a real value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a> </td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The <span class=courier>MIN</span>(<i>ValueColumn</i>) function, i.e. 1
+      parameter only, can only be used in <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>.</li>
+	<li>To retrieve the minimum value of a single raster map, use the function <a href="calc_mapmin.htm"><span class=courier>MAPMIN</span></a>.</li>
+	<li>The <span class="courier">MIN</span> function can also be performed
+      through a dialog box, see <a href="../ilwismen/column_statistics.htm">Column
+      Statistics</a>.</li>
+	<li>When one of the input parameters is undefined, or when more input parameters are undefined, the output will also be undefined.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="150"><p class=calc00>? MIN(3.8,8.1,1.34)</p></td>
+	<td><p>returns 1.34</p></td>
+</tr>
+<tr>
+	<td width="150"><p class=calc00>? MIN(PIDIV4,NEG(2))</p>
+	<td><p>returns -2.0000</p></td>
+</tr>
+<tr>
+	<td width="150" valign="top"><p class=calc00>? MIN(Column1)</p>
+	<td><p>returns the minimum of column1 when used on the command line of the
+      table window</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>OutMap = MIN(InMapA,InMapB)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>InMapA</p></td>
+	<td><p class=courier>InMapB</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>8</td>
+    <td class=calcpict>6</td>
+    <td class=calcpict>-4</td>
+  </tr>
+  <tr>
+    <td class=calcpict>4</td>
+    <td class=calcpict>-11</td>
+    <td class=calcpict>0</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>-7</td>
+    <td class=calcpict>3</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>8</td>
+    <td class=calcpict>7</td>
+    <td class=calcpict>-2</td>
+  </tr>
+  <tr>
+    <td class=calcpict>14</td>
+    <td class=calcpict>1</td>
+    <td class=calcpict>2</td>
+  </tr>
+  <tr>
+    <td class=calcpict>5</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>9</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>8</td>
+    <td class=calcpict>6</td>
+    <td class=calcpict>-4</td>
+  </tr>
+  <tr>
+    <td class=calcpict>4</td>
+    <td class=calcpict>-11</td>
+    <td class=calcpict>0</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>3</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol1 = MIN(InColA)</p>
+<p class=calc00>OutCol2 = MIN(InColA,IncolB)<br>
+OutCol3 = IFUNDEF(InColA,MIN(IncolA))</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InColA</p></td>
+	<td valign="top"><p class=tcolhr>InColB</p></td>
+	<td valign="top"><p class=tcolhr>OutCol1</p></td>
+	<td valign="top"><p class=tcolhr>OutCol2</p></td>
+	<td valign="top"><p class=tcolhr>OutCol3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>8</p></td>
+	<td valign="top"><p class=t1r>8</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+	<td valign="top"><p class=t1r>8</p></td>
+	<td valign="top"><p class=t1r>8</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1r>6</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-4</p></td>
+	<td valign="top"><p class=t1r>-2</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+	<td valign="top"><p class=t1r>-4</p></td>
+	<td valign="top"><p class=t1r>-4</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>14</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>4</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-11</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-7</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>-7</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1r>9</p></td>
+	<td valign="top"><p class=t1r>-11</p></td>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1r>3</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_max.htm">MAX</a></p></td>
+	<td valign="top" width="55"><a href="calc_avg.htm">AVG</a></td>
+	<td valign="top" width="50"><p class=seealsolinks><a href="calc_var.htm">VAR</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_ttest.htm">TTEST</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_sum.htm">SUM</a></p></td>
+	<td valign="top" width="55"><a href="calc_std.htm">STD</a></td>
+	<td valign="top" width="50"><p class=seealsolinks><a href="calc_cov.htm">COV</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_chisquare.htm">CHISQUARE</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_cum.htm">CUM</a></p></td>
+	<td valign="top" width="55"><a href="calc_std.htm">STDEV</a></td>
+	<td valign="top" width="50"><a href="calc_cov.htm">COVAR</a></td>
+	<td valign="top"><a href="../ilwismen/column_statistics.htm">Column
+      Statistics</a></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><a href="calc_cnt.htm">CNT</a></td>
+	<td valign="top" width="55"><p class=seealsolinks><a href="calc_stderr.htm">STDERR</a></p></td>
+	<td valign="top" width="50"><a href="calc_corr.htm">CORR</a></td>
+	<td valign="top"><a href="calc_aggmin.htm">AGGMIN</a></td>
+</tr>
+</table>
+
+</body

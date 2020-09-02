@@ -1,0 +1,165 @@
+<html>
+
+<head>
+<title>Filter : command line (2)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filter operation, MapFilter, Map list operations, Operations on map lists, MapListApplic">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Filter</h1>
+
+<h1 class=secondline>Command line (2)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To perform the <a href="..//ilwisapp/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a> operation on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, type one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=84>
+<p class=calccommline>OUTMAPLIST</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapListApplic</span>(InputMapListName, <span class=courier>MapFilter</span>(<span class=courier>##</span>, <i>FilterName</i>))</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=84>
+<p class=calccommline>OUTMAPLIST</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapListApplic</span>(InputMapListName, <span class=courier>MapFilter</span>(<span class=courier>##</span>, <i>FilterExpression</i>))</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAPLIST</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output map list map; all output raster maps will be created when the map list is opened, the raster maps will obtain the same name as the map list followed by _1, _2, _3, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapListApplic</p>
+
+</td>
+<td valign="top">
+<p>is the command to start an operation on all raster maps in a map list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>InputMapListName</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input map list which contains all raster maps on which the operation should be performed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapFilter</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Filter operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>##</p>
+
+</td>
+<td valign="top">
+<p>is an obligatory parameter in map list expressions; it indicates the individual raster maps in the input map list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>FilterName</i></p>
+
+</td>
+<td valign="top">
+<p>see <a href="filter_command_line.htm">Filter : command line (1)</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>FilterExpression</i></p>
+
+</td>
+<td valign="top">
+<p>see <a href="filter_command_line.htm">Filter : command line (1)</a></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>For more information and some examples of using standard and user-defined filters on the command line, refer to <a href="../ilwisapp/filters_user_defined_filters.htm">Filters : user-defined filters</a>.</p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map list</a> is created. When the map list is opened and thus calculated, the dependent output raster maps will be defined and calculated. </p>
+
+<p class=defnewpar>When the assignment symbol := is used, the output raster maps will be defined and calculated, then the dependency links of the output raster maps will be broken. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filter_command_line.htm">Filter : command line (1)</a></p>
+
+<p class=seealsolinks><a href="filter_functionality.htm">Filter : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_filter_types.htm">Filters : filter types</a></p>
+
+<p class=seealsolinks><a href="filters_standard_filters.htm">Filters : standard filters</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_user_defined_filters.htm">Filters : user-defined filters</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_filters.htm">ILWIS objects : filters</a></p>
+
+</body

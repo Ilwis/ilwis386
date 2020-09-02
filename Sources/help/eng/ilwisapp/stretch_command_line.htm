@@ -1,0 +1,228 @@
+<html>
+
+<head>
+<title>Stretch : command line (1)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stretch, MapStretch">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Stretch</h1>
+
+<h1 class=secondline>Command line (1)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/stretch_popup.htm" onClick="return popup(this, 'notes')" >Stretch</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapStretchLinear</span>(InputMapName, <i>Range from</i>, Domain)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapStretchLinear</span>(InputMapName, <i>Range from</i>, Domain, <i>Range to</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapStretchHistEq</span>(InputMapName, <i>Range from</i>, <i>Intervals</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapStretchLinear</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Stretch operation with <a href="..//ilwisapp/popup/stretch_linear_popup.htm" onClick="return popup(this, 'notes')" >linear stretching</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapStretchHistEq</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Stretch operation with <a href="..//ilwisapp/popup/stretch_histequa_popup.htm" onClick="return popup(this, 'notes')" >histogram equalization</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input raster map (must be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>Range from</i></p>
+
+</td>
+<td valign="top">
+<p>is the range of input values that should be stretched. Specify the 'stretch from range' as:</p>
+
+<p> <i>min</i>:<i>max</i> |<i>perc</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=leftmargin1><i>min</i>:<i>max</i></p>
+
+</td>
+<td valign="top">
+<p>lower and upper 'stretch from' boundaries</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=leftmargin1><i>perc</i>  </p>
+
+</td>
+<td valign="top">
+<p>real value &gt;= 0, percentage of pixels to be ignored on both sides of the input map's histogram during stretching.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>Domain</p>
+
+</td>
+<td valign="top">
+<p><u>For linear stretching:</u><br>
+when choosing output domain <span class=courier>Image</span>, the output stretch range is from 0 to 255; <br>
+when choosing any other output value domain, specify the minimum and maximum values to stretch to (value range) and a precision (resolution of output values). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>Range to</i></p>
+
+</td>
+<td valign="top">
+<p>For linear stretching when choosing an output Value domain but not Image: the range of output values to which the 'range from' values need to be stretched. Specify the 'stretch to' range as:</p>
+
+<p><i>min</i>:<i>max</i> | <i>min</i>:<i>max</i>:<i>precision</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=leftmargin1><i>min</i>:<i>max</i></p>
+
+</td>
+<td valign="top">
+<p>Lower and upper 'stretch to' values in output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=leftmargin1><i>min</i>:<i>max</i>:<i>precision</i></p>
+
+</td>
+<td valign="top">
+<p>Lower and upper 'stretch to' values in output map, and precision of output values.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>Intervals</i></p>
+
+</td>
+<td valign="top">
+<p><u>For histogram equalization</u>: the number of output intervals:</p>
+
+<p>when 256 intervals are specified, the output values will range from 0 to 255; <br>
+when another number of output intervals is specified, the first interval will obtain output value 1, the second value 2, etc. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To use this operation on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, see <a href="stretch_command_line2.htm">Stretch : command line (2)</a>. </p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="stretch_command_line2.htm">Stretch : command line (2)</a></p>
+
+<p class=seealsolinks><a href="stretch_functionality.htm">Stretch : functionality</a></p>
+
+</body

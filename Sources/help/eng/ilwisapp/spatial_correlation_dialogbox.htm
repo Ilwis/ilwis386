@@ -1,0 +1,184 @@
+<html>
+
+<head>
+<title>Spatial correlation : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Spatial correlation, Semi-variogram (experimental)">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Spatial correlation</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Spatial correlation calculates spatial autocorrelation (as Moran's I),  spatial variance (as Geary's c) and semi-variogram values for point pairs that are at a certain distance to each other. <a href="point_statistics.htm">Point statistics</a> may help to get an impression of the nature of your point data, for instance prior to a <a href="point_interpolation.htm">point interpolation</a>, and to find necessary input parameters for <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a>. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input point map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input point map. Open the list box and select the desired input map, or drag a point map directly from the Catalog into this box. You can select a point map with a value domain, or a point map with a class or ID domain which has a linked attribute table with values (then select an attribute column with a value domain). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Omnidirectional:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose the option omnidirectional when distances between points should be calculated in all directions. Depending on the user-specified lag spacing, distance classes are determined; the upper limits of the distance classes are multiples of the lag spacing. Based on the found distance between each pair of points, it is determined to which distance class this pair of points belongs. Thus, all point pairs that are found to have a certain distance towards each other, will be counted as a point pair in that distance class. For all point pairs within each distance class, the spatial autocorrelation, spatial variance and experimental semi-variogram values will be calculated.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Bidirectional:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose the option bidirectional when distances between points should also be calculated in a certain direction. <br>
+Like the Omnidirectional option, all points that have a certain distance to each other will be counted as a point pair in a certain distance class. For all point pairs within each distance class, the spatial autocorrelation and spatial variance will be calculated. </p>
+
+<p class=diabox>Furthermore, for the same distance classes, all points that have a certain distance to each other and that fall within the specified direction, will be counted as a point pair. For all these point pairs, experimental semi-variogram values will be calculated. Similarly, point pairs will be counted in the perpendicular direction and experimental semi-variogram values will also be calculated for this perpendicular direction. For an explanation of parameters for the bidirectional method, see <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Lag spacing (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value that will be used for the distance classes; the output table will contain a <span class=courier>Distance</span> column with multiples of the specified lag spacing. However, these values represent the middle values of actual distance classes. For example, when using lag spacing 500, distance classes of 500&nbsp;m will be used, and the output table will show Distance values of 0, 500, 1000, 1500, etc. These values represent the intervals 0-250, 250-750, 750-1250, 1250-1750, etc. </p>
+
+<ul class=diaul>
+
+<li>	For distance class 0, all point pairs will be counted where the points are less than 250&nbsp;m apart; </li>
+
+<li>	for distance class 500, all point pairs will be counted where the points are between 250 and 750&nbsp;m apart; </li>
+
+<li>	for distance class 1000, all point pairs will be counted where the points are between 750 and 1250&nbsp;m apart, etc.</li>
+
+</ul>
+
+<p class=diabox>When a variable was sampled at regular distances, you can enter this distance as the lag spacing. You should not use a value larger than half of the size of your map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Use spherical distance:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When using the 'omnidirectional' method: </p>
+
+<ul class=diaul>
+
+<li>Select this check box to calculate with spherical distances, i.e. distances are calculated over the sphere using the projection of the coordinate system of the input point map. It is advised to select this option in case your map covers a relatively large area, or when you are working in LatLon coordinates. For more information, see <a href="spatial_correlation_functionality.htm">Spatial correlation : functionality</a>. </li>
+
+<li>Clear this check box to calculate with planar (Euclidean) distances. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Direction (deg):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For Bidirectional: type a value for the direction in which point pairs should be found. The direction is specified in degrees as a clockwise angle from the Y-axis. </p>
+
+<p class=diabox>Direction 0° means finding only point pairs in the direction North-South and South-North to each other. <br>
+Direction 90° means finding only point pairs in the direction East-West and West-East to each other. </p>
+
+<p class=diabox>0° <span class=symbol>£</span> direction <span class=symbol>£</span> 90°. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Tolerance (deg):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For Bidirectional: type a value in degrees for half of the opening angle with which point pairs should be found in a certain direction. </p>
+
+<p class=diabox>Tolerance 0.01 means a very narrow opening to find point pairs in a certain direction. </p>
+
+<p class=diabox>Tolerance 45° means an opening of 90°.</p>
+
+<p class=diabox>0° <span class=symbol>&lt;</span> tolerance <span class=symbol>£</span> 45°.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Band width (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For Bidirectional: optionally, specify a value for the band width. By specifying a band width, you will limit the opening angle to a certain width; the opening width with which point pairs can be found in a certain direction will never be broader than twice the specified band width. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output table that will contain the spatial autocorrelation, spatial variance, and experimental semi-variogram values. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output table will only be defined; if necessary, the table will be calculated later, for instance when the table is opened to be displayed. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>The <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a> topic contains a figure in which the options direction, tolerance and band width, are explained. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a></p>
+
+</body

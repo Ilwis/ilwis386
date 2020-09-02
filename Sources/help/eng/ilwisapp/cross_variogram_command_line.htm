@@ -1,0 +1,152 @@
+<html>
+
+<head>
+<title>Cross Variogram : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cross Variogram, TableCrossVariogram, Semi-variogram (experimental)">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Cross Variogram</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/cross_variogram_popup.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a> operation can be directly executed by typing the following expression on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableCrossVariogram</span>(InputPointMap, <i>ColumnA</i>, <i>ColumnB</i>, <i>LagSpacing</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableCrossVariogram</span>(InputPointMap, <i>ColumnA</i>, <i>ColumnB</i>, <i>LagSpacing</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p>OUTTABLE</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output Cross Variogram table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>TableCrossVariogram</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Cross Variogram operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>InputPointMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input point map with ID domain. The point map should be linked to an attribute table which contains at least 2 columns with a <a href="..//ilwis/sec/domain_type_value2_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>ColumnA</i></p>
+
+</td>
+<td valign="top">
+<p>is an attribute column with a value domain that contains the first variable.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>ColumnB</i></p>
+
+</td>
+<td valign="top">
+<p>is an attribute column with a value domain that contains the second variable.</p>
+
+<p>For many points, there should be measured values both for <i>Column A</i> and <i>Column B</i>. The variables should be highly correlated (positive or negative).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>LagSpacing</i></p>
+
+</td>
+<td valign="top">
+<p>is a parameter to specify the length in meters of the linear distance intervals that should be used (real value &gt; 0). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><span class=courier>plane</span> | <span class=courier>sphere</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >sphere</a> by using the projection of the coordinate system of the input point map (<span class=courier>sphere</span>). If not specified, distances will be calculated in a plane. 
+
+</td>
+</tr>
+
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> is created: when the assignment symbol := is used the dependency link is immediately broken after the output table has been calculated.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cross_variogram_functionality.htm">Cross Variogram : functionality</a></p>
+
+</body

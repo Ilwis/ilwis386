@@ -1,0 +1,79 @@
+<html>
+
+<head>
+<title>ILWIS objects : filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="User-defined filters, Filters, ILWIS objects, Special objects, FIL">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Filters&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/filt.gif" align=bottom width="13" height="13"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Filters are used in the <a href="..//ilwis/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a> operation. In ILWIS, there are four main filter types: Linear filters, Rank order filters, Majority filters, and Binary filters. Furthermore, there is a Pattern filter and a Standard deviation filter. For an explanantion on the working of these filter types and examples, see <a href="../ilwisapp/filters_filter_types.htm">Filter types</a>. For examples on the use of filters, see <a href="../ilwisapp/filter_functionality.htm">Filter : functionality</a>. </p>
+
+<p class=defnewpar>Some 30 <a href="../ilwisapp/filters_standard_filters.htm">standard filters</a> are predefined in the <span class=courier>SYSTEM</span> directory. However, the <a href="../ilwisapp/filter_dialog_box.htm">Filter : dialog box</a> offers many possibilities to define most filters on the fly according to your wishes before applying them. This can of course also be done on the command line of the Main window. Further, your own linear filters can be created, edited and stored on disk. For more information, see <a href="../ilwisapp/filters_user_defined_filters.htm">Filters : user-defined filters.</a></p>
+
+<p class=kopje>Names of filters:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a linear filter:</p>
+
+<p>You can create your own user-defined linear filter of any odd size. Easy ways to create a new linear filter is to choose <span class=arial>Create Filter</span> from the <a href="main_window_menu_commands.htm">File menu</a> of the Main window, or to double-click the <span class=arial>New Filter</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>. For more information, refer to <a href="how_to_create_linear_filters.htm">How to create a linear filter</a>. </p>
+
+<p class=kopje>To view or edit a linear filter:</p>
+
+<p>The easiest way to view or edit a linear filter is double-click a filter in a Catalog: the filter will be shown in the <a href="filter_editor.htm">Filter editor</a>. You can view all linear filters, i.e. including the linear system filters; and you can edit your own user-defined linear filters. For more information, see <a href="how_to_edit_user_defined_linear_filters.htm">How to edit a user-defined linear filter</a>.</p>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>The Average filter, Majority filters, Median filters, Rank Order filters, and the Standard Deviation filter may have a user-defined size, rank or threshold. You can define these filters on the fly in the <a href="../ilwisapp/filter_dialog_box.htm">Filter : dialog box</a>. </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>Filters which are stored on disk consist only of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object-definition file</a> (.FIL). This file stores the name, type and size of the filter, and it may further store matrix values for linear filters, the solution table for binary filters, etc.
+
+<p class=defnewpar>By viewing the properties of a filter, you can see whether it is a system filter or not, when it was last edited, object size and the description of the filter. A filter has no relations to other objects. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/filter.htm">Filter operation</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_filter_types_standard_filters_user_defined_filters.htm">Filters</a>, topics: <a href="../ilwisapp/filters_filter_types.htm">Filter types</a>, <a href="../ilwisapp/filters_standard_filters.htm">Standard filters</a>, <a href="../ilwisapp/filters_user_defined_filters.htm">User-defined filters</a></p>
+
+<p class=seealsolinks><a href="how_to_create_linear_filters.htm">How to create linear filters</a></p>
+
+<p class=seealsolinks><a href="how_to_edit_user_defined_linear_filters.htm">How to edit user-defined linear filters</a></p>
+
+<p class=seealsolinks><a href="filter_editor.htm">(Linear) Filter editor</a> </p>
+
+</body

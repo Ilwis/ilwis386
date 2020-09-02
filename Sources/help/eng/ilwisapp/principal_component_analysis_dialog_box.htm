@@ -1,0 +1,92 @@
+<html>
+
+<head>
+<title>Principal Component Analysis : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Principal component analysis">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Principal Component Analysis</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Principal Component Analysis operation is a linear transformation of  a set of (satellite) raster maps to uncover relationships among many variables and to reduce the amount of data needed to define such relationships. The input raster maps are transformed, i.e. recalculated based on the covariance matrix, into output raster maps called components. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Input map list:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. Open the list box and select the desired map list, or drag a map list from the Catalog into the box. You can also click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> to create a new map list.</p>
+
+<p class=tiptext><span class=tip>Note: </span>When using the dialog box, the map list cannot contain more than 99 input bands. This limitation does not exist on the command line. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Nr. of output bands:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the desired number of output bands. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Output matrix:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output matrix which will contain the transformation coefficients. The output map list will obtain the same name as the matrix; the output raster maps in the output map list will also obtain the name of the matrix followed by _1, _2, _3, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output matrix. The description will appear in the status bar of the Main window when moving the mouse pointer over the matrix in a Catalog. <!--If no description is supplied, the output matrix will obtain a fixed description like 'Principal Components of <i>input map list name</i>'. --></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output matrix</a> will be defined, calculated and shown. Furthermore, the dependent output map list <!--and the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output raster maps</a>--> will be defined. </p>
+
+<p class=defnewpar>When you click the <b>Define</b> button, the dependent output matrix will only be defined; if necessary, the matrix will be calculated later, for instance when the matrix is opened to be displayed. Furthermore, the dependent output map list <!--and the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output raster maps</a>--> will be defined. </p>
+
+<p class=defnewpar>The dependent raster maps of the dependent output map list will only be calculated when the map list is opened, e.g. by double-clicking the map list in a Catalog. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="principal_component_analysis_functionality.htm">Principal Component Analysis : functionality</a></p>
+
+</body

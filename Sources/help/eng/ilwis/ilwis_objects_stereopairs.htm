@@ -1,0 +1,186 @@
+<html>
+
+<head>
+<title>ILWIS objects : stereo pairs</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stereo pairs, Epipolar stereo pair, Stereo pair from DTM, ILWIS objects, Special objects, STP">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Stereo pairs&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/obj_stereopair2.gif" align=bottom width="18" height="12"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A stereo pair can be created to view a single or a pair of photograph(s) or image(s) in stereo either with a <a href="..//ilwisapp/popup/stereoscope_popup.htm" onClick="return popup(this, 'notes')" >stereoscope</a> or as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >anaglyph</a>. </p>
+
+<p class=defnewpar>You can create a stereo pair: </p>
+
+<ul>
+
+<li class="ls01be">with the <a href="..//ilwisapp/popup/epipolar_stereopair_popup.htm" onClick="return popup(this, 'notes')" >Epipolar Stereo Pair</a> operation and the <a href="epipolar_stereopair_creation_window.htm">Epipolar Stereo Pair - Creation window</a>. </li>
+
+        <p>As input you need from a pair of scanned aerial photographs or images, with overlap. In the output stereo pair you can view the area of overlap in stereo. </p>
+
+<li class="ls01be">with the <a href="..//ilwisapp/popup/stereopair_from_dtm_popup.htm" onClick="return popup(this, 'notes')" >Stereo Pair from DTM</a> operation. </li>
+        
+        <p>As input you need a single scanned aerial photograph, image or any other map, and a DTM. In the output stereo pair, you can view the whole area of the input map displayed over the DTM in stereo. </p>
+
+</ul>
+
+<p class=defnewpar>When a stereo pair has been calculated, it contains:</p>
+
+<ul>
+
+<li>	two (resampled) output raster maps, </li>
+
+<li>	where each raster map uses a new georeference. </li>
+
+</ul>
+
+<p class=defnewpar>You can view a calculated stereo pair: </p> 
+
+<ul>
+
+        <li>in a <a href="..//ilwisapp/popup/stereoscope_popup.htm" onClick="return popup(this, 'notes')" >stereoscope</a> window, while using a stereoscope, and </li>
+
+        <li>as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >anaglyph</a> in a map window, while using red-green or red-blue glasses. </li>
+
+</ul>
+
+<p class=kopje>Names of stereo pairs:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create an epipolar stereo pair:</p>
+
+<p>You should have two scanned images (for instance two aerial photographs with fiducial marks) that have overlap. </p>
+
+<ul>
+
+<li>When you wish to view the stereo pair later on with a stereoscope, you can use input raster maps with the <span class=courier>Color</span> domain, the <span class=courier>Image</span> domain, or another value domain. </li>
+
+<li>When you wish to view the stereo pair as an anaglyph later on, you can only use raster maps with the <span class=courier>Image</span> domain, or with another value domain.  </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>As scanned images may have a very large file size, it is advised to create <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">Pyramid Layers</a> for both input raster maps. This will speed up display in the Epipolar Stereo Pair - Creation window later on. </p>
+
+<p class=defnewpar>The <a href="../ilwisapp/epipolar_stereopair.htm">Epipolar Stereo Pair</a> operation can be started for instance by double-clicking the <span class=arial>Epipolar Stereo Pair</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or by choosing <span class=arial>Epipolar Stereo Pair</span> from the <a href="main_window_menu_commands.htm">Operations</a>, <span class=arial>Image Processing</span> menu in the Main window. After a dialog box, the <a href="epipolar_stereopair_creation_window.htm">Epipolar Stereo Pair - Creation window</a> will be opened where you can mark the positions of fiducial marks, transferred principal points, and optional scaling points. </p>
+
+<p class=defnewpar>When finished, close the Epipolar Stereo Pair - Creation window with the <span class=arial>Exit and Show</span> button <img src="../images/stereo_showcalc.gif" align=bottom width="22" height="22">; the output stereo pair and its two output raster maps will then be calculated. During resampling, the Bilinear interpolation method is used; for more information, see <a href="../ilwisapp/resample_algorithm.htm">Resample : algorithm</a>. </p>
+
+<p class=kopje>To create a stereo pair from a DTM:</p>
+
+<p>You should have an input raster map (for instance a scanned aerial photograph or a satellite image) and a Digital Terrain Model (DTM). </p>
+
+<ul>
+
+<li>The input raster map may have any value domain, the <span class=courier>Image</span> domain, the <span class=courier>Picture</span> domain, or the <span class=courier>Color</span> domain. </li>
+
+<li>The DTM should use a value domain. </li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwisapp/stereopair_from_dtm.htm">Stereo Pair from DTM</a> operation can be started for instance by double-clicking the <span class=arial>Stereo Pair from DTM</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or by choosing <span class=arial>Stereo Pair from DTM</span> from the <a href="main_window_menu_commands.htm">Operations</a>, <span class=arial>Image Processing</span> menu in the Main window. </p>
+
+<p class=kopje>To view a calculated stereo pair:</p>
+
+<p>When the output raster maps of a stereo pair have been calculated, you can view the stereo pair: </p> 
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+        <li>by choosing <a href="../ilwisapp/stereoscope.htm">Show Stereo Pair with Stereoscope</a> from the <span class=arial><a href="main_window_menu_commands.htm">Operations, Visualization</a></span> menu in the Main window: the output raster maps of the stereo pair will be shown in a <a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope window</a>, in which you can use a stereoscope; </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+        <li>by choosing <a href="../ilwisapp/anaglyph.htm">Anaglyph</a> from the <span class=arial><a href="main_window_menu_commands.htm">Operations, Visualization</a></span> menu in the Main window: the stereo pair will be shown as an anaglyph in a map window, where you can either red-green glasses or red-blue glasses. </li>
+
+</ul>
+
+<p class=defnewpar>When the stereo pair is displayed, you can for instance add a new georeference to one of the output maps, or create a new vector map and start <a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen digitizing</a> on the stereo pair.</p>
+
+<p class=kopje>Technical information:</p>
+
+<p>A stereo pair consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.STP). This file contains for instance references to the two input raster maps. </p>
+
+<p class=defnewpar>For an epipolar stereo pair, the object definition file also contains the positions of the fiducial marks, the transferred principal points and the optional scaling points. </p>
+
+<ul>
+
+<li>In each photograph (input raster map), the principal point of the photograph is calculated from the positions of the fiducial marks. The photograph will be rotated around this point. How much each photograph should be rotated is determined from the position of the principal point of the other photograph that has been transferred to the current photograph. </li>
+
+<li>To correct for possible scaling differences between the input photographs, the positions of the optional scaling points are used. </li>
+
+</ul>
+
+<p class=defnewpar>When a stereo pair has been calculated, the object definition file of the stereo pair also contains references to two output raster maps. </p>
+
+<ul>
+
+<li>The output raster maps will obtain the same name as the stereo pair, followed by <span class=courier>_Left</span> and <span class=courier>_Right</span>, for the left output raster map and the right output raster map respectively. </li>
+
+<li>The output raster maps of an epipolar stereo pair will have a georef Scale_Rotate which ensures that the columns in the two output raster maps are perpendicular to each other. The overlapping area between the two photographs can thus be viewed in stereo. </li>
+
+<li>The output raster maps of a stereo pair from DTM will have a georef StereoMate which defines the angle etc. at which the area is looked at from above. </li>
+
+</ul>
+<p class=defnewpar>By default, an output stereo pair is a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> object. </p>
+
+<ul>
+
+<li>As the object definition file of the stereo pair stores the names of the input raster maps and other parameters, the output stereo pair and its output raster maps can always be recalculated. </li>
+
+<li>However, the dependency links of the output raster maps are always broken. The output raster maps are thus editable, so that you can add for instance a new georeference to one of the output maps, or create a new vector map and can start <a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen digitizing</a> on the stereo pair. </li>
+
+</ul>
+
+<p class=defnewpar>By viewing the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a stereo pair, you can see the names of the input raster maps, whether the stereo pair has been calculated or not, the names of the output raster maps, etc. For more information on properties, see <a href="../ilwismen/stereopair_properties.htm">Stereo Pair Properties</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/stereopair_properties.htm">Stereo Pair Properties</p>
+
+<p class=seealsolinks><a href="../ilwisapp/epipolar_stereopair.htm">Epipolar Stereo Pair</a> (operation)</p>
+
+<p class=seealsolinks><a href="epipolar_stereopair_creation_window.htm">Epipolar Stereo Pair - Creation window</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/stereopair_from_dtm.htm">Stereo pair from DTM</a> (operation)</p>
+
+<p class=seealsolinks><a href="../ilwisapp/stereoscope.htm">Show stereo pair with stereoscope</a></p>
+
+<p class=seealsolinks><a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope window</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/anaglyph.htm">Show stereo pair as anaglyph</a></p>
+
+</body

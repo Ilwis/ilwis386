@@ -1,0 +1,117 @@
+<html>
+
+<head>
+<title>semivar models (sec)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Modelling a semi-variogram</p>
+
+<p class=linespacing03after>The output of <a href="../../ilwisapp/popup/spatial_correlation_popup.htm">Spatial correlation</a> and <a href="../../ilwisapp/popup/cross_variogram_popup.htm">Cross Variogram</a> result in a experimental semi-variogram. You can show the experimental semi-variogram values in a graph window. For these values, you need determine the 'best' semi-variogram model before a Kriging operation can be performed. The following semi-variogram models are available:</p>
+
+<p><img src="../../images/svsphe3.gif" align=bottom width="282" height="80"></p>
+
+<p><img src="../../images/svexpo3.gif" align=bottom width="268" height="44"></p>
+
+<p><img src="../../images/svgauss3.gif" align=bottom width="285" height="51"></p>
+
+<p><img src="../../images/svwave3.gif" align=bottom width="285" height="49"></p>
+
+<p><img src="../../images/svratqu3.gif" align=bottom width="263" height="66"></p>
+
+<p><img src="../../images/svcirc3.gif" align=bottom width="410" height="86"></p>
+
+<p class=linespacing01before><img src="../../images/svpow3.gif" align=bottom width="230" height="20"></p>
+
+<p class=linespacing03before>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>h</p>
+
+</td>
+<td valign="top">
+<p>is the distance</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>C<sub>0</sub></p>
+
+</td>
+<td valign="top">
+<p>is the nugget, parameter supplied by the user</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>C<sub>0</sub> + C</p>
+
+</td>
+<td valign="top">
+<p>is the sill, parameter supplied by the user</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>a</p>
+
+</td>
+<td valign="top">
+<p>is the range, parameter supplied by the user</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>k</p>
+
+</td>
+<td valign="top">
+<p>linear slope for the power function</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>m</p>
+
+</td>
+<td valign="top">
+<p>power exponent (0 &lt; m &lt; 2)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwisapp/spatial_correlation_functionality.htm" onClick="return popup(this, 'notes')" >Spatial correlation : functionality</a></p>
+
+<p class=seealsolinks><a href="..//ilwismen/graph_window_add_semivariogram_model.htm" onClick="return popup(this, 'notes')" >Graph window : Add semi-variogram model</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="..//ilwismen/column_semivariogram.htm" onClick="return popup(this, 'notes')" >Column semi-variogram</a></p>
+
+</body

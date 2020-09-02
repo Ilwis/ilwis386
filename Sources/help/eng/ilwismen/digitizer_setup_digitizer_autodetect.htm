@@ -1,0 +1,177 @@
+<html>
+
+<head>
+<title>Setup Digitizer - Automatic Detection</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Setup digitizer, Digitizer setup">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Setup Digitizer wizard</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Automatic Detection</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="digitizer_setup_digitizer_port_settings.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="digitizer_setup_digitizer_size.htm">Next</a>&nbsp;&gt;</td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>This page helps you to check:</p>
+
+<ul>
+
+<li>    whether you selected the correct port; </li>
+
+<li>	whether you specified for the Port Settings exactly the same values as you used for the configuration of the digitizer tablet itself (settings for Baud Rate, Parity, Data Bits and Stop Bits);
+
+<li>	whether your digitizer is configured to send coordinates in Run Mode; </li>
+
+<li>    whether your digitizer is configured so send coordinates in ASCII format; </li>
+
+<li>    whether the digitizer configuration for Data Rate is accepted. </li>
+
+</ul>
+
+<p class=defnewpar>If the communication between digitizer and computer port is correct, you will assign the digitizer cursor buttons with the Automatic Setup.  </p>
+
+
+<p class=kopje>Received digitizer coordinates (check whether you have communication): </p>
+
+<p>Do not press any buttons on the digitizer cursor. Move your digitizer cursor over the tablet. Inspect the string that is listed on the first line after 'Received'. </p>
+
+<p class=defnewpar>You <i>have</i> communication between the digitizer and the computer: </p>
+
+<ul>
+
+<li>when the first line of this page reads: </li>
+
+        <p><span class=functionexpl><b>Received:</b></span> coordinates as readable numbers </li>
+        
+<li>when coordinates change from about 0,0 (when moving the digitizer cursor into the lower left corner of the tablet) to greater positive figures (when moving the digitizer cursor into upper right corner of the tablet). </li>
+
+</ul>
+
+<p>The message <span class=arial>Trying Automatic Detection</span> will appear. </p>
+
+<p class=linespacing03before>The digitizer setup is proceeding satisfactorily: you can continue to have ILWIS recognize the digitizer cursor buttons. Follow the instructions for <a href="#automatic_detection"><span class=bookmark>Automatic Detection</span></a> (below). </p>
+
+
+<p class=defnewpar>You definitely <i>don't have</i> communication between your digitizer and your computer: </p>
+
+<ul>
+
+<li>	when the first line of this page reads: </li>
+
+        <p><span class=functionexpl>Received:</span> <span class=courier>Nothing</span> </p>
+
+<li>	when the first line of this page reads: </li>
+
+        <p><span class=functionexpl>Received:</span> coordinates as unreadable characters </p>
+
+<li>    when coordinates do not change when you move the digitizer cursor over the tablet; </li>
+
+<li>	when the message <span class=arial>Press Button 0</span> does not appear. </li>
+
+</ul>
+
+<p class=linespacing03before>Go to the <a href="#fixing_digitizer_problems"><span class=bookmark>Trouble shooting</span></a> section (below). </p>
+
+<p id="automatic_detection" class=kopje>Trying Automatic Detection:</p>
+
+<p>When you have communication and when the message <span class=arial>Press Button 0</span> appears:
+
+<ul>
+
+<li>move the digitizer cursor into the upper right corner of the tablet (but still inside the active area);</li>
+
+<li>press button <span class=courier>0</span> on the digitizer cursor; </li>
+
+<li>when asked for, also press buttons <span class=courier>1</span>, <span class=courier>2</span>, and <span class=courier>3</span> on the digitizer cursor. </li>
+
+</ul>
+
+<p class=defnewpar>You will automatically go to the last page of the Setup Digitizer wizard: the <b><a href="digitizer_setup_digitizer_size.htm">Setup Digitizer - Size, Resolution, Final Check</a></b> page. </p>
+
+<p class=linespacing03before>If you experience any strange behaviour when using Automatic Detection, you may go <span class=arial>Back</span> to the <a href="digitizer_setup_digitizer_port_settings.htm">Port Settings</a> page and then with <span class=arial>Next</span> to this Automatic Detection page and try again. Otherwise go to the <a href="#fixing_digitizer_problems"><span class=bookmark>Trouble shooting</span></a> section (below). </p>
+
+
+<p id="fixing_digitizer_problems" class=kopje>Trouble shooting:</p>
+
+<ul>
+
+<li>The first line on this page reads: </li>
+
+        <p class=linespacing01before><span class=functionexpl>Received:</span> <span class=courier>Nothing</span> </p>  
+
+        <p><i>Problems</i>: You may have selected the wrong Port number; the Port Settings (such as Baud Rate, Data Bits, etc.) may not correspond to the digitizer configuration settings; the digitizer may not send coordinates in ASCII format; the digitizer may not be configured to work in Run Mode. </p> 
+
+        <p class=linespacing03before><span class=functionexpl>Received:</span> coordinates appear as unreadable characters </p>
+
+        <p><i>Problem</i>: Digitizer may not send coordinates in ASCII format. </p> 
+
+<li class=ls01be>Coordinates do not change when moving the digitizer cursor over the tablet. </p>
+
+<p class=leftmargin01><i>Problem</i>: Digitizer may not be configured to work in Run Mode. </p>
+
+<li class=ls01be>The message <span class=arial>Press Button 0</span> does not appear. </li>
+
+<p class=leftmargin01><i>Problem</i>: Digitizer may not be configured to work in Run Mode and/or reduce the Data Rate. </p>
+
+<li class=ls01be>Coordinates only appear after pressing a button on the digitizer cursor.</li>
+
+<p class=leftmargin01><i>Problem</i>: Digitizer is not configured to work in Run Mode. </p>
+
+<p class=leftmargin01>Port Settings may be already correct. </p>
+
+<li class=ls01be>The page does not respond to pressing buttons 0, 1, 2, 3 on the digitizer cursor when Trying Automatic Detection. </p>
+
+<p class=leftmargin01>Try going <span class=arial>Back</span> to the <a href="digitizer_setup_digitizer_port_settings.htm">Port Settings</a> page and then with <span class=arial>Next</span> to this Automatic Detection page and try again. </p>
+
+<p class=leftmargin01>If this does not solve your problem: check all digitizer settings. </p>
+
+</ul>
+
+<p class=defnewpar>Remedy: </p>
+
+<ol>
+
+<li>	Check the configuration settings of the digitizer tablet itself: Run mode, ASCII format, Baud Rate, Data Bits, Parity, Stop Bits and write the figures down; </li>
+
+<li>    Press the &lt; <span class=arial>Back</span> button and return to the <a href="digitizer_setup_digitizer_port_settings.htm">Setup Digitizer - Port Settings</a> page; </li>
+
+<li>	On the Setup Digitizer - Port Settings page, make sure that the settings for the port (Baud Rate, Data Bits, Parity, Stop Bits) is exactly the same as the settings you used for the digitizer tablet, then press the <span class=arial>Next</span> button; </li>
+
+<li>	On this Setup Digitizer - Automatic Detection page again, check whether you communication: </li>
+
+        <ul>
+
+        <li>if you have communication now, continue with the <a href="#automatic_detection"><span class=bookmark>Automatic Detection</span></a>.</li>
+
+        <li>if you don't have communication, check whether all cables are properly connected, whether you use the correct port number, cancel the setup, switch the digitizer off and on again, reboot your computer and try again. </li>
+
+        </ul>
+
+<li>Keep trying until you have communication.</li>
+
+</ol>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>It is strongly advised to first ensure the communication between the digitizer and the port and then to choose the ILWIS Automatic Detection. Trying the manual setup button on this page will not make things easier. </p>
+
+<p class=kopje>Manual setup (advanced): </p>
+
+<p>Press the <span class=arial>Manual</span> button if you are sure that you have communication, but when Automatic Detection is not able to recognize a certain 'difficult' digitizer Format. You can unravel the received ASCII string yourself: the <a href="digitizer_setup_digitizer_manual.htm">Setup Digitizer - Manual Setup</a> page will appear. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="digitizer_setup_digitizer_size.htm">Setup Digitizer - Size, Resolution, Final Check</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_set_up_a_digitizer_and_start_digitizing.htm">How to setup a digitizer</a></p>
+
+</body

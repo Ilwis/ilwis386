@@ -1,0 +1,242 @@
+<html>
+
+<head>
+<title>Polygon editor : Copy</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygon editor, Copy to clipboard">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Polygon editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/polygon_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Copy to clipboard</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Copy selected polygons with their coordinates and their class names, identifiers or values to the clipboard. In the clipboard, the information is available both in <i>text</i> format and in <i><a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >picture</a></i> format. </p>
+
+<p class=defnewpar>Subsequently, the copied polygons can be pasted as segments into a <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >segment editor</a>, as points into a <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >point editor</a> and/or into any other application which uses the <i>picture</i> format or the <i>text</i> format (e.g. a word processor or a data base).</p>
+
+<p class=kopje>To copy:</p>
+
+<p>Select one or more polygons, and: </p>
+
+<ul>
+
+<li>choose <span class=arial>Copy</span> from the Edit menu, or</li>
+
+<li>press <span class=arial>Ctrl+C</span> on the keyboard.</li>
+
+</ul>
+
+<p class=defnewpar>For more information on selecting polygons, see <a href="polygon_editor_select_mode.htm">Polygon editor : Normal/Select mode</a>.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To copy the active window including the window borders, title bar, menu bar and status bar as a <i><a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmap</a></i> to clipboard, press <span class=arial>Alt+PrintScrn</span> on the keyboard.</li>
+
+<li>	Also from within a map window, you can copy (the displayed part of) a map as a <i>picture</i> to the clipboard; choose <span class=arial><a href="copy_map_window_to_clipboard.htm">Copy</a></span> from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in a map window. Coordinate information will not be available however. </li>
+
+<li>	You can use Windows' Clipboard/Clipbook Viewer to inspect the current contents of the clipboard. For more information, see the Windows Help.</li>
+
+</ul>
+
+<p class=kopje>Example: </p>
+
+<p>Two polygons which have been copied to the clipboard, in text format and in picture format. </p>
+
+<p class=defnewpar>Text format (only part of the copied polygons is shown in text here):</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellpadding="3">
+<tr>
+<td>
+<p class=t1>803910.67256600002</p>
+</td>
+<td>
+<p class=t1>8072629.9306619996</p>
+</td>
+<td>
+<p class=t1>Lake</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>803999.13318799995</p>
+</td>
+<td>
+<p class=t1>8072564.9740700005</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>804211.52414999995</p>
+</td>
+<td>
+<p class=t1>8072553.4357279995</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>804403.402504</p>
+</td>
+<td>
+<p class=t1>8072514.9745880002</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>... </p>
+</td>
+<td>
+<p class=t1>... </p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>804393.57354600006</p>
+</td>
+<td>
+<p class=t1>8074337.1779319998</p>
+</td>
+<td>
+<p class=t1>Lake</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>804303.83088599995</p>
+</td>
+<td>
+<p class=t1>8074364.1007300001</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>804186.73808200005</p>
+</td>
+<td>
+<p class=t1>8074306.4090200001</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>804158.10589999997</p>
+</td>
+<td>
+<p class=t1>8074266.2384959999</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>... </p>
+</td>
+<td>
+<p class=t1>... </p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>799203.02902999998</p>
+</td>
+<td>
+<p class=t1>8072444.0351520004</p>
+</td>
+<td>
+<p class=t1>Airport</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>799733.792762</p>
+</td>
+<td>
+<p class=t1>8071897.8869639998</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>... </p>
+</td>
+<td>
+<p class=t1>... </p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>799733.792762</p>
+</td>
+<td>
+<p class=t1>8071897.8869639998</p>
+</td>
+<td>
+<p class=t1>Airport</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>801823.94204800006</p>
+</td>
+<td>
+<p class=t1>8071897.8869639998</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>... </p>
+</td>
+<td>
+<p class=t1>... </p>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Picture format:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/polcopied.gif" alt="Two copied polygons shown as picture" height="65" width="135"></p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_functionality.htm">Polygon editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_menu_commands.htm">Polygon editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/polygon_editor_select_mode.htm">Polygon editor : Normal/Select Mode</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_paste_selection.htm">Segment editor : Paste</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/point_editor_paste_selection.htm">Point editor : Paste</a></p>
+
+<p class=seealsolinks><a href="copy_map_window_to_clipboard.htm">Map window : copy to clipboard</a></p>
+
+</body

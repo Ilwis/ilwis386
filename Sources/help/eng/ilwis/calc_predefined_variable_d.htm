@@ -1,0 +1,124 @@
+<html>
+
+<head>
+<title>%D</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="%D, Predefined variables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>Predefined variable %D</h1>
+
+<p class=defnewpar>Returns the distance between the central pixel and its neighbouring ones.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>%D</span></p>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>D stands for Distance.</li>
+	<li>%D and <a href="calc_special_neighbourhood_operations_and_iterations.htm#NBDIS">NBDIS</a> are aliases of each other. For more information, see <a href="calc_special_neighbourhood_operations_and_iterations.htm">Map Calculation : Neighbourhood operations &amp; iterations</a>.</li>
+	<li>The distance to the central pixel is 0, the distance to pixels on positions 2, 4, 6, and 8 is 1, and the distance to pixels on positions 1, 3, 7 and 9 is &#8730;2 (i.e. &#8776; 1.4).
+<table>
+<tr>
+	<td>Position of neighbours:</td>
+	<td>Return values:</td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>2</td>
+    <td class=calcpict>3</td>
+  </tr>
+  <tr>
+    <td class=calcpict>4</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>6</td>
+  </tr>
+  <tr>
+    <td class=calcpict>7</td>
+    <td class=calcpict>8</td>
+    <td class=calcpict>9</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict> 1.4</td>
+    <td class=calcpict>1</td>
+    <td class=calcpict> 1.4</td>
+  </tr>
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>0</td>
+    <td class=calcpict>1</td>
+  </tr>
+  <tr>
+    <td class=calcpict> 1.4</td>
+    <td class=calcpict>1</td>
+    <td class=calcpict> 1.4</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+
+<p class=tip>Tip</p>
+<p class=tiptext>%D is generally multiplied by the pixel size of a raster map or a georeference, for instance like: <span class=courier>%D * <a href="calc_pixsize.htm">PIXSIZE</a>(<i>RasterMap</i>)</span> or <span class=courier>%D * PIXSIZE(<i>GeoReference.grf</i>)</span>.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a></p>
+
+<p class=calctitle>Examples</p>
+<p>See <a href="how_to_calculate_distances_using_iterations_advanced.htm">How to calculate distances using iterations</a>. </p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_x.htm">%X</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_y.htm">%Y</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_l.htm">%L</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_c.htm">%C</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_r.htm">%R</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_k.htm">%K</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_p.htm">%P</a></p></td>
+</tr>
+</table>
+
+</body

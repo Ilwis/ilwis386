@@ -1,0 +1,415 @@
+<html>
+
+<head>
+<title>Column semi-variogram</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Semi-variogram, Column operations, ColumnSemiVariogram, Columns, Column semi-variogram">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Columns menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Semi-variogram column</h1></td>
+</tr>
+</table>
+
+<!--<hr>-->
+
+<h2>Functionality</h2>
+
+<p>For distance values (h) in a Distance column, the Column Semi-variogram operation calculates semi-variogram values (<span class=symbol>g</span>) according to a <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >semi-variogram model</a> and its parameters as specified by the user. The calculated semi-variogram values are stored in an output column. You can calculate multiple columns with semi-variogram values, e.g. using different semi-variogram models or using different parameters for one semi-variogram model. </p>
+
+<p>The aim of storing modelled semi-variogram values in a column is for instance to be able to assess the 'Goodness of Fit (R<sup>2</sup>)' between modelled semi-variogram values and experimental semi-variogram values.</p>
+
+<p class=defnewpar>This operation is generally used on the output table of Spatial Correlation (see <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial Correlation : functionality</a>), and presumably after you have fit some semi-variogram models through the experimental semi-variogram values in a graph window (see <a href="graph_window_add_semivariogram_model.htm">Graph window : Add Semi-variogram Model</a>). </p>
+
+<p class=kopje>Input column requirements:</p>
+
+<p>The input column should be a column with positive values representing distance values. </p>
+
+<p class=defnewpar>You can generally use the <span class=courier>Distance</span> column, the <span class=courier>AvgLag</span> column, or the <span class=courier>AvgLag1</span> / <span class=courier>AvgLag2</span> columns stored in the output table of the Spatial Correlation operation:</p>
+
+<ul>
+
+<li>	the <span class=courier>Distance</span> column contains the center value of each distance interval; the width of the distance interval is equal to the user-specified lag spacing.</li>
+
+<li>	the <span class=courier>AvgLag</span> column contains for each distance interval, the average distance of all point pairs within that distance interval. </li>
+
+<li>	the <span class=courier>AvgLag1</span> column is available when you used the <i>bidirectional</i> method in Spatial Correlation; it contains the average distance value of point pairs in that distance interval and in the specified direction sector. </li>
+
+<li>	the <span class=courier>AvgLag2</span> column is available when you used the <i>bidirectional</i> method in Spatial Correlation; it contains the average distance value of point pairs in that interval and in the perpendicular direction sector.</li>
+
+</ul>
+
+<p>For more information, refer to <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial Correlation : functionality</a>.</p>
+
+<p class=defnewpar>Furthermore, you need to define a complete <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >semi-variogram model</a>. </p>
+
+<p class=kopje>Domain of output column:</p>
+
+<p>The output column will use system domain <span class=courier>Value</span>. </p>
+
+<p id="r2" class=kopje>Calculating R<sup>2</sup>:</p>
+
+<p>To test which semi-variogram model fits the experimental semi-variogram values best, you can calculate goodness of fit (R<sup>2</sup>), for instance as:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargin06><img src="../images/goodfit.gif" align=bottom width="182" height="45"></p>
+
+<p class=defnewpar>where: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p><span class=symbol><img src="../images/gamest.gif" align=bottom width="6" height="15"></span></p>
+
+</td>
+<td valign="top">
+<p>are the experimental semi-variogram values calculated by the Spatial Correlation operation; these values are present in columns <span class=courier>SemiVar</span>, <span class=courier>SemiVar1</span>, <span class=courier>SemiVar2</span> in the output table of the Spatial Correlation operation;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p><span class=symbol>g</span></p>
+
+</td>
+<td valign="top">
+<p>are the semi-variogram values calculated by the Column Semi-variogram operation, i.e. the output column name of the Column Semi-variogram operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>N</p>
+
+</td>
+<td valign="top">
+<p>total number of distance classes/intervals.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The numerator of the fraction gives the sum of the squared differences between the experimental semi-variogram values and the semi-variogram values calculated by a user-specified semi-variogram model.</p>
+
+<p>The denominator of the fraction gives the sum of the squared differences between the experimental semi-variogram values and the average experimental semi-variogram value of <i>all</i> distance classes/intervals.</p>
+
+<p class=defnewpar>The maximum value of R<sup>2</sup> is 1, meaning an exact match of semi-variogram values calculated using a certain semi-variogram model and parameters, and experimental semi-variogram values. </p>
+
+<h2>Dialog box</h2>
+
+<p>For distance values (h) in a Distance column, the Column Semi-variogram operation calculates semi-variogram values (<span class=symbol>g</span>) according to a semi-variogram model and its parameters as specified by the user. The calculated semi-variogram values are stored in an output column. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Distance column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the column that you want to use as the distance column. You can generally select one of the Distance interval columns from the output table of the Spatial Correlation operation: <span class=courier>Distance</span> , <span class=courier>AvgLag</span> , <span class=courier>AvgLag1</span> , or <span class=courier>AvgLag2</span> . </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Semi-variogram:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose a model which fits your experimental semi-variogram values; the model and specified parameters define the calculation of semi-variogram values for the values in the selected distance column. You can choose between the Spherical model, Exponential model, Gaussian model, Wave model, Rational Quadratic model, Circular model, or the Power model. For more information on the mathematical formulae of the models, see <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >Semi-variogram models</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1>Nugget:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you found a nugget effect, specify the value. A nugget effect is the vertical jump from value 0 at the origin, to the semi-variogram value at extremely small separation distances. You are specifying  parameter 'C0' for the selected model. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1>Sill:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the sill; the sill is the plateau that the semi-variogram values reach at the range. You are specifying parameter 'C0 + C' for the selected model. </p>
+
+<p class=diabox>Range:	Type a value for the range; the range is the distance at which the semi-variogram values do not increase anymore and reach a plateau. You are specifying parameter 'a' for the selected model (real value &gt; 0). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1>Slope:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Power model only: type a value for the 'slope', i.e. specify parameter 'k' for this model. When you use the Power model with a power exponent of 1, the model becomes linear (a straight sloping line); then, this 'slope' parameter equals the direction coefficient (Dg/Dh) of the line.</p>
+
+<p class=diabox></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxleft1>Power:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Power model only: type a real value for the power exponent, i.e. specify parameter ‘m’ for this model. The power function is meaningful if 0 &lt; power exponent &lt; 2. When value 1 is used, the Power model becomes linear and the slope will be constant. If the power exponent is 2 the assumed stochastic model (‘randomness’) is not always justifiable and the interpolation can become pathological.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a name for the output column that will contain the calculated semi-variogram values. A <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >dependent column</a> is created. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <a href="column_properties.htm">Column Properties</a> dialog box appears. The default domain for the output column is system domain <span class=courier>Value</span>.</p>
+
+<h2>Command line</h2>
+
+<p>The Column Semi-variogram operation can be directly executed by typing the following expression on the command line of the table window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTCOL </p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>ColumnSemiVariogram</span>(<i>DistanceColumn</i>, <i>SemiVarModel</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTCOL</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output column containing the calculated semi-variogram values.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>ColumnSemiVariogram</p>
+
+</td>
+<tr>
+<td valign="top" width=119>
+<p></p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Column Semi-variogram operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>DistanceColumn</i></p>
+
+</td>
+<td valign="top">
+<p>is the column containing distance values. Any column with a value domain is allowed. You can generally use one of the Distance interval columns from the output table of Spatial Correlation. For more information on the contents of these columns, refer to <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>SemiVarModel</i></p>
+
+</td>
+<td valign="top">
+<p><i>Model</i>(<i>nugget, sill, range</i>)<span class=courier> | Power</span>(<i>nugget, slope, pow</i>)</p>
+
+<p>This expression defines the <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >semi-variogram model</a> that should be used and its parameters.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=leftmargin1><i>Model</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Spherical | Exponential | Gaussian | Wave | RatQuad | Circular</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=leftmargin1><i>nugget</i></p>
+
+</td>
+<td valign="top">
+<p>value for the nugget, according to semi-variogram.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=leftmargin1><i>sill</i></p>
+
+</td>
+<td valign="top">
+<p>value for the sill, according to semi-variogram.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=leftmargin1><i>range</i></p>
+
+</td>
+<td valign="top">
+<p>value for the range, according to semi-variogram; real value &gt; 0.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=leftmargin1><i>slope</i></p>
+
+</td>
+<td valign="top">
+<p>when using the <span class=courier>Power</span> model: value for the 'slope'. When <i>pow</i> is specified as 1 (i.e. thus using a linear model), then <i>slope</i> is the direction coefficient, i.e. <span class=symbol>Dg</span>/<span class=symbol>D</span>h.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=leftmargin1><i>pow</i></p>
+
+</td>
+<td valign="top">
+<p>when using the <span class=courier>Power</span> model: an exponent 0 &lt; real value &lt;
+2. When you use value 1, the <span class=courier>Power</span> model will become linear.
+If the power exponent is 2 the assumed stochastic model (‘randomness’) is not always justifiable and the interpolation can become pathological.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the column is calculated. </p>
+
+<p class=kopje>Examples:</p>
+
+<p>Examples of complete expressions are for instance:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=79>
+<p class=calc0>OUTCOL1</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calc0>=</p>
+
+</td>
+<td valign="top">
+<p class=calc0>ColumnSemiVariogram(Distance, Spherical(0, 7200, 4500))</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calc0>OUTCOL2</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calc0>=</p>
+
+</td>
+<td valign="top">
+<p class=calc0>ColumnSemiVariogram(Distance, Gaussian(200, 7550, 2400))</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calc0>OUTCOL3</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calc0>=</p>
+
+</td>
+<td valign="top">
+<p class=calc0>ColumnSemiVariogram(Distance, Power(200, 0.4, 1.2))</p>
+
+</td>
+</tr>
+</table>
+
+<h2>Algorithm</h2>
+
+<p>For the value encountered in a specified Distance column, a semi-variogram value is calculated according to a specified <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >semi-variogram model</a> and specified model parameters. </p>
+
+<p class=tip>Mind: </p>
+
+<p class=tiptext>With the Column Semi-variogram operation, only some discrete semi-variogram values are calculated, namely one semi-variogram value for each distance interval. When you would make a line graph of a Distance column against a column that is the result of the Column Semi-variogram operation, you will see a straight line between any two consecutive calculated semi-variogram values. </p>
+
+<p class=defnewpar>To obtain a line graph with continuous semi-variogram values, first make a point graph of a distance column against a semi-variogram column that is the result of the Spatial Correlation operation, then add a semi-variogram model through these experimental semi-variogram values. For more information, see <a href="graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a></p>
+
+<p class=seealsolinks><a href="graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/kriging_functionality.htm">Kriging : functionality</a></p>
+
+</body

@@ -1,0 +1,359 @@
+<html>
+
+<head>
+<title>Display options - Map list as color composite</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Display options ..., Color composite (interactive), Map lists">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="65%"><h1 class=firstline>Display options</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Layers menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Map list as color composite</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Displays three raster images, or other raster maps with a value domain, that are part of your map list as an interactive color composite. One map will be displayed in shades of red, one in shades of green, and one in shades of blue. Furthermore, specify the stretch intervals to be used for each of the selected maps.  </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Show Map List as Color Composite</span> from the <a href="../ilwis/main_window_menu_commands.htm">Operations, Visualization</a> menu in the Main window, and subsequently select a map list,</li>
+
+<li>	when you choose <span class=arial>Open</span> from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window, and subsequently select a map list which contains raster maps with the <span class=courier>Image</span> domain or a value domain,</li>
+
+<li>	when you double-click the <img src="../images/showtv.gif" align=bottom width="14" height="14"> <span class=arial>ColorComp</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a> and subsequently select a map list,</li>
+
+<li>	when you are creating a <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> and your graphics board is configured to use more than 256 colors; the interactive color composite will be used as a background during <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a>,</li>
+
+<li>	when you double-click a map list in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, and when the map list contains raster maps with the <span class=courier>Image</span> domain or a value domain, and you click the <span class=arial>Open as Color Composite</span> button <img src="../images/showmap.gif" align=bottom width="22" height="22"> in the map list editor, </li>
+
+<li>	when you use the right mouse button on a map list in a Catalog, and select <span class=arial>Visualization, as Color Composite</span> from the context-sensitive menu, </li>
+
+<li>	when a map window already displays an interactive color composite, and double-click the map list in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of the map window, </li>
+
+<li>	when a map window already displays an interactive color composite, and you choose <span class=arial>Display Options</span> from the Layers menu in the map window,</li>
+
+<li>	when a map window already displays an interactive color composite, and you press the right mouse button in the map window and select the map list from the context-sensitive menu.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Info:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you wish to see the values of the three selected bands as (band 1, band 2, band 3) when you press the left mouse button in a map window. Clear this check box if you do not wish to obtain info when pressing the left mouse button.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Scale limits:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when this color composite should be displayed or hidden depending on the scale specified in the scale control of the map window; specify the scale range within which the color composite should be displayed. The color composite will be automatically hidden if the scale of the map window is outside this range. </p>
+
+<p class=diaboxnospace>With this option you can achieve for instance, that very detailed maps (e.g. on cadastral units) are only displayed when using a large scale in a map window, or that very general maps which depict overviews are only displayed when using a small scales in a map window, etc. </p>
+
+<p class=diabox>Clear this check box when you wish to display the color composite regardless of the scale of the map window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Transparent:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you wish to display the interactive color composite with a certain transparency. Any layer that has been added to the map window before, e.g. a shadow map, will remain partly visible through the transparent color composite layer. Subsequently, type a value for the transparency rate (percentage): value 1 means almost not transparent, and value 99 means almost totally transparent. </p>
+
+<p class=diabox>Clear this check box to just display the color composite, i.e. non-transparent. </p>
+
+<p class=tipnospace>Mind: </p>
+
+<ul class=tipul>
+
+<li>For Transparency, the Display Settings of your screen must be set to 32 bit (True Color). </li>
+
+<li>When the map window already displays another raster map, you can only add raster maps which have the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>. You can use the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation to transform a raster map to a desired georeference. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  RGB:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option when one band should be displayed in Red, one in Green and one in Blue. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  YMC:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><p class=diabox>Select this option when the three selected bands should be displayed as Yellow, Magenta, Cyan. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  HSI:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><p class=diabox>Select this option when the three selected bands should be displayed as Hue, Saturation, Intensity. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=defnewpar>When using the RGB option:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Red band:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a map from the map list to be displayed in shades of red. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Green band:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a map from the map list to be displayed in shades of green. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Blue band:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a map from the map list to be displayed in shades of blue. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=defnewpar>When using the YMC option:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Yellow band:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a map from the map list to be displayed in Yellow. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Magenta band:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a map from the map list to be displayed in Magenta. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Cyan band:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a map from the map list to be displayed in Cyan. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=defnewpar>When using the HSI option:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Hue band:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a map from the map list which will be used for Hue. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Saturation band:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a map from the map list which will be used for Saturation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Intensity band:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a map from the map list which will be used for Intensity. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Stretch ranges:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify for each selected map the range of values that should be taken into account. By default, the 1% intervals are listed, i.e. 1% of the values on both sides of a map's histogram will be ignored.</p>
+
+<p class=diabox><span class=tip>Notes: </span> </p>
+
+<ul class=tipul>
+
+<li>For more information on color composites, refer to <a href="../ilwisapp/color_composite_algorithm.htm">Color Composite : algorithm</a>. </p>
+
+<li>For more information on YMC or HSI conversion formulas, refer to <a href="../ilwisapp/color_separation_algorithm.htm">Color Separation : algorithm</a>.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Light, etc:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select option Light to display this map a little lighter than normal, select option Normal to display this map with normal brightness, or select option Dark to display this map a little darker than normal. Select option Gray to display this map in gray tones regardless of the colors in the picture. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Create Pyramid Layers:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>In case <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">pyramid layers</a> are not yet available for the raster maps of this map list: </p>
+
+<ul class=diaul>
+
+<li>Select this check box to create pyramid layers for all raster maps in the map list. Pyramid layers speed up the display of large raster maps in a map window. </li>
+
+<li>Clear this check box if you do not wish to create pyramid layers for the raster maps in the map list. </li>
+
+</ul>
+
+<p>For more information on pyramid layers, see <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">ILWIS objects : Raster maps - Pyramid layers</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The interactive color composite will be displayed in a map window. </p>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	To modify a displayed interactive color composite: </li>
+
+        <ul>
+
+        <li>double-click the map list in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of the map window, </li>
+
+        <li>open the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> in the map window, choose <span class=arial>Display Options</span> and select the map list, or </li>
+
+        <li>use the right mouse button in the map window and select the map list from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+        </ul>
+
+<p>This Display Options dialog box will appear again. You can change the coloring method, select other bands and/or change stretch ranges.</p>
+
+<li>	An interactive color composite is very suitable to be used during sampling and on-screen digitizing as you can easily change the bands to be used in the color composite and the stretch ranges of the bands by changing the <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> of the map list. This will make different features in the bands visible in the map window.</li>
+
+<li>	To add extra layers to the map window such as segment maps, point maps etc., select the <span class=arial><a href="../ilwismen/add_layer_to_map_window.htm">Add Layer</a></span> command from the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> in the map window.</li>
+
+<li>	You can save the contents of the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>: choose the <span class=arial><a href="../ilwismen/save_view.htm">Save View</a></span> command from the <a href="../ilwis/map_window_menu_commands.htm">File menu</a> in the map window. You can also click the <span class=arial>Save</span> button  in the toolbar of the map window. </li>
+
+<li>	When you want to create a <i>permanent</i> color composite, which can for instance be used as a drape over a 3D model, choose <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >Color Composite</a> from the <a href="../ilwis/main_window_menu_commands.htm">Operations, Image Processing</a> menu.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_color_composites.htm">How to create color composites</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_map_lists.htm">ILWIS objects : map lists</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/show_map_list_as_color_composite.htm">Show map list as color composite</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/color_composite.htm">Color Composite (operation)</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/color_separation_algorithm.htm">Color Separation : algorithm</a></p>
+
+</body

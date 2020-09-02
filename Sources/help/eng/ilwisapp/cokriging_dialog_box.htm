@@ -1,0 +1,302 @@
+<html>
+
+<head>
+<title>CoKriging : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="CoKriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>CoKriging</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>CoKriging can be seen as a <a href="point_interpolation.htm">point interpolation</a>, which requires a point map as input and which returns a raster map with estimations and optionally an error map. CoKriging is a multivariate variant of the Ordinary <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation: CoKriging calculates estimates or predictions for a poorly sampled variable (the predictand) with help of a well-sampled variable (the covariable). The variables should be highly correlated (positive or negative).</p>
+
+<p class=defnewpar>Before CoKriging, you should perform the <a href="..//ilwisapp/popup/cross_variogram_popup.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a> operation and determine a semi-variogram model for the predictand, for the covariable and a cross-variogram model for the combination of the variables in a graph window (<a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>). All three models serve as input for the CoKriging operation. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Predictand:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input point map that contains the predictand (the poorly sampled variable). Open the list box and select the desired input map, or drag a point map directly from the Catalog into this box. </p>
+
+<p class=diabox>You can select a point map with a value domain, but you may also use a point map with a ID domain which has a linked attribute table, then select an attribute column with a value domain from the attribute table. You should generally select the point map which you used in Cross Variogram. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Covariable:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In the same way, select an input point map or an attribute that contains the covariable (the well sampled variable). This is also usually the point map which you used in Cross Variogram. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >Semi-variogram model</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the model which should be used to calculate the semi-variogram function <span class=symbol>g</span>(h) <i>for the predictand</i>. The available models are: Spherical, Exponential, Gaussian, Wave, Rational Quadratic, Circular, and Power. The model, as well as the variables nugget, sill and range can be found by modelling the semi-variogram which is the output of the <a href="..//ilwisapp/popup/cross_variogram_popup.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a> operation. For more information, see <a href="cross_variogram_functionality.htm">Cross Variogram : functionality</a>, or <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window: Add Semi-variogram Model</a> (dialog box).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Co-variogram model:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Similarly, select the model which should be used to calculate the semi-variogram function <span class=symbol>g</span>(h) <i>for the covariable</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Cross-variogram model:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the model, which should be used to calculate the cross-variogram function <span class=symbol>g</span>(h).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Nugget:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you found a nugget effect, specify the value. A nugget effect is the vertical jump from value 0 at the origin to the semi-or cross-variogram value <span class=symbol>g</span> at extremely small separation distances. You are specifying parameter 'C0' for the selected model. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Sill:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a real value for the sill; the sill is the plateau that the semi- or cross-variogram values g reach at the range. You are specifying parameter 'C0 + C' for the selected model. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the range; the range is the distance at which the semi- or cross-variogram values do not increase anymore and reach a plateau. You are specifying parameter 'a' for the selected model (real value &gt; 0). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Slope:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Power model only: type a real value for the 'slope', i.e. specify parameter 'k' for this model. When you use the Power model with a power exponent of 1, the model becomes linear (a straight sloping line), then, this 'slope' parameter equals the direction coefficient (<span class=symbol>Dg</span>/<span class=symbol>D</span>h) of the line.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Power:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Power model only: type a real value for the power exponent, i.e. specify parameter ‘m’ for this model. The power function is meaningful if 0 &lt; power exponent &lt; 2. When value 1 is used, the Power model becomes linear and the slope will be constant. If the power exponent is 2 the assumed stochastic model (‘randomness’) is not always justifiable and the interpolation can become pathological.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwisapp/sec/point_interpolation_limiting_distance_sec.htm" onClick="return popup(this, 'notes')" >Limiting distance</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the limiting distance also called search radius or limiting circle. Points that are farther away from an output pixel than the limiting distance will not be used in the calculation of the value for that output pixel. The limiting distance is usually smaller than the range of your semi-variogram of the predictand. (0 &lt; limiting distance &lt; diagonal of point map).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Min nr of points:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the minimum number of points that should be used by the calculation within each limiting distance (search radius). This is necessary to make sure that the estimation is based at least this many points. </p>
+
+<p class=diabox>When for an output pixel, not enough points are found within the specified limiting distance, then the undefined value will be assigned to the output pixel. It is advised to use at least 4 points.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Max nr of points:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the maximum number of points that should be used by the calculation within each limiting distance (search radius). </p>
+
+<p class=diabox>Limitation: To increase calculation speed when using the <i>dialog box</i>, you are not allowed to use more than 100 point values within the limiting distance. This limitation is not present on the command line. </p>
+
+<p class=diabox>When for an output pixel more points are found within the limiting distance than specified, then only the points nearest to the output pixel will be used in the calculation. </p>
+
+<p class=diabox>By specifying a rather small maximum, the algorithm may be faster but the estimation quality may be less.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Remove duplicates:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of coinciding points, it is advised to select this check box. Subsequently, select 'Average' or 'First value'. You can clear this check box when you are sure that you have no coinciding points. If the check box is cleared and any coinciding points, i.e. duplicates, are found, CoKriging will result in undefined values for estimated pixels whose search circle contains a pair of coinciding points.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Average:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For points that are less than the specified tolerance distance apart, use the mean value of these points.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> First value:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For points that are less than the specified tolerance distance apart, only use the value of the first point encountered.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Tolerance (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value (meters) for the tolerance distance: when the distance between two points is smaller than the specified Tolerance, then these points are considered as coinciding points or duplicates (real value &gt; 0).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Use spherical distance:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to calculate with spherical distances, i.e. distances are calculated over the sphere using the projection of the coordinate system of the georeference of the output raster map. It is advised to select this option in case your map covers a relatively large area, or when you are working in LatLon coordinates. For more information, see <a href="cokriging_functionality.htm">CoKriging : functionality</a>. </p>
+
+<p class=diabox>Clear this check box to calculate with planar (Euclidean) distances. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the Kriging estimates.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Georeference:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the name of an existing georeference or <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> a new georeference. When you create a new georeference, ILWIS will suggest default limiting coordinates that are the boundaries of the input point map (the predictand).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, or specify your own range of possible values in the output map. Kriging estimates may be greater or smaller than your original input values and it is therefore advisable to make the value range for the output map wider than the input value range. In case the calculated estimates fall outside the specified value range, the output pixel will be undefined.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of output values, or specify your own precision.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Error map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you also want to obtain an error map. The error map will contain the standard error of the estimates, i.e. the square root of the Kriging error variance values. The name of the error map will be the same as the name specified for the CoKriging output map followed by the additional string <span class=courier>_Error</span>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=linespacing03before>Optionally, an output error map containing standard errors can be created.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cokriging_functionality.htm">CoKriging : functionality</a></p>
+
+</body

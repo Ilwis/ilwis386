@@ -1,0 +1,97 @@
+<html>
+
+<head>
+<title>Coordinate system Tiepoints editor : Add tiepoint</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Coordinate system Tiepoints editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Coordinate system Tiepoints editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Add tiepoint</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__coordinate_system_tiepoint_editor_edit_menu_sec2.Click()>Edit menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Adds a tiepoint to this coordinate system tiepoints. A tiepoint establishes the relation between a current XY-coordinate and a future correct XY-coordinate. </p>
+
+<p class=diakopje>Dialog box:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>X  Y: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>The current XY-coordinate of the position that you clicked in the background map is shown.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Related X  Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To obtain a correct XY-coordinate for this tiepoint, either:</p>
+
+<ul class=diaul>
+
+<li>	read the correct XY-coordinate for this position from a paper map, and type these in the Rel  X  Y boxes, or </li>
+
+<li>	click at the same position in a map window which already has correct coordinates (master/slave) and the related X Y boxes are automatically filled out, or </li>
+
+<li>	digitize the same position on a map stuck on the digitizer and the related X Y boxes are automatically filled out. </li>
+
+</ul>
+
+<p class=diabox>When you already have a (mathematically) sufficient number of tiepoints, and you add a new tiepoint, the dialog box comes up with a suggestion for the correct XY-coordinates for this point. The suggested correct XY-coordinate gives an indication of the quality of your existing tiepoints. You should <b>never</b> accept this suggestion but always look up the correct XY-coordinate from a paper map, a master, etc.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click OK, the tiepoint will be added to the tiepoint table. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To make a tiepoint inactive for this coordinate system: in column <span class=courier>Active</span>, set the value on False by typing an <span class=courier>F</span>.</li>
+
+<li>	To check the quality of a coordinate system tiepoints, you can add a vector map with correct coordinates and a correct coordinate system to the map window. Then, add tiepoints to the map with artificial coordinates and redraw the map window once in a while: you can see how well the maps fit.</li>
+
+<li>	To add a created coordinate system tiepoints to other vector maps which use the same artificial coordinates: open the properties of these vector maps, in the <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box, click the <span class=arial>Edit Properties</span> button, then select the newly created coordinate system tiepoints. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/coordinate_system_tiepoints_editor_functionality.htm">Coordinate system Tiepoints editor : functionality</a></p>
+
+</body

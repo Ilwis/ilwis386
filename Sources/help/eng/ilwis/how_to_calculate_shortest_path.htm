@@ -1,0 +1,241 @@
+<html>
+
+<head>
+<title>How to calculate shortest path</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Shortest path, Calculate ..., How to calculate ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to calculate shortest path</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To calculate the shortest path between two pixels:</p>
+
+<ul>
+
+<li>	prepare two source maps for two distance calculations; </li>
+
+        <ul>
+
+        <li>	the first source map only contains a start pixel, all other pixels are undefined.</li>
+
+        <li>	the second source map only contains an end pixel, all other pixels are undefined.</li>
+
+        </ul>
+
+<li>    prepare a weight map in which less accessible pixels have higher weight values.</li>
+
+<li>	perform two distance calculations, one on the first source map, and one on the second source map.</li>
+
+<li>	sum the two output maps of the distance calculations.</li>
+
+</ul>
+
+<p>The minimum value in the summed distance maps indicates the shortest path.</p>
+
+<p class=kopje>1. Preparing two source maps:</p>
+
+<p>By using a background map on which you can easily identify start and end points, you will create two new point maps. In the first point map, you indicate a start point; in the second point map you indicate an end point. Both point maps are then rasterized. They will serve as input source maps for distance calculations. </p>
+
+<p>If you wish, you can also directly prepare two <i>raster</i> maps on the background map with start and end pixels; however, point maps are handier for display purposes later on.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	Display a map on which you can easily find a start point and an end point. </li>
+
+<li>	In the map window, open the <a href="map_window_menu_commands.htm">File menu</a> and choose <span class=arial>Create, Point Map</span>. </li>
+
+<li class=ls01be>	In the <a href="../ilwismen/create_a_point_map.htm">Create Point Map</a> dialog box, </li>
+
+        <ul>
+
+        <li>	type a new name for the point map, e.g. <span class=courier>Start</span>,</li>
+
+        <li>	accept the default coordinate boundaries for the point map, </li>
+
+        <li>	click the little create domain button <img src="../images/crea.gif" align=bottom width="17" height="22"> to create a new class domain for the point map. </li>
+
+        </ul>
+
+<li class=ls01be>    In the <a href="../ilwismen/create_a_domain.htm">Create Domain</a> dialog box:</li>
+
+        <ul>
+
+        <li>	type a new name for domain,</li>
+
+        <li>	select to create a class domain.</li>
+
+        </ul>
+
+<li class=ls01be>    The <a href="..//ilwis/popup/domain_classid_editor_popup.htm" onClick="return popup(this, 'notes')" >domain Class/ID editor</a> will be opened. </li>
+
+        <ul>
+
+        <li>	add class <span class=courier>start</span> to the domain, and</li>
+
+        <li>	add class <span class=courier>end</span> to the domain.</li>
+
+        </ul>
+
+</ul>
+
+<p class=linespacing01before>Close the domain editor and click OK in the <span class=arial>Create Point Map</span> dialog box. </p>
+
+<p>The Point editor will be activated.</p>
+
+<p class=defnewpar>In the <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >Point editor</a>:</p>
+
+<ul>
+
+<li>	zoom in on the area where the start point is located,</li>
+
+<li>	click the Insert Mode button <img src="../images/ed_insert_mode.gif" align=bottom width="22" height="22"> in the toolbar of the Point editor, and</li>
+
+<li>	add the starting point. Assign to this point the name <span class=courier>Start</span>.</li>
+
+</ul>
+
+<p class=linespacing01before>Close the Point editor. Point map <span class=courier>Start</span> contains the starting point. </p>
+
+<p class=defnewpar>In the same way, prepare another point map, e.g. called <span class=courier>End</span>, which will contain the end point. You can use the same domain for the <span class=courier>End</span> point map as for the <span class=courier>Start</span> point map. In the Point editor, add one point to the <span class=courier>End</span> point map and assign to this point the name <span class=courier>End</span>. </p>
+
+<p class=defnewpar>When finished, <a href="..//ilwisapp/popup/points_to_raster_popup.htm" onClick="return popup(this, 'notes')" >rasterize</a> both point maps so that you obtain raster maps <span class=courier>Start</span> and <span class=courier>End</span>. These maps will serve as source maps during the distance calculations. Make sure that both raster maps are calculated; you can for instance display them, or you can open the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of the maps and click the <span class=arial>Calculate</span> button in the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> dialog box.</p>
+
+<p class=kopje>2.  Preparing the weight map:</p>
+
+<p>Shortest path calculations are most useful when speed or costs are involved. You can then prepare a weight map where the pixel values represent the relative difficulty or the relative extra cost to surpass the pixels. In a weight map, you should use value 1 for normally accessible pixels, various higher weight values for less accessible pixels, and a negative or the undefined value for unsurpassable barriers. </p>
+
+<p>To create a weight map, you can for instance create an attribute column in an attribute table and base weight factors for instance on known land use and then create an attribute map of the weight column, or you can use some MapCalc statements including road maps, rivers, DEM information, etc. </p>
+
+<p>For more information, see <a href="../ilwisapp/distance_calculation_functionality.htm">Distance calculation : functionality</a> and <a href="../ilwisapp/distance_calculation_travel_time_map.htm">Distance calculation : travel time map</a>.</p>
+
+<p class=kopje>3.  Performing the <span class=DefaultStyle><u><i>first</i></u></span> distance calculation:</p>
+
+<ul>
+
+<li>	From <a href="main_window_menu_commands.htm">Operations menu</a> in the Main window, choose the <a href="..//ilwisapp/popup/distance_calculation_popup.htm" onClick="return popup(this, 'notes')" ><span class=arial>Distance</a></span> operation. </li>
+
+<li>	In the <a href="../ilwisapp/distance_calculation_dialogbox.htm">Distance calculation dialog box:</a></li>
+
+        <ul>
+
+        <li>	for the <span class=arial>Source Map</span>, select map <span class=courier>Start</span> which you created above,</li>
+
+        <li>	select the <span class=arial>Weight Map</span> check box and select your weight map,</li>
+
+        <li>	type a name for the output map of the distance calculation, e.g. <span class=courier>Dist1</span>. </li>
+
+        </ul>
+
+<li>	Display map <span class=courier>Dist1</span>, so that it is calculated.</li>
+
+</ul>
+
+<p class=kopje>4.  Performing the <span class=DefaultStyle><u><i>second</i></u></span> distance calculation:</p>
+
+<ul>
+
+<li>	From Operations menu in the Main window, choose the <span class=arial>Distance</span> operation.</li>
+
+<li>	In the Distance calculation dialog box:</li>
+
+        <ul>
+
+        <li>	for the <span class=arial>Source Map</span>, select map <span class=courier>End</span> which you created above,</li>
+
+        <li>	select the <span class=arial>Weight Map</span> check box and select your weight map,</li>
+
+        <li>	type a name for the output map of the distance calculation, e.g. <span class=courier>Dist2</span>. </li>
+
+        </ul>
+
+<li>    Display map <span class=courier>Dist2</span>, so that it is calculated.</li>
+
+</ul>
+
+<p class=kopje>5.  Checking results:</p>
+
+<p>Display maps <span class=courier>Dist1</span> and <span class=courier>Dist2</span>, and drag to both map windows the <span class=courier>Start</span> and <span class=courier>End</span> point maps. In the <a href="../ilwismen/display_options_point_map.htm"><span class=arial>Display Options</a></span> dialog boxes of the point maps, clear the <span class=arial>Info</span> check box.</p>
+
+<p class=defnewpar>In map <span class=courier>Dist1</span>, created using the start point, the position of the end point has the value that represents the shortest route to reach this end point.</p>
+
+<p>In map <span class=courier>Dist2</span>, created using the end point, the position of the start point has the value that represents the shortest route to reach this start point.</p>
+
+<p class=defnewpar>To check the values in the maps, you can use <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >Pixel Info</a>.</p>
+
+<p class=kopje>6.  Summing the output maps of the distance calculations:</p>
+
+<p>By summing the maps <span class=courier>Dist1</span> and <span class=courier>Dist2</span>, you will find the shortest path or the area in which any shortest path can be located. </p>
+
+<p class=defnewpar>Type on the command line of the Main window:</p>
+
+<p class=calc1>Path = Dist1 + Dist2</p>
+
+<p class=defnewpar><i>When you did not use a weight map</i>, the shortest path can be found very easily.</p>
+
+<ul>
+
+<li>	Type the following MapCalc formula on the command line of the Main window:</li>
+
+<p class=calc1>Path2a = <a href="calc_mapmin.htm">MAPMIN</a>(Path) = Path</p>
+
+<li>	The resulting <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >Bool map</a> contains <span class=courier>True</span> values for pixels containing the shortest path value (this may appear as an area in which any shortest path can be located) and <span class=courier>False</span> values for other pixels.</li>
+
+</ul>
+
+<p class=defnewpar><i>When you did use a weight map</i>, the values in map <span class=courier>Path</span> are not real distance values; they are the product of the unit of your weight value (e.g. s/m or $/m) and calculated distances (m). However, when during the preparation of the weight map you used a multiplication factor to obtain whole weight values, you now have to divide map <span class=courier>Path</span> by this factor. </p>
+
+<ul>
+
+<li>	Display map <span class=courier>Path</span> in a map window with representation <span class=courier>Pseudo</span>, and experiment with the display stretch values: you can accept the default minimum stretch value but for the maximum stretch value type a value which is for instance 10% higher than the minimum. This will show all possible fastest or cheapest paths within 10% of the absolute minimum. You will thus be able to identify fast or cheap alternative routes. </li>
+
+<li>	To subtract the 'double' weights from each end pixel (as distances are calculated to each pixel from 2 sides), you can type on the command line:</li>
+
+        <p class=calc1>Path2b = Path - (weight * <a href="calc_pixsize.htm">PIXSIZE</a>(Path))</p>
+
+        <p class=leftmargininlist>	This may slightly improve your results. You can display map <span class=courier>Path2b</span> in the same way as above: accept the minimum stretch value and for the maximum stretch value, type a value which is for instance 10% higher than the minimum. </p>
+
+<li>	In case you want to obtain a bool map or a polygon map with a single shortest path, and when you have decided until which value your definition of shortest is valid (e.g. from 1255 to 1288), you can type the following MapCalc formula on the command line of the Main window to obtain a map containing the area of the shortest path(s):</li>
+
+        <p class=calc1>Path2c = <a href="calc_inrange.htm">INRANGE</a>(Path, 1255, 1288)</p>
+
+        <p class=leftmargininlist>	The resulting Bool map contains <span class=courier>True</span> values for pixels containing the shortest path value (this may appear as an area in which any shortest path can be located) and <span class=courier>False</span> values for other pixels.</p>
+
+</ul>
+
+<p class=kopje>7.  Polishing the result:</p>
+
+<ul>
+
+<li>	If necessary, you can enhance a shortest path area by using a Dilate filter. For more information, see <a href="../ilwisapp/filter_functionality.htm">Filter operation: functionality</a>. </li>
+
+<li>	To make a polygon out of the shortest path area, use the <a href="../ilwisapp/raster_to_polygons_functionality.htm">Raster to Polygons</a> operation. When you want to perform this operation on a value map, you have to use the command line instead of the dialog box. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/distance_calculation_functionality.htm">Distance calculation : functionality</a></p>
+
+</body

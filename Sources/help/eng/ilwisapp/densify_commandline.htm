@@ -1,0 +1,169 @@
+<html>
+
+<head>
+<title>Densify : command line (1)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Densify raster map, MapDensify">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Densify</h1>
+
+<h1 class=secondline>Command line (1)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a> operation can be directly executed by typing one of the following expressions on the command line of the Main Window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDensify</span>(InputMapName, <i>factor</i>, <span class=courier>nearestneighbour</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDensify</span>(InputMapName, <i>factor</i>, <span class=courier>bilinear</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDensify</span>(InputMapName, <i>factor</i>, <span class=courier>bicubic</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output raster map</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=courier>MapDensify</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Densify operation</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input raster map</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p><i>factor</i></p>
+
+</td>
+<td valign="top">
+<p>is the enlargement factor (real value &gt; 1)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=courier>nearestneighbour</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to assign output values from the nearest pixels in the intput map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=courier>bilinear</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to calculate new values by a <a href="..//ilwisapp/popup/bilinear_interpolation_popup.htm" onClick="return popup(this, 'notes')" >bilinear interpolation</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=courier>bicubic</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to calculate new values by a <a href="..//ilwisapp/popup/bicubic_interpolation_popup.htm" onClick="return popup(this, 'notes')" >bicubic interpolation</a>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To use this operation on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, see <a href="densify_commandline2.htm">Densify : command line (2)</a>. </p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. Furthermore, a georeference factor is created with the same name as the output map. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="densify_commandline2.htm">Densify : command line (2)</a></p>
+
+<p class=seealsolinks><a href="densify_functionality.htm">Densify : functionality</a></p>
+
+</body

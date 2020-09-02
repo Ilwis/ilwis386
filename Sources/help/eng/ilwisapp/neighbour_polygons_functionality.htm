@@ -1,0 +1,152 @@
+<html>
+
+<head>
+<title>Neighbour polygons : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Neighbour polygons">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Neighbour polygons</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Neighbour polygons operation finds adjacent (or neighbouring) polygons in a polygon map and calculates the length of the boundaries of adjacent polygons. </p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input map needs to be a polygon map with a class, ID, or group domain.</p>
+
+<p class=kopje>Output table:</p>
+
+<p>An output table with domain <span class=courier>None</span> is created. </p>
+
+<p class=defnewpar>The output table has 3 columns: </p>
+
+<ul>
+
+<li>	The first two columns list the class names, IDs, or group names of neighbouring, i.e. adjacent, polygons. In the table, the combinations of neighbouring polygons is shown twice. It means that, for example, all boundaries between polygons A and B are shown not only as PolA-PolB but also as PolB-PolA;</li>
+
+<li>	Column <span class=courier>Length</span> lists the lengths of the summed boundaries between these polygons.</li>
+
+</ul>
+
+<p class=defnewpar>For example, an area with certain crops needs to be protected against rabbits. A fence is needed at the boundary of this area. It is therefore interesting to calculate the boundary of the area. The output of the Neighbour polygon operation is an output table which shows the length of the boundaries between polygons.</p>
+
+<p class=kopje>Example:<span class=DefaultStyle>				</span></p>
+
+<p>Input map:</p>
+
+<p class=linespacing01before><img src="../images/neipol.gif" align=bottom width="127" height="127"></p>
+
+<p></p>
+
+<p class=linespacing01after>Output table:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p class=tcolh>PolName1</p>
+
+</td>
+<td valign="top" width=75>
+<p class=tcolh>PolName2</p>
+
+</td>
+<td valign="top" width=75>
+<p class=tcolh>Length</p>
+
+</td>
+<td valign="top">
+<p class=tcolh>(segments)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>A</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>B</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>100</p>
+
+</td>
+<td valign="top">
+<p class=t1>1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>A</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>D</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>1150</p>
+
+</td>
+<td valign="top">
+<p class=t1>2+4</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>B</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>D</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>650</p>
+
+</td>
+<td valign="top">
+<p class=t1>3</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>C</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>D</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>750</p>
+
+</td>
+<td valign="top">
+<p class=t1>5</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In this example, you can see that for class A, there are 2 polygons. Note that there are 2 polygon boundaries between the polygons of class A and class D. In the output table, the lengths of these two segment boundaries are summed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="neighbour_polygons_dialog_box.htm">Neighbour polygons : dialog box</a></p>
+
+<p class=seealsolinks><a href="neighbour_polygons_command_line.htm">Neighbour polygons : command line</a></p>
+
+<p class=seealsolinks><a href="neighbour_polygons_algorithm.htm">Neighbour polygons : algorithm</a></p>
+
+</body

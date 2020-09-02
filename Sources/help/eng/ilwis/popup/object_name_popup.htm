@@ -1,0 +1,63 @@
+<html>
+
+<head>
+<title>object name popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<script language="JavaScript" src="../../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle id="top">Object names</p>
+
+<p>In ILWIS 3, object names comply with Windows long file names. </p>
+
+<ul>
+
+<li>In object names, any character may be used except<span class=courier> \ / : * ? &lt; &gt; | &quot;</span></li>
+
+<li>The maximum length of an object name is 255 characters including the full path.</li>
+
+</ul>
+
+<p>Furthermore, it is not allowed to use <span class=courier>%</span> in any ILWIS object name. </p>
+
+<p class=defnewpar>Long object names can be used freely in dialog boxes. </p>
+
+<p class=defnewpar>On the command line and in scripts however, object names must be enclosed by <i>single quotes</i> when the object name: </p>
+
+<ul>
+
+<li>starts with a digit from 0 to 9, </li>
+
+<li>contains one or more spaces, </li>
+
+<li>contains any of the following characters<span class=courier> ` ~ ! @ # $ ^ &amp; ( ) - + = [ ] { } ; ' , .</span> </li>
+
+</ul>
+
+<p>Object extensions should be left outside the quotes. If an object name already contains a single quote, this single quote must be duplicated.</p>
+
+<p class=defnewpar>Furthermore, in ILWIS 3, Universal Naming Convention (UNC) paths are supported. A UNC path starts with <span class=courier>\\<i>ServerName</i>\</span>... rather than with <span class=courier><i>DriveLetter</i>:\</span>...</p>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolink><a href="..//ilwis/how_to_use_long_object_names.htm" onClick="return popup(this, 'notes')" >How to use long object names</a></p>
+
+</body

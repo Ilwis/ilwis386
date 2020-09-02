@@ -1,0 +1,209 @@
+<html>
+
+<head>
+<title>Repr Class editor : Edit item (polygon)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Representation Class editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Representation Class editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Edit Item (polygon)</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__repr_class_editor_edit_menu_sec2.Click()>Edit menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>When editing the representation of a class domain in the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >representation class editor</a>, specify a color for each class of <i>polygons.</i>Optionally, you can use hatchings or patterns for polygon classes. </p>
+
+<p class=defnewpar>This dialog box appears when you selected to edit the <i>polygon form</i> of a representation class in the representation class editor, and </p>
+
+<ul>
+
+<li>	you double-click a class in the editor window, or</li>
+
+<li>	you select a class in the editor window, and you choose <span class=arial>Edit Item</span> from the <a href="..//ilwismen/sec2/repr_class_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a>, or </li>
+
+<li>	you select a class in the editor window, and you press <span class=arial>Enter</span> on the keyboard.</li>
+
+</ul>
+
+<p>For more information, see <a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor</a>.</p>
+
+<p class=defnewpar>Furthermore, this dialog box appears:</p>
+
+<ul>
+
+<li>	when a map window displays a polygon map with a class domain, and </li>
+
+<li>	in the <a href="../ilwismen/display_options_polygon_map.htm">Display Options</a> dialog box for the polygon map, the <span class=arial>Info</span> check box is marked, and </li>
+
+<li>	in the map window, you set the <a href="double_click_action.htm">Double-Click Action</a> to <span class=arial>Edit Representation</span>, and </li>
+
+<li>	you subsequently double-click a polygon in the map window.</li>
+
+</ul>
+
+<p>For more information, see <a href="../ilwis/map_window_functionality_advanced.htm">Map window : advanced functionality</a>.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Class name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The selected class name is shown as text at the top of the dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Color list box:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the selected polygon class in the list box. If you want to define your own color you can double-click the 'Custom' item at the bottom of the list; then, the <a href="custom_colors.htm">Custom Colors</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/custcol.gif" align=bottom width="103" height="23"></p>
+
+</td>
+<td valign="top">
+<p class=diabox>To define your own custom color, you can also click the Custom Color command button; the <a href="custom_colors.htm">Custom Colors</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Solid:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select option Solid when the selected class of polygons should appear as filled polygons, i.e. as solid areas in the color as selected above.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Hatching:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select option Hatching when the selected class of polygons should be hatched with the color as selected above. Subsequently, select a Windows hatching type: Upwards, Downwards, Crossing, Diagonal, Horizontal, or Vertical. Hatch angles and spacing cannot be specified.</p>
+
+<p class=diabox>Optionally, a background color can be specified.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Pattern:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select option Pattern when the selected class of polygons should be represented in a Windows pattern, such as Bricks, Plaid, Tiles, etc. or in a pattern which you created yourself. To create or modify an existing Windows pattern, see the Tip below.<br>
+Subsequently, select a pattern, and specify a background color. The white part of a pattern will be drawn in the color as selected above in the Color list box; the black part of a pattern will be drawn in the background color.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Background color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For Hatching or Pattern: select a background color which will be used as background for the hatching or the pattern. The color as selected in he Color list box will be used as the foreground color. <br>
+For hatching, it is advisable to choose Transparent as background. You can then use the polygon hatching for instance on top of a raster map which uses other colors.<br>
+For patterns which use alternating pixels in foreground and background color, it is advisable to choose White or Black as background color. Furthermore, when using patterns, you cannot choose Transparent as background color but you can create your own background color by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>, or by choosing 'Custom' at the bottom of the list.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/switcol.gif" align=bottom width="96" height="23"></p>
+
+</td>
+<td valign="top">
+<p class=diabox>For Hatching or Pattern: click this command button to easily switch the foreground and background colors of your hatching or your pattern.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	To obtain a hatched polygon map on top of a raster map which uses other colors:</li>
+
+        <ul class=tipul>
+
+        <li>	Display the raster map (any domain) and the polygon map (class domain) in one map window;</li>
+
+        <li>	Open the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in the map window, choose <span class=arial>Representation</span> and select the polygon map;</li>
+
+        <li>	In the representation class editor, double-click a polygon class; in the appearing Edit Item dialog box, select the Hatching option and select a hatching type, choose Black in the color list box, and choose Transparent as the background color;</li>
+
+        <li>	If necessary, redraw <img src="../images/redraw.gif" align=bottom width="22" height="22"> the map window;</li>
+
+        <li>	Continue to edit hatchings for other polygon classes.</li>
+
+        </ul>
+
+<li>	To apply the changes in the representation in a displayed map (with a domain to which this representation is linked), press the <span class=arial>Redraw</span> <img src="../images/redraw.gif" align=bottom width="22" height="22"> button in the map window. In this way, you can work with the representation editor and a map window simultaneously.</li>
+
+<li>	When using the double-click action to edit a representation, representation changes will be applied immediately in the map window. For more information, see <a href="../ilwis/map_window_functionality_advanced.htm">Map window : advanced functionality</a>.</li>
+
+<li>	To edit <i>colors of multiple classes</i>, select multiple classes in the editor window (use the <span class=arial>Shift</span> and <span class=arial>Ctrl</span> keys), and choose <a href="representation_class_editor_edit_multiple_items.htm">Edit Multiple Items</a> from the <a href="..//ilwismen/sec2/repr_class_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a>.</li>
+
+<li>	To create or edit a Windows pattern (8x8): open your Windows Settings, choose Display, and select the Background tab. </li>
+
+        <ul class=tipul>        
+
+        <li>	To edit an existing pattern: select a pattern in the Pattern list box and click the Edit Pattern button. The Edit Pattern dialog box will appear. You can edit the pattern by clicking in it with the left mouse button: each mouse click changes a foreground color to a background color and vice versa.</li>
+
+        <li>	To create a new pattern: select a pattern in the Pattern list box and click the Edit Pattern button. The Edit Pattern dialog box will appear. For the name: type a new name. Then, edit the pattern as described above.</li>
+
+        </ul>
+
+<li>	Windows patterns are stored in your Windows directory in the <span class=courier>control.ini</span> file.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="representation_class_editor_edit_multiple_items.htm">Representation Class editor : Edit multiple items</a></p>
+
+<p class=seealsolinks><a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor : functionality</a></p>
+
+</body

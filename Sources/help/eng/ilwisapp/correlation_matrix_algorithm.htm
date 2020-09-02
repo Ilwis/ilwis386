@@ -1,0 +1,76 @@
+<html>
+
+<head>
+<title>Correlation matrix : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Correlation matrix">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Correlation matrix</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Correlation matrix operation calculates correlation coefficients of input raster maps of a map list. Undefined values in the maps are ignored. </p>
+
+<p class=defnewpar>The correlation matrix is calculated in two steps. In the first step, the covariance matrix of the raster maps in the map list is calculated. In the second step, the elements of the covariance matrix are normalized according to the following formula:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p><img src="../images/corr.gif" align=bottom width="168" height="36"></p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p>Covar<sub>b1,b2</sub> </p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>the covariance computed of two input raster maps (b1, b2).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>var<sub>b1</sub> </p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>the variance in the first input raster map (b1 ).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>var<sub>b2</sub></p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>the variance in the second input raster map (b2 ).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="correlation_matrix_functionality.htm">Correlation matrix : functionality</a></p>
+
+</body

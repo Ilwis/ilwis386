@@ -1,0 +1,129 @@
+<html>
+
+<head>
+<title>Drainage network extraction : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Drainage network extraction">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Drainage network extraction</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+
+<p class="defnewpar">The Drainage Network Extraction operation extracts a basic drainage network (boolean raster map). The output raster map will show the basic drainage as pixels with value True, while other pixels have value False. </p>
+
+<p class="defnewpar">As input is required: the output raster map of the <a href="flow_accumulation_functionality.htm">Flow Accumulation</a> operation. This map contains a cumulative drainage count for each pixel. </p>
+
+<p class="defnewpar">Subsequently, you can choose to use either:</p>
+
+<ul>
+
+<li>a <i>threshold value</i>, i.e. a value for the minimum number of pixels that are supposed to drain into a pixel to let this pixel remain as a drainage in the output map; the larger you choose this value, the fewer drainages will remain in the output map; </li>
+
+<li>a <i>threshold raster map</i> that contains variable threshold values. A threshold map can for instance be based on geological units, on height values, or on an internal relief map, etc. </li>
+
+	<ul>
+
+	<li>when using a threshold map, also the output map of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation is required. The program then uses the flow direction map to automatically fill possible gaps between extracted drainage lines. </li>
+
+	</ul>
+</ul>
+
+<p class="defnewpar">Depending on the flow accumulation value for a pixel and the threshold value for this pixel, it is decided whether true or false should be assigned to the output pixel. 
+
+If the flow accumulation value of a pixel exceeds the threshold value, the output pixel value will be true; else, false is assigned. </p>
+
+<p class="defnewpar">For instance, when a stream threshold value of 1000 is used: </p>
+
+<ul>
+
+<li>if a pixel in the flow accumulation map has a value <span class="symbollarger">&gt;</span> 1000, this pixel will be assigned value True in the output drainage network map; </li>
+
+<li>else value False will be assigned to the output pixel. </li>
+
+</ul>
+
+<p class="tip">Tips: </p>
+
+<ul class="tipul">
+
+<li>A threshold map can be prepared with the <a href="..//ilwisapp/popup/variable_threshold_computation_popup.htm" onClick="return popup(this, 'notes')" >Variable threshold computation</a> operation. A threshold map may be based on internal relief values or on specific infiltration values for specific geological units, etc. </li>
+
+<li>When using a threshold map, the operation will furthermore fill possible gaps between extracted drainage lines. </li>
+
+</ul>
+
+<p class="kopje">Example:</p>
+
+<table cellspacing="0">
+<tr>
+<td width="250">Input flow accumulation map:</td>
+<td width="250">Output drainage network map <br>(threshold 1000):</td>
+<td width="250">Output drainage network map <br>(variable threshold):</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_flow_acc.gif" width="229" height="186"></td>
+<td><img src="../images/hydro_drain_netw1000.gif" width="229" height="186"></td>
+<td><img src="../images/hydro_drain_netw.gif" width="229" height="186"></td>
+</tr>
+<tr>
+<td>Larger values in red, <br>
+	and smaller values in blue. </td>
+<td>True values in green, <br>
+	and False values in gray. </td>
+<td>True values in green, <br>
+	and False values in gray. </td>
+</tr>
+</table>
+
+<p class="kopje">Input map requirements:</p>
+
+<ul>
+
+<li>The required input map is a raster map produced by the <a href="flow_accumulation_functionality.htm">Flow accumulation</a> operation, i.e. a raster map using <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">Value</span></a>. </li>
+
+<li>Optionally, you can use a raster map containing threshold values; this map should thus be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. </li>
+
+<li>When using such a threshold <i>map</i>, you also need to specify a <a href="flow_direction_functionality.htm">Flow direction</a> map. This map is used to automatically fill possible gaps between extracted drainage lines. A flow direction map always uses <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>FlowDirection</span></a>. </li>
+
+</ul>
+
+<p class="kopje">Domain and georeference of output map:</p>
+
+<p>The ouput map will use <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Bool</span></a>; the output map will use the same georeference as the input map(s). </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>The output map of the Drainage network extraction operation can be used as input for the <a href="drainage_network_ordering_functionality.htm">Drainage network ordering</a> operation. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="drainage_network_extraction_dialog_box.htm">Drainage network extraction : dialog box</a></p>
+
+<p class=seealsolinks><a href="drainage_network_extraction_command_line.htm">Drainage network extraction : command line</a></p>
+
+<p class=seealsolinks><a href="drainage_network_extraction_algorithm.htm">Drainage network extraction : algorithm</a></p>
+
+
+</body

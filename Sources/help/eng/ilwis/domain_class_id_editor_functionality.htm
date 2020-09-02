@@ -1,0 +1,428 @@
+<html>
+
+<head>
+<title>Domain Class/ID editor : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Domain Class/ID editor, Domain Group, Editors, Edit domain, Class domain, ID domain, Group domain">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Domain Class/ID editor</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The domain Class/ID editor allows you to <i>add</i> and <i>edit</i> names, codes and descriptions of classes in a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a> and of IDs in an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a>.
+
+You can also add and edit upper boundary values, names, codes and descriptions of groups in a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >group domain</a>.</p>
+
+<p class=defnewpar>Furthermore, you can: </p>
+
+<ul>
+
+<li>set the sorting order of domain items in a class or ID domain; this influences for instance the appearance of domain items in a legend, and, if the domain is used as the domain of an attribute table, the order of records in the table; </li>
+
+<li>use Copy and Paste to add certain classes, IDs, or groups from another domain into the current one;</li>
+
+<li>merge all items of another class, ID or group domain into the current one;</li>
+
+<li>when a prefix is available in an ID domain, change the prefix of all IDs that use this prefix in that domain;</li>
+
+<li>delete items from a domain;</li>
+
+<li>print all or selected items of a domain. </li>
+
+</ul>
+
+<p class=kopje>To open the domain Class/ID editor:</p>
+
+<p>The easiest ways to open the domain Class/ID editor is to double-click a domain in the Catalog or to double-click a domain in the Layer Management pane in a map window. For other methods, see <a href="../ilwis/how_to_edit_domains.htm">How to edit a domain</a>.</p> 
+
+<p class=kopje>Parts of the domain editor:</p>
+
+<p>The domain Class/ID editor has a <a href="domain_class_id_editor_menu_commands.htm">menu bar</a>, a description bar, a <a href="domain_class_id_editor_toolbar.htm">toolbar</a> and a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. 
+
+In the editor, existing 'Name', 'Code' and 'Description' fields can be <i>directly edited</i>, i.e. without using a dialog box: a first single click selects a domain item, a second single click will allow you to edit that field.</p>
+
+<p class=defnewpar>The description bar and the toolbar can be moved and <i>docked</i> along an edge of the window. You can also make them floating. You can hide or show the description bar, the toolbar and the status bar via the commands on the <a href="domain_class_id_editor_menu_commands.htm">View menu</a>. These settings as well as the size of the window etc. are stored per domain type, i.e. either class, ID, or group, in the registry. The domain class, ID, or group that is closed last thus determines the appearance of any newly opened domain class, ID, or group.</p>
+
+<p class=defnewpar>The maximum number of items that can be shown in the Domain Class/ID editor is 100 million.</p>
+
+<p class=kopje>Parts of domain items in class, ID and group domains: </p>
+
+<p><b>Names</b> of classes, IDs or groups can have any length you like. By default, the width for a class domain is 15, and for an ID domain 6 characters. 
+
+You can set the width of a domain Class or ID yourself through the properties of the domain (see also <a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit the properties of an object</a>). 
+
+Names of classes, IDs or groups may contain any character you like, except the <span class="courier">%</span> character. </p>
+
+<p class=defnewpar><b>Codes</b> of classes, IDs or groups are usually short texts which are designed to be used as abbreviations of the Names in <i>calculations</i>. In Codes, you can use any characters, except colons <span class=courier>:</span> and percentages <span class="courier">%</span>.</p> 
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="tiptext"><span class="tip">Mind: </span>In any class, ID or group domain, the complete set of Names and Codes must be unique.</p>
+
+<p class=defnewpar><b>Descriptions</b> of classes and IDs can be longer texts which can be shown in legends.</p> 
+
+<p class=defnewpar>When you created an ID domain and chose to automatically add a number of (numbered) items, you also specified a short <i>Prefix</i>. The Prefix in such an ID domain is designed to avoid confusion with a value domain. 
+
+In calculations, the Prefix is considered integrated with the Name of the items. </p>
+
+<p class=defnewpar>In a group domain, the <i>Upper Boundary Values</i> determine to which group the values of a value map will be assigned after using the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation or the <a href="calc_clfy.htm">CLFY</a> function in MapCalc or TabCalc. </p> 
+
+<p class="emptyline">&nbsp;</p>
+
+<p class=tiptext><span class="tip">Tip: </span>When using class names, IDs, or codes in MapCalc or TabCalc expressions, you must enclose the class names, IDs, or codes in &quot;double quotes&quot;. </p>
+
+<h2>Using the domain editor</h2>
+
+<p>In the remainder of this topic, the word 'class' can also be applied to IDs and groups.</p>
+
+<p class=kopje>To add new class names:</p>
+
+<ul>
+
+<li>	open the <a href="domain_class_id_editor_menu_commands.htm">Edit menu</a> and select the <span class=arial>Add Item</span> command, or </li>
+
+<li>    click the <img src="../images/domadditem.gif" alt="Add Item" align=bottom width="22" height="22"> <span class=arial>Add Item</span> button in the toolbar, or </li>
+
+<li>    select an item in the domain editor, click the right-mouse button and choose <span class=arial>Add Item</span> from the context-sensitive menu, or
+
+<li>	press the <span class=arial>Ins</span> key on your keyboard. </li>
+
+</ul>
+
+<p class=linespacing01before>The <a href="../ilwismen/domain_class_id_editor_add_item.htm">Add Item</a> dialog box appears: type a new class Name, and optionally a Code and a Description. 
+
+When editing a group domain, the <a href="../ilwismen/domain_group_editor_add_item.htm">Add Group</a> dialog box appears: you also have to specify an Upper Boundary Value.<p>
+
+</p>
+ 
+<p class=kopje>To edit a class name:</p>
+
+<ul>
+
+<li>    double-click a domain item, 
+
+<li>    select an item, and:
+
+        <ul>
+
+        <li>	open the <a href="domain_class_id_editor_menu_commands.htm">Edit menu</a> and select the <span class=arial>Edit Item</span> command, or </li>
+
+        <li>    click the <img src="../images/domeditsel.gif" alt="Edit Selection" align=bottom width="22" height="22"> <span class=arial>Edit Item</span> button in the toolbar, or </li>
+        
+        <li>    click the right-mouse button, and choose <span class=arial>Edit Item</span> from the context-sensitive menu, or
+
+        <li>	press the <span class=arial>Enter</span> key on your keyboard. </li>
+
+        </ul>
+
+</ul>
+
+<p class=linespacing01before>The <a href="../ilwismen/domain_class_id_editor_edit_item.htm">Edit Item</a> dialog box appears in which you can change the class Name, Code or Description. 
+
+When editing a group domain, the <a href="../ilwismen/domain_group_editor_edit_item.htm">Edit Group</a> dialog box appears in which you also change the Upper Boundary Value.<p>
+
+<p class=defnewpar>To directly edit a Name, Code or Description of a class, i.e. to skip any dialog boxes, you can also:
+
+<ul>
+
+<li>    single click a domain item (the record is selected), and </li>
+
+<li>    single click the Name, Code or Description field in the selection. </li>
+
+</ul>
+
+<p class=linespacing01before>The field is editable. 
+
+<p class=defnewpar>When you selected multiple items and obtain the Edit Item dialog box, you can merely modify the Description of the selected items.</p>
+
+<p class=kopje>To sort class names:</p>
+
+<p>Class names can be sorted by Name, by Code and Manually. </p>
+
+<p class=defnewpar>To sort items by Name (or by Code): 
+
+<ul>
+
+<li>open the <a href="domain_class_id_editor_menu_commands.htm">Edit menu</a> and select the <span class=arial>Sort by Name</span> (or the <span class=arial>Sort by Code</span>) command, or</li>
+
+<li>click the <img src="../images/domsortname.gif" alt="Sort by Name" align=bottom width="22" height="22"> <span class=arial>Sort by Name</span> button (or the <img src="../images/domsortcode.gif" alt="Sort by Code" align=bottom width="22" height="22"> <span class=arial>Sort by Code</span>) button in the toolbar.</li>
+
+</ul>
+
+<p class=linespacing01before>All items are sorted automatically. For more information on the sorting method, see below.</p>
+
+<p class=defnewpar>To order items manually: 
+
+<ul>
+
+<li>open the <a href="domain_class_id_editor_menu_commands.htm">Edit menu</a> and select the <span class=arial>Order Manually</span> command, or</li>
+
+<li>click the <img src="../images/domsortman.gif" alt="Order Manually" align=bottom width="22" height="22"> <span class=arial>Order Manually</span> button in the toolbar.</li>
+
+</ul>
+
+<p>Subsequently, you can select a domain item and drag it to another position in the list. Continue to do so until satisfied.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>The sorting order of the classes or IDs in a domain determines 
+
+ the order of these items in a legend in a map window, 
+
+ the order of classes in a representation class, 
+
+ the order of records in an attribute table, and 
+
+ the order in lists from which you can choose a class name or ID, 
+
+ for instance when editing units in a map editor and when editing fields of class columns in a table.</li>
+
+<li>The order of a group domain is determined by the upper boundary values of the groups in the group domain.</li>
+
+<li><span class=tipnospace>Mind:</span> When you switch from a manual sorting order to Sorting by Name or by Code, the manual sorting order is lost. </li>
+
+</ul>
+
+<p class=defnewpar>Method of Sorting by Name or by Code:
+
+<ul>
+
+<li>when class names, IDs, or codes consist of characters A-Z and a-z only, sorting will order the items alphabetically as: A, AA, ABC, B, BB, etc. </li>
+
+<li>when class names, IDs, or codes consist of characters A-Z and a-z followed by numbers, sorting will order the items first by the A-Z characters, then by numbers as in: A, A1, A2, A10, A11, AA, ABC, B, B1, B2, BB, etc. </li>
+
+<li>like the previous one: when IDs consist of a prefix followed by a number, sorting will order the items first by the Prefix, then by the numbers as in: Plot 1, Plot 2, Plot 3, ..., Plot 10, XYZ 1, etc. </li>
+
+</ul>
+
+<p>Other possible results of automatic sorting are for instance: A, A1, A2, A10, A11, A1A, A1B, B1, B10, B11, B1A, B1B, AA, ABC, or 1, 10A, 10B, 11A, 1A, 1B, 2, 2A, 2B, A, B. </p>
+
+<p class=kopje>To insert items from another domain into the current domain:</p>
+
+<p> You are free to paste items or merge all items of a class domain with an ID domain, a group domain with an ID domain, etc.</p>
+
+<p class=defnewpar> To add only <i>some items</i> from another domain into the current domain, use the Copy and Paste method:</p>
+
+<P class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>    open the domain from which you want to get items, </p>
+
+<li>    select the items that you want to copy, and </li>
+
+<li>    click the <img src="../images/copy.gif" alt="Copy" align=bottom width="22" height="22"> <span class=arial>Copy</span> button in the toolbar, or choose <span class=arial>Copy</span> from the Edit menu or from the context-sensitive menu.</li>
+
+</ul>
+
+<p class=linespacing03before> Then,</p>
+
+<ul>
+
+<li>    open the domain editor into which you want to paste these items, 
+
+<li>    click the <img src="../images/paste.gif" alt="Paste" align=bottom width="22" height="22"> <span class=arial>Paste</span> button in the toolbar, or choose <span class=arial>Paste</span> from the Edit menu or from the context-sensitive menu.</li>
+
+</ul>
+
+<p class=defnewpar>To merge <i>all items</i> of another domain into the current domain:</p>
+
+<ul>
+
+<li>    open the domain into which you want to merge items from another domain, </li>
+
+<li>    open the <a href="domain_class_id_editor_menu_commands.htm">File menu</a> and select the <span class=arial>Merge Domain</span> command,</li>
+
+<li>    in the appearing <a href="../ilwismen/domain_class_id_editor_merge_domains.htm">Merge Domain</a> dialog box, select the domain from which you want to get items.</li>
+
+</ul>
+
+<p class=defnewpar>During Paste and Merge, the following is checked in the domain that you are merging into the current domain:
+
+<ul>
+
+<li>when a Name is encountered which already exists as a Name in the current domain, 
+
+        the item <i>is not merged</i>, i.e. the original Name remains.</li>
+
+<li>when a Name is encountered which already exists as a Code in the current domain, 
+
+        the item <i>is merged</i>, i.e. the new Name appears, but the Code that existed in the current domain is removed. </li>
+        
+<li>when a Code is encountered which already exists as a Name or a Code in the current domain, 
+
+        the item <i>is merged</i> but the Code of the merged item remains empty. </li>
+
+</ul>
+
+<p>In all cases, Names have priority over Codes.</p>
+
+<p class=defnewpar>Format of Copy and Paste:</p>
+
+<p>For class and ID domains, the format produced by Copy is:<br>
+
+Name&lt;TAB&gt;Code&lt;TAB&gt;Description&lt;CR&gt;&lt;LF&gt; <br>
+Name&lt;TAB&gt;Code&lt;TAB&gt;Description&lt;CR&gt;&lt;LF&gt; </p>
+
+<p class=linespacing03before>For group domains, the format produced by Copy is:<br>
+
+Name&lt;TAB&gt;Code&lt;TAB&gt;Description&lt;TAB&gt;UpperBoundaryValue&lt;CR&gt;&lt;LF&gt;<br>
+Name&lt;TAB&gt;Code&lt;TAB&gt;Description&lt;TAB&gt;UpperBoundaryValue&lt;CR&gt;&lt;LF&gt;</p>
+
+<p class=defnewpar>The expected format for Paste is the same as the format produced by Copy; 
+
+however the last item in the list does not necessarily have to end on a &lt;CR&gt;&lt;LF&gt;</p>
+
+<p class=kopje>To save a copy of this domain with a different name:</p>
+
+<p>From the <a href="domain_class_id_editor_menu_commands.htm">File menu</a>, choose the <span class=arial>Save Copy As</span> command. 
+
+It may be handy to use this command before merging domains or before deleting domain items so that, if something unexpected might happen, you can at least return to your original situation.</p>
+
+<p>
+
+<p class=kopje>To delete a class name:</p>
+
+<p>Select one or more classes, and: </p>
+
+<ul>
+
+<li>	open the <a href="domain_class_id_editor_menu_commands.htm">Edit menu</a>, and select the <span class=arial>Delete Item</span> command,</li>
+
+<li>	click the <img src="../images/domdelitem.gif" alt="Delete Item" align=bottom width="22" height="22"> <span class=arial>Delete Item</span> button in the toolbar, or </li>
+
+<li>    click the right mouse button in the selection, and select <span class=arial>Delete Item</span> from the context-sensitive menu, or </li>
+
+<li>	press the <span class=arial>Del</span> key on your keyboard.</li>
+
+</ul>
+
+<p class=defnewpar>Deleting items from a domain should be done with care. 
+
+When the domain and the deleted class, ID or group was used: </p>
+
+<ul>
+
+<li>	in a map, the undefined value will appear;</li>
+
+<li>	as a table domain, the record will not be shown any more;</li>
+
+<li>	as field in a column of a table, the undefined value will appear.</li>
+
+</ul>
+
+<p class=kopje>To change the Prefix of an ID domain:</p>
+
+<p>When you created an ID domain while you chose to have a certain number of IDs automatically added to your domain
+
+and you specified a Prefix, you can change the prefix of all items that use it at a go: 
+
+<ul>
+
+<li>From the <a href="domain_class_id_editor_menu_commands.htm">Edit Menu</a>, choose <span class=arial>Change Prefix</span>. </li>
+
+<li>In the <a href="../ilwismen/domain_class_id_editor_change_prefix.htm">Change Prefix</a> dialog box, you can specify a new Prefix which will be applied to all IDs that had the old prefix.</li>
+
+</ul>
+
+<p class=defnewpar>As it is not allowed to specify an empty prefix, it is not possible to delete the prefix of all prefixed IDs in an ID domain. </p>
+
+<p class=kopje>Other functionality:</p>
+
+<p>Via the <a href="domain_class_id_editor_menu_commands.htm">File menu</a>, you can furthermore: 
+
+<ul>
+
+<li> when editing a class or group domain: open and edit the <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> of classes or groups by selecting the <a href="..//ilwismen/popup/domain_class_id_editor_representation_popup.htm" onClick="return popup(this, 'notes')" ><span class=arial>Open Representation</span></a> command;</li>
+
+<li> open the <a href="../ilwismen/domain_properties.htm">Properties</a> of the domain by selecting the <span class=arial>Properties</span> command;</li>
+
+<li> print one or more selected domain items by selecting the <span class=arial>Print</span> command.</li>
+
+</ul>
+
+<p class=kopje>To exit the domain Class/ID editor:</p>
+
+<p>To exit the domain Class/ID editor, choose the <span class=arial>Exit</span> command on the File menu or click the <span class=arial>Close</span> button. All changes are already stored namely while editing the domain. </p>
+
+<h2>Additional information : Multiple selection</h2>
+
+<p class=kopjeaftertitlesub>To select all domain items:</p>
+
+<ul>
+
+<li>	open the Edit menu and choose the <span class=arial>Select All</span> command.</li>
+
+</ul>
+
+<p class=kopje>To select two or more items in sequence:</p>
+
+<ul>
+
+<li>	click the first item you want to select,</li>
+
+<li>	press and hold down the <span class=arial>Shift</span> key while you click the last item in the group. </li>
+
+</ul>
+
+<p class=kopje>To select two or more items out of sequence:</p>
+
+<ul>
+
+<li>	press and hold down the <span class=arial>Ctrl</span> key while you click each item.</li>
+
+</ul>
+
+<p class=kopje>To cancel the selection of an item:</p>
+
+<ul>
+
+<li>	press and hold down the <span class=arial>Ctrl</span> key while you click a selected item.</li>
+
+</ul>
+
+<p class=kopje>To cancel the complete selection:</p>
+
+<ul>
+
+<li>	press the <span class=arial>Esc</span> key.</li>
+
+</ul>
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="domain_class_id_editor_toolbar.htm">Domain Class/ID editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="domain_class_id_editor_menu_commands.htm">Domain Class/ID editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_domains.htm">How to create a domain</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_domains.htm">How to edit a domain</a></p>
+
+</body

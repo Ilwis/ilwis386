@@ -1,0 +1,1041 @@
+<html>
+
+<head>
+<title>Glue tables : functionality/algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Glue tables, Merge tables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Glue tables</h1>
+
+<h1 class=secondline>Functionality / Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Glue tables operation allows you to glue or merge two or more tables together. As input tables, you may use: </p>
+
+<ul>
+
+<li>	tables with domain <span class=courier>None</span>, </li>
+
+<li>	tables with class domains,</li>
+
+<li>	tables with ID domains,</li>
+
+<li>	tables with class domains and ID domains.</li>
+
+</ul>
+
+<p class=defnewpar>The Glue tables operation should be regarded as a tool to combine different tables. You can for instance combine or integrate attribute tables of different years. Tables with domain <span class=courier>None</span> can also be glued vertically one below the other. </p>
+
+<p class=defnewpar>The operation will automatically determine:</p>
+
+<ul>
+
+<li>	the domain of the output table,</li>
+
+<li>	the domains of the columns in the output table.</li>
+
+</ul>
+
+<p>Then, fields in the input tables will be copied to the output table. </p>
+
+<p class=defnewpar>In the dialog box, you can select 2, 3, or 4 input tables. On the command line, you can specify as many input tables as you like. </p>
+
+<p class=kopje>Process:</p>
+
+<p>First, the domain for the output table will be determined; the domain for the output table depends on the domains that are used by the input tables:</p>
+
+<ul>
+
+<li>	when the domain of all input tables is domain <span class=courier>None</span>, the output table will also use domain <span class=courier>None</span>,</li>
+
+        <ul>
+
+        <li>	when the option Vertical is used, the number of records in the output table will be the sum of all records in all input tables,</li>
+
+        <li>	when the option Vertical is not used, the output table will have the same the number of records as the largest input table. </li>
+
+        </ul>
+
+<li>	when all input tables have the same Class or the same ID domain, the output table will also use this class or ID domain;</li>
+
+<li>	when the input tables use different class domains or different ID domains, then a new output class or ID domain will be created which contains all class names or all IDs of all input table domains; the new output domain will obtain the same name as the output table;</li>
+
+<li>	when some of the input tables use class domains and other input tables use ID domains, then a new output ID domain will be created which contains, as IDs, all class names and all IDs of all input table domains; the new output domain will obtain the same name as the output table.</li>
+
+</ul>
+
+<p class=defnewpar>Then, the columns to be copied to the output table will be examined. </p>
+
+<p class=defnewpar>For input tables with a class or ID domain and for input tables with domain <span class=courier>None</span> (no vertical gluing):</p>
+
+<ul>
+
+<li>	when in 2 or more input tables, columns are found that have the same name and the same domain, then only the column of the first input table is copied to the output table,</li>
+
+<li>	when in 2 or more input tables, columns are found that have the same name but which are using different domains, then all these columns are copied to the output table; in the output table, the column of the first table will keep its original name, while the second column will obtain a 2 behind its name, etc. (e.g. MyColumn and MyColumn2) so that you can identify from which table each column was copied,</li>
+
+<li>	other input columns which only exist in one table will always be copied to the output table.</li>
+
+</ul>
+
+<p class=defnewpar>For input tables with domain <span class=courier>None</span> and when you selected the option vertical gluing:</p>
+
+<ul>
+
+<li>	when in 2 or more input tables, columns are found that have the same name and the same domain, then all values of all these columns are copied into a single output column (i.e. below each other = vertical);</li>
+
+<li>	other columns are glued as above. </li>
+
+</ul>
+
+<p class=defnewpar>When a new Class or ID domain is created for the output table, this domain will obtain the same name as the output table. On the command line, you can also specify a name for the output domain yourself.</p>
+
+<p class=kopjeboldandund>Examples:</p>
+
+<p class=kopjeaftertitlesub>1. Combining tables with domain <span class=courier><u>None</u></span> and using option Vertical:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=132>
+<p class=th>First input table</p>
+
+</td>
+<td valign="top" width=132>
+<p class=th>Second input table</p>
+
+</td>
+<td valign="top" width=145>
+<p class=th>Output table</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=132>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=145>
+<p class=t1></p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=18>
+<p class=tcolh></p>
+
+</td>
+<td valign="top" width=52>
+<p class=tcolh>Direction</p>
+
+</td>
+<td valign="top" width=62>
+<p class=tcolh>Length</p>
+
+</td>
+<td valign="top" width=18>
+<p class=tcolh></p>
+
+</td>
+<td valign="top" width=52>
+<p class=tcolh>Direction</p>
+
+</td>
+<td valign="top" width=62>
+<p class=tcolh>Length</p>
+
+</td>
+<td valign="top" width=18>
+<p class=tcolh></p>
+
+</td>
+<td valign="top" width=52>
+<p class=tcolh>Direction</p>
+
+</td>
+<td valign="top" width=53>
+<p class=tcolh>Length</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=18>
+<p class=t1>1</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      0</p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1>  2223</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>1</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      5</p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1>  6993</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>1</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      0</p>
+
+</td>
+<td valign="top" width=53>
+<p class=t1>  2223</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=18>
+<p class=t1>2</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      1</p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1>  4737</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>2</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      6</p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1>  1123</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>2</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      1</p>
+
+</td>
+<td valign="top" width=53>
+<p class=t1>  4737</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=18>
+<p class=t1>3</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      2</p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1>  2048</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>3</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      7</p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1>  4273</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>3</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      2</p>
+
+</td>
+<td valign="top" width=53>
+<p class=t1>  2048</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=18>
+<p class=t1>4</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      3</p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1>  6000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>4</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      8</p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1>  1827</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>4</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      3</p>
+
+</td>
+<td valign="top" width=53>
+<p class=t1>  6000</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=18>
+<p class=t1>5</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      4</p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1>        0</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>5</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      9</p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1>  1265</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>5</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      4</p>
+
+</td>
+<td valign="top" width=53>
+<p class=t1>        0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=18>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>6</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      5</p>
+
+</td>
+<td valign="top" width=53>
+<p class=t1>  6993</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=18>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>7</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      6</p>
+
+</td>
+<td valign="top" width=53>
+<p class=t1>  1123</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=18>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>8</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      7</p>
+
+</td>
+<td valign="top" width=53>
+<p class=t1>  4273</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=18>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>9</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      8</p>
+
+</td>
+<td valign="top" width=53>
+<p class=t1>  1827</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=18>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=62>
+<p class=t1> </p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1>10</p>
+
+</td>
+<td valign="top" width=52>
+<p class=t1>      9</p>
+
+</td>
+<td valign="top" width=53>
+<p class=t1>  1265</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<ul>
+
+<li>	In this example, both input tables use domain <span class=courier>None</span>. The output table will also use domain <span class=courier>None</span>.</li>
+
+<li>	Because option Vertical is used, the output table contains the total number of records of all input tables.</li>
+
+<li>	In this example, the columns Direction and Length occur in both input tables; in both the input tables, these columns have the same name and use the same domain. The output table will therefore contain one column Direction and one column Length.</li>
+
+<li>	The values of the columns are then copied to the output table. </li>
+
+</ul>
+
+<p class=kopje>2. Combining tables with domain Class:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=165>
+<p class=th>First input table</p>
+
+</td>
+<td valign="top" width=165>
+<p class=th>Second input table</p>
+
+</td>
+<td valign="top" width=192>
+<p class=th>Output table</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=165>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=165>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=192>
+<p class=t1></p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=86>
+<p class=tcolh></p>
+
+</td>
+<td valign="top" width=79>
+<p class=tcolh>Landvalue80</p>
+
+</td>
+<td valign="top" width=86>
+<p class=tcolh></p>
+
+</td>
+<td valign="top" width=79>
+<p class=tcolh>Landvalue90</p>
+
+</td>
+<td valign="top" width=86>
+<p class=tcolh></p>
+
+</td>
+<td valign="top" width=79>
+<p class=tcolh>Landvalue80</p>
+
+</td>
+<td valign="top" width=79>
+<p class=tcolh>Landvalue90</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1>Agriculture</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            75</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Agriculture</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          100</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Agriculture</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            75</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          100</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1>Agriculture (irrig)</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          125</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Agriculture (irrig)</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          150</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Agriculture (irrig)</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          125</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          150</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1>Bare rock</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            10</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1><b>Airport</b></p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          600</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Airport</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>             ?</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          600</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1>Bare soils</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            10</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Bare rock</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            50</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Bare rock</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>           10</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            50</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1>Forest</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            25</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Bare soils</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            50</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Bare soils</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>           10</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            50</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            25</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Forest</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            75</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Forest</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>           25</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            75</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1>Lake    		</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>             ?</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Grassland	</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            75</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Grassland</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>           25</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            75</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1>Riverbed</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>             ?</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Lake</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>             ?</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Lake</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            ?</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>             ?</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1>Shrubs</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            35</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Riverbed</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>             ?</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Riverbed</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            ?</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>             ?</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1>Urban center</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          750</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Shrubs</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            50</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Shrubs</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>           35</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>            50</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1>Urban periphery</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          500</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Urban center</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>        1000</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Urban center</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>         750</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>        1000</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=86>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Urban periphery</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          750</p>
+
+</td>
+<td valign="top" width=86>
+<p class=t1>Urban periphery</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>         500</p>
+
+</td>
+<td valign="top" width=79>
+<p class=t1>          750</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	In this example, the input tables use different domains. Therefore, for the output table, a new domain is created which contains all items of the input domains.</li>
+
+<li>	In this example, columns 'Landvalue80' and 'Landvalue90' have distinct names and occur only in one input table, therefore both columns will be copied to the output table.</li>
+
+<li>	The values of columns Landvalue80 and Landvalue90 are then copied to the output table.</li>
+
+</ul>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	If each of the input tables would have contained a column 'Landvalue' (using the same domain in both input tables), then the output table would have contained only one column 'Landvalue' containing the values of column 'Landvalue' of the first input table.</li>
+
+<li>	If each of the input tables would have contained a column 'Landvalue' (using the different domains in both input tables), then the output table would have contained two columns, called 'Landvalue' and 'Landvalue2'. </li>
+
+</ul>
+
+<p class=kopje>Domain of output table:</p>
+
+<ul>
+
+<li>	When all input tables use domain <span class=courier>None</span>, the output table will also use domain <span class=courier>None</span>.</li>
+
+<li>	When all input tables use the same class domain or the same ID domain, then the output table will also use this class domain or this ID domain.</li>
+
+<li>	When the input tables use different class domains or different ID domains, then a new class domain or a new ID domain will be created for the output table; the output domain will contain all class names or all IDs of the input domains. </li>
+
+<li>	When the input tables use class domains and ID domains, then a new ID domain will be created for the output table; the output domain will contain all class names and IDs of the input domains as IDs.</li>
+
+</ul>
+
+<p>When a new domain is created for the output table, the domain will obtain the same name as the output table. On the command line, you can also specify a name for the output domain yourself. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="glue_tables_dialog_box.htm">Glue tables : dialog box</a></p>
+
+<p class=seealsolinks><a href="glue_tables_command_line.htm">Glue tables : command line</a></p>
+
+</body

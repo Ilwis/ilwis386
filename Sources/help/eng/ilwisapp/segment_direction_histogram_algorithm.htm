@@ -1,0 +1,74 @@
+<html>
+
+<head>
+<title>Segment direction histogram : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment direction histogram">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segment direction histogram</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Segment direction histogram operation calculates directions and lengths within segments, i.e. between all stored coordinates of the segments. The output is a table with directions from 0 to 179° and the length and number of the segment parts in that direction. </p>
+
+<p class=kopje>Steps:</p>
+
+<ol>
+
+<li>	The program scans the map segment by segment.</li>
+
+<li>	Within each segment, i.e. between all stored coordinates in a segment, directions are calculated. This means that not the total direction of a complete segment is calculated but the direction from the begin node to the first intermediate point, from the first intermediate point to the second, etc., until the end node. Figure 1 and Figure 2 below show segments with and without intermediate points.</li>
+
+<p class=emptyline>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01after><img src="../images/segdir1.gif" align=bottom width="105" height="100"></p>
+
+</td>
+<td valign="top" width=151>
+<p class=linespacing01after><img src="../images/segdir2.gif" align=bottom width="105" height="100"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=captionfig>Fig. 1: Segments without intermediate points.</p>
+
+</td>
+<td valign="top" width=151>
+<p class=captionfig>Fig. 2: Segments with intermediate points.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;	</p>
+
+<li>	The compass directions are sorted from 0 to 179°.</li>
+
+<p class=emptyline>&nbsp; </p>
+
+<li>	Then, for each direction:</li>
+
+        <ul>
+
+        <li>	when the segments in the map have no intermediate points at all, the total lenghts of segments in that direction and the number of segments in that direction are calculated;</li>
+
+        <li>	when the segments do have intermediate points, the total length of the segment parts in that direction and the frequency of the segment parts in that direction are calculated.</li>
+
+        </ul>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segment_direction_histogram_functionality.htm">Segment direction histogram : functionality</a></p>
+
+</body

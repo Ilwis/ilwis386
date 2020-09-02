@@ -1,0 +1,54 @@
+<html>
+
+<head>
+<title>topological optimization popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Topological Optimization</p>
+
+<p>When a DEM and/or a flow direction map have undefined values, e.g. when there are lakes in the study area, the <a href="..//ilwisapp/topological_optimization.htm" onClick="return popup(this, 'notes')" >Topological Optimization</a> operation can improve the results of a previous Flow Direction operation and a Drainage Network Extraction operation to ensure a proper flow through this lake. </p>
+
+<p class="defnewpar">As input, this operation requires: </p>
+
+<ul>
+
+<li>an existing output map of the Drainage Network Extraction operation, </li>
+
+<li>an existing output map of the Flow Direction operation, </li>
+
+<li>a segment map with one or more segments that connect the <i>inlet(s) of a lake</i> with the <i>outlet(s) of lake</i> (down flow). </li>
+
+</ul>
+
+<p class="defnewpar">As output, the operation delivers: </p>
+
+<ul>
+
+<li>a new continuous drainage network raster map, and </li>
+
+<li>a new flow direction raster map.</li>
+
+</ul>
+
+<p class="defnewpar">The output of this operation can serve as a new basis for the other hydrologic operations, e.g. to obtain new Strahler or Shreve order numbers, new catchments etc. </p>
+
+</body

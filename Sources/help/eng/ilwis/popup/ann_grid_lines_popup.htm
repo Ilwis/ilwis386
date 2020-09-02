@@ -1,0 +1,49 @@
+<html>
+
+<head>
+<title>ann grid lines popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Grid lines&nbsp;&nbsp;&nbsp;<img src="../../images/gridmapw.gif" align=bottom width="14" height="14"></p>
+
+<p>Grid lines can be drawn in a map window as lines which are parallel to the X- and Y-axes of the <a href="objects_coordinate_system_popup.htm">coordinate system</a> used by the map window. You are allowed to add multiple grid lines to one map window. </p>
+
+<p class=linespacing03before>When a map window displays: </p>
+
+<ul>
+
+<li>	a North-oriented map (e.g. raster map with a georef corners), the grid lines will be straight and exactly horizontal and vertical;</li>
+
+<li>	a raster map which has a georef tiepoints with a conformal or an affine transformation, the grid lines will be straight but not exactly horizontal and vertical;</li>
+
+<li>	a raster map which has a georef tiepoints with a higher order transformation, or a georef direct linear, georef orthophoto, the grid lines will be curved.</li>
+
+</ul>
+
+<p class=linespacing03before>In the <a href="..//ilwismen/display_options_grid_lines.htm" onClick="return popup(this, 'notes')" >Display Options - Grid Lines</a> dialog box, you can specify the spacing of the grid lines in meters. Furthermore, you can select <!--a line type and --> a color for the grid lines. </p>
+
+<p class=linespacing03before>You can save the map window as a <a href="objects_map_view_popup.htm">map view</a>; then you can add the map view to a <a href="objects_layout_popup.htm">layout</a>. </p>
+
+<p class=linespacing03before>In the <a href="layout_editor_popup.htm">layout editor</a>, you can add
+ticks and XY-coordinates through the <span class=arial>Map Border</span> button <img src="../../images/annborder.gif" align=bottom width="22" height="22"> in the <a href="..//ilwis/layout_editor_layout_toolbar.htm" onClick="return popup(this, 'notes')" >layout toolbar</a>, or through the <span class=arial><a href="..//ilwismen/layout_editor_insert_edit_map_border_neatline.htm" onClick="return popup(this, 'notes')" >Map Border</a></span> command on the <a href="..//ilwis/layout_editor_menu_commands.htm" onClick="return popup(this, 'notes')" >Insert menu</a> of the layout editor.</p>
+
+</body

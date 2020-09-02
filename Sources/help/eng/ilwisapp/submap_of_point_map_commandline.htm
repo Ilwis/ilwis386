@@ -1,0 +1,195 @@
+<html>
+
+<head>
+<title>Sub-map of point map : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sub-map of point map, PointMapSubMap">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Sub-map of point map</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/sub_map_points_popup.htm" onClick="return popup(this, 'notes')" >sub-map of point map</a> operation can be directly executed by typing the following expression on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapSubMap</span>(InputPointMap, minX, minY, maxX, maxY)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapSubMap</span>(InputPointMap, minLon, minLat, maxLon, maxLat)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=courier>PointMapSubMap</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the sub-map of point map operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>InputPointMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>minX</p>
+
+</td>
+<td valign="top">
+<p>minimum X-coordinate of output point map, i.e. X-coordinate of lower left corner (real number).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>minY</p>
+
+</td>
+<td valign="top">
+<p>minimum Y-coordinate of output point map, i.e. Y-coordinate of lower left corner (real number).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>maxX</p>
+
+</td>
+<td valign="top">
+<p>maximum X-coordinate of output point map, i.e. X-coordinate of upper right corner (real number).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>maxY</p>
+
+</td>
+<td valign="top">
+<p>maximum Y-coordinate of output point map, i.e. Y-coordinate of upper right corner (real number).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing03before>When the coordinate system of the input point map is a coordinate system of <i>type latlon</i>:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>minLon</p>
+
+</td>
+<td valign="top">
+<p>minimum Longitude of output point map, i.e. Longitude of lower left corner (real number, signed decimal degrees). Use a - sign when working in the Western hemisphere. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>minLat</p>
+
+</td>
+<td valign="top">
+<p>minimum Latitude of output point map, i.e. Longitude of lower left corner (real number, signed decimal degrees). Use a - sign when working on the Southern hemisphere. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>maxLon</p>
+
+</td>
+<td valign="top">
+<p>maximum Longitude of output point map, i.e. Longitude of upper right corner (real number, signed decimal degrees).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>maxLat</p>
+
+</td>
+<td valign="top">
+<p>maximum Latitude of output point map, i.e. Latitude of upper right corner (real number, signed decimal degrees).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="submap_of_point_map_functionality.htm">Sub-map of point map : functionality</a></p>
+
+</body

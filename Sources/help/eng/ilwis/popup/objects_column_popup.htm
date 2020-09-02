@@ -1,0 +1,35 @@
+<html>
+
+<head>
+<title>objects-column popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Column&nbsp;&nbsp;&nbsp;<img src="../../images/column.gif" align=bottom width="13" height="14"></p>
+
+<p>A <a href="../../ilwis/popup/objects_table_popup.htm"> table</a> consists of <a href="..//ilwis/ilwis_objects_columns.htm" onClick="return popup(this, 'notes')" >columns</a>. You can perform calculations with columns using <a href="..//ilwis/calc.htm" onClick="return popup(this, 'notes')" >TabCalc</a>. </p>
+
+<p class=linespacing03before>Each column has a <a href="objects_domains_intro_popup.htm">domain</a>. A column with a value domain contains values, a column with a class domain contains class names, a column with domain ID contains IDs, etc. Columns can also have domain String; you can use this to type for instance descriptions.</p>
+
+<p class=linespacing03before>If in an attribute table you have columns with a class domains, or with user-defined value domains, you may consider to prepare a
+<a href="objects_representation_popup.htm"> representation</a> for these columns as well. When you open the map to which the attribute table is linked, and you can directly display the map by one of its attributes.</p>
+
+</body

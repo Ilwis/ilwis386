@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<title>georeference_tiepoints_popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Georeference tiepoints</p>
+
+<p class=linespacing03after>A <a href="objects_georeference_popup.htm">georeference</a> tiepoints stores the relation between user-indicated points in a raster map or image (row,col) and real world coordinates (X,Y). These user-indicated points are called tiepoints or ground control points. A georeference tiepoints can be edited with the <a href="..//ilwis/georeference_tiepoints_editor.htm" onClick="return popup(this, 'notes')" >tiepoint editor</a>. </p>
+
+<p class=linespacing03after>A <i>georeference tiepoints</i> is mostly used to <b>add</b> coordinates to a satellite image which is not North-oriented and in which the pixels do not represent exactly square areas on the ground. One georeference tiepoints can be used for all bands of an image. </p>
+
+<p class=linespacing03after>When you have raster maps of different sources or images of different dates and you want to perform raster operations to combine these maps or images (e.g. MapCalc, Cross), first create a georeference tiepoints for each set of maps/images, then use the <a href="../../ilwisapp/popup/resample_popup.htm">Resample</a> operation and resample the maps/images preferably to a georeference corners.</p>
+
+<p class=linespacing03after>When you want to combine rasterized vector maps with satellite data, you can rasterize the vector data on the georeference tiepoints of the satellite images. In case you prefer North-oriented raster maps, rasterize the vector maps with a georeference corners, and Resample the images with the georeference tiepoints to this georeference corners.</p>
+
+</body

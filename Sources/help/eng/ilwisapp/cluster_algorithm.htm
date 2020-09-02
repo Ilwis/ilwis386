@@ -1,0 +1,65 @@
+<html>
+
+<head>
+<title>Cluster : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cluster">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Cluster</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Clustering, or unsupervised classification, is a rather quick process in which image data is grouped into spectral clusters based on the statistical properties of all pixel values. It is an automated classification approach with a maximum of 4 input bands. </p>
+
+<p class=defnewpar>To create the number of desired clusters a generalized form of the Heckbert quantization algorithm is used. For more information, see also <a href="color_composite_algorithm.htm">Color composite : algorithm</a>. </p>
+
+<p class=defnewpar>In the first phase of the application a multidimensional histogram of the input bands is calculated. </p>
+
+<ul>
+
+<li>	When only 1 or 2 input bands are used, all values of the band(s) are taken into account;</li>
+
+<li>	When 3 input bands are used, the pixel values 0-255 are linearly stretched to 0-31 using the 1% interval of the histograms;</li>
+
+<li>	When 4 input bands are used, the pixel values 0-255 are linearly stretched to 0-15 using the 1% interval of the histograms.</li>
+
+</ul>
+
+<p>The multidimensional histogram is regarded as a representation of the feature space. </p>
+
+<p class=defnewpar>In the second phase this feature space is split or divided into several boxes to obtain the desired number of clusters. In this phase the software starts with one cluster occupying the entire feature space. This cluster is divided into two along its longest axis (largest variation in pixel values). The division is done in such a way that the two new clusters approximately contain the same amount of pixels. Then, the next cluster is divided into two along the longest axis (largest variation). This process continues until the required number of clusters is reached. </p>
+
+<p class=defnewpar>Optionally, an attribute table can be created for the output map. For each output cluster, the average, predominant and minimum and maximum value are extracted from the input bands. </p>
+
+<p class=kopje>Output domain:</p>
+
+<p>The output map and the optional attribute table will use an internally defined class domain; the class names have names like <span class=courier>Cluster 1</span>, <span class=courier>Cluster 2</span>, etc. This domain is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cluster_functionality.htm">Cluster : functionality</a></p>
+
+<p class=seealsolinks><a href="color_composite_algorithm.htm">Color composite : algorithm</a></p>
+
+</body

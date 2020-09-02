@@ -1,0 +1,333 @@
+<html>
+
+<head>
+<title>ILWIS objects : introduction on maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>ILWIS data objects</h1>
+
+<h1 class=secondline>Introduction on maps</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A map contains certain features and refers to the geographic position of those features:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/pointmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>point maps: a point map contains point features;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/segmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>segment maps: a segment map contains line features;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/polmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>polygon maps: a polygon map contains closed area features;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rasmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>raster maps: a raster map contains pixels. In ILWIS, most spatial operations are performed on raster maps.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When using satellite images, you already have raster maps. Pixels in a satellite image have values ranging from 0 to 255, although not every value may occur in your image. In ILWIS, satellite images are stored with domain Image. </p>
+
+<p class=defnewpar>When starting from an analog paper map, you start by:</p>
+
+<ul>
+
+<li>	digitizing point features of interest with the point editor, </li>
+
+<li>	digitizing line features of interest with the segment editor, and/or </li>
+
+<li>	digitizing areas of interest with the polygon editor. </li>
+
+</ul>
+
+<p>Afterwards, point, segment and polygon maps can be rasterized into a raster map. </p>
+
+<p class=defnewpar>Before you begin to digitize, you have to know that features in any map can be identified in the following manner:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=75>
+<p>by ID:</p>
+
+</td>
+<td valign="top">
+<p>each feature is identified by its own name or number; each feature occurs in general only once in the map;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=75>
+<p>by Classes:</p>
+
+</td>
+<td valign="top">
+<p>features are identified by their class name; features may occur in several places in the map;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=75>
+<p>by Value:</p>
+
+</td>
+<td valign="top">
+<p>features are identified by a measurable value.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The following scheme illustrates the above:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=79>
+<p class=th>Map type:</p>
+
+</td>
+<td valign="top" width=189>
+<p class=th>Features in map:</p>
+
+</td>
+<td valign="top" width=105>
+<p class=th>Identification of features by:</p>
+
+</td>
+<td valign="top">
+<p class=th>Example:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=t1>Point map </p>
+
+</td>
+<td valign="top" width=189>
+<p class=t1>Points: indiv. sample points</p>
+
+<p class=t1>Points: classes of farms</p>
+
+<p class=t1>Points: height information</p>
+
+</td>
+<td valign="top" width=105>
+<p class=t1>IDs</p>
+
+<p class=t1>Class names</p>
+
+<p class=t1>Values</p>
+
+</td>
+<td valign="top">
+<p class=t1>1,2,3</p>
+
+<p class=t1>small farm, large farm</p>
+
+<p class=t1>500, 600, 700 (m)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=t1>Segment map</p>
+
+</td>
+<td valign="top" width=189>
+<p class=t1>Lines: individual rivers</p>
+
+<p class=t1>Lines: classes of roads</p>
+
+<p class=t1>Lines: isolines for height </p>
+
+</td>
+<td valign="top" width=105>
+<p class=t1>IDs</p>
+
+<p class=t1>Class names</p>
+
+<p class=t1>Values</p>
+
+</td>
+<td valign="top">
+<p class=t1>section1, section2</p>
+
+<p class=t1>prim. road, sec. road</p>
+
+<p class=t1>500, 600, 700 (m)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=t1>Polygon map</p>
+
+</td>
+<td valign="top" width=189>
+<p class=t1>Areas: indiv. cadastral plots</p>
+
+<p class=t1>Areas: land use classes</p>
+
+<p class=t1>Areas: acid deposition</p>
+
+</td>
+<td valign="top" width=105>
+<p class=t1>IDs</p>
+
+<p class=t1>Class names</p>
+
+<p class=t1>Values</p>
+
+</td>
+<td valign="top">
+<p class=t1>plot 234a, plot 345b</p>
+
+<p class=t1>rice, maize, forest</p>
+
+<p class=t1>1000, 2000, 5000  (mol/ha/y)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=t1>Raster map</p>
+
+</td>
+<td valign="top" width=189>
+<p class=t1>Pixels: rasterized points, lines or areas with IDs</p>
+
+<p class=t1>Pixels: rasterized points, lines, or areas with Class names</p>
+
+<p class=t1>Pixels: rasterized points, lines or areas with Values</p>
+
+<p class=t1>Pixels: value outcome of calculations</p>
+
+</td>
+<td valign="top" width=105>
+<p class=t1>IDs</p>
+
+<p class=t1></p>
+
+<p class=t1>Class names</p>
+
+<p class=t1></p>
+
+<p class=t1>Values</p>
+
+<p class=t1></p>
+
+<p class=t1>Values</p>
+
+</td>
+<td valign="top">
+<p class=t1>plot 234a, plot 345b</p>
+
+<p class=t1></p>
+
+<p class=t1>rice, maize, forest</p>
+
+<p class=t1></p>
+
+<p class=t1>values</p>
+
+<p class=t1></p>
+
+<p class=t1>any value</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=t1>Raster map</p>
+
+</td>
+<td valign="top" width=189>
+<p class=t1>Pixels (satellite images)</p>
+
+</td>
+<td valign="top" width=105>
+<p class=t1>pixel value 0 to 255</p>
+
+</td>
+<td valign="top">
+<p class=t1>TM images, SPOT images</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The user-defined collection or set of IDs, Class names or values that may be used in a map is called the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of a map. In ILWIS, we speak of maps of the ID, Class or Value type, meaning that the elements in that map are either identified by IDs, Class names or values. </p>
+
+<p class=defnewpar>Only maps with features identified by IDs or Class names can have attributes; i.e. extra information about the point, segment, polygons or mapping units, in so-called attribute tables. When creating an attribute table, this table should have the same domain as your ID or Class map. Afterwards you can add extra columns with the attribute information. </p>
+
+<p class=defnewpar>The Class names (or Identifiers) in a domain type Class (or a domain type Identifier) provide the relational link between the units in a map and the records in a table. </p>
+
+<p class=defnewpar>Maps containing values, for example a satellite image or a height map, cannot have attributes in an attribute table.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="basic_concepts_domains.htm">Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+</body

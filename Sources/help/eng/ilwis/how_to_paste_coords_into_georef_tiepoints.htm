@@ -1,0 +1,263 @@
+<html>
+
+<head>
+<title>How to paste coordinates into a georef tiepoints</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Paste from clipboard, Clipboard, How to paste ..., Georeference Tiepoints editor, Tiepoint editor, Tiepoints, Control points">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to paste coordinates</h1>
+
+<h1 class=secondline>into a georeference tiepoints</h1>
+
+<!--<hr>-->
+
+<p class=kopje>Copying input data to clipboard:</p>
+
+<p>Open the file which contains the coordinates and the row/column numbers for the tiepoints of your image(s). </p>
+
+<p class=defnewpar>ILWIS will expect to receive the following and preferably in this order: </p>
+
+<table cellspacing="0">
+<tr>
+<td width="96" align="top">
+<p class=th>X-coordinates</p>
+
+</td>
+<td width="96" align="top">
+<p class=th>Y-coordinates</p>
+
+</td>
+<td width="108" align="top">
+<p class=th>Row numbers</p>
+
+</td>
+<td width="108" align="top">
+<p class=th>Column numbers</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Make sure the 'columns' in your file are in this order and copy the block of XY-coordinates and corresponding Row/Column numbers to clipboard. </p>
+
+<p class=defnewpar>Below, an example is shown, of how the clipboard contents may look like after copying. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing="0" width="50%">
+<tr>
+<td width="10%" align="top">
+<p class=t1>801490.000</p>
+
+</td>
+<td width="10%" align="top">
+<p class=t1>8089155.000</p>
+
+</td>
+<td width="5%" align="top">
+<p class=t1>23</p>
+
+</td>
+<td width="5%" align="top">
+<p class=t1>90</p>
+
+</td>
+</tr>
+<tr>
+<td align="top">
+<p class=t1>802004.000</p>
+
+</td>
+<td align="top">
+<p class=t1>8075147.000</p>
+
+</td>
+<td align="top">
+<p class=t1>471</p>
+
+</td>
+<td align="top">
+<p class=t1>206</p>
+
+</td>
+</tr>
+<tr>
+<td align="top">
+<p class=t1>800242.000</p>
+
+</td>
+<td align="top">
+<p class=t1>8074191.000</p>
+
+</td>
+<td align="top">
+<p class=t1>510</p>
+
+</td>
+<td align="top">
+<p class=t1>156</p>
+
+</td>
+</tr>
+<tr>
+<td align="top">
+<p class=t1>802445.000</p>
+
+</td>
+<td align="top">
+<p class=t1>8077922.000</p>
+
+</td>
+<td align="top">
+<p class=t1>379</p>
+
+</td>
+<td align="top">
+<p class=t1>201</p>
+
+</td>
+</tr>
+<tr>
+<td align="top">
+<p class=t1>802841.000</p>
+
+</td>
+<td align="top">
+<p class=t1>8076212.000</p>
+
+</td>
+<td align="top">
+<p class=t1>433</p>
+
+</td>
+<td align="top">
+<p class=t1>224</p>
+
+</td>
+</tr>
+<tr>
+<td align="top">
+<p class=t1>797727.000</p>
+
+</td>
+<td align="top">
+<p class=t1>8076145.000</p>
+
+</td>
+<td align="top">
+<p class=t1>461</p>
+
+</td>
+<td align="top">            
+<p class=t1>61</p>
+
+</td>
+</tr>
+<tr>
+<td align="top">
+<p class=t1>805768.000</p>
+
+</td>
+<td align="top">
+<p class=t1>8086385.000</p>
+
+</td>
+<td align="top">
+<p class=t1>90</p>
+
+</td>
+<td align="top">
+<p class=t1>247</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Pasting into an ILWIS georeference tiepoints:</p>
+
+<p>Create a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference tiepoints</a>, select or create a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> into which the coordinates will fit, and choose a background map on which you wish to view the tiepoints. For more information, see <a href="../ilwismen/create_a_georeference.htm">Create a georeference</a>. </p>
+
+<p class=defnewpar>The <a href="..//ilwis/popup/georeference_tiepoints_editor_popup.htm" onClick="return popup(this, 'notes')" >georeference tiepoint editor</a> will be opened automatically. </p>
+
+<p class=defnewpar>The background map is shown, and at the bottom (default) of the window, you will see the empty tiepoint table: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/tiepoint_table.gif" align=bottom width="717" height="190"> </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>If necessary, you can first re-order the columns in the tiepoint table so that the columns in the tiepoint table will comply with the order of the copied data. To change the position of a column in the table, <i>drag a column header</i> to a new position. The mouse pointer will change into a column icon <img src="../images/columngray.gif" align=bottom width="13" height="14"> while dragging. </p>
+
+<p class=defnewpar>If you have an empty tiepoint table as above, <b>click once</b> in the gray area at the left side of the tiepoint table (where the cursor is located in the picture above).</p>
+
+<p class=defnewpar>Now you can paste the clipboard contents into the tiepoint table: </p>
+
+<ul>
+
+<li>choose <span class=arial>Paste</span> from the Edit menu, </li>
+
+<li>press the <span class=arial>Ctrl+V</span> keys on the keyboard, or </li>
+
+<li>click with the right mouse button at the same position in the tiepoint table pane (gray area to the left), and choose <span class=arial>Paste</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>If you already have some tiepoints, you can also <i>add</i> tiepoints by pasting. </p>
+
+<ul class=tipul>
+
+<li>First, click once in a field in the tiepoint table which already contains a value, </li>
+
+<li>then press the <span class=arial>Esc</span> key on the keyboard, and </li>
+
+<li>then use one of the paste methods described above. </li>
+
+</ul>
+
+<p class=defnewpar>The clipboard contents will be pasted into the tiepoint table. </p>
+
+<p class=defnewpar>If everything went OK, your tiepoint table may look as follows: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/tiepoint_table_filled.gif" align=bottom width="718" height="189"> </p>
+
+<p class=defnewpar>As you can see, the <span class=arial>Active</span> column (which indicates the tiepoints that are active) does not yet contain values, but the values for <span class=arial>DRow</span> and <span class=arial>DCol</span> (deviations for the current transformation) are immediately calculated. </p>
+
+<p>You can activate tiepoints by typing a <span class=courier>T</span> for the each tiepoints in the <span class=arial>Active</span> column. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To get rid of the highlight in the tiepoint table (dark blue in the picture above), click once in a field in the tiepoint table which already contains a value, then press the <span class=arial>Esc</span> key on the keyboard. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/paste_table_data_into_table_window.htm">Table window : Paste</a></p>
+
+<p class=seealsolinks><a href="georeference_tiepoints_editor.htm">Georeference tiepoint editor : functionality</a></p>
+
+
+
+</body

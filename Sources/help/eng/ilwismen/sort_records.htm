@@ -1,0 +1,201 @@
+<html>
+
+<head>
+<title>Sort a table / Sort records in table</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Sort table, Ascending, Descending">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Columns menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Sort</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Sort the records of the table.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Record sequence:</p>
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top">
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Domain / Record number:</p>
+
+</td>
+</tr>
+<td valign="top" width=108>
+<p class=diaboxnospacetop>&nbsp;
+
+</td>
+<td valign="top">
+
+<p class=diaboxnospacetop>If the table uses a regular class or ID domain: select this option to sort on the domain of this table, i.e. return to the original order of the table. </p>
+
+<p class=diabox>If the table uses system domain <span class=courier>None</span>: select this option to sort on record numbers, i.e. return to the original order of the table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=108>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to sort the table on the contents of a column. </p>
+
+<p class=diabox>Select a column from the list box; open the list box by clicking it. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Sort order:</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=108>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Ascending:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When sorting on a column: select this option to sort the class names, IDs, values or strings of the selected column in ascending order, i.e. from A to Z or from small values to large values. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=108>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Descending:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When sorting on a column: select this option to sort the class names, IDs, values or strings of the selected column in descending order, i.e. from Z to A or from large values to small values. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=defnewpar>The table will be sorted: the order of records probably changes. </p>
+
+<p class=defnewpar>If you sorted on a certain column: </p>
+
+        <ul>
+
+        <li>the column name will be followed by <span class=courier>*&gt;</span> when you selected to sort <span class=arial>Ascending</span>; </li>
+
+        <li>the column name will be followed by <span class=courier>*&lt;</span> when you selected to sort <span class=arial>Descending</span>. </li>
+
+        </ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To sort on a column, you can also select a column by clicking a column header, then click the selection with the <i>right</i> mouse button, and choose <span class=arial>Sort Ascending</span> or <span class=arial>Sort Descending</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<p class=tip>Mind: </p>
+
+<p class=tiptext>When sorting on the domain of the table or on a column of a table, and when the table or the column uses a <i><b>class or ID domain</b></i>: </p>
+
+<ul class=tipul>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<li>If the class or ID domain is already sorted <i>alphabetically</i>, </li>
+
+        <p>the table will be sorted in ascending or descending order as expected. </p>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<li>If the class or ID domain is not sorted alphabetically, but <i>manually</i>: </li>
+
+<ul class=tipul>
+
+<li>when choosing <span class=arial>Sort Ascending</span>, the table will be sorted according to the manual sort order of the domain; </li>
+
+<li>when choosing <span class=arial>Sort Descending</span>, the table will be sorted according to the reverse manual sort order of the domain. </li>
+
+</ul>
+
+<p class=tiptext>For more information, see <a href="../ilwis/domain_class_id_editor_functionality.htm">Domain Class/ID editor : functionality</a>. </p>
+
+</ul>
+
+<p class=defnewpar>Sort settings are stored when you close the table. </p>
+
+<p class=kopje>Command line syntax:</p>
+
+<p>If you like, you can also sort through the command line. Type on the command line of a table window:</p>
+
+<p class=calccommline>&nbsp;&nbsp;&nbsp;&nbsp;<span class=courier>sorton</span> <i>columnname</i> [<span class=courier>-sortorder=ascending</span>|<span class=courier>descending</span>]</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>The part between the square brackets [ ] is optional; if not used, sorting will be ascending.</li>
+
+<li>The square brackets themselves should be omitted when typing the expression. </li>
+
+<li>The pipe symbol | represents a choice. </li>
+
+</ul>
+
+<p class=defnewpar>Example 1: to sort the table in ascending order on column <span class=courier>MyValues</span>, type either: </p>
+
+        <p class=courier>sorton myvalues</p>
+
+        <p>or</p>
+
+        <p class=courier>sorton myvalues -sortorder=ascending</p>
+
+<p class=defnewpar>Example 2: to sort the table in descending order on column <span class=courier>MyValues</span>, type: </p>
+
+        <p class=courier>sorton myvalues -sortorder=descending</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>These <span class=courier>sorton</span> expressions can only be used on the command line of a table window, thus not from the command line of the Main window and not in a script. </p>
+
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_toolbar.htm">Table window : toolbar</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_menu_commands.htm">Table window : menu commands</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_command_line.htm">Table window : command line</a> </p>
+
+</body

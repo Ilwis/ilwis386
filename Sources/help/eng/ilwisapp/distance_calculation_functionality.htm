@@ -1,0 +1,107 @@
+<html>
+
+<head>
+<title>Distance calculation : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Distance calculation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Distance calculation</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Distance operation assigns to each pixel the smallest distance in meters towards user-specified source pixels, for example distance to schools, to roads etc. The output is called a <a href="..//ilwisapp/popup/distance_calculation_distance_map_popup.htm" onClick="return popup(this, 'notes')" >distance map</a>. </p>
+
+<p class=defnewpar>Input for a distance calculation is a source map and optionally a weight map. </p>
+
+<p class=defnewpar>By using weight factors that are inversely proportional to the possible speed that can be obtained in different mapping units, a so-called <a href="..//ilwisapp/popup/distance_calculation_time_travel_map_popup.htm" onClick="return popup(this, 'notes')" >time travel map</a> can be calculated. Through a distance calculation, also a <a href="..//ilwisapp/popup/distance_calculation_thiessen_map_popup.htm" onClick="return popup(this, 'notes')" >Thiessen map</a> can be calculated. </p>
+
+<p class=kopje>Input source map for a distance calculation:</p>
+
+<p>A <a href="..//ilwisapp/popup/distance_calculation_source_map_popup.htm" onClick="return popup(this, 'notes')" >source map</a> is obligatory input for a distance calculation. In the Distance calculation dialog box, a source map can be any raster map with a class or ID domain. On the command line, you can also use raster maps with a value domain. </p>
+
+<p>All pixels in the source map that have a class name, ID or value are considered as sources. For all pixels that have the undefined value, a distance value is calculated.  </p>
+
+<p>As a source map, you can thus directly use any rasterized point, segment, or polygon map. </p>
+
+<p>Of course, you can also use one or more <a href="../ilwis/calc.htm">MapCalc</a> statements to prepare a source map from existing raster maps. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=leftmargin1>For ILWIS 1.41 users: the input map for a distance calculation is no longer a map in which value 0 is used for sources and value 1 is used for accessible pixels.</p>
+
+<p class=kopje>Input weight map for a distance calculation:</p>
+
+<p>A <a href="..//ilwisapp/popup/distance_calculation_weight_map_popup.htm" onClick="return popup(this, 'notes')" >weight map</a> is optional input for a distance calculation. </p>
+
+<ul>
+
+<li>	If no resistances have to be taken into account, a weight map is not necessary. All pixels are assumed to have weight 1. </li>
+
+<li>	To exclude inaccessible areas from a distance calculation, prepare a weight map in which negative values or the undefined value are assigned to inaccessible areas; assign value 1 to accessible pixels. </li>
+
+<li>	To work with relative accessibility, prepare a weight map in which weight values represent the relative difficulty to surpass pixels.</li>
+
+<li>	To calculate a <a href="..//ilwisapp/popup/distance_calculation_time_travel_map_popup.htm" onClick="return popup(this, 'notes')" >travel time map</a>, prepare a weight map in which weight values are inversely proportional to the relative speed that can be obtained in the different mapping units. </li>
+
+<li>	Pixels with value 1 in the weight map are normally accessible, pixels with value 2 are twice as difficult to access than pixels with value 1, etc.</li>
+
+<li>	Pixels with a negative value or value 'undefined' in the weight map cannot be reached; such pixels have a weight that is unlimitedly large.</li>
+
+<li>	Pixels with value 0 in the weight map have free accessibility: distance/time values will not increase while surpassing these areas.</li>
+
+</ul>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>In the output distance map: value 0 is assigned to source pixels, the shortest distance value towards the nearest source is assigned to all accessible pixels, and the undefined value is assigned to inaccessible pixels. </p>
+
+<p>By default, the distance map obtains system domain Distance; the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> for the output map can be adjusted each time you perform the Distance operation. You can also create or use a value domain of your own. </p>
+
+<p>The output distance map uses the same georeference as the input map.</p>
+
+<p class=defnewpar>When displaying a distance output map, by default System Gray or System Pseudo representations can be selected. You can also create a representation of your own, e.g. by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create representation button</a> in the Display Options dialog box of the output distance map.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>If line barriers are used with a width of only one pixel (e.g. rasterized segments), these barriers should be broadened before performing a distance calculation. This is because in the distance program, pixels are regarded to be 8-connected: each pixel has access to its eight neighbours (horizontally, vertically, and diagonally). Line barriers that are 8-connected can thus still be surpassed: only 4-connected lines cannot be surpassed.</p>
+
+<p class=tiptext>To make a raster map with line barriers 4-connected  instead of 8-connected, you can use use the <a href="..//ilwisapp/sec/filter_dilate4_sec.htm" onClick="return popup(this, 'notes')" >Dilate4</a> filter or the <a href="..//ilwisapp/sec/filter_eighttofour_sec.htm" onClick="return popup(this, 'notes')" >Conn8to4</a> filter. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/distance_calculation_travel_time_map.htm">Distance calculation : travel time map</a></p>
+
+<p class=seealsolinks><a href="distance_calculation_thiessen_map.htm">Distance calculation : Thiessen map</a></p>
+
+<p class=seealsolinks><a href="distance_calculation_dialogbox.htm">Distance calculation : dialog box</a></p>
+
+<p class=seealsolinks><a href="distance_calculation_commandline.htm">Distance calculation : command line (1)</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/distance_calculation_commandline2.htm">Distance calculation : command line (2)</a></p>
+
+<p class=seealsolinks><a href="distance_calculation_algorithm.htm">Distance calculation : algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_shortest_path.htm">How to calculate shortest path</a></p>
+
+</body

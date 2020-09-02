@@ -1,0 +1,92 @@
+<html>
+
+<head>
+<title>Polygon editor : Extract segments</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygon editor, Polygons to segments, Extract segments">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Polygon editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/polygon_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Extract segments</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Extract all segments from the polygon map and create a segment map of it. </p>
+
+<p class=defnewpar>This operation can be used if you wish to edit the polygon boundaries as segments in the segment editor, and then repolygonize the segments. </p>
+
+<p class=defnewpar>This operation can also be used when you want to obtain different polygon maps out of one polygon map: extract segments, assign different class names, IDs or values to the segments, then polygonize the segment map again using a mask.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output segment map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a name for the output segment map that will contain the extracted polygon boundaries.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing domain for the output segment map. All extracted segments obtain the first class name, ID or value that is found in the selected domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Edit: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to continue in the segment editor when the segment extraction has finished. Clear this check box if you do not want to see the segment map immediately: you simply define how the map should be created; you remain in the polygon editor. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To extract boundaries of specific polygons, i.e. by using a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a>, use the <a href="..//ilwisapp/popup/polygons_to_segments_popup.htm" onClick="return popup(this, 'notes')" >Polygons to Segments</a> operation. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_functionality.htm">Polygon editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_menu_commands.htm">Polygon editor : menu commands</a></p>
+
+</body

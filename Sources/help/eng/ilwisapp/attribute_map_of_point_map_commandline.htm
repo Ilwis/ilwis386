@@ -1,0 +1,129 @@
+<html>
+
+<head>
+<title>Attribute map of point map : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Attribute map of point map, PointMapAttribute">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Attribute map of point map</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/attribute_map_of_points_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of point map</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window: </p>
+
+<p class=emptyline>&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapAttribute</span>(InputPntMapName, ColumnName)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapAttribute</span>(InputPntMapName, TableName.ColumnName)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>PointMapAttribute</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the creation of an attribute map of a point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPntMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input point map. For the first expression, the attribute table needs to be linked to the input map or its domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>TableName</p>
+
+</td>
+<td valign="top">
+<p>is the name of an attribute table. The attribute table should use the same domain as the input map but it does not need to be linked to the point map or its domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>ColumnName</p>
+
+</td>
+<td valign="top">
+<p>is the name of an attribute column in the attribute table.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="attribute_map_of_point_map_functionality.htm">Attribute map of point map : functionality</a></p>
+
+</body

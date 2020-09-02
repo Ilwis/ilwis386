@@ -1,0 +1,75 @@
+<html>
+
+<head>
+<title>Edit georeference</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Edit ..., Georeference">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>View/Edit Georeference</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>View and/or edit the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of the raster map that is currently displayed in the map window. </p>
+
+<p class=defnewpar>Depending on the type of georeference which is used by the raster map in the map window, a dialog box and/or an editor will be opened:</p>
+
+<ul>
+
+<li>	georeference <b>corners</b> (rasterized vector maps): the <a href="edit_georeference_corners.htm">Edit Georeference Corners</a> dialog box will appear;</li>
+
+<li>	georeference <b>tiepoints</b> (satellite images or scanned photograph without DTM), or<br>
+georeference <b>direct linear</b> (scanned photograph without fiducial marks), or<br>
+georeference <b>orthophoto</b> (scanned photograph with fiducial marks):<br>
+the <a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor</a> will be opened. <br>
+When the raster map uses a georeference orthophoto, the <a href="../ilwismen/georef_ortho_locate_fiducial_marks.htm">Locate Fiducial Marks</a> dialog box is opened first;</li>
+
+<li>	georeference <b>3D</b>: the <a href="../ilwis/georeference_3d_editor_functionality.htm">Georeference 3D editor</a> is opened in the form of an <a href="georeference_3d_editor_edit.htm">Georeference 3D : Edit</a> dialog box in which you can specify parameters for your 3D view.</li>
+
+</ul>
+
+<p class=defnewpar>This option is <i>not</i> available when the map window only displays polygon, segment and/or point maps. Further, this option is <i>not</i> available for raster maps that have a georeference which is marked read-only, nor for raster maps that use a georeference submap, georeference mirrorrotate, or a georeference factor. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To view and/or edit a georeference, you can also double-click it in the Catalog. To make georeferences visible in the Catalog, refer to <a href="../ilwis/how_to_customize_the_catalog.htm">How to customize the Catalog</a>. For more information, see also <a href="../ilwis/how_to_edit_georeferences.htm">How to edit a georeference</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a></p>
+
+<p class=seealsolinks><a href="edit_georeference_corners.htm">Edit Georeference Corners</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_3d_editor_functionality.htm">Georeference 3D editor</a></p>
+
+</body

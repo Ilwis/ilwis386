@@ -1,0 +1,278 @@
+<html>
+
+<head>
+<title>Glue segment maps : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Glue segment maps, SegmentMapGlue">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Glue segment maps</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p></p>
+
+<p>The <a href="..//ilwisapp/popup/glue_segment_maps_popup.htm" onClick="return popup(this, 'notes')" >Glue segment maps</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapGlue</span>(InputSegmentMap1, <span class=courier>&quot;</span>mask1<span class=courier>&quot;</span>, InputSegmentMap2, <span class=courier>&quot;</span>mask2<span class=courier>&quot;</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapGlue</span>(InputSegmentMap1, <span class=courier>&quot;</span>mask1<span class=courier>&quot;</span>, InputSegmentMap2, <span class=courier>&quot;</span>mask2<span class=courier>&quot;</span>, NewDomain)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapGlue</span>(InputSegmentMap1, <span class=courier>&quot;</span>mask1<span class=courier>&quot;</span>, InputSegmentMap2, <span class=courier>&quot;</span>mask2<span class=courier>&quot;</span>, InputSegmentMap3, <span class=courier>&quot;</span>mask3<span class=courier>&quot;</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p>etc.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapGlue</span>(minX, minY, maxX, maxY, InputSegmentMap1, <span class=courier>&quot;</span>mask1<span class=courier>&quot;</span>, InputSegmentMap2, <span class=courier>&quot;</span>mask2<span class=courier>&quot;</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapGlue</span>(minX, minY, maxX, maxY, InputSegmentMap1, <span class=courier>&quot;</span>mask1<span class=courier>&quot;</span>, InputSegmentMap2, <span class=courier>&quot;</span>mask2<span class=courier>&quot;</span>, NewDomain)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapGlue</span>(minX, minY, maxX, maxY, InputSegmentMap1, <span class=courier>&quot;</span>mask1<span class=courier>&quot;</span>, InputSegmentMap2, <span class=courier>&quot;</span>mask2<span class=courier>&quot;</span>, InputSegmentMap3, <span class=courier>&quot;</span>mask3<span class=courier>&quot;</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p>etc.</p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>SegmentMapGlue</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Glue segment map operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputSegmentMap1</p>
+
+</td>
+<td valign="top">
+<p>is the name of the first input segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputSegmentMap2</p>
+
+</td>
+<td valign="top">
+<p>is the name of the second segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputSegmentMap3</p>
+
+</td>
+<td valign="top">
+<p>is the name of the third segment map (optional).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>mask1</p>
+
+</td>
+<td valign="top">
+<p>are the (multiple) search strings to find the classes, IDs or values of the segments in the first input map that you want to copy into the output map; on the command line, the total <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> for each input map needs to be surrounded by double quotes. To copy all segments, use as mask: &quot;<span class=courier>*</span>&quot;.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>mask2</p>
+
+</td>
+<td valign="top">
+<p>are the (multiple) search strings to find the classes, IDs or values of the segments in the second input map that you want to copy into the output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>mask3</p>
+
+</td>
+<td valign="top">
+<p>are the (multiple) search strings to find the classes, IDs or values of the segments in the third input map that you want to copy into the output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>minX</p>
+
+</td>
+<td valign="top">
+<p>minimum X-coordinate of output segment map (real number).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>minY</p>
+
+</td>
+<td valign="top">
+<p>minimum Y-coordinate of output segment map (real number).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>maxX</p>
+
+</td>
+<td valign="top">
+<p>maximum X-coordinate of output segment map (real number).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>maxY</p>
+
+</td>
+<td valign="top">
+<p>maximum Y-coordinate of output segment map (real number).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>NewDomain</p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter, when merging Class or ID maps that do not have the same domain, to specify a name for the new output domain in which all input domain items will be merged. When input Class or ID domains are not the same and this parameter is not specified, the new output domain in which all input domain items are merged will be stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>On the command line, you can specify as many input segment  maps and their masks as you like; i.e. you can merge as many segment maps as you like. When using the dialog box of this operation, only two, three or four input maps can be merged at a time. </p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. When Class or ID maps are merged that do not have the same domain, and the NewDomain parameter is used, a new output domain is also created.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="glue_segment_maps_functionality.htm">Glue segment maps : functionality</a></p>
+
+</body

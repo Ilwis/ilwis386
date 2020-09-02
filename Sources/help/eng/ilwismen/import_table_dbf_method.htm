@@ -1,0 +1,125 @@
+<html>
+
+<head>
+<title>Import Table wizard - dBase DBF import method</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Import, Table import, Import table wizard, dBase, DBF, Databases">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table class=headingblue cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Import Table wizard</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">Main window, File menu</a></td>
+</tr>
+<tr>
+<td class=menucommand2 rowspan="2"><h1 class=secondline>dBase DBF import method</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="import_table_input_table_name.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="../ilwismen/import_table_select_table_format.htm">ILWIS import, Next</a>&nbsp;&gt;</td>
+</tr>
+<tr>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="import_table_input_table_name.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="import_database_table_table_domain.htm">Database, Next</a>&nbsp;&gt;</td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>This page is only shown when importing a dBase DBF file. </p>
+
+<p class=tiptext>As DBF files can be imported both by ILWIS import and by database access (ODBC), you have to choose the method you wish to use. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>This page is skipped when importing: </p>
+
+<ul>
+
+<li>an ASCII table in ILWIS 1.4 format, 
+
+<li>an ASCII table in comma delimited format, </li>
+
+<li>an ASCII table in space delimited format, or </li>
+
+<li>an ASCII table in fixed format. </li>
+
+</ul>
+
+<p>In these cases, you will automatically be directed to the ILWIS import method. You can click <span class=arial>ILWIS import, Next</span> at the top of this Help page. </p>
+
+<p class=defnewpar>This page is also skipped when importing: </p>
+
+<ul>
+
+<li>a database format such as Access .MDB, for which an ODBC driver has been installed on your system. </li>
+
+</ul>
+
+<p>In this case, you will automatically be directed to the Database method. You can click <span class=arial>Database, Next</span> at the top of this Help page. </p>
+
+<p class=diakopje>Page options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Use ILWIS import:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To import the dBase DBF file with ILWIS DBF import. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Use Open Database Connectivity (ODBC):</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>To import the dBase DBF file using an ODBC driver or OLE DB. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>If you choose ILWIS import: </p>
+
+<p>After clicking the <span class=arial>Next</span> button, the <b><a href="../ilwismen/import_table_select_table_format.htm">Import Table - Select Table Format</a></b> page will appear. On that page, you have to specify the format of the table you wish to import. </p>
+
+<p class=defnewpar>When you specified that the external file is a file in ASCII format (ILWIS 1.4, Comma delimited, Space delimited, or Fixed format), the <b><a href="../ilwismen/import_table_view_file.htm">Import Table - View File</a></b> page will appear. </p>
+
+<p>This page will be skipped if you specified that the external file is a file in dBase format. </p>
+
+<p class=defnewpar>The <b><a href="../ilwismen/import_table_edit_column_details.htm">Import Table - Edit Column Details</a></b> can be used to specify the name and type of domains of each column and optionally, the domain of the table. </p>
+
+<p class=defnewpar>Finally, on the last page of the wizard, the <b><a href="../ilwismen/import_table_output_table_name.htm">Import Table - Specify ILWIS Table Name</a></b> page will appear. There you can specify the name of the ILWIS table that will be the result of import. </p>
+
+<p class=kopje>If you choose ODBC: </p>
+
+<p>After clicking the <span class=arial>Next</span> button, the <b><a href="../ilwismen/import_database_table_table_domain.htm">Import Database - Select Table and/or Table Domain</a></b> page will appear. On that page, you can choose a domain for the output table. </p>
+
+<p class=defnewpar>Subsequently, you will go to the <b><a href="../ilwismen/import_database_sql_query.htm">Import Database - SQL query</a></b> page. On that page, you can specify the SQL query to retrieve specific record from the table. </p>
+
+<p class=defnewpar>Finally, on the last page of the wizard, the <b><a href="../ilwismen/import_table_output_table_name.htm">Import Table - Specify ILWIS Table Name</a></b> page will appear. There, you can specify the output name for the table, and you can choose to obtain a <i>Use As</i> table or to <i>convert</i> the table to the ILWIS table format. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/import_table_select_table_format.htm">Import Table - Select Table Format</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/import_table_select_table_format.htm">Import Database - Table and/or Table domain</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_import_data.htm">How to import data</a></p>
+
+</body

@@ -1,0 +1,253 @@
+<html>
+
+<head>
+<title>How to create representations</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Representation, How to create ..., Colors, Create ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to create a representation</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> stores the manner in which the <i>classes</i> of a map with a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>, a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >group domain</a> or a <a href="..//ilwis/sec/domain_type_picture_sec.htm" onClick="return popup(this, 'notes')" >picture domain</a>, or the <i>values</i> of a map with a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a> or the <a href="..//ilwis/sec/domain_image_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Image</span> domain</a> should be represented on the screen and on a printer.</p>
+
+<p class=defnewpar>A representation is a <a href="ilwis_objects_service_objects.htm">service object</a> for a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>. </p>
+
+<p class=kopje>To create a representation:</p>
+
+<p>A representation class can be created for raster, polygon, segment and point maps with a class, group or picture domain and for attribute columns with such a domain.</p>
+
+<p>A representation value or a representation gradual can be created for raster, polygon, and segment maps with a value domain and for attribute columns with a value domain.</p>
+
+<p class=defnewpar>You can create a representation in the following manners:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>	in a <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a map with a class, group or value domain, click the little <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box, </li>
+
+<li>	in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> sheet of a map with a class, group or value domain, go to the Map tab, right-click the domain, and select <span class=arial>Create Representation</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, </li>
+
+<li>	in the <a href="../ilwismen/domain_properties.htm">Domain Properties</a> sheet of a class, group or value domain, go to the Domain tab, and click the little create button <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box, </li>
+
+<li>	from the <a href="main_window_menu_commands.htm">File menu</a> of the Main window, choose <span class=arial>Create Representation</span>, </li>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, right-click a class, group or value domain and choose <span class=arial>Create Representation</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Create</span> item, and double-click the <span class=arial>New Representation</span> item, or </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>New Representation</span> item.</li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="../ilwismen/create_a_representation.htm">Create Representation</a> dialog box will appear. </p>
+
+<p class=linespacing03before>Depending on the <i>domain</i> (of the map or the attribute column), a representation class, value or gradual will be created. </p>
+
+<p class=defnewpar>For more information on symbols for point maps, on colors for maps with a Bit, Bool, ID or the Color domain, or on obtaining a <span class=arial>Display Options</span> dialog box, a <span class=arial>Map Properties</span> sheet, or a <span class=arial>Domain Properties</span> sheet, see the <a href="#addinfo"><span class=bookmark>Additional Information</span></a> below.</p>
+
+
+
+<p class=kopje>Representation types:</p>
+
+<ul>
+
+<li>A <b>representation class</b> will be created for class and group domains. <br>
+
+In the <a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor</a> you can assign colors to the <i>classes</i>. </li>
+
+<li>A <b>representation value</b> will be created for:
+
+        <ul>
+
+        <li>a user-defined value domain, </li>
+        
+        <li>the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a> while you <i>clear</i> the <span class=arial>Use Percentages</span> checkbox in the <a href="../ilwismen/create_a_representation.htm">Create Representation</a> dialog box, or </li>
+
+        <li>one of the other <a href="..//ilwis/popup/yy_system_domain_value_all_popup.htm" onClick="return popup(this, 'notes')" >system value domains</a> for instance system domain <span class=courier>Image</span>. </li>
+        
+        </ul>
+
+In the <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a> you can assign colors to specific <i>values</i> by inserting and editing limits, etc. </li>
+
+<li>A <b>representation gradual</b> will be created for the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span> while you <i>select</i> the <span class=arial>Use Percentages</span> checkbox in the <a href="../ilwismen/create_a_representation.htm">Create Representation</a> dialog box. <br>
+
+In the <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a> you can assign colors to <i>percentage values</i> by inserting and editing limits, etc.</li>
+
+A representation gradual can be used to display any <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. </li>
+
+</ul>
+
+<p class=linespacing01before>For more information on representation types, see <a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representations</a>. </p>
+
+<p class=kopje>Representation Class editor:</p>
+
+<p>In the <a href="representation_class_editor_functionality.htm">Representation Class editor</a>, you can for each class in the domain:</p>
+
+<ul>
+
+<li>	select or create a color (<a href="../ilwismen/representation_class_editor_edit_item_raster.htm">Edit Item - Raster</a> dialog box);</li>
+
+<li>	select or create a color and select a hatching type or a pattern (<a href="../ilwismen/representation_class_editor_edit_item_polygon.htm">Edit Item - Polygon</a> dialog box);</li>
+
+<li>	select or create a color, select a line type (e.g. single, double, triple, dot, dash dot, blocked), specify line width, have an optional support line, etc., or a symbol font and a symbol which will be used to draw lines (<a href="../ilwismen/representation_class_editor_edit_item_segment.htm">Edit Item - Segment</a> dialog box);</li>
+
+<li>	select or create a color, select a simple symbol or a symbol from any installed symbol font,  specify symbol size, etc. (<a href="../ilwismen/representation_class_editor_edit_item_point.htm">Edit Item - Point</a> dialog box).</li>
+
+</ul>
+
+<p class=defnewpar>Furthermore, when you select <i>multiple</i> classes in the representation Class editor, you can assign a single color or a smooth range of colors to all selected classes (<a href="../ilwismen/representation_class_editor_edit_multiple_items.htm">Edit Multiple Items</a> dialog box).</p>
+
+<p class=kopje>Representation Value/Gradual editor:</p>
+
+<p>In the <a href="representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a>, you can:</p>
+
+<ul>
+
+<li>	insert and/or edit limits, i.e. boundary <i>values</i> for a representation value, or boundary <i>percentages</i> for a representation gradual (<a href="../ilwismen/representation_value_gradual_editor_insert_limit.htm">Insert Limit</a> and <a href="../ilwismen/representation_value_gradual_editor_edit_limit.htm">Edit Limit</a> dialog boxes),</li>
+
+<li>	choose or create a color for each limit (<a href="../ilwismen/representation_value_gradual_editor_insert_limit.htm">Insert Limit</a> and <a href="../ilwismen/representation_value_gradual_editor_edit_limit.htm">Edit Limit</a> dialog boxes), </li>
+
+<li>	indicate whether to stretch colors between the limits or to use the color of the upper or the lower boundary,</li>
+
+<li>	when you stretch in between limits, you can specify the number of stretch steps (<a href="../ilwismen/representation_value_gradual_editor_stretch_steps.htm">Stretch Steps</a> dialog box). </li>
+
+</ul>
+
+<p> You can also insert multiple limits/boundary values and colors at a time by using the Insert Multiple Limits dialog box. </p>
+
+
+<p class=tip>Mind: </p>
+
+<ul class=tipul>
+
+        <li>To create a representation value, working in values, for a map which uses <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>, you need to clear the <span class=arial>Use Percentages</span> check box in the <a href="../ilwismen/create_a_representation.htm">Create Representation</a> dialog box. </li>
+
+        <li>It is advised to create a user-defined value domain when values in a map or column have a specific meaning, are in a specific range and should be represented by specific colors or ranges of colors. To convert a map which uses system domain <span class=courier>Value</span> to a map with a user-defined value domain, see <a href="how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a>.</li>
+
+</ul>
+
+<h2 id=addinfo>Additional information</h2>
+
+<p class=kopjeaftertitlesub>Symbols for point maps:</p>
+
+<ul>
+
+<li>For point maps with a <i>class domain</i>, you can use Single Symbols or create a <i>representation class</i> as described above. In the <a href="../ilwismen/representation_class_editor_edit_item_point.htm">Edit Item (point)</a> dialog box in the Representation Class editor, you then define symbol type, point size and colors for the points. </li>
+
+<li>For point maps with a <i>value domain</i>, you can click the <span class=arial>Symbols</span> button in the <a href="../ilwismen/display_options_point_map.htm">Display Options - Point Map</a> dialog box. In the <a href="../ilwismen/symbols_for_value_point_maps.htm">Symbol</a> dialog box, you can then define symbol type, point sizes, colors, etc. </li>
+
+<li>For point maps with an <i>ID domain</i> and which have a linked attribute table, you can use the options Single Symbol, <a href="../ilwismen/symbols_by_attributes_id_point_map_with_attr_table.htm">Symbols by Attributes</a>, <a href="../ilwismen/symbols_as_arrows_id_point_map_with_attr_table.htm">Symbols as Arrows</a>, <a href="../ilwismen/symbols_as_graphs_id_point_map_with_attr_table.htm">Symbols as Graphs</a> as available in the <a href="../ilwismen/display_options_point_map.htm">Display Options - Point Map</a> dialog box. </li>
+
+</ul>
+
+<p>To store the display settings of point maps with a value or an ID domain, you can save the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>.</p>
+
+<p class=kopje>Colors for maps with a Bool, Bit, ID, or the Color domain:</p>
+
+<p>Maps with a Bool, the <span class=courier>Bit</span>, an ID, or the Color domain do <i>not</i> have a stored representation on disk.</p>
+
+<ul>
+
+<li>	For maps with a <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool domain</a> or the <a href="..//ilwis/sec/domain_type_bit_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Bit</span> domain</a>, you can interactively select colors in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of the map each time you display the map. You can save the display settings by saving the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>.</li>
+
+<li>	Maps with an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a> can be shown in 7, 15, or 31 colors to inspect the map itself. In most cases however, you will display an ID map by one of its attributes as stored in the map's attribute table; to do so, select the <span class=arial>Attribute</span> check box in the Display Options dialog box of the ID map and select an attribute column.</li>
+
+<li>	Raster maps with the <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" >Color domain</a> store colors in each pixel, so no representation is needed.</li>
+
+</ul>
+
+<p class=kopje>To obtain a Display Options dialog box:</p>
+
+<ul>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, double-click a map which uses a class, group, value, or picture domain, or</li>
+
+<li>	from the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, choose <span class=arial>Open</span>, and select a map which uses a class, group, value, or picture domain.</li>
+
+</ul>
+
+<p>A <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box will appear.</p>
+
+<p class=kopje>To obtain a Properties sheet of a map: </p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window, choose <span class=arial>Properties</span> and select a map, or </li>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click a raster, polygon, segment or point map with a class, group, value, or picture domain with the right mouse button, and select <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p>The <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a>, the <a href="../ilwismen/polygon_map_properties.htm">Polygon Map Properties</a>, the <a href="../ilwismen/segment_map_properties.htm">Segment Map Properties</a>, or the <a href="../ilwismen/point_map_properties.htm">Point Map Properties</a> sheet will appear.</p>
+
+<p class=kopje>To obtain a Domain Properties sheet: </p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window, choose <span class=arial>Properties</span> and select a class, group, value, or picture domain, or </li>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click a class, group, value, or picture domain with the right mouse button, and select <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p>The <a href="../ilwismen/domain_properties.htm">Domain Properties</a> sheet will appear.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/create_a_representation.htm">Create a representation</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_representations.htm">How to edit representations</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representations</a></p>
+
+<p class=seealsolinks><a href="representation_class_editor_functionality.htm">Representation Class editor : functionality</a></p>
+
+<p class=seealsolinks><a href="representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit the properties of an object</a></p>
+
+
+<!--<p class=defnewpar>A representation class stores: </p>
+
+<ul>
+
+<li> for raster <i>classes</i>: colors for the classes in the class domain, </li>
+
+<li> for polygon <i>classes</i>: colors, and optionally hatching or patterns, </li>
+
+<li> for segment <i>classes</i>: colors, line types and line widths, etc., </li>
+
+<li> for point <i>classes</i>: colors, symbols, symbol sizes, etc. </li>
+
+</ul>
+
+<p class=defnewpar>A representation value stores:</p>
+
+<ul>
+
+<li> for raster, polygon, and segment <i>values</i>: colors for specific values (i.e. the limits), and colors for the values in between the limits. </li>
+
+</ul>-->
+
+</body

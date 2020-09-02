@@ -1,0 +1,123 @@
+<html>
+
+<head>
+<title>Edit coordinate system boundary only</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Edit Coordinate System Boundary Only</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>View and/or edit a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> boundary only. A coordinate system boundaries defines the XY-coordinates in your maps. Coordinate systems are used by polygon, segment and point maps, and by the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of a raster map. It is advised to use one coordinate system for all the maps in your project. </p>
+
+<p class=defnewpar>A coordinate system boundaries can be used for maps for which you do NOT want to specify projection information. Specify the XY- coordinates for the boundaries of your coordinate system, i.e. the total extent of XY-coordinates which defines your study area. The boundary values will only be used to determine:</p>
+
+<ul>
+
+<li>	default map coordinate boundaries for vector maps, and </li>
+
+<li>	default coordinate boundaries for a georeference for raster maps.</li>
+
+</ul>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when in the <a href="../ilwismen/create_a_coordinate_system.htm">Create Coordinate System</a> dialog box, you selected to create a coordinate system of the type boundary only, </li>
+
+<li>	when in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, you double-click a coordinate system of the type boundary only,</li>
+
+<li>	when in the Catalog, you press the right mouse button on a coordinate system of the type boundary only and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>,</li>
+
+<li>	when from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> in the Main window, you choose <span class=arial>Edit Object</span> and subsequently you select a coordinate system of the type boundary only,</li>
+
+<li>	when from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in the map window which uses a coordinate system of the type boundary only, you choose <span class=arial>Coordinate System</span>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the coordinate system. The description is visible on the status bar of the Main window when moving the mouse pointer over the coordinate system in the Catalog. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Min X, Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the minimum X-coordinate and the minimum Y-coordinate for this coordinate system. With the minimum XY-coordinate, the XY-coordinate of the <i>lower left</i> corner of the coordinate system is meant. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Max X, Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the maximum X-coordinate and the maximum Y-coordinate for this coordinate system. With the maximum XY-coordinate, the XY-coordinate of the <i>upper right</i> corner of the coordinate system is meant. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	When you work with multiple adjacent map sheets, it is advised to create <b>one</b> coordinate system in which the smallest minimum X and Y, and the largest maximum X and Y coordinates of all those map sheets are defined. Then, select this one coordinate system for all the maps you will create. </li>
+
+<li>	When digitizing one single map sheet out of many adjacent map sheets:</li>
+
+        <ul class=tipul>
+
+        <li>	create one coordinate system in which all the coordinates of the different map sheets fit,</li>
+
+        <li>	use this coordinate system for all your maps, </li>
+
+        <li>	as the <a href="..//ilwis/popup/coordinate_boundary_popup.htm" onClick="return popup(this, 'notes')" >boundaries</a> of each map, use the coordinates of each separate map sheet.</li>
+
+        </ul>
+
+<li>	When you have imported vector maps comprising the same study area from other packages, you can create one proper coordinate system. You can then link this coordinate system to all imported maps of the area in the <a href="coordinate_system_properties.htm">Coordinate System Properties</a> sheet of the maps.</li>
+
+<li>	Once you have created a correct coordinate system, it is advised to make it read-only in the <a href="coordinate_system_properties.htm">Coordinate System Properties</a> sheet.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/create_a_coordinate_system.htm">Create Coordinate System</a> (dialog box)</p>
+
+</body

@@ -1,0 +1,70 @@
+<html>
+
+<head>
+<title>SMCE window popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>SMCE window</p>
+
+<p>The <a href="..//ilwis/smce_window.htm" onClick="return popup(this, 'notes')" >Spatial Multi-Criteria Evaluation (SMCE) window</a> is an application that assists and guides a user in doing Multi-Criteria Evaluation (MCE) in a spatial way.</p> 
+
+<p class=defnewpar>As input for the application, you need to build a <a href="../../ilwis/popup/objects_criteria_trees_popup.htm">criteria tree</a>: </p>
+
+<ol>
+
+	<li>specify a main goal and supply a name for the final output map, </li>
+
+	<li>optionally, add groups to the main goal; a group is supposed to contain multiple factors, </li>
+
+	<li>add criteria to the main goal, and specify whether a criterion is a factor or a constraint. </li>
+
+</ol>
+
+<p class=defnewpar>For each factor and for each constraint, you need to specify a name as text (like a description), and an input map or input attribute column. </p>
+
+<p class=defnewpar>A criteria tree lists and defines: 
+
+<ul>
+
+<li>all inserted groups, factors and constraints, </li>
+
+<li>the way in which all groups, factors and constraints should be grouped, standardized and weighed, </li>
+
+<li>in order to calculate the final output map. </li>
+
+</ul>
+
+<p class=defnewpar>The initial output of the operation are so-called 'composite index' raster maps. These maps combine all input data according to the rules for weighing and standardization of the factors and/or constraints. </p>
+
+<ul>
+
+<li>As you can use multiple alternatives, which use different input maps, the output maps of the various alternatives can be compared to each other. </li>
+
+<li>The composite index maps can be classified or sliced so that the sliced output maps contain a limited number of classes. Furthermore, from the sliced output maps, the Shape Index and Connectivity Index can be calculated. </li>
+
+</ul>
+
+<p>The output maps show the suitability for the goal that was set, and can be an aid in planning and decision-making.</p>
+
+<p class=defnewpar>The SMCE window consists of a <a href="..//ilwis/smce_window_menu_commands.htm" onClick="return popup(this, 'notes')" >menu bar</a>, a <a href="..//ilwis/smce_window_toolbar.htm" onClick="return popup(this, 'notes')" >toolbar</a>, a <a href="..//ilwis/smce_window_criteria_tree_viewer.htm" onClick="return popup(this, 'notes')" >criteria tree viewer</a>, a <a href="..//ilwis/smce_window_status_bar.htm" onClick="return popup(this, 'notes')" >status bar</a>, and a <a href="context_sensitive_menu_popup.htm">context-sensitive menu</a>.</p>
+
+</body

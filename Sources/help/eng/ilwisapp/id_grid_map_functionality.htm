@@ -1,0 +1,204 @@
+<html>
+
+<head>
+<title>ID Grid map : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ID Grid map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>ID Grid map</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+<p class=kopje>Wildlife distribution and density:</p>
+<p>Systematic reconnaissance flights is a sample survey, where by evenly-spaced parallel transects
+are flown over a large area, and observers count all wildlife seen within defined counting strips on either site of the aircraft.
+The number of animals counted per square kilometer can be entered in a table or
+database. To obtain a spatial representation of these data (a map) you can use
+the ID Grid map operation which creates square polygons for every entry in the
+table.</p>
+
+<p class=defnewpar>The ID Grid map operation uses a coordinate system and optionally an attribute table as input and creates a polygon map as output. The output polygon map consists of rectangular grid cells with a unique ID, and can be linked to a table with attribute data when sample data is available for the rectangular grid cells (e.g. biodiversity data in 5x5 km blocks).</p> 
+<p class=defnewpar>Besides the above, the operation can create an additional point map with label points at the center of each grid cell.</p>
+
+<p class=kopje>Concept:</p>
+<p>The figure below schematically presents the concept of the ID grid map operation. The black grid is a metric coordinate system and the red one is the output polygon map consisting of 12 ID grid cells (4x3 cells). The origin of the ID grid map is at point A (0,0). Point B (7,-1) in the opposite corner of the map is called the opposite corner coordinate. Point C
+(3,3) along the positive Y-axis of the ID grid map defines the degrees that the grid cells should be rotated. This point is called direction point. Grid size should always be
+specified in the units of the coordinate system. In this figure the grid cells are perfectly rectangular and the width and height of the cells are both <span class="symbollarger">Ö</span>(1<sup>2</sup> +
+1<sup>2</sup>), i.e. <span class="symbollarger">Ö</span>2.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top"><p><img border="0" src="../images/idgrid.gif" width="208" height="260"></p></td>
+<td  valign="bottom">
+<table>
+<tr>
+<td valign="top">&nbsp;&nbsp;</td>
+<td valign="top">A</td>
+<td valign="top">=</td>
+<td valign="top">origin</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;</td>
+<td valign="top">B</td>
+<td valign="top">=</td>
+<td valign="top">opposite corner</td>
+</tr>
+<tr>
+<td valign="top">&nbsp;&nbsp;</td>
+<td valign="top">C</td>
+<td valign="top">=</td>
+<td valign="top">direction point</td>
+</tr>
+</table>
+</td>
+<!--<td valign="top">&nbsp;&nbsp;</td>
+<td valign="top">A <br>
+B <br>
+C </td>
+<td valign="top">= <br>
+= <br>
+= </td>
+<td valign="top">origin <br>
+ opposite corner <br>
+ direction point</td>
+-->
+</tr>
+</table>
+
+<p class=kopje>Example of creating an ID Grid map:</p>
+
+<p>In this example an ID grid map <span class=courier>OutMap</span> is created using an input coordinate system and an existing attribute table. The attribute table with animal counts/census has an ID domain with IDs like, nr1, nr2, nr3 etc. The output polygon map with rectangular grid cells has the same domain as the existing attribute table.</p>
+
+<table>
+<tr>
+	<td><p class=courier>Attribute table</p></td>
+	<td>&nbsp;</td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>ID</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Elephants</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Buffalo</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Cattle</p></td>
+	<td valign="top"><p class=tcolhr>Nr....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr1</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class="t1r">53</td>
+	<td valign="top"><p class="t1r">22</td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr2</p></td>
+	<td valign="top"><p class=t1r>22</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+	<td valign="top"><p class=t1r>34</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr3</p></td>
+	<td valign="top"><p class=t1r>24</p></td>
+	<td valign="top"><p class=t1r>80</p></td>
+	<td valign="top"><p class=t1r>45</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr4</p></td>
+	<td valign="top"><p class=t1r>87</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>64</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr5</p></td>
+	<td valign="top"><p class=t1r>34</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+	<td valign="top"><p class=t1r>70</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr6</p></td>
+	<td valign="top"><p class=t1r>45</p></td>
+	<td valign="top"><p class=t1r>20</p></td>
+	<td valign="top"><p class=t1r>22</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr7</p></td>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>15</p></td>
+	<td valign="top"><p class="t1r">86</td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr8</p></td>
+	<td valign="top"><p class=t1r>37</p></td>
+	<td valign="top"><p class=t1r>29</p></td>
+	<td valign="top"><p class=t1r>12</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr9</p></td>
+	<td valign="top"><p class=t1r>12</p></td>
+	<td valign="top"><p class=t1r>15</p></td>
+	<td valign="top"><p class=t1r>21</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+</table>
+</td>
+<td>&nbsp;</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>nr1</td>
+    <td class=calcpict>nr4</td>
+    <td class=calcpict>nr7</td>
+  </tr>
+  <tr>
+    <td class=calcpict>nr2</td>
+    <td class=calcpict>nr5</td>
+    <td class=calcpict>nr8</td>
+  </tr>
+  <tr>
+    <td class=calcpict>nr3</td>
+    <td class=calcpict>nr6</td>
+    <td class=calcpict>nr9</td>
+  </tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>For more information on the labelling process, refer to <a href="id_grid_map_algorithm.htm">ID Grid map : algorithm</a>.</p>
+
+<p class=kopje>Input coordinate system requirements:</p>
+<p>No special requirements for the input coordinate system.</p>
+
+<p class=kopje>Input attribute table requirements:</p>
+<p>The attribute table needs to be a table with an Identifier domain. The ID to be assigned to each grid cell should be available in the ID domain of the table. See <a href="id_grid_map_algorithm.htm">ID Grid map : algorithm</a> for more information.</p>
+
+<p class=kopje>Coordinate system of output maps:</p>
+<p>The output polygon map and the optional point map use the input coordinate system.</p>
+
+<p class=kopje>Domain of output maps:</p>
+<p>When an attribute table is used, the polygon map and the optional point map with label points both use the ID domain of this attribute table. When no attribute table is used a new ID domain is created based on the input values given.</p>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="id_grid_map_dialog_box.htm">ID Grid map : dialog box</a></p>
+<p class=seealsolinks><a href="id_grid_map_command_line.htm">ID Grid map : command line</a></p>
+<p class=seealsolinks><a href="id_grid_map_algorithm.htm">ID Grid map : algorithm</a></p>
+
+</body

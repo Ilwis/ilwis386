@@ -1,0 +1,379 @@
+<html>
+
+<head>
+<title>MapCalc/TabCalc : general syntax</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Main window, Table window, Command line, Map calculation, Table calculation, Calculation, MapCalculate, ColumnCalculate, History of expressions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>General syntax</h1>
+
+<!--<hr>-->
+
+<h2>Introduction</h2>
+
+<p>To calculate with raster maps, you can use the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the Main window</a>; to calculate with columns in a table, you can use the <a href="..//ilwis/popup/command_line_table_window_popup.htm" onClick="return popup(this, 'notes')" >command line of a table window</a>. </p>
+
+<p class=defnewpar>A MapCalc or TabCalc formula consists of:</p>
+
+<ul>
+	<li>an <a href="#outputname"><b>output</b> <b>raster</b> <b>map</b> <b>name</b></a> or an <a href="#outputname"><b>output</b> <b>column</b> <b>name</b></a> that will contain the result of the calculation,</li>
+	<li>a <a href="#symbol"><b>definition</b> <b>symbol</b></a> (<b>=</b>), or an <a href="#symbol"><b>assignment</b> <b>symbol</b></a> (<b>:=</b>), and</li>
+	<li>an <a href="#expression"><b>expression</b></a>.</li>
+</ul>
+
+<p class=calctitle>MapCalc syntax</p>
+<p class=syntax><b>OutputMap</b>&nbsp; <b>=</b> <b> Expression</b><br>
+<b>OutputMap</b> <b>:=</b> <b>Expression</b></p>
+
+<p class=calctitle>TabCalc syntax </p>
+<p class=syntax><b>OutputColumn</b>&nbsp; <b>=</b> <b> Expression</b><br>
+<b>OutputColumn</b> <b>:=</b> <b>Expression</b></p>
+
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+	<li>MapCalc formulae, typed on the command line of the Main window, are always performed on all pixels of the input map(s) and the answers are written to the pixels of the output map. By default, the command line of the Main window assumes raster map objects; when <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >object extensions</a> are specified, you can also work with other objects. </li>
+	<li>TabCalc formulae, typed on the command line of a table window, are by default performed on the records of the input column(s) and the answers are written to the records of the output column. By default, the command line of a table window assumes
+      columns. </li>
+</ul>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+	<li>It does not matter whether you type in capitals or in small characters;
+      map and table calculation formulae are not case-sensitive. </li>
+	<li>When you use the <a href="../ilwisapp/map_calculation_dialog_box.htm">Map Calculation dialog box</a>, you have to type the expression part; the output map name has to be specified separately.</li>
+	<li>Advanced users who are certain that a typed formula is correct, may skip
+      any dialog boxes by ending the expression with a semi-colon (;).</li>
+	<li>To use TabCalc formulae in a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a>, i.e. using TabCalc formulae on the command line of the Main window, see <a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="appendices_ilwis_scripts_language_syntax.htm#script_expressions_tabcalc"><span class=bookmark>TabCalc</span></a><span class=bookmark></span>.</li>
+	<li>ILWIS integer mathematics is limited to 32 bits (i.e. from -2147483647 to 2147483647).
+      This means that any integer calculation which exceeds these limits, also within
+      memory, may lead to
+      unpredictable results. </li>
+	<li>Using a MapCalc expression like <span class=courier>Map1=Map1*1000</span>
+      leads to
+      an error message because the expression is cyclic. The same goes for a TabCalc expression like <span class=courier>Column1=Column1*100</span>. </li>
+</ul>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub> MapCalc example</p>
+<p>A simple MapCalc formula reads:</p>
+<p class=calc0>OutMap = InMapA + InMapB</p>
+<p class=emptylinehalf>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>InMapA</p></td>
+	<td><p class=courier>InMapB</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>2</td>
+    <td class=calcpict>3</td>
+  </tr>
+  <tr>
+    <td class=calcpict>4</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>6</td>
+  </tr>
+  <tr>
+    <td class=calcpict>7</td>
+    <td class=calcpict>8</td>
+    <td class=calcpict>9</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>20</td>
+    <td class=calcpict>30</td>
+  </tr>                 
+  <tr>
+    <td class=calcpict>40</td>
+    <td class=calcpict>50</td>
+    <td class=calcpict>60</td>
+  </tr>
+  <tr>
+    <td class=calcpict>70</td>
+    <td class=calcpict>80</td>
+    <td class=calcpict>90</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>11</td>
+    <td class=calcpict>22</td>
+    <td class=calcpict>33</td>
+  </tr>
+  <tr>
+    <td class=calcpict>44</td>
+    <td class=calcpict>55</td>
+    <td class=calcpict>66</td>
+  </tr>
+  <tr>
+    <td class=calcpict>77</td>
+    <td class=calcpict>88</td>
+    <td class=calcpict>99</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>The values of the pixels in <span class=courier>OutMap</span> are the sums of the values in the corresponding pixels of <span class=courier>InMapA</span> and <span class=courier>InMapB</span>. </p>
+
+<p class=kopje>TabCalc example</p>
+<p>A simple TabCalc formula reads: </p>
+<p class="calc0">OutColumn = InColumnA + InColumnB</p>
+
+<p class=defnewpar>In the table, this looks as follows:</p>
+<p class=emptylinehalf>&nbsp;</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" width="60"><p class="tcolh">InColumnA</p></td>
+    <td valign="top" width="60"><p class="tcolh">InColumnB</p></td>
+    <td valign="top"><p class="tcolh">OutColumn</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="60"><p class="t1">1</p></td>
+    <td valign="top" width="60"><p class="t1">10</p></td>
+    <td valign="top"><p class="t1">11</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="60"><p class="t1">2</p></td>
+    <td valign="top" width="60"><p class="t1">20</p></td>
+    <td valign="top"><p class="t1">22</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="60"><p class="t1">3</p></td>
+    <td valign="top" width="60"><p class="t1">30</p></td>
+    <td valign="top"><p class="t1">33</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="60"><p class="t1">4</p></td>
+    <td valign="top" width="60"><p class="t1">40</p></td>
+    <td valign="top"><p class="t1">44</p></td>
+  </tr>
+</table>
+
+<p class="defnewpar">Each record in column <span class="courier">OutColumn</span> stores the sum of the values of the records in <span class="courier">InColumnA</span> and <span class="courier">InColumnB</span>.</p>
+
+<h2 id="outputname">Names of maps and tables</h2>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a>, i.e. input or output map or table names, comply with Windows long file names.</p>
+
+<ul>
+	<li>In object names, any character may be used except<span class=courier> \ / : * ? &lt; &gt; | &quot;</span></li>
+	<li>The maximum length of an object name is 255 characters including the full path.</li>
+</ul>
+
+<p>Furthermore, it is not allowed to use <span class=courier>%</span> in any ILWIS object name.</p>
+
+<p class=defnewpar>However, on the command line, object names must be enclosed by <i>single quotes</i> when the object name:</p>
+
+<ul>
+	<li>starts with a digit from 0 to 9; </li>
+	<li>contains one or more spaces; </li>
+	<li>contains any of the following characters<span class=courier> ` ~ ! @ # $ ^ &amp; ( ) - + = [ ] { } ; ' , .</span> </li>
+</ul>
+
+<p>Object extensions should be left outside the quotes. When an object name already contains a single quote, this single quote must be duplicated. </p>
+
+<p class=defnewpar>Thus, on the command line, single quotes around object names can only be omitted when object names start with a character between A to Z and do not contain spaces nor special characters.</p>
+
+<p class=tip>Note:</p>
+<p class=tiptext>When an existing output map name is specified, a message box will appear asking whether to overwrite the existing map or not.</p>
+
+<p class=defnewpar>For more information and examples, see <a href="how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<h2 id="symbol">Definition symbol <b>=</b> &nbsp;&nbsp;&nbsp; Assignment symbol <b>:=</b></h2>
+
+<p>By using the <b>defintion symbol =</b>, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> will be created. </p>
+
+<p class=linespacing03before>A dependent map or a dependent column has the following advantageous characteristics: </p>
+
+<ul>
+	<li>the formula/expression by which the map or column was created is stored (this is also called the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> of a map or column), </li>
+	<li>the formula/expression by which the output map or column was created can be changed/edited,</li>
+	<li>a series of dependent maps or columns can be recalculated/made up-to-date, when a single definition or a single <i>input</i> map or column has changed. </li>
+</ul>
+
+<p class=defnewpar>You can manage dependent maps and columns through: </p>
+
+<ul>
+
+<li>the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> sheet of a dependent map, </li>
+
+<li>the <a href="../ilwismen/column_properties.htm">Column Properties</a> of a dependent column. </li>
+
+</ul>
+
+<p>For more information, refer to <a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a>.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To make all columns in a table up-to-date, you can also click the <span class="arial">Update all columns</span> button <img src="../images/table_update_all_cols.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/table_window_toolbar.htm">toolbar</a> of a table window. </p>
+
+<p class=defnewpar>By using the <b>assignment symbol :=</b>, an editable map or column will be created. Dependency links are immediately broken after the output map or the output column has been calculated. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note:</span> It does not matter whether you type spaces around the definition or assignment symbol, or in the expression or not.</p>
+
+<h2 id="expression">Expression</h2>
+
+<p>The expression usually contains one or more input map names or column names combined with operators and/or functions to specify <b>what</b> calculation has to be performed. The operators and functions which can be used in Table Calculations are identical to those in Map Calculation.</p>
+
+<p class=defnewpar>For overviews of operators and functions, see: </p>
+
+<ul>
+	<li><a href="calc_aal.htm">Alphabetic overview of operators and functions</a>, or </li>
+	<li><a href="calc_aaf.htm">Functional overview of operators and functions</a>. </li>
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+	<li>Operators are for instance <span class=courier><a href="calc_addition_operator.htm">+</a> <a href="calc_subtraction_operator.htm">-</a> <a href="calc_division_operator.htm">/</a> <a href="calc_multiplication_operator.htm">*</a> <a href="calc_exponential_operator.htm">^</a></span> etc.</li>
+	<li>Some regularly used functions are for instance <a href="calc_iff.htm"><span class=courier>IFF(</span><i>a,b,c</i><span class=courier>)</span></a>, <i>a</i> <a href="calc_and_operator.htm"><span class=courier>AND</span></a> <i>b</i>, <a href="calc_sqrt.htm"><span class=courier>SQRT(</span><i>a</i><span class=courier>)</span></a>, <a href="calc_pow.htm"><span class=courier>POW(</span><i>a,b</i><span class=courier>)</span></a>, <a href="calc_log.htm"><span class=courier>LOG(</span><i>a</i><span class=courier>)</span></a>, etc.</li>
+	<li>Some constant values are predefined: the value <span class=symbol>p</span> can be used by typing <a href="calc_predefined_values.htm"><span class=courier>PI</span></a>, the value <span class=courier>e</span> can be used by typing <span class=courier><a href="calc_predefined_values.htm">EXP(1)</a></span>.</li>
+	<li>To use line numbers or column numbers as variables in calculations, you can use <a href="calc_predefined_variable_l.htm"><span class=courier>%L</span></a> (line) or
+      <a href="calc_predefined_variable_c.htm"><span class=courier>%C</span></a> (column).</li>
+	<li>To use X-coordinates or Y-coordinates as variables in calculations, you can use
+      <a href="calc_predefined_variable_x.htm"><span class=courier>%X</span></a> and
+      <a href="calc_predefined_variable_y.htm"><span class=courier>%Y</span></a>.</li>
+	<li>To use record numbers, or class names or IDs from the table domain as variables in calculations, you can use
+      <a href="calc_predefined_variable_r.htm"><span class=courier>%R</span></a> (record) and <a href="calc_predefined_variable_k.htm"><span class=courier>%K</span></a> (key).</li>
+</ul>
+
+<p>Examples of the usage of a function are presented in the topic on the function.</p>
+
+<p class=defnewpar>Furthermore, advanced users may wish to create their own <a href="..//ilwis/popup/objects_userdef_functions_popup.htm" onClick="return popup(this, 'notes')" >functions</a>. For more information, see <a href="calc_creating_and_applying_user_defined_functions.htm">Map and Table Calculation : User-defined functions</a>.</p>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>Input object names that contain spaces or special characters should be enclosed by 'single quotes', see the section on <a href="#outputname"><span class=bookmark>Names of maps and tables</span></a> above.</li>
+	<li>When using class names or IDs or their codes in expressions, these should be enclosed by &quot;double quotes&quot;, e.g. &quot;Coffee&quot;.</li>
+</ul>
+
+<p class="tip">Tip:</p>
+<p class="tiptext">It is advised to use built-in functions instead of creating a combination of simple functions which perform the same calculation because pre-defined functions are quicker.</p>
+
+<h2>Miscellaneous</h2>
+    
+<p class=kopjeaftertitlesub>General information on the command lines: </p>
+
+<ul>
+	<li>The maximum length of an expression on the command line is 32000 characters. You can use the (<span class=arial>Ctrl+</span>) <span class=arial>Left</span> and <span class=arial>Right Arrow</span> keys on the keyboard to move back and forth in your formula. Use the somewhat larger <a href="../ilwisapp/map_calculation_dialog_box.htm">MapCalc dialog box</a> if you
+      wish to type a MapCalc formula on multiple lines.</li>
+	<li>The command line has a <a href="..//ilwis/popup/history_popup.htm" onClick="return popup(this, 'notes')" >history</a>: press the <span class="arial">Up Arrow</span> key to retrieve previously used expressions; the <span class="arial">Down Arrow</span> key is used to 'scroll' forward again. You can also open the list of previously used commands and expressions by clicking the arrow at the right hand side of the command line. The amount of commands and expressions that can be retrieved can be set in the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>.</li> 
+	<li>You can use the command line as a <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >pocket calculator</a> by typing a question mark ? followed by an expression, i.e. do not specify an output map/column name nor a definition or assignment symbol. </li>
+</ul>
+
+<p class=kopje>Raster Map Definition dialog box: </p>
+
+<p>After typing a MapCalc formula on the command line of the Main window, and pressing <span class=arial>Enter</span>, the <a href="../ilwismen/raster_map_definition.htm">Raster Map Definition</a> dialog box will appear, in which you can: </p>
+
+<ul>
+	<li>accept or modify your expression; </li>
+	<li>accept or specify the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> that should be used by the output map;</li>
+	<li>for <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>, accept or modify the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of the output map;</li>
+	<li>accept or modify the description of the output map.</li>
+</ul>
+
+<p>Normally, ILWIS will come up with correct defaults for domain, value range and precision. </p>
+
+<p class="kopje">Column Properties dialog box:</p>
+
+<p>After typing a TabCalc formula on the command line of a table window, and pressing <span class="arial">Enter</span>, the <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box will appear, in which you can:</p>
+
+<ul>
+	<li>accept or modify your expression;</li>
+	<li>accept or specify the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> that should be used by the output column;</li>
+	<li>for <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value columns</a>, accept or modify the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of the output column;</li>
+	<li>specify the position of the column in the table, the width with which the column should be displayed, the number of decimals that should be displayed;</li>
+	<li>accept or modify the description of the output column. </li>
+</ul>
+
+<p>Normally, ILWIS will come up with correct defaults for domain, value range and precision.</p>
+
+<p class=kopje>Overruling the default domain, value range and precision: </p>
+
+<p>Generally, ILWIS will use correct defaults for the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> and possible <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of the output map(s) or columns. When using the <span class=arial><a href="../ilwismen/raster_map_definition.htm">Raster Map Definition</a></span> dialog box or the <span class=arial><a href="../ilwismen/column_properties.htm">Column Properties</a></span> dialog box, you will notice this. In <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a> however, these dialog boxes will never appear.</p> 
+
+<p class=defnewpar>To ensure that an output map or column will use a certain <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>, and/or a certain <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and/or a certain <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a>, you can specify this yourself within a pair of curly brackets {} after the output map/column name. </p>
+
+<p class=defnewpar>Within the curly brackets, you can specify:
+
+<ul>
+	<li>the domain as <span class=courier>dom=</span><i>MyDomain</i> </li>
+	<li>the value range as <span class=courier>vr=</span><i>min:max:precision</i>, or as <span class=courier>vr=</span><i>min:max</i>, or as <span class=courier>vr=</span><i>::precision</i> </li>
+</ul>
+
+<p class=linespacing03before>When you specify both domain and value range, separate these with a semicolon. </p>
+
+<p class="tip">Notes:</p>
+<ul class=tipul>
+  <li class=li01be>ILWIS expressions are not case-sensitive.
+  <li class=li01be>Spaces are allowed after output object names, around the definition or assignment symbol, and before and behind brackets, commas, or semicolons.
+  <li class=li01be>Spaces are not allowed before or behind colons.</li>
+  <li class=li01be>ILWIS uses its internal defaults to determine whether the internal calculation will be performed in integers or in reals. <br>In general it can be said, that:</p>
+  	<ul>
+		<li>when the input consists of integers, the internal calculation will also be performed in integers; </li>
+		<li>when the input consists of reals, the internal calculation will also be performed in reals. </li>
+	</ul>
+
+  <p class=linespacing01before>Any user specification of the desired output domain and value range can only limit the results from the internal calculation. It is thus not possible, that when all input is in integers, to obtain output in reals by using a precision smaller than 1, for instance by using <span class=calc0>OUT{dom=Value;vr=0:10000:0.001} = ...</span>. </p>
+
+</ul>
+
+<p class=calctitle>Examples</p>
+<p class=calc0>OUT1{dom=MyVal} = <i>expression</i></p>
+<p class=calc0>OUT2{dom=MyVal;vr=0:10000:1} = <i>expression</i></p>
+<p class=calc0>OUT3{dom=MyVal;vr=0:10000} = <i>expression</i></p>
+<p class=calc0>OUT4{dom=MyVal;vr=::0.001} = <i>expression</i></p>
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>For more information and examples, see <a href="appendices_construction_of_expressions.htm">Appendices : Construction of expressions</a>.</p>
+
+<p class="Seealso">See also:</p>
+<p class="seealsolinks"><a href="calc_aal.htm">MapCalc/TabCalc : Alphabetical overview of operators and functions</a></p>
+<p class="seealsolinks"><a href="calc_aaf.htm">MapCalc/TabCalc : Functional overview of operators and functions</a></p>
+<p class="seealsolinks"><a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a></p>
+<p class="seealsolinks"><a href="main_window_command_line.htm">Main window : command line</a></p>
+<p class="seealsolinks"><a href="table_window_command_line.htm">Table window : command line</a></p>
+<p class="seealsolinks"><a href="how_to_use_long_object_names.htm">How to use long object names</a></p>
+<p class="seealsolinks"><a href="appendices_construction_of_expressions.htm">Appendices : Construction of expressions</a></p>
+<p class="seealsolinks"><a href="how_to_calculate_with_undefineds_in_maps_and_tables.htm">How to calculate with undefineds in maps and tables</a></p>
+</body

@@ -1,0 +1,190 @@
+<html>
+
+<head>
+<title>Fill sinks : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Fill sinks">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Fill sinks</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Before using the Flow Direction operation, you may wish to clean up your Digital Elevation Model (DEM), so that local depressions (sinks) are removed from your DEM. </p>
+
+<p class=defnewpar>The Fill sinks operation will 'remove' the following from a Digital Elevation Model (DEM): </p>
+
+<ul>
+
+<li class=ls01be>depressions that consist of a single pixel, 
+         i.e. any pixel with a smaller height value than all of its 8 neighbouring pixels, </li>
+
+<li class=ls01be>depressions that consist of multiple pixels, 
+         i.e. any group of adjacent pixels where the pixels that have smaller height values than all pixels that surround such a depression. </li>
+
+</ul>
+
+<p class=kopje>Process:</p>
+
+<p>When a depression of a single pixel is encountered: </p>
+
+<ul>
+
+<li>then the height value of this pixel will be increased to the smallest value of its 8 neighbour pixels. </li>
+
+</ul>
+
+<p class=defnewpar>When a depression of multiple pixels is encountered: <p>
+
+<ul>
+
+<li>then the height values of this depression will be increased to the smallest value of a pixel 
+
+        that is both adjacent to the outlet for the depression, and that would discharge into the initial depression. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>The height values of the following pixels will <i>never</i> be changed in the output map:</p>
+
+        <ul>
+
+        <li>pixels at the border of the map,</li>
+        
+        <li>pixels that have the undefined value,</li>
+
+        <li>pixels that are adjacent to pixels with the undefined value. </li>
+
+        </ul>
+
+
+<p class=defnewpar>For detailed information on the internal working of the Fill sinks operation, see <a href="fill_sinks_algorithm.htm">Fill sinks : algorithm</a>.</p>
+
+<p class=defnewpar>An example of using the Fill sinks operation, followed by the Flow direction and the Flow accumulation operations is given in Figures 1a - 1d below. </p>
+
+<p class=kopje>Output:</p>
+
+<p>The resulting output map of the Fill sinks operation is a so-called sink-free or depression-free DEM. This means that for every pixel in the DEM, a flow direction will be found towards the edges of the map. </p>
+
+<p class=defnewpar>In this way, it is ensured that, when using the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation on the output DEM of the Fill sinks operation, and a subsequent <a href="..//ilwisapp/popup/flow_accumulation_popup.htm" onClick="return popup(this, 'notes')" >Flow accumulation</a> operation on the output map of the Flow direction operation: </p>
+
+<ul>
+
+<li>outlets will always be found towards the edges of the map, </li>
+
+<li>lakes and flat areas will not act as 'consuming' reservoirs of water but will still discharge towards an outlet. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>After using the Fill sinks operation, but before using the Flow direction and Flow accumulation operations, 
+
+        you can use the <a href="..//ilwisapp/popup/dem_optimization_popup.htm" onClick="return popup(this, 'notes')" >DEM optimization</a> operation on the output DEM of the Fill sinks operation, to further improve your DEM. </p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>; the input map is expected to be a Digital Elevation Model (DEM). </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output map will use the same domain and the same georeference as the input map. </p>
+
+<p class=kopje>Example of using Fill sinks, Flow direction and Flow accumulation:</p>
+
+<p>Figures 1a - 1d below show the complete process of using Fill sinks, Flow direction and Flow accumulation. The last picture, Fig. 1e, shows the result of using Flow direction and Flow accumulation directly on the input map, without using the Fill sinks operation. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td width="250">Figure 1a: Input map for Fill sinks. </td>
+
+<td width="20">&nbsp;</td>
+
+<td width="250">Figure 1b: Output map of Fill sinks.</td>
+
+</tr>
+<tr>
+<td width="250"><img src="../images/fillsinks_process_input.gif" width="228" height="228"></td>
+
+<td width="20">&nbsp;</td>
+
+<td width="250"><img src="../images/fillsinks_process_outfillsinks.gif" width="228" height="228"></td>
+
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td width="250">Figure 1c: Result of Flow direction.</td>
+
+<td width="20">&nbsp;</td>
+
+<td width="250">Figure 1d: Result of Flow accumulation.</td>
+
+</tr>
+<tr>
+<td width="250"><img src="../images/fillsinks_process_outflowdir.gif" width="228" height="228"></td>
+
+<td width="20">&nbsp;</td>
+
+<td width="250"><img src="../images/fillsinks_process_outflowacc.gif" width="228" height="228"></td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td width="250">Figure 1e: Result of Flow accumulation when Fill sinks is not used. </td>
+
+<td width="20">&nbsp;</td>
+
+<td width="250">&nbsp;</td>
+
+</tr>
+<tr>
+<td width="250"><img src="../images/fillsinks_process_outflowacc_nofillsinks.gif" width="228" height="228"></td>
+
+<td width="20">&nbsp;</td>
+
+<td width="250">&nbsp;</td>
+</tr>
+
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="fill_sinks_dialogbox.htm">Fill sinks : dialog box</a></p>
+
+<p class=seealsolinks><a href="fill_sinks_commandline.htm">Fill sinks : command line</a></p>
+
+<p class=seealsolinks><a href="fill_sinks_algorithm.htm">Fill sinks : algorithm</a></p>
+
+<p class=seealsolinks><a href="dem_optimization_functionality.htm">DEM optimization : functionality</a></p>
+
+</body

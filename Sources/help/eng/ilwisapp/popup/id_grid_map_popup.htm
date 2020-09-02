@@ -1,0 +1,31 @@
+<html>
+
+<head>
+<title>id grid map popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>ID Grid Map</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/id_grid_map.htm" onClick="return popup(this, 'notes')" >ID Grid map</a> operation uses a coordinate system and optionally an attribute table as input and creates a polygon map as output. The output polygon map consists of rectangular grid cells with a unique ID, and can be linked to a table with attribute data when sample data is available for the rectangular grid cells (e.g. biodiversity data in 5x5 km blocks).</p> 
+<p>Besides the above, the operation can create an additional point map with label points at the center of each grid cell.</p>
+
+</body

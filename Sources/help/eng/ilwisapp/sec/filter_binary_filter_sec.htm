@@ -1,0 +1,185 @@
+<html>
+
+<head>
+<title>filter binary filter sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Example binary filters</p>
+
+<p>A <a href="..//ilwisapp/filters_types_binary_filters.htm" onClick="return popup(this, 'notes')" >binary filter</a> interprets <i>zero values</i> in the input map as 0 (false), and <i>all other defined values</i> in the input map as 1 (true). For each 9 input pixels, these values are arranged in a special order or bit position:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>5</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>6</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>7</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>4</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>8</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>3</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>2</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>1</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>where 0 means the last position, 1 the one but last position, etc. </p>
+
+<p class=defnewpar>This results in a binary number of 9 digits which solely depends on the position of true and false pixels in the input map. To decide whether the central pixel should be assigned a 0 or 1, the binary number is looked up in a table which is present in each binary filter itself. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ol>
+
+<li>	When for example the following 9 input pixels are considered:</li>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>0</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>0</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>1</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>1</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+
+<li>	The binary ordering results in the following binary number: <span class=courier>000001110</span><br>
+
+        (This equals: 2<sup>1</sup> + 2<sup>2</sup> + 2<sup>3</sup> = 2+4+8 = 14)</li>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	The number is looked up in a table which is present in each binary filter itself. <br>
+The table of the DILATE4 filter gives for 14, output value 1<br>
+0-63=01011111010111<span class=DefaultStyle><u><b>1</b></u></span>1111111111111111101011111010111111111111111111111 <br>
+		  ......... <br>
+You can see this for instance by opening <span class=courier>Dilate4.fil</span> from your <span class=courier>ILWIS\SYSTEM</span> directory in an ASCII editor such as Notepad.</li>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	Thus, the  value assigned to the center pixel in the output map is <b>1</b> (was 0 in the input map).</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_types_binary_filters.htm" onClick="return popup(this, 'notes')" >Filter types : binary filters</a></p>
+
+</body

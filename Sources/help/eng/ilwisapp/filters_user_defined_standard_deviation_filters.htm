@@ -1,0 +1,150 @@
+<html>
+
+<head>
+<title>Filters : user-defined standard deviation filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filters, User-defined filters, Standard deviation filters, Use ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Filters</h1>
+
+<h1 class=secondline>User-defined standard deviation filters</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>There is no standard standard deviation filter stored on disk. You always have to define a standard deviation filter yourself, either through the Filter dialog box or by an expression on the command line of the Main window. </p>
+
+<p class=kopje>Using the Filter dialog box:</p>
+
+<p>To define your own standard deviation filter: </p>
+
+<ul>
+
+<li>	Open the Filter dialog box,</li>
+
+<li>	for <span class=arial>Filter Type</span>, select: Standard Deviation, </li>
+
+<li>	specify the size of the filter.</li>
+
+</ul>
+
+<p class=kopje>Using the command line (advanced):</p>
+
+<p>To define your own Standard Deviation filter, type the following expression on the command line of the Main window: </p>
+
+<p class=emptyline>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName, <span class=courier>FilterStandardDev</span>(<i>rows,cols</i>))</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapFilter</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Filter operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>FilterStandardDev</p>
+
+</td>
+<td valign="top">
+<p>is the command to define a standard deviation filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>rows</i></p>
+
+</td>
+<td valign="top">
+<p>are the number of rows of your standard deviation filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>cols</i></p>
+
+</td>
+<td valign="top">
+<p>are the number of columns of your standard deviation filter.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Example: </p>
+
+<p>To use a standard deviation filter which considers each<b> 7 vertically neighbouring pixels</b>:</p>
+
+<ul>
+
+<li>	in the Filter : dialog box, choose for <span class=arial>Filter type</span>: Standard Deviation, <br>
+specify 7 for the number of rows and <span class=courier>1</span> for the number of columns, </li>
+
+<li>	on the command line, use a filter definition of: <span class=courier>FilterStandardDev(7,1)</span>. </li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<ul class=tipul>
+
+<li>	Both the number of rows and the number of columns defining the filter size must be <i>odd</i> values.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filter_types_standard_deviation_filters.htm">Filter types : standard deviation filters</a></p>
+
+<p class=seealsolinks><a href="filter_dialog_box.htm">Filter : dialog box</a></p>
+
+<p class=seealsolinks><a href="filter_command_line.htm">Filter : command line</a></p>
+
+</body

@@ -1,0 +1,139 @@
+<html>
+
+<head>
+<title>Segment editor : Paste</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Paste from clipboard, Segment editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Segment editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/segment_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Paste</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Paste data from the clipboard into the current segment map. </p>
+
+<p class=defnewpar>Into a segment map, it is possible to paste:</p>
+
+<ul>
+
+<li>    <a href="point_editor_cut_selection.htm">cut</a> or <a href="point_editor_copy_selection.htm">copied</a> points from a point map (as one segment), </li>
+
+<li>	<a href="segment_editor_cut_selection.htm">cut</a> or <a href="segment_editor_copy_selection.htm">copied</a> segments from a segment map, </li>
+
+<li>	<a href="polygon_editor_copy_selection.htm">copied</a> polygons boundaries from a polygon map, </li>
+
+<li>	<a href="pixel_editor_cut_selection.htm">cut</a> or <a href="pixel_editor_copy_selection.htm">copied</a> pixels from a raster map (as one segment). </li>
+
+</ul>
+
+<p class=tip>Mind: </p>
+
+<p class=tiptext>The map from which you have cut or copied points, segments, polygons or pixels must have the <i>same domain type</i> (i.e. either class, ID, or value, etc.) as the segment map into wish to paste these points, segments, polygons or pixels. </p>
+
+<p class=tiptext>This means that it is not possible to paste for instance copied contour segments (values) into a segment map which uses a class domain and vice versa. </p>
+
+<p class=kopje>To paste:</p>
+
+<ul>
+
+<li>	choose <span class=arial>Paste</span> from the <span class=arial>Edit</span> menu, or</li>
+
+<li>	press <span class=arial>Ctrl+V</span> on the keyboard.</li>
+
+</ul>
+
+<p class=defnewpar>In case you cut or copied from a map with a class or ID domain, and now pasting this into a segment map which uses <i>another</i> class or ID domain, the program will try to add any domain items which are not yet present in the domain of the current map to the domain of the current map. A question will be asked to confirm this. </li>
+
+<p class=defnewpar>Answer the question(s) to add encountered class name(s) or ID(s) from another class or ID domain to the current class or ID domain with:</p>
+
+<ul>
+
+<li>	<span class=courier>yes</span>: to add the encountered domain item to the present domain, or</li>
+
+<li>	<span class=courier>no</span>: to skip the encountered domain item and continue with the next item, or</li>
+
+<li>	<span class=courier>cancel</span>: to interrupt the pasting and return to the segment editor.</li>
+
+</ul>
+
+<p class=kopje>Results of pasting:</p>
+
+<p>When pasting points into a segment map:</p>
+        
+        <ul>
+
+        <li>all pasted points will keep their coordinates; </li>
+
+        <li>all pasted points will together form one segment in the current segment map; </li>
+
+        <li>the single output segment will obtain the class name, identifier or value of the first point encountered. </li>
+
+        </ul>
+
+<p class=defnewpar>When pasting segments into a segment map:</p>
+
+        <ul>
+
+        <li>all pasted segments will keep their coordinates, </p>
+
+        <li>all pasted segments will keep their class names, identifiers or values. </li>
+
+        </ul>
+
+<p class=defnewpar>When pasting polygons into a segment map:</p>
+
+        <ul>    
+      
+        <li>all pasted polygons boundaries will keep their coordinates, </li>
+
+        <li>the polygon boundaries will appear as segments in the current segment map, </li>
+
+        <li>you may need to check the obtained class names, identifiers or values. </li>
+
+        </ul>
+
+<p class=defnewpar>When pasting pixels into a segment map:</p>
+        
+        <ul>
+
+        <li>all pasted pixels will keep their coordinates; </li>
+
+        <li>all pasted pixels will together form one segment in the current segment map; </li>
+
+        <li>the single output segment will obtain the class name, identifier or value of the first pixel encountered. </li>
+
+        </ul>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>You can use Windows' Clipboard/Clipbook Viewer to inspect the current contents of the clipboard in various formats. For more information on the Clipboard Viewer, see the Windows Help.</li>
+
+<li>An example of segments copied to the clipboard is presented in <a href="segment_editor_copy_selection.htm">Segment editor : Copy</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_menu_commands.htm">Segment editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="segment_editor_select_mode.htm">Segment editor : Select mode</a></p>
+
+<p class=seealsolinks><a href="segment_editor_copy_selection.htm">Segment editor : Copy</a></p>
+
+</body

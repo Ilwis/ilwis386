@@ -1,0 +1,3338 @@
+<html>
+
+<head>
+<title>Appendices : ILWIS script language (syntax)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Scripts, Command line, Appendices, ILWIS script language, Syntax, DDE, Properties of objects, Domains, Representation, Georeference, Two-dimensional tables, Import, Import expressions, ASC, ASCII, ASTER, HDF, Bitmap, BMP, Atlas, BNA, AutoCad, DXF, Arc/Info, E00, LIN, PTS, Erdas, GIS (Erdas format), LAN, ArcGIS, PRJ, GARtrip (GPS data), GPS, GIF, IDA, IMG (format), Idrisi, DOC (Idrisi format), ILWIS 3 formats, InfoCam, SEQ, PaintBrush, PCX, Arc/View, Shape files, SHP, SMT (ILWIS 1.x ASCII vector format), TIFF, GeoTIFF, ILWIS import, Map import, General Raster import, Table import, dBase, DBF, Delimited, Comma delimited, Space delimited, ILWIS 1.4 formats, Fixed format, Standard format, SDF, Export, Export expressions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Appendices</h1>
+
+<h1 class=secondline>ILWIS script language (syntax)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> is a sequenced list of ILWIS commands and expressions. By creating a script, you can build a complete GIS or Remote Sensing analysis for your own research discipline. </p>
+
+
+<p class=defnewpar>This topic consists of a number of sections: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">
+<p><a href="#script_general_info"><span class=bookmark>1. General information</span></a></p>
+
+<p><a href="#script_expressions_calc_operations"><span class=bookmark>2. Expressions for calculations and operations</span></a>:</p>
+
+        <p class=leftmargin06><a href="#script_expressions_mapcalc"><span class=bookmark>2a. MapCalc</span></a></p>
+
+        <p class=leftmargin06><a href="#script_expressions_tabcalc"><span class=bookmark>2b. TabCalc</span></a></p>
+
+        <p class=leftmargin06><a href="#script_expressions_operations"><span class=bookmark>2c. Operations</span></a></p>
+        
+<p><a href="#script_additional"><span class=bookmark>3. Additional script commands</span></a></p>
+
+        <p class=leftmargin06><a href="#script_remarks_messages_pause"><span class=bookmark>3a. Remarks etc. </span></a></p>
+
+        <p class=leftmargin06><a href="#script_opening_objects"><span class=bookmark>3b. Opening objects</span></a></p>
+
+        <p class=leftmargin06><a href="#script_data_management"><span class=bookmark>3c. Data management</span></a></p>
+
+        <p class=leftmargin06><a href="#script_properties_of_objects"><span class=bookmark>3d. Properties of objects</span></a></p>
+
+        <p class=leftmargin06><a href="#script_creating_objects"><span class=bookmark>3e. Creating objects</span></a></p>
+
+        <p class=leftmargin06><a href="#script_pyramids"><span class=bookmark>3f. Creating/deleting pyramid layers</span></a></p>
+
+        <p class=leftmargin06><a href="#script_domainconversion"><span class=bookmark>3g. Converting domains</span></a></p>
+
+        <p class=leftmargin06><a href="#script_other"><span class=bookmark>3h. Other</span></a></p>
+
+
+</td>
+<td valign="top">
+<p>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p><a href="#import_commandline"><span class=bookmark>4. Import expressions</span></a>:</p>
+
+        <p class=leftmargin06><a href="#ilwis14rasimport_commandline"><span class=bookmark>4a. ILWIS 1.4 Raster Import</span></a></p>
+
+<p class=leftmargin06><a href="#ilwismapimport_commandline"><span class=bookmark>4b. ILWIS Map Import</span></a></p>
+<p class=leftmargin2><a href="#ilwisasterimport_commandline"><span class=bookmark>ILWIS ASTER Import</span></p>
+
+        <p class=leftmargin06><a href="#generalrasterimport_commandline"><span class=bookmark>4c. ILWIS General Raster Import</span></a></p>
+
+        <p class=leftmargin06><a href="#ilwistableimport_commandline"><span class=bookmark>4d. ILWIS Table Import</span></a></p>
+
+<p><a href="#export_commandline"><span class=bookmark>5. Export expressions</span></a></p>
+
+        <p class=leftmargin06><a href="#ilwisexport_commandline"><span class=bookmark>5a. ILWIS Export</span></a></p>
+
+</td>
+</tr>
+</table>
+
+<h2 id="script_general_info">1. General information</h2>
+
+<p>Each line in a script is a statement that is executed via the ILWIS command line of the Main window. Via a script, you can for instance handle some necessary object management (e.g. copy or delete), display of objects (open or show), and the creation and calculation of data objects. All map and table <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculations</a>, and all <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >ILWIS expressions</a> to perform <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operations</a> may be used. Furthermore, you can call other scripts and start other Windows applications from within a script. </p>
+
+<p class=defnewpar>When you run a script, no dialog boxes appear and no questions are asked; all lines in the script are simply performed. Error messages appear in case syntax errors are detected in a MapCalc expression, in a TabCalc expression, in an expression for another operation, or in a script command. Further error messages appear when a script command is not recognized, or when required objects are not found. A script line is ignored when the syntax is correct and necessary objects are found but the command cannot be performed otherwise (e.g. creating objects that already exist, missing or wrong extensions during a copy). </p>
+
+<p class=defnewpar>To use long directory names and/or long file names, the object name including a possible path should be enclosed in single quotes. For more information, see <a href="how_to_use_long_object_names.htm">How to use long object names</a>. </p>
+
+<p class=kopje>Parameters in scripts:</p>
+
+<p>A script can use parameters. Parameters in a script replace (parts of) object names, operations, etc. Parameters in scripts work as DOS replaceable parameters in DOS batch files, and must be written on the Script Tab in the script editor as <span class=courier>%1</span>, <span class=courier>%2</span>, <span class=courier>%3</span>, up to <span class=courier>%9</span>. For more information, see <a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a>.</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+  <li>On the Script tab, you can type your script commands and expressions. Optionally, you can use parameters %1 until %9.
+
+  <li>On the Parameters tab, you can assign names to parameters. Parameter names will be visible in the <span class="arial">Run Script</span> dialog box when you run the script.
+
+  <li>On the Default Values tab, you can fill out default objects for your parameters so that you can test the script and/or wish to have defaults in the <span class="arial">Run Script</span> dialog box.</li>
+
+</ul>
+
+<p class=kopje>To run a script:</p>
+
+<p>In <a href="how_to_run_scripts.htm">How to run scripts</a> you will find procedures to run scripts, e.g. run script with or without parameters, run script from the command line, etc.</p>
+
+<p class=kopje>Example:</p>
+
+<p>In <a href="how_to_use_parameters_in_scripts.htm"> How to use parameters in scripts</a> two script examples are given. A more elaborated example of a script to create slope maps in percentages and in degrees is presented in <a href="calc_creating_and_running_scripts.htm">Map and Table calculation : creating and running scripts</a>.</p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>Single text lines of a script, i.e. the commands and expressions described below, can also be typed on the command line of the Main window or the Table window. To avoid any dialog boxes when typing on the command line, you can use a semicolon ; at the end of a command line expression. In a script, semicolons at the end of a line are not required. </p>
+
+
+<h2 id="script_expressions_calc_operations">2. Expressions for calculations and other operations</h2>
+
+<p>Most text lines in a script will consist of MapCalc and TabCalc expressions and expressions of operations that you can also type on the command line of the Main window or on the command line of a Table window. You should be familiar with these expressions. </p>
+
+<ul>
+
+<li>For an overview of MapCalc and TabCalc operators and functions, refer to <a href="calc_aal.htm">Map and Table Calculation : Alphabetical overview of operators and functions</a>
+  or <a href="calc_aaf.htm">Map and Table Calculation : Functional overview of operators and functions</a>.</li>
+
+<li>For an overview of expressions for other operations, refer to <a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a>. </li>
+
+<li>For more information on the creating of expressions, see <a href="appendices_construction_of_expressions.htm">Appendices : construction of expressions</a>.</p> </li>
+
+</ul>
+
+<h3 id="script_expressions_mapcalc">2a. MapCalc</h3>
+
+<p>For <a href="calc.htm">MapCalc</a> expressions, no special syntax is required: you can simply type the MapCalc expression as you would type it on the command line of the Main window. </p>
+
+<p>For example, to sum maps <span class=courier>map1</span> and <span class=courier>map2</span> to create <span class=courier>map3</span>, type in the script:</p>
+
+<p class=calc0>map3=map1+map2</p>
+
+<p>By this expression, <span class=courier>map3</span> is defined but not yet calculated. You can continue defining other (intermediate) maps, but at the end of a series of calculations, it is advised to calculate the last output map of these calculations. Intermediate maps will be calculated automatically when the final map is calculated. </p>
+
+<p class=linespacing03before>To force the calculation of a final map of a series of calculations, use:</p>
+
+<p calccommline><span class=courier>calc</span> <i>mapname</i><span class=courier>.mpr</span> </p>
+
+<p class=linespacing03before>The script will continue with the next line, only after the calculation has finished. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>For the <span class=courier>calc</span> command in a script, the extension of the object to be calculated is required.</p>
+
+<h3 id="script_expressions_tabcalc">2b. TabCalc</h3>
+
+<p>For <a href="calc.htm">TabCalc</a> expressions, it is necessary that you type <span class=courier>tabcalc </span><i>tablename</i> in front of the tabcalc expression. For example, to sum columns <span class=courier>col1</span> and <span class=courier>col2</span> in table <span class=courier>MyTable</span> and to store the results in column <span class=courier>col3</span>, type in the script:</p>
+
+<p class=calc0>tabcalc MyTable col3=col1+col2</p>
+
+<p class=defnewpar>For the <span class=courier>tabcalc</span> command in a script and when calculating with tables, the extension .TBT is not required. Only to calculate with columns in table-like objects which can be opened as a table, e.g. histograms, point maps, class representations (see also <a href="../ilwis/how_to_open_objects_as_a_table_advanced.htm">How to open objects as a table</a>), an extension is required. To calculate with the histogram of raster map <span class=courier>MyMap</span>, you can type e.g.:</p>
+
+<p class=calc0>tabcalc MyMap.his a=b+c</p>
+
+<p class=defnewpar>Columns of the <span class=arial>ColumnCalculate</span> type, i.e. result of normal column calculations, will directly both be defined and calculated. There is no thus need to use the <span class=courier>calc</span> command separately as with MapCalc. </p>
+
+<p class=defnewpar>However, you must force the calculation of columns which are <i>not</i> of the <span class=arial>ColumnCalculate</span> type, e.g. result of an aggregation or a join, when you wish to make further calculations on the aggregation or join results. This includes for instance columns of the types <span class=arial>ColumnAggregate</span>, <span class=arial>ColumnJoin</span>, and <span class=arial>ColumnLeastSquaresFit</span>. To force the calculation of such columns, you can use:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p><span class=courier>calc</span> <i>tablename.ext</i> </p>
+
+</td>
+<td valign="top">
+<p>In table <i>tablename.ext</i>, (re)calculate all columns.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>calccol</span> <i>tablename.ext.columnname</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>In table <i>tablename.ext</i>, (re)calculate column <i>columnname</i>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=linespacing03before>The script will continue with the next line, only after the calculation has finished. </p>
+
+<p class=tiptext><span class=tip>Mind: </span>For the <span class=courier>calc</span> and the <span class=courier>calccol</span> commands in a script, the extension of the object to be calculated is required.</p>
+
+<p class=defnewpar>Finally, when you wish to perform a series of calculations in <i>one table</i>, it is advised to use the following script commands:</p>
+
+<P class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>opentbl</span><i> tablename.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Keep the table <i>tablename.ext</i> open; first line in the script before a series of TabCalc expressions on one table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>closetbl</span><i> tablename.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Close the open table <i>tablename.ext</i>; last line in the script after a series of TabCalc expressions on one table.</p>
+
+</td>
+</tr>
+</table>
+
+
+<h3 id="script_expressions_operations">2c. ILWIS operations</h3>
+
+<p>To perform ILWIS operations, you can use any ILWIS expression as described in <a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a>. To cross for example two maps (<span class=courier>map1</span> and <span class=courier>map2</span>) and obtain a cross table (<span class=courier>m1m2cr</span>), type in the script:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=calc00>m1m2cr = TableCross(map1,map2)</p>
+
+<p class=calc00>calc m1m2cr.tbt</p>
+
+<p class=defnewpar>For operations which result in a map, it is not necessary to force the calculation of temporary output objects. It is sufficient to force the calculation of the last output object in a series of calculations and operations, like in MapCalc. </p>
+
+<p class=defnewpar>However, for operations which result in a <i>table</i>, and when you wish to calculate with the columns in that table later on in the script, it is strongly recommended to force the calculation of the output table immediately after the operation. Some frequently used operations which result in a table are for instance: <span class=courier>TableCross</span> and all <span class=courier>TableHistogram</span> operations. To calculate for instance the histogram of raster map <span class=courier>band1</span> and then do some further calculations in the histogram, use: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=calc00>band1 = TableHistogram(band1)</p>
+
+<p class=calc00>calc band1.his</p>
+
+<p class=calc00>tabcalc band1.his col3=iff(area&lt;500,0,area)
+
+<p class=defnewpar>In general, it is not necessary to specify the extensions of input or output objects of operations, although the ILWIS.LOG file and the command line may suggest so. Only when an operation can use multiple types of input objects for a certain parameter, the extension of the desired object must be specified. Furthermore, it is not required to specify domain type and/or value range for every output object: the script will use defaults as in the Raster Map Definition dialog box and in any dialog box of an operation. </p>
+
+<h2 id="script_additional">3. Additonal script commands</h2>
+
+<p>A number of additional script commands is available for data management, to show objects, handle object properties, edit object properties, create objects, calling other scripts, etc. </p>
+
+<p class=defnewpar>In many of the following script commands, object names and <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >extensions</a> of their <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition files</a> must be specified (see also <a href="appendices_general_structure_of_object_definition_files.htm">Appendices : object definition files</a>). In some script commands, you are allowed to use wildcards <span class=courier>*</span> and <span class=courier>?</span> to specify object names and their extensions (<i>object.ext</i> and <i>table.ext.col</i>). </p>
+
+<p class=defnewpar>When using a script command that works on a column in a table (<i>table.ext.col</i>), you can ignore the extension when the table has extension .TBT. Table extensions only need to be specified when the column is stored in a histogram, a point map, a class representation, a georeference tiepoints, etc. For more information, see <a href="../ilwis/how_to_open_objects_as_a_table_advanced.htm">How to open objects as a table</a>. </p>
+
+<p class=defnewpar>Further, in the list below, optional parameters of script commands are shown between square brackets. Omit these square brackets when writing a script. Square brackets are only recognized for TabCalc expressions to indicate a specific record in a table.</p>
+
+<h3 id="script_remarks_messages_pause">3a. Remarks, etc.</h3>
+
+<p class=kopjeboldandund>Remarks/comments, messages and pause:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>rem </span>This is a remark</p>
+
+</td>
+<td valign="top">
+<p>All text on this line after <span class=courier>rem</span> is ignored by the script. In this manner, you can document your script expressions. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>//</span> This is a remark</p>
+
+</td>
+<td valign="top">
+<p>All text on this line after <span class=courier>//</span> is ignored by the script. In this manner, you can document your script expressions. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>begincomment</span></p>
+
+<p class=calccommline>this line is comment</p>
+
+<p class=calccommline>this line is comment</p>
+
+<p class=calccommline>endcomment</p>
+
+</td>
+<td valign="top">
+<p>All lines of text between the commands <span class=courier>begincomment</span> and <span class=courier>endcomment</span> are ignored by the script. In this manner, you can document your script expressions and you can temporarily exclude parts of your script.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>message</span> Text in message box on my screen</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Obtain a message box on the screen with any text; the text can be as long as you like. After pressing the OK button in the message box, the script will continue. In this manner, you can display texts on the screen during demos, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>pause</span> <i>seconds</i></p>
+
+</td>
+<td valign="top">
+<p>Stop the script for a certain amount of time (seconds). You can use this command for instance when you want to show multiple maps and give the user time to view each one of them.</p>
+
+</td>
+</tr>
+</table>
+
+<h3 id="script_opening_objects">3b. Opening objects</h3>
+
+<p class=kopjeboldandund>Open/Show an object:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>show</span> <i>object.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Open/show object <i>object.ext.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>open</span> <i>object.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Open/show object <i>object.ext.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>open </span><i>object.ext</i> <span class=courier>-noask</span></p>
+
+</td>
+<td valign="top">
+<p>Open/show object <i>object.ext</i> with its default display options, i.e. a Display Options dialog box will be skipped. You can use this command for instance to quickly show a map on the screen.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>anaglyph </span><i>stereopair</i><span class=courier>.stp -noask</span></p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p>Open/show a stereo pair <i>stereopair</i><span class=courier>.stp</span> as an anaglyph with its default display options, i.e. the anaglyph's Display Options dialog box will be skipped. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>setnextwindowrect </span><i>X, Y, width, height</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Specify the position and size of the next window; the map or table that is displayed next will be displayed in that window. <i>X</i> and <i>Y</i> specify the top left position of the next window and are expressed in screen pixels measured from the top left of your screen; <i>Width</i> and <i>Height</i> specify the size of the next window and are also expressed in screen pixels. Parameters may be left blank, then ILWIS will decide on defaults. Syntax primarily useable in scripts and DDE. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=courier>closeall</p>
+
+</td>
+<td valign="top">
+<p>Close all ILWIS windows except the ILWIS Main window. You can use this command for instance to close any map and/or table windows which are displayed on the screen.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>To open objects with possible user interaction, see also <a href="../ilwis/appendices_ilwis_commands.htm">Appendices : ILWIS commands</a>. </p>
+
+<p class=kopjeboldandund>Open a pixel info window showing maps, map lists and/or coordinate systems:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>pixelinfo</span> <i>object.ext [object.ext [object.ext [...]]]]</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Open a pixel information window and show one or more objects in this pixel info window specified as <i>object.ext</i>. For <i>object.ext</i>, you can use raster maps (.mpr), polygon maps (.mpa), segment maps (.mps) and point maps (.mpp), map lists (.mpl), and/or coordinate systems (.csy). Furthermore, attribute tables linked to maps or to the domain of a map will be automatically added to the pixel info window. </p>
+
+</td>
+</tr>
+</table>
+
+<h3 id="script_data_management">3c. Data management</h3>
+
+<p class=kopjeboldandund>Change directory etc.:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>cd </span><i>path</i></p>
+
+</td>
+<td valign="top">
+<p>Change directory to directory <i>path.</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>cd</span> <i>d</i>:<i>path</i></p>
+
+</td>
+<td valign="top">
+<p>Change drive to drive <i>d:</i> and change directory to directory <i>path.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>md</span> [<i>drive</i>:]<i>path</i></p>
+
+</td>
+<td valign="top">
+<p>Make directory <i>path.</i> Optionally make directory <i>path</i> on drive <i>drive.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>mkdir</span> [<i>drive</i>:]<i>path</i></p>
+
+</td>
+<td valign="top">
+<p>Make directory <i>path.</i> Optionally make directory on <i>path</i> on drive <i>drive.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>rd</span> [<i>drive</i>:]<i>path</i></p>
+
+</td>
+<td valign="top">
+<p>Remove directory <i>path.</i> Optionally remove directory <i>path</i> from drive <i>drive.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>rmdir</span>  [<i>drive</i>:]path</p>
+
+</td>
+<td valign="top">
+<p>Remove directory <i>path. </i>Optionally remove directory <i>path</i> from drive <i>drive.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>rd</span> [<i>drive</i>:]<i>path</i> <span class=courier>-force</span></p>
+
+</td>
+<td valign="top">
+<p>Remove directory <i>path</i> while deleting all files in that directory. Optionally remove directory <i>path</i> and all files in that directory from drive <i>drive.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>rmdir</span> [<i>drive</i>:]<i>path</i> <span class=courier>-force</span></p>
+
+</td>
+<td valign="top">
+<p>Remove directory <i>path</i> while deleting all files in that directory. Optionally remove directory <i>path</i> and all files in that directory from drive <i>drive.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>opendir</span> [<i>drive</i>:]<i>path</i></p>
+
+</td>
+<td valign="top">
+<p>Open a new Catalog and show the contents of directory <i>path</i>; optionally, you can specify the drive <i>drive</i>: as well. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>An error message appears when changing to a directory that does not exist, or when removing a directory that does not exist. The script line is ignored, when when making a directory that already exists, or when deleting files that do not exist. </p>
+
+<p class=kopjeboldandund>Copy and delete:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>copy</span> <i>object.ext  objname </i></p>
+
+</td>
+<td valign="top">
+<p>Copy object <i>object.ext</i> to new name <i>objname.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>copy</span> <i>object.ext  objname</i> <span class=courier>-breakdep</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Copy object <i>object.ext</i> to new name <i>objname</i> while breaking the dependency links of <i>object.ext.</i></p>
+
+</td>
+</tr>                     
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>copy</span> <i>object.ext path</i></p>
+
+</td>
+<td valign="top">
+<p>Copy object <i>object.ext</i> to existing directory <i>path.</i> Wildcards are allowed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>copy</span> <i>object.ext   path</i> <span class=courier>-breakdep</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Copy object <i>object.ext</i> to existing directory <i>path</i> while breaking the dependencies of <i>object.ext. </i>Wildcards are allowed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>copyfile</span><i> file.ext  filename.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Copy file <i>file.ext</i> to new file <i>filename.ext.</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>copyfile</span><i> file.ext  path</i></p>
+
+</td>
+<td valign="top">
+<p>Copy file <i>file.ext</i> to existing directory <i>path. </i>Wildcards are allowed.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When copying objects (or files), you cannot copy objects to another directory and give the object another name at the same time. When copying an object to another directory, existing objects in that directory are not overwritten. In the same way, when copying an object in the current directory to an object name which already exists, the script line is ignored. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>del</span> <i>object.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Delete object <i>object.ext.</i>Wildcards are allowed. Objects that are still used by other objects will not be deleted. Also objects that are used by <i>object.ext</i> will not be deleted. However, when deleting a domain, the representation(s) that use this domain are not taken into account; thus the domain will be deleted while the representations will remain (and vice versa).</p>
+
+</td>
+</tr>                 
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>del</span> <i>object.ext</i>  <span class=courier>-force</span></p>
+
+</td>
+<td valign="top">
+<p>Delete object <i>object.ext</i> even when this object is still used by other objects. This command also tries to delete object <i>object.ext</i> which is not completely valid (i.e. an error occurs when the object is opened). Wildcards are allowed. To remove the contents of a complete directory, use <span class=courier>del *.* -force</span>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>delcol</span><i> table.ext.column</i></p>
+
+</td>
+<td valign="top">
+<p>Delete column <i>table.ext.column.</i>Columns which are table-owned will not be deleted.</p>
+
+</td>
+</tr>                     
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>delfile</span> <i>file.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Delete file <i>file.ext </i>as if this file was deleted in DOS or the File Manager. Wildcards are allowed. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Read-only objects will never be deleted. A del command is ignored when objects, columns or files do not exist.</p>
+
+<h3 id="script_properties_of_objects">3d. Properties of objects</h3>
+
+<p class=kopjeboldandund>Handling properties of dependent objects:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>update</span><i> object.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Make the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent map or table</a> <i>object.ext</i> up-to-date. Wildcards are allowed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>updatecol</span><i> table.ext.column</i></p>
+
+</td>
+<td valign="top">
+<p>Make <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent column</a> <i>table.ext.column</i> up-to-date.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>breakdep</span> <i>object.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Break the dependency links of dependent map or table <i>object.ext.</i> Wildcards are allowed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>breakdep</span> <i>object.ext</i>  <span class=courier>-force</span></p>
+
+</td>
+<td valign="top">
+<p>Tries to break the dependency links of dependent map <i>object.ext</i> which is not completely valid (i.e. an error occurs when the object is opened). Wildcards are allowed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>breakdepcol</span> <i>table.ext.column</i></p>
+
+</td>
+<td valign="top">
+<p>Break the dependency links of dependent column <i>column</i> in table <i>table.ext.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>reldisksp</span> <i>object.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Delete the data file(s) of dependent object <i>object.ext.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>calc</span> <i>object.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Recalculate the data files of dependent map or table <i>object.ext.</i> Wildcards are allowed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>calccol</span><i> table.ext.col</i></p>
+
+</td>
+<td valign="top">
+<p>Recalculate dependent column <i>table.ext.col.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>editdef</span> <i>rasmap.mpr</i></p>
+
+</td>
+<td valign="top">
+<p>For a dependent raster map <i>rasmap.mpr</i> created with a MapCalc formula: open the map's <a href="../ilwismen/raster_map_definition.htm">Raster Map Definition</a> dialog box. You can manually change the MapCalc expression of the map and then recalculate the raster map with a <span class=courier>calc</span> command (see above). This command is the same as clicking the <span class=arial>Edit Definition</span> button in a <a href="../ilwismen/raster_map_properties.htm">Raster Map Property</a> sheet. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>setdescr</span> <i>object.ext Any text</i></p>
+
+</td>
+<td valign="top">
+<p>Change the description of object <i>object.ext</i> to <i>Any text</i>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For more information, see <a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a>.</p>
+
+<p class=kopjeboldandund>Editing properties of editable source objects (advanced):</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>changedom</span> <i>object.ext  domname</i> [<i>valuerange</i>]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Change the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of raster, polygon, segment or point map  <i>object.ext</i> to existing domain <i>domname,</i> while converting the class names, IDs, or values of the original domain into new domain <i>domname.</i> </p>
+
+<p>Optionally, in case of a value domain <i>domname,</i> set the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> of the object to <i>valuerange. </i>Specify the value range as <i>min</i><span class=courier>:</span><i>max</i><span class=courier>:</span><i>precision,</i> as <i>min</i><span class=courier>:</span><i>max,</i> or as <span class=courier>::</span><i>precision.</i></p>
+
+<p>This is a rather safe way to change the domain of a map into another domain or to change the precision of a map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>setdom</span> <i>object.ext  domname </i>[<i>valuerange</i>] [<span class=courier>-force</span>]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Set the domain of <i>object.ext</i> to <i>domname.</i> Wildcards are allowed for <i>object.ext.</i></p>
+
+<p>Optionally, in case of a value domain <i>domname,</i> set the value range of the object to <i>valuerange.</i> Specify the value range as <i>min</i><span class=courier>:</span><i>max</i><span class=courier>:</span><i>precision,</i> as <i>min</i><span class=courier>:</span><i>max,</i> or as <span class=courier>::</span><i>precision.</i></p>
+
+<p>When you also specify the <span class=courier>-force</span> flag, no checks are performed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>setvr</span> <i>object.ext  valuerange </i></p>
+
+</td>
+<td valign="top">
+<p>Set the value range of <i>object.ext</i> to <i>valuerange.</i> Wildcards are allowed for <i>object.ext.</i> Specify the value range as <i>min</i><span class=courier>:</span><i>max</i><span class=courier>:</span><i>precision,</i> as <i>min</i><span class=courier>:</span><i>max,</i> or as <span class=courier>::</span><i>precision.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>setgrf</span> <i>rasmap  georef</i></p>
+
+</td>
+<td valign="top">
+<p>Set the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of raster map <i>rasmap</i> to <i>georef.</i> Wildcards are allowed for <i>rasmap.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>setcsy</span> <i>map.ext  coordsys</i></p>
+
+</td>
+<td valign="top">
+<p>Set the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> of point, segment or polygon map <i>map.ext</i> to <i>coordsys.</i> Wildcards are allowed for <i>map.ext.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>setcsy</span> <i>georef  coordsys </i></p>
+
+</td>
+<td valign="top">
+<p>Set the coordinate system of georeference <i>georef</i> to <i>coordsys.</i> Wildcards are allowed for <i>georef.</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>setreadonly</span> <i>object.ext </i></p>
+
+</td>
+<td valign="top">
+<p>Mark object <i>object.ext</i> as read only. Read only objects cannot be edited or deleted. Wildcards are allowed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>setreadwrite</span> <i>object.ext </i></p>
+
+</td>
+<td valign="top">
+<p>Remove the read only flag for object <i>object.ext</i>: the objects are editable and deleteable. Wildcards are allowed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>setatttable</span> <i>map.ext  atttable</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Set the <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> of class or ID map <i>map.ext</i> to <i>atttable.</i> </p>
+
+<p>Wildcards are allowed for <i>map.ext.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>setatttable</span> <i>map.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Remove the link between class or ID map map.ext and its attribute table. Wildcards are allowed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>setdescr</span> <i>object.ext Any text</i></p>
+
+</td>
+<td valign="top">
+<p>Change the description of object <i>object.ext</i> to <i>Any text</i>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <span class=courier>setdom</span>, <span class=courier>setvr</span>, <span class=courier>setgrf</span>, <span class=courier>setscy</span>, <span class=courier>setatttable</span> and <span class=courier>setdescr</span> commands are only performed on objects that are not read only.</p>
+
+<h3 id="script_creating_objects">3e. Creating objects</h3>
+
+<p class=kopjeboldandund>Creating (empty) maps and tables:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>crmap</span> <i>map georef domname</i></p>
+
+</td>
+<td valign="top">
+<p>Create raster map <i>map</i> with existing georeference <i>georef</i> and existing domain <i>domname.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crsegmap</span> <i>map crdsys [MinX MinY MaxX MaxY] domname</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create segment <i>map</i> with existing coordinate system <i>crdsys</i> and existing domain <i>domname</i>. Optionally, you can specify the <a href="..//ilwis/popup/coordinate_boundary_popup.htm" onClick="return popup(this, 'notes')" >coordinate boundaries</a> of the segment map as <i>MinX MinY MaxX MaxY</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crpntmap</span> <i>map crdsys [MinX MinY MaxX MaxY] domname</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create point map <i>map</i> with existing coordinate system <i>crdsys</i> and existing domain <i>domname</i>. Optionally, you can specify the <a href="..//ilwis/popup/coordinate_boundary_popup.htm" onClick="return popup(this, 'notes')" >coordinate boundaries</a> of the point map as <i>MinX MinY MaxX MaxY</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>crtbl</span> <i>table domname</i></p>
+
+
+</td>
+<td valign="top">
+<p>Create table <i>table</i> using existing Class or ID domain <i>domname.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>crtbl</span> <i>table nrrecs</i></p>
+
+</td>
+<td valign="top">
+<p>Create table <i>table</i> using domain <span class=courier>None</span> and with a number of records specified as <i>nrrecs.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crmaplist</span> <i>maplist rasmap1.mpr rasmap2.mpr [rasmap3.mpr [...]]</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create map list <i>maplist</i> that should contain a number of raster maps specified as <i>rasmap1.mpr rasmap2.mpr rasmap3.mpr</i> etc. All raster maps must use the same domain and the same georeference. </p>
+
+
+</td>
+</tr>
+</table>
+
+<p class=kopjeboldandund>Creating domains:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crdom</span> <i>domname</i> [<span class=courier>-type=class|ID|group</span>]<span class=courier> -items=</span><i>number</i><span class=courier> </span>[<span class=courier>-prefix=</span><i>prefix</i>]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create domain <i>domname</i> with a number of items specified as <span class=courier>-items=</span><i>number. </i></p>
+
+<p>Optionally, specify:</p>
+
+<p><span class=courier>-type=class</span> to create a class domain, or </p>
+
+<p><span class=courier>-type=ID</span> to create an ID domain, or</p>
+
+<p> <span class=courier>-type=Group</span> to create a group domain. </p>
+
+<p>If parameter <span class=courier>-type</span> is omitted, then a class domain is created. </p>
+
+<p>Optionally specify:</p>
+
+<p><span class=courier>-prefix=</span><i>prefix</i> to obtain classes or IDs with a certain <i>prefix.</i> </p>
+
+<p>If parameter <span class=courier>-prefix</span> is omitted when creating a class domain, classes will obtain prefix <span class=courier>class</span>, thus <span class=courier>class 1</span>, <span class=courier>class 2</span>, etc. </p>
+
+<p>If parameter <span class=courier>-prefix</span> is omitted when creating an ID domain, the IDs will obtain prefix <span class=courier>ID</span>, thus <span class=courier>ID 1</span>, <span class=courier>ID 2</span>, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crdom</span> <i>domname</i> <span class=courier>-type=value -min=</span><i>value</i> <span class=courier>-max=</span><i>value</i> [<span class=courier>-prec=</span><i>value</i>]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create value domain <i>domname</i> with a specified value range between <span class=courier>-min=</span><i>value</i> and <span class=courier>-max=</span><i>value</i>. </p>
+
+<p>Optionally, specify a precision for the value domain as <span class=courier>-prec=</span><i>value.</i></p>
+
+<p>When this parameter is not specified, precision 1 will be used.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0 class=tiptext>
+<tr>
+<td valign="top" colspan="2">
+<p class=tipnospace>Examples:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crdom</span> <i>domname</i> <span class=courier>-type=class -items=10 -prefix=cl</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create class domain <i>domname</i> and add ten items to this domain with class names &quot;cl 1&quot;, &quot;cl 2&quot;, ... &quot;cl 10&quot;. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crdom</span><i> domname </i><span class=courier>-type=id -items=100 -prefix=prov</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create ID domain <i>domname</i> and add hundred items to this domain with IDs &quot;prov 1&quot;, &quot;prov 2&quot;, ... &quot;prov 100&quot;.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>crdom</span> <i>domname</i> <span class=courier>-items=0</span></p>
+
+</td>
+<td valign="top">
+<p>Create class domain <i>domname</i> without any items. You can add items with the <span class=courier>additemtodomain</span> command.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crdom </span><i>domname </i><span class=courier>-type=value -min=100 -max=200</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create value domain <i>domname</i> with a value range between 100 and 200 (precision is 1).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crdom</span><i> domname </i><span class=courier>-type=value -min=10 -max=20 -prec=0.01</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create value domain <i>domname</i> with a value range between 10.00 and 20.00 and a precision of 0.01.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <span class=courier>crdom</span> command is ignored when domain <i>domname</i> already exists.</p>
+
+<p class=kopjeboldandund>Editing a class, ID or group domain:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>additemtodomain</span>  <i>domname  class </i>[<i>classcode</i>]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Add item <i>class,</i> optionally with code <i>classcode,</i> to class or ID domain <i>domname.</i> Class names which contain spaces must be enclosed by double quotes.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>additemtodomaingroup</span>  <i>domname  upperlimit class </i>[<i>classcode</i>]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Add an item to group domain <i>domname.</i> The item is defined by an <i>upperlimit</i> (a real value), a class name <i>class</i> and, optionally, a <i>classcode.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>mergedom</span>  <i>domname1</i>  <i>domname2</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Merge the items of class or ID domain <i>domname2</i> into class or ID domain <i>domname1.</i> </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopjeboldandund>Create representations:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>crrpr</span><i> rprname domname</i></p>
+
+</td>
+<td valign="top">
+<p>Create representation <i>rprname</i> for class or value domain <i>domname.</i></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <span class=courier>crrpr</span> command is ignored when representation <i>rprname</i> already exists.</p>
+
+<p class=kopjeboldandund>Create georeference corners:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crgrf</span><i> grfname nrrows nrcols</i> [<span class=courier>-crdsys=</span><i>coordsysname</i>]<span class=courier> -lowleft=</span>(<i>minX,minY</i><span class=courier>) </span>
+
+<span class=courier>-upright=</span>(<i>maxX,maxY</i>) <b>|</b> <span class=courier>-pixsize=</span><i>value</i><span class=courier> </span>
+
+[<span class=courier>-centercorners+</span>]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p>Create georeference corners <i>grfname</i> with:</p>
+
+<ul>
+
+<li>the number of rows as specified by <i>nrrows</i>, </li>
+
+<li>the number of columns as specified by <i>nrcols,</i> and</li>
+
+<li>the coordinates for the lower left corner as specified by <span class=courier>-lowleft=</span>(<i>minX,minY</i>).</li>
+
+</ul>
+
+<p class=linespacing01before>Specify the coordinates for the upper right corner as: </p>
+
+<ul>
+
+<li><span class=courier>-upright=</span>(<i>maxX, maxY</i>) <b>or</b> as </li>
+
+<li><span class=courier>-pixsize=</span><i>value</i>. </li>
+
+</ul>
+
+<p class=defnewpar><span class=tipnospace>Mind:</span><span class=tiptext> in a script, you are not allowed to use spaces within a coordinate expression (X,Y). </span></p>
+
+<p class=defnewpar>Optionally, a coordinate system <i>coordsysname</i> can be specified by using parameter <span class=courier>-crdsys=</span><i>coordsysname</i>, otherwise the system coordinate system <span class=courier>Unknown</span> will be used. </p>
+
+<p>Furthermore, you can optionally add coordinates to the centers of the corner pixels by using parameter <span class=courier>-centercorners+</span>. When this parameter is not used, coordinates will be added to the corners of the corner pixels.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0 class=tiptext>
+<tr>
+<td valign="top" colspan="2">
+<p class=tipnospace>Examples:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crgrf</span><i> grfname </i><span class=courier>500 1000 -crdsys=cs -lowleft=(0,0) -upright=(10000,5000)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create georeference corners <i>grfname</i> with 500 rows and 1000 columns and using coordinate system <span class=courier>cs</span>. </p>
+
+<p>The coordinate boundaries are defined by the lower left coordinate (0,0) and the upper right coordinate (10000,5000).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>crgrf</span><i> grfname </i><span class=courier>500 1000 -crdsys=cs -lowleft=(0,0) -pixsize=10</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create georeference corners <i>grfname</i> with 500 rows and 1000 columns and using coordinate system <span class=courier>cs</span>. </p>
+
+<p>The georeference has as lower left coordinate (0,0) and as pixel size 10 m.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar><span class=tip>Mind: </span><span class=tiptext>In a script, you are NOT allowed to use spaces within a coordinate expression (X,Y). </span> </p>
+
+<p class=defnewpar>The <span class=courier>crgrf</span> command is ignored when georeference <i>grfname</i> already exists.</p>
+
+<p class=kopjeboldandund>Creating a two-dimensional table:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>cr2dim</span><i>  2dimtablename  indomname1  indomname2  outdomname3  [valuerange]</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create two-dimensional table <i>2dimtablename</i> </p>
+
+<ul>
+
+<li> using existing input domains <i>indomname1</i> and <i>indomname2</i> and </li>
+
+<li> using existing domain <i>outdomname3</i> as the domain of the fields in the table. </li>
+
+</ul>
+
+<p>If <i>outdomname3</i> is a value domain, you can optionally specify the value range of this domain as <i>min</i><span class=courier>:</span><i>max</i> or as <i>min</i><span class=courier>:</span><i>max</i><span class=courier>:</span><i>precision</i>.</p>
+
+</td>
+</tr>
+</table>
+
+<h3 id="script_pyramids">3f. Creating/deleting pyramid layers</h3>
+
+<p class=kopjeboldandund>Creating pyramid layers for one or more raster maps: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>createpyramidlayers</span></p>
+
+</td>
+<td valign="top">
+<p>Create pyramid layers (i.e. .MPY# files) for all raster maps in the current directory. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>createpyramidlayers *.mpr</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top" >
+<p class=nospacetop>Create pyramid layers for all raster maps in the current directory; wildcards are allowed; extension <span class=courier>.mpr</span> is obligatory. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>createpyramidlayers </span><i>rasmap1</i><span class=courier>.mpr </span><i>rasmap2</i><span class=courier>.mpr</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top" >
+<p class=nospacetop>Create pyramid layers for raster maps <i>rasmap1</i> and <i>rasmap2</i>, separate multiple raster maps by a space; wildcards are allowed; the extension <span class=courier>.mpr</span> is obligatory. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>createpyramidlayers </span><i>maplist1</i><span class=courier>.mpl</span> <i>maplist2</i><span class=courier>.mpl</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Create pyramid layers for the raster maps in map lists <i>maplist1</i> and <i>maplist2</i>, separate multiple map lists by a space; wildcards are allowed; the extension <span class=courier>.mpl</span> is obligatory. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar><a href="ilwis_objects_raster_maps_pyramids.htm">Pyramid layers</a> (stored in an .MPY# file) speed up the display of large raster maps. </p>
+
+<p class=kopjeboldandund>Deleting pyramid layers: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>deletepyramidlayers</span></p>
+
+</td>
+<td valign="top">
+<p>Delete the pyramid layers (.i.e. .MPY# files) of all raster maps in the current directory. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>deletepyramidlayers *.mpr</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Delete the pyramid layers of all raster maps in the current directory; wildcards are allowed; extension <span class=courier>*.mpr</span> is obligatory. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>deletepyramidlayers </span><i>rasmap1</i><span class=courier>.mpr </span><i>rasmap2</i><span class=courier>.mpr</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Delete the pyramid layers of raster maps <i>rasmap1</i> and <i>rasmap2</i>; separate multiple raster maps by a space; the extension <span class=courier>.mpr</span> is obligatory. </p>
+
+</td>
+</tr>
+</table>
+
+<h3 id="script_domainconversion">3g. Converting domains</h3>
+
+<p class=kopjeboldandund>Converting domains:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>domclasstoid</span><i> domname[.ext]</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Convert class domain <i>domname</i> into an ID domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>domidtoclass</span><i> domname[.ext]</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Convert ID domain <i>domname</i> into a class domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>dompictoclass</span> <i>domname[.ext]</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Convert Picture domain <i>domname.ext</i> into a class domain. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>These are rather safe ways to convert one domain into another. When the domain you want to convert is an internal domain which is stored in a map, you need to specify the extension of the map after the domain name.</p>
+
+<h3 id="script_other">3h. Other</h3>
+
+<p class=kopjeboldandund>Calling other scripts:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>run</span> <i>script2</i></p>
+
+</td>
+<td valign="top">
+<p>Run another script named <i>script2</i>. </p>
+
+<ul>
+
+<li>When <i>script2</i> contains no parameters, <i>script2</i> will be directly run. </li>
+
+<li>When <i>script2</i> does contain parameters that are defined on the Parameters tab in the script editor, then the <span class="arial">Run Script</span> dialog box will appear, the user should select a valid map name etc. in this dialog box. </li>
+
+<li>When <i>script2</i> contains parameters that are defined on the Parameters tab and for which default 'values' have been provided on the Default Values tab in the script editor, the <span class="arial">Run Script</span> dialog box will appear with the default objects or values already filled out. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>run</span> <i>script2  parameter  parameter</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Run another script name <i>script2</i>; fill out parameters (map names including extension, etc.). The first parameter specified will be used for %1 in the script, the second for %2, etc. </p>
+
+<p class="tiptext"><span class="tip">Tip: </span>When you wish to use long object names as parameters for a called script, then you must use single quotes around the long object names, excluding the <i>.ext</i> extensions. 
+	For more information, see <a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a> or <a href="how_to_use_long_object_names.htm">How to use long object names</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If <i>script2</i> is not found, an error message appears.</p>
+
+<p class=kopjeboldandund>Start other Windows applications:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>!</span><i>expression</i> </p>
+<p class=calccommline><span class=courier>!</span><i>expression</i> <i>optional_parameter(s)</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" class="nospacetop" width=180>
+<p class="nospacetop">&nbsp;</p>
+
+</td>
+<td class="nospacetop" valign="top">
+<p class="nospacetop">Starts any Windows application, a batch file, etc. and <i>will wait</i> until the application has finished, i.e. the script will wait until the external application has been closed again. </p>
+
+	<p class="emptyline">&nbsp;</p>
+
+	<ul>
+	<li>Type the <i>command</i> directly after the exclamation mark (no spaces allowed). </li>
+	<li><i>Programs</i> with the following extensions can always be started: <span class="courier">.exe</span>, <span class="courier">.com</span>, <span class="courier">.bat</span>. </li>
+	<li>You can also use Windows <i>shortcuts</i> (<span class="courier">.lnk</span>) to Windows applications, provided that the shortcut points to the correct location of the application. </li>
+	<li>Furthermore, <i>files of a registered file type</i> can be opened with the application for which the file type has been registered (Open command). 
+		Examples of possible <i>registered</i> file types on your computer may be: <span class="courier">.doc</span>, <span class="courier">.txt</span>, <span class="courier">.pdf</span>, <span class="courier">.xls</span>, <span class="courier">.ppt</span>, <span class="courier">.pps</span>, <span class="courier">.gif</span>, <span class="courier">.bmp</span>, etc. </li>
+	<li>If no extension is specified, <span class="courier">.exe</span> is assumed. </li>	
+	<li>Full paths and relative paths (relative to the currently active folder/currently active Catalog) may be used. </li>
+	<li>If no path is specified for a program (<span class="courier">.exe</span>, <span class="courier">.com</span>, <span class="courier">.bat</span>), the following locations will be searched: the currently active ILWIS working folder/Catalog, the ILWIS folder, the Windows folder, the Windows\System folder, and the folders specified in the PATH environment variable. </li>
+    <li>If no path is specified for a shortcut (<span class="courier">.lnk</span>) or for other files (e.g. <span class="courier">.doc</span>, <span class="courier">.xls</span>, <span class="courier">.gif</span> etc.), only the currently active ILWIS working folder, i.e. the currently active Catalog, will be searched. </li>
+	<li>Long file names (e.g. programs, paths or file names containing spaces) must be quoted within single quotes, including possible extensions. </li>
+	<li>Optionally, one or more parameters may be passed, separated by spaces. Parameters that contain spaces themselves, must again be quoted within single quotes, including possible extensions. </li>
+	</ul>
+
+<p class="tip">Examples:</p>
+
+<ul class="tipul">
+
+<li class="ls01be">to start NotePad, type: <span class=courier>!NotePad</span> </li>
+
+<li class="ls01be">To start Notepad via a shortcut to Notepad, when the shortcut is located in D:\My Folder, type: <br>
+
+	<span class="courier">!!'D:\My&nbsp;Folder\shortcut&nbsp;to&nbsp;notepad.exe.lnk'</span></li>
+
+
+<li>to open a Word document called <i>Document of Interest</i> that is located in D:\My Documents, use: <br />
+
+		<span class="courier">!'D:\My Documents\Document of Interest.doc'</span></li>
+
+<li>to start a program called <i>My Program.exe</i> that is located in C:\Program Files\Any Folder\, use: <br />
+
+		<span class="courier">!'C:\Program Files\Any Folder\My Program.exe'</span></li>
+
+<li>to start a program called <i>My Program.exe</i> located in C:\Program Files\Any Folder\, and to pass two parameters for this program, use: <br />
+
+		<span class="courier">!'C:\Program Files\Any Folder\My Program.exe' 'D:\this file.gif' 'D:\other file.tif'</span></li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>!!</span><i>expression</i> </p>
+<p class=calccommline><span class=courier>!!</span><i>expression</i> <i>optional_parameter(s)</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" class="nospacetop" width=180>
+<p class="nospacetop">&nbsp;</p>
+
+</td>
+<td class="nospacetop" valign="top">
+<p class="nospacetop">Same as <span class=courier>!</span><i>expression</i>, but enables a <i>continuation of ILWIS</i> while the external application is running. </p>
+
+</td>
+</tr>
+</table>
+
+<h2 id="import_commandline">4. Import expressions</h2>
+
+<h3 id="ilwis14rasimport_commandline" class=afterh2>4a. ILWIS 1.4 Raster Import</h3>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>import14 </span> <i>file14.ext</i> [<i>outputdir</i>]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p>Batch-wise import of <i>file14.ext</i> in the current directory, or optionally to the specified output directory <i>outputdir.</i> </p>
+
+<p>Wildcards are allowed. </p>
+
+<p>The ILWIS object(s) keep the name(s) of the 1.4 file(s); new extensions are created during import. Domains, representations, georeferences etc. are created using defaults. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=emptyline>&nbsp;</p>
+
+<p class=calccommline><span class=courier>import14 </span> <i>file14.ext</i> [<i>ilwis3name</i><span class=courier>|</span><i>outputdir</i>] [<span class=courier>-dmt=</span><i>domtype</i>] [<span class=courier>-dom=</span><i>domainname</i>] [<span class=courier>-grf=</span><i>georef</i>]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p>Import an ILWIS 1.4 file <i>file14.ext</i> according to your wishes. </p>
+
+<p>All parameters shown above between square brackets can but do not have to be used.</p>
+
+</td>
+</tr>                     
+<tr>
+<td valign="top" width="180">
+<p class=leftmargin06><i>ilwis3name</i>|<i>outputdir</i></p>
+
+</td>
+<td valign="top">
+<p>Either specify an ILWIS 3 <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object name</a> as <i>ilwis3name</i> for the 1.4 file to be imported, or specify an output directory as <i>outputdir</i> in which the imported object should appear. </p>
+
+<p>If this parameter is omitted, then <i>file14.ext</i> is imported in the current directory and the ILWIS 3 object(s) keep the name(s) of the 1.4 file(s).</p>
+
+</td>
+</tr>              
+<tr>
+<td valign="top" width="180">
+<p class=leftmargin06><span class=courier>-dmt=</span><i>domtype</i></p>
+
+</td>
+<td valign="top">
+<p>Specify the domain type <i>domtype</i> for the output object as: </p>
+
+<p><span class=courier>Picture</span>, <span class=courier>Image</span>, <span class=courier>Value</span>, <span class=courier>Class</span>, or <span class=courier>ID</span>. </p>
+
+<p>If you specify domain type <span class=courier>Class</span> or <span class=courier>ID</span>, you also have to use the <span class=courier>-dom</span> option to specify the name of that domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=leftmargin06><span class=courier>-dom=</span><i>domname</i></p>
+
+</td>
+<td valign="top">
+<p>If you specified domain type <span class=courier>Class</span> or <span class=courier>ID</span> in the previous option, then also specify a new or existing <i>domname </i>for the output object.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=leftmargin06><span class=courier>-grf=</span><i>georef</i></p>
+
+</td>
+<td valign="top">
+<p>When importing a raster map, you can specify the name of a new or existing georeference <i>georef.</i></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>For more information on the domain type to choose, see <a href="../ilwis/how_to_import_ilwis14_raster_data.htm">How to import ILWIS 1.4 raster data</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing="0" class=tiptext>
+<tr>
+<td valign="top" colspan="2">
+<p class=tipnospace>Example:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>import14 orotm4.mpd -dmt=image -grf=tmgeoref</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p></p>
+
+</td>
+<td valign="top">
+<p>Imports 1.4 raster map <span class=courier>Orotm4</span> as an image using existing georeference tiepoints <span class=courier>tmgeoref</span>. </p>
+
+</td>
+</tr>
+</table>
+
+<h3 id="ilwismapimport_commandline" class=afterh2>4b. ILWIS Map Import</h3>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=180>
+<p class=calccommline><span class=courier>import</span> <i>format</i>(<i>file.ext</i>, <i>ilwobj</i>)</p>
+
+</td>
+<td valign="top">
+<p>Import a data file <i>file.ext</i> into an ILWIS object with the name <i>ilwobj</i>. </p>
+
+<p>The extension of the input file <i>file.ext</i> must be specified. </p>
+
+<p>The extension for the output ILWIS object(s) <i>ilwobj</i> will be automatically created during import.</p>
+
+<p>For <i>format</i>, you have to specify one of the following formats: </p>
+
+<p><span class=courier>arcinfonas | ascii | bmp | bna | dbase | dxf | e00 |  erdas | gartrip | gif | ida | idrisi | infocam | lin | pcx | shape | smt | tiff</span>&nbsp;. </p>
+
+</td>
+</tr>  
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>arcinfonas</span></p>
+
+</td>
+<td valign="top">
+<p>Import an Arc/Info non-compressed ASCII raster file (.NAS or .ASC) to an ILWIS raster map.</p>
+
+</td>
+</tr>               
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>ascii</span></p>
+
+</td>
+<td valign="top">
+<p>Import an ILWIS 1.x ASCII raster file (.ASC) to an ILWIS raster map.</p>
+
+</td>
+</tr>                        
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>bmp</span></p>
+
+</td>
+<td valign="top">
+<p>Import a Windows bitmap (.BMP) to an ILWIS raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>bna</span></p>
+
+</td>
+<td valign="top">
+<p>Import an Atlas vector data file (.BNA) to an ILWIS point and/or segment and/or polygon map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>dxf</span></p>
+
+</td>
+<td valign="top">
+<p>Import an AutoCad .DXF file to an ILWIS point and/or segment and/or polygon map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>e00</span></p>
+
+</td>
+<td valign="top">
+<p>Import an Arc/Info file in interchange format (.E00) to an ILWIS raster and/or polygon and/or segment and/or point map. When attributes are available, also an ILWIS table will be created.</p>
+
+<p class=tiptext><span class=tip>Note: </span>Optionally, you can specify a third parameter <span class=courier>CreatePol</span> within the <span class=courier>( )</span> brackets to directly polygonize imported segments and points. The syntax then reads: </p>
+
+<p class=tiptext><span class=courier>import e00</span>(<i>file.ext</i>, <i>ilwobj</i>, <span class=courier>CreatePol</span>)</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>erdas</span></p>
+
+</td>
+<td valign="top">
+<p>Import an Erdas .GIS file into an ILWIS raster map; or import an Erdas .LAN file into a single ILWIS raster map or into an ILWIS map list containing multiple raster maps (bands).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>gartrip</span></p>
+
+</td>
+<td valign="top">
+<p>Import a GARtrip file (extension .TXT or other extension) to an ILWIS vector map. </p>
+
+<ul>
+
+<li>When the first line of the input file contains the word 'Waypoints', an ILWIS point map and an attribute table will be created. </li>
+
+<li>When the first line of the input file contains the word 'Track', an ILWIS point map and an attribute table will be created, and furthermore an ILWIS segment map will be created. </li>
+
+<li class=ls01af>When a UTM projection is used, also an ILWIS coordinate system (with UTM projection and WGS84 datum) will be created. </li>
+
+</ul>
+
+<p class=tiptext><span class=tip>Note: </span>Optionally, you can specify a third parameter <i>height_offset</i>, between the <span class=courier>( )</span> brackets, to correct Altitude values in an 'Alt' column.  A <i>height_offset</i> of 20 will increase all values in the output 'Alt' column with 20. The syntax then reads: </p>
+
+<p class=tiptext><span class=courier>import gartrip</span>(<i>file.ext</i>, <i>ilwobj</i>, 20)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>gif</span></p>
+
+</td>
+<td valign="top">
+<p>Import a gif image (.GIF) to an ILWIS raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>ida</span></p>
+
+</td>
+<td valign="top">
+<p>Import an IDA image (.IMG) to an ILWIS raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>idrisi</span></p>
+
+</td>
+<td valign="top">
+<p>Import an Idrisi image (.DOC). to an ILWIS raster map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>infocam</span></p>
+
+</td>
+<td valign="top">
+<p>Import an Infocam sequential file (.SEQ) to an ILWIS point and/or segment and/or polygon map. When attributes are available, also an ILWIS table will be created.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>lin</span></p>
+
+</td>
+<td valign="top">
+<p>Import an Arc/Info file created with the Ungenerate command (.LIN and .PTS) to an ILWIS segment and/or point map. When the extension of the Arc/Info file is .PTS, you will obtain a point map, otherwise you will obtain a segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>pcx</span></p>
+
+</td>
+<td valign="top">
+<p>Import a PaintBrush image (.PCX) to an ILWIS raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>shape</span></p>
+
+</td>
+<td valign="top">
+<p>Import Arc/View Shape files (.SHP, .SHX, .DBF) to an ILWIS point and/or segment and/or polygon map. Furthermore, an ILWIS table will be created.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>smt</span></p>
+
+</td>
+<td valign="top">
+<p>Import an ILWIS 1.x ASCII vector file (.SMT) to an ILWIS segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>tiff</span></p>
+
+</td>
+<td valign="top">
+<p>Import a Tiff image (.TIF) to an ILWIS raster map. When the Tiff image contains GeoTiff information, a georeference will be created for the imported map; furthermore, it is attempted to create a coordinate system (you can find projection information in the description of the coordinate system).</p>
+
+</td>
+</tr>                   
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>For more information on Import through ILWIS Map Import, see also the <a href="../ilwismen/import_map.htm">Import Map</a> dialog box, or the <span class=courier>import.def</span> file in your ILWIS directory.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0 class=tiptext>
+<tr>
+<td valign="top" colspan="2">
+<p class=tipnospace>Examples:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>import erdas(soil.gis, ilwsoil)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Imports the Erdas file SOIL.GIS into ILWIS; a raster map with the name ILWSOIL.MPR will be created. The import will also look for the availability of an Erdas file called SOIL.TRL that may accompany the .GIS file. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>import e00(parcel.e00, ilwparc)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Imports the Arc/Info interchange file PARCEL.E00 into ILWIS; a segment map, a polygon map, a raster map and a point map can be created (all named ILWPARC), where the vector maps can also be linked to attribute tables. </p>
+
+</td>
+</tr>
+</table>
+
+<h3 id="ilwisasterimport_commandline" class=afterh2>ILWIS ASTER Import</h3>
+
+<p class=defnewpar>Importing ASTER level 1A and/or level 1B images through <a href="../ilwismen/import_map.htm">ILWIS
+Map Import</a> always results in an ILWIS <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collection</a>.
+Opening an ASTER level 1A image in ILWIS results in an object collection
+existing of 15 raster maps (4 VNIR bands, 6 SWIR bands and 5 TIR bands), 15
+georeferences (one for each band) and 1 coordinate system. Opening an ASTER
+level 1B image results in an object collection consisting of 15 raster maps, 4
+georeferences (VNIR, VNIR3B, SWIR and TIR) and 1 coordinate system. The name of the output object collection is always the same as the name of the imported external file. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>open</span> <i>file.ext</i> [<span class=courier>-import</span>] [<span class=courier>-output=</span><i>path</i><span class=courier>\</span>]
+[-noshow] [-usednvalues]</p>
+
+<p class=calccommline><span class=courier>open</span> <i>file.ext</i> [<span class=courier>-import</span>] [<span class=courier>-output=</span><i>ilwobj</i>]
+[-noshow] [-usednvalues]</p>
+
+<p class=calccommline><span class=courier>open</span> <i>file.ext</i> [<span class=courier>-import</span>] [<span class=courier>-output=</span><i>path</i><span class=courier>\</span><i>ilwobj</i>]
+[-noshow] [-usednvalues]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>open</span></p>
+
+</td>
+<td valign="top">
+<p>Imports a file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><i>file.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Name of the external ASTER level 1A or ASTER level 1B file. The file may or may not
+have an extension.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>-import</span></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter. </p>
+
+<p>If specified: data file(s) will be translated into ILWIS data files. </p>
+
+<p>If omitted: data file(s) will be used in their original format (UseAs). </p>
+
+<p><a href="../ilwis/ilwis_objects_service_objects.htm">Service objects</a> like
+<a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeferences</a> and <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate
+systems</a> will always be imported into the ILWIS format.</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>-output=</span><i>path</i><span class=courier>\</span></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter. 
+
+<p>If specified: results will be stored in the specified directory <i>path</i><span class=courier>\</span>; output object(s) IN the object collection will obtain the same name as the output object collection. </p>
+
+<p>If omitted: results will be stored in the current directory; output object(s) IN the object collection will obtain the same name as the output object collection. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>-output=</span><i>ilwobj</i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter. 
+
+<p>If specified: results will be stored in the current directory; the output
+object collection and output object(s) IN the object collection will obtain the specified name <i>ilwobj</i>. </p>
+
+<p>If omitted: results will be stored in the current directory; output object(s) IN the object collection will obtain the same name as the output object collection. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>-output=</span><i>path</i><span class=courier>\</span><i>ilwobj</i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter. 
+
+<p>If specified: results will be stored in the specified directory <i>path</i><span class=courier>\</span>;
+the output object collection and the output object(s) IN the object collection will obtain the specified name <i>ilwobj</i>. </p>
+
+<p>If omitted: results will be stored in the current directory; output object(s) IN the object collection will obtain the same name as the output object collection. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>-noshow</span></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter. 
+
+<p>If specified: the resulting object collection will not be opened. </p>
+
+<p>If omitted: the resulting object collection will be directly opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>-usednvalues</span></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter. 
+
+<p>If specified: the DN values of the ASTER file will not automatically be
+convert to radiance values. </p>
+
+<p>If omitted: the DN values of the ASTER file will automatically be convert to
+radiance values. </p>
+
+</td>
+</tr>
+</table>
+
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+<li>For more information on <a href="../ilwismen/import_aster.htm">Import ASTER</a> through ILWIS Map Import, see also the <a href="../ilwismen/import_map.htm">Import Map</a> dialog box, or the <span class=courier>import.def</span> file in your ILWIS directory.</li>
+<li>For more technical information about radiometric and geometric corrections of ASTER images refer to <a href="../ilwismen/import_aster_technical_information.htm">ASTER 
+Import : Radiometric and geometric corrections (technical information)</a>.</li>
+</ul>
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0 class=tiptext>
+<tr>
+<td valign="top" colspan="2">
+<p class=tipnospace>Examples:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>open Image_1B.hdf -import -noshow</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Imports the ASTER level 1B file Image_1B.hdf into ILWIS; an
+object collection with the name Image_1B.IOC containing 15 raster maps, 4
+georeferences and 1 coordinate system will be created. The data file will be
+translated into ILWIS data files but the resulting object collection will not be
+opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>open PG-PR1A0000-2001032501_22_039 -output=Aster -usednvalues</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Imports the ASTER level 1A file
+pg-PR1A0000-2001032501_22_039 into ILWIS; an object collection with the name
+Aster.IOC containing 15 raster maps, 15 georeferences and 1 coordinate system will be created.
+The data files will be used in their original format (UseAs) and instead of
+converting the DN values to radiance values the DN values are converted to sensor
+calibrated DN values.</p></td>
+</tr>
+</table>
+
+<h3 id="generalrasterimport_commandline">4c. ILWIS General Raster import</h3>
+
+<p class=defnewpar>As there are quite some different output possibilities, it is advised to first read the explanations in the <a href="../ilwismen/import_general_raster.htm">Import General Raster</a> dialog box. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>map(</span><i>file.ext</i>, <span class=courier>GenRas</span>, <span class=courier>UseAs</span> | <span class=courier>Convert</span>, <i>NrCols</i>, <i>SizeHeader</i> [, <span class=courier>Bit</span> | <span class=courier>Byte</span> | <span class=courier>Int</span> | <span class=courier>Real</span>] [, <span class=courier>1</span> | <span class=courier>2</span> | <span class=courier>4</span> | <span class=courier>8</span>] <span class=courier></span> [, <span class=courier>NoSwap</span> | <span class=courier>SwapBytes</span>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAPLIST</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>maplist(</span><i>file.ext</i>, <span class=courier>GenRas</span>, <span class=courier>UseAs</span> | <span class=courier>Convert</span>, <i>NrCols</i>, <i>NrBands</i>, <i>SizeHeader</i> [, <span class=courier>BIL</span> | <span class=courier>BSQ</span> | <span class=courier>BIP</span>] [, <span class=courier>Bit</span> | <span class=courier>Byte</span> | <span class=courier>Int</span> | <span class=courier>Real</span>] [, <span class=courier>1</span> | <span class=courier>2</span> | <span class=courier>4</span> | <span class=courier>8</span>] [, <span class=courier>NoSwap</span> | <span class=courier>SwapBytes</span>] [, <span class=courier>NoMPR</span> | <span class=courier>CreateMPR</span>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>OUTMAP</span></p>
+
+</td>
+<td valign="top">
+<p>Name of the output raster map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>OUTLIST</span></p>
+
+</td>
+<td valign="top">
+<p>Name of the output map list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>map</span></p>
+
+</td>
+<td valign="top">
+<p>Command line syntax to ensure that the output of general raster import is a raster map. You should use this option when the data file contains only 1 band.</p>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>maplist</span></p>
+
+</td>
+<td valign="top">
+<p>Command line syntax to ensure that the output of general raster import is a map list which may contain multiple raster maps. You sould use this option when the data file contains multiple bands, e.g. Band Interleaved, Band Sequential, or Pixel Interleaved. </p>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+<p class=leftmargin06><i>file.ext</i></p>
+
+</td>
+<td valign="top">
+<p>Name and extension of the external file.</p>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>GenRas</span></p>
+
+</td>
+<td valign="top">
+<p>Command line syntax to use General Raster Import.</p>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>UseAs</span> | <span class=courier>Convert</span></p>
+
+</td>
+<td valign="top">
+<p>Specify <span class=courier>UseAs</span> to create only one or more object definition files and keep the data file(s) in their original format. </p>
+
+<p>Specify <span class=courier>Convert</span> to translate the data file(s) to the ILWIS raster data format (.MP#). </p>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+<p class=leftmargin06><i>NrCols</i>
+
+</td>
+<td valign="top">
+<p>Specify the number of columns of a map / band. </p>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+<p class=leftmargin06><i>NrBands</i></p>
+
+</td>
+<td valign="top">
+<p>In case of importing a file that contains multiple bands: specify the number of bands that the file contains. </p>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+<p class=leftmargin06><i>SizeHeader</i></p>
+
+</td>
+<td valign="top">
+<p>Specify the number of bytes that is used by the header in the external file. </p>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>BIL</span> | <span class=courier>BSQ</span> | <span class=courier>BIP</span></p>
+
+</td>
+<td valign="top">
+<p>In case of importing a file that contains multiple bands: </p>
+
+<ul>
+
+<li>Specify <span class=courier>BIL</span> when the external file is Band Interleaved.</li>
+
+<li>Specify <span class=courier>BSQ</span> when the external file is Band Sequential.</li>
+
+<li>Specify <span class=courier>BIP</span> when the external file is Pixel Interleaved.</li>
+
+</ul>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+
+<p class=leftmargin06><span class=courier>Bit</span> | <span class=courier>Byte</span> | <span class=courier>Int</span> | <span class=courier>Real</span></p>
+</td>
+<td valign="top">
+<p>Optional paramter to specify the type of values that are used by the pixels in the file. </p>
+
+<ul>
+
+<li>Specify <span class=courier>Bit</span> when the values of the pixels are stored as bits (1 bit per pixel). </li>
+
+<li>Specify <span class=courier>Byte</span> when the values of the pixels are stored as bytes (1 byte per pixel). </li>
+
+<li>Specify <span class=courier>Int</span> when the values of the pixels are stored as short integers (2 bytes per value) or as long integers (4 bytes per pixel). </li>
+
+<li>Specify <span class=courier>Real</span> when the values of the pixels in the file are stored as floats (4 bytes per pixel) or as reals (8 bytes per pixel). </li>
+
+</ul>
+
+<p>If omitted, <span class=courier>Byte</span> will be used. </p>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>1</span> | <span class=courier>2</span> | <span class=courier>4</span> | <span class=courier>8</span></p>
+
+</td>
+<td valign="top">
+<p>In case you specified <span class=courier>Int</span> or <span class=courier>Real</span> as the previous parameter, optional parameter to specify the number of bytes that are used to store individual pixel values. </p>
+
+<ul>
+
+<li>Specify <span class=courier>1</span> when values are stored as bytes (same as using the <span class=courier>Byte</span> parameter); </li>
+
+<li>Specify <span class=courier>2</span> when values are stored as short integers;  </li>
+
+<li>Specify <span class=courier>4</span> when values are stored as long integers or as floats;  </li>
+
+<li>Specify <span class=courier>8</span> when values are stored as reals. </li>
+
+</ul>
+
+<p>If omitted, <span class=courier>1</span> will be used (1 byte per pixel). </p>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>NoSwap</span> | <span class=courier>SwapBytes</span></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter to specify whether or not bytes should be swapped: </p>
+
+<ul>
+
+<li>Specify <span class=courier>NoSwap</span> when the file uses the Intel byte order (highest byte last, Low Endian). </p>
+
+<li>Specify <span class=courier>SwapBytes</span> when the file uses the Motorola byte order (highest byte first, High Endian), e.g. when the file was created on an Apple or (downloaded from) a Unix machine. </p>
+
+</ul>
+
+<p>If omitted, <span class=courier>NoSwap</span> will be used. </p>
+
+</td>
+</tr><tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>NoMPR</span> | <span class=courier>CreateMPR</span></p>
+
+</td>
+<td valign="top">
+<p>In case of importing a file that contains multiple bands and using the <span class=courier>UseAs</span> option, optional parameter to specify whether or not an .MPR file should be created for every band: </p>
+
+<ul>
+
+<li>Specify <span class=courier>NoMpr</span> when you only wish to obtain an .MPL (object definition file for the output map list). The bands in the map list will automatically be called <span class=courier>band1</span>, <span class=courier>band2</span>, <span class=courier>band3</span>, etc. You can calculate with the bands by addressing them as <i>maplistname</i>:<i>bandnumber</i> as for instance in <span class=courier>OUTCalc = MyMapList:1 + MyMapList:2</span></li>
+
+<li>Specify <span class=courier>CreateMpr</span> when you wish to obtain an .MPL and various .MPR files (object definition file for every output raster map). The output raster maps will obtain the same name as the output map list, directly followed by a band number, for instance as <span class=courier>OutMap1</span>, <span class=courier>OutMap2</span>, <span class=courier>OutMap3</span>, etc.</li>
+
+</ul>
+
+<p>If omitted, <span class=courier>NoMpr</span> will be used. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>For more information, refer to the <a href="../ilwismen/import_general_raster.htm">Import General Raster</a> dialog box. </p>
+
+                                          
+<h3 id="ilwistableimport_commandline">4d. ILWIS Table Import</h3>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>table(</span><i>file.ext</i>, <span class=courier>Comma</span> | <span class=courier>Space</span> | <span class=courier>ILWIS14</span> | <span class=courier>DBF</span> , <!--<span class=courier>UseAs</span> | --><span class=courier>Convert</span> [, <i>SkipLines</i>] , TableDomain </p>
+
+<p class=calccommline>[, <i>UndefValueCol1</i>] , Col1NameValue ( coldomainname [ { <i>min</i> : <i>max</i> [ : <i>prec</i>] } ]</p>
+
+<p class=calccommline>[, <i>UndefValueCol2</i>] [, Col2Name ( ... ) ] ) )  </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>table(</span><i>file.ext</i>, <span class=courier>Comma</span> | <span class=courier>Space</span> | <span class=courier>ILWIS14</span> | <span class=courier>DBF</span> , <!--<span class=courier>UseAs</span> | --><span class=courier>Convert</span> [, <i>SkipLines</i>] , TableDomain </p>
+
+<p class=calccommline>[, <i>UndefValueCol1</i>] , Col1NameClassId ( coldomainname [ { <span class=courier>Class</span> | <span class=courier>ID</span> [ , <span class=courier>Extend</span> ] [ , <span class=courier>Key</span> ] } </p>
+
+<p class=calccommline>[, <i>UndefValueCol2</i>] [, Col2Name ( ... ) ] ) )  </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>table(</span><i>file.ext</i>, <span class=courier>Fixed</span>, <!--<span class=courier>UseAs</span> | --><span class=courier>Convert</span> [, <i>SkipLines</i>] , TableDomain, </p>
+
+<p class=calccommline><i>WidthCol1</i> [, <i>UndefValueCol1</i>] , Col1NameValue ( coldomainname [ { <i>min</i> : <i>max</i> [ : <i>prec</i>] } ] </p>
+
+<p class=calccommline>[, <i>WidthCol2</i> [, <i>UndefValue</i>] , Col2Name ( ... ) ] ) )  </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>table(</span><i>file.ext</i>, <span class=courier>Fixed</span>, <!--<span class=courier>UseAs</span> | --><span class=courier>Convert</span> [, <i>SkipLines</i>] , TableDomain, </p>
+
+<p class=calccommline><i>WidthCol1</i> [, <i>UndefValueCol1</i>] , Col1NameClassId ( coldomainname [ { <span class=courier>Class</span> | <span class=courier>ID</span> [ , <span class=courier>Extend</span> ] [ , <span class=courier>Key</span> ] } </p>
+
+<p class=calccommline>[, <i>WidthCol2</i> [, <i>UndefValueCol2</i>] , Col2Name ( ... ) ] ) )  </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>OUTTABLE</span></p>
+
+</td>
+<td valign="top">
+<p>Name of the output table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>table</span></p>
+
+</td>
+<td valign="top">
+<p>Command line syntax to import a table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=leftmargin06><span class=courier>Comma</span> | <span class=courier>Space</span> | <span class=courier>ILWIS14</span> | <span class=courier>DBF</span> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Parameter to specify the file format of the file to be imported. </p>
+
+<ul>
+
+<li>Specify <span class=courier>Comma</span> to import a comma delimited file (ASCII), i.e. when fields are separated by a comma. </li>
+
+<li>Specify <span class=courier>Space</span> to import a space delimited file (ASCII), i.e. when fields are separated by a space or a tab. </li>
+
+<li>Specify <span class=courier>ILWIS14</span> to import an ILWIS 1.4 table (ASCII). </li>
+
+<li>Specify <span class=courier>DBF</span> to import a file in dBase III/IV format. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>Fixed</span></p>
+
+</td>
+<td valign="top">
+<p>Parameter to import a file in Fixed format (ASCII, e.g. SDF), i.e. when columns start at fixed positions. Available character positions that are not filled with a character are expected to be filled with a space. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>Convert</span></p>
+
+</td>
+<td valign="top">
+<p>Parameter to specify to convert the file to the ILWIS table data format (.TB#). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><i>SkipLines</i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter to specify the number of lines at the beginning of the file that should be skipped when importing. You should use this parameter when the file has a header (e.g. when your file is an ILWIS 1.4 table, the first line should be skipped). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06>TableDomain</p>
+
+</td>
+<td valign="top">
+<p>Parameter to specify use specify the number </p>
+
+<ul>
+
+<li>If you wish to use a (class or ID) column of the input file as the domain of the imported table: use the <span class=courier>Key</span> parameter explained below, and specify <span class=courier>None</span> for this TableDomain parameter. In fact, then the specification <span class=courier>None</span> will be overruled by the specification <span class=courier>Key</span>. </li>
+
+<li>If you wish to use an existing domain as the domain of the imported table: specify the name of the existing domain that you wish to use. </li>
+
+<li>If you wish to use system domain <span class=courier>None</span> as the domain of the imported table: specify <span class=courier>None</span>. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><i>WidthCol1</i></p>
+
+</td>
+<td valign="top">
+<p>Obligatory parameter when importing a file that is in <span class=courier>Fixed</span> format. </p>
+
+<ul>
+
+<li>The <i>WidthCol1</i> parameter specifies the width of the first column of a <span class=courier>Fixed</span> format file; all values in this column should fit in the specified width.  </li>
+
+<li>When you wish to import a second, third, etc. column of a <span class=courier>Fixed</span> format file, you MUST also specify <i>WidthCol2</i>, <i>WidthCol3</i>, etc. When specifying <i>WidthCol2</i>, the width for the second column will start counting at the end of the first column as specified by <i>WidthCol1</i>, etc. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><i>UndefValueCol1</i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter to specify, for the first column of the external file, a value which should be regarded as undefined. When encountered in that column during Import, ILWIS will import the specified value as an undefined value, i.e. ?.</p>
+
+<p>Similarly, you can specify a value of the second column which should be regarded as an undefined value as <i>UndefValueCol2</i>, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><i>Col1NameValue</i></p>
+
+</td>
+<td valign="top">
+<p>Parameter to specify a name for the first column. Below, you find the syntax for when this column is supposed to contain values in contrast to classes or IDs. </p>
+
+<p>Similarly, you can specify a name for the second column etc. with <i>Col2Name</i>, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin1><i>coldomainname</i></p>
+
+</td>
+<td valign="top">
+<p>Parameter to specify a name for the domain of the first column. You can specify both an existing domain name and a new domain name. </p>
+
+<p class=tiptext><span class=tip>Tip: </span>When the column is supposed to contain values, you can generally use <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a> by typing <span class=courier>Value</span> for this parameter. </p>
+
+<p>Similarly, you can specify a name for the second column etc. with <i>Col2Name</i>, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin1><i>min</i> : <i>max</i> [: <i>prec</i>]</p>
+
+</td>
+<td valign="top">
+<p>Optionally, when the column is a value column, specify the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> for this column as <i>min</i> : <i>max</i>. Furthermore, you can also optionally specify the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> that should be used by the column as <i>prec</i>. </p>
+
+<p>When you know for instance that values of this column are in the range from 0 to 1000 and that 3 decimals are used, type: <span class=courier>0:1000:0.001</span>. All values outside a specified value range will be imported as undefined values.  </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><i>Col1NameClassID</i></p>
+
+</td>
+<td valign="top">
+<p>Parameter to specify a name for the first column. Below, you find the syntax for when this column is supposed to contain classes or IDs in contrast to values. </p>
+
+<p>Similarly, you can specify a name for the second column etc. with <i>Col2Name</i>, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin1><i>coldomainname</i></p>
+
+</td>
+<td valign="top">
+<p>Parameter to specify a name for the domain of the first column. You can specify both an existing domain name and a new domain name. </p>
+
+<ul>
+
+<li>When the column is supposed to contain classes or IDs, and you specify a <i>new domain name</i> for this column, you MUST also use the <span class=courier>Extend</span> parameter for this column as explained below. </li>
+
+<li>When the column is supposed to contain classes or IDs, and you this column should be used as the domain of the table, you should also use the <span class=courier>Key</span> parameter for this column as explained below. </li>
+
+<li>When you wish to import the characters in this column simply as strings, then type <span class=courier><a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >String</a></span>. Subsequently, you can skip for this column the parameters <span class=courier>Class</span> | <span class=courier>ID</span>, <span class=courier>Extend</span>, and <span class=courier>Key</span>. </li>
+
+<p class=tiptext><span class=tip>Tip: </span>Specifying system domain <span class=courier>String</span> for columns is a very safe way to import. </p>
+
+<p class=tiptext>After import, you can convert the String columns in the imported table to:</p>
+
+        <ul class=tipul>
+
+        <li>Value columns, type on the command line of the table window: <span class=courier>NewCol=VALUE(</span><i>stringcol</i><span class=courier>)</span> </li>
+
+        <li>Class columns, use the '<a href="../ilwismen/create_domain_class_or_id_from_string_column.htm">Create new domain from strings in column</a>' button in the <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box of a string column;</li>
+
+        <li>ID columns, use same method as to convert to Class columns. </li>
+
+        </ul>
+
+<p class=tiptext>Finally, you may have to use the <a href="../ilwisapp/change_domain_of_table.htm">Change domain of table</a> operation to convert the table to an attribute table. </p>
+
+</ul>
+
+<p>Similarly, you can specify a name for the second column etc. with <i>Col2Name</i>, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin1><span class=courier>Class</span> | <span class=courier>ID</span></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter to specify whether you wish to put the strings found in this column in a Class domain or in an ID domain. </p>
+
+<ul>
+
+<li>Specify <span class=courier>Class</span> when the strings in this column of the external file may occur more than once in this column. The strings in the column are supposed to represent classes of something. </li>
+
+<li>Specify <span class=courier>ID</span> when the strings in this column of the external file occur (generally) once in this column. The strings are supposed to represent IDs.</li>
+
+</ul>
+
+<p>Parameter can be omitted, when you will accept system naming or when you specified to use the <span class=courier>String</span> domain for this column, i.e. as characters only. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin1><span class=courier>Extend</span></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter to specify whether a Class or ID domain that should be used by this column (coldomainname) should be extended with any new classes or ID's found in the column during import or not. </p>
+
+<ul>
+
+<li>Parameter MUST be used when you specified a <i>new domain name</i> (coldomainname) for this column, and when you specified that the domain should be a Class or ID domain. </li>
+
+<li>Parameter may be used when you specified an <i>existing domain name</i> for this column and when column should be of type Class or ID. 
+
+        <ul>
+
+        <li>If specified: Any unique string that is found in this column in the external file will be added to the domain that has been specified for this column. </li>
+
+        <li>If omitted and if a <i>new</i> domain name has been specified before, then the new domain will remain empty! Thus the imported column will only contain undefs. </li>
+
+        <li>If omitted and if an <i>existing</i> domain name has been specified before, then the existing domain will not be extended with any new strings found in this column. Some fields in the output table of this column may thus contain undefs. </li>
+
+        </ul>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin1><span class=courier>Key</span></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter to specify whether a Class or ID domain that should be used by this column (<i>coldomainname</i>) should be used as the domain of the table. You can use the <span class=courier>Key</span> parameter only for 1 (Class or ID) column. The column for which the <span class=courier>Key</span> parameter is specified will not appear as a column in the table. Using the <span class=courier>Key</span> parameter will overrule any previous setting of the TableDomain parameter. </p>
+
+<p>Purpose of this <span class=courier>Key</span> parameter: When an output table itself uses a certain Class or ID domain, you can link the output table to a map which uses the same Class or ID domain; the output table will then become an attribute table of the map to which you linked it. You can also link the output table to the Class or ID domain itself; then the table will be the (default) attribute table of all maps which use that domain. </p>
+
+<ul>
+
+<li>Specify the <span class=courier>Key</span> parameter for the Class or ID column that contains unique strings which will be the 'record numbers' in the output table. </li>
+
+<li>If the <span class=courier>Key</span> parameter is omitted for <i>all</i> columns, you will obtain a table with system domain <span class=courier>None</span>. The table will have record numbers like 1, 2, 3, etc. You may have to use the <a href="../ilwisapp/change_domain_of_table.htm">Change domain of table</a> operation after import to convert the table to an attribute table. </li>
+
+</ul>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>For more information, please refer to the <a href="../ilwismen/import_table_input_table_name.htm">Import Table wizard</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0 class=tiptext width="100%">
+<tr>
+<td valign="top" colspan="3">
+<p class=tipnospace>Examples:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline><span class=courier>ImpTable1</span></p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline><span class=courier>=</span></p>
+
+</td>
+<td valign="top">
+<p class=courier>table( HOUSES.DBF, DBF, Convert, none, colAnyname(ImpTable1{ID,Extend,Key}), colHouses(value) ) </p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0 class=tiptext>
+<tr>
+<td valign="top" width=180>
+<p>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p>Imports the dBase <span class=courier>DBF</span> file <span class=courier>HOUSES.DBF</span> into ILWIS; a table with the name <span class=courier>ImpTable1</span> will be created. </p>
+
+<p>One column in the DBF file will temporarily get the column name <i>colAnyname</i> and it will use domain <span class=courier>ImpTable1</span>; this is a new ID domain (therefore <span class=courier>Extend</span>) and this temporary column will be used as <span class=courier>Key</span> for the output table (i.e. as the domain of the output table). </p>
+
+<p>The only column that will thus appear in the output table is called <span class=courier>colHouses</span>; this column will use the system <span class=courier>Value</span> domain. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tiptext><span class=emtpylinehalf>&nbsp;</span></p>
+
+<table cellspacing=0 class=tiptext width="100%">
+<tr>
+<td valign="top" width=68>
+<p class=calccommline><span class=courier>ImpTable2</span></p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline><span class=courier>=</span></p>
+
+</td>
+<td valign="top">
+<p class=courier>table( HOUSES.DBF, DBF, Convert, none, col1Name(String), col2Houses(String) ) </p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0 class=tiptext>
+<tr>
+<td valign="top" width=180>
+<p>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p>Imports the dBase <span class=courier>DBF</span> file <span class=courier>HOUSES.DBF</span> into ILWIS. A table with the name <span class=courier>ImpTable2</span> will be created, the table will use system domain <span class=courier>None</span>. </p>
+
+<p>The first column in the output table will get column name <span class=courier>col1Name</span> and it will use system domain <span class=courier>String</span>. </p>
+
+<p>The second column in the output table will get column name <span class=courier>col2Houses</span> and it will also use system domain <span class=courier>String</span>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tiptext><span class=emtpylinehalf>&nbsp;</span></p>
+
+<table cellspacing=0 class=tiptext width="100%">
+<tr>
+<td valign="top" width=68>
+<p class=calccommline><span class=courier>ImpTable3</span></p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline><span class=courier>=</span></p>
+
+</td>
+<td valign="top">
+<p class=courier>table( SDFTable.SDF, Fixed, Convert, none, 10, col1(String), 25, col2(String) )</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0 class=tiptext>
+<tr>
+<td valign="top" width=180>
+<p>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p>Imports the file <span class=courier>SDFTable</span> which is in <span class=courier>Fixed</span> format into ILWIS. A table with the name <span class=courier>ImpTable3</span> will be created; the table will have system domain <span class=courier>None</span>.</p>
+
+<p>The first column in the output table will get column name <span class=courier>col1</span> and it will use system domain <span class=courier>String</span>. <i>Col1</i> will contain the characters that are found on positions 1 to 10 of the input file. </p>
+
+<p>The second column in the output table will get column name <span class=courier>col2</span> and it will also use system domain <span class=courier>String</span>. <i>Col2</i> will contain the characters that are found on positions 11 to 35 of the input file. </p>
+
+</td>
+</tr>
+</table>
+
+<h2 id="export_commandline">5. Export expressions</h2>
+
+<h3 id="ilwisexport_commandline">5a. ILWIS Export</h3>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=calccommline><span class=courier>export</span> <i>format</i>(<i>ilwobj.ext</i>,<i>filename</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Export an ILWIS 3 map or table <i>ilwobj.ext</i> to another data file <i>filename</i>.</p>
+
+<ul>
+
+<li>For <i>format</i>, you have to specify one of the following formats: </li>
+
+<p><span class=courier>arcinfonas | arcinfopts |  ascii | bmp | bna | dbase | dbasesdf | delimited | dxf | e00 | erdasgis | erdaslan | ida | idrisi | ilwis2 | ilwis14 | infocam | lin | shapefile | smt | tiff</span>&nbsp;.</p>
+
+<li>The extension of the ILWIS 3 map or table <i>ilwobj.ext</i> must be specified; <span class=courier>.mpl</span> for a map list, <span class=courier>.mpr</span> for a raster map, <span class=courier>.mpa</span> for a polygon map, <span class=courier>.mps</span> for a segment map, <span class=courier>.mpp</span> for a point map, <span class=courier>.tbt</span> for a
+  table, <span class=courier>.his</span>, <span class=courier>.hsa</span>, <span class=courier>.hss</span>,
+  and <span class=courier>.hsp</span>
+  for histograms and <span class=courier>.csy</span> for a coordinate system.</li>
+
+<p>Furthermore, ILWIS 3 objects which are stored as a table can be exported as tables of external formats:&nbsp;2-dimensional tables (<span class=courier>.ta2</span>), domain class/ID/group (<span class=courier>.dom</span>), representation class (<span class=courier>.rpr</span>), georeference tiepoints (<span class=courier>.grf</span>), coordinate system tiepoints (<span class=courier>.csy</span>). </p>
+
+<li>The extension(s) for the output data file(s) <i>filename</i> will be automatically added during export. </li>
+
+</ul>
+
+<p class=tipnospace>Note: </p>
+
+<ul class=tipul>
+
+<li>It is not a good idea to use a space before the output <i>filename</i> in the expression, as this will result in output file(s) starting with a space. </li>
+
+</ul>
+
+</td>
+</tr>                  
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>arcinfonas</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS raster map to an Arc/Info non-compressed ASCII file (.ASC). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>arcinfopts</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS point map to an Arc/Info .PTS (ASCII) file. From this file, (label) points can be created using the Arc/Info Generate command. For <i>format</i>, you may use <span class=courier>arcinfopts</span> (as described) or <span class=courier>arcgen</span>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>ascii</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS raster map to an ILWIS 1.x ASCII file (.ASC).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>bmp</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS raster map to a Windows bitmap (.BMP).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>bna</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS segment map to an Atlas vector map (.BNA).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>dbase</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS table to a dBase III/IV file (.DBF).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>dbasesdf</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS table to an ASCII dBase III/IV file (.SDF). This format is also known as Standard format or Fixed format. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>delimited</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS table to an ASCII comma delimited file (.TXT).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>dxf</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS polygon, segment  or point map to an AutoCad .DXF file.</p>
+
+</td>
+</tr> 
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>e00</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS polygon, segment or point map to an Arc/Info .E00 file.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>erdasgis</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS raster map to an Erdas .GIS file; in case you exported a domain Class map, also a trailer file will be created (.TRL). The ILWIS map should preferably be north-oriented.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>erdaslan</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS map list, which contains multiple bands of a satellite image, or export a single ILWIS raster map to an Erdas .LAN file. The ILWIS map(s) should preferably be north-oriented.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>esriprj</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS coordinate system projection or an ILWIS coordinate system latlon to an ESRI ArcGIS projection file (.PRJ). An ILWIS coordinate system should have an ellipsoid WGS 84 or an ellipsoid and a datum.</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>ida</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS raster map to an IDA image (.IMG). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>idrisi</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS raster map to an Idrisi map (.DOC, .IMG).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>ilwis2</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS 3 polygon, segment, point map or table to an ILWIS 2 polygon, segment, point map or table (.MPA, .MPS, .MPP, .TBT and others). Histograms or other objects that are stored as a table cannot be exported. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>ilwis14</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS raster, segment, point map or table to an ILWIS 1.x raster, segment, point map or table (.MPD, .SEG, .PNT, .TBL and others). Histograms or other objects that are stored as a table cannot be exported. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>infocam</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS polygon, segment or point map to an InfoCam sequential file (.SEQ).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>lin</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS segment map to an Arc/Info .LIN file (ASCII). From this file, lines can be created using the Arc/Info Generate command.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>shapefile</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS polygon, segment or point map to Arc/View Shape files (.SHP, .SHX, .DBF).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>smt</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS segment map to an ILWIS 1.x ASCII vector file (.SMT).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=leftmargin06><span class=courier>tiff</span></p>
+
+</td>
+<td valign="top">
+<p>Export an ILWIS raster map to a Tiff image (.TIF).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>For more information, see also the <a href="../ilwismen/export.htm">Export</a> dialog box, or the <span class=courier>expras.def</span>, <span class=courier>expmpl.def</span>, <span class=courier>exppol.def</span>, <span class=courier>expseg.def</span>, <span class=courier>exppnt.def</span>, <span class=courier>exptbl.def</span>,
+<span class=courier>expcsy.def</span> files in your ILWIS directory. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0 class=tiptext>
+<tr>
+<td valign="top" colspan="2">
+<p class=tipnospace>Examples:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>export e00(water.mps,e00water)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Exports the ILWIS segment map WATER.MPS to the file E00WATER.E00 in the Arc/Info interchange format. This example also illustrates the need for the explicit mentioning of the ILWIS map extension: as the E00 export is defined for segments, polygons and points there is no other way than the extension to tell export which type should be exported.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>export erdasgis(soil.mpr,erdsoil)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=180>
+<p class=nospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=nospacetop>Exports the ILWIS raster map SOIL.MPR to the file ERDSOIL.GIS. If the ILWIS map has a class domain, ILWIS will also create a ERDSOIL.TRL file.</p>
+
+</td>
+</tr>
+</table>
+
+        
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="ilwis_objects_scripts.htm">ILWIS objects : scripts</a></p>
+
+<p class=seealsolinks><a href="how_to_create_scripts.htm">How to create a script</a></p>
+
+<p class=seealsolinks><a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a></p>
+
+<p class=seealsolinks><a href="how_to_run_scripts.htm">How to run scripts</a></p>
+
+<p class=seealsolinks><a href="how_to_use_long_object_names.htm">How to use long object names</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_commands.htm">Appendices : ILWIS commands</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_as_dde_server.htm">Appendices : ILWIS as DDE server</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/import_map.htm">Import</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/export.htm">Export</a> (dialog box)</p>
+
+</body

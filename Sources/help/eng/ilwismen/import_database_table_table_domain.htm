@@ -1,0 +1,113 @@
+<html>
+
+<head>
+<title>Import Table wizard (table from database) - Select table and table domain</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Import, Databases, Database collections, dBase, DBF, MS Excel, Excel, XLS, MS Access, Access, MDB">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table class=headingblue cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Import Table wizard</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">Main window, File menu</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Database, Table + Table Domain</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="import_table_input_table_name.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="import_database_sql_query.htm">Next</a>&nbsp;&gt;</td>
+</tr>
+</table>
+
+<!--<hr>-->
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>Select the table from the database that you wish to use or that you wish to import, and select the domain for the table. </p>
+
+<p class=defnewpar>In case of a dBase DBF table, the table is already known, so you only need to specify a domain. </p>
+
+<p class=diakopje>Page options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Database tables: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a table from the database. </p>
+
+<ul class=diaul>
+
+<li>Excel sheets are listed with a $ sign behind the sheet name. </li>
+
+<li>The database tables list box is not available when importing a dBase DBF file. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Possible key columns: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> for the output table. </p>
+
+<p class=diabox>You can select: </p>  
+
+        <ul>
+
+        <li><a href="..//ilwis/popup/yy_system_domain_none_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>None</span></a>: the output table will resemble the original table.  </li>
+
+        <li>a String column from the table: the items in the string column will be converted to an ID domain, and the output table will use this ID domain. </li>
+
+        </ul>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>For Excel import requirements, see <a href="import_table_input_table_name.htm">Import Table wizard</a>, <a href="import_table_input_table_name.htm#excel_import"><span class=bookmark>section Import Excel .XLS requirements</span></a>. </li>
+
+<li>This option is one of the methods to access a database. For a general introduction, refer to <a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a>. </li>
+
+<li>After initial import, you can change the domain of a String column through the <a href="../ilwismen/column_properties.htm">Column Properties</a> of a column. </li>
+
+<li>After initial import, you can change the domain of a table (e.g. when table uses domain <span class=courier>None</span>) through the <a href="..//ilwisapp/popup/change_domain_of_table_popup.htm" onClick="return popup(this, 'notes')" >Change domain of table</a> operation. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/import_database_sql_query.htm">Import database - SQL query</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_object_collections.htm">ILWIS objects : object collections</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_import_data.htm">How to import data</a></p>
+
+</body

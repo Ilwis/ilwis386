@@ -1,0 +1,106 @@
+<html>
+
+<head>
+<title>Open/Show object as table</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Show as ..., Open as ..., Tables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Open/Show Object As Table</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Select a table, a two-dimensional table, a histogram, a point map, an annotation text object, a domain class/ID, a representation class/picture, a georeference tiepoints or a coordinate system tiepoints, and show this object as a table in a table window. </p>
+
+<p class=defnewpar>Tables, histograms and two-dimensional tables are always opened as a table, for instance when they are double-clicked in the Catalog. </p>
+
+<p>Point maps, annotation text objects, class/ID domains, class/picture representations, georeferences tiepoints and coordinate systems tiepoints are internally stored as a table and these objects can therefore also be opened as a table. </p>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>The option <span class=arial>Open As Table</span> is designed for experienced users. Opening an object as a table means that you can touch the object as it is stored on disk; you can see and edit the binary data files of an object, which are otherwise not readable, in ASCII now. Editing leads to changes with the risk of making an object unusable. Keep in mind that names and codes of domain items should be unique. Further it is not advised to edit the values in columns Ind and Ord of a domain as this can lead to serious problems such as missing domain items, wrong colors, wrongly linked attributes, etc. </p>
+
+<p class=defnewpar>The general idea behind opening these objects as a table is to allow the user to manually edit the object in table form, and to perform calculations with TabCalc on or with the columns in the table. For some purposes editing an object in table form might be quicker, easier or more precise, than using the point map editor, the annotation text editor, the domain class/ID editor, the representation class editor, or the georef tiepoints editor.</p>
+
+<p>A special set of functions was designed to be able to calculate with XY-coordinate columns, color columns, etc. For more information, refer to <a href="../ilwis/calc.htm">TabCalc : special calculations</a>.</p>
+
+<p class=defnewpar>Opening point maps, representations or annotation text objects as a table will look familiar to ILWIS 1.4 users because ILWIS 1.4 point maps, color look-up-tables and annotation text files were always stored as ASCII tables.</p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Open As Table</span> from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Select a table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the object which you want to open in a new table window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the object is not open yet, it is opened in a new table window.</p>
+
+<p>When the object was already open in another form, it is also opened as a table.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	An annotation text object is directly opened as a table by double-clicking it in the Catalog.</li>
+
+<li>	To open a point map, domain class/ID, representation class/picture, a georeference tiepoints, or a coordinate system tiepoints as a table, you can also click them in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> with the right mouse button, then choose <span class=arial>Open as Table</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+<li>	You can also open objects as a table by typing the <span class=courier>ShowAsTbl</span> or the <span class=courier>OpenAsTbl</span> command on the command line of the Main window. For more information, see <a href="../ilwis/appendices_ilwis_commands.htm">Appendices : ILWIS commands</a>.</li>
+
+</ul>
+
+</body

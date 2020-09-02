@@ -1,0 +1,25 @@
+<html>
+
+<head>
+<title>Assign labels to polygons : algoritm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Assign labels to polygons">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Assign labels to polygons</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Assign labels to polygons operation copies the polygon map and and assigns the undefined value to all polygons. Next, for each label point, the surrounding polygon is determined. Then the class name, ID or value of the label point is assigned to that polygon. If there is no point in a polygon, the polygon will keep the undefined value. </p>
+
+<p class=defnewpar>If the input polygon map and the input point map have a different but compatible coordinate system, a coordinate transformation in performed on the point map before the determination of which polygon surrounds a point. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="assign_labels_to_polygons_functionality.htm">Assign labels to polygons : functionality</a></p>
+
+</body

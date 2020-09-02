@@ -1,0 +1,192 @@
+<html>
+
+<head>
+<title>ILWIS objects : container objects</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS objects, Container objects">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>ILWIS objects</h1>
+
+<h1 class=secondline>Container objects</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Container objects are collections of <a href="ilwis_objects_data_objects.htm">data objects</a>. Container objects in its simplest form are (ASCII) lists with references to the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition files</a> of the data objects they contain. Container objects themselves thus do not store the data files of data objects. Some extra information may be stored by container objects as well. </p>
+
+<p class=defnewpar>Container object are: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/mpl.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top" width=120>
+<p><a href="ilwis_objects_map_lists.htm">map lists</a></p>
+
+</td>
+<td valign="top">
+<p>containing raster maps</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/objcol.gif" align=bottom width="15" height="13"></p>
+
+</td>
+<td valign="top" width=120>
+<p><a href="ilwis_objects_object_collections.htm">object collections</a></p>
+
+</td>
+<td valign="top">
+<p>containing a subset of your data or the results of importing an Aster image</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/mpv.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top" width=120>
+<p><a href="ilwis_objects_map_views.htm">map views</a></p>
+
+</td>
+<td valign="top">
+<p>containing a raster map and/or one or more polygon, segment and point maps, grid lines and graticules</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/layout.gif" align=bottom width="12" height="14"></p>
+
+</td>
+<td valign="top" width=120>
+<p><a href="ilwis_objects_layouts.htm">layouts</a></p>
+
+</td>
+<td valign="top">
+<p>containing one or more map views and other annotation</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/anntxt.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top" width=120>
+<p><a href="ilwis_objects_annotation_text.htm">annotation text</a></p>
+
+</td>
+<td valign="top">
+<p>containing multiple texts, e.g. labels of polygons, segments or points</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/graphicon.gif" align=bottom width="15" height="15"></p>
+
+</td>
+<td valign="top" width=120>
+<p><a href="ilwis_objects_graphs.htm">graphs</a></p>
+
+</td>
+<td valign="top">
+<p>containing graphical display settings for values in columns</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names.</p> 
+
+<ul>
+
+<li>In object names, any character may be used except<span class=courier> \ / : * ? &lt; &gt; | &quot;</span></li>
+
+<li>The maximum length of an object name is 255 characters including the full path.</li>
+
+</ul>
+
+<p>Furthermore, it is not allowed to use <span class=courier>%</span> in any ILWIS object name. </p>
+
+<p class=linespacing03before>In dialog boxes, long object names can be used freely. </p>
+
+<p class=linespacing03before>On the command line and in scripts however, object names must be enclosed by <i>single quotes</i> e.g. <span class=courier>'My Object'.</span><i>ext</i> when the object name: </p>
+
+<ul>
+
+<li>starts with a digit from 0 to 9,</li>
+
+<li>starts with or contains one or more spaces, or </li>
+
+<li>starts with or contains any of the following special characters <span class=courier> ` ~ ! @ # $ ^ &amp; ( ) - + = [ ] { } ; ' , .</span></li>
+
+</ul>
+
+<p>See also <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=defnewpar>Furthermore, in ILWIS 3, Universal Naming Convention (UNC) paths are supported. A UNC path starts with <span class=courier>\\<i>ServerName</i>\</span>... rather than with <span class=courier><i>DriveLetter</i>:\</span>...</p>
+
+<p class=tip>Tips: </p>
+
+<ol class=tipol>
+
+<li> To hide or show certain object types from a Catalog, use the <a href="../ilwismen/catalog_show.htm">Catalog - Show</a> command, <a href="../ilwis/main_window_object_selection_toolbar.htm">Object Selection toolbar</a> or the <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog, Object Selection tab</a>.</li>
+
+<li> To copy, rename or delete ILWIS objects, you MUST use ILWIS commands.</li>
+
+        <ul>
+
+        <li> To copy or to rename a single object: select an object and choose the <span class=arial><a href="../ilwismen/copy_object_to.htm">Copy Object To</a></span> command. </li>
+
+        <li> To copy one or more objects: select the object(s) and use <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag and drop</a>, or select the object(s) and choose the <span class=arial><a href="..//ilwismen/popup/main_window_copy_popup.htm" onClick="return popup(this, 'notes')" >Copy</a></span> command and then the <span class=arial><a href="..//ilwismen/popup/main_window_paste_popup.htm" onClick="return popup(this, 'notes')" >Paste</a></span> command. </li>
+
+        <li> To delete one or more objects: select the object(s) and choose the <span class=arial><a href="..//ilwismen/popup/main_window_delete_popup.htm" onClick="return popup(this, 'notes')" >Delete</a></span> command. </li>
+
+        </ul>
+
+        <p>For more information, see <a href="../ilwis/how_to_copy_objects.htm">How to copy objects</a> or <a href="../ilwis/how_to_delete_objects.htm">How to delete objects</a>.</p>
+ 
+<li> <span class=tip>Mind: </span>It is strongly discouraged to copy, rename or delete files using Windows Explorer or DOS.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="ilwis_objects_map_lists.htm">ILWIS objects : map lists</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_object_collections.htm">ILWIS objects : object collections</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_map_views.htm">ILWIS objects : map views</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_layouts.htm">ILWIS objects : layouts</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_graphs.htm">ILWIS objects : graphs</a></p>
+
+</body

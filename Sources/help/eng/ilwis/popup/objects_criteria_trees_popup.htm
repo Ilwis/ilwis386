@@ -1,0 +1,103 @@
+<html>
+
+<head>
+<title>Objects criteria trees popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Criteria trees&nbsp;&nbsp;&nbsp;<img src="../../images/criteria_tree.gif" align=bottom width="13" height="14"></p>
+
+<p class=defnewpar>A <a href="..//ilwis/ilwis_objects_criteria_trees.htm" onClick="return popup(this, 'notes')" >criteria tree</a> contains the definition of a complicated calculation in which multiple input maps and/or attribute columns are combined, according to certain user-defined rules or criteria, to obtain a final output raster map using <a href="..//ilwis/smce_window_functionality.htm" onClick="return popup(this, 'notes')" >Spatial Multi-Criteria Evaluation (SMCE)</a>. </p>
+
+<p class=defnewpar>Under the <i>main goal</i> of a criteria tree, you can add: </p>
+
+<ul>
+
+<li>criteria: these rules are either <i><a href="smce_factor_popup.htm">factors</a></i> or <i><a href="smce_constraint_popup.htm">constraints</a></i>. </li>
+
+<li><i>groups</i>: as many criteria may be involved, you can create groups under the main goal of a tree to keep an overview of all rules. A group defines an intermediate or a partial goal. Under a group, you can add one or more <i>factors</i>. </li>
+
+</ul>
+
+<p class=defnewpar>A criteria tree as a whole contains all rules you defined; it thus contains the way in which all input data should be standardized, grouped or weighed, to be able to calculate the final output map. The calculated final output map will show the performance of an area for the main goal that was set. </p>
+
+<p class=defnewpar>To build a criteria tree, you need to: </p>
+
+<ul>
+
+<li class=ls01be>specify the name of the <i>main goal</i> as text, and specify the name of the output raster map that will contain the calculated final result, </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>add criteria under the main goal, i.e.: </li>
+
+	<ul>
+
+	<li>add <i><a href="smce_factor_popup.htm">factors</a></i> (benefits and/or costs) and add <i><a href="smce_constraint_popup.htm">constraints</a></i>, </li>
+
+	<li>specify the name of each factor or constraint as text, </li>
+
+	<li>select for each factor or constraint the input raster map or the attribute column that needs to be used. </li>
+
+	</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>optionally, add <i>groups</i> (partial goals) under the main goal, or under another partial goal, i.e.: </li>
+
+	<ul>
+
+	<li>specify the name of a group as text, </li>
+
+    <li>optionally, specify the name of the output raster map that will contain the calculated result for this group, </li>
+
+		<ul>
+
+		<li>add <i><a href="smce_factor_popup.htm">factors</a></i> (benefits and/or costs) under the group, </li>
+
+		<li>specify the name of each factor as text, </li>
+
+		<li>select for each factor the input raster map or the attribute column that needs to be used. </li>
+    
+	    </ul>
+
+	</ul>
+
+</ul>
+
+<p class=defnewpar>Optionally, you can calculate performance by multiple <i>scenarios</i> or <i>alternatives</i>, in order to select the best scenario or alternative, and to identify poorly performing scenarios or alternatives. You will use: </p>
+
+<ul>
+
+<li>the same criteria tree, i.e. the same rules for standardization, grouping and weighing of criteria, </li>
+
+<li>for each alternative: other input maps. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../../ilwis/popup/smce_factor_popup.htm">SMCE Factors (Benefits and Costs)</a></p>
+<p class=seealsolinks><a href="../../ilwis/popup/smce_constraint_popup.htm">SMCE Constraints</a></p>
+<p class=seealsolinks><a href="..//ilwis/smce_window_functionality.htm" onClick="return popup(this, 'notes')" >SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="..//ilwis/smce_window_criteria_tree_viewer.htm" onClick="return popup(this, 'notes')" >SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_criteria_trees.htm" onClick="return popup(this, 'notes')" >ILWIS objects : criteria trees</a></p>
+
+</body

@@ -1,0 +1,244 @@
+<html>
+
+<head>
+<title>RPRCOLOR</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="RPRCOLOR, Color functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>RPRCOLOR( ) function</h1>
+
+<p class=defnewpar>Returns the (R,G,B) color of a certain class <i>Class</i> or value <i>Value</i> from a representation <i>Representation</i>  of type Class or type Value.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>RPRCOLOR</span>(<i>Representation, Value</i>)<br>
+<span class=courier>RPRCOLOR</span>(<i>Representation</i>, &quot;<i>Class</i>&quot;)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><i>Representation</i></td>
+	<td valign="top">is a representation</td>
+</tr>
+<tr>
+	<td width="110" valign="top"><i>Value</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="110" valign="top"><i>Class</i></td>
+	<td valign="top">is a class name</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><span class=courier>RPRCOLOR</span> returns:</td>
+	<td valign="top">a color</td>
+</tr>
+<tr>
+	<td width="110" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Color</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>The <span class=courier>RPRCOLOR</span> function <i>retrieves</i> a color from a representation class or from a representation value. The function can also be used on a representation class that is opened as a table.</li>
+	<li>This function may be handy to use in <a href="..//ilwis/popup/dde_popup.htm" onClick="return popup(this, 'notes')" >DDE</a> applications.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class="calctitle">Examples
+<p class=kopjeaftertitlesub>Pocket line calculator example:</p>
+<table cellspacing="0">
+  <tr>
+    <td width="220"><p class="calc00">? RPRCOLOR(Suitability,&quot;4&quot;)</p></td>
+    <td>returns the color of class <span=class=courier>4 in a map with suitability classes</td>
+  </tr>
+  <tr>
+    <td width="220"><p class="calc00">? RPRCOLOR(Landuse,&quot;Forest&quot;)</p></td>
+    <td>returns the color of land use <span class=courier>Forest</span> in map <span class=courier>Landuse</span>, e.g. (0,255,0)</td>
+  </tr>
+  <tr>
+    <td width="220"><p class="calc00">? RPRCOLOR(DEM,3000)</p></td>
+    <td>returns the color of value 3000 from representation <span class=courier>DEM</span>, e.g. (255,255,128)</td>
+ </tr>   
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p>Using Table Calculation, you have the ability to read colors from a representation into another table. Because a color should be retrieved for every item in the domain, you can use the <a href="calc_predefined_variable_k.htm">predefined variable %K</a>.</p>
+<p class="calc0linsp03befaft">OutCol = RPRCOLOR(Landuse,%K)</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" width="70"><p class="th">Landuse.tbt</p></td>
+    <td valign="top" width="50"></td>
+    <td valign="top" width="70"><p class="th">Landuse.rpr</p></td>
+    <td valign="top">
+      <p class="th"></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="tcolh">Landunit</p></td>
+    <td valign="top"></td>
+    <td valign="top" width="70"><p class="tcolh">Landunit</p></td>
+    <td valign="top"><p class="tcolhr">Color</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Agriculture</p></td>
+    <td valign="top"></td>
+    <td valign="top" width="70"><p class="t1">Agriculture</p></td>
+    <td valign="top"><p class="t1r">(255, 255, 0)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Airport</p></td>
+    <td valign="top"></td>
+    <td valign="top" width="70"><p class="t1">Airport</p></td>
+    <td valign="top"><p class="t1r">(255, 0, 0)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Bare soils</p></td>
+    <td valign="top"></td>
+    <td valign="top" width="70"><p class="t1">Bare soils</p></td>
+    <td valign="top"><p class="t1r">(164, 40, 40)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Forest</p></td>
+    <td valign="top"></td>
+    <td valign="top" width="70"><p class="t1">Forest</p></td>
+    <td valign="top"><p class="t1r">(48, 128, 76)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Grass</p></td>
+    <td valign="top"></td>
+    <td valign="top" width="70"><p class="t1">Grass</p></td>
+    <td valign="top"><p class="t1r">(98, 98, 98)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Lake</p></td>
+    <td valign="top"></td>
+    <td valign="top" width="70"><p class="t1">Lake</p></td>
+    <td valign="top"><p class="t1r">(0, 0, 255)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Riverbed</p></td>
+    <td valign="top"></td>
+    <td valign="top" width="70"><p class="t1">Riverbed</p></td>
+    <td valign="top"><p class="t1r">(0, 255, 255)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Rocks</p></td>
+    <td valign="top">&nbsp;</td>
+    <td valign="top" width="70"><p class="t1">Rocks</p></td>
+    <td valign="top"><p class="t1r">(128, 128, 128)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Shrubs</p></td>
+    <td valign="top"></td>
+    <td valign="top" width="70"><p class="t1">Shrubs</p></td>
+    <td valign="top"><p class="t1r">(255, 0, 255)</p></td>
+  </tr>
+</table>
+<p class=emptylinehalf>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=th>Landuse.tbt</p></td>
+</tr>
+</table>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" width="70"><p class="tcolh">Landunit</p></td>
+    <td valign="top"><p class="tcolhr">Color</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Agriculture</p></td>
+    <td valign="top"><p class="t1r">(255, 255, 0)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Airport</p></td>
+    <td valign="top"><p class="t1r">(255, 0, 0)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Bare soils</p></td>
+    <td valign="top"><p class="t1r">(164, 40, 40)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Forest</p></td>
+    <td valign="top"><p class="t1r">(48, 128, 76)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Grass</p></td>
+    <td valign="top"><p class="t1r">(98, 98, 98)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Lake</p></td>
+    <td valign="top"><p class="t1r">(0, 0, 255)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Riverbed</p></td>
+    <td valign="top"><p class="t1r">(0, 255, 255)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Rocks</p></td>
+    <td valign="top"><p class="t1r">(128, 128, 128)</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Shrubs</p></td>
+    <td valign="top"><p class="t1r">(255, 0, 255)</p></td>
+  </tr>
+</table>
+
+<p class=defnewpar>The expression returns for every item in the attribute table <span class=courier>Landuse.tbt</span> the color which was described in the representation
+<span class=courier>Landuse.rpr</span>.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="70"><a href="calc_color.htm">COLOR</a></td>
+	<td valign="top" width="70"><a href="calc_clrgreen.htm">CLRGREEN</a></td>
+	<td valign="top" width="85"><a href="calc_clryellow.htm">CLRYELLOW</a></td>
+	<td valign="top"><a href="calc_clrhue.htm">CLRHUE</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70"><a href="calc_mapcolor.htm">MAPCOLOR</a></td>
+	<td valign="top" width="70"><a href="calc_clrblue.htm">CLRBLUE</a></td>
+	<td valign="top" width="85"><a href="calc_clrmagenta.htm">CLRMAGENTA</a></td>
+	<td valign="top"><a href="calc_clrsat.htm">CLRSAT</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70"><a href="calc_rprcolor.htm">RPRCOLOR</a></td>
+	<td valign="top" width="70"></td>
+	<td valign="top" width="85"><a href="calc_clrcyan.htm">CLRCYAN</a></td>
+	<td valign="top"><a href="calc_clrintens.htm">CLRINTENS</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70">&nbsp;</td>
+	<td valign="top" width="70">&nbsp;</td>
+	<td valign="top" width="85"><a href="calc_clrgrey.htm">CLRGREY</a></td>
+	<td valign="top"><a href="calc_colorhsi.htm">COLORHSI</a></td>
+</tr>
+</table>
+
+</body

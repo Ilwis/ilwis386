@@ -1,0 +1,406 @@
+<html>
+
+<head>
+<title>Layout editor : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Editors, Layout editor, Annotation, Map view, Text, Box, Bitmap, Picture, Metafile, Page border, Legend, Map border, North arrow, Scale bar, Scale text, Grid lines, Graticule, Print">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Layout editor</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In the Layout editor you can edit a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>. A layout is a virtual sheet of paper on which you can make a composition of one or more <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a> and <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> before printing. </p>
+
+<p class=defnewpar>The Layout editor has a <a href="layout_editor_menu_commands.htm">menu bar</a>, a Layout Management pane, a <a href="layout_editor_standard_toolbar.htm">standard toolbar</a>, a <a href="layout_editor_layout_toolbar.htm">layout toolbar</a>, a <a href="layout_editor_context_sensitive_menu.htm">context-sensitive menu</a>, and a <a href="..//ilwis/popup/status_line_popup.htm" onClick="return popup(this, 'notes')" >status bar</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To be able to print maps and annotation, first <b>save a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a></b> containing one or more maps, and optionally <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text</a>, <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and/or <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a> <b>as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a></b>. Then, create a layout and add one or more map views to it. </p>
+
+<p class=defnewpar>In the layout editor, you can add to a layout: </p>
+
+<ul>
+
+<li>one or more <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a> to be printed on a certain scale; each map view may include one <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> and/or one or more <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a>, <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a> and/or <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a>, <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text layers</a>, <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and/or <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a>, </li>
+
+<li><a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a> such a titles; </li>
+
+<li><a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >boxes</a>; </li>
+
+<li><a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmaps</a> and/or <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >pictures</a>; </li>
+
+<li>a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a>.</li> 
+
+</ul>
+
+<p class=defnewpar>For each map view in a layout, you can furthermore add:</p>
+
+<ul>
+
+<li>a <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legend</a> for a specific layer in the map view; </li>
+
+<li>a <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map border</a>, including coordinates and ticks for grid lines and/or a graticule;</li>
+
+<li>a <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >North arrow</a>; </li>
+
+<li>a <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bar and scale text</a>. </li>
+
+</ul>
+
+<p class=defnewpar>You can also add or delete layers from a map view, or edit the grid lines or graticule(s) in a map view. </p>
+
+<p class=defnewpar>Finally, any picture or bitmap that was copied into the clipboard from another Windows application program can be pasted into a layout.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>Multiple texts, e.g. names or values of points in a point map, names or values of segments in a segment map, or names of polygons in a polygon map, that are stored in an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text</a> object can be edited in the <a href="..//ilwis/popup/annotation_text_editor_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text editor</a>.</p>
+
+<p class=kopje>To start the Layout editor:</p>
+
+<p>The Layout editor is automatically started when you create a new layout. You can use for instance the <span class=arial><a href="../ilwismen/create_a_layout.htm">Create Layout</a></span> command on the <a href="main_window_menu_commands.htm">File menu</a> of the Main window, from the <a href="map_window_menu_commands.htm">File menu</a> in a map window, or by clicking an existing map view in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> with the right mouse button and choosing the <span class=arial>Create Layout</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<p class=defnewpar>To open an existing layout, you can simply double-click it in a Catalog. </p>
+
+<p class=kopje>Choosing a paper size and a printer:</p>
+
+<p>It is advised to first select a paper size and a printer when you start working on a layout. </p>
+
+<ul>
+
+<li>Choose the <span class=arial><a href="../ilwismen/layout_editor_page_setup.htm">Page Setup</a></span> command from the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a>. </li>
+
+<li>Select the desired paper size, and select the desired printer. </li>
+
+<li>You can usually also specify the orientation of the paper and the margins you wish to use. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>The exact contents of the <span class=arial>Page Setup</span> dialog box depend on the printer(s) that have been installed on your computer. </p>
+
+<p class=defnewpar>When done, the layout editor (re)appears with a virtual sheet of paper with the dimensions and orientation as specified. As a reminder, the selected paper size is also shown in the <a href="..//ilwis/popup/status_line_popup.htm" onClick="return popup(this, 'notes')" >status bar</a> of the window. </p>
+
+<p class=kopje>Inserting one or more map views: </p>
+
+<p>To insert a map view: </p>
+
+<ul>
+
+<li>	click the <span class=arial>Insert Map View</span> <img src="../images/annmpv.gif" align=bottom width="22" height="22"> button in the <a href="../ilwis/layout_editor_layout_toolbar.htm">layout toolbar</a> of the Layout editor, or</li>
+
+<li>	from the <a href="layout_editor_menu_commands.htm">Insert menu</a>, choose the <span class=arial><a href="../ilwismen/layout_editor_insert_map_view.htm">Insert Map View</a></span> command. </li>
+
+</ul>
+
+<p class=defnewpar>For each map view you insert, an initial scale will be asked. By default, this is the scale on which you saved the map view. However, if this would not fit on the paper size you specified for the layout, the scale of the map view is adapted so that it will fit the paper size. </p>
+
+<p class=defnewpar>When a map view is inserted, you must decide on the scale of the map view; this is the scale on which the map view will be printed later on. It is advised to set the scale of a map view before adding annotation and before printing. For more information, see <a href="../ilwismen/layout_editor_keep_scale.htm">Keep Scale</a>. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>You can use the Layout Management pane to size and position an inserted map view quite exact, by modifying the values for Left, Top, Width and Height in the Layout Management pane (values for Height and Width are approximations). </li>
+
+<li>In the Layout Management pane, you can also specify the scale on which a map view should be displayed and printed later on. </li>
+
+</ul>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>Map views that use a coordinate system of type latlon, cannot be properly displayed nor printed in a layout. It is advised: </p>
+
+<ul class=tipul>
+
+<li>to drag a coordinate system of type projection to a map window before saving the map window as a map view, or </li>
+
+<li>to transform the vector maps with a coordinate system of type latlon, to a coordinate system of type projection. </li>
+
+</ul>
+
+<p class=kopje>Inserting annotation:</p>
+
+<p>To insert a text, a box or a bitmap or picture: </p>
+
+<ul>
+
+<li>	click the <span class=arial>Insert Text</span> <img src="../images/annsitxt.gif" align=bottom width="22" height="22">, the <span class=arial>Insert Box</span> <img src="../images/annbox.gif" align=bottom width="22" height="22">, or the <span class=arial>Insert Bitmap/Picture</span> button <img src="../images/annbp.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/layout_editor_layout_toolbar.htm">layout toolbar</a> of the Layout editor, or</li>
+
+<li>	from the <a href="layout_editor_menu_commands.htm">Insert menu</a>, choose the <span class=arial><a href="../ilwismen/layout_editor_insert_edit_text.htm">Insert Text</a></span>, the <span class=arial><a href="../ilwismen/layout_editor_insert_edit_box.htm">Insert Box</a></span>, or the <span class=arial><a href="../ilwismen/layout_editor_insert_bitmap_picture.htm">Insert Bitmap or Picture</a></span> commands. </li>
+
+</ul>
+
+<p>You can also use Copy in other programs and then Paste any texts, bitmaps or pictures in clipboard into a layout, see <a href="../ilwismen/layout_editor_copy_selection.htm">Layout editor : Copy</a> and <a href="../ilwismen/layout_editor_paste_selection.htm">Layout editor : Paste</a>. </p>
+
+<p class=defnewpar>To insert a legend, a map border (including ticks and or coordinates of grid lines or a graticule), a north arrow, a scale bar, or a scale text: </p>
+
+<ul>
+
+<li>	first, select the map view for which you wish to add the annotation in the layout editor, and </li>
+
+<li>	click the <span class=arial>Insert Legend</span> <img src="../images/annleg.gif" align=bottom width="22" height="22">, the <span class=arial>Insert Map Border</span> <img src="../images/annborder.gif" align=bottom width="22" height="22">, the <span class=arial>Insert North Arrow</span> <img src="../images/annnor.gif" align=bottom width="22" height="22">, the <span class=arial>Insert Scale Bar</span> <img src="../images/annsca.gif" align=bottom width="22" height="22">, or the <span class=arial>Insert Scale Text</span> <img src="../images/annscatxt.gif" align=bottom width="22" height="22"> button in the <a href="../ilwis/layout_editor_layout_toolbar.htm">layout toolbar</a> of the Layout editor (the status bar gives an explanation), or</li>
+
+<li>	from the <a href="layout_editor_menu_commands.htm">Insert menu</a>, choose the <span class=arial><a href="../ilwismen/layout_editor_legend_select_map_layer.htm">Insert Legend</a></span>, the <span class=arial><a href="../ilwismen/layout_editor_insert_edit_map_border_neatline.htm">Insert Map Border</a></span>, the <span class=arial><a href="../ilwismen/layout_editor_insert_edit_north_arrow.htm">Insert North Arrow</a></span>, the <span class=arial><a href="../ilwismen/layout_editor_insert_edit_scale_bar.htm">Insert Scale Bar</a></span>, or the <span class=arial><a href="../ilwismen/layout_editor_insert_edit_scale_text.htm">Insert Scale Text</a></span> commands. </li>
+
+</ul>
+
+<p class=defnewpar>For any type of newly inserted annotation listed above, an <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Edit</a> dialog box, or a <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box appears in which you can specify the display settings of the annotation 'object'. </p>
+
+<p class=defnewpar>To add a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a>: </p>
+
+<ul>
+
+<li>	choose <span class=arial>Page Border</span> from the <span class=arial><a href="layout_editor_menu_commands.htm">Edit menu</a></span>. </li>
+
+</ul>
+
+<p>The Page Border will simply follow the paper margins set during <span class=arial>Page Setup</span> and will be printed when the <span class=arial>Page Border</span>  command on the Edit menu is preceded by a <img src="../images/chkmark.gif" align=bottom width="7" height="7"> check mark. </p>
+
+<p class=kopje>Positioning and sizing annotation:</p>
+
+<p>You can position annotation in the layout editor window by using <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag and drop</a>: </p>
+
+<ul>
+
+<li>	click an annotation 'object' with the left mouse button, hold the left mouse button down, and </li>
+
+<li>	move the mouse pointer to another location in the layout, </li>
+
+<li>	then release the left mouse button.</li>
+
+</ul>
+
+<p class=defnewpar>To size annotation:</p>
+
+<ul>
+
+<li>	select an annotation 'object' by clicking it: the borders of the annotation become visible,</li>
+
+<li>	position the mouse pointer on one of the 4 or 8 <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> (little black blocks appearing at the annotation borders),</li>
+
+<li>	<a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >drag</a> the size handle to a new position. </li>
+
+</ul>
+
+<p class=defnewpar>Dragging one of the corner handles maintains the original ratio of height-width ratio. </p>
+
+<p>Dragging one of the middle handles resizes the annotation horizontally or vertically; the height-width ratio may change.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>You can use the Layout Management pane to size and position inserted annotation quite exact, by modifying the values for Left, Top, Width and Height in the Layout Management pane. </p>
+
+<p class=kopje>Zooming in and out, pan: </p>
+
+<p>By using the <span class=arial>Zoom In</span> <img src="../images/zoomin.gif" align=bottom width="22" height="22"> and <span class=arial>Zoom Out</span> <img src="../images/zoomout.gif" align=bottom width="22" height="22"> buttons, or the <span class=arial><a href="..//ilwismen/popup/layout_editor_zoom_in_popup.htm" onClick="return popup(this, 'notes')" >Zoom In</a></span> and <span class=arial><a href="..//ilwismen/popup/layout_editor_zoom_out_popup.htm" onClick="return popup(this, 'notes')" >Zoom Out</a></span> commands from the <a href="../ilwis/layout_editor_menu_commands.htm">View menu</a>, or from the context-sensitive menu, you can zoom in and zoom out on any part of your layout. </p>
+
+<p>By using the <span class=arial>Pan</span> <img src="../images/pan.gif" align=bottom width="22" height="22"> button, or the <span class=arial><a href="..//ilwismen/popup/layout_editor_pan_popup.htm" onClick="return popup(this, 'notes')" >Pan</a></span> command from the View menu, you can roam through your layout when you zoomed in on a part of the layout. </p>
+
+<p class=defnewpar>To size map views, see <a href="../ilwismen/layout_editor_keep_scale.htm">Keep Scale</a>. To show only part of a map in a map view, you can select the map view in the layout editor, and choose <span class=arial>Pan</span> from the <a href="../ilwis/layout_editor_context_sensitive_menu.htm">context-sensitive menu</a>. When you reduced the size of a map view, you can also choose <span class=arial>Pan</span> from the <a href="../ilwis/layout_editor_context_sensitive_menu.htm">context-sensitive menu</a> to display a specific area of your map view. </p>
+
+<p class=kopje>Editing annotation:</p>
+
+<p>To edit annotation: </p>
+
+<ul>
+
+<li>in the Layout editor or in the Layout Management pane, </li>
+
+<li>double-click the annotation 'object' that you wish to edit.</li>
+
+</ul>
+
+<p>An <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Edit</a> dialog box, or a <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box appears in which you can re-specify the display settings of the selected 'object'. </p>
+
+<p class=defnewpar>You can also: </p>
+
+<ul>
+
+<li>	select an annotation 'object' in the layout editor, and choose <span class=arial><a href="..//ilwismen/popup/layout_editor_edit_item_popup.htm" onClick="return popup(this, 'notes')" >Edit Item</a></span> from the <a href="../ilwis/layout_editor_menu_commands.htm">Edit menu</a>, or </li>
+
+<li>    in the Layout editor or in the Layout Management pane, click a selected annotation 'object' with the right mouse button and select <span class=arial>Edit Item</span> from the <a href="../ilwis/layout_editor_context_sensitive_menu.htm">context-sensitive menu</a>, or</li>
+
+<li>	select an annotation 'object' in the layout editor, and press the <span class=arial>Enter</span> key on the keyboard. </li>
+
+</ul>
+
+<p class=kopje>To clear annotation:</p>
+
+<p>You can clear or delete annotation as follows: </p>
+
+<ul>
+
+<li>    in the Layout editor or in Layout Management pane, select the annotation 'object' you wish to delete, </li>
+
+<p>     then: </p>
+
+<li>	choose <span class=arial>Clear</span> from the <a href="../ilwis/layout_editor_menu_commands.htm">Edit menu</a>, or </li>
+
+<li>    click the <span class=arial>Clear</span> <img src="../images/delete.gif" align=bottom width="22" height="22"> button in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>, or </li>
+
+<li>    click the selection with the right mouse button and choose <span class=arial>Clear</span> from the <a href="../ilwis/layout_editor_context_sensitive_menu.htm">context-sensitive menu</a>, or </li>
+
+<li>	press the <span class=arial>Del</span> key on the keyboard. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>When you select a map view and choose <span class=arial>Clear</span>, then the map view and <b>all</b> annotation related to the map view will be cleared. </p>
+
+<p class=kopje>To edit a map view in a layout: </p>
+
+<p>To add extra layers to a map view in a layout: </p>
+
+<ul>
+
+<li>select the map view in the layout editor, and </li>
+
+<li>use the <span class=arial>Add Layer</span> <img src="../images/addlayer.gif" align=bottom width="22" height="22">, the <span class=arial>Add Grid Lines</span> <img src="../images/anngrd.gif" align=bottom width="22" height="22"> and/or the <span class=arial>Add Graticule</span> <img src="../images/anngra.gif" align=bottom width="22" height="22"> buttons in the <a href="../ilwis/layout_editor_layout_toolbar.htm">layout toolbar</a>. </li>
+
+</ul>
+
+<p class=defnewpar>To remove layers or to change display options of layers: </p>
+
+<ul>
+
+<li>double-click a map view in the layout editor, </li>
+
+<li>a <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane will appear as in a map window. </li>
+
+<p class=defnewpar>You can for instance: </p>
+
+        <ul>
+
+        <li>double-click a map layer, an annotation text layer, a grid layer or a graticule layer in the Layer Management pane to edit the display options of the layer, </li>
+
+        <li>select a layer in the Layer Management pane and use the <span class=arial>Remove Layer</span> <img src="../images/remlayer.gif" align=bottom width="22" height="22"> button to remove the layer, </li>
+
+        <li>you can also use the <span class=arial>Add Layer</span>, <span class=arial>Add Grid Lines</span> and/or the <span class=arial>Add Graticule</span> buttons as described above. </p>
+
+        </ul>
+
+</ul>
+
+<p>After editing a map view, you need to use <span class=arial>Redraw</span> <img src="../images/redraw.gif" align=bottom width="22" height="22"> to apply any changes. </p>
+
+<p class=kopje>To save a changed map view in a layout: </p>
+
+<p>To save a map view to which you added (or from which you removed) extra layers, grid lines or a graticule, or when you changed display options of a layer in the map view: </p>
+
+        <ul>
+
+        <li>select the map view you wish to save in the layout, </li>
+
+        <li>click the <span class=arial>Save</span> button <img src="../images/save.gif" width="22" height="22"> in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>, or </li>
+
+        <li>click the selected map view with the right mouse button, and choose <span class=arial><a href="../ilwismen/layout_editor_save_map_view.htm">Save View</a></span> or <span class=arial><a href="../ilwismen/layout_editor_save_map_view_as.htm">Save View As</a></span> from the <a href="../ilwis/layout_editor_context_sensitive_menu.htm">context-sensitive menu</a>. </li>
+
+        </ul>
+
+
+<p class=kopje>To replace a map view in a layout:</p>
+
+<p>To produce multiple layouts which are more or less similar, but which use for instance different map views, you can replace one or more map views in the layout, save the layout with a different name and optionally edit some annotation. </p>
+
+<p class=defnewpar>To replace a map view in the current layout with another map view: </p>
+
+        <ul>
+        
+        <li>select the map view you wish to replace, </li>
+
+        <li>click the selected map view with the right mouse button, and </li>
+
+        <li>choose <span class=arial><a href="../ilwismen/layout_editor_replace_map_view.htm">Replace Map View</a></span> from the <a href="../ilwis/layout_editor_context_sensitive_menu.htm">context-sensitive menu</a>.</li>
+
+        </ul>
+
+<p class=defnewpar>To save a layout with a different name, use the <span class=arial>Save As</span> command on the File menu (see below). </p>
+
+<p class=kopje>To save a layout:</p>
+
+<p>When finished inserting and editing map views and annotation, first save any changed map views (see above). To save the layout with the map views and the annotation that it contains: </p>
+
+        <ul>
+        
+        <li>click somewhere in the white space of the layout, and </li>
+
+        <li>click the <span class=arial>Save</span> button <img src="../images/save.gif" width="22" height="22"> in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>, or </li>
+
+        <li>choose <span class=arial><a href="../ilwismen/layout_editor_save_layout.htm">Save</a></span> or <span class=arial><a href="../ilwismen/layout_editor_save_layout_as.htm">Save As</a></span> from the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a> of the layout editor.</li>
+
+        </ul>
+
+<p class=kopje>Printing:</p>
+
+<p>To print a layout with all map views on the scale you specified and all annotation as appearing in the layout: </p>
+
+<ul>
+
+<li>choose <a href="../ilwismen/layout_editor_print.htm">Print</a> from the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a>, or </li>
+
+<li>click the <span class=arial>Print</span> button <img src="../images/print.gif" align=bottom width="22" height="22"> in the standard toolbar of the layout editor. </li>
+
+</ul>
+
+<p class=kopje>Other functionality:</p>
+
+<ul>
+
+<li>Exporting a complete layout as a bitmap: choose <span class=arial><a href="../ilwismen/layout_editor_export_to_bitmap.htm">Export to Bitmap</a></span> from the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a>. </li>
+
+<li>Copying and Pasting text, bitmaps or pictures: choose <span class=arial><a href="../ilwismen/layout_editor_copy_selection.htm">Copy</a></span> or <span class=arial><a href="../ilwismen/layout_editor_paste_selection.htm">Paste</a></span> from the Edit menu. </li>
+
+<li>To fit the entire layout in the layout editor window: choose <span class=arial><a href="..//ilwismen/popup/layout_editor_entire_page_popup.htm" onClick="return popup(this, 'notes')" >Entire Page</a></span> from the View menu. </li>
+
+<li>To (re)fit an entire map view in the area specified for a map view: choose <span class=arial><a href="..//ilwismen/popup/layout_editor_entire_map_popup.htm" onClick="return popup(this, 'notes')" >Entire Map</a></span> from the Edit menu. </li>
+
+</ul>
+
+<p class=kopje>To exit the layout editor:</p>
+
+<ul>
+
+<li>	choose from the File menu, choose <span class=arial><a href="..//ilwismen/popup/exit_layout_editor_popup.htm" onClick="return popup(this, 'notes')" >Exit Editor</a></span>, or </li>
+
+<li>	click the <span class=arial>Close</span> button at the right top of the layout editor window, or double-click the <a href="..//ilwis/popup/win_controlmenubox_popup.htm" onClick="return popup(this, 'notes')" >Control-menu box</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="layout_editor_standard_toolbar.htm">Layout editor : standard toolbar</a></p>
+
+<p class=seealsolinks><a href="layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+<p class=seealsolinks><a href="layout_editor_menu_commands.htm">Layout editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="layout_editor_context_sensitive_menu.htm">Layout editor : context-sensitive menu</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_map_views.htm">ILWIS objects : map views</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_layouts.htm">ILWIS objects : layouts</a></p>
+
+</body

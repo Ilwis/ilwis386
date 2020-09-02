@@ -1,0 +1,248 @@
+<html>
+
+<head>
+<title>Polygon editor : toolbar</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygon editor, Toolbar, Button bar, Edit polygon map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Polygon editor</h1>
+
+<h1 class=secondline>Toolbar</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwis/popup/button_bar_popup.htm" onClick="return popup(this, 'notes')" >toolbar</a> of the Polygon editor is similar to the toolbar of a map window; there is an extra button to select polygons, and there are buttons to undo changes, to save changes and to exit the editor.</p>
+
+<p class=defnewpar><img src="../images/bbpoled.gif" align=bottom width="268" height="26"></p>
+
+<p class=defnewpar>When you leave the mouse pointer for a short period of time on top of a button, a tooltip will appear with the name of the button / the menu command that it will perform. Also the <a href="map_window_status_bar.htm">status bar</a> at the bottom of the window may provide you with a short explanation on the effect of using the button. </p>
+
+<p class=defnewpar>The following actions can be performed:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing="1%" width="100%">
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/entirmap.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="108">
+<p>Entire Map:</p>
+
+</td>
+<td valign="top">
+<p>Displays the entire map in the map window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/redraw.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="108">
+<p>Redraw:</p>
+
+</td>
+<td valign="top">
+<p>Redraws the contents of the map window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/dist.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="108">
+<p><a href="../ilwismen/measure_distance.htm">Measure Distance</a>:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to measure the distance and the angle between two points in the map window. </p>
+
+<p>The mouse pointer will change into a pair of compasses, then: </p>
+
+<ul>
+
+<li>draw a line between two points of interest.</li>
+
+</ul>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/pan.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="108">
+<p>Pan:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to roam through the map window when zoomed in. </p>
+
+<p>The mouse pointer will change into a hand, then: </p>
+
+<ul>
+
+<li>click somewhere in the map window, and drag this part of the map window to another position. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/zoomin.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="108">
+<p><a href="../ilwismen/zoom_in_on_maps.htm">Zoom In</a>:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to zoom in on a selected spot or area in the map window. </p>
+
+<p>The mouse pointer will change into a magnifying-glass with a large plus inside, then: </p>
+
+<ul>
+
+<li>click in the map window to zoom in on that position with a factor 2, or  </li>
+
+<li>drag the mouse pointer in the map window from one corner of interest to another (any zoom in factor). </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/zoomout.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="108">
+<p>Zoom Out:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to zoom out from a selected spot in the map window. </p>
+
+<p>The mouse pointer will change to a 'magnifying'-glass with a large minus inside, then: </p>
+
+<ul>
+
+<li>click in the map window to zoom out with a factor 2, or </li>
+
+<li>drag the mouse pointer in the map window from one corner of interest to another (any zoom out factor). </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/ed_select_mode.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="96">
+<p><a href="../ilwismen/polygon_editor_select_mode.htm">Normal/Select mode</a>:</p>
+
+</td>
+<td valign="top">
+
+<p>Allows you to select one or more existing polygons to be edited. The mouse pointer will change into a little hand. </p>
+
+<p>To select: </p>
+
+<ul>
+
+<li>a single polygon: click or double-click the polygon; </li>
+
+<li>multiple polygons: hold the <span class=arial>Ctrl</span> key on the keyboard and click the polygons you wish to edit. </li>
+
+</ul>
+
+<p>You can also press the <span class=arial>Esc</span> key on the keyboard to go to <span class=arial>Select</span> mode. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/ed_undo_all.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="108">
+<p><a href="../ilwismen/polygon_editor_undo_all_changes.htm">Undo All Changes</a>:</p>
+
+</td>
+<td valign="top">
+<p>Undo all changes you made after the last Save. </p>
+
+<p>If you have not used Save so far, all changes since you started editing will be undone. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/save.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="108">
+<p><a href="../ilwismen/polygon_editor_save.htm">Save</a>:</p>
+
+</td>
+<td valign="top">
+<p>Save the changes you made so far. In principle, all changes are directly stored on disk. Using the Save button however, will reduce the amount of restores that will be made if the Undo All Changes option is used later on. </p>
+
+<p>After you used the Save button, you can only use Undo All Changes again after you have made some further changes. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/ed_stoped.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="108">
+<p>Exit editor:</p>
+
+</td>
+<td valign="top">
+<p>Leave the editor and keep all changes. The editor will be closed but the map(s) remain displayed in a map window. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The toolbar can be hidden or shown with the <span class=arial>Toolbar</span> command on the <a href="polygon_editor_menu_commands.htm">Options menu</a>. If the action of a certain button cannot be performed at a certain moment, the button appears gray.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="polygon_editor_functionality.htm">Polygon editor : functionality</a></p>
+
+<p class=seealsolinks><a href="polygon_editor_menu_commands.htm">Polygon editor : menu commands</a></p>
+
+</body

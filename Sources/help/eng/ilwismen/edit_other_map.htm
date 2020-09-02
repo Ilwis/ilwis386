@@ -1,0 +1,126 @@
+<html>
+
+<head>
+<title>Edit other map</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Edit ..., Screen digitize, Digitize">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Edit Other Map</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Edit another map than the maps that are currently displayed in this map window. </p>
+
+<p class=defnewpar>This option is designed to edit a map while using the contents of the current map window as a background. In this way, you can update an <i>existing</i> map on the basis of the maps which are displayed as background. This is also called screen digitizing. </p>
+
+<p class=defnewpar>Select from the cascading menu:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p><a href="..//ilwis/popup/pixel_editor_popup.htm" onClick="return popup(this, 'notes')" >Pixel editor</a>:</p>
+
+</td>
+<td valign="top">
+<p>The <a href="edit_raster_map.htm">Edit Raster Map</a> dialog box follows.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >Point editor</a>:</p>
+
+</td>
+<td valign="top">
+<p>The <a href="edit_point_map.htm">Edit Point Map</a> dialog box follows.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >Segment editor</a>:</p>
+
+</td>
+<td valign="top">
+<p>The <a href="edit_segment_map.htm">Edit Segment Map</a> dialog box follows.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><a href="..//ilwis/popup/polygon_editor_popup.htm" onClick="return popup(this, 'notes')" >Polygon editor</a>:</p>
+
+</td>
+<td valign="top">
+<p>The <a href="edit_polygon_map.htm">Edit Polygon Map</a> dialog box follows.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To create and edit a <i>new</i> map while using the contents of the current map window as a background, open the <a href="../ilwis/map_window_menu_commands.htm">File menu</a> in the map window, and choose the <span class=arial>Create</span> command.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>The layers that are displayed remain displayed in the map window.</p>
+
+<ul>
+
+<li>	When you select a polygon, segment or point map to be edited, the polygons, segments or points of this second map will be displayed as a new layer over the existing layers displayed in the map window; you can then edit the newly added vector layer.</li>
+
+<li>	When only vector data is displayed in your map window, and you select to edit a raster map, the georeference of the raster map will become the georeference of the map window.</li>
+
+<li>	When you already have a raster map displayed in your map window, and you select another raster map to be edited, usually it is necessary to zoom in until you can view and edit the pixels of the second map.</li>
+
+</ul>
+
+<p class=defnewpar>The maps in the map window and the map that you select to edit must use the same georeference or coordinate system, or a compatible coordinate system.</p>
+
+<p class=tip>Mind:</p>
+
+<p class=tiptext><a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent maps</a> and maps marked as read-only cannot be edited; also maps using a Picture domain or a Color domain cannot be edited. When you want to edit a dependent map, you first have to <a href="../ilwis/how_to_break_dependency_links.htm">break the dependency links</a> of the map in the map's <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Properties</a> sheet. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_screen_digitize.htm">How to screen digitize</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_functionality.htm">Polygon editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/pixel_information_window_functionality.htm">Pixel editor : functionality</a></p>
+
+</body

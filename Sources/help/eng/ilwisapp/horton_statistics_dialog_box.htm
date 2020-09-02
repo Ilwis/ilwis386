@@ -1,0 +1,133 @@
+<html>
+
+<head>
+<title>Horton statistics : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Horton statistics">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Horton statistics</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class="defnewpar">The Horton Statistics operation calculates for each (Strahler) stream order number and for each merged catchment: </p> 
+
+<ul>
+<li>the number of streams, </li>
+<li>the average stream length, and </li>
+<li>the average area of catchments, and </li>
+<li>expected values for these by means of a least squares fit. </li>
+</ul>
+
+<p class="defnewpar">The output is stored in a table which can be used to construct so-called Horton plots. Horton plots enable you to inspect the regularity of your extracted stream network and may serve as a quality control indicator for the entire stream network extraction process. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>the output of a previous Catchment extraction operation, </li>
+
+<li>the output of a previous Catchment merge operation, </li>
+
+<li>the output of a previous Drainage network ordering operation. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Catchment map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input raster map that is the result of a previous <a href="..//ilwisapp/popup/catchment_extraction_popup.htm" onClick="return popup(this, 'notes')" >Catchment extraction</a> operation. Open the list box and select the desired input map, or drag a raster map directly from a Catalog into this box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Merged catchment map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input raster map that is the result of a previous <a href="..//ilwisapp/popup/catchment_merge_popup.htm" onClick="return popup(this, 'notes')" >Catchment merge</a> operation. The map may contain a single merged catchment but may also contain multiple merged output catchments. For more information, see also <a href="catchment_merge_functionality.htm">Catchment merge : functionality</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Drainage network ordering map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input raster map that is the result of a previous 
+<a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation. For more information, see also
+<a href="drainage_network_ordering_functionality.htm">Drainage network ordering : functionality</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Output table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> of the output table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output table. The description will appear in the status bar of the Main window when moving the mouse pointer over the table in a Catalog, and in the title bar of a table window when the output table is displayed. If no description is supplied, the output table will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output table will only be defined; if necessary, the table will be calculated later, for instance when the table is opened to be displayed. </p>
+
+<p class="defnewpar">Furthermore, a new ID domain will created for the output table. The domain will obtain the same name as the output table and it will contain the Strahler order numbers as IDs. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="horton_statistics_functionality.htm">Horton statistics : functionality</a></p>
+
+</body

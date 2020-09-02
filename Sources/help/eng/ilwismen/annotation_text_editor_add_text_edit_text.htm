@@ -1,0 +1,227 @@
+<html>
+
+<head>
+<title>Annotation Text editor : Add text / Edit text</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Annotation Text editor, Add ..., Edit ..., Text">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Annotation Text editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Add Text / Edit Text</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__annotation_text_editor_edit_menu_sec2.Click()>Edit menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Add a new text item to the Annotation Text object, or edit the text and settings of one selected text item.</p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose the <span class=arial>Add Text</span> command from the Edit menu,</li>
+
+<li>	when you click the right mouse button in the editor window and choose <span class=arial>Add Text</span> from the context-sensitive menu,</li>
+
+<li>	when you double-click at a new position in the editor window,</li>
+
+<li>	when you double-click a text item in the editor window,</li>
+
+<li>	when you select one text item and choose <span class=arial>Edit</span> from the Edit menu or from the context-sensitive menu.</li>
+
+</ul>
+
+<p>When you select an existing text item in the editor window, the selected item will appear highlighted.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Text box:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a new text or modify the existing text. The text box has no limitation on the number of characters that you can enter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>X  Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When working with XY-coordinates, type X- and Y-coordinates where the text should appear or modify the XY-coordinate of the existing text.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Row  Col:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When working with RowCols, type Row and Column numbers where the text should appear or modify the RowCols of the existing text.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a font in which the text should appear. Open the list box by clicking it. You can select any installed True Type font.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the font size in which the text should appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Bold:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the text should appear in Bold.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Italic:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the text should appear in Italics.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Underline:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the text should appear Underlined.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Justification:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a position for the justification mark of this text. Justification Baseline Center gives a justification mark located at the center of the base line of the text; justification Top Left gives a justification mark located at the top left of the rectangle which surrounds the text.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Text color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color in which the text should appear. Open the list box by clicking it. To create your own color, select Custom from the bottom of the list or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Transparent:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the rectangle in which this text appears should be transparent; you will see the text directly on the contents of the map window. </p>
+
+<p class=diabox>Clear this check box when a rectangle around the text should have the background color as defined for the map window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Rotation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the rotation of this text. Rotation is specified in degrees: rotation 0 gives text in direction left to right, rotation 90 gives text in direction bottom to top. Maximum rotation is 360.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	To move a text item: select a text item and <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> it to another position in the editor window.</li>
+
+<li>	To make a duplicate of a text item: press and hold the <span class=arial>Ctrl</span> key down, select a text item, and drag it to another position. </li>
+
+<li>	You can also edit an annotation text object in a table window: </li>
+
+        <ul class=tipul>
+
+        <li>	double-click an annotation text object in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, or </li>
+
+        <li>	in the Main window, open the <a href="../ilwis/main_window_menu_commands.htm">File menu</a>, choose <a href="../ilwismen/open_show_object_as_table.htm"><span class=arial>Open as Table</a></span>, and select the desired annotation text object.</li>
+
+        </ul>
+
+<li>	To install a Windows True Type font:</li>
+
+        <ul class=tipul>
+
+        <li>	In the Windows Settings, choose Control Panel, and choose Fonts. A list of installed fonts will appear.</li>
+
+        <li>	When the desired font is not yet in this list, choose File, Install New Font. The Add Font dialog box will appear.</li>
+
+        <li>	Specify the directory where fonts are available and select the font(s) you want to install. Then click OK.</li>
+
+        </ul>
+
+<p class=tiptext>	Now that the fonts are registered by Windows, you can use them in ILWIS as well.</p>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/annotation_text_editor_functionality.htm">Annotation Text editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a></p>
+
+</body

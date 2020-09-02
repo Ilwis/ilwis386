@@ -1,0 +1,54 @@
+<html>
+
+<head>
+<title>cumulative hypsometric curve popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Cumulative Hypsometric Curve</p>
+
+<p class="defnewpar">The <a href="..//ilwisapp/cumulative_hypsometric_curve.htm" onClick="return popup(this, 'notes')" >Cumulative Hypsometric Curve</a> script crosses a merged catchments map with your DEM. The script will ask for the ID of a single catchment that you wish to use in the Cross. In the resulting cross table, cumulative values are calculated for the Area of subsequent height values in pixels and in percentages. The output is stored in columns: <span class="courier">cum_area</span> and <span class="courier">cum_percent</span>. </p>
+
+<p class="defnewpar">With the output cross table and its newly calculated columns, you can create graphs: </p>
+
+<ul>
+
+<li>use column <span class="courier">cum_area</span> or column <span class="courier">cum_percent</span> on the X-axis, </li>
+
+<li>use the column with the height values on the Y-axis.</li>
+
+</ul>
+
+<p>This will give you a so-called cumulative hypsometric curve. </p>
+
+<p class="defnewpar">As input, this script requires: </p>
+
+<ul>
+
+<li>an output map of a previous Catchment Merge operation, and the ID of a catchment in this map, </li>
+
+<li>a DEM. </li>
+
+</ul>
+
+<p class="defnewpar">For more information, refer to <a href="..//ilwisapp/cumulative_hypsometric_curve.htm" onClick="return popup(this, 'notes')" >Cumulative Hypsometric Curve</a>. </p>
+
+</body

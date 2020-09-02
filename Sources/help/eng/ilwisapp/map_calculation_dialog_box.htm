@@ -1,0 +1,125 @@
+<html>
+
+<head>
+<title>Map calculation : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map calculation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map calculation</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Map calculation can be used to perform calculations with raster maps. In the dialog box, type a MapCalc expression. For more information on the operators and functions that can be used, refer to <a href="../ilwis/calc.htm">Map Calculation</a>. You can also type your map calculation expressions on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the Main window</a>. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Expression:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a MapCalc formula, for example <span class=courier>Map1+Map2</span></p>
+
+<p class=tiptextls01be><span class=tipnospace>Mind: </span>You must use single quotes around <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> which start with a digit, contain spaces or contain one of the following special characters<span class=courier> ` ~ ! @ # $ ^ &amp; ( ) - + = [ ] { } ; ' , . </span>. Example: <span class=courier>'My Map1' + 'My Map2'</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Defaults</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Click this button to obtain a default domain. When the default domain is a value domain, you also obtain defaults for the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of the output map.<br>
+You can also click this button to obtain defaults again after you changed the default domain, value range or precision.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default domain, or select or create <img src="../images/crea.gif" align=bottom width="17" height="22"> your own output domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If the output map uses a value domain, accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, or specify your own range of possible values in the output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If the output map uses a value domain, accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of output values, or specify your own precision. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary, the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When working with <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>, you can generally accept the default <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>. You only need to select or create a user-defined value domain when the values have a specific meaning for which you have or want to create a meaningful representation.</p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/calc.htm">Map calculation</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a></p>
+
+</body

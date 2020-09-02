@@ -1,0 +1,124 @@
+<html>
+
+<head>
+<title>Customize the pixel information window</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Pixel information window, Customize ..., How to customize ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Pixel information window</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Customize</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__pixel_info_options_menu_sec2.Click()>Options menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Customize the working of the <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel information window</a>: </p>
+
+<ul>
+
+<li>	receive coordinates at the position of the mouse pointer in a map window and/or at the position of the digitizer cursor; subsequently, the class names, identifiers and/or values of the maps (and tables) that were added to the pixel info window at that coordinate. </li>
+
+<li>	continuously receive coordinates and retrieve information or only receive coordinates and retrieve information at a click of the mouse pointer or the digitizer cursor, and</li>
+
+<li>	of all maps (and columns of attribute tables) that were added to the pixel info window, select the ones of which you want to see the class names, identifiers, or values in the pixel info window.</li>
+
+</ul>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Customize</span> from the <a href="..//ilwismen/sec2/pixel_info_options_menu_sec2.htm" onClick="return popup(this, 'notes')" >Options menu</a> in the pixel info window, or</li>
+
+<li>	when you clicked the upper left gray field in the pixel info window.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Mouse:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the pixel info window should receive coordinates from the mouse pointer in a map window. Subsequently, map/column information is retrieved at that coordinate. Clear this check box if the mouse pointer should not be active.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Continuous:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if the mouse pointer should continuously receive coordinates and retrieve information when it is positioned in a map window. Clear this check box when the mouse pointer should only receive coordinates and retrieve information at a click in the map window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Digitizer:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the pixel info window should receive coordinates from the digitizer cursor. Subsequently, map/column information is retrieved at that coordinate. Clear this check box if the digitizer cursor should not be active.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Continuous:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if the digitizer cursor should continuously receive coordinates and retrieve information when it is positioned on a referenced map on the digitizer. Clear this check box when the digitizer cursor should only receive coordinates and retrieve information when you press a button on the digitizer cursor.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Show values of:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In the list box, select the maps and attribute columns of which class names, identifiers, or values that should be shown in the pixel info window. In the list box, selected maps and columns appear highlighted. You can deselect the maps and columns that you do not want to see in the pixel info window.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/pixel_information_window_introduction.htm">Pixel information window : introduction</a></p>
+
+<p class=seealsolinks><a href="../ilwis/pixel_information_window_functionality.htm">Pixel information window : functionality</a></p>
+
+</body

@@ -1,0 +1,183 @@
+<html>
+
+<head>
+<title>filter med5x5 sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>MED5x5 filter</p>
+
+<p>The MED5x5 is a standard <a href="../popup/filter_rank_order_filter_popup.htm">rank order filter</a> which works in a 5 by 5 environment. </p>
+
+<p class=defnewpar>When 25 pixel values encountered in the input map are:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;2</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;4</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>10</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;3</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>21</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>14</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;1</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;9</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>12</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;9</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>11</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;7</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;5</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;8</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>13</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;8</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;8</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>13</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>15</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;6</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>12</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;2</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;5</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>10</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>12</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>Then the median filter orders these 25 values as:</p>
+
+<p class=calc0linsp03befaft>1,2,2,3,4,5,5,6,7,8,8,8,9,9,10,10,11,12,12,12,13,13,14,15,21</p>
+
+<p>The value <b>at rank order 13</b> is assigned to the pixel in the output map: 9.</p>
+
+<p class=defnewpar>Input pixel value 5 is smaller than the value of surrounding pixels in this example, while the output pixel value 9 is the median value of the 25 pixels examined.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_types_rank_order_and_median_filters.htm" onClick="return popup(this, 'notes')" >Filter types : rank order and median filters</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_user_defined_rank_order_and_median_filters.htm" onClick="return popup(this, 'notes')" >Filters: user-defined rank order and median filters</a></p>
+
+</body

@@ -1,0 +1,118 @@
+<html>
+
+<head>
+<title>Pixel info window : functionality (advanced)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Pixel information window, ILWIS window types, Coordinate system">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Pixel information window</h1>
+
+<h1 class=secondline>Functionality (advanced)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In this topic an example is given of adding multiple coordinate systems in the pixel info window.</p>
+
+<p class=defnewpar>When you add multiple coordinate systems to the pixel information window, and when <a href="..//ilwis/popup/pixinfo_possible_coordinate_system_transformations.htm" onClick="return popup(this, 'notes')" >transformations are possible</a> between the current coordinate system of the map and the added coordinate systems, the pixel information will show the transformed coordinates in the added coordinate systems. The example below illustrates the importance of selecting the correct ellipsoid and/or datum in coordinate systems that need to be transformed to each other, i.e. when you obtained data from different sources using different projections, etc.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p><img src="../images/pixcsy.gif" align=bottom width="373" height="196"></p>
+
+<p class=captionfig>Fig. 1:	Viewing the results of transformations to a number of different coordinate systems in the pixel information window. Mark the coordinate differences between the original coordinate system Cochabam and the transformation results for the other coordinate systems.</p>
+
+<p>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Cochabam</p>
+
+</td>
+<td valign="top">
+<p>is the original coordsys of the map displayed in a map window; <span class=courier>Cochabam</span> is a <i>coordsys projection</i>; the projection is UTM, zone 19 on the Southern hemisphere; the projection uses the Provisional South American 1956 datum (area Bolivia); this datum uses the International 1924 ellipsoid.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Cochodat</p>
+
+</td>
+<td valign="top">
+<p>UTM projection using another datum (and ellipsoid); <span class=courier>Cochodat</span> is a <i>coordsys projection</i>; the projection is UTM, zone 19 on the Southern hemisphere; the projection uses the South American 1969 datum (area Bolivia); this datum uses the South American 1969 ellipsoid.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Cochsph</p>
+
+</td>
+<td valign="top">
+<p>UTM on a sphere; <span class=courier>Cochsph</span> is <i>coordsys projection</i>; the projection is UTM, zone 19 on the Southern hemisphere; the projection uses no ellipsoid nor datum but a sphere. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Latcdat</p>
+
+</td>
+<td valign="top">
+<p>LatLon coordinates with correct datum; <span class=courier>Latcdat</span> is a <i>coordsys latlon</i>; the projection uses the Provisional South American 1956 datum (area Bolivia); this datum uses the International 1924 ellipsoid.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Latodat</p>
+
+</td>
+<td valign="top">
+<p>LatLon coordinates with another datum; <span class=courier>Latodat</span> is a <i>coordsys latlon</i>; the projection uses the South American 1969 datum (area Bolivia); this datum uses the South American 1969 ellipsoid.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>Latsph</p>
+
+</td>
+<td valign="top">
+<p>LatLon coordinates using a sphere; <span class=courier>Latsph</span> is a <i>coordsys latlon</i>; the projection uses a sphere.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="pixel_information_window_functionality.htm">Pixel information window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/transform_coordinates.htm">Transform coordinates</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="..//ilwis/popup/transform_operations_popup.htm" onClick="return popup(this, 'notes')" >Transform operations</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a></p>
+
+</body

@@ -1,0 +1,446 @@
+<html>
+
+<head>
+<title>SMCE window : Standardize Value</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Standardize Value">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Analysis menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Standardize Value Input</span>&nbsp;&nbsp;&nbsp;<img src="../images/smce_standardize_icon.gif" align=middle width="23" height="23"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Standardize the values in the selected <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>, or in the selected value column in an attribute table. </p>
+
+<ul>
+<li class=ls01be>an output standardization value of 0 means that the input value is perceived to have low utility, </li>
+<li class=ls01be>an output standardization value of 1 means that the input value is perceived to have high utility. </li>
+</ul>
+
+<p class=defnewpar>Standardization possibilities are slightly different for <a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a> and for <a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >constraints</a>.</p>
+
+<ul>
+<li class=ls01be><a href="#factor"><span class=bookmark>Standardization of factors (benefits and costs)</span></a>: output values range between 0 and 1; </li>
+<li class=ls01be><a href="#constraint"><span class=bookmark>Standardization of constraints</span></a>; output values are either 0 or 1.</li>
+</ul>
+
+<h2 id="factor">Standardization of factors (benefits and costs)</h2>
+
+<p>For standardization of <a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a>, you must select one of the following linear standardization functions.</p>
+
+<p class=diakopje>Dialog box options:</p>
+<table cellspacing=0>
+  <tr>
+    <td valign="top" width="96">
+      <p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Maximum:</p>
+    </td>
+    <td valign="top">
+
+      <p class=diabox>Select this option when you wish to standardize the input values by dividing them by the maximum value of the map. </p>
+
+		<p class=diabox>For a benefit:</p>
+		<ul class=diaul>
+		<li>value 0 in the input map or column will be standardized to 0, even if value 0 does not occur in the input; </li>
+		<li>the maximum value of the input map or column will be standardized to 1; </li>
+		<li>all other input values will be standardized to a value between 0 and 1. </li>
+	    </ul>
+
+		<p class=diabox>For a cost:</p>
+		<ul class=diaul>
+		<li>the minimum value of the input map or column will be standardized to 1; </li>
+        <li>values larger than the minimum value in the input map or column will obtain values smaller than 1, while value 0 may not be reached; </li>
+		<li>all other input values will be standardized to a value between 0 and 1. </li>
+	    </ul>
+
+	  <p class=tiptextls01be><span class=tip>Note: </span>The following formulas will be used:<br>
+		Benefit factor = value / maximum input value<br>
+	    Cost factor = 1 - (value / maximum input value) + (minimum input value / maximum input value)</p></td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Interval:</p>
+    </td>
+    <td valign="top">
+      <p class=diabox>Select this option when you wish to standardize the input values with a linear function that uses the minimum value and the maximum value of the input map or input column.</p>
+      <p class=diabox>The output of this standardization are positive values for both the cost and benefit factors. The standardized values are exactly between 0 and 1. 
+
+	  <p class=diabox>For a benefit: 
+	  <ul class=diaul>
+		<li>the minimum value in the input map or column will be standardized to 0; </li>
+		<li>the maximum value of the input map or column will be standardized to 1; </li>
+		<li>all other input values will be standardized to a value between 0 and 1. </li>
+	  </ul>
+
+	<p class=diabox>For a cost:</p>
+	  <ul class=diaul>
+		<li>the maximum value of the input map or column will be standardized to 0; </li>
+		<li>the minimum value of the input map or column will be standardized to 1; </li>
+		<li>all other input values will be standardized to a value between 0 and 1. </li>
+	  </ul>
+
+	  <p class=tiptextls01be><span class=tip>Note: </span>The following formulas will be used:<br>
+      Benefit factor = (value - minimum input value) / (maximum input value - minimum input value)<br>
+	  Cost factor = 1 - (value - minimum input value) / (maximum input value - minimum input value)</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Goal:</p>
+    </td>
+    <td valign="top">
+      <p class=diabox>Select this option when you wish to standardize the input values with a linear function that uses a specified minimum and maximum value.</p>
+      <p class=diabox>The output of this standardization are positive values for both the cost and benefit factors. The standardized values are exactly between 0 and 1. 
+	</td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class=diaboxleft1>Min:</p>
+    </td>
+    <td valign="top">
+      <p class=diabox>
+      <p class=diabox>When using the Goal method: Specify the minimum value in the input map that should be used in the goal standardization formulas. The minimum goal value refers to the lowest value of input values that is perceived to have any utility. Lower values are perceived to also have a utility of 0, i.e. these are not performing or undershooting the goal. <br>
+	  The specified input value, and any other input map values smaller than the specified minimum value, will be standardized to 0. </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class=diaboxleft1>Max:</p>
+    </td>
+    <td valign="top">
+      <p class=diabox>
+      <p class=diabox>When using the Goal method: Specify the maximum value in the input map that should be used in the goal standardization formulas. The maximum goal value refers to the highest value of input values that is perceived to have the most necessary utility. Higher values are perceived to also have a utility, i.e. they are over-performing or overshooting the goal. <br>
+	  The specified input value, and any other input map values larger than the specified maximum value, will be standardized to 1. </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+		<p class=diabox>&nbsp;</p>
+    <td valign="top">
+		<p class=diabox>For a benefit: </p>
+ 		<ul>
+		<li>The minimum value specified for the goal will be standardized to value 0, all input values smaller than the minimum goal value will also obtain value 0; </li>
+        <li>The maximum goal value will be standardized to value 1, all input values larger than the maximum goal value will also obtain value 1; </li>
+		<li>all other input values will be standardized to a value between 0 and 1. </li>
+		</ul>
+	</td>
+  </tr>
+  <tr>
+    <td valign="top">
+		<p class=diabox>&nbsp;</p>
+    <td valign="top">
+		<p class=diabox>For a cost: </p>
+ 		<ul>
+		<li>The maximum goal value will be standardized to value 0, all input values larger than the maximum goal value will also obtain value 0; </li>
+        <li>The minimum goal value will be standardized to value 1, all input values smaller than the minimum goal value will also obtain value 1; </li>
+		<li>all other input values will be standardized to a value between 0 and 1. </li>
+		</ul>
+	</td>
+  </tr>
+    <td valign="top">
+		<p class=diabox>&nbsp;</p>
+    <td valign="top">
+		<p class=tiptextls01be><span class=tip>Note: </span>The following formulas will be used:<br>
+        Benefit factor = (value - minimum goal value) / (maximum goal value - minimum goal value)<br>
+        Cost factor = 1 - (value - minimum goal value) / (maximum goal value - minimum goal value)</p>
+	</td>
+  </tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p class=tiptext><span class="tip">Tip: </span> When a factor (a benefit or a cost) with a value domain has been standardized, the <a href="../ilwis/smce_window_criteria_tree_viewer.htm">criteria tree viewer</a> shows information about the way the factor is standardized, see the first column below. Explanations, in the second column, refer to benefits.</p>
+
+<table class=tiptext cellpadding="0" cellspacing="0" width="100%">
+  <tr><td colspan="3"><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td width="40%" valign="top"><i>Criterion name</i>--Std:Maximum</td>
+   	<td valign="top">input values (from 0 to the maximum input value) are standardized to values 0 to 1. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Interval</td>
+   	<td valign="top">input values (from the minimum input value to the maximum input value) are standardized to values 0 to 1. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Goal(<i>Min</i>,<i>Max</i>)</td>
+   	<td valign="top">input values (from user-specified minimum input value to user-specified maximum input value) are standardized to values 0 to 1; 
+		input values smaller than the specified minimum value will obtain value 0, input values larger than the specified maximum will obtain value 1. </td>
+  </tr>
+</table>
+
+<h2>Examples of standardizing factors (benefits and costs)</h2>
+
+<p>In the examples below, 6 output maps were calculated, each time using a single factor as input. As input, a value map was used with input values between 10000 and 17250. Each time a different standardization method was selected, and an output map was calculated. This shows the effect of each selected standardization method. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table width="100%" border="0">
+<tr>
+<td><img src="../images/smce_stand_factor_input.gif" width="124" height="90"></td>
+<td><br><img src="../images/smce_stand_legend.gif" width="88" height="99"></td>
+</tr>
+<tr>
+<td valign="top"><b>Input value map</b> <br>
+	Input values range from 10000 to about 17250. <br>
+	&nbsp;</td>
+<td valign="top">Legend for standardized output values</td>
+</tr>
+<tr>
+<td><img src="../images/smce_stand_benefit_max.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_cost_max.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top"><b>Benefit Std:Max</b> <br>
+	0 is standardized to 0 (input value 0 does not occur); <br>
+	maximum input value is standardized to 1 (green).</td>
+</td>
+<td valign="top"><b>Cost Std:Max</b> <br>
+	minimum input value is standardized to 1 (green).<br>
+	</td>
+</tr>
+<tr><td colspan="2"><p class=emptylinehalf>&nbsp;</p></td></tr>
+<tr>
+<td><img src="../images/smce_stand_benefit_interval.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_cost_interval.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top"><b>Benefit Std:Interval</b> <br />
+	minimum input value is standardized to 0 (red); <br>
+	maximum input value is standardized to 1 (green).</td>
+<td valign="top"><b>Cost Std:Interval</b> <br />
+	maximum input value is standardized to 0 (red); <br>
+	minimum input value is standardized to 1 (green).</td>
+</tr>
+<tr><td colspan="2"><p class=emptylinehalf>&nbsp;</p></td></tr>
+<tr>
+<td><img src="../images/smce_stand_benefit_goal.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_cost_goal.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top"><b>Benefit Std:Goal(12500,15000)</b><br>
+	input values &lt;=12500 are standardized to 0 (red); <br>
+	input values &gt;=15000 are standardized to 1 (green). </td>
+<td valign="top"><b>Cost Std:Goal(12500,15000)</b><br>
+	input values &gt;=15000 are standardized to 0 (red); <br>
+	input values &lt;=12500 are standardized to 1 (green).</td>
+</tr>
+</table>
+
+
+<h2 id="constraint">Standardization of constraints</h2>
+
+<p class=defnewpar>Unlike factor standardization, standardized constraints cannot be compensated by good performance of other criteria. Standardized constraints will either obtain value 0 (not performing) or value 1 (performing). </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<p class=linespacing03before>The dialog box contains only two check boxes: Minimum and Maximum. <br>
+
+By using various combinations of these check boxes, 5 possibilities of standardization of constraints can be achieved. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td colspan="2" valign="top">
+<p class=diabox>Unequal to zero method: </p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="60"><p class=diaboxnospacetop>&nbsp;</p>
+</td>
+<td valign="top"><p class=diaboxnospacetop>To obtain a standardized value of 1 for all areas that are unequal to zero, and a standardized value 0 for input value 0. </p>
+				<ul>
+				<li>Do not select any of the two check boxes.</li>
+				</ul>
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top"><p class=diabox>Minimum method: </p>
+</td>
+</tr>
+<tr>
+<td valign="top"><p class=diaboxnospacetop>&nbsp;</p>
+</td>
+<td valign="top"><p class=diaboxnospacetop>To obtain a standardized value of 1 for all areas that have a value larger than or equal to the specified minimum value; other areas will obtain a standardized value of 0. <br>
+			Thus, areas which values are smaller than the specified minimum value will be excluded in further analysis, even if they perform well in other criteria maps. </p>
+			<ul>
+			<li>Select the minimum check box and specify a value.</li>
+            </ul>
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top"><p class=diabox>Maximum method: </p>
+</td>
+</tr>
+<tr>
+<td valign="top"><p class=diaboxnospacetop>&nbsp;</p>
+</td>
+<td valign="top"><p class=diaboxnospacetop>To obtain a standardized value of 1 for all areas that have a value smaller than or equal to the specified maximum value; other areas will obtain a standardized value of 0. <br>
+			Thus, areas which values are larger than the specified maximum value will be excluded in further analysis, even if they perform well in other criteria maps. </p>
+			<ul>
+			<li>Select the maximum check box and specify a value.</li>
+            </ul>
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top"><p class=diabox>Inside method: </p>
+</td>
+</tr>
+<tr>
+<td valign="top"><p class=diaboxnospacetop>&nbsp;</p>
+</td>
+<td valign="top"><p class=diaboxnospacetop>To obtain a standardized value of 1 for all areas that have a value larger than or equal to the specified minimum value, and smaller than or equal to the specified maximum value; other areas will obtain a standardized value of 0. <br>
+			Thus, areas which values are smaller than the specified minimum value, and areas which values are larger than the specified maximum value will be excluded in further analysis, even if they perform well in other criteria maps. </p>
+			<ul>
+			<li>Select the minimum check box and specify a minimum value, and </li>
+			<li>select the maximum check box and specify a maximum value. </li>
+            <li>The specified value for the minimum should be smaller than the specified value for the maximum. </li>
+            </ul>
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top"><p class=diabox>Outside method: </p>
+</td>
+</tr>
+<tr>
+<td valign="top"><p class=diaboxnospacetop>&nbsp;</p>
+</td>
+<td valign="top"><p class=diaboxnospacetop>To obtain a standardized value of 0 for all areas that have a value larger than or equal to the specified minimum value, and smaller than or equal to the specified maximum value; other areas will obtain a standardized value of 1. <br>
+			Thus, areas which values are larger than the specified first value and that are smaller than the specified second value will be excluded in further analysis, even if they perform well in other criteria maps. </p>
+			<ul>
+			<li>Select the <b>maximum</b> check box and specify the first value, and </li>
+			<li>select the <b>minimum</b> check box and specify the second value, and </li>
+			<li>The value specified for the minimum needs to be <i>larger</i> than the value specified for the maximum! </li>
+            </ul>
+</td>
+</tr>
+</table>
+
+<p>&nbsp;</p>
+
+<p class=tiptext><span class="tip">Tip: </span> When a constraint with a value domain has been standardized, the <a href="../ilwis/smce_window_criteria_tree_viewer.htm">criteria tree viewer</a> shows information about the way the constraint is standardized, see the first column below. </p>
+
+<table class=tiptext cellpadding="0" cellspacing="0" width="100%">
+  <tr><td colspan="3"><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td width="45%" valign="top"><i>Criterion name</i>--Std:&lt;&gt;0</td>
+   	<td valign="top">When using the Unequal to zero method, see above. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Min=<i>Min</i></td>
+   	<td valign="top">When using the Minimum method, see above. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Max=<i>Max</i></td>
+   	<td valign="top">When using the Maximum method, see above. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Inside(<i>Min</i>,<i>Max</i>)</td>
+   	<td valign="top">When using the Inside method, see above. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Outside(<i>1st val</i>, <i>2nd val</i>)</td>
+   	<td valign="top">When using the Outside method, see above. </td>
+  </tr>
+</table>
+
+<h2>Examples of standardizing constraints</h2>
+
+<p>In the examples below, 5 output maps were calculated, each time using a single constraint (distance to city center) as input. As input, value map DIST was used, representing the distance towards the city center; the input values range between 0 and about 7250. Each time a different standardization method was selected, and an output map was calculated. This shows the effect of each selected standardization method. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table width="100%" border="0">
+<tr>
+<td><img src="../images/smce_stand_constr_input.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_constr_nonzero.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top">Input map: distance to city center (DIST). <br>
+	Input values range from 0 to about 7250. <br>
+	White represents the city center itself.</td>
+<td valign="top"><b>Std:&lt;&gt;0</b> <br>
+	DIST &lt;&gt; 0 is standardized to 1 (green)<br>
+	all other values are standardized to 0 (red); <br></td>
+</tr>
+<tr><td colspan="2"><p class=emptylinehalf>&nbsp;</p></td></tr>
+<tr>
+<td><img src="../images/smce_stand_constr_min.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_constr_max.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top"><b>Std:Min=500</b> <br />
+	DIST &ge; 500 is standardized to 1 (green); <br>
+	all other values are standardized to 0 (red).</td>
+<td valign="top"><b>Std:Max=1000</b> <br />
+	DIST &le; 1000 is standardized to 1 (green); <br>
+	all other values are standardized to 0 (red).</td>
+</tr>
+<tr><td colspan="2"><p class=emptylinehalf>&nbsp;</p></td></tr>
+<tr>
+<td><img src="../images/smce_stand_constr_inside.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_constr_outside.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top"><b>Std:Inside(500,1000)</b><br>
+	DIST &ge; 500 and DIST &le; 1000 is standardized to 1 (green); <br>
+	all other values are standardized to 0 (red). </td>
+<td valign="top"><b>Std:Outside(500,1000)</b><br>
+	DIST &ge; 500 and DIST &le; 1000 is standardized to 0 (red); <br>
+	all other values are standardized to 1 (green). </td>
+</tr>
+</table>
+
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_standardize.htm">SMCE window : Standardize</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_standardize_class.htm">SMCE window : Standardize Class Input</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_standardize_boolean.htm">SMCE window : Standardize Boolean Input</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a></p>
+
+</body

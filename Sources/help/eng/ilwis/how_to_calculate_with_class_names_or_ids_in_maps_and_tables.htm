@@ -1,0 +1,83 @@
+<html>
+
+<head>
+<title>How to calculate with class names or IDs in maps and tables</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to calculate ..., Calculate ..., Class maps, ID maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to calculate </h1>
+
+<h1 class=secondline>with class names or IDs in maps and tables</h1>
+
+<p class=defnewpar>When using class names or IDs in a MapCalc or TabCalc expression, these class names or IDs should be put &quot;<b>between double quotes</b>&quot;. </p>
+
+<p class=defnewpar>For example, if you want to assign a 1 in a new map <span class=courier>Result</span> to all areas of map <span class=courier>Landuse</span> where there is <span class=courier>Coffee</span>, and a 0 to all other landuse classes, you can use the following formula:</p>
+
+<p class=calc0>Result = Landuse = &quot;Coffee&quot;</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+	<td valign="top" width=132><p>Landuse:</p></td>
+	<td valign="top" width=132><p>Result:</p></td>
+</tr>
+<tr>
+	<td valign="top" width=132><p class=linespacing01before><img src="../images/lu.gif" align=bottom width="85" height="85"></p></td>
+	<td valign="top"><p class=linespacing01before><img src="../images/luout.gif" align=bottom width="85" height="85"></p></td>
+</tr>
+</table>
+
+<p class=linespacing03before>Read in the <span class=courier>Landuse</span> map for <span class=courier>B</span>= Bare, for <span class=courier>C</span>= Coffee, and for <span class=courier>S</span>= Shrub.</p>
+
+<p class=defnewpar>The same formula can be used in Table calculation when you want to assign a 1 to all fields in column <span class=courier>Landuse</span> where the landuse class is <span class=courier>Coffee</span>.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+	<td valign="top" width=48><p class=tcolh>Parcel</p></td>
+	<td valign="top" width=48><p class=tcolh>Landuse</p></td>
+	<td valign="top" width=48><p class=tcolh>Result</p></td>
+</tr>
+<tr>
+	<td valign="top" width=48><p class=t1>01256</p></td>
+	<td valign="top" width=48><p class=t1>Coffee</p></td>
+	<td valign="top" width=48><p class=t1>1</p></td>
+</tr>
+<tr>
+	<td valign="top" width=48><p class=t1>01257</p></td>
+	<td valign="top" width=48><p class=t1>Banana</p></td>
+	<td valign="top" width=48><p class=t1>0</p></td>
+</tr>
+<tr>
+	<td valign="top" width=48><p class=t1>01258</p></td>
+	<td valign="top" width=48><p class=t1>Rice</p></td>
+	<td valign="top" width=48><p class=t1>0</p></td>
+</tr>
+<tr>
+	<td valign="top" width=48><p class=t1>01259</p></td>
+	<td valign="top" width=48><p class=t1>Maize</p></td>
+	<td valign="top" width=48><p class=t1>0</p></td>
+</tr>
+<tr>
+	<td valign="top" width=48><p class=t1>01260</p></td>
+	<td valign="top" width=48><p class=t1>Coffee</p></td>
+	<td valign="top" width=48><p class=t1>1</p></td>
+</tr>
+<tr>
+	<td valign="top" width=48><p class=t1>01261</p></td>
+	<td valign="top" width=48><p class=t1>Maize</p></td>
+	<td valign="top" width=48><p class=t1>0</p></td>
+</tr>
+</table>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=tiptext><span class=tip>Note:</span> <span class=courier>Result=IFF(Landuse=&quot;Coffee&quot;,1,0)</span>
+produces the same result but is longer and slower.</p>
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="calc.htm">Map and Table calculation</a></p>
+
+</body

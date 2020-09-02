@@ -1,0 +1,327 @@
+<html>
+
+<head>
+<title>Classify : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Classify, MapClassify">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Classify</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >Classify</a> operation can be directly executed by typing one of the following expressions on the command line of the Main Window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapClassify</span>(SampleSetName, <span class=courier>ClassifierBox</span>(<i>factor</i>))</p>
+
+</td>
+</tr>
+<td colspan="3" valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapClassify</span>(SampleSetName, <span class=courier>ClassifierMinDist</span>())</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapClassify</span>(SampleSetName, <span class=courier>ClassifierMinDist</span>(<i>threshold</i>))</p>
+
+</td>
+</tr>
+<td colspan="3" valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapClassify</span>(SampleSetName, <span class=courier>ClassifierMinMahaDist</span>())</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapClassify</span>(SampleSetName, <span class=courier>ClassifierMinMahaDist</span>(<i>threshold</i>))</p>
+
+</td>
+</tr>
+<td colspan="3" valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapClassify</span>(SampleSetName, <span class=courier>ClassifierMaxLikelihood</span>())</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapClassify</span>(SampleSetName, <span class=courier>ClassifierMaxLikelihood</span>(<i>threshold</i>))</p>
+
+</td>
+</tr>
+<td colspan="3" valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapClassify</span>(SampleSetName, <span class=courier>ClassifierPriorProb</span>(<i>TableName</i>, <i>ColumnName</i>))</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapClassify</span>(SampleSetName, <span class=courier>ClassifierPriorProb</span>(<i>threshold</i>, <i>TableName</i>, <i>ColumnName</i>))</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=192>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p class=courier>MapClassify</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Classify operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p>SampleSetName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> which contains the training pixels; a sample set is created through <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p class=courier>ClassifierBox</p>
+
+</td>
+<td valign="top">
+<p>is obligatory syntax for a Box classification.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p class=courier>ClassifierMinDist</p>
+
+</td>
+<td valign="top">
+<p>is obligatory syntax for a Minimum Distance classification.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p class=courier>ClassifierMinMahaDist</p>
+
+</td>
+<td valign="top">
+<p>is obligatory syntax for a Minimum Mahalanobis Distance classification.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p class=courier>ClassifierMaxLikelihood</p>
+
+</td>
+<td valign="top">
+<p>is obligatory syntax for a Maximum Likelihood classification.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p class=courier>ClassifierPriorProb</p>
+
+</td>
+<td valign="top">
+<p>is obligatory syntax for a Maximum Likelihood classification which includes prior probabilities.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p><i>factor</i></p>
+
+</td>
+<td valign="top">
+<p>is an obligatory parameter for the Box classifier which allows you to widen (<i>factor</i> &gt; 1) the boxes that are 'drawn' around class means; the <i>n</i>-dimensional size of a box depends on the standard deviations in the <i>n</i> input bands; real value &gt; 0.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p><i>threshold</i></p>
+
+</td>
+<td valign="top">
+<p>for the Minimum Distance, Minimum Mahalanobis distance, Maximum Likelihood and Prior Probabilities classifier: 
+
+<ul>
+
+<li>Optional parameter which is used, for a pixel to be classified, to decide whether the calculated spectral distance towards a class is small enough to actually classify the pixel as that class; if the spectral distance of a pixel towards a class is larger than the threshold, the pixel will not be classified as that class; real value &gt; 0. </li>
+
+<li>The larger you choose the <i>threshold</i>, the more pixels will be classified. </li>
+
+<li>If the <i>threshold</i> is not specified, all pixels will be classified. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p><i>TableName</i></p>
+
+</td>
+<td valign="top">
+<p>for the Prior Probabilities classifier: the parameter which specifies the table that contains the column with the prior probability values.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p><i>ColumnName</i></p>
+
+</td>
+<td valign="top">
+<p>for the Prior Probabilities classifier: the parameter which specifies the column name that contains prior probability values.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="classify_functionality.htm">Classify : functionality</a></p>
+
+</body

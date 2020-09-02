@@ -1,0 +1,158 @@
+<html>
+
+<head>
+<title>Insert/Edit Map Border in layout (neat line or border line around map view)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Border around map view, Map border, Neat line around map view, Layout editor, Layouts, Add ..., Annotation, Map view">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="3"><h1 class=firstline>Layout editor</h1></td>
+<td colspan="2" class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a></td>
+</tr>
+<tr>
+<td colspan="5"><h1 class=secondline>Insert/Edit Map Border</h1></td>
+</tr>
+<tr>
+<td width="20%"><h1 class=firsttabactive><a class=thistab href="layout_editor_insert_edit_map_border_neatline.htm">Neat line</a></h1>
+</td>
+<td width="20%"><h1 class=othertab><a class=othertab href="layout_editor_insert_edit_map_border_grid.htm">Grid</a></h1>
+</td>
+<td width="20%"><h1 class=othertab><a class=othertab href="layout_editor_insert_edit_map_border_graticule.htm">Graticule</a></h1>
+</td>
+<td width="20%"><h1 class=othertab><a class=othertab href="layout_editor_insert_edit_map_border_corners.htm">Corners</a></h1>
+</td>
+<td width="20%"><h1 class=othertab><a class=othertab href="layout_editor_insert_edit_map_border_outline.htm">Outline</a></h1>
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p>Insert or edit a <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map border</a>, and/or ticks and/or coordinates for grid lines or a graticule for a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in your <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>.</p>
+
+<p class=defnewpar>You can insert or edit: </p>
+
+<ul>
+
+<li>a neatline which exactly fits the selected map view; </li>
+
+<li>grid ticks and/or coordinates along the map view in meters; </li>
+
+<li>graticule ticks and/or coordinates along the map view in degrees, minutes, seconds; </li>
+
+<li>coordinates for the corners of a map view; </li>
+
+<li>an outline at a certain distance around a map view. </li>
+
+</ul>
+
+<p>Use the tabs to go to a specific page. </p>
+
+<p class=defnewpar>On this Neat Line page, you can add or edit a border which <i>exactly fits</i> the selected map view. To add a border at a certain distance around your map view, use the <a href="layout_editor_insert_edit_map_border_outline.htm">Outline</a> tab. To obtain a border along the margins of the page of a layout, choose <span class=arial><a href="..//ilwismen/popup/layout_editor_page_border_popup.htm" onClick="return popup(this, 'notes')" >Page Border</a></span> from the <a href="../ilwis/layout_editor_menu_commands.htm">Edit menu</a>. </p>
+
+<p class=diakopje>Neat line page options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the line that will be drawn along the selected map view.  To define your own color, select the 'Custom' item at the bottom of the list or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>; the Windows <a href="custom_colors.htm">Color</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Neat line graduation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you wish to obtain a blocked border of alternating colors around the selected map view (user-defined width in mm). </p>
+
+<p class=diabox>Clear this dialog box when you wish to obtain only a neat line of 0.1 mm around the selected map view. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Meters:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose this option button when the intervals in the blocked border should be in meters. </p>
+                                                                                          
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Degrees:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose this option button when the intervals in the blocked border should be in degrees, minutes, seconds. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Interval:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the size of each interval or block in your blocked border, i.e. the distance that each block should represent. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Width (mm):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the width of the blocked border (both on screen and on printer). </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	If you size a selected map border in the Layout editor, by <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> one of the <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of a selected map border, then the size or the scale of your map view will change. This depends on whether you used the <a href="layout_editor_keep_scale.htm">Keep Scale</a> button. </li>
+
+<li>	To store annotation, you need to save the layout. Open the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a> and choose the <span class=arial><a href="layout_editor_save_layout.htm">Save</a></span> or the <span class=arial><a href="layout_editor_save_layout_as.htm">Save As</a></span> command. You can also click in the white space of your layout, and click the <span class=arial>Save</span> button in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>. </li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+</body

@@ -1,0 +1,434 @@
+<html>
+
+<head>
+<title>Main window : object selection toolbar</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Toolbar, Button bar, Main window, Show ..., Object selection, Catalog">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Main window</h1>
+
+<h1 class=secondline>Object selection toolbar</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The object selection toolbar of the Main window allows you to specify the <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >object types</a> that should be visible in the current <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. 
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>All <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >object types</a> of which the button appears <i>down</i> will be shown. </li>
+
+<li>The first button is used to <i>hide all</i> object types (after which you can click specific object buttons, to show only these object types), or to <i>show all</i> object types.</li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar><img src="../images/bbmainobjsel1.gif" align=bottom width="306" height="28" usemap="#objsel1" border="0"></p>
+
+<p class=defnewpar><img src="../images/bbmainobjsel2.gif" align=bottom width="442" height="28" usemap="#objsel2" border="0"></p>
+
+<p class=defnewpar>When you leave the mouse pointer for a short period of time on top of a button, a tooltip will appear with the name of the object that you are pointing to. </p>
+
+<p class=defnewpar>You can move the toolbar and <i>dock</i> it along an edge of the window; you can also make the toolbar floating. </p>
+
+<p class=kopje>Object types: </p>
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top">
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rasmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/polmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/segmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/pointmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/table.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >tables</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/mpl.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map lists</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/objcol.gif" align=bottom width="15" height="13"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collections</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/mpv.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views </a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/layout.gif" align=bottom width="12" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layouts</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/anntxt.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text objects</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/graphicon.gif" align=bottom width="15" height="15"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_graph_popup.htm" onClick="return popup(this, 'notes')" >graphs</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/domain.gif" align=bottom width="16" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domains</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rpr.gif" align=bottom width="16" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representations</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/georef.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeferences</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/coordsy.gif" align=bottom width="15" height="15"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinates systems</a></p>
+
+</td>
+</tr>
+</table> 
+</td><!--end LEFT column-->
+
+<td valign="top">
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hist.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_raster_popup.htm" onClick="return popup(this, 'notes')" >histograms of raster maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hispol.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_polygon_popup.htm" onClick="return popup(this, 'notes')" >histograms of polygon maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hisseg.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_segment_popup.htm" onClick="return popup(this, 'notes')" >histograms of segment maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hispnt.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_point_popup.htm" onClick="return popup(this, 'notes')" >histograms of point maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/sample.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample sets</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/obj_stereopair.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pairs</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/criteria_tree.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_criteria_trees_popup.htm" onClick="return popup(this, 'notes')" >criteria trees</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/tb2.gif" align=bottom width="14" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_table2dim_popup.htm" onClick="return popup(this, 'notes')" >two-dimensional tables</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/matrix.gif" align=bottom width="16" height="13"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_matrices_popup.htm" onClick="return popup(this, 'notes')" >matrices</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/filt.gif" align=bottom width="13" height="13"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_filters_popup.htm" onClick="return popup(this, 'notes')" >(user-defined) filters</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/func.gif" align=bottom width="15" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_userdef_functions_popup.htm" onClick="return popup(this, 'notes')" >user-defined functions</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/script.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a></p>
+
+</td>
+</tr>
+</table>
+</td> <!--end right column-->
+</tr>
+</table>
+
+<p class=kopje>Using the object selection toolbar:</p>
+
+<p>Click the ILWIS button to switch between: </p>
+
+<ul>
+
+<li>hide all object types; after this you can click specific object buttons, to show only these object types, </li>
+
+<li>show all object types. </li>
+
+</ul>
+
+<p class=defnewpar>Click an object type button to switch between: </p>
+
+<ul>
+
+<li>show the object type, </li>
+
+<li>hide the object type. </li>
+
+</ul>
+
+<p class=defnewpar>Click the directory button or the drive button to switch between: </p>
+
+<ul>
+
+<li>show subdirectories and the parent directory or drives, </li>
+
+<li>hide subdirectories and the parent directory or drives. </li>
+
+</ul>
+
+<p class=tip>Mind:</p>
+
+<ul class=tipul>
+
+<li>Settings are applicable to the currently active Catalog <i>only</i>. </li>
+
+<li>In a Catalog, only those objects will be shown which match the selected object types <i>and</i> a used query. </li>
+
+</ul>
+
+<p class=defnewpar>The Object Selection toolbar can be hidden or shown with the <span class=arial>Object Selection Toolbar</span> command on the <a href="main_window_menu_commands.htm">View menu</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="main_window_catalog.htm">Main window : Catalog(s)</a></p>
+
+<p class=seealsolinks><a href="main_window_operation_list.htm">Main window : Operation-tree and Operation-list</a></p>
+
+<p class=seealsolinks><a href="main_window_standard_toolbar.htm">Main window : Standard toolbar</a></p>
+
+<p class=seealsolinks><a href="main_window_menu_commands.htm">Main window : Menu commands</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects.htm">ILWIS objects</a></p>
+
+<map name="objsel1"> 
+  <area shape="rect" coords="10,3,33,24" title="hide/show all ilwis objects">
+  <area shape="rect" coords="40,3,62,24" title="raster maps">
+  <area shape="rect" coords="63,3,85,24" title="polygon maps">
+  <area shape="rect" coords="86,3,108,24" title="segment maps">
+  <area shape="rect" coords="109,3,131,24" title="point maps">
+  <area shape="rect" coords="132,3,154,24" title="tables">
+  <area shape="rect" coords="161,3,183,24" title="map lists">
+  <area shape="rect" coords="184,3,206,24" title="object collections">
+  <area shape="rect" coords="207,3,229,24" title="map views">
+  <area shape="rect" coords="230,3,252,24" title="layouts">
+  <area shape="rect" coords="253,3,275,24" title="annotation text">
+  <area shape="rect" coords="276,3,298,24" title="graphs">
+</map>
+
+<map name="objsel2"> 
+  <area shape="rect" coords=" 6,3,28,24" title="domains">
+  <area shape="rect" coords="29,3,51,24" title="representations">
+  <area shape="rect" coords="52,3,74,24" title="georeferences">
+  <area shape="rect" coords="75,3,97,24" title="coordinate systems">
+  <area shape="rect" coords="104,3,126,24" title="raster histograms">
+  <area shape="rect" coords="127,3,147,24" title="polygon histograms">
+  <area shape="rect" coords="150,3,172,24" title="segment histograms">
+  <area shape="rect" coords="173,3,195,24" title="point histograms">
+  <area shape="rect" coords="202,3,224,24" title="sample sets">
+  <area shape="rect" coords="225,3,247,24" title="stereo pairs">
+  <area shape="rect" coords="248,3,270,24" title="criteria trees">
+  <area shape="rect" coords="271,3,293,24" title="two-dimensional tables">
+  <area shape="rect" coords="294,3,316,24" title="matrices">
+  <area shape="rect" coords="317,3,339,24" title="filters">
+  <area shape="rect" coords="340,3,362,24" title="functions">
+  <area shape="rect" coords="363,3,385,24" title="scripts">
+  <area shape="rect" coords="392,3,414,24" title="folders/directories">
+  <area shape="rect" coords="415,3,437,24" title="drives">
+</map>
+
+</body

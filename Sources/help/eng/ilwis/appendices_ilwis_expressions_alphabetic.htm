@@ -1,0 +1,433 @@
+<html>
+
+<head>
+<title>Appendices : ILWIS expressions (alphabetic)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS expressions, Expressions, Syntax, Quick reference for ILWIS expressions, MapAggregate, MapApply3D, MapAreaNumbering, MapAttribute, MapCalculate, MapCatchmentExtraction, MapCatchmentMerge, MapClassify, MapCluster, MapCoKriging, MapColorComp, MapColorSep, MapCross, MapDemOptimization, MapDensify, MapDistance, MapDrainageNetworkExtraction, MapDrainageNetworkOrdering, MapFillSinks, MapFilter, MapFlowAccumulation, MapFlowDirection, MapGlue, MapHeckbert, MapInterpolContour, MapIter, MapIterProp, MapKriging, MapKrigingAnisotropic, MapKrigingFromRaster, MapKrigingUniversal, MapListApplic, MapListMatrixMultiply, MapNearestPoint, MapMirrorRotate, MapMovingAverage, MapMovingSurface, MapNearestPoint, MapOverlandFlowLength, MapRasterizePoint, MapRasterizePointCount, MapRasterizePointSum, MapRasterizePolygon, MapRasterizeSegment, MapResample, MapSegmentDensity, MapSlicing, MapStretch, MapSubMap, MapThiessen, MapTopologicalOptimization, MapTrendSurface, MapVariableThresholdComputation, MapVariogramSurfacePnt, MapVariogramSurfaceRas, PolygonMapAttribute, PolygonMapFromRas, PolygonMapFromSegment, PolygonMapGrid, PolygonMapLabels, PolygonMapMask, PolygonMapNumbering, PolygonMapTransform, SegmentMapAttribute, SegmentMapDensifyCoords, SegmentMapFromRasAreaBnd, SegmentMapGlue, SegmentMapLabels, SegmentMapMask, SegmentMapNumbering, SegmentMapPolBoundaries, SegmentMapSubMap, SegmentMapTransform, SegmentMapTunneling, PointMapAttribute, PointMapFromRas, PointMapFromTable, PointMapGlue, PointMapMask, PointMapNumbering, PointMapPolLabels, PointMapSegCoords, PointMapSegDist, PointMapSegNodes, PointMapSubMap, PointMapTransform, TableAutoCorrSemiVar, TableChangeDomain, TableCross, TableCrossVariogram, TableGlue, TableHistogram, TableHistogramPnt, TableHistogramPol, TableHistogramSeg, TableHortonPlots, TableNeighbourPol, TablePattAnal, TableSegDir, TableSpatCorr, TableTranspose, MatrixFactorAnal, MatrixPrincComp, ColumnAggregate, ColumnJoin, ColumnCalculate, ColumnSemiVariogram, ColumnLeastSquaresFit, ColumnCumulative">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Appendices&nbsp;&nbsp;&nbsp;</h1></td>
+<td class=menucommand><a class=menlink href="appendices_ilwis_expressions.htm">ILWIS expressions (menu-wise)</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>ILWIS expressions (alphabetic)</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>In the listing below, all <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >ILWIS expressions</a> are ordered by output object type, and then alphabetical. For more information, refer to <a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a> or to individual operations by clicking the links in the list below.</p>
+
+<p class=defnewpar><span class=kopje>Operations resulting in a raster map:</span> <img src="../images/rasmap.gif" align=bottom width="16" height="12"></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/aggregate_command_line.htm">MapAggregate</span><i>AggFunc</i></a><span class=courier>(</span>rasmap, <i>groupfactor</i>, <span class=courier>group</span> [, <i>rowoffset, coloffset</i>] [, <i>newgeoref</i>] <span class=courier>)</span></p>
+                                                 
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/aggregate_command_line.htm">MapAggregate</span><i>AggFunc</i></a><span class=courier>(</span>rasmap, <i>groupfactor</i>,  <span class=courier>nogroup</span> [, <i>rowoffset, coloffset</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/apply_3d_command_line.htm">MapApply3D</a>(</span>rasmap, georef3D<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/areanumbering_commandline.htm">MapAreaNumbering</a>(</span>rasmap, <span class=courier>8</span> | <span class=courier>4</span> <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/attribute_map_of_raster_map_commandline.htm">MapAttribute</a>(</span>rasmap, attribute column<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc.htm">MapCalculate</a>(</span><i>expression</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/catchment_extraction_command_line.htm">MapCatchmentExtraction</a>(</span><i>drainorder_rasmap</i>, <i>flowdir_rasmap</i><span class="courier">)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/catchment_merge_command_line.htm">MapCatchmentMerge</a>(</span><i>drainorder_rasmap</i>, <i>flowdir_rasmap</i>, <i>flowacc_rasmap</i>, <i>outlet_pntmap</i>, <span class="courier">true</span> | <span class="courier">false</span>, <span class="courier">true</span> | <span class="courier">false</span> [, <i>output_segmap_longestFlow</i>] <span class="courier">)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/catchment_merge_command_line.htm">MapCatchmentMerge</a>(</span><i>drainorder_rasmap</i>, <i>flowdir_rasmap</i>, <i>flowacc_rasmap</i>, <span class="courier">Strahler</span> | <span class="courier">Shreve</span>, <i>stream_order</i> [, <i>output_segmap_longestFlow</i>] <span class="courier">)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/classify_commandline.htm">MapClassify</a>(</span>sample set, <i>classifier</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/cluster_command_line.htm">MapCluster</a>(</span><i>map list, nr of clusters</i> [, output attrib table] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/cokriging_command_line.htm">MapCoKriging</a>(</span><i>pntmapPred, pntmapCovar, </i>georef, <i>semivarmodelPred, semivarmodelCovar, crossvarmodel, limdist</i> [, <span class=courier>1</span> | <span class=courier>0</span> [, <i>min</i>, <i>max</i> [, <i>remove duplic</i> [, <i>tolerance</i> [, <span class=courier>plane</span> | <span class=courier>sphere</span>] ] ] ] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/color_composite_commandline.htm">MapColorComp24</span>[<span class=courier>Linear</span>]</a><span class=courier>(</span><i>map list </i>[, <i>range1, range2, range3</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/color_composite_commandline.htm">MapColorComp24HistEq</a>(</span><i>map list, range1, range2, range3</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/color_composite_commandline.htm">MapColorComp24HSI</a>(</span><i>map list</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/color_composite_commandline.htm">MapColorComp</span>[<span class=courier>Linear</span>]</a><span class=courier>(</span><i>map list, range1, range2, range3</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/color_composite_commandline.htm">MapColorCompHistEq</a>(</span><i>map list, range1, range2, range3</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/color_separation_command_line.htm">MapColorSep</span>[<span class=courier>aration</span>]</a><span class=courier>(</span><i>rasmap,color</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/cross_commandline.htm">MapCross</a>(</span>rasmap1, rasmap2, output cross table<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/dem_optimization_commandline.htm">MapDemOptimization</a>(</span><i>rasmap</i>, <i>segmap</i>, <i>table</i>, <i>col_buffer_dist</i>, <i>col_smooth_drop</i>, <i>col_sharp_drop</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/dem_optimization_commandline.htm">MapDemOptimization</a>(</span><i>rasmap</i>, <i>segmap</i>, <i>bufferdist</i>, <i>smoothdrop</i> [, <i>sharpdrop</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/dem_optimization_commandline.htm">MapDemOptimization</a>(</span><i>rasmap</i>, <i>polmap</i>, <i>poldrop</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/densify_commandline.htm">MapDensify</a>(</span>rasmap, <i>factor, interpolation method</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/distance_calculation_commandline2.htm">MapDistance</a>(</span>source rasmap [ , weight rasmap | <span class=courier>1</span> [ , output Thiessen rasmap] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/drainage_network_extraction_command_line.htm">MapDrainageNetworkExtraction</a>(</span><i>flowacc_rasmap</i>, <i>threshold</i><span class="courier">)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/drainage_network_extraction_command_line.htm">MapDrainageNetworkExtraction</a>(</span><i>flowacc_rasmap</i>, <i>threshold_rasmap</i>, <i>flowdir_rasmap</i><span class="courier">)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/drainage_network_ordering_command_line.htm">MapDrainageNetworkOrdering</a>(</span><i>DEM_rasmap</i>, <i>flowdir_rasmap</i>, <i>drainnetwork_rasmap</i>, <i>minLength</i><span class="courier">)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/fill_sinks_commandline.htm">MapFillSinks</a>(</span><i>rasmap</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/filter_command_line.htm">MapFilter</a>(</span>rasmap, <i>filter </i> | <i> filter expression</i> <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/flow_accumulation_commandline.htm">MapFlowAccumulation</a>(</span><i>flowdir_rasmap</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/flow_direction_commandline.htm">MapFlowDirection</a>(</span><i>rasmap</i>, [<span class=courier>slope</span> | <span class=courier>height</span>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/glue_raster_maps_command_line.htm">MapGlue</a>(</span> [<i>georef</i><span class=courier>.grf</span>, ] rasmap1, rasmap2 [, <i>rasmaps</i>] [, <i>newdomain</i>] [, <span class=courier>replace</span>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/color_composite_commandline.htm">MapHeckbert</a>(</span>map list, <i>nr of colors</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/contour_interpolation_command_line.htm">MapInterpolContour</a>(</span>segmap, georef<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/contour_interpolation_command_line.htm">MapInterpolContour</a>(</span>rasmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/iteration_command_line.htm">MapIter[Prop]</a>(</span><i>StartMap, </i>IterExpr [, <i> nr of iterations</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/anisotropic_kriging_command_line.htm">MapKrigingAnisotropic</a>(</span><i>pntmap</i>, georef, <i>semivarmodel, limdist, angle, ratio</i> [, <span class=courier>1</span> | <span class=courier>0</span> [, <i>min, max</i> [, <i>remove duplic</i> [, <i>tolerance</i>] ] ] ] ) </p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/kriging_from_raster_command_line.htm">MapKrigingFromRaster</a>(</span><i>rasmap</i>, <i>semivarmodel</i> [, <i>limdist</i> [, <i>distance</i> <i>unit</i> [, <span class=courier>1</span> | <span class=courier>0</span> [, <i>min</i>, <i>max</i>] ] ] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/kriging_command_line.htm">MapKrigingOrdinary</a>(</span><i>pntmap</i>, georef, <i>semivarmodel</i> [, <span class=courier>plane</span> | <span class=courier>sphere</span>] , <i>limdist</i> [, <span class=courier>1</span> | <span class=courier>0</span> [, <i>min, max</i> [, <i>remove duplic</i> [, <i>tolerance</i>] ] ] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/kriging_command_line.htm">MapKrigingSimple</a>(</span><i>pntmap</i>, georef, <i>semivarmodel</i> [, <span class=courier>plane</span> | <span class=courier>sphere</span>] [, <span class=courier>1 </span> | <span class=courier>0</span> [, <i>remove duplic</i> [, <i>tolerance</i>] ] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/anisotropic_kriging_command_line.htm">MapKrigingUniversal</a>(</span><i>pntmap</i>, georef, <i>semivarmodel, limdist,</i> <span class=courier>0</span>, <i>angle, ratio</i> [, <span class=courier>1</span> | <span class=courier>0</span> [, <i>min, max</i> [, <i>remove duplic</i> [, <i>tolerance</i>] ] ] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/universal_kriging_command_line.htm">MapKrigingUniversal</a>(</span><i>pntmap</i>, georef, <i>semivarmodel, limdist, trend type, </i><span class=courier>0</span>, <span class=courier>1</span> [, <span class=courier>1</span> | <span class=courier>0</span> [, <i>min, max</i> [, <i>remove duplic</i> [, <i>tolerance</i>] ] ] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/mirror_rotate_commandline.htm">MapMirrorRotate</a>(</span>rasmap, <i>rotate type</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/moving_average_commandline.htm">MapMovingAverage</a>(</span>pntmap, georef, <i>weight function</i> [, <span class=courier>plane</span> | <span class=courier>sphere</span>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/moving_surface_command_line.htm">MapMovingSurface</a>(</span>pntmap, georef, <i>surface type, weight function</i> [, <span class=courier>plane</span> | <span class=courier>sphere</span>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/nearest_point_commandline.htm">MapNearestPoint</a>(</span>pntmap, georef [, <span class=courier>plane</span> | <span class=courier>sphere</span>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/overland_flow_length_command_line.htm">MapOverlandFlowLength</a>(</span><i>drainorder_rasmap</i>, <i>flowdir_rasmap</i><span class="courier">)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/points_to_raster_commandline.htm">MapRasterizePoint</a>(</span>pntmap, georef, <i>pointsize</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/point_density_command_line.htm">MapRasterizePoint[Count</span> | <span class=courier>Sum</span>]</a><span class=courier>(</span>pntmap, georef, <i>pointsize</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/polygons_to_raster_commandline.htm">MapRasterizePolygon</a>(</span>polmap, georef<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segments_to_raster_commandline.htm">MapRasterizeSegment</a>(</span>segmap, georef<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/resample_command_line.htm">MapResample</a>(</span>rasmap, georef, <i>resample method </i>[, <span class=courier>Patch</span> | <span class=courier>NoPatch</span>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segment_density_command_line.htm">MapSegmentDensity</a>(</span>segmap [, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;</span>] , georef<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/slicing_commandline.htm">MapSlicing</a>(</span>rasmap, domain group)</p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/stretch_command_line.htm">MapStretch[Linear]</a>(</span>rasmap, <i>range from, domain </i>[<span class=DefaultStyle>,<a href="..//ilwis/popup/y_value_range_in_expressions_popup.htm" onClick="return popup(this, 'notes')" ><i>range to</i></span></a>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/stretch_command_line.htm">MapStretchHistEq</a>(</span>rasmap, <i>range from, intervals</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline.htm">MapSubMap</a>(</span>rasmap, start row, start col [, nr rows, nr cols] [, <i>newgeoref</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline.htm">MapSubMapCorners</a>(</span>rasmap, start row, start col, end row, end col [, <i>newgeoref</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline.htm">MapSubMapCoords</a>(</span>rasmap, start X-coord, start Y-coord, end X-cooord, end Y-coord [, <i>newgeoref</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/distance_calculation_commandline2.htm">MapThiessen</a>(</span>source rasmap [, weight rasmap<span class=courier></span> | <span class=courier>1</span> ], output Distance rasmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class="courier"><a href="../ilwisapp/topological_optimization_command_line.htm">MapTopologicalOptimization</a>(</span><i>drainnetwork_rasmap</i>, <i>flowdir_rasmap</i>, <i>stream_segmap</i>, <i>output_modified_flowdir_rasmap</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/trend_surface_command_line.htm">MapTrendSurface</a>(</span>pntmap, georef, <i>surface type</i>)</p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/variable_threshold_computation_command_line.htm">MapVariableThresholdComputation</a>(</span>rasmap, <i>filter_size</i>, <i>nr_classes</i>, <span class="courier">&quot;</span><i>UpperBounds_and_ThresholdVals</i><span class="courier">&quot;</span>, <i>output_internal_relief_rasmap</i>)</p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/variogram_surface_command_line.htm">MapVariogramSurfacePnt</a>(</span>pntmap [, <i>lagspacing</i> [, <i>nr of lags</i>] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/variogram_surface_command_line.htm">MapVariogramSurfaceRas</a>(</span>rasmap [, <i>nr of lags</i>] <span class=courier>)</span></p>
+
+<p class=defnewpar><span class=kopje>Operations resulting in a polygon map:</span> <img src="../images/polmap.gif" align=bottom width="16" height="12"></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/attribute_map_of_polygon_map_commandline.htm">PolygonMapAttribute</a>(</span>polmap, attribute column<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/raster_to_polygons_command_line.htm">PolygonMapFromRas</a>(</span>rasmap [, <span class=courier>8</span> | </span>4</span> [, <span class=courier>smooth</span> | <span class=courier>nosmooth</span>] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segments_to_polygons_command_line.htm">PolygonMapFromSegment</a>(</span>segmap [, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;</span> [, <i>labelpntmap</i> | <span class=courier>unique</span> | <i>domain</i> [, <span class=courier>auto</span> ] ] ] <span class=courier>)</span></p>
+
+<!-- <p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segments_to_polygons_command_line.htm">PolygonMapFromSegment</a>(</span>segmap [, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;</span> [, <i>domain</i> <i>labelpntmap</i> | <span class=courier>unique</span> [, <span class=courier>auto</span> ] ] ] <span class=unique>)</span></p> -->
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segments_to_polygons_command_line.htm">PolygonMapFromSegmentNonTopo</a>(</span>segmap [, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;</span> [, <span class=courier>segments</span> | <i>labelpntmap</i> | <span class=courier>unique</span> | <i>domain</i> ] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/id_grid_map_command_line.htm">PolygonMapGrid</a></span> 
+(coordsys, <i>originX</i>, <i>originY</i>, <i>width</i>, <i>height</i>, <i>nrVertical</i>,
+<i>nrHorizontal</i>, , , [<i>directionX</i>], [<i>directionY</i>], [table], [<i>label</i>],
+[<i>order</i>], [<i>startcorner</i>], [<i>startnumber</i>], [<i>steps</i>], [<i>prefix</i>],
+[<i>postfix</i>])
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/id_grid_map_command_line.htm">PolygonMapGrid</a></span> 
+(coordsys, <i>originX</i>, <i>originY</i>, <i>width</i>, <i>height</i>, , , <i>oppositeX</i>,
+<i> oppositeY</i>, [<i>directionX</i>], [<i>directionY</i>], [table], [<i>label</i>],
+[<i>order</i>], [<i>startcorner</i>], [<i>startnumber</i>], [<i>steps</i>], [<i>prefix</i>],
+[<i>postfix</i>])<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/id_grid_map_command_line.htm">PolygonMapGrid</a></span> 
+(coordsys, <i>originX</i>, <i>originY</i>, , , <i>nrVertical</i>, <i>nrHorizontal</i>,
+<i>oppositeX</i>, <i> oppositeY</i>, [<i>directionX</i>], [<i>directionY</i>], [table],
+[<i>label</i>], [<i>order</i>], [<i>startcorner</i>], [<i>startnumber</i>], [<i>steps</i>],
+[<i>prefix</i>], [<i>postfix</i>])
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/assign_labels_to_polygons_command_line.htm">PolygonMapLabels</a>(</span>polmap, pntmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/mask_polygons_command_line.htm">PolygonMapMask</a>(</span>polmap, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/unique_id_command_line.htm">PolygonMapNumbering</a>(</span>polmap [, , <i>prefix</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/transform_polygon_map_command_line.htm">PolygonMapTransform</a>(</span>polmap, targetcoordsys [, <i>interval</i>] <span class=courier>)</span></p>
+
+<p class=defnewpar><span class=kopje>Operations resulting in a segment map:</span> <img src="../images/segmap.gif" align=bottom width="16" height="12"></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/attribute_map_of_segment_map_commandline.htm">SegmentMapAttribute</a>(</span>segmap, attribute column<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/densify_segment_coordinates_commandline.htm">SegmentMapDensifyCoords</a>(</span>segmap, <i>distance</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/raster_to_segments_command_line.htm">SegmentMapFromRasAreaBnd</a>(</span>rasmap, <span class=courier>8</span> | <span class=courier>4</span>, <span class=courier>smooth</span> | <span class=courier>nosmooth</span>, <span class=courier>single</span> | <span class=courier>unique)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/glue_segment_maps_commandline.htm">SegmentMapGlue</a>(</span>segmap1, <span class=courier>&quot;</span><i>mask1</i><span class=courier>&quot;</span>, segmap2, <span class=courier>&quot;</span><i>mask2</i><span class=courier>&quot; </span>[, ... ] [, <i>newdomain</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/glue_segment_maps_commandline.htm">SegmentMapGlue</a>(</span><i>minX, minY, maxX, maxY,</i>segmap1, <span class=courier>&quot;</span><i>mask1</i><span class=courier>&quot;</span>, segmap2, <span class=courier>&quot;</span><i>mask2</i><span class=courier>&quot; </span>[, ... ] [, <i>newdomain</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/assign_labels_to_segments_command_line.htm">SegmentMapLabels</a>(</span>segmap, pntmap, <i>set domain</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/mask_segments_commandline.htm">SegmentMapMask</a>(</span>segmap, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/unique_id_command_line.htm">SegmentMapNumbering</a>(</span>segmap [, , <i>prefix</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/polygons_to_segments_command_line.htm">SegmentMapPolBoundaries</a>(</span>polmap, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;</span>, <span class=courier>single</span> | <span class=courier>unique)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/submap_of_segment_map_commandline.htm">SegmentMapSubMap</a>(</span>segmap, <i>minX, minY, maxX, maxY</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/submap_of_segment_map_commandline.htm">SegmentMapSubMap</a>(</span>segmap, <i>minLon, minLat, maxLon, maxLat</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/transform_segment_map_command_line.htm">SegmentMapTransform</a>(</span>segmap, targetcoordsys [, <i>interval</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/tunnel_segments_commandline.htm">SegmentMapTunneling</a>(</span>segmap, <i>tunnel width, remove nodes</i><span class=courier>)</span></p>
+
+<p class=defnewpar><span class=kopje>Operations resulting in a point map:</span> <img src="../images/pointmap.gif" align=bottom width="16" height="12"></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/attribute_map_of_point_map_commandline.htm">PointMapAttribute</a>(</span>pntmap, attribute column<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/raster_to_points_commandline.htm">PointMapFromRas</a>(</span>rasmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/table_to_point_map_command_line.htm">PointMapFromTable</a>(</span>table, <i>XYcoordcolumn</i> [<i>, prefix | attribcolumn</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/table_to_point_map_command_line.htm">PointMapFromTable</a>(</span>table, [<i>Xcolumn, Ycolumn,</i>] coordsys [<i>, prefix | attribcolumn</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/glue_point_maps_commandline.htm">PointMapGlue</a>(</span>pntmap1, <span class=courier>&quot;</span><i>mask1</i><span class=courier>&quot;</span>, pntmap2, <span class=courier>&quot;</span><i>mask2</i><span class=courier>&quot;</span>[, ...] [, <i>newdomain</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/glue_point_maps_commandline.htm">PointMapGlue</a>(</span><i>minX, minY, maxX, maxY,</i>pntmap1, <span class=courier>&quot;</span><i>mask1</i><span class=courier>&quot;</span>, pntmap2, <span class=courier>&quot;</span><i>mask2</i><span class=courier>&quot;</span> [, ... ] [, <i>newdomain</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/mask_points_command_line.htm">PointMapMask</a>(</span>pntmap, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/unique_id_command_line.htm">PointMapNumbering</a>(</span>pntmap [, , <i>prefix</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/polygons_to_points_commandline.htm">PointMapPolLabels</a>(</span>polmap [, <span class=courier>AlsoUndefs</span>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segments_to_points_commandline.htm">PointMapSegCoords</a>(</span>segmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segments_to_points_commandline.htm">PointMapSegDist</a>(</span>segmap, <i>distance</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segments_to_points_commandline.htm">PointMapSegNodes</a>(</span>segmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/submap_of_point_map_commandline.htm">PointMapSubMap</a>(</span>pntmap, <i>minX, minY, maxX, maxY</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/submap_of_point_map_commandline.htm">PointMapSubMap</a>(</span>pntmap, <i>minLon, minLat, maxLon, maxLat</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/transform_point_map_command_line.htm">PointMapTransform</a>(</span>pntmap, targetcoordsys<span class=courier>)</span></p>
+
+<p class=defnewpar><span class=kopje>Operations resulting in a table:</span> <img src="../images/table.gif" align=bottom width="13" height="14"> </p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/auto_correlation_semivariance_command_line.htm">TableAutoCorrSemiVar</a>(</span>rasmap [, <i>max shift</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/change_domain_of_table_command_line.htm">TableChangeDomain</a>(</span>table, <span class=courier>None</span> | <i>domainondisk</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/change_domain_of_table_command_line.htm">TableChangeDomain</a>(</span>table, columnname [, <span class=courier>avg</span> | <span class=courier>min</span> | <span class=courier>max</span> | <span class=courier>sum</span> | <span class=courier>last</span> | <span class=courier>no</span> ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/cross_commandline.htm">TableCross</a>(</span>rasmap1, rasmap2<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/cross_commandline.htm">TableCross</a>(</span>rasmap1, rasmap2, output cross rasmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/cross_commandline.htm">TableCross</a>(</span>rasmap1, rasmap2 [, output cross rasmap] [, <span class=courier>IgnoreUndefs</span> | <span class=courier>IgnoreUndef1</span> | <span class=courier>IgnoreUndef2</span> ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/cross_variogram_command_line.htm">TableCrossVariogram</a>(</span><i>pntmap</i>, <i>columnA</i>, <i>columnB</i>, <i>lagspacing</i> [, <span class=courier>plane</span> | <span class=courier>sphere</span>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/glue_tables_command_line.htm">TableGlue</a>(</span>table1, table2 [<i>, more tables</i>] [, <span class=courier>vertical</span>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/glue_tables_command_line.htm">TableGlue</a>(</span>[<i>newdomain,</i>] table1, table2 [<i>, more tables</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/histogram_commandline.htm">TableHistogram</a>(</span>rasmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/histogram_commandline.htm">TableHistogramPnt</a>(</span>pntmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/histogram_commandline.htm">TableHistogramPol</a>(</span>polmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/histogram_commandline.htm">TableHistogramSeg</a>(</span>segmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/horton_statistics_command_line.htm">TableHortonPlots</a>(</span><i>catch_extr_rasmap</i>, <i>catch_merge_rasmap</i>, <i>drainorder_rasmap</i><span class="courier">)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/neighbour_polygons_command_line.htm">TableNeighbourPol</a>(</span>polmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/pattern_analysis_command_line.htm">TablePattAnal</a>(</span>pntmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segment_direction_histogram_command_line.htm">TableSegDir</a>(</span>segmap<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/spatial_correlation_commandline.htm">TableSpatCorr</a>(</span>pntmap [, <i>lagspacing</i> [, <span class=courier>plane</span> | <span class=courier>sphere</span>] ] <span class=courier>)</span> </p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/spatial_correlation_commandline.htm">TableSpatCorr</a>(</span>pntmap [, <i>lagspacing</i> [, <i>direction</i> [, <i>tolerance</i> [, <i>bandwidth</i>] ] ] ] <span class=courier>)</span> </p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/transpose_table_command_line.htm">TableTranspose</a>(</span><i>table, column domain</i> [,<a href="..//ilwis/popup/y_value_range_in_expressions_popup.htm" onClick="return popup(this, 'notes')" ><span class=DefaultStyle><i>value range</i></span></a>] <span class=courier>)</span></p>
+
+<p class=defnewpar><span class=kopje>Operations on columns in a table, resulting in a column:</span> <img src="../images/column.gif" align=bottom width="13" height="14"></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc.htm">ColumnCalculate</a>(</span><i>expression</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwismen/cumulative_column.htm">ColumnCumulative</a>(</span>column [, <i>sortcolumn</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwismen/least_squares_fit.htm">ColumnLeastSquaresFit</a>(</span>column1, column2, <i>Function, n</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwismen/column_semivariogram.htm">ColumnSemiVariogram</a>(</span>DistanceColumn, <i>SemiVarModel</i><span class=courier>)</span></p>
+
+<p class=defnewpar><span class=kopje>Aggregation or join operations in tables, resulting in a column:</span> <img src="../images/column.gif" align=bottom width="13" height="14"></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggavg.htm">ColumnAggregateAvg</a>(</span>column [, <i>group </i> [, <i>weight </i>] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggavg.htm">ColumnAggregateAvg</a>(</span>column [, , <i>weight </i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggcnt.htm">ColumnAggregateCnt</a>(</span>column [, <i>group</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggmax.htm">ColumnAggregateMax</a>(</span>column [, <i>group</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggmed.htm">ColumnAggregateMed</a>(</span>column [, <i>group </i> [, <i>weight </i>] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggmed.htm">ColumnAggregateMed</a>(</span>column [, , <i>weight </i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggmin.htm">ColumnAggregateMin</a>(</span>column [, <i>group</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggprd.htm">ColumnAggregatePrd</a>(</span>column [, <i>group </i> [, <i>weight </i>] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggprd.htm">ColumnAggregatePrd</a>(</span>column [, , <i>weight </i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggstd.htm">ColumnAggregateStd</a>(</span>column [, <i>group </i> [, <i>weight </i>] ] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggstd.htm">ColumnAggregateStd</a>(</span>column [, , <i>weight </i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aggsum.htm">ColumnAggregateSum</a>(</span>column [, <i>group</i>] <span class=courier>)</span></p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_joining_columns_from_other_tables.htm">ColumnJoin</a>(</span>table, column<span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_joining_columns_from_other_tables.htm">ColumnJoin</a>(</span>table, column, <i>key1</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_joining_columns_from_other_tables.htm">ColumnJoin2ndKey</a>(</span>table, column, <i>key2</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_joining_columns_from_other_tables.htm">ColumnJoin2ndKey</a>(</span>table, column, <i>key1, key2</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_joining_columns_from_other_tables.htm">ColumnJoin</span><i>AggFunc</i></a><span class=courier>(</span>table, column, <i>key2</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_joining_columns_from_other_tables.htm">ColumnJoin</span><i>AggFunc</i></a><span class=courier>(</span>table, column, <i>key2, weight</i><span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_joining_columns_from_other_tables.htm">ColumnJoin</span><i>AggFunc</i></a><span class=courier>(</span>table, column, <i>key2, weight, key1</i><span class=courier>)</span></p>
+
+<p class=defnewpar><span class=kopje>Operations resulting in a map list:</span> <img src="../images/mpl.gif" align=bottom width="16" height="12"></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier>&quot;</span><i>MapCalcExpression containing</i> <span class=courier>##&quot;)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier>Map</span><i>Operation</i><span class=courier>(##</span> [, <i>parameters</i>] <span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <a href="../ilwisapp/aggregate_command_line2.htm"><span class=courier>MapAggregate</span><i>AggFunc</i></a><span class=courier>(##</span>, <i>groupfactor</i>, <span class=courier>group</span> [, <i>rowoffset, coloffset</i>] [, <i>newgeoref</i>] <span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <a href="../ilwisapp/aggregate_command_line2.htm"><span class=courier>MapAggregate</span><i>AggFunc</i></a><span class=courier>(##</span>, <i>groupfactor</i>, <span class=courier>nogroup</span> [, <i>rowoffset, coloffset</i>] <span class=courier>))</span> </p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/densify_commandline2.htm">MapDensify</a>(##</span>, <i>factor, interpol meth</i><span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/filter_command_line2.htm">MapFilter</a>(##</span>, <i>filter name</i>| <i>filter expression</i><span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/mirror_rotate_commandline2.htm">MapMirrorRotate</a>(##</span>, <i> rotate type</i><span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/resample_command_line2.htm">MapResample</a>(##</span>, georef, <i>resamp meth</i> [, <span class=courier>Patch | NoPatch</span>] <span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/stretch_command_line2.htm">MapStretch[Linear]</a>(##</span>, <i>range from, domain</i><span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/stretch_command_line2.htm">MapStretch[Linear]</a>(##</span>, <i>range from, domain, range to</i><span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/stretch_command_line2.htm">MapStretchHistEq</a>(##</span>, <i>range from, intervals</i><span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline2.htm">MapSubMap</a>(##</span>, start row, start col [, nr rows, nr cols] [, <i> newgeoref</i>] <span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline2.htm">MapSubMapCorners</a>(##</span>, start row, start col, end row, end col [, <i> newgeoref</i>] <span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline2.htm">MapSubMapCoords</a>(##</span>, start X-coord, start Y-coord, end X-coord, end Y-coord [, <i> newgeoref</i>] <span class=courier>))</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListMatrixMultiply(</span>maplist, <i><a href="../ilwisapp/factor_analysis_command_line.htm">FactorAnalysisMatrix</a></i>, nr of output maps <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier>MapListMatrixMultiply(</span>maplist, <i><a href="../ilwisapp/principal_component_analysis_command_line.htm">PrincipalComponentsMatrix</a></i>, nr of output maps <span class=courier>)</span></p>
+
+<p class=defnewpar><span class=kopje>Operation resulting in a stereo pair:</span> <img src="../images/obj_stereopair.gif" align=bottom width="16" height="12"></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/stereopair_from_dtm_commandline.htm">StereoPairFromDTM</a>(</span>rasmap, DTM [, <i>look angle</i> [, <i>reference height</i> [, <i>look modus</i> [, <i>resample modus</i>] ] ] ] <span class=courier>)</span></p>
+
+<p class=defnewpar><span class=kopje>Operations resulting in a matrix:</span> <img src="../images/matrix.gif" align=bottom width="16" height="13"></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/factor_analysis_command_line.htm">MatrixFactorAnal</a>(</span>map list [, <i>nr of output bands</i>] <span class=courier>)</span></p>
+
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/principal_component_analysis_command_line.htm">MatrixPrincComp</a>(</span>map list [, <i>nr of output bands</i>] <span class=courier>)</span></p>
+
+<p class=kopje>Special syntax to create attribute maps:</p>
+
+<p class=calccommlinelnsp01b><i>Map.column</i></p>
+
+<p class=calccommlinelnsp01b><i>Polygonmap.mpa.column</i></p>
+
+<p class=calccommlinelnsp01b><i>Segmentmap.mps.column</i></p>
+
+<p class=calccommlinelnsp01b><i>Pointmap.mpp.column</i></p>
+
+<p class=kopje>Special syntax to perform color separation:</p>
+
+<p class=calccommlinelnsp01b><i>Map.color</i></p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="appendices_ilwis_expressions.htm">ILWIS expressions</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_commands.htm">ILWIS commands</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_scripts_language_syntax.htm">ILWIS script language (syntax)</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_as_dde_server.htm">ILWIS as DDE server</a></p>
+
+</body

@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>filter median popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Median filters</p>
+
+<p class=linespacing03after>A median filter is a special type of a <a href="..//ilwisapp/filters_types_rank_order_and_median_filters.htm" onClick="return popup(this, 'notes')" >rank order filter</a>. A median filter calculates the median of the pixels considered, and assigns this value to the center pixel in the output map. A median filter may have any user-defined size. </p>
+
+<p class=linespacing03after>The standard median filters are <a href="../../ilwisapp/sec/filter_med3x3_sec.htm">MED3x3</a> and <a href="../../ilwisapp/sec/filter_med5x5_sec.htm">MED5x5</a>.</p>
+
+<p>Furthermore, you can use <a href="..//ilwisapp/filters_user_defined_rank_order_and_median_filters.htm" onClick="return popup(this, 'notes')" >user-defined median filters</a>: specify the size of the filter and optionally a threshold.</p>
+
+</body

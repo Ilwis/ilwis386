@@ -1,0 +1,159 @@
+<html>
+
+<head>
+<title>%C</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="%C, Predefined variables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>Predefined variable %C</h1>
+
+<p class=defnewpar>Variable to calculate with column numbers of raster maps.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>%C</span></p>
+
+<p class=tip>Note:</p>
+<p class=tiptext><span class=courier>C</span>  stands for Column number.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a></p>
+
+<p class=calctitle>Examples</p>
+<p class=kopjeaftertitlesub>MapCalc examples:</p>
+<p class="calc00">SubMap = IFF(INRANGE(%C,100,400) AND (INRANGE(%L,200,500)), InMap, &quot;?&quot;)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellpadding="0" cellspacing="0">
+<tr>
+	<td><p class=courier>InMap</p></td>	
+	<td>&nbsp;&nbsp;</td>
+	<td><p class=courier>SubMap</p></td>
+</tr>
+<tr>
+	<td><img border="0" src="../images/predefined.gif" width="85" height="85"></td>	
+	<td>&nbsp;&nbsp;</td>
+	<td><img border="0" src="../images/predefined_lc.gif" width="85" height="85"></td>
+</tr>
+</table>
+<p class="defnewpar"><span class="courier">SubMap</span> has the same content as <span class="courier">InMap</span> if the column number is in the range of 100 to 400 and the line number in the range of 200 to 500. Outside this area <span class="courier">SubMap</span> is undefined.</p>
+
+<p class=kopje>Applied example: Assigning pixels to a back drop line:</p>
+<p>The next example describes the assignment of average values to pixels of an image in which whole lines are missing. Occasionally satellite images suffer from so called back drop lines. In this example every 8<sup>th</sup> line is missing. These lines are assigned values which are the average values from the line above and the line below.</p>
+<p class=calc0linsp03befaft>OutImage = IFF((%L MOD 8=0), (RASVALUE(Image, %L-1, %C) + RASVALUE(Image, %L+1, %C))/2, Image)</p>
+<table>
+<tr>
+	<td><p class=courier></p></td>
+	<td><p class=courier>Image</p></td>
+	<td><p class=courier>OutImage</p></td>
+</tr>
+<tr>
+<td>
+<table cellspacing="0" cellpadding="0">
+  <tr>
+  <td>Line 7
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+  </td>
+  </tr>
+  <tr>
+  <td>Line 8
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+  </td>
+  </tr>
+  <tr>
+  <td>Line 9</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>51</td>
+    <td class=calcpict>6</td>
+    <td class=calcpict>29</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>8</td>
+    <td class=calcpict>18</td>
+    <td class=calcpict>53</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>51.00</td>
+    <td class=calcpict>6.00</td>
+    <td class=calcpict>29.00</td>
+  </tr>
+  <tr>
+    <td class=calcpict>29.50</td>
+    <td class=calcpict>12.00</td>
+    <td class=calcpict>41.00</td>
+  </tr>
+  <tr>
+    <td class=calcpict>8.00</td>
+    <td class=calcpict>18.00</td>
+    <td class=calcpict>53.00</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class=defnewpar> <span class="courier">Image</span>  shows some pixels of line 7 up to line 9 while line 8 is missing. These missing values are replaced by the average values of the pixels of the line above and the line below.</p>
+
+<p class=tip>Note:</p>
+<p class=tiptext>In this example both maps use system domain <span class=courier>Value</span>.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_x.htm">%X</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_y.htm">%Y</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_l.htm">%L</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_r.htm">%R</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_k.htm">%K</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_d.htm">%D</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_p.htm">%P</a></p></td>
+</tr>
+</table>
+
+</body

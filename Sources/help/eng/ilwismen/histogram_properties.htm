@@ -1,0 +1,261 @@
+<html>
+
+<head>
+<title>Histogram properties</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Properties of objects, Histogram, Histogram summary, Standard deviation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Histogram properties</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Histogram Properties sheet lists all kind of important information on a selected <a href="..//ilwis/popup/objects_histogram_raster_popup.htm" onClick="return popup(this, 'notes')" >histogram</a>. In fact, all relevant information that is stored in the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the histogram is displayed. Furthermore, Property sheets are designed to handle the properties of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent objects</a>. For more information, refer to the <a href="../ilwisapp/histogram.htm">Histogram operation</a> or to <a href="../ilwis/basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a>. Note that you can calculate histograms of raster, polygon, segment and point maps.  </p>
+
+<p class=defnewpar>The Histogram Properties sheet appears:</p>
+
+<ul>
+
+<li>	when you click a histogram in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> with the right mouse button, and choose <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>;</li>
+
+<li>	when you select a histogram in a Catalog, and choose <span class=arial>Properties</span> from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> in the Main window; </li>
+
+<li>	when you open a histogram, and choose <span class=arial>Properties</span> from the File menu.</li>
+
+</ul>
+
+<table cellspacing=0>
+<tr>
+<td colspan="2">
+<p class=diakopje>Histogram tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Histogram</b> &quot;Name&quot;. When you click this flat button, the histogram will be (re)opened. </p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For your information, the domain and domain type of the histogram table are listed. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>General tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Histogram</b> &quot;Name&quot;. When you click this flat button, the histogram will be (re)opened. </p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Location:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The path and directory where this object is stored. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object date and time:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Date and time when this histogram was last changed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Total size of the histogram on disk in bytes. For raster histograms .HIS and .HI#; for polygon histograms .HSA and .HA#; for segment histograms .HSS and .HS#; for point histograms .HSP and .HP#.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Read only:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if this histogram should be read only. You are then not allowed to edit or delete the histogram. Clear this check box if you want to be able to edit the histogram.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, change the description of this histogram. The description of a histogram appears in the title bar when the histogram is displayed. Further, the description is visible on the status bar of the Main window when moving the mouse pointer over the histogram in the Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>Dependency tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Histogram</b> &quot;Name&quot;. When you click this flat button, the histogram will be (re)opened. </p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Definition:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For your information, the expression by which this histogram was created is listed, i.e. the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >object definition</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Up-to-date or not:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Lists whether this histogram is up-to-date or not. If not, the name of the object which was changed last is shown including that object's date and time. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Depends on:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In a tree structure, it is listed on which objects this histogram depends (name of the map for which this histogram was calculated). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><span class=arial>Make Up-to-Date</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When the histogram is not up-to-date and both the object definition file and a calculated data file exist: click this button to check the object on which this histogram depends, see if this object is up-to-date, if not, check all objects below, etc., and recalculate the data file of this histogram using all new changed objects.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><span class=arial>Release disk space</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When both the object defintion file (.HIS, .HSA, .HSS, .HSP) and a calculated data file (.HI#, .HA#, .HS#, .HP#) exist: click this button to delete the data file of this histogram.</p>
+
+<p class=diabox>The expression by which this dependent histogram was created remains stored in the object definition file, so this histogram can always be recalculated.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><span class=arial>Break dependency link</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Click this button to break the dependency links between this histogram and the map on which it depends and make this histogram an editable source object. Do not break dependencies if you want to be able to update this histogram in a later stage on the basis of changed input objects.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>Additional Info tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Histogram</b> &quot;Name&quot;. When you click this flat button, the histogram will be (re)opened. </p></p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><span class=arial>Additional Info</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For raster histograms: summary information on the histogram is listed. For histograms of value raster maps: Mean, Median, Standard deviation, Predominant value, Number of undefined pixels, and Percentage intervals. For histograms of other raster maps: Predominant class name, ID, or color, etc. and Number of undefined pixels (if any).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>    To print or to copy the contents of all Property pages to the clipboard, choose <span class=arial>Print</span> or <span class=arial>Copy</span> from the <a href="../ilwis/windows_features_control_menu.htm">Control menu</a>. </li>
+
+<li>    To print or to copy the contents of the currently active Property tab to the clipboard, click with the right mouse button in the white space of the Property page and choose <span class=arial>Print</span> or <span class=arial>Copy</span> from the context-sensitive menu. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/histogram.htm">Histogram operation</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_histograms.htm">ILWIS objects : histograms</a></p>
+
+</body

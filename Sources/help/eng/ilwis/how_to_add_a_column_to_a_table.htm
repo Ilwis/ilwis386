@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<title>How to add a column to a table</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Columns, Add ..., How to add ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to add a column to a table</h1>
+
+<!--<hr>-->
+
+<p class=kopje>To add an editable column to a table:</p>
+
+<ul>
+
+<li>	From the <a href="table_window_menu_commands.htm">Columns menu</a>, choose <span class=arial>Add Column</span>, or</li>
+
+<li>	from the Columns menu, choose <span class=arial>Column Managemen</span>t; the Column Management dialog box appears; in this dialog box, click the <span class=arial>Add Column</span> button, or</li>
+
+<li>	in the table window, scroll to the last column and double-click in the gray area to the right of the last column header.</li>
+
+</ul>
+
+<p>The <a href="../ilwismen/add_column_to_table.htm">Add Column</a> dialog box appears. </p>
+
+<p class=defnewpar>The created column will be an editable source column. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>Even if you use this column later on as the output column of a calculation, the column remains a source column. </p>
+
+<p class=kopje>To add a column which contains the answers of a calculation:</p>
+
+<ul>
+
+<li>	Type a TabCalc formula on the <a href="..//ilwis/popup/command_line_table_window_popup.htm" onClick="return popup(this, 'notes')" >command line</a> of the table window, or</li>
+
+<li>	from <a href="table_window_menu_commands.htm">Columns menu</a>, choose use the Join, Aggregate, Cumulative, Least Squares, Semivariogram or Column Slicing command, and fill out the appearing dialog box of this column operation.</li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>The <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box will appear; you can generally accept the defaults. </p>
+
+<p class=defnewpar>For more information on table calculation formulae, refer to <a href="calc.htm">Table Calculation</a>.</p>
+
+<p class=defnewpar>The created column will be: </p>
+
+<ul>
+
+<li>a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent column</a> when the column is created by a TabCalc formula on the command line in which you used an definition symbol (=),  </li>
+
+<li>a dependent column when the column contains the result of a join, aggregation, cumulative sum, least squares fit, semi-variogram or column slicing operation (when performed through a dialog box),  </li>
+
+<li>an editable source column when the column is created by a TabCalc formula in which you used an assignment symbol (:=). </li>
+
+</ul>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="calc.htm">Table calculation</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_columns.htm">ILWIS objects : columns</a></p>
+
+</body

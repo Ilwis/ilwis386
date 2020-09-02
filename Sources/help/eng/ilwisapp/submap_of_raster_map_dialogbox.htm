@@ -1,0 +1,274 @@
+<html>
+
+<head>
+<title>Sub-map of raster map : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sub-map of raster map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Sub-map of raster map</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Sub-map of raster map operation copies a rectangular part of a raster map into a new raster map. The user has to specify row and column numbers or XY-coordinates of the input map to indicate the part of the input map that should be copied into the new raster map.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Input raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> or an input <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. Open the list box and select the desired input map or map list, or directly drag a raster map or map list from a Catalog into this box. No special input map requirements.</p>
+
+<p class=diabox>When you select an input map list, the operation will be performed on all raster maps in the map list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Lines and columns:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option when you want to specify <i>start</i> line and column and the <i>number of</i> lines and columns that should be copied.</p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Corners:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option when you want to specify <i>start</i> line and column and <i>end</i> line and column; the area in between will be copied.</p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Coordinates:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option when you want to specify <i>start</i> the XY-coordinate and the <i>end</i> XY-coordinate; the area in between will be copied.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><u>Lines and columns option:</u></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diaboxnospacetop>First line:</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Type the line number of the input map where copying should start (top row).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>First column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the column number of the input map where copying should start (left column). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Number of lines:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the number of lines of the input map that you want to be copied starting from 'First line'.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Number of columns:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the number of columns of the input map that you want to be copied starting from 'First column'.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diaboxnospacetop><u>Corners option:</u></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diaboxnospacetop>First line:</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Type the line number of the input map where copying should start (top row).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>First column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the column number of the input map where copying should start (left column).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Last line:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the line number of the input map where copying should end (bottom row).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Last column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the column number of the input map where copying should end (right column).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><u>Coordinates option:</u></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diaboxnospacetop>First coordinate:</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Type the X-coordinate and the Y-coordinate where copying should start. You may specify any corner where copying should start: the upper left, upper right, lower left or lower right corner.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Opposite coordinate:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the X-coordinate and the Y-coordinate where copying should end. This must be the corner opposite to the corner specified for 'first coordinate'. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the copied pixels.</p>
+
+<p class=diabox>If you selected an input map list, then you can type a name for the output map list; all raster maps in the output map list will obtain this name followed by _1, _2, _3, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map or the output map list. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map or the output map list will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you selected a single raster map as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when it is opened to be displayed. </li>
+
+</ul>
+
+<p class=defnewpar>When you selected a map list as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map list</a> and its dependent raster maps will be defined and calculated. Then, the output map list will be shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map list will only be defined. When you open the output map list later on, the map list will be calculated, which means that the output raster maps will be defined and calculated. </li>
+
+</ul>
+
+<p class=defnewpar>Furthermore, a new georeference is automatically created for the output map(s); this georeference obtains the same name as the output map or the same name as the output map list followed by _1. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="submap_of_raster_map_functionality_algorithm.htm">Sub-map of raster map : functionality / algorithm</a></p>
+
+</body

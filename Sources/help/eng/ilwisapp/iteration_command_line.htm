@@ -1,0 +1,171 @@
+<html>
+
+<head>
+<title>Iteration : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Iteration, MapIter, MapIterProp">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Iteration</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar><a href="..//ilwisapp/popup/iteration_popup.htm" onClick="return popup(this, 'notes')" >Iterations</a> can be directly performed by typing one of the following expressions on the command line of the Main window: </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapIter</span>(Startmap, <i>Iter-expression</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapIter</span>(Startmap, <i>Iter-expression, nr of iterations</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapIterProp</span>(Startmap, <i>Iter-expression</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapIterProp</span>(Startmap, <i>Iter-expression, nr of iterations</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map that will contain the result of the iteration.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapIter</p>
+
+</td>
+<td valign="top">
+<p>is the command to perform an iteration without propagation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapIterProp</p>
+
+</td>
+<td valign="top">
+<p>is the command to perform an the iteration with propagation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>Startmap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input map which contains one or more pixels acting as the starting point for the calculation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>Iter-expression</i></p>
+
+</td>
+<td valign="top">
+<p>is the Iteration-expression which defines the calculation to be performed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>nr or iterations</i></p>
+
+</td>
+<td valign="top">
+<p>is the number of iterations to be performed.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/calc_special_neighbourhood_operations_and_iterations.htm">Map calculation : neighbourhood operations &amp; iterations</a></p>
+
+<p class=seealsolinks><a href="iteration_functionality.htm">Iteration : functionality</a></p>
+
+<p></p>
+
+<p></p>
+
+</body

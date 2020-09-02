@@ -1,0 +1,115 @@
+<html>
+
+<head>
+<title>Overland flow length : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Overland flow length, MapOverlandFlowLength">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Overland flow length</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/overland_flow_length_popup.htm" onClick="return popup(this, 'notes')" >Overland Flow Length</a> operation can be directly executed by typing the following expression on the command line of the Main window: </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width="68">
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapOverlandFlowLength</span>(<i>drainorder_rasmap</i>, <i>flowdir_rasmap</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map that will contain the overland distance towards the nearest drainage. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>MapOverlandFlowLength</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+
+</td>
+<td valign="top">
+<p>is the command to start the Overland Flow Length operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>drainorder_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster map that is the outcome of the <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage Network Ordering</a> operation, i.e. a raster map with an Identifier domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster that is the outcome of the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow Direction</a> operation, i.e. a raster map with <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="overland_flow_length_functionality.htm">Overland flow length : functionality</a></p>
+
+<p class=seealsolinks><a href="overland_flow_length_dialog_box.htm">Overland flow length : dialog box</a></p>
+
+<p class=seealsolinks><a href="overland_flow_length_algorithm.htm">Overland flow length : algorithm</a></p>
+
+
+</body

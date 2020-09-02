@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>densify popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Densify</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/densify.htm" onClick="return popup(this, 'notes')" >Densify</a> operation allows you to reduce the pixel size of a raster map, i.e. the number of rows and columns is increased in the output map. When the input map is a <a href="../../ilwis/sec/y_value_maps2_sec.htm">value map</a>, new values can be assigned to the pixels in the output map by means of nearest neighbour, or a bilinear or bicubic interpolation. When the input map is a domain class or ID map, only the nearest neighbour method is available. </p>
+
+<p class=linespacing03after>Densify should be used after you performed a <a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" >point interpolation</a>. Furthermore, you can use Densify before printing raster maps with the <span class=courier>Image</span> domain or a value domain, to improve the quality of the printed maps.</p>
+
+</body

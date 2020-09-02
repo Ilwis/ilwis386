@@ -1,0 +1,146 @@
+<html>
+
+<head>
+<title>Create an annotation text object</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Annotation Text, Text, Labels, Labeling, Labeling polygons, Labeling segments">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Create Annotation Text</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Create a new <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text object</a> which will then be added to the current map window. An annotation text object is designed to display and store multiple texts at multiple positions. </p>
+
+<p class=defnewpar>This dialog box appears when in a map window:</p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/map_window_menu_commands.htm">File menu</a>, you choose <span class=arial>Create, Annotation Text</span>. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Ann Text Name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the annotation text object.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the annotation text object. The description of an annotation text object will appear in the title bar of the Annotation Text editor. Further, the description is visible on the status bar of the Main window when moving the mouse pointer over the annotation text object in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>Based on map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you want to obtain texts (class names, IDs, or values) for every point, segment or polygon in a map. Subsequently, select a point, segment or polygon map. In fact, you will automatically obtain labels for all elements in the selected point, segment or polygon map. In the <a href="..//ilwis/popup/annotation_text_editor_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text editor</a>, you can easily refine positions, fonts, sizes, colors, etc. of all class names, IDs, or values. For points, segments or polygons that have the undefined value, no annotation text elements are created.</p>
+
+<p class=diabox>Clear this check box when you want to create an empty annotation text object; you will need to enter all texts yourself in the Annotation Text editor.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan ="2" valign="top">
+<p class=diabox>When the Annotation Text object is based on a map with a Class, ID, Group domain:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxnospacetop><img src="../images/option.gif" align=top width="12" height="12"> Code:</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>To obtain only the codes of your classes, IDs, or groups as annotation text. When a domain item in the domain of the selected map does not have a code, there will be no annotation text for that class. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To obtain only the names of your classes, IDs, or groups as annotation text.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Both:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To obtain both the names and the codes of your classes, IDs, or groups as annotation text.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Working scale:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the scale on which you wish to work; this can be for instance the scale on which you will print your maps later on. The working scale value is used to properly display font sizes, etc., which you specify in the Annotation Text editor, on your screen and on your printer. </p>
+
+<p class=diabox>By default, a scale value appears which reflects the scale that would be used if the current map window would be printed on the currently selected printer with option Fit on Page.</p>
+
+<p class=diabox>You can always change the working scale later on: in the Annotation Text editor, open the <a href="..//ilwismen/sec2/annotation_text_editor_file_menu_sec2.htm" onClick="return popup(this, 'notes')" >File menu</a> and choose Options.</p>
+
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <a href="../ilwis/annotation_text_editor_functionality.htm">Annotation Text editor</a> will be opened.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a></p>
+
+<p class=seealsolinks><a href="../ilwis/annotation_text_editor_functionality.htm">Annotation Text editor : functionality</a></p>
+
+</body

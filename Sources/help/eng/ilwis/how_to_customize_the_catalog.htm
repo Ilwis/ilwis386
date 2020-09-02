@@ -1,0 +1,139 @@
+<html>
+
+<head>
+<title>How to customize a Catalog</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Customize ..., Catalog, How to customize ..., List View, Details View, Show ..., Sort objects by ..., Query, Predefined Catalog queries">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to customize a Catalog</h1>
+
+<!--<hr>-->
+
+<p class=kopje>List View and Details View: </p>
+
+<p>When using <a href="../ilwismen/catalog_list_view.htm">List View</a>, all objects in a Catalog are shown as a simple list of objects and icons. </p>
+
+<p>When using <a href="../ilwismen/catalog_details_view.htm">Details View</a>, all objects in a Catalog are shown in a table-like fashion with detailed information on each object, for instance whether objects are dependent or not, used domain/georeference/coordinate system, their description, expression, etc. </p>
+
+<p class=defnewpar>To switch between List View and Details View: </p>
+
+<ul>
+
+<li>choose the <span class=arial>List</span> or the <span class=arial>Details</span> command from the <a href="main_window_menu_commands.htm">View menu</a> in the Main window; </li>
+
+<li>click the choose the <span class=arial>List</span> button <a href="../ilwismen/catalog_list_view.htm"><img src="../images/catlist.gif" width="22" height="22" border="none"></a> or the <span class=arial>Details</span> button <a href="../ilwismen/catalog_details_view.htm"><img src="../images/catdetails.gif" width="22" height="22" border="none"></a> in the <a href="main_window_standard_toolbar.htm">standard toolbar</a> of the Main window; </li>
+
+<li>click the right mouse button in the white space of a Catalog, and choose the <span class=arial>List</span> or the <span class=arial>Details</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=kopje>Show or hide certain object types: </p>
+
+<ul>
+
+<li>choose the <a href="../ilwismen/catalog_show.htm">Show</a> command from the <a href="main_window_menu_commands.htm">View menu</a> in the Main window; </li>
+
+<li>use the <a href="main_window_object_selection_toolbar.htm">object selection toolbar</a> in the Main window; or </li>
+
+<li>choose the <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog</a> command on the View menu, or click the <a href="../ilwismen/customize_catalog_selection.htm"><img src="../images/custcat.gif" align=bottom width="22" height="22" border="none"></a> button in the <a href="main_window_standard_toolbar.htm">standard toolbar</a> of the Main window. </li>
+
+</ul>
+
+<p class=kopje>Sorting objects: </p>
+
+<ul>
+
+<li>choose the <a href="../ilwismen/catalog_sort_by.htm">Sort By</a> command on the <a href="main_window_menu_commands.htm">View menu</a> in the Main window; </li>
+
+<li>when in <a href="../ilwismen/catalog_details_view.htm">Details view</a>: click a column header; columns can be sorted in Ascending order (delta up) and in Descending order (delta down); </li>
+
+<li>click in the white space in a Catalog, and select <span class=arial>Sort</span> from the context-sensitive menu. </li>
+
+</ul>
+
+<p class=kopje>Using queries to search for certain objects: </p>
+
+<ul>
+
+<li>choose the <a href="../ilwismen/catalog_predefined_query.htm">Catalog Queries</a> command on the <a href="main_window_menu_commands.htm">View menu</a> of the Main window;  </li>
+
+<li>choose the <a href="../ilwismen/customize_catalog_query.htm">Customize Catalog</a> command on the View menu, or click the <a href="../ilwismen/customize_catalog_query.htm"><img src="../images/custcat.gif" align=bottom width="22" height="22" border="none"></a> button and select the <a href="../ilwismen/customize_catalog_query.htm">Query tab</a>. </li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>    To include system objects or non-ILWIS objects in a Catalog, e.g. DBF files and/or TIF files, see <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog, Selection tab</a>.</li>
+
+<li>	To see only objects that start with certain characters, or which use a certain domain, georeference, etc.: use a predefined <a href="../ilwismen/customize_catalog_query.htm">query</a> or contstruct a query yourself. </li>
+
+</ul>
+
+<p class=tip>Mind:</p>
+
+<ul class=tipul>
+
+<li>Settings on visible object types, sorting/ordering method and queries on objects are either applied to all new Catalogs that will be opened, or to the currently active Catalog only. This depends on whether you click the <span class=arial>Use current settings for new Catalogs</span> button or the <span class=arial>Use default settings for new Catalogs</span> button on the <a href="../ilwismen/customize_catalog_details_view.htm">Customize Catalog, Details View</a> page. </li>
+
+<li>Only those objects will be shown which match the selected object types <i>and</i> a used query. </li>
+
+</ul>
+
+<p class=kopje>Other functionality: </p>
+
+<ul>
+
+<li>To open another new Catalog, choose the <a href="../ilwismen/new_catalog.htm">New Catalog</a> command from the <a href="main_window_menu_commands.htm">Window menu</a> in the Main window, or click the <span class=arial>New Catalog</span> button <a href="../ilwismen/new_catalog.htm"><img src="../images/catopennew.gif" width="22" height="22" border="none"></a> in the <a href="main_window_standard_toolbar.htm">standard toolbar</a> of the Main window. </li>
+
+<li>To refresh the contents of a Catalog, choose the <a href="..//ilwismen/popup/main_window_refresh_popup.htm" onClick="return popup(this, 'notes')" >Refresh</a> command from the Window menu, or press the <span class=arial>F5</span> key on the keyboard.</li>
+
+<li>To arrange Catalogs, choose the <a href="..//ilwismen/popup/main_window_arrange_catalogs_popup.htm" onClick="return popup(this, 'notes')" >Arrange Catalogs</a> command from the Window menu. </li>
+
+<li>To close all Catalogs, choose the <a href="..//ilwismen/popup/main_window_close_all_catalogs_popup.htm" onClick="return popup(this, 'notes')" >Close All Catalogs</a> command from the Window menu. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="how_to_use_the_catalog.htm">How to use a Catalog</a></p>
+
+<p class=seealsolinks><a href="main_window_catalog.htm">Main window : Catalog</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/catalog_list_view.htm">Catalog - List View</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/catalog_details_view.htm">Catalog - Details View</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/catalog_show.htm">Catalog - Show ...</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/catalog_sort_by.htm">Catalog - Sort By ...</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/catalog_predefined_query.htm">Catalog - Predefined Queries ...</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog, Selection tab</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/customize_catalog_details_view.htm">Customize Catalog, Details View tab</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/customize_catalog_query.htm">Customize Catalog, Query tab</a></p>
+
+</body

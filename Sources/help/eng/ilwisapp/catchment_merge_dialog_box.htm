@@ -1,0 +1,249 @@
+<html>
+
+<head>
+<title>Catchment merge : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catchment merge">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Catchment merge</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class="defnewpar">The Catchment merge operation is able to merge adjacent catchments, as found by a previous <a href="..//ilwisapp/popup/catchment_extraction_popup.htm" onClick="return popup(this, 'notes')" >Catchment extraction</a> operation. In fact, new catchments will be created on the basis of the <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> output map and its attribute table. </p>
+
+<p class="defnewpar">You can merge catchments in two manners: </p>
+
+<ul>
+
+<li>by specifying a point map that contains locations of stream outlets within a catchment; all adjacent catchments that drain into such outlets will be merged, </li>
+
+<li>by simply specifying a Strahler or Shreve ordering value: all adjacent catchments that have this Strahler or Shreve order value (or a lower value) will be merged. </li>
+
+</ul>
+
+
+<p class="defnewpar">The operation delivers an output raster map, an output polygon map and an output attribute table. </p>
+
+<p class="defnewpar">Optionally, you can also obtain: </p>
+
+<ul>
+
+<li>a segment map (and attribute table) that contains the longest flow paths per new catchment, </li>
+
+<li>a segment ordering map and attribute table, that only contain the segment streams within the new catchments; other streams will not appear anymore; output is similar to the segment map and attribute table of the Drainage Network Ordering operation. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Drainage network ordering map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class="diabox"></p>
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> that is the output of a previous <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Flow direction map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a raster map that is the output of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Flow accumulation map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a raster map that is the output of a previous <a href="..//ilwisapp/popup/flow_accumulation_popup.htm" onClick="return popup(this, 'notes')" >Flow accumulation</a> operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Use outlet locations:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option and select a point map containing one or more points (catchment outlets) to merge all catchments of the drainages that drain into such a point into a bigger catchment. By using multiple points, you can thus merge a number of sub-catchments into several bigger ones. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diaboxleft1>Include undefined pixels:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diaboxleft1></p>
+
+</td>
+<td valign="top">
+<p class=diabox>This option should be used when your study area contains lakes; your DEM and your initial flow direction maps contain undefined values in these lake areas, and your initial drainage network map will contain no drainage lines in the lake areas. By using this option, you can include lake(s) into a catchment. </p>
+
+<ul class=diaul>
+
+<li>First, use the <a href="..//ilwisapp/popup/topological_optimization_popup.htm" onClick="return popup(this, 'notes')" >Topological optimization</a> operation several times, to obtain proper flow directions in the lake areas. </li>
+
+<li>Then redo the <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> and the <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operations to obtain a continuous drainage network in the lake area. </li>
+
+<li>Finally, use the Catchment merge operation: use the option <span class="arial">Use Outlet Points</span> (<span class="tip">mind: </span><span class="tiptext">the input point map should only contain a single point</span>), and use this option <span class="arial">Use Undefined Pixels</span>. </li>
+
+</ul>
+
+<p class="diabox">The lake area will now be included into the catchment that drains into the outlet point in the point map. </p>
+
+<p class="diabox">For more information, see the <a href="catchment_merge_functionality.htm">Catchment merge : functionality</a> topic. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Use stream orders:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option if you simply wish to use stream order values to merge catchments. Subsequently, specify an order value and select the order system according to which catchments should be merged. The Strahler and Shreve order values are found in the attribute table of the network ordering input map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Strahler order system:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option if you wish to merge catchments according to the specified order number of the Strahler ordering system. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12"> Shreve order system:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option if you wish to merge catchments according to the specified order number of the Shreve ordering system. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map and the output polygon map that will contain the uniquely numbered catchments. The name will also be used for the output attribute table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Longest flow path segment map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, select this check box to obtain an additional segment map (and linked attribute table) that contains the longest flow path segment in each merged catchment. Subsequently, specify a name for the additional longest flow path segment map and its attribute table. </p>
+
+<p class="diabox">Clear this check box if you do not wish to obtain longest flow path segments. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Extract stream segments and attributes:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, select this check box to obtain only those segments (and linked attribute table), that fall within the new catchments; any other streams will not appear anymore. </p>
+
+<p class="diabox">The output segment map will automatically obtain the same name as the output raster map and the output polygon map of this Catchment merge operation. The attribute table will obtain a similar name, followed by __1. </p>
+
+<p class="diabox">The content of the output is similar to the output of the <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network extraction</a> operation. </p>
+
+<p class="diabox">This option can only be used when you selected the option <span class="arial">Use Outlet Locations</span>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class="defnewpar">The output maps and the attribute table will all use the ID domain of the input drainage network ordering map. </p>
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="catchment_merge_functionality.htm">Catchment merge : functionality</a></p>
+
+</body

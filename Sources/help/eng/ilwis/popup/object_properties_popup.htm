@@ -1,0 +1,48 @@
+<html>
+
+<head>
+<title>object properties popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Properties of an object</p>
+
+<p class=linespacing03after>The <a href="..//ilwis/basic_concepts_properties_of_objects.htm" onClick="return popup(this, 'notes')" >properties of an object</a> describe the object and its relations to other objects.</p>
+
+<p>The <a href="../../ilwismen/sec/properties_sec.htm">Property sheet</a> of an object lists:</p>
+
+<ul>
+
+<li>	object type, object name, date and time of last change, read-only or not, total size of object on disk, object description,</li>
+
+<li>	objects used by the current object, for instance domain, georeference, coordinate system, </li>
+
+<li>	for maps and domains: whether an <a href="../../ilwis/popup/objects_table_popup.htm">attribute table</a> is linked to the map or to the domain and the name of the attribute table,</li>
+
+<li>	additional information on the object such as pixel size, number of lines and columns (raster map), number of segments (segment maps), etc.,</li>
+
+<li>	for <a href="object_dependent_data_objects_popup.htm">dependent data objects</a>: the <a href="../../ilwis/popup/object_definition_popup.htm">object definition</a>.</li>
+
+</ul>
+
+<p class=linespacing03before>Furthermore, Property sheets are designed to handle the properties of <i>dependent data objects</i>, e.g. <span class=arial>Make up-to-date</span>, <span class=arial>Edit Definition</span>, <span class=arial>Release Disk Space</span>, etc. For more information, refer to <a href="..//ilwis/basic_concepts_properties_of_objects.htm" onClick="return popup(this, 'notes')" >Basic concepts : properties of objects</a>. To view the properties of an object, refer to <a href="..//ilwis/how_to_view_and_edit_the_properties_of_an_object.htm" onClick="return popup(this, 'notes')" >How to view and edit the properties of an object</a>.</p>
+
+</body

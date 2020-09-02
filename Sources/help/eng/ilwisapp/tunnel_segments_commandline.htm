@@ -1,0 +1,121 @@
+<html>
+
+<head>
+<title>Tunnel segments : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Tunnel segments, SegmentMapTunneling">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Tunnel segments</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/tunnel_segments_popup.htm" onClick="return popup(this, 'notes')" >Tunnel segments</a> operation can be directly executed by typing the following expression on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapTunneling</span>(InputSegmentMap, <i>tunnel width</i>, <i>remove nodes</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>SegmentMapTunneling</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Tunnel segments operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>InputSegmentMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>tunnel width</i></p>
+
+</td>
+<td valign="top">
+<p>is the width of the tunnel in meters; real value &gt;= 0; when a tunnel width of 0 is specified, no tunnelling is performed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>remove nodes</i></p>
+
+</td>
+<td valign="top">
+<p>remove superfluous nodes or not:</p>
+
+<p class=courier>yes | no</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/tunnel_segments_functionality_algorithm.htm">Tunnel segments : functionality</a></p>
+
+<p>	</p>
+
+<p>	</p>
+
+</body

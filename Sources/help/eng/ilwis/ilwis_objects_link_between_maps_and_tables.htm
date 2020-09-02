@@ -1,0 +1,47 @@
+<html>
+
+<head>
+<title>ILWIS objects : link between maps and tables</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS objects">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>ILWIS objects</h1>
+
+<h1 class=secondline>Link between maps and tables</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The relational link between point, segment, polygon or raster maps and an attribute table, is provided by the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>. The domain should be of the ID or Class type. The domain should be used both by the map(s) and the table. The table contains additional columns with the attributes.</p>
+
+<p class=defnewpar>An attribute table can also be linked to a domain (domain Class or ID). Then all maps using that domain automatically use the attribute table which has the same domain.</p>
+
+<p class=defnewpar>It is the class names in a domain Class and the IDs in a domain Identifier that provide the relational link between the elements in a raster, polygon, segment or point map and the records in an attribute table. </p>
+
+<p class=defnewpar>Whether a map or a domain has an attribute table can be seen by viewing the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of the map or the domain.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_before_creating_maps_and_tables.htm">Basic concepts : before creating ILWIS maps and tables</a></p>
+
+<p class=seealsolinks><a href="basic_concepts_domains.htm">Basic concepts : domains</a></p>
+
+</body

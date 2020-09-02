@@ -1,0 +1,30 @@
+<html>
+
+<head>
+<title>Data window popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Data window</p>
+
+<p>A data window is a <a href="..//ilwis/map_window_functionality.htm" onClick="return popup(this, 'notes')" >map window</a>, a <a href="..//ilwis/table_window_functionality.htm" onClick="return popup(this, 'notes')" >table window</a> or a <a href="..//ilwis/pixel_information_window_functionality.htm" onClick="return popup(this, 'notes')" >pixel information window</a>. You can open as many data windows as you like.</p>
+
+</body

@@ -1,0 +1,121 @@
+<html>
+
+<head>
+<title>Distance calculation : command line (1)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Distance calculation, MapDistance">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Distance calculation</h1>
+
+<h1 class=secondline>Command line (1)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To create a <a href="..//ilwisapp/popup/distance_calculation_distance_map_popup.htm" onClick="return popup(this, 'notes')" >distance map</a> or a <a href="..//ilwisapp/popup/distance_calculation_time_travel_map_popup.htm" onClick="return popup(this, 'notes')" >travel time map</a>, the <a href="..//ilwisapp/popup/distance_calculation_popup.htm" onClick="return popup(this, 'notes')" >distance calculation</a> can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDistance</span>(SourceMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDistance</span>(SourceMap,WeightMap)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output raster distance map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>MapDistance</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Distance calculation operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>SourceMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the <a href="..//ilwisapp/popup/distance_calculation_source_map_popup.htm" onClick="return popup(this, 'notes')" >source map</a>; the source map can be a map with a class, ID, or value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>WeightMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the optional <a href="..//ilwisapp/popup/distance_calculation_weight_map_popup.htm" onClick="return popup(this, 'notes')" >weight map</a>; the weight map should be a map with a value domain.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/distance_calculation_commandline2.htm">Distance calculation : command line (2)</a></p>
+
+<p class=seealsolinks><a href="distance_calculation_functionality.htm">Distance calculation : functionality</a></p>
+
+</body

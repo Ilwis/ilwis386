@@ -1,0 +1,213 @@
+<html>
+
+<head>
+<title>Table to point map : functionality/algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table to point map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Table to point map</h1>
+
+<h1 class=secondline>Functionality / Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The table to point map operation creates a point map out of a table. 
+
+<!--<p class=defnewpar>You can choose between the following possibilities:</p>
+
+<ul>
+
+<li>	the output point map should use the same domain as the table (ID domain); <br>
+        the table will be linked as attribute table to the output point map;</li>
+
+<li>	the output point map will use the domain of a column in the table; <br>
+        the output point map will have no attribute table; </li>
+
+<li>	the output point map should use a new ID domain which is based on the record numbers of the table (domain <span class=courier>None</span>) and a user-defined prefix; <br>
+        the table also obtains this new ID domain and the table will be linked as attribute table to the output point map. The new ID domain will automatically obtain the same name of the output point map.</li>
+
+</ul>-->
+
+<p class=defnewpar>This operation is designed to obtain a point map from external data which has been imported into ILWIS as a table.</p>
+
+<p class=kopje>Coordinates of points in output point map: </p>
+
+<p>The coordinates for the points in the output point map should be available in the input table. </p>
+
+<p class=defnewpar>The input table should therefore contain either: </p>
+
+<ul>
+
+<li>a single column with the XY-coordinates for the points as (X,Y); <br>
+
+        any point map created or edited in ILWIS version 3 has such a column: it is called <span class=courier>Coordinate</span> and the column uses a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> as its <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>; </li>
+
+<li>a column with X-coordinates and another column with Y-coordinates for the points; <br>
+
+        these columns should use a value domain. </li>
+
+</ul>
+
+<p class=kopje>Class names, IDs or values of points in output point map: </p>
+
+<p>In case your input table uses an <i>ID domain</i>, you can choose whether the points in the output point map: </p> 
+
+<ul>
+
+<li> should obtain the same IDs as found in the domain of the input table, or </li>
+
+<li> should obtain the class names, IDs, or values as found in an attribute column of the table. </li>
+
+</ul>
+
+<p class=defnewpar>In case your input table is a table with <i>domain <span class=courier>None</span></i>, you can choose whether the points in the output point map: </p>
+
+<ul>
+
+<li> should obtain new IDs, based on a user-specified prefix followed by the record numbers of the table, or </li>
+
+<li> should obtain the class names, IDs, or values as found in an attribute column of the table. </li>
+
+</ul>
+
+<p class=defnewpar>In case your input table uses any other domain, e.g. a <i>class domain</i>, the points in the output point map: </p> 
+
+<ul>
+
+<li> will obtain the class names, IDs, or values as found in an attribute column of the table. </li>
+
+</ul>
+
+
+<p class=kopje>Input table requirements:</p>
+
+<p>The input table should have either: </p>
+
+<ul>
+
+<li>a column which contains the XY-coordinates for the points as (X,Y); this type of column uses a coordinate system as its domain, or</li>
+
+<li>a value column which contains the X-coordinates for the points and another value column which contains the Y-coordinates for the points. </li>
+
+</ul>
+
+<p class=kopje>Domain and coordinate system of output point map:</p>
+
+<p>During the operation, you will need to specify the domain that should be used by the output point map. The point may use:</p>
+
+<ul>
+
+<li>the same ID domain as an input ID table, </li>
+
+<li>a new ID domain in which the IDs are based on the record numbers in the table and a user-specified prefix (when the input table has domain <span class=courier>None</span>).</li>
+
+<li>any class, ID, or value domain of a selected column from the input table (when the input table uses a class or ID domain or when the input table uses domain <span class=courier>None</span>), </li>
+
+</ul>
+
+<p class=defnewpar>The coordinate system used by the output point map: </p>
+
+<ul>
+
+<li>is either the coordinate system which is the domain of a single selected XY-coordinate column, </li>
+
+<li>or, when using two separate columns to specify X-coordinates and Y-coordinates respectively, a coordinate system specified by the user. </li>
+
+</ul>
+
+<p class=kopje>Attribute table for output map:</p>
+
+<p>The input table will be linked as an attribute table to the output point map: </p>
+
+<ul>
+
+<li>when the input table uses an ID domain, and when you choose to obtain a point map in which the points will have the same IDs as found in the domain of the input table; </li>
+
+<li>when the input table uses domain <span class=courier>None</span>, and when you choose to use the record numbers of the table as identifiers (new ID domain); the IDs will consist of a user-specified prefix followed by the record numbers as found in the input table. </li>
+
+<p>In this case, the domain of the input table will be automatically changed from domain <span class=courier>None</span> to the new ID domain. </p>
+
+</ul>
+
+<p class=kopje>Limitation: </p>
+
+<p>Currently, the operation can only handle tables with extension .TBT. </p>
+
+<p class=tip>Tip (for advanced users): </p>
+
+<p class=tiptext>To convert the tiepoints in a georef tiepoints to a point map, you can do for instance the following: </p>
+
+<ol class=tipol>
+
+<li>Open the georef tiepoints as a table. </li>
+
+        <ul>
+
+        <li>In the table window, make the command line visible and type the following expression: </li>
+
+        <p class=calc00>Coord = coord(X,Y) </p>
+
+        <li>In the <span class=arial>Column Properties</span> dialog box, select a coordinate system in which these coordinates fit, e.g. the coordinate system of the georef tiepoints. </li>
+
+        </ul>
+
+<li>Create a point map using the same coordinate system and create an ID domain with the same number as items as the number of tiepoints in your georef tiepoints. </li>
+
+        <ul>
+
+        <li>When the point editor opens, close it. </li>
+
+        <li>Open the point map as a table and add the same number of records to the table as the numbers of tiepoints in your georef tiepoints. </li>
+
+        </ul>
+
+<li>To copy the coordinates of the points: </li>
+
+        <ul>
+
+        <li>In the tiepoints table, select all fields of column <span class=courier>Coord</span>, press the right mouse button and choose <span class=arial>Copy</span>. </li>
+
+        <li>In the point map table, select all fields of column <span class=courier>Coordinate</span>, press the right mouse button and choose <span class=arial>Paste</span>.</li>
+
+        </ul>
+
+<li>To obtain the IDs of the control points: </li>
+
+        <ul>
+
+        <li>In the point map table, make the command line visible and type the following expression:</li>
+
+        <p class=calc00>Name = %k</p>
+
+        </ul>
+
+<li>Close both table windows and open the point map as usual. </li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="table_to_point_map_dialog_box.htm">Table to point map : dialog box</a></p>
+
+<p class=seealsolinks><a href="table_to_point_map_command_line.htm">Table to point map : command line</a></p>
+
+</body

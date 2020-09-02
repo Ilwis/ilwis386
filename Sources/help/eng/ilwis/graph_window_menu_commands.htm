@@ -1,0 +1,86 @@
+<html>
+
+<head>
+<title>Graph window : menu commands</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Graph window, Menu commands">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<a id="top">
+<h1 class=firstline>Graph window</h1>
+
+<h1 class=secondline>Menu commands</h1>
+</a>
+<!--<hr>-->
+
+<table class=menupage border="0" cellspacing="0" width="100%" cellpadding="1">
+<tr bgcolor="#CCCCCC">
+
+<!--FILE MENU -->
+
+<td valign="top" width="33%" align="left" nowrap>&nbsp;<span class=menuheading><u>F</u>ile</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/create_a_graph.htm"><u>N</u>ew Graph ...</a> <br>
+&nbsp;<a href="../ilwismen/graph_window_open_graph.htm"><u>O</u>pen ...</a> <br>
+&nbsp;<a href="../ilwismen/graph_window_save_graph.htm"><u>S</u>ave</a> <br>
+&nbsp;<a href="../ilwismen/graph_window_save_graph_as.htm">Save As ...</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/graph_window_print_graph.htm"><u>P</u>rint ...</a> <br>
+&nbsp;<a href="../ilwismen/graph_window_open_table.htm">Open <u>T</u>able</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="..//ilwismen/popup/exit_graphwindow_popup.htm" onClick="return popup(this, 'notes')" >E<u>x</u>it</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<!--EDIT MENU -->
+
+<td align="left" valign="top" width="33%" nowrap>&nbsp;<span class=menuheading><u>E</u>dit</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a onClick="doExpand(exp1,link1)" href="#top"><u>A</u>dd Graph <img src="../images/menuarrt.gif" align="bottom" id="link1" border=0 width="9" height="13"></a> <br>
+<DIV ID="exp1" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/graph_window_add_graph_from_columns.htm">From <u>C</u>olumns ...</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/graph_window_add_graph_from_formula.htm">From <u>F</u>ormula ...</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/graph_window_add_graph_least_squares_fit.htm"><u>L</u>east Squares Fit ...</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/graph_window_add_semivariogram_model.htm"><u>S</u>emi-Variogram Model ...</a> <br>
+</div>
+&nbsp;<a href="../ilwismen/graph_window_remove_layer.htm"><u>R</u>emove Layer</a> <br>
+&nbsp;<a href="../ilwismen/graph_window_copy_to_clipboard.htm"><u>C</u>opy</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<!--VIEW MENU-->
+
+<td align="left" valign="top" width="33%" nowrap>&nbsp;<span class=menuheading><u>V</u>iew</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_graph_management_pane_graph_window_popup.htm" onClick="return popup(this, 'notes')" ><u>G</u>raph Management</a> <br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_toolbar_graph_window_popup.htm" onClick="return popup(this, 'notes')" ><u>T</u>oolbar</a> <br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_status_bar_graph_window_popup.htm" onClick="return popup(this, 'notes')" >Status Bar</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+</tr>
+</table>
+
+</body

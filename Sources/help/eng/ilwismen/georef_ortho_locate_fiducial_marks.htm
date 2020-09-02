@@ -1,0 +1,274 @@
+<html>
+
+<head>
+<title>Georef ortho : Locate fiducial marks</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Fiducial marks, Aerial photographs">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Locate Fiducial Marks</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>When creating a Georef OrthoPhoto (differential rectification), you first have to reference the fiducial marks which appear on the scanned aerial photograph and you have to specify the principal distance of the photogrammetric camera with which the photo was taken. In photogrammetry, this process in known as the inner orientation. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you are creating a georef orthophoto, i.e. as a second dialog box after a <a href="create_a_georeference.htm">Create Georeference</a> dialog box in which you specified to create a georef orthophoto,</li>
+
+<li>	when you open an existing georef orthophoto, for instance by double-clicking a georef orthophoto in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> or by selecting the <span class=arial>Georeference</span> command from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in a map window when the map window is displaying an aerial photograph which already has a georef orthophoto,</li>
+
+<li>	when you choose the <span class=arial>Fiducial Marks</span> command from the <a href="..//ilwismen/sec2/georeference_tiepoints_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a> of the Tiepoint editor.</li>
+
+</ul>
+
+<p class=kopje>Specifying the principal distance:</p>
+
+<p>The principal distance is the distance between the photo plane (the negative) and the projection center of the lens, is generally slightly greater than the focal length, and should be listed in the calibration report of your photograph. The principal distance is generally a value between 90 mm and 300 mm; many aerial photographs have a principal distance in the order of 152 mm or 153 mm. </p>
+
+<ul>
+
+<li>	Fill out the value for the principal distance (you are allowed to use decimals). </li>
+
+</ul>
+
+<p class=kopje>Registering fiducial marks:</p>
+
+<p>An aerial photograph usually has 4 fiducial marks in the corners of the photo and/or 4 fiducial marks in the middle along the edges of the photo. In the scanned photograph however not all fiducial marks may appear. </p>
+
+<p class=linespacing01after>You must make a choice to use either the corner fiducial marks or the ones in the middle along the edges of the photo. It is best if you can locate all 4 fiducial marks. In case your scanned photo contains only 3 fiducial marks, use those 3. In case you can see only 2 fiducial marks on your photo, these must be located on opposite sides of the photo.</p>
+
+<ul>
+
+<li>	Zoom in on a fiducial mark on the scanned photograph.</li>
+
+<li>	Position the mouse pointer carefully in the middle of the fiducial mark and press the left mouse button.</li>
+
+<li>	Repeat for other fiducial marks. There is no special order required in which you have to click fiducial marks, but you have to keep in mind the order in which you entered them. </li>
+
+</ul>
+
+<p class=linespacing01before>In the dialog box, under heading
+<small><u><b>RowCol (pixels)</b></u></small>, the row and column numbers of the fiducial marks will appear.</p>
+
+<p class=defnewpar>Then, if you have the paper photograph available, measure the distance between the fiducial marks as precisely as possible. In this dialog box, you then have to fill out photo-coordinates in mm for the fiducial marks; in photogrammetry, it is customary that the center of the photo (principal point) is located at 0, 0.</p>
+
+<ul>
+
+<li>	Click the first box under heading <small><u><b>Photo (
+mm)</b></u></small> and enter photo-coordinates in mm for this fiducial mark (you are allowed to use decimals).</li>
+
+<li>	Repeat for other fiducial marks.</li>
+
+</ul>
+
+<p class=linespacing01before>When the size of your aerial photograph is 23 x 23 cm and you are using the <i>center</i> fiducial marks along the edges, the photo-coordinates for the fiducial marks will be something like: </p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>-111.3</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>(Lower)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>-111.8</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.0</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>(Left)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.0</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>111.6</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>(Upper)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>111.1</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>0.0</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>(Right)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=linespacing01before>When using <i>corner</i> fiducial marks, photo-coordinates will be something like: </p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>-159.3</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>-159.1</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>(Lower, Left)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>-159.1</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>159.3</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>(Upper, Left)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>159.8</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>159.4</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>(Upper, Right)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p></p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>159.5</p>
+
+</td>
+<td valign="top" width=48>
+<p class=t1>-159.6</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>(Lower, Right)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Be sure that entered photo-coordinates match with the fiducial marks. </p>
+
+<ul>
+
+<li>	Finally, tick the boxes in front of the fiducial mark numbers.</li>
+
+</ul>
+
+<p class=defnewpar>As soon as a transformation is possible,
+residuals will appear under heading
+<small><u><b>diffRow</b></u></small> and
+<small><u><b>diffCol</b></u></small>. The residuals are a measure of accuracy of your fiducial marks referencing and are presented in pixels in your scanned photo. The size of pixels in the scanned photo naturally depends on the resolution with which the photo has been scanned. </p>
+
+<p class=defnewpar>Furthermore, the dialog box gives feedback on the scan resolution (dpi) and on the scale factor, i.e. the fraction of photo-coordinates and pixels (mm/pixel). </p>
+
+<p class=defnewpar>In case you do not have the paper photograph anymore, you can enter similar photo-coordinates for the fiducial marks on the scanned photo as above, as long as you keep shape similarity between the position of fiducial marks and photo-coordinates.</p>
+
+<p class=kopje>Next steps:</p>
+
+<p>When finished registering the fiducial marks, the <a href="../ilwis/georeference_tiepoints_editor.htm">Tiepoint editor</a> will be opened. In the Tiepoint editor, you can insert tiepoints, also known as ground control points, which establish the relationships between pixels in your digital photo (row,col) and real world XYZ-coordinates. When you know Z-coordinates for your control points, you can enter these, otherwise height values will be used as found in the DTM. In photogrammetry, this process is known as the outer orientation.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Tiepoint editor</a></p>
+
+<p class=seealsolinks><a href="create_a_georeference.htm">Create Georeference</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_monoplot.htm">How to monoplot</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_orthophoto.htm">How to create an orthophoto</a></p>
+
+</body

@@ -1,0 +1,65 @@
+<html>
+
+<head>
+<title>How to use pixel information</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to use ..., Pixel information window, Use ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to use pixel information</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The pixel information window allows you to interactively inspect class names, IDs or values in multiple raster, polygon, segment and point maps with the same or a compatible <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>. When one map is displayed in a map window, the pixel information window is capable of retrieving values of all maps added to the pixel info window, at the position of the mouse pointer in the map window. In the same way, when you have an analog paper map on the digitizer and you performed MapReference, the pixel information window is capable of retrieving values of all maps added to the pixel info window, at the position of the digitizer cursor.</p>
+
+<p class=kopje>General method to use Pixel Information:</p>
+
+<ol>
+
+<li>	Open the pixel info window by choosing the <span class=arial>Open Pixel Information</span> command on the <a href="main_window_menu_commands.htm">File menu</a> of the Main window or a map window. You can also click the <span class=arial>Pixel Information</span> button in the <a href="main_window_standard_toolbar.htm">standard toolbar of the Main window</a>.</li>
+
+<li>	Add maps to the pixel information window by choosing the <span class=arial>Add Map</span> command on the File menu of the pixel info window. You can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> maps from the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> into the pixel info window. Raster maps as well as polygon, segment and point maps can be added to the pixel information window. If an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> is linked to a map or to the domain of a map, the attribute information is shown as well. You can check whether an attribute table is linked to a  map or a domain in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the map or the domain.</li>
+
+<li>	Locate the mouse pointer on a map or locate the digitizer cursor on a reference paper map on the digitizer.</li>
+
+</ol>
+
+<p class=kopje>To hide or show maps or attribute columns in the pixel info window:</p>
+
+<ul>
+
+<li>	from the <a href="..//ilwismen/sec2/pixel_info_options_menu_sec2.htm" onClick="return popup(this, 'notes')" >Options menu</a>, choose <span class=arial>Customize</span>, or</li>
+
+<li>	click on the upper left grey area in the pixel info window.</li>
+
+</ul>
+
+<p>The <a href="../ilwismen/customize_the_pixel_information_window.htm">Customize Pixel Info</a> dialog box appears which displays a list of maps, tables and columns. By clicking in this list, maps and columns can be (de-)selected; selected items appear highlighted and will be shown in the pixel info window.</p>
+
+<p class=kopje>Detailed pixel info by using the keyboard:</p>
+
+<p>To move the mouse pointer in the map window and see the result in the Pixel info window, you can use the <span class=arial>Arrow</span> keys on the keyboard to move 1 screen pixel, or use the <span class=arial>Ctrl+Arrow</span> keys on the keyboard to move 10 screen pixels.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/pixel_information_window.htm">Pixel information window</a></p>
+
+</body

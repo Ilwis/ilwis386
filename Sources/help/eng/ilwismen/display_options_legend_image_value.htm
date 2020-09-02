@@ -1,0 +1,146 @@
+<html>
+
+<head>
+<title>Insert/Edit Legend (Image/Value)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Legend, Layout editor, Layouts, Add ..., Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert/Edit Legend (Images/Value maps)</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Insert or edit a <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legend</a> for a raster, polygon or segment <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. The legend will be added to your <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>. </p>
+
+<p class=defnewpar>A legend for a value map consists of a vertical color bar with gradual colors and corresponding values. The legend is based on the <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> that is currently used by the layer. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>MinMax:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to specify the minimum and maximum value to be shown by the legend yourself. </p>
+
+<p class=diabox>Clear this check box if the legend should show the range of values of the domain; also all limits/boundaries inserted to the representation will be shown. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Upward:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the legend should display the largest value at the top and the smallest value at the bottom.</p>
+
+<p class=diabox>Clear this check box when the legend should display the smallest value at the top and the largest value at the bottom.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Ratio:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the height/width ratio of the color bar (1.0&nbsp;&lt;=&nbsp;real&nbsp;value&nbsp;&lt;=&nbsp;20.0). </p>
+
+<p class=diabox>When you use a ratio of 5, you will normally obtain 6 text values along your color bar. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the <a href="..//ilwis/popup/font_popup.htm" onClick="return popup(this, 'notes')" >font</a> in which the legend values should appear; you can select an installed font from the list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the font size (pt) in which your legend values should appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Bold:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have legend values appear in <b>bold</b>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Italic:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have legend values appear in <i>italics</i>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>    To adjust the number of values displayed along the color bar, specify another height/width Ratio. </li>
+
+<li>	To have round values appear along the color bar, specify MinMax values yourself and think about the Ratio. </li>
+
+<li>	In the Layout editor, a legend can be sized by <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> for instance one of the corner <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of a selected legend to a new position. The mouse pointer changes into a double-sided arrow when at the right position to start dragging. The color bar and the font used by the legend will be automatically adapted to the new size. </li>
+
+<li>	To store annotation, you need to save the layout. Open the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a> and choose the <span class=arial><a href="../ilwismen/layout_editor_save_layout.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/layout_editor_save_layout_as.htm">Save As</a></span> command. You can also click in the white space of your layout, and click the <span class=arial>Save</span> button in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>. </li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+</body

@@ -1,0 +1,50 @@
+<html>
+
+<head>
+<title>representation value/gradual editor popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Representation Value/Gradual editor</p>
+
+<p>The <a href="..//ilwis/representation_value_gradual_editor_functionality.htm" onClick="return popup(this, 'notes')" >Representation Value/Gradual editor</a> allows you to change the
+<a href="objects_representation_popup.htm"> representation</a> of any map with a
+<a href="../sec/domain_type_value_sec.htm"> value domain</a>. </p>
+
+<p class=linespacing03before>In general, in the representation Value/Gradual editor, you can: </p>
+
+<ul>
+
+<li>	insert, change and delete boundary values,</li>
+
+<li>	assign or change the color of a boundary value, </li>
+
+<li>	assign or change the coloring of the values in between the boundary values. </li>
+
+</ul>
+
+<p class=linespacing03before>Colors in between boundary values are either stretched, this means gradual colors in a number of steps (you can increase or decrease the number of steps used to stretch), or are the same color as the boundary above or the boundary below. </p>
+
+<p class=tip>For ILWIS 1.4 users: </p>
+
+<p class=tiptext>Using the representation Value/Gradual editor gives the same results on the screen as applying a classify table and preparing a color lookup table for an output map, but the original values of the input map are retained. </p>
+
+</body

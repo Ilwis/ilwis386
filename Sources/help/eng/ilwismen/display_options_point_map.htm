@@ -1,0 +1,290 @@
+<html>
+
+<head>
+<title>Display options - Point map</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Display options ..., Point maps, Arrows, Points as arrows, Points as graphs, Bar chart, Pie chart, Volume cubes">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="65%"><h1 class=firstline>Display&nbsp;options</h1></td>
+<td rowspan="2" class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Layers menu</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Point map</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Specify <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> for a point map. </p>
+
+<p class=defnewpar>Before a map is displayed in a map window, you have to answer some questions on how this layer should be displayed in the map window. Also, once a map is displayed in a map window, you may want to change the display options of a certain layer: </p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> in a map window, choose the <span class=arial>Display Options</span> command, then select a layer from the cascading menu, or </li>
+
+<li>	click the right mouse button in the map window, choose the <span class=arial>Display Options</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_map.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, and select a layer from the cascading menu, or </li>
+
+<li>	double-click a layer in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of a map window. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Info:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you wish to see the class name, ID, or value of a point when you press the left mouse button on a point in the map window. Clear this check box if you do not wish to see information on point class names, IDs or values. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Scale limits:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when this map should be displayed or hidden depending on the scale specified in the scale control of the map window; specify the scale range within which the map should be displayed. The map will be automatically hidden if the scale of the map window is outside this range. </p>
+
+<p class=diaboxnospace>With this option you can achieve for instance, that very detailed maps (e.g. on cadastral units) are only displayed when using a large scale in a map window, or that very general maps which depict overviews are only displayed when using a small scales in a map window, etc. </p>
+
+<p class=diabox>Clear this check box when you wish to display the map regardless of the scale of the map window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Transparent:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you wish to display this point layer with a certain transparency. Any layer that has been added to the map window before, e.g. an image or a shadow map, will remain partly visible through the transparent point layer. Subsequently, type a value for the transparency rate (percentage): value 1 means almost not transparent, and value 99 means almost totally transparent. </p>
+
+<p class=diabox>Clear this check box to just display the layer, i.e. non-transparent. </p>
+
+<p class=tiptext><span class=tip>Mind: </span>For Transparency, the Display Settings of your screen must be set to 32 bit (True Color). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Mask:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you only wish to display points with specific class name(s), identifier(s) or value(s). Subsequently, specify the <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a>, i.e. the class names, IDs or values of the points that you wish to display. For more information, see <a href="../ilwis/how_to_use_masks.htm">How to use masks</a>. Clear this check box when you wish to display all points of this point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Attribute:</p>
+
+</td>
+<td valign="top">
+
+<p class=diabox>In case of a point map with a class or ID domain and an attribute table that is linked to the map or to the domain of the map:</p>
+
+<ul class=diaul>
+
+<li>Select this check box if you wish to <i>display the map by an attribute column</i> found in the attribute table. Subsequently, select an attribute column from the attribute table. The attribute column may use a value domain, a class or ID domain, a bool domain, or system domain <span class=courier>String</span>. </li>
+
+<p class=tiptext><span class=tip>Tip: </span>By using the Attribute option, you will display a temporary attribute map; you can use the <a href="..//ilwisapp/popup/attribute_map_of_points_popup.htm" onClick="return popup(this, 'notes')" >Attribute of point map</a> operation to create a permanent attribute map. </p>
+
+<li>Clear the Attribute check box if you wish to display the map itself. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Text:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you wish to see the <i>class names, IDs, or values of the points displayed as text</i>. When you show a map itself, the class names, IDs, or values of the map will appear next to your points; when you show a map by one of its attributes, i.e. when the Attribute check box above is selected, the class names, IDs, or values of the selected attribute column will be displayed next to your points. </p>
+
+<p class=diabox>Subsequently, you can choose a font and you can select or <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> a color for the text. The text will appear to the lower right of the symbols. </p>
+
+<p class=diabox>Clear this check box if you wish to display the points without text. </p>
+
+<p class=diabox><span class=tipnospace>Tip:</span> You can also create an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text object</a> which can be based on a map; in this way you obtain all <i>class names, IDs, or values of the points </i>in your map, while you can edit the exact positions, fonts, font sizes, etc. of the texts later on in the <a href="..//ilwis/popup/annotation_text_editor_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text editor</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxleft1><img src="../images/font.gif" align=bottom width="62" height="23"></p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you selected the Text check box, click the <span class=arial>Font</span> button to select another font, to change the font style (bold, italic, etc.) or the font size in the following <a href="font.htm">Font</a> dialog box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxleft1>Text color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you selected the Text check box, select a color in which the text of the points should be displayed. Open the list box by clicking it. To create your own color, select 'Custom' at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Representation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For point maps with a class domain, or when showing a point map by a class attribute column, select a user-defined <i>representation class</i> for this map, or <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> a new <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> with the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Class editor</a>. Each class of points is displayed in its own symbol, color and size, according to the representation.</p>
+
+<p class=diabox>This option can be used for instance: </p>
+
+<ul class=diaul>
+
+<li>	to visualize location and type cities (class point map with city types), where each type has its own colors, symbol, etc.</li>
+
+<li>	to visualize location and type of volcanoes (class point map with volcano types), where each type has its own colors, symbol, etc.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Single Symbol:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For point maps with a class domain or an ID domain, or when showing a point map by a class attribute column, select option Single Symbol when all points should be displayed by the same symbol. Subsequently, click the <span class=arial>Symbol</span> button.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/symbol.gif" align=bottom width="75" height="23"></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Click the <span class=arial>Symbol</span> button to specify symbol type, size, color, line width and line color in which your points should be displayed.</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=diabox>For point maps with a <i>class or ID domain</i>, or when showing a point map by a class attribute column, the <a href="../ilwismen/symbols_for_class_and_id_point_maps.htm">Symbol (Class /ID)</a> dialog box will appear. All points will be displayed similarly (one kind of symbol, one size, one color, etc.) as specified in the Symbol dialog box. </p>
+
+<p class=diabox>This option can for instance be used:</p>
+
+<ul class=diaul>
+
+<li>	to visualize the location of main cities simply as filled circles (ID point map with main cities);</li>
+
+<li>	to visualize the location of active volcanoes by filled delta-up symbols (class point map with one class 'volcanoes'), etc.</li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=diabox>For point maps with a <i>value domain</i>, or when showing a point map by a value attribute column, the <a href="../ilwismen/symbols_for_value_point_maps.htm">Symbol (Value)</a> dialog box will appear. All points can be displayed similarly (one kind of symbol, one size, one color, etc.) but you also have the possibility to size the symbols proportionally to the value of the points. </p>
+
+<p class=diabox>This option can be used to visualize for instance:</p>
+
+<ul class=diaul>
+
+<li>	population size per region as filled circles where the size of the symbol represents the size of the population. You require an ID polygon map of provinces and an attribute table with a value column containing population figures; prepare a label point map of the polygon map; link the attribute table of the polygon map to the label point map; show the point map by Attribute (option at the top of this dialog box) and select the population column. In the Symbol (Value) dialog box, select a symbol and specify how population figures should be stretched (symbol size). The population figures can be displayed next to the text. Add the polygon map to the map window, choose Boundaries only. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Symbols by Attributes:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For point maps with an ID domain and an attribute table linked to the map or to the domain: select the By Attributes option button <i>to display points according to the symbols of a representation class linked to a class column</i> in the attribute table. Optionally, you can <i>overrule the settings in the representation, </i>such as the rotation, color, and size of symbols by using more columns from the attribute table. When you click the <span class=arial>Details</span> button, the <a href="../ilwismen/symbols_by_attributes_id_point_map_with_attr_table.htm">Symbols by Attributes</a> dialog box will appear. <br>
+
+This option can be used for example:</p>
+
+<ul class=diaul>
+
+<li>	to visualize cities by type based on the number of inhabitants, for instance cities with more than 1 million inhabitants as larger filled red squares, cities with 500,000 to 1 million inhabitants as smaller filled red squares, and cities with less than 500,000 inhabitants as filled black circles. You require an ID point map with cities and an attribute table with a value column containing the number of inhabitants of each city; classify the inhabitants column of so that you obtain a class attribute column in attribute table; prepare a representation class for this class column, each class may be represented by its own symbol, color, size, etc. The names of the cities can be displayed next to the points, e.g. by creating an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text</a> object based on the point map.</li>
+
+<li>	to visualize type and amount of mining activities; ID point map with mining locations: mining categories as gold, silver and diamonds (class column in attribute table), each category represented by different symbols and colors (according to the representation of this class column), and different symbol sizes according to a production column in the attribute table;</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Symbols as Arrows:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For point maps with an ID domain and an attribute table linked to the map or to the domain: select the Arrow option button <i>to display  points as arrows</i> with a direction and optionally a certain length, line width, and color; all according to attribute columns in the attribute table. When you click the <span class=arial>Details</span> button, the <a href="../ilwismen/symbols_as_arrows_id_point_map_with_attr_table.htm">Symbols as Arrows</a> dialog box will appear. <br>
+This option can be used to visualize attributes with a direction such as direction of winds, sea currents or magnetic fields. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Symbols as Graphs:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For point maps with an ID domain and an attribute table linked to the map or to the domain: select the Graph option button <i>to display for each point, (multiple) attributes visualized as pie charts, a bar graphs, line graphs, composed vertical bars, or as volume cubes. </i>When you click the <span class=arial>Details</span> button, the <a href="../ilwismen/symbols_as_graphs_id_point_map_with_attr_table.htm">Symbols as Graphs</a> dialog box will appear. <br>
+This option can be used for example:</p>
+
+<ul class=diaul>
+
+<li>	to visualize for each point (e.g. per city, province or country), the proportions of various categories (e.g. number of children going to various school types, areas of various crops) as pie charts; </li>
+
+<li>	to visualize for each weather station, the amount of rainfall per time period as bar graphs; </li>
+
+<li>	to visualize for each point, value attribute information (e.g. temperature) over time as line graphs; </li>
+
+<li>	to visualize for each point, agricultural production (various categories) as volume cubes, etc.</li>
+
+</ul>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The first text line in this dialog box states the <i>map type</i> and the <i>map name</i>. Furthermore, the dialog box shows the <i>description</i> and <i>domain</i> of the map. In case of a value map, also the minimum and maximum values of the map are shown when these values are available, i.e. when a point histogram exists. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+</body

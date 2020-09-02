@@ -1,0 +1,124 @@
+<html>
+
+<head>
+<title>Map window : overview window</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map window, Overview window in map window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map window</h1>
+
+<h1 class=secondline>Overview window</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The overview window shows the entire area of the maps that were added to the map window; it allows you to quickly zoom in on a certain area, and it helps to orient yourself on the position of the area that is currently displayed in the map window. </p>
+
+<p class=defnewpar>The overview window shows the position of the area on which you zoomed in (and that is currently displayed by the map window), either by a rectangle or by a cross: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td valign=bottom width="125">
+<img src="../images/overviewarea.gif" align=bottom width="97" height="157">
+</td>
+<td valign=bottom>
+<img src="../images/overviewcross.gif" align=bottom width="97" height="157">
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>The map window will only display the part of the maps that is within the rectangle or that is around the cross in the overview window. </p>
+
+<p class=defnewpar>You can move the overview window and dock it along an edge of a map window; you can also make the overview window floating. The overview window can be hidden or shown with the <span class=arial>Overview Window</span> command on the <a href="../ilwis/map_window_menu_commands.htm">Options menu</a>. </p>
+
+<p class=kopje>To zoom in on a new area:</p>
+
+<ul>
+
+<li>Drag a rectangle with the left mouse button in the overview window; </li>
+
+<li>the mouse pointer will temporarily change to a magnifying glass with a plus sign inside. </li>
+
+</ul>
+
+<p class=linespacing03before>The map window will directly scroll to and display the selected part of the map(s). </p>
+
+<p class=kopje>To move the area on which you zoomed in:</p>
+
+<ul>
+
+<li>Click the existing rectangle in the overview window, and hold the left mouse button down;</li>
+
+<li>move the mouse pointer to another position in the overview window, then release the left mouse button. </li>
+
+</ul>
+
+<p class=linespacing03before>The map window will directly scroll to and display the newly selected part of the map(s). </p>
+
+<p class=defnewpar>The behavior is similar to using <span class=arial><a href="..//ilwismen/popup/map_window_pan_popup.htm" onClick="return popup(this, 'notes')" >Pan</a></span> in a map window. </p>
+
+<p class=kopje>To select another area when you zoomed in deeply:</p>
+
+<p>When you zoomed in deeply on a part of the map window, the area that is displayed in the map window may be too small to be shown as a rectangle in the overview window. Then, the overview window indicates the approximate position of the displayed part in the entire area as a large cross. </p>
+
+<p class=defnewpar>To change the area displayed by the map window: </p>
+
+<ul>
+
+<li>Position the mouse pointer at the center of the cross in the overview window, and hold the left mouse button down; </li>
+
+<li>move the mouse pointer to another position in the overview window, then release the left mouse button. </li>
+
+</ul>
+
+<p class=linespacing03before>The map window will directly scroll to and display the map(s) around the new position. </p>
+
+<p class=kopje>Other functionality:</p>
+
+<ul>
+
+<li>When you use the scroll bars in the map window, or when you use <span class=arial>Pan</span> in the map window, the overview window will always show you where are. </li>
+
+<li>When you click the right mouse button in the overview window, a context-sensitive menu will appear containing the <span class=arial>Select Area</span> command. </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To avoid the appearance of a point, segment, or polygon map in the overview window, select the <span class=arial>Scale Limits</span> check box in the map's <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box, and reduce the number for the upper scale limit.  </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="map_window_functionality_advanced.htm">Map window : functionality (advanced)</a></p>
+
+<p class=seealsolinks><a href="map_window_layer_management.htm">Map window : Layer Management</a></p>
+
+<p class=seealsolinks><a href="map_window_toolbar.htm">Map window : toolbar</a></p>
+
+<p class=seealsolinks><a href="map_window_menu_commands.htm">Map window : menu commands</a></p>
+
+</body

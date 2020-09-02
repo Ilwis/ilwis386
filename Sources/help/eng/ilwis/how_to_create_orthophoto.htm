@@ -1,0 +1,111 @@
+<html>
+
+<head>
+<title>How to create orthophoto</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Orthophoto, Create ..., Aerial photographs, Photographs, How to create ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to create an orthophoto</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>An orthophoto is a rectified (North-oriented raster map with square pixels) scanned photogrammetric aerial photograph with corrections for tilt and relief displacement. An orthophoto is obtained by resampling a photograph which has a georef orthophoto to a georef corners.</p>
+
+<p class=kopje>Requirements:</p>
+
+<ul>
+
+<li>	a  scanned photogrammetric aerial photograph on which you can distinguish 2, 3, or 4 fiducial marks;</li>
+
+<li>	known principal distance of the photogrammetric camera;</li>
+
+<li>	Digital Terrain Model (DTM) of the area.</li>
+
+</ul>
+
+<p class=kopje>1.  Creating a georef orthophoto:</p>
+
+<p>You need to create a <b>georeference orthophoto</b> for the scanned photograph. </p>
+
+<p>The process is described in topic <a href="how_to_monoplot.htm">How to monoplot</a>, steps 1 - 4.</p>
+
+<p class=tipindent06>Tip: </p>
+
+<p class=tiptextleft06>For a correct behaviour of a georef orthophoto, it is essential that you have marked the 'Interpolation' check box in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of your DTM raster map. For more information, refer to the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> dialog box.</p>
+
+<p class=defnewpar>When finished creating and editing a georef orthophoto, leave the Tiepoint editor and close the map window as well.</p>
+
+<p class=kopje>2.  Resampling the scanned photo:</p>
+
+<p>Once you have a georeference orthophoto for your scanned aerial photograph, the only step you have to take is to <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >resample</a> the photograph to a North-oriented georef corners. </p>
+
+<p class=defnewpar>Usually, you will already have a georeference corners, e.g. the one on which you rasterized your Digital Terrain Model (DTM). In case you do not have a georeference corners yet, create one, for instance by clicking the create button in the Resample dialog box.</p>
+
+<p class=defnewpar>To start the Resample operation:</p>
+
+<ul>
+
+<li>	choose <span class=arial>Image Processing, Resample</span> from the <a href="main_window_menu_commands.htm">Operations menu</a> in the Main window, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Image Processing</span> item, and double-click the <span class=arial>Resample</span> operation,  </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Resample</span> operation, or</li>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click the scanned photograph with the <i>right</i> mouse button, then choose <span class=arial>Image Processing, Resample</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="../ilwisapp/resample_dialog_box.htm">Resample</a> dialog box will appear.</p>
+
+<p class=defnewpar>In the Resample dialog box:</p>
+
+<ul>
+
+<li>	select for the input raster map your scanned aerial photograph (which uses a georef orthophoto),</li>
+
+<li>	select for the target georeference a georeference corners,</li>
+
+<li>	choose for nearest neighbour, bilinear interpolation or bicubic interpolation,</li>
+
+<li>	type a name for the output raster map,</li>
+
+<li>	optionally, type a description for the output map.</li>
+
+</ul>
+
+<p class=defnewpar>For each pixel in the output map, a value will be retrieved from the nearest pixel in the input map, or a value will be calculated from 4, or 16 near pixel values in the input map.</p>
+
+<p class=defnewpar>Finally, display the output map in a map window.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When you add grid lines to the resampled photo in the map window, the grid lines will be straight and perpendicular to each other. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a></p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/resample.htm">Resample</a></p>
+
+</body

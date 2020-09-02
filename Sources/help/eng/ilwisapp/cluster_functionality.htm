@@ -1,0 +1,85 @@
+<html>
+
+<head>
+<title>Cluster : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cluster">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Cluster</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Clustering, or unsupervised classification, is a rather quick process in which image data is grouped into spectral clusters based on the statistical properties of all pixel values. It is an automated classification approach with a maximum of 4 input bands.</p>
+
+<p class=defnewpar>In the first phase of the operation, a multidimensional histogram of the input bands is calculated. The multidimensional histogram is a representation of the feature space. In the second phase, this feature space is split into several boxes to obtain the desired number of clusters.</p>
+
+<p class=defnewpar>After classification the desired number of clusters are available. In the output raster map, each pixel has a class name like <span class=courier>Cluster 1</span>, <span class=courier>Cluster 2</span>, ..., etc. These clusters are called spectral classes. </p>
+
+<p class=defnewpar>Optionally, an attribute table can be created for the output map. The table will contain statistical information on the output clusters: the average, predominant and minimum and maximum value of each cluster as found in the input bands. </p>
+
+<p class=defnewpar>The program cannot automatically give you the meaning of the obtained spectral classes; it is up to the user to find out which land cover type or other feature corresponds to each cluster, and finding these relationships may not always be easy. You can compare the clusters in the output raster map to field observation data, or perform a <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a> with a ground truth map. Of course, if you know the area, you can also visually interpret the output.</p>
+
+<p class=defnewpar>The difference between unsupervised classification (Cluster) and supervised classification (<a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >Sample</a> and <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >Classify</a>) is that when using Cluster, the software automatically splits the feature space into clusters based on the spectral values and afterwards you have to identify these clusters. When using Sample and Classify, classification takes place according to training pixels in a <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> which is defined by the user.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input raster map list must contain raster maps that have the <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>Image</span> domain</a> and the same georeference.</p>
+
+<p class=kopje>Domain and georeference of ouput map:</p>
+
+<p>The output map and the optional attribute table will use an internally defined class domain; the class names have names like <span class=courier>Cluster 1</span>, <span class=courier>Cluster 2</span>, etc. This domain is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </p>
+
+<p>The output raster map uses the same georeference as the input raster maps.</p>
+
+<p class=kopje>Attribute table for ouput map:</p>
+
+<p>Optionally, an attribute table can be created for the output map. The table will contain statistical information on the output clusters: the average, predominant and minimum and maximum value of each cluster as found in the input bands. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To view and edit the internal output domain of the Cluster operation, you can display the output map in a map window and choose the Domain command from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in the map window.</li>
+
+<li>	To change the colors of the clusters in the output map, you can display the map in a map window and choose the Representation command from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in the map window. Press the Redraw button <img src="../images/redraw.gif" align=bottom width="22" height="22"> in the map window to see the effect of changed colors.</li>
+
+<li>	To view or edit the internal domain or the representation, you can also click the output map with the right mouse button in the Catalog, then choose Open as Domain or Open as Representation from the context-sensitive menu.</li>
+
+<li>	For more information on internal domains and representations, refer to <a href="../ilwis/how_to_open_internal_domains_representations_advanced.htm">How to open internal domains/representations</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cluster_dialog_box.htm">Cluster : dialog box</a></p>
+
+<p class=seealsolinks><a href="cluster_command_line.htm">Cluster : command line</a></p>
+
+<p class=seealsolinks><a href="cluster_algorithm.htm">Cluster : algorithm </a></p>
+
+<p class=seealsolinks><a href="sample.htm">Sample</a></p>
+
+<p class=seealsolinks><a href="classify_functionality.htm">Classify : functionality</a></p>
+
+</body

@@ -1,0 +1,1974 @@
+<html>
+
+<head>
+<title>TabCalc : joining columns from other tables</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table calculation, Calculation, Command line, Join columns, ColumnJoin">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Table calculation</h1>
+<h1 class=secondline>Joining columns from other tables</h1>
+
+<p class=defnewpar>The join operation enables you to read a column from a second table and join it into the current table. </p>
+
+<p class=defnewpar>To be able to join, you need a link between the tables. The link between tables is always made through a <i>common Class or ID domain</i> that exists in both tables; this common domain may be used either by one or both of the tables itself, or by a column in the tables. This link is also called the <i>key</i> through which joining can take place. </p>
+
+<p class=defnewpar>To join a column into a currently opened table: </p>
+
+<ul>
+
+<li>you can use the Join Column wizard, </li>
+
+<li>you can type a Join expression on the command line of the table window. </li>
+
+</ul>
+
+<p class=defnewpar>This topic contains the following sections: </p>
+
+<ul>
+
+<li><a href="#join_methods"><span class="bookmark">Join methods to create links between tables</span></a></li>
+
+<li><a href="#join_wizard"><span class="bookmark">Using the Join Column wizard</span></a></li>
+
+<li><a href="#join_expressions"><span class="bookmark">Join expressions on the command line of a table window</span></a></li>
+
+<li><a href="#examples"><span class="bookmark">Examples</span></a></li>
+
+</ul>
+
+
+<h2 id="join_methods">Join methods to create links between tables</h2>
+
+<p class=kopjeaftertitlesub>1.&nbsp;Two tables which use the same domain:</p>
+
+<p>The tables have a <b>one to one</b> relation. </p>
+
+<p>You don't have to specify a key. </p>
+
+<p>The link between the tables can be directly created through the domain of both tables. </p>
+
+<p class=kopje>2.&nbsp;A column in the current table uses the same domain as the second table:</p>
+
+<p>The relation between the column of the current table and the second, selected table is a <b>many to one</b> relation. </p>
+
+<p>You will need to specify a key column from the current table, i.e. key 1. </p>
+
+<p>The link between the tables can then be created through the domain of the specified key column in the current table (key 1) and the domain of the second, selected table (key 2). </p>
+
+<p class=kopje>3.&nbsp;The current table uses the same domain as a column in the second table:</p>
+
+<p>The relation between the records in the current table and the values in the
+second selected table is possibly a <b>one to many</b> relation. </p>
+
+<p>You will need a key column from the second, selected table, i.e. key 2.</p>
+
+<p>The link between the tables can then be created through the domain of the current table (key 1) and the domain of the specified key column in the second, selected table (key 2). </p>
+
+<ul>
+
+<li>	Furthermore, when the classes or IDs in the key 2 column of the second table are <i>not unique</i> (i.e. one to many relation), then the values to be joined need to be aggregated by the groups of key 2. </li>
+
+        <p>You will then thus need to specify from the second, selected table a key 2 column (the 'group by' column), an aggregation method, and optionally a weight column. </p>
+
+<li>	When the classes or IDs in the key column of the second table are unique (i.e. one to one relation), you should only specify key 2. </li>
+
+</ul>
+
+<p class=kopje>4.&nbsp;A column in the current table uses the same domain as a column in the second table:</p>
+
+<p>The relation between the records in the current table and the second, selected table is possibly a <b>many to many</b> relation. </p>
+
+<p>You will need to specify both a key column from the current table, i.e. key 1, as well as a key column from the second, selected table, i.e. key 2. </p>
+
+<p>The link between the tables can then be created through the domain of the specified key column in the current table (key 1) and the domain of the specified key column in the second, selected table (key 2). </p>
+
+<ul>
+
+<li>	Furthermore, when the classes or IDs in the key 2 column of the second table are <i>not unique</i> (i.e. many to many relation), then the values to be joined need to be aggregated by the groups of key 2. </li>
+        
+        <p>You will then thus need to specify from the second, selected table, a key 2 column from the second table (the 'group by' column), an aggregation method, and optionally a weight column; and from the current table a key 1 column. </p>
+
+<li>	When the classes or IDs in the key column of the second table are unique (i.e. many to one relation), you should only specify key 2. </li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	Links between tables are always through Class or ID domains.</li>
+
+<li>	For more information on column aggregations, refer to <a href="calc_aaf.htm#aggregate_functions">Aggregate functions</a>.</li>
+
+</ul>
+
+<h2 id="join_wizard">Using the Join Column wizard</h2>
+
+<p>The easiest way to join columns is via the Join Column wizard which is available on the Columns menu in a table window. </p>
+
+<p class=defnewpar>To start the Join Column wizard: </p>
+
+<ul>
+
+<li>	open the table into which you wish to join one or more columns of another table, </li>
+
+<li>    open the <a href="table_window_menu_commands.htm"><span class=arial>Columns</span> menu</a> of the table window, and choose the <span class=arial>Join</span> command. </li>
+
+<li>    the first page of the <a href="../ilwismen/join_column.htm">Join Column</a> wizard appears.</li>
+
+</ul>
+
+<p class=defnewpar>Short explanation of the Join Column wizard: </p>
+
+<ol>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Select table and column: </li>
+
+        <ul>
+
+        <li>	Select the table from which you wish to join a column into the current table.</li>
+
+        <li>	From the selected table, select the column that you wish to join into the current table.</li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Join method: </li>
+        
+        <ul>
+
+        <li>    Select one of the join methods, see the explanation above. </li>
+
+        </ul>
+
+        <p>If you wish to create a link through the common Class or ID domain of both tables, i.e. both tables use the same domain, you will directly continue on the Output column name page. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Link between tables: </li>
+
+        <ul>
+
+        <li>	Select a key column from the current table (<i>key 1</i>), and/or a key column from the second, selected table (<i>key2</i>). </li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Aggregation method: </li>
+
+        <ul>
+
+        <li>	If the values to be joined need to be aggregated, select an <a href="..//ilwis/popup/aggregation_functions_popup.htm" onClick="return popup(this, 'notes')" >aggregation function</a> and, optionally, a weight column from the second table.</li>
+
+        <p>The Aggregation method page will not appear when an aggregation is not necessary. </p>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Output column name: </li>
+
+        <ul>
+
+        <li>	Type, for the current table, a name for the output column that will contain the joined values.</li>
+
+        </ul>
+
+</ol>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>For more information, refer to the <a href="../ilwismen/join_column.htm">Join Column wizard</a> 
+ Help. </p>
+
+<h2 id="join_expressions">Join expressions on the command line of a table window</h2>
+
+<p>To join a column from another table into the <i> current</i> table you may also type a Join expression on the command line of a table window. </p>
+
+<p class=calctitle>Syntax</p>
+
+<p>The syntax of the join operation on the command line is:</p>
+<p class=emptylinehalf>&nbsp;</p>
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=30>
+<p>(1)</p>
+
+</td>
+<td valign="top" width=86>
+<p>OutColName</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier>ColumnJoin</span>(TableName, ColumnName)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p>(2)</p>
+
+</td>
+<td valign="top" width=86>
+<p>OutColName</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier>ColumnJoin</span>(TableName, ColumnName, <i>Key1</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p>(3)</p>
+
+</td>
+<td valign="top" width=86>
+<p>OutColName</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier>ColumnJoin2ndKey</span>(TableName, ColumnName, <i>Key2</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p>(4)</p>
+
+</td>
+<td valign="top" width=86>
+<p>OutColName</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier>ColumnJoin2ndKey</span>(TableName, ColumnName, <i>Key1</i>, <i>Key2</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p>(5)</p>
+
+</td>
+<td valign="top" width=86>
+<p>OutColName</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier>ColumnJoin</span><i>AggFunc</i>(TableName, ColumnName, <i>Key2</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p>(6)</p>
+
+</td>
+<td valign="top" width=86>
+<p>OutColName</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier>ColumnJoin</span><i>AggFunc</i>(TableName, ColumnName, <i>Key2</i>, <i>Weight</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=30>
+<p>(7)</p>
+
+</td>
+<td valign="top" width=86>
+<p>OutColName</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier>ColumnJoin</span><i>AggFunc</i>(TableName, ColumnName, <i>Key2</i>, [<i>Weight</i>], <i>Key1</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p>OutColName</p>
+
+</td>
+<td valign="top">
+<p>is the output column name. Usually, this is the same as the column name that was chosen to be joined into the current table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=courier>ColumnJoin</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Join operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=courier>ColumnJoin2ndKey</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Join operation and when you wish to use a column from the second table (key2) to make a link to the current table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p><span class=courier>ColumnJoin</span><i>AggFunc</i></p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Join operation and when you wish to use an aggregation, i.e. joining while using an <a href="..//ilwis/popup/aggregation_functions_popup.htm" onClick="return popup(this, 'notes')" >aggregation function</a>. Replace the <i>AggFunc</i> part by one of the following aggregation functions: </p>
+
+<p class=courier><a href="calc_aggavg.htm">Avg</a> | <a href="calc_aggcnt.htm"> Cnt</a> |
+<a href="calc_aggmax.htm"> Max</a> | <a href="calc_aggmed.htm"> Med</a> | <a href="calc_aggmin.htm"> Min</a> |
+<a href="calc_aggprd.htm"> Prd</a> | <a href="calc_aggstd.htm"> Std</a> | <a href="calc_aggsum.htm">Sum</a>. </p>
+
+<p>To use for instance the Average function, the first part of the expression should thus look like <span class=courier>ColumnJoinAvg</span>(...)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>TableName</p>
+
+</td>
+<td valign="top">
+<p>is the name of the second table from which you wish to join a column into the current table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>ColumnName</p>
+
+</td>
+<td valign="top">
+<p>is the name of the column, from the second table, that contains the data that you wish to join into the current table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><i>Key1</i></p>
+
+</td>
+<td valign="top">
+<p>is a Class or ID column from the <u>current table</u> that is needed to create a link between both tables. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><i>Key2</i></p>
+
+</td>
+<td valign="top">
+<p>is a Class or ID column from the <u>second table</u> that is needed to create a link between both tables. </p>
+
+<p>If an aggregation has to take place, the values to be joined will be grouped and aggregated on this column. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><i>Weight</i></p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to specify a  column from the <u>second table</u> which contains weight values to be used during the aggregation.
+When you do not wish to use weights, specify value <span class=courier>1</span>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Formula 1 represents the case where both tables have the same domain.</p>
+
+<p class=linespacing03before>Formula 2 represents the case where a <i>column</i> of the current table has the same domain as the second table (i.e. many to one relation).</p>
+
+<p class=linespacing03before>Formula 3 represents the case where the current table uses the same domain as a <i>column</i> in the second table and when the classes or IDs in that column in the second table are unique (one to one relation).</p>
+
+<p class=linespacing03before>Formula 4 represents the case where a <i>column</i> in the current table uses the same domain as a <i>column</i> in the second table and when the classes or IDs in that column in the second table are unique (many to one relation).</p>
+
+<p class=linespacing03before>Formula 5 represents the case where the current table uses the same domain as a <i>column</i> in the second table and when the classes or IDs in that column in the second table are not unique (one to many relation). The values will be aggregated during the join.</p>
+
+<p class=linespacing03before>Formula 6 represents the same case as Formula 5, but now weight values are used during the aggregation. </p>
+
+<p class=linespacing03before>Formula 7 represents the case where a <i>column</i> in the current table uses the same domain as a <i>column</i> in the second table and when the classes or IDs in that column in the second table are not unique (many to many relation). The values will be aggregated during the join, while, optionally, using a weight column.</p>
+
+<h2 id="examples">Examples</h2>
+
+<p class=kopje>Example 1:</p>
+
+<p>The domain of the current table is the same as the domain of another table.</p>
+
+<p class=linespacing03before>Table <span class=courier>Landuse</span> contains landuse classes and also lists the commercial value of these landuse
+classes (column <span class=courier>CommVal</span>).</p>
+
+<p class=linespacing01before>The (raster or polygon) histogram of the <span class=courier>Landuse</span> map contains the area of each landuse class. </p>
+
+<p class=linespacing01before>The column <span class=courier>Area</span> from the histogram will be joined into attribute table <span class=courier>Landuse</span>. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="3">
+<p class=th>Landuse.tbt</p>
+
+</td>
+<td valign="top" colspan="3">
+<p class=th>Landuse.his/.hsa</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=th>Landuse.tbt after joining</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=tcolh>Domain<br>Landuse</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>CommVal</p>
+
+</td>
+<td valign="top" width=18>
+<p class=tcolhr></p>
+
+</td>
+<td valign="top">
+<p class=tcolh>Domain<br>Landuse</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>Area</p>
+
+</td>
+<td valign="top" width=18>
+<p class=tcolhr></p>
+
+</td>
+<td valign="top">
+<p class=tcolh>Domain<br>Landuse</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>CommVal</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>Area</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Residential</p>
+
+</td>
+<td valign="top">
+<p class=t1r>1000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>Residential</p>
+
+</td>
+<td valign="top">
+<p class=t1r>9920800</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>Residential</p>
+
+</td>
+<td valign="top">
+<p class=t1r>1000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>9920800</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Commercial</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>Commercial</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4131200</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>Commercial</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4131200</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Industrial</p>
+
+</td>
+<td valign="top">
+<p class=t1r>5000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>Industrial</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2161600</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>Industrial</p>
+
+</td>
+<td valign="top">
+<p class=t1r>5000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2161600</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Institutional</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>Institutional</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4918400</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>Institutional</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4918400</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Agricultural</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>Agricultural</p>
+
+</td>
+<td valign="top">
+<p class=t1r>10461600</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>Agricultural</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>10461600</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Open table <span class=courier>Landuse</span> as the current table. </p>
+
+<p class=defnewpar>When you wish to use the Join Column wizard, open the Columns menu in the table, and choose <span class=arial>Join</span>. </p>
+
+<p>In the Join Column wizard:</p>
+
+<ul>
+
+<li>	Select table and column page: select histogram <span class=courier>Landuse</span>, and select column <span class=courier>Area</span> as the column to be joined.</li>
+
+<li>    Join method page: select the option <span class=arial>Use Domain of current table (key1) and use Domain of selected table (key2)</span>.</li>
+
+<li>	Output column page: type a name for the output column that will contain the joined values, e.g. <span class=courier>Area</span>.</li>
+
+</ul>
+
+<p class=defnewpar>When you wish to type a Join expression on the command line of the table window, type one of the following expressions:</p>
+
+<p class=calc1>Area = ColumnJoin(Landuse.his, Area)</p>
+
+<p class=calc1>Area = Landuse.his.Area</p>
+
+<p class=calc1>Area = ColumnJoin(Landuse.hsa, Area)</p>
+
+<p class=calc1>Area = Landuse.hsa.Area</p>
+
+<p class=linespacing01before>With the first and second formula, column <span class=courier>Area</span> from the <i>raster histogram</i> <span class=courier>Landuse.his</span> is joined into the attribute table. </p>
+
+<p>With the third and fourth formula, column <span class=courier>Area</span> from <i>polygon histogram</i> <span class=courier>Landuse.hsa</span> is joined into the attribute table. </p>
+
+<p>The second formula is an alias for the first formula. </p>
+
+<p>The fourth formula is an alias for the thrid formula. </p>
+
+<p class=kopje>Example 2:</p>
+
+<p>The domain of a column in the current table is the same as the domain of the second table. </p>
+
+<p class=linespacing03before>Table <span class=courier>Municipality</span> contains a number of municipalities, the population of each municipality and a column indicating whether the municipalities are considered large, medium or small (column <span class=courier>MunClass</span>).</p>
+
+<p class=linespacing01before>Table <span class=courier>MuniSubs</span> contains information for large, medium and small municipalities. It contains a column <span class=courier>Subsidy</span> which represents for instance expected subsidy figures for types of municipalities.</p>
+
+<p class=linespacing01before>The subsidy figures in table <span class=courier>MuniSubs</span> will be joined into the <span class=courier>Municipality</span> table.</p>
+
+<p class=emptyline>&nbsp;</p>
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="4">
+<p class=th>Table Municipality</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=th>Table MuniSubs</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=tcolh>Domain<br>Municipality</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>Population </p>
+
+</td>
+<td valign="top">
+<p class=tcolh><br>MunClass</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=tcolh>Domain<br>MunClass</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>Subsidy</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Municip1</p>
+
+</td>
+<td valign="top">
+<p class=t1r>99208</p>
+
+</td>
+<td valign="top">
+<p class=t1>MunLarge</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>MunSmall</p>
+
+</td>
+<td valign="top">
+<p class=t1r>1000</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Municip2</p>
+
+</td>
+<td valign="top">
+<p class=t1r>41312</p>
+
+</td>
+<td valign="top">
+<p class=t1>MunMedium</p>
+
+ </td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>MunMedium</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Municip3</p>
+
+</td>
+<td valign="top">
+<p class=t1r>21616</p>
+
+</td>
+<td valign="top">
+<p class=t1>MunSmall</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>MunLarge</p>
+
+</td>
+<td valign="top">
+<p class=t1r>5000</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Municip4</p>
+
+</td>
+<td valign="top">
+<p class=t1r>49184</p>
+
+</td>
+<td valign="top">
+<p class=t1>MunMedium</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1>...</p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Municip5</p>
+
+</td>
+<td valign="top">
+<p class=t1r>104616</p>
+
+</td>
+<td valign="top">
+<p class=t1>MunLarge</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>...</p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="4">
+<p class=th>Table Municip after joining</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=tcolh>Domain<br>Municipality </p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>Population</p>
+
+</td>
+<td valign="top">
+<p class=tcolh><br>MunClass</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>Subsidy</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Municip1</p>
+
+</td>
+<td valign="top">
+<p class=t1r>99208</p>
+
+</td>
+<td valign="top">
+<p class=t1>MunLarge</p>
+
+</td>
+<td valign="top">
+<p class=t1r>5000</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Municip2</p>
+
+</td>
+<td valign="top">
+<p class=t1r>41312</p>
+
+</td>
+<td valign="top">
+<p class=t1>MunMedium</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Municip3</p>
+
+</td>
+<td valign="top">
+<p class=t1r>21616</p>
+
+</td>
+<td valign="top">
+<p class=t1>MunSmall</p>
+
+</td>
+<td valign="top">
+<p class=t1r>1000</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Municip4</p>
+
+</td>
+<td valign="top">
+<p class=t1r>49184</p>
+
+</td>
+<td valign="top">
+<p class=t1>MunMedium</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Municip5</p>
+
+</td>
+<td valign="top">
+<p class=t1r>104616</p>
+
+</td>
+<td valign="top">
+<p class=t1>MunLarge</p>
+
+</td>
+<td valign="top">
+<p class=t1r>5000</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>...</p>
+
+</td>
+<td valign="top">
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1r></p>
+
+</td>
+</tr>
+</table>
+
+
+<p class=defnewpar>Open table <span class=courier>Municipality</span> as the current table. </p>
+
+<p class=defnewpar>When using the Join Column wizard: </p>
+
+<ul>
+
+<li>	Select table and column page: select table <span class=courier>MuniSubs</span> as the second table, and select column <span class=courier>Subsidy</span> as the column to be joined.</li>
+
+<li>    Join method page: select the option <span class=arial>Choose key Column from current table (key1) and use Domain of selected table (key2). </span></li>
+
+<li>    Link between tables page: on the left hand side of the page, select column <span class=courier>MunClass</span> as key1.</li>
+
+<li>	Output column page: type a name for the output column that will contain the joined values, e.g. <span class=courier>Subsidy</span>.</li>
+
+</ul>
+
+<p class=defnewpar>When you wish to type a Join expression on the command line of the table window, type:</p>
+
+<p class=calc0>Subsidy = ColumnJoin(MuniSubs, Subsidy, MunClass)</p>
+
+<p class=kopje>Example 3:</p>
+
+<p>The domain of your current table is the same as the domain of a column in the second table. </p>
+
+<p class=linespacing03before>Table <span class=courier>Province</span> lists for each province some information. The domain of this table is <span class=courier>Province</span>; the <span class=courier>Province</span> domain contains all provinces of a certain country.</p>
+
+<p class=linespacing01before>Table <span class=courier>Municipality</span> contains population figures for each
+municipality (column <span class=courier>Population</span>). Furthermore, for each municipality it is known in which province it is (column <span class=courier>Province</span>). Column <span class=courier>Population</span> has a value domain, column <span class=courier>Province</span> has domain <span class=courier>Province</span> (i.e. the same domain as the domain of the other table).</p>
+
+<p class=linespacing01before>The population column <span class=courier>Population</span> of table <span class=courier>Municipality</span> will be joined into the <span class=courier>Province</span> table. As a province usually contains more than one municipality, the population figures need to be aggregated during the join.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="3">
+<p class=th>Table Province</p>
+
+</td>
+<td valign="top" colspan="3">
+<p class=th>Table Municipality</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=tcolh>Domain<br>Province</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>AnyInfo</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=tcolh>Domain<br>Minicipality</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>Population</p>
+
+</td>
+<td valign="top">
+<p class=tcolh><br>Province</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Prov1</p>
+
+</td>
+<td valign="top">
+<p class=t1r>1000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>Municip1</p>
+
+</td>
+<td valign="top">
+<p class=t1r>9920</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Prov2</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>Municip2</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4131</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Prov3</p>
+
+</td>
+<td valign="top">
+<p class=t1r>5000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>Municip3</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2161</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov2</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Prov4</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>Municip4</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4918</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Prov5</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>Municip5</p>
+
+</td>
+<td valign="top">
+<p class=t1r>10461</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov3</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>...</p>
+
+</td>
+<td valign="top">
+<p class=t1r></p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>...</p>
+
+</td>
+<td valign="top">
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="3">
+<p class=th>Table Province after joining</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=tcolh>Domain<br>Province</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>AnyInfo</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>Population</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Prov1</p>
+
+</td>
+<td valign="top">
+<p class=t1r>1000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>18969</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Prov2</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2161</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Prov3</p>
+
+</td>
+<td valign="top">
+<p class=t1r>5000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>10461</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Prov4</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>?</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>Prov5</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>?</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>...</p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+</tr>
+</table>
+
+<p class=linespacing03before>Note that the value for <span class=courier>Prov1</span> is an aggregated value. </p>
+
+<p class=defnewpar>Open table <span class=courier>Province</span> as the current table. </p>
+
+<p class=defnewpar>When using the Join Column wizard: </p>
+
+<ul>
+
+<li>	Select table and column page: select table <span class=courier>Municipality</span> as the second table, and select column <span class=courier>Population</span> as the column to be joined.</li>
+
+<li>    Join method page: select the option <span class=arial>Use Domain of current table (key1) and choose key Column from selected table (key2). </span></li>
+
+<li>    Link between tables page: on the right hand side of the page, select column <span class=courier>Province</span> as key2.</li>
+
+<li>    Aggregation page: select an aggregation function, e.g. <span class=courier>Sum</span>. </li>
+
+<li>	Output column page: type a name for the output column that will contain the joined values, e.g. <span class=courier>Population</span>.</li>
+
+</ul>
+
+<p class=defnewpar>When you wish to type a Join expression on the command line of the table window, use:</p>
+
+<p class=calc0>Population = ColumnJoinSum(Municipality, Population, Province)</p>
+
+<p>where: <span class=courier>Population</span> is the output column name, <span class=courier>Municipality</span> is the table from which you wish to get a column, <span class=courier>Population</span> is the column to be joined, and <span class=courier>Province</span> is used as key2 (the 'group by' column). </p>
+
+<p class=kopje>Example 4:</p>
+
+<p>The domain of a column in the current table is the same as the domain of a column in the second table.</p>
+
+<p class=linespacing03before>In this example, we will use two tables with domain <span class=courier>None</span>: </p>
+
+<ul>
+
+<li>It is possible to make a link between the tables through their common table domain <span class=courier>None</span>, but then, the values of the selected column to be joined will simply be written, record by record, from the second table into the first table. </li>
+
+<li>To obtain more useful values, we will therefore use a column that exists in both tables and which can ensure a proper link between the tables. </li>
+
+</ul>
+
+<p class=linespacing03before>Table <span class=courier>Province</span> contains information on provinces (column <span class=courier>Province</span>) and some other information. The domain of the table is domain <span class=courier>None</span>; the domain of column <span class=courier>Province</span> is <span class=courier>Province</span>. </p>
+
+<p class=linespacing01before>Table <span class=courier>Municip</span>ality contains information on municipalities and population figures for each
+municipality (column <span class=courier>Population</span>). Furthermore, for each municipality it is known in which province it is (column <span class=courier>Province</span>). Column <span class=courier>Population</span> has a value domain, column <span class=courier>Province</span> has domain <span class=courier>Province</span> (i.e. the same domain as the domain of the column in the other table).</p>
+
+<p class=linespacing01before>The population column <span class=courier>Population</span> of table <span class=courier>Municipality</span> will be joined into the <span class=courier>Province</span> table. As a province usually contains more than one municipality, the population figures need to be aggregated during the join. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="4">
+<p class=th>Table Province</p>
+
+</td>
+<td valign="top" colspan="4">
+<p class=th>Table Municipality</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=tcolh>Domain<br>None</p>
+
+</td>
+<td valign="top">
+<p class=tcolh><br>Province</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>AnyInfo</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=tcolh>Domain<br>None</p>
+
+</td>
+<td valign="top">
+<p class=tcolh><br>Municipality</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>Population</p>
+
+</td>
+<td valign="top">
+<p class=tcolh><br>Province</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>1</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov1</p>
+
+</td>
+<td valign="top">
+<p class=t1r>1000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>1</p>
+
+</td>
+<td valign="top">
+<p class=t1>Municip1</p>
+
+</td>
+<td valign="top">
+<p class=t1r>9920</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>2</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov4</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>2</p>
+
+</td>
+<td valign="top">
+<p class=t1>Municip2</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4131</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>3</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov3</p>
+
+</td>
+<td valign="top">
+<p class=t1r>5000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>3</p>
+
+</td>
+<td valign="top">
+<p class=t1>Municip3</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2161</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov2</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>4</p>
+</td>
+
+<td valign="top">
+<p class=t1>Prov4</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>4</p>
+
+</td>
+<td valign="top">
+<p class=t1>Municip4</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4918</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>5</p>
+</td>
+
+<td valign="top">
+<p class=t1>Prov5</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>5</p>
+
+</td>
+<td valign="top">
+<p class=t1>Municip5</p>
+
+</td>
+<td valign="top">
+<p class=t1r>10461</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov3</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>6</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov2</p>
+
+</td>
+<td valign="top">
+<p class=t1r>...</p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>6</p>
+
+</td>
+<td valign="top">
+<p class=t1>Municip6</p>
+
+</td>
+<td valign="top">
+<p class=t1r>8745</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov4</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>7</p>
+
+</td>
+<td valign="top">
+<p class=t1>...</p>
+
+</td>
+<td valign="top">
+<p class=t1r></p>
+
+</td>
+<td valign="top" width=18>
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1>7</p>
+
+</td>
+<td valign="top">
+<p class=t1>...</p>
+
+</td>
+<td valign="top">
+<p class=t1r></p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="3">
+<p class=th>Table Province after joining</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=tcolh>Domain<br>None</p>
+
+</td>
+<td valign="top">
+<p class=tcolh><br>Province</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>AnyInfo</p>
+
+</td>
+<td valign="top">
+<p class=tcolhr><br>Population</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>1</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov1</p>
+
+</td>
+<td valign="top">
+<p class=t1r>1000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>18969</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>2</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov4</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>8745</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>3</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov3</p>
+
+</td>
+<td valign="top">
+<p class=t1r>5000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>10461</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>4</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov4</p>
+
+</td>
+<td valign="top">
+<p class=t1r>4000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>8745</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>5</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov5</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2000</p>
+
+</td>
+<td valign="top">
+<p class=t1r>?</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>6</p>
+
+</td>
+<td valign="top">
+<p class=t1>Prov2</p>
+
+</td>
+<td valign="top">
+<p class=t1r>...</p>
+
+</td>
+<td valign="top">
+<p class=t1r>2161</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=t1>7</p>
+
+</td>
+<td valign="top">
+<p class=t1>...</p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+<td valign="top">
+<p class=t1></p>
+
+</td>
+</tr>
+</table>
+
+<p class=linespacing03before>Note that the value for <span class=courier>Prov4</span> is listed twice; the value for <span class=courier>Prov1</span> is an aggregated value. </p>
+
+<p class=defnewpar>Open table <span class=courier>Province</span> as the current table. </p>
+
+<p class=defnewpar>When using the Join Column wizard: </p>
+
+<ul>
+
+<li>	Select table and column page: select table <span class=courier>Municipality</span> as the second table, and select column <span class=courier>Population</span> as the column to be joined.</li>
+
+<li>    Join method page: select the option <span class=arial>Choose key Column from current table (key1) and choose key Column from selected table (key2). </span></li>
+
+<li>    Link between tables page: </li>
+
+        <ul>
+
+        <li>on the left hand hand side of the page, select column <span class=courier>Province</span> as key1.</li>
+
+        <li>on the right hand side of the page, select column <span class=courier>Prov</span> as key2.</li>
+
+        </ul>
+
+<li>    Aggregation page: select an aggregation function, e.g. <span class=courier>Sum</span>. </li>
+
+<li>	Output column page: type a name for the output column that will contain the joined values, e.g. <span class=courier>Population</span>.</li>
+
+</ul>
+
+<p class=defnewpar>When you wish to type a Join expression on the command line of the table window, use:</p>
+
+<p class=calc0>Population = ColumnJoinSum(Municipality, Population, Province, 1, Province)</p>
+
+<p>where: <span class=courier>Population</span> is the output column name, <span class=courier>Municipality</span> is the table from which you wish to get a column, <span class=courier>Population</span> is the column to be joined, <span class=courier>Province</span> is used as key2 (the 'group by' column), <span class=courier>1</span> is used to indicate that no weights are used, and <span class=courier>Province</span> is used as key1. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/join_column.htm">Join Column wizard</a></p>
+
+<p class=seealsolinks><a href="how_to_join_areas_from_a_histogram_to_an_attribute_table.htm">How to join areas from a histogram into an attribute table</a></p>
+
+<p class=seealsolinks><a href="how_to_join_columns_of_another_table_to_the_current_table.htm">How to columns of another table into the current table</a></p>
+
+<p class=seealsolinks><a href="calc_aaf.htm#aggregate_functions">Aggregate functions</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/aggregate_column.htm">Aggregate column (dialog box)</a></p>
+
+</body

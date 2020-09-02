@@ -1,0 +1,142 @@
+<html>
+
+<head>
+<title>Glue tables : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Glue tables, Merge tables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Glue tables</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Glue tables operation allows you to glue or merge two or more tables together. As input tables, you may use: </p>
+
+<ul>
+
+<li>	tables with domain <span class=courier>None</span>, </li>
+
+<li>	tables with class domains,</li>
+
+<li>	tables with ID domains,</li>
+
+<li>	tables with class domains and ID domains.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Number of input tables:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the number of tables that you want to glue or merge together (2, 3, or 4). In the dialog box, the number of input tables is limited to four. On the command line, this limitation is not present.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>First input table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the first input table. Open the list box and select the desired input table, or drag a table directly from the Catalog into this box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Second input table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the second input table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Third input table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, select a third input table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Fourth input table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, select a fourth input table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output table that will contain all input tables. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output table. The description will appear in the status bar of the Main window when moving the mouse pointer over the table in a Catalog, and in the title bar of a table window when the output table is displayed. If no description is supplied, the output table will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Vertical:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case you are merging tables that use domain <span class=courier>None</span>: select this check box to create an output table which will contain as many records as the total number of records of all input tables. If a column exists in more that one input table with the same name and the same domain, then the values of these columns will be glued into one output column (values one below the other = vertically). </p>
+
+<p class=diabox>In case you are merging tables that use domain <span class=courier>None</span>: clear this check box when the output table should contain the same number of records as the first input table. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output table will only be defined; if necessary the table will be calculated later, for instance when the table is opened to be displayed. </p>
+
+<p class=defnewpar>When the input tables use different class or ID domains, a new domain will be created for the output table. This output domain will contain all class names and/or IDs of the input domains and the domain will obtain the same name as the output table.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/glue_tables_functionality_algorithm.htm">Glue tables : functionality</a></p>
+
+</body

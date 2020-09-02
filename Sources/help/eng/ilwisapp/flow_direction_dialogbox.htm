@@ -1,0 +1,107 @@
+<html>
+
+<head>
+<title>Flow direction : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Flow direction">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Flow direction</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Flow direction operation determines into which neighbouring pixel any water in a central pixel will flow. Flow direction is calculated for every central pixel in input blocks of 3 by 3 pixels, each time comparing the value of the central pixel with the value of its 8 neighbouring pixels. The output map contains flow directions as N (to the North), NE (to the North East), etc. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Input DEM:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a>. Open the list box and select the desired input map, or directly drag a raster map from a Catalog into this box. </p>
+
+<p class=diabox>The input map is supposed to be a sink-free Digital Elevation Model (DEM). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Steepest slope:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option when flow direction should be calculated according to the steepest downhill slope between a central pixel and its 8 neighbour pixels. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Lowest height:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option when flow direction should be simply be calculated as: </p>
+
+        <ul class=diaul>
+
+        <li>check whether any of the 8 neighbour pixels has a value smaller than the central pixel; </li>
+        <li>if so, then use the position of the pixel with the smallest pixel value to determine the flow direction for the central pixel. </li>
+
+        </ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the flow directions. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=defnewpar>The output map will always use <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>FlowDirection</span></a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="flow_direction_functionality.htm">Flow direction: functionality</a></p>
+
+</body

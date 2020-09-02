@@ -1,0 +1,63 @@
+<html>
+
+<head>
+<title>Densify segment coordinates : functionality / algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Densify segment coordinates">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Densify segment coordinates</h1>
+
+<h1 class=secondline>Functionality / Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Densify segment coordinates operation allows you to obtain more intermediate coordinates within segments. The segments of an input map are copied, and extra intermediate coordinates are added to the segments in the output map at a user-specified distance. </p>
+
+<p class=defnewpar>Increasing the number of intermediate points within segments is useful when you want to transform segments with the <a href="..//ilwisapp/popup/transform_segments_popup.htm" onClick="return popup(this, 'notes')" >Transform segments</a> operation. As the Transform segments operation will only transform the coordinates of nodes and of intermediate coordinates within segments, the shapes of the segments will be better preserved during the transformation when there are more intermediate points within the input segments. </p> 
+
+<p class=defnewpar>You can also choose to use the <span class=arial>Densify coordinates</span> option within the <a href="..//ilwisapp/popup/transform_segments_popup.htm" onClick="return popup(this, 'notes')" >Transform segments</a> and the <a href="..//ilwisapp/popup/transform_polygons_popup.htm" onClick="return popup(this, 'notes')" >Transform Polygons</a> operations. </p>
+
+<p class=kopje>Requirements for input segment map:</p>
+
+<p>No special input map requirements. </p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The output segment map uses the same domain as the input segment map. </p>
+
+<p>The output segment map uses the same coordinate system and the same coordinate boundaries as the input segment map. </p>
+
+<p class=kopje>Algorithm:</p>
+
+<p>All nodes and existing intermediate coordinates within segments of the input map are copied into the output map. Extra intermediate coordinates are added to the segments in the output map at a user-specified distance.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="densify_segment_coordinates_dialogbox.htm">Densify segment coordinates : dialog box</a></p>
+
+<p class=seealsolinks><a href="densify_segment_coordinates_commandline.htm">Densify segment coordinates : command line</a></p>
+
+<p class=seealsolinks><a href="transform_segment_map_functionality_algorithm.htm">Transform segment map : functionality / algorithm</a>
+
+<p class=seealsolinks><a href="transform_polygon_map_functionality_algorithm.htm">Transform polygon map : functionality / algorithm</a>
+
+</body

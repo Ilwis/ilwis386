@@ -1,0 +1,316 @@
+<html>
+
+<head>
+<title>How to change the domain of a map</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to change ..., Domains, Change ..., Convert domains, Change domain of map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to change the domain of a map</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>This topic contains five sections to change the domain of a map:</p>
+
+<ol>
+
+<li>	<a href="#1"><span class=bookmark>From system domain <span class=courier>Value</span> to a user-defined value domain</span></a></li>
+
+<li>	<a href="#2"><span class=bookmark>From the <span class=courier>Image</span> domain to system domain <span class=courier>Byte</span> or to system domain <span class=courier>Value</span></span></a></li>
+
+<li>	<a href="#3"><span class=bookmark>From a Class domain to an ID domain or vice versa</span></a></li>
+
+<li>	<a href="#4"><span class=bookmark>From a Picture domain to a Class domain</span></a></li>
+
+<li>	<a href="#5"><span class=bookmark>From a Class or ID domain to another Class, ID, or to a value domain</span></a></li>
+
+<li>	<a href="#6"><span class=bookmark>From a Class, ID or Value domain to the <span class=courier>Color</span> domain</span></a></li>
+
+<li>	<a href="#7"><span class=bookmark>From the <span class=courier>Color</span> domain to the <span class=courier>Image</span> domain</span></a></li>
+
+</ol>
+
+<p class=kopje><a id="1">1. From system domain <span class=courier>Value</span> to a user-defined value domain:</a></p>
+
+<p>When a map uses <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span> 
+
+and when for instance in the map's <span class=arial>Display Options</span> dialog box you create a new representation for this domain, 
+
+you can choose in the <span class=arial><a href="../ilwismen/create_a_representation.htm">Create Representation</a></span> dialog box whether a representation value or a representation gradual should be created. </p>
+
+<P class=emptylinehalf>&nbsp;</p>
+
+<p>A <b>representation value</b> shows boundary values in <i>values</i>. Advised for final maps, when you want to assign specific ranges of colors to specific ranges of <i>values</i>. <br>
+
+        To create your own representation value for system domain <span class=courier>Value</span>:</p>
+                
+                <ul>
+
+                <li>in the map's <span class=arial>Display Options</span> dialog box, click the <span class=arial>Create Representation</span> button, and </li> 
+
+                <li>in the subsequent <span class=arial><a href="../ilwismen/create_a_representation.htm">Create Representation</a></span> dialog box, CLEAR the <span class=arial>Use Percentages</span> check box.</li>
+
+                </ul>
+
+<p class=linespacing03before>A <b>representation gradual</b> shows boundary values in <i>percentages</i>. This may be fine for intermediate calculation results. All value maps can be displayed with a representation gradual; all system representations are representations gradual. <br>
+
+        To create your own representation gradual for system domain <span class=courier>Value</span>: </p>
+
+                <ul>
+
+                <li>in the map's <span class=arial>Display Options</span> dialog box, click the <span class=arial>Create Representation</span> button, and </li> 
+
+                <li>in the subsequent <span class=arial><a href="../ilwismen/create_a_representation.htm">Create Representation</a></span> dialog box, select the <span class=arial>Use Percentages</span> check box.</li>
+
+                </ul>
+
+<p class=defnewpar>However, when the values you are using refer to the same kind of values, with a specific meaning, are always in a certain range, and when these values should be represented by 'standard' colors, it is advised to create a <i>user-defined value domain</i>.</p>
+
+<p>Subsequently, you can create your own representation value for your value domain, and edit your own default colors in this representation value. Then you can use your value domain with your default colors for all maps for which it is applicable.</p>
+
+<p class=defnewpar>To convert a map (e.g. <span class=courier>Map1</span>) with system domain <span class=courier>Value</span> to another map (e.g.&nbsp;<span class=courier>Map2</span>) with a user-defined value domain:</p>
+
+<ul>
+
+<li>	Type a simple MapCalc formula on the command line of the Main window, like:</li>
+
+        <p class=calc1>Map2 = Map1 </p>
+
+<li class=ls01af>	In the <a href="../ilwismen/raster_map_definition.htm">Raster Map Definition</a> dialog box, check the minimum and maximum values as stated under <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >Value Range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >Precision</a> which would be used for the output map if you would accept the default system domain <span class=courier>Value</span> again;</li>
+
+<li class=ls01af>	However, instead of accepting system domain <span class=courier>Value</span> in the <span class=arial>Raster Map Definition</span> dialog box, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create domain button</a> in the <span class=arial>Raster Map Definition</span> dialog box to create a new value domain; </li>
+
+<li class=ls01af>	In the appearing <a href="../ilwismen/create_a_domain.htm">Create Domain</a> dialog box, type a new name for your new value domain and select the <img src="../images/option.gif" align=top width="12" height="12"> Value <a href="..//ilwis/popup/win_option_buttons_popup.htm" onClick="return popup(this, 'notes')" >option button</a>. 
+
+                <p class=linespacing01before>Also, type the minimum and maximum values for the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> of this domain this new value domain and type a value for the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a>. 
+
+                You can use the value range and precision as found in the <span class=arial>Raster Map Definition</span> dialog box; you may widen the value range and/or increase or decrease the precision. In any case, specify a value range and precision that fit the values in your map. </p>
+
+                <p class=linespacing01before>Then, click the OK button in the <span class=arial>Create Domain</span> dialog box.</p>
+                        </li>
+
+<li class=ls01af> The <span class=arial>Raster Map Definition</span> dialog box will be activated again. <br>
+
+                The newly created domain appears in the Domain list box and the value range and precision as set for the user-defined value domain are listed. If you like, you can adapt the value range and precision for this specific output map. <br>
+                        
+                Then, click the OK button in the <span class=arial>Raster Map Definition</span> dialog box. </li>
+
+</ul>
+
+<p class=defnewpar>To create a user-defined representation value for your map (<span class=courier>Map2</span>) with the user-defined value domain:</p>
+
+<ul>
+
+<li class=ls01af>	Display <span class=courier>Map2</span> and in the map's <span class=arial>Display Options</span> dialog box, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create representation button</a>. The <a href="../ilwismen/create_a_representation.htm">Create Representation</a> dialog box will appear: type a name and optionally a description for your new representation value. <br>
+        
+        Click the OK button in the <span class=arial>Create Representation</span> dialog box.</li>
+
+<li class=ls01af>	The <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value editor</a> will be opened and you can see that values of your domain are used for the limits, i.e. the boundary values. <br>
+        
+        Insert limits, choose or create colors for each limit, specify whether to stretch colors in between limits or use the color of the upper or lower limit, and in case of stretching colors, specify the number of stretch steps.</li>
+
+<li class=ls01af>	When finished, click the OK button in the <span class=arial>Display Options</span> dialog box. You do not have to close the Representation Value editor window.</li>
+
+<li class=ls01af>	You can continue to edit your representation value, in the Representation Value editor and redrawing <img src="../images/redraw.gif" align=bottom width="22" height="22"> the map in the map window.</li>
+
+<li class=ls01af>	When you already closed the Representation Value editor, you can open it again by selecting the <span class=arial>Representation</span> command from the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window. Edit the representation value and redraw the map.</li>
+
+<li class=ls01af>	When you want to create another representation value for the map, choose <span class=arial>Display Options</span> from the <a href="map_window_menu_commands.htm">Layers menu</a>. In the appearing <span class=arial>Display Options</span> dialog box of the map, click the create representation button.</li>
+
+</ul>
+
+<p class=kopje><a id="2">2. From domain <span class=courier>Image</span> to system domain <span class=courier>Byte</span> or to system domain <span class=courier>Value</span>:</a></p>
+
+<p>To convert a map with system domain <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>Image</span></a> (values 0-255, no undefs): 
+
+<ul>
+
+<li>to a map with <a href="..//ilwis/popup/yy_system_domain_byte_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Byte</span></a> (values 1-255, where value 0 means undefined) or </li>
+
+<li>to a map with <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a> (values 0-255 with the possibility of undefined values). </li>
+
+</ul>
+
+<p class=defnewpar>Use a very simple MapCalc statement; type on the command line something like: </p>
+
+<p class=calc1>mapval = mapimg</p>
+
+<p>where <span class=courier>mapimg</span> is the name of your image and <span class=courier>mapval</span> is the name of the output map.</p>
+
+<p class=defnewpar>In the <a href="../ilwismen/raster_map_definition.htm">Raster Map Definition</a> dialog box that follows directly after you typed the statement:
+
+        <ul>
+
+        <li>select <a href="..//ilwis/popup/yy_system_domain_byte_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Byte</span></a>, and accept the default minimum 1, default maximum 255, and default precision 1, or </li>
+
+        <li>select <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a>, and <i>specify</i> minimum 0, maximum 255, precision 1. </li>
+
+        </ul>
+
+<p class=kopje><a id="3">3. From a Class domain to an ID domain or vice versa:</a></p>
+
+<p>In some cases you may want to change from classes to IDs or vice versa. </p>
+
+<ul>
+
+<li>	In the Catalog, click a map with the right mouse button, and choose <span class=arial>Properties</span>. In the map's properties dialog box, check which domain the map is using.</li>
+
+<li>	In the Catalog, click the domain with the right mouse button, and choose <span class=arial>Properties</span>. </li>
+
+<li>	In the <a href="../ilwismen/domain_properties.htm">Domain Properties</a> dialog box, click the button <span class=arial>Convert to Classes</span> or the button <span class=arial>Convert to Identifiers</span>.</li>
+
+</ul>
+
+<p class=tip>Mind: </p>
+
+<p class=tiptext>When converting classes to IDs, you should keep in mind that an ID domain does not use a representation.</p>
+
+<p class=kopje><a id="4">4. From a Picture domain to a class domain:</a></p>
+
+<p>After import, you may find that a raster map has a Picture domain. The colors of the map seem OK but when you want to perform calculations with this map, it is strongly advised to first convert the domain of the map from a Picture domain to a Class domain. </p>
+
+<ul>
+
+<li>	In the Catalog, click the raster map with the right mouse button, and choose <span class=arial>Properties</span>. </li>
+
+<li>	In the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> dialog box, check which Picture domain the map is using.</li>
+
+<li>	In the Catalog, click the Picture domain with the right mouse button, and choose <span class=arial>Properties</span>. </li>
+
+<li>	In the <a href="../ilwismen/domain_properties.htm">Domain Properties</a> dialog box, click the button <span class=arial>Convert to Classes</span>.</li>
+
+</ul>
+
+<p class=defnewpar>The domain will contain as many classes as you had colors before. The classes will obtain default class names, like Class1, Class2, etc. In the <a href="..//ilwis/popup/domain_classid_editor_popup.htm" onClick="return popup(this, 'notes')" >domain Class/ID editor</a>, you can change these default class names. The colors of the Picture domain will now be available in the representation of the Class domain. </p>
+
+<p class=kopje><a id="5">5. From a Class or ID domain to another Class, or ID domain or to a value domain:</a></p>
+
+<p>In short, you have to add a column with the correct domain to an attribute table of the original map and then you have to create an attribute map of the original map.</p>
+
+<p class=defnewpar>When your original map does not have an attribute table yet:</p>
+
+<ul>
+
+<li>	In the Catalog, click a map with the right mouse button, and choose <span class=arial>Properties</span>. </li>
+
+<li>	In the map's <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box, select the Attribute Table check box, and click the create button.</li>
+
+<li>	A table will be created with the same domain as the map and the table will be displayed in a table window.</li>
+
+<li>	Proceed with the section below.</li>
+
+</ul>
+
+<p class=defnewpar>When your original map already has an attribute table:</p>
+
+<ul>
+
+<li>	Add a column to the table and select for this column the correct domain.</li>
+
+<li>	Fill the column with values, classes or IDs as you like: </li>
+
+        <ul>
+
+        <li>	the domain of the table (gray) shows the current class names or IDs in your map;</li>
+
+        <li>	the class names, IDs or values in your column represent the correct class names, IDs, or values that you want to assign to the map. </li>
+
+        </ul>
+
+<li>    In the Catalog, click the map with the right mouse button and choose <span class=arial>Raster Operations, Attribute Map</span> (when you are working on a raster map) or <span class=arial>Vector Operations, Attribute Map</span> (when you are working on a polygon, segment or point map).</li>
+
+<li>	In the appearing dialog box Attribute map of Raster/Polygon/Segment/Point map, </li>
+
+        <ul>
+
+        <li>	the name of the map is already filled out,</li>
+
+        <li>	the attribute table currently linked to this map is already filled out,</li>
+
+        <li>	select the attribute column in which you filled out the correct class names, IDs, or values</li>
+
+        <li>	fill out the rest of the dialog box, and click OK.</li>
+
+        </ul>
+
+        <p class=leftmargininlist>	The output map will by default use the same domain as the column you selected from the table.</p>
+
+</ul>
+
+<p>For more information, see the <a href="..//ilwisapp/popup/attribute_map_of_raster_map_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of raster map</a>, <a href="..//ilwisapp/popup/attribute_map_of_polygons_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of polygon map</a>, <a href="..//ilwisapp/popup/attribute_map_of_segments_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of segment map</a>, <a href="..//ilwisapp/popup/attribute_map_of_points_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of point map</a>. </p>
+
+<p class=kopje><a id="6">6. From a Class, ID, or Value domain to the <span class=courier>Color</span> domain:</a></p>
+
+<p>To convert a raster map with a Class, ID or Value domain to system domain Color, type on the command line of the Main window: </p>
+
+<p class=calc1>OUTMAP = MAPCOLOR(InputMap)</p>
+
+<p>To convert possible undefined values to color white, type subsequently on the command line of the Main window: </p>
+
+<p class=calc1>OUTMAP2 = IfUndef(InputMap, COLOR(255,255,255), OUTMAP)</p>
+
+<p>If you like, you can of course combine these formulae into one formula:</p>
+
+<p class=calc1>OUTMAPCOL = IfUndef(InputMap, COLOR(255,255,255), MapColor(InputMap))</p>
+
+<p class=defnewpar>For more information on the MAPCOLOR or the COLOR functions, refer to <a href="calc_aaf.htm#color_functions">Color functions</a>.</p>
+
+<p class=kopje><a id="7">7. From the <span class=courier>Color</span> domain to the <span class=courier>Image</span> domain:</a></p>
+
+<p>When you have two scanned colored images with overlap and when you wish to show these as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >anaglyph</a>, you first have to transform the <span class=courier>Color</span> maps to maps which use the <span class=courier>Image</span> domain. You can use the <a href="..//ilwisapp/popup/color_separation_popup.htm" onClick="return popup(this, 'notes')" >Color Separation</a> operation with the <span class=arial>Intensity</span> option to obtain maps with the <span class=courier>Image</span> domain. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>Start the <a href="../ilwisapp/color_separation_functionality.htm">Color Separation</a> operation, </li>
+
+<li>choose one of the colored images as input; </li>
+
+<li>choose the option <span class=arial>Intensity</span>; </li>
+
+<li>specify an output map name. </li>
+
+</ul>
+
+<p>The output raster map will be default use system domain <span class=courier>Image</span>. </p>
+
+<p class=defnewpar>Repeat these steps for the other scanned colored image. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>Instead of using the Color Separation operation, you can also use the <span class=courier>CLRINTENS</span> function in a Map calculation formula, as in: </p>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext><span class=calc1>OUTMAP = CLRINTENS(InputMap)</span></p>
+
+<p class=tipemptylinehalf>&nbsp;</p>
+
+<p class=tiptext>where the input map must use the <span class=courier>Color</span> domain. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representations</a></p>
+
+</body

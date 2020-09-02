@@ -1,0 +1,286 @@
+<html>
+
+<head>
+<title>Script editor : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Script editor, Editors">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Script editor</h1>
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class="defnewpar">The script editor allows you to <i>create</i>, <i>view</i>,
+<i>edit</i> and <i>test</i> <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a>. With
+a script, you can build your own GIS and Remote Sensing application.</p>
+
+<p class="kopje">To open the script editor:</p>
+<p>The script editor automatically opens when you create a new <a href="ilwis_objects_scripts.htm">script</a>. The
+script editor is also opened when you edit an existing script, e.g. by double-clicking a script in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>.
+For other methods to open the script editor, see <a href="how_to_edit_objects.htm">How to edit objects</a>.</p>
+
+<p class="kopje">Parts of the script editor:</p>
+<p>The script editor has a <a href="script_editor_menu_commands.htm">menu bar</a>, a description bar, a <a href="script_editor_toolbar.htm">toolbar</a>, a <a href="#script_tab"> script tab</a>, a <a href="#parameters_tab"> parameters tab</a>, a <a href="#default_values_tab">default values tab</a> and a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive
+menu</a>.</p>
+<p class="defnewpar">The description bar and the toolbar can be moved and <i>docked</i> 
+along an edge of the window. You can also make them floating. You can hide or show the description bar, the toolbar and the status bar via 
+commands on the <a href="script_editor_menu_commands.htm">View menu</a>. These settings as well as the size of the window etc. are stored per script in the registry. The script that is closed last thus determines the 
+appearance of any newly opened script.</p>
+<p class=emptyline>&nbsp;</p>
+<ul>
+<li>On the Script tab, you can type your script commands and
+expressions. Optionally, you can use parameters %1 until %9.
+<li>On the Parameters tab, you can assign names to parameters.
+Parameter names will be visible in the Run Script dialog box when you run the script.
+<li>On the Default Values tab, you can fill out default objects for your parameters so that you can test the
+  script and/or specify the objects that you wish to get as defaults in the 
+  <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box.
+</ul>
+
+<p class=defnewpar>To run a script: </p>
+<ul>
+<li>click the right mouse button on a script in a Catalog, 
+and choose <span class="arial">Run</span> from the 
+<a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, </li>
+<li>in the Script editor, press the 
+<img align="bottom" alt="Run Script" src="../images/run.gif" width="22" height="22"> 
+<span class="arial">Run Script</span> button, or 
+<li>when you copy your script to the ILWIS\Scripts directory, you can also
+double-click the script in the Operation-list or Operation-tree. </li>
+</ul>
+
+<p class="defnewpar">If a script contains parameters, the 
+<a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog
+box will appear. This dialog box lists: </p>
+<ul>
+<li>parameter names (as specified on the Parameters tab). <br />
+        For each input parameter you have to select an input object and for each output
+        parameter you have to type an output object name in the Run Script dialog box. </li>
+<li>default objects (as specified on the Default Values tab). <br />
+        Any specified default objects or default file names, default values or default strings are automatically filled out in the Run Script dialog box.</li>
+</ul>
+
+<h2><a name="script_tab">Script tab</a></h2>
+
+<p class="defnewpar">On the script tab you have to type your
+script expressions. Lines in a script may contain commands for object management (e.g. copy or delete),
+for the display of data objects (open or show), and for the creation and calculation of data objects. All MapCalc, and TabCalc formulas, and all ILWIS expressions to perform operations may be used.
+You can also call other scripts or other Windows applications from within a script. For more information on valid expressions, refer to
+<a href="appendices_ilwis_commands.htm">Appendices : ILWIS commands</a>, <a href="appendices_ilwis_expressions.htm"> Appendices : ILWIS expressions</a> or <a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>.<br>
+An example of a script to create slope maps in percentages and in degrees is presented in <a href="calc_creating_and_running_scripts.htm"> Map &amp; Table calculation : creating and running
+scripts</a> and in <a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a>. </p>
+
+<p class="kopje">Using parameters on the Script tab:</p>
+<p>You can directly type map and column names in
+expressions, but you can also use parameters. Parameters in a script replace (parts of) object names, operations, etc.
+Parameters in scripts work as DOS replaceable parameters in DOS batch files, and must be written
+on the Script Tab in the script editor as %1, %2, %3, up to %9. For more information,
+see below and/or <a href="how_to_use_parameters_in_scripts.htm">How
+to use parameters in scripts</a>.</p>
+
+<h2><a name="parameters_tab">Parameters tab</a></h2>
+<p>If you use parameters in your script, you are advised to specify names for the
+parameters on this Parameters tab. Parameter names will later on appear in
+the <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box when
+a user runs the script. The user can then select object
+names for input parameters and/or type object names for output parameters. When your script does not have any parameters
+you can skip this tab.</p>
+
+<p class=kopje>Parameters tab options:</p>
+<table border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="120" valign="top">Nr of parameters:</td>
+    <td>Select the number of parameters. Make sure that the number corresponds with the number of parameters defined in the script itself. The maximum number
+      of parameters that can be specified is 9.</td>
+  </tr>
+  <tr>
+    <td width="120" valign="top">Name:</td>
+    <td>Type a name for every parameter. It is advised to use names that clearly describe the meaning of
+      each parameter. The parameter names will appear on the Default Values tab and in the Run
+      Script dialog box.</td>
+  </tr>
+  <tr>
+    <td width="120" valign="top">Type:</td>
+    <td>Select a type for each parameter; parameter types are used when you run the script. You can choose between: <br />
+      Raster Map | Segment Map | Polygon Map | Point Map | Table | Column
+      | Map List | Map View | CoordSystem | GeoReference | Domain | Representation | Filter
+      | Script | Function | Matrix | Sample Set | 2-Dimensional Table | Annotation Text |
+      String | Value | Filename
+    </td>
+  </tr>
+  <tr>
+    <td width="120" valign="top">Include extension:</td>
+    <td>Select this check box if the extension of an ILWIS object should be sent to the ILWIS command line
+        when the script is executed. <br />
+        Clear this check box if the extension of an ILWIS object should <i>not</i> be sent to the ILWIS command line
+        when the script is executed. You can use this option when you wish to use suffixes behind object names etc. 
+    </td>
+  </tr>
+</table>
+
+<p class=defnewpar>When for a parameter type, you specify a regular ILWIS object (e.g. Raster map, Segment map, Table), 
+it means that the parameter expects an ILWIS input object of a certain type (a raster map, a segment map, a table, etc.).  
+In fact, in the Run Script dialog box which appears when the script is run, the user should select 
+an ILWIS object of the specified type and thus supply the script 
+with the necessary information to execute itself. </p>
+
+<p class=defnewpar>Special parameter types available on the Parameters tab:</p>
+<ul>
+<li>Parameter type Filename: for an output object, </li>
+<li>Parameter type Value: to use a certain value in the script, </li>
+<li>Parameter type String: to define a string in a column of a table, or to define a string
+in a Class/ID domain. </li>
+</ul>
+
+<h2><a name="default_values_tab">Default Values tab</a></h2>
+<p class="defnewpar">On the Default Values tab, you may fill out all variables / parameters as
+you would like to use them in the script. This tab is very useful when you want
+to test your script or when you directly want to run your script. The
+information on this tab is based on the
+information as specified on the Parameters tab. When your script does not have
+any parameters you can skip this tab.</p>
+
+<h2>Using the script editor</h2>
+
+<p class="kopje">To cut, copy, paste and delete selections within the script editor:</p>
+<p class="linespacing03before">You can cut, copy, paste and delete texts in the same way as in a text editor.</p>
+<ul>
+  <li>Use the <span class="arial">Cut</span>, <span class="arial">Copy</span>, <span class="arial">Paste</span>,
+    or <span class="arial">Delete</span> commands from the Edit menu,
+  <li>Use the <img border="0" src="../images/cut.gif" width="22" height="22"> <img border="0" src="../images/copy.gif" width="22" height="22"> <img border="0" src="../images/paste.gif" width="22" height="22">
+    buttons in the toolbar,
+  <li>Use the <span class="arial">Cut</span>, <span class="arial">Copy</span>, <span class="arial">Paste</span>, and <span class="arial">Delete</span> commands from the context-sensitive
+    menu, or
+  <li>Use the <span class="arial">Ctrl+X</span>, <span class="arial">Ctrl+C</span>, <span class="arial">Ctrl+V</span> or the
+    <span class="arial">Delete</span> key(s) on the keyboard.</li>
+</ul>
+
+<p class="kopje">To reverse the last action:</p>
+<ul>
+  <li>Open the Edit menu and select the <span class="arial">Undo </span>command, or
+  <li>Click the right-mouse button, and choose <span class="arial">Undo</span> from the context-sensitive menu.</li>
+</ul>
+
+<p class="kopje">To search for and/or replace certain characters or text:</p>
+You can search and replace texts in the same way as in a text editor.
+<ul>
+  <li>Use the <span class="arial">Find</span> or <span class="arial">Replace</span> commands from the Edit
+    menu, or
+  <li>Use the <img border="0" src="../images/find.gif" width="22" height="22"> <span class="arial">Find</span> button in the toolbar.</li>
+</ul>
+
+<p class="kopje">To save a script:</p>
+<ul>
+  <li>Open the File menu and select the <span class="arial">Save</span> command, or
+  <li>Click the <img border="0" src="../images/save.gif" width="22" height="22"> <span class="arial">Save</span> button in the toolbar.</li>
+</ul>
+<p class="linespacing03before">When you close the editor and the script contains any unsaved changes, you
+will be prompted to save the script.</p>
+
+<p class="kopje">To save a script with a different name and/or location:</p>
+<ul>
+  <li>Open the File menu and select the <span class="arial">Save As</span> command.</li>
+</ul>
+<p class="linespacing03before">The Save As dialog box appears in which you can specify a name and a location to save the script.</p>
+
+<p class="kopje">To run or test a script from within the script editor:</p>
+<ul>
+  <li>Open the File menu and select the <span class="arial">Run Script</span> command, or
+  <li>Click the <img border="0" src="../images/run.gif" width="22" height="22"> <span class="arial">Run Script</span> button in the toolbar.</li>
+</ul>
+<p class=emptylinehalf>&nbsp;</p>
+<ol>
+<li>If your script does not contain parameters, the
+script will immediately be executed.&nbsp;
+<li> If your script does contain parameters with names specified on the Parameters tab, first the <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box will
+appear. In the Run Script dialog box, all parameter names are listed as specified on the Parameters tab.</li>
+<li>If you did not specify default objects on the Default Values tab you will need to select objects for input
+parameters and/or type object names for output parameters.</li>
+<li>If you did fill out objects on the Default Values tab, the Run Script dialog
+  box will already be filled out with these defaults.</li>
+<li>When the OK button is clicked in the Run Script dialog box and when all parameters are correctly specified, the script will be executed.</li>
+</ol>
+
+<p class="defnewpar"> For more information about running scripts, e.g. to run a script from the command line, see <a href="how_to_run_scripts.htm">How to run scripts</a>.</p>
+
+<p class="kopje">To print a script or a selection of a script:</p>
+<ul>
+  <li>Open the File menu and select the <span class="arial">Print</span> command, or
+  <li>Click the <img border="0" src="../images/print.gif" width="22" height="22"> <span class="arial">Print</span> button in the
+    toolbar.</li>
+</ul>
+<p class="linespacing03before">The Print dialog box appears in which you can select your printing options, such as the name of the printer you want to use and the number of copies you want.</p>
+
+
+
+
+<p class="kopje">To select the whole script:</p>
+<ul>
+  <li>Open the Edit menu and choose the <span class="arial">Select All</span> command, or
+  <li>Click the right-mouse button, and choose <span class="arial">Select All</span> from the context-sensitive menu.</li>
+</ul>
+
+<p class="linespacing03before">You can now copy the script contents to the clipboard and paste it for
+instance in a document.</p>
+<p class="kopje">To open the script properties:</p>
+<ul>
+  <li>Open the File menu and select the <span class="arial"><a href="../ilwismen/script_properties.htm">Properties</a></span> command, or
+  <li>Click the <img border="0" src="../images/prop.gif" width="22" height="22"> <span class="arial">Properties</span> button in the toolbar.</li>
+</ul>
+
+<p class="linespacing03before">The <a href="../ilwismen/script_properties.htm">Script Properties</a> sheet will appear.</p>
+
+<p class="kopje">To open another script:</p>
+<ul>
+  <li>Open the File menu and select the <span class="arial">Open</span> command, or
+  <li>Click the <img border="0" src="../images/open.gif" width="22" height="22"> <span class="arial">Open</span> button in the toolbar.</li>
+</ul>
+<p class="linespacing03before">The Open dialog box appears in which you can select the script that you want to open.</p>
+
+
+<p class="kopje">To exit the script editor:</p>
+<ul>
+  <li>Open the File menu and select the <span class="arial">Exit</span> command, or
+  <li>Click the <span class="arial">Close</span> button.</li>
+</ul>
+
+<p class="linespacing03before">If the script contains any unsaved changes, you will be prompted to save the script.</p>
+
+<h2>Creating your own Help for a script</h2>
+
+<p class="linespacing03before">You can create your own Help for a script so that
+you can explain the meaning of parameters to other users of the script. For more
+information, see the <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box.</p>
+
+<p class="Seealso">See also:</p>
+<p class="seealsolinks"><a href="script_editor_toolbar.htm">Script editor : toolbar</a></p>
+<p class="seealsolinks"><a href="script_editor_menu_commands.htm">Script editor : menu commands</a></p>
+<p class="seealsolinks"><a href="../ilwismen/script_editor_run_script.htm">Run
+script (dialog box)</a></p>
+<p class="seealsolinks"><a href="ilwis_objects_scripts.htm">ILWIS objects : scripts</a></p>
+<p class="seealsolinks"><a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a></p>
+<p class="seealsolinks"><a href="appendices_ilwis_commands.htm">Appendices : ILWIS commands</a></p>
+<p class="seealsolinks"><a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a></p>
+<p class="seealsolinks"><a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a></p>
+<p class="seealsolinks"><a href="calc_creating_and_running_scripts.htm">Map &amp; Table calculation : creating and running scripts (example)</a></p>
+
+</body

@@ -1,0 +1,411 @@
+<html>
+
+<head>
+<title>How to use masks</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Mask, Use ..., How to use ..., Retrieve">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to use masks</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>By specifying a mask, you can search for points, segments or polygons with a certain class name, ID or value. A mask is in fact a simple query to find (retrieve), display or use only those points, segments or polygons in a map that have certain class names, identifiers or values. A mask contains one or more search strings in which wild cards, asterisks (<span class=courier>*</span>) and question marks (<span class=courier>?</span>), are allowed. You can enter as many search strings in a mask as you like; separate the strings by commas. </p>
+
+<p class=defnewpar>When you specify a mask in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a point, segment or polygon map, then only those points, segments or polygons in the map of which the class name, identifier or value matches one of the strings specified in the mask are displayed in a map window. </p>
+
+<p class=defnewpar>Further, in many <a href="../ilwisapp/vector_operations.htm">Vector Operations</a> a mask can be used to selectively copy or use points, segments or polygons with certain class names, identifiers or values from an input map into an output map. Only those points, segments or polygons of the input map of which the class name, identifier or value matches one of the strings listed in the mask are copied to the output map. </p>
+
+<p class=kopje>Mask syntax:</p>
+
+<ul>
+
+<li>	search strings in a mask are compared with the classes, IDs or values of the domain of a map; when a map uses a class or ID domain and the classes or IDs have codes, the mask works on the codes <i>and</i> on the names <i>and</i> on the combination of codes and names,</li>
+
+<li>	to find/retrieve one specific class name, identifier or value: type that class name, ID or identifier in the mask, </li>
+
+<li>	to find/retrieve multiple class names, identifiers or values: separate the different class names, identifiers or values in the mask by commas (it does not matter whether you use spaces before or after a comma),</li>
+
+<li>	you can use asterisks as wild cards to replace zero or more characters in class names, IDs or values, for example <span class=courier>road*,riv*</span> or  <span class=courier>1*,2*,3*</span> , or even <span class=courier>*25,*50,*75,*00</span>, or <span class=courier>A*b*,D*g*</span></li>
+
+<li>	you can use question marks as wild cards to replace single characters in class names, identifiers or values, for example <span class=courier>Ab?,D?,Gl?</span> or <span class=courier>?p,??i</span>, or <span class=courier>A*b??,D*g??</span></li>
+
+<li>	in a dialog box, you should not use quotes around class names, identifiers or values,</li>
+
+<li>	on the command line, you must use double quotes around the complete mask.</li>
+
+</ul>
+
+<p class=kopje>Example of using a mask on a map with a class domain:</p>
+
+<p>Consider the domain Landuse with its class codes as presented below. </p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=37>
+<p class=tcolh>Code</p>
+
+</td>
+<td valign="top">
+<p class=tcolh>Class Name</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=t1>Fb</p>
+
+</td>
+<td valign="top">
+<p class=t1>Secondary forest, shrubland, bushland</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=t1>Fp</p>
+
+</td>
+<td valign="top">
+<p class=t1>Primary forest</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=t1>G</p>
+
+</td>
+<td valign="top">
+<p class=t1>Grazing</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=t1>H</p>
+
+</td>
+<td valign="top">
+<p class=t1>Homestead gardens</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=t1>P</p>
+
+</td>
+<td valign="top">
+<p class=t1>Fish ponds</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=t1>Pi</p>
+
+</td>
+<td valign="top">
+<p class=t1>Paddy rice irrigated</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=t1>Pr</p>
+
+</td>
+<td valign="top">
+<p class=t1>Paddy rice rainfed</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=t1>Tu</p>
+
+</td>
+<td valign="top">
+<p class=t1>Tree crops and upland field crops</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=t1>U</p>
+
+</td>
+<td valign="top">
+<p class=t1>Upland field crops</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=t1>Ut</p>
+
+</td>
+<td valign="top">
+<p class=t1>Upland fields crops and tree crops</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=37>
+<p class=t1>W</p>
+
+</td>
+<td valign="top">
+<p class=t1>Waterbody</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=113>
+<p class=kopje>Mask:</p>
+
+</td>
+<td valign="top">
+<p class=kopje>Retrieves:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>Fp</p>
+
+</td>
+<td valign="top">
+<p>Fp</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>Grazing</p>
+
+</td>
+<td valign="top">
+<p>G</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>upland*</p>
+
+</td>
+<td valign="top">
+<p>U, Ut</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>*tree*</p>
+
+</td>
+<td valign="top">
+<p>Tu, Ut</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>?</p>
+
+</td>
+<td valign="top">
+<p>G, H, P, U, W</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>*forest*</p>
+
+</td>
+<td valign="top">
+<p>Fb, Fp</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>F?</p>
+
+</td>
+<td valign="top">
+<p>Fb, Fp</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>F*</p>
+
+</td>
+<td valign="top">
+<p>Fb, Fp, P</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>*rice*</p>
+
+</td>
+<td valign="top">
+<p>Pi, Pr</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>P?</p>
+
+</td>
+<td valign="top">
+<p>Pi, Pr</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>P, P?</p>
+
+</td>
+<td valign="top">
+<p>P, Pi, Pr</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>P*</p>
+
+</td>
+<td valign="top">
+<p>P, Pi, Pr, Fb</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>*u*</p>
+
+</td>
+<td valign="top">
+<p>Tu, U, Ut, Fb</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Example using a mask on a map with a value domain:</p>
+
+<p>Suppose you have a segment map with contour lines between 3000 and 4500m and the segment map has a precision of 1. </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=113>
+<p class=kopje>Mask:</p>
+
+</td>
+<td valign="top">
+<p class=kopje>Retrieves:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>3000</p>
+
+</td>
+<td valign="top">
+<p>contour lines with value 3000</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>3*,4000</p>
+
+</td>
+<td valign="top">
+<p>all contour lines between 3000 and 4000m</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>30*,31*</p>
+
+</td>
+<td valign="top">
+<p>all contour lines between 3000 and 3199m</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=113>
+<p class=courier>*00</p>
+
+</td>
+<td valign="top">
+<p>all contour lines ending on 00, thus 3000, 3100, 3200, etc.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If the segment map uses a precision of 0.01 and you want to retrieve segments with value 3000, you need to specify in the mask &quot;<span class=courier>3000.00</span>&quot;. Similarly, to retrieve all 100m contour lines, use a mask of &quot;<span class=courier>*00.00</span>&quot;.</p>
+
+<p class=kopje>Another example to display contour lines:</p>
+
+<p>Suppose you have a segment map with contour lines between 3000 and 4500m, at every 10m (precision of the map is 1). Goal: display the contour lines 3000, 3100, 3200, etc. in one color, and all contour lines with values like 3050, 3150, 3250, etc. in another color and all remaining contour lines in another color.		</p>
+
+<ol>
+
+<li>	Display the segment map; do not use a mask. <br>
+Specify one color and a line width of 1.</li>
+
+<li>	Add the same segment map to this map window; use as mask: <span class=courier>*00 </span><br>
+Choose a color for these segments and a line width.</li>
+
+<li>	Add the segment map again to this map window; use as mask: <span class=courier>*50 </span><br>
+Choose another color and another line width for these segments.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options dialog boxes</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/vector_operations.htm">Vector Operations</a></p>
+
+</body

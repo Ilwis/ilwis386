@@ -1,0 +1,107 @@
+<html>
+
+<head>
+<title>Main window : mouse functions</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Main window, Mouse functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Main window</h1>
+
+<h1 class=secondline>Mouse functions</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, and the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a> are very sensitive to clicking, double-clicking and <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag and drop</a> actions. Using the Catalog and Operation-tree or Operation-list capabilities is far more efficient than using menus.</p>
+
+<p class=kopje>Moving with the mouse over:</p>
+
+<ul>
+
+<li>	A command on a menu: the status bar displays information that helps explain the task of the highlighted menu command; Highlight a menu command by opening a menu and drag the mouse pointer along the commands on the menu. You can also use the <span class=arial>Up Arrow</span> and <span class=arial>Down Arrow</span> keys on the keyboard to move through the commands on a menu;</li>
+
+<li>	A button in the <a href="..//ilwis/popup/button_bar_popup.htm" onClick="return popup(this, 'notes')" >toolbar</a>: the status bar gives a short explanation of the function of the button;</li>
+
+<li>	An object in the Catalog: the status bar displays the description of the object;</li>
+
+<li>	An operation in the Operation-tree or Operation-list: the status bar gives a brief explanation on the operation.</li>
+
+</ul>
+
+<p class=kopje>Clicking:</p>
+
+<ul>
+
+<li>	A button in the toolbar: performs the action of the button.</li>
+
+</ul>
+
+<p class=kopje>Double-clicking:</p>
+
+<ul>
+
+<li>	A map, table and most other objects in the Catalog: the object is opened in a new window;</li>
+
+<li>	A filter in the Catalog: starts the Filter operation, the Filter dialog box is displayed;</li>
+
+<li>	A script in the Catalog: starts to run the script;</li>
+
+<li>	An operation in the Operation-tree or Operation-list: the operation's dialog box appears;</li>
+
+<li>	Another directory or drive in the Catalog, changes the current directory or drive;</li>
+
+</ul>
+
+<p class=kopje>Drag:</p>
+
+<ul>
+
+<li>	A raster, polygon, segment, or point map from the Catalog to an existing <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>: adds the map as an extra data layer to the map window. It is not possible to display two raster maps in one map window;</li>
+
+<li>	A raster, polygon, segment, or point map from the Catalog to an existing <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel information window</a>: adds the map to the pixel info window. When an attribute table is linked to the map, the attribute values also appear;</li>
+
+<li>	A data object from the Catalog to an operation in the Operation-tree or Operation-list: the dialog box of that operation appears with the data object specified as input for the operation;</li>
+
+<li>	An object from the Catalog to a <a href="..//ilwis/popup/win_drop_down_list_boxes.htm" onClick="return popup(this, 'notes')" >drop-down list box</a> in an opened dialog box of an operation: the object is put in the box.</li>
+
+</ul>
+
+<p class=kopje>Clicking the <span class=DefaultStyle><u><b>right</b></u></span> mouse button:</p>
+
+<ul>
+
+<li>	On an object in the Catalog: a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> appears from which you can select an operation that you want to perform with this object, or a command such as Open, Edit, Properties, Copy and Delete. You can also select Help from the context-sensitive menu to obtain short Help on the selected object type;</li>
+
+<li>	On an operation in the Operation-tree or Operation-list: a context-sensitive menu appears from which you can select Run to start the operation, or select Help to obtain short Help on the selected operation.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_drag_and_drop.htm">Basic concepts : drag and drop</a></p>
+
+<p class=seealsolinks><a href="how_to_use_the_catalog.htm">How to use the Catalog</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_use_the_operation_list.htm">How to use the Operation-tree and the Operation-list</a></p>
+
+<p class=seealsolinks><a href="how_to_use_the_status_line.htm">How to use the status bar</a></p>
+
+</body

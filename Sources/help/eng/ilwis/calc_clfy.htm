@@ -1,0 +1,379 @@
+<html>
+
+<head>
+<title>CLFY function</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="CLFY, Classify, Domain Group, Group domain">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>CLFY function</h1>
+
+<p class=defnewpar>Classifies a value map or a value column according to a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >Group domain</a>. </p>
+
+<p class="calctitlesyntax">Syntax</p>
+
+<p class=syntax>
+<span class=courier>CLFY</span>(<i>ValueMap</i>, <i>GroupDomain</i>)<br>
+<span class=courier>CLFY</span>(<i>ValueColumn</i>, <i>GroupDomain</i>)</p>
+
+<p class="calctitle">Input</p>
+<table cellspacing="0">
+  <tr>
+    <td width="100" valign="top"><i>ValueMap</i></td>
+    <td valign="top">is a value raster map</td>
+  </tr>
+  <tr>
+    <td width="100" valign="top">Domain type:</td>
+    <td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+  </tr>
+  <tr>
+    <td width="100" valign="top"><i>ValueColumn</i></td>
+    <td valign="top">is a value column</td>
+  </tr>
+  <tr>
+    <td width="100" valign="top">Domain type:</td>
+    <td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+  </tr>
+  <tr>
+    <td width="100" valign="top"><i>GroupDomain</i></td>
+    <td valign="top">is a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >Group domain</a>; it lists the upper boundary values of the groups, and the class names and group names for the output map or the output column. </td>
+  </tr>
+</table>
+
+<p class="calctitle">Output</p>
+<table cellspacing="0">
+  <tr>
+    <td width="280" valign="top"><span class=courier>CLFY</span>(<i>ValueMap</i>, <i>GroupDomain</i>) returns:</td>
+    <td valign="top">a map with classified values</td>
+  </tr>
+  <tr>
+    <td width="280" valign="top"><span class=courier>CLFY</span>(<i>ValueColumn</i>, <i>GroupDomain</i>) returns:</td>
+    <td valign="top">a column with classified values</td>
+  </tr>
+  <tr>
+    <td width="280" valign="top">Domain:</td>
+    <td valign="top">the group domain <i>GroupDomain</i></td>
+  </tr>
+</table>
+
+<p class="tip">Notes:</p>
+<ul class="tipul">
+	<li>Instead of using the <span class=courier>CLFY</span> function, you can also use the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation (for maps), or the <span class=arial><a href="../ilwismen/column_slicing.htm">Column Slicing</a></span> command on the <a href="../ilwis/table_window_menu_commands.htm">Columns menu</a> of a table window. This produces the same results. </li>
+	<li>A <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >group domain</a> should be created beforehand. For more information, see <a href="how_to_create_domain_group.htm">How to create a group domain</a>. </li>
+	<li>When the input value is undefined, the value is excluded from the calculation.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>The <span class=courier>CLFY</span> function and the Slicing operations permanently classify a map or column. </li>
+	<li>To interactively classify a map by means of a representation, see <a href="how_to_classify_a_map_or_column.htm">How to classify a map</a>.</li>
+	<li>To perform a multispectral image classification, use <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >Sample</a> and then the <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >Classify</a> operation.</li>
+	<li>Classified maps are less detailed than the original ones but they are often more easy to read because of the limited number of groups or classes.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map or column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>MapCalc example:</p>
+<p>Suppose, you have a raster map <span class=courier>SlopePct</span> with slope values ranging from 0 to 200%, which you wish to classify into the following relief classes: Flat (0-2%), Undulating (2-8%), Rolling (8-16%), Hilly (16-30%), Mountainous (&gt;30%) (FAO). </p>
+<p class=emptyline>&nbsp;</p>
+<ol>
+<li>Create a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >group domain</a>, for instance called <span class=courier>ReliefClass</span>,  where you specify the upper boundaries and the output Group names as:</li>
+<p class="emptylinehalf">&nbsp;&nbsp;&nbsp;</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" "><p class="tcolhr">Upper<br>
+    Boundary</p></td>
+    <td valign="top"><p class="tcolh"><br>
+    Group Name</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">2</p></td>
+    <td valign="top"><p class="t1">Flat</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">8</p></td>
+    <td valign="top"><p class="t1">Undulating</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">16</p></td>
+    <td valign="top"><p class="t1">Rolling</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">30</p></td>
+    <td valign="top"><p class="t1">Hilly</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">200</p></td>
+    <td valign="top"><p class="t1">Mountainous</p></td>
+  </tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+<li>To classify the values of map <span class="courier">SlopePct</span> according to group domain <span class="courier">ReliefClass</span>, and create an output map <span class=courier>Relief</span>;</li>
+<ul>
+<p class=emptylinehalf>&nbsp;</p>
+<li>Type on the command line of the Main window:<br>
+<p class="calc0">Relief = CLFY(SlopePct, ReliefClass)</p></li>
+<li>You can also use the <a href="../ilwisapp/slicing.htm">Slicing</a> operation; then select <span class="courier">SlopePct</span> for the input map name, and select <span class="courier">ReliefClass</span> for the Group domain name.</li>
+</ul>
+
+<p class="emptyline">&nbsp;&nbsp;&nbsp;</p>
+
+<li>The output map will contain the classified values: </li>
+
+<p class=emptyline></p>
+<table>
+<tr>
+	<td><p class=courier>SlopePct</p></td>
+	<td><p class=courier>Relief</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>6</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>20</td>
+    <td class=calcpict>40</td>
+  </tr>
+  <tr>
+    <td class=calcpict>4</td>
+    <td class=calcpict>12</td>
+    <td class=calcpict>20</td>
+    <td class=calcpict>25</td>
+  </tr>
+  <tr>
+    <td class=calcpict>3</td>
+    <td class=calcpict>7</td>
+    <td class=calcpict>12</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>5</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>U</td>
+    <td class=calcpict>R</td>
+    <td class=calcpict>H</td>
+    <td class=calcpict>M</td>
+  </tr>
+  <tr>
+    <td class=calcpict>U</td>
+    <td class=calcpict>R</td>
+    <td class=calcpict>H</td>
+    <td class=calcpict>H</td>
+  </tr>
+  <tr>
+    <td class=calcpict>U</td>
+    <td class=calcpict>U</td>
+    <td class=calcpict>R</td>
+    <td class=calcpict>R</td>
+  </tr>
+  <tr>
+    <td class=calcpict>F</td>
+    <td class=calcpict>U</td>
+    <td class=calcpict>U</td>
+    <td class=calcpict>U</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class=defnewpar>For ranges of values of input map <span class="courier">SlopePct</span>, containing slope values in percentages, relief class names are assigned in output map <span class="courier">Relief</span>. The ranges and class names are specified in group domain <span class="courier">ReliefClass</span>. In the output map, read for
+<span class=courier>F</span> Flat, for <span class=courier>U</span> Undulation, for <span class=courier>R</span> Rolling, for <span class=courier>H</span> Hilly and for <span class=courier>M</span> Mountainous.</p>
+</ol>
+
+<p class="kopje">TabCalc example: </p>
+
+<p>Suppose, you have a column <span class=courier>SoilDepth</span> with soil depths which you wish to classify into the following classes: 0-25 Very shallow, 25-50 Shallow, 50-100 Moderately Deep, 100-150 Deep, and &gt;150 Very deep (USDA Soil Classification System).</p>
+<p class="emptyline">&nbsp;</p>
+<ol>
+
+  <li>Create a domain Group, for instance called <span class="courier">DepthClass</span>, where you specify the upper boundaries and the output Group names as:</li>
+
+  <p class="emptyline">&nbsp;</p>
+
+  <table cellspacing="0">
+    <tr>
+      <td valign="top"><p class="tcolhr">Upper<br>
+      Boundary</p></td>
+      <td valign="top"><p class="tcolh"><br>
+      Group Name</p></td>
+    </tr>
+    <tr>
+      <td valign="top"><p class="t1r">25</p></td>
+      <td valign="top"><p class="t1">Very shallow</p></td>
+    </tr>
+    <tr>
+      <td valign="top"><p class="t1r">50</p></td>
+      <td valign="top"><p class="t1">Shallow</p></td>
+    </tr>
+    <tr>
+      <td valign="top"><p class="t1r">100</p></td>
+      <td valign="top"><p class="t1">Moderately deep</p></td>
+    </tr>
+    <tr>
+      <td valign="top"><p class="t1r">120</p></td>
+      <td valign="top"><p class="t1">Deep</p></td>
+    </tr>
+    <tr>
+      <td valign="top"><p class="t1r">400</p></td>
+      <td valign="top"><p class="t1">Very deep</p></td>
+    </tr>
+  </table>
+
+  <p class="emptyline">&nbsp;</p>
+
+  <li>To classify the values of column <span class=courier>SoilDepth</span> according to group domain <span class=courier>DepthClass</span>, and create output column <span class=courier>SoilDepthClass</span>:</li>
+
+        <ul>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <li>Type on the command line of the table window:
+
+        <p class="calc0">SoilDepthClass = CLFY(SoilDepth,DepthClass)</p></li>
+
+        <li>You can also choose <span class=arial><a href="../ilwismen/column_slicing.htm">Column Slicing</a></span> from the Columns menu in the table window; then select <span class=courier>SoilDepth</span> for the input column and select
+          <span class=courier>DepthClass</span> for the group domain. 
+
+</li>
+
+        </ul>
+
+  <p class="emptyline">&nbsp;</p>
+
+  <li>In the table, column <span class="courier">SoilDepthClass</span> is created and filled according to the Group domain.</li>
+
+  <p class="emptyline">&nbsp;</p>
+
+  <table cellspacing="0">
+    <tr>
+      <td valign="top">
+        <p class="tcolh">Sample</p>
+      </td>
+      <td valign="top">
+        <p class="tcolhr">SoilDepth</p>
+      </td>
+      <td valign="top">
+        <p class="tcolh">SoilDepthClass</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <p class="t1">1</p>
+      </td>
+      <td valign="top">
+        <p class="t1r">15</p>
+      </td>
+      <td valign="top">
+        <p class="t1">Very shallow</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <p class="t1">2</p>
+      </td>
+      <td valign="top">
+        <p class="t1r">45</p>
+      </td>
+      <td valign="top">
+        <p class="t1">Shallow</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <p class="t1">3</p>
+      </td>
+      <td valign="top">
+        <p class="t1r">95</p>
+      </td>
+      <td valign="top">
+        <p class="t1">Moderately deep</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <p class="t1">4</p>
+      </td>
+      <td valign="top">
+        <p class="t1r">20</p>
+      </td>
+      <td valign="top">
+        <p class="t1">Very shallow</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <p class="t1">5</p>
+      </td>
+      <td valign="top">
+        <p class="t1r">40</p>
+      </td>
+      <td valign="top">
+        <p class="t1">Shallow</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <p class="t1">6</p>
+      </td>
+      <td valign="top">
+        <p class="t1r">60</p>
+      </td>
+      <td valign="top">
+        <p class="t1">Moderately deep</p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top">
+        <p class="t1">7</p>
+      </td>
+      <td valign="top">
+        <p class="t1r">110</p>
+      </td>
+      <td valign="top">
+        <p class="t1">Deep</p>
+      </td>
+    </tr>
+  </table>
+
+</ol>
+
+<p class="Seealso">See also:</p>
+<p class="seealsolinks"><a href="how_to_create_domain_group.htm">How to create a domain Group</a></p>
+<p class="seealsolinks"><a href="how_to_classify_a_map_or_column.htm">How to classify a map or column</a></p>
+<p class=seealsolinks><a href="../ilwisapp/slicing.htm">Slicing</a> (operation for maps)</p>
+<p class=seealsolinks><a href="../ilwismen/column_slicing.htm">Column Slicing</a> (dialog box)</p>
+
+</body

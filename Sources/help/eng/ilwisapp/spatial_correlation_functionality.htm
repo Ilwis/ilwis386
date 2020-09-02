@@ -1,0 +1,486 @@
+<html>
+
+<head>
+<title>Spatial correlation : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Spatial correlation, Semi-variogram, Semi-variogram (experimental), Variogram">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Spatial correlation</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar><a href="point_statistics.htm">Point statistics</a> may help to get an impression of the nature of your point data, for instance prior to a <a href="point_interpolation.htm">point interpolation</a>, and to find necessary input parameters for <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a>, <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a> or <a href="..//ilwisapp/popup/universal_kriging_popup.htm" onClick="return popup(this, 'notes')" >Universal Kriging</a>. First, distance and optionally direction is calculated between all points of possible point pairs; these distances and directions are also known as the separation vectors. Subsequently, autocorrelation, autovariance and experimental semi-variogram values are calculated from the values of those point pairs which fall within the same user-specified lag, i.e. the same distance (and direction) class. </p>
+
+<p class=defnewpar>Spatial autocorrelation measures dependence among nearby values in a spatial distribution. Variables may be correlated because they are affected by similar processes, or phenomena, that extend over a larger region. Odland (1988, p.7) mentions that spatial autocorrelation 'exists whenever a variable exhibits a regular pattern over space in which values at a certain set of locations depend on values of the same variable at other locations'. For example, if the concentration of a certain pollutant is very high at a certain location, it will most likely also be high in the direct surroundings. In other words, the concentration is autocorrelated at small distances. At larger distances, it is less likely that the concentration will be equally high. The correlation will probably be lower, and the variance higher. </p>
+
+<p class=defnewpar>By plotting the answers on autocorrelation against the distance classes, you will be able to see until which distance spatial autocorrelation exists between point pairs. This value can be used for the <i>limiting distance</i> in point interpolations such as <a href="..//ilwisapp/popup/moving_average_popup.htm" onClick="return popup(this, 'notes')" >moving average</a> and <a href="..//ilwisapp/popup/moving_surface_popup.htm" onClick="return popup(this, 'notes')" >moving surface</a>. Furthermore, the user is encouraged to compare his or her data set with a data set consisting of the same point locations, with a set of attribute values, approximately in the same range as the measured variable, but created at random (using one of the RND functions in Table Calculation). If the graphs are very much the same for the measured data and the random data, no spatial autocorrelation exists between the data points. Hence, point interpolation is not useful. For more information, see <a href="#moran"><span class=bookmark>Interpretation of Moran's I and Geary's c</a></span> below. </p>
+
+<p class=defnewpar>Calculating semi-variograms is a basic geostatistical measure to determine the rate of change of a regionalized variable along a specific orientation (usually distances). Semi-variogram values are defined as the sum of the squared differences between pairs of points separated by a certain distance divided by two times the number of points in a distance class. By plotting experimental semi-variogram values against distance classes in a graph, you obtain a semi-variogram. By finding a model or function which fits these experimental semi-variogram values, you can obtain necessary input information (such as model type, sill, range, and nugget) for a Simple or Ordinary <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a>, an <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a> or a <a href="..//ilwisapp/popup/universal_kriging_popup.htm" onClick="return popup(this, 'notes')" >Universal Kriging</a> operation later on. For more information, see the <a href="#semivar"><span class=bookmark>Additional info on semi-variograms</a></span> below.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When you suspect <i>anisotropy</i> in your input data, you can first perform the <a href="..//ilwisapp/popup/variogram_surface_popup.htm" onClick="return popup(this, 'notes')" >Variogram Surface</a> operation. The output of this operation will show you the direction of the anisotropy. You can then do Spatial Correlation using the bi-directional method.</p>
+
+<p class=kopje>General process of this operation (omni directional):</p>
+
+<ol>
+
+<li>	First, the <i>distances between all points</i> are calculated. </li>
+
+<li>	Then, <i>distance classes</i> are determined (output column <span class=courier>Distance</span>). This is usually done according to the user-specified <i>lag spacing</i>: in the output table, records will appear for each multiple of the user-specified lag spacing. When specifying a lag spacing of 500 m., the values in the <span class=courier>Distance</span> column in the output table will be 0, 500, 1000, 1500, etc. <br> 
+
+	However, these values in the output column <span class=courier>Distance</span> represent the <i>middle value</i> of a distance class, thus for lag spacing 500, distance 500 represents the distance interval of 250-750m, distance 1000 represents the distance interval of 750-1250m, etc. <br>
+	
+	When a variable was sampled at regular distances, you can use this distance for the lag spacing.</li>
+
+<li>	Subsequently, for each distance class, the <i>number of point pairs</i> is counted of which the points have such a distance towards each other. <br>
+	
+	Thus, when the user-specified lag spacing is 500 m.:</li>
+
+        <ul>
+
+        <li>	the first record in the output table has value 0 in column <span class=courier>Distance</span>; this first distance class is only half a distance class: it contains all point pairs of which the distance of the points towards each other is 0-250&nbsp;m.; </li>
+
+        <li>	the second record in the output table has value 500 in column <span class=courier>Distance</span>; this distance class contains all point pairs of which the distance of the points towards each other is between 250-750&nbsp;m.; </li>
+
+        <li>	the third record in the output table has value 1000 in column <span class=courier>Distance</span>; this distance class contains all point pairs of which the distance of the points towards each other is between 750-1250&nbsp;m. etc.; </li>
+
+        </ul>
+
+        <p class=leftmargininlist>	On the command line, you can also use a certain expression to obtain log-scaled distance classes.</p>
+
+<li>	Then, for all the point pairs within a certain distance class, the following statistical values are calculated:</li>
+
+        <ul>
+
+        <li>spatial autocorrelation (as Moran's I)</li>
+
+        <li>spatial variance (as Geary's c)</li>
+        
+        <li>semi-variogram values.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>	The formula to calculate experimental semi-variogram values reads:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargin06><img src="../images/gamest.gif" align=bottom width="6" height="15"><span class=symbol> = </span><span class=symbollarger>S</span><span class=symbol> (</span>z<sub>i</sub><span class=symbol> - </span>z<sub>i+h</sub><span class=symbol>)</span><sup>2</sup> / 2n</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=94>
+<p><img src="../images/gamest.gif" align=bottom width="6" height="15"></p>
+
+</td>
+<td valign="top">
+<p>experimental semi-variogram value of points that have a certain distance (h) towards each other</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=94>
+<p>z<sub>i</sub></p>
+
+</td>
+<td valign="top">
+<p>the value of point i</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=94>
+<p>z<sub>i+h</sub></p>
+
+</td>
+<td valign="top">
+<p>the value of a point at distance h from point i</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=94>
+<p><span class=symbollarger>S</span><span class=symbol> (</span>z<sub>i</sub><span class=symbol> - </span>z<sub>i+h</sub><span class=symbol>)</span><sup>2</sup></p>
+
+</td>
+<td valign="top">
+<p>the sum of the squared differences between point values of all point pairs within a certain distance class</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=94>
+<p>n</p>
+
+</td>
+<td valign="top">
+<p>the number of point pairs within a distance class</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>For more information on formulas, see <a href="spatial_correlation_algorithm.htm">Spatial correlation : algorithm</a>.</p>
+
+</ol>
+
+<p class=kopje>Methods:</p>
+
+<p>In the dialog box, you can choose to use either the <i>omni directional</i> or the
+<i>bi-directional</i> method:</p>
+
+<ul>
+
+<li>	The <i>omni directional</i> method simply determines all distances between all point pairs, regardless of any direction, i.e. in all directions. Thus, all point pairs that have a certain distance towards each other will be counted in a certain distance class. <br>
+	
+		Then, Moran's I, Geary's c, and experimental semi-variogram values are calculated for all point pairs within each distance class.</li>
+
+<li>	The <i>bi-directional</i> method first counts, just like the omni directional method, all pairs of points that have a certain distance to each other, and then calculates the Moran's I and Geary's c for these point pairs within each distance class. Furthermore, all point pairs are counted with a certain distance to each other and with a certain <i>direction</i> towards each other. For the point pairs in a certain distance class and in the correct direction, experimental semi-variogram values will be calculated. Then, also, for the direction perpendicular to the specified direction, point pairs are counted and experimental semi-variogram values calculated.</li>
+
+</ul>
+
+<p>Both for the omni directional or the bi-directional method, linear distance intervals are created where the middle values of these distance classes are multiples of the user-specified lag spacing.</p>
+
+<p class=defnewpar>To calculate experimental semi-variogram values <i>in a certain direction</i>, you thus have to use the bi-directional method. The parameters for the bi-directional method are schematically presented in Figure 1.</p>
+
+<ul>
+
+<li>	The direction angle is measured clockwise from the Y-axis and defines the direction in which points should be located relative to each other. When you use a direction angle of 90°, it means that only point pairs for which the points are located in West-East or in East-West direction will be considered (i.e. +90° clockwise from the Y-axis). <br>
+
+        When choosing the bi-directional method, semi-variogram values will always be calculated for the point pairs in the specified direction and the perpendicular direction. </li>
+
+<li>	The tolerance angle is a parameter with which you can limit the number of point pairs. <br>
+
+        When a tolerance of 45° is used, all point pairs in the map will contribute to calculated semi-variogram values. <br>
+
+        When using a tolerance of 10°, the direction of every 2 points may differ -10° or +10° from the specified direction (90°). So, in fact, all points that are found in a position within 80° to 100° to one another are valid pairs. Then, for the valid point pairs, the distance class to which they belong will be determined. </li>
+
+<li>	Optionally, you can specify a third parameter, the band width (m), to limit the tolerance angle to a certain width. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+<p><img src="../images/spbidir3.gif" align=bottom width="308" height="224"></p>
+
+<p class=captionfig>Fig. 1:	Schematic explanation of the bi-directional method when experimental semi-variogram values are calculated for the specified direction as well as for the perpendicular direction. The user has to specify a Direction (blue angle) and a Tolerance (red angle), and optionally, also a Band width (green distance in meters) can be specified. These parameters are used to find valid point pairs. When an input point is located at the origin of this picture, it is calculated whether any other input point is within the specified direction, tolerance angle and band width. If this is the case, the 2 points are a valid point pair; otherwise the pair is ignored. For each valid point pair, the distance between the 2 points is calculated, and the point pair is counted in the appropriate distance class. </p>
+
+<p>Finally, from the command line, you can even use another method by which <i>logarithmic distance intervals</i> are used. The lag spacing increases with the distance.</p>
+
+<p class=kopje>Spherical distance:</p>
+
+<p>Optionally, when using the 'omni directional' method, you can choose to calculate with <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distances</a>, i.e. distances calculated over the sphere using the <i>projection</i> that is specified in the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> used by the input point map. It is advised to use this spherical distance option for maps that comprise large areas (countries or regions) and for maps that use LatLon coordinates. In more general terms, spherical distance should be used when there are 'large' scale differences within a map as a consequence of projecting the globe-shaped earth surface onto a plane. </p>
+
+<p>When the spherical distance option is not used, distances will be calculated in a plane as Euclidean distances. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>When you used the spherical distance option in the Spatial Correlation operation, you should also use the spherical distance option in a subsequent <a href="..//ilwisapp/popup/point_interpolation_popup.htm" onClick="return popup(this, 'notes')" >point interpolation</a> operation, or in a subsequent <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging operation</a>.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input point map should either be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a> itself, or a Class or ID point map which has a linked attribute table with one or more value columns.</p>
+
+<p class=kopje>Output table:</p>
+
+<p>An output table with domain <span class=courier>None</span> is created. </p>
+
+<p class=defnewpar>When you use the option <i>Omni directional</i>, the output table will contain 6 columns:</p>
+
+<ul>
+
+<li>	Column <span class=courier>Distance</span> lists the middle values of the distance intervals;</li>
+
+<li>	Column <span class=courier>NrPairs</span> lists for each distance interval, the number of point pairs found at these distances towards each other;</li>
+
+<li>	Column <span class=courier>I</span> lists for each distance interval, the spatial autocorrelation of the point pairs in this distance interval;</li>
+
+<li>	Column <span class=courier>c</span> lists for each distance interval, a statistic for spatial variance of the point pairs in this distance interval;</li>
+
+<li>	Column <span class=courier>AvgLag</span> lists for each distance interval, the average distance between points of point pairs in this distance interval;</li>
+
+<li>	Column <span class=courier>Semivar</span> lists for each distance interval, the experimental semi-variogram value of the point pairs in this distance interval.</li>
+
+</ul>
+
+<p class=defnewpar>When you use the option <i>Bi-directional</i>, the output table will contain 10 columns:</p>
+
+<ul>
+
+<li>	Column <span class=courier>Distance</span> lists the middle values of the distance intervals;</li>
+
+<li>	Column <span class=courier>NrPairs</span> lists for each distance interval, the number of point pairs found at these distances towards each other;</li>
+
+<li>	Column <span class=courier>I</span> lists for each distance interval, the spatial autocorrelation of the point pairs in this distance interval;</li>
+
+<li>	Column <span class=courier>c</span> lists for each distance interval, a statistic for spatial variance of the point pairs in this distance interval;</li>
+
+<li>	Column <span class=courier>AvgLag1</span> lists for each distance interval, the average distance between points of point pairs in this distance interval;</li>
+
+<li>	Column <span class=courier>NrPairs1</span> lists for each distance interval, the number of point pairs found in the user-specified direction and at these distances towards each other;</li>
+
+<li>	Column <span class=courier>Semivar1</span> lists for each distance interval, the experimental semi-variogram value of the point pairs found in the user-specified direction and at these distances towards each other;</li>
+
+<li>	Column <span class=courier>AvgLag2</span> lists for each distance interval, the average distance between points of point pairs in this distance interval;</li>
+
+<li>	Column <span class=courier>NrPairs2</span> lists for each distance interval, the number of point pairs found perpendicular to the user-specified direction and at these distances towards each other;</li>
+
+<li>	Column <span class=courier>Semivar2</span> lists for each distance interval, the experimental semi-variogram value of the point pairs found perpendicular to the user-specified direction and at these distances towards each other. </li>
+
+</ul>
+
+<p class=tip>Mind: </p>
+
+<p class=tiptext>When in an distance interval <i>no</i> point pairs are found, then the values in columns <span class=courier>I</span>, <span class=courier>c</span>, <span class=courier>AvgLag</span> and <span class=courier>SemiVar</span> will be undefined for these distance intervals.</p>
+
+<h2><a name="semivar">Additional information: Semi-variograms</a></h2>
+
+<p>From the results of the Spatial correlation operation, you can make a semi-variogram. In the semi-variogram, the discrete experimental semi-variogram values <img src="../images/gamest.gif" align=bottom width="6" height="15"> that are the outcome of Spatial correlation will be modeled by a continuous function so that a semi-variogram value <span class=symbol>g</span> will be available for any desired distance <i>h</i> (and optionally direction) for a Simple or Ordinary <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a>, an <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a> or a <a href="..//ilwisapp/popup/universal_kriging_popup.htm" onClick="return popup(this, 'notes')" >Universal Kriging</a> operation later on. </p>
+
+<p class=kopje>How to display a semi-variogram:</p>
+
+<p>Display the <i>input</i> table of the Spatial correlation operation or a histogram of an input value map in a table window.</p>
+
+<ul>
+
+<li>	Determine the variance (<span class=symbol>s</span><sup>2</sup>) of your input variable. The variance of a column can be calculated by using an expression like <span class=courier>OUT = var(</span><i>columnname</i><span class=courier>)</span></li>
+
+</ul>
+
+<p class=defnewpar>Display the <i>output</i> table of the Spatial correlation operation in a table window. Inspect the following columns in the output table:</p>
+
+<ul>
+
+<li>	columns <span class=courier>Distance</span>, and <span class=courier>AvgLag</span>/<span class=courier>AvgLag1</span>/<span class=courier>AvgLag2</span>: usually not more than <i>half</i> of the total sampled distance should be taken into account; the larger the distance between the point pairs, the less point pairs, and the less reliable the outcome;</li>
+
+<li>	columns <span class=courier>NrPairs</span>/<span class=courier>NrPairs1</span>/<span class=courier>NrPairs2</span>: for reliable semi-variogram values, distance classes should at least contain 30 point pairs.</li>
+
+</ul>
+
+<p class=defnewpar>Create point graphs, i.e. experimental semi-variogram(s), from the Distance and SemiVar columns in the output table of Spatial Correlation.</p>
+
+<ul>
+
+<li>	From the <a href="../ilwis/table_window_menu_commands.htm">File menu</a> in the table window, choose the <span class=arial>Create Graph</span> command.</li>
+
+<li>	In the <a href="../ilwismen/create_a_graph.htm">Create Graph</a> dialog box, when you used the omni directional method: </li>
+
+        <ul>
+
+        <li>	choose for the X-axis, the <span class=courier>Distance</span> column or the <span class=courier>AvgLag</span> column;</li>
+
+        <li>	choose for the Y-axis, the <span class=courier>SemiVar</span> column.</li>
+
+        </ul>
+
+        <p class=leftmargininlist>	When you used the bi-directional method, you can draw two graphs (e.g. in two graph windows): </p>
+
+        <ul>
+
+        <li>	<span class=courier>Distance</span> or <span class=courier>AvgLag1</span> against <span class=courier>SemiVar1</span> (semi-variogram values in the specified direction), and</li>
+
+        <li>	<span class=courier>Distance</span> or <span class=courier>AvgLag2</span> against <span class=courier>SemiVar2</span> (semi-variogram values in the perpendicular direction).</li>
+
+        </ul>
+
+<li>	The experimental semi-variogram values will automatically be displayed as point graphs. </li>
+
+<li>	You may wish to adapt the boundaries of the X-axis from 0 to more or less <i>half</i> of the total distance between the samples, and the Y-axis from 0 to more or less the expected variance (<span class=symbol>s</span><sup>2</sup>) of your input sample values.</li>
+
+</ul>
+
+<p>In literature, the shown graph is called a discrete experimental semi-variogram. </p>
+
+<p class=defnewpar>Figure 2 below shows a semi-variogram depicting a spherical model:</p>
+
+<ul>
+
+<li>	When the distance between sample points is 0, the differences between sampled values is also expected to be 0. Thus, the semi-variogram value at distance 0 equals 0, i.e. <span class=symbol>g</span>(0)=0. </li>
+
+<li>	Samples that are at a very small distance to each other are expected to have almost the same values; thus, the squared differences between sample values are expected to be small positive values at small distances.</li>
+
+<li>	With increasing distance between point pairs, the expected squared differences between point values will also increase.</li>
+
+<li>	At some distance the points that are compared are so far apart that they are not any more related to each other, i.e. the sample values will become independent of one another. Then, the squared differences of the point values will become equal in magnitude to the variance of the variable. The semi-variogram no longer increases and the semi-variogram develops a flat region, called the <i>sill</i>. The distance at which the semi-variogram approaches the variance is referred to as the <i>range</i> or the span of the variable. </li>
+
+</ul>
+
+<p><img src="../images/smvar3.gif" align=bottom width="320" height="161"></p>
+
+<p class=captionfig>Fig. 2:	A semi-variogram depicting a spherical model.</p>
+
+<p class=linespacing01before>Remarks on semi-variograms:</p>
+
+<ul>
+
+<li>	A semi-variogram with a <i>nugget</i> effect is a semi-variogram that goes from 0 to the level of the nugget effect in a distance less than the sampling distance. The semi-variogram model shows the semi-variogram value 0 at distance 0 and a discontinuity (jump) to a semi-variogram value at an extremely small distance. A nugget effect indicates that the variable is erratic over very short distances, the variable is highly variable over distances less than the specified lag spacing or the sampling interval. </li>
+
+<li>	For semi-variograms which, after a flat sill level, show an ongoing increase in semi-variogram values, probably a trend has to be taken into account for the longer distances. However, the experimental semi-variogram values for the distances up to the sill, are probably accurate enough to be used in a model.</li>
+
+<li>	Possible dips in the semi-variogram indicate that at certain distances between points there is less difference between the samples than at other distances; this might indicate periodic trends.</li>
+
+</ul>
+
+<p class=defnewpar>The next step, before <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a>, is to model the discrete values of your experimental semi-variogram by a continuous function which will give an expected value for any desired distance.</p>
+
+<ul>
+
+<li>	From the <a href="../ilwis/graph_window_menu_commands.htm">Edit menu</a> in the graph window, choose the <span class=arial>Add Graph Semi-variogram Model</span> command. </li>
+
+<li>	In the <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Add Graph Semi-variogram Model</a> dialog box, you can choose a type of <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >semi-variogram model</a> (spherical, exponential, etc.), and you can fill out values for the sill, range and nugget. A line will then be drawn according to the model you selected and the values you selected for sill, range and nugget. </li>
+
+<li>	You are advised to visually experiment a little with models and sill, range, and nugget values to find the best line through your experimental semi-variogram values. You can edit a semi-variogram model by double-clicking it in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane. For more information, refer to the <a href="../ilwismen/graph_window_options_semivariogram_model.htm">Graph Options - Semi-variogram Model</a> dialog box. </li>
+
+<li>	When finished, you can save the graph by choosing the <span class=arial><a href="../ilwismen/graph_window_save_graph.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/graph_window_save_graph_as.htm">Save As</a></span> commands from the <a href="../ilwis/graph_window_menu_commands.htm">File menu</a> of the graph window. </li>
+
+</ul>
+
+<p class=defnewpar>To find which semi-variogram model fits your experimental semi-variogram values best, you can also use the <a href="../ilwismen/column_semivariogram.htm">Column SemiVariogram</a> operation. This operation calculates semi-variogram values according to a user-specified semi-variogram model and parameters and stores calculated semi-variogram values in an output column.</p>
+
+<p class=defnewpar>Once you have decided which semi-variogram model, and which values for sill, range and nugget fit your data best, you can continue with the Simple or Ordinary <a href="kriging.htm">Kriging</a> operation, the <a href="anisotropic_kriging.htm">Anisotropic Kriging</a> operation or the <a href="universal_kriging.htm">Universal Kriging</a> operation. </p>
+
+<h2><a name="moran">Interpretation of Moran's I and Geary's c</a></h2>
+
+<p>For all point pairs in a distance/direction class, you obtain a value for Moran's I and Geary's c; the formulae for these statistic measures can be found in topic <a href="spatial_correlation_algorithm.htm">Spatial correlation : algorithm</a>. Geary's c compares the squared differences of point pair values to the mean of all values. Moran's I relates the product of differences of point pair values to the overall difference.</p>
+
+<p class=defnewpar>The general interpretation of both statistics can be summarized as:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p>0 &lt; C &lt; 1</p>
+
+</td>
+<td valign="top" width=204>
+<p>Strong positive autocorrelation</p>
+
+</td>
+<td valign="top">
+<p>I &gt; 0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>C &gt; 1</p>
+
+</td>
+<td valign="top" width=204>
+<p>Strong negative autocorrelation</p>
+
+</td>
+<td valign="top">
+<p>I &lt; 0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>C = 1</p>
+
+</td>
+<td valign="top" width=204>
+<p>Random distribution of values</p>
+
+</td>
+<td valign="top">
+<p>I = 0</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Geary's c multiplied by the variance of the input equals the semi-variogram values.</p>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>	Berry, J. K. Beyond Mapping: extending spatial dependency to maps. In: Geoworld, 1999, vol. 12, no. 1, pp. 26-27.</li>
+
+<li>	Clark, I. 1979. Practical geostatistics. Applied Science Publishers, London. 129 pp.</li>
+
+<li>	Davis, J. C. 1973. Statistics and data analysis in geology. Wiley, New York. 646 pp.</li>
+
+<li>	Isaaks, E. H., and R. M. Srivastava. 1989. An introduction to applied geostatistics. Oxford University Press, New York. 561 pp.</li>
+
+<li>	Odland, J. 1988. Spatial autocorrelation. In: G.I. Thrall (Ed.), Sage University Scientific Geography Series no. 9. Sage Publications, Beverly Hills. 87 pp.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="point_statistics.htm">Point statistics</a></p>
+
+<p class=seealsolinks><a href="variogram_surface_functionality.htm">Variogram surface : functionality</a></p>
+
+<p class=seealsolinks><a href="spatial_correlation_dialogbox.htm">Spatial correlation : dialog box</a></p>
+
+<p class=seealsolinks><a href="spatial_correlation_commandline.htm">Spatial correlation : command line</a></p>
+
+<p class=seealsolinks><a href="spatial_correlation_algorithm.htm">Spatial correlation : algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/graph_window_options_semivariogram_model.htm">Graph options - Semi-variogram Model</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="point_interpolation.htm">Point interpolation</a></p>
+
+<p class=seealsolinks><a href="kriging_functionality.htm">Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="anisotropic_kriging_functionality.htm">Anisotropic Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="universal_kriging_functionality.htm">Universal Kriging : functionality</a></p>
+
+</body

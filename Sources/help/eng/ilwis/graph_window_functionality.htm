@@ -1,0 +1,314 @@
+<html>
+
+<head>
+<title>Graph window : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Graph window, Graphs">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Graph window</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In a graph window, you can show the following types of graphs: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li><b>Graphs from Columns</b>, i.e. distinct values available in columns of a table; the graph can be shown in a number of manners: </p>
+
+        <ul>
+
+        <li>as points: this is also known as a scatter gram, </li>
+
+        <li>as bars: this is also known as a bar chart, </li>
+
+        <li>as a line: connecting the successive distinct Y-values by the shortest possible line, </li>
+
+        <li>as needles: vertical lines from the X-axis to each distinct Y-value, </li>
+
+        <li>as steps: connecting successive distinct Y-values by a horizontal + vertical line, </li>
+
+        </ul>
+
+<li><b>Graphs from Formula</b>, i.e. a continuous line showing a Y-value for every X-value according to a completely user-defined function, </li>
+
+<li><b>Least Squares Fit</b>, i.e. a continuous line displaying the best fit through distinct points according using a certain user-selected function while coefficients are calculated by the program, </li>
+
+<li><b>Semi-variogram Models</b>, to find the best line through experimental semi-variogram values (distance values <i>h</i> against semi-variogram values <span class=symbol>g</span>), </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>You can display multiple graph types listed above in one graph window. </p>
+
+<p class=defnewpar>Furthermore, <b>Rose diagrams</b> can be created, to plot directions against a Y-value. </p>
+
+<p class=defnewpar>A graph window consists of a viewer which displays your graph, a <a href="graph_window_graph_management.htm">Graph Management</a> pane, <a href="graph_window_menu_commands.htm">menu bar</a>, a <a href="graph_window_toolbar.htm">toolbar</a> and a <a href="status_line.htm">status bar</a>. Furthermore, a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> is available within the Graph Management pane. </p> 
+
+<p class=defnewpar>For examples of different graphs, see <a href="graph_window_examples_of_graphs.htm">Graph window : examples of graphs</a>. </p>
+
+<p class=kopje>To create a new graph:</p>
+
+<p>To obtain a graph window containing a new graph: </p>
+
+<ul>
+
+<li>open the table which contains the column(s) from which you wish to create a graph, </li>
+
+<li>choose <span class=arial>Create Graph</span> or <span class=arial>Create Rose Diagram</span> from the <a href="table_window_menu_commands.htm">File menu</a> in the table window. </li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="../ilwismen/create_a_graph.htm">Create Graph</a> dialog box or the <a href="../ilwismen/create_a_rose_diagram.htm">Create Rose Diagram</a> dialog box will be opened. After you selected the column(s), a new graph window will be opened. </p>
+
+<p class=defnewpar>To create a graph, you can also: </p>
+
+<ul>
+
+<li>click the <span class=arial>Graph</span> button <img src="../images/table_graph.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/table_window_toolbar.htm">toolbar of a table window</a>, </li>
+
+<li>use the <span class=arial>New Graph</span> command in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or </li>
+
+<li>click a table with the right mouse button in a Catalog, and choose the <span class=arial>Create Graph</span> or the <span class=arial>Create Rose Diagram</span> command from the context-sensitive menu. </li>
+
+</ul>
+
+<p class=kopje>To add graph layers to the graph window:</p>
+
+<p>To add more graph layers to the graph window, use the <span class=arial>Add Graph</span> command on the <a href="graph_window_menu_commands.htm">Edit menu</a> of the graph window, and choose the type of graph you wish to add to the graph window. You can also click the (arrow next to the) <span class=arial>Add Graph</span> <img src="../images/add_graph_layer.gif" align=bottom width="36" height="22"> button in the <a href="graph_window_toolbar.htm">toolbar of the graph window</a>. </p>
+
+<p class=defnewpar>Depending on whether you choose to add another graph from columns, a graph from formula, a least squares fit, or a semi-variogram model: </p>
+
+<ul>
+
+<li>the <a href="../ilwismen/graph_window_add_graph_from_columns.htm">Add Graph from Columns</a> dialog box will appear, </li>
+
+<li>the <a href="../ilwismen/graph_window_add_graph_from_formula.htm">Add Graph from Formula</a> dialog box will appear, </li>
+
+<li>the <a href="../ilwismen/graph_window_add_graph_least_squares_fit.htm">Add Graph Least Squares Fit</a> dialog box will appear, </li>
+
+<li>the <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Add Semi-variogram Model</a> dialog box will appear. </li>
+
+</ul>
+
+<p class=defnewpar>The new graph layer will be displayed on top of the other layers that are currently displayed. </p>
+
+<p class=defnewpar>Any layer that is added to a graph window is also added to the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane of the graph window. </p> 
+
+<p class=kopje>To (temporarily) remove graph layers from the graph window:</p>
+
+<p>To temporarily hide or show a graph layer: </p>
+
+<ul>
+
+<li>click the <img src="../images/layeron.gif" align=bottom width="14" height="12"> box or the <img src="../images/layeroff.gif" align=bottom width="14" height="12"> box in front of a graph layer in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane (toggle). </li>
+
+</ul>
+
+<p class=defnewpar>To remove a graph layer: </p>
+
+<ul>
+
+<li>in <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane, select the graph layer you wish to remove, and </li>
+
+<li>click the <span class=arial><a href="../ilwismen/graph_window_remove_layer.htm">Remove Layer</a></span> <img src="../images/remlayer.gif" align=bottom width="22" height="22"> button in the toolbar of the graph window, or </li>
+
+<li>choose <span class=arial>Remove Layer</span> from the Edit menu, or </li>
+
+<li>click the layer with the right mouse button and choose <span class=arial>Remove Layer</span> from the context-sensitive menu. </li>
+
+</ul>
+
+<p class=kopje>To change the appearance of a graph layer:</p>
+
+<p>By double-clicking a graph layer in the <a href="graph_window_graph_management.htm">Graph Management</a> pane, you can modify:
+
+<ul>
+
+<li>name of the graph layer, </li>
+
+<li>the display options of the graph such as color, line width, symbols, etc., </li>
+
+</ul>
+
+<p class=defnewpar>Depending on whether you double-click a graph from columns, a graph from formula, a least squares fit, a semi-variogram model, or a rose diagram: </p>
+
+<ul>
+
+<li>the <a href="../ilwismen/graph_window_options_graph_from_columns.htm">Graph Options - Graph from Columns</a> dialog box will appear, </li>
+
+<li>the <a href="../ilwismen/graph_window_options_graph_from_formula.htm">Graph Options - Graph from Formula</a> dialog box will appear, </li>
+
+<li>the <a href="../ilwismen/graph_window_options_graph_least_squares_fit.htm">Graph Options - Least Squares Fit</a> dialog box will appear, </li>
+
+<li>the <a href="../ilwismen/graph_window_options_semivariogram_model.htm">Graph Options - Semi-variogram Model</a> dialog box will appear, </li>
+
+<li>the <a href="../ilwismen/graph_window_options_rose_diagram.htm">Graph Options - Rose Diagram</a> dialog box will appear. </li>
+
+</ul>
+
+<p class=defnewpar>In these dialog boxes, you can also: </p>
+
+<ul>
+
+<li>for a graph from columns: choose whether the graph should be displayed as points, bar, line, needle or step, </li>
+
+<li>for a graph from formula: modify the formula, </li>
+
+<li>for a least squares fit: choose another function to calculate the least squares fit, and/or change parameters when using a Polynomial or Trigonometric function, </li>
+
+<li>for a semi-variogram model: choose another model to calculate semi-variogram values, and/or change the values of nugget, sill, range, etc. </li>
+
+</ul>
+
+<p class=defnewpar>For more information, refer to <a href="graph_window_graph_management.htm">Graph Management</a>. </p>
+
+<p class=kopje>To adapt the X-axis, Y-axis (left or right) or title of the graph: </p>
+
+<p>You can change for instance the range of the X-axis, the range of the Y-axis (left or right), the texts shown next to axes, and/or the title of the graph: </p>
+
+<ul>
+
+<li>by double-clicking an axis or the graph title directly in the graph window, or </li>
+
+<li>by double-clicking the appropriate item in the <a href="graph_window_graph_management.htm">Graph Management</a> pane. </li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="../ilwismen/graph_window_options_x_axis.htm">X-axis</a>, <a href="../ilwismen/graph_window_options_y_axis_left.htm">Y-axis (left)</a>, or the <a href="../ilwismen/graph_window_options_y_axis_right.htm">Y-axis (right)</a> or the <a href="../ilwismen/graph_window_options_title.htm">Title</a> dialog box will appear. </p>
+
+<p>In the axis dialog boxes, you can also specify whether you wish to view grid lines or not.</p>
+
+<p class=kopje>To hide or show the legend of all layers added to a graph window: </p>
+
+<p>In the <a href="graph_window_graph_management.htm">Graph Management</a> pane: </p>
+
+<ul>
+
+<li>click the check box in front of the legend item <img src="../images/graphlegend.gif" align=bottom width="73" height="14">, </li> 
+
+        <ul>
+
+        <li>to show <img src="../images/layeron.gif" align=bottom width="14" height="12"> the legend, or </li>
+
+        <li>to hide <img src="../images/layeroff.gif" align=bottom width="14" height="12"> the legend (toggle).</li></li>
+
+        </ul>
+
+</ul>
+
+<p class=kopje>To move the legend to another position: </p>
+
+<p>In a graph window:</p>
+
+<ul>
+
+<li>click the legend, hold the left mouse button down, and drag the legend to another position. </li>
+
+</ul>
+
+<p class=kopje>To save a graph: </p>
+
+<p>To save all layers in the graph window as a graph: </p>
+
+<ul>
+
+<li>first, make the graph viewer of graph window active (click in the viewer),  </li>
+
+<li>choose <a href="../ilwismen/graph_window_save_graph.htm">Save</a> or <a href="../ilwismen/graph_window_save_graph_as.htm">Save As</a> from the <a href="graph_window_menu_commands.htm">File menu</a> of the graph window, or </li>
+
+<li>click the <span class=arial>Save</span> <img src="../images/save.gif" align=bottom width="22" height="22"> button in the toolbar of the graph window. </li>
+
+</ul>
+
+<p class=linespacing03before>When you save a graph for the first time, the <a href="../ilwismen/graph_window_save_graph_as.htm">Save As</a> dialog box will appear. </p>
+
+<p class=kopje>To print a graph: </p>
+
+<p>To print the contents of the current graph window: </p>
+
+<ul>
+
+<li>first, make the graph viewer of graph window active (click in the viewer),  </li>
+
+<li>then, choose <span class=arial>Print</span> from the <a href="graph_window_menu_commands.htm">File menu</a> of the graph window, or </li>
+
+<li>click the <span class=arial>Print</span> <img src="../images/print.gif" align=bottom width="22" height="22"> button in the toolbar of the graph window. </li>
+
+</ul>
+
+<p class=linespacing03before>Before a graph is printed, first a <a href="../ilwismen/graph_window_print_graph.htm">Print Options</a> dialog box will appear. </p>
+
+
+<p class=kopje>Other functionality:</p>
+
+<p>To open another existing graph in the current graph window:  </p>
+
+        <ul>
+        
+        <li>choose <a href="../ilwismen/graph_window_open_graph.htm">Open</a> from the File menu, or </li>
+
+        <li>click the <span class=arial>Open</span> <img src="../images/open.gif" align=bottom width="22" height="22"> button in the toolbar. </li>
+
+        </ul>
+
+<p class=defnewpar>To open the table from which the graph was constructed: </p> 
+
+        <ul>
+
+        <li>choose <span class=arial><a href="../ilwismen/graph_window_open_table.htm">Open Table</a></span> from the File menu, or </li>
+
+        <li>double-click the table listed in the <a href="graph_window_graph_management.htm">Graph Management</a> pane. </li>
+
+        </ul>
+
+<p class=defnewpar>To copy the contents of the graph window as a <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >picture</a> to clipboard, so that this can be pasted into an ILWIS layout, or into any other Windows application, for instance into a word processor: </p>
+
+        <ul>
+
+        <li>make the graph viewer active, </li>
+
+        <li>then choose <a href="../ilwismen/graph_window_copy_to_clipboard.htm">Copy</a> from the Edit menu, or </li>
+
+        <li>click the <span class=arial>Copy</span> <img src="../images/copy.gif" align=bottom width="22" height="22"> button in the toolbar. </li>
+
+        </ul>
+
+<p class=defnewpar>The graph(s) in a graph window are automatically resized when you change the size of the graph window. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="graph_window_examples_of_graphs.htm">Graph window : examples of graphs</a></p>
+
+<p class=seealsolinks><a href="graph_window_graph_management.htm">Graph window : Graph Management</a></p>
+
+<p class=seealsolinks><a href="graph_window_toolbar.htm">Graph window : toolbar</a></p>
+
+<p class=seealsolinks><a href="graph_window_menu_commands.htm">Graph window : menu commands</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_graphs.htm">ILWIS objects : graphs</a></p>
+
+</body

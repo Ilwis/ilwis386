@@ -1,0 +1,189 @@
+<html>
+
+<head>
+<title>SMCE window : Weigh - Pairwise Comparison</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Weigh Pairwise Comparison">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Analysis menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Weigh - Pairwise Comparison</span>&nbsp;&nbsp;&nbsp;<img src="../images/smce_weigh_icon.gif" align=middle width="23" height="23"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Assign weights to multiple <a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a> and optional groups that occur under the selected main goal, or to multiple factors and optional groups that occur under the selected sub goal. </p>
+
+<p class=defnewpar>In the pairwise comparison method, also known as the Analytical Hierarchy Process (AHP) (Saaty), you must indicate for each pair of factors which factor is the most important one. Subsequently you must indicate in qualitative terms to what extent a factor is more important than another. The pairwise comparison method converts these comparisons of all pairs of factors to quantitative weights for all factors. </p>
+
+<ul>
+<li>For instance, if three elements A, B, C were to be compared, and A &gt; B and B &gt; C, we would expect A &gt; C. With three elements we can maintain such consistency, but with many elements we can only maintain consistency if we have a good understanding of our priorities. If not, inconsistencies will appear such as C &gt; A. </li>
+<li>The advantage of this method is that decision makers can express qualitative priorities and that more priority assessments are made, which allows for a check on consistent assessment. </li>
+<li>A disadvantage of this method is that it is rather time consuming. </li>
+</ul>
+
+<p>For more information, see also <a href="../ilwismen/smce_window_weigh_methods_additional_info.htm">Weigh methods (additional info)</a>, section <a href="../ilwismen/smce_window_weigh_methods_additional_info.htm#pairwise"><span class=bookmark>Pairwise comparison</span></a>. </p>
+  
+<p class=defnewpar>The  dialog box is a kind of wizard and consists of two sheets.</p>
+  
+<h2>Pairwise Comparison sheet</h2>
+
+<p class=diakopje>Dialog box options:</p>
+<table cellspacing=0>
+<tr>
+    <td valign="top" colspan="2"><p class=diabox>Current comparison column:</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="120"><p class=diaboxnospacetop>&nbsp;</p></td>
+    <td valign="top"><p class=diaboxnospacetop>This column each time shows two factors that are to be compared.
+        For each pair of factors, you must indicate which factor is the more important than the other; 
+		in other words, you must indicate in qualitative terms, using Saaty weights, 
+        to what extent one factor is more important than the other. </p>
+
+      <p class=diabox>Assigning Saaty weights can be done:</p>
+      <ul>
+      <li>by selecting the correct wording in the drop-down list box, or</li>
+      <li>by dragging the slider up or down until the correct wording is visible in the drop-down list box.</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" colspan="2"><p class=diabox>Comparisons column:</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diaboxnospacetop>&nbsp;</p></td>
+    <td valign="top"><p class=diaboxnospacetop>This column lists all unique pairs of factors that need to be compared to each other.</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diabox><img src="../images/checkbox_grey.gif" width="15" height="15"></p></td>
+    <td valign="top"><p class=diabox>When a check box is selected, this pair of factors has already been compared to each other. </p>
+		<p class=diabox>When a check box is not yet selected, that pair of factors still needs to be compared. </p>
+		<p class=diabox>The application keeps track of whether factors have been compared to each other or not. </p>
+		</td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diabox><img src="../images/option.gif" align=top width="12" height="12"></p></td>
+    <td valign="top"><p class=diabox>The selected option button shows you the currently selected pair of factors that is to be compared. To store Saaty weights for the currently selected pair and move to a next pair: click the <span class=arial>Next</span> button. </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diabox><span class=arial>Next</span></p></td>
+    <td valign="top"><p class=diabox>Press the <span class=arial>Next</span> button to select the next pair of factors. When all pairwise comparisons are done, the Next button will lead to the sheet with the Pairwise Comparison - Results.</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diabox><span class=arial>Back</span></p></td>
+    <td valign="top"><p class=diabox>Press the <span class=arial>Back</span> button to go back to the previously selected pair of factors.</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diaboxnospacetop><span class=arial>Choose other method</span></p></td>
+    <td valign="top"><p class=diabox>Click the <span class=arial>Choose other method</span> button to open the <a href="../ilwismen/smce_window_weigh.htm">Weights</a> dialog box to choose another Weigh method.</p>
+    </td>
+  </tr>
+  </table>
+  
+<p class=tip>Warning:</p>
+<p class=tiptext>Within pairwise comparison, the number of comparisons increases combinatorially with the number of factors (n*(n-1)/2). For example, the assessment
+  of the weights of 4 factors involves no more than 6 comparisons, but assessment of the weights for 10 factors requires as many as 45 comparisons. It is not 
+recommended to use this method if the number of factors is higher than 7 (21 comparisons). The inconsistency ratio is only calculated if the number of factors is 3-9.</p>
+
+<h2>Pairwise Comparison - Results sheet</h2>
+
+<p class=diakopje>Dialog box options :</p>
+<table cellspacing=0>
+  <tr>
+    <td valign="top" colspan="2"><p class=diabox>Resulting Normalized Weights column:</p></td>
+  </tr>
+
+  <tr>
+    <td valign="top" width="130"><p class=diaboxnospacetop>&nbsp;</p></td>
+    <td valign="top"><p class=diaboxnospacetop>All factors are listed with their resulting normalized weights. The sum of all resulting normalized weights is always 1.</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diabox>Inconsistency ratio:</p></td>
+    <td valign="top"><p class=diabox>An index between 0 en 1 that indicates whether the pairwise comparisons are sufficiently consistent. A value of 0 indicates complete consistency; a value larger than 0.1 indicates inconsistency.</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diabox><span class=arial>Back</span></p></td>
+    <td valign="top"><p class=diabox>Press the <span class=arial>Back</span> button to go back to the Pairwise Comparison sheet to assign other Saaty weights to one or more pairs of factors.</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diabox><span class=arial>Finish</span></p></td>
+    <td valign="top"><p class=diabox>Press the <span class=arial>Finish</span> button to close the Pairwise Comparison dialog box and finish weighing.</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diaboxnospacetop><span class=arial>Choose other method</span></p></td>
+    <td valign="top"><p class=diabox>Click the <span class=arial>Choose other method</span> button to open the <a href="../ilwismen/smce_window_weigh.htm">Weigh</a> dialog box to choose another Weigh method.</p></td>
+  </tr>
+  </table>
+  
+<p class=tip>Note:</p>
+
+<p class=tiptext>After weights have been assigned, the <a href="../ilwis/smce_window_criteria_tree_viewer.htm">criteria tree viewer</a> will show the following: </p>
+
+<ul class=tipul>
+<li class=ls01be>The selected weight method is shown after the selected main goal, or the selected sub goal. </li>
+<li class=ls01be>The assigned weight values are shown in front of the factors and optional groups of factors that occur under the selected main goal or under the selected sub goal. </li>
+</ul>
+
+<table class=tiptext cellpadding="0" cellspacing="0" border="0">
+  <tr><td colspan="3"><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td width="40%" valign="top"><i>Main goal or sub goal</i>--Pairwise<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.21 Criterion name</i>--Std:...<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.42 Criterion name</i>--Std:...<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.31 Criterion name</i>--Std:...<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.06 Criterion name</i>--Std:...
+	</td>
+   	<td valign="top">Pair-wise comparison: all factors are considered, but the user needs to specify for each pair of factors considered which of these two factors is more important or less important than the other; the specification of the importance of factors is done in fixed phrases or with a slide bar. </td>
+  </tr>
+</table>
+
+<p class=kopje>Reference: </p>
+
+<ul>
+
+<li>Saaty, T. (1980) The Analytical Hierarchy Process. New York, McGraw Hill. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh.htm">SMCE window : Weigh</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh_direct.htm">SMCE window : Weigh - Direct Method</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh_rank_order.htm">SMCE window : Weigh - Rank Ordering</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh_methods_additional_info.htm">SMCE window : Weigh methods (additional info)</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a></p>
+
+</body

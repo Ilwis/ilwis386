@@ -1,0 +1,67 @@
+<html>
+
+<head>
+<title>How to create linear filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Filters, Linear filters, User-defined filters, How to create ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to create linear filters</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Filtering is a process in which each pixel value in a raster map is replaced with a new value. The new value is obtained by applying a certain function to each input pixel and the neighborhood. </p>
+
+<p class=defnewpar>Linear filters use a linear combination of all pixels in a rectangle around the input pixel. They can have a user-defined size; further, you may wish to insert your own values in the matrix and determine your own gain value. </p>
+
+<p class=kopje>To create a user-defined linear filters:</p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, choose <span class=arial>Create Filter</span>, </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Create</span> item, and double-click the <span class=arial>NewFilter</span> item, </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>NewFilter</span> item, or</li>
+
+<li>	click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> in the dialog box of the <a href="../ilwisapp/filter.htm">Filter</a> operation.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwismen/create_a_filter.htm">Create Filter</a> dialog box appears in which you can define the size of the filter. Subsequently, you can enter the values of the cells in the filter in the <a href="filter_editor.htm">Filter editor</a>.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>The Average filter, Majority filters, Median filters, the Pattern filter, Rank Order filters, and the Standard Deviation filter may have a user-defined size, rank or threshold. These filters can be modified <a href="../ilwisapp/filter_dialog_box.htm">Filter : dialog box</a>; they can also be defined on the command line.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_filters.htm">ILWIS objects : filters</a> </p>
+
+<p class=seealsolinks><a href="filter_editor.htm">Filter editor</a> </p>
+
+<p class=seealsolinks><a href="../ilwisapp/filter_functionality.htm">Filter : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filter_dialog_box.htm">Filter : dialog box</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_types_linear_filters.htm">Filters : linear filters</a></p>
+
+</body

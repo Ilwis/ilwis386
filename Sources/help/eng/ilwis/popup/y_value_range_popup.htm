@@ -1,0 +1,24 @@
+<html>
+
+<head>
+<title>Value range</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Value range</p>
+
+<p class=linespacing03after>The value range defines the range of possible values in a <a href="../../ilwis/sec/y_value_maps_sec.htm">value map</a> or a <a href="../../ilwis/sec/y_value_maps_sec.htm">value column</a>. Calculated values outside this range are assigned the undefined value.</p>
+
+<p class=linespacing03after>During calculations or operations, the system will come up with a suggestion for the value range of the output map or column. If allowed by the domain that you selected for the output object, you can adjust these values for the output object: make a liberal estimate of minimum and maximum output values. </p>
+
+<p class=linespacing03after>You cannot specify the value range for the values in an output map or column when you select a domain that has a fixed value range (e.g. system domains <span class=courier><a href="yy_system_domain_image_popup.htm">Image</a></span>, <span class=courier><a href="yy_system_domain_min1to1_popup.htm">Min1to1</a></span>, <span class=courier><a href="yy_system_domain_noaa_popup.htm">NOAA</a></span>, or <span class=courier><a href="yy_system_domain_radar_popup.htm">Radar</a></span>). </p>
+
+<p class=linespacing03after>The wider you chose the value range, the larger the size of the output map will be (in bytes on disk), as more bytes are needed to store each value in the map. Values in value maps can be stored as fixed point real numbers (using 1 byte, 2 bytes, 4 bytes per pixel) or as floating point real numbers (using 8 bytes per pixel). The display of maps using 1 byte per pixel is fast and the display of 8 byte maps is slower, also calculation time may increase.</p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="y_precision_popup.htm">Precision</a></p>
+
+</body

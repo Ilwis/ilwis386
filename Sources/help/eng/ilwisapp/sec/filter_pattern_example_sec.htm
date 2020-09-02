@@ -1,0 +1,260 @@
+<html>
+
+<head>
+<title>filter pattern example sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Example pattern filters</p>
+
+<p>A <a href="..//ilwisapp/filters_types_pattern_filters.htm" onClick="return popup(this, 'notes')" >pattern filter</a> always works in a 3x3 environment; it works on satellite images and other raster maps with a value domain. A pattern filter considers the center pixel and each of its 8 neighbours in the following order:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>4</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>3</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>2</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>5</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>0</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>6</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>7</p>
+
+</td>
+<td valign="top">
+<p class=filtcour>8</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>If the absolute difference between the value of the center pixel and a neigbour is smaller than or equal to the specified threshold value, then the answer is true.</p>
+
+<p class=defnewpar>According to the position of a <b>true</b> neighbour, a certain bit is set: </p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p>Position 1 true:</p>
+
+</td>
+<td valign="top" width=75>
+<p class=courier>00000001</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>    1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Position 2 true:</p>
+
+</td>
+<td valign="top" width=75>
+<p class=courier>00000010</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>    2</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Position 3 true:</p>
+
+</td>
+<td valign="top" width=75>
+<p class=courier>00000100</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>    4</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Position 4 true:</p>
+
+</td>
+<td valign="top" width=75>
+<p class=courier>00001000</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>    8</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Position 5 true:</p>
+
+</td>
+<td valign="top" width=75>
+<p class=courier>00010000</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>  16</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Position 6 true:</p>
+
+</td>
+<td valign="top" width=75>
+<p class=courier>00100000</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>  32</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Position 7 true:</p>
+
+</td>
+<td valign="top" width=75>
+<p class=courier>01000000</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>  64</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Position 8 true:</p>
+
+</td>
+<td valign="top" width=75>
+<p class=courier>10000000</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>128</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The value assigned to the output center pixel is the bitwise combination of all true neighbours. </p>
+
+<p class=defnewpar>Thus, when only the difference between the lower right pixel and the center pixel is smaller than or equal to the threshold value, value 128 is assigned to the center pixel in the output map. When all pixels to the right of the center pixel are true, value 1+2+128 = 131 is assigned to the center pixel in the output map. </p>
+
+<p class=defnewpar>Concluding:</p>
+
+<ul>
+
+<li>	when the absolute differences between the center pixel and all neighbours are smaller than or equal to the threshold value (meaning small differences = area), value 255 is assigned to the center pixel in the output map; </li>
+
+<li>	when the absolute differences between the center pixel and all neighbours are larger than the threshold value (meaning large differences = outlier), value 0 is assigned to the center pixel in the output map; and </li>
+
+<li>	changes in pixel values can be detected for all individual directions.</li>
+
+</ul>
+
+</body

@@ -1,0 +1,63 @@
+<html>
+
+<head>
+<title>Filter types : linear filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filter types, Linear filters, Average filters, Gradient filters, Derivative filters, AVG3x3, EDGESENH, LAPLACE, SHADOW, DFDX, DFDY, DFDDN, DFDDN, DFDUP, D2FDX2, D2FDY2, D2FDXDY">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="70%"><h1 class=firstline>Filter types</h1></td>
+<td rowspan="2" class=menucommand><a class=menlink href=JavaScript:__ilwisapp__sec__filter_linear_filter_sec.Click()>Example linear filters</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Linear filters</h1></td>
+</tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Linear (convolution) filters consist of a matrix with values and a gain factor. When considering a linear filter of size 3x3, the 9 matrix values are multiplied with 9 pixel values in the input raster map, this is summed and then multiplied with the gain factor. The result is assigned to the center pixel in the output map. </p>
+
+<p class=kopje>Standard linear filters:</p>
+
+<p>The following standard filters are linear filters: <a href="..//ilwisapp/sec/filter_avg3x3_sec.htm" onClick="return popup(this, 'notes')" >AVG3x3</a>, <a href="..//ilwisapp/sec/filter_edgesenh_sec.htm" onClick="return popup(this, 'notes')" >EDGESENH</a>, <a href="..//ilwisapp/sec/filter_laplace_sec.htm" onClick="return popup(this, 'notes')" >LAPLACE</a>, <a href="..//ilwisapp/sec/filter_shadow_sec.htm" onClick="return popup(this, 'notes')" >SHADOW</a>. Also the standard gradient filters are linear filters: <a href="..//ilwisapp/sec/filter_dfdx_sec.htm" onClick="return popup(this, 'notes')" >DFDX</a>, <a href="..//ilwisapp/sec/filter_dfdy_sec.htm" onClick="return popup(this, 'notes')" >DFDY</a>, <a href="..//ilwisapp/sec/filter_dfddn_sec.htm" onClick="return popup(this, 'notes')" >DFDDN</a>, <a href="..//ilwisapp/sec/filter_dfdup_sec.htm" onClick="return popup(this, 'notes')" >DFDUP</a>, <a href="..//ilwisapp/sec/filter_d2fdx2_sec.htm" onClick="return popup(this, 'notes')" >D2FDX2</a>, <a href="..//ilwisapp/sec/filter_d2fdy2_sec.htm" onClick="return popup(this, 'notes')" >D2FDY2</a>, <a href="..//ilwisapp/sec/filter_d2fdxdy_sec.htm" onClick="return popup(this, 'notes')" >D2FDXDY</a>.</p>
+
+<p class=kopje>User-defined linear filters:</p>
+
+<p>You can create, edit and store your own linear filters, for instance from the <a href="filter_dialog_box.htm">Filter : dialog box</a>, through the File menu in the Main window or by clicking the <span class=arial>NewFilter</span> item in the Operation-list or the Operation-tree. For more information, refer to the <a href="../ilwismen/create_a_filter.htm">Create Filter</a> dialog box and the <a href="../ilwis/filter_editor.htm">(Linear) Filter editor</a>. You need to specify the size of your filter, fill out the values in the matrix and specify a gain factor. Experienced users may wish to experiment with the definition of a linear filter by an expression on the command line. For more information on using standard and user-defined linear filters, refer to <a href="filters_user_defined_linear_filters.htm">User-defined linear filters</a>.</p>
+
+<p class=defnewpar>Furthermore, you can interactively define an Average filter in the Filter dialog box or by an expression on the command line. For more information, refer to <a href="filters_user_defined_average_filters.htm">User-defined average filters</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filters_standard_filters.htm">Filters : standard filters</a></p>
+
+<p class=seealsolinks><a href="filters_user_defined_linear_filters.htm">Filters : user-defined linear filters</a></p>
+
+<p class=seealsolinks><a href="filters_user_defined_average_filters.htm">Filters : user-defined average filters</a></p>
+
+<p class=seealsolinks><a href="filter.htm">Filter (operation)</a></p>
+
+</body

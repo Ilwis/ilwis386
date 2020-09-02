@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>Objects-polygon map popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Polygon map&nbsp;&nbsp;&nbsp;<img src="../../images/polmap.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="..//ilwis/ilwis_objects_polygon_maps.htm" onClick="return popup(this, 'notes')" >polygon map</a> is a vector map containing closed <b>areas</b> and the boundaries making up the areas. Polygon maps can for example contain uniquely codified areas such as cadastral plots, or mapping units such as land use classes, geological units or soil units. The areas are either codified by IDs, class names or values; this is determined by the <a href="objects_domains_intro_popup.htm">domain</a> of the map. Further, polygon maps use a certain <a href="objects_coordinate_system_popup.htm">coordinate system</a>. </p>
+
+<p class=linespacing03after>Polygon maps are generally used as a stepping stone to raster maps. </p>
+
+<p>To obtain a polygon map, you first have to create a new segment map and edit it with the <a href="../../ilwis/popup/segment_editor_popup.htm">segment editor</a> (with or without digitizer); then polygonize these segments within the segment editor or with the <a href="../../ilwisapp/popup/segments_to_polygons_popup.htm">Segments to Polygons</a> operation. </p>
+
+</body

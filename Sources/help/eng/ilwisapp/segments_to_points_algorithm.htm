@@ -1,0 +1,49 @@
+<html>
+
+<head>
+<title>Segments to points : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segments to points">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segments to points</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Segments to points operation simply copies either:</p>
+
+<ul>
+
+<li>	all nodes of a segment map into a point map, </li>
+
+<li>	finds coordinates along segments at a user-defined distance interval and writes these to a point map, or </li>
+
+<li>	all nodes and intermediate coordinates of a segment map into a point map.</li>
+
+</ul>
+
+<p class=kopje>Segments to points by distance:</p>
+
+<p>Segment nodes are always copied to the point map.</p>
+
+<p>For each segment, </p>
+
+<ul>
+
+<li>	the program starts at the begin node, </li>
+
+<li>	then the segment is followed along its intermediate coordinates using straight lines, and</li>
+
+<li>	after each user-defined distance interval along this path, a point is created in the point map.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segments_to_points_functionality.htm">Segments to points : functionality</a></p>
+
+</body

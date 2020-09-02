@@ -1,0 +1,181 @@
+<html>
+
+<head>
+<title>Edit fields in multiple columns</title>
+<meta name="keywords" content="Edit ..., Edit attributes, Edit table, Table window">
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Edit fields in multiple columns</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Edit the values of one or more selected records, or edit a block of selected fields in <i>multiple columns</i> in a table. </p>
+
+<p class=defnewpar>To edit one or more fields in a single column, see <a href="table_window_edit_single_column.htm">Edit fields in a single column</a>.</p>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+
+<li>The contents of fields of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent columns</a> cannot be edited, as these 'values' are the result of a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculation</a> or a column <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>. </li>
+
+<li>The contents of fields of read-only columns and table-owned columns cannot be edited. </li>
+
+<li>All changes are directly stored on disk. You CANNOT UNDO an edit action. </li>
+
+</ul>
+
+<p class=kopje>To edit the fields of a single record:</p>
+
+<ol>
+
+<li class=ls01be>Click the record you wish to edit: the <a href="../ilwis/table_window_record_view_pane.htm">record view</a> window will appear. </li>
+
+        <p>You can drag the record view window to another position. </p>
+
+<li class=ls01be>Then, either:</li>
+
+        <ul>
+
+        <li>choose <span class=arial>Edit</span> from the Edit menu, or </li>
+
+        <li>click the selection with the right mouse button, and choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+        </ul>
+
+<li class=ls01be> This <span class=arial>Edit</span> dialog box will appear: </li>
+
+        <table cellspacing="0">
+        <tr>
+        <td width="108" valign="top">
+        <p class=diabox>Edit record ...</p>
+
+        </td>
+        <td valign="top">
+        <p class=diabox>Specifies the selected record. </p>
+
+        </td>
+        </tr>
+        <tr>
+        <td valign="top">
+        <p class=diabox>Column name:</p>
+
+        </td>
+        <td valign="top">
+        <p class=diabox>For the field of the first column in the record, type a value, choose a class, or type an ID. </p>
+
+        </td>
+        </tr>
+        <tr>
+        <td valign="top">
+        <p class=diabox>Column name:</p>
+
+        </td>
+        <td valign="top">
+        <p class=diabox>For the field of the second column in the record, choose a class, or type an ID. Etc. </p>
+
+        </td>
+        </tr>
+        <tr>
+        <td valign="top">
+        <p class=diabox>Column name:</p>
+
+        </td>
+        <td valign="top">
+        <p class=diabox>For the field of the next column in the record, choose a class, or type an ID. Etc. </p>
+
+        </td>
+        </tr>
+        <tr>
+        <td colspan="2" valign="top">
+        <p class=diabox>Fields which are not editable are automatically grayed out. </p>
+
+        </td>
+        </tr>
+        </table>
+
+</ol>
+
+<p class=kopje>To edit the fields of multiple records:</p>
+
+<ol>
+
+<li class=ls01be>Select the sequence of records that you wish to edit e.g. by keeping the left mouse button down while moving over the record buttons of the records that you wish to edit. </li>
+
+        <p>The <a href="../ilwis/table_window_record_view_pane.htm">record view</a> window will appear. You can drag the record view window to another position. </p>
+
+<li class=ls01be>Then, either:</li>
+
+        <ul>
+
+        <li>choose <span class=arial>Edit</span> from the Edit menu, or </li>
+
+        <li>click the selection with the right mouse button, and choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+        </ul>
+
+<li class=ls01be>The <span class=arial>Edit</span> dialog box as described above will appear for the first record that is selected. </li>
+
+        <p>Type a value, select a class, or type an ID for each field in the record. </p>
+
+<li class=ls01be>After you click <span class=arial>OK</span> in the first <span class=arial>Edit</span> dialog box, the <span class=arial>Edit</span> dialog box for the next selected record will appear. </li>
+
+<li class=ls01be>When you click <span class=arial>OK</span> in the <span class=arial>Edit</span> dialog box of the last record that is selected, you will return to the table window. </li>
+
+</ol>
+
+<p class=kopje>To edit a block of fields in multiple columns in multiple selected records:</p>
+
+<ol>
+
+<li class=ls01be>Select the block of fields, in multiple columns and in multiple records, that you wish to edit. </li>
+
+        <p>The <a href="../ilwis/table_window_record_view_pane.htm">record view</a> window will appear. You can drag the record view window to another position. </p>
+
+<li class=ls01be>Follow steps 2-5 described in the previous section. The <span class=arial>Edit</span> dialog box will appear record by record, and it will only contain the column names of the selected fields. </li>
+
+</ol>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>In the <a href="../ilwis/table_window_record_view_pane.htm">record view</a> window, you can only edit fields one by one. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_toolbar.htm">Table window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_menu_commands.htm">Table window : menu commands</a></p>
+
+<p class=seealsolinks><a href="table_window_edit_single_column.htm">Edit fields in a single column</a></p>
+
+</body

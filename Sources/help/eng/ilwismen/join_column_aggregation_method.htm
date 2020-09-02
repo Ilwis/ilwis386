@@ -1,0 +1,91 @@
+<html>
+
+<head>
+<title>Join column wizard - Aggregation method</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Columns, Join columns, Column operations, Table window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table bgcolor="#006699" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Join Column wizard</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Aggregation method</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="join_column_link_between_tables.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="join_column_output_column.htm">Next</a>&nbsp;&gt;</td>
+</tr>
+<tr><td bgcolor="FFFFFF" colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>This page appears in the Join Column wizard when the classes or IDs in a specified key column in the selected table (key 2) are <i>not unique</i>. </p>
+
+<p class=defnewpar>You have to specify the aggregation function to aggregate the values of the column that you wish to join into the current table by the groups of key 2. Optionally, you can specify a weight column to obtain weighted averages etc. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td valign="top" width="72">
+<p class=diabox>Function: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an <a href="..//ilwis/popup/aggregation_functions_popup.htm" onClick="return popup(this, 'notes')" >aggregation function</a> to aggregate the values of the column to be joined. </p>
+
+<p class=diabox>The following aggregation functions are available: Average, Count, Maximum, Median, Minimum, Predominant, Standard deviation, and Sum. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Weight: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you wish to use a weight column (from the selected table) during the aggregation and join. The weight column determines the relative importance of the values to be aggregated. </p>
+
+<p class=diabox>The weight check box is available for the following aggregation functions: Average, Median, Predominant, and Standard deviation. You can thus calculate weighted averages, weighted median values, weighted predominant values and weighted standard deviations. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <span class=arial>Next</span> button: </p>
+
+        <ul>
+
+        <li>You will continue on the <b><a href="join_column_output_column.htm">Specify output column name</a></b> page of the wizard. </li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip:</span> Experienced users may also join columns from other tables by typing an expression on the TabCalc command line. For more information, see <a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a>. This topic also provides some examples, both for using the wizard and for using the command line. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="join_column_output_column.htm">Join Column wizard - Output column name</a></p>
+
+<p class=seealsolinks><a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a></p>
+
+</body

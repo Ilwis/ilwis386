@@ -1,0 +1,325 @@
+<html>
+
+<head>
+<title>Filters : user-defined linear filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filters, User-defined filters, Linear filters, AVG3x3, D2FDX2, d2FDXDY, D2FDY2, DFDDN, DFDUP, DFDX, DFDY, EDGESENH, LAPLACE, SHADOW, Use ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Filters</h1>
+
+<h1 class=secondline>User-defined linear filters</h1>
+
+<!--<hr>-->
+
+<p class=kopje>To create, edit and store a linear filter on disk:</p>
+
+<p>A user-defined <a href="..//ilwisapp/popup/filter_linear_filter_popup.htm" onClick="return popup(this, 'notes')" >linear filter</a> can be created: </p>
+
+<ul>
+
+<li>	by clicking the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> in the Filter dialog box, or </li>
+
+<li>	by choosing the <span class=arial>Create Filter</span> command from the File menu of the Main window, or</li>
+
+<li>	by double-clicking the <span class=arial>NewFilter</span> command in the Operation-list or the Operation-tree. </li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwismen/create_a_filter.htm">Create Filter</a> dialog box will appear and the <a href="../ilwis/filter_editor.htm">Filter editor</a> will be opened. You can specify the size of the filter, fill out values in the matrix, and specify a gain factor. </p>
+
+<p class=kopje>To edit an existing user-defined linear filter:</p>
+
+<p>An existing user-defined linear filter can be edited:</p>
+
+<ul>
+
+<li>    by double-clicking a user-defined linear filter in a Catalog, </li>
+
+<li>	by clicking your filter with the right mouse button in the Catalog, and subsequently choosing the <span class=arial>Open</span> command from the context-sensitive menu,</li>
+
+<li>	by selecting a filter in a Catalog, and choosing the <span class=arial>Edit Object</span> command from the Edit menu in the Main window.</li>
+
+</ul>
+
+<p>The <a href="../ilwis/filter_editor.htm">Filter editor</a> will be opened. </p>
+
+<p class=defnewpar>The standard linear filters cannot be edited.</p>
+
+<p class=kopje>User-defined average filters:</p>
+
+<p>Additional possibilities are provided to for user-defined average filters, via the Filter dialog box or via the command line, see <a href="filters_user_defined_average_filters.htm">Filters : user-defined average filters</a>.</p>
+
+<p class=kopje>Selecting an existing linear filter in the Filter dialog box:</p>
+
+<p>In the Filter dialog box, you can select any standard linear filter or any linear filter you created yourself.</p>
+
+<ul>
+
+<li>	Open the Filter dialog box,</li>
+
+<li>	for <span class=arial>Filter Type</span>, select: Linear,</li>
+
+<li>	for <span class=arial>Filter Name</span>, select: Avg3x3, d2fdx2, d2fdxdy, d2fdy2, dfddn, dfdup, dfdx, dfdy, Edgesenh, Laplace, Shadow, or your own linear filter.</li>
+
+</ul>
+
+<p class=kopje>Using existing linear filters on the command line:</p>
+
+<p>To use an existing linear filter from the command line, type the following expression on the command line of the Main window.</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName, <i>FilterName</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapFilter</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Filter operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>FilterName</i></p>
+
+</td>
+<td valign="top">
+<p>is either the name of a standard filter on disk, then fill out one of the following standard linear filter names:</p>
+
+<p class=courier>avg3x3 | d2fdx2 | d2fdxdy | d2fdy2 | dfddn | dfdup | dfdx | dfdy | edgesenh | laplace | shadow </p>
+
+<p><i>or</i> the name of a linear filter which you created yourself.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Defining a linear filter on the command line (advanced):</p>
+
+<p>Advanced users may wish to experiment with the definition of a linear filter by an expression. The syntax for the command line is:</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName, <span class=courier>FilterLinear</span>(<i>rows, cols, expression</i>))</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapFilter</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Filter operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>FilterLinear</p>
+
+</td>
+<td valign="top">
+<p>is the command to define a linear filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>rows</i></p>
+
+</td>
+<td valign="top">
+<p>are the number of rows of your linear filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>cols</i></p>
+
+</td>
+<td valign="top">
+<p>are the number of columns of your linear filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>expression</i></p>
+
+</td>
+<td valign="top">
+<p>is an expression in which you can use <span class=courier>x</span>, <span class=courier>y</span>, and <span class=courier>r</span> to calculate the linear filter's matrix values, where:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=leftmargin1>x</p>
+
+</td>
+<td valign="top">
+<p>distance to the center cell of the matrix in x-direction; the center cell of the matrix has position (0,0); the distance in x-direction increases to the right.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=leftmargin1>y</p>
+
+</td>
+<td valign="top">
+<p>distance to the center cell of the matrix in y-direction; the center cell of the matrix has position (0,0); the distance in y-direction increases downwards. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=leftmargin1>r</p>
+
+</td>
+<td valign="top">
+<p>Euclidean distance to the center cell of the matrix: <span class=symbollarger>&Ouml;</span>(x<sup>2</sup>+y<sup>2</sup>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Examples of linear filter expressions are for instance:</p>
+
+<p></p>
+
+<p class=calc0>FilterLinear(5,5,2x+y)</p>
+
+<p>Defines a 5 by 5 shadow filter where the illumination is from the north-west.</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=calc0>FilterLinear(5,5,-2x-y)</p>
+
+<p>Defines a 5 by 5 shadow filter where the illumination is from the south-east.</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=calc0>FilterLinear(5,5,iff(r&gt;3,0,4-r))</p>
+
+<p>Defines an average filter in which the matrix values decrease linearly from the center cell of the matrix towards the borders of the matrix according to Euclidean distance.</p>
+
+<p class=tip>Tip:</p>
+
+<ul class=tipul>
+
+<li>	Both the number of rows and the number of columns defining the filter size must be <i>odd</i> values.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_types_linear_filters.htm">Filter types : linear filters</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/create_a_filter.htm">Create a linear filter</a></p>
+
+<p class=seealsolinks><a href="../ilwis/filter_editor.htm">(Linear) Filter editor</a></p>
+
+<p class=seealsolinks><a href="filter_dialog_box.htm">Filter : dialog box</a></p>
+
+<p class=seealsolinks><a href="filter_command_line.htm">Filter : command line</a></p>
+
+</body

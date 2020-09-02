@@ -1,0 +1,215 @@
+<html>
+
+<head>
+<title>MAPVALUE</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="MAPVALUE, Coordinate functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>MAPVALUE( ) function</h1>
+
+<p class=defnewpar>Returns the value, class, or ID of a map <i>Map</i> at a certain (X,Y) <i>Coordinate</i>.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>MAPVALUE</span>(<i>Map, Coordinate</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="115" valign="top"><i>Map</i></td>
+	<td valign="top">is a raster, polygon, segment or point map</td>
+</tr>
+<tr>
+	<td width="115" valign="top"><i>Coordinate</i></td>
+	<td valign="top">is an (X,Y) coordinate</td>
+</tr>
+<tr>
+	<td width="115" valign="top">Domain type:</td>
+	<td valign="top">a coordinate system</td></tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="115" valign="top"><span class=courier>MAPVALUE</span> returns:</td>
+	<td valign="top">a value, a class name or an ID</td>
+</tr>
+<tr>
+	<td width="115" valign="top">Domain:</td>
+	<td valign="top">same as input <i>Map</i></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>By default this function works on raster maps with extension <span class=courier>.mpr</span>; you can omit the extension <span class=courier>.mpr</span>. To use this function on a polygon map, a segment map or a point map, you need to specify the object's extension (<span class=courier>.mpa</span>, <span class=courier>.mps</span> or <span class=courier>.mpp</span>).</li>	
+	<li>The coordinate system of <i>Coordinate</i> is automatically transformed to the coordinate system of <i>Map</i> if <i>Coordinate</i> and <i>Map</i> do not have the same coordinate system.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>This function may be handy to use in <a href="..//ilwis/popup/dde_popup.htm" onClick="return popup(this, 'notes')" >DDE</a> applications.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p> <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a>, <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator example:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="375"><p class=calc00>? MAPVALUE(Tmb1,COORD(800000,8080000,Cochabamba))</p></td>
+	<td><p>returns the value of Tmb1 on the location with X-coordinate 800000 and Y-coordinate 8080000, e.g. 50.</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc examples:</p>
+
+<p class=calc00>LanduseVal=MAPVALUE(Landuse,Coordinate)</p>
+<p class=calc00>Tmb1Val=MAPVALUE(Tmb1,Coordinate)</p>
+<p class=emptylinehalf>&nbsp;</p>
+<table cellspacing=0>
+<table>
+<tr>
+	<td valign="top" colspan="3"><p class=th>Rainfall.mpp opened as table</p></td>
+	<td valign="top" width="50"></td>
+	<td valign="top" colspan="2"><p class=th>Working table</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=tcolhr>ID</p></td>
+	<td valign="top"><p class=tcolh>Name</p></td>
+	<td valign="top"><p class=tcolhr>Coordinate</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=tcolh>LanduseVal</p></td>
+	<td valign="top"><p class=tcolhr>Tmb1Val</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1>UMSS</p></td>
+	<td valign="top"><p class=t1r>(803429.00, 8074631.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1>Urban centre</p></td>
+	<td valign="top"><p class=t1r>69</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1>Taquina</p></td>
+	<td valign="top"><p class=t1r>(799748.00, 8082415.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1>Shrubs</p></td>
+	<td valign="top"><p class=t1r>34</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1>Laguna Santa Rosa</p></td>
+	<td valign="top"><p class=t1r>(803511.00, 8087422.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1>Bare rock</p></td>
+	<td valign="top"><p class=t1r>38</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1>Laguna Totura</p></td>
+	<td valign="top"><p class=t1r>(801281.00, 8088967.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1>Grassland</p></td>
+	<td valign="top"><p class=t1r>45</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1>PROMIC</p></td>
+	<td valign="top"><p class=t1r>(802613.00, 8080483.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1>Agrculture</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1>Aro Caqua</p></td>
+	<td valign="top"><p class=t1r>(806816.00, 8076585.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1>Urban periphery</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1>Colca Pithua</p></td>
+	<td valign="top"><p class=t1r>(797465.00, 8078352.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1>Agriculture (irrigated)</p></td>
+	<td valign="top"><p class=t1r>43</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>8</p></td>
+	<td valign="top"><p class=t1>Cerro MachaMach</p></td>
+	<td valign="top"><p class=t1r>(796346.00, 8087736.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1>Grassland</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>9</p></td>
+	<td valign="top"><p class=t1>Laguna WaraWara</p></td>
+	<td valign="top"><p class=t1r>(806042.00, 8085414.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1>Grassland</p></td>
+	<td valign="top"><p class=t1r>43</p></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>Column <span class=courier>Coordinate</span> uses coordinate system <span class=courier>Cochabamba</span> as domain.</li>
+	<li>See <a href="how_to_calculate_a_cross_section_through_the_terrain_advanced.htm">How to calculate a cross-section through the terrain</a> for more useful examples.</li>
+</ul>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="90"><a href="calc_coord.htm">COORD</a></td>
+	<td valign="top" width="80"><a href="calc_mincrdx.htm">MINCRDX</a></td>
+	<td valign="top" width="70"><a href="calc_mapcrd.htm">MAPCRD</a></td>
+	<td valign="top"><a href="calc_rasvalue.htm">RASVALUE</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_crdx.htm">CRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mincrdy.htm">MINCRDY</a></td>
+	<td valign="top" width="70"><a href="calc_maprow.htm">MAPROW</a></td>
+	<td valign="top"><a href="calc_dist.htm">DIST</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_crdy.htm">CRDY</a></td>
+	<td valign="top" width="80"><a href="calc_maxcrdx.htm">MAXCRDX</a></td>
+	<td valign="top" width="70"><a href="calc_mapcol.htm">MAPCOL</a></td>
+	<td valign="top"><a href="calc_dist2.htm">DIST2</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_transform.htm">TRANSFORM</a></td>
+	<td valign="top" width="80"><a href="calc_maxcrdy.htm">MAXCRDY</a></td>
+	<td valign="top" width="70"></td>
+	<td valign="top"></td>
+</tr>
+</table>
+</body

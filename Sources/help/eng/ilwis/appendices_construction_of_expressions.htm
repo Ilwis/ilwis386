@@ -1,0 +1,317 @@
+<html>
+
+<head>
+<title>Appendices : construction of expressions</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Appendices, ILWIS expressions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Appendices</h1>
+
+<h1 class=secondline>Construction of expressions</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Expressions on the command line and in scripts may have additional parameters to the left of the definition symbol or the assignment symbol. Furthermore, on the command line, expressions may be followed by a semicolon. ILWIS expressions are not case-sensitive. </p>
+
+<p class=defnewpar>For more information on expressions of operations, see <a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a>.</p>
+
+<p>For more information on MapCalc and TabCalc expressions, see <a href="calc_general_syntax.htm">Map
+and Table Calculation : General syntax</a>. </p>
+
+<p>Expressions cannot be performed if the output object is currently open or is marked read only. </p>
+
+<p class=defnewpar>In the expressions and explanation below:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Courier</p>
+
+</td>
+<td valign="top">
+<p>is used for obliged parts in expressions;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=96>
+<p><i>Italics</i></p>
+
+</td>
+<td valign="top">
+<p>is used for parameters with special requirements;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=96>
+<p>'domain'</p>
+
+</td>
+<td valign="top">
+<p>an existing domain; the domain will be used for the output object;</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top">
+<p>a vertical bar | represents a choice;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top">
+<p>anything in square brackets [ ] represents an optional parameter.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>1. Expressions on the command line <span class=DefaultStyle><u><b>without semicolon</b></u></span></p>
+
+<p class=linespacing01before>[$] [objtype] OUTOBJ [{domvr}]  = <i>expression</i></p>
+
+<p class=linespacing01before>[$] [objtype] OUTOBJ [{domvr}]  := <i>expression</i></p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	First, it is checked whether the output object already exists. If so, a question is asked whether to overwrite the object or not. If you answer the question with 'No', no new object is created. </li>
+
+<li>	When the output object is a raster map, then a Raster Map Definition dialog box appears. In this dialog box, you can select or create a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> for the output map, in case of a value domain you can specify the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> for the output map, and a description for the output map. When the expression does not contain any maps but does contain predefined variables %C, %L , then you also need to specify a geroeference.</li>
+
+<li>	When the expression starts with a $ sign, the output object will directly be calculated and displayed in a window.</li>
+
+</ul>
+
+<p class=kopje>2. Expressions on the command line <span class=DefaultStyle><u><b>with semicolon</b></u></span></p>
+
+<p class=linespacing01before>OUTOBJ [{domvr}]  = <i>expression</i>;</p>
+
+<p class=linespacing01before>OUTOBJ [{domvr}]  := <i>expression</i>;</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>There is no check on existing output objects; an existing output object is simply overwritten.</p>
+
+<p>You can specify a domain and value range for the output map in a pair of curly brackets after the output object name. </p>
+
+<p>These type of expressions are executed by the script processor.</p>
+
+<p class=kopje>3. Expressions in <span class=DefaultStyle><u><b>scripts</b></u></span></p>
+
+<p class=linespacing01before>OUTOBJ [{domvr}]  = <i>expression</i></p>
+
+<p class=linespacing01before>OUTOBJ [{domvr}]  := <i>expression</i></p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>There is no check on existing output objects; existing output objects are simply overwritten.</p>
+
+<p>You can specify a domain and value range for the output map in a pair of curly brackets after the output object name. </p>
+
+<p>There numerous script commands to handle object properties (set domain, set value range, set georef, break dependencies, calc, release disk space, etc.). For more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">ILWIS script language</a>.</p>
+
+<p class=kopje>Explanation of syntax:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p>$</p>
+
+</td>
+<td valign="top">
+<p>to directly calculate and display the output object in a new window</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>objtype </p>
+
+</td>
+<td valign="top">
+<p>to specify the output object type as: </p>
+
+<p class=courier>mpl | map | pol | seg | pnt | tbl | mat</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>OUTOBJ[.ext] </p>
+
+</td>
+<td valign="top">
+<p>the name of the output object with optional <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >extension</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>{domvr}</p>
+
+</td>
+<td valign="top">
+<p>to specify a domain and value range for an output map as:</p>
+
+<p class=calccommline>{<span class=courier>dom=</span>domain<span class=courier>} | {dom=</span>domain<span class=courier>;vr=</span><i>valuerange</i><span class=courier>} | {vr=</span><i>valuerange</i><span class=courier>; dom=</span>domai<span class=courier>n} | {vr=</span><i>valuerange</i><span class=courier>}</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><i>valuerange</i></p>
+
+</td>
+<td valign="top">
+<p>as<span class=courier> </span><i>min</i>:<i>max</i>:<i>prec</i><span class=courier> | </span><i>min</i>:<i>max</i><span class=courier> | </span>::<i>prec</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>to create a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output object</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>:=</p>
+
+</td>
+<td valign="top">
+<p>to create an editable object</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><i>expression</i></p>
+
+</td>
+<td valign="top">
+<p>expression of an operation or a MapCalc expression. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Input objects:</p>
+
+<ul>
+
+<li>	For each part of an expression which requires a raster map as input, you can also use:</li>
+
+        <ul>
+
+        <li>	if the raster map is linked to an attribute table, you can directly access attributes: <br>
+                <i>map.column</i>	</li>
+
+        <li>	if you have a table with the same domain as the raster map, you can access attributes in the table as: 
+                <span class=DefaultStyle><i><br>
+                map.table.col<br>
+                map.table.ext.col</i></span> <br>
+                When you do not specify a table name, it is assumed that the attribute table is linked to the raster map. <br>
+                When you do not specify an extension for the table, it is assumed that the table has extension .TBT.</li>
+
+        </ul>
+
+<li>	For each part of an expression which requires a table as input, you can also specify: <br>
+        <i>table.ext </i><br>
+        where <i>table.ext</i> is a table name and its extension. Extension .TBT can be omitted when the table has extension .TBT.</li>
+
+<li>	For each part of an expression which requires a column as input, you can also use: 
+        <span class=DefaultStyle><i><br>
+        table.col<br>
+        table.ext.col </i></span><br>
+        in which <i>table.ext</i> is a table name and its extension and <i>col</i> is a column name in that table. Extension .TBT can be omitted when the table has extension .TBT.</li>
+
+<li>	For each part of an expression which requires a map list, you can also use:  <br>
+        <span class=courier>mlist</span>(<i>rasmap1, rasmap2, rasmap3, ...</i>)</li>
+
+</ul>
+
+<p class=kopje>Domain and value range:</p>
+
+<p>In MapCalc and TabCalc expressions, and in expressions for operations, you can optionally specify for the output map: an existing <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> and/or the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> of and/or the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> for the output map or column by using a pair of curly brackets between the name of the ouput object and the definition or assignment symbol. </p>
+
+<p class=defnewpar>Examples:</p>
+
+<p class=leftmargin03><i>map1</i><span class=courier>{dom=</span><i>domainname</i><span class=courier>;vr=</span><i>min</i><span class=courier>:</span><i>max</i><span class=courier>:</span><i>precision</i><span class=courier>} </span>= <i>expression</i></p>
+
+<p class=leftmargin03><i>map2</i><span class=courier>{dom=</span><i>domainname</i><span class=courier>;vr=</span><i>min</i><span class=courier>:</span><i>max</i><span class=courier>} </span>= <i>expression</i></p>
+
+<p class=leftmargin03><i>map3</i><span class=courier>{dom=</span><i>domainname</i><span class=courier>;vr=::</span><i>precision</i><span class=courier>} </span>= <i>expression</i></p>
+
+<p class=leftmargin03><i>map4</i><span class=courier>{dom=</span><i>domainname</i><span class=courier>} </span>= <i>expression</i></p>
+
+<p class=leftmargin03><i>map5</i><span class=courier>{vr=</span><i>min</i><span class=courier>:</span><i>max</i><span class=courier>:</span><i>precision</i><span class=courier>;dom=</span><i>domainname</i><span class=courier>} </span>= <i>expression</i></p>
+
+<p class=leftmargin03><i>map6</i><span class=courier>{vr=</span><i>min</i><span class=courier>:</span><i>max</i><span class=courier>;dom=</span><i>domainname</i><span class=courier>} </span>= <i>expression</i></p>
+
+<p class=leftmargin03><i>map7</i><span class=courier>{vr=</span><i>min</i><span class=courier>:</span><i>max</i><span class=courier>:</span><i>precision</i><span class=courier>} </span>= <i>expression</i></p>
+
+<p class=leftmargin03><i>map8</i><span class=courier>{vr=::</span><i>precision</i><span class=courier>} </span>= <i>expression</i></p>
+
+<p class=linespacing03before>The same applies for columns.</p>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>ILWIS uses its internal defaults to determine whether the internal calculation will be performed in integers or in reals. <br>In general it can be said, that:</p>
+
+  	<ul class=tipul>
+		<li>when the input consists of integers, the internal calculation will also be performed in integers; </li>
+		<li>when the input consists of reals, the internal calculation will also be performed in reals. </li>
+	</ul>
+
+  <p class=tiptext>Any user specification of the desired output domain and value range can only limit the results from the internal calculation. It is thus not possible, that when all input is in integers, to obtain output in reals by using a precision smaller than 1, for instance by using <span class=calc0>OUT{dom=Value;vr=0:10000:0.001} = ...</span>. </p>
+
+</body

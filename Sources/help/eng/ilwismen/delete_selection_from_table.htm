@@ -1,0 +1,190 @@
+<html>
+
+<head>
+<title>Table window : Clear/Delete selection</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Clear ..., Delete ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Clear/Delete</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Clear or delete a selection of fields, columns or records in a table. </p>
+
+<p class=defnewpar>To delete a selection:</p>
+
+<ul>
+
+<li>choose <span class=arial>Delete</span> from the Edit menu, </li>
+
+<li>click the <span class=arial>Delete</span> button <img src="../images/delete.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/table_window_toolbar.htm">toolbar</a>, </li>
+
+<li>press the <span class=arial>Del</span> key on the keyboard, or </li>
+
+<li>click the selection with the right mouse button, and choose <span class=arial>Delete</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+</ul>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+
+<li>When deleting the contents of selected fields: the contents of fields of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent columns</a> cannot be deleted, as these 'values' are the result of a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculation</a> or a column <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>. </li>
+
+<li>When deleting columns: read-only columns and table-owned columns cannot be deleted. </li>
+
+<li>When clearing or deleting parts of a table, all changes are directly stored on disk. <br>You CANNOT UNDO a clear or a delete. </li>
+
+</ul>
+
+<p class=kopje>To clear the contents of selected fields:</p>
+
+<ol>
+
+<li class=ls01be>Select the fields you wish to clear: </li>
+
+        <ul>
+
+        <li>To select a single field: click the single field you wish to clear. </li>
+
+        <li>To select multiple fields in sequence: </li>
+
+                <ul>
+
+                <li>drag a rectangle over the <i>block of fields</i> you wish to clear, </li>
+
+                <p>or </p>
+
+                <li>click the first field you wish to clear, </li>
+
+                <li>then press the <span class=arial>Shift</span> key and hold it down, and </li>
+
+                <li>select the last field of a sequence of fields that you wish to clear. </li>
+
+                </ul>
+
+        </ul>
+
+<li class=ls01be>    Use one of the Clear/Delete methods described above.</li>
+
+</ol>
+
+<p class=linespacing03before>Before the selected field(s) are actually cleared, a confirmation is asked. </p>
+
+<p class=kopje>To delete one or more selected columns:</p>
+
+<ol>
+
+<li class=ls01be>Select the column(s) you wish to delete: </li>
+
+        <ul>
+
+        <li>To select a single column: click the single column you wish to delete.</li>
+
+        <li>To select multiple columns in sequence: </li>
+
+                <ul>
+        
+                <li>click the first column of a sequence of columns you wish to delete, </li>
+
+                <li>then, press the <span class=arial>Shift</span> key on the keyboard and hold it down, and </li>
+
+                <li>click the last column of a sequence of columns that you wish to delete. </li>
+
+                </ul>
+
+        </ul>
+
+<li class=ls01be>    Use one of the Clear/Delete methods described above.</li>
+
+</ol>
+
+<p class=linespacing03before>Before the selected column(s) are actually deleted, a confirmation is asked. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>Before deleting a number of columns, you may wish to first re-order your columns. To change the position of a column in the table, <i>drag a column header</i> to a new position. The mouse pointer will change into a column icon <img src="../images/columngray.gif" align=bottom width="13" height="14"> while dragging. </p>
+
+<p class=kopje>To clear the contents/to delete one or more selected records (rows):</p>
+
+<p class=linespacing01before>When a table uses a Class or ID domain, the contents of selected record(s) will be <i>cleared</i>. </p>
+
+<p class=linespacing01before>When a table uses system domain <span class=courier>None</span>, the selected record(s) will be <i>deleted</i>. After the deletion, the remaining records will be renumbered. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ol>
+
+<li class=ls01be>Select the records you wish to delete: </li>
+
+        <ul>
+
+        <li>To select a single record: click the record button of the record you wish to clear/delete. </li>
+
+        <li>To select multiple records in sequence: </li>
+
+        <ul>
+
+        <li>keep the left mouse button down while moving over the record buttons of the records that you wish to delete, </li>
+
+        <p>or</p>
+
+        <li>click the first record button of a sequence of records that you wish to delete, </li>
+
+        <li>press the <span class=arial>Shift</span> key on the keyboard and hold it down, </li>
+
+        <li>click the last record button of a sequence or records that you wish to delete. </li>
+
+        </ul>
+
+        </ul>        
+
+<li class=ls01be>    Use one of the Clear/Delete methods described above.</li>
+
+</ol>
+
+<p class=linespacing03before>Before the selected record(s) are actually cleared or deleted, a confirmation is asked. </p>
+
+<!--<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>The Clear/Delete methods cannot be used in the record view window. </p>-->
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_toolbar.htm">Table window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_menu_commands.htm">Table window : menu commands</a></p>
+
+</body

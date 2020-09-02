@@ -1,0 +1,91 @@
+<html>
+
+<head>
+<title>Spherical distance</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Spherical distance</p>
+
+<p>Spherical distances are calculated over the sphere instead of in a plane. </p>
+
+<p class=defnewpar>First:</p>
+
+<ul>
+
+<li>XY-coordinates of vector maps are first converted to LatLons, using the projection of the coordinate system of the vector map. </li>
+
+<li>XY-coordinates of raster maps are first converted to LatLons, using the projection of the coordinate system of the georeference used by the raster map. </li>
+
+</ul>
+
+<p class=defnewpar>Then, distances are calculated over a sphere with radius 6371007.0 m. A sphere with this radius has an area equal to that of the WGS84 ellipsoid. </p>
+
+<p>&nbsp;</p>
+
+<p class=linespacing01after>Figure 1 below shows the spherical distance (L) between two points called 1 and 2. </p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargin1><img src="../../images/sphdist.gif" width="207" height="190"></p>
+
+<p class=captionfigleft1>Fig. 1: Principle of spherical distance. The spherical distance or arc length (L) between two points called 1 and 2, depends on <span class=courier>c</span> (angle in radians between 2 points with geographical coordinates) and R (radius of the earth as a sphere). </p>
+
+<p>Suppose there are 2 points on earth with geographical coordinates &#966;<sub>1</sub> &#955;<sub>1</sub> and &#966;<sub>2</sub> &#955;<sub>2</sub>. </p>
+
+<p class=defnewpar>The cosine of arc <span class=courier>c</span> between the 2 points can be found as: </p>
+
+<p class=linespacing03before>cos <span class=courier>c</span> =  sin &#966;<sub>1</sub> sin &#966;<sub>2</sub> + cos &#966;<sub>1</sub> cos &#966;<sub>2</sub> cos(&#955;<sub>2</sub> - &#955;<sub>1</sub>)</p>
+
+<p class=defnewpar>However, because of inaccuracy of the formula above at small distances (cos <span class=courier>c</span> values close to 1), the equation above is replaced by the following: </p>
+
+<p class=linespacing03before>sin(<span class=courier>c</span>/2) = <span class=symbollarger>&Ouml;</span>{sin<sup>2</sup>[ (&#966;<sub>2</sub> -  &#966;<sub>1</sub>) / 2 ] + cos &#966;<sub>1</sub> cos &#966;<sub>2</sub> sin<sup>2</sup>[ (&#955;<sub>2</sub> - &#955;<sub>1</sub>) / 2 ] }</p>
+
+<p class=linespacing03before>Thus: <br>
+
+<span class=courier>c</span> = arcsin <span class=symbollarger>&Ouml;</span>{sin<sup>2</sup>[ (&#966;<sub>2</sub> -  &#966;<sub>1</sub>) / 2 ] + cos &#966;<sub>1</sub> cos &#966;<sub>2</sub> sin<sup>2</sup>[ (&#955;<sub>2</sub> - &#955;<sub>1</sub>) / 2 ] } <span class=symbol>*</span> 2</p>
+
+<p>(<span class=courier>c</span> expressed in radians)</p>   
+
+<p class=defnewpar>Then, the arc length (L), i.e. the spherical distance over a great circle arc less than 180 (half the earth's circumference) is found as:
+
+<p class=linespacing03before>L = <span class=courier>c</span> <span class=symbol>*</span> R </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwismen/measure_distance.htm" onClick="return popup(this, 'notes')" >Map window : measure distance</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/spatial_correlation_functionality.htm" onClick="return popup(this, 'notes')" >Spatial correlation : functionality</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/cross_variogram_functionality.htm" onClick="return popup(this, 'notes')" >Cross variogram : functionality</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/nearest_point_functionality_algorithm.htm" onClick="return popup(this, 'notes')" >Nearest point : functionality / algorithm</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/moving_average_functionality.htm" onClick="return popup(this, 'notes')" >Moving average : functionality</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/moving_surface_functionality.htm" onClick="return popup(this, 'notes')" >Moving surface : functionality</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/kriging_functionality.htm" onClick="return popup(this, 'notes')" >Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/cokriging_functionality.htm" onClick="return popup(this, 'notes')" >CoKriging : functionality</a></p>
+
+
+</body

@@ -1,0 +1,576 @@
+<html>
+
+<head>
+<title>Least squares fit</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Least squares fit, Column operations, Columns, Regression, Table window, ColumnLeastSquaresFit">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table&nbsp;window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Columns menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Least Squares Fit</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>This topic consists of the following sections: </p>
+
+<p><a href="#functionality"><span class=bookmark>1. Functionality</span></a></p>
+
+<p><a href="#dialog_box"><span class=bookmark>2. Dialog box</span></a></p>
+
+<p><a href="#command_line"><span class=bookmark>3. Command line</span></a></p>
+
+<p><a href="#algorithm"><span class=bookmark>4. Algorithm</span></a></p>
+
+<p><a href="#description_functions"><span class=bookmark>5. Description of functions</span></a></p>
+
+<h2 id="functionality">Functionality</h2>
+
+<p>The least squares fit operation calculates for all discrete values in two input columns an output value in an output column, according to a certain user-selected function which is supposed to describe the relation between all values in the two input columns. Coefficients for this function are calculated in such a way that the sum of errors is as small as possible (best fit). </p>
+
+<p class=defnewpar>The least squares fit operation provides a tool to describe the best fitting relation between two columns in a table. The most common application of this concept is a linear regression which means the two table columns are known or expected to have some linear relationship.</p>
+
+<p class=defnewpar>This may be described with the following equation:</p>
+
+<p class=calc0linsp03befaft>Y = <i>a</i> * X + <i>b</i></p>
+
+<p>where X and Y are known variables (records from the two columns in the table) and where <i>a</i> and <i>b</i> are unknown coefficients. </p>
+
+<p class=defnewpar>Usually there is some experimental error present or other deviation from a line describing the relation between X and Y. This means that no values for <i>a</i> and <i>b</i> are possible for a perfect fit. The best fit is found when the sum of the errors is as small as possible. This is the case when the sum of squares of the deviations of all points from the line, indicating the relationship, is as small as possible (see figures below). In other words the sum of squares of the errors on each data point is minimized. </p>
+
+<p class=defnewpar>The model used, provides a method for finding the least squares approximation to a set of data points (X, Y). The approximation must be a linear combination of a set basis vectors. The functional form of the approximation (polynomial, exponential etc.) is determined by the user. </p>
+
+<p class=defnewpar>To find the least squares fit, X and Y can be represented graphically using one of the five predefined function types: exponential, logarithmic, power law, polynomial or trigonometric. </p>
+
+<p>Then the number of terms can be specified: </p>
+
+<ul>
+
+<li>when using 2 terms in a polynomial function, the function will read: </li>
+
+        <p>Y = <i>a</i><sup> </sup>X + <i>b</i> </p>
+
+<li>when using 3 terms in a polynomial function, the function will read: </li>
+
+        <p> Y = <i>a</i><sup> </sup>X<sup> 2</sup> + <i>b</i><sup> </sup>X + <i>c</i></p>
+
+<li>etc. </li>
+
+</ul>
+
+<p class=defnewpar>By calculating a least squares fit through the <a href="../ilwis/table_window_menu_commands.htm">Columns menu</a> of a table window, you will thus obtain values in an output column which if plotted in a graph are positioned exactly on the line which represents the best fitting curve through all input points. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>It might be easier to directly calculate a least squares fit in a <a href="..//ilwis/popup/graph_window_popup.htm" onClick="return popup(this, 'notes')" >graph window</a>. </p>
+
+	<ul class=tipul>
+	
+	<li>First, create a graph from two columns in a table. </li>
+	
+	<li>Then, in the graph window, choose <span class=arial>Add Graph Least Squares Fit</span> from the <a href="../ilwis/graph_window_menu_commands.htm">Edit menu</a> of the graph window; </li>
+		
+	<li>In the appearing <a href="graph_window_add_graph_least_squares_fit.htm">Add Graph Least Squares Fit</a> dialog box, select the two input columns again, and select a function how the least squares fit should be calculated. </li>
+
+	</ul>
+		
+<p class=tiptext>The results of the least squares fit will then be directly shown as a continuous line in your graph window. The resulting formula can be viewed in the <a href="graph_window_options_graph_least_squares_fit.htm">Graph Options - Least Squares Fit</a> dialog box; in this dialog box you can also modify the calculation by choosing another function, etc. </p>
+
+<p class=kopje>Examples:</p>
+
+<p>The examples below show the relations between column colX and column colY1 and between column colX and column colY2 as a result of a least squares fit. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p><img src="../images/lssquarespoly.gif" align=bottom width="389" height="302"></p>
+
+<p class=captionfig>Fig. 1:	The best fit between colX and colY1 using a polynomial function with 2 terms (a straight line) defined by the line:<br>
+Y =  49.101 + 1.276 * X</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p><img src="../images/lssquaresexpo.gif" align=bottom width="408" height="302"></p>
+
+<p class=captionfig>Fig. 2:	The best fit between colX and colY2 using an exponential function (always 2 terms) defined by the line: <br>
+
+Y = 42.341302790409 * exp(0.007566547732 * X) </p>
+
+<p>When using the least squares fit operation on the Columns menu of a table window, the output column shows the Y-values which are exactly on the line of the best-fit curve.</p>
+
+<p class=kopje>Input column requirements: </p>
+
+<ul>
+
+<li>	The input columns should both have a value domain.</li>
+
+<li>	The number of points should be at least 2; points having undefined values for X and/or Y included.</li>
+
+<li>	The exponential function require that all Y-values have the same sign (either all positive, or all negative) and none of them equals 0.</li>
+
+<li>	The logarithmic function requires that all X-values have the same sign (either all positive, or all negative) and none of them equals 0.</li>
+
+<li>	The power law function requires that all X-values are positive and that the Y-values all have the same sign (either all positive or all negative) and none of them equals 0.</li>
+
+<li>	The trigonometric ('Fourier') function requires at least 3 terms.</li>
+
+<li>	The number of points must be at least equal to the number of terms selected (undefineds not counted).</li>
+
+</ul>
+
+<h2 id="dialog_box">Dialog box</h2>
+
+<p>The least squares fit operation provides a tool to describe the best fitting relation between two table columns. Usually there is some experimental error present or other deviation from a line describing the relation between X and Y. This means that no values for a and b are possible for a perfect fit. The best fit is found when the sum of the errors (least squares) is as small as possible.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>X - column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the name of the column representing the x-values (independent variable). For the input column requirements, see above <a href="#functionality"><span class=bookmark>Functionality</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Y - column: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the name of the column representing the y-values (dependent variable).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Function:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the type of function: Exponential, Logarithmic, Polynomial, Power Law, or Trigonometric. For more information, see <a href="#functionality"><span class=bookmark>Functionality</span></a> and <a href="#algorithm"><span class=bookmark>Algorithm</span></a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Nr. of terms:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the number of terms to be used in the formula, describing the best fit. The text box is only available for function types polynomial (minimum 2 terms) and trigonometric (minimum 3 terms).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Output column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the name of the output column that will contain the transformed Y-values (obtained by applying the fitting function to the independent (X) variable, skipping undefined values). A <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >dependent column</a> is created. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <a href="column_properties.htm">Column Properties</a> dialog box appears. </p>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	To view the resulting least squares fit formula: double-click the output column name in the table. The <a href="column_properties.htm">Column Properties</a> dialog box appears; then, click the Additional Info button in that dialog box.</li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	To view the results in a graph, choose the <span class=arial>Create Graph</span> command from the <a href="../ilwis/table_window_menu_commands.htm">File menu</a> in the table window. </li>
+
+<p class=tiptextls01be>	To display the input values as points:</p>
+
+        <ul class=tipul>
+
+        <li>	for the X-axis of the graph, use the same column as you used as input X in the least squares fit; </li>
+
+        <li>	for the Y-axis of the graph, use the same column as you used as input Y in the least squares fit;</li>
+
+        </ul>
+        
+        <p>	A point graph will be directly shown. </p>
+        
+<p class=emptylinehalf>&nbsp;</p>
+
+		<p>	To display the results of the least-squares fit as a line:</p>
+
+        <ul class=tipul>
+
+        <li>	From the <a href="../ilwis/graph_window_menu_commands.htm">Edit menu</a> in the graph window, choose <span class=arial>Add Graph from Columns</span>;</li>
+        
+        <li>	In the appearing <a href="graph_window_add_graph_from_columns.htm">Add Graph from Columns</a> dialog box: </li>
+        
+	        <ul>
+
+	        <li>	for the X-axis of the graph, select the same X-column as you used in the least squares fit; </li>
+	        
+	        <li>	for the Y-axis of the graph, select the output column of the least squares fit; </li>
+        
+	        </ul>
+	        
+        </ul>
+
+        <p>	Initially, a point graph will be displayed. </p>
+        
+        <ul class=tipul>
+
+        <li>	Then, double-click this graph layer in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane. In the appearing <a href="graph_window_options_graph_from_columns.htm">Graph Options - Graph from Columns</a> dialog box, choose graph type <span class=arial>Line</span>.</li>
+        
+        </ul>
+
+        <p>	Now, a line will be drawn through the calculated values. </p>
+        
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	It is probably easier to directly perform a least squares fit in a graph window. </li>
+
+		<ul>
+		
+		<li>Create a graph from the input columns, as described above. </li>
+		
+		<li>In the graph window, choose Add Graph Least Squares Fit from the Edit menu of the graph window; </li>
+		
+		<li>In the appearing <a href="graph_window_add_graph_least_squares_fit.htm">Add Graph Least Squares Fit</a> dialog box, select the two input columns again, and a function how the least squares fit should be calculated. </li>
+		
+		</ul>
+		
+		<p>The results of the least squares fit will then be directly shown as a line in your graph window. </p>
+		
+</ol>
+
+<h2 id="command_line">Command line</h2>
+
+<p>The Least Squares Fit operation can be directly executed by typing one of the following expressions on the command line of the table window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTCOL</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>ColumnLeastSquaresFit</span>(Col1, Col2, <i>Function</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=60>
+<p class=calccommline>OUTCOL</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>ColumnLeastSquaresFit</span>(Col1, Col2, <i>Function</i>, <i>n</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=84>
+<p>OUTCOL</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output column.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>ColumnLeastSquaresFit</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=84>
+<p></p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Least Squares Fit operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=84>
+<p>Col1</p>
+
+</td>
+<td valign="top">
+<p>is the name of your X-column, i.e. an independent variable with a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=84>
+<p>Col2</p>
+
+</td>
+<td valign="top">
+<p>is the name of your Y-column, i.e. a dependent variable with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=84>
+<p><i>Function</i></p>
+
+</td>
+<td valign="top">
+<p>is the function to be used in the description of the relationship between X and Y. For the function, type either:</p>
+
+<p class=courier>exponential | logarithmic | polynomial | power | trigonometric </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=84>
+<p><i>n</i></p>
+
+</td>
+<td valign="top">
+<p>When using a polynomial or trigonometric function: </p>
+
+        <ul>
+
+        <li>Optional parameter to specify the number of terms to be used in the function. </li>
+
+        <li><i>n</i> may not be greater than the number of valid data points, excluding points with undefined X or Y values. </li>
+
+        <li>If the parameter is omitted, 2 terms will be used for a polynomial function, and 3 terms will be used for a trigonometric function. </li>
+
+        </ul>
+
+<p class=linespacing03before>When using an exponential, logarithmic or power function: </p>
+
+        <ul>
+
+        <li>Parameter is not required and can be omitted: always 2 terms will be used. </li>
+
+        </ul>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the column is calculated. </p>
+
+<h2 id="algorithm">Algorithm</h2>
+
+<p>Given a set of <i>m</i> data points (X,Y) and <i>n</i> unknown coefficients in the fitting function, an <i>m</i> <span class=courier>*</span> <i>n</i> matrix (<i>m</i> &ge; <i>n</i>), is constructed. In this matrix, <i>n</i> is the number of basis vectors in the approximation. A basis vector is a function itself defined by the fit type, selected by the user. The accuracy of the fit (goodness of fit) is indicated by the standard deviation:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p>S.D. = <span class=symbollarger>&Ouml;</span> ( <span class=symbol>S</span> (Y<sub>i</sub> - F (X<sub>i</sub>) )<sup>2</sup> / (<i>m</i> - <i>n</i>))</p>
+
+<p class=defnewpar>where: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p>F(X<sub>i</sub>)</p>
+
+</td>
+<td valign="top">
+<p>is the least squares solution at the point X<sub>i</sub>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>(Y<sub>i</sub> - F (X<sub>i</sub>))</p>
+
+</td>
+<td valign="top">
+<p>is the residual and (<i>m</i> - <i>n</i>) is the degree of freedom to the fit.</p>
+
+</td>
+</tr>
+</table>
+
+<h2 id="description_functions">Description of functions</h2>
+
+<p class=kopjeboldandund>Exponential:</p>
+
+<p>This module fits the function:  <span class=courier>Y = <i>a</i> e<sup> <i>b</i>&nbsp;X</sup></span></p>
+
+<p>where <i>a</i> and <i>b</i> are real numbers to the data points. </p>
+
+<p class=defnewpar>A linear equation is obtained by taking the natural logarithm of both sides: </p>
+
+<p><span class=courier>ln(Y) = ln(<i>a</i>) + <i>b</i> X</span></p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>The Y-values of the data points must all have the same sign (either all positive or all negative).</p>
+
+<p class=kopjeboldandund>Logarithmic:</p>
+
+<p>This module fits the function:  <span class=courier>Y = <i>a</i> ln(<i>b</i><sub>&nbsp;</sub>X)</span></p>
+
+<p>in which <i>a</i> and <i>b</i> are real numbers to the data points.</p>
+
+<p class=defnewpar>A linear equation is obtained rewriting the equation to: </p>
+
+<p class=courier>Y = <i>a</i> ln(<i>b</i>) + <i>a</i> ln(X)</p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>The X-values of the data points must all have the same sign (either all positive or all negative)  and none of them equals 0.</p>
+
+<p class=kopjeboldandund>Polynomial:</p>
+
+<p>This module uses Chebyshev polynomials to fit a polynomial to the data points.</p>
+
+<p class=defnewpar>The Nr of terms must be one greater than the degree of the polynomial. A straight-line least squares fit needs only two terms. The elements of the solution vector S will be as follows:<sub> </sub></p>
+
+<p><span class=courier>S</span><sub>j</sub><span class=courier> = <i>a</i></span><sub>j</sub></p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>                      
+<td valign="top" width=60>
+<p><i>a</i><sub>j</sub></p>
+
+</td>
+<td valign="top">
+<p>is the coefficient of X<sub> j - 1</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p>1 &lt;= j &lt;= Nr of terms</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p>2 &lt;= Nr of terms &lt;= Nr data points</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopjeboldandund>Power law:</p>
+
+<p>This module fits the function: <span class=courier>Y = <i>a</i> X<sup> <i>b</i></sup></span></p>
+
+<p>in which <i>a</i> and <i>b</i> are real numbers to the data points. </p>
+
+<p class=defnewpar>A linear equation is obtained by taking the natural logarithm of both sides: </p>
+
+<p><span class=courier>ln(Y) = ln(<i>a</i>) + <i>b</i> * ln(X)</span></p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>All X-values of the data points must be positive and the Y-values of the data points must all have the same sign (either all positive or all negative) and none of them equals 0.</p>
+
+<p class=kopjeboldandund>Trigonometric:</p>
+
+<p class=linespacing03after>This module fits a finite Fourier series to the data points. </p>
+
+<p class=defnewpar>The elements of the solution vector S will be as follows:</p>
+
+<p class=courier>S<sub>j</sub> = F<sub>j - 1</sub></p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=60>
+<p>F<sub> j - 1</sub></p>
+
+</td>
+<td valign="top"> 
+<p>is the (j - 1)<sup>th</sup> term in the Fourier series. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p>1 &lt;= j &lt;= Nr of terms</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p>3 &lt;= Nr of terms &lt;= Nr data points</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The first few terms in the Fourier series are:</p>
+
+<p>F<sub>0</sub> = 1	</p>
+
+<p>F<sub>1</sub> = cos(X)</p>
+
+<p>F<sub>2</sub> = sin(X)</p>
+
+<p>F<sub>3</sub> = cos(2X)</p>
+
+<p>F<sub>4</sub> = sin(2X)</p>
+
+<p>F<sub>5</sub> = cos(3X)</p>
+
+<p>F<sub>6</sub> = sin(3X)</p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_functionality.htm">Graph window : functionality</a></p>
+
+<p class=seealsolinks><a href="graph_window_add_graph_least_squares_fit.htm">Add Graph by Least Squares Fit</a></p>
+
+<p class=seealsolinks><a href="graph_window_options_graph_least_squares_fit.htm">Graph Options - Least Squares Fit</a></p>
+
+</body

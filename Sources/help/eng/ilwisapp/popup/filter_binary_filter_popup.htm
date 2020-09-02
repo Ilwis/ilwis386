@@ -1,0 +1,40 @@
+<html>
+
+<head>
+<title>filter binary filter popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Binary filters</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/filters_types_binary_filters.htm" onClick="return popup(this, 'notes')" >Binary filters</a> regard the input map as a binary map. This means that <i>zero values</i> in the input map are regarded as 0 (false), and <i>all other defined values</i> as 1 (true). By ordering the 9 input pixels in a certain way, the filter produces a number of 9 binary digits. This figure solely depends on the positions of true and false pixels in the map. To decide whether to assign a 0 or 1 to the output pixel, the binary number is looked up in a table which is present in each binary filter itself.</p>
+
+<p class=linespacing03after>Binary filters are widely used for morphologic filtering.</p>
+
+<p class=linespacing03after>Standard binary filters are: <a href="../../ilwisapp/sec/filter_binmajor_sec.htm">BINMAJOR</a>, <a href="../../ilwisapp/sec/filter_eighttofour_sec.htm">CONN8TO4</a>, <a href="../../ilwisapp/sec/filter_dilate4_sec.htm">DILATE4</a>, <a href="../../ilwisapp/sec/filter_dilate8_sec.htm">DILATE8</a>, <a href="../../ilwisapp/sec/filter_shrink4_sec.htm">SHRINK4</a>, <a href="../../ilwisapp/sec/filter_shrink_8_sec.htm">SHRINK8</a>, <a href="../../ilwisapp/sec/filter_inbdn4_sec.htm">INBND4</a>, <a href="../../ilwisapp/sec/filter_inbnd8_sec.htm">INBND8</a>, <a href="../../ilwisapp/sec/filter_outbnd4_sed.htm">OUTBND4</a>, <a href="../../ilwisapp/sec/filter_outbnd8_sec.htm">OUTBND8</a>, <a href="../../ilwisapp/sec/filter_peppsalt_sec.htm">PEPPSALT</a>, LIFEGAME.</p>
+
+<p>There are no possibilities to define your own binary filters.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_types_binary_filters.htm" onClick="return popup(this, 'notes')" >Filter types : binary filters</a></p>
+
+</body

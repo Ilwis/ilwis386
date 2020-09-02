@@ -1,0 +1,355 @@
+<html>
+
+<head>
+<title>Layout editor : standard toolbar</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Layout editor, Toolbar, Button bar, Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Layout editor</h1>
+
+<h1 class=secondline>Standard toolbar</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >Layout editor</a> has two toolbars that provide <i>shortcuts</i> for some regularly used menu commands: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>a Standard toolbar: for standard actions like zooming in and out, save and print; </li>
+
+<li>a <a href="layout_editor_layout_toolbar.htm">Layout toolbar</a>: to insert <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> to a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>, to add or to remove a layer from a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout, to add <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> or <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a> to a map view, etc.</li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>In this topic, the Standard toolbar is described. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar><img src="../images/layouteditorstandard.gif" align=bottom width="354" height="26"></p>
+
+<p class=defnewpar>When you leave the mouse pointer for a short period of time on top of a button, a tooltip will appear with the name of the button / the menu command that it will perform. Also the <a href="map_window_status_bar.htm">status bar</a> at the bottom of the window may provide you with a short explanation on the effect of using the button. </p>
+
+<p class=defnewpar>You can move the toolbar and dock it along an edge of the window; you can also make the toolbar floating. </p>
+
+<p class=defnewpar>The following actions can be performed:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing="1%" width="100%">
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/open.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="../ilwismen/layout_editor_open_layout.htm">Open</a>:</p>
+
+</td>
+<td valign="top">
+<p>Open another layout in the layout editor; this will replace the layout that is currently open. A dialog box will appear in which you can choose another layout. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/save.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="../ilwismen/layout_editor_save_layout.htm">Save</a>:</p>
+
+</td>
+<td valign="top">
+<p>Save the current <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>. If a map view is selected when you click this button, the map view will be saved. The button is only available if the contents of the layout or the selected map view have changed. </p>
+
+<p>When this is the first time you save a layout, a <span class=arial>Save As</span> dialog box will appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/print.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="../ilwismen/layout_editor_print.htm">Print</a>:</p>
+
+</td>
+<td valign="top">
+<p>Print the layout. You can also use the <span class="arial">Ctrl+P</span> keys on the keyboard. A <span class=arial>Print</span> dialog box will appear in which you can select a printer, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=24>
+<p><img src="../images/cut.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="../ilwismen/layout_editor_cut_selection.htm">Cut</a>:</p>
+
+</td>
+<td valign="top">
+<p>Copy the current selection to the clipboard and delete the selection from the layout. You can also use the <span class="arial">Ctrl+X</span> keys on the keyboard.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/copy.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="../ilwismen/layout_editor_copy_selection.htm">Copy</a>:</p>
+
+</td>
+<td valign="top">
+<p>Copy the current selection to the clipboard. You can also use the <span class="arial">Ctrl+C</span> keys on the keyboard.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/paste.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="../ilwismen/layout_editor_paste_selection.htm">Paste</a>:</p>
+
+</td>
+<td valign="top">
+<p>Paste the contents of the clipboard into this layout as text, as a picture or as a bitmap. You can also use the <span class="arial">Ctrl+V</span> keys on the keyboard.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/delete.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="../ilwismen/layout_editor_clear_selection.htm">Clear</a>:</p>
+
+</td>
+<td valign="top">
+<p>Clears or deletes the selected object from the current layout. You can also use the <span class=arial>Del</span> key on the keyboard. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/layoutentirmap.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="..//ilwismen/popup/layout_editor_entire_page_popup.htm" onClick="return popup(this, 'notes')" >Entire Page</a>:</p>
+
+</td>
+<td valign="top">
+<p>Display the layout as an entire page in the layout editor window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/normal.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="..//ilwismen/popup/layout_editor_normal_popup.htm" onClick="return popup(this, 'notes')" >Normal</a>:</p>
+
+</td>
+<td valign="top">
+<p>Switch off <span class=arial>Zoom In</span>, <span class=arial>Zoom Out</span>, or <span class=arial>Pan</span>, and return to normal pointing mode. The mouse pointer will change back into a normal pointer. You can also press the <span class=arial>Esc</span> key or the <span class=arial>Ctrl+N</span> keys on the keyboard to return to <span class=arial>Normal</span> mode. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/pan.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="..//ilwismen/popup/layout_editor_pan_popup.htm" onClick="return popup(this, 'notes')" >Pan</a>:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to roam through the entire page of the layout, when you zoomed in on the layout. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/zoomin.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="../ilwismen/zoom_in_on_maps.htm">Zoom In</a>:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to zoom in on a selected spot or area in the layout. </p>
+
+<p>The mouse pointer will change into a magnifying-glass with a large plus inside, then: </p>
+
+<ul>
+
+<li>click in the layout window to zoom in on that position with a factor 2, or  </li>
+
+<li>drag the mouse pointer in the layout window from one corner of interest to another (any zoom in factor). </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/zoomout.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p>Zoom Out:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to zoom out from a selected spot in the layout window. </p>
+
+<p>The mouse pointer will change to a 'magnifying'-glass with a large minus inside, then: </p>
+
+<ul>
+
+<li>click in the layout window to zoom out with a factor 2, or </li>
+
+<li>drag the mouse pointer in the layout window from one corner to another (any zoom out factor): </li>
+
+        <ul>
+
+        <li>when you drag a small rectangle to zoom out: you will zoom out a lot; </li>
+
+        <li>when you drag a large rectangle to zoom out: you will zoom out a bit. </li>
+
+        </ul>
+
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/redraw.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="..//ilwismen/popup/layout_editor_redraw_popup.htm" onClick="return popup(this, 'notes')" >Redraw</a>:</p>
+
+</td>
+<td valign="top">
+<p>Redraws the contents of the layout window. If a map view is selected when you click this button, the map view will be redrawn. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/annkeepscale.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p><a href="../ilwismen/layout_editor_keep_scale.htm">Keep scale</a>:</p>
+
+</td>
+<td valign="top">
+<p>Fix the scale for a selected map view or not. <br />The effect is noticed when dragging borders of a map view: </p>
+
+<ul>
+<li>when the scale of a map view is fixed and you drag the map view's borders: the area shown by the map view is reduced or enlarged, </li>
+
+<li>when the scale of a map view is <i>not</i> fixed and you drag the map view's borders: the scale on which the map view is displayed is changed. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ol> 
+
+<li>When the button appears <b>down</b>: the scale of the map view is fixed for display and printing. You can only change the scale of a map view manually by typing a scale in the Layout Management pane. </li>
+
+    
+        <p class=linespacing03before>Dragging the <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of a selected map view to the outside: </p>
+
+        <ul>
+
+        <li>if the map view was displayed as an entire map, it will remain as it was; the scale of the map view and thus its size are already fixed; </li>
+
+        <li>if only part of the map view was displayed, then the map view will become larger, but the scale on which it is displayed remains the same (already fixed). </li>
+
+        </ul>
+
+        <p class=linespacing03before>Dragging the size handles of a selected map view to the inside: </p>
+
+        <ul>
+
+        <li>only part of the map view will be shown; the scale on which the map view is displayed remains the same (already fixed). </li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>When the button appears <b>up</b>: the scale of the map view is not fixed.</li>
+
+        <p class=linespacing03before>Dragging the <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of a selected map view to the outside: </p>
+
+        <ul> 
+
+        <li>the map view will become larger (the scale will be automatically adjusted). </li>
+
+        </ul>
+
+        <p class=linespacing03before>Dragging the size handles of a selected map view to the inside: </p>
+
+        <ul>
+
+        <li>the map view will become smaller (the scale will be automatically adjusted). </li>
+
+        </ul>
+
+</ol>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The toolbar can be hidden or shown with the <span class=arial>Standard Toolbar</span> command on the <a href="layout_editor_menu_commands.htm">View menu</a>. If the action of a certain button cannot be performed at a certain moment, the button appears gray.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+<p class=seealsolinks><a href="layout_editor_menu_commands.htm">Layout editor : menu commands</a></p>
+
+</body

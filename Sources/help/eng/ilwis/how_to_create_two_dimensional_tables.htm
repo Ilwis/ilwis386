@@ -1,0 +1,65 @@
+<html>
+
+<head>
+<title>How to create two-dimensional tables</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Two-dimensional tables, How to create ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to create a two-dimensional table</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A two-dimensional table is used to combine or reclassify two raster maps with a class or ID domain. It defines a value for each possible combination of input classes or IDs. A two-dimensional table view consists of rows which represent one domain and of columns which represent another domain. In the two-dimensional table, you have to assign a value, class name or ID to the fields which represent the combination of these domains.</p>
+
+<p class=kopje>To create a two-dimensional table:</p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">File menu</a> in the Main Window, choose <span class=arial>Create Two-Dimensional Table</span>, </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Create</span> item, and double-click the <span class=arial>New 2DimTbl</span> item, or </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>New 2DimTbl</span> item.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwismen/create_a_two_dimensional_table.htm">Create Two-Dimensional Table</a> dialog box appears. </p>
+
+<p class=defnewpar>When you create a new two-dimensional table, it is directly displayed in a table window where you can also edit it. To open and to edit an existing two-dimensional table, see also: <a href="how_to_edit_two_dimensional_tables.htm">How to edit a two-dimensional table</a>.</p>
+
+<p class=kopje>To apply a two-dimensional table:</p>
+
+<p>The table can be applied by typing a special expression on the command line of the Main window: </p>
+
+<p class=defnewpar>OUTMAP <span class=courier>=</span> 2dimtablename<span class=courier>[</span>map1<span class=courier>,</span>map2<span class=courier>]</span></p>
+
+<p class=defnewpar>When you apply the two-dimensional table, you need two input raster maps which have the domains as used by the two-dimensional table, the output raster map then contains the values, classes or IDs that you entered in the fields of the two-dimensional table.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="ilwis_objects_two_dimensional_tables.htm">ILWIS objects : two-dimensional tables</a></p>
+
+<p class=seealsolinks><a href="how_to_edit_two_dimensional_tables.htm">How to edit a two-dimensional table</a></p>
+
+<p class=seealsolinks><a href="calc_classifying_two_maps_with_a_two_dimensional_table.htm">Map calculation: classifying two maps according to a two-dimensional tables</a></p>
+
+</body

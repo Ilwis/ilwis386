@@ -1,0 +1,716 @@
+<html>
+
+<head>
+<title>ID Grid map : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ID Grid map, PolygonMapGrid">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>ID Grid map</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/id_grid_map_popup.htm" onClick="return popup(this, 'notes')" >ID Grid map</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (CoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, <i>NrVertical</i>, <i>NrHorizontal</i>)</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (CoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, , , <i>OppositeX</i>,
+<i> OppositeY)</i></p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (CoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, , , <i>NrVertical</i>, <i>NrHorizontal</i>, <i>OppositeX</i>,
+<i> OppositeY)</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (CoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, <i>NrVertical</i>, <i>NrHorizontal</i>, ,
+, [<i>DirectionX</i>], [<i>DirectionY</i>], [Table], [<i>Label</i>], [<i>Order</i>]<i>,
+</i>[<i>StartCorner</i>]<i>, </i>[<i>StartNumber</i>], [<i>Steps</i>], [<i>Prefix</i>],
+[<i>Postfix</i>])</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (CoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, , , <i>OppositeX</i>,
+<i> OppositeY</i>, [<i>DirectionX</i>], [<i>DirectionY</i>], [Table], [<i>Label</i>],
+[
+<i>Order</i>], [<i>StartCorner</i>], [<i>StartNumber</i>], [<i>Steps</i>], [<i>Prefix</i>],
+[<i>Postfix</i>])</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (CoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, , , <i>NrVertical</i>, <i>NrHorizontal</i>, <i>OppositeX</i>,
+<i> OppositeY</i>, [<i>DirectionX</i>], [<i>DirectionY</i>], [Table], [<i>Label</i>],
+[<i>Order</i>], [<i>StartCorner</i>], [<i>StartNumber</i>], [<i>Steps</i>], [<i>Prefix</i>],
+[<i>Postfix</i>])</p>
+
+</td>
+</tr>
+</table>
+
+
+<!--<p class=defnewpar>You can find some more written out syntax and examples below. </p>-->
+
+
+<p class=defnewpar>where: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+</td>
+
+<td valign="top">
+<p>is the name of the output polygon map containing the ID grid cells.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><p class=courier>PolygonMapGrid</p></td>
+<td valign="top">is the command to start the ID Grid map operation.</td>
+</tr>
+
+<tr>
+<td valign="top" width=144>CoordSystem</td>
+<td valign="top">is the name of the coordinate system (metric or latlon).</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>OriginX</i>, <i> OriginY</i></td>
+<td valign="top">are the X and Y coordinates of the origin. The origin is the lower left corner of the output polygon map.</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>Width</i>, <i>  Height</i></td>
+<td valign="top">are the width and height of an ID grid cell. The grid size is always expressed in the units of the
+  coordinate system.</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>NrVertical</i>, <i> NrHorizontal</i></td>
+<td valign="top">are the number of vertical and horizontal grid cells in the ID grid map.</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>OppositeX</i>, <i> OppositeY</i></td>
+<td valign="top">are the X and Y coordinates of the opposite corner in the ID grid map. The opposite corner coordinate is the corner opposite the corner specified as 'origin coordinate'.</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>DirectionX</i>, <i> DirectionY</i></td>
+<td valign="top">are the X and Y coordinates of the direction point. The direction point is a point on the positive Y-axis from the lower left corner (origin) of the ID grid map and is used to rotate the grids.</td>
+</tr>
+
+<tr>
+<td valign="top" width=144>Table</td>
+<td valign="top">is an existing attribute table with an ID domain. The ID to be assigned to each grid cell should be available in the domain of the table otherwise undefined values will be assigned to the grid cells during the labeling process. See <a href="id_grid_map_algorithm.htm">ID Grid map : algorithm</a> for more information.</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>Label</i></td>
+<td valign="top"><span class=courier>LabelPoints</span> | <span class=courier>NoLabelPoints</span>
+  <p>specify whether or not a point map with label points at the center of the each grid cell has to be created.
+  If this parameter is omitted&nbsp;&nbsp; <span class="courier">NoLabelPoints</span> 
+  is assigned.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><p class=leftmargin1><span class=courier>LabelPoints</span></p></td>
+<td valign="top">create a point map with label points. The point map will obtain the same name as specified for the output polygon map and will use the same ID domain.</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><p class=leftmargin1><span class=courier>NoLabelPoints</span></p></td>
+<td valign="top">do not generate a point map with label points.</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>Order</i></td>
+<td valign="top"><span class="courier">H</span> | <span class="courier">HC</span> | <span class="courier">V</span> | <span class="courier">VC</span>
+<p>define the direction which should be used for labeling the grid cells. Available option are: Horizontal (<span class="courier">H</span>), Horizontal
+Continued (<span class="courier">HC</span>), Vertical (<span class="courier">V</span>) and Vertical
+Continued (<span class="courier">VC</span>). See
+<a href="id_grid_map_algorithm.htm">ID Grid map : algorithm</a> for more information about the labeling orders.</p>
+<p>When you did not specify this option Horizontal labeling (<span class="courier">H</span>),
+will be used.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>StartCorner</i></td>
+<td valign="top"><p><span class="courier">LL</span> | <span class="courier">LR</span> | <span class="courier">UL</span> | <span class="courier">UR</span>.</p>
+<p>specify the corner where labeling should start. Available option are: Lower Left (<span class="courier">LL</span>), Lower Right (<span class="courier">LR</span>), Upper Left (<span class="courier">UL</span>) and Upper Right (<span class="courier">UR</span>).</p>
+<p>When you did not specify this option the Lower Left (<span class="courier">LL</span>)
+corner will be used to start labeling.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>StartNumber</i></td>
+<td valign="top">is an integer that will be used as an initial number to start labeling the grid cells. If the value for this parameter is omitted, 1 will be assigned.
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>Steps</i></td>
+<td valign="top">is the step size for label point numbers. The step size is a positive or negative integer that is used to determine the increase/decrease of
+  individual grid cell numbers during the labeling process. If the value for this parameter is omitted, 1 will be assigned.
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>Prefix</i></td>
+<td valign="top">optional parameter to specify some characters that should be used as prefix for the IDs in the output polygon map.</td>
+</tr>
+
+<tr>
+<td valign="top" width=144><i>Postfix</i></td>
+<td valign="top"><p>optional parameter to specify some characters that should be used as postfix/suffix for the IDs in the output polygon map.</p>
+</td>
+</tr>
+
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated.</p>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+<li>Grid cell width and grid cell height are usually the same but they could be different.</li>
+<li>The opposite corner coordinates will be ignored when the width and height of the grid cells as well as the number of vertical and horizontal grid cells are specified.</li>
+</ul>
+
+<!-- <p class=emptyline>&nbsp;</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (InputCoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, <i>NrVertical</i>, <i>NrHorizontal</i>, ,
+, <i>DirectionX</i>, <i>DirectionY</i>)</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (InputCoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, <i>NrVertical</i>, <i>NrHorizontal</i>, ,
+, <i>DirectionX</i>, <i>DirectionY</i>, InputTable)</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (InputCoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, <i>NrVertical</i>, <i>NrHorizontal</i>, ,
+, <i>DirectionX</i>, <i>DirectionY</i>, InputTable, <i>Label</i>)</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (InputCoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, <i>NrVertical</i>, <i>NrHorizontal</i>, ,
+, <i>DirectionX</i>, <i>DirectionY</i>, InputTable, <i>Label</i>, <i>Order</i>)</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (InputCoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, <i>NrVertical</i>, <i>NrHorizontal</i>, ,
+, <i>DirectionX</i>, <i>DirectionY</i>, InputTable, <i>Label</i>, <i>Order, StartCorner</i>)</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (InputCoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, <i>NrVertical</i>, <i>NrHorizontal</i>, ,
+, <i>DirectionX</i>, <i>DirectionY</i>, InputTable, <i>Label</i>, <i>Order, StartCorner,
+StartNumber</i>)</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (InputCoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, <i>NrVertical</i>, <i>NrHorizontal</i>, ,
+, <i>DirectionX</i>, <i>DirectionY</i>, InputTable, <i>Label</i>, <i>Order, StartCorner,
+StartNumber</i>, <i>Steps</i>)</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (InputCoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, <i>NrVertical</i>, <i>NrHorizontal</i>, ,
+, <i>DirectionX</i>, <i>DirectionY</i>, InputTable, <i>Label</i>, <i>Order, StartCorner,
+StartNumber</i>, <i>Steps</i>, <i>Prefix</i>)</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+</td>
+
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+</td>
+
+<td valign="top">
+<p class=calccommline><span class="courier">PolygonMapGrid</span>  (InputCoordSystem,
+<i>OriginX</i>, <i>OriginY</i>, <i>Width</i>, <i>Height</i>, <i>NrVertical</i>, <i>NrHorizontal</i>, ,
+, <i>DirectionX</i>, <i>DirectionY</i>, InputTable, <i>Label</i>, <i>Order, StartCorner,
+StartNumber</i>, <i>Steps</i>, <i>Prefix</i>, <i>Postfix</i>)</p>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Instead of using the combination , <i>Width</i>, <i>Height</i>,
+<i>NrVertical</i>, <i>NrHorizontal</i>, , , you can also use the combinations , <i>Width</i>,
+<i>Height</i>, , , <i>OppositeX</i>, <i> OppositeY</i> or , , , <i>NrVertical</i>,
+<i>NrHorizontal</i>, <i>OppositeX</i>, <i>OppositeY</i>.</p> -->
+<p class=kopje>Example 1:</p>
+
+<p class=linespacing03after>The following expression:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68><p class=courier>IDGridMap</p></td>
+<td valign="top" width=18><p class=courier>=</p></td>
+<td valign="top"><p class=courier>PolygonMapGrid(Coord, 1, 1, 1, 1, 3, 3, , , ,
+  , AnimalCounts, NoLabelPoints, V, UL, 1, 1, nr)</p></td>
+</tr>
+</table>
+
+<p class=defnewpar>performs ID Grid map:</p>
+
+<ul>
+<li>with coordinate system <span class="courier">Coord</span> as input,</li>
+<li>using (1, 1) as origin,</li>
+<li>using a grid cell width and a grid cell height of 1,</li>
+<li>creating a grid map with 3 horizontal and 3 vertical cells,</li>
+<li>using <span class="courier">AnimalCounts</span> as attribute table,</li>
+<li>not creating an additional point map with label points,</li>
+<li>creating label points in which the labels are ordered in a vertical way,</li>
+<li>the labeling starts in the upper left corner,<li>with 1 as starting number,</li>
+<li>using a step size of 1 and</li>
+<li>using nr as prefix.</li>
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>The result of the expression is</p>
+<ul>
+<li>a polygon map <span class=courier>IDGridMap</span> containing the ID grid
+  cells.</li>
+</ul>
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+	<td><p class=courier>AnimalCounts</p></td>
+	<td>&nbsp;</td>
+	<td><p class=courier>IDGridMap</p></td>
+</tr>
+<tr>
+<td>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>ID</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Elephants</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Buffalo</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Cattle</p></td>
+	<td valign="top"><p class=tcolhr>Nr....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr1</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class="t1r">53</td>
+	<td valign="top"><p class="t1r">22</td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr2</p></td>
+	<td valign="top"><p class=t1r>22</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+	<td valign="top"><p class=t1r>34</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr3</p></td>
+	<td valign="top"><p class=t1r>24</p></td>
+	<td valign="top"><p class=t1r>80</p></td>
+	<td valign="top"><p class=t1r>45</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr4</p></td>
+	<td valign="top"><p class=t1r>87</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>64</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr5</p></td>
+	<td valign="top"><p class=t1r>34</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+	<td valign="top"><p class=t1r>70</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr6</p></td>
+	<td valign="top"><p class=t1r>45</p></td>
+	<td valign="top"><p class=t1r>20</p></td>
+	<td valign="top"><p class=t1r>22</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr7</p></td>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>15</p></td>
+	<td valign="top"><p class="t1r">86</td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr8</p></td>
+	<td valign="top"><p class=t1r>37</p></td>
+	<td valign="top"><p class=t1r>29</p></td>
+	<td valign="top"><p class=t1r>12</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr9</p></td>
+	<td valign="top"><p class=t1r>12</p></td>
+	<td valign="top"><p class=t1r>15</p></td>
+	<td valign="top"><p class=t1r>21</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+</table>
+</td>
+<td>&nbsp;</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>nr1</td>
+    <td class=calcpict>nr4</td>
+    <td class=calcpict>nr7</td>
+  </tr>
+  <tr>
+    <td class=calcpict>nr2</td>
+    <td class=calcpict>nr5</td>
+    <td class=calcpict>nr8</td>
+  </tr>
+  <tr>
+    <td class=calcpict>nr3</td>
+    <td class=calcpict>nr6</td>
+    <td class=calcpict>nr9</td>
+  </tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+
+
+<p class=kopje>Example 2:</p>
+
+<p class=linespacing03after>The following expression:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68><p class=courier>IDGridMap2</p></td>
+<td valign="top" width=18><p class=courier>=</p></td>
+<td valign="top"><p class=courier>PolygonMapGrid(Cochabamba, 803200, 8072400, 100, 100,
+  , , 804200, 8073400, 803201, 8072402, AnimalCounts, LabelPoints, H, LL, 1, 10,
+  P, S)</p></td>
+</tr>
+</table>
+
+<p class=defnewpar>performs ID Grid map:</p>
+
+<ul>
+<li>with coordinate system Cochabamba as input,</li>
+<li>using (803200, 8072400) as origin,</li>
+<li>using a grid cell width and a grid cell height of 100,</li>
+<li>using (804200, 8073400) as opposite corner,</li>
+<li>using (803201, 8072402) as direction point,</li>
+<li>using <span class="courier">AnimalCounts</span> as attribute table,</li>
+<li>creating an additional point map with the label points,</li>
+<li>in which the labels are ordered in a horizontal way,</li>
+<li>the labeling starts in the lower left corner,<li>with 1 as starting number,</li>
+<li>using a step size of 10,</li>
+<li>using P as prefix and</li>
+<li>using S as suffix.</li>
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>The results of the expression are:</p>
+<ul>
+<li>a polygon map <span class=courier>IDGridMap2</span> containing the ID grid cells;</li>
+<li>an additional point map <span class=courier>IDGridMap2</span> with label points.</li>
+</ul>
+
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+	<td><p class=courier>AnimalCounts</p></td>
+	<td>&nbsp;</td>
+	<td><p class=courier>IDGridMap2</p></td>
+</tr>
+<tr>
+<td>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>ID</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Elephants</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Buffalo</p></td>
+	<td valign="top"><p class=tcolhr>Nr. Cattle</p></td>
+	<td valign="top"><p class=tcolhr>Nr....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr1</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class="t1r">53</td>
+	<td valign="top"><p class="t1r">22</td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr2</p></td>
+	<td valign="top"><p class=t1r>22</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+	<td valign="top"><p class=t1r>34</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr3</p></td>
+	<td valign="top"><p class=t1r>24</p></td>
+	<td valign="top"><p class=t1r>80</p></td>
+	<td valign="top"><p class=t1r>45</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr4</p></td>
+	<td valign="top"><p class=t1r>87</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>64</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr5</p></td>
+	<td valign="top"><p class=t1r>34</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+	<td valign="top"><p class=t1r>70</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr6</p></td>
+	<td valign="top"><p class=t1r>45</p></td>
+	<td valign="top"><p class=t1r>20</p></td>
+	<td valign="top"><p class=t1r>22</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr7</p></td>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>15</p></td>
+	<td valign="top"><p class="t1r">86</td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr8</p></td>
+	<td valign="top"><p class=t1r>37</p></td>
+	<td valign="top"><p class=t1r>29</p></td>
+	<td valign="top"><p class=t1r>12</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>nr9</p></td>
+	<td valign="top"><p class=t1r>12</p></td>
+	<td valign="top"><p class=t1r>15</p></td>
+	<td valign="top"><p class=t1r>21</p></td>
+	<td valign="top"><p class=t1r>....</p></td>
+</tr>
+</table>
+</td>
+<td>&nbsp;</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>P61S</td>
+    <td class=calcpict>P71S</td>
+    <td class=calcpict>P81S</td>
+  </tr>
+  <tr>
+    <td class=calcpict>P31S</td>
+    <td class=calcpict>P41S</td>
+    <td class=calcpictlarge>P51S</td>
+  </tr>
+  <tr>
+    <td class=calcpict>P1S</td>
+    <td class=calcpict>P11S</td>
+    <td class=calcpict>P21S</td>
+  </tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="id_grid_map_functionality.htm">ID Grid map : functionality</a></p>
+
+</body

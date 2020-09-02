@@ -1,0 +1,242 @@
+<html>
+
+<head>
+<title>Table window : Paste</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Paste from clipboard, Clipboard, Table window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Paste from clipboard</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Paste the contents of the clipboard into the selected fields of the current table. </p>
+
+<p class=linespacing03before>When no fields are selected in a table with <a href="..//ilwis/popup/yy_system_domain_none_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>None</span></a>, the clipboard contents will be <i>appended</i> to the bottom of the table. </p>
+
+<p class=defnewpar>When you copied for example (a part of) an ILWIS table, a spreadsheet or a database to the clipboard, you can paste this data into an ILWIS table. </p>
+
+<p class=kopje>To paste into selected fields:</p>
+
+<p>Select the fields, the sequence of columns, or the sequence of records into which you wish to paste the clipboard contents, then: </p> 
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>choose <span class=arial>Paste</span> from the Edit menu, </li>
+
+<li>click the <span class=arial>Paste</span> button <img src="../images/paste.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/table_window_toolbar.htm">toolbar</a>, </li>
+
+<li>press the <span class=arial>Ctrl+V</span> keys on the keyboard, or </li>
+
+<li>click the selection with the right mouse button, and choose <span class=arial>Paste</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=tip>Notes:</p>
+
+<p class=tiptext>Editable columns must be available in the table into which you wish to paste. </p>
+
+<p class=tiptext>These columns should be in the same order as the clipboard contents that you wish to paste. </p>
+
+<ul class=tipul>
+
+<li>If the table has no columns yet, you should thus manually <a href="../ilwismen/add_column_to_table.htm">add columns</a> before pasting. </li>
+
+<li>The column names are not important: the values in clipboard will be pasted regardless of the column names. </li> 
+
+<li>The domain/value range of the columns are important in the sense that pasted values which do not fit the domain or value range will appear as undefined values, i.e. question marks. </li>
+
+<li>It is NOT possible to paste into <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent columns</a>, into read-only columns, or into table-owned columns. These columns will be skipped during a paste. </li>
+
+<li>When pasting into a table, all changes are directly stored on disk. </li>
+
+        <p>You CANNOT UNDO a paste action. </p>
+
+</ul>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>Use Windows' Clipboard Viewer (clipbrd.exe) to inspect the current contents of the clipboard before pasting. </li>
+
+<li>Before pasting into a number of columns, you may wish to first re-order your columns. To change the position of a column in the table, <i>drag a column header</i> to a new position. The mouse pointer will change into a column icon <img src="../images/columngray.gif" align=bottom width="13" height="14"> while dragging. </li>
+
+<li>To clear a selection, press <span class=arial>Esc</span> on the keyboard, or click in the white space of a table. </li>
+
+</ul>
+
+<p class=kopje>To paste into selected fields:</p>
+
+<ol>
+
+<li class=ls01be>Select the fields into which you wish to paste: </li>
+
+        <ul>
+
+        <li>To select a single field: click the single field into which you wish to paste. </li>
+
+        <li>To select multiple fields in sequence: </li>
+
+                <ul>
+
+                <li>drag a rectangle over the <i>block of fields</i> into which you wish to paste, </li>
+
+                <p>or </p>
+
+                <li>click the first field into which you wish to paste, </li>
+
+                <li>then press the <span class=arial>Shift</span> key and hold it down, and </li>
+
+                <li>select the last field of a sequence of fields into which you wish to paste. </li>
+
+                </ul>
+
+        </ul>
+
+<li class=ls01be>    Use one of the Paste methods described above.</li>
+
+</ol>
+
+<p class=defnewpar>The clipboard contents will be pasted into the selected fields; the selected fields should be editable. When pasting (part of) a copied ILWIS table, any column names and/or record names or record numbers available in the clipboard will be skipped; thus only the 'values' of copied fields will be pasted. </p>
+
+<p class=kopje>To paste into one or more selected columns:</p>
+
+<ol>
+
+<li class=ls01be>Select the column(s) into which you wish to paste: </li>
+
+        <ul>
+
+        <li>To select a single column: click the single column into which you wish to paste.</li>
+
+        <li>To select multiple columns in sequence: </li>
+
+                <ul>
+        
+                <li>click the first column of a sequence of columns into which you wish to paste, </li>
+
+                <li>then, press the <span class=arial>Shift</span> key on the keyboard and hold it down, and </li>
+
+                <li>click the last column of a sequence of columns into which you wish to paste. </li>
+
+                </ul>
+
+        </ul>
+
+<li class=ls01be>    Use one of the Paste methods described above.</li>
+
+</ol>
+
+<p class=defnewpar>The clipboard contents will be pasted into the fields of the selected column(s); the fields of the column(s) should be editable. When pasting (part of) a copied ILWIS table, any column names and/or record names or record numbers available in the clipboard will be skipped; thus only the 'values' of copied fields will be pasted. </p>
+
+<p class=kopje>To paste into one or more selected records (rows):</p>
+
+<ol>
+
+<li class=ls01be>Select the records into which you wish to paste: </li>
+
+        <ul>
+
+        <li>To select a single record: click the record button of the record into which you wish to paste. </li>
+
+        <li>To select multiple records in sequence: </li>
+
+        <ul>
+
+        <li>keep the left mouse button down while moving over the record buttons of the records into which you wish to paste, </li>
+
+        <p>or</p>
+
+        <li>click the first record button of a sequence of records into which you wish to paste, </li>
+
+        <li>press the <span class=arial>Shift</span> key on the keyboard and hold it down, </li>
+
+        <li>click the last record button of a sequence or records into which you wish to paste. </li>
+
+        </ul>
+
+        </ul>        
+
+<li class=ls01be>    Use one of the Paste methods described above.</li>
+
+</ol>
+
+<p class=defnewpar>The clipboard contents will be pasted into the fields of the selected record(s); the fields of the record(s) should be editable. When pasting (part of) a copied ILWIS table, any column names and/or record names or record numbers available in the clipboard will be skipped; thus only the 'values' of copied fields will be pasted. </p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>No warnings are issued whether the size or shape of the selected fields fit the clipboard contents or not. </p>
+
+<ul class=tipul>
+
+<li>	If the size of the table in the clipboard is larger than the size of the selection in the current table into which you wish to paste, then, only the selected part of the table is filled with the clipboard data. </li>
+
+<li>	If the size of the table in the clipboard is smaller than the size of the selection in the current table into which you wish to paste, then the clipboard contents are pasted into the upper and left part of the selection, and the remaining part of the selection keeps the data it had before pasting.</li>
+
+</ul>
+
+<p class=kopje>To append records to a table with domain <span class=arial>None</span>:</p>
+
+<ol>
+
+<li class=ls01be>Open a table using <a href="..//ilwis/popup/yy_system_domain_none_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>None</span></a> to which you wish to append the clipboard contents. </li>
+
+<li class=ls01be>Make sure there is not a single field, column, or record selected in the table: </li>
+
+        <ul>
+
+        <li>press the <span class=arial>Esc</span> key on the keyboard, or </li>
+
+        <li>click a single field, and press the <span class=arial>Esc</span> key on the keyboard. </li>
+
+        </ul>        
+
+<li class=ls01be>    Use one of the Paste methods described above.</li>
+
+</ol>
+
+<p class=defnewpar>The method of adding records to a table with domain <span class=courier>None</span> by a paste action, can also be used to paste existing tiepoint coordinates and row/column numbers into a <a href="..//ilwis/popup/georeference_tiepoints_popup.htm" onClick="return popup(this, 'notes')" >georeference tiepoints</a>. For more information, see <a href="../ilwis/how_to_paste_coords_into_georef_tiepoints.htm">How to paste coordinates into a georeference tiepoints</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_toolbar.htm">Table window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_menu_commands.htm">Table window : menu commands</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/add_column_to_table.htm">Table window : Add Column</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/copy_table_selection_to_clipboard.htm">Table window : Copy</a></p>
+
+</body

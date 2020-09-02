@@ -1,0 +1,115 @@
+<html>
+
+<head>
+<title>Universal Kriging : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Universal Kriging, Error map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Universal Kriging</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Universal Kriging can be seen as a <a href="point_interpolation.htm">point interpolation</a>, which requires a point map as input and which returns a raster map with estimations and optionally an error map. Universal Kriging is a variant of the Ordinary <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation: Universal Kriging is Kriging with a <i>local trend</i>. The local trend or drift is a continuous and slowly varying trend surface on top of which the variation to be interpolated is superimposed. The local trend is recomputed for each output pixel and the operation is therefore more similar to the <a href="..//ilwisapp/popup/moving_surface_popup.htm" onClick="return popup(this, 'notes')" >Moving Surface</a> operation than to the <a href="..//ilwisapp/popup/trend_surface_popup.htm" onClick="return popup(this, 'notes')" >Trend Surface</a> operation.</p>
+
+<p class=kopje>Theory:</p>
+
+<p>Geostatistical methods for interpolation like Universal Kriging start with the recognition that the spatial variation of any continuous attribute is often too irregular to be modelled by a simple, smooth mathematical function. Instead, the variation can be better described by a stochastic surface. The attribute is then known as a regionalized variable (Burrough 1986). The regionalized variable theory assumes second order stationarity in the data. Second order stationarity means that the mean has to exist, is constant and is independent of the location within the region of stationarity. Furthermore, the covariance or variogram has to exist, only depends on the distance between any two values, and does not depend on locations.</p>
+
+<p class=defnewpar>Very often, the mean of the regionalized variable is not constant across the entire study area and the variable is said to be nonstationary. A nonstationary regionalized variable can be regarded as having two components (Davis 1973):</p>
+
+<ul>
+
+<li>	a drift consisting of the average or expected value of the regionalized variable, </li>
+
+<li>	a residual being the difference between the actual measurements and the drift.</li>
+
+</ul>
+
+<p>Instead of removing the slow variation beforehand by subtracting the local trend or drift from the data, the method of Universal Kriging can be used. </p>
+
+<p class=kopje>Preparation and input parameters:</p>
+
+<ul>
+
+<li>	First, perform the <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial Correlation</a> operation.</li>
+
+<li>	The output table of Spatial Correlation will contain a column with experimental semi-variogram values. </li>
+
+<li>	In a graph window, you need to find a semi-variogram model for the column with experimental semi-variogram values (see <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>). Determine the <i>type</i> of model and its parameters <i>sill</i>, <i>range</i> and <i>nugget</i> or, in case of using the Power model, the parameters slope and power.  </li>
+
+</ul>
+
+<p class=defnewpar>Besides an input map, you need to specify the following parameters for Universal Kriging:</p>
+
+<ul>
+
+<li>	a <i>semi-variogram model</i> based on the output of the omnidirectional Spatial correlation operation. </li>
+
+<li>	a value for the <i>trend</i>. You can choose to used either a first order local trend or a second order quadratic trend. The surface is calculated for each output pixel and will approach the values of the input points within the limiting distance.</li>
+
+</ul>
+
+<p class=defnewpar>Furthermore, you need to specify a <i>limiting distance</i> or search radius, optionally a <i>minimum and maximum number of points</i> within the limiting distance that should be taken into account in the calculation of an output pixel value, and a method to deal with (almost) <i>coinciding points</i>. These options are the same as in Ordinary <a href="kriging_functionality.htm">Kriging</a>. </p>
+
+<p class=defnewpar>For more information on preparations and input parameters, see <a href="kriging_functionality.htm">Kriging : functionality</a>, section on preparation, or <a href="../ilwis/how_to_use_kriging.htm">How to use Kriging</a>.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input point map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Furthermore, when a point map uses an ID domain and the map is linked to an attribute table, you can also use such a point map and select a column with a value domain from the map's attribute table. Furthermore, you need to define a complete semi-variogram model and a trend type (for explanations, see above).</p>
+
+<p class=defnewpar>When using the <i>dialog box</i>, there is a limitation of a maximum of 100 valid input point values within each limiting distance (search radius). This limitation is not present when using the command line. </p>
+
+<p class=kopje>Domain and georeference of output raster maps:</p>
+
+<p>The output raster map containing the Kriging estimates or predictions uses the same value domain as the input point map or the attribute column. The <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> can be adjusted for the output map; it is advised to choose a wider value range for the output map than the input value range. </p>
+
+<p class=defnewpar>The georeference for the output Kriging map has to be selected or created; you can usually select an existing georeference corners. </p>
+
+<p class=defnewpar>Optionally, an output error map can be created which will contain the standard errors of the estimates, i.e. the square root of the error variance. The error map will obtain the same name as specified for the output Kriging map, followed by the string <span class=courier>_Error</span>. The output error map will use the same domain and the same georeference as the output Kriging map with the predictions. </p>
+
+<p class=kopje>Confidence interval maps:</p>
+
+<p>From the combination of a Kriged output map containing the estimates and its output error map, you can create confidence interval maps by using some MapCalc statements. For more information, see <a href="../ilwis/how_to_calculate_confidence_interval_maps.htm">How to calculate confidence interval maps</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="universal_kriging_dialog_box.htm">Universal Kriging : dialog box</a></p>
+
+<p class=seealsolinks><a href="universal_kriging_command_line.htm">Universal Kriging : command line</a></p>
+
+<p class=seealsolinks><a href="universal_kriging_algorithm.htm">Universal Kriging : algorithm</a></p>
+
+<p class=seealsolinks><a href="point_interpolation.htm">Point interpolation</a></p>
+
+<p class=seealsolinks><a href="moving_surface_functionality.htm">Moving surface : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a></p>
+
+<p class=seealsolinks><a href="kriging_functionality.htm">(Ordinary) Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_use_kriging.htm">How to use Kriging</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_confidence_interval_maps.htm">How to calculate confidence interval maps</a></p>
+
+</body

@@ -1,0 +1,101 @@
+<html>
+
+<head>
+<title>Domain Class/ID editor : Merge domain</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Domain Class/ID editor, Domains, Merge domains">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Domain Class/ID editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Merge Domain</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/domain_class_id_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Merge all items of another class, ID or group domain into the current domain.</p>
+
+<P class=tip>Tip:</p>
+
+<p class=tiptext>Before merging domains, it may be handy to save a copy of your original domain first: from the <a href="../ilwis/domain_class_id_editor_menu_commands.htm">File menu</a>, choose the <span class=arial>Save Copy As</span> command. If anything unexpected might happen during Merge, you can at least return to the original situation.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=60>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a domain of which the items should be added to the current domain.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In any class, ID, or group domain, the complete set of Names and Codes must be unique. 
+
+During Merge, the following is checked in the domain that you want to merge with the current domain:
+
+<ul>
+
+<li>when a Name is encountered which already exists as a Name in the current domain, 
+
+        the item <i>is not merged</i>, i.e. the original Name remains.</li>
+
+<li>when a Name is encountered which already exists as a Code in the current domain, 
+
+        the item <i>is merged</i>, i.e. the new Name appears, but the Code that existed in the current domain is removed. </li>
+        
+<li>when a Code is encountered which already exists as a Name or a Code in the current domain, 
+
+        the item <i>is merged</i> but the Code of the merged item remains empty. </li>
+
+</ul>
+
+<p>In all cases, Names have priority over Codes.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To merge only some items from one domain to another, you can also use <a href="..//ilwismen/popup/domain_class_id_editor_copy_popup.htm" onClick="return popup(this, 'notes')" >Copy</a> and <a href="..//ilwismen/popup/domain_class_id_editor_paste_popup.htm" onClick="return popup(this, 'notes')" >Paste</a>.</li>
+
+<li>You are free to merge a class domain with an ID domain, a group domain with an ID domain, etc. </li>
+
+<li>When merging a group domain into a class or ID domain, the upper boundary values of the group domain are dropped. </li>
+
+<li>When merging a class or ID domain into a group domain, the upper boundary values of the merged classes or IDs are initially undefined. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/domain_class_id_editor_functionality.htm">Domain Class/ID editor : functionality</a></p>
+
+</body

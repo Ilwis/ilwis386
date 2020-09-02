@@ -1,0 +1,33 @@
+<html>
+
+<head>
+<title>attribute map of points popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Attribute map of point map</p>
+
+<p>By creating an <a href="..//ilwisapp/attribute_map_of_point_map.htm" onClick="return popup(this, 'notes')" >attribute map of a point map</a>, the class name or ID of each point in the original map is replaced by the value, class or ID found in a certain column in an
+<a href="../../ilwis/popup/objects_table_popup.htm"> attribute table</a>. </p>
+
+<p class=linespacing03before>A point map using a Class or ID domain, can have extra attribute information on the classes or identifiers in the map. These attributes are stored in columns in an attribute table. The attribute table can be linked to the map to which it refers, or to the domain of the map. You can check whether an attribute table is linked to the point map or to its domain through the <a href="../../ilwis/popup/object_properties_popup.htm">Properties</a> dialog box of the map or the domain. </p>
+
+</body

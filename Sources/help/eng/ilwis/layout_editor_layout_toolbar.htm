@@ -1,0 +1,338 @@
+<html>
+
+<head>
+<title>Layout editor : layout toolbar</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Layout editor, Toolbar, Button bar, Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Layout editor</h1>
+
+<h1 class=secondline>Layout toolbar</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >Layout editor</a> has two toolbars that provide <i>shortcuts</i> for some regularly used menu commands: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>a <a href="layout_editor_standard_toolbar.htm">Standard toolbar</a>: for standard actions like zooming in and out, save and print; </li>
+
+<li>a Layout toolbar: to insert <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> to a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>, to add or to remove a layer from a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout, to add <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> or <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a> to a map view, etc.</li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>In this topic, the Layout toolbar is described.</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar><img src="../images/layouteditorann.gif" align=bottom width="331" height="26"></p>
+
+<p class=defnewpar>When you leave the mouse pointer for a short period of time on top of a button, a tooltip will appear with the name of the button / the menu command that it will perform. Also the <a href="map_window_status_bar.htm">status bar</a> at the bottom of the window may provide you with a short explanation on the effect of using the button. </p>
+
+<p class=defnewpar>You can move the toolbar and dock it along an edge of the window; you can also make the toolbar floating. To add annotation to a layout, you can also use the <a href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a>. </p>
+
+<p class=defnewpar>The following actions can be performed:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/annmpv.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Map View:</p>
+
+</td>
+<td valign="top">
+<p>Insert an existing <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> into the layout. </p>
+
+<p>The <a href="../ilwismen/layout_editor_insert_map_view.htm">Insert Map View</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/annsitxt.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Text:</p>
+
+</td>
+<td valign="top">
+<p>Insert new <a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >text</a> into the layout. </p>
+
+<p>The <a href="../ilwismen/layout_editor_insert_edit_text.htm">Insert/Edit Text</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/annbox.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Box:</p>
+
+</td>
+<td valign="top">
+<p>Insert a new <a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >box</a> into the layout. </p>
+
+<p>The <a href="../ilwismen/layout_editor_insert_edit_box.htm">Insert/Edit Box</a> dialog will appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/annbp.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Bitmap/Picture:</p>
+
+</td>
+<td valign="top">
+<p>Insert an existing <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmap</a> or <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >picture</a> (Windows metafile) from disk into the layout. </p>
+
+<p>The <a href="../ilwismen/layout_editor_insert_bitmap_picture.htm">Insert Bitmap or Picture</a> dialog box will appear.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/annleg.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Legend:</p>
+
+</td>
+<td valign="top">
+<p>For a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout: insert a <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legend</a> for a certain layer in the map view into the layout. </p>
+
+<p>When the selected map view contains multiple layers, first the <a href="../ilwismen/layout_editor_legend_select_map_layer.htm">Map Layer Selection</a> dialog box will appear. </p>
+
+<p>Depending on the domain and the type of the layer for which you wish to insert a legend, you will need to specify display options for the legend for instance in:</p>
+
+<ul>
+
+<li>the <a href="../ilwismen/display_options_legend_class.htm">Display Options - Legend (Class)</a> dialog box when you add a legend of a class map; </li>
+
+<li>the <a href="../ilwismen/display_options_legend_image_value.htm">Display Options - Legend (Image/Value)</a> dialog box follows when you add a legend of a value map.</li>
+
+</ul>
+
+<p>For other types of legends, refer to <a href="../ilwismen/layout_editor_legend_select_map_layer.htm">Insert Legend / Map Layer Selection</a>. 
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/annborder.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Map Border:</p>
+
+</td>
+<td valign="top">
+<p>For a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout: insert a <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map border</a> into the layout. With this option you can also add ticks and coordinates of grid lines and/or of a graticule available in the selected map view or coordinates of the corner of the map(s) in the map view. Furthermore, you can add an outline around the map view. </p>
+
+<p>The <a href="../ilwismen/layout_editor_insert_edit_map_border_neatline.htm">Insert/Edit Map Border</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/annnor.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>North Arrow:</p>
+
+</td>
+<td valign="top">
+<p>For a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout: insert a <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >North arrow</a> to the layout. </p>
+
+<p>The <a href="../ilwismen/layout_editor_insert_edit_north_arrow.htm">Insert/Edit North Arrow</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/annsca.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Scale Bar:</p>
+
+</td>
+<td valign="top">
+<p>For a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout: insert a <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bar</a> into the layout. The scale bar will reflect the scale on which the selected map view is displayed and will be printed later on. </p>
+
+<p>The <a href="../ilwismen/layout_editor_insert_edit_scale_bar.htm">Insert/Edit Scale Bar</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/annscatxt.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Scale Text:</p>
+
+</td>
+<td valign="top">
+<p>For a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout: insert as text the exact scale figure on which the map view is displayed and will be printed later on. </p>
+
+<p>The <a href="../ilwismen/layout_editor_insert_edit_scale_text.htm">Insert/Edit Scale Text</a> dialog box will appear.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/addlayer.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p><a href="../ilwismen/add_layer_to_map_window.htm">Add Layer</a>:</p>
+
+</td>
+<td valign="top">
+<p>For a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout: </p>
+
+<ul>
+
+<li>add a raster map to the current map view when the map view does not contain a raster map yet, or </li>
+
+<li>add another polygon, segment or point map to the current map view, or </li>
+
+<li>add grid lines, a graticule or an annotation text object to the current map view. </li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="../ilwismen/add_layer_to_map_window.htm">Add Layer</a> dialog box will appear and the layout editor will obtain a <a href="map_window_layer_management.htm">Layer Management</a> pane like a map window. You can thus edit display options of the layers in the map view. </p>
+
+<p class=linespacing03before>After you have added a layer, you need to redraw the map view: 
+
+<ul>
+
+<li>select the map view and click the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22"> in the <a href="layout_editor_standard_toolbar.htm">standard toolbar</a>, or </li>
+
+<li>click the map view with the right mouse button and choose <span class=arial>Redraw</span>from the <a href="../ilwis/layout_editor_context_sensitive_menu.htm">context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=linespacing03before>To save the changes in the map view, see the tip below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/remlayer.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p>Remove Layer:</p>
+
+</td>
+<td valign="top">
+<p>When you already double-clicked a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout editor and when the layout editor has a <a href="map_window_layer_management.htm">Layer Management</a> pane: select a layer in the Layer Management pane and click this button to remove the layer from the map view. </p>
+
+<p>Click the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22"> in the standard toolbar to view the grid lines in the map view. To save the changes in the map view, see the tip below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/anngrd.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Grid Lines:</p>
+
+</td>
+<td valign="top">
+<p>For a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout: add <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> to the map view. </p>
+
+<p>The <a href="../ilwismen/display_options_grid_lines.htm">Display Options - Grid Lines</a> dialog box will appear.</p>
+
+<p>Click the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22"> in the standard toolbar to view the grid lines in the map view. To save the changes in the map view, see the tip below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/anngra.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width=84>
+<p>Graticule:</p>
+
+</td>
+<td valign="top">
+<p>For a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout: add a <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticule</a> to the map view. </p>
+
+<p>The <a href="../ilwismen/display_options_graticule.htm">Display Options - Graticule</a> dialog box will appear.</p>
+
+<p>Click the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22"> in the standard toolbar to view the graticule in the map view. To save the changes in the map view, see the tip below.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To save a map view to which you added (or from which you removed) extra layers, grid lines or a graticule, or when you changed display options of a layer in the map view: </p>
+
+<ul class=tipul>
+
+<li>select the map view, and click the <span class=arial>Save</span> <img src="../images/save.gif" align=bottom width="22" height="22"> button in the standard toolbar, or </li>
+
+<li>click the selected map view with the right mouse button, and choose <span class=arial><a href="../ilwismen/layout_editor_save_map_view.htm">Save View</a></span> or <span class=arial><a href="../ilwismen/layout_editor_save_map_view_as.htm">Save View As</a></span> from the <a href="layout_editor_context_sensitive_menu.htm">context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=defnewpar>The toolbar can be hidden or shown with the <span class=arial>Layout Toolbar</span> command on the <a href="layout_editor_menu_commands.htm">View menu</a>. If the action of a certain button cannot be performed at a certain moment, the button appears gray.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="layout_editor_standard_toolbar.htm">Layout editor : standard toolbar</a></p>
+
+<p class=seealsolinks><a href="layout_editor_menu_commands.htm">Layout editor : menu commands</a></p>
+
+</body

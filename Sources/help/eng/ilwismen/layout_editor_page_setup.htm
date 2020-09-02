@@ -1,0 +1,214 @@
+<html>
+
+<head>
+<title>Page setup in layout editor</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Page setup, Layouts, Layout editor, Print">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Page Setup</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Before adding <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a> and <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> to a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>, you should first specify the size, orientation, and margins of the paper on which you wish to create your layout and on which you wish to print, and the printer that you wish to use. </p>
+
+<p class=defnewpar>For your information, the current paper size is listed in the <a href="..//ilwis/popup/status_line_popup.htm" onClick="return popup(this, 'notes')" >status bar</a> of the layout editor. The orientation of the paper is reflected by shape of the 'paper' in the layout editor itself. </p>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>If you change the printer, paper size, or orientation of the paper etc. <i>after</i> adding map views and annotation to the layout, you may need to rearrange and resize the map view(s) and the annotation elements that were previously inserted in the layout. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Paper:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the paper size and the source of the paper.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the paper size for the selected printer, for example A4 or A3, or another paper size appearing in the drop-down list box. Which paper sizes appear in the drop-down list box depends on the driver of the currently selected printer.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Source:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the paper source for the selected printer. Which paper sources that appear in the drop-down list box depends on the driver of the currently selected printer.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Orientation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the orientation of the paper. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Portrait:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Vertical paper orientation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Landscape:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Horizontal paper orientation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Margins:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the margins of the paper. Any (parts of) map views or annotation placed in these margins will not be printed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Left:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value in mm for the margin on the left. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Right:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value in mm for the margin on the left. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Top:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value in mm for the margin on the top. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Bottom:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value in mm for the margin on the bottom. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><span class=arial>Printer</span> button:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you click this button, another dialog box will appear. In that dialog box, the name of the currently selected printer is displayed and the status, type and server name of the printer are shown.</p>
+
+<p class=diabox>You can select the printer you wish to use. ILWIS will only list the printers that have been properly installed and which appear in Windows Control Panel. For information about installing printers, see your Windows documentation.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/layout_editor_print.htm">Print</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_layouts.htm">ILWIS objects : layouts</a></p>
+
+</body

@@ -1,0 +1,137 @@
+<html>
+
+<head>
+<title>Point editor : Paste</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Paste from clipboard, Point editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Point editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/point_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Paste</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Paste data from the clipboard into the current point map. </p>
+
+<p class=defnewpar>Into a point map, it is possible to paste:</p>
+
+<ul>
+
+<li>    <a href="point_editor_cut_selection.htm">cut</a> or <a href="point_editor_copy_selection.htm">copied</a> points from a point map, </li>
+
+<li>	<a href="segment_editor_cut_selection.htm">cut</a> or <a href="segment_editor_copy_selection.htm">copied</a> segments from a segment map, </li>
+
+<li>	<a href="polygon_editor_copy_selection.htm">copied</a> polygons boundaries from a polygon map, </li>
+
+<li>	<a href="pixel_editor_cut_selection.htm">cut</a> or <a href="pixel_editor_copy_selection.htm">copied</a> pixels from a raster map (as one segment). </li>
+
+</ul>
+
+<p class=tip>Mind: </p>
+
+<p class=tiptext>The map from which you have cut or copied points, segments, polygons or pixels must have the <i>same domain type</i> (i.e. either class, ID, or value, etc.) as the point map into wish to paste these points, segments, polygons or pixels. </p>
+
+<p class=tiptext>This means that it is not possible to paste for instance copied contour segments (values) into a point map which uses a class domain and vice versa. </p>
+
+<p class=kopje>To paste:</p>
+
+<ul>
+
+<li>	choose <span class=arial>Paste</span> from the <span class=arial>Edit</span> menu, or</li>
+
+<li>	press <span class=arial>Ctrl+V</span> on the keyboard.</li>
+
+</ul>
+
+<p class=defnewpar>In case you cut or copied from a map with a class or ID domain, and now pasting this into a point map which uses <i>another</i> class or ID domain, the program will try to add any domain items which are not yet present in the domain of the current map to the domain of the current map. A question will be asked to confirm this. </li>
+
+<p class=defnewpar>Answer the question(s) to add encountered class name(s) or ID(s) from another class or ID domain to the current class or ID domain with:</p>
+
+<ul>
+
+<li>	<span class=courier>yes</span>: to add the encountered domain item to the present domain, or</li>
+
+<li>	<span class=courier>no</span>: to skip the encountered domain item and continue with the next item, or</li>
+
+<li>	<span class=courier>cancel</span>: to interrupt the pasting and return to the point editor.</li>
+
+</ul>
+
+<p class=kopje>Results of pasting:</p>
+
+<p>When pasting points into a point map:</p>
+        
+        <ul>
+
+        <li>all pasted points will keep their coordinates; </li>
+
+        <li>all pasted points will keep their class names, identifiers or values. </li>
+
+        </ul>
+
+<p class=defnewpar>When pasting segments into a point map:</p>
+
+        <ul>
+
+        <li>all nodes and all intermediate points within the copied segments will appear as points in the point map;</li>
+
+        <li>the nodes and intermediate points will keep their coordinates, </p>
+
+        <li>the class names, identifiers or values of the copied segments are assigned to the points. </li>
+
+        </ul>
+
+<p class=defnewpar>When pasting polygons into a point map:</p>
+
+        <ul>    
+      
+        <li>the nodes and intermediate points of the copied polygon boundaries will appear as points in the current point map, </li>
+
+        <li>the nodes and intermediate points of the copied polygon boundaries will keep their coordinates, </li>
+
+        <li>in principle, class names, IDs, or values of the polygons are assigned to the points. </li>
+
+        </ul>
+
+<p class=defnewpar>When pasting pixels into a point map:</p>
+        
+        <ul>
+
+        <li>all pasted pixels will appear as points in the point map;</li>
+
+        <li>all pasted pixels will keep their coordinates; </li>
+
+        <li>the class names, identifiers or values of the pixels will be assigned to the points. </li>
+
+        </ul>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>You can use Windows' Clipboard/Clipbook Viewer to inspect the current contents of the clipboard in various formats. For more information on the Clipboard Viewer, see the Windows Help.</li>
+
+<li>An example of points copied to the clipboard is presented in <a href="point_editor_copy_selection.htm">Point editor : Copy</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_menu_commands.htm">Point editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="point_editor_select_mode.htm">Point editor : Select mode</a></p>
+
+<p class=seealsolinks><a href="point_editor_copy_selection.htm">Point editor : Copy</a></p>
+
+</body

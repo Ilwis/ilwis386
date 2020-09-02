@@ -1,0 +1,111 @@
+<html>
+
+<head>
+<title>How to create polygon maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygon maps, Create ..., How to create ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to create polygon maps</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In the text below, the word 'code' will be used for the class names, IDs, or values of segments. </p>
+
+<p class=defnewpar>According to the ILWIS concept, segments with different class names, IDs or values can be stored in a segment map. </p>
+
+<p>From each segment code or set of codes, different polygon maps can be created by using a mask. It is advised that you have a separate label point map for each set of segment codes from which you want to create a polygon map. </p>
+
+<p class=defnewpar>For a general introduction on creating maps, refer to <a href="../ilwis/how_to_create_maps.htm">How to create maps</a>.</p>
+
+<p>For more information on using a digitizer, refer to <a href="../ilwis/how_to_set_up_a_digitizer_and_start_digitizing.htm">How to set up a digitizer and start digitizing</a> and <a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a>.</p>
+
+<p class=kopje>Steps to obtain a polygon map:</p>
+
+<ol>
+
+<li>	Start the <b>segment editor</b>: when you create a new segment map, the segment editor is automatically started. To edit an existing segment map in a map window, open the <a href="map_window_menu_commands.htm">Edit menu</a>, choose <span class=arial>Edit Layer</span> and select the segment layer from the cascading menu.</li>
+
+        <p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<li>	Start the <b>point editor</b>: when you create a new point map, the point editor is automatically started. To edit an existing map, display the point map in a map window, open the Edit menu, choose <span class=arial>Edit Layer</span> and select the point layer from the cascading menu. </li>
+
+        <p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<li>	In the <b>segment editor</b>: digitize the segments. When you want to create multiple polygon maps from one segment map, you have to code your segments in such a way that you can select sets of codes by using a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> later on. </li>
+
+        <p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<li>	In the <b>point editor</b>: digitize a label point within each polygon boundary. The label is the class name, ID or value of each future polygon. </li>
+
+        <p class=tipindent06>Tip: </p>
+
+        <p class=tiptextleft06>It is recommended to add your segment map as a data layer to the point editor, and regularly redraw the point map <img src="../images/redraw.gif" align=bottom width="22" height="22">. Changes in the segment map will then be reflected in the point editor. In this way, you can easily verify whether each future polygon has a label point. </p>
+
+        <p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<li>    In the <b>segment editor</b>, from the <a href="../ilwis/segment_editor_menu_commands.htm">File menu</a>, select <span class=arial><a href="../ilwismen/segment_editor_check_segments.htm">Check Segments</a>, Self Overlap</span>, and subsequently <span class=arial>Check Segments, Dead Ends</span>, and <span class=arial>Check Segments, Intersections</span>. </p>
+
+        <p>Correct possible errors. </p>
+
+        <p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<li>	In the <b>segment editor</b>, from the <a href="../ilwis/segment_editor_menu_commands.htm">File menu</a>, select <span class=arial><a href="../ilwismen/segment_editor_polygonize.htm">Polygonize</a></span>. </li>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <p class=leftmargininlist> The <a href="../ilwismen/segment_editor_polygonize.htm">Polygonize Segment Map</a> dialog box appears.</p>
+
+        <ul>
+
+        <li>	select the mask for the segments which should be used for polygonization; </li>
+
+        <li>	select the label point map; </li>
+
+        <li>	select a name for the output polygon map.</li>
+
+        </ul>
+
+        <p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+        <p class=leftmargininlist> Segments will be checked and if no errors occur in your segment map, the topology will be build and polygons are named according to the label point map.</p>
+
+        <p class=tipindent06>Note: </p>
+
+        <p class=tiptextleft06>If you digitize different segment codes in one digitizing session (for example: soil units, districts, roads etc.) make sure you select the right <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> for polygonization. You can repeat the procedure of creating polygons; each time specify another mask, another label point map and a different output polygon map name.</p>
+
+        <p class=tipindent06>Tip: </p>
+
+        <p class=tiptextleft06>To check after polygonization whether all polygons have a class name, ID or value, you can use the <a href="../ilwismen/polygon_editor_find_undefineds.htm">Find Undefineds</a> option from the <a href="../ilwis/polygon_editor_menu_commands.htm">Edit menu</a> of the polygon editor. </li>
+
+        <p class=tiptextleft06>You may also use the <a href="..//ilwisapp/popup/polygons_to_points_popup.htm" onClick="return popup(this, 'notes')" >Polygons to Points</a> operation, see <a href="../ilwisapp/polygons_to_points_functionality.htm">Polygons to Points : functionality</a>.</p>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_functionality.htm">Polygon editor : functionality</a></p>
+
+</body

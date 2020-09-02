@@ -1,0 +1,58 @@
+<html>
+
+<head>
+<title>Table to point map popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Table to point map</p>
+
+<p>The <a href="..//ilwisapp/table_to_point_map.htm" onClick="return popup(this, 'notes')" >Table to point map</a> operation creates a point map out of a table. </p>
+
+<p class=linespacing03before>For the coordinates of the points, you can use from the table: </p>
+
+<ul>
+
+<li>a coordinate column which contains the XY-coordinates for the points as (X,Y); the domain of this column should be a coordinate system; </li>
+
+<li>a value column which contains the X-coordinates for the points and another value column which contains the Y-coordinates for the points. </li>
+
+</ul>
+
+<p class=linespacing03before>Depending on the domain of the input table, you can furthermore choose between the following possibilities:</p>
+
+<ul>
+
+<li>	Input table with an ID domain: <br>
+        the points in the output point map should use the same IDs as found in the domain of the table; <br>
+        the input table will be linked as attribute table to the output point map.</li>
+
+<li>	Input table with domain <span class=courier>None</span>: <br>
+        the points in the output point map should use the IDs of a new ID domain in which the IDs are based on the record numbers of the table and a user-defined prefix; <br>
+        also the input table will obtain this new ID domain and the table will be linked as attribute table to the output point map. </li>
+
+<li>	Any input table: <br>
+        the points in the output point map should use the class names, IDs, or values as found in a column of the table; <br>
+        the output point map will have no attribute table. </li>
+
+</ul>
+
+</body

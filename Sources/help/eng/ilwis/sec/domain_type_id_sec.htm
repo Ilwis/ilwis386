@@ -1,0 +1,70 @@
+<html>
+
+<head>
+<title>Domain type : ID (2)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Domain type Identifier</p>
+
+<p class=linespacing03after>An Identifier/ID domain is <i>a list of unique identifiers (IDs)</i>, and optionally unique codes, descriptions, etc. for features in one or more maps. </p>
+
+<p class=linespacing03after>An Identifier domain can be used in maps when each feature can be identified by a unique name (an ID/identifier); features without an ID/identifier are considered undefined. Each 'named'/'identified' feature generally occurs only in one place in the map.</p>
+
+<p class=linespacing03after>When you create an Identifier domain, you can either add all IDs to the domain yourself, or use a list of numbers created by the system with or without using your own prefix. Furthermore, you can always add new IDs yourself to the domain later on, for instance during digitizing.</p>
+
+<p class=linespacing03after>Attributes can be linked to the unique names, that is to the identifiers. The attribute table should have the same domain as the map. The attribute table contains additional information on the uniquely identified features. </p>
+
+<p>You can use an Identifier domain in point, segment, and polygon maps, and in rasterized point, segment, and polygon maps. It is advised to use an ID domain for detailed maps on large scales such as 1: 500 for cadastral and infrastructural purposes.</p>
+
+<p class=kopje>Examples:</p>
+
+<p>You can use an Identifier domain for:</p>
+
+<ul>
+
+<li>	point maps with individual water wells,</li>
+
+<li>	segment maps with individual road sections,</li>
+
+<li>	segment maps with individual river sections,</li>
+
+<li>	polygon maps of cadastral plots,</li>
+
+<li>	rasterized forms of these maps,</li>
+
+<li>	a map-related table which contains extra attribute information on the IDs in the maps above,</li>
+
+<li>	an output map of an <a href="../../ilwisapp/popup/area_numbering_popup.htm">Area Numbering</a> operation on a raster map of domain type Class.</li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When you work with for example <i>multiple maps for different years</i> of cadastral plots, you should work with <i>one</i> domain e.g. <span class=courier>PLOTID</span> (domain Identifier) for all maps. In this user-defined domain called <span class=courier>PLOTID</span>, you should list all possible plot identifiers of all years. Not every ID has to exist in each year. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_domains.htm" onClick="return popup(this, 'notes')" >Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</a></p>
+
+</body

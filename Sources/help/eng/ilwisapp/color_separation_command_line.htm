@@ -1,0 +1,145 @@
+<html>
+
+<head>
+<title>Color separation : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Color separation, MapColorSep">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Color separation</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar><a href="..//ilwisapp/popup/color_separation_popup.htm" onClick="return popup(this, 'notes')" >Color separation</a> can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapColorSeparation</span>(InputMapName, <i>Color</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapColorSep</span>(InputMapName, <i>Color</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline>InputMapName.<i>Color</i></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapColorSeparation</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Color separation operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>MapColorSep</p>
+
+</td>
+<td valign="top">
+<p>is an alias to start the Color separation operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input raster map; the input maps must have a Picture domain or the <span class=courier>Color</span> domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>Color</i></p>
+
+</td>
+<td valign="top">
+<p>is the color you want to extract, choose one of the following:</p>
+
+<p class=courier>red | green | blue | yellow | magenta | cyan | hue | saturation | sat | intensity | intens | gray | grey</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="color_separation_functionality.htm">Color separation : functionality</a></p>
+
+</body

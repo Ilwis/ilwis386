@@ -1,0 +1,107 @@
+<html>
+
+<head>
+<title>Create a table</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Tables, Attribute tables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a table</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >table</a> is for instance created to store attributes for features in existing raster, polygon, segment or point maps. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Create Table</span> from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window, or</li>
+
+<!--<li>	when you choose <span class=arial>Create Table</span> from the <a href="..//ilwismen/sec2/table_window_file_menu_sec2.htm" onClick="return popup(this, 'notes')" >File menu</a> of a table window, or</li>-->
+
+<li>	when you double-click the <span class=arial>New Table</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or</li>
+
+<li>	when viewing the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of an existing map, and in the <span class=arial>Properties</span> dialog box, you clicked the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create attribute table button</a>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Table name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the table. The description of a table appears in the title bar when the table is displayed. Further, the description is visible on the status bar of the Main window when moving the mouse pointer over the table in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> for this table or <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> a new domain. <br>
+If you want to create an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>, you should select for the table the <b>same</b> domain name as is used by the map to which this table refers. Only maps of the domain type Class or ID can have an attribute table.</p>
+
+<p class=diabox>Only if you want to create a table that has no relation to a map, select domain <span class=courier>None</span>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxleft1>Records:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of a table with domain <span class=courier>None</span>, enter the number of records that the table should contain. For tables with any other domain, the domain determines the number of records that appear in the table.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The table appears in a table window. When you are in the process of creating an attribute table, all class names or Identifiers of the selected domain appear as records in the table. You can start adding attribute columns to the table.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To create an attribute table, it is often easier to open the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of a map, and create a new attribute table there by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_tables.htm">ILWIS objects : tables</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a></p>
+
+</body

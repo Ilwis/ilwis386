@@ -1,0 +1,46 @@
+<html>
+
+<head>
+<title>class coverage statistics popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Class Coverage Statistics</p>
+
+<p class="defnewpar">The <a href="..//ilwisapp/class_coverage_statistics.htm" onClick="return popup(this, 'notes')" >Class Coverage Statistics</a> script crosses a selected catchment from a merged catchments map with a raster map that has a class domain, for instance land use classes or land cover classes. </p>
+
+<p class="defnewpar">Then, for each class, the area in percentages is calculated, i.e. the area that is occupied by each class in the selected catchment. The output is stored in column <span class="courier">area_percent</span>. </p>
+
+<p class="defnewpar">As input, this script requires: </p>
+
+<ul>
+
+<li>an output map of a previous Catchment Merge operation, and the ID of a catchment in this map, </li>
+
+<li>a raster map with a class domain, for instance a land use map or a land cover map, </li>
+
+</ul>
+
+<p class="defnewpar">When the script is finished, the output cross table is displayed. </p>
+
+<p class="defnewpar">For more information, refer to <a href="..//ilwisapp/class_coverage_statistics.htm" onClick="return popup(this, 'notes')" >Class Coverage Statistics</a>. </p>
+
+</body

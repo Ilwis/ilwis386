@@ -1,0 +1,127 @@
+<html>
+
+<head>
+<title>How to export data</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Export, ILWIS export, Map export, Table export, Histogram export, Coordinate system export, How to export data, ASC, ASCII, Bitmap, BMP, Atlas, BNA, AutoCad, DXF, Arc/Info, E00, LIN, PTS, Erdas, GIS (Erdas format), LAN, IDA, IMG (format), Idrisi, DOC (Idrisi format), Arc/View, Shape files, SHP, InfoCam, SEQ, SMT (ILWIS 1.x ASCII vector format), TIFF, GeoTIFF, ILWIS 3 formats, ILWIS 1.4 formats, MPD (ILWIS 1.4 raster format), TBL (ILWIS 1.4 table format), dBase, DBF, ArcGIS, PRJ, Delimited, Comma delimited, Space delimited, Fixed format, Standard format, SDF">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to export data</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To export maps, tables, histograms or coordinate systems, you can use <a href="../ilwismen/export.htm">ILWIS Export</a>. </p>
+
+<ul>
+
+<li>With ILWIS Export, you can exports maps, tables, histograms and coordinate
+  systems to the formats described below. </li>
+
+</ul>
+
+<p class=defnewpar>When you wish to export multiple files, it is advised to use the ILWIS command line or an ILWIS script. Export expressions are described in <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#export_commandline">Export expressions</a>. </p>
+
+
+
+<h2>Exporting data using ILWIS Export</h2>
+
+<p class=linespacing03after>You can use ILWIS Export to export ILWIS map lists, maps, tables and histograms to the following packages and formats:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="125">
+<p>Raster:</p>
+
+</td>
+<td valign="top">
+<p>Arc/Info ASCII (.ASC), Erdas .GIS .LAN (.GIS, .LAN), IDA images (.IMG), Idrisi maps (.DOC/.IMG), ILWIS 1.4, ILWIS ASCII (.ASC), TIFF images, including GeoTIFF extensions (.TIF), and Windows bitmaps (.BMP). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="125">
+<p>Vector:</p>
+
+</td>
+<td valign="top">
+<p>Arc/Info E00 (.E00), Arc/Info ASCII vector (.LIN), Arc/Info ASCII vector (.PTS), Arc/View Shape files (.SHP, SHX, DBF), Atlas segments (.BNA), AutoCad (.DXF), ILWIS ASCII segments (.SMT), ILWIS version 1.4, ILWIS version 2, InfoCam (.SEQ).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="125">
+<p>Table:</p>
+
+</td>
+<td valign="top">
+<p>dBase III/IV table (.DBF), dBase SDF table (.SDF), Delimited ASCII Text (.TXT), ILWIS 1.4, ILWIS 2. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="125">
+Histogram:
+
+</td>
+<td valign="top">
+dBase III/IV table (.DBF), dBase SDF table (.SDF), Delimited ASCII Text (.TXT).
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="125">
+<p>Coordinate system:</p>
+
+</td>
+<td valign="top">
+<p>ESRI ArcGIS (.PRJ). </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>To start exporting single maps, tables, histograms and
+coordinate systems using ILWIS export: </p>
+
+<ul>
+
+<li>	open the <a href="main_window_menu_commands.htm">File menu</a> in the Main window and choose <span class=arial>Export</span>, </li>
+
+<li>	expand the <span class=arial>Import/Export</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, and double-click the <span class=arial>Export</span> item, or  </li>
+
+<li>	double-click the <span class=arial>Export</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>.</li>
+
+</ul>
+
+<p class=linespacing01before>The <a href="../ilwismen/export.htm">Export</a> dialog box will be opened; select the file you wish to export and the <span class=arial>Export Format</span>. </p>
+
+<p class=defnewpar>To export (multiple) maps, tables and all other objects that are internally stored as a table, to one of the formats listed above you can also type expressions on the command line or create a script containing one or more export expressions. For more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwisexport_commandline">ILWIS Export</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/export.htm">Export</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#export_commandline">Appendices : ILWIS script language (syntax), section Export expressions</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwisexport_commandline">Appendices : ILWIS script language (syntax), section ILWIS Export</a></p>
+
+</body

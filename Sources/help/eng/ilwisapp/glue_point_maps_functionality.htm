@@ -1,0 +1,76 @@
+<html>
+
+<head>
+<title>Glue point maps : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Glue point maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Glue point maps</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Glue point maps operation glues or merges two or more point maps into one output point map. You can thus merge for instance point maps that were digitized as separate point maps from different map sheets. </p>
+
+<p class=defnewpar>By default, the operation copies all points of the input maps into the output map. You can also specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> to select and retrieve the class names, IDs or values of the points that are to be copied into the output map. For more information on how to use a mask, see also <a href="mask_points_functionality.htm">Mask points : functionality</a>. </p>
+
+<p class=defnewpar>By default, the operation finds the minimum and maximum X and Y coordinates used in the two, three or four different input maps and creates from this the <a href="..//ilwis/popup/coordinate_boundary_popup.htm" onClick="return popup(this, 'notes')" >coordinate boundaries</a> for the output map. The output map thus comprises the total area of all input maps.</p>
+
+<p>You can also define the coordinate boundaries of the output map yourself, by specifying a so-called 'clip boundary'. Then, all points of the input maps that fall within these coordinates are copied. </p>
+
+<p class=defnewpar>When the input point maps have attribute tables, also the tables will be automatically merged; for more information see the <a href="..//ilwisapp/popup/glue_tables_popup.htm" onClick="return popup(this, 'notes')" >Glue tables</a> operation.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>All input point maps should be of the same domain type;  i.e. two or more Class maps, two or more ID maps, or two or more Value maps. The contents of the input domains does not necessarily need to be the same. For more information, see the section Domain of output map below. </p>
+
+<p>Furthermore, the input point maps should have the same or a compatible coordinate system; input point maps may not use coordinate system <span class=courier>Unknown</span>.</p>
+
+<p class=kopje>Domain of output map:</p>
+
+<ul>
+
+<li>	When combining point maps with a Value domain, the output map always uses the system <span class=courier>Value</span> domain. The value range for the output map is determined by the smallest minimum and the largest maximum of all input maps; the precision is determined by the smallest precision of the input maps.</li>
+
+<li>	When combining point maps with the same Class domain, the output map also uses this Class domain. <br>
+In case the class names in the input domains are different, both domains are merged into a new domain, and the output domain then contains all domain items, i.e. all classes, and the output map thus shows both input maps with their original class names. The new domain is either stored as a separate object, or is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </li>
+
+<li>	When combining point maps with ID domains, the same procedure is followed as for Class maps but the output domain is an ID domain.</li>
+
+</ul>
+
+<p>For more information on internal domains and internal representations, see <a href="../ilwis/how_to_open_internal_domains_representations_advanced.htm">How to open internal domains/representations</a>.</p>
+
+<p class=kopje>Coordinate system of output map:</p>
+
+<p>The output point map uses the coordinate system of the first input map. The coordinate boundaries for the output map are determined from all input maps or are as specified by the user. When the coordinate systems of the input maps are different (e.g. different projections) but compatible, the point coordinates will be transformed to the coordinate system of the first input map.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="glue_point_maps_dialogbox.htm">Glue point maps : dialog box</a></p>
+
+<p class=seealsolinks><a href="glue_point_maps_commandline.htm">Glue point maps : command line</a></p>
+
+<p class=seealsolinks><a href="glue_point_maps_algorithm.htm">Glue point maps : algorithm</a></p>
+
+</body

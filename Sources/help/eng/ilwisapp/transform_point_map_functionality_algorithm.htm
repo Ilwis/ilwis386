@@ -1,0 +1,201 @@
+<html>
+
+<head>
+<title>Transform point map : functionality/algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Transform point map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Transform point map</h1>
+
+<h1 class=secondline>Functionality / Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Transform point map operation transforms the coordinates of points in a point map from the map's current <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> to another target coordinate system. </p>
+
+<p class=defnewpar>A transformation can only be performed between compatible coordinate systems. You can:</p>
+
+<ul>
+
+<li>	transform a point map with a <i>coordinate system projection</i> with a certain projection, ellipsoid and/or datum to another <i>coordinate system projection</i> with a different projection, ellipsoid and/or datum;</li>
+
+<li>	transform a point map with a <i>coordinate system projection</i> with a certain projection, ellipsoid and/or datum to a <i>coordinate system latlon</i> with a certain ellipsoid and/or datum (and vice versa);</li>
+
+<li>	transform a point map with a <i>coordinate system latlon</i> with a certain ellipsoid and/or datum to another <i>coordinate system latlon</i> with a different ellipsoid and/or datum;</li>
+
+<li>	transform a point map with a <i>coordinate system formula</i> to the '<i>related coordinate system</i>' of this coordinate system formula (and vice versa);</li>
+
+<li>	transform a point map with a <i>coordinate system tiepoints</i> to the '<i>related coordinate system</i>' of this coordinate system tiepoints (and vice versa).</li>
+
+</ul>
+
+<p class=defnewpar>Furthermore:</p>
+
+<ul>
+
+<li>	when in a coordinate system an ellipsoid is not specified, then a sphere is assumed, and </li>
+
+<li>	when in either of the 2 coordinate systems a datum is not specified, then the same datum is assumed.</li>
+
+</ul>
+
+<p class=defnewpar>For more information on coordinate system types, see <a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a>.</p>
+
+<p class=defnewpar>In general, the operation can be used:</p>
+
+<ul>
+
+<li>	to integrate data which are obtained from different sources and when these data are in different projections,</li>
+
+<li>	to present data or results in a more appropriate projection.</li>
+
+</ul>
+
+<p class=kopje>Preparations for using a coordinate system projection:</p>
+
+<ul>
+
+<li>	When you want to integrate data of different projections, first think of the most suitable projection in which you can do your analysis. <br>
+
+        You can either:</li>
+
+        <ul>
+
+        <li>	transform your maps to one existing coordinate system; select this existing coordinate system as the target coordinate system during Transform operations. </li>
+
+        <li>	first create a new coordinate system, specify projection information, and then transform all your maps to that new coordinate system. </li>
+
+        </ul>
+
+<li>	When you want to present data in other projections, you can generally first create a number of new coordinate systems (using <a href="../ilwis/main_window_menu_commands.htm">File</a>, Create,  or by clicking the create button in the dialog box of a Transform operation) and then transform your map to these new coordinate systems. 
+        During the Transform operations, specify a different output map name for each selected target coordinate system.<br>
+        For presentation purposes, you can also interactively change the coordinate system as used by maps displayed in a map window. For more information, see the tips below.</li>
+
+</ul>
+
+<p class=defnewpar>For more information on available projections, refer to the <a href="../ilwismen/select_projection.htm">Select Projection</a> dialog box. </p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>A transformation is only possible between:</p>
+
+<ul>
+
+<li>	a coordinate system projection with a known projection, ellipsoid, and/or datum, and </li>
+
+        <ul>
+
+        <li>	another coordinate system projection with another projection, ellipsoid, and/or datum, or</li>
+
+        <li>	a coordinate system latlon with a known ellipsoid and/or datum, or</li>
+
+        </ul>
+
+<li>	a coordinate system latlon with a known ellipsoid and/or datum, and </li>
+
+        <ul>
+
+        <li>	another coordinate system latlon with a known ellipsoid and/or datum, or</li>
+
+        </ul>
+
+<li>	a coordinate system formula, and</li>
+
+        <ul>
+
+        <li>	the 'related coordinate system' of this coordinate system formula, or</li>
+
+        </ul>
+
+<li>	a coordinate system tiepoints, and</li>
+
+        <ul>
+
+        <li>	the 'related coordinate system' of this coordinate system tiepoints. </li>
+
+        </ul>
+
+</ul>
+
+<p>In each of these combinations, one coordinate system is the current coordinate system of the point map, and the other is the selected target coordinate system. </p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The output point map uses the same domain as the input point map. </p>
+
+<p>The output point map uses the selected target coordinate system; the coordinate boundaries of the output map will be the transformed coordinate boundaries of the input map. </p>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	To see the effect of using different projections, it is advisable to display the input map in a map window and the output maps in other map windows; then add a graticule to the map windows; open the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> and select the <span class=arial>Add Annotation, Graticule</span> command. </li>
+
+<li>	The Transform operations permanently change the projection of your map(s), i.e. for analysis and calculation purposes.</li>
+
+<p class=tiptext>	To temporarily view map(s) which are displayed in a map window in another projection, i.e. for presentation purposes, you can:</p>
+
+        <ul class=tipul>
+
+        <li>	create a coordinate system in which you already specify some projection information,</li>
+
+        <li>	display your map(s) in a map window, </li>
+
+        <li>	<i>drag</i> your new coordinate system to the map window, or choose the <span class=arial>Coordinate System</span> command from the <a href="../ilwis/map_window_menu_commands.htm">Options menu</a> in the map window and subsequently select another coordinate system.</li>
+
+        </ul>
+
+<p class=tiptext>	The contents of the map window will be displayed in the new projection. Projection information of the coordinate system as currently used by the map window can be refined by choosing the <span class=arial>Coordinate System</span> command from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in the map window. Thus, you do not need to use a Transform operation.</p>
+
+</ol>
+
+<p class=kopje>Algorithm:</p>
+
+<p>The XY-coordinates of the points of the input map are copied, and then transformed.</p>
+
+<ul>
+
+<li>	When both the input coordinate system and the target coordinate system have the same ellipsoid and datum information, then the transformations are calculated via geographic coordinates; i.e. from XY (input) to <span class=symbollarger>f</span>, <span class=symbollarger>l</span> (LatLon) to XY (target).</li>
+
+<li>	When in the input coordinate system and the target coordinate system, ellipsoid and datum information is different, then Molodensky formulas are used to calculate the ellipsoidal transformations and datum shifts, i.e. from XY (input) to <span class=symbollarger>f</span>, <span class=symbollarger>l</span> (input) to <span class=symbollarger>f</span>, <span class=symbollarger>l</span> (target) to XY (target).</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="transform_point_map_dialog_box.htm">Transform point map : dialog box</a></p>
+
+<p class=seealsolinks><a href="transform_point_map_command_line.htm">Transform point map : command line</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/create_a_coordinate_system.htm">Create coordinate system</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/edit_coordinate_system.htm">Edit coordinate system</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/select_projection.htm">Select projection</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/select_ellipsoid.htm">Select ellipsoid</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/select_datum.htm">Select datum</a> (dialog box)</p>
+
+</body

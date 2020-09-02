@@ -1,0 +1,93 @@
+<html>
+
+<head>
+<title>Script editor : Run script</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Run script, Script editor, Scripts, Help file">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Script editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Run Script</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/script_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Run or test a script.</p>
+
+<p class=defnewpar>The Run Script dialog box only appears if your script contains parameters for which a user still needs to select input objects or for which a user still needs to specify an output file name etc. </p>
+
+<p class=defnewpar>If your script does not contain any parameters, or if all parameters were already specified (i.e. on command line), this dialog box will be skipped and your script will immediately be executed.</p>
+
+<p class="diakopje">Dialog box options:</p>
+
+<p>In the Run Script dialog box, all parameter names are listed as specified on the <a href="../ilwis/script_editor_functionality.htm#parameters_tab"><span class=bookmark>Parameters tab</span></a> of the script editor. </p>
+
+<p class=defnewpar>Furthermore, default objects may be shown as specified on the <a href="../ilwis/script_editor_functionality.htm#default_values_tab"><span class=bookmark>Defaults Values tab</span></a> of the script editor: </p>
+
+<ul>
+
+<li>If default objects or file names were <i>not</i> specified on the Defaults Values tab, you will need to select objects for input parameters and/or names for output parameters in this Run Script dialog box. </li>
+
+<li>If you selected objects on the Default Values tab, the Run Script dialog box will show these defaults. </li>
+
+</ul>
+
+<p class=defnewpar>When the OK button is clicked and when all parameters are correctly specified, the script will be executed.</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>For an example of how a Run Script dialog box may look like, see <a href="../ilwis/how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a>. </li>
+
+<li>For more information about running scripts, e.g. running a script from the command line, see <a href="../ilwis/how_to_run_scripts.htm">How to run scripts</a>.</li>
+
+</ul>
+
+<h2>Creating your own Help for a script</h2>
+
+<p>When you have created a script and when you click the Help button in the Run
+Script dialog box for the first time, an HTML page is automatically generated
+listing all parameter names of the script and a minimal explanation. 
+This HTML file is stored with the same name and in the same directory as the
+script. You are free to adapt the auto-generated HTML file according to your
+wishes. You can for instance give a better introduction of the working of the
+script, explain input and possible output parameters more in depth, etc. When
+you save the edited HTML file with the same name and the same location as the
+script, your own 'Help' will appear whenever the Run Script Help button is clicked
+again.</p>
+
+<p class=defnewpar>The auto-generated HTML file lists:</p>
+
+<ul>
+
+<li>the script description for the first paragraph of text</li>
+
+<li>parameter names as specified before on the Parameters tab</li>
+
+<li>optional default objects as specified on the Default Values tab.</li>
+
+</ul>
+
+<p class=defnewpar>The HTML file uses the same stylesheet (.css file) as the ILWIS Help.</p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>When you copy a script to another directory, please copy your script's .htm file and the ilwis.css file yourself.</p>
+
+<p class="Seealso">See also:</p>
+
+<p class="seealsolinks"><a href="../ilwis/script_editor_functionality.htm">Script editor : functionality</a></p>
+
+<p class="seealsolinks"><a href="../ilwis/how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a></p>
+
+</body

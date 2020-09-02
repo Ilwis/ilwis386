@@ -1,0 +1,378 @@
+<html>
+
+<head>
+<title>IFF</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="IFF, Conditional IFF function">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>IFF( ) function</h1>
+<p class="defnewpar">If <i>a</i> is true, then return <i>b</i>, else return <i>c</i>.</p>
+
+<p class="calctitlesyntax">Syntax</p>
+<p class="syntax"><span class="courier">IFF</span>(<i>a</i>, <i>b</i>, <i>c</i>)</p>
+
+<p class="calctitle">Input</p>
+<table cellspacing="0">
+  <tr>
+    <td width="100" valign="top"><i>a</i></td>
+    <td valign="top">is the test condition: a boolean expression containing at least one map name or one column name.</td>
+  </tr>
+  <tr>
+    <td width="100" valign="top"><i>b</i>, <i>c</i></td>
+    <td valign="top">an expression containing at least one map name or one column name, or simply a value, class name, ID, etc.</td>
+  </tr>
+</table>
+
+<p class="calctitle">Output</p>
+<table cellspacing="0">
+  <tr>
+    <td width="100" valign="top"><span class="courier">IFF</span> returns:</td>
+    <td valign="top">if <i>a</i>=true, <i>b</i> is returned;<br>
+    if <i>a</i>=false, <i>c</i> is returned;<br>
+    if <i>a</i>=undefined, undefined is returned.</td>
+  </tr>
+  <tr>
+    <td width="100" valign="top">Domain:</td>
+   <td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a>;
+    <p>the class/ID domain returned by <i>c</i>;</p>
+    <p>if <i>c</i> returns a string or undefined value, the class/ID domain
+    returned by <i>b</i>;</p>
+    <p>if both <i>b</i> and <i>c</i> return a string, no default output domain.</p>
+    </td>
+  </tr>
+</table>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+	<li>The conditional <span class=courier>IFF</span> may be used for all types of input data: values, classes, IDs and groups.</li>
+
+        <li>Merging Class or ID domains during calculations does not work properly when the IFF function is used. For more information, refer to <a href="calc_merge_domains.htm">Map and Table Calculation : Merging domains (workaround)</a>.</li>
+
+	<li>The amount of nested <span class=courier>IFF</span> statements is unlimited.</li>
+
+	<li>When <i>a</i> is undefined, the output will also be undefined.</li>
+
+	<li>When calculating with classes or IDs of a class or ID domain, you need to use double quotes around the &quot;class names&quot;, &quot;IDs&quot;, etc.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</p>
+
+<p class="calctitle">Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>MapCalc example using a value map:</p>
+<p class=calc00>OutMap = IFF(DEM &gt; 20, 50, 10)</p>
+<p class=emptylinehalf>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>DEM</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>45</td>
+    <td class=calcpict>40</td>
+    <td class=calcpict>30</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>15</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>15</td>
+    <td class=calcpict>30</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>50</td>
+    <td class=calcpict>50</td>
+    <td class=calcpict>50</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>50</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class="defnewpar">If a pixel in a Digital Elevation Model (map <span class=courier>DEM</span>) has a value greater than
+<span class=courier>20</span>, then assign <span class=courier>50</span> to this pixel in output map
+<span class=courier>OutMap</span>, else assign <span class=courier>10</span>.</p>
+
+<p class=kopje>MapCalc example using a class map:</p>
+<p class=calc00>OutMap = IFF(Landuse=&quot;Coffee&quot;, 50, 10)</p>
+<p class=emptylinehalf>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>Landuse</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>C</td>
+    <td class=calcpict>C</td>
+    <td class=calcpict>G</td>
+  </tr>
+  <tr>
+    <td class=calcpict>F</td>
+    <td class=calcpict>F</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>G</td>
+    <td class=calcpict>C</td>
+    <td class=calcpict>C</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>50</td>
+    <td class=calcpict>50</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>50</td>
+    <td class=calcpict>50</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If in map <span class=courier>Landuse</span> a pixel belongs to class <span class=courier>Coffee</span>, then assign <span class=courier>50</span> to this pixel in output map <span class=courier>OutMap</span>, else assign
+<span class=courier>10</span>.</p>
+
+<p class="tip">Note:</p>
+<p class=tiptext>Read in the <span class=courier>Landuse</span> map for <span class=courier>C</span>=Coffee, <span class=courier>G</span>=Grassland, and for <span class=courier>F</span>=Forest.</p>
+
+<p class=kopje>MapCalc example using a conditional IFF and a logical AND:</p>
+<p class=calc00>OutMap1 = IFF ((Landuse=&quot;Coffee&quot;) AND (DEM&gt;=20), 50, 10)</p>
+<p class=calc00>OutMap2 = IFF ((Landuse=&quot;Coffee&quot;) AND (INRANGE(DEM,5,25), &quot;True&quot;, &quot;False&quot;)</p>
+<p class=defnewpar>The previous formula as above can also be written as:</p>
+<p class=calc00>OutMap2 = (Landuse=&quot;Coffee&quot;) AND (INRANGE(DEM,5,25)</p>
+<p class="emptyline">&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>Landuse</p></td>
+	<td><p class=courier>DEM</p></td>
+	<td><p class=courier>OutMap1</p></td>
+	<td><p class=courier>OutMap2</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>C</td>
+    <td class=calcpict>C</td>
+    <td class=calcpict>G</td>
+  </tr>
+  <tr>
+    <td class=calcpict>F</td>
+    <td class=calcpict>F</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>G</td>
+    <td class=calcpict>C</td>
+    <td class=calcpict>C</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>45</td>
+    <td class=calcpict>40</td>
+    <td class=calcpict>30</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>15</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>15</td>
+    <td class=calcpict>30</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>50</td>
+    <td class=calcpict>50</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>50</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+  </tr>
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>False</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>False</td>
+    <td class=calcpict>True</td>
+    <td class=calcpict>False</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class="emptyline">&nbsp;</p>
+<ul>
+	<li><span class=courier>OutMap1</span>: If a pixel belongs to class <span class=courier>Coffee</span> in map <span class=courier>Landuse</span> and at the same time this pixel has a value greater than or equal to <span class=courier>20</span> in map <span class=courier>DEM</span>, then assign a <span class=courier>50</span> to this pixel in output map <span class=courier>OutMap1</span>, else assign a <span class=courier>10</span>.</li>
+	<li><span class=courier>OutMap2</span>: If a pixel belongs to class <span class=courier>Coffee</span> in map <span class=courier>Landuse</span> and at the same time this pixel has a value in between <span class=courier>5</span> and <span class=courier>25</span> in map <span class=courier>DEM</span>, then assign <span class=courier>True</span> to this pixel in output map <span class=courier>OutMap2</span>, else assign <span class=courier>False</span>.</li>
+</ul>
+
+<p class=tip>Note:</p>
+<p class=tiptext>Read in the <span class=courier>Landuse</span> map for <span class=courier>C</span>=Coffee, <span class=courier>G</span>=Grassland, and for <span class=courier>F</span>=Forest.</p>
+
+<p class=kopje>TabCalc examples:</p>
+<p class="calc00">Suitability1 = IFF (SoilDepth &gt; 0.20, &quot;Suitable&quot;, &quot;Not Suitable&quot;)</p>
+<p class="calc00">Suitability2 = IFF ((SoilDepth &gt; 0.20) AND (Phosphate &gt; 30), True,
+False)</p>
+<p class=defnewpar>The second formula can also be written as:</p>
+<p class="calc00">Suitability2 = (SoilDepth &gt; 0.20) AND (Phosphate &gt; 30)</p>
+<p class="emptylinehalf">&nbsp;</p>
+<p class="calc00">SoilLevel=IFF(SoilDepth&lt;0.20,1,IFF(SoilDepth&lt;0.40,2,IFF(SoilDepth&lt;0.80,3,IFF(SoilDepth&lt;1.60,4,0))))</p>
+
+<p class="emptyline">&nbsp;</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top"><p class="tcolhr">SoilDepth</p></td>
+    <td valign="top"><p class="tcolhr">Phosphate</p></td>
+    <td valign="top"><p class="tcolh">Suitability1</p></td>
+    <td valign="top"><p class="tcolh">Suitability2</p></td>
+    <td valign="top"><p class="tcolh">SoilLevel</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">0.15</p></td>
+    <td valign="top"><p class="t1r">8</p></td>
+    <td valign="top"><p class="t1">Not Suitable</p></td>
+    <td valign="top"><p class="t1">False</p></td>
+    <td valign="top"><p class="t1r">1</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">0.45</p></td>
+    <td valign="top"><p class="t1r">34</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+    <td valign="top"><p class="t1">True</p></td>
+    <td valign="top"><p class="t1r">3</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">0.90</p></td>
+    <td valign="top"><p class="t1r">10</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+    <td valign="top"><p class="t1">False</p></td>
+    <td valign="top"><p class="t1r">4</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">0.20</p></td>
+    <td valign="top"><p class="t1r">25</p></td>
+    <td valign="top"><p class="t1">Not Suitable</p></td>
+    <td valign="top"><p class="t1">False</p></td>
+    <td valign="top"><p class="t1r">2</p></td>
+  </tr>
+</table>
+<p class="emptyline">&nbsp;</p>
+<ul>
+	<li>If the first expression <span class=courier>SoilDepth</span> is greater than <span class=courier>0.20</span> is true, then <span class=courier>Suitable</span> is assigned in column <span class=courier>Suitability1</span>, else, if <span class=courier>SoilDepth</span> is less than or equal to <span class=courier>0.20</span>, <span class=courier>Not S</span><span class=courier>uitable</span> is assigned.</li>
+	<li>In expressions two and three a <a href="calc_and_operator.htm">logical <span class=courier>AND</span></a>  is used together with a conditional <span class=courier>IFF</span>. Only if both conditions are true, i.e. <span class="courier">SoilDepth</span> is greater than <span class=courier>0.20</span> and <span class="courier">Phosphate</span> is greater than <span class=courier>30</span>, then a <span class=courier>True</span> is assigned, else a <span class=courier>False</span> is assigned.</li>
+	<li>Expression 4 nests four IFF statements. In words the expression means:<br>
+	- If column <span class=courier>SoilDepth</span> is less than <span class=courier>1.60</span>, then assign a <span class=courier>4</span> to column <span class=courier>SoilLevel</span>, else assign a <span class=courier>0</span> to column <span class=courier>SoilLevel</span><br>
+	- If column <span class=courier>SoilDepth</span> is less than <span class=courier>0.80</span>, then assign a <span class=courier>3</span> to column <span class=courier>SoilLevel</span>, else&nbsp;<br>
+	- If column <span class=courier>SoilDepth</span> is less than <span class=courier>0.40</span>, then assign a <span class=courier>2</span> to column <span class=courier>SoilLevel</span>, else<br>
+	- If column <span class=courier>SoilDepth</span> is less than <span class=courier>0.20</span>, then assign a <span class=courier>1</span> to column <span class=courier>SoilLevel</span>.</li>
+</ul>
+<p class="Seealso">See also:</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top"><a href="calc_ifundef.htm">IFUNDEF</a></td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="calc_isundef.htm">ISUNDEF</a></td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="calc_ifnotundef.htm">IFNOTUNDEF</a></td>
+  </tr>
+  <tr>
+    <td><a href="calc_assign_undefined_values.htm">Map and Table Calculation : Assigning undefined values</a></td>
+  </tr>
+  <tr>
+    <td><a href="how_to_calculate_with_undefineds_in_maps_and_tables.htm">How to calculate with undefineds in maps and tables</a></td>
+  </tr>
+  <tr>
+    <td><a href="calc_merge_domains.htm">Map and Table Calculation : Merging domains (workaround)</a></td>
+  </tr>
+</table>
+
+</body

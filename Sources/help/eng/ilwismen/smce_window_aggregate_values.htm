@@ -1,0 +1,231 @@
+<html>
+
+<head>
+<title>SMCE window : Aggregate Values</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Aggregate SMCE values, SUM, MIN, MAX, AVG, Minimum, Maximum, Average">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Generate menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Aggregate Values</span>&nbsp;&nbsp;&nbsp;<img src="../images/smce_aggr_vals_icon.gif" title="Aggregate Values" align=bottom width="23" height="23"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>For each of the SMCE output maps that are currently selected, calculate: </p>
+
+<ul>
+<li>the Minimum value, </li>
+<li>the Maximum value, </li>
+<li>the Sum of all values, </li>
+<li>the weighted Average. </li>
+</ul>
+
+<p class=defnewpar>When you have for instance three alternative SMCE output maps, and when you selected for instance Minimum, you will obtain three Minimum values, i.e. a minimum value for each SMCE output map. </p>
+
+<p class=defnewpar>Together with the histograms of the SMCE output maps, the Aggregate Values option helps you get a general idea of the values in the SMCE output maps, and helps you to decide on the boundary values needed in Slicing. </p>
+
+<p class="defnewpar">This dialog box appears, after you selected the main goal or a sub goal in the criteria tree viewer, and: </p>
+<ul>
+<li>clicked the <span class=arial>Aggregate Values</span> button in the <a href="../ilwis/smce_window_toolbar.htm">toolbar</a>, </li>
+<li>chose the <span class=arial>Aggregate Values</span> command from the <a href="../ilwis/smce_window_menu_commands.htm">Generate</a> menu, or </li>
+<li>chose the <span class=arial>Aggregate Values</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+                                     
+<p class=tiptext><span class=tip>Tip: </span>To inspect the minimum, maximum, sum and average (mean) value in a single map, you can also use <span class=arial><a href="../ilwismen/smce_window_histogram.htm">Histogram</a></span>.</p>
+
+<p class=emptyline>&nbsp;</p>
+                                     
+<p class=tiptext><span class=tip>Note: </span><span class=arial>Aggregate Values</span> is not available when the SMCE output maps have not yet been generated. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing="0" cellpadding="0">
+  <tr>
+    <td valign="top" width="172">
+	<p class="diabox">Operation:</p>
+	</td>
+    <td valign="top">
+	<p class="diabox">Choose to calculate for each SMCE output map within the current selection:</p>
+		<ul class=diaul>
+		<li>the <span class=arial>Minimum</span> or the <span class=arial>Maximum</span> value in each map, or </li>
+		<li>the (weighted) <span class=arial>Average</span> or the <span class=arial>Sum</span> of the values in each map. </li>
+		</ul>    
+	</td>
+  </tr>
+  <tr>
+    <td valign="top">
+	<p class="diabox">Calculation results:</p>
+	</td>
+    <td valign="top">
+	<p class="diabox">After the <span class=arial>Calculate</span> button has been pressed, calculation results will appear in this pane for all maps within the current selection. </p>
+	</td>
+  </tr>
+  <tr>
+    <td valign="top">
+	<p class="diabox">Additional parameters: </p>
+	</td>
+    <td valign="top">
+	<p class="diabox">Optionally, you can specify a mask map or a weight map. </p>
+
+
+			<ul class=diaul>
+
+			<li>Select this checkbox if you wish to use a mask map to reduce the study area, or to use a weight map to assign more importance to some areas, or to use a mask expression to reduce the area of interest. </li>
+
+			<li>Clear this checkbox if you simply wish to calculate <span class=arial>Minimum, Maximum, Average</span> or <span class=arial>Sum</span> without a mask or without weights. </li>
+
+			</ul>
+
+	</td>
+  </tr>
+  <tr>
+    <td valign="top">
+
+	<p class="diaboxleft1"><img src="../images/option.gif" align=top width="12" height="12">  Mask map:</p>
+
+	</td>
+    <td valign="top">
+
+	<p class="diabox">Select a mask map which uses system domain <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >Bool</a>. 
+	
+		The calculations will include those pixels of the SMCE output maps that have a True value in the mask map. 
+	
+        The Mask map should use the same georeference as the SMCE output maps. </p>
+
+	</td>
+  </tr>
+  <tr>
+    <td valign="top">
+
+	<p class="diaboxleft1"><img src="../images/option.gif" align=top width="12" height="12">  Weight map:</p>
+
+	</td>
+    <td valign="top">
+
+	<p class="diabox">Select a weight map which uses system domain <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >Value</a>. 
+	
+		All pixels in the SMCE output maps will be multiplied with the values in the weight map just before the calculations. 
+
+		Values in the weight map must be greater than zero. 
+	
+		The weight map should use the same georeference as the SMCE output maps. </p>
+
+	</td>
+  </tr>
+  <tr>
+    <td valign="top">
+
+	<p class="diaboxleft1"><img src="../images/option.gif" align=top width="12" height="12">  Mask Expression:</p>
+
+	</td>
+    <td valign="top">
+
+	<p class="diabox">Type an expression; the calculations will include those pixels of the SMCE output maps for which the mask expression is True. </p>
+	
+		<p class=tiptext><span class=tip>Tip: </span>&nbsp;Examples of mask expressions are for instance: <br>
+
+		<span class=calc0>myValueMap &gt; 0.25</span><br>
+
+		<span class=calc0>(myClassMap = &quot;pasture&quot;) or (myClassMap = &quot;shrubs&quot;)</span></p>
+
+		<p class="tipemptylinehalf">&nbsp;</p>
+
+	</td>
+  </tr>
+  <tr>
+    <td valign="top">
+
+	<p class="diabox"><span class=arial>Calculate</span>:</p>
+
+	</td>
+    <td valign="top">
+
+	<p class="diabox">Click the <span class=arial>Calculate</span> button (or press the <span class="arial">Spacebar</span> on the keyboard) to start the calculations. Results will appear in the Calculation Results pane. </p>
+
+	</td>
+  </tr>
+</table>
+
+<h2>Additional information</h2>
+
+<p>Once the Minimum, Maximum, Sum or Average has been calculated, the histograms of the raster maps remain on disk. </p>
+
+<p class=kopje>Calculating Minimum or Maximum: </p>
+
+	<ul>
+	
+	<li>Undefined pixels are ignored; only pixels that are not undefined are considered. </li>
+
+	<li>The minimum value or the maximum value of all pixels in the map is shown. </li>
+
+	</ul>
+
+<p class=kopje>Calculating Sum: </p>
+
+	<ul>
+	
+	<li>Undefined pixels are ignored; only pixels that are not undefined are considered. </li>
+
+	<li>The sum of all pixel values in the map is shown. </li>
+
+	</ul>
+
+<p class=kopje>Calculating Average: </p>
+
+	<ul>
+	
+	<li>Undefined pixels are ignored; only pixels that are not undefined are considered. </li>
+
+	<li>The average of all pixel values in the map is shown, as: <br>
+
+    <span class=symbollarger>S</span> (Value<sub>i</sub>) / N <br>
+
+	where <i>Value</i><sub>i</sub> is the value of a pixel <i>i</i>, and <i>N</i> is the total number of pixels in the map. <br>
+
+	<li>When using a weight map, the (weighted) average of all pixel values in the map is shown, as: <br>
+
+	<span class=symbollarger>S</span> (Value<sub>i</sub> * Weight<sub>i</sub>) / <span class=symbollarger>S</span> (Weight<sub>i</sub>) <br>
+	
+	where <i>Value</i><sub>i</sub> is the value of a pixel, and <i>Weight</i><sub>i</sub> is the weight value of that pixel. </li>
+
+	</ul>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_histogram.htm">SMCE window : Histogram</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_slice.htm">SMCE window : Slice</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_aggregate_values_sliced.htm">SMCE window : Aggregate Values Sliced</a></p>
+
+</body

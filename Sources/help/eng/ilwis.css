@@ -1,0 +1,1164 @@
+/* ================================= */
+/* CASCADING STYLE SHEET FOR ILWIS 3.0  */
+/* ================================= */
+
+/* ******** */
+/* BODY  */
+/* ******** */
+body  {
+	font-family : Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	font-size : 70%;
+	font-weight : normal;
+	font-style : normal;
+	font-variant : normal;
+	color : #000000;
+	/*line-height : 120%;*/
+	border-top : none;
+	border-bottom : none;
+	border-left : none;
+	border-right : none;
+	white-space : normal;
+	text-indent : 0em;
+	text-align : left;
+	text-decoration : normal;
+	}
+
+/* ========= */
+/* HEADINGS  /* 
+/* ========= */
+
+/* **** */
+/* H1  */
+/* **** */
+
+h1{     font-family : Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	font-weight : bold;
+	color : #CDCDCD;
+	background : #006699;
+        text-indent: 0.1em;
+	margin-top : 0em;
+	margin-bottom : 0 em;
+	margin-left : 0em;
+	margin-right : 0em;
+	}
+
+/* h1, title of topic, first line - when there are more lines */
+	.firstline  {
+		line-height : 1.5 em;
+		font-size : 150%;
+		}
+
+/* h1, title of topic - second line when there are more lines */
+	.secondline  {
+		line-height : 1.6em;
+		font-size : 135%;
+		margin-bottom : 0.8 em;
+		}
+
+/* h1, title of topic - third line when there are more lines */
+	.thirdline  {
+		line-height : 1.2em;
+		font-size : 120%;
+		}
+
+/* h1, title of topic - blue line of 1 pixel when title in table */
+	.emptylineblue {
+                background-color : #006699;
+		line-height : 1px;
+                }
+
+/* h1, title of topic when there is one line */
+	.only1  {
+                line-height: 2.8em;
+  		font-size : 150%;
+                margin-bottom : 0.8em;
+		}
+
+TD H1.only1	{
+        margin-bottom : 0em;
+  	}
+
+TD H1.SECONDLINE	{
+	background : #006699;
+        margin-bottom : 0em;
+  	}
+/* when second line of title is followed by 'large' picture; seg ed modes */
+.middle {
+        vertical-align:middle;
+        }
+
+/*if other tabs exist*/
+/*first tab active*/
+TD H1.firsttabactive     {
+        line-height : 1.4em;
+ 	font-size : 110%;
+	color: #FFF68F;	/*khaki1*/
+        text-align : left;
+	margin-bottom : 0.7 em;
+	}
+
+TD H1.firsttabnotactive     {
+        line-height : 1.5em;
+ 	font-size : 100%;
+	color: #FFF68F;	/*khaki1*/
+        text-align : left;
+	margin-bottom : 0.7 em;
+	}
+
+
+/*for other active tab (not the first tab)*/
+TD H1.thistab     {
+        line-height : 1.4em;
+ 	font-size : 110%;
+	color: #FFF68F;	/*khaki1*/
+        text-align : center;
+	margin-bottom : 0.7 em;
+        }
+
+/* for other inactive tabs (not the first tab)*/
+TD H1.othertab     {
+        line-height : 1.5em;
+ 	font-size : 100%;
+        text-align : center;
+	margin-bottom : 0.7 em;
+        }
+
+
+/* ********************* */
+/* H2/*
+/* ********************* */
+h2  {   font-family : Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	line-height : 1.2em;
+	font-size : 135%;
+	font-weight : bold;
+	margin-top : 1em;
+        margin-bottom : 0.5em;
+	margin-right : 0em;
+	margin-left : 0em;
+	}
+
+/* h2 die in ordered list zit maar toch vooraan moet beginnen */
+	.left0  {
+		margin-left : -1.75em;
+		}
+
+h3  {   font-family : Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	line-height : 1.2em;
+	font-size : 110%;
+	font-weight : bold;
+	margin-top : 1em;
+        margin-bottom : 0.4em;
+	margin-right : 0em;
+	margin-left : 0em;
+	}
+
+h3.afterh2
+ 	{margin-top : 0.7em;
+         }
+
+h3.und  /*for Preferences*/
+	{
+        text-decoration : underline;
+	}
+
+
+/* ********************* */
+/* P GENERAL/* 
+/* ********************* */
+p  {
+	font-family : Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	/*font-size : 100%;*/
+	font-weight : normal;
+	font-style : normal;
+	font-variant : normal;
+	color : #000000;
+	/*line-height : 120%;*/
+	border-top : none;
+	border-bottom : none;
+	border-left : none;
+	border-right : none;
+	white-space : normal;
+	text-indent : 0em;
+	text-align : left;
+	text-decoration : normal;
+        margin-top : 0em;
+	margin-right : 0em;
+	margin-bottom : 0em;
+	margin-left : 0em;  
+	}
+
+/* ********************* */
+/* A LINKS*/
+/* ********************* */
+
+/* hyperlink default */
+A:link  {
+	color : #0000DD;
+	text-decoration : none;
+	}
+
+/* hyperlink visited */
+A:visited  {
+	color : #901090;
+	text-decoration : none;
+	}
+
+/* hyperlink mouseover */
+A:hover  {
+	/*color : #DC143C;*/
+	text-decoration : underline;
+	}
+
+/* menu hyperlink */
+A.menlink:link  {
+	color : #FFFFC0;
+	text-decoration : none;
+	}
+
+/* menu hyperlink visited */
+A.menlink:visited  {
+	color : #B9D3EE;	/* slate gray2 */
+        text-decoration : underline;
+	}
+
+/* menu hyperlink mouseover  */
+A.menlink:hover  {
+	color: #FFF68F;	/*khaki1*/
+	text-decoration : underline;
+	}
+
+
+/* back next link */
+A.menlink2:link  {
+	color : #FFFFC0;
+	text-decoration : none;
+	}
+
+/* back next visited */
+A.menlink2:visited  {
+	color : #B9D3EE;	/* slate gray2 */
+        text-decoration : none;
+	}
+
+/* back next mouseover  */
+A.menlink2:hover  {
+	color: #FFF68F;		/*khaki1*/
+	text-decoration : underline;
+	}
+
+/* heading hyperlink to othertab */
+A.othertab:link  {
+	color : #B9D3EE;
+	text-decoration : none;
+	}
+
+/* heading hyperlink to othertab visited */
+A.othertab:visited  {
+	color : #B9D3EE;	/* slate gray2 */
+	}
+
+/* heading hyperlink to othertab mouseover  */
+A.othertab:hover  {
+        color: #FFF68F;	/*khaki1*/
+	text-decoration : underline;
+	}
+
+/* colors, underline of thistab */
+A.thistab:link  {
+        color: #FFF68F;	/*khaki1*/
+	text-decoration : none;
+	}
+
+/* heading hyperlink to othertab mouseover  */
+A.thistab:hover  {
+        color: #FFF68F;	/*khaki1*/
+	text-decoration : underline;
+	}
+
+/* heading hyperlink to othertab visited */
+A.thistab:visited  {
+        color: #FFF68F;	/*khaki1*/
+	}
+
+
+/* for Contents, Alpha numbers only */
+td.menucommand .menlink {
+	color : #FFFFC0;
+        }
+
+/* ================== */
+/* 	LISTS 	            */
+/* ================== */
+
+/* ***************************** */
+/* UNORDERED GENERAL */
+/* ***************************** */
+
+/* unordered lists */
+ul  {
+	margin-top : 0em;
+	margin-bottom : 0em;
+	margin-left : 2.75em;
+	list-style : square;
+	list-style-position : outside;
+	list-style-type : square;
+	}
+
+/* ********************* */
+/* ORDERED GENERAL*/
+/* ********************* */
+
+/* ordered list */
+ol {
+	margin-top : 0em;
+	margin-bottom : 0em;
+	margin-left : 3.5em;
+	}
+
+/* ==================== */
+/* NESTED LISTS GENERAL  */
+/* ==================== */
+
+/* ********************* */
+/* NESTED ORDERED */
+/* ********************* */
+/* ordered list in ordered list as 1a, 1b, 1c etc. */
+	ol.abc {
+		list-style : lower-alpha;
+		}
+
+/* ordered list in ordered list as 1a, 1b, 1c etc. */
+	ol.onelineup {
+		margin-top : -1.2em;
+		margin-left : 2.2em;
+		list-style : lower-alpha;
+		}
+
+/* unordered list inside ordered list */
+	ol ul  {
+		margin-left : 2.75em;
+		list-style : square;
+		}
+
+/* ********************* */
+/* LIST ITEMS GENERAL*/
+/* ********************* */
+/* normal list item */
+li  {
+	/*line-height : 1.2em;*/
+	margin-top : 0em;
+	margin-bottom : 0em;
+	margin-left : -1.25em;
+	}
+
+/* list item with bullet and with linespacing01before */
+	li.ls01be  {
+		/*line-height : 1.2em;*/
+		margin-top : 0.2em;
+		/* margin-bottom : 0em; */
+		margin-left : -1.25em;
+		}
+	
+/* list item with bullet and with linespacing01after */
+	li.ls01af  {
+		/*line-height : 1.2em;*/
+		/* margin-top : 0em;*/
+		margin-bottom : 0.2em;
+		margin-left : -1.25em;
+		}
+
+/* ********************* */
+/* MARGINS IN LISTS */
+/* ********************* */
+
+/* in list: leftmargin but no list bullet */
+/* same as DefaultStyle */
+.leftmargininlist {
+	}
+
+/* in list: leftmargin with extra linespacing but no list bullet */
+/* same linespacing01before */
+.leftmargininlist01be {
+	margin-top : 0.2em;
+	}
+
+/* ************ */
+/* TABLES   */
+/* ************ */
+
+.tcolh  {
+	line-height : 1.1em;
+	text-decoration : underline;
+	font-size : 90%;
+        padding-right : 8pt;
+	}
+
+.th  {
+	line-height : 1.1em;
+	font-weight : bold;
+	font-size : 90%;
+	}
+
+.t1  {
+	line-height : 1.1em;
+	font-size : 90%;
+        padding-right : 8pt;
+	}
+
+/*RIGHT aligned column headers and column values*/
+.tcolhr  {
+	line-height : 1.1em;
+	text-decoration : underline;
+	font-size : 90%;
+        text-align : right;
+        padding-right : 8pt;
+	}
+
+.t1r  {
+	line-height : 1.1em;
+	font-size : 90%;
+        text-align : right;
+        padding-right : 8pt;
+	}
+
+/* ******************* */
+/* Menu pages with overview menu commands in table*/
+/* ******************* */
+
+table.menupage td {
+	font-family : sans-serif;
+        line-height : 130%;
+        }
+
+table.menupage td .menuheading {
+        font-family : sans-serif;
+        font-weight : bold;
+        line-height: 130%;
+        font-size: 100%;
+        margin-bottom : 0.1em;
+        letter-spacing : 1;
+        }
+
+/* ******************* */
+/* TD 		*/
+/* ******************* */
+/* table data cell */
+td  {
+	font-family : Verdana, Tahoma, Arial, Helvetica, sans-serif;
+	font-size : 70%;
+	}
+
+	/* table data cell with menu link */
+	td.menucommand {
+		font-family : Verdana, Tahoma, Arial, Helvetica, sans-serif;
+		font-size : 70%;
+		font-weight : bold;
+		text-align : center;
+                color : #B9D3EE;
+        	background : #006699;
+		}
+
+        /* for table data cell and title second line (2 rows), Import table wizard) */
+	td.menucommand2 {
+		font-family : Verdana, Tahoma, Arial, Helvetica, sans-serif;
+		font-size : 70%;
+		font-weight : bold;
+		text-align : left;
+                color : #B9D3EE;
+        	background : #006699;
+		}
+
+        /*for strange line in page headings, title of topic consists of a table with link to menu */
+        table.headingblue {
+		background : #006699;
+		}
+
+	td.emptylinehalf {
+                line-height: 0.3em;
+                }
+
+	td.nospacetop {
+                margin-top: -0.2em;
+                }
+
+        td.larger {
+                font-size: larger;
+                }
+
+/* ********************************************* */
+/* Contents pages with DHTML contents in table   */
+/* ********************************************* */
+
+table.contents td.contents {
+        font-weight : bold;
+        padding-top : 0.8em;
+        padding-right : 0.4em;
+        valign : bottom;
+        }
+
+table.contents td {
+        line-height : 120%;
+        valign : top;
+        }
+
+table.contents td .contentsindent1 {
+        text-indent : 3.4em;
+        }
+
+/* ********************* */
+/* SPECIAL FONTS */
+/* ********************* */
+sub {
+	font-family : sans-serif;
+	font-size: 95%;
+	}
+
+sup {
+	font-family : sans-serif;
+	font-size: 95%;
+	}
+
+.courier  {
+	font-family : "Courier New", courier;
+	font-size : 110%;
+	}
+
+.courierleft1  {
+	font-family : "Courier New", courier;
+	font-size : 110%;
+	margin-left : 2.2em;
+	}
+
+.symbol  {
+	font-family : Symbol;
+	}
+
+.symbollarger  {
+	font-family : Symbol;
+	font-size : 125%;
+	}
+
+/* examples in dde topic */
+.times  {
+	font-family : "Times New Roman";
+        font-size : 120%;
+	}
+
+/* example of text in times 10 in ilwismen\font.htm dialog box */
+.times10 {
+	font-family : "Times New Roman";
+        font-size : 10pt;
+	}
+
+/* mostly for menu commands in text */
+.arial  {
+	font-family : Arial;
+	}
+
+/* for graph management font: tahoma */
+.tahoma {
+	font-family : Tahoma, Arial;
+        font-size : 8pt;
+        }
+
+
+/* example of text in arial 10 bold in ilwismen\font.htm dialog box */
+.arial10bold  {
+	font-family : Arial;
+        font-size : 10pt;
+        font-weight : bold;
+	}
+
+.bookmark {
+        color : #008080;
+	}
+
+.grayish {
+        color : #707070;
+	}
+
+.blue {
+        color : #0000FF;
+	}
+
+/* ****************************  */
+/* P CLASSES GENERAL  */
+/* ****************************  */
+.DefaultStyle  {
+	}
+
+.defnewpar  {
+	margin-top : 0.7em;
+	}
+
+.defnewparlnsp01aft  {
+	margin-top : 0.7em;
+	margin-bottom : 0.2em;
+	}
+
+/* ****************************** */
+/* KOPJES EN VARIANTEN */
+/* ****************************** */
+.kopje  {
+	text-decoration : underline;
+	font-weight : normal;
+	color : #000000;
+	margin-top : 0.9em;
+	margin-bottom : 0.1em;
+	}
+	
+.kopjeaftertitlesub  {
+	text-decoration : underline;
+	margin-top : 0.2em;
+	margin-bottom : 0.1em;
+	}
+
+.kopjeaftertitleboun  {
+	font-weight : bold;
+	text-decoration : underline;
+	margin-top : 0.5em;
+	margin-bottom : 0.1em;
+	}
+
+.kopjeboldandund  {
+	font-weight : bold;
+	text-decoration : underline;
+	margin-top : 0.9em;
+	margin-bottom : 0.1em;
+	}
+
+.kopjeboldnound  {
+	font-weight : bold;
+	margin-top : 0.9em;
+	margin-bottom : 0.1em;
+	}
+
+.kopjeboldnoundafterkopje  {
+	font-weight : bold;
+	margin-top : 0.2em;
+	margin-bottom : 0.1em;
+	}
+        /*after normal kopje */
+
+.kopjelinsp01after  {
+	text-decoration : underline;
+	margin-top : 0.9em;
+	margin-bottom : 0.2em;
+	}
+
+/* for editors: kopje followed by picture*/
+.kopjenoboldnound  {
+	margin-top : 0.4em;
+	margin-bottom : 0.1em;
+	}
+
+.kopjenoboldnoundaftertitlesub  {
+	margin-top : 0.1em;
+	margin-bottom : 0.1em;
+	}
+
+/* ********************* */
+/* SEE ALSO           */
+/* ********************* */
+.Seealso  {
+	font-weight : bold;
+	margin-top : 0.7em;
+	}
+
+/* see also links */
+.seealsolinks  {
+	}
+
+/* **************************** */
+/* DIALOG BOX OPTIONS */
+/* **************************** */
+.diakopje  {
+	text-decoration : underline;
+	/* font-weight : bold; */
+	/* background-color : #CDCDCD;*/
+	margin-top : 0.9em;
+	margin-bottom : -0.1em;
+	}
+
+/* Dialog box, text */
+.diabox  {
+	/* background-color : #CDCDCD; */
+	margin-top : 0.1em;
+	}
+
+/* ingesprongen dialog box entry */
+.diaboxleft1  {
+	margin-left : 2.2em;
+	}
+
+/* Dialog box, text; no space top in case form entry is colspan=2*/
+.diaboxnospacetop  {
+	/*background-color : #CDCDCD;*/
+	margin-top : -0.1em;
+	}
+
+/* Dialog box, bold text for e.g. Preference topic*/
+.diaboxbold  {
+	/* background-color : #CDCDCD; */
+	margin-top : 0.1em;
+        font-weight : bold;
+	}
+
+/* ******************************************************** */
+/* UNORDERED LISTS IN DIALOG BOX OPTIONS */
+/* ******************************************************** */
+ul.diaul  {
+	/*background-color : #CDCDCD;*/
+	margin-top : 0em;
+	margin-bottom : 0em;
+	margin-left : 0em;
+  	list-style : square;
+	list-style-position : outside;
+	list-style-type : square;
+	}
+
+ul.diaul li {
+	/*background-color : #CDCDCD;*/
+	margin-left : 1.4em;
+	}
+
+ul.dialeft1ul {
+	/*background-color : #CDCDCD;*/
+	margin-left : 2.2em;
+	}
+
+ul.dialeft1ul li {
+	/*background-color : #CDCDCD;*/
+	margin-left : 1.4em;
+	}
+
+/* **************************************************** */
+/* ORDERED LISTS IN DIALOG BOX OPTIONS */
+/* **************************************************** */
+ol.diaol  {
+	/* background-color : #CDCDCD; */
+	}
+
+ol.diaol li {
+	/* background-color : #CDCDCD; */
+	/*margin-left : 2.1em;*/
+	}
+
+/* ***************************************************** */
+/* MAP AND TABLE CALCULATION CLASSES  */
+/* ***************************************************** */
+
+table.calcpict
+{
+	margin-right : 10px;
+	border-width : 1px 1px 0px 0px;
+	border-style : solid;
+	border-color : #000000;
+	font-size : 100%;
+}
+
+table.calcpictlarge
+{
+	margin-right : 10px;
+	border-width : 1px 1px 0px 0px;
+	border-style : solid;
+	border-color : #000000;
+	font-size : 100%;
+}
+
+table.calcpict td
+{
+	border-style : solid;
+	border-width : 0px 0px 1px 1px;
+	padding : 2px 2px 2px 2px;
+	font-size : 90%;
+	text-align : center;
+	height : 38px;
+	width : 38px;
+}
+
+table.calcpictlarge td
+{
+	border-style : solid;
+	border-width : 0px 0px 1px 1px;
+	padding : 2px 2px 2px 2px;
+	font-size : 90%;
+	text-align : center;
+	height : 38px;
+	width : 76px;
+}
+
+.calctitle  {
+	font-weight : bold;
+	margin-top : 0.9em;
+	margin-bottom : 0.1em;
+}
+
+.calctitlesyntax  {
+	font-weight : bold;
+	margin-bottom : 0.2em;
+	margin-top : 0.9em;
+}
+
+.syntax {
+        	background: #dddddd;
+        	color: #000000;
+        	border-width: 1px;
+        	border-style: solid;
+        	border-color: #999999;
+	padding: 4px 8px;
+}
+
+/*for spans with syntax, without borders, topic Customize Catalog - Query*/
+.syntax2 {
+        	background: #dddddd;
+        	color: #000000;
+        	border-color: #999999;
+		padding: 1px 1px;
+}
+
+/* ********************************* */
+/* COMMANDLINE CLASSES  */
+/* ********************************* */
+.syntax {
+        background: #dddddd;
+        color: #000000;
+        border-width: 1px;
+        border-style: solid;
+        border-color: #999999;
+        }
+
+.calccommline  {
+	margin-left : -0.1em;
+	/*color : #00AA0D;*/
+	}
+
+.calccommlinelnsp01b  {
+	margin-top : 0.2em;
+	}
+
+.calccommlinetable  {
+	/*color : #00AA0D;*/
+	}
+
+/* *********** */
+/* matrix  (as in Cross functionality)*/
+/* *********** */
+
+tr.rowborder
+{
+	border-width : 0px 0px 1px 0px;
+	border-style : solid;
+	border-color : #000000;
+	font-size : 90%;
+}
+
+td.borderhor       /*first row of matrix underlined*/
+{
+	border-style : solid;
+	border-width : 0px 0px 1px 0px;
+	padding : 2px 2px 2px 2px;
+	font-size : 70%;
+	text-align : right;
+}
+
+td.bordercell1         /*cell(1,1) in matrix*/
+{
+	border-style : solid;
+	border-width : 0px 1px 1px 0px;
+	padding : 2px 2px 2px 2px;
+	font-size : 70%;
+	text-align : left;
+}
+
+tr.bordervert           /*first column of matrix with border right*/
+{
+	border-width : 0px 1px 0px 0px;
+	border-style : solid;
+	border-color : #000000;
+	font-size : 90%;
+}
+
+td.bordervert           /*first column of matrix with border right*/
+{
+	border-style : solid;
+	border-color : #000000;
+	border-width : 0px 1px 0px 0px;
+	padding : 2px 2px 2px 2px;
+	font-size : 70%;
+	text-align : left;
+        }
+
+td.matval  /*all cells with values in matrix, right aligned*/
+{
+	padding : 2px 2px 2px 2px;
+	font-size : 70%;
+	text-align : right;
+        }
+
+/* *********** */
+/* POPUPS */
+/* *********** */
+.popuptitle  {
+	font-weight : bold;
+        margin-top : -0.2em;
+	margin-bottom : 0.8em;
+}
+
+.popuptitleinappen  {
+	font-weight : bold;
+	margin-top : 1.4em;
+	margin-bottom : 0.8em;
+}
+
+.popuptitleinappe2  {
+	font-weight : bold;
+	margin-bottom : 0.8em;
+}
+
+/* ************ */
+/* MARGINS */
+/* ************ */
+.leftmargin03  {
+	margin-left : 1em;
+	}
+
+.leftmargin06  {
+	margin-left : 2.05em;
+}
+
+.leftmargin1  {
+	margin-left : 3em;
+}
+
+.leftmargin2  {
+	margin-left : 6em;
+}
+
+/* ************************************************** */
+/* EMPTYLINES AND EXTRA LINESPACING */
+/* ************************************************** */
+.emptyline  {
+	line-height : 80%;
+}
+
+.emptylinehalf  {
+	line-height : 40%;
+}
+
+.linespacing01before  {
+	margin-top : 0.2em;
+}
+
+.linespacing01after  {
+	margin-bottom : 0.2em;
+}
+
+.linesp01befafter  {
+	margin-top : 0.2em;
+	margin-bottom : 0.2em;
+}
+
+.linespacing03after  {
+	margin-bottom : 0.4em;
+}
+
+.linespacing03before  {
+	margin-top : 0.4em;
+}
+
+.linesp03befaf  {
+	margin-top : 0.4em;
+        margin-bottom : 0.4em;
+}
+
+.nospacetop     {
+        margin-top : -0.2em;
+        }
+
+/* *********** */
+/* FIGURES */
+/* *********** */
+.captionfig  {
+	text-align : left;
+	text-indent : -3.3em;
+	font-family : arial;
+	font-size : 92%;
+	margin-top : 0.4em;
+	margin-bottom : 1em;
+	margin-left : 3.3em;
+	}
+
+.captionfignolnspaft  {
+	text-align : left;
+	text-indent : -3.3em;
+	font-family : arial;
+	font-size : 92%;
+	margin-top : 0.4em;
+	margin-left : 3.3em;
+	}
+
+.captionfigleft1  {
+	text-align : left;
+	text-indent : -3.3em;
+	font-family : arial;
+	font-size : 92%;
+	margin-top : 0.4em;
+	margin-bottom : 1em;
+	margin-left : 3.3em;
+	}
+
+/* ************************** */
+/* FUNCTIONS E.D. */
+/* ************************* */
+
+.functionexpl  {
+	/*line-height : 1.1em;*/
+	font-weight : bolder;
+	font-size : smaller;
+}
+
+.filtcour  {
+	line-height : 2em;
+	font-family : "Courier New", courier;
+	font-size : 110%;
+	}
+
+.calc00  {
+	font-family : "Courier New", courier;
+	font-size : 110%;
+	margin-top : 0.0em;
+	margin-bottom : 0.0em;
+	}
+
+.calc0  {
+	font-family : "Courier New", courier;
+	font-size : 110%;
+	margin-top : 0.3em;
+	margin-bottom : 0.3em;
+	}
+
+.calc0linsp03befaft  {
+	font-family : "Courier New", courier;
+	font-size : 110%;
+	margin-top : 0.6em;
+	margin-bottom : 0.6em;
+	}
+
+.calc1  {
+	font-family : "Courier New", courier;
+	font-size : 110%;
+	margin-top : 0.3em;
+	margin-bottom : 0.3em;
+	margin-left : 2.6em;
+	}
+
+/* ***************** */
+/* TIPS EN VARIANTEN */
+/* ***************** */
+.tip  {
+	color : #AF004B;
+	background-color : #FFFFE0;
+	margin-top : 0.8em;
+	}
+
+.tiptext  {
+	background-color : #FFFFE0;
+	}
+
+.tipindent06  {
+	color : #AF004B;
+	background-color : #FFFFE0;
+	margin-top : 0.8em;
+	margin-left : 1.9em;
+	}
+
+.tiptextleft06  {
+	background-color : #FFFFE0;
+	 margin-top : 0em;
+        	margin-right : 0em;
+        	margin-bottom : 0em;	
+	margin-left : 2.05em;
+	}
+
+.tiptextindent06  {
+	text-indent : -1em;
+	background-color : #FFFFE0;
+	text-align : left;
+	margin-left : 2.1em;
+	}
+
+.tipnospace  {
+	color : #AF004B;
+	background-color : #FFFFE0;
+	font-weight : normal;
+	}
+
+.tiptextls01be  {
+	background-color : #FFFFE0;
+	margin-top : 0.2em;
+	}
+
+.tipemptyline  {
+	background-color : #FFFFE0;
+	line-height : 0.8em;
+	}
+
+.tipemptylinehalf  {
+	background-color : #FFFFE0;
+	line-height : 0.4em;
+	}
+
+
+/* ***************** */
+/* UNORDERED LISTS IN TIPS */
+/* ***************** */
+ul.tipul  {
+	background-color : #FFFFE0;
+	list-style : square;
+	list-style-position : outside;
+	list-style-type : square;
+	margin-top : 0.0em;
+	margin-right : 0em;
+        	margin-bottom : 0em;
+	margin-left : 0em;
+	}
+
+ul.tipul li {
+	background-color : #FFFFE0;
+	margin-top : 0em;
+      	margin-right : 0em;
+      	margin-bottom : 0em;
+	margin-left : 1.4em;     	
+}
+
+ul.tipul li.ls01be {
+	margin-top : 0.2em;
+        background-color : #FFFFE0;
+}
+
+/* ***************** */
+/* ORDERED LISTS IN TIPS */
+/* ***************** */
+ol.tipol {
+	background-color : #FFFFE0;
+	margin-top : 0em;
+        margin-right : 0em;
+        margin-bottom : 0em;
+	margin-left : 0em;
+	}
+
+ol.tipol li {
+	background-color : #FFFFE0;
+	margin-top : 0em;
+      	margin-right : 0em;
+      	margin-bottom : 0em;
+      	margin-left : 2.1em;
+	}
+
+ol.tipol ul  {
+	margin-right : 0em;
+       	 margin-bottom : 0em;
+	margin-left : -0.5em;
+	list-style : square;
+	}

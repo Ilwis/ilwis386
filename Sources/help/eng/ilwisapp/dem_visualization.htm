@@ -1,0 +1,302 @@
+<html>
+<head>
+<title>DEM visualization (DEM-Hydro Processing script)</title>
+<meta name="keywords" content="DEM visualization, DEM Hydro-Processing, Hydrologic Operations, DEM">
+<meta name="Generator" content="ILWIS Script Form">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<!-- COPY of ILWISxx\Scripts\Hydro-DEM\DEM_visualisation.htm -->
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>DEM-Hydro Processing scripts</h1>
+
+<h1 class=secondline>DEM visualization</h1>
+
+<!--<hr>-->
+
+<p class="defnewpar">The DEM Visualization script creates a color composite for you a DEM. First, three shadow maps are created by the script, using three different shadow filters. The combination of them in a color composite gives a very good impression of the relief in your area. </p>
+
+<p class=diakopje>Dialog box options:</p>
+<table cellspacing=0>
+<tr>
+<td valign="top" width="119"><p class=diabox>DEM:</p></td>
+<td valign="top"><p class=diabox>Select a raster map with height values, i.e. your DEM.</p></td>
+</tr>
+<tr>
+<td valign="top"><p class=diabox>Output map: </p></td>
+<td valign="top"><p class=diabox>Type a name for the output color composite raster map that is a combination of three different shadow maps. </p></td>
+</tr>
+</table>
+
+<p class="kopje">Short explanation of the calculations by the script: </p>
+
+<ul>
+
+<li class="ls01be">First three shadow maps are created using the shadow filters <span class="courier">ShadowW</span> (West), <span class="courier">Shadow</span> (North-West) and <span class="courier">ShadowN</span> (North). </li>
+
+<li class="ls01be">The three shadow maps are stretched using linear stretching, ignoring 5%. </li>
+
+<li class="ls01be">The color composite that is created from these stretched shadow maps is a 24-bit color composite with linear stretching. </li>
+
+<li class="ls01be">Finally, temporary raster maps are removed, and the output color composite of the shadow maps is shown (first picture below).</li>
+
+</ul>
+
+<p class="tip">Tips: </p>
+
+<p class="tiptext">To display the relief of your study area, you can perform the following steps: </p>
+
+<ul class="tipul">
+
+<li class="ls01be">Display your DEM and create a new representation for it: use for smaller height values the color green, and use for larger height values the color brown. <br>
+		
+	For more information, see <a href="../ilwismen/display_options_raster_domain_value.htm">Display Options : Raster map domain Value</a>. </li>
+
+<li class="ls01be">Add the output color composite shadow map, use a transparency of 70%. For more information, see <a href="../ilwismen/display_options_raster_domain_color.htm">Display Options : Raster map domain Color</a>. <br>
+
+	The result of these two layers is shown in the second picture below. </li>
+
+<li class="ls01be">Finally, add your drainage network (segments from drainage network ordering), using Display by Attribute <span class="courier">StrahlerClass</span>. <br>
+
+	Then edit the representation for the segments: make all segments blue, assign small Strahler values a thin line width, and assign larger Strahler values a larger line width. <br>
+	
+	The result is shown in the third picture below. </li>
+
+</ul>
+
+<p class="tipemptylinehalf">&nbsp;</p>
+
+<p class="tiptext">The drainage network now really stands out very nicely in the relief of your study area. </p>
+
+<p class="kopje">Results:</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top">Output color composite from the shadow maps:</td>
+<td valign="top" width="10"></td>
+<td valign="top">Transparent color composite with DEM: </td>
+</tr>
+<tr>
+<td valign="top"><img src="../images/hydro_dem_visualization1.gif" height="341" width="341"></td>
+<td valign="top" width="10"></td>
+<td valign="top"><img src="../images/hydro_dem_visualization2.gif" height="341" width="341"></td>
+</tr>
+<tr><td valign="top"><p class="emptyline">&nbsp;</p></td></tr>
+<tr><td valign="top">Drainage network on transparent color composite and DEM: </td>
+</tr>
+<tr>
+<td valign="top"><img src="../images/hydro_dem_visualization3.gif" height="341" width="341"></td>
+</tr>
+</table>
+
+<p class="kopje">Definition of the shadow filters used: </p>
+
+<p>The three shadow filters that are used are defined as follows: </p>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td align="center"><b>ShadowW</b> (West)
+
+        <p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+        <table cellspacing=0>
+        <tr>
+        <td valign="top" width=22>
+        <p class=filtcour></p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-2</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-1</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;2</p>
+
+        </td>
+        </tr>
+        <tr>
+        <td valign="top" width=22>
+        <p class=filtcour></p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-3</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;1</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;4</p>
+
+        </td>
+        </tr>
+        <tr>
+        <td valign="top" width=22>
+        <p class=filtcour></p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-2</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-1</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;2</p>
+
+        </td>
+        </tr>
+		</table>
+</td>
+
+<td width="10"></td>
+
+<td align="center"><b>Shadow</b> (North-West)
+
+        <p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+        <table cellspacing=0>
+        <tr>
+        <td valign="top" width=22>
+        <p class=filtcour></p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-3</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-2</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-1</p>
+
+        </td>
+        </tr>
+        <tr>
+        <td valign="top" width=22>
+        <p class=filtcour></p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-2</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;1</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;2</p>
+
+        </td>
+        </tr>
+        <tr>
+        <td valign="top" width=22>
+        <p class=filtcour></p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-1</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;2</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;4</p>
+
+        </td>
+        </tr>
+		</table>
+ </td>
+
+<td width="10"></td>
+
+<td align="center"><b>ShadowN</b> (North)
+
+        <p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+        <table cellspacing=0>
+        <tr>
+        <td valign="top" width=22>
+        <p class=filtcour></p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-2</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-3</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-2</p>
+
+        </td>
+        </tr>
+        <tr>
+        <td valign="top" width=22>
+        <p class=filtcour></p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-1</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;1</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour>-1</p>
+
+        </td>
+        </tr>
+        <tr>
+        <td valign="top" width=22>
+        <p class=filtcour></p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;2</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;4</p>
+
+        </td>
+        <td valign="top" width=30>
+        <p class=filtcour> &nbsp;2</p>
+
+        </td>
+        </tr>
+		</table>
+</td>
+
+</tr>
+</table>
+
+<p class=seealso>See also:</p>
+<p class="seealsolinks"><a href="filter_functionality.htm">Filter : functionality</a></p>
+<p class="seealsolinks"><a href="stretch_functionality.htm">Stretch : functionality</a></p>
+<p class="seealsolinks"><a href="color_composite_functionality.htm">Color composite : functionality</a></p>
+<p class="seealsolinks"><a href="../ilwis/script_editor_functionality.htm">Script editor : functionality</a></p>
+<p class="seealsolinks"><a href="../ilwis/ilwis_objects_scripts.htm">ILWIS objects : scripts</a></p>
+<p class=seealsolinks><a href="../ilwis/how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a></p>
+<p class=seealsolinks><a href="http://www.52n.org/index.php?option=com_projects&task=showProject&id=30&Itemid=127" target="_blank">ILWIS on the web (52 North)</a></p>
+
+</body

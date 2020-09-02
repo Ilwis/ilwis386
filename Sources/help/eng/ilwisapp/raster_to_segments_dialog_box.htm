@@ -1,0 +1,144 @@
+<html>
+
+<head>
+<title>Raster to segments : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Raster to segments">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Raster to segments</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Raster to segments operation extracts segments from the boundaries of mapping units in a raster map. You can choose to extract segments from 4-connected or 8-connected areas, and to smooth output segments or not. </p>
+
+<p class=defnewpar>Furthermore, you can choose to assign a single name 'Boundaries' to all output segments or to assign unique names like 'Boundary 1', 'Boundary 2', etc. to the output segments. In the latter case, an attribute table will be created for the output map which contains the original mapping unit names or values on either side of an extracted segment as well the lengths of the extracted segments. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Input raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input raster map (map with a class, ID or a Bool domain). Open the list box and select the desired input map, or drag a raster map directly from the Catalog into this box. The raster map must have a georeference which is not georeference <span class=courier>None</span>. On the command line, you can also use an input value map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Boundaries:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify to extract boundaries for contiguous units in the raster map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Connect:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify to obtain segments from 4-connected pixels or from 8-connected pixels. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> 4-connected:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Find areas of pixels with the same name which are <i>horizontally or vertically connected</i>, then create segments from the boundaries of these areas.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> 8-connected:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Find areas of pixels with the same name which are <i>horizontally, vertically or diagonally connected</i>, then create segments from the boundaries of these areas.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Smooth lines:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want the output segments to be smoothed. Clear this check box if the segments should follow the exact boundaries of the pixel areas. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Single name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want that all segments obtain the same code 'Boundaries'.</p>
+
+<p class=diabox>Clear this check box to assign unique names ('<span class=courier>Boundary 1</span>', '<span class=courier>Boundary 2</span>', etc.) to the extracted segments; the original mapping unit names on either side of a boundary will be stored in the attribute table of the output map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Output segment map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output segment map that will contain the segments which were extracted from the boundaries of mapping units in the raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary, the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=defnewpar>When you wish to obtain Unique names for extracted segments, an attribute table will be automatically created for the output map (same name as output map). The table will contain the names of the mapping units to the right and to the left of an extracted segment and the length of each extracted segment. Both the map and the attribute table will then use a <span class=courier>UniqueID</span> domain.</p>
+
+<p class=defnewpar>The unique names or the single name for the output segments are always stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="raster_to_segments_functionality.htm">Raster to segments : functionality</a></p>
+
+</body

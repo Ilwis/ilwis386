@@ -1,0 +1,172 @@
+<html>
+
+<head>
+<title>Point editor : Customize</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point editor, Customize ..., How to customize ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Point editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/point_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Customize</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Customize the manner in which points are displayed in the <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >point editor</a>. </p>
+
+<p class=defnewpar>This dialog box appears when in the Point editor:</p>
+
+<ul>
+
+<li>	you selected <span class=arial>Customize</span> from the File menu, or</li>
+
+<li>	you selected <span class=arial>Customize</span> from the <a href="..//ilwis/popup/context_sensitive_menu_editors.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Color digitizer cursor:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color in which the digitizer cursor should be displayed in the point editor; open the list box by clicking it. To create your own custom color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select Custom at the bottom of the drop-down list.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Show text:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to see the class names, identifiers or values next to your points. </p>
+
+<p class=tiptext><span class=tipnospace>Mind: </span>These texts are only meant for temporary orientation purposes. </span></p>
+
+<p class=diabox>Clear this check box if you do not want to display class names, identifiers or values next to points.  </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Text color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the class names, IDs, or values that will be displayed next to the points. To create your own custom color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select Custom at the bottom of the drop-down list.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Background:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a background color on which the texts should be displayed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Symbol type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a symbol type with which the points should be displayed. The following symbols can be selected: circle, square, diamond, delta-up, delta-down, plus, minus and cross.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Symbol size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the size with which the symbols should be displayed (values refer to screen pixels).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Pen width:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the size with which the outer part of circles, squares, diamonds or delta-ups or delta-downs should be displayed or with which plusses, minuses or crosses should be displayed (values refer to screen pixels).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the outer part of circles, squares, diamonds or delta-ups or delta-downs, or for plusses, minuses or crosses as a whole. To create your own custom color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select Custom at the bottom of the drop-down list.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Fill color: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color to fill circles, squares, diamonds or delta-ups or delta-downs with.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Find undef color: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color in which undefined points (i.e. points without value, class name or ID) should be displayed in case you use <span class=arial><a href="point_editor_find_undefineds.htm">Find Undefineds</a></span> from the <a href="../ilwis/point_editor_menu_commands.htm">Edit menu</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Settings are automatically stored in the registry. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_toolbar.htm">Point editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_menu_commands.htm">Point editor : menu commands</a></p>
+
+</body

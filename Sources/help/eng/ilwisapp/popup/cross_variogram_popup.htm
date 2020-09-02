@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>Cross Variogram popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Cross Variogram</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/cross_variogram.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a> operation calculates experimental semi-variogram values for two variables and cross-variogram values for the combination of both variables. As input for the Cross Variogram operation, you can use a point map with a linked attribute table containing at least two value attribute columns. The Cross Variogram operation is a multivariate form of the <a href="../../ilwisapp/popup/spatial_correlation_popup.htm">Spatial correlation</a> operation. </p>
+
+<p>From the output table of the Cross Variogram operation, you can create semi-variogram models for both variables and a cross-variogram model for the combination of the variables (<a href="..//ilwismen/graph_window_add_semivariogram_model.htm" onClick="return popup(this, 'notes')" >Graph window : Add semi-variogram model</a>). All three models serve as input for the <a href="cokriging_popup.htm">CoKriging</a> operation. CoKriging calculates estimates or predictions for a poorly sampled variable (the predictand) with help of a well-sampled variable (the covariable). The variables should be highly correlated (positive or negative).  </p>
+
+</body

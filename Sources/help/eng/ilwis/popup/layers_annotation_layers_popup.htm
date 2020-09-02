@@ -1,0 +1,72 @@
+<html>
+
+<head>
+<title>annotation layer popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Annotation</p>
+
+<p>Annotation can be added to a <a href="objects_layout_popup.htm">layout</a> in the <a href="layout_editor_popup.htm">layout editor</a>. A layout is a virtual sheet of paper on which you can make a composition of one or more <a href="objects_map_view_popup.htm">map views</a> and <a href="layers_annotation_layers_popup.htm">annotation</a> before printing. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To obtain a layout, first save a map window containing one or more maps, optionally <a href="annotation_text_popup.htm">Annotation Text</a>, <a href="ann_grid_lines_popup.htm">grid lines</a> and/or <a href="ann_graticule_popup.htm">graticules</a> as a <a href="objects_map_view_popup.htm">map view</a>. Then, create a <a href="objects_layout_popup.htm">layout</a> and add one or more map views to it. </p>
+
+<p class=defnewpar>Annotation that can be added to a layout in the <a href="layout_editor_popup.htm">layout editor</a> is for instance: </p>
+
+<ul>
+
+<li><a href="ann_text_popup.htm">texts</a> such a titles; </li>
+
+<li><a href="ann_box_popup.htm">boxes</a>; </li>
+
+<li><a href="ann_bitmap_popup.htm">bitmaps</a> and/or <a href="ann_windows_metafile_popup.htm">pictures</a>;</li>
+
+<li>a <a href="../../ilwis/popup/ann_page_border_popup.htm">page border</a>.</li> 
+
+</ul>
+
+<p class=defnewpar>Furthermore, for each map view in a layout, you can add:</p>
+
+<ul>
+
+<li>a <a href="ann_legend_popup.htm">legend</a> for a specific layer in the map view; </li>
+
+<li>a <a href="ann_map_border_popup.htm">map border</a>, including ticks and coordinates for grid lines and/or a graticule;</li>
+
+<li>a <a href="ann_north_arrow_popup.htm">North arrow</a>; </li>
+
+<li>a <a href="ann_scale_bar_popup.htm">scale bar and scale text</a>. </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When you wish to obtain label-like texts for all points, segment or polygons of a map, it is advised to create an <img src="../../images/anntxt.gif" align=bottom width="16" height="12"> <a href="annotation_text_popup.htm">Annotation Text object</a>. An Annotation Text object can be created in a map window, not in a layout. </p>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_map_views_and_layouts.htm" onClick="return popup(this, 'notes')" >Basic concepts : map views and layouts</a> </p>
+
+<p class=seealsolinks><a href="..//ilwis/layout_editor_functionality.htm" onClick="return popup(this, 'notes')" >Layout editor : functionality</a> </p>
+
+</body

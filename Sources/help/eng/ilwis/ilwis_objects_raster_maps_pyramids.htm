@@ -1,0 +1,183 @@
+<html>
+
+<head>
+<title>Pyramid layers for large raster maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS objects, Raster maps, Pyramid layers, Data objects, MPR">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Raster maps - Pyramid layers</h1></td>
+</tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>To speed up the display of large raster maps, for instance maps or satellite images which consist of a few thousand lines and columns or more, you can create Pyramid layers. </p>
+
+<p class=defnewpar>When Pyramid layers are created for a raster map, an extra file (.MPY#) is created for the raster map. This file stores for every possible zoom factor 2, a 'display version' of the raster map. </p>
+
+<p class=defnewpar>The file containing the pyramid layers will thus contain: </p>
+
+<ul>
+
+<li>a reduced version of the original raster map: </li>
+
+        <p class=leftmargin03>this layer contains half the number of lines and half the number of columns of the original raster map; </p>
+
+<li>probably more reduced versions, </li>
+
+        <p class=leftmargin03>every layer contains half the number of lines and half the number of columns of the previous layer, </p>
+
+<li>until the last version, </li>
+
+        <p class=leftmargin03>where either the number of lines or the number of columns (or both) is less than 64. </p>
+
+</ul>
+
+<p class=defnewpar>When a raster map with pyramid layers is subsequently displayed in a map window, and depending on the map's zoom factor and the size of the map window, the best layer is picked from the file with the pyramid layers; this layer will be displayed. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>When you zoom in on a raster map, and when another layer exists in the file with the pyramid layers which contains more lines and columns, then that layer will be displayed by the map window: the map window will show the map in greater detail. </li>
+
+<li>When the original version of the raster map is already shown by the map window, and when you zoom in, the pixels of the raster map will be displayed larger, i.e. map pixels will use 2x2 screen pixels, or more. </li>
+
+</ul>
+
+<p class=kopje>Creating pyramid layers:</p>
+
+<p>You can create Pyramid layers for one or more raster maps in a directory, including the raster maps in a map list: </p>
+
+<ul>
+
+<li>through the <a href="../ilwismen/create_pyramid_files.htm"><span class=arial>Create Pyramid Layers</span></a> command on the <a href="main_window_menu_commands.htm">File menu</a> of the Main window, </li>
+
+<li>through the <span class=arial><a href="../ilwismen/main_window_preferences.htm">Preferences</a></span> on the File menu of the Main window: </li>
+
+        <ul>
+
+        <li>open the items <span class=arial>Map window, Display, Raster maps</span>, and </li>
+
+        <li>select the check box <span class=arial>Create Pyramid Layers by default</span>, </li>
+
+        </ul>
+
+<li>through the <a href="../ilwismen/raster_map_properties.htm">Properties of a raster map</a>, or through the <a href="../ilwismen/map_list_properties.htm">Properties of a map list</a>, </li>
+
+<li>through the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a raster map, </li>
+
+<li>by typing a <span class=courier>CreatePyramidLayers</span> command on the command line in the Main window, or by using this command in a script (for more information, see <a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="appendices_ilwis_scripts_language_syntax.htm#script_pyramids"><span class=bookmark>Creating/deleting pyramid layers</span></a>). </li>
+
+</ul>
+
+<p class=defnewpar>Pyramid layers can only be created for a raster map, when the data file (.MP#) of the raster map already exists, i.e. the raster map must have been calculated. The extension of the file containing the pyramid layers is .MPY#. </p>
+
+<p class=defnewpar>It is furthermore not possible to create pyramid layers for read-only raster maps nor for read-only map lists. </p>
+
+<p class=kopje>Deleting pyramid layers:</p>
+
+<p>You can delete Pyramid layers of one or more raster maps: </p>
+
+<ul>
+
+<li>through the <a href="../ilwismen/raster_map_properties.htm">Properties of a raster map</a>, or through the <a href="../ilwismen/map_list_properties.htm">Properties of a map list</a>, </li>
+
+<li>by typing a <span class=courier>DeletePyramidLayers</span> command on the command line in the Main window, or by using this command in a script (for more information, see <a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="appendices_ilwis_scripts_language_syntax.htm#script_pyramids"><span class=bookmark>Creating/deleting pyramid layers</span></a>). </li>
+
+</ul>
+
+<p class=kopje>Example:</p>
+
+<p>When an original raster map contains for instance 5000 lines and 2500 columns, the file containing the pyramid layers of this raster map will contain the following layers or versions of the map: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>a layer with 2500 lines and 1250 columns, </li>
+
+<li>a layer with 1250 lines and 625 columns, </li>
+
+<li>a layer with 625 lines and 312 columns, </li>
+
+<li>a layer with 312 lines and 156 columns, </li>
+
+<li>a layer with 156 lines and 78 columns, </li>
+
+<li>a layer with 78 lines and 39 columns. </li>
+
+</ul>
+
+<p class=defnewpar>In each version or layer, of each 2 consecutive lines and of each 2 consecutive columns, 1 line and 1 column is skipped. </p>
+
+<p class=defnewpar>Some layers of satellite image TMB4: </p>
+
+<table>
+<tr>
+<td valign=middle width="160"><img src="../images/pyra1.gif" align=bottom width="140" height="227">
+<p>227 lines x 140 columns</p>
+
+</td>
+<td valign=middle width="160"><img src="../images/pyra2.gif" align=bottom width="69" height="113">
+<p>113 lines x 70 columns</p>
+
+</td>
+<td valign=middle><img src="../images/pyra3.gif" align=bottom width="35" height="56">
+<p>56 lines x 35 columns</p>
+
+</td>
+</tr>
+</table>
+
+
+<p class=kopje>Behaviour when editing, copying or deleting raster maps:</p>
+
+<p>When a raster map is edited, and when pyramid layers exist for the raster map, then the file containing the pyramid layers of the map will be removed. When finished editing, you can create new pyramid layers for the raster map. </p>
+
+<p class=defnewpar>When a raster map is copied to another directory, and when pyramid layers exist for the raster map, then the file containing the pyramid layers will also be copied. </p>
+
+<p class=defnewpar>When a raster map is deleted, and when pyramid layers exist for the raster map, then also the file containing the pyramid layers will be deleted. </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>When pyramid layers are created for a raster map, a binary file with extension .MPY# will be created for the raster map. The .MPY# file will exist next to the binary data file of the raster map .MP#. The raster map's object definition file .MPR will be adapted so that it is known that an .MPY# file with pyramid layers exists.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="ilwis_objects_raster_maps.htm">ILWIS objects : raster maps</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/create_pyramid_files.htm">Create Pyramid Layers</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/map_list_properties.htm">Map List Properties</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="appendices_ilwis_scripts_language_syntax.htm#script_pyramids"><span class=bookmark>Creating/Deleting pyramid layers</span></a></p>
+
+</body

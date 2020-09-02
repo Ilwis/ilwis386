@@ -1,0 +1,203 @@
+<html>
+
+<head>
+<title>Repr Class editor : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Representation editors, Edit representation, Editors, Colors">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Representation Class editor</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>With the representation class editor, you can change the <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> as used by a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>, a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >group domain</a>, or a <a href="..//ilwis/sec/domain_type_picture_sec.htm" onClick="return popup(this, 'notes')" >picture domain</a>. In the representation class editor, you see all the class names of the domain to which this representation is linked, and the way in which these classes will be represented on the screen and on a printer. </p>
+
+<p class=defnewpar>For each class as available in the domain, you can edit:</p>
+
+<ul>
+
+<li>	colors (for mapping units in raster maps);</li>
+
+<li>	colors, hatching or patterns (for mapping units in polygon maps);</li>
+
+<li>	colors, line types, line widths, etc. or use equally spaced symbols (for segments);</li>
+
+<li>	colors, symbol types, symbol sizes, etc. (for points).</li>
+
+</ul>
+
+<p class=defnewpar>The Representation Class editor consists of an editor window with the class names and their colors, a <a href="..//ilwismen/sec2/repr_class_editor_sec2.htm" onClick="return popup(this, 'notes')" >menu bar</a>, a <a href="representation_class_editor_toolbar.htm">toolbar</a>, and Red, Green and Blue color slide bars at the bottom of the window. </p>
+
+<p class=defnewpar>To start the Representation Class editor, see <a href="../ilwis/how_to_create_representations.htm">How to create a representation</a> and <a href="../ilwis/how_to_edit_representations.htm">How to edit a representation</a>. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>You can always create a number of representations for a certain domain, for instance by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the Representation list box in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a map. Then, to display a map with a certain representation, in the map's Display Options dialog box, select the representation you want to use.</p>
+
+<p class=kopje>General working of the Representation Class editor:</p>
+
+<ol>
+
+<li>	Select a map type:</li>
+
+        <ul>
+
+        <li>	Click one of the tabs in the <a href="representation_class_editor_toolbar.htm">toolbar</a>: <img src="../images/bbrpred.gif" align=bottom width="109" height="24"> for Raster, Polygon, Segment, or Point respectively, or</li>
+
+        <li>	Open the <a href="..//ilwismen/sec2/repr_class_editor_options_menu_sec2.htm" onClick="return popup(this, 'notes')" >View menu</a> and select either <span class=arial>Raster, Polygon, Segment or Point</span>.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>	Keep in mind that when changing a color of a class in one 'mode' (e.g. Polygon), then the color of this class will also change for all other modes (e.g. Raster, Segment). </p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<li>	Select a single class in the editor window and subsequently edit the color and optionally other representation attributes of this class:</li>
+
+        <ul>
+
+        <li>	Double-click a class or its color box in the editor window, or </li>
+
+        <li>	Select a class or its color box and choose <span class=arial>Edit Item</span> from the <a href="..//ilwismen/sec2/repr_class_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a>, or </li>
+
+        <li>	Select a class or its color box and press the <span class=arial>Enter</span> key on the keyboard.</li>
+
+        </ul>
+
+<p class=leftmargininlist>	The <a href="../ilwismen/representation_class_editor_edit_item_raster.htm">Edit Repr Item (raster)</a>, <a href="../ilwismen/representation_class_editor_edit_item_polygon.htm">Edit Repr Item (polygon)</a>, <a href="../ilwismen/representation_class_editor_edit_item_segment.htm">Edit Repr Item (segment)</a> or the <a href="../ilwismen/representation_class_editor_edit_item_point.htm">Edit Repr Item (point)</a> dialog box will appear.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>	Depending on whether you selected to edit the raster form, polygon form, segment form or point form of the representation, the Edit Repr. Item dialog box will allow you to edit:</p>
+
+        <ul>
+
+        <li>	for raster: colors</li>
+
+        <li>	for polygon: fill colors, hatchings or patterns;</li>
+
+        <li>	for segment: colors, line types (e.g. single, double, triple, dot, dash dot, blocked), line widths, optional support lines, or a symbol font and a symbol which will be used to draw lines; </li>
+
+        <li>	for point: simple symbols or symbols from any installed symbol font, symbol sizes, colors, etc.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>	Furthermore, you can use the Red, Green and Blue color slide bars at the bottom of the editor window to edit the colors of a single selected class. </p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<li>	Select multiple classes in the editor window and subsequently assign a single color to all selected classes or assign a smooth range of colors to the selected classes. </li>
+
+        <ul>
+
+        <li>	Select multiple classes in the editor window by using the <span class=arial>Shift</span> and/or <span class=arial>Ctrl</span> key, and </li>
+
+        <li>	Open the <a href="..//ilwismen/sec2/repr_class_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a> and choose <span class=arial>Edit Multiple Items</span>, or press the <span class=arial>Enter</span> key on the keyboard.</li>
+
+        </ul>
+
+<p class=leftmargininlist>	The <a href="../ilwismen/representation_class_editor_edit_multiple_items.htm">Edit Multiple Items</a> dialog box will appear.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>	Assigning a range of colors can be used:</p>
+
+        <ul>
+
+        <li>	to obtain smooth color changes between multiple classes, for instance from yellow to red, through orange, or </li>
+
+        <li>	to obtain similar colors for related classes in a domain, e.g. various forest types in similar shades of green, etc. </li>
+
+        </ul>
+
+<p class=leftmargininlist>	When assigning a color range, the order of the classes in the domain will be used. For more information, see the <a href="../ilwismen/representation_class_editor_edit_multiple_items.htm">Edit Multiple Items</a> dialog box.</p>
+
+</ol>
+
+<p class=kopje>To interactively change colors of maps:</p>
+
+<ol>
+
+<li>	For any raster, polygon, segment or point map with a class or group domain:</li>
+
+        <ul>
+
+        <li>	Display the map in a map window and make sure that the <span class=arial>Info</span> check box in the map's <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box is marked;</li>
+
+        <li>	Open the <a href="map_window_menu_commands.htm">Layers menu</a> in the map window and choose the <a href="../ilwismen/double_click_action.htm"><span class=arial>Double-Click Action</a></span> command; in the appearing dialog box, select the <span class=arial>Edit Representation</span> option;</li>
+
+        <li>	Then, double-click the pixels, polygons, segments or points in the map: each time a <span class=arial>Edit Repr Item</span> dialog box will appear in which you can directly change colors, polygon patterns, segment line types, line widths, point symbols, etc.</li>
+
+        <li>	The map window will directly show the map in the changed representation. </li>
+
+        <li>	Continue double-clicking units in the map and editing the representation of that class until satisfied.</li>
+
+        </ul>
+
+<p class=leftmargininlist>	For more information, see <a href="map_window_functionality_advanced.htm">Map window : advanced functionality</a>.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<li>	For any raster, polygon, segment or point map with a class, group or value domain:</li>
+
+        <ul>
+
+        <li>	Display the map in a map window; </li>
+
+        <li>	Open the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window and choose the <a href="../ilwismen/edit_representation.htm"><span class=arial>Representation</a></span> command;</li>
+
+        <li>	Depending on the type of representation that the domain of this map is using, the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >representation class editor</a> as described above, or the <a href="..//ilwis/popup/representation_value_gradual_editor_popup.htm" onClick="return popup(this, 'notes')" >representation value/gradual editor</a> is opened; </li>
+
+        <li>	In the appearing representation editor window, edit one or more colors, etc;</li>
+
+        <li>	To see the changes in the map window, press the <span class=arial>Redraw</span> <img src="../images/redraw.gif" align=bottom width="22" height="22"> button in the map window;</li>
+
+        <li>	Continue editing colors in the representation editor and redrawing the map window until satisfied.</li>
+
+        </ul>
+
+<p class=leftmargininlist>	In this way, you can work with a representation editor and a map window simultaneously.</p>
+
+</ol>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>Advanced users may wish to edit a representation class in table form; click a representation class with the right mouse button in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, and choose <span class=arial>Open As Table</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwismen/sec2/repr_class_editor_sec2.htm" onClick="return popup(this, 'notes')" >Representation Class editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="representation_class_editor_toolbar.htm">Representation Class editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representations</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_representations.htm">How to create a representation</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_representations.htm">How to edit a representation</a></p>
+
+</body

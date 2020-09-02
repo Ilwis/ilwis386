@@ -1,0 +1,166 @@
+<html>
+
+<head>
+<title>Edit a Value domain</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Domains, Edit domain, Value domain">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Edit a Value domain</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Edit the minimum and maximum values (the value range) that can be used by this domain and the precision of a user-defined Value domain. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you double-click a user-defined Value domain in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>,</li>
+
+<li>	when you press the right mouse button on a user-defined Value domain in a Catalog, and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>,</li>
+
+<li>	when you you select a user-defined Value domain in a Catalog, and choose <span class=arial>Edit Object</span> from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> in the Main window, </li>
+
+<li>	when you choose <span class=arial>Domain</span> from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in a map window and subsequently you select a layer that uses a user-defined Value domain.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>You can change the description of the domain. The description is visible on the status bar of the Main window when moving the mouse pointer over the domain in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Min&nbsp;&nbsp;&nbsp;Max:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>You can change the minimum and maximum value of this domain. This is also called the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>.</p>
+
+<p class=diabox>The specified minimum and maximum values of a value domain will be used as the default minimum and maximum values for any new maps or columns that use this domain. </p>
+
+<p class=diabox>When you create a representation for this value domain, the specified minimum and maximum values will determine the absolute lower and upper boundaries of that representation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>You can change the value for the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of this domain. </p>
+
+<p class=diabox>By specifying a precision of 0.01, values will use 2 decimals; by specifying a precision of 25, values will increase or decrease in steps of 25, etc. </p>
+
+<p class=diabox>The combination of specified values for minimum, maximum and precision implies the store type of raster maps that use this domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Fixed range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if any output map or column (created by a calculation or an operation) and which will use this domain, <i>must use</i> values as specified for the value range (<span class=arial>Min</span> <span class=arial>Max</span>) for this domain. During calculation or operations, the value range boxes for an output object which uses this domain will be grayed out. Any calculated values outside this range will become undefined. </p>
+
+<p class=diabox>Clear this check box when you wish to keep the possibility to <i>set the value range yourself</i> (during calculations or operations) for any output map or column that will use this domain. During calculations or operations, the value range for the output object which uses this domain is still changeable.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Fixed precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if any output map or column (created by a calculation or an operation) and which will use this domain, <i>must use</i> the precision as specified for this domain. During calculation or operations, the precision box for an output object which uses this domain will be grayed out. Any calculated values that do not fit the precision will be rounded to the nearest value that fits the precision of the domain. </p>
+
+<p class=diabox>Clear this check box when you wish to keep the possibility to <i>set the precision yourself</i> (during calculations or operations) for any output map or column that will use this domain. During calculations or operations, the precision for the output object which uses this domain is still changeable. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Unit:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the values in this domain use a certain unit, for instance mm, ha, or m3/ha/year, etc. Subsequently, type a text for the Unit. </p>
+
+<p class=diabox>The specified Unit text will appear: </p>
+
+<ul class=diaul>
+
+<li>when using left mouse <span class=arial>Info</span> in a map window, </li>
+
+<li>in legends, and </li>
+
+<li>in the pixel information window. </li>
+
+</ul>
+
+<p class=diabox>Clear this check box when you do not wish to view units for the values of this domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Width:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>You can change the value of the width to increase or decrease the number of characters shown.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To view the representation that is currently linked to your value domain, or to create a new representation value for your value domain, you can:</p>
+
+        <ul class=tipul>
+
+        <li>	open the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> of your value domain and in the Domain Properties dialog box; you can click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box; or</li>
+
+        <li>	open the map with your value domain, and in the map's <span class=arial>Display Options</span> dialog box; you can click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box.</li>
+
+        </ul>
+
+<p class=tiptext>	The <a href="create_a_representation.htm">Create Representation</a> dialog box follows.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+</body

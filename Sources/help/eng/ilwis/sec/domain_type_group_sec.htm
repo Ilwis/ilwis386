@@ -1,0 +1,131 @@
+<html>
+
+<head>
+<title>Domain type : Group</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Domain type Group</p>
+
+<p class=linespacing03after>A group domain is designed to <i>permanently slice a satellite image</i> or to <i>permanently classify values </i>in a value raster map or in a value column. A group domain contains upper boundary values or limits (as used in an input map or column) and class names (as used in the output map or column). The classification or slicing of the values is permanent, i.e. after applying the group domain to a value map or column, you will continue to work with classes. A group domain can only be used for raster maps and for columns. A group domain is a special case of a <a href="../../ilwis/sec/domain_class_sec.htm">class domain</a>. </p>
+
+<p class=linespacing03after>To create a group domain and insert upper boundary values or limits, class names and optionally codes, see <a href="..//ilwis/how_to_create_domain_group.htm" onClick="return popup(this, 'notes')" >How to create a group domain</a>. A group domain is linked to a <i>representation class</i>. You can edit the colors of the output classes when creating the group domain but also when the output map which uses the group domain is displayed.</p>
+
+<p class=linespacing03after>To <i>apply a group domain</i> on a value map, use the <a href="../../ilwisapp/popup/slicing_popup.htm">Slicing</a> operation or use the <a href="..//ilwis/calc_clfy.htm" onClick="return popup(this, 'notes')" >CLFY</a> function in <a href="../popup/map_calculation_popup.htm">MapCalc</a>. Both the operation and the function produce the same results. To classify a column according to a group domain, use the <a href="..//ilwis/calc_clfy.htm" onClick="return popup(this, 'notes')" >CLFY</a> function in <a href="../../ilwis/popup/table_calculation_popup.htm">TabCalc</a>. The group domain is used to look up which ranges of values of the input should be grouped together into one output class. The output map or column will use the group domain. For more information, see <a href="..//ilwis/how_to_slice_an_image.htm" onClick="return popup(this, 'notes')" >How to slice an image</a> or <a href="..//ilwis/how_to_classify_a_map_or_column.htm" onClick="return popup(this, 'notes')" >How to classify a map or column</a>.</p>
+
+<p class=linespacing03after>You can always adjust the limits and class names in the group domain later on in the <a href="../popup/domain_classid_editor_popup.htm">Domain Class/ID/Group editor</a>, then recalculate the output map which uses the group domain: open the <a href="../../ilwis/popup/object_properties_popup.htm">properties</a> of the output map and click the <span class=arial>Make Up-to-Date</span> button. </p>
+
+<p class=tip>Tips: </p>
+
+<ol class=tipol>
+
+<li>	To <i>permanently</i> slice an image or classify values in a value raster map, you can create a group domain and apply it on the image or the value map. </li>
+
+<li>	To <i>interactively</i> slice an image or classify a value map (raster, polygon, or segment map), there is no need to create a domain group: you can just create a representation value/gradual for your image or value map, and edit this representation in the <a href="../../ilwis/popup/representation_value_gradual_editor_popup.htm">Representation Value/Gradual editor</a>. You have to indicate upper boundary values or limits and colors for these values. In between the limits, you can use the color of the limit above or below (slicing) or apply a kind of stretching of the colors. By keeping both the Representation Value/Gradual editor and the map window open, you edit limits and colors interactively.<br>
+
+        When the image or value map is displayed with the newly created representation, the colors in which the map is displayed suggest a sliced image or a classified value map, but the original values of the image or map are still available, for instance when pressing the left mouse button in the map window to get Info. </li>
+
+<li>	To interactively classify maps which use <a href="../../ilwis/popup/yy_system_domain_value_popup.htm">system domain Value</a>, you can only create or select a representation gradual (working in percentages). In order to create a representation value (working in values) for such maps, you have to change the domain of the map from system domain Value to a user-defined value domain, see <a href="..//ilwis/how_to_change_the_domain_of_a_map.htm" onClick="return popup(this, 'notes')" >How to change the domain of a map</a>. </li>
+
+<li>    For more information on the <i>interactive</i> and <i>permanent</i> methods to slice or classify maps, refer to <a href="..//ilwis/how_to_slice_an_image.htm" onClick="return popup(this, 'notes')" >How to slice an image</a> or <a href="..//ilwis/how_to_classify_a_map_or_column.htm" onClick="return popup(this, 'notes')" >How to classify a map</a>. </li>
+
+</ol>
+
+<p class=kopje>Example of a group domain:</p>
+
+<p class=linespacing03after>For example, to slice a map with slope values ranging from 0 to 200% into relief classes: Flat (0-2%), Undulating (2-8%), Rolling (8-16%), Hilly (16-30%), Mountainous (&gt;30%) (FAO), the following group domain may be created:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p class=tcolh>Upper Boundary</p>
+
+</td>
+<td valign="top" width=75>
+<p class=tcolh>Group Name</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>2</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Flat</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>8</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Undulating</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>16</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Rolling</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>30</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Hilly</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p class=t1>200</p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>Mountainous</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/how_to_create_domain_group.htm" onClick="return popup(this, 'notes')" >How to create a domain Group</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/how_to_slice_an_image.htm" onClick="return popup(this, 'notes')" >How to slice an image</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/how_to_classify_a_map_or_column.htm" onClick="return popup(this, 'notes')" >How to classify a map or column</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/slicing.htm" onClick="return popup(this, 'notes')" >Slicing</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/calc_clfy.htm" onClick="return popup(this, 'notes')" >CLFY function</a></p>
+
+</body

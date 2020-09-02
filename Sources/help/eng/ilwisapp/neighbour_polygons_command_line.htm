@@ -1,0 +1,95 @@
+<html>
+
+<head>
+<title>Neighbour polygons : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Neighbour polygons, TableNeighbourPol">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Neighbour polygons</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/neighbour_polygons_popup.htm" onClick="return popup(this, 'notes')" >Neighbour polygons</a> operation can be directly executed by typing the following expression on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableNeighbourPol</span>(InputPolMapName)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTTABLE</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>TableNeighbourPol</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Neighbour polygons operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPolMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input polygon map.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output table has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="neighbour_polygons_functionality.htm">Neighbour polygons : functionality</a></p>
+
+</body

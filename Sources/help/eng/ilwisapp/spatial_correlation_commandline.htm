@@ -1,0 +1,217 @@
+<html>
+
+<head>
+<title>Spatial correlation : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Spatial correlation, Semi-variogram (experimental), TableSpatCorr">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Spatial correlation</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableSpatCorr</span>(InputPointMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableSpatCorr</span>(InputPointMap, <i>LagSpacing</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableSpatCorr</span>(InputPointMap, <i>LagSpacing</i>, <i>Direction</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableSpatCorr</span>(InputPointMap, <i>LagSpacing</i>, <i>Direction</i>, <i>Tolerance</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableSpatCorr</span>(InputPointMap, <i>LagSpacing</i>, <i>Direction</i>, <i>Tolerance</i>, <i>Bandwidth</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableSpatCorr</span>(InputPointMap, <i>LagSpacing</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTTABLE</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output spatial correlation table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>TableSpatCorr</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Spatial correlation operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>InputPointMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input point map (<a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>). When you want to use a Class or ID point map with an attribute table linked to the map, you can use: InputPointMap.ColumnName</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>LagSpacing</i></p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to specify the length in meters for the linear distance intervals that should be used. When this parameter is not used, logarithmic distance intervals will be calculated.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>Direction</i></p>
+
+</td>
+<td valign="top">
+<p>To use the 'bidirectional' method: an optional parameter to specify an angle in degrees for the direction in which point pairs should be found. Direction 0° is North; direction 90° is East. The direction is a clockwise angle from the Y-axis. 0°&nbsp;<span class=symbol>£</span>&nbsp;direction&nbsp;<span class=symbol>£</span>&nbsp;90°. <br />When this parameter is not used your semi-variogram values will be 'omnidirectional'.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>Tolerance</i></p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to specify half of the opening angle in degrees with which point pairs in a certain direction should be found. 0° <span class=symbol>&lt;</span> tolerance <span class=symbol>£</span> 45°. <br />When a Direction is specified but the Tolerance is not specified, a Tolerance of 45° will be used (meaning that all points will be found).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>Bandwidth</i></p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to specify half of the maximum width in meters within which point pairs within a certain angle and in a certain direction should be found. By specifying a band width, you will limit the opening angle to a certain width; the opening width with which point pairs can be found in a certain direction will never be broader than twice the specified band width. <br />When this parameter is not specified, there is no limitation for the width of the opening angle.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><span class=courier>plane</span> | <span class=courier>sphere</span></p>
+
+</td>
+<td valign="top">
+<p>When using the 'omnidirectional' method: an optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >sphere</a> by using the <i>projection</i> of the coordinate system of the input point map (<span class=courier>sphere</span>). <br />If not specified, distances will be calculated in a plane. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the first formula is used, only spatial autocorrelation and spatial variance are calculated, i.e. no semi-variogram values. Furthermore, instead of linear distance classes, you will obtain a number of logarithmic distance classes. </p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output table has been calculated. </p>
+
+<p class=Seealso>See also: </p>
+
+<p class=seealsolinks><a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a></p>
+
+</body

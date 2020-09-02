@@ -1,0 +1,148 @@
+<html>
+
+<head>
+<title>Coordsys Tiepoints editor : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Coordinate system Tiepoints editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Coordinate system Tiepoints editor</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<h2>General information</h2>
+
+<p>With the Coordinate system Tiepoints editor you can edit a coordinate system <b>tiepoints</b>: to add coordinates to a vector map. For more information on coordinate systems, see <a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a>.</p>
+
+<p class=defnewpar>The Coordinate system Tiepoints editor shows:</p>
+
+<ul>
+
+<li class=ls01af>	in a map window: <i>one or more vector maps</i>.  This is the background map as specified during the creation of the coordinate system. By inserting tiepoints, you can establish relationships between the current XY-coordinates in the map and related XY-coordinates. </li>
+
+<li>	<i>existing tiepoints in a table in a secondary window</i>: for each existing tiepoint, its current XY-coordinate (X and Y) in the vector maps, its related XY-coordinates (RelX and RelY), and the residuals (DX and DY). </li>
+
+</ul>
+
+<p class=defnewpar>The coordinate system tiepoints editor has a <a href="..//ilwismen/sec2/coordinate_system_tiepoint_editor_sec2.htm" onClick="return popup(this, 'notes')" >menu bar</a>, a <a href="coordinate_system_tiepoints_editor_toolbar.htm">toolbar</a>, a status bar and a context-sensitive menu. </p>
+
+<p class=kopje>Purpose of a coordinate system tiepoints:</p>
+
+<p>A coordinate system <b>tiepoints</b> is mostly used to add correct XY-coordinates to a vector map which has wrong or artificial coordinates, e.g. maps starting at (0,0), maps digitized in millimeters, or maps that were were imported from other packages and do not have correct coordinates. </p>
+
+<p>When working with multiple imported vector maps of the same kind, you should add a created coordsys tiepoints to all similar vector maps, by editing the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of these maps.</p>
+
+<p class=defnewpar>When you added a coordsys tiepoints to a vector map, you can: </p>
+
+<ul>
+
+<li>	Display the vector map on top of any map with correct  coordinates; </li>
+
+<li>	Use the map and the coordinate system in <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >Pixel Info</a>; </li>
+
+<li>	To actually change the XY-coordinates of your vector maps, first create a coordinate system tiepoints, then <a href="..//ilwis/popup/transform_operations_popup.htm" onClick="return popup(this, 'notes')" >transform</a> the vector maps to the correct coordinate system. </li>
+
+</ul>
+
+<h2>Using the Coordinate system Tiepoint editor</h2>
+
+<p class=kopjeaftertitlesub>Inserting tiepoints:</p>
+
+<p>In the tiepoint editor, tiepoints can be added to a map in several manners:</p>
+
+<ul>
+
+<li>	first, click at a recognizable point in the map with wrong coordinates,</li>
+
+<li>	the <a href="../ilwismen/coordinate_system_tiepoints_editor_add_tiepoint.htm">Add Tiepoint</a> dialog box appears. In this dialog box, the current XY-coordinates at the position of the click are filled out. <br>
+When you already have some tiepoints, the dialog box will also come up with a suggestion for the related XY-coordinates. This suggestion is the result of the calculation with the existing tiepoints and using the current transformation method. This suggestion is a measure of the quality of the current tiepoints. The suggestion is merely a suggestion, it is advised to enter your own related XY-coordinates to prevent false accuracy.</li>
+
+</ul>
+
+<p class=defnewpar>Then:</p>
+
+<ul>
+
+<li>	click at the same position in a map which already has correct XY-coordinates and which is displayed in another map window (Master/Slave), or</li>
+
+<li>	digitize the same point in an analog paper map on a digitizer, or</li>
+
+<li>	read the correct XY-coordinates for this point from a table or an analog paper map, and type these XY-coordinates in the dialog box.</li>
+
+</ul>
+
+<p class=defnewpar>The inserted tiepoint appears in the map window and in the tiepoint table.</p>
+
+<p class=kopje>(De)selecting tiepoints:</p>
+
+<p>Column <span class=courier>Active</span> in the tiepoint table indicates whether or not a tiepoint is used in the transformation. Include tiepoints by the putting True in column <span class=courier>Active</span>; exclude tiepoints by putting False in column <span class=courier>Active</span>. You can type <span class=courier>T</span> or <span class=courier>F</span> in column <span class=courier>Active</span> or use the space bar to switch between these.</p>
+
+<p class=kopje>Changing colors and symbol size of tiepoints:</p>
+
+<p>To change the colors or symbol size of tiepoints or to change the colors of fiducial marks, choose <span class=arial>Customize</span> from the <a href="..//ilwismen/sec2/coordinate_system_tiepoint_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a>.</p>
+
+<p class=kopje>Deleting tiepoints:</p>
+
+<p>To delete a tiepoint, choose <span class=arial>Delete Tiepoint</span> from the <a href="..//ilwismen/sec2/coordinate_system_tiepoint_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a>, or click the <span class=arial>Delete Tiepoint</span> button in the toolbar. Furthermore, after selecting a tiepoint in the tiepoint table, you can press <span class=arial>Del</span> on the keyboard, or use the right mouse button and select <span class=arial>Delete</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</p>
+
+<p class=kopje>Coordsys Tiepoints: transformation method:</p>
+
+<p>When editing a coordinate system tiepoints, one of the following <a href="..//ilwis/popup/georeference_transformation_method_popup.htm" onClick="return popup(this, 'notes')" >transformation methods</a> can be selected: conformal, affine, second order bilinear, full second order, third order and projective. An affine transformation will usually do. </p>
+
+<p class=kopje>Changing the boundaries of the coordinate system:</p>
+
+<p>When creating a coordinate system tiepoints in a map window, then for the boundaries of the new coordsys tiepoints, the boundaries of the map window are automatically used. Usually, you will not have to change these values. </p>
+
+<p class=kopje>Tiepoint requirements:</p>
+
+<ul>
+
+<li>	Mathematical minimum number of tiepoints required:</li>
+
+<p class=leftmargininlist>	conformal  2; affine 3; second order 4; full second order 6; third order 10; projective 4.</p>
+
+<li>	You should always insert more tiepoints than is mathematically required. </li>
+
+<li>	Tiepoints should be well spread over the map (XY-direction).</li>
+
+</ul>
+
+<p class=kopje>Inspecting DX, DY and Sigma:</p>
+
+<p>Columns DX and DY show the difference between calculated related XY-coordinates and actual XY-coordinates in meters. Sigma is calculated from these values and the degrees of freedom, and gives a measure for the overall accountability or credibility of the active tiepoints. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwismen/sec2/coordinate_system_tiepoint_editor_sec2.htm" onClick="return popup(this, 'notes')" >Coordinate system Tiepoints editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="coordinate_system_tiepoints_editor_toolbar.htm">Coordinate system Tiepoints editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/transform_point_map.htm">Transform point map</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/transform_segment_map.htm">Transform segment map</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/transform_polygon_map.htm">Transform polygon map map</a></p>
+
+</body

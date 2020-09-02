@@ -1,0 +1,217 @@
+<html>
+
+<head>
+<title>Projections : Suggested projections</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Projections">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Suggested projections</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>This topic contains a simple list of suggested projections after Snyder (1987). The following projection methods and projection properties are supposed to be understood: <a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >cylindrical projections</a>, <a href="..//ilwis/popup/projection_conical_popup.htm" onClick="return popup(this, 'notes')" >conic projections</a>, <a href="..//ilwis/popup/projection_azimuthal_popup.htm" onClick="return popup(this, 'notes')" >azimuthal projections</a>, <a href="..//ilwis/popup/projection_conformal_popup.htm" onClick="return popup(this, 'notes')" >conformal</a>, <a href="..//ilwis/popup/projections_equal_area_popup.htm" onClick="return popup(this, 'notes')" >equal area</a>, <a href="..//ilwis/popup/projection_equidistant_popup.htm" onClick="return popup(this, 'notes')" >equidistant</a>. Furthermore, it is expected that, if required, the user is capable of specifying a polar, equatorial or oblique aspect for each of the projection methods in the Edit Coordinate System dialog box after the selection of a projection in the Select Projection dialog box.</p>
+
+<p class=defnewpar>For more information on the projections mentioned below, see the <a href="../ilwismen/select_projection.htm">Select Projection</a> dialog box.</p>
+
+<h2>World <span class=DefaultStyle>(Earth should be treated as a sphere)</span></h2>
+
+<p><b>Conformal (gross area distortion)</b></p>
+
+<ul>
+
+<li>	Constant scale along equator: Mercator</li>
+
+<li>	Constant scale along meridian: Transverse Mercator</li>
+
+<li>	Constant scale along oblique great circle: Oblique Mercator</li>
+
+</ul>
+
+<p class=kopjeboldnound>Equal-Area</p>
+
+<ul>
+
+<li>	Standard without interruption: Mollweide, Sinusoidal, misc. pseudo-cylindricals</li>
+
+<li>	Interrupted: Sinusoidal interrupted.</li>
+
+</ul>
+
+<p class=kopjeboldnound>Equidistant</p>
+
+<ul>
+
+<li>	Centered on pole: Azimuthal Equidistant (polar aspect)</li>
+
+<li>	Centered on a city: Azimuthal Equidistant (oblique aspect)</li>
+
+</ul>
+
+<p class=kopjeboldnound>Straight rhumb lines <span class=DefaultStyle>(constant compass course)</span></p>
+
+<ul>
+
+<li>	Mercator</li>
+
+</ul>
+
+<p class=kopjeboldnound>Compromise distortion</p>
+
+<ul>
+
+<li>	Miller</li>
+
+<li>	Robinson</li>
+
+</ul>
+
+<h2>Hemisphere <span class=DefaultStyle>(Earth should be treated as a sphere)</span></h2>
+
+<p><b>Conformal</b></p>
+
+<ul>
+
+<li>	Stereographic (any aspect)</li>
+
+</ul>
+
+<p class=kopjeboldnound>Equal Area</p>
+
+<ul>
+
+<li>	Lambert Azimuthal Equal Area (any aspect)</li>
+
+</ul>
+
+<p class=kopjeboldnound>Equidistant</p>
+
+<ul>
+
+<li>	Azimuthal Equidistant (any aspect)</li>
+
+</ul>
+
+<p class=kopjeboldnound>Global look</p>
+
+<ul>
+
+<li>	Orthographic (any aspect)</li>
+
+</ul>
+
+<h2>Continent, ocean, or smaller region <span class=DefaultStyle>(Earth should be treated as a sphere for larger continents and oceans and as an ellipsoid for smaller regions, especially at a larger scale)</span></h2>
+
+<p><b>Predominant east-west extent</b></p>
+
+<ul>
+
+<li>	Along equator and conformal: Mercator</li>
+
+<li>	Along equator and equal area: Lambert Cylindrical Equal Area</li>
+
+<li>	Away from equator and conformal: Lambert Conformal Conic</li>
+
+<li>	Away from equator and equal area: Albers Equal Area Conic</li>
+
+</ul>
+
+<p class=kopjeboldnound>Predominant north-south extent</p>
+
+<ul>
+
+<li>	Conformal: Transverse Mercator</li>
+
+</ul>
+
+<p class=kopjeboldnound>Predominant oblique extent <span class=DefaultStyle>(for instance North America, South America, Atlantic Ocean)</span></p>
+
+<ul>
+
+<li>	Conformal: Oblique Mercator</li>
+
+<li>	Equal Area: Lambert Cylindrical Equal Area (oblique aspect)</li>
+
+</ul>
+
+<p class=kopjeboldnound>Equal extent in all directions <span class=DefaultStyle>(for instance Europe, Africa, Asia, Australia, Antarctica, Pacific Ocean, Indian Ocean, Arctic Ocean, Antarctic Ocean)</span></p>
+
+<ul>
+
+<li>	Center at pole and conformal: Stereographic (polar aspect)</li>
+
+<li>	Center at pole and equal area: Lambert Azimuthal Equal Area (polar aspect)</li>
+
+<li>	Center along equator and conformal: Stereographic (equatorial aspect)</li>
+
+<li>	Center along equator and equal area: Lambert Azimuthal Equal Area (equatorial aspect)</li>
+
+<li>	Center away from pole or equator and conformal: Stereographic (oblique aspect)</li>
+
+<li>	Center away from pole or equator and equal area: Lambert Azimuthal Equal Area (oblique aspect)</li>
+
+</ul>
+
+<p class=kopjeboldnound>Straight rhumb lines <span class=DefaultStyle>(=constant compass course) </span></p>
+
+<ul>
+
+<li>	Mercator (principally for oceans)</li>
+
+</ul>
+
+<p class=kopjeboldnound>Straight great-circle routes <span class=DefaultStyle>(=shortest path between two points) </span></p>
+
+<ul>
+
+<li>	Gnomonic (less than a hemisphere)</li>
+
+</ul>
+
+<p class=kopjeboldnound>Correct scale along meridians</p>
+
+<ul>
+
+<li>	Center at pole: Azimuthal Equidistant (polar aspect)</li>
+
+<li>	Center along equator: Plate Carree</li>
+
+<li>	Center away from pole or equator: Equidistant Conic.</li>
+
+</ul>
+
+<p class=kopje>Reference:</p>
+
+<ul>
+
+<li>	Snyder, J.P., 1987, Map projections, a working manual. U.S. Geological Survey professional paper 1395. United States Government Printing Office, Denver. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/select_projection.htm">Select Projection</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a></p>
+
+<p></p>
+
+</body

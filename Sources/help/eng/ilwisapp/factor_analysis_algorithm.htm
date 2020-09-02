@@ -1,0 +1,199 @@
+<html>
+
+<head>
+<title>Factor analysis : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Factor analysis">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Factor analysis</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Factor analysis operation results in a linear transformation of  a set of (satellite) raster maps. The map values are transformed into raster map values, called factors. </p>
+
+<p class=defnewpar>The following steps apply:</p>
+
+<ol>
+
+<li>	The correlation matrix of the input raster maps is computed. </li>
+
+<li>	The orientation of the factors is computed based on the eigenvectors and eigenvalues of the correlation matrix. </li>
+
+<li>	The vectors in each column are normalized. The normalized values are the factor analysis coefficients. </li>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=leftmargin06>Looking at two input raster maps the factor analysis coefficients matrix looks like:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=leftmargin06><img src="../images/factan1s.gif" align=bottom width="57" height="50"></p>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=leftmargin06>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=33>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p><span class=symbol>a</span><sub><i>1</i></sub>  and  <span class=symbol>a</span><sub><i>2</i></sub></p>
+
+</td>
+<td valign="top" width=33>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>coefficients of  the first factor (factor loadings)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=33>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p><span class=symbol>b</span><sub><i>1</i></sub>  and  <span class=symbol>b</span><sub><i>2</i></sub></p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>coefficients of the second factor (factor loadings)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=leftmargin06>If M bands are used, an MxM matrix of factor analysis coefficients is computed.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>    A map list is created which contains an expression with which the transformed raster maps (factors) can be defined and calculated. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+        <p>The expression in the map list reads: </p>
+
+        <p class=leftmargin06><span class=courier>MapListMatrixMultiply</span>(<i>InputMapList</i>, <i>FactorAnalysisMatrix</i>, <i>nr of output maps</i>)</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>	When the map list is opened, the pixel values of the input maps are transformed into the new raster maps (factors):</li>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargin06><img src="../images/factan2s.gif" align=bottom width="106" height="42"> </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargin06>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=33>
+<p></p>
+
+</td>
+
+<td valign="top" width=96>
+<p>x  and  y</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>spectral values in the first and second factor (output maps)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=33>
+<p></p>
+
+</td>
+
+<td valign="top" width=96>
+<p>X  and  Y</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>spectral values in the two input raster maps </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=33>
+<p></p>
+
+</td>
+
+<td valign="top" width=96>
+<p><span class=symbol>a</span><sub><i>1</i></sub>  and  <span class=symbol>a</span><sub><i>2</i></sub></p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>coefficients of the first factor</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=33>
+<p></p>
+
+</td>
+
+<td valign="top" width=96>
+<p><span class=symbol>b</span><sub><i>1</i></sub>  and  <span class=symbol>b</span><sub><i>2</i></sub></p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>coefficients of the second factor. </p>
+
+</td>
+</tr>
+</table>
+
+</ol>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>Davis, J.C. 1986. Statistics and data analysis in geology. John Wiley &amp; Sons, Inc., New York.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="factor_analysis_functionality.htm">Factor analysis: functionality</a></p>
+
+</body

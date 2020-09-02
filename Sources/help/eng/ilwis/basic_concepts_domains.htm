@@ -1,0 +1,233 @@
+<html>
+
+<head>
+<title>Basic concepts : domains</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Basic concepts, Domains, Class maps, ID maps, Value maps, Images">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Basic concepts</h1>
+
+<h1 class=secondline>Working with domains</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A domain defines the values, classes or identifiers that can be <b>stored</b> in a map or column. When you create a map or column, you also have to select or create a suitable domain for that map or column. When you create an attribute table for a map, the table must use the same domain as the map to which the table refers; the domain provides the link between the map and the table. Further, a domain uses a certain <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> which defines the graphical representation of a map, e.g. the coloring. </p>
+
+<p class=defnewpar>All ILWIS <a href="ilwis_objects_data_objects.htm">data objects</a> have a domain. One domain can be used for several data objects. To view the domain of a data object, open the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of that data object. To list existing domains in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, refer to <a href="how_to_customize_the_catalog.htm">How to customize the Catalog</a>. </p>
+
+<p class=defnewpar>The four main types of domains are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=71>
+<p><a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a></p>
+
+</td>
+<td valign="top">
+<p>for data objects that contain <b>unique identifiers</b> (e.g. plot 1024, plot 1025) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=71>
+<p><a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a></p>
+
+</td>
+<td valign="top">
+<p>for data objects that contain <b>classes</b> (e.g. soil units: clay, sandy loam)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=71>
+<p><a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a></p>
+
+</td>
+<td valign="top">
+<p>for data objects that contain measured, calculated or interpolated <b>values</b> (e.g. height, concentration)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=71>
+<p><a href="..//ilwis/sec/domain_image_sec.htm" onClick="return popup(this, 'notes')" >Image</a></p>
+
+</td>
+<td valign="top">
+<p>for <b>satellite images</b> and scanned aerial photographs that contain values between 0 and 255.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Domains for new maps:</p>
+
+<p>When you create a new map, you should also select or create a suitable domain for the map. As described above, you can:</p>
+
+<ul>
+
+<li>	create a class domain <span class=courier>Soils</span> when you want to digitize soil classes and fill this domain with your soil classes; </li>
+
+<li>	create an identifier domain <span class=courier>Plots</span> when you want to digitize unique identified cadastral plots and;</li>
+
+<li>	create a value domain <span class=courier>Height</span> when you want to digitize contour lines. </li>
+
+</ul>
+
+<p>You can directly add classes to a class domain when you create the domain, but you can also add classes to the domain when actually editing or digitizing the map. Identifier domains can automatically be filled with numbers, but you can also add the identifiers yourself. </p>
+
+<p class=defnewpar>However, when working for instance with multiple land use maps of different years, the idea is that you create only one class domain Landuse in which you enter all possible land use classes of all years. This domain can then be used for all your land use maps and related attribute tables. It is not necessary that all classes in the domain actually occur in each map. As a domain is linked to a representation, the use of one domain for maps of the same theme ensures that these maps are also by default displayed in the same colors.</p>
+
+<p class=kopje>Domains for attribute tables and columns:</p>
+
+<p>For maps using a class or ID domain, you can create an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>. You have to make sure that the table uses the same domain as the map because the domain provides the link between them. In the table, the class names or IDs of the domain appear on the record buttons. You can add attribute columns to the table which contain additional information on the classes or IDs in the map. When you create columns in the attribute table, you may create suitable domains for each column; for general use of values however use the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>. </p>
+
+<p class=kopje>Domains for value maps and value columns:</p>
+
+<p>When calculating with <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value maps</a> and value columns, you can usually accept the default <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span> and adjust the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> for the output map if necessary. </p>
+
+<p>You only need to create a user-defined value domain (e.g. <span class=courier>Height</span>, <span class=courier>pH</span>, <span class=courier>Yields</span>, or concentration values):</p>
+
+<ul>
+
+<li>	if the output values have a specific 'standardized' meaning that you want to document and </li>
+
+<li>	if you have, or want to create, a specific representation for these values (colors are linked to values). </li>
+
+</ul>
+
+<p class=defnewpar>A number of value domains are available in your <span class=courier>ILWIS\SYSTEM</span> directory:</p>
+
+<p><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >Value</a>, <a href="..//ilwis/popup/yy_system_domain_count_popup.htm" onClick="return popup(this, 'notes')" >Count</a>, <a href="..//ilwis/popup/yy_system_domain_distance_popup.htm" onClick="return popup(this, 'notes')" >Distance</a>, <a href="..//ilwis/popup/yy_system_domain_min1to1_popup.htm" onClick="return popup(this, 'notes')" >Min1to1</a>, <a href="..//ilwis/popup/yy_system_domain_nilto1_popup.htm" onClick="return popup(this, 'notes')" >NILto1</a>, <a href="..//ilwis/popup/yy_system_domain_noaa_popup.htm" onClick="return popup(this, 'notes')" >NOAA</a>, <a href="..//ilwis/popup/yy_system_domain_perc_popup.htm" onClick="return popup(this, 'notes')" >Perc</a>, <a href="..//ilwis/popup/yy_system_domain_radar_popup.htm" onClick="return popup(this, 'notes')" >Radar</a>. For calculations on value maps, you can of course also use the <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" >Image</a> domain.</p>
+
+<p class=kopje>Other domain types:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=71>
+<p><a href="..//ilwis/sec/domain_type_bit_sec.htm" onClick="return popup(this, 'notes')" >Bit</a></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/yy_system_domain_bit_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Bit</a></span> is available for raster maps and columns that have to store values 0 and 1.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=71>
+<p><a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Bool</a></span> and <a href="..//ilwis/popup/yy_system_domain_yesno_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Yes/No</a></span> are available for maps and columns that have to store True, False or undefined values.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=71>
+<p><a href="..//ilwis/sec/domain_type_picture_sec.htm" onClick="return popup(this, 'notes')" >Picture</a></p>
+
+</td>
+<td valign="top">
+<p>for raster maps which contain merely colors, the pixels have no meaning, for instance color composites or scanned pictures.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=71>
+<p><a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" >Color</a></p>
+
+</td>
+<td valign="top">
+<p>for raster maps that are stored in 24-bit colors.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=71>
+<p><a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >Group</a></p>
+
+</td>
+<td valign="top">
+<p>a user-defined list of values and class names that can be used to classify a value map (similar to the ILWIS 1.41 classify tables)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=71>
+<p><a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >String</a></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>String</a></span> is available for columns that contain text.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_before_creating_maps_and_tables.htm">Before creating maps and tables</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+</body

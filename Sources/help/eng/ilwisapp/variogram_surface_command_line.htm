@@ -1,0 +1,207 @@
+<html>
+
+<head>
+<title>Variogram surface : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Variogram surface, MapVariogramSurfacePnt, MapVariogramSurfaceRas">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Variogram surface</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/variogram_surface_popup.htm" onClick="return popup(this, 'notes')" >Variogram surface</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapVariogramSurfacePnt</span>(InputPointMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapVariogramSurfacePnt</span>(InputPointMap, <i>LagSpacing</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapVariogramSurfacePnt</span>(InputPointMap, <i>LagSpacing, Nr of Lags</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapVariogramSurfaceRas</span>(InputRasterMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapVariogramSurfaceRas</span>(InputRasterMap, <i>Nr of Lags</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=192>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p class=courier>MapVariogramSurfacePnt</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Variogram surface operation with a point map as input.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p class=courier>MapVariogramSurfaceRas</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Variogram surface operation with a raster map as input.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p>InputPointMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map with a value domain; to use a domain value attribute column from an attribute table which is linked to an ID point map, use <i>InputPointMap.Columnname</i>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p>InputRasterMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map with a value domain; to use a domain value attribute column from an attribute table which is linked to an ID point map, use <i>InputPointMap.Columnname</i>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p><i>LagSpacing</i></p>
+
+</td>
+<td valign="top">
+<p>for input point maps only: a parameter to specify the length in meters for the directional distance classes (lags) that should be used; 0 &lt; real value &lt; diagonal of point map. This also determines the pixel size of the pixels in the output map. </p>
+
+<p>When this parameter is not specified for an input point map, a default lag spacing is provided based on the point density in the input point map as 0.5 <span class=symbollarger>&Ouml;</span> ((point map height <span class=courier>*</span> point map width) / number of points) .</p>
+
+<p>For input raster maps, the lag spacing and thus the pixel size of the output map is determined by the pixel size of the input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=192>
+<p><i>Nr of Lags</i></p>
+
+</td>
+<td valign="top">
+<p>is a parameter to specify the number of distance classes (lags) that should be used both in horizontal and in vertical direction away from the central pixel at the origin in the output map. This also determines the number of pixels in the output map. In principle, you can use 1 to 45 lags both for point maps and for raster maps (see also limitations below). The number of pixels in the output map is defined as (2 <span class=courier>*</span> <i>nr of lags</i>) - 1.</p>
+
+<p>When this parameter is not specified, 10 lags are assumed; 10 lags result in an output map of 19 x 19 'pixels'. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In order to prevent the creation of output maps which contain almost no information, there are some extra limitations on the combination of lag spacing and number of lags when using an input point map and on the number of lags when using an input raster map:</p>
+
+<ul>
+
+<li>	for an input point map, the product of the lag spacing and the number of lags may not exceed twice the length of the diagonal of the point map; </li>
+
+<li>	for an input raster map, the number of lags cannot exceed neither the number of rows nor the number of columns of the input raster map; the program will then automatically round this value down to (the minimum of) the number of rows or the number of columns in the input map. </li>
+
+</ul>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. The output map always uses an internally defined (not available on disk) georeference differential. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="variogram_surface_functionality.htm">Variogram surface : functionality</a></p>
+
+</body

@@ -1,0 +1,50 @@
+<html>
+
+<head>
+<title>NDVI popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>NDVI</p>
+
+<p>NDVI (Normalized Difference Vegetation Index) values are a measure for the presence and condition of green vegetation.</p>
+
+<p>NDVI values are calculated from two satellite bands; one band containing visible or red reflectance values, the other band near-infrared reflectance values. Use the NDVI function in MapCalc: <a href="..//ilwis/calc_ndvi.htm" onClick="return popup(this, 'notes')" >NDVI</a>(<i>a,b</i>) in which <i>a</i> is the band with visible or red reflectance and <i>b</i> the band with near-infrared reflectance.</p>
+
+<p class=defnewpar>The NDVI is calculated as:</p>
+
+<p class=leftmargin1><u>near infrared band - visible band</u></p>
+
+<p class=leftmargin1>near infrared band + visible band</p>
+
+<p class=defnewpar>NDVI values range from -1 to 1:</p>
+
+<ul>
+
+<li>	Vegetated areas will generally yield high values because of their relatively high near-infrared reflectance and low visible reflectance.</li>
+
+<li>	In contrast, water, clouds, and snow have larger visible reflectance than near-infrared reflectance. Thus, these features yield negative index values.</li>
+
+<li>	Rock and bare soil areas have similar reflectances in the two bands and result in vegetation indices near zero.</li>
+
+</ul>
+
+</body

@@ -1,0 +1,201 @@
+<html>
+
+<head>
+<title>Catchment extraction : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catchment extraction">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Catchment extraction</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p>The Catchment extraction operation constructs catchments; a catchment will be calculated for each stream found in the output map of the <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation. The operation uses a <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> map to determine the flow path of each stream. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>the output raster map of the <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation, </li>
+
+<li>the output raster map of the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation. </li>
+
+</ul>
+
+<p class="defnewpar">As output a raster map, a polygon map and an attribute table are produced which all use the ID domain of the input Drainage network ordering map. </p>
+
+<p class="defnewpar">The attribute table contains information on each catchment, such as: </p>
+
+<ul>
+
+<li>area and perimeter of the catchment, </li>
+
+<li>total upstream area, i.e. the area of all catchments that drain into this catchment, etc. </li>
+
+</ul>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="tiptext"><span class="tip">Tip: </span>The obtained catchments can be merged afterwards with the <a href="..//ilwisapp/popup/catchment_merge_popup.htm" onClick="return popup(this, 'notes')" >Catchment merge</a> operation. </p>
+
+<p class="kopje">Example:</p>
+
+<table cellspacing="0">
+<tr>
+<td width="250">Input drainage network ordering map:</td>
+<td>Output catchment map (boundaries only), <br>
+	including input drainages:</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_drain_netw_ord.gif" width="231" height="188"></td>
+<td><img src="../images/hydro_catch_extr.gif" width="231" height="188"></td>
+</tr>
+<tr>
+<td>Stream segments with unique IDs; <br>
+	input streams shown in multiple colors.</td>
+<td>For each stream, a catchment is constructed; <br>
+	input streams in blue, output catchment polygon boundaries in green. </td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td width="250">Input drainage network ordering map <br>
+	including segment drainage IDs:</td>
+<td>Output catchment map (boundaries only)<br>
+	including polygon catchment IDs:</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_drain_netw_ord3.gif" width="231" height="188"></td>
+<td><img src="../images/hydro_catch_extr3.gif" width="231" height="188"></td>
+</tr>
+<tr>
+<td valign="top">Input stream segments in multiple colors; <br>
+	additional stream label points also<br>
+	in multiple colors.</td>
+<td valign="top">Output catchment polygon boundaries in green, <br>
+	additional catchment label points in black.</td>
+</tr>
+
+</table>
+
+<p class="kopje">Input map requirements:</p>
+
+<ul>
+
+<li>The output raster map of a previous <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation, </li>
+
+<li>The output raster map of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation. </li>
+
+</ul>
+
+<p class="kopje">Domain of output maps and attribute table:</p>
+
+<ul>
+<li>An output raster map and an output polygon map will be created; these maps will use the ID domain of the input Drainage network ordering map. </li>
+<li>An output attribute table will be created, using the same ID domain. </li>
+<li>The output raster map and the output polygon map are both linked to the output attribute table. </li>
+</ul>
+
+<p class="kopje">Columns in the Catchment extraction output attribute table:</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="144"><i>domain</i></td>
+<td valign="top">The IDs of the table's domain, every record (ID) represents a certain catchment that corresponds to a certain stream.</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">DrainageID</span></td>
+<td valign="top">The ID of the stream that corresponds to this catchment; the ID of the table and this column always show the same number. This column is a value column. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">UpstreamLinkCatchment</span></td>
+<td valign="top">The IDs of the catchments that directly contribute to the current catchment, e.g. when catchments 5 and 7 flow together into catchment 18, then the UpstreamLinkCatchment column will read for the record with ID 18: <span class="courier">{5,7}</span> </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">DownstreamLinkCatchment</span></td>
+<td valign="top">The ID of the catchment into which the current catchment will flow (down-flow). This column is a value column. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">Perimeter</span></td>
+<td valign="top">The perimeter of the current catchment. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">CatchmentArea</span></td>
+<td valign="top">The area of the current catchment. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">TotalUpstreamArea</span></td>
+<td valign="top">The total area of the catchments that directly contribute to the current catchment, i.e. the sum of the areas of the catchments listed in column UpstreamLinkCatchment. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">LongestFlowLength</span></td>
+<td valign="top">The length of the longest flow path found in this catchment, according to the Flow direction input map. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">CenterCatchment</span></td>
+<td valign="top">The XY-coordinate at the center of each catchment; these coordinates are shown as points in the fourth picture above. This column is a coordinate column. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">CenterDrainage</span></td>
+<td valign="top">The XY-coordinate in the middle of each stream segment; these coordinates are shown as points in the third picture above. This column is a coordinate column. </td>
+</tr>
+</table>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="tip">Tip 1: </p>
+<p class="tiptext">To obtain label points at the center of the drainages, use the <a href="table_to_point_map_functionality_algorithm.htm">Table to point map</a> operation: </p>
+
+<ul class="tipul">
+<li>As input table, choose the output table of the Catchment extraction operation, </li>
+<li>as single XY column, choose the <span class="arial">CenterDrainage</span> column as available in the table, </li>
+<li>for the domain of the output point map, you can simply use the table domain. </li>
+</ul>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="tip">Tip 2: </p>
+<p class="tiptext">To obtain label points at the center of the polygons, use the <a href="table_to_point_map_functionality_algorithm.htm">Table to point map</a> operation: </p>
+
+<ul class="tipul">
+<li>As input table, choose the output table of the Catchment extraction operation, </li>
+<li>as single XY column, choose the <span class="arial">CenterCatchment</span> column as available in the table, </li>
+<li>for the domain of the output point map, you can simply use the table domain. </li>
+</ul>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="tip">Tip 3: </p>
+<p class="tiptext">From a label point map, you can create an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text layer</a> in a map window.  <br>
+	An annotation text layer may come in handy when you wish to move the position of some labels, or when you wish to produce printed output through a map view. <br>
+	For more information, refer to <a href="../ilwis/ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a> or <a href="../ilwis/annotation_text_editor_functionality.htm">Annotation text editor : functionality</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="catchment_extraction_dialog_box.htm">Catchment extraction : dialog box</a></p>
+
+<p class=seealsolinks><a href="catchment_extraction_command_line.htm">Catchment extraction : command line</a></p>
+
+<p class=seealsolinks><a href="catchment_extraction_algorithm.htm">Catchment extraction : algorithm</a></p>
+
+
+</body

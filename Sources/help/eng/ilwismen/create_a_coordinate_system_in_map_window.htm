@@ -1,0 +1,158 @@
+<html>
+
+<head>
+<title>Create a coordinate system (in map window)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Create a coordinate system</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Create a coordinate system formula or a coordinate system tiepoints. A <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> defines the XY-coordinates in your maps. A coordinate system is directly used by point, segment and polygon maps; a raster map uses a georeference which uses a coordinate system. One coordinate system can be used by many maps. </p>
+
+<p class=defnewpar>This dialog box appears when you choose the <span class=arial>Create Coordinate System</span> command from the <a href="../ilwis/map_window_menu_commands.htm">File menu</a> of a map window and the map window contains one or more vector maps. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Coordinate system name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the coordinate system. As one coordinate system is used for all maps with the same projection, it is advised to enter a coordinate system name that applies to all maps (the name of the country, region, project, etc.).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the coordinate system. The description is visible on the status bar of the Main window when moving the mouse pointer over the coordinate system in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  CoordSys Formula:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select Coordinate System Formula when you obtained data which is using different XY-coordinates than the coordinate system of your project, and when you know the relation between the two coordinate systems. The <a href="edit_coordinate_system_formula.htm">Edit Coordinate System Formula</a> dialog box will appear.</p>
+
+<p class=diabox>This type of coordinate system can be created for maps which use artificial coordinates, for instance maps starting at (0,0), or maps digitized in millimeters. You have to specify parameters like origin shift, scale, rotation, etc. or you can type complete formulas. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Related coordsys:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the coordinate system with the correct coordinates.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  CoordSys Tiepoints:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select Coordinate System Tiepoints when you obtained data which is using different XY-coordinates than the coordinate system of your project, and when you do not know the relation between the two coordinate systems. </p>
+
+<p class=diabox>This type of coordinate system can be created for maps which use artificial coordinates, for instance maps starting at (0,0) or maps digitized in millimeters. The <a href="../ilwis/coordinate_system_tiepoints_editor_functionality.htm">Coordinate System Tiepoint editor</a> will be opened in which you can add tiepoints to the selected background map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxleft1>Related coordsys:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the coordinate system with the correct coordinates.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For every vector map that is displayed in the map window, a message will appear whether the current coordinate system of that map should be replaced with the new coordinate system.</p>
+
+<p>In general, this question should be answered with Yes.</p>
+
+<p>The coordinate system which you are creating will thus be directly linked to the all maps for which you answered the question with yes. </p>
+
+<p class=defnewpar>When you display maps with different coordinate systems, the question can be answered with No for those maps which already have the correct coordinates. </p>
+
+<p class=defnewpar>The coordinate system which you are creating will automatically be used by the map window. </p>
+
+<p class=defnewpar>After you have created the coordinate system formula or tiepoints, you can:</p>
+
+<ul>
+
+<li>	transform the map with artificial coordinates to the correct coordinate system (the related coordsys).</li>
+
+<li>	display the maps which use the coordsys formula or tiepoints and maps which use the related coordsys together in one map window. </li>
+
+<li>	combine maps which use coordinate systems that can be transformed in to one another in the pixel information window.</li>
+
+<li>	display the maps which use the coordsys formula or tiepoints and maps with a graticule, when the related coordinate system has projection information. </li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	When you create a coordinate system by using <a href="../ilwis/map_window_menu_commands.htm">File menu</a> in a map window, the Create Coordinate System (in map window) dialog box as described above will appear. You can only select to create a coordsys formula, a coordsys tiepoints, a coordsys direct linear or a coordsys orthophoto. A question will be asked whether the newly created coordinate system should be directly linked to the maps which are displayed in the map window. You should answer the question with <span class=courier>Yes</span>; then you do not have to edit the properties of these maps.</li>
+
+<li>	When you create a coordinate system by using the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window or by double-clicking the <span class=arial>New Coordinate System</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, the <a href="create_a_coordinate_system.htm">Create Coordinate System</a> dialog box will appear. You can choose to create a coordsys boundary only, a coordsys projection, a coordsys latlon, a coordsys formula, a coordsys tiepoints, a coordsys direct linear, or a coordsys orthophoto. When finished creating the coordinate system, you have to make sure that the newly created coordinate system is linked to ALL maps that should use this coordinate system: you have to <i>edit</i> the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of these maps.</li>
+
+<li>	Once you have created a correct coordinate system, it is advised to make it read-only in the <a href="coordinate_system_properties.htm">Coordinate System Properties</a> sheet.</li>
+
+<li>	To change the coordinates of maps from one coordinate system to another coordinate system, use the Transform Points, Transform Segments or Transform Polygons operation. To transform coordinates of raster maps from one georeference to another georeference (which has for instance another coordsys), use the Resample operation.</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a></p>
+
+<p class=seealsolinks><a href="edit_coordinate_system_formula.htm">Edit Coordinate System Formula</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwis/coordinate_system_tiepoints_editor_functionality.htm">Coordinate System Tiepoint editor</a></p>
+
+</body

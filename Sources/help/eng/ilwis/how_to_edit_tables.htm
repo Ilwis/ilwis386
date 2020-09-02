@@ -1,0 +1,258 @@
+<html>
+
+<head>
+<title>How to edit tables</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Edit ..., How to edit ..., Tables, Columns">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to edit a table</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >table</a> is displayed in a <a href="..//ilwis/popup/table_window_popup.htm" onClick="return popup(this, 'notes')" >table window</a>. 
+
+<p class=defnewpar>A table consists of <a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >columns</a>, records and fields. Schematically, this looks like: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/tableexample.gif" align=bottom width="257" height="76"></p>
+
+<p class=defnewpar>Fields of editable source columns can be edited. </p>
+
+<p class=defnewpar>You can edit: </p>
+
+<ul>
+
+<li>single fields (both in the table viewer and in <a href="table_window_record_view_pane.htm">record view</a>), </li>
+
+<li>selected fields in a single column (only in the table viewer), </li>
+
+<li>selected fields in multiple columns (only in the table viewer). </li>
+
+</ul>
+
+<p class=defnewpar>This topic deals with editing single fields and describes the behaviour for various column <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domains</a>. </p>
+
+<p class=defnewpar>The editing of multiple fields is performed via a dialog box. For more information, refer to: </p>
+
+<ul>
+
+<li><a href="../ilwismen/table_window_edit_single_column.htm">Edit fields in a single column</a>, or </li>
+
+<li><a href="../ilwismen/table_window_edit_multiple_columns.htm">Edit fields in multiple columns</a>. </li>
+
+</ul>
+
+
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>You cannot edit: </p>
+
+<ul class=tipul>
+
+<li>fields of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> columns, which contain the results of a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculation</a> or a column operation, </li>
+
+<li>fields in a dependent table, where the table is the result of an <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>, or </li>
+
+<li>fields of read-only columns. </li>
+
+</ul>
+
+<p class=tiptext>For more information, see <a href="ilwis_objects_columns.htm">ILWIS objects : columns</a>.</p>
+
+<h2>Editing single fields</h2>
+
+<p>In short:</p>
+
+<ul>
+
+<li>	When a column uses a value or identifier domain, you can select a field by clicking it with the mouse pointer and directly start typing. </li>
+
+<li>	When a column uses a class domain, you can select a field, open the drop-down list box and then select a class name from the list.</li>
+
+</ul>
+
+<p class=defnewpar>If a column is not wide enough to the contents of the fields, stars <span class=courier>*</span> appear. You can enlarge the width of the column by <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> the right side of the column button to the right.</p>
+
+<p class=kopje>Using the keyboard to move through fields of a table:</p>
+
+<p>If you want to edit many fields in a table, it is advised not to use the <span class=arial>Enter</span> key on the keyboard, instead:</p>
+
+<ul>
+
+<li>	to move downward or upward in the table to edit other fields, press the <span class=arial>Down Arrow</span> or <span class=arial>Up Arrow</span> keys on the keyboard,</li>
+
+<li>	to move to the right in a table to edit other fields, press the <span class=arial>Tab</span> key on the keyboard, </li>
+
+<li>	to move to the left in a table to edit other fields, press the <span class=arial>Shift +Tab</span> keys on the keyboard.</li>
+
+</ul>
+
+<p>Whenever you move to another field, the previously edited field is directly stored on disk. You can stop editing by pressing <span class=arial>Enter</span> or <span class=arial>Esc</span>.</p>
+
+<h2>Behaviour for various domain types</h2>
+
+<p class=kopje>To edit columns using a value domain:</p>
+
+<p>When the column uses a <a href="..//ilwis/sec/domain_type_value2_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>: </p>
+
+<ul>
+
+<li>	select a field in the column and type a new value. </li>
+
+</ul>
+
+<p class=defnewpar>If the value you typed does not fit in the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> of the column, the undefined value is assigned represented by a question mark. Values are rounded so that fit the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of the column. To have column values displayed with more decimals or less decimals, change the Decimals option in the <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box.</p>
+
+<p class=kopje>To edit columns using an ID domain:</p>
+
+<p>When the column uses an <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a>: </p>
+
+<ul>
+
+<li>	select a field in the column and type a new value or a new Identifier.</li>
+
+</ul>
+
+<p class=defnewpar>If the ID you typed is not yet present in the domain of the column, a question is asked whether this ID should be added to the domain. </p>
+
+<p class=kopje>To edit columns using a class domain:</p>
+
+<p>When the column uses a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>: </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>By mouse:</p>
+
+<ul>
+
+<li>	select a field in the column, </li>
+
+<li>	open the drop-down list box showing all class names of the domain and </li>
+
+<li>	select a class name from the list.</li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>By keyboard:</p>
+
+<ul>
+
+<li>	select a field in the column,</li>
+
+<li>	press the <span class=arial>Left Arrow</span> and <span class=arial>Right Arrow</span> key on the keyboard, to move up and down in the drop-down list box with the classes,</li>
+
+<li>	press the <span class=arial>Down Arrow</span> or <span class=arial>Up Arrow</span> keys on the keyboard, to move downward or upward to another record in the column.</li>
+
+</ul>
+
+<p class=defnewpar>You can add a new class to the domain, by selecting the <span class=courier>&lt;new&gt;</span> item in the list.</p>
+
+<p class=kopje>To edit columns using the Bool or the Yes/No domain:</p>
+
+<p>A column which uses <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Bool</span></a> can contain the values True, False and ? (undefined). </p>
+
+<p>A column which uses <a href="..//ilwis/popup/yy_system_domain_yesno_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Yes/No</span></a> can contain the values Yes, No and ? (undefined).</p>
+
+<p class=defnewpar>In a field of a column that uses the Bool or Yes/No domain:</p>
+
+<ul>
+
+<li>	type <span class=courier>T</span> or <span class=courier>Y</span> or <span class=courier>1</span> to obtain a True value,</li>
+
+<li>	type <span class=courier>F</span> or <span class=courier>N</span> or <span class=courier>0</span> to obtain a False value,</li>
+
+<li>	type <span class=courier>?</span> to obtain an undefined value,</li>
+
+<li>	you can select a field and press the space bar to change <span class=courier>True</span> in <span class=courier>False</span> and vice versa.</li>
+
+</ul>
+
+<p class=kopje>To edit columns using the Color domain:</p>
+
+<p>Fields in a column that uses the <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Color</span></a> domain can store colors as (Red, Green, Blue) values. The minimum value for Red, Green, and Blue is 0; the maximum value for Red, Green and Blue is 255.</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p class=courier>(  0,  0,  0)</p>
+
+</td>
+<td valign="top" width=151>
+<p>represents black</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=courier>(255,255,255)</p>
+
+</td>
+<td valign="top" width=151>
+<p>represents white</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=courier>(255,  0,  0)</p>
+
+</td>
+<td valign="top" width=151>
+<p>represents red, etc.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If width of the column is not wide enough to display Red, Green and Blue values, the Red, Green and Blue values are shown in hexadecimal notation. If you like, you can edit colors in this hexadecimal notation (where 000000 is black, FFFFFF is white, FF0000 is red, etc.). However, if you wish to see RGB values between 0 and 255: enlarge the width of the column.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>There are many more keys on the keyboard that you can use in a table window. For more information, see <a href="appendices_keyboard_shortcuts.htm">Appendices : keyboard shortcuts</a>. </p>
+
+<h2>Dependent columns or dependent tables</h2>
+
+<p>In principle, fields of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent columns</a> and fields of table-owned columns in <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent tables</a> are not editable in order to protect the results of a calculation or an operation. </p>
+
+<p class=defnewpar>If you need to edit fields of a dependent column, you first have to break the dependency links of the dependent column in the <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box of the dependent column. </p>
+
+<p class=defnewpar>If you need to edit fields of a table-owned column in a dependent table, you first have to break the dependency links of the dependent table in the <a href="../ilwismen/table_properties.htm">Table Properties</a> sheet of the dependent table. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/table_window_edit_single_column.htm">Edit fields in a single column</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/table_window_edit_multiple_columns.htm">Edit fields in multiple columns</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_columns.htm">ILWIS objects : columns</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/column_properties.htm">Column Properties</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/table_properties.htm">Table Properties</a></p>
+
+</body

@@ -1,0 +1,134 @@
+<html>
+
+<head>
+<title>Display options - 3D grid</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Display options 3D grid, Display 3D">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Display options</h1>
+
+<h1 class=secondline>3D Grid</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Specify how the 3D view should be drawn in a map window, using your georeference 3D.</p>
+
+<ul>
+
+<li>	When you already created a georeference 3D, the map window will directly display a 3D view using grid lines and/or a raster drape. In the map window you can add other vector maps to the 3D view in the usual way.</li>
+
+<li>	When you create a 3D view for the first time, you probably have to modify the parameters of the georeference 3D with the georeference 3D editor. The georeference 3D editor can be started from within the map window (see below). </li>
+
+</ul>
+
+<p class=defnewpar>Your Digital Elevation Model can be drawn in three dimensions:</p>
+
+<ul>
+
+<li>	by using 3D grid lines in X and Y directions, </li>
+
+<li>	by using a raster map draped over your height values,</li>
+
+<li>	by using both a raster map draped over your height values, and 3D grid lines. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Grid:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to see 3D grid lines that follow the height values of your DEM raster map. Clear this box if you do not want to see grid lines.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Grid distance:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a distance between the grid lines. When the distance between the grid lines is decreased, you obtain a more accurate representation of your DEM but drawing speed in the map window will decrease as well.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the grid lines. To create your own color, select Custom at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Raster Drape:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if a raster map should be superimposed on your height values. Subsequently, select the name of a raster map in the list box or drag a raster map directly from the Catalog into this box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Pixel steps:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To speed up the display of the raster drape, specify an aggregation factor for the pixels of the raster map that will be superimposed.</p>
+
+<p class=diabox>When you specify a pixel step value of 3, every block of 3 by 3 pixels of the input map is grouped into one output display element. </p>
+
+<p class=diabox>When you specify a pixel step value of 1, all pixels of the raster map are displayed but this will slow down the display.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the OK button, the 3D grid lines and/or the raster drape are displayed in a map window. </p>
+
+<p class=defnewpar>When you already specified parameters for the georeference 3D in an earlier session, and the 3D view is OK, you can add other vector data layers (point maps, segment maps, etc) to the map window. To save the 3D view, store the map window as a map view. </p>
+
+<p class=defnewpar>To start editing the 3D view, open the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in the map window and select the <span class=arial>Georeference</span> command. The <a href="georeference_3d_editor_edit.htm">Georeference 3D editor</a> will be opened. In the editor, you can make sure that your complete study area falls inside the view, that you look into the terrain from the right angle, that height differences are clearly displayed, etc.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To redraw a 3D view, click the <span class=arial>Redraw</span> button in the toolbar of the map window, or press <span class=arial>Ctrl+R</span> on the keyboard. </li>
+
+<li>	To permanently display a raster map with a georeference 3D, use the Apply 3D operation.</li>
+
+</ul>
+
+<p class=Seealso>Next dialog box:</p>
+
+<p class=seealsolinks><a href="georeference_3d_editor_edit.htm">Georeference 3D editor : Edit</a></p>
+
+</body

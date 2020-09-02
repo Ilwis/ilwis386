@@ -1,0 +1,111 @@
+<html>
+
+<head>
+<title>Select object to be deleted</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Select object to be deleted</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Select a map or table, or any other <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >object</a> and delete it. </p>
+
+<p class=defnewpar>This dialog box only appears when:</p>
+
+<ul>
+
+<li>when you type <span class=courier>Del</span> on the command line of the Main window.</p>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Select an object:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the object which you want to delete.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Select object type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the type of object you want to delete: a map, a table, a map list, a map view, a domain, a representation, a georeference, a coordinate system, a histogram, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>First, ILWIS checks whether the object you selected is still in use by other objects. For example, a domain or a georeference can be used by many maps. </p>
+
+<ul>
+
+<li>	If the selected object <i>is not</i> used by other objects, you will get a question whether you are sure to delete the selected object. </li>
+
+<li>	If the selected object <i>is</i> used by other objects, you will get a message saying that in principle you cannot delete the selected object; however, if you want, you can still delete the object.</li>
+
+</ul>
+
+<p>To view which objects use the current object, check the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of the object.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>You can also delete one or more objects, by selecting objects in the Catalog, then choose <span class=arial>Delete</span> from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> or from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+<li>You can also delete multiple objects by using the command line in the Main window. For more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>.</li>
+
+</ul>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_delete_objects.htm">How to delete objects</a></p>
+
+</body

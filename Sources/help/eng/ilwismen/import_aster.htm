@@ -1,0 +1,272 @@
+<html>
+
+<head>
+<title>Import ASTER</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Import, ASTER import, ASTER, HDF">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Main window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="3"><h1 class=secondline> Import ASTER</h1></td>
+</tr>
+<tr>
+<td><h1 class=firsttabnotactive><a class=thistab href="import_map.htm">Import Map</a></h1>
+</td>
+<td><h1 class=othertab><a class=othertab href="import_general_raster.htm">Import General Raster</a></h1>
+</td>
+<td><h1 class=othertab><a class=othertab href="import_table_input_table_name.htm">Import Table Wizard</a></h1>
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+ 
+<!--<hr>-->
+
+<p>Import ASTER level 1A and/or level 1B images by using ILWIS Map
+Import. </p>
+
+<p class=defnewpar>The dialog box described below appears when you choose
+<span class=arial><a href="import_map.htm">Import Map</a></span></p>
+<ul>
+<li>from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the Main window;</li>
+<li>in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or;</li>
+<li>in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a></li>
+</ul>
+
+<p class=defnewpar>and select in the Import dialog box Import Format<span class=arial>  Aster (1A/1B)</span>.</p>
+
+<p class=defnewpar>When using Import ASTER, you can choose:</p>
+
+<ul>
+
+<li>to perform a genuine import and translate the external file to an ILWIS data format, or</li>
+
+<li>to keep the external file in its original format (Use As). </li>
+
+</ul>
+
+<p>For more information, see the <span class=arial>Convert to ILWIS data format</span> option below. </p>
+
+<p class=defnewpar>After you used Import Map with Import Format <span class=arial>Aster
+(1A/1B)</span>, you will obtain an ILWIS <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collection</a> <img src="../images/objcol.gif" align=top width="15" height="13">. The object collection contains the ILWIS objects that are the result of the import. You can open an object collection by double-clicking it in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>; subsequently you can also open the imported objects by double-clicking.</p>
+
+<p class=diakopje><b>Import</b> dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Select a file:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the file that you wish to import. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Import format:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><img src="../images/objcol.gif" align=top width="15" height="13">&nbsp;<b>ASTER
+(1A/1B)</b></p>
+
+<p class=diabox><span class=tiptext>When you select another Import format, please refer to the other Import topics in the Help; you can click one of the links in the header of this topic. </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output file name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a name for the output ILWIS <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collection</a>. Do not specify an extension; ILWIS will add its own extensions. The imported data will be part of the output object collection. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Show:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you like to directly open the resulting object collection. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Use Radiances (Wm<sup>-2</sup>sr<sup>-1</sup>µm<sup>-1</sup>):</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+
+<p class="diaboxnospacetop">For ASTER level 1A images:</p>
+<ul>
+<li>Select this check box if you want to convert the raw Digital
+  Numbers of the ASTER HDF file to radiometric corrected radiance values.</li>
+<li>Clear this check box if you want to convert the raw Digital
+  Numbers of the ASTER HDF file to sensor calibrated DN values.</li>
+</ul>
+<p class="diabox">For ASTER level 1B images:</p>
+<ul>
+<!--<li>Select this check box if you want to convert the radiometrically corrected
+  DN values of the HDF file to radiance values.</li>
+<li>Clear this check box if you do not want to convert the radiometrically
+  corrected DN values of the ASTER HDF file to radiance values.</li>-->
+<li>Select this check box if you want to convert the radiometrically corrected
+  DN values of the ASTER HDF file to radiance values.</li>
+<li>Clear this check box if you want to use the radiometrically
+  corrected DN values of the ASTER HDF file.</li>
+</ul>
+<p class="tip">Notes:</p>
+<ul class="tipul">
+<li>Sensor calibrated DN values are not the actual digital unprocessed numbers
+  of the file but radiometric corrected radiance values scaled back into an
+  appropriate range.</li>
+<li>For more technical information about radiometric and
+geometric corrections
+of ASTER images refer to <a href="import_aster_technical_information.htm">ASTER Import : Radiometric and geometric corrections (technical information)</a>.</li>
+</ul>
+</td>
+</tr>
+<tr>
+<td valign="top" colspan=2>
+<p class=diabox>Convert to ILWIS data format:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select this check box to perform a genuine import and translate the external file to an ILWIS format: </p>
+
+<ul>
+
+<li>the external data will be translated into ILWIS file formats: ILWIS object definition files (e.g.
+  .MPR) as well as ILWIS data files will be created;</li>
+
+<li>you can view the imported data, calculate with it, use it in ILWIS operations, etc.;</li>
+
+<li>the imported data can be edited in ILWIS.</li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=diabox>Clear this check box when you wish to keep the external file in its original format (Use As): </p>
+
+<ul>
+
+<li>the external data will not be translated into ILWIS file formats: only ILWIS object definition files (e.g.
+  .MPR) will be created; as the same data file will not appear twice on your hard disk in different formats, you will save some hard disk space in this way; </li>
+
+<li>you can view the imported data, calculate with it, use it in ILWIS operations,
+  etc.;</li>
+
+<li>the original file can not be edited in ILWIS;</li>
+
+</ul>
+
+<p>Necessary service objects like georeferences, etc. will always be imported into the ILWIS
+format. </p>
+
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>When you wish to import <i>multiple files</i>, it is advised to type an Import expression on the command line or to write a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> with Import expressions. The Import expressions are described in
+  <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwisasterimport_commandline">Appendices : ILWIS script language (syntax), section
+  ILWIS ASTER Import</a>.</li>
+
+<li >To show ASTER files with an extension in a Catalog: open the <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog</a> sheet, on the <span class=arial><a href="../ilwismen/customize_catalog_selection.htm">Selection</a></span> tab, and specify the external extension(s) you wish to see in the <span class=arial>External file extensions</span> text box.
+  ASTER files with no extension can not be shown in the Catalog. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="import_aster_technical_information.htm">ASTER Import : Radiometric and geometric corrections (technical information)</a></p>
+
+<p class=seealsolinks><a href="import_map.htm">ILWIS Map Import</a></p>
+
+<p class=seealsolinks><a href="import_general_raster.htm">Import General Raster</a></p>
+
+<p class=seealsolinks><a href="import_table_input_table_name.htm">Import Table wizard</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_import_data.htm">How to import data</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_object_collections.htm">ILWIS objects : object collections</a></p>
+
+<p class=seealsolinks>
+  <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwisasterimport_commandline">Appendices : ILWIS script language (syntax), section
+  ILWIS ASTER Import</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#import_commandline">Appendices : ILWIS script language (syntax), section Import expressions</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwismapimport_commandline">Appendices
+: ILWIS script language (syntax), section ILWIS Map Import</a></p>
+
+
+</body

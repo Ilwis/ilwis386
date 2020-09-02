@@ -1,0 +1,48 @@
+<html>
+
+<head>
+<title>point interpolation popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Point interpolation</p>
+
+<p class=linespacing03after>In a <a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" >point interpolation</a>, the input map is a point map, and the output map is a raster map. The pixel values in the raster output map are interpolated from the point values.</p>
+
+<p>There are four point interpolations:</p>
+
+<ul>
+
+<li>	<a href="..//ilwisapp/nearest_point.htm" onClick="return popup(this, 'notes')" >Nearest point</a>: assigns to pixels the value, identifier or class name of the nearest point, according to Euclidean distance. This method is also called Nearest Neighbour or Thiessen.</li>
+
+<li>	<a href="..//ilwisapp/moving_average.htm" onClick="return popup(this, 'notes')" >Moving average</a>: assigns to pixels weighted averaged point values. The weight factors for the points are calculated by a user-specified weight function. The weight function ensures that points close to an output pixel obtain larger weights than points which are farther away. Furthermore, the weight functions are implemented in such a way that points which are farther away from an output pixel than the user-defined <a href="../sec/point_interpolation_limiting_distance_sec.htm">limiting distance</a> obtain weight zero.</li>
+
+<li>	<a href="..//ilwisapp/trend_surface.htm" onClick="return popup(this, 'notes')" >Trend surface</a>: calculates pixel values by fitting one <a href="../sec/point_interpolation_surfaces_sec.htm">surface</a> through all point values in the map using a least squares method. To the output pixels, the calculated surface values are assigned.</li>
+
+<li>	<a href="..//ilwisapp/moving_surface.htm" onClick="return popup(this, 'notes')" >Moving surface</a>: calculates pixel values by fitting a <a href="../sec/point_interpolation_surfaces_sec.htm">surface</a>, for each output pixel, through weighted point values using a least squares method. The weight factors for the points are calculated by a user-specified weight function. The weight function ensures that points close to an output pixel obtain larger weights than points which are farther away. Furthermore, the weight functions are implemented in such a way that points which are farther away from an output pixel than the user-defined <a href="../sec/point_interpolation_limiting_distance_sec.htm">limiting distance</a> obtain weight zero.</li>
+
+<li>	<a href="..//ilwisapp/kriging.htm" onClick="return popup(this, 'notes')" >Kriging</a>: estimation assigns to pixels weighted averaged points values, like the Moving Average operation. The weight factors in Kriging are determined by using a user-specified semi-variogram model (based on the output of the <a href="../../ilwisapp/popup/spatial_correlation_popup.htm">Spatial correlation</a> operation), the distribution of input points, and are calculated in such a way that they minimize the estimation error in each output pixel. Two methods are available: Simple Kriging and Ordinary Kriging. Optionally, an error map can be obtained which contains the standard errors of the estimates.</li>
+
+<li>	See also: <a href="anisotropic_kriging_popup.htm">Anisotropic Kriging</a>, <a href="../../ilwisapp/popup/universal_kriging_popup.htm">Universal Kriging</a> and <a href="cokriging_popup.htm">CoKriging</a>.</li>
+
+</ul>
+
+</body

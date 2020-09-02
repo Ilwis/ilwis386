@@ -1,0 +1,46 @@
+<html>
+
+<head>
+<title>dem optimization popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>DEM optimization</p>
+
+<p>The <a href="..//ilwisapp/dem_optimization.htm" onClick="return popup(this, 'notes')" >DEM optimization</a> operation enables you to 'burn' existing drainage features into a Digital Elevation Model (DEM), so that a subsequent <a href="../../ilwisapp/popup/flow_direction_popup.htm">Flow direction</a> operation on the output DEM will better follow the existing drainage pattern. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>The DEM optimization operation offers the following possibilities: </p>
+
+<ul>
+
+<li>Gradual drop of (drainage) segments in the output DEM, over a certain distance to the (drainage) segments. </li>
+
+<li>Gradual raise of (watershed-divide) segments on the output DEM, over a certain distance to the (watershed-divide) segments. </li>
+
+<li>Additional sharp drop or raise of segments on top of the gradual drop or raise. </li>
+
+<li>Simple drop or raise of polygons in the output DEM. </li>
+
+</ul>
+
+</body

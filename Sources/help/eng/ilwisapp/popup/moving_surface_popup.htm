@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>moving surface popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Moving surface      (Point interpolation)</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/moving_surface.htm" onClick="return popup(this, 'notes')" >Moving surface</a> operation is a <a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" >point interpolation</a> which requires a point map as input and returns a raster map as output. For each output pixel, a polynomial surface is calculated by a least squares fit; for each output pixel, the surface will approach the weighted point values of the points which fall within the specified <a href="../sec/point_interpolation_limiting_distance_sec.htm">limiting distance</a>. The calculated surface values are assigned to the output pixels. </p>
+
+<p class=linespacing03after>Weight factors for the input points are calculated by a user-specified weight function. The weight function ensures that points close to an output pixel obtain larger weights than points which are farther away. Furthermore, the weight functions are implemented in such a way that points which are farther away from an output pixel than a user-defined limiting distance obtain weight zero.</p>
+
+<p class=linespacing03after>When interpolating point values, it is for time efficiency reasons, strongly advised to choose a rather large pixel size for the output map. Further interpolation on the raster map values can be performed using the <a href="densify_popup.htm">Densify</a> operation or the <a href="../../ilwisapp/popup/resample_popup.htm">Resample</a> operation.</p>
+
+</body

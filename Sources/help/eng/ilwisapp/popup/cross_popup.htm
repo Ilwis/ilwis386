@@ -1,0 +1,33 @@
+<html>
+
+<head>
+<title>cross popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Cross</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/cross.htm" onClick="return popup(this, 'notes')" >Cross</a> operation performs an overlay of two
+<a href="../../ilwis/popup/objects_raster_map_popup.htm"> raster maps</a> which have the same <a href="../../ilwis/popup/objects_georeference_popup.htm">georeference</a>. Pixels on the same positions in both maps are compared; the occurring combinations of class names, identifiers or values of pixels in the first input map and those of pixels in the second input map are stored. </p>
+
+<p>These combinations give an output <i>cross table</i> and optionally an output <i>cross map</i>. The cross table contains the combinations of input values, classes or IDs in both maps, the number of pixels that occur for each combination, and the area of each combination.</p>
+
+</body

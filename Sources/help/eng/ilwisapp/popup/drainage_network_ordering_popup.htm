@@ -1,0 +1,60 @@
+<html>
+
+<head>
+<title>drainage network ordering popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Drainage Network Ordering</p>
+
+<p>The <a href="..//ilwisapp/drainage_network_ordering.htm" onClick="return popup(this, 'notes')" >Drainage Network Ordering</a> operation: </p>
+
+<ul>
+
+<li>examines all drainage lines in the drainage network map, i.e. output map from the Drainage Network Extraction operation, </li>
+
+<li>finds the nodes where two or more streams meet, and </li>
+
+<li>assigns a unique ID to each stream in between these nodes, as well as to the streams that only have a single node. </li>
+
+</ul>
+
+<p class="defnewpar">To limit the number of output streams and reduce calculation time, you can specify the minimum length that streams should have to remain in the network. </p>
+
+<p class="defnewpar">The output of this operation is a raster map, a segment map and an attribute table that all use a newly created ID domain. </p>
+
+<p class="defnewpar">The attribute table contains information on each stream, such as: </p>
+
+<ul>
+
+<li>Strahler ordering number, Shreve ordering number, </li>
+
+<li>stream length, calculated along the drainage, and calculated as a straight line between XY-coordinates, </li>
+
+<li>slope values in degrees and in percentages, calculated along the drainage and calculated as a straight line between XY-coordinates, and elevation, </li>
+
+<li>sinuosity of the drainage path as a measure of meandering, </li>
+
+<li>total upstream drainage length, i.e. the total length of the streams that drain into the current one, etc.</li>
+
+</ul>
+
+</body

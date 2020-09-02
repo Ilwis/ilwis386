@@ -1,0 +1,323 @@
+<html>
+
+<head>
+<title>Customize Catalog - Details View</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catalog, Customize ..., Main window, Details View, Data management">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Main window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">View menu</a></td>
+</tr>
+<tr>
+<td colspan="3"><h1 class=secondline>Customize Catalog</h1></td>
+</tr>
+<tr>
+<td width="38%"><h1 class=firsttabnotactive><a class=othertab href="customize_catalog_selection.htm">Object Selection</a></h1>
+</td>
+<td width="31%"><h1 class=thistab><a class=thistab href="customize_catalog_details_view.htm">Details View</a></h1>
+</td>
+<td width="31%"><h1 class=othertab><a class=othertab href="customize_catalog_query.htm">Query</a></h1>
+</td>
+</tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Specify the columns that should be shown when displaying a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, an opened <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collection</a>, or an opened <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> in <a href="catalog_details_view.htm">Details View</a>. </p>
+
+<p class=defnewpar>The Customize Catalog sheet appears:</p>
+
+<ul>
+
+<li>	when in the Main window, you choose the <span class=arial>Customize Catalog</a></span> command from the <span class=arial>View</span> menu, </li>
+
+<li>	when you click the <span class=arial>Customize Catalog</span> button <img src="../images/custcat.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/main_window_standard_toolbar.htm">standard toolbar</a> of the Main window, </li>
+
+<li>    when you click the right mouse button in the white space of a Catalog and choose the <span class=arial>Customize Catalog</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>Subsequently, click the <span class=arial>Details View</span> tab.</p>
+
+
+<p class=diakopje>Page options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="96">
+<p class=diabox>Visible columns:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the columns that you wish to see when in Details View. For more information on how to select a number of columns, see <a href="#selectmulitpleinlist"><span class=bookmark>below</span></a>. </p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Grid visible:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if grid lines should be drawn around the 'cells' in the Details View table. Clear this check box if you do not want to see grid lines. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><span class=arial>Use current settings for new Catalogs</span>:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Click this button to apply the settings of the currently active Catalog to all new Catalogs that will be opened. Settings include visible objects, sorting method, and queries. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><span class=arial>Use default settings for new Catalogs</span>:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Click this button to ensure that the settings of the active Catalog are NOT applied to any new Catalog that will be opened. For any new Catalog that will be opened, the default Customize Catalog settings will be used. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Available columns:</p>
+
+<table cellspacing=0 cellpadding=0 border=0>
+<tr>
+<td valign="top" width="96">Name
+
+</td>
+<td valign="top">lists the object icons and the object names.
+
+</td>
+</tr>
+<tr>
+<td valign="top">D
+
+</td>
+<td valign="top">lists whether objects are <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent</a> (D) or not (blank).
+
+</td>
+</tr>
+<tr>
+<td valign="top">C
+
+</td>
+<td valign="top">lists whether dependent objects are Calculated (C) or not (N); blank for non-dependent objects.
+
+</td>
+</tr>
+<tr>
+<td valign="top">U
+
+</td>
+<td valign="top">lists whether dependent objects are Up-to-Date (U) or not (N); blank for non-dependent objects.
+
+</td>
+</tr>
+<tr>
+<td valign="top">R
+
+</td>
+<td valign="top">lists whether objects are Read-only (R) or not (blank).
+
+</td>
+</tr>
+<tr>
+<td valign="top">Modified
+
+</td>
+<td valign="top">lists the date and time that objects were modified last.
+
+</td>
+</tr>
+<tr>
+<td valign="top">Domain
+
+</td>
+<td valign="top">lists the name of the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> that is used by objects; blank if object does not use a domain.
+
+</td>
+</tr>
+<tr>
+<td valign="top">Domain type
+
+</td>
+<td valign="top">lists the type of domain used by objects.
+
+</td>
+</tr>
+<tr>
+<td valign="top">CoordSystem
+
+</td>
+<td valign="top">lists the name of the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that is used by objects; blank if object does not use a coordinate system.
+
+</td>
+</tr>
+<tr>
+<td valign="top">Csy type
+
+</td>
+<td valign="top">lists the type of coordinate system that is used by objects; blank if object does not use a coordinate system.
+
+</td>
+</tr>
+<tr>
+<td valign="top">Georef
+
+</td>
+<td valign="top">lists the name of the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> that is used by the object; blank if object does not use a georeference.
+
+</td>
+</tr>
+<tr>
+<td valign="top">Georef type
+
+</td>
+<td valign="top">lists the type of georeference that is used by an object; blank if object does not use a georeference.
+
+</td>
+</tr>
+<tr>
+<td valign="top">Size
+
+</td>
+<td valign="top">lists the 'Contents Size' of objects, e.g. nr of lines and cols for raster maps, nr of polygons for polygon maps, nr of records and columns in a table, nr of items in a class or ID domain, etc.
+
+</td>
+</tr>
+<tr>
+<td valign="top">Attribute
+
+</td>
+<td valign="top">lists the name of the attribute table that is linked to a map or to a domain; blank if object does not have an attribute table.
+
+</td>
+</tr>
+<tr>
+<td valign="top">Description
+
+</td>
+<td valign="top">lists the Description of objects; when during an operation no description is filled out for the dependent output object, the dependent output object will use its <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition or expression</a> as description; blank if a non-dependent object has no description.
+
+</td>
+</tr>
+<tr>
+<td valign="top">Expression
+
+</td>
+<td valign="top">lists for dependent objects the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >expression or definition</a> by which the object was created; blank for non-dependent objects.
+
+</td>
+</tr>
+<tr>
+<td valign="top">Type
+
+</td>
+<td valign="top">lists the type of the objects as text.
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>To view only certain objects, use the <a href="catalog_show.htm"><span class=arial>Show</span></a> command on the <span class=arial>View</span> menu, the <a href="../ilwis/main_window_object_selection_toolbar.htm">Object Selection toolbar</a>, or the <a href="customize_catalog_selection.htm">Customize Catalog, Selection tab</a>. </li>
+
+<li>To sort objects, use the <a href="catalog_sort_by.htm"><span class=arial>Sort By</span></a> command on the <span class=arial>View</span> menu, or click the column headers when in <a href="catalog_details_view.htm">Details View</a>. </li>
+
+<li>To search for certain objects, use the <a href="catalog_predefined_query.htm"><span class=arial>Catalog Queries</span></a> command on the <span class=arial>View</span> menu, or use the <a href="customize_catalog_query.htm">Customize Catalog, Query tab</a>. </li>
+
+</ul>
+
+<h2 id="selectmulitpleinlist">Selecting multiple items in a list</h2>
+
+<p class=kopjeaftertitlesub>To select two or more items in sequence:</p>
+
+<ul>
+
+<li>	click the first object type you want to select, </li>
+
+<li>	keep the left mouse button down, and </li>
+
+<li>	move the mouse pointer to the last object type you want to select, </li>
+
+<li>	then release the left mouse button;</li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	click the first object type you want to select,</li>
+
+<li>	press and hold down the <span class=arial>Shift</span> key while you click the last object type of the group.</li>
+
+</ul>
+
+<p class=kopje>To select two or more items out of sequence:</p>
+
+<ul>
+
+<li>	press and hold down the <span class=arial>Ctrl</span> key while you click each object type.</li>
+
+</ul>
+
+<p class=kopje>To cancel a selected object type:</p>
+
+<ul>
+
+<li>	press and hold down the <span class=arial>Ctrl</span> key while you click a selected object type.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="catalog_details_view.htm">Catalog - Details View</a></p>
+
+<p class=seealsolinks><a href="../ilwis/main_window_catalog.htm">Main window : Catalog</a> </p>
+
+</body

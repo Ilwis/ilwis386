@@ -1,0 +1,170 @@
+<html>
+
+<head>
+<title>Classify : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Classify">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Classify</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The classify operation performs a <a href="..//ilwisapp/popup/classify_multispectral_popup.htm" onClick="return popup(this, 'notes')" >multi-spectral</a> image classification according to training pixels in a <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a>. The following classification methods can be used: Box classifier, Minimum distance, Minimum Mahalanobis distance, Maximum Likelihood, and Maximum Likelihood with Prior Probabilities.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Sample set:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a>. Open the list box and select the desired sample set, or drag a sample set directly from the Catalog into this box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Classification method:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a classification method: Box Classifier, Minimum Distance, Minimum Mahalanobis Distance, Maximum Likelihood or Prior Probability. For more information, see <a href="classify_functionality.htm">Classify : functionality</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Multiplication factor:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Box Classifier method, type a multiplication factor, usually larger than 1. </p>
+
+<p class=diabox>The multiplication factor allows you to make boxes drawn around class means on the basis of their standard deviations a bit wider.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Threshold distance:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Minimum Distance, Minimum Mahalanobis distance, Maximum Likelihood and Prior Probability classification methods: </p>
+
+<ul class=diaul>
+
+<li>Select this check box and subsequently type a threshold distance when pixels with a spectral signature that is <i>not</i> similar to any of the training classes, should <i>not</i> be classified. </li>
+
+        <ul class=diaul>
+
+        <p class=diabox>When, for a pixel to be classified, the spectral distance towards a class mean: </p>
+
+        <li>is smaller than or equal to the threshold, the pixel is acceptable for that class; the pixel will be classified as that class when there is no other class at an even smaller spectral distance;  </li>
+
+        <li>is larger than the threshold, the pixel is rejected and will not classified as that class. </li>
+
+        </ul>
+
+<li>Clear this check box when all pixels should be classified.  </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=tipnospace>Tips: </p>
+
+<ul class=tipul>
+
+<li>The larger you choose the threshold value, the more pixels will be classified. </li>
+
+<li>The calculation of spectral distances towards class means depends on the selected classification method. </li>
+
+<li>For an example of the meaning of the threshold value for the Minimum Distance classifier, see <a href="classify_algorithm.htm">Classify : algorithm</a>. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Prior Probability classification method: select the table which contains the column with the prior probability values. </p>
+
+<p class=diabox>The table must use the same class domain as the sample set. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the Prior Probability classification method: select the column with the prior probability values. </p>
+
+<p class=diabox>Ideally, the sum of probabilities equals 1. When this is not the case, the program will internally normalize the probability values. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the outcome of the classification.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To assess the accuracy of the classification, you can prepare a confusion matrix. For more information, see <a href="../ilwis/how_to_calculate_confusion_matrix.htm">How to calculate a confusion matrix</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="classify_functionality.htm">Classify : functionality</a></p>
+
+<p class=seealsolinks><a href="classify_algorithm.htm">Classify : algorithm</a></p>
+
+</body

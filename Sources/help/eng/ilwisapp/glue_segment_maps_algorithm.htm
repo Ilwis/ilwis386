@@ -1,0 +1,79 @@
+<html>
+
+<head>
+<title>Glue segment maps : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Glue segment maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Glue segment maps</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Glue segment maps operation glues or merges two or more segment maps into one output segment map. By default, the output map then comprises the area of all input maps. The domains of the input maps are merged when needed. </p>
+
+<p class=kopje>Rules:</p>
+
+<p>To copy segment from the input maps into the output map, the following rules are applied:</p>
+
+<ul>
+
+<li>	the class names, IDs or values of the input segments must match the specified <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a>, and</li>
+
+<li>	the input segments must at least partially fall within the specified clip boundary (also called clipping rectangle):</li>
+
+<ul>
+
+<li>	segments that entirely fall within the clipping rectangle are copied to the output map without modifications;</li>
+
+<li>	segments that have one intersection with the clipping rectangle, obtain a node at the intersection, and then the parts within the clipping rectangle are copied into the new output map;</li>
+
+<li>	segments that have more than one intersection with the clipping rectangle, obtain nodes at each intersection, and then the parts within the clipping area are copied as multiple segments into the output map.</li>
+
+</ul>
+
+</ul>
+
+<p class=defnewpar>By default, all segments are copied into the output map.</p>
+
+<p>By default, <a href="..//ilwis/popup/coordinate_boundary_popup.htm" onClick="return popup(this, 'notes')" >coordinate boundaries</a> for the output map are determined from the coordinate boundaries of all input maps. When the coordinate systems of the input maps are different but compatible, the segment coordinates will be transformed to the coordinate system of the first input map.</p>
+
+<p class=kopje>Output domain:</p>
+
+<ul>
+
+<li>	When merging two maps with the same domain, the output map will also use that domain. </li>
+
+<li>	When merging Value maps, the value range for the output map is determined by the smallest minimum and the largest maximum of all input maps; the precision is determined by the smallest precision of all input maps.</li>
+
+<li>	When merging Class maps or ID maps that do not have the same domain, a new output domain is created which contains all domain items, i.e. all classes. The new domain is either stored as a separate object, or is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>).</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="glue_segment_maps_functionality.htm">Glue segment maps : functionality</a></p>
+
+<p></p>
+
+</body

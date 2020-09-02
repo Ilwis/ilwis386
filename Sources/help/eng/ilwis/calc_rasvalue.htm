@@ -1,0 +1,190 @@
+<html>
+
+<head>
+<title>RASVALUE</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="RASVALUE, Coordinate functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>RASVALUE( ) function</h1>
+
+<p class=defnewpar>Returns the value of a raster map at a certain row, column position.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>RASVALUE</span>(<i>RasterMap</i>, <i>RowNumber</i>, <i>ColumnNumber</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="120" valign="top"><i>RasterMap</i></td>
+	<td valign="top">is a raster map</td>
+</tr>
+<tr>
+	<td width="120" valign="top"><i>RowNumber</i></td>
+	<td valign="top">is a row number</td>
+</tr>
+<tr>
+	<td width="120" valign="top"><i>ColumnNumber</i></td>
+	<td valign="top">is a column number</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="120" valign="top"><span class=courier>RASVALUE</span>  returns:</td>
+	<td valign="top">a class name, an ID or a value</td>
+</tr>
+<tr>
+	<td width="120" valign="top">Domain:</td>
+	<td valign="top">same as <i>RasterMap</i></td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>This function may be handy to use in <a href="..//ilwis/popup/dde_popup.htm" onClick="return popup(this, 'notes')" >DDE</a> applications.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a>, <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="200"><p class=calc00>? RASVALUE(Tmb1,100,200)</p></td>
+	<td valign="top"><p>returns the pixel value of the pixel on line 100 and column 200, e.g. 45</p></td>
+</tr>
+<tr>
+	<td valign="top" width="200"><p class=calc00>? RASVALUE(Geology,62,191)</p>
+	<td valign="top"><p>returns the pixel value of the pixel on line 62 and column 191, e.g. Gl : Glacial deposits</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p>The next example describes the assignment of average values to pixels of an image in which whole lines are missing. Occasionally satellite images suffer from so called back drop lines. In this example every 8<sup>th</sup> line is missing. These lines are assigned values which are the average values from the line above and the line below.</p>
+<p class=calc0linsp03befaft>OutImage = IFF((<a href="calc_predefined_variable_l.htm">%L</a>
+<a href="calc_modulus_operator.htm"> MOD</a> 8=0), (RASVALUE(Image, %L-1, <a href="calc_predefined_variable_c.htm">%C</a>) + RASVALUE(Image, %L+1, %C))/2, Image)</p>
+<table>
+<tr>
+	<td><p class=courier></p></td>
+	<td><p class=courier>Image</p></td>
+	<td><p class=courier>OutImage</p></td>
+</tr>
+<tr>
+<td>
+<table cellspacing="0" cellpadding="0">
+  <tr>
+    <td>Line 7
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+    </td>
+  </tr>
+  <tr>
+    <td>Line 8
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+    </td>
+  </tr>
+  <tr>
+    <td>Line 9</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>51</td>
+    <td class=calcpict>6</td>
+    <td class=calcpict>29</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>8</td>
+    <td class=calcpict>18</td>
+    <td class=calcpict>53</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>51.00</td>
+    <td class=calcpict>6.00</td>
+    <td class=calcpict>29.00</td>
+  </tr>
+  <tr>
+    <td class=calcpict>29.50</td>
+    <td class=calcpict>12.00</td>
+    <td class=calcpict>41.00</td>
+  </tr>
+  <tr>
+    <td class=calcpict>8.00</td>
+    <td class=calcpict>18.00</td>
+    <td class=calcpict>53.00</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class=defnewpar> <span class="courier">Image</span>  shows some pixels of line 7 up to line 9 while line 8 is missing. These missing values are replaced by the average values of the pixels of the line above and the line below.</p>
+
+<p class=tip>Note:</p>
+<p class=tiptext>In this example both maps use system domain <span class=courier>Value</span>.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="90"><a href="calc_coord.htm">COORD</a></td>
+	<td valign="top" width="80"><a href="calc_mincrdx.htm">MINCRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mapcrd.htm">MAPCRD</a></td>
+	<td valign="top"><a href="calc_dist.htm">DIST</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_crdx.htm">CRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mincrdy.htm">MINCRDY</a></td>
+	<td valign="top" width="80"><a href="calc_maprow.htm">MAPROW</a></td>
+	<td valign="top"><a href="calc_dist2.htm">DIST2</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_crdy.htm">CRDY</a></td>
+	<td valign="top" width="80"><a href="calc_maxcrdx.htm">MAXCRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mapcol.htm">MAPCOL</a></td>
+	<td valign="top"></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_transform.htm">TRANSFORM</a></td>
+	<td valign="top" width="80"><a href="calc_maxcrdy.htm">MAXCRDY</a></td>
+	<td valign="top" width="80"><a href="calc_mapvalue.htm">MAPVALUE</a></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

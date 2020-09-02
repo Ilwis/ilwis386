@@ -1,0 +1,239 @@
+<html>
+
+<head>
+<title>Color composite : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Color composite">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Color composite</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<h2>Standard color composites</h2>
+
+<p class=kopjeaftertitlesub>Linear stretching of interval:</p>
+
+<p>The specified interval range per band is linearly divided into 6 classes of equal length with numbers 0 to 5. Since this is done for three bands, the number of possible combinations is 6<span class=symbol>´</span>6<span class=symbol>´</span>6 = 216. This is the number of different colors that will appear in the color composite.</p>
+
+<p class=kopje>Histogram equalization:</p>
+
+<p>The specified interval range (lower and upper boundary) per band is divided into 6 classes with numbers 0 to 5, in which each class has an equal area under the histogram. As for linear stretching, the number of different output colors is 6<span class=symbol>´</span>6<span class=symbol>´</span>6 = 216. </p>
+
+<p class=kopje>Output colors:</p>
+
+<p>Each output color obtains an internal number of the system picture domain <span class=courier>ColorCmp</span>; the value is calculated as:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;	</p>
+
+<p class=leftmargin1>output = 36*red + 6*green + blue.</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>This implies that the output map will contain internal values between 0 and 215 (since 215 = 5 * 36 + 5 * 6 + 5). The values of this <span class=courier>ColorCmp</span> domain are always linked to system representation <span class=courier>ColorCmp</span>.</p>
+
+<h2>Dynamic color composites</h2>
+
+<p>A dynamic color composite is calculated using the Heckbert Quantization Algorithm. The Heckbert algorithm produces a color composite on the basis of the amount of variation in pixel values in the three input maps. </p>
+
+<p>This algorithm first builds a three dimensional histogram, indicating how 'popular' any given value is in the images. All values fall in one box or cube. This histogram is then subdivided into smaller boxes or cubes: a division is made in the middle of the axis which has the largest variation. This process continues until as many boxes are created as there are output colors (number defined by the user, maximum 255). This algorithm attempts to create boxes which have approximately equal popularity in the image. Then, colors are assigned to represent each box.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ol>
+
+<li>	First, the input map values at 1% and 99% are determined. See also the <a href="histogram.htm">Histogram</a> operation. </li>
+
+<li>	The band with the largest variation in pixel values is selected, the total number of pixels for this band is calculated, and the band is divided into 2 halves, each containing half of the total number of pixels. The division leaves the other 2 bands intact. The result after one division is 2 so-called 'boxes': one band divided over the 2 boxes, and the other 2 bands complete in both boxes.</li>
+
+<li>	The program then searches for the next (part of a) band with the largest variation in pixel values. The total number of pixels on that (part of the) band is calculated, the (part of a) band is divided into 2 halves, so that each new part of the band contains half of the total number of pixels, and the other 2 bands are left as they were. The result after 2 divisions is 3 'boxes': each with (parts of) the red, the green, and the blue band.</li>
+
+<li>	The division process is repeated until the total number of  'boxes' reaches the number of user-defined colors desired for the output map.</li>
+
+<li>	Then colors are assigned to all boxes. For each box, weighted averages are calculated of the parts of the red band, green band and blue band covered by that box; the outcome values are the Red, Green and Blue values for that box. The calculation is repeated for all boxes.</li>
+
+</ol>
+
+<p>An example of the first and second division is given in Figures 1, 2 and 3 below.</p>
+
+<p class=kopje>Example Heckbert algorithm:</p>
+
+<p>Three 1% histograms are calculated before the first division, see Figure 1:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p>Figure1:</p>
+
+<p class=linespacing01before><img src="../images/colc0.gif" align=bottom width="285" height="357"></p>
+
+<p></p>
+
+<p>Figure 1 shows that the pixel values range:</p>
+
+<ul>
+
+<li>	from 31 to 98 in the first input map </li>
+
+<li>	from 22 to 100 in the second input map and </li>
+
+<li>	from 21 to 66 in the third input map.</li>
+
+</ul>
+
+<p>Thus, the largest variation is found in the second input map. The total number of pixels on this band is divided in 2 so-called 'boxes': the first division is at pixel value 65 of band 2.</p>
+
+<p>	</p>
+
+<p>The result of the first division is represented in Figures 2 and 3. Figure 2 shows the histograms of one box; Figure 3 the histograms of the other. Enlarge the Help window by dragging its borders when you cannot see both figures next to each other.</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">
+<p>Figure 2:</p>
+
+</td>
+<td valign="top">
+<p>Figure 3:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=linespacing01before><img src="../images/colc11.gif" align=bottom width="285" height="357"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/colc12.gif" align=bottom width="285" height="357"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Figure 2 shows that the pixel values range in box 1:</p>
+
+<ul>
+
+<li>	from 31 to 98 in the first input map</li>
+
+<li>	from 22 to 65 in the second input map, and</li>
+
+<li>	from 21 to 66 in the third input map</li>
+
+</ul>
+
+<p class=defnewpar>Figure 3 shows that the pixel values range in box 2:</p>
+
+<ul>
+
+<li>	from 31 to 98 in the first input map</li>
+
+<li>	from 66 to 100 in the second input map, and</li>
+
+<li>	from 21 to 66 in the third input map.</li>
+
+</ul>
+
+<p class=defnewpar>The next largest variation is found in the first input map in box 1. The total number of pixels on this band divided into 2 parts: the next division takes place at pixel value 66.</p>
+
+<p class=kopje>Output domain for dynamic composites:</p>
+
+<p>The operation creates a new domain (type Picture) for the output color composite and a new representation for this domain. This output domain and representation are always stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a> and internal representation).</p>
+
+<h2>24-bit RGB color composites</h2>
+
+<p class=kopjeaftertitlesub>Linear stretching of interval:</p>
+
+<p>Each input band is stretched to values between 0 and 255 using linear stretching using the user-defined intervals of the histograms. </p>
+
+<p class=kopje>Histogram equalization:</p>
+
+<p>Each input band is stretched to values between 0 and 255 using histogram equalization using the user-defined intervals of the histograms. </p>
+
+<p class=kopje>Output colors:</p>
+
+<p>The results are combined in a map with 4 bytes per pixel (4 bytes is 32 bits, thus 8 bits are not used). Each pixel in this map contains the red, green, and blue intensities of  values between 0 and 255. It means that the possible number of output colors is 256 x 256 x 256 = <span class=symbollarger>±</span> 16 million.</p>
+
+<h2>24-bit HSI color composites</h2>
+
+<p>In this case no stretching is performed. In the output map, for each pixel the hue, saturation and intensity is converted to red, green, and blue intensities. The following relations exist:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p>Hue</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>255/2<span class=symbollarger>p</span> <span class=courier>*</span> arctan2 ( 1/2 <span class=courier>*</span> <span class=symbollarger>&Ouml;</span>3 <span class=courier>*</span> (Green-Blue) , Red - (Green+Blue) / 2 ) <span class=courier>*</span> 240/255 </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Saturation</p>
+
+</td>
+<td valign="top" width=18>
+<p>=	</p>
+
+</td>
+<td valign="top">
+<p><span class=symbollarger>&Ouml;</span> (Red<sup>2</sup> + Green<sup>2</sup> + Blue<sup>2</sup> - Red<span class=courier>*</span>Green - Red<span class=courier>*</span>Blue - Green<span class=courier>*</span>Blue) <span class=courier>*</span> 240/255</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Intensity</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top">
+<p>1/3 <span class=courier>*</span> (Red + Green + Blue) <span class=courier>*</span> 240/255</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Red, green, and blue values range from 0 to 255. Hue, saturation, and intensity values however range from 0 to 240; this range complies with the Windows color scheme definition. In the formulas above, multiplication factor 240/255 is used to obtain that range.</p>
+
+<p class=kopje>References:</p>
+
+<p>Heckbert, P., 1982. Color image quantization for frame buffer display. SIGGRAPH '82 Proceedings, p. 297.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="color_composite_functionality.htm">Color Composite : functionality</a></p>
+
+</body

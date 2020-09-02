@@ -1,0 +1,82 @@
+<html>
+
+<head>
+<title>ILWIS objects : two-dimensional tables</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS objects, Special objects, Two-dimensional tables, Tables, TA2">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Two-dimensional tables&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/tb2.gif" align=bottom width="14" height="14"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A two-dimensional table is used to combine or reclassify two raster maps with a class or ID domain. It defines a value for each possible combination of input classes or IDs. </p>
+
+<p class=defnewpar>A two-dimensional table consists of rows which represent one domain and of columns which represent another domain. In the two-dimensional table, you have to assign a value, class name or ID to the fields which represent the combination of these domains. When you apply the two-dimensional table on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line</a> of the Main window, you need two input raster maps which have the domains as used by the two-dimensional table, the output raster map then contains the values, classes or IDs that you entered in the fields of the two-dimensional table.</p>
+
+<p class=kopje>Names of two-dimensional tables:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a two-dimensional table:</p>
+
+<p>Open the <a href="main_window_menu_commands.htm">File menu</a> of the Main window and select the <span class=arial>Create Two-Dimensional Table </span>command, or double-click the <span class=arial>New 2DimTbl</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>. In the appearing <a href="../ilwismen/create_a_two_dimensional_table.htm">Create 2-Dimensional Table</a> dialog box, select two input domains of raster maps on which you want to apply the two-dimensional table later on.</p>
+
+<p class=kopje>To display and edit a two-dimensional table:</p>
+
+<p>When you create a new two-dimensional table, it is directly displayed in a <a href="../ilwis/table_window.htm">table window</a> where you can also directly edit it. </p>
+
+<p>To open and edit an existing two-dimensional table, double-click a two-dimensional table in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, double-click the <span class=arial>Open</span> or <span class=arial>Edit</span> item in the Operation-list, or select the <span class=arial>Edit Object</span> command on the <a href="main_window_menu_commands.htm">Edit menu</a> of the Main window and select a two-dimensional table. </p>
+
+<p>For more information on editing a two-dimensional table, see <a href="../ilwis/how_to_edit_tables.htm">How to edit a table</a>.</p>
+
+<p class=kopje>To apply a two-dimensional table:</p>
+
+<p>A two-dimensional table can be applied by typing a special expression on the command line of the Main window: </p>
+
+<p class=calccommline>OUTMAP = <i>2dimtablename</i>[<i>map1</i>,<i>map2</i>]</p>
+
+<p class=linespacing03before>For more information, see <a href="calc_classifying_two_maps_with_a_two_dimensional_table.htm">Map calculation : classifying two maps according to a two-dimensional table</a>.</p>
+
+<p class=kopje>Technical information:</p>
+
+<p>A two-dimensional table consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.TA2) and a binary data file (.T2#). The object definition file contains further references to two domains that contain the classes or IDs that you want to reclassify and to one domain which contains the classes, IDs or values after reclassification; these three domains are <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a two-dimensional table (see also <a href="appendices_relations_between_ilwis_objects.htm">Appendices : relations between ILWIS objects</a>).</p>
+
+<p class=defnewpar>Internally, a two-dimensional table uses system domain None; the table has only one table-owned column named Value which stores the output class names, IDs or values for each combination of input classes or IDs.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_tables.htm">How to edit a table</a></p>
+
+<p class=seealsolinks><a href="calc_classifying_two_maps_with_a_two_dimensional_table.htm">Map calculation : classifying two maps according to a two-dimensional table</a></p>
+
+</body

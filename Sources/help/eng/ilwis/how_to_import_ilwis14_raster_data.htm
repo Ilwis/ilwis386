@@ -1,0 +1,107 @@
+<html>
+
+<head>
+<title>How to import ILWIS 1.4 raster data</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Import ILWIS 1.4 raster data, How to import ..., Import, ILWIS 1.4">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to import ...</h1>
+
+<h1 class=secondline>ILWIS 1.4 raster data</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Raster data from ILWIS 1.4 can only be imported into ILWIS 3 through the command line of the Main window. The syntax is described in topic <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwis14rasimport_commandline"><span class=bookmark>ILWIS 1.4 Raster Import</span></a>. </p>
+
+<p class=defnewpar>This topic gives you some preparative hints and background information so that import from ILWIS 1.4 into ILWIS 3 will be a smooth process. In the remainder, ILWIS 1.4 is used meaning ILWIS 1.3, 1.4 or 1.41.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<ol>
+
+<li>	First of all, make a backup of your existing data. </li>
+
+<li>	Organize the data to be imported in one or more directories. </li>
+
+</ol>
+
+<p class=defnewpar>Before starting to import, it is strongly advised to carefully read the following paragraphs.</p>
+
+<p class=kopje>Importing satellite images:</p>
+
+<p>The .MPD and .MPI files of the satellite bands should be available. Any .HSB or .COL files can be deleted. When importing, specify domain type <b>Image</b> for satellite imagery.</p>
+
+<p class=kopje>Importing color composites:</p>
+
+<p>The .MPD, .MPI, and .COL  files of the color composite should be available. You may need to save the color composite's color look up table (.COL) in ILWIS 1.4; give it the same name as the color composite. When importing, specify domain type <b>Picture</b> for the output color composites. </p>
+
+<p class=kopje>Importing raster maps that were created from vector data:</p>
+
+<p>Specify the domain type for the output map as: </p>
+
+<ul>
+
+<li>	domain type <b>Class</b> when the elements in the original  polygon, segment or point map are named by class names (e.g. mapping units in thematic maps). The classes may occur in various parts in the original polygon, segment or point map. The .MPD, .MPI, .COL and .INF files should be available for domain Class raster maps. </li>
+
+<li>	domain type <b>ID</b>, when the elements in the original polygon, segment or point map are uniquely named (e.g. cadastral plots). The .MPD, .MPI, and .INF files should be available for domain ID raster maps.</li>
+
+<li>	domain type <b>Value</b> when the elements in the original polygon, segment or point map refer to measurable values (e.g. contour lines). The .MPD and .MPI files should be available for domain Value raster maps. </li>
+
+</ul>
+
+<p class=kopje>Importing raster maps obtained through calculations:</p>
+
+<p>For maps containing measurable values, for example created by MCalc calculations or by interpolations, the .MPD and .MPI files should be available. Any .HSB, .HSI files can be deleted. When importing, specify domain type <b>Value</b>. If you have a byte map with a user-defined color lut, see the next paragraph.</p>
+
+<p class=kopje>Importing classified raster data:</p>
+
+<p>Byte maps containing classes are expected to have an .INF table with the class names and a color lut .COL. Such maps may for instance be obtained by a classify operation in MCalc using a classify table, or are output maps of an image classification. However, maps created through a classify table do not yet have an .INF table; it is advised to create one before Import 1.4. You could do this in ILWIS 1.4 TabCalc: create a table with as many records as classes in your map, add one column Name$, and type the meanings of your classes for each record, save as .INF. Of course, the same can be obtained with an editor. </p>
+
+<p class=defnewpar>As mentioned before, Import 1.4 works smoothly when the .MPD, .MPI, .COL and .INF files are available. It is also advised that the files have the same file name, e.g. DISTCLAS.MPD, DISTCLAS.MPI, DISTCLAS.COL, and DISTCLAS.INF. When importing, specify domain type <b>Class</b>.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>if you do not make the effort to create an .INF table beforehand, then specify domain type Class or ID during import, and edit this domain later yourself.</p>
+
+<p class=kopje>Importing other raster data:</p>
+
+<p>To import bitmaps, the .MPD and .MPI files should be available. There is no need for a .COL file. Bitmaps are automatically imported with domain type <b>Bit</b>.</p>
+
+<p class=defnewpar>Scanned raster data can be imported when the .MPD, .MPI are available. If the scanned data consists of gray values, specify domain type <b>Image</b> during import. If the scanned data is in color, the .COL should also be available. Then, specify domain type <b>Picture</b> during import.</p>
+
+<p class=kopje>To start importing maps and tables from ILWIS version 1.4:</p>
+
+<p>Type on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the Main window</a>, the syntax as described in topic <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwis14rasimport_commandline"><span class=bookmark>ILWIS 1.4 Raster Import</span></a>. </p>
+
+<p class=defnewpar>When Import has finished you can start to display your maps, etc., see <a href="../ilwis/ilwis_introduction_getting_started_with_ilwis_for_windows.htm">Getting started with ILWIS</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts.htm">Basic concepts</a></p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_before_creating_maps_and_tables.htm">Basic concepts : before creating maps and tables</a></p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_domains.htm">Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwis14rasimport_commandline">Appendices : ILWIS script language (syntax), section ILWIS 1.4 Raster Import</a></p>
+
+</body

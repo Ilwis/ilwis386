@@ -1,0 +1,37 @@
+<html>
+
+<head>
+<title>Raster to segments : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Raster to segments">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Raster to segments</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>First, the Raster to segments operation finds areas of pixels in the input map that have the same class name, ID or value. Areas can be constructed from pixels that are either horizontally or vertically connected (4-connected) or horizontally, vertically or diagonally connected (8-connected). For more information on constructing areas of 4 or 8-connected pixels, see <a href="areanumbering_functionality.htm">Area numbering : functionality</a>. </p>
+
+<p class=defnewpar>Then, from the boundaries of these areas, segments are extracted. </p>
+
+<ul>
+
+<li>If the Single Name option is used, all segments in the output map obtain the code <span class=courier>Boundaries</span>. </li>
+
+<li>If the UniqueIDs option is used, each segment obtains a unique ID like <span class=courier>Boundary 1</span>', <span class=courier>Boundary 2</span>, etc. </li>
+
+        <p>In this case, an attribute table will be created for the output map in which the names of the original mapping units on either side of an extracted segment are stored, as well as the length of extracted segments. </p>
+
+</ul>
+
+<p class=defnewpar>Finally, if specified, the segments in the output map will be smoothed.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="raster_to_segments_functionality.htm">Raster to segments : functionality</a></p>
+
+</body

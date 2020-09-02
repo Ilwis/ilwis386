@@ -1,0 +1,191 @@
+<html>
+
+<head>
+<title>SMCE window : Weigh - Rank Ordering</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Weigh Rank Ordering">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Analysis menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Weigh - Rank Ordering</span>&nbsp;&nbsp;&nbsp;<img src="../images/smce_weigh_icon.gif" align=middle width="23" height="23"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Manually assign a rank order to multiple <a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a> and optional groups that occur under the selected main goal, or to multiple factors and optional groups that occur under the selected sub goal. </p>
+
+<p class=defnewpar>In the rank order method, you have to place all factors and optional sub goals in a rank-order (most important item at the top). From this rank-order, numerical weights are calculated using either the expected value method or the rank sum method. For more information on the Rank Ordering method, Expected value method, or Rank sum method, refer to <a href="../ilwismen/smce_window_weigh_methods_additional_info.htm">Weigh methods (additional information)</a>. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+  <tr>
+    <td valign="top" width=130><p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Expected Value:</p>
+    </td>
+    <td width="738" valign="top">
+      <p class=diabox>Select this option if you wish to calculate weight values from the specified rank-order, using the expected value method. 
+		For more information, refer to <a href="../ilwismen/smce_window_weigh_methods_additional_info.htm">Weigh methods (additional information)</a>, section <a href="../ilwismen/smce_window_weigh_methods_additional_info.htm#expected_value"><span class=bookmark>Expected value</span></a>. </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" width=130>
+      <p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Rank
+      Sum:</p>
+    </td>
+    <td valign="top">
+      <p class=diabox>Select this option if you wish to calculate weight values from the specified rank-order, using the rank sum method. 
+	  For more information, refer to <a href="../ilwismen/smce_window_weigh_methods_additional_info.htm">Weigh methods (additional information)</a>, section <a href="../ilwismen/smce_window_weigh_methods_additional_info.htm#rank_sum"><span class=bookmark>Rank sum</span></a>. </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class=diabox>Rank Sum Power:</p>
+    </td>
+    <td valign="top">
+      <p class=diabox>The Rank Sum Power text box appears when you select the Rank Sum option. 
+         By default the power is 1.000000.</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class=diabox>Left-hand list box :</p>
+    </td>
+    <td valign="top">
+      <p class=diabox>The left-hand list box displays the factors and/or groups of factors that you wish to rank-order. </p>
+	  	<ul>
+		<li>Select an item in the left-hand list box, and click the <img src="../images/arrow_right.gif" width="18" height="22"> or the <img src="../images/arrow_down.gif" width="18" height="22"> button to move the item to the right-hand list box. </li>
+	  	<li>You can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> an item from the left-hand list box to the right-hand list box. </li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class=diabox>Right-hand list box:</p>
+    </td>
+    <td valign="top">
+      <p class=diabox>The right-hand list box displays the rank-order of the factors and/or groups of factors. The factor or group at the top of the list is considered the most important, the factor or group at the bottom of the list is considered the least important. </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">      
+      <p class=diabox><img src="../images/arrow_right.gif" align=top width="18" height="22"></p>
+    </td>
+    <td valign="top">
+      <p class=diaboxnospacetop>
+      <p class=diabox>Press this button to move a selected item from the left-hand list box to the right-hand list box. 
+	  The selected item will be positioned at the <i>same rank level</i> as the item currently selected on the right, which is usually the item positioned last. 
+	  You can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> an item from the left-hand list box to the right-hand list box: drop the item <i>onto</i> the item positioned last.</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top"><p class=diaboxnospacetop>
+      <img src="../images/arrow_down.gif" align=top width="18" height="22"></p>
+    </td>
+    <td valign="top"><p class=diabox>Press this button to move a selected item from the left list box to the right list box. 
+	The selected item will be positioned <i>one rank level lower</i> than the item positioned last. 
+	You can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> an item from the left-hand list box to the right-hand list box: drop the item <i>below</i> the item positioned last. </p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class=diaboxnospacetop><img src="../images/arrow_left.gif" align=top width="18" height="22"></p>
+    </td>
+    <td valign="top"><p class=diabox>Press this button to move a selected item back from the right-hand list box to the left-hand list box. 
+	You can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> an item from the right-hand list box to the left-hand list box: it does not matter where you drop the item.</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top" colspan="2">
+      <p class=diabox>Resulting Weights column:</p>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class=diaboxnospacetop>&nbsp;</p>
+    <td valign="top">
+      <p class=diaboxnospacetop>This column displays the factors and groups and their resulting weight values. Weights are automatically calculated using the expected value method or the rank sum method. For more information, refer to <a href="../ilwismen/smce_window_weigh_methods_additional_info.htm">Weigh methods (additional information)</a>. The sum of all resulting weights is always 1.</p></td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <p class=diaboxnospacetop><span class=arial>Choose other method</span></p>
+    </td>
+    <td valign="top">
+      <p class=diaboxnospacetop>
+      <p class=diabox>Click the <span class=arial>Choose other method</span> button to open the <a href="../ilwismen/smce_window_weigh.htm">Weigh</a> dialog box to choose another Weigh method.</p>
+    </td>
+  </tr>
+</table>
+
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>After weights have been assigned, the <a href="../ilwis/smce_window_criteria_tree_viewer.htm">criteria tree viewer</a> will show the following: </p>
+
+<ul class=tipul>
+<li class=ls01be>The selected weight method is shown after the selected main goal, or the selected sub goal. </li>
+<li class=ls01be>The assigned weight values are shown in front of the factors and optional groups of factors that occur under the selected main goal or under the selected sub goal. </li>
+</ul>
+
+<table class=tiptext cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td colspan="3"><p class=emptylinehalf>&nbsp;</p></td>
+  </tr>
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td width="40%" valign="top"><i>Main goal or sub goal</i>--ExpVal<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.75 Criterion name</i>--Std:...<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.25 Criterion name</i>--Std:...	
+	</td>
+   	<td valign="top">Expected Value: user-defined rank ordering of factors in a group (first item selected receives the highest weight value); slightly different automatic calculation of weights than the Rank Sum method. 
+	</td>
+  </tr>
+  <tr><td colspan="3"><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Main goal or sub goal</i>--Ranksum<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.67 Criterion name</i>--Std:...<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.33 Criterion name</i>--Std:...	
+	</td>
+   	<td valign="top">Rank Sum: user-defined rank ordering of factors in a group (first item selected receives the highest weight value); slightly different automatic calculation of weights than the Expected Value method. 
+	</td>
+  </tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh.htm">SMCE window : Weigh</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh_direct.htm">SMCE window : Weigh - Direct Method</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh_pairwise.htm">SMCE window : Weigh - Pairwise Comparison</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_weigh_methods_additional_info.htm">SMCE window : Weigh methods (additional info)</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a></p>
+
+</body

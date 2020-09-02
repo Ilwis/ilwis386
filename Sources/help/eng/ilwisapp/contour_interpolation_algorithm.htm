@@ -1,0 +1,51 @@
+<html>
+
+<head>
+<title>Contour interpolation : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Contour interpolation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Contour interpolation</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Contour interpolation first rasterizes contour lines in the segment map (see also <a href="segments_to_raster.htm">Segments to Raster</a>). This results in values for all pixels that are located on the segments. </p>
+
+<p class=defnewpar>Then values have to be calculated for pixels that fall in between the segments. For each undefined pixel, the distance is calculated towards the two nearest contour lines (see also <a href="distance_calculation.htm">Distance calculation</a>). The distances are calculated forwards and backwards, until no more changes occur. Then a linear interpolation is performed using the two distance values. This returns the value for the undefined pixel.</p>
+
+<p class=kopje>Example:</p>
+
+<p class=linespacing01before><img src="../images/cont1.gif" align=bottom width="300" height="300"></p>
+
+<p class=defnewpar>The pixel values in this example are calculated as follows: </p>
+
+<ol>
+
+<li>	The value for output pixel no. 1 is determined by the contour lines with value 0m and value 10m. The distance to these contour lines is respectively 1 and 3 and therefore the pixel value will be ((3*10)+(1*0))/4 = 7.5m. This interpolation matches reality.</li>
+
+<li>	Pixel no. 2 is situated on a contour line with value 20, and therefore obtains this value. This interpolation also matches reality.</li>
+
+<li>	The value for output pixel no. 3 is determined by the contour line with value 10m, and therefore the pixel value will also be 10m. When this area indeed represents a flat area, the interpolation matches reality. However, when the area represents a peak or a valley, this interpolation is wrong. You can then obtain a correct interpretation by adding a small segment representing the highest point of the top or the lowest point of the valley to the segment map.</li>
+
+<li>	The value for output pixel no. 4 is determined by the contour lines with value 10m and value 20m. The distance to these contour lines is respectively 2 and 4 and therefore the pixel value will be ((2*20)+(4*10))/6 = 13.33m. This is incorrect, because the output pixel value is most likely to lay within the values 0m and 10m. To avoid these kind of artifects, extend the contour line (segment) with value 10 to the border of the map. The output pixel value will now be determined by the contour lines with value 0m and 10m, and the interpolation will be better.</li>
+
+</ol>
+
+<p class=kopje>Reference:</p>
+
+<ul>
+
+<li>	Gorte, B.G.H. and Koolhoven W., 1990. Interpolation between isolines based on the Borgefors distance transform. ITC Journal 1990-3, pp. 245-247. ITC, Enschede.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/contour_interpolation_functionality.htm">Contour interpolation : functionality</a></p>
+
+</body

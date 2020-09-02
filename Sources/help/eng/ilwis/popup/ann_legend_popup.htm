@@ -1,0 +1,54 @@
+<html>
+
+<head>
+<title>ann legend popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Legend&nbsp;&nbsp;&nbsp;<img src="../../images/annleg.gif" align=bottom width="22" height="22"></p>
+
+<p>In a map window, the legends of maps that were added to the map window are by default shown in the <a href="..//ilwis/map_window_layer_management.htm" onClick="return popup(this, 'notes')" >Layer Management</a> pane of the map window. </p>
+
+<p class=defnewpar>To be able to print maps with legends, you need to save one or more maps and optional <a href="ann_grid_lines_popup.htm">grid lines</a>, <a href="ann_graticule_popup.htm">graticules</a> and/or <a href="annotation_text_popup.htm">annotation text layers</a> in a map window as a <a href="objects_map_view_popup.htm">map view</a>. Then, you should create a <a href="objects_layout_popup.htm">layout</a> to which you can add your map views and additional <a href="layers_annotation_layers_popup.htm">annotation</a>. </p>
+
+<p class=defnewpar>In the <a href="layout_editor_popup.htm">layout editor</a>, you can add a custom legend for each layer in a map view. </p>
+
+<p class=defnewpar>Legends are more or less automatically created from the <a href="objects_domains_ilwobj_popup.htm">domain</a> of a map in a map view and from the <a href="objects_representation_popup.htm">representation</a> used by that domain.</p>
+
+<ul>
+
+<li>For a <i>class map</i>, you will get a legend consisting of color boxes and class names for selected items in the class domain. </li>
+
+<p>For more information, see <a href="..//ilwismen/display_options_legend_class.htm" onClick="return popup(this, 'notes')" >Display Options - Legend (Class)</a> dialog box. </p>
+
+<li>For an <i>image</i> or a <i>value map</i>, you will get a legend consisting of a vertical color bar with values along a side of the bar. </li>
+
+<p>For more information, see <a href="..//ilwismen/display_options_legend_image_value.htm" onClick="return popup(this, 'notes')" >Display Options - Legend (Image/Value)</a> dialog box. </p>
+
+<li>For <i>other legend types</i>, see <a href="..//ilwismen/layout_editor_legend_select_map_layer.htm" onClick="return popup(this, 'notes')" >Insert a legend</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/layout_editor_functionality.htm" onClick="return popup(this, 'notes')" >Layout editor : functionality</a></p>
+
+</body

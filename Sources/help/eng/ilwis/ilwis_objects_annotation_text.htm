@@ -1,0 +1,105 @@
+<html>
+
+<head>
+<title>ILWIS objects : annotation text</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Annotation Text, ILWIS objects, Container objects, ATX">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Annotation Text&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/anntxt.gif" align=bottom width="16" height="12"></h1>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>An Annotation Text object, also called an annotation text layer, is designed to display and store multiple texts at multiple positions. </p>
+
+<p class=defnewpar>When creating an Annotation text object in a map window, you can base the Annotation Text object on an existing point, segment, or polygon map. If you do so, you will obtain label-like texts for all points, segments or polygons in the selected map as class names, IDs or values. </p>
+
+<p class=defnewpar>The texts of an Annotation Text object can be edited with the <a href="..//ilwis/popup/annotation_text_editor_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text editor</a> or in a table window. In the Annotation Text editor, you can easily insert more text items, change and refine the position of texts (move), make text duplicates, and specify fonts, font sizes, appearance (bold, italics, underline), colors, rotations, etc. for (multiple) selected texts.</p>
+
+<p class=defnewpar>When you save the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>, you can insert the map view including the map(s) and the annotation text layer into a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>. </p>
+
+<p class=kopje>Names of an annotation text object:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create an annotation text object:</p>
+
+<p>In a map window, open the <a href="map_window_menu_commands.htm">File menu</a> and choose <span class=arial>Create Annotation Text</span>. You can also open the <a href="map_window_menu_commands.htm">Layers menu</a>, choose <span class=arial>Add Annotation, Text Layer</span> and then click the <span class=arial>Create</span> button in the appearing <span class=arial>Add Annotation Text</span> dialog box. </p>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>For vector maps that use a coordinate system of type latlon, an annotation text layer cannot be properly created. It is advised: </p>
+
+<ul class=tipul>
+
+<li>to transform the vector map with a coordinate system of type latlon, to a coordinate system of type projection. </li>
+
+</ul>
+
+<p class=kopje>To display annotation text:</p>
+
+<p>The easiest way to display an existing annotation text object in a map window is to <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> the annotation text object from the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> to a map window. In a map window, you can also open the <a href="map_window_menu_commands.htm">Layers menu</a> and choose <span class=arial>Add Annotation, Text Layer</span> and then select an annotation text object in the appearing <span class=arial>Add Annotation Text</span> dialog box. </p>
+
+<p class=kopje>To edit annotation text:</p>
+
+<p>Annotation text objects can be edited in the <a href="..//ilwis/popup/annotation_text_editor_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text editor</a> or in a table window. In the annotation text editor, you can insert new texts and delete selected existing texts, move one or more selected texts to another position, make text duplicates, and specify fonts, sizes, colors, etc. for (multiple) selected texts.</p>
+
+<ul>
+
+<li>	When you create a new annotation text object, the annotation text editor is directly opened. </li>
+
+<li>	To edit an existing annotation text object in the annotation text editor, first display the annotation text object in a map window, then open the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window, choose <span class=arial>Edit Layer</span> and select the annotation text layer.</li>
+
+<li>	To edit an annotation text object in a table window, you can simply double-click the annotation text object in the Catalog, or open the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, choose <span class=arial>Open As Table</span> and select the annotation text object.</li>
+
+</ul>
+
+<p>For more information, refer to the <a href="annotation_text_editor_functionality.htm">Annotation Text editor</a>.</p>
+
+<p class=kopje>Annotation Text objects in map views and layouts:</p>
+
+<p>When an annotation text layer is correctly displayed in a map window, you can save the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. Then, to print the map, choose <a href="../ilwismen/create_a_layout.htm">File, Create Layout</a> in the map window, the map view including the annotation text layer will appear in the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a>. Decide on paper size on which the <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> should be printed and decide on the scale on which the map view should be printed; add additional annotation as you like and print from within the layout editor. </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>An annotation text object consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.ATX) and a binary data file (.AT#). The object definition file contains information on the working scale and information on columns in the table. The object definition file contains no further references to other objects.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="annotation_text_editor_functionality.htm">Annotation Text editor : functionality</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_map_views.htm">ILWIS objects : map views</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_layouts.htm">ILWIS objects : layouts</a></p>
+
+<p class=seealsolinks><a href="layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+</body

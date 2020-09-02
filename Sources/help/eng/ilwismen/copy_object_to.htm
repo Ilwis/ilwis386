@@ -1,0 +1,324 @@
+<html>
+
+<head>
+<title>Copy Object To</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Copy objects, Data management, Main window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Main window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Copy Object To</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Copy a selected <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >object</a> to a new name or to a new directory. </p>
+
+<p class=defnewpar>This dialog box appears when:</p>
+
+<ul>
+
+<li>	you select an object in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, and choose the <span class=arial>Copy To</span> command from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Object name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The first line of this dialog box states the name and type of object you are about to copy. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The second line of this dialog box displays the description of the object you are about to copy.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  New Name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option button if you want to copy the selected object to a new name in the current directory. Subsequently, type a new name for the object.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2" valign="top">
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  New Directory:</p>
+
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select this option button if you want to copy the object to another directory. Subsequently, either:</p>
+
+<ul class=diaul>
+
+<li>	click the <i>Browse</i> button to browse to another directory, or </li>
+
+<li>	directly type the path of the directory where this object should be copied to. </li>
+
+</ul>
+
+<p class=diabox>When copying an object to another directory, the object cannot be renamed; it will always keep its name.</p>
+
+</td>
+</tr>
+
+<tr>
+<td colspan="2" valign="top">
+<p class=diabox>Break dependency links:</p>
+
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>This check box only appears in case of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent data objects</a>:</p>
+
+<p class=diabox>Select this check box when you want to copy only those files that are necessary for this object.</p>
+
+<p class=diabox>Clear this check box if you want to copy all objects that are necessary to recalculate this object.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When copying an object to a new name, only the object selected to be copied obtains the new name. When copying to a new directory, all objects keep the same name.</p>
+
+<!--<p class=defnewpar>For more information on dependent objects, see <a href="../ilwis/basic_concepts_dependent_data_objects.htm">Basic concepts : Dependent data objects</a>. </p> -->
+
+<p class=tip>Tips:</p>
+
+<p class=tiptext>Other ways to copy one or more objects are:</p>
+
+<ol class=tipol>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Use <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag and drop</a> between two Catalogs: </li>
+
+        <ul class=tipul>
+
+        <li> press the New Catalog <img src="../images/catopennew.gif" width="22" height="22"> button and select a destination directory which will be shown in the new Catalog, </li>
+
+        <li> select one or more objects in the original Catalog, </li>
+
+        <li> <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> the selected object(s) to the destination Catalog. </li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Use copy and paste:</li>
+
+        <ul>
+
+        <li> select one or more objects in the original Catalog, </li>
+
+        <li> choose the <span class=arial>Copy</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> or from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a>, </li>
+
+        <li> use the <a href="..//ilwis/popup/navigator_popup.htm" onClick="return popup(this, 'notes')" >Navigator</a> to select a destination directory; the contents of this directory which will be shown in the current Catalog, </li>
+
+        <li> choose the <span class=arial>Paste</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> or from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a>. </li>
+
+        </ul>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <p>You can also use copy and paste between an original and a destination Catalog.</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Use the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line</a> in the Main window. For more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>.</li>
+
+</ol>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_copy_objects.htm">How to copy objects</a></p>
+
+<h2>Additional information</h2>
+
+<p>When an object is copied <b>to another directory</b>, the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the object and its data files are always copied. When other objects are encountered in the object definition file of the selected object, e.g. service objects, these are also copied. When in one of these object definition files other objects are encountered, the same procedure is followed. </p>
+
+<p>Example: when you copy a raster map to another directory, the domain, georeference and if available the attribute table and histogram are copied as well. If the domain is a domain Class or Picture, then also the representation is copied. Further, as the georeference needs a coordinate system, the coordinate system of this georeference is copied as well. </p>
+
+<p class=defnewpar>When copying <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent maps, tables and columns</a> to <b>another directory</b>, all objects that are needed to recalculate the dependent object are copied as well, i.e. all objects listed in the expression/definition in the object definition file. These necessary objects are listed on the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog boxes of the dependent object under the heading 'Depends on'.</p>
+
+<p class=defnewpar>The list below presents for each object that is copied to another directory the additional objects that are automatically copied with it.</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>Raster map:</p>
+
+</td>
+<td valign="top">
+<p>Domain, georeference, attribute table, histogram.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Polygon map:</p>
+
+</td>
+<td valign="top">
+<p>Domain, coordinate system, attribute table, histogram.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Segment map:</p>
+
+</td>
+<td valign="top">
+<p>Domain, coordinate system, attribute table, histogram.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Point map:</p>
+
+</td>
+<td valign="top">
+<p>Domain, coordinate system, attribute table, histogram.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Table:</p>
+
+</td>
+<td valign="top">
+<p>Domain of table and domains of columns.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Map list:</p>
+
+</td>
+<td valign="top">
+<p>All raster maps of the map list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Domain:</p>
+
+</td>
+<td valign="top">
+<p>For Class and Picture domains: Representation. </p>
+
+<p>For user-defined value domains: representation <span class=courier>Value</span>. <br>
+For system value domains, a representation Gradual is not copied.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Georeference corners:</p>
+
+</td>
+<td valign="top">
+<p>Coordinate system.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Georeference tiepoints:</p>
+
+</td>
+<td valign="top">
+<p>Coordinate system and background map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Georeference 3D:</p>
+
+</td>
+<td valign="top">
+<p>Coordinate system, DTM.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Map view:</p>
+
+</td>
+<td valign="top">
+<p>All maps and annotation and their display options as listed in the map view.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Sample set:</p>
+
+</td>
+<td valign="top">
+<p>Sample map and background map.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For more information, see also <a href="../ilwis/appendices_relations_between_ilwis_objects.htm">Appendices : Relations between ILWIS objects</a> and <a href="../ilwis/appendices_general_structure_of_object_definition_files.htm">Appendices : General structure of object definition files</a>.</p>
+
+</body

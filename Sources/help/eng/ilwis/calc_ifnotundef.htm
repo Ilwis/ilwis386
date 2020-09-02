@@ -1,0 +1,391 @@
+<html>
+
+<head>
+<title>IFNOTUNDEF</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="IFNOTUNDEF, Undefined functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>IFNOTUNDEF( ) function</h1>
+
+<p class="defnewpar">If <i>a</i> is not undefined, then return <i>b, </i>else return undefined.<br>
+If <i>a</i> is not undefined, then return <i>b</i>, else return <i>c</i>.
+
+<p class="calctitlesyntax">Syntax</p>
+<p class="syntax"><span class="courier">IFNOTUNDEF</span>(<i>a</i>, <i>b</i>)<br>
+<span class="courier">IFNOTUNDEF</span>(<i>a</i>, <i>b</i>, <i>c</i>)</p>
+
+<p class="calctitle">Input</p>
+<table cellspacing="0">
+  <tr>
+    <td width="130" valign="top"><i>a</i></td>
+    <td valign="top">is the test condition: a boolean expression containing at least one map name or one column name.</td>
+  </tr>
+  <tr>
+    <td width="130" valign="top"><i>b</i>, <i>c</i></td>
+    <td valign="top">an expression containing at least one map name or one column name, or simply a value, class name, ID, etc.</td>
+  </tr>
+</table>
+
+<p class="calctitle">Output</p>
+<table cellspacing="0">
+  <tr>
+    <td width="130" valign="top"><span class="courier">IFNOTUNDEF</span> returns:</td>
+    <td valign="top">if <i>a</i> is not undefined, <i>b</i> is returned;<br>
+        if <i>a</i> is undefined and c is specified then <i>c</i> is returned;<br>
+        if <i>a</i> is undefined and <i>c</i> is not specified, undefined is returned.</td>
+  </tr>
+  <tr>
+    <td width="130" valign="top">Domain:</td>
+    <td valign="top"><p><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">Value</span></a>; </p>
+
+		<ul>
+
+				<li>when using <span class="courier">IFNOTUNDEF</span>(<i>a</i>, <i>b</i>), the output domain will use reals if <i>b</i> uses real values; else integers will be used; </li>
+
+				<li>when using <span class="courier">IFNOTUNDEF</span>(<i>a</i>, <i>b</i>, <i>c</i>), the output domain will use reals when either <i>b</i> or <i>c</i> uses real values; else integers will be used; </li>
+		
+		</ul>
+
+      <p>the class/ID domain returned by <i>c</i>;</p>
+
+		<ul>
+
+			<li>if <i>c</i> returns a string or undefined value, the class/ID domain returned by <i>b</i>;</li>
+
+			<li>if both <i>b</i> and <i>c</i> return a string, no default output domain;</li>
+
+			<li>if <i>c</i> is not specified and <i>b</i> returns a string or undefined value, the class/ID domain of <i>a.</i></li>
+	  
+	    </ul>
+	  
+	  </td>
+  </tr>
+</table>
+
+<p class="tip">Notes:</p>
+<ul class="tipul">
+
+  <li>The functions <a href="calc_isundef.htm"><span class=courier>ISUNDEF</span></a>, <a href="calc_ifundef.htm"><span class=courier>IFUNDEF</span></a> or <span class=courier>IFNOTUNDEF</span> are the only functions that do NOT return an undefined when the input is undefined.</li>
+
+  <li>When using <span class="courier">IFNOTUNDEF</span>(<i>a</i>, <i>b</i>), the internal calculation will use reals if <i>b</i> uses real values; else integers will be used. </li>
+
+  <li>When using <span class="courier">IFNOTUNDEF</span>(<i>a</i>, <i>b</i>, <i>c</i>), the internal calculation will use reals when either <i>b</i> or <i>c</i> uses real values; else integers will be used. </li>
+
+  <li>When calculating with a non-value domain, you need to use double quotes around the class names, IDs, etc.</li>
+
+  <li>It is not possible to test for undefined values by using expressions like:<span class="calc1"><br>
+
+          OUT = IFF(Landuse=&quot;?&quot;,...,...)<br>
+          OUT = IFF(DEM=?,...,...)</span></li>
+
+  <li>To assign undefined values, see <a href="calc_assign_undefined_values.htm">Map and Table Calculation : Assigning undefined values</a>.</li>
+
+</ul>
+
+<p class="tip">Tip:</p>
+<p class="tiptext">When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</p>
+
+<p class="calctitle">Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples
+
+<p class=kopjeaftertitlesub>MapCalc example using a value map:</p>
+<p class=calc00>OutMap1 = IFNOTUNDEF(InMap,100)</p>
+<p class=calc00>OutMap2 = IFNOTUNDEF(InMap,10,50)</p>
+<p class="emptyline">&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap1</p></td>
+	<td><p class=courier>OutMap2</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>3</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>4</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>1</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>5</td>
+    <td class=calcpict>2</td>
+    <td class=calcpict>6</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>100</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>100</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>100</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>100</td>
+    <td class=calcpict>100</td>
+    <td class=calcpict>100</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>50</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>50</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>50</td>
+  </tr>
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>10</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class="emptyline">&nbsp;</p>
+<ul>
+	<li>In <span class=courier>OutMap1</span>, every undefined pixel in map <span class=courier>InMap</span> remains undefined. Every defined pixel is assigned a value of <span class=courier>100</span>.</li>
+	<li>In <span class=courier>OutMap2</span>, every undefined pixel in map <span class=courier>InMap</span> gets the value <span class=courier>50</span>. Every defined pixel is assigned a value of <span class=courier>10</span>.</li>
+</ul>
+
+<p class=kopje>MapCalc example using a class map:</p>
+<p class=calc00>OutMap1 = IFNOTUNDEF(Landuse,&quot;Suitable&quot;)</p>
+<p class=calc00>OutMap2 = IFNOTUNDEF(Landuse,&quot;Suitable&quot;,&quot;Not Suitable&quot;)</p>
+<p class="emptyline">&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>Landuse</p></td>
+    <span class=courier>
+	<td><p class=courier>OutMap1</p></td>
+    </span>
+	<td><p class=courier>OutMap2</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>F</td>
+    <td class=calcpict>G</td>
+  </tr>
+  <tr>
+    <td class=calcpict>L</td>
+    <td class=calcpict>L</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>G</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>F</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>S</td>
+    <td class=calcpict>S</td>
+  </tr>
+  <tr>
+    <td class=calcpict>S</td>
+    <td class=calcpict>S</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>S</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>S</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>N</td>
+    <td class=calcpict>S</td>
+    <td class=calcpict>S</td>
+  </tr>
+  <tr>
+    <td class=calcpict>S</td>
+    <td class=calcpict>S</td>
+    <td class=calcpict>N</td>
+  </tr>
+  <tr>
+    <td class=calcpict>S</td>
+    <td class=calcpict>N</td>
+    <td class=calcpict>S</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class="emptyline">&nbsp;</p>
+<ul>
+	<li>In <span class=courier>OutMap1</span>, class name &quot;<span class=courier>Suitable</span>&quot; (i.e. <span class=courier>S</span>) is assigned for every defined pixel in map <span class=courier>Landuse</span>. For all undefined pixels, undefined (<span class=courier>?</span>) is returned.</li>
+	<li>In <span class=courier>OutMap2</span>, class name &quot;<span class=courier>Suitable</span>&quot; (i.e. <span class=courier>S</span>) is assigned for every defined pixel in map <span class=courier>Landuse</span>. For all undefined pixels &quot;<span class=courier>Not Suitable</span>&quot; (i.e. <span class=courier>N</span>) is assigned.</li>
+</ul>
+
+<p class=tip>Note:</p>
+<p class=tiptext>In map <span class=courier>Landuse</span>: <span class=courier>F</span>=Forest, <span class=courier>G</span>=Grassland and <span class=courier>L</span>=Lake.</p>
+
+<p class=kopje>TabCalc examples:</p>
+<p class=calc00>OutCol1 = IFNOTUNDEF(Population,1000)</p>
+<p class=calc00>OutCol2 = IFNOTUNDEF(Population,1000,5000)</p>
+<p class=calc00>OutCol3 = IFNOTUNDEF(Landuse,&quot;Suitable&quot;)</p>
+<p class=calc00>OutCol4 = IFNOTUNDEF(Landuse,&quot;Suitable&quot;,&quot;Not Suitable&quot;)</p>
+<p class="emptyline">&nbsp;</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top"><p class="tcolh">Sitenr</p></td>
+    <td valign="top"><p class="tcolhr">Population</p></td>
+    <td valign="top" width="75"><p class="tcolh">Landuse</p></td>
+    <td valign="top"><p class="tcolhr">OutCol1</p></td>
+    <td valign="top"><p class="tcolhr">OutCol2</p></td>
+    <td valign="top"><p class="tcolh">OutCol3</p></td>
+    <td valign="top"><p class="tcolh">OutCol4</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">1</p></td>
+    <td valign="top"><p class="t1r">850</p></td>
+    <td valign="top"><p class="t1">Crops</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">2</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+    <td valign="top"><p class="t1">Grassland</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">3</p></td>
+    <td valign="top"><p class="t1r">600</p></td>
+    <td valign="top"><p class="t1">Urban area</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">4</p></td>
+    <td valign="top"><p class="t1r">950</p></td>
+    <td valign="top"><p class="t1">?</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1r">1000</p>
+    </td>
+    <td valign="top"><p class="t1">?</p></td>
+    <td valign="top"><p class="t1">Not Suitable</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">5</p></td>
+    <td valign="top"><p class="t1r">1250</p></td>
+    <td valign="top"><p class="t1">Crops</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">6</p></td>
+    <td valign="top"><p class="t1r">450</p></td>
+    <td valign="top"><p class="t1">?</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1">?</p></td>
+    <td valign="top"><p class="t1">Not Suitable</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">7</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+    <td valign="top"><p class="t1">Grassland</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">8</p></td>
+    <td valign="top"><p class="t1r">900</p></td>
+    <td valign="top"><p class="t1">Urban area</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+    <td valign="top"><p class="t1">Suitable</p></td>
+  </tr>
+</table>
+<p class=emptylinehalf>&nbsp;</p>
+<ul>
+	<li>To Column <span class="courier">OutCol1</span>, value <span class=courier>1000</span> is assigned when a record of column <span class="courier">Polulation</span> is defined; when a record in column <span class=courier>Population</span> is undefined, undefined is returned.</li>
+	<li>To Column <span class="courier">OutCol2</span>, value <span class=courier>1000</span> is assigned when a record of column <span class="courier">Population</span> is defined; when a record in column <span class=courier>Population</span> is undefined a value of <span class=courier>5000</span> is assigned.</li>
+	<li>To Column <span class=courier>OutCol3</span>, class name &quot;<span class=courier>Suitable</span>&quot; is assigned when a record of column <span class=courier>Landuse</span> is defined; when a record in column <span class=courier>Landuse</span>  is undefined, undefined (<span class=courier>?</span>) is returned.</li>
+	<li>To Column <span class=courier>OutCol4</span>, class name &quot;<span class=courier>Suitable</span>&quot; is assigned when a record of column <span class=courier>Landuse</span> is defined; when a record in column <span class=courier>Landuse</span>  is undefined, &quot;<span class=courier>Not Suitable</span>&quot; is assigned.</li>
+</ul>
+
+<p class="Seealso">See also:</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top"><a href="calc_isundef.htm">ISUNDEF</a></td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="calc_ifundef.htm">IFUNDEF</a></td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="calc_iff.htm">IFF</a></td>
+  </tr>
+  <tr>
+    <td><a href="calc_assign_undefined_values.htm">Map and Table Calculation : Assigning undefined values</a></td>
+  </tr>
+  <tr>
+    <td><a href="how_to_calculate_with_undefineds_in_maps_and_tables.htm">How to calculate with undefineds in maps and tables</a></td>
+  </tr>
+  <tr>
+    <td><a href="calc_merge_domains.htm">Map and Table Calculation : Merging domains (workaround)</a></td>
+  </tr>
+</table>
+
+</body

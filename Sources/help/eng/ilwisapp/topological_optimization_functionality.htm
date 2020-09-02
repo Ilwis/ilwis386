@@ -1,0 +1,267 @@
+<html>
+
+<head>
+<title>Topological optimization : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Topological optimization">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Topological optimization</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p>When a DEM and/or a flow direction map have undefined values, e.g. when there are lakes in the study area, the Topological Optimization operation can improve the results of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation and a <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network extraction</a> operation to ensure a proper flow through this lake. </p>
+
+<p class="defnewpar">As input, this operation requires: </p>
+
+<ul>
+
+<li>an existing output map of the <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network extraction</a> operation, </li>
+
+<li>an existing output map of the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation, </li>
+
+<li>a segment map with one or more segments that connect the <i>inlet(s) of a lake</i> with the <i>outlet(s) of lake</i> (down-flow). </li>
+
+</ul>
+
+<p class="defnewpar">As output, the operation delivers: </p>
+
+<ul>
+
+<li>a new continuous drainage network raster map, and </li>
+
+<li>a new flow direction raster map.</li>
+
+</ul>
+
+<p class="defnewpar">The output of this operation can serve as a new basis for the other hydrologic operations, e.g. to obtain new Strahler or Shreve order numbers, new catchments etc. For more information, see also <a href="catchment_merge_functionality.htm">Catchment merge : functionality</a> (third example).</p>
+
+<p class="kopje">Using Topological optimization:</p>
+
+<p>The idea is to create one or more segment maps that will connect drainages through lake areas, so that the drainages that flow into a lake, are connected to the drainages that flow out of the lake. 
+
+The operation works best, when it is used several times; each time with new connecting drainages, and using the output of a first pass as input in a second pass. </p>
+
+<ol>
+
+<li>
+
+    <p class="defnewpar">To start, you need:</p>
+
+    <ul>
+    <li>a previous flow direction map containing areas without a flow direction; </li>
+    <li>a previous drainage network extraction map or a drainage network ordering (segment) map, in which not all drainages seem connected.</li>
+    </ul>
+
+    <p class="defnewpar">To prepare for the first pass: 
+    <ul>
+    <li>create a segment map containing one or more <i>main drainage</i> segments. </li>
+    </ul>
+    <p>In other passes, you will create more segments that will connect to this first one. </p>
+
+	<p class="tip">Tips: </p>
+	<ul class="tipul">
+    <li>A segment map can be created in a map window, using the input flow direction map and the initial drainage network ordering segment map as background. </li>
+    <li>Choose <span class="arial">File, Create Segment map</span> in the map window and the <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >Segment editor</a> will be opened. For more information, refer to <a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a>, section <a href="../ilwis/segment_editor_functionality.htm#segedmouse"><span class="bookmark">Working with the mouse</span></a>. </li>
+    <li><b>It is important to digitize segments from start to end in a <i>down-flow</i> direction. </b></li>
+    </ul>
+
+    <p class="defnewpar">The input for the first pass is shown in pictures 1, 2, and 4 below. </p>
+
+    <p class="defnewpar">The output of the first pass is an updated flow direction map, and an updated drainage network extraction map. This is shown in pictures 5 and 6 below. </p>
+
+</li>
+
+<li>
+
+    <p class="defnewpar">Then you move on to the second pass: </p>
+    <ul>
+    <li>create another segment map where you connect loose drainages to the main drainage line you digitized in the first pass; </li>
+    <li>keep in mind to connect drainages in a down-flow direction to the main drainage line; </li>
+    </ul>
+    <p>The segments of the second segment map are shown in picture 8 below. </p>
+
+    <p class="defnewpar">As input for the second pass, you use: </p>
+
+    <ul>
+    <li>the output maps of the first pass (pictures 5 and 6); </li>
+    <li>the second segment map (picture 8). </li>
+    </ul>
+
+    <p class="defnewpar">The output of the second pass is again an updated flow direction map, and an updated drainage network extraction map. This is shown in pictures 9 and 10 below. </p>
+
+</li>
+
+<li>
+    <p class="defnewpar">For a third pass, prepare another segment map (picture 12). </p>
+
+    <p class="defnewpar">For the third pass, use the output maps of the second pass (pictures 9 and 10) and the new segment map (picture 12). </p>
+
+    <p class="defnewpar">The output of the third pass is again an updated flow direction map, and an updated drainage network extraction map. This is shown in pictures 13 and 14 below. </p>
+
+</li>
+</ol>
+
+<p class="defnewpar">As you can see in picture 13 below, the output updated flow direction map still contains some undefined values, but (most of) the drainages upstream of the lake are now connected to the drainages downstream of the lake. </p>
+
+<p class="tip">Tips:</p>
+
+<ul class="tipul">
+
+<li>When you perform a <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation on the output of a Topological optimization operation, you obtain segment maps. The new segments will be integrated in your drainage network (pictures 7, 11, and 15). </li>
+
+<li>The updated flow direction map, that is the output of the Topological optimization operation, can be used as input for a <a href="..//ilwisapp/popup/catchment_merge_popup.htm" onClick="return popup(this, 'notes')" >Catchment merge</a> operation with the option <span class="arial">Included Undefined Pixels</span>. 
+	By using this option, a lake area with undefined flow direction values, can be included into a catchment (single polygon). 
+	For more information, refer to <a href="catchment_merge_functionality.htm">Catchment merge : functionality</a>. </li>
+
+</ul>
+
+<p class="kopje">Example:</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="290">1. Input flow direction map
+</td>
+<td valign="top" width="290">2. Input drainage network extraction map</td>
+<td valign="top">3. Initial drainage network ordering map (reference)</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_topo_opt1a.gif" width="252" height="202"></td>
+<td><img src="../images/hydro_topo_opt1b.gif" width="252" height="202"></td>
+<td><img src="../images/hydro_topo_opt1c.gif" width="252" height="202"></td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td valign="top">4. Main drainage segment added through lake <br>
+	(single segment in green)
+</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_topo_opt2.gif" width="252" height="202"></td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td valign="top">5. First pass: output flow direction map <br>
+	after 1st time Topological optimization</td>
+<td valign="top">6. First pass: output drainage network map <br>
+	after 1st time Topological optimization</td>
+<td valign="top">7. After subsequent Drainage network ordering <br>
+	(displayed by attribute Strahler)</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_topo_opt3a.gif" width="252" height="202"></td>
+<td><img src="../images/hydro_topo_opt3b.gif" width="252" height="202"></td>
+<td><img src="../images/hydro_topo_opt3c.gif" width="252" height="202"></td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td valign="top">8. Other drainage segments added through lake <br>
+	(segments in green)
+</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_topo_opt4.gif" width="252" height="202"></td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td valign="top">9. Second pass: output flow direction map <br>
+	after 2nd time Topological optimization</td>
+<td valign="top">10. Second pass: output drainage network map <br>
+	after 2nd time Topological optimization</td>
+<td valign="top">11. After subsequent Drainage network ordering <br>
+	(displayed by attribute Strahler)</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_topo_opt5a.gif" width="252" height="202"></td>
+<td><img src="../images/hydro_topo_opt5b.gif" width="252" height="202"></td>
+<td><img src="../images/hydro_topo_opt5c.gif" width="252" height="202"></td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td valign="top">12. Other connecting drainage segments added<br>
+	(segments in green)
+</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_topo_opt6.gif" width="252" height="202"></td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td valign="top">13. Third pass: output flow direction map <br>
+	after 3rd time Topological optimization</td>
+<td valign="top">14. Third pass: output drainage network map <br>
+	after 3rd time Topological optimization</td>
+<td valign="top">15. After subsequent Drainage network ordering <br>
+	(displayed by attribute Strahler)</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_topo_opt7a.gif" width="252" height="202"></td>
+<td><img src="../images/hydro_topo_opt7b.gif" width="252" height="202"></td>
+<td><img src="../images/hydro_topo_opt7c.gif" width="252" height="202"></td>
+</tr>
+
+</table>
+
+<p class="kopje">Input map requirements: </p>
+
+<ul>
+
+<li>the output map of a previous <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network extraction</a> operation, </li>
+
+<li>the output map of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation, </li>
+
+<li>a segment map with one or more segments that connect <i>drainages upstream of a lake</i> with <i>drainages downstream of a lake</i>; segments should be (screen-)digitized in a down-flow direction. </li>
+
+</ul>
+
+<p class="kopje">Domain and georeference of output maps: </p>
+
+<p>The operation produces:</p>
+
+<ul>
+
+<li>an updated drainage network raster map (as if the Drainage network extraction operation was used); this output map uses <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">Bool</span></a>, and </li>
+
+<li>an updated flow direction raster map (as if the Flow direction operation was used); this output map uses <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>.</li>
+
+</ul>
+
+<p class="defnewpar">The output maps will use the same georeference as the input maps. </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="tiptext"><span class="tip">Tip: </span>As mentioned before, the updated flow direction map can be used as input for a <a href="..//ilwisapp/popup/catchment_merge_popup.htm" onClick="return popup(this, 'notes')" >Catchment merge</a> operation with the option <span class="arial">Included Undefined Pixels</span>. 
+	By using this option, a lake area with undefined flow direction values, can be included into a catchment (single polygon). 
+	For more information, refer to <a href="catchment_merge_functionality.htm">Catchment merge : functionality</a>, third example. </p>
+
+<p class="Seealso">See also:</p>
+
+<p class="seealsolinks"><a href="topological_optimization_dialog_box.htm">Topological optimization : dialog box</a></p>
+
+<p class="seealsolinks"><a href="topological_optimization_command_line.htm">Topological optimization : command line</a></p>
+
+<p class="seealsolinks"><a href="topological_optimization_algorithm.htm">Topological optimization : algorithm</a></p>
+
+<p class="seealsolinks"><a href="catchment_merge_functionality.htm">Catchment merge : functionality</a></p>
+
+</body

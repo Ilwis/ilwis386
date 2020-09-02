@@ -1,0 +1,364 @@
+<html>
+
+<head>
+<title>Kriging from Raster : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Kriging from Raster, Raster Kriging, MapKrigingFromRaster">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Kriging from Raster</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/kriging_from_raster_popup.htm" onClick="return popup(this, 'notes')" >Kriging from Raster</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingFromRaster</span>(InputRasterMap, <i>SemiVarModel</i>)</p> 
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKriging</span><span class=courier>FromRaster</span>(InputRasterMap, <i>SemiVarModel</i>, <i>LimDist</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingFromRaster</span>(InputRasterMap, <i>SemiVarModel</i>, <i>LimDist</i>, <i>DistanceUnit</i>)&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingFromRaster</span>(InputRasterMap, <i>SemiVarModel</i>, <i>LimDist</i>, <i>Distance Unit</i>, <span class=courier>1|0</span>, <i>min</i>)&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapKrigingFromRaster</span>(InputRasterMap, <i>SemiVarModel</i>, <i>LimDist</i>, <i>Distance Unit</i>, <span class=courier>1|0</span>,<i> min, max</i>)&nbsp;</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapKrigingFromRaster</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Kriging from Raster operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputRasterMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input raster map with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>SemiVarModel</i></p>
+
+</td>
+<td valign="top">
+<p><i>Model</i><span class=courier>(</span><i>nugget, sill, range</i><span class=courier>) | Power(</span><i>nugget, slope, pow</i><span class=courier>)</span></p>
+
+<p>This expression defines the <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >semi-variogram model</a> that should be used and the expected parameters.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>Model</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Spherical | Exponential  | Gaussian | Wave | RatQuad | Circular</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>nugget</i></p>
+
+</td>
+<td valign="top">
+<p>value for the nugget, according to your semi-variogram (real value).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>sill</i></p>
+
+</td>
+<td valign="top">
+<p>value for the sill, according to your semi-variogram (real value). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>range</i></p>
+
+</td>
+<td valign="top">
+<p>value for the range, according to your semi-variogram (real value &gt; 0).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>slope</i></p>
+
+</td>
+<td valign="top">
+<p>when using the <span class=courier>Power</span> model: value for the 'slope'. When <i>pow</i> is specified as 1 (i.e. thus using a linear model), then <i>slope</i> is the direction coefficient, i.e. <span class=symbol>Dg</span>/<span class=symbol>D</span>h.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>pow</i></p>
+
+</td>
+<td valign="top">
+<p>when using the <span class=courier>Power</span> model: an exponent 0 &lt; real value &lt;
+2. When you use value 1, the <span class=courier>Power</span> model will become
+linear and the slope will be constant. If the power exponent is 2 the assumed stochastic model (‘randomness’) is not always justifiable and the interpolation can become pathological.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>LimDist</i></p>
+
+</td>
+<td valign="top">
+<p>A value for the limiting distance: pixels that are farther away from an output pixel than the limiting distance will not be used in the Kriging equations. You can specify a value in meters or in pixels, see <i>DistanceUnit</i> below. <br>
+
+If the <i>DistanceUnit</i> is specified in meters: 0 &lt; <i>limiting distance</i> (real) &lt;= 40 * pixelsize; <br>
+
+if the <i>DistanceUnit</i> is specified in pixels: 0 &lt; <i>limiting distance</i> (integer) &lt;= 40.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>DistanceUnit</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>m | p</p>
+
+<p>Defines whether the limiting distance value is expressed in meters or in pixels. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>m</p>
+
+</td>
+<td valign="top">
+<p>Limiting distance value is expressed in meters. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>p</p>
+
+</td>
+<td valign="top">
+<p>Limiting distance value is expressed in pixels. </p>
+                                          
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>1 | 0</p>
+
+</td>
+<td valign="top">
+<p>Specify whether or not an error map has to be created. The error map will contain the square root of the Kriging error variance values, i.e. standard deviations per pixel. When this parameter is not specified, no error map will be created. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>1</p>
+
+</td>
+<td valign="top">
+<p>Create an error map. The error map will obtain the same name as specified for the output Kriging map followed by the additional string <span class=courier>_Error</span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>0</p>
+
+</td>
+<td valign="top">
+<p>Do not create an error map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>min, max</i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameters to specify the minimum and maximum number of input pixels with a value that should be taken into account per Kriging estimate/prediction, i.e. the number of input pixels with a value within the limiting distance of an output pixel that should be taken into account in the calculation of the output value for that pixel. 1 &lt;= <i>min. nr. of pixels</i> (integer) &lt;= <i>max. nr. of pixels</i> (integer) &lt;= 100. </p>
+
+<ul>
+
+<li>When the minimum is not specified a minimum value 1 will be used. When, for an output pixel, less valid input pixels are found within the specified limiting distance than the specified minimum, no Kriging is performed and the output pixel will become undefined. If the whole map contains less valid input pixels than the specified minimum, an error message will appear and no output will be produced. </li>
+
+<li>When the maximum is not specified, value 16 will be used. When, for an output pixel, more valid input pixels are found within the specified limiting distance than the specified maximum, then only the specified maximum number of pixels that are nearest to the output pixel will be used. </li>
+
+</ul>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=kopje>Example:</p>
+
+<p>To perform Kriging from Raster on the attribute values in column <span class=courier>MyAttribute</span> as present in an attribute table linked to raster map <span class=courier>MyRaster</span>,</p>
+
+<ul>
+
+<li>	producing output raster map <span class=courier>OUTMAP</span>,</li>
+
+<li>	using a Spherical semi-variogram model with nugget 10&nbsp;m, sill 70&nbsp;m and range 800&nbsp;m (found by means of Autocorrelation - Semivariance), </li>
+
+<li>	using a limiting distance of 20 m,</li>
+
+<li>	producing an error map <span class=courier>OUTMAP_Error</span>,</li>
+
+<li>	while each Kriging equation should use at least 5 and at most 16 input samples (min, max). </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p>you can use the following expression:</p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=courier>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=courier>=</p>
+
+</td>
+<td valign="top">
+<p class=courier>MapKrigingFromRaster(MyRaster.MyAttribute,Spherical(10,70,800),20,m,1,5,16)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="kriging_from_raster_functionality.htm">Kriging from Raster : functionality</a></p>
+
+<p class=seealsolinks><a href="auto_correlation_semivariance_functionality.htm">Autocorrelation - Semivariance : functionality</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >Formulae of semi-variogram models</a></p>
+
+</body

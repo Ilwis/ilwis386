@@ -1,0 +1,102 @@
+<html>
+
+<head>
+<title>Unique ID : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Unique ID">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Unique ID</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Unique ID operation can be used to assign unique identifiers to all elements in a segment, polygon or point map. The output map contains the same geographic information as the input map, but each point, segment or polygon will have a unique ID. </p>
+
+<p class=linespacing03before>Furthermore, an attribute table is created for the output map. The table contains a column with the original classes, IDs or values of the input map; the areas of individual output polygons; the lengths of individual output segments. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Input map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input point, segment or polygon map. Open the list box and select the desired input map, or drag a map directly from the Catalog into this box. No special input map requirements.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Domain Prefix:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type some characters that should be used as a prefix for the items in the output map. Without prefix, the names of the output items will simply be Pol 1, Pol 2, Pol 3, or Seg 1, Seg 2, Seg 3, or Pnt 1, Pnt 2, Pnt 3, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Output map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output map that will contain the points, segments or polygons with unique IDs. This name will also be used for the output attribute table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary, the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=defnewpar>Furthermore, an attribute table will be automatically defined for the output map (same name as output map). This table will contain: </p>
+
+<ul>
+
+<li>the names or values of the original input polygons and the areas of individual output polygons; </li>
+
+<li>the names or values of the original input segments and the lengths of individual output segments; </li>
+
+<li>the names or values of the original input points. </li>
+
+</ul>
+
+<p class=defnewpar>Both the output map and the attribute table will use a <span class=courier>UniqueID</span> domain (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="unique_id_functionality.htm">Unique ID : functionality</a></p>
+
+</body

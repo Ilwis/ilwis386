@@ -1,0 +1,46 @@
+<html>
+
+<head>
+<title>distance calculation weight map popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Weight map for distance calculation</p>
+
+<p>A weight map is optional input for a distance calculation. If all parts in your map are equally accessible, there is no need to specify a weight map: the system assumes a weight of 1 for all undefined pixels. </p>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<ul>
+
+<li>	To exclude inaccessible areas from a <a href="..//ilwisapp/distance_calculation.htm" onClick="return popup(this, 'notes')" > distance calculation</a> or to indicate insurpassable barriers, prepare a weight map in which negative values or the undefined value are assigned to inaccessible areas; assign value 1 to accessible pixels. </li>
+
+<li>	To work with relative accessibility, prepare a weight map in which weight values represent the relative difficulty to surpass pixels.</li>
+
+<li>	To calculate a <a href="distance_calculation_time_travel_map_popup.htm">travel time map</a>, prepare a weight map in which weight values are inversely proportional to the relative speed that can be obtained in the different mapping units. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp; </p>
+
+<p>In a weight map, value 1 means normal accessibility, positive values represent a factor of resistance, and negative values represent insurpassable barriers i.e. inaccessible areas. Value 0 in a weight map means free accessibility, distance/time values will not increase while passing these areas.</p>
+
+</body

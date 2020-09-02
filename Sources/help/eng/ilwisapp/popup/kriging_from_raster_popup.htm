@@ -1,0 +1,38 @@
+<html>
+
+<head>
+<title>kriging popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Kriging from Raster</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/kriging_from_raster.htm" onClick="return popup(this, 'notes')" >Kriging from Raster</a> 
+is similar to the Ordinary Kriging interpolation c.q. prediction method but requires a raster map
+as input, instead of a point map. The operation can be seen as a raster interpolation
+and returns a raster map with estimations and optionally an error map. The estimations are weighted averaged input point values, similar to the <a href="../../ilwisapp/popup/moving_average_popup.htm">Moving Average</a> operation. The weight factors in Kriging
+from Raster are determined by using a user-specified semi-variogram model (based on the output of the
+<a href="../../ilwisapp/popup/autocorrelation_popup.htm">Autocorrelation -
+Semivariance</a> operation), the distribution of input pixels, and are calculated in such a way that they minimize the estimation error in each output pixel. The estimated or predicted values are thus a linear combination of the input values and have a minimum estimation error. The optional error map contains the standard errors of the estimates.</p>
+
+<p>If you have an input point map, you can use the <a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" >point interpolation</a> operations <a href="kriging_popup.htm">Simple and Ordinary Kriging</a>, <a href="anisotropic_kriging_popup.htm">Anisotropic Kriging</a>, <a href="../../ilwisapp/popup/universal_kriging_popup.htm">Universal Kriging</a> and <a href="cokriging_popup.htm">CoKriging</a>.</p>
+
+</body

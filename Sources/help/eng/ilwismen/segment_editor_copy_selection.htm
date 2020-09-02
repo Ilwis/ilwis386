@@ -1,0 +1,216 @@
+<html>
+
+<head>
+<title>Segment editor : Copy</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment editor, Copy to clipboard">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Segment editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/segment_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Copy to clipboard</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Copy selected segments with their coordinates and their class names, identifiers or values to the clipboard. In the clipboard, the information is available both in <i>text</i> format and in <i><a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >picture</a></i> format. </p>
+
+<p class=defnewpar>Subsequently, the copied segments can be pasted as segments into another <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >segment editor</a>, as points into a <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >point editor</a>, and/or into any other application which uses the <i>picture</i> format or the <i>text</i> format (e.g. a word processor or a data base).</p>
+
+<p class=kopje>To copy:</p>
+
+<p>Select one or more segments, and: </p>
+
+<ul>
+
+<li>choose <span class=arial>Copy</span> from the Edit menu, or</li>
+
+<li>press <span class=arial>Ctrl+C</span> on the keyboard.</li>
+
+</ul>
+
+<p class=defnewpar>For more information on selecting segments, see <a href="segment_editor_select_mode.htm">Segment editor : Select mode</a>.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To copy the active window including the window borders, title bar, menu bar and status bar as a <i><a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmap</a></i> to clipboard, press <span class=arial>Alt+PrintScrn</span> on the keyboard.</li>
+
+<li>	Also from within a map window, you can copy (the displayed part of) a map as a <i>picture</i> to the clipboard; choose <span class=arial><a href="copy_map_window_to_clipboard.htm">Copy</a></span> from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in a map window. Coordinate information will not be available however. </li>
+
+<li>	You can use Windows' Clipboard/Clipbook Viewer to inspect the current contents of the clipboard. For more information, see the Windows Help.</li>
+
+</ul>
+
+<p class=kopje>Example: </p>
+
+<p>Two contour segments which have been copied to the clipboard, in text format and in picture format. </p>
+
+<p class=defnewpar>Text format (only part of the copied segments is shown in text here):</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellpadding="3">
+<tr>
+<td>
+<p class=t1>799490.240276</p>
+</td>
+<td>
+<p class=t1>8088572.9642679999</p>
+</td>
+<td>
+<p class=t1>4120</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>799576.57752199995</p>
+</td>
+<td>
+<p class=t1>8088642.3494520001</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>799637.28955800005</p>
+</td>
+<td>
+<p class=t1>8088687.2921280004</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>799683.41493600002</p>
+</td>
+<td>
+<p class=t1>8088737.3598459996</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>799707.85744399996</p>
+</td>
+<td>
+<p class=t1>8088711.7346360004</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>799763.05020399997</p>
+</td>
+<td>
+<p class=t1>8088716.0712099997</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>... </p>
+</td>
+<td>
+<p class=t1>... </p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>800223.12128199998</p>
+</td>
+<td>
+<p class=t1>8089058.6605559997</p>
+</td>
+<td>
+<p class=t1>4140</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>800274.76593600004</p>
+</td>
+<td>
+<p class=t1>8089069.3048740001</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>800344.93958799995</p>
+</td>
+<td>
+<p class=t1>8089072.85298</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>800385.15145600005</p>
+</td>
+<td>
+<p class=t1>8089082.7088299999</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>800465.18095800001</p>
+</td>
+<td>
+<p class=t1>8089117.0071879998</p>
+</td>
+</tr>
+<tr>
+<td>
+<p class=t1>... </p>
+</td>
+<td>
+<p class=t1>... </p>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Picture format:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/segcopied.gif" alt="Two copied segments shown as picture" height="134" width="306"></p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>You can specify whether you wish to show or hide nodes in the segment editor when in <span class=arial>Select mode</span> or in <span class=arial>Insert mode</span>; the setting is available in the <a href="segment_editor_customize.htm">Customize</a> dialog box of the segment editor. When in <span class=arial>Move Points mode</span>, segment nodes and intermediate points within segments are always shown. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_menu_commands.htm">Segment editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_select_mode.htm">Segment editor : Select Mode</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_paste_selection.htm">Segment editor : Paste</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/point_editor_paste_selection.htm">Point editor : Paste</a></p>
+
+<p class=seealsolinks><a href="copy_map_window_to_clipboard.htm">Map window : copy to clipboard</a></p>
+
+</body

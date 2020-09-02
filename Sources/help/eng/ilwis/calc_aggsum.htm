@@ -1,0 +1,317 @@
+<html>
+
+<head>
+<title>AGGSUM or ColumnAggregateSum</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="AGGSUM, ColumnAggregateSum, Aggregate functions, SUM">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>AGGSUM( ) or ColumnAggregateSum() function</h1>
+
+<p class="defnewpar">Returns the sum of the values of an entire column, or the sums of values per group.</p>
+
+<p class="calctitlesyntax">Syntax</p>
+<p class="syntax"><span class="courier">AGGSUM</span>(<i>ValueColumn</i>)<br>
+<span class="courier">AGGSUM</span>(<i>ValueColumn</i>, <i>Group</i>)<br>
+<span class="courier">ColumnAggregateSum</span>(<i>ValueColumn</i>)<br>
+<span class="courier">ColumnAggregateSum</span>(<i>ValueColumn</i>, <i>Group</i>)</p>
+
+<p class="calctitle">Input</p>
+<table cellspacing="0">
+  <tr>
+    <td width="100" valign="top"><i>ValueColumn</i></td>
+    <td valign="top">is a value column</td>
+  </tr>
+  <tr>
+    <td width="100" valign="top">Domain type:</td>
+    <td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+  </tr>
+  <tr>
+    <td width="100" valign="top"><i>Group</i></td>
+    <td valign="top">is the 'group by' column</td>
+  </tr>
+  <tr>
+    <td width="100" valign="top">Domain type:</td>
+    <td valign="top">any <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a>, <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a>,
+      <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >Group</a> or<a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >
+      Bool</a> domain</td>
+  </tr>
+</table>
+
+<p class="calctitle">Output</p>
+
+<table cellspacing="0">
+ <tr>
+    <td colspan="2" valign="top"><p><span class="courier">AGGSUM</span>(<i>ValueColumn</i>) or <span class="courier">ColumnAggregateSum</span>(<i>ValueColumn</i>)</p></td>
+ </tr>
+ <tr>
+    <td width="40" valign="top"><p class=nospacetop>returns:</p></td>
+    <td valign="top"><p class=nospacetop>the sum of a column</p></td>
+  </tr>
+  <tr>
+    <td width="40" valign="top"><p>Domain:</p></td>
+    <td valign="top"><p><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">Value</span></a></p></td>
+  </tr>
+  <tr>
+    <td colspan="2" valign="top">
+        <p class=emptylinehalf>&nbsp;</p>
+        <p><span class="courier">AGGSUM</span>(<i>ValueColumn</i>, <i>Group</i>) or <span class="courier">ColumnAggregateSum</span>(<i>ValueColumn</i>, <i>Group</i>)</p></td>
+ </tr>
+ <tr>
+    <td width="40" valign="top"><p class=nospacetop>returns:</p></td>
+    <td valign="top"><p class=nospacetop>sums per group</p></td>
+  </tr>
+  <tr>
+    <td width="40" valign="top"><p>Domain:</p></td>
+    <td valign="top"><p><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">Value</span></a></p></td>
+  </tr>
+</table>
+
+<p class="tip">Notes:</p>
+
+<ul class="tipul">
+  <li>The <span class=courier>AGGSUM</span> and the <span class=courier>ColumnAggregateSum</span> function are aliases of each other. These functions can be used both in a table window and in scripts. </li>
+  <li>A 'group by' column can be specified when you perform an aggregation within one table. A 'group by' column must be specified when you perform an aggregation during a join.</li>
+  <li>The function parameters refer to nothing else than column names. This means that within the brackets no other expressions can be used.</li>
+  <li>Any undefined values in the input column are excluded from the calculation.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+        <li>On the command line of a table window, you may also use the <span class=courier><a href="calc_sum.htm">SUM</a></span> function. </li>
+	<li>To calculate the cumulative sum of a value column, you can use <span class=courier>ColumnCumulative</span> or <a href="calc_cum.htm"><span class=courier>CUM</span></a>.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>TabCalc example:</p>
+<p class=calc00>OutCol1 = AGGSUM(Area)</p>
+<p class=calc00>OutCol2 = AGGSUM(Area,Landuse)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top"><p class="tcolhr">Parcel</p></td>
+    <td valign="top"><p class="tcolh">Landuse</p></td>
+    <td valign="top"><p class="tcolhr">Area</p></td>
+    <td valign="top"><p class="tcolhr">OutCol1</p></td>
+    <td valign="top"><p class="tcolhr">OutCol2</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">00123</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">4000</p></td>
+    <td valign="top"><p class="t1r">50000</p></td>
+    <td valign="top"><p class="t1r">20000</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">00124</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">3500</p></td>
+    <td valign="top"><p class="t1r">50000</p></td>
+    <td valign="top"><p class="t1r">20000</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">00125</p></td>
+    <td valign="top"><p class="t1">Commercial</p></td>
+    <td valign="top"><p class="t1r">17500</p></td>
+    <td valign="top"><p class="t1r">50000</p></td>
+    <td valign="top"><p class="t1r">17500</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">00126</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">7500</p></td>
+    <td valign="top"><p class="t1r">50000</p></td>
+    <td valign="top"><p class="t1r">20000</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">00127</p></td>
+    <td valign="top"><p class="t1">Industrial</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+    <td valign="top"><p class="t1r">50000</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">01272</p></td>
+    <td valign="top"><p class="t1">Institutional</p></td>
+    <td valign="top"><p class="t1r">12500</p></td>
+    <td valign="top"><p class="t1r">50000</p></td>
+    <td valign="top"><p class="t1r">12500</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">04625</p></td>
+    <td valign="top"><p class="t1">Residential</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+    <td valign="top"><p class="t1r">50000</p></td>
+    <td valign="top"><p class="t1r">20000</p></td>
+  </tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+<ul>
+	<li>Column <span class=courier>OutCol1</span> contains the sum of all values of column <span class=courier>CommVal</span>.</li>
+	<li>Column <span class=courier>OutCol2</span> contains the sum of parcel areas per landuse class.</li>
+</ul>
+
+<p class="kopje">Advanced example</p>
+<p>Suppose we have one table <span class=courier>Province</span> which contains all provinces of a certain country. Further, we have a table <span class=courier>Municipality</span> that contains information on municipalities. One column in this table (column <span class=courier>Population</span>) contains information on the population of each municipality. To obtain the total population of each province in the <span class=courier>Province</span> table, we can sum the population values of the municipalities in the <span class=courier>Municipality</span> table.</p>
+<p class="calc0linsp03befaft">PopPerProv = AGGSUM(Municipality.Population,
+Municipality.Province)</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" colspan="3"><p class="th">Province.tbt</p></td>
+    <td valign="top" colspan="3"><p class="th">Municipality.tbt</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="tcolh">Dom.<br>Province</p></td>
+    <td valign="top" width="55"><p class="tcolhr"><br>AnyInfo</p></td>
+    <td valign="top" width="20"></td>
+    <td valign="top" width="45"><p class="tcolh">Dom.<br>Municipality</p></td>
+    <td valign="top" width="70"><p class="tcolhr"><br>Population</p></td>
+    <td valign="top"><p class="tcolh"><br>Province</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Province1</p></td>
+    <td valign="top" width="55"><p class="t1r">1000</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1">Minicipality1</p></td>
+    <td valign="top" width="70"><p class="t1r">9920</p></td>
+    <td valign="top"><p class="t1">Province1</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Province2</p></td>
+    <td valign="top" width="55"><p class="t1r">2000</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1">Minicipality2</p></td>
+    <td valign="top" width="70"><p class="t1r">4131</p></td>
+    <td valign="top"><p class="t1">Province1</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Province3</p></td>
+    <td valign="top" width="55"><p class="t1r">5000</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1">Minicipality3</p></td>
+    <td valign="top" width="70"><p class="t1r">2161</p></td>
+    <td valign="top"><p class="t1">Province2</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Province4</p></td>
+    <td valign="top" width="55"><p class="t1r">4000</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1">Minicipality4</p></td>
+    <td valign="top" width="70"><p class="t1r">4918</p></td>
+    <td valign="top"><p class="t1">Province1</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Province5</p></td>
+    <td valign="top" width="55"><p class="t1r">2000</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1">Minicipality5</p></td>
+    <td valign="top" width="70"><p class="t1r">10461</p></td>
+    <td valign="top"><p class="t1">Province3</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">...</p></td>
+    <td valign="top" width="55"><p class="t1r">...</p></td>
+    <td valign="top" width="10"><p class="t1r"></p></td>
+    <td valign="top" width="45"><p class="t1">...</p></td>
+    <td valign="top" width="70"></td>
+    <td valign="top"></td>
+  </tr>
+</table>
+
+<p class="emptyline">&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+    <td valign="top" colspan="3"><p class="th">Province.tbt after aggregation</p></td>
+</tr>
+<tr>
+    <td valign="top"><p class="tcolh">Dom.<br>Province</p></td>
+    <td valign="top"><p class="tcolhr"><br>AnyInfo</p></td>
+    <td valign="top"><p class="tcolhr"><br>PopPerProv</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">Province1</p></td>
+    <td valign="top"><p class="t1r">1000</p></td>
+    <td valign="top"><p class="t1r">18969</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">Province2</p></td>
+    <td valign="top"><p class="t1r">2000</p></td>
+    <td valign="top"><p class="t1r">2161</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">Province3</p></td>
+    <td valign="top"><p class="t1r">5000</p></td>
+    <td valign="top"><p class="t1r">10461</p></td>
+  </tr>
+<tr>
+    <td valign="top"><p class="t1">Province4</p></td>
+    <td valign="top"><p class="t1r">4000</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+</tr>
+  <tr>
+    <td valign="top"><p class="t1">Province5</p></td>
+    <td valign="top"><p class="t1r">4000</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1">...</p></td>
+    <td valign="top"><p class="t1r">...</p></td>
+    <td valign="top"><p class="t1r">...</p></td>
+  </tr>
+</table>
+
+<p class="defnewpar">This expression will only work when the <i>Group</i> column (<span class=courier>Municipality.Province</span>) has the same domain as the current table <span class=courier>Province</span>. It is usually easier to perform a join operation through the <a href="../ilwismen/join_column.htm">Join Column</a> wizard. This will give the same result as the expression above, and is even more flexible. For more information, see <a href="calc_joining_columns_from_other_tables.htm">Table calculation : Join columns</a>.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+        <td valign="top" width="80"><p class=seealsolinks><a href="calc_aggavg.htm">AGGAVG</a></p></td>	
+	<td valign="top" width="80"><p class=seealsolinks><a href="calc_aggmed.htm">AGGMED</a></p></td>
+        <td valign="top"><p class=seealsolinks><a href="calc_aggstd.htm">AGGSTD</a></p></td>
+</tr>
+<tr>
+        <td valign="top" width="80"><p class=seealsolinks><a href="calc_aggmin.htm">AGGMIN</a></p></td>	
+	<td valign="top"><p class=seealsolinks><a href="calc_aggprd.htm">AGGPRD</a></p></td>
+<td valign="top"><p class=seealsolinks><a href="calc_aggcnt.htm">AGGCNT</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><p class=seealsolinks><a href="calc_aggmax.htm">AGGMAX</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_sum.htm">SUM</a></p></td>
+</tr>
+<tr>
+<td colspan="3" valign="top">
+<p class=seealsolinks><a href="../ilwismen/aggregate_column.htm">Aggregate Column</a> (dialog box)</p>
+
+</td>
+</tr>
+</table>
+
+</body

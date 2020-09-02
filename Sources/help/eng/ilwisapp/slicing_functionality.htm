@@ -1,0 +1,229 @@
+<html>
+
+<head>
+<title>Slicing : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Slicing">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Slicing</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Slicing classifies the values of a raster map. Ranges of values of the input map are grouped together into one output class. A <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >domain Group</a> should be created beforehand; it lists the upper boundaries of the groups and the group names. </p>
+
+<p class=defnewpar>With Slicing, a map with for example slope values ranging from 0 to 200% can be grouped into relief classes: Flat (0-2%), Undulating (2-8%), Rolling (8-16%), Hilly (16-30%), Mountainous (&gt;30%) (FAO). Also, a map containing Green Vegetation Index values (combination of satellite bands), can be sliced into user-defined intervals. This can be considered as a first classification.</p>
+
+<p class=kopje>Example:</p>
+
+<p>A map with slope values ranging from 0 to 200% is grouped into relief classes: Flat (0-2%), Undulating (2-8%), Rolling (8-16%), Hilly (16-30%), Mountainous (&gt;30%)
+(FAO).</p>
+
+<p class=emptyline></p>
+<table>
+<tr>
+	<td><p class=courier>Input map:</p></td>
+	<td><p class=courier>Output map:</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>6</td>
+    <td class=calcpict>10</td>
+    <td class=calcpict>20</td>
+    <td class=calcpict>40</td>
+  </tr>
+  <tr>
+    <td class=calcpict>4</td>
+    <td class=calcpict>12</td>
+    <td class=calcpict>20</td>
+    <td class=calcpict>25</td>
+  </tr>
+  <tr>
+    <td class=calcpict>3</td>
+    <td class=calcpict>7</td>
+    <td class=calcpict>12</td>
+    <td class=calcpict>10</td>
+  </tr>
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>5</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>U</td>
+    <td class=calcpict>R</td>
+    <td class=calcpict>H</td>
+    <td class=calcpict>M</td>
+  </tr>
+  <tr>
+    <td class=calcpict>U</td>
+    <td class=calcpict>R</td>
+    <td class=calcpict>H</td>
+    <td class=calcpict>H</td>
+  </tr>
+  <tr>
+    <td class=calcpict>U</td>
+    <td class=calcpict>U</td>
+    <td class=calcpict>R</td>
+    <td class=calcpict>R</td>
+  </tr>
+  <tr>
+    <td class=calcpict>F</td>
+    <td class=calcpict>U</td>
+    <td class=calcpict>U</td>
+    <td class=calcpict>U</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p>In the output map, read for F Flat, for U Undulating, for R Rolling, for H Hilly and for M Mountainous.</p>
+
+<p class=defnewpar>The Slicing is performed according to the following domain Group: </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top"><p class=tcolhr>Upper<br>
+  Boundary</p></td>
+<td valign="top"><p class=tcolh><br>
+  Group Name</p></td>
+</tr>
+<tr>
+<td valign="top"><p class=t1r>2</p></td>
+<td valign="top"><p class=t1>Flat</p></td>
+</tr>
+<tr>
+<td valign="top"><p class=t1r>8</p></td>
+<td valign="top"><p class=t1>Undulating</p></td>
+</tr>
+<tr>
+<td valign="top"><p class=t1r>16</p></td>
+<td valign="top"><p class=t1>Rolling</p></td>
+</tr>
+<tr>
+<td valign="top"><p class=t1r>30</p></td>
+<td valign="top"><p class=t1>Hilly</p></td>
+</tr>
+<tr>
+<td valign="top"><p class=t1r>200</p></td>
+<td valign="top"><p class=t1>Mountainous</p></td>
+</tr>
+</table>
+
+<p class=kopje>Input requirements:</p>
+
+<p>The input map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>; further, a Group domain should be available.</p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output map uses the Group domain that is required for the Slicing operation.</p>
+
+<p>The output map uses the same georeference as the input map.</p>
+
+<p class=tip>Tip 1:</p>
+
+<p class=tiptext>The Slicing operation creates a new output map with new class names. Instead, you can also slice/classify a value map by creating and editing a representation for that map. You can then <i>interactively</i> modify the representation and redraw the map until satisfied:</p>
+
+<ol class=tipol>
+
+<li> Double-click a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a> in the Catalog; in the <span class=arial>Display Options</span> dialog box, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> next to the <span class=arial>Representation</span> list box to create a representation for this map;</li>
+
+<li> Type a name for the new representation; then the <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a> is opened;</li>
+
+<li> Click OK in the Display Options dialog box of the map; the map is displayed in a map window;</li>
+
+<li> In the Representation Value/Gradual editor, insert boundaries and adjust colors;</li>
+
+<li> Keep the editor open and switch to the map window;</li>
+
+<li> Press the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22"> in the map window and the map is directly shown with this representation;</li>
+
+<li> Switch to the Representation editor and continue to change boundaries, and colors; then switch to the mapp window to redraw the map, etc. until satisfied.</li>
+
+</ol>
+
+<p class=tiptext>Slicing by modifying a representation takes much less time than (re-)calculating values as the Slicing operation would do; another advantage is that the exact input values are retained.</p>
+
+<p class=tiptext>For more information, see <a href="../ilwis/how_to_slice_an_image.htm">How to slice an image</a>.</p>
+
+<p class=tip>Tip 2:</p>
+
+<p class=tiptext>To get the best out of the Slicing operation:</p>
+
+<ul class=tipul>
+
+<li>	When creating a Group domain, also fill the representation of this domain.</li>
+
+<li>	Keep the domain window, representation window and output map window open simultaneously; you can modify classes, i.e edit the domain Group, and change its representation;</li>
+
+<li>	Open the Properties of the map (Edit menu in the map window, <span class=arial>Properties</span>) and click the <span class=arial>Make Up-to-Date</span> button; the map is recalculated according to the new boundaries in the domain Group;</li>
+
+<li>	Redraw the map in the map window.</li>
+
+</ul>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+
+<li>	For ILWIS 1.41 users: a domain Group is a synonym for an ILWIS 1.41 classify table.</li>
+
+<li>	Instead of using the Slicing operation to apply a domain Group on a map, you can also use the MapCalc function <a href="../ilwis/calc_clfy.htm">CLFY</a>(<i>InputMap,DomainGroup</i>) on the command line. </li>
+
+<li>	To perform a multi-spectral image classification, see the <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >Classify</a> operation.</li>
+
+</ul>
+
+<p class=kopje>Reference: </p>
+
+<ul>
+
+<li>	FAO, 1990, Guidelines for soil profile description. FAO, Rome.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_slice_an_image.htm">How to slice an image</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_classify_a_map_or_column.htm">How to classify a map</a></p>
+
+<p class=seealsolinks><a href="slicing_dialogbox.htm">Slicing : dialog box</a></p>
+
+<p class=seealsolinks><a href="slicing_commandline.htm">Slicing : command line</a></p>
+
+<p class=seealsolinks><a href="slicing_algorithm.htm">Slicing : algorithm</a></p>
+
+</body

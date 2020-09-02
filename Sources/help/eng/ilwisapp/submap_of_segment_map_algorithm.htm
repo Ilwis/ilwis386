@@ -1,0 +1,39 @@
+<html>
+
+<head>
+<title>Sub-map of segment map : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sub-map of segment map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Sub-map of segment map</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Sub-map of segment map operation copies a rectangular part of a segment map into a new segment map. </p>
+
+<p class=defnewpar>The user has to specify minimum and maximum XY-coordinates for the output segment map. When the input map uses a coordinate system of <i>type latlon</i>, the user has to specify minimum and maximum Latitudes and Longitudes for the output segment map. The specified minimum and maximum coordinates define the so-called clipping rectangle. </p>
+
+<p class=defnewpar>Then:</p>
+
+<ul>
+
+<li>	Segments that entirely fall within the clipping rectangle are copied to the output map without modifications;</li>
+
+<li>	Segments that have one intersection with the clipping rectangle, obtain a node at the intersection, and then the parts within the clipping rectangle are copied into the new output map;</li>
+
+<li>	Segments that have more than one intersection with the clipping rectangle, obtain nodes at each intersection, and then the parts within the clipping area are copied as multiple segments into the output map.</li>
+
+<li>	Segments that completely fall outside the clipping rectangle are not copied.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="submap_of_segment_map_functionality.htm">Sub-map of segment map : functionality</a></p>
+
+</body

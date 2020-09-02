@@ -1,0 +1,122 @@
+<html>
+
+<head>
+<title>Cross : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cross">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Cross</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Cross operation performs an overlay of two raster maps: pixels on the same positions in both maps are compared; the occurring combinations of class names, identifiers or values of pixels in the first input map and those of pixels in the second input map are stored. These combinations give an output cross map and a cross table. The cross table includes the combinations of input values, classes or IDs, the number of pixels that occur for each combination and the area for each combination.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>First map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the first input raster map. Open the drop-down list box by clicking it and select a map, or directly drag a map from the Catalog into this box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Ignore undefs:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to ignore undefined values in the first input map; in the output cross table, combinations with undefined values in the first map will not be listed. Clear this check box when combinations with undefined values in the first map should be listed in the cross table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Second map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the second input raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Ignore undefs:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to ignore undefined values in the second input map; in the output cross table, combinations with undefined values in the second map will not be listed. Clear this check box when combinations with undefined values in the second map should be listed in the cross table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output cross table which will contain the combinations of the two input maps. This name will also be used for the output domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output cross table (and cross map). The description will appear in the status bar of the Main window when moving the mouse pointer over the table or the map in a Catalog, and in the title bar of a table or map window when the output table or output map is displayed. If no description is supplied, the output table (and the output map) will use their own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to obtain a cross map containing the combinations of the two input maps. Subsequently, type a name for the output raster map. Clear this check box if an output cross map is not desired.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output table will only be defined; if necessary the table will be calculated later, for instance when the table is opened to be displayed. </p>
+
+<p class=defnewpar>Optionally, a dependent output map can be defined. </p>
+
+<p class=defnewpar>An ID domain will be created (same name as cross table) which contains the combinations of domain items of both input maps. When an input map has a class or ID domain in which the class names or IDs have <i>codes</i>, then these codes will appear in the output domain. </p>
+
+<!--<p>When crossing two <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>, or maps with very many classes or IDs, the number of combinations of input map values may be larger than 16000. In this case, the output cross domain will <i>not</i> be sorted. When you open the output cross table, you can sort on columns, calculate with columns and perform column aggregations as usual.</p>-->
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cross_functionality.htm">Cross : functionality</a></p>
+
+</body

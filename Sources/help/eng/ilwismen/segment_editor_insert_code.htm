@@ -1,0 +1,119 @@
+<html>
+
+<head>
+<title>Segment editor : Insert code</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment editor, Edit segment map, Insert segments, Add ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Segment editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/segment_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert code</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Select a class name or type a value that will be assigned by default to <i>all new segments</i> that you insert from this moment onwards. </p>
+
+<p class=defnewpar>You can set the <span class=arial>Insert code</span> when you intend to digitize a couple of segments which should obtain the same class name or the same value. When finished, you can reset the <span class=arial>Insert code</span> to another class name or value, and digitize segments with another class name or value than before. </p>
+
+<p class=defnewpar>For more information on inserting segments, see <a href="segment_editor_insert_mode.htm">Insert mode</a>.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>The <span class=arial>Insert code</span> option is grayed out when editing a segment map with an ID domain or a Unique ID domain, because in such maps, each segment is supposed to have a unique code. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Class name/Value:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a class name, or type a value that should be assigned by default to all new segments that you will insert from this moment onwards.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Class names, values, etc. </p>
+
+<ul>
+
+<li class=linespacing01before>For a map using a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>: select an existing class name from the drop-down list. </li>
+
+        <p>To enter a new class name: select <b>&lt;new&gt;</b> from the list, then type the new class name, and, optionally, type a class code and choose a color for the new class.</li>
+
+        <p>A new class name will be automatically added to the class domain. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>: type a value. </li>
+
+        <p>The value should fall inside the minimum and maximum value of the value domain used by the map. </p>
+
+ <p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using a <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool domain</a>: select <span class=arial>True</span>, <span class=arial>False</span>, or <span class=arial>?</span> (= undefined) from the drop-down list. </li>
+
+ </ul>
+
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>When you choose the '?' question mark, the selected segment(s) will not get a class name or value; they will have the undefined value. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>    For maps with a class domain: the class name selected for the <span class=arial>Insert Code</span> will be assigned automatically to each newly inserted segment (i.e. no questions). </li>
+
+<li>    For maps with an ID, a value, or a Bool domain: an ID or a value etc. will be asked for each newly inserted segment. For more information, see <span class=arial><a href="segment_editor_insert_mode.htm">Insert mode</a></span>. </li>
+
+<li>    For maps with a system <span class=courier>UniqueID</span> domain, each newly inserted segment will automatically obtain a unique ID like <span class=courier>seg 1</span>, <span class=courier>seg 2</span>, <span class=courier>seg 3</span>, etc. </li>
+
+<li>    You can also <span class=arial>Edit</span> the class names, values etc. of segments after you finished digitizing. For more information, see <span class=arial><a href="segment_editor_edit_selection.htm">Edit</a></span>. </li>
+
+<li>	The <b>width</b> of class names, IDs, or values as shown in the <span class=arial>Edit</span> dialog box, depends on the width of the domain. You can change the width of a domain by editing the <a href="../ilwismen/domain_properties.htm">Domain Properties</a> sheet.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_menu_commands.htm">Segment editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="segment_editor_insert_mode.htm">Segment editor : Insert mode</a></p>
+
+<p class=seealsolinks><a href="segment_editor_edit_selection.htm">Segment editor : Edit</a></p>
+
+</body

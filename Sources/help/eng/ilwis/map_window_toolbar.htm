@@ -1,0 +1,239 @@
+<html>
+
+<head>
+<title>Map window : toolbar</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Toolbar, Map window, Button bar">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map window</h1>
+
+<h1 class=secondline>Toolbar</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The toolbar of a map window provides <i>shortcuts</i> for some regularly used menu commands for instance to zoom in on maps, to pan, to add a layer to the map window, to remove a layer from the map window, or to save the contents of a map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>.</p>
+
+<p class=defnewpar><img src="../images/bbmap.gif" align=bottom width="262" height="26"></p>
+
+<p class=defnewpar>When you leave the mouse pointer for a short period of time on top of a button, a tooltip will appear with the name of the button / the menu command that it will perform. Also the <a href="map_window_status_bar.htm">status bar</a> at the bottom of the window may provide you with a short explanation on the effect of using the button. </p>
+
+<p class=defnewpar>You can move the toolbar and dock it along an edge of the window; you can also make the toolbar floating. Some of the actions that are available via the toolbar are also available via the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<p class=defnewpar>The following actions can be performed:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing="1%" width="100%">
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/entirmap.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p>Entire Map:</p>
+
+</td>
+<td valign="top">
+<p>Displays the entire map in the map window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/redraw.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p>Redraw:</p>
+
+</td>
+<td valign="top">
+<p>Redraws the contents of the map window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/dist.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p><a href="../ilwismen/measure_distance.htm">Measure Distance</a>:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to measure the distance and the angle between two points in the map window. </p>
+
+<p>The mouse pointer will change into a pair of compasses, then: </p>
+
+<ul>
+
+<li>draw a line between two points of interest.</li>
+
+</ul>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/pan.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p>Pan:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to roam through the map window when zoomed in. </p>
+
+<p>The mouse pointer will change into a hand, then: </p>
+
+<ul>
+
+<li>click somewhere in the map window, and drag this part of the map window to another position. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/zoomin.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p><a href="../ilwismen/zoom_in_on_maps.htm">Zoom In</a>:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to zoom in on a selected spot or area in the map window. </p>
+
+<p>The mouse pointer will change into a magnifying-glass with a large plus inside, then: </p>
+
+<ul>
+
+<li>click in the map window to zoom in on that position with a factor 2, or  </li>
+
+<li>drag the mouse pointer in the map window from one corner of interest to another (any zoom in factor). </li>
+
+</ul>
+
+<p class=tiptext><span class=tip>Tip: </span> To zoom in, you can also use the <a href="map_window_overview_window.htm">overview window</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/zoomout.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p>Zoom Out:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to zoom out from a map window. </p>
+
+<p>The mouse pointer will change to a 'magnifying'-glass with a large minus inside, then: </p>
+
+<ul>
+
+<li>click in the map window to zoom out with a factor 2, or </li>
+
+<li>drag a rectangle with the mouse pointer in the map window; the smaller the rectangle, the more you will zoom out. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/normal.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p>Normal:</p>
+
+</td>
+<td valign="top">
+<p>Switch off <span class=arial>Measure Distance</span>, <span class=arial>Pan</span>, <span class=arial>Zoom In</span>, or <span class=arial>Zoom Out</span> and return to normal pointing mode. The mouse pointer will change back into a normal pointer. You can also press the <span class=arial>Esc</span> key or the <span class=arial>Ctrl+N</span> keys on the keyboard to return to <span class=arial>Normal</span> mode. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/addlayer.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p><a href="../ilwismen/add_layer_to_map_window.htm">Add Layer</a>:</p>
+
+</td>
+<td valign="top">
+<p>Add another <a href="..//ilwis/popup/layers_data_layers_popup.htm" onClick="return popup(this, 'notes')" >data layer</a> or an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text layer</a> to the map window. The <a href="../ilwismen/add_layer_to_map_window.htm">Add Layer</a> dialog box will appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/remlayer.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p>Remove Layer:</p>
+
+</td>
+<td valign="top">
+<p>Remove a selected layer from the map window. First select the layer to be removed in the <a href="map_window_layer_management.htm">Layer Management</a> pane of the map window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/save.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p><a href="../ilwismen/save_view.htm">Save View</a>:</p>
+
+</td>
+<td valign="top">
+<p>Save the contents of this map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. When this is the first time you save the map window as a map view, the <a href="../ilwismen/save_view_as.htm">Save View As</a> dialog box will appear. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The toolbar can be hidden or shown with the <span class=arial>Toolbar</span> command on the <a href="map_window_menu_commands.htm">Options menu</a>. If the action of a certain button cannot be performed at a certain moment, the button appears gray.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="map_window_layer_management.htm">Map window : Layer Management</a></p>
+
+<p class=seealsolinks><a href="map_window_overview_window.htm">Map window : overview window</a></p>
+
+<p class=seealsolinks><a href="map_window_menu_commands.htm">Map window : menu commands</a></p>
+
+</body

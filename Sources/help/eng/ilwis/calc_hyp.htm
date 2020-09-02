@@ -1,0 +1,315 @@
+<html>
+
+<head>
+<title>HYP</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="HYP, Exponential functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>HYP( ) function</h1>
+
+<p class=defnewpar>Returns the hypotenuse <span class="symbollarger">Ö</span>(a<sup>2</sup> + b<sup>2</sup>), i.e. the positive square root of the sum of <i>Value a</i> square and <i>Value b</i> square.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>HYP</span>(<i>Value a, Value b)</i></p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>Value a</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>Value b</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>HYP</span>  returns:</td>
+	<td valign="top">a real value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+<tr>
+	<td width="100" valign="top">Value range:</td>
+	<td valign="top">&gt;=0</td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>When one of the input parameters is undefined, or when both input parameters are undefined, the output will also be undefined.</p>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>The <span class=courier>HYP</span> function finds the side opposite the right angle in a right-angled triangle and is often used in slope calculations. See the <a href="#Applied example"> applied example</a> below.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="100"><p class=calc00>? HYP(1,1)</p></td>
+	<td><p>returns 1.4142, i.e. <span class="symbollarger">Ö</span>2</p></td>
+</tr>
+<tr>
+	<td width="100"><p class=calc00>? HYP(3,4)</p></td>
+	<td><p>returns 5.0000</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>OutMap = HYP(InMapA,InMapB)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>MapA</p></td>
+	<td><p class=courier>MapB</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>2</td>
+    <td class=calcpict>3</td>
+  </tr>
+  <tr>
+    <td class=calcpict>-2</td>
+    <td class=calcpict>0</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>4</td>
+    <td class=calcpict>-9</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>2</td>
+    <td class=calcpict>4</td>
+  </tr>
+  <tr>
+    <td class=calcpict>3</td>
+    <td class=calcpict>1</td>
+    <td class=calcpict>8</td>
+  </tr>
+  <tr>
+    <td class=calcpict>9</td>
+    <td class=calcpict>6</td>
+    <td class=calcpict>0</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>1.4142</td>
+    <td class=calcpict>2.8284</td>
+    <td class=calcpict>5.0000</td>
+  </tr>
+  <tr>
+    <td class=calcpict>3.6056</td>
+    <td class=calcpict>1.0000</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>7.2111</td>
+    <td class=calcpict>9.0000</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = HYP(InColA,InColB)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InColA</p></td>
+	<td valign="top"><p class=tcolhr>InColB</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>1.4142</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1r>2.8284</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>5.0000</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-2</p></td>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1r>3.6056</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>1.0000
+</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>8</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>9</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1r>7.2111</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-9</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>9.0000</p></td>
+</tr>
+</table>
+
+<p class=kopje><a name="Applied example">Applied example</a>: calculation of slope values in percentages</p>
+<p>The exponential <span class=courier>HYP</span> function can for instance be used to calculate <b>slope values</b> in percentages, from 2 input maps which contain heigth differences in x-direction (map
+<span class=courier>DX</span>) and in y-direction (map <span class=courier>DY</span>).</p>
+
+<table>
+<tr>
+	<td><p class=courier>DX</p></td>
+	<td><p class=courier>DY</p></td>
+	<td><p class=courier>Slopepct</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>-8.0</td>
+    <td class=calcpict>-0.2</td>
+    <td class=calcpict>9.2</td>
+  </tr>
+  <tr>
+    <td class=calcpict>-9.7</td>
+    <td class=calcpict>1.1</td>
+    <td class=calcpict>10.8</td>
+  </tr>
+  <tr>
+    <td class=calcpict>-8.0</td>
+    <td class=calcpict>-0.4</td>
+    <td class=calcpict>13.0</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>6.3</td>
+    <td class=calcpict>11.3</td>
+    <td class=calcpict>3.7</td>
+  </tr>
+  <tr>
+    <td class=calcpict>8.3</td>
+    <td class=calcpict>7.3</td>
+    <td class=calcpict>8.8</td>
+  </tr>
+  <tr>
+    <td class=calcpict>7.7</td>
+    <td class=calcpict>0.8</td>
+    <td class=calcpict>18</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>50.9</td>
+    <td class=calcpict>56.5</td>
+    <td class=calcpict>49.6</td>
+  </tr>
+  <tr>
+    <td class=calcpict>63.8</td>
+    <td class=calcpict>36.9</td>
+    <td class=calcpict>69.7</td>
+  </tr>
+  <tr>
+    <td class=calcpict>55.5</td>
+    <td class=calcpict>4.5</td>
+    <td class=calcpict>111.02</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class=calc0linsp03befaft>Slopepct = (HYP(DX,DY)/<a href="../ilwis/calc_pixsize.htm">PIXSIZE</a>(DX)) * 100</p>
+<p><span class=courier>PIXSIZE(DX)</span> is a function which retrieves the pixel size of map <span class=courier>DX</span>. You can also directly fill out the pixel size of the input maps yourself (in this case 20). The results may exceed 100%, as a slope of 45° is equal to 100%.&nbsp;</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="50"><p class=seealsolinks><a href="calc_sq.htm">SQ</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_pow.htm">POW</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="50"><p class=seealsolinks><a href="calc_sqrt.htm">SQRT</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_exp.htm">EXP</a></p></td>
+</tr>
+</table>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="..//ilwis/popup/calc_laws_of_exponents_popup.htm" onClick="return popup(this, 'notes')" >Laws of exponents</a></p></td>
+</tr>
+</table>
+
+</body

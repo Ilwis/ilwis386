@@ -1,0 +1,67 @@
+<html>
+
+<head>
+<title>Assign labels to polygons : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Assign labels to polygons">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Assign labels to polygons</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Assign Labels to Polygons operation can be used to recode polygons in a polygon map according to label points in a point map. For each label point, the surrounding polygon is determined; then the class name, ID, or value of the label point is assigned to that polygon.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>For the input polygon map and the input point map there are no special requirements. </p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The output polygon map uses the same domain as the input point map.</p>
+
+<p>The output polygon map uses the same coordinate system and coordinate boundaries as the input polygon map.</p>
+
+<p>When the coordinate systems of the input maps are different (e.g. different projections) but compatible, the coordinates of the point map will be transformed to the coordinate system of the polygon map.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To create polygon labels, you can use the <a href="..//ilwisapp/popup/polygons_to_points_popup.htm" onClick="return popup(this, 'notes')" >Polygons to Points</a> operation.</li>
+
+<li>	To obtain the names, IDs or values of polygons as text, it is advised to create an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text object</a> and base it on your polygon map. You can edit font, color, and position of the texts in the <a href="..//ilwis/popup/annotation_text_editor_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text editor</a>. For more information, see <a href="../ilwis/ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="assign_labels_to_polygons_dialog_box.htm">Assign labels to polygons : dialog box</a></p>
+
+<p class=seealsolinks><a href="assign_labels_to_polygons_command_line.htm">Assign labels to polygons : command line </a></p>
+
+<p class=seealsolinks><a href="assign_labels_to_polygons_algoritm.htm">Assign labels to polygons : algorithm</a></p>
+
+<p></p>
+
+</body

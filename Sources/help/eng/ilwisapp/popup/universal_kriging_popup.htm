@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>Universal kriging popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Universal Kriging</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/universal_kriging.htm" onClick="return popup(this, 'notes')" >Universal Kriging</a> can be seen as a <a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" >point interpolation</a>, which requires a point map as input and which returns a raster map with estimations and optionally an error map. Universal Kriging is a variant of the Ordinary <a href="kriging_popup.htm">Kriging</a> operation: Universal Kriging is Kriging with a <i>local trend</i>. The local trend or drift is a continuous and slowly varying trend surface on top of which the variation to be interpolated is superimposed. The local trend is recomputed for each output pixel and the operation is therefore more similar to the <a href="moving_surface_popup.htm">Moving Surface</a> operation than to the <a href="trend_surface_popup.htm">Trend Surface</a> operation.</p>
+
+<p>Before Universal Kriging, you should perform the <a href="spatial_correlation_popup.htm">Spatial Correlation</a> operation, and determine a semi-variogram model in a graph window (<a href="..//ilwismen/graph_window_add_semivariogram_model.htm" onClick="return popup(this, 'notes')" >Graph window : Add semi-variogram model</a>).</p>
+
+</body

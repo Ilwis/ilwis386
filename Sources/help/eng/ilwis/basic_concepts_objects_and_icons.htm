@@ -1,0 +1,379 @@
+<html>
+
+<head>
+<title>Basic concepts : objects and icons</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Basic concepts, Objects, ILWIS objects, Data objects, Container objects, Service objects, Special objects">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Basic concepts</h1>
+
+<h1 class=secondline>ILWIS objects and icons</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>There are several types of ILWIS objects: <b>data objects</b>, <b>container objects</b>, <b> service objects</b>, and <b>special objects</b>. Click the next link to get a list of all <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >ILWIS objects and their icons</a> in a secondary window. </p>
+
+<p class=defnewpar><a href="ilwis_objects_data_objects.htm">Data objects</a> are point, segment, polygon and raster maps, satellite images, tables and columns; that are the GIS/RS materials to work with. Maps can be displayed and edited in a map window, tables and  columns in a table window. You can perform <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculations</a> and <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operations</a> on data objects. </p>
+
+<p class=linespacing03before>Data objects are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rasmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top" width=96>
+<p><a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a></p>
+
+</td>
+<td valign="top">
+<p>(containing pixels)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/polmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top" width=96>
+<p><a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a></p>
+
+</td>
+<td valign="top">
+<p>(containing area features)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/segmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top" width=96>
+<p><a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a></p>
+
+</td>
+<td valign="top">
+<p>(containing line features)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/pointmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top" width=96>
+<p><a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a></p>
+
+</td>
+<td valign="top">
+<p>(containing point features)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/table.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top" width=96>
+<p><a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >tables</a></p>
+
+</td>
+<td valign="top">
+<p>(containing columns)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/column.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top" width=96>
+<p><a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >columns</a></p>
+
+</td>
+<td valign="top">
+<p>(not listed in Catalog)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar><a href="ilwis_objects_container_objects.htm">Container objects</a> are collections of <a href="ilwis_objects_data_objects.htm">data objects</a>. </p>
+
+<p class=linespacing03before>Container objects are: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/mpl.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map lists</a></p>
+
+</td>
+<td valign="top">
+<p>(containing a set of raster maps)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/objcol.gif" align=bottom width="15" height="13"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collections</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/mpv.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/layout.gif" align=bottom width="12" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layouts</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/anntxt.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/graphicon.gif" align=bottom width="15" height="15"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_graph_popup.htm" onClick="return popup(this, 'notes')" >graphs</a></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar><a href="ilwis_objects_service_objects.htm">Service objects</a> are domains, representations, georeferences, and coordinate systems. Service objects are used by data objects; they contain accessories that data objects need besides the data itself. Service objects can be selected to serve one or more data objects; they can be created, edited, etc. through the properties of an object. </p>
+
+<p class=linespacing03before>Service objects are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/domain.gif" align=bottom width="16" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domains</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rpr.gif" align=bottom width="16" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representations</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/georef.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeferences</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/coordsy.gif" align=bottom width="15" height="15"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate systems</a></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar><a href="ilwis_objects_special_objects.htm">Special objects</a> are
+  histograms, sample sets, stereo pairs, criteria trees, two-dimensional tables,
+  matrices, filters, user-defined functions and scripts.</p>
+
+<p class=linespacing03before>Special objects are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hist.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_raster_popup.htm" onClick="return popup(this, 'notes')" >histograms of raster maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hispol.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_polygon_popup.htm" onClick="return popup(this, 'notes')" >histograms of polygon maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hisseg.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_segment_popup.htm" onClick="return popup(this, 'notes')" >histograms of segment maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hispnt.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_point_popup.htm" onClick="return popup(this, 'notes')" >histograms of point maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/sample.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample sets</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/obj_stereopair.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pairs</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22><p><img src="../images/criteria_tree.gif" align=bottom width="13" height="14"></p></td>
+<td valign="top"><p><a href="..//ilwis/popup/objects_criteria_trees_popup.htm" onClick="return popup(this, 'notes')" >criteria trees</a></p></td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/tb2.gif" align=bottom width="14" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_table2dim_popup.htm" onClick="return popup(this, 'notes')" >two-dimensional tables</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/matrix.gif" align=bottom width="16" height="13"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_matrices_popup.htm" onClick="return popup(this, 'notes')" >matrices</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/filt.gif" align=bottom width="13" height="13"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_filters_popup.htm" onClick="return popup(this, 'notes')" >filters</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/func.gif" align=bottom width="15" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_userdef_functions_popup.htm" onClick="return popup(this, 'notes')" >functions</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/script.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Furthermore, <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a> can be added to a map window. </p>
+
+<p class=defnewpar><a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >Annotation</a> as <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legends</a>, a <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map border</a> including coordinates and ticks for grid lines and/or a graticule, a <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >North arrow</a>, a <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bar and a scale text</a>, <a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a>, <a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >boxes</a>, <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmaps</a>, <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >pictures</a>, and  a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a> can be added to a layout. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="ilwis_objects.htm">ILWIS objects</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_objects.htm">Appendices : ILWIS objects</a></p>
+
+<p class=seealsolinks><a href="appendices_relations_between_ilwis_objects.htm">Appendices : Relations between ILWIS objects</a></p>
+
+</body

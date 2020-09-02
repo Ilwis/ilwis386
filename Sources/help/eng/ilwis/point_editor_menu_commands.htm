@@ -1,0 +1,141 @@
+<html>
+
+<head>
+<title>Point editor : menu commands</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point editor, Menu commands, Edit point map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<a id="top">
+<h1 class=firstline>Point editor</h1>
+
+<h1 class=secondline>Menu commands</h1>
+</a>
+
+<!--<hr>-->
+
+<table class=menupage border="0" cellspacing="0" width="100%" cellpadding="1">
+
+<tr bgcolor="#CCCCCC">
+
+<td valign="top" width="20%" align="left" nowrap>&nbsp;<span class=menuheading><u>F</u>ile</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/point_editor_undo_all_changes.htm">Undo All Changes</a> <br>
+&nbsp;<a href="../ilwismen/point_editor_save.htm">Save</a> <br>
+&nbsp;<a href="../ilwismen/point_editor_bounds_of_map.htm">Boundaries of Map</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;<a href="../ilwismen/point_editor_customize.htm">Customize ...</a><br>
+&nbsp;<a onclick="doExpand(exp1,link1)" href="#top">Digitizer<img src="../images/menuarrt.gif" align="bottom" id="link1" border=0 width="9" height="13"></a><br>
+<DIV ID="exp1" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="../ilwismen/point_editor_digitizer.htm">Map <u>R</u>eference</a><br>
+&nbsp;&nbsp;&nbsp;<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="../ilwismen/point_editor_digitizer.htm">Active</a> <br>
+</div>
+&nbsp;<a href="..//ilwismen/popup/exit_point_editor_popup.htm" onClick="return popup(this, 'notes')" >Exit Editor</a><br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<td align="left" valign="top" width="20%" nowrap>&nbsp;<span class=menuheading><u>E</u>dit</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/point_editor_cut_selection.htm">Cut</a> <br> 
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/point_editor_copy_selection.htm">Copy</a> <br> 
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/point_editor_paste_selection.htm">Paste</a> <br> 
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/point_editor_delete_selection.htm">Delete</a> <br> 
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/point_editor_select_all_popup.htm" onClick="return popup(this, 'notes')" >Select All</a> <br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/point_editor_edit_selection.htm">Edit ...</a> <br> 
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/point_editor_add_point.htm">Add Point ...</a> <br> 
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13">&nbsp;<a href="../ilwismen/point_editor_select_mode.htm">Select Mode</a> <br> 
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/point_editor_move_points_mode.htm">Move Points</a> <br> 
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/point_editor_insert_mode.htm">Insert Mode</a> <br> 
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="../ilwismen/point_editor_find_undefineds.htm">Find Undefineds</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<td align="left" valign="top" width="30%" nowrap>&nbsp;<span class=menuheading><u>L</u>ayers</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+&nbsp;<a href="map_window_menu_commands.htm"><i>similar to map window:</i></a><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+&nbsp;<a href="../ilwismen/add_layer_to_map_window.htm">Add <u>L</u>ayer ...</a> <br>
+&nbsp;<a href="../ilwismen/display_options_grid_lines.htm">Add <u>G</u>rid Lines ...</a> <br>
+&nbsp;<a href="../ilwismen/display_options_graticule.htm">Add Gra<u>t</u>icule ...</a> <br>
+&nbsp;<a href="../ilwismen/remove_layer_from_map_window.htm"><u>R</u>emove Layer</a> <br>
+&nbsp;<a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" ><u>D</u>isplay Options <img src="../images/menuarrt.gif" align="bottom" border=0 width="9" height="13"></a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+&nbsp;<a href="../ilwismen/background_color.htm"><u>B</u>ackground Color ...</a><br>
+&nbsp;<a onclick="doExpand(exp2,link2)" href="#top">Double-Click <u>A</u>ction <img src="../images/menuarrt.gif" align="bottom" id="link2" border=0 width="9" height="13"></a><br>
+<DIV ID="exp2" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13">&nbsp;<a href="../ilwismen/double_click_action.htm">Attributes</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13">&nbsp;<a href="../ilwismen/double_click_action.htm">Representation</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13">&nbsp;<a href="../ilwismen/double_click_action.htm">Execute Action</a><br>
+</div>
+
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+
+<td bgcolor="#FFFFFF">&nbsp;</td>
+
+<td align="left" valign="top" width="30%" nowrap>&nbsp;<span class=menuheading><u>O</u>ptions</span><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br>
+&nbsp;<a href="map_window_menu_commands.htm"><i>similar to map window:</i></a><br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+ 
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/map_window_entire_map_popup.htm" onClick="return popup(this, 'notes')" ><u>E</u>ntire Map</a> <br>
+<img src="../images/menuoptbullet.gif" align="bottom" width="6" height="13">&nbsp;<a href="..//ilwismen/popup/map_window_normal_popup.htm" onClick="return popup(this, 'notes')" ><u>N</u>ormal/Select</a> <br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/zoom_in_on_maps.htm">Zoom <u>I</u>n</a> <br>
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/options_zoomout_popup.htm" onClick="return popup(this, 'notes')" >Zoom <u>O</u>ut</a> <br>
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/map_window_pan_popup.htm" onClick="return popup(this, 'notes')" ><u>P</u>an</a> <br>
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/options_no_zoom_popup.htm" onClick="return popup(this, 'notes')" >No Zoom</a> <br>
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/options_redraw_map_window_popup.htm" onClick="return popup(this, 'notes')" ><u>R</u>edraw</a> <br>
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/measure_distance.htm"><u>M</u>easure Distance</a> <br> 
+&nbsp;&nbsp;&nbsp;<a href="..//ilwismen/popup/map_window_show_histogram_popup.htm" onClick="return popup(this, 'notes')" >Show <u>H</u>istogram</a> <br> 
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+
+&nbsp;&nbsp;&nbsp;<a onclick="doExpand(exp3,link3)" href="#top">E<u>x</u>tend Window<img src="../images/menuarrt.gif" align="bottom" id="link3" border=0 width="9" height="13"></a><br>
+<DIV ID="exp3" STYLE="display: none;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/extend_window_by_percentage.htm">Extend by <u>P</u>ercentage ...</a> <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="../ilwismen/extend_window_by_coordinates.htm">Extend by <u>C</u>oordinates ...</a> <br>
+</div>
+&nbsp;&nbsp;&nbsp;<a href="../ilwismen/change_coordinate_system_of_a_map_window.htm"><u>C</u>oordinate System ...</a> <br> 
+<img src="../images/menuhr.gif" width="100%" height="6"><br> 
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_adjust_window_size_popup.htm" onClick="return popup(this, 'notes')" ><u>A</u>djust Window Size</a> <br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_layer_management_pane_map_window_popup.htm" onClick="return popup(this, 'notes')" ><u>L</u>ayer Management</a> <br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_scale_control_map_window_popup.htm" onClick="return popup(this, 'notes')" ><u>S</u>cale Control</a> <br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_toolbar_point_editor_popup.htm" onClick="return popup(this, 'notes')" ><u>T</u>oolbar</a> <br>
+<img src="../images/menuchkmark.gif" align=bottom width="9" height="13"><a href="..//ilwismen/popup/options_status_bar_point_editor_popup.htm" onClick="return popup(this, 'notes')" >Status Bar</a> <br>
+<img src="../images/menugr.bmp" width="100%" height="3"><br>
+</td>
+</tr>
+</table>
+
+</body

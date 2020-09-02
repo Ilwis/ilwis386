@@ -1,0 +1,143 @@
+<html>
+
+<head>
+<title>Point density : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point density, MapRasterizePointCount, MapRasterizePointSum">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Point density</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/point_density_popup.htm" onClick="return popup(this, 'notes')" >Point density</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapRasterizePointCount</span>(InputPointMap, Georeference, <i>PointSize</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapRasterizePointSum</span>(InputPointMap, Georeference, <i>PointSize</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output raster map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapRasterizePointCount </p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Point density operation and counting the number of points inside pixels. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapRasterizePointSum</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Point density operation and summing the values of the points or the attribute values of points inside pixels. This command can only be used on the command line.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPointMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input point map. When using <span class=courier>MapRasterizePointCount</span>, the map may use any domain. When using <span class=courier>MapRasterizePointSum</span>, the map has to use a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value domain</a> or you have to specify an attribute column of an attribute table linked to the point map as <i>InputPointMap.ColumnName</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Georeference</p>
+
+</td>
+<td valign="top">
+<p>is the name of an existing georeference that should be used for the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>PointSize</i></p>
+
+</td>
+<td valign="top">
+<p>is the point size (integer value &gt; 0) of the output map. Point size 1 means each point is counted in 1 pixel in the output map. Point size 2 means that each point is counted in 2<span class=courier>*</span>2 pixels in the output map.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>In a script, you can prepare a georeference corners before rasterizing by using the <span class=courier>crgrf</span> command. See <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="point_density_functionality.htm">Point density : functionality</a></p>
+
+</body

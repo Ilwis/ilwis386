@@ -1,0 +1,123 @@
+<html>
+
+<head>
+<title>Point editor : Boundaries of map</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point editor, Boundaries of map, Coordinates of corners of point map, Extend vector map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Point editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/point_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Boundaries of map</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Change the <a href="..//ilwis/popup/coordinate_boundary_popup.htm" onClick="return popup(this, 'notes')" >coordinate boundaries</a> of the point map you are editing. </p>
+
+<p class=defnewpar>The coordinate boundaries define the outer boundaries of the point coordinates that can be added to your point map. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>By extending the coordinate boundaries of the point map, you can also digitize points in the extended part of the point map. </p>
+
+<li>When accidentally the coordinate boundaries are reduced too much, so that part of the points would fall outside the map, the program will recalculate the outer bounding box of all points that are already in the map and use this as the coordinate boundaries of your map; so none of your existing points will get lost. </p> 
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=84>
+<p class=diabox>Min X, Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type new values for the minimum X-coordinate and for the minimum Y-coordinate of the point map. With the minimum XY-coordinate, the XY-coordinate of the <i>lower left corner</i> of the map is meant. </p>
+
+</td>
+</tr>
+<td valign="top" width=84>
+<p class=diabox>Max X, Y:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type new values for the maximum X-coordinate and for the maximum Y-coordinate of the point map. With the maximum XY-coordinate, the XY-coordinate of the <i>upper right corner</i> of the map is meant. </p>
+
+</td>
+</tr>
+<td valign="top" width=84>
+<p class=diabox><img src="../images/defaultbutton.gif" width="66" height="23"> </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Only click the <span class=arial>Default</span> button when the new boundaries should exactly fit the outer coordinates of the existing points in the current map. The Min X, Y and the Max X, Y coordinates will change in the text boxes above.</p>
+
+<p class=diabox><span class=tip>Note: </span><span class=tiptext>You cannot return to the original map boundaries once you clicked the <span class=arial>Default</span> button and the <span class=arial>OK</span> button of this dialog box. </span></p>
+
+</td>
+</tr>
+<td valign="top" width=84>
+<p class=diabox>Adapt window: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you wish to show the map with its new boundary coordinates (i.e. new size) in the editor. </p>
+
+<p class=diabox>Clear this check box if you wish to show the map with its original boundary coordinates. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>After clicking the <span class=arial>OK</span> button, you can directly continue to digitize new points within the new coordinate boundaries; you can also do a <a href="../ilwismen/digitizer_map_referencing_coordsys.htm">Map Reference</a> again using the new corners. </p>
+
+<p class=defnewpar>When the new coordinate boundaries exceed the coordinates of the coordinate system used by the map, it is <i>not</i> necessary to extend the boundaries of the coordinate system used by the map. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>To change the coordinate boundaries of a point map, you can also use the <a href="../ilwisapp/submap_of_point_map_functionality.htm">Sub-map of point map</a> operation. </li>
+
+<li>To merge two or more point maps, use the <a href="../ilwisapp/glue_point_maps_functionality.htm">Glue point maps</a> operation. </li>
+
+</ul>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_menu_commands.htm">Point editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="extend_window_by_coordinates.htm">Map window : Extend window</a> (dialog box)</p>
+
+</body

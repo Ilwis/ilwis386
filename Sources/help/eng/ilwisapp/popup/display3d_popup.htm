@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>display 3D popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Display 3D</p>
+
+<p class=linespacing03after>With <a href="..//ilwisapp/display_3d.htm" onClick="return popup(this, 'notes')" >Display 3D</a>, you can create and edit a <b>georeference 3D</b> in order to obtain a three dimensional view of one or more maps. For the creation of a georeference 3D, a Digital Elevation Model (DEM) is required.</p>
+
+<p class=linespacing03after>The DEM can then be displayed as 3D grid lines with or without a drape of a raster map. The georeference 3D can be edited with the <a href="..//ilwis/georeference_3d_editor_functionality.htm" onClick="return popup(this, 'notes')" >Georeference 3D editor</a>. When finished editing the 3D view, you can add point, segment and/or polygon maps and/or annotation to improve the 3D view. </p>
+
+<p class=linespacing03after>With <a href="apply_3d_popup.htm">Apply3D</a>, you can create a permanent raster map which uses your georeference 3D. In fact an input raster map is resampled to the georeference 3D.</p>
+
+</body

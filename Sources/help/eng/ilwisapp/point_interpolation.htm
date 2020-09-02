@@ -1,0 +1,119 @@
+<html>
+
+<head>
+<title>Point interpolation</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point interpolation, Gridding, Moving average, Moving surface, Nearest point, Trend surface, Kriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Point interpolation</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A point interpolation performs an interpolation on randomly distributed point values and returns regularly distributed point values. This is also known as gridding. In ILWIS, the output values are raster values. </p>
+
+<p class=defnewpar>In an ILWIS point interpolation, the input map is a point map in which:</p>
+
+<ul>
+
+<li>	the points themselves are values (point map with a value domain), for instance concentration values, or </li>
+
+<li>	the points are identifiers (point map with an Identifier domain) and values are stored in a column of an attribute table linked to the point map.</li>
+
+</ul>
+
+<p class=defnewpar>The output of a point interpolation is a raster map. For each pixel in the output map, a value is calculated by an interpolation on input point values. </p>
+
+<p class=defnewpar>Several point interpolation methods are available:</p>
+
+<ul>
+
+<li class=ls01be>	<a href="nearest_point.htm">Nearest point</a>: assigns to pixels the value, identifier or class name of the nearest point, according to Euclidean distance. This method is also called Nearest Neighbour or Thiessen. The points in the input point map for the Nearest point operation do not need to be values necessarily; point maps (or attribute columns) with a class, ID or bool domain are also accepted.</li>
+
+<li class=ls01be>	<a href="moving_average.htm">Moving average</a>: assigns to pixels weighted averaged point values. The weight factors for the points are calculated by a user-specified weight function. Weights may for instance approximately equal the inverse distance to an output pixel. The weight function ensures that points close to an output pixel obtain larger weights than points which are farther away. Furthermore, the weight functions are implemented in such a way that points which are farther away from an output pixel than a user-defined <a href="..//ilwisapp/sec/point_interpolation_limiting_distance_sec.htm" onClick="return popup(this, 'notes')" >limiting distance</a> obtain weight zero; this speeds up the calculation and prevents artifacts.</li>
+
+<li class=ls01be>	<a href="trend_surface.htm">Trend surface</a>: calculates pixel values by fitting one <a href="..//ilwisapp/sec/point_interpolation_surfaces_sec.htm" onClick="return popup(this, 'notes')" >surface</a> through all point values in the map. The surface may be of the first order up to the sixth order. A trend surface may give a general impression of the data. Surface fitting is performed by a least squares fit. It might be a good idea to subtract the outcome of a trend surface from the original data, and calculate the residuals.</li>
+
+<li class=ls01be>	<a href="moving_surface.htm">Moving surface</a>: calculates a pixel value by fitting a <a href="..//ilwisapp/sec/point_interpolation_surfaces_sec.htm" onClick="return popup(this, 'notes')" >surface</a> for each output pixel through weighted point values. The weight factors for the points are calculated by a user-specified weight function. Weights may for instance approximately equal the inverse distance to an output pixel. The weight function ensures that points close to an output pixel obtain larger weights than points which are farther away. Furthermore, the weight functions are implemented in such a way that points which are farther away from an output pixel than a user-defined <a href="..//ilwisapp/sec/point_interpolation_limiting_distance_sec.htm" onClick="return popup(this, 'notes')" >limiting distance</a> obtain weight zero; this speeds up the calculation and prevents artifacts. Surface fitting is performed by a least squares fit.</li>
+
+<li class=ls01be>	<a href="kriging.htm">Kriging</a>: assigns to pixels weighted averaged points values, like the Moving Average operation. The weight factors in Kriging are determined by using a user-specified semi-variogram model (based on the output of the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation), the distribution of input points, and are calculated in such a way that they minimize the estimation error in each output pixel. Two methods are available: Simple Kriging and Ordinary Kriging. Optionally, an error map can be obtained which contains the standard errors of the estimates. The errors are assumed to have e normal (Gauss) distribution. The technique is derived from the theory of regionalized variables (Krige, Matheron).</li>
+
+<li class=ls01be>	<a href="anisotropic_kriging.htm">Anisotropic Kriging</a>: calculates estimates or predictions and optionally standard errors from point values similar to the Kriging operation but spatial dependencies (anisotropy) is taken into account. The direction of anisotropy can be investigated with the <a href="..//ilwisapp/popup/variogram_surface_popup.htm" onClick="return popup(this, 'notes')" >Variogram Surface</a> operation. Then, by using the bidirectional method in <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial Correlation</a>, you need to determine two semi-variogram models, i.e. for two perpendicular directions; the ranges of these semi-variogram models determine the ratio of anisotropy.</li>
+
+<li class=ls01be>	<a href="universal_kriging.htm">Universal Kriging</a>: calculates estimates or predictions and optionally standard errors from point values similar to the Kriging operation but a local trend is taken into account. This local trend or drift is a continuous and slowly varying trend surface on top of which the variation to be interpolated is superimposed. The local trend is recomputed for each output pixel and the operation is therefore more similar to the <a href="..//ilwisapp/popup/moving_surface_popup.htm" onClick="return popup(this, 'notes')" >Moving Surface</a> operation than to the <a href="..//ilwisapp/popup/trend_surface_popup.htm" onClick="return popup(this, 'notes')" >Trend Surface</a> operation. You need to specify a semi-variogram model (from the output of <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial Correlation</a>) and a trend surface type (linear or quadratic). </li>
+
+<li class=ls01be>	<a href="cokriging.htm">CoKriging</a>: calculates estimates or predictions and optionally standard errors from point values for a poorly sampled variable (the predictand) with help of a well-sampled variable (the covariable). The variables should be highly correlated (positive or negative). CoKriging is a multi-variate variant of the Ordinary <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation. You need to specify semi-variogram models for the predictand and for the covariable, and a cross variogram model for the combination of both variables. All three models can be determined from the output table of the <a href="..//ilwisapp/popup/cross_variogram_popup.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a> operation.</li>
+
+</ul>
+
+<p class=linespacing01before>For more information on the Kriging operation, see also <a href="../ilwis/how_to_use_kriging.htm">How to use Kriging</a>.</p>
+
+<p class=kopje>Preparations:</p>
+
+<ul>
+
+<li>	Point interpolations assume spatial randomness of the input points. To investigate whether your points are <i>randomly distributed</i>, or appear clustered, regular, or paired, etc., you can use the <a href="..//ilwisapp/popup/pattern_analysis_popup.htm" onClick="return popup(this, 'notes')" >Pattern analysis</a> operation prior to a point interpolation. </li>
+
+<p class=leftmargininlist>	In case your points are regularly distributed, e.g. as a regular grid, it is advised to directly rasterize the points with the <a href="..//ilwisapp/popup/points_to_raster_popup.htm" onClick="return popup(this, 'notes')" >Points to Raster</a> operation. Use a georeference which ensures that each output pixel contains one point and that the points are positioned at the center of the pixels. Further interpolation on the raster map values can be performed using the <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a> operation or the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation (bilinear or bicubic interpolation).</p>
+
+<li>	Furthermore, point interpolations assume a certain degree of <i>spatial correlation</i> between the input point values. To investigate whether your point values are spatially correlated and until which distance from any point this correlation occurs, you can use the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation prior to a point interpolation. The distance over which the data are correlated can be used as the maximum limiting distance in Moving average, Moving surface or Kriging operations. When there is no correlation between input point values, interpolation is senseless.</li>
+
+</ul>
+
+<p class=tip>Tips: </p>
+
+<ol class=tipol>
+
+<li> When your point map contains values in which all extremes of your measured variable are present (e.g. for height values all mountain tops and valleys are measured), then using a Moving average point interpolation will probably be sufficient.</li>
+
+<li> When you have indications that your point map does not contain all extreme values of a measured variable (e.g. you have soil samples and you have measured pH values as part of a large soil survey), then it is advised to use the Moving surface operation; the Moving average operation is not suitable. When you find extremes with the Moving surface operation, you might decide to go back to the field and measure the variable at the position of the extreme value; this will improve the results of a subsequent Moving surface operation.</li>
+
+<li> When you have relatively few points, it is advised to use a Trend surface operation.</li>
+
+<li> When you have rainfall data from a number of rainfall stations, first subtract for known patterns (e.g. height influence), then perform a Trend surface operation, and finally add the known patterns again to the output map.</li>
+
+<li> To check whether you have enough points within the limiting distance in a Moving average or a Moving surface point interpolation, you can perform the calculation again with a limiting distance increased by a factor 2. When you find profound differences in outcomes, you have chosen the limiting distance too small in the first calculation.</li>
+
+<li> When using a Moving average or a Moving surface point interpolation, it is for time efficiency reasons strongly advised to choose a rather large pixel size for the output map. Further interpolation on the raster map values can be performed using the <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a> operation or the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation (bilinear or bicubic interpolation).</li>
+
+<li> Instead of using Densify or Resample, you can also use online interpolation. In the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the output raster map of an interpolation, i.e. of a value raster map, you can select the <span class=arial>Interpolation</span> check box. This means that the normal pixel value will only refer to the center of that pixel; elsewhere in any pixel, a value will be directly interpolated based on the values of 4 (bilinear) or 16 (bicubic) neighbouring pixels. The interpolated values are directly available in the raster map, e.g. by using left mouse info or in pixel info. Hence, the creation of an extra raster map with Densify or Resample is not needed. For more information, see <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> (dialog box).</li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="nearest_point.htm">Point interpolation : Nearest point</a></p>
+
+<p class=seealsolinks><a href="moving_average.htm">Point interpolation : Moving average</a></p>
+
+<p class=seealsolinks><a href="trend_surface.htm">Point interpolation : Trend surface</a></p>
+
+<p class=seealsolinks><a href="moving_surface.htm">Point interpolation : Moving surface</a></p>
+
+<p class=seealsolinks><a href="kriging.htm">Point estimation : Kriging</a></p>
+
+<p class=seealsolinks><a href="anisotropic_kriging.htm">Point estimation : Anisotropic Kriging</a></p>
+
+<p class=seealsolinks><a href="universal_kriging.htm">Point estimation : Universal Kriging</a></p>
+
+<p class=seealsolinks><a href="cokriging.htm">Point estimation : CoKriging</a></p>
+
+</body

@@ -1,0 +1,122 @@
+<html>
+
+<head>
+<title>Repr Value/Gradual editor : Insert limit</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Representation Value/Gradual editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Representation Value/Gradual editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Insert Limit</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__repr_value_gradual_editor_edit_menu_sec2.Click()>Edit menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Insert a limit (or break point) in this representation value or representation gradual. Type a value or percentage value for a new limit (or break point) and select a color for this limit. </p>
+
+<p class=emptyline>&nbsp; </p>
+
+<ul>
+
+<li>	When you are editing a representation value (i.e. the representation is linked to any value domain except system domain <span class=courier>Value</span>), the editor works in values.</li>
+
+<li>	When you are editing a representation gradual (i.e. the representation is linked to <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>), the editor works in percentages.</li>
+
+</ul>
+
+<p class=defnewpar>This dialog box appears when in the Representation Value/Gradual editor:</p>
+
+<ul>
+
+<li>	you select the <span class=arial>Insert Limit</span> command from the <a href="..//ilwismen/sec2/repr_value_gradual_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a>, or</li>
+
+<li>	you press <span class=arial>Ins</span> on the keyboard.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Value:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For a representation value, type a value between the maximum and maximum value of this domain.</p>
+
+<p class=diabox>For a representation gradual, type a value between 0 and 100%.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for this limit (break point); open the list box by clicking it. To create a custom color, you can click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or click the 'Custom' item at the bottom of the color list.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The color bar at the bottom of the representation editor shows the colors of the entire representation.</p>
+
+<p class=tip>Tips:</p>
+
+<p class=tiptext>To interactively edit the colors of a value map, </p>
+
+<ol class=tipol>
+
+<li>	Display the value map in a map window;</li>
+
+<li>	Open the map's representation by selecting <span class=arial>Representation</span> from the Edit menu in the map window;</li>
+
+<li>	In the Representation Value/Gradual editor, edit colors, insert limits, etc.;</li>
+
+<li>	Keep the editor open and switch to the map window;</li>
+
+<li>	Click the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22"> in the map window to apply the changes;</li>
+
+<li>	Switch to the Representation editor to continue to insert limits and changing colors and switch to the map window and click the <span class=arial>Redraw</span> button to apply the changes, until satisfied.</li>
+
+</ol>
+
+<p class=emptyline>&nbsp;</p>
+
+<p>When you displayed a value map in the map window and you selected a <a href="..//ilwis/sec/y_system_representations_sec.htm" onClick="return popup(this, 'notes')" >system representation</a>, like <span class=courier>Gray</span>, <span class=courier>Pseudo</span>, etc., you cannot edit the representation. Instead, in the map's Display Options dialog box, click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box to create a new representation. After the Representation editor has opened, you can interactively edit the new representation of the map.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representations</a></p>
+
+</body

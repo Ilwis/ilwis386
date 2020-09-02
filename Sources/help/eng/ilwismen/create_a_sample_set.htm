@@ -1,0 +1,126 @@
+<html>
+
+<head>
+<title>Create a sample set</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Sample sets">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a sample set</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> must be created before you can start <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a>. A sample set is required for a multi-spectral image classification. During sampling, class names are assigned to groups of pixels with similar spectral values that are supposed to represent a known feature on the ground. The sampled pixels are also called training pixels. A sample set thus stores locations of sampled pixels and the assigned class names. </p>
+
+<p class=defnewpar>This dialog box appears when creating a new sample set:</p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> of the Main window, choose the <span class=arial>Create</span> command, or </li>
+
+<li>	by double-clicking the <span class=arial>New SmpleSet</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or </li>
+
+<li>	from the <a href="../ilwis/map_window_menu_commands.htm">File menu</a> in an existing map window, choose the <span class=arial>Create</span> command. As a default, the currently displayed raster map in that map window is already filled out as the background map. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Sample Set Name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the sample set.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the sample set. The description of a sample set appears in the title bar of the <a href="..//ilwis/popup/sample_set_editor_popup.htm" onClick="return popup(this, 'notes')" >sample set editor</a> when adding training pixels to the sample set. Further, the description is visible on the status bar of the Main window when moving the mouse pointer over the sample set in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing class <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> which contains the class names that you want to use during <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a> (open the list box by clicking it), or create a new class domain by clicking the little <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22">.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Map List:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> (open the list box by clicking it), or create a new map list by clicking the little <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22">. </p>
+
+<p class=diabox>The map list will be shown as in <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >interactive color composite</a>; you can locate your training pixels on this color composite. If you wish to locate training pixels on another map, you have to add that map to the map window yourself. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Values of the maps in the map list at the position of training pixels, are used to calculate sample statistics during sampling (to ensure coherent spectral values per class), and are the basis on which a classification is performed in a later stage.</p>
+
+<p class=kopje>Next dialog boxes:</p>
+
+<p>When creating a new class domain, the <a href="create_a_domain.htm">Create domain</a> dialog box appears. </p>
+
+<p>When creating a new map list, the <a href="create_a_map_list.htm">Create map list</a> dialog box appears.</p>
+
+<p class=defnewpar>When your graphics board is configured to use more than 256 colors, for instance High Color 16-bit or True Color 24-bit, the <a href="display_options_map_list_as_color_composite.htm">Display Options - Map list as color composite</a> dialog box appears, in which you can select the bands/maps in your map list from which an interactive color composite will be created. This color composite will be used as a background during sampling. You can easily change bands and stretch intervals of the interactive color composite during sampling by changing the Display Options of the map list: click the right mouse button in the sample editor and select the map list from the context-sensitive menu. </p>
+
+<p>When your graphics board is configured to use 256 colors: a warning will appear. </p>
+
+<p class=defnewpar>When everything is OK, the <a href="../ilwis/sample_set_editor_functionality1.htm">Sample set editor</a> is started.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To perform for instance a land use classification, you can use or create a domain called Landuse, in which you enter the following land use classes: forest, grass land, arable land etc. </li>
+
+<li>	You can still add new classes to the domain during sampling.</li>
+
+<li>	It is advised to use the same domains throughout a project as far as possible.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/sample_set_editor_functionality1.htm">Sample set editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_sample_sets.htm">How to create a sample set</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_sample_sets.htm">ILWIS objects : sample sets</a></p>
+
+</body

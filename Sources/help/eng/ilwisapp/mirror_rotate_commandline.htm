@@ -1,0 +1,113 @@
+<html>
+
+<head>
+<title>Mirror/Rotate : command line (1)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Mirror/Rotate, MapMirrorRotate">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Mirror/Rotate</h1>
+
+<h1 class=secondline>Command line (1)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/mirror_rotate_popup.htm" onClick="return popup(this, 'notes')" >Mirror/Rotate</a> operation can be directly executed by typing the following expression on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapMirrorRotate</span>(InputRasterMap, <i>rotatetype</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapMirrorRotate</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Mirror/Rotate operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputRasterMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>rotatetype</i></p>
+
+</td>
+<td valign="top">
+<p>is the type of reflection or rotation that you wish to use: </p>
+
+<p class=courier>mirrhor | mirrvert | mirrdiag | transpose | rotate90 | rotate180 | rotate270</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To use this operation on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, see <a href="mirror_rotate_commandline2.htm">Mirror/Rotate : command line (2)</a>. </p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. Furthermore, a georeference mirrorrotate is created with the same name as the output map. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="mirror_rotate_commandline2.htm">Mirror/Rotate : command line (2)</a></p>
+
+<p class=seealsolinks><a href="mirror_rotate_functionality.htm">Mirror/Rotate : functionality</a></p>
+
+</body

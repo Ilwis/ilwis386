@@ -1,0 +1,183 @@
+<html>
+
+<head>
+<title>Display options - Raster domain Bool</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Display options ..., Raster maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="65%"><h1 class=firstline>Display&nbsp;options</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Layers menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Raster map domain Bool</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Specify <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> for a raster map with domain <span class=courier>Bool</span> or domain <span class=courier>YesNo</span>. </p>
+
+<p class=defnewpar>Before a map is displayed in a map window, you have to answer some questions on how this layer should be displayed in the map window. Also, once a map is displayed in a map window, you may want to change the display options of a certain layer: </p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> in a map window, choose the <span class=arial>Display Options</span> command, then select a layer from the cascading menu, or </li>
+
+<li>	click the right mouse button in the map window, choose the <span class=arial>Display Options</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_map.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, and select a layer from the cascading menu, or </li>
+
+<li>	double-click a layer in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of a map window. </li>
+
+</ul> 
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=128>
+<p class=diabox>Info:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to see the pixel values when you press the left mouse button in a map window. For a domain Bool map, you will see <span class=courier>True</span>, <span class=courier>False</span>, and <span class=courier>?</span> for undefined pixels; for a domain YesNo map, you will see <span class=courier>Yes</span>, <span class=courier>No</span> and <span class=courier>?</span> for undefined pixels. Clear this check box if you do not want to see pixel values.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=128>
+<p class=diabox>Scale limits:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when this map should be displayed or hidden depending on the scale specified in the scale control of the map window; specify the scale range within which the map should be displayed. The map will be automatically hidden if the scale of the map window is outside this range. </p>
+
+<p class=diaboxnospace>With this option you can achieve for instance, that very detailed maps (e.g. on cadastral units) are only displayed when using a large scale in a map window, or that very general maps which depict overviews are only displayed when using a small scales in a map window, etc. </p>
+
+<p class=diabox>Clear this check box when you wish to display the map regardless of the scale of the map window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=128>
+<p class=diabox>Transparent:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you wish to display this raster layer with a certain transparency. Any layer that has been added to the map window before, e.g. an image or a shadow map, will remain partly visible through the transparent raster layer. Subsequently, type a value for the transparency rate (percentage): value 1 means almost not transparent, and value 99 means almost totally transparent. </p>
+
+<p class=diabox>Clear this check box to just display the layer, i.e. non-transparent. </p>
+
+<p class=tipnospace>Mind: </p>
+
+<ul class=tipul>
+
+<li>For Transparency, the Display Settings of your screen must be set to 32 bit (True Color). </li>
+
+<li>When the map window already displays another raster map, you can only add raster maps which have the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>. You can use the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation to transform a raster map to a desired georeference. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=128>
+<p class=diabox>Text:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to see the values of pixels displayed as text on top of the pixels. Subsequently, select a color for the text from the appearing Text Color list box. Clear this check box if you just want to see the map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=128>
+<p class=diabox>True Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the true pixels of this boolean map; open the list box by clicking it. To create your own color, select Custom at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>.</p>
+
+<p class=diabox><span class=tip>Tip: </span><span class=tiptext>The default color can be set in the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>, section <span class=arial>Map window, Display</span> (color selected for True in Bool maps). </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=128>
+<p class=diabox>False Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the false pixels of this boolean map; open the list box by clicking it. To create your own color, select Custom at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. Pixels with the undefined value (?) are displayed in the background color.</p>
+
+<p class=diabox><span class=tip>Tip: </span><span class=tiptext>The default color can be set in the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>, section <span class=arial>Map window, Display</span> (color selected for False in Bool maps). </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=128>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Light, etc.:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select option Light to display this map a little lighter than normal, select option Normal to display this map with normal brightness, or select option Dark to display this map a little darker than normal. Select option Gray to display this map in gray tones regardless of the previously selected colors. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Create Pyramid Layers:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=128>
+<p class=diaboxnospacetop>&nbsp;</p>
+</td>
+
+<td valign="top">
+<p class=diaboxnospacetop>In case <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">pyramid layers</a> are not yet available for this raster map: </p>
+
+<ul class=diaul>
+
+<li>Select this check box to create pyramid layers for this raster map. Pyramid layers speed up the display of large raster maps in a map window. </li>
+
+<li>Clear this check box if you do not wish to create pyramid layers for this raster map. </li>
+
+</ul>
+
+<p>For more information on pyramid layers, see <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">ILWIS objects : Raster maps - Pyramid layers</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The first text line in this dialog box states the map type and the map name. Furthermore, the dialog box shows the description and domain of the map. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_raster_maps.htm">ILWIS objects : raster maps</a></p>
+
+</body

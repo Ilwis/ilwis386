@@ -1,0 +1,132 @@
+<html>
+
+<head>
+<title>Change domain of table : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Change domain of table">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Change domain of table</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Change domain of table operation copies the contents of an input table to a new table; the new table will have another domain than the input table. </p>
+
+<p class=defnewpar>For the domain of the output table, you can choose:</p>
+
+<ul>
+
+<li>	domain <span class=courier>None</span>;</li>
+
+<li>	an existing class or ID domain on disk;</li>
+
+<li>	a class or ID domain of a column in the input table when that column contains unique classes or IDs;</li>
+
+<li>	a class or ID domain of a column in the input table where the column does not contain unique classes or IDs and other column values need to be aggregated (average, minimum, maximum, sum, last value encountered).</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input table. Open the list box and select the desired input map, or drag a raster map directly from the Catalog into this box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Change domain to:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose whether you want to change the domain of the table to a class or ID domain of a column in the table, or to an existing class or ID domain on disk.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a class or ID column from the table; the domain of this column will be the domain of the output table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing class or ID domain from disk.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Aggregate:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you selected a class or ID column from the table and when the class names or IDs in that column occur more than once, i.e. are not unique. Subsequently, select an aggregation function: average, minimum, maximum, sum, last. The values of value columns in the input table will appear aggregated in the output table according to the selected aggregation function. </p>
+
+<p class=diabox>Clear this check box when the classes or IDs in the selected column are unique.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output table. The description will appear in the status bar of the Main window when moving the mouse pointer over the table in a Catalog, and in the title bar of a table window when the output table is displayed. If no description is supplied, the output table will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent table will only be defined; if necessary the table will be calculated later, for instance when the table is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="change_domain_of_table_functionality_algorithm.htm">Change domain of table : functionality / algorithm</a></p>
+
+</body

@@ -1,0 +1,195 @@
+<html>
+
+<head>
+<title>SMCE window : Aggregate Values Sliced</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Aggregate SMCE values, Aggregate sliced SMCE values, Shape Index, Connectivity Index">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Generate menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Aggregate Values Sliced</span>&nbsp;&nbsp;&nbsp;<img src="../images/smce_aggr_vals_sliced_icon.gif" title="Aggregate Values Sliced" align=bottom width="23" height="23"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>For each of the <i>sliced</i> SMCE output maps that are currently selected, calculate: </p>
+<ul>
+<li>the Shape Index, or </li>
+<li>the Connectivity Index. </li>
+</ul>
+
+<p class=defnewpar>When you have for instance three alternative sliced SMCE output maps, and when you selected for instance Shape Index, you will obtain three Shape Index values, i.e. a Shape Index value for each sliced SMCE output map. </p>
+
+<p class="defnewpar">This dialog box appears, after you selected the main goal or a sub goal in the criteria tree viewer, and: </p>
+<ul>
+<li>clicked the <span class=arial>Aggregate Values Sliced</span> button in the <a href="../ilwis/smce_window_toolbar.htm">toolbar</a>, </li>
+<li>chose the <span class=arial>Aggregate Values Sliced</span> command from the <a href="../ilwis/smce_window_menu_commands.htm">Generate</a> menu, or </li>
+<li>chose the <span class=arial>Aggregate Values Sliced</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+</ul>
+                                     
+<p class=tip>Notes:</p>
+<ul class="tipul">
+<li><span class=arial>Aggregate Values Sliced</span> is not available when the SMCE output maps have not yet been sliced. </li>
+<li><span class=arial>Aggregate Values Sliced</span> will force the calculation of sliced SMCE output maps when 'Define' was used during slicing. </li>
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing="0" cellpadding="0">
+  <tr>
+    <td valign="top" width="144">
+	<p class="diabox">Operation:</p>
+	</td>
+    <td valign="top">
+    <p class="diabox">Choose to calculate for each sliced SMCE output map within the current selection:  <br>
+		the <span class=arial>Shape Index</span> or the <span class=arial>Connectivity Index</span>. </p>
+	</td>
+  </tr>
+  <tr>
+    <td valign="top">
+	<p class="diabox">Calculation results:</p>
+	</td>
+    <td valign="top">
+	<p class="diabox">After the <span class=arial>Calculate</span> button has been pressed, calculation results will appear in this pane for all maps within the current selection. </p>
+	</td>
+  </tr>
+  <tr>
+    <td valign="top">
+
+	<p class="diabox"><span class=arial>Power</span>:</p>
+
+	</td>
+    <td valign="top">
+
+	<p class="diabox">In case of calculating the Connectivity Index: type a value for a user-defined power value that is used in the formula for the Connectivity Index. 
+                        The minimum Power value that can be used is 1.0001; the maximum Power value is 1000. </p>
+	<p class="tiptext"><span class="tip">Note: </span>Using a rather large Power value may result in a <span class=courier>?</span> in the Calculation results. This means that the result is an infinitely large value. </p>
+	</td>
+  </tr>
+  <tr>
+    <td valign="top">
+
+	<p class="diabox"><span class=arial>Calculate</span>:</p>
+
+	</td>
+    <td valign="top">
+
+	<p class="diabox">Click the <span class=arial>Calculate</span> button (or press the <span class="arial">Spacebar</span> on the keyboard) to start the calculations. Results will appear in the Calculation Results pane. </p>
+
+	</td>
+  </tr>
+</table>
+
+
+<h2>Additional information</h2>
+
+<p class=kopje>Shape Index: </p>
+
+	<ul>
+	
+	<li>Undefined pixels are ignored; only pixels that are not undefined are considered. </li>
+
+	<li>For each 'polygon', i.e. contiguous 8-connected area of pixels with the same value, a shape index value is calculated as: <br>
+	
+		Perimeter<sub>i</sub> / <span class=symbollarger>&Ouml;</span> Area<sub>i</sub> <br>
+
+		where Perimeter<sub>i</sub> is the perimeter of polygon <i>i</i>, and Area<sub>i</sub> is the area of that polygon. </li>
+
+	<li>Then, these shape indexes of the individual 'polygons' are summed. The complete formula for the Shape Index of a map thus reads: <br>
+	
+		<span class=symbollarger>S</span> (Perimeter<sub>i</sub> / <span class=symbollarger>&Ouml;</span> Area<sub>i</sub>) </li>
+
+	<li>The Shape Index is a measure for non-compactness of areas in the map: 
+	
+		the less compact the areas are, the larger the Shape Index will be. </li>
+	
+		<ul>
+		
+		<li>When all pixels in a square map have the same value, the Shape Index is 4. </li>
+
+		<li>When all pixels in a rectangular map (relative size of 4 x 1) have the same value, the Shape Index is 5. </li>
+        
+        <li>When a map consists of 4 equally sized square areas, the Shape Index is 16. </li>
+
+        <li>When a map consists of 4 equally sized rectangles (relative size of 4 x 1), the Shape Index is 20. </li>
+		
+        <li>When a map consists of 16 equally sized square areas, the Shape Index is 64. </li>
+
+        <li>When a map consists of 16 equally sized rectangles (relative size of 4 x 1), the Shape Index is 80. </li>
+
+		</ul>
+	
+	</ul>
+
+<p class=kopje>Connectivity Index: </p>
+
+	<ul>
+	
+	<li>Undefined pixels are ignored; only pixels that are not undefined are considered. </li>
+
+	<li>For each contiguous 8-connected area of pixels with the same value, 
+	
+	the area is raised to power <i>p</i>, 
+	
+	this is summed for all areas, and the <i>p</i><sup>th</sup> root is taken of this summed value. 
+
+	This value is then multiplied by 100 and divided by the sum of all areas, and divided by the number of areas: <br>
+	
+	<img src="../images/smce_connectivity.gif" height="39" width="209"> <br>
+	
+	where <i>Area</i><sub>i</sub> is the area of an 8-connected area in the map, <i>p</i> is the user-defined power value, <i>Area</i><sub>total</sub> is the sum of all areas, and <i>n</i> is the total number of 8-connected areas in the map. </li>
+
+	<li>The Connectivity Index is a measure for the connectedness of areas with different values in the map; 
+
+	the less individual areas there are in a map, the larger the Connectivity Index will be. <br>
+
+	In the example below, a Power value of 2 is used: </li>
+	
+		<ul>
+		
+        <li>When a map consists of 100 equally sized areas, the Connectivity Index is 0.1. </li>
+      
+        <li>When a map consists of 4 equally sized areas, the Connectivity Index is 12.5. </li>
+		
+        <li>When a map consists of 2 equally sized areas, the Connectivity Index is 35.36. </li>
+
+		<li>When all pixels in a map have the same value, the Connectivity Index is 100. </li>
+
+		</ul>
+
+	</ul>
+     
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_aggregate_values.htm">SMCE window : Aggregate Values</a></p>
+
+</body

@@ -1,0 +1,306 @@
+<html>
+
+<head>
+<title>DEM optimization : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="DEM optimization, MapDemOptimization">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>DEM optimization</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/dem_optimization_popup.htm" onClick="return popup(this, 'notes')" >DEM optimization</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDemOptimization</span>(InputMapName, InputSegmentMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDemOptimization</span>(InputMapName, InputSegmentMap, InputTable)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDemOptimization</span>(InputMapName, InputSegmentMap, InputTable, <i>ColumnNameBufferDistance</i>, <i>ColumnNameSmoothDrop</i>, <i>ColumnNameSharpDrop</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDemOptimization</span>(InputMapName, InputSegmentMap, , <i>ColumnNameBufferDistance</i>, <i>ColumnNameSmoothDrop</i>, <i>ColumnNameSharpDrop</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDemOptimization</span>(InputMapName, InputSegmentMap, <i>BufferDistanceValue</i>, <i>SmoothDropValue</i> [, <i>SharpDropValue</i>])</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapDemOptimization</span>(InputMapName, InputPolygonMap, <i>PolygonDropValue</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapDemOptimization</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the DEM optimization operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input raster map (value domain); the input raster map is expected to be a Digital Elevation Model (DEM).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputSegmentMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of an input segment map (class or ID domain); the input segment map is expected to be a drainage map or a watershed-divide map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2"><p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputTable</p>
+
+</td>
+<td valign="top">
+<p>is the name of an attribute table belonging to the input segment map with the drainage or watershed classes or IDs. In the attribute table, you can indicate the amount that (each) drainage class should be dropped into the DEM, or the amount that (each) watershed-divide class should be raised on the DEM. </p>
+        <ul>
+        <li>If the name of the attribute table is specified without specifying any further column names, then the attribute table is expected to contain the following value columns: <span class=courier>Buffer_dist</span>, <span class=courier>Smooth_drop</span>, <span class=courier>Sharp_drop</span>.</li>
+        <li>If the attribute table is linked to the segment map (or to the domain of the segment map) and if further column names are specified, then the attribute table name can be omitted. </li>
+        </ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin03><i>ColumnNameBufferDistance</i></p>
+
+</td>
+<td valign="top">
+<p>is the name of a value column containing the buffer distance values. <br >
+        In the attribute table, buffer distance values can be specified for individual classes/IDs of segments. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin03><i>ColumnNameSmoothDrop</i></p>
+
+</td>
+<td valign="top">
+<p>is the name of a value column containing the smooth drop values. <br >
+        In the attribute table, smooth drop values can be specified for individual classes/IDs of segments. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin03><i>ColumnNameSharpDrop</i></p>
+
+</td>
+<td valign="top">
+<p>is the name of a value column containing the sharp drop values. <br >
+        In the attribute table, sharp drop values can be specified for individual classes/IDs of segments. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2"><p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>BufferDistanceValue</i></p>
+
+</td>
+<td valign="top">
+<p>is a value (m) to indicate the 'area' at either side of the segments that will be affected by the drop or raise; real value &gt; 0. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>SmoothDropValue</i></p>
+
+</td>
+<td valign="top">
+<p>is a value (m) to indicate the total drop/raise of all segments in the DEM. </p>
+
+        <ul>
+        <li><i>SmoothDropValue</i> &gt; 0 means that all (drainage) segments will be dropped with this value in the output DEM. </li>
+        <li><i>SmoothDropValue</i> = 0 means no drop and no raise.</li>
+        <li><i>SmoothDropValue</i> &lt; 0 means that all (watershed-divide) segments will be raised with this value on the output DEM. </li>
+        </ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>SharpDropValue</i></p>
+
+</td>
+<td valign="top">
+<p>is an optional value (m) to indicate an extra drop/raise of all segments in the output DEM on top of the specified <i>SmootDropValue</i>. </p>
+        <ul>
+        <li><i>SharpDropValue</i> &gt; 0 means an extra drop of all segments. </li>
+        <li><i>SharpDropValue</i> = 0 means no drop and no raise.</li>
+        <li><i>SharpDropValue</i> &lt; 0 means an extra raise of all segments. </li>
+        </ul>
+<p>When not specified, a SharpDropValue of 0 will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2"><p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPolygonMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of an input polygon map (any domain). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>PolygonDropValue</i></p>
+
+</td>
+<td valign="top">
+<p>is a value (m) to indicate the drop/raise of all polygons in the output DEM. </p>
+        <ul>
+        <li><i>PolygonDropValue</i> &gt; 0 means that all polygons will be dropped with this value in the output DEM. </li>
+        <li><i>PolygonDropValue</i> = 0 means no drop and no raise.</li>
+        <li><i>PolygonDropValue</i> &lt; 0 means that all polygons will be raised with this value on the output DEM. </li>
+        </ul>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=defnewpar>The output map will use <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain Value</a>; the value range for the output map is automatically calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="dem_optimization_functionality.htm">DEM optimization : functionality</a></p>
+
+</body

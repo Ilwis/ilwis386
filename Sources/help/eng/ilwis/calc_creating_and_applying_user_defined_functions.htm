@@ -1,0 +1,916 @@
+<html>
+
+<head>
+<title>MapCalc/TabCalc : user-defined functions</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Functions, User-defined functions, Create ..., Calculation, Calculate (advanced) ..., Map calculation, Table calculation, Command line">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table calculation</h1>
+<h1 class=secondline>User-defined functions</h1>
+
+<p class=defnewpar>A user-defined <a href="..//ilwis/popup/objects_userdef_functions_popup.htm" onClick="return popup(this, 'notes')" >function</a> can be created:</p>
+
+<ul>
+<li>to perform calculations in MapCalc and TabCalc which use difficult or long formulas that are tedious to type in on the command line, or</li>
+<li>to define calculations for MapCalc and TabCalc which you want to use a number of times on different maps or columns.</li>
+</ul>
+
+<p class=defnewpar>A user-defined function may contain any combination of existing MapCalc/TabCalc operators and functions, and may use parameters representing maps and columns.&nbsp;</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p><u>For a function with parameters:</u></p>
+<p class=emtpylinehalf>&nbsp;</p>
+<p class=syntax><span class="courier">Function </span>FunctionName (<i>ParamDomain</i> Param [,<i>ParamDomain</i>
+Param]) : <i>OutputDomain</i> 
+<br><span class="courier">Begin</span>
+<br><span class="courier">&nbsp;&nbsp;Return</span>&nbsp;&nbsp;<i>Expression</i>;
+<br><span class="courier">End</span>;</p>
+
+<p class=kopje>For a function without parameters:</p
+<p class=emtpylinehalf>&nbsp;
+<p class=syntax><span class="courier">Function </span>FunctionName() : <i>OutputDomain</i>
+<br><span class="courier">Begin</span>
+<br><span class="courier">Return</span>  <i>Expression</i>;
+<br><span class="courier">End</span>;</p>
+
+<p class="defnewpar">Where:</p>
+
+<table border="0" cellpadding="0" cellspacing="0" class=diabox>
+  <tr>
+    <td width="135" valign="top">FunctionName</td>
+    <td>is the <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> of the function as specified in the Create Function dialog box.</td>
+  </tr>
+  <tr>
+    <td width="135" valign="top"><i>ParamDomain</i></td>
+    <td>is the domain type of an input parameter. You can use e.g.
+      <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> | <a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >String</a> | Coord |
+      <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" > Color</a> | <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a>.
+
+      By default, the domain type of input parameters is set to Value.
+
+<ul>
+	<li>Choose Value when input maps or columns use a Value domain,</li>
+	<li>choose String when input maps or columns use a Class or ID domain or when columns use the String domain,</li>
+	<li>choose Coord when input columns use a coordinate system as domain,</li>
+	<li>choose Color when input maps or columns use the Color domain,</li>
+	<li>choose Bool when input maps or columns use the Bool, the YesNo, or the Bit domain. </li>
+</ul>
+
+  </td>
+  </tr>
+  <tr>
+    <td width="135" valign="top">Param</td>
+    <td>is the name of an input parameter. 
+
+        <br>Parameter names:
+        
+        <ul>
+
+        <li>must start with a character from A to Z, </li>
+
+        <li>may contain characters from A to Z, digits 0 to 9, and underscores. </li>
+
+        </ul>
+    </td>
+  </tr>
+  <tr>
+    <td width="135" valign="top"><i>OutputDomain</i></td>
+    <td>is the domain that should be used for the output object (a
+      column or a map) of the function. You can choose any domain available in your data set as
+      well as a coordinate system. By default, the output domain is set to the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system Value domain</a>.
+      When you choose a value output domain, the value range is determined by
+      the selected domain.</td>
+  </tr>
+  <tr>
+    <td width="135" valign="top"><i>Expression</i></td>
+    <td>is the expression that the function should perform, as defined before in the <a href="../ilwismen/create_a_function.htm">Create Function</a> dialog box.</td>
+  </tr>
+</table>
+
+<p class=tip>Notes: </p>
+
+<ul class=tipul>
+
+<li>When a function is created, the domain type of all input parameters <i>ParamDomainType</i>, and the output domain <i>OutputDomain</i> for the function are by default set to <span class=functionexpl>Value</span>. </li>
+
+<li>In case your input parameters use <i>another</i> domain type than domain type Value, or if the output domain of the function is another domain than system domain Value, you need to <i>change</i> the word(s) <span class=functionexpl>Value</span> yourself in the appropriate place(s). </li>
+
+<li>In other words, you must make sure that the domain type of each parameter and the output domain of the function are correctly declared. </li>
+
+</ul>
+
+
+
+<p class=kopje>To create a user-defined function:</p>
+
+<!--<ul>
+<li>in a Table window, open the <a href="..//ilwismen/sec2/table_window_file_menu_sec2.htm" onClick="return popup(this, 'notes')" >File menu</a>, and choose&nbsp;<span class=arial>Function</span>, or</li>
+</ul>-->
+
+<ul>
+<li>in the Main window, open the <a href="main_window_menu_commands.htm">File menu</a> and choose <span class="arial">Create Function</span>, or
+<li>in the Operation-tree, expand the <span class="arial">Create</span>  item and double-click <span class="arial">New Function</span>,
+  or
+<li>in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the item <span class="arial">New Function</span>.</li>
+</ul>
+
+<p class=defnewpar>The <a href="../ilwismen/create_a_function.htm"><span class=arial>Create Function</span></a> dialog box appears where:</p>
+
+<ul>
+<li>you can fill in the name of your new function;</li>
+<li>you can enter the expression which should be performed when the function is applied, and </li>
+<li>optionally you can give a short description of the function in the description box.</li>
+</ul>
+
+<p class=defnewpar>The different parameters in your function may be characters  (a, b, c etc.) but it is recommended to give
+parameters logic names. Clear names make the application of user-defined functions much easier. </p>
+<p class=defnewpar>After the Create Function dialog box, the Function editor
+will be opened. The <a href="function_editor_functionality.htm">Function
+editor</a> shows the newly created function. If necessary you can edit the function
+until it satisfies your purposes. </p>
+
+
+<p class=kopje>Applying a user-defined function:</p>
+
+<p>You apply your function on the command line of the Main window or a Table window. </p>
+
+<p class=defnewpar>The syntax to apply a user-defined function is:</p>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=syntax>OUTPUT =  <i>FunctionName</i>(<i>a</i><i>, b, c, ...</i>)</p>
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+OUTPUT
+</td>
+<td valign="top">
+is the output map name (when applied on the command line of the Main window) or
+the output column name (when applied on the command line of a Table window).
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<i>FunctionName</i>
+</td>
+<td valign="top">
+is the name of the user-defined function.
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<i>a, b, c, ...</i>
+</td>
+<td valign="top">
+are the parameters such as values, map names or table column names, used in the function;
+parameters should be typed in the same order as they appear in the function definition.
+</td>
+</tr>
+</table>
+
+<p class=kopje>Examples:</p>
+<a href="#example1"><span class=bookmark>Example 1 : Sum of two value maps/columns using parameters</span></a><br>
+<a href="#example2"><span class=bookmark>Example 2 : Sum of two value maps without using parameters</span></a><br>
+<a href="#example3"><span class=bookmark>Example 3 : Calculation of the seasonal rainfall and expressing it as the relative amount of total rainfall</span></a><br>
+<a href="#example4"><span class=bookmark>Example 4 : Using Class or ID domains in user-defined functions</span></a><br>
+<a href="#example5"><span class=bookmark>Example 5 : User-defined function in slope instability hazard analysis (advanced)</span></a><br>
+<a href="#example6"><span class=bookmark>Example 6 : Calling a user-defined function in a user-defined function; Mean flow velocity of rivers</span></a><br>
+<a href="#example7"><span class=bookmark>Example 7 : Conversion of LatLon to Mercator</span></a>
+
+<p class=kopje><a name="example1">Example 1: Sum of two value maps/columns using parameters</a></p>
+<p>In the <span class=arial>Create Function</span> dialog box, define a function <span class=courier>SUM</span> to sum two
+value maps or two value columns as:</p>
+<p class=calc0>a + b</p>
+<p class=defnewpar>In the <span class=arial>Function editor</span>, this function is listed as:</p>
+<p class=functionexpl>Function SUM(Value a,Value b) : Value</p>
+<p class=functionexpl>Begin</p>
+<p class=functionexpl>Return a + b;</p>
+<p class=functionexpl>End;</p>
+
+<p class=defnewpar>This means that the function <span class=courier>SUM</span>
+has two parameters (<b>a</b> and <b>b</b>) which have a value domain and that the output of the function will also be a
+value (<a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain Value</a>). The calculation itself is defined as:  return the sum of a and b. </p>
+
+<p class=defnewpar>To apply this function, type on the command line:</p>
+<span class=courier>Output1</span>=<span class=courier>SUM</span>(<i>Parameter1</i>, <i>Parameter2</i>)
+
+<p class=emptyline>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=150>
+<p class=courier>Output1</p>
+</td>
+<td valign="top">is the output object (value domain);
+</td>
+</tr>
+<tr>
+<td valign="top" width=150>
+<p><i>Parameter1</i>,<i>Parameter2</i></p>
+</td>
+<td valign="top">are the parameters replacing the <b>a</b> and <b>b</b> in the function, e.g. <span class=courier>Map1</span> and <span class=courier>Map2</span> or <span class=courier>Col1</span> and <span class=courier>Col2</span>.
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>This example shows the functionality of a user-defined function.
+However in such a simple example, it would have been easier for example to directly type on
+the command line: </p>
+
+<p class=calc0>Output1 = Map1 + Map2</p>
+
+<p class="kopje"><a name="example2">Example 2: Sum of two value maps without using parameters</a></p>
+
+<p>Although it is not common, you may define functions which use
+existing data that are not mentioned as parameters. In this example, two
+existing maps will be used; the resulting function can thus only be used in a
+MapCalc expression.</p>
+<p class="defnewpar">To define a function <span class="courier">AVG2</span> to calculate the average of two
+existing maps (<span class=courier>MyMap1</span> and <span class=courier>MyMap2</span>), you may create a function
+<span class="courier">AVG2</span> defined as:</p>
+<p class=calc0>(MyMap1+MyMap2)/2</p>
+<p class="defnewpar">In the <span class="arial">Function editor </span>this will appear as:</p>
+<p class="functionexpl">Function AVG2(value MyMap1, value MyMap2) : Value</p>
+<p class="defnewpar">Remove the parameters between the brackets; and keep the default output domain Value.</p>
+<p class="functionexpl">Function AVG2() : Value</p>
+<p class="defnewpar">Further, the <span class="arial">Function editor</span> states the calculation that should be performed with the parameters of the function; in this case:</p>
+<p class="functionexpl">Begin</p>
+<p class="functionexpl">Return (MyMap1+MyMap2)/2;</p>
+<p class="functionexpl">End;</p>
+<p class="defnewpar">To use this function, type on the command line:</p>
+<p class="calc0linsp03befaft">OUT=AVG2()</p>
+<p>where:</p>
+<table cellapacing="0">
+  </table>
+<table>
+    <tr>
+      <td valign="top" width="35"><p class="courier">OUT</p></td>
+      <td valign="top"><p>is the output object,</p></td>
+    </tr>
+    <tr>
+      <td valign="top" width="35"><p class="courier">AVG2</p></td>
+      <td valign="top"><p>is the function which already contains the map names MyMap1 and MyMap2 on which the function should be performed.</p></td>
+    </tr>
+</table>
+
+<p class=kopje><a name="example3">Example 3 : Calculation of seasonal rainfall and expressing it as the relative amount of total rainfall</a></p>
+
+<p>Another and a little bit more complicated example is the calculation of the seasonal rainfall
+which should be expressed as the relative amount of total rainfall. In this example, a table named <span class=courier>Rainfall</span> is used.  It shows the amount of rainfall per month for several rainfall stations. A new column
+<span class=courier>total</span> was already calculated, showing the total rainfall per year for each rainfall station. </p>
+
+<p class=defnewpar>In the <span class=arial>Create Function</span> dialog box, define a function <span class=courier>SEASON</span> as: </p>
+
+<p class=calc0linsp03befaft>100 * (Month1 + Month2 + Month3) / Totrain</p>
+
+<p> For the description of this function, you may type for instance:</p>
+
+<p class=calc0linsp03befaft>Seasonal rainfall as relative amount of total rainfall</p>
+
+<p class=defnewpar>In the <span class=arial>Function editor</span>, the function is listed as:<b> </b></p>
+
+<p class=functionexpl>Function SEASON(Value Month1,Value Month2,Value Month3,Value
+Totrain) : Value</p>
+
+<p class=functionexpl>Begin</p>
+
+<p class=functionexpl>  Return 100 * (Month1 + Month2 + Month3) / Totrain;</p>
+
+<p class=functionexpl>End;</p>
+
+<p class=defnewpar>This means: </p>
+
+<p>The parameters <b>Month1, Month2, Month3</b> and <b>Totrain</b> are values, the values for these parameters are retrieved and the output is calculated; the output of function <span class=courier>Season</span> will also be a value. </p>
+
+<p class=defnewpar>In this example the output value domain is changed into domain <span class=courier>Perc</span> (Percentage) as follows:</p>
+
+<ul>
+
+<li>	Select with the cursor the last word <b>Value</b> which indicates the output domain (the one after the <b>:</b> ), and </li>
+
+<li>	change it to <b>Perc</b> (which is one of the ILWIS <a href="..//ilwis/popup/yy_system_domain_value_all_popup.htm" onClick="return popup(this, 'notes')" >system value domains</a>). </li>
+
+</ul>
+
+<p class=defnewpar>Now the definition of the function should read:</p>
+
+<p class=functionexpl>Function SEASON(Value Month1,Value Month2,Value Month3,Value
+Totrain) : Perc</p>
+
+<p class=functionexpl>Begin</p>
+
+<p class=functionexpl>  Return 100 * (Month1 + Month2 + Month3) / Totrain;</p>
+
+<p class=functionexpl>End;</p>
+
+<p class=defnewpar>To apply this function for the first three months of the year, type on the command line of the
+Table window:</p>
+
+<p class=calc0linsp03befaft>Relative_Amount1 = SEASON (January, February, March,
+Total)</p>
+
+<p>Column <span class=courier>Relative_Amount1</span> stores the relative amount of rainfall which fell in the months January, February and March compared to the total rainfall in that year.</p>
+
+<p class=defnewpar>You may use the function again to calculate the relative amount of rainfall for the
+months of April, May, and June.</p>
+
+<p class=calc0linsp03befaft>Relative_Amount2 = SEASON (April, May, June, Total)</p>
+
+<p class=kopje><a name="example4">Example 4 : Using Class or ID domains in user-defined functions</a></p>
+
+<p>You can also use Class or ID domains in user-defined functions.</p>
+
+<p>This example uses a table with information on parcels. Imagine that we want to build extra houses, but only on parcels which are already in residential use and only when there is enough space to build. If the parcels satisfy certain conditions, specified in the user-defined function, they are assigned &quot;suitable&quot; else &quot;not suitable&quot;. </p>
+
+<p class=defnewpar>In the <span class=arial>Create Function</span> dialog box, define a function <span class=courier>SUITABLE</span> as: </p>
+
+<p class=calc0linsp03befaft>IFF ((landuse = &quot;Residential&quot;) and (Area/Nrhouses &gt; 10000), &quot;Suitable&quot;, &quot;Not
+Suitable&quot;)</p>
+
+<p>Because ILWIS assigns by default value domains to landuse and to the output column an error message appears to warn you that ILWIS does not
+recognize the quotation mark &quot; before the word <span class=courier>Residential</span>. This needs to be changed in the
+<a href="function_editor_functionality.htm">Function
+editor</a>.</p>
+
+<p class=defnewpar>In the <span class=arial>Function editor</span>, the function is listed as:</p>
+
+<p class=functionexpl>Function SUITABLE (Value Landuse,Value Area,Value Nrhouses) : Value</p>
+
+<p class=functionexpl>Begin</p>
+
+<p class=functionexpl>  Return IFF ((Landuse = &quot;Residential&quot;) and (Area/Nrhouses &gt; 10000)  , &quot;Suitable&quot;, &quot;Not
+Suitable&quot;);</p>
+
+<p class=functionexpl>End;</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	Change the domain type of input parameter <b>Landuse</b> from <b>Value</b> to <b>String</b></li>
+
+<li>	Change the output domain of the function from <b>Value</b> to <b>String</b></li>
+
+</ul>
+
+<p class=defnewpar>Now the function should read:</p>
+
+<p class=functionexpl>Function SUITABLE(String Landuse,Value Area,Value Nrhouses) : String</p>
+
+<p class=functionexpl>Begin</p>
+
+<p class=functionexpl>  Return  iff ((Landuse = &quot;Residential&quot;) and (Area/Nrhouses &gt; 10000)  , &quot;Suitable&quot;, &quot;Not
+Suitable&quot;);</p>
+
+<p class=functionexpl>End;</p>
+
+<p class=defnewpar>To apply the function on the <span class=courier>Parcel</span> table
+that is displayed in a
+Table window, type on </p>
+
+<p>the command line of the Table window: </p>
+
+<p class=calc0linsp03befaft>Suit = SUITABLE (Landuse, Area, Units)</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=56>
+<p class=tcolh>Parcel</p>
+
+</td>
+<td valign="top" width=96>
+<p class=tcolh>Landuse</p>
+
+</td>
+<td valign="top" width=56>
+<p class=tcolh>Area</p>
+
+</td>
+<td valign="top" width=37>
+<p class=tcolh>Units</p>
+
+</td>
+<td valign="top">
+<p class=tcolh>Suit</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1>100</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>Residential</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>58200</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>5</p>
+
+</td>
+<td valign="top">
+<p class=t1>suitable</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1>124</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>Commercial</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>16600</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>4</p>
+
+</td>
+<td valign="top">
+<p class=t1>not suitable </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1>157</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>Residential</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>82540</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>12</p>
+
+</td>
+<td valign="top">
+<p class=t1>suitable</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1>162</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>Residential</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>65925</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>4</p>
+
+</td>
+<td valign="top">
+<p class=t1>not suitable </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1>181</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>Industrial</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>8365</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>3</p>
+
+</td>
+<td valign="top">
+<p class=t1>not suitable </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1>202</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>Institutional</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>82470</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>5</p>
+
+</td>
+<td valign="top">
+<p class=t1>not suitable </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1>225</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>Residential</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>19830</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>7</p>
+
+</td>
+<td valign="top">
+<p class=t1>not suitable </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1>269</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>Commercial</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>52945</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>9</p>
+
+</td>
+<td valign="top">
+<p class=t1>not suitable </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1>288</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>Institutional</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>29400</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>6</p>
+
+</td>
+<td valign="top">
+<p class=t1>not suitable </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=t1>295</p>
+
+</td>
+<td valign="top" width=96>
+<p class=t1>Residential</p>
+
+</td>
+<td valign="top" width=56>
+<p class=t1>7235</p>
+
+</td>
+<td valign="top" width=37>
+<p class=t1>4</p>
+
+</td>
+<td valign="top">
+<p class=t1>not suitable </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Only parcels having a Residential landuse as well as an area per unit over 10000 square meters are assigned &quot;Suitable&quot;. </p>
+
+<p class=kopje><a name="example5">Example 5 : User-defined function in slope instability hazard analysis (advanced)</a></p>
+
+<p>The hazard degree of slope instability can be expressed by the Safety Factor (F). This is the ratio between the forces that make the slope fail and those that prevent the slope from failing. F-values larger than 1 indicate stable conditions, and F-values smaller than 1 instable conditions. At F=1 the slope is at the point of failure. Many different models exist for the calculation of Safety Factors. Here one of the simplest models is used. </p>
+
+<p class=defnewpar>When the model is applied on each pixel, a hazard map of safety
+factors is calculated. The safety factor is calculated according the following formula (Brunsden and Prior, 1979) : </p>
+
+<p class=defnewpar>F = (c' + (<span class=symbol>g</span> - m * <span class=symbol>g</span><sub>w</sub>) z cos<sup>2</sup><span class=symbol>b *</span> tan <span class=symbol>f</span>') / (<span class=symbol>g</span><sub>z</sub> sin<span class=symbol>b</span> <span class=symbol>*</span> cos<span class=symbol>b</span> ) </p>
+
+<p class=defnewpar>Below, the meaning of the symbols is briefly explained, and
+some average values are given from laboratory analysis:</p>
+<p class=emptylinehalf>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+<td valign="top">c'</td>
+<td valign="top">= effective cohesion</td>
+<td valign="top">= 10000</td>
+<td valign="top"><p>[Pa= N/m<sup>2</sup>]</td>
+</tr>
+
+<tr>
+<td valign="top"><span class=symbol>g</span></td>
+<td valign="top">= unit weight of soil</td>
+<td valign="top">= 11000</td>
+<td valign="top">[N/m<sup>3</sup>]</td>
+</tr>
+
+<tr>
+<td valign="top">m</td>
+<td valign="top">= relative water depth</td>
+<td valign="top">= z<sub>w</sub>/w</td>
+<td valign="top">[-]</td>
+</tr>
+
+<tr>
+<td valign="top"><span class=symbol>g</span><sub>w</sub></td>
+<td valign="top">= unit weight of water</td>
+<td valign="top">= 10000</td>
+<td valign="top">[N/m<sup>3</sup>]</td>
+</tr>
+
+<tr>
+<td valign="top">z</td>
+<td valign="top">= depth of failure surface below the surface</td>
+<td valign="top">= map <span class=courier>Asht</span></td>
+<td valign="top">[m]</td>
+</tr>
+
+<tr>
+<td valign="top">z<sub>w</sub></td>
+<td valign="top">= height of water table above failure surface</td>
+<td valign="top">= ?</td>
+<td valign="top">[m]</td>
+</tr>
+
+<tr>
+<td valign="top"><span class=symbol>b</span></td>
+<td valign="top">= slope surface inclination</td>
+<td valign="top">= map <span class=courier>Slope</span></td>
+<td valign="top">[°]</td>
+</tr>
+
+<tr>
+<td valign="top"><span class=symbol>f</span></td>
+<td valign="top">= effective angle of shearing resistance</td>
+<td valign="top">= 30</td>
+<td valign="top">[°]</td>
+</tr>
+
+<tr>
+<td valign="top">tan(<span class=symbol>f</span>')</td>
+<td valign="top">= tangent of the effective angle of shearing resistance</td>
+<td valign="top">= 0.58</td>
+<td valign="top">[°]</td>
+</tr>
+</table>
+
+<p class=defnewpar>For detailed information on this formula refer to Chapter 6 of the Applications Guide. </p>
+
+<p class=defnewpar>In this example the slope stability analysis is made by using only two parameter maps: <span class=courier>Asht</span> (thickness of volcanic ashes) and <span class=courier>Slope</span> (slope angles in degrees). The depth of the possible failure plane is taken at the contact of the volcanic ashes and the underlying material.
+As a consequence, safety factors will not be calculated for the entire area, but only for the areas where there is volcanic ash at the surface. </p>
+
+<p class=defnewpar>The only unknown parameter yet is the depth of the water table. In the formula this is expressed as the value
+<b>m</b>, which is the relation between the depth of the water table and the depth of the failure surface. </p>
+
+<p class=defnewpar>ILWIS does not recognize symbols such as: c' , <span class=symbol>g</span>, or <span class=symbol>f</span> . Therefore, give clear name to these symbols in the user-defined function. Later, while applying the user-defined function, you fill
+out the values of the parameters which are represented by symbols now.</p>
+
+<p class=defnewpar>Create a function <span class=courier>SAFETY</span> with the following expression: </p>
+
+<p class=calc0linsp03befaft>EffectiveCohesion + (SoilWeight - RelWaterDepth * WaterWeight) *
+FailureDepth * SQ(COS(DEGRAD(MapSlope))) * TanAngleRes / SoilWeight * FailureDepth *
+SIN(DEGRAD(MapSlope)) * COS(DEGRAD(MapSlope))</p>
+
+<p class=defnewpar>For the description of the function, you can type for instance: Safety factor. </p>
+
+<p class=defnewpar>In the <span class=arial>Function editor</span>, the expression is listed as: </p>
+
+<p class=functionexpl>Function SAFETY (Value EffectiveCohesion,Value SoilWeight,Value
+RelWaterDepth,Value WaterWeight,Value FailureDepth,Value MapSlope,Value TanAngleRes) : Value</p>
+
+<p class=functionexpl>Begin</p>
+
+<p class=functionexpl>  Return EffectiveCohesion + (SoilWeight - RelWaterDepth *
+WaterWeight) * FailureDepth * SQ(COS(DEGRAD(Mapslope))) * TanAngleRes / SoilWeight *
+FailureDepth * SIN(DEGRAD(MapSlope)) * COS(DEGRAD(MapSlope));</p>
+
+<p class=functionexpl>End;</p>
+
+<p>&nbsp; </p>
+
+<p>Firstly calculate the safety factor for the volcanic ashes under the assumption that the soil is completely dry. In that case the parameter <b>m</b> equals zero. In the expression, <b>m</b> is represented by parameter '<b>RelWaterDepth</b>'; it describes the relation between the depth of the
+water-table and the depth of the failure surface.</p>
+
+<p class=defnewpar>Type on the command line of the Main window:</p>
+
+<p class=calc0linsp03befaft>Fdry = SAFETY (10000, 11000, 0, Asht, Slope, 0.58)</p>
+
+<p>This means: apply the function <span class=courier>SAFETY</span> using the values and maps which are specified between the brackets and store the result in map
+<span class=courier>Fdry</span>. Map <span class=courier>Fdry</span> shows the safety factors for extremely dry conditions. </p>
+
+<p class=defnewpar>You can imagine that a situation with a completely dry situation does not occur in many tropical regions such as for instance  Manizales in Colombia.</p>
+
+<p>You can easily calculate a next scenario that will evaluate a condition in which the slopes are completely  saturated.  This is also not a very realistic situation, but it will give us the most pessimistic estimation of slope stability.</p>
+
+<p class=defnewpar>When the soil is saturated, the <b>m</b> factor from the formula is equal to 1 which means that the
+water-table is at the surface. There is also another factor which is different for  saturated conditions:</p>
+
+<table cellspacing=0 width="227">
+<tr>
+<td valign="top" width="136"><span class=symbol>g</span> = unit weight of soil</td>
+<td valign="top" width="83">= 16000 N/m<sup>3</sup></td>
+</tr>
+</table>
+
+<p class=defnewpar>Now you can simply apply the user-defined function again, this
+time using the new saturated values. </p>
+
+<p class=calc0linsp03befaft>Fsat = SAFETY (10000, 16000, 1, Asht, Slope, 0.58)</p>
+
+<p>This means: apply the function <span class=courier>SAFETY</span> using the values and maps which are specified between the brackets and store the result in map
+<span class=courier>Fsat</span>. The map shows the safety factors for extremely wet conditions. </p>
+
+<p class=defnewpar>As soon as you have created your user-defined function, you are able to perform many similar calculations only by using different values for your parameters.</p>
+
+<p class=kopje><a name="example6">Example 6 : Calling a user-defined function in a user-defined
+function: Mean flow velocity</a></p>
+
+<p>An equation that is often used to calculate the river's mean
+flow velocity is the Manning equation:</p>
+
+<p class=defnewpar>V=(R<sup>2/3</sup> * S<sup>1/2</sup>)/n</p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">V</td>
+<td valign="top">= the mean flow velocity</td>
+<td valign="top"><p>[m/s]</td>
+</tr>
+
+<tr>
+<td valign="top">R</td>
+<td valign="top">= hydraulic radius</td>
+<td valign="top">[m]</td>
+</tr>
+
+<tr>
+<td valign="top">S</td>
+<td valign="top">= slope gradient</td>
+<td valign="top">[°]</td>
+</tr>
+
+<tr>
+<td valign="top">n</td>
+<td valign="top">= Manning roughness coefficient</td>
+<td valign="top">[-]</td>
+</tr>
+</table>
+
+<p class=defnewpar>The Manning equation refers to the relationship between the velocity
+of a stream and its channel geometry. For a rectangular channel the hydraulic radius R
+is:</p>
+
+<p class=defnewpar>R=(W*H)/(W+2*H)</p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">W</td>
+<td valign="top"> = width of the channel</td>
+<td valign="top"><p> [m]</td>
+</tr>
+
+<tr>
+<td valign="top">H</td>
+<td valign="top"> = height of the water in the channel</td>
+<td valign="top">[m]</td>
+</tr>
+</table>
+
+<p class=defnewpar>For a straight artificial concrete-lined culvert the Manning
+roughness coefficient is 0.013. For an unvegetated straight channel at bankfull
+discharge the roughness fluctuates between 0.025 - 0.033. In ILWIS, functions can
+call other functions but calls cannot be recursive, i.e. a function cannot call
+itself. In the example below, Manning function (V) calls another function (R) that
+calculates the Hydraulic radius.&nbsp;</p>
+<ol>
+<li>
+<p class="defnewpar">Create a function R with the following expression:&nbsp;</p>
+<p class="calc0linsp03befaft">(W*H)/(W+2*H)</p>
+<p class="defnewpar">For the description of the function, you can type for
+instance: <span class=courier>Hydraulic radius for a rectangular channel</span></p>
+<p class="defnewpar">In the <span class=arial>Function editor</span>, the function
+reads:</p>
+<p class="functionexpl">Function R(Value W,Value H) : Value</p>
+<p class="functionexpl">Begin</p>
+<p class="functionexpl">Return (W*H)/(W+2*H);</p>
+<p class="functionexpl">End;</p>
+</li>
+
+<li><p class=defnewpar>Then, create another function V
+that calls function R and calculates the mean flow velocity:&nbsp;</p>
+
+<p class=calc0linsp03befaft>(POW(R(W,H),2/3)*SQRT(S))/n</p>
+
+<p class=defnewpar>For the description of this function, you can type for
+instance: <span class=courier>Manning equation to calculate the mean flow
+velocity</span>&nbsp;</p>
+
+<p class=defnewpar>In the F<span class=arial>unction editor</span>, the function
+reads:</p>
+
+<p class=functionexpl>Function V(Value W,Value H,Value S,Value n) : Value</p>
+<p class=functionexpl>Begin</p>
+  <p class=functionexpl>Return (POW(R(W,H),2/3)*SQRT(S))/n;</p>
+<p class=functionexpl>End;</p></li>
+
+<li><p class=defnewpar>To apply this function, using for example a channel width of
+10 meter (W), a water depth of 4 meter (H), a channel slope of 5 degrees (S) and a Manning
+roughness coefficient of 0.013 (n), type on the command line of a Table window: </p>
+<p class=calc0linsp03befaft>Velocity = V(10,4,5,0.013)</p></li>
+</ol>
+
+<p class=kopje><a name="example7">Example 7 : Conversion of LatLon to Mercator</a></p>
+<p>To convert coordinates from LatLon to Mercator create a function <span class=courier>LatLonMerc</span> as:</p>
+<p>&nbsp;</p>
+<p class=functionexpl>Function LatLonMerc(Value Lat,Value Lon) : Coord</p>
+<p class=functionexpl>Begin</p>
+<p class=functionexpl>Value xx;</p>
+<p class=functionexpl>Value yy;</p>
+<p class=functionexpl>Value k;</p>
+<p class=functionexpl>k:=1;</p>
+<p class=functionexpl>xx:=k*Lon</p>
+<p class=functionexpl>yy:=k*LOG(TAN(PIDIV4+0.5*Lat));</p>
+<p class=functionexpl>Return COORD(xx,yy);</p>
+<p class=functionexpl>End;</p>
+
+<p class=kopje>Additional information and examples (advanced)</p>
+<p>Besides the normal MapCalc and TabCalc expressions, the ILWIS
+calculator has the basic functionality of a Pascal like program. With this
+Pascal like functionality you can build functions that contain IF, THEN, ELSE
+loops, FOR loops, WHILE loops and REPEAT/UNTIL loops. For more information, see <a href="calc_user_defined_functions_advanced.htm">Map and Table calculation : User-defined functions (advanced)</a>.</p>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="ilwis_objects_functions.htm">ILWIS objects : functions</a></p>
+<p class=seealsolinks><a href="function_editor_functionality.htm">Function editor : functionality</a></p>
+<p class=seealsolinks><a href="calc_user_defined_functions_advanced.htm">Map and Table calculation : User-defined functions (advanced)</a></p>
+<p class=seealsolinks><a href="calc_aaf.htm">Map and Table calculation : Alphabetical overview of operators and functions</a></p>
+<p class=seealsolinks><a href="calc_aaf.htm">Map and Table calculation : Functional overview of operators and functions</a></p>
+
+</body

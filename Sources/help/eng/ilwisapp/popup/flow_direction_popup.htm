@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<title>flow direction popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Flow direction</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/flow_direction.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation determines into which neighbouring pixel any water in a central pixel will flow. </p>
+
+<p class=linespacing03after>Flow direction is calculated for every central pixel in input blocks of 3 by 3 pixels, each time comparing the value of the central pixel with the value of its 8 neighbouring pixels. 
+
+The output map contains flow directions as N (to the North), NE (to the North East), etc. </p>
+
+<p class=linespacing03after>You can choose to calculate flow direction according to steepest slope or according to lowest neighbour. </p>
+
+</body

@@ -1,0 +1,934 @@
+<html>
+
+<head>
+<title>Import Map</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Import, ILWIS import, Map import, ASTER, HDF, ASC, ASCII, Bitmap, BMP, Atlas, BNA, AutoCad, DXF, Arc/Info, E00, LIN, PTS, Erdas, GARtrip (GPS data), GPS, GIS (Erdas format), LAN, GIF, IDA, IMG (format), Idrisi, DOC (Idrisi format), PaintBrush, PCX, Arc/View, Shape files, SHP, InfoCam, SEQ, SMT (ILWIS 1.x ASCII vector format), TIFF, GeoTIFF">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Main window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="3"><h1 class=secondline>Import</h1></td>
+</tr>
+<tr>
+<td><h1 class=firsttabactive><a class=thistab href="import_map.htm">Import Map</a></h1>
+</td>
+<td><h1 class=othertab><a class=othertab href="import_general_raster.htm">Import General Raster</a></h1>
+</td>
+<td><h1 class=othertab><a class=othertab href="import_table_input_table_name.htm">Import Table Wizard</a></h1>
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p>Import a map in the format of another software package into ILWIS 3 by using ILWIS Map Import. If an attribute table is included in the file to be imported, then the attribute table will be imported as well. </p>
+
+<p class=defnewpar>When you convert files, it is assumed that you already understand some of the main ILWIS concepts. It is recommended that you have read at least the following topics: <a href="../ilwis/basic_concepts_before_creating_maps_and_tables.htm">Basic concepts : before creating ILWIS maps and tables</a> and <a href="../ilwis/basic_concepts_domains.htm">Basic concepts : working with domains</a>. </p>
+
+<p class=defnewpar>The Import dialog box can be used for various types of import: </p>
+
+<ol>
+
+<li><a href="import_map.htm">Import Map</a> (ILWIS Import, described below)</li>
+
+<ol class=abc>
+
+<li><a href="#ilwis_import_raster">Raster formats</a> (described below)</li>
+
+<li><a href="#ilwis_import_vector">Vector formats</a> (described below)</li>
+
+<li><a href="import_aster.htm">ASTER (1A/1B) images</a></li>
+
+</ol>
+
+<li><a href="import_general_raster.htm">Import General Raster (ILWIS Import)</a></li>
+
+</ol>
+
+<p class=defnewpar>The type of import that will be used depends on the menu command you selected and on the <span class=arial>Import Format</span> you select in the Import dialog box. You can read Help according to the type of Import by clicking the links in the header of this topic.</p>
+
+<p class=defnewpar>Below, the formats are described that are supported by ILWIS Map Import and sometimes an explanation of the import behaviour is given. </p>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>ILWIS Map Import also supports the ASTER level 1A and level 1B
+EOS-HDF format. Importing ASTER images is however described in a separate topic. See
+<a href="import_aster.htm">Import ASTER</a> for more information.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To import separate tables, see the <a href="import_table_input_table_name.htm">Import Table wizard</a>. </li>
+
+<li>When you wish to import <i>multiple files</i>, it is advised to type an Import expression on the command line or to write a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> with Import expressions. The Import expressions are described in <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#import_commandline">Appendices : ILWIS script language (syntax), section Import expressions</a>. </li>
+
+</ul>
+
+<p class=diakopje><b>Import</b> dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Select a file:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the file that you wish to import. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Import format:</p>
+
+</td>
+<td valign="top">
+
+<p class=diabox>Select the format of the file which you wish to import. When an import format is selected, the input files that have the correct extension in the current directory will be shown. </p>
+
+<p class=tipnospace>Tip:</p>
+
+<ul class=tipul>
+
+<li>There are separate Help topics for the Import formats  
+
+<img src="../images/objcol.gif" width="15" height="13">&nbsp;<span class=arial><a href="import_aster.htm">Aster(1A/1B)</a></span>, and 
+
+<img src="../images/objcol.gif" width="15" height="13">&nbsp;<span class=arial><a href="import_general_raster.htm">Use General Raster Import</a></span> (click the links).</li>
+
+<li>You can also click <span class=arial><a href="import_general_raster.htm">Import General Raster Import</a></span> in the header of this topic. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Output file name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a name for the output ILWIS object(s). Do not specify an extension for the ILWIS object(s); ILWIS will add its own extensions. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Height offset:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Only for <a href="#gartrip_import"><span class=bookmark>GARtrip import</span></a> (see below).</p>
+
+</td>
+</tr>
+</table>
+
+
+<h2 id="ilwis_import_raster">Importing Raster maps through ILWIS Import</h2>
+
+<p>Import <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a> of a number of different formats (indicated by the name of the option) to the ILWIS raster format. For each map, an .MPR and an .MP# file are created. Furthermore, a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>, a <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a>, a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>, a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> and an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> may be created.</p>
+
+<p class=diakopje>Raster import formats:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Arc/Info ASCII: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Imports an Arc/Info non-compressed ASCII file; the input file is expected to have extension .ASC or .NAS.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Arc/Info .E00:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Imports an Arc/Info .E00 file. For more information, refer to the Vector import below. </p>
+
+<p class=tiptextls01be><span class=tipnospace>Tip: </span>To import Arc/Info Grid files, export the Arc/Info files to .E00 or to non-compressed ASCII. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Compuserve-GIF:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Imports a GIF image. First, it is checked whether the file contains the GIF signature. Then, it is checked whether a color lookup table is available. When a color lookup table is found, the raster map will use domain Picture, otherwise, the map will use domain Image. After that the (LZW compressed) raster data is retrieved. <br>
+
+A GIF file does not contain any geographic information, therefore the resulting raster map in ILWIS will not be georeferenced. Furthermore, the raster map will always be stored as using 1 byte per pixel (maximum of 256 colors). </p>
+
+<p class=tiptextls01be><span class=tipnospace>Tip: </span>When the colors in a GIF file represent classes, and when you obtained a raster map with a Picture domain from import, you can easily change the Picture domain to a Class domain in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of the raster map. After that you can edit the class names in the Domain Class/ID editor. For more information, see <a href="../ilwis/how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a> (section on From a Picture domain to a Class domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Erdas-GIS: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Imports an Erdas .GIS file (thematic map). You can import any maps stored as 4, 8 or 16 bits per pixel. Coordinate information is retrieved from the Erdas .GIS file. Note: Information on class names and representation colors is retrieved from the trailer file (.TRL), if available. Both pre-version 7.4 and Erdas version 7.4 files can be imported. <br>
+The resulting raster map will have a georeference corners.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Erdas-LAN: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Imports an Erdas .LAN file (Remote Sensing Images). You can import any map stored as 4, 8 or 16 bits per pixel. Coordinate information is retrieved from the Erdas .LAN file. Both pre-version 7.4 and Erdas version  7.4 files can be imported. <br>
+The import results are a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> and a number of individual raster maps which will have a georeference corners. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>IDA image:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Imports an IDA (Image Display and Analysis) image (.IMG).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Idrisi map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Imports an Idrisi raster image. Select the .DOC file which accompanies the .IMG file. All required information will be extracted from the .DOC file. When a color file (.PAL) is found, this will be used to create a representation. You can import Idrisi byte maps, integer maps and real maps. When the Idrisi file contains classes, ILWIS will create a class map; otherwise an Image (for Idrisi byte maps) or a Value map (for Idrisi integer and real maps) will be created.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>ILWIS ASCII raster:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Imports an ILWIS 1.x ASCII raster file (.ASC).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Paintbrush-PCX:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Imports a Paintbrush file (.PCX); the resulting map will not have coordinates.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>TIFF: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Imports a Tag Image File Format file (.TIF). ILWIS can import:</p>
+
+<ul class=diaul>
+
+<li>	raster data with 1 bit per pixel: to a raster map with the Bit domain;</li>
+
+<li>	raster data with 4 or 8 bits per pixel: to a raster map with the Image domain, </li>
+
+<li>	raster data with 4 or 8 bits per pixel and a color lookup table: to a map with a Picture domain, </li>
+
+<li>	raster data with 24 bits per pixel (RGB): to a raster map with the Color domain. </li>
+
+</ul>
+
+<p class=tiptextls01be><span class=tipnospace>Tip: </span>When the colors in a TIFF file represent classes, and when you obtained a raster map with a Picture domain from import, you can easily change the Picture domain to a Class domain in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> dialog box of the raster map. After that you can edit the class names in the Domain Class/ID editor. For more information, see <a href="../ilwis/how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a> (section on From a Picture domain to a Class domain).</p>
+
+<p class=diabox>ILWIS can import raster data from the TIFF file that is uncompressed, LZW-compressed (for 8 bits per pixel or more), or Packbits compressed (run-length encoded). </p>
+
+<p class=diabox>Furthermore, ILWIS can import GeoTiff information to create a georeference corners (1 or 2 tiepoints) or a georeference tiepoints (3 or more tiepoints). An empty coordinate system is created which contains textual information in its description: you have to edit the coordinate system yourself and specify projection parameters and datum, etc. as found in the description.</p>
+
+<p class=diabox>After it is checked whether the input file is a TIFF file, the TIFF file is scanned to find:</p>
+
+<ul class=diaul>
+
+<li>	the number of lines and columns,</li>
+
+<li>	the number of bits per pixel,</li>
+
+<li>	the number of values (may be different from the number of bits per pixel!),</li>
+
+<li>	the availability of a color lookup table,</li>
+
+<li>	the TIFF compression method,</li>
+
+<li>	<a href="..//ilwismen/sec/import_tiff_additional_info_on_geotiff_sec.htm" onClick="return popup(this, 'notes')" >GeoTiff information</a>.</li>
+
+</ul>
+
+<p class=diabox>Finally, the raster data is imported and decompressed if necessary.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Windows bitmap:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Imports a Microsoft Windows bitmap (.BMP). You can import any bitmap stored as 1, 4, 8, 16 or 24 bits per pixel. The resulting raster map will not have coordinates.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf></p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>ILWIS Map Import also supports the ASTER level 1A and level 1B HDF format. Importing ASTER images is however described in a separate topic. See <a href="import_aster.htm"> Import ASTER</a> for more information.</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>For the structure of the different formats mentioned in this section, please refer to the manuals of the corresponding software packages.</li>
+
+<li>To import maps via the ILWIS command line or via a script, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwismapimport_commandline">Appendices ILWIS script language (syntax), section ILWIS Map Import</a>. </li>
+
+</ul>
+
+<h2 id="ilwis_import_vector">Importing Vector maps through ILWIS Import</h2>
+
+<p>Vector Import imports vector maps in several formats to vector maps in ILWIS format. </p>
+
+<p>When the input is a <b>polygon map</b>, the following files are created:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>.MPA:</p>
+
+</td>
+<td valign="top">
+<p>the object definition file for the <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon map</a>; contains all <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a>. This file will be visible in the Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.MPAP#</p>
+
+</td>
+<td valign="top">
+<p>contains coordinates of the bounding box around each polygon, polygon areas, length of polygon boundaries, polygon codes and references to the topology of the polygons.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.MPAT#</p>
+
+</td>
+<td valign="top">
+<p>contains coordinates of polygon boundaries, coordinates of nodes, and topology information of the polygon map.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When importing a <b>segment map</b>, the following files are created:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>.MPS:</p>
+
+</td>
+<td valign="top">
+<p>the object definition file for the <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment map</a>; contains all properties. This file will be visible in the Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.MPS#</p>
+
+</td>
+<td valign="top">
+<p>contains coordinates of intermediate points, coordinates of nodes and segment codes.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the input is a <b>point map</b>, the following files are created:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>.MPP:</p>
+
+</td>
+<td valign="top">
+<p>the object definition file for the <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point map</a>; contains all properties. This file will be visible in the Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.PT#</p>
+
+</td>
+<td valign="top">
+<p>contains all point coordinates and the codes of the points.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Furthermore, a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>, a <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a>, a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> and an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> may be created.</p>
+
+<p class=diakopje>Import vector formats:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Arc/Info .E00:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Imports an Arc/Info file in interchange format (.E00) into an ILWIS raster, a polygon map, a segment map and/or a point map. </p>
+
+<p class=diabox>When attributes are available, also one or more ILWIS tables will be created. When the .E00 file contains a table only, this table is imported with domain <span class=courier>None</span>.</p>
+
+<p class=diabox>The E00 import can handle compressed, partially compressed, and uncompressed files. </p>
+
+<p class=diabox>The conversion first scans the .E00 file to gather information, such as: </p>
+
+<ul class=diaul>
+
+<li>	Types of maps included in the .E00 file,</li>
+
+<li>	Codes of segments (IDs), polygons (IDs) and points (labels),</li>
+
+<li>	Value range for raster,</li>
+
+<li>	Attribute tables,</li>
+
+<li>	Map boundary.</li>
+
+</ul>
+
+<p class=diabox>Next, the E00 file is imported, taking into account a number of <a href="..//ilwismen/sec/import_arcinfo_e00_additional_info_on_recognized_tags_sec.htm" onClick="return popup(this, 'notes')" >E00 tags</a>. When the Arc/Info export split the data into several consecutive .E00 files (same file name, extensions .E00, E01, E02, etc.), ILWIS reads all data until the EOF tag is encountered. </p>
+
+<p class=diabox><b>Output:</b></p>
+
+<p class=diabox>When the .E00 file contains:</p>
+
+<ul class=diaul>
+
+<li>	<i>a  segment map only</i> (ARC section only): ILWIS creates a segment map and a table which consists of a single column containing the original Arc/Info IDs;</li>
+
+<li>	<i>a segment map with attributes</i> (.AAT): ILWIS creates a segment map and an attribute table where one column contains the original Arc/Info IDs, and where the other columns contain the attribute values;</li>
+
+<li>	<i>a point map only</i>: ILWIS creates a point map and a table which consists of a single column containing the original Arc/Info IDs;</li>
+
+<li>	<i>a point map with attributes</i> (.PAT): ILWIS creates a point map and an attribute table where one column contains the original Arc/Info IDs, and where the other columns contain the attribute values;</li>
+
+<li>	<i>a segment map and a point map</i>; ILWIS creates a segment map and a point map and tables for the segment map and the point map with a single column containing the original Arc/Info IDs,</li>
+
+<li>	<i>a segment map, a point map and a polygon map </i>(.PAL): a question is asked whether the user wants to obtain a polygon map or not. </li>
+
+        <ul class=diaul>
+
+        <li>	When this question is answered with No, ILWIS creates a segment map and a point map and tables with a single column containing the original Arc/Info IDs for the segment map and the point map;</li>
+
+        <li>	When this question is answered with Yes, ILWIS creates a polygon map using the ILWIS <a href="..//ilwisapp/popup/segments_to_polygons_popup.htm" onClick="return popup(this, 'notes')" >Segments to Polygons</a> operation, a point map and a table with a single column containing the original Arc/Info IDs of the points. By using the <a href="..//ilwisapp/popup/assign_labels_to_polygons_popup.htm" onClick="return popup(this, 'notes')" >Assign labels to polygons</a> operation, the original label point IDs can be applied to the polygons.</li>
+
+        </ul>
+
+<li>	<i>a segment map, a point map and a polygon map with point or polygon attributes</i> (.PAL + .PAT): a question is asked whether the user wants to obtain a polygon map or not. </li>
+
+        <ul class=diaul>
+
+        <li>	When this question is answered with No: then ILWIS creates a segment map and a point map and tables with a single column containing the original Arc/Info IDs for the segment map and the point map;</li>
+
+        <li>	When this question is answered with Yes, then ILWIS creates (a) a polygon map using the ILWIS Polygonize operation, (b) a point map and (c) a table where one column contains the original Arc/Info IDs, and where the other columns contain the attribute values. </li>
+
+        </ul>
+
+<li>	<i>a raster map </i>(GRD section): ILWIS creates a raster map with a value domain.</li>
+
+<li>	<i>a table only</i>: ILWIS creates a table with domain <span class=courier>None</span>.</li>
+
+</ul>
+
+<p class=diabox>The output map(s) usually obtain the same name as the input .E00 file. The same is also true for any class or ID domain; however when a domain with that name already exists, the domain name is slightly adjusted to be unique.</p>
+
+<p class=tipnospace>Limitations: </p>
+
+<ul class=tipul>
+
+<li>	Arc/Info IDs that are whole positive numbers up to 2 billion are supported.</li>
+
+<li>	This version does not import possible coordinate system information contained in the .E00 file. Furthermore, some sections may be recognized but ignored (see <a href="..//ilwismen/sec/import_arcinfo_e00_additional_info_on_recognized_tags_sec.htm" onClick="return popup(this, 'notes')" >E00 tags</a>). </li>
+
+<li>	Extracting attribute information for raster maps is not yet implemented.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Arc/Info .LIN, .PTS ASCII:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Imports files that were created with the Arc/Info ungenerate command (extension .LIN/.PTS). A .LIN file will be converted to a segment map; a .PTS file to a point map. The extension .GEN (generate) is also used by some systems. </p>
+
+<p class=diabox><u>LIN file</u>: .LIN files are considered to contain segments (arcs in Arc/Info terminology); the output map will be a segment map. The segment map will obtain an ID domain and an attribute table will be linked to the map. The attribute table has a single column which contains the original segment codes. The column which contains the Arc/Info IDs is usually called mapname_ID. To obtain a segment map with these original codes, you will have to use the <a href="..//ilwisapp/popup/attribute_map_of_segments_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of segment map</a> operation after import. </p>
+
+<p class=diabox>The ILWIS map usually has the same name as the input file. The same is also true for its domain, unless there already is a domain carrying the envisioned name, in which case the domain name is slightly adjusted to be unique. </p>
+
+<p class=diabox>The attribute table will get a name based on the map name, making sure the table name is unique. The name of the attribute column will be <i>mapname</i>_ID.</p>
+
+<p class=diabox><u>PTS file</u>: .PTS files are considered to contain points; the output map will be a point map. The output point map will obtain an ID domain and an attribute table will be linked to the map. The attribute table has a single column which contains the original point codes. The column which contains the Arc/Info IDs is usually called <i>mapname</i>_ID. To obtain a point map with these original codes, you will have to use the <a href="..//ilwisapp/popup/attribute_map_of_points_popup.htm" onClick="return popup(this, 'notes')" >Attribute map of point map</a> operation after import. </p>
+
+<p class=diabox>The ILWIS map usually has the same name as the input file. The same is also true for its domain, unless there already is a domain carrying the envisioned name, in which case the domain name is slightly adjusted to be unique. </p>
+
+<p class=diabox>The attribute table will get a name based on the map name, making sure the table name is unique. The name of the attribute column will be PtsValue. </p>
+
+<p class=tiptextls01be><span class=tipnospace>Tip: </span>To reconstruct a polygon map, see the remarks under the E00 import. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Arc/View Shape files .SHP:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Imports Arc/View Shape files to an ILWIS polygon and/or segment and/or point map. Furthermore, also possible attribute data will be imported into attribute tables. ILWIS expects to find three files to perform the conversion: <i>filename</i>.SHP, <i>filename</i>.SHX and <i>filename</i>.DBF files, such as for instance <span class=courier>landuse.shp</span>, <span class=courier>landuse.shx</span> and  <span class=courier>landuse.dbf</span>. Newly created ILWIS attribute tables will be automatically linked to the maps to which they refer. New Shape types like Measure types (M-types) and Elevation types (Z-types) are recognized but the extra information in these file types is skipped.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Atlas .BNA:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Imports a file in Atlas/Map Edit format (.BNA). 
+
+<p class=diabox>Depending on the contents of the BNA file, you can obtain a polygon map and/or a segment map and/or a point map. </p>
+
+<p class=diabox>The output ILWIS map(s) and attribute table(s) will use an internally defined <span class=courier>UniqueID</span> domain; all columns in the attribute table will use the <a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >system <span class=courier>String</span> domain</a>. </p>
+
+<ul class=diaul>
+
+<li>You can convert the <span class=courier>String</span> columns in the attribute table to regular Class or ID columns via the <a href="column_properties.htm">Column Properties</a>. </li>
+
+<li>You can change the domain of the table from a <span class=courier>UniqueID</span> domain to a regular Class or ID domain (containing point, segment or polygon codes) with the <a href="../ilwisapp/change_domain_of_table_functionality_algorithm.htm">Change domain of table</a> operation. </li>
+
+<li>You can obtain original codes of the point, segments or polygons in the output maps by performing an Attribute map operation on the output maps. </li>
+
+<li>You can check whether an attribute table is linked to a map through the <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >properties</a> of the map. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>AutoCAD .DXF:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Imports vector files in AutoCAD Drawing eXchange Files (.DXF). </p>
+
+<p class=diabox>Depending on the contents of the DXF file, you can obtain a polygon map and/or a segment map and/or a point map. </p>
+
+<p class=diabox>First, the DXF file is scanned to find for instance information on:</p>
+
+<ul class=diaul>
+
+<li>	Segment codes</li>
+
+<li>	Boundary</li>
+
+<li>	Height information</li>
+
+</ul>
+
+<p class=diabox>Then, the domain is determined:</p>
+
+<ul class=diaul>
+
+<li>	When the codes contain numeric values only, and the difference between the minimum and maximum value is greater than 1, then a value domain will be created. </li>
+
+<li>	Else, the number of classes is checked; </li>
+
+        <ul class=diaul>
+
+        <li>	When there is more than one class, a class domain will be created. </li>
+
+        <li>	Else, i.e. when all elements have the same code, the height information is checked:</li>
+
+        <ul class=diaul>
+
+        <li>	When the maximum height difference is more than 10 meters, a value domain will be created containing height values. </li>
+
+        <li>	Else, i.e. when no height information is available and all elements have the same non-numeric code, the domain will become a class domain with a single class.</li>
+
+        </ul>
+
+        </ul>
+
+</ul>
+
+<p class=diabox>Next, the DXF file is imported. The following DXF elements are recognized and imported:</p>
+
+<ul class=diaul>
+
+<li>    LWPOLYLINE (DXF14 or higher; imported as a polygon when closed, otherwise imported as a segment) </li>
+
+<li>	POLYLINE (and thus VERTEX, including bulge; imported as a polygon when closed, otherwise imported as a segment) </li>     
+
+<li>	LINE (line segment with only two points)</li>
+
+<li>	ARC (part of circle; imported as one segment)</li>
+
+<li>	POINT (single point)</li>
+
+</ul>
+
+<p class=diabox>The codes of these DXF elements are used for the class names, values, etc. of the imported segments and points. In case of LWPOLYLINE and POLYLINE: the class name, value, etc. is taken to be the code of the LWPOLYLINE or POLYLINE, not of any VERTEX within.</p>
+
+<p class=diabox>When several LINE items follow each other, Import will check whether they are connecting. If this is the case, the lines will be combined into one single segment. Other elements (such as BLOCKS sections, INSERT entities and others) are ignored and skipped. </p>
+
+<p class=tiptextls01be><span class=tipnospace>Tip: </span>To import BLOCK sections, first Explode all the blocks to layer 0 in AutoCad.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox id="gartrip_import">GARtrip Text .TXT:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Imports a GARtrip file (.TXT) with GPS data. It is expected that the input file is created by using the Export option in GARtrip. GARtrip (<a href="http://www.gartrip.de">http://www.gartrip.de</a>) is PC shareware software for Garmin and Magellan GPS receivers. </p>
+
+<ul class=diaul>
+
+<li>When the first line in the GARtrip file contains the word 'Waypoints', an ILWIS point map and an attribute table will be created. </li>
+
+<li>When the first line in the GARtrip file contains the word 'Track', an ILWIS point map and an attribute table will be created, and furthermore an ILWIS segment map will be created. </li>
+
+<li>When a UTM projection is used, also an ILWIS coordinate system (with UTM projection and WGS84 datum) will be created. 
+
+	When the UTM projection uses multiple zones, then all coordinates are automatically transformed to the first zone encountered in the file. <br />
+
+	If no UTM projection is used, ILWIS will use coordinate system Unknown. <br />You may adapt the initially created coordinate system yourself after import. </li>
+
+<li>Optionally, height values in an Altitude 'Alt' column in the input file can be corrected by using the <span class=arial>Height offset</span> option in this Import Map dialog box: </li>
+
+        <ul>
+                
+        <li>a positive value for the <span class=arial>Height offset</span> will increase the 'Altitude' values;</li>
+        
+        <li>a negative value for the <span class=arial>Height offset</span> will decrease the 'Altitude' values. </li>
+
+        </ul>
+
+</ul>
+
+<p class=diabox>The output ILWIS point map and its attribute table will use an internally defined <span class=courier>UniqueID</span> domain; columns in the attribute table will either use <a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>String</span></a> or <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a>. </p>
+
+<p class=diabox>An output ILWIS segment map will use a new ID domain. </p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>ILWIS ASCII segments .SMT:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Imports an ILWIS 1.x ASCII file (.SMT) into an ILWIS segment map. If the first line is not 'Segments', an error message will be displayed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>SMT file structure:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>1st line: <span class=courier>Segments</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Defines a segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>2nd line: <span class=courier>min X  min Y</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Defines the minimum coordinate boundaries of the map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>3rd line: <span class=courier>max X  max Y</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Defines the maximum coordinate boundaries of the map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>4th line: <i>the class name, ID, or value of the first segment.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>5th line and following:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox></p>
+
+</td>
+<td valign="top">
+<p class=diabox>Each line will contain an XY-coordinate of the segment until all coordinates of the segment are listed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox></p>
+
+</td>
+<td valign="top">
+<p class=diabox>The next line states the class name, ID, or value of the second segment. And again, from the next line onward, all coordinates of the second segment will be listed. <a href="..//ilwismen/sec/import_ilwis_ascii_vector_smt_example_sec.htm" onClick="return popup(this, 'notes')" >Example of an .SMT segment file</a>.</p>
+
+<p class=diabox>To import an .SMT file which contains polygons, use Convert1.4 to import the file into ILWIS 1.4, then use Import to import the results into ILWIS 3.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Infocam Sequential .SEQ:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Imports an Infocam sequential file (.SEQ) to a point map and/or a segment map and/or a polygon map. The different types of vector maps that may be present in the .SEQ file are imported as different ILWIS maps. For each map, an attribute table is created in which information on the points, segments and polygons is stored. An Infocam object may have different attributes per element, thus the attribute table may be sparsely filled. The ILWIS maps will always obtain an ID domain; the IDs in the domain will be according to code information.</p>
+
+<p class=diabox><u>Limitations:</u> Double polygon boundaries are not removed thus topology may not be correct. Furthermore, Spline or Arc information in a .SEQ file is not translated. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>For the structure of the different formats mentioned in this section, please refer to the manuals of the corresponding software packages.</li>
+
+<li>To import maps via the ILWIS command line or via a script, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwismapimport_commandline">Appendices ILWIS script language (syntax), section ILWIS Map Import</a>. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>Polygon data are not checked when read. If polygons partly or entirely overlap, problems may occur. Therefore, check your data carefully before conversion!</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects.htm">ILWIS objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_domains.htm">Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_import_data.htm">How to import data</a></p>
+
+<p class=seealsolinks><a href="import_aster.htm">Import ASTER</a></p>
+
+<p class=seealsolinks><a href="import_general_raster.htm">Import General Raster</a></p>
+
+<p class=seealsolinks><a href="import_table_input_table_name.htm">Import Table wizard</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#import_commandline">Appendices : ILWIS script language (syntax), section Import expressions</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwismapimport_commandline">Appendices ILWIS script language (syntax), section ILWIS Map Import</a></p>
+
+</body

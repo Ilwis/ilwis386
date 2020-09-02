@@ -1,0 +1,50 @@
+<html>
+
+<head>
+<title>Objects-map list popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Map list&nbsp;&nbsp;&nbsp;<img src="../../images/mpl.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="..//ilwis/ilwis_objects_map_lists.htm" onClick="return popup(this, 'notes')" >map list</a> is a set of raster maps, for example the bands of a satellite image. All <a href="../../ilwis/popup/objects_raster_map_popup.htm">raster maps</a> in the map list must have the same <a href="objects_georeference_popup.htm">georeference</a> and the same <a href="objects_domains_ilwobj_popup.htm">domain</a>.</p>
+
+<p class=linespacing03before>A map list is used: </p>
+
+<ul>
+
+<li>	for <a href="../../ilwisapp/popup/sample_popup.htm">sampling</a> and <a href="../../ilwisapp/popup/classify_popup.htm">classification</a>,</li>
+
+<li>	to display three maps in a map list as an <a href="../../ilwisapp/popup/show_map_list_as_color_composite_popup.htm">interactive color composite</a>,</li>
+
+<li>	to present multi-temporal changes in maps as a <a href="../../ilwisapp/popup/show_map_list_as_slide_show_popup.htm">slide show</a>, </li>
+
+<li>	to perform a <a href="../../ilwisapp/popup/principle_components_popup.htm">Principal Components Analysis</a>, </li>
+
+<li>    to apply the same MapCalc formula on all raster maps in the map list, or</li>
+
+<li>    to perform an operation on all raster maps in the map list.</li>
+
+</ul>
+
+<p class=linespacing03before>A map list can be created from the <a href="..//ilwis/main_window_menu_commands.htm" onClick="return popup(this, 'notes')" >File menu</a> in the Main window or while starting an operation which requires a map list as input. You can include as many raster maps in a map list as you like. </p>
+
+</body

@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>Class coverage statistics (DEM-Hydro Processing script)</title>
+<meta name="keywords" content="Class coverage statistics, DEM Hydro-Processing, Hydrologic Operations, DEM">
+<meta name="Generator" content="ILWIS Script Form">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<!-- COPY of ILWISxx\Scripts\Hydro-DEM\class_coverage_statistics.htm -->
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>DEM-Hydro Processing scripts</h1>
+
+<h1 class=secondline>Class coverage statistics</h1>
+
+<!--<hr>-->
+
+<p class="defnewpar">The Class coverage statistics script crosses a selected catchment from a merged catchments map with a raster map that has a class domain, for instance land use classes or land cover classes. </p>
+
+<p class="defnewpar">Then, for each class, the area in percentages is calculated, i.e. the area that is occupied by each class in the selected catchment. The output is stored in column <span class="courier">area_percent</span>. </p>
+
+<p class="defnewpar">When the script is finished, the output cross table is displayed. </p>
+
+<p class=diakopje>Dialog box options:</p>
+<table cellspacing=0>
+<tr>
+<td valign="top" width="168"><p class=diabox>Merged catchment map:</p></td>
+<td valign="top"><p class=diabox>Select a raster map that is the result of a previous <a href="..//ilwisapp/popup/catchment_merge_popup.htm" onClick="return popup(this, 'notes')" >Catchment Merge</a> operation. </p></td>
+</tr>
+<tr>
+<td valign="top"><p class=diabox>Selected catchment ID</b>:</p></td>
+<td valign="top"><p class=diabox>Type the ID of a catchment with which you wish to perform the cross. </p></td>
+</tr>
+<tr>
+<td valign="top"><p class=diabox>Cross map:</p></td>
+<td valign="top"><p class=diabox>Select a raster map with a class domain, for instance a land use map or land cover map. The merged catchments map will be crossed with the raster map selected here. </p></td>
+</tr>
+<tr>
+<td valign="top"><p class=diabox>Output table:</p></td>
+<td valign="top"><p class=diabox>Type a name for the output cross table that will contain the statistics on your landuse or landcover classes. </p></td>
+</tr>
+</table>
+
+<p class="kopje">Short explanation of the calculations by the script: </p>
+
+<ol>
+<li class="ls01be">A temporary (bool) map is created which only contains the selected catchment. </li>
+
+<li class="ls01be">This map is crossed with your class map. </li>
+
+<li class="ls01be">In the resulting cross table, a temporary column is calculated to obtain the sum of the total area: </li>
+
+   	<p class="tipemptylinehalf">&nbsp;</p>
+   	<p class="tiptext"><i>temp_col_sum</i> = <span class="courier">ColumnAggregateSum</span>(NPix)</p>
+   	<p class="tipemptylinehalf">&nbsp;</p>
+
+	<p class="linespacing01before">The script calculates with NPix, so that even if you use a map with geographic LatLon coordinates, answers will be obtained. </p>
+
+<li class="ls01be">Then, for each class, the percentage of the area that is occupied by this class in the selected catchment is calculated: </li>
+
+   	<p class="tipemptylinehalf">&nbsp;</p>
+   	<p class="tiptext">output column <span class="courier">area_percent</span> = (NPix / <i>temp_col_sum</i>) * 100</p>
+   	<p class="tipemptylinehalf">&nbsp;</p>
+   
+<li class="ls01be">Finally, the temporary raster map and the temporary column are removed, and the output cross table is shown. </li>
+
+</ol>
+
+<p class="tip">Tip: </p>
+
+<p class="tiptext">For more information on the TabCalc functions used in this script, please refer to the following topics: <a href="../ilwis/calc_aggsum.htm">ColumnAggregateSum</a> / <a href="../ilwis/calc_aggsum.htm">AGGSUM</a>, or to <a href="../ilwis/calc.htm">Map and Table Calculation</a>. </p>
+
+<p class=seealso>See also:</p>
+<p class="seealsolinks"><a href="../ilwisapp/class_coverage_statistics.htm">Class Coverage Statistics</a></p>
+<p class="seealsolinks"><a href="../ilwisapp/cross_functionality.htm">Cross : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/script_editor_functionality.htm">Script editor : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_scripts.htm">ILWIS objects : scripts</a></p>
+<p class=seealsolinks><a href="../ilwis/how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a></p>
+<p class=seealsolinks><a href="http://www.52n.org/index.php?option=com_projects&task=showProject&id=30&Itemid=127" target="_blank">ILWIS on the web (52 North)</a></p>
+
+</body

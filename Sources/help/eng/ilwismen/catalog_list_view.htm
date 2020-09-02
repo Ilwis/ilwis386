@@ -1,0 +1,165 @@
+<html>
+
+<head>
+<title>Catalog - List View</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catalog, Customize ..., Main window, List View, Views, Data management">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Main window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">View menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Catalog - List View</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>View the <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >objects</a> in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> (directory), in an opened <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collection</a> or in an opened <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> as a simple list of icons and object names. To see detailed information on objects in a Catalog, use <a href="catalog_details_view.htm">Details View</a>.</p>
+
+<p class=defnewpar>When using List View, you can:</p>
+
+<ul>
+
+<li>specify the object types you want to see, </li> 
+
+<li>order the objects by name, by date, etc., </li>
+
+<li>search for certain objects, e.g. objects of a certain type, with certain name, using a certain domain or georef type, using a certain domain or georef, etc. </li>
+
+</ul>
+
+<p>For more information, see below. </p>
+
+<p class=defnewpar>When the current Catalog is shown in List View, the <span class=arial>List View</span> command is preceded by an option bullet <IMG SRC="../images/optbullet.gif" width="4" height="6">. </p>
+
+<p class=kopje>To specify visible object types:</p>
+
+<ul>
+
+<li>Use the <span class=arial><a href="catalog_show.htm">Show</a></span> command on the <span class=arial>View</span> menu, and select a group of objects that you want to see; </li>
+
+<li>Click the right mouse button in the white space of a Catalog, choose the <span class=arial><a href="catalog_show.htm">Show</a></span> command from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, and select a group of objects that you want to see; </li>
+
+<li>Use the <a href="../ilwis/main_window_object_selection_toolbar.htm">Object Selection toolbar</a> in the Main window; object types of which the button is 'down' are shown; </li>
+
+<li>Use the <span class=arial><a href="customize_catalog_selection.htm">Customize Catalog</a></span> command on the <span class=arial>View</span> menu, or click the <span class=arial>Customize Catalog</span> button <a href="customize_catalog_selection.htm"><img src="../images/custcat.gif" align=bottom width="22" height="22" border="none"></a> in the <a href="../ilwis/main_window_standard_toolbar.htm">Standard toolbar</a>, and choose the <a href="customize_catalog_selection.htm">Selection tab</a>. </li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To include system objects or non-ILWIS objects in a Catalog, e.g. DBF files and/or TIF files, see <a href="customize_catalog_selection.htm">Customize Catalog, Selection tab</a>.</p>
+
+<p class=kopje>To sort or order objects:</p>
+
+<ul>
+
+<li>Use the <span class=arial><a href="catalog_sort_by.htm">Sort By</a></span> command on the <span class=arial>View</span> menu, and select a sorting method.</li>
+
+<li>Click the right mouse button in the white space of a Catalog, choose the <span class=arial><a href="catalog_sort_by.htm">Sort By</a></span> command from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, and select a sorting method; </li>
+
+</ul>
+
+<p>When showing objects in a Catalog in <a href="catalog_details_view.htm">Details View</a>, you can also click the column buttons to sort objects. </p>
+
+<p class=kopje>To perform a query on objects:</p>
+
+<p> By using a Catalog query, ILWIS will scan the contents of all <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition files</a> in the current Catalog and show only those objects that are the result of the query. By using a query, you can search for instance for objects that use domain type Class/ID, domain type Image, a certain domain (e.g. domain landuse), a certain georeference, etc. The query that is in use is shown in the <a href="../ilwis/main_window_status_bar.htm">status bar</a> of the Main window. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>Use the <span class=arial><a href="catalog_predefined_query.htm">Catalog Queries</a></span> command on the <span class=arial>View</span> menu, and select a predefined query; </li>
+
+<li>Use the <span class=arial><a href="customize_catalog_query.htm">Customize Catalog</a></span> command on the <span class=arial>View</span> menu, or click the <span class=arial>Customize Catalog</span> button <a href="customize_catalog_query.htm"><img src="../images/custcat.gif" align=bottom width="22" height="22" border="none"></a> in the <a href="../ilwis/main_window_standard_toolbar.htm">Standard toolbar</a>, choose the <a href="customize_catalog_query.htm">Query tab</a>, and select a predefined query or construct a query yourself; </li>
+
+<li>Click the right mouse button in the white space of a Catalog, choose the <span class=arial><a href="customize_catalog_query.htm">Customize Catalog</a></span> command from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, choose the <a href="customize_catalog_query.htm">Query tab</a>, and select a predefined query or construct a query yourself. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><u>Query examples:</u></p>
+
+<table class=tiptext border=0 cellspacing=0 width="100%">
+<tr>
+<td valign=top width=150><span class=courier>map.name=Land*</span>
+
+</td>
+<td valign=top>shows the raster, polygon, segment and point maps that start with <span class=courier>Land</span>.
+
+</td>
+</tr>
+<tr>
+<td valign=top width=150><span class=courier>map.domain=Landuse</span>
+
+</td>
+<td valign=top>shows the raster, polygon, segment and point maps that use domain <span class=courier>Landuse</span>.
+
+</td>
+</tr>
+<tr>
+<td valign=top width=150><span class=courier>map.domain.type=image</span>
+
+</td>
+<td valign=top>shows the maps that use domain type <span class=courier>Image</span>.
+
+</td>
+</tr>
+</table>
+
+<p class=tiptext>For more information, see <a href="customize_catalog_query.htm">Customize Catalog, Query tab</a>.</p>
+
+<p class=tip>Mind:</p>
+
+<ul class=tipul>
+
+<li>Settings on visible object types, sorting/ordering method and queries on objects are either applied to all new Catalogs that will be opened, or to the currently active Catalog only. This depends on whether you click the <span class=arial>Use current settings for new Catalogs</span> button or the <span class=arial>Use default settings for new Catalogs</span> button on the <a href="../ilwismen/customize_catalog_details_view.htm">Customize Catalog, Details View</a> page. </li>
+
+<li>Only those objects will be shown which match the selected object types <i>and</i> a used query. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="catalog_show.htm">Catalog - Show ...</a> </p>
+
+<p class=seealsolinks><a href="catalog_sort_by.htm">Catalog - Sort by ...</a> </p>
+
+<p class=seealsolinks><a href="catalog_predefined_query.htm">Catalog - Predefined queries ...</a> </p>
+
+<p class=seealsolinks><a href="customize_catalog_selection.htm">Customize Catalog, Selection tab</a> </p>
+
+<p class=seealsolinks><a href="customize_catalog_details_view.htm">Customize Catalog, Details View tab</a> </p>
+
+<p class=seealsolinks><a href="customize_catalog_query.htm">Customize Catalog, Query tab</a> </p>
+
+<p class=seealsolinks><a href="catalog_details_view.htm">Catalog - Details View</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/main_window_catalog.htm">Main window : Catalog</a> </p>
+
+</body

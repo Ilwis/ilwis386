@@ -1,0 +1,37 @@
+<html>
+
+<head>
+<title>objects-table popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>(Attribute) Table&nbsp;&nbsp;&nbsp;<img src="../../images/table.gif" align=bottom width="13" height="14"></p>
+
+<p>A <a href="..//ilwis/ilwis_objects_tables.htm" onClick="return popup(this, 'notes')" >table</a> consists of records and
+<a href="objects_column_popup.htm">columns</a>. A table is an <a href="..//ilwis/basic_concepts_attribute_tables.htm" onClick="return popup(this, 'notes')" >attribute table</a> when the table stores additional information on elements in a map; i.e. extra tabular data which relates to mapping units, points, segments, or polygons in maps. To create an attribute table, see <a href="..//ilwis/how_to_create_tables.htm" onClick="return popup(this, 'notes')" >How to create an attribute table</a>.</p>
+
+<p class=linespacing03before>Raster, polygon, segment and point maps which use a <a href="objects_domains_intro_popup.htm">domain</a> type <a href="../../ilwis/sec/domain_class_sec.htm">Class</a> or <a href="../sec/domain_id_sec.htm">ID</a> can have attribute tables. The domain of the attribute table should be the same as the domain of the map to which it relates. An attribute table can be linked to a map or to a domain through the <a href="object_properties_popup.htm">Properties</a> of a map or a domain.</p>
+
+<p class=linespacing03before>An attribute table can be edited when the table is displayed in a table window. When an attribute table is linked to a map or to a domain, and the map is displayed in a map window, you can also double-click the units in the map (see <a href="..//ilwis/map_window_functionality_advanced.htm" onClick="return popup(this, 'notes')" >Map window : advanced functionality</a>). </p>
+
+<p></p>
+
+</body

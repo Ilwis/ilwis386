@@ -1,0 +1,84 @@
+<html>
+
+<head>
+<title>Glue segment maps : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Glue segment maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Glue segment maps</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Glue segment maps operation glues or merges two or more segment maps into one output segment map. You can thus merge for instance segment maps that were digitized as separate segment maps from different map sheets. </p>
+
+<p class=defnewpar>By default, the operation copies all segments of the input maps into the output map. You can also specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> to select and retrieve the class names, IDs or values of the segments that are to be copied into the output map. For more information on how to use a mask, see also <a href="mask_segments_functionality.htm">Mask segments : functionality</a>. </p>
+
+<p class=defnewpar>By default, the operation finds the minimum and maximum X and Y coordinates used in the input maps and creates from this the <a href="..//ilwis/popup/coordinate_boundary_popup.htm" onClick="return popup(this, 'notes')" >coordinate boundaries</a> for the output map. The output map thus comprises the total area of all input maps. You can also define the coordinate boundaries of the output map yourself, by specifying a so-called 'clip boundary'. Then, all segments of the input maps that fall within these coordinates are copied. </p>
+
+<p class=defnewpar>When the input segment maps have attribute tables, also the tables will be automatically merged; for more information see the <a href="..//ilwisapp/popup/glue_tables_popup.htm" onClick="return popup(this, 'notes')" >Glue tables</a> operation.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>All input segment maps should be of the same domain type, i.e. two or more Class maps, two or more ID maps, or two or more Value maps. The contents of the input domains does not necessarily need to be the same. For more information, see the section Domain of output map below. </p>
+
+<p>Furthermore, the input segment maps should have the same or a compatible coordinate system; input segment maps may not use coordinate system <span class=courier>Unknown</span>. </p>
+
+<p class=kopje>Domain of output map:</p>
+
+<ul>
+
+<li>	When combining segment maps with a Value domain, the output map always uses the system <span class=courier>Value</span> domain. The value range for the output map is determined by the smallest minimum and the largest maximum of all input maps; the precision is determined by the smallest precision of the input maps.</li>
+
+<li>	When combining segment maps with the same Class domain, the output map also uses this Class domain. <br>
+In case the class names in the input domains are different, both domains are merged into a new domain, and the output domain then contains all domain items, i.e. all classes, and the output map thus shows both input maps with their original class names. The new domain is either stored as a separate object, or is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </li>
+
+<li>	When combining segment maps with ID domains, the same procedure is followed as for Class maps but the output domain is an ID domain.</li>
+
+</ul>
+
+<p class=kopje>Coordinate system of output map:</p>
+
+<p>The output segment map uses the coordinate system of the first input map.  The coordinate boundaries for the output map are determined from all input maps or are as specified by the user.  When the coordinate systems of the input maps are different (e.g. different projections) but compatible, the coordinates will be transformed to the coordinate system of the first input map.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	This operation has similar functionality as the CopySeg program in ILWIS 1.4.</li>
+
+<li>	When merging segments of different map sheets into one output segment map, segments that are supposed to continue in two or more sheets are not automatically connected to each other. When you break the dependency links of the output map in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the output map, you can edit the output map in the Segment editor using the Move Points and Split/Merge mode.</li>
+
+<li>	For more information on internal domains and representations, see <a href="../ilwis/how_to_open_internal_domains_representations_advanced.htm">How to open internal domains/representations</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="glue_segment_maps_dialogbox.htm">Glue segment maps : dialog box</a></p>
+
+<p class=seealsolinks><a href="glue_segment_maps_commandline.htm">Glue segment maps : command line</a></p>
+
+<p class=seealsolinks><a href="glue_segment_maps_algorithm.htm">Glue segment maps : algorithm</a></p>
+
+</body

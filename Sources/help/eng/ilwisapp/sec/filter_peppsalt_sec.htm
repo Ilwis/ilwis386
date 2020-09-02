@@ -1,0 +1,70 @@
+<html>
+
+<head>
+<title>filter peppsalt sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>PEPPSALT filter</p>
+
+<p>The Pepper&amp;Salt (PEPPSALT) filter is a standard binary filter which works in 
+a 3x3 environment. This filter can be used to remove 'noise' from an image. </p>
+
+<p class=defnewpar>When in the input map, the center pixel is 0 and all neighbours are non-zero, then value 1 will be assigned to the center pixel in the output map. </p>
+
+<p>When in the input map, the center pixel is 1 and at least one neighbour is true as well, then value 1 will be assigned to the center pixel in the output map also.</p>
+
+<p>In other cases value 0 will be assigned. </p>
+
+<p class=defnewpar>The result of using the PEPPSALT filter is that only the single true pixels and single false pixels are filtered out.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=226>
+<p>Input:</p>
+
+</td>
+<td valign="top" width=226>
+<p>Output:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=226>
+<p class=linespacing01before><img src="../../images/pepps1.gif" align=bottom width="200" height="200"></p>
+
+</td>
+<td valign="top" width=226>
+<p class=linespacing01before><img src="../../images/pepps2.gif" align=bottom width="200" height="200"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../../ilwisapp/sec/filter_binary_filter_sec.htm">Example of binary filters</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_types_binary_filters.htm" onClick="return popup(this, 'notes')" >Filter types : binary filters</a></p>
+
+</body

@@ -1,0 +1,168 @@
+<html>
+
+<head>
+<title>VALUE</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="VALUE, String functions, String conversion functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>VALUE( ) function</h1>
+
+<p class=defnewpar>Converts a string with numbers to a value.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+
+<p class=syntax><span class=courier>VALUE</span>(<i>String</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>String</i></td>
+	<td valign="top">is a string consisting of numbers, optionally preceded with a minus sign and optionally containing a dot.</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >system domain String</a></td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>VALUE</span> returns:</td>
+	<td valign="top">a real value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain Value</a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The <span class=courier>VALUE</span> function is the inverse of the <a href="calc_string.htm"><span class=courier>STRING</span></a> function.</li>
+	<li>When the input string starts with a minus sign, the output value will be negative.</li>
+	<li>A dot in the input string will result in an output value with a decimal point.</li>
+	<li>When the input string contains any alphabetic characters, the output will be undefined.</li>
+	<li>When the input is undefined, the output will also be undefined.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</p>
+
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>,
+<a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width=120><p class=calc00>? VALUE(&quot;45&quot;)</p></td>
+	<td><p>returns 45.000</p></td>
+</tr>
+<tr>
+	<td width=120><p class=calc00>? VALUE(-38.5)</p>
+	<td><p>returns -38.500</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol1 = VALUE(InCol1)</p>
+<p class=calc00>OutCol2 = VALUE(SUB(InCol2,2,2))</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InCol1</p></td>
+	<td valign="top"><p class=tcolhr>InCol2</p></td>
+	<td valign="top"><p class=tcolhr>OutCol1</p></td>
+	<td valign="top"><p class=tcolhr>OutCol2</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class="t1r">A11</td>
+	<td valign="top"><p class="t1r">0.000</td>
+	<td valign="top"><p class="t1r">11</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.1</p></td>
+	<td valign="top"><p class=t1r>A12</p></td>
+	<td valign="top"><p class=t1r>0.100</p></td>
+	<td valign="top"><p class=t1r>12</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-1.5</p></td>
+	<td valign="top"><p class=t1r>A20</p></td>
+	<td valign="top"><p class=t1r>-1.500</p></td>
+	<td valign="top"><p class=t1r>20</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>25</p></td>
+	<td valign="top"><p class=t1r>A30</p></td>
+	<td valign="top"><p class=t1r>25.000</p></td>
+	<td valign="top"><p class=t1r>30</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>999</p></td>
+	<td valign="top"><p class=t1r>B10</p></td>
+	<td valign="top"><p class=t1r>999</p></td>
+	<td valign="top"><p class=t1r>10</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>A300</p></td>
+	<td valign="top"><p class="t1r">B21</td>
+	<td valign="top"><p class="t1r">?</td>
+	<td valign="top"><p class="t1r">21</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>ABC</p></td>
+	<td valign="top"><p class=t1r>B22</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>22</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+</table>
+
+<p class=defnewpar>Column <span class=courier>ColOut2</span> contains the values of a sub string of column <span class=courier>InCol2</span>. The sub string starts at position 2 and takes 2 characters into account; when the result of the sub string is a number, then this is converted to a value.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+<td valign="top" width="50"><p class=seealsolinks><a href="calc_string.htm">STRING</a></p></td>
+</tr>
+<tr>
+<td valign="top" width="50"><p class=seealsolinks><a href="calc_code.htm">CODE</a></p></td>
+</tr>
+<tr>
+<td valign="top" width="50"><p class=seealsolinks><a href="calc_name.htm">NAME</a></p></td>
+</tr>
+</table>
+
+</body

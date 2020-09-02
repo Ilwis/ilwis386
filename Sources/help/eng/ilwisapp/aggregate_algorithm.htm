@@ -1,0 +1,57 @@
+<html>
+
+<head>
+<title>Aggregate map : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Aggregate map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Aggregate map</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Aggregate Map operation aggregates blocks of input pixels by applying an aggregation function: Average, Count, Maximum, Median, Minimum, Predominant, Standard Deviation or Sum. The Aggregate Map operation either creates a new georeference factor in which each block of input pixels corresponds to one output pixel (group) or the output raster map uses the same georeference as the input map (no group).</p>
+
+<p class=defnewpar>The Aggregate Map operation considers blocks of n x n input pixels at a time, as specified by the group factor. In Figure 1 below, a group factor of 3 is used. Note that the numbers 1 to 36 are pixel numbers, not pixel values.</p>
+
+<p class=defnewpar><img src="../images/aggalg.gif" align=bottom width="125" height="125"></p>
+
+<p class=captionfig>Figure 1: Principle of calculating aggregated values for blocks of input pixels.</p>
+
+<p>The first aggregated value is calculated for pixels 1, 2, 3, 7, 8, 9, 13, 14, and 15. Then the block is moved 3 steps to the right and the next aggregated value is calculated for pixels 4, 5, 6, 10, 11, 12, 16, 17, and 18, etc. </p>
+
+<p>Mark the difference with the <a href="..//ilwisapp/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a> operation in which the first filtered value is also calculated for pixels 1, 2, 3, 7, 8, 9, 13, 14, and 15. However, then the filter is moved one step to the right, and the next filtered value is calculated for pixels 2, 3, 4, 8, 9, 10, 14, 15, and 16,  etc.</p>
+
+<p class=defnewpar>For each block of n x n input pixels values, the operation calculates an aggregated value. If no aggregation function is specified on the command line, the operation will use the pixel in the upper left corner of each block of input pixels as output. </p>
+
+<p class=defnewpar>An aggregated value is either assigned to 1 pixel in the output map (Group) or to all pixels in the output map which correspond to the considered block of input pixels (No Group). For more information, see <a href="aggregate_functionality.htm">Aggregate map : functionality</a>.</p>
+
+<p class=defnewpar>When an input map cannot be completely split up in blocks (for example when using an input map of 100 lines x 100 columns and a group factor of 3) the last line(s)/column(s) are ignored. In case the option No Group is selected, these remaining lines columns are assigned the undefined value. </p>
+
+<p class=defnewpar>When a RowOffset and a ColumnOffset are specified, the aggregation skips the specified number of lines at the top of the input map and/or the specified number of columns at the left of the input map. For example, when a RowOffset of 5 is used and a ColumnOffset of 10, the operation will start at line 6 and column 11. In case the option No Group is selected, the skipped lines and columns are assigned the undefined value.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="aggregate_functionality.htm">Aggregate map : functionality</a></p>
+
+</body

@@ -1,0 +1,178 @@
+<html>
+
+<head>
+<title>Mirror/Rotate : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Mirror/Rotate">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Mirror/Rotate</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Mirror/Rotate operation allows you to reflect or mirror a raster map in a horizontal, vertical, or diagonal line, to transpose the map's rows and columns, or to rotate a raster map 90°, 180°, 270° (clock-wise). </p>
+
+<p class=defnewpar>Below, the different options are illustrated using a 3 <span class=courier>*</span> 3 map.</p>
+
+<p class=kopje>Reflection in a horizontal line:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/mrhor.gif" align=bottom width="111" height="111"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/mirhor.gif" align=bottom width="111" height="111"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Reflection in a vertical line:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/mrvert.gif" align=bottom width="111" height="111"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/mirvert.gif" align=bottom width="111" height="111"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Reflection in a diagonal:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/mrdiag.gif" align=bottom width="111" height="111"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/mirdiag.gif" align=bottom width="111" height="111"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Transpose:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/mrtran.gif" align=bottom width="111" height="111"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/mirtran.gif" align=bottom width="111" height="111"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Rotate 90°:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/mr90.gif" align=bottom width="111" height="111"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/rot90.gif" align=bottom width="111" height="111"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Rotate 180°:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/mr180.gif" align=bottom width="111" height="111"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/rot180.gif" align=bottom width="111" height="111"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Rotate 270°:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/mr270.gif" align=bottom width="111" height="111"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/rot270.gif" align=bottom width="111" height="111"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special input map requirements.</p>
+
+<p class=defnewpar>The operation can also be applied on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output raster map uses the same domain as the input raster map.</p>
+
+<p>The operation always creates a new georeference for the output map.</p>
+
+<p class=defnewpar>When the operation is performed on an input map list, you will obtain an output map list. When the output map list is opened, the output raster maps will be (defined and) calculated. </p>
+
+<ul>
+
+<li>The output raster maps will obtain the same name as the output map list followed by _1, _2, _3, etc. </li>
+
+<li>All output raster maps will use the georeference created for the first raster map in the map list, e.g. <i>Out</i>_1. </li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When you wish to rotate a raster map into another direction, create a <a href="..//ilwis/popup/georeference_tiepoints_popup.htm" onClick="return popup(this, 'notes')" >georeference tiepoints</a> and then use <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="mirror_rotate_dialogbox.htm">Mirror/Rotate : dialog box</a></p>
+
+<p class=seealsolinks><a href="mirror_rotate_commandline.htm">Mirror/Rotate : command line (1)</a></p>
+
+<p class=seealsolinks><a href="mirror_rotate_commandline2.htm">Mirror/Rotate : command line (2)</a></p>
+
+<p class=seealsolinks><a href="mirror_rotate_algorithm.htm">Mirror/Rotate : algorithm</a></p>
+
+</body

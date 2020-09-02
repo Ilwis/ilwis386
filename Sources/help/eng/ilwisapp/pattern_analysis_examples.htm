@@ -1,0 +1,202 @@
+<html>
+
+<head>
+<title>Pattern analysis : examples</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Pattern analysis">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Pattern analysis</h1>
+
+<h1 class=secondline>Examples</h1>
+
+<h2>Input maps for Pattern analysis </h2> 
+
+<p>Below, you find examples of three point maps in which the spacing of the samples shows the three fundamental pattern types: </p>
+
+<ul>
+
+<li>Random samples;</li>
+
+<li>Clustered samples;</li>
+
+<li>Regular samples.</li>
+
+</ul>
+
+<p class=defnewpar>Each point map occupies an area of 5000m by 5000m. The measured values of the samples are not important (they were all set to 1). Each point map was used as input in a Pattern analysis operation. </p>
+
+<p class=emptyline>&nbsp; </p>
+
+<table width="100%" cellspacing="0"> 
+<tr>
+<td width="30%">
+<img src="../images/patrandom.gif" height="191" width="191">
+
+</td>
+<td width="30%">
+<img src="../images/patclus.gif" height="191" width="191">
+
+</td>
+<td width="30%">
+<img src="../images/patregu.gif" height="191" width="191">
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><b>Random point samples</b></p>
+
+</td>
+<td valign="top">
+<p><b>Clustered point samples</b></p>
+
+</td>
+<td valign="top">
+<p><b>Regular point samples</b></p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<h2>Output tables and graphs of Pattern analysis</h2>
+
+<p>For each input point map, an output table was obtained from Pattern analysis. From each output table, some graphs were prepared: </p>
+
+<ul>
+
+<li>firstly, graphs were made of the <span class=courier>Distance</span> column against the <span class=courier>Prob1Pnt</span> column; </li>
+
+<li>secondly, graphs were made of the <span class=courier>Distance</span> column against the <span class=courier>ProbAllPnt</span> column. </li>
+
+</ul>
+
+<p class=kopje>Probability and distance of finding at least 1 point neighbour: </p>
+
+<p>The three graphs below show the probability and the distance at which at least 1 point neighbour will be found (<span class=courier>Distance</span> column against <span class=courier>Prob1Pnt</span> column) for each of the input maps. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td colspan="2">
+<img src="../images/patrand1.gif" height="215" width="210">
+
+</td>
+<td colspan="2">
+<img src="../images/patclus1.gif" height="215" width="210">
+
+</td>
+<td colspan="2">
+<img src="../images/patregu1.gif" height="215" width="210">
+
+</td>
+</tr>
+<tr>
+<td width="20">&nbsp;
+
+</td>
+<td>
+<p><b>For random points</b>: distances and probabilities of finding at least 1 point neighbour.</p>
+
+</td>
+<td width="20">&nbsp;
+
+</td>
+<td>
+<p><b>For clustered points</b>: distances and probabilities of finding at least 1 point neighbour. </p>
+
+</td>
+<td width="20">&nbsp;
+
+</td>
+<td>
+<p><b>For regular points</b>: distances and probabilities of finding at least 1 point neighbour. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>From the graphs you can find the distance at which the probability of finding at least 1 neighbour (for any point) becomes 1 (<span class=courier>Prob1Pnt = 1</span>). For the input maps used, you can see that this occurs:</p>
+
+<ul>
+
+<li>around 750m in case of the map with the randomly spaced points; </li>
+
+<li>around 300m in case of the map with the clustered points; </li>
+
+<li>around 500m in case of the map with the regularly spaced points. </li>
+
+</ul>
+
+<p class=defnewpar>For interpolation and/or Kriging purposes of these input maps, it will thus make no sense using a <i>limiting distance</i> value smaller than or similar to the values listed above, as interpolations or estimations on the basis of the value of only <i>one</i> other neighbour are of course not very accurate. </p>
+
+<p class=defnewpar>If you want to make sure that interpolations or estimations will be based on for example at least <i>five</i> point values (the value of any point itself and the values of at least 4 neighbours), you should prepare a graph of the <span class=courier>Distance</span> column against the <span class=courier>Prob4Pnt</span> column, then read the distance at which the probability of finding at least 4 neighbours becomes 1. For your information, in the three point maps used above, this is at a distance of around 1600m for the random points, 500m for the clustered points, and 1000m for the regular points. </p>
+
+<p class=kopje>Probability and distance of finding neighbours:</p>
+
+<p>The next three graphs are graphs of the <span class=courier>Distance</span> column against the <span class=courier>ProbAllPnt</span> column. </p>
+
+<p>This shows the cumulative number of neighbours (on a scale from 0 to 1) which will be found at a certain distance. </p>
+
+<p>The graphs also show the probability that a randomly selected point pair in an input map will have a separation less than a certain distance. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td colspan="2">
+<img src="../images/patrndal.gif" height="212" width="210">
+
+</td>
+<td colspan="2">
+<img src="../images/patclual.gif" height="212" width="210">
+
+</td>
+<td colspan="2">
+<img src="../images/patregal.gif" height="212" width="210">
+
+</td>
+</tr>
+<tr>
+<td width="20">&nbsp;
+
+</td>
+<td>
+<p><b>For random points</b>: probability of finding point neighbours at a certain distance.</p>
+
+</td>
+<td width="20">&nbsp;
+
+</td>
+<td>
+<p><b>For clustered points</b>: probability of finding point neighbours at a certain distance.</p>
+
+</td>
+<td width="20">&nbsp;
+
+</td>
+<td>
+<p><b>For regular points</b>: probability of finding point neighbours at a certain distance.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The probability of finding neighbours approaches 1 at distances greater than 5000m. As the side of each map was 5000m, all points will certainly have been found at distances of <span class=symbollarger>&Ouml;</span>(5000<sup>2</sup> + 5000<sup>2</sup>) <span class=symbol>»</span> 7000m. </p>
+
+<p class=defnewpar>In the graph of the map containing the clustered points, you can see that the probability curve is not increasing between distances between around 600m and 1000m. This is the distance at which the points in any certain cluster have all been found, but none of the points of any other cluster. </p>
+
+<p class=tip>Mind: </p>
+
+<p class=tiptext>When you apply Pattern Analysis on point measurements of a single province or region, you can expect boundary effects at distances greater than around half of the size of the input map (in the examples above around 2500m). You can see in the <span class=courier>ProbAllPnt</span> graphs that from this distance onward, the probability increases less rapidly (curves flatten). When the phenomenon under study has also been sampled in other neighbouring provinces or regions, you can therefore reduce these boundary effects by including some points in your data set from the neighbouring areas. </p>  
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="pattern_analysis_functionality.htm">Pattern Analysis : functionality</a></p>
+
+</body

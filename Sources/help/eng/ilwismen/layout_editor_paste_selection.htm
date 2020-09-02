@@ -1,0 +1,87 @@
+<html>
+
+<head>
+<title>Layout editor : Paste</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Paste from clipboard, Layout editor, Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Paste</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Paste the contents of the clipboard into the current <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>. </p>
+
+<p class=defnewpar>You can paste:</p>
+
+<ul>
+
+<li>	anything that has been copied into the clipboard as text, a picture or a bitmap; the copying may have been done in ILWIS or in any other Windows application; </li>
+
+<li>	this includes for instance: logos, graphs, multiple lines or multiple paragraphs of text, etc.</li>
+
+</ul>
+
+<p class=kopje>To paste:</p>
+
+<ul>
+
+<li>	select <span class=arial>Paste</span> from the Edit menu, or</li>
+
+<li>    click the <span class=arial>Paste</span> button <img src="../images/paste.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a> of the layout editor,</li>
+
+<li>	press the <span class=arial>Ctrl+V</span> keys on the keyboard.</li>
+
+</ul>
+
+<p class=defnewpar>Pasted objects will always appear as a new text, picture or bitmap at the top left corner in your layout. </p>
+
+<p class=tip>Tip:</p>
+
+<ul class=tipul>
+
+<li>You can use Windows' Clipboard Viewer to inspect the current contents of the clipboard.</li>
+
+<li>Afer pasting, you may need to resize the pasted pictures, bitmaps or text. To resize an object, you can select an object and drag its <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a>; you can also adapt the width and height values in the Layout Management pane. </li>
+
+<li>It is not a very good idea to copy and paste annotation elements from one layout into another layout: as most objects are copied as pictures, the meaning of coordinates, sizes of a scale bar, etc. will get lost. </li>
+
+        <p>When you wish to create a layout which should look almost exactly as another layout, it is therefore advised to save the current layout with another name and replace the map view(s) and/or edit the annotation. For more information, refer to the tips in the <a href="layout_editor_copy_selection.htm">Copy</a> topic.</p>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/layout_editor_copy_selection.htm">Layout editor : Copy</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+</body

@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>Variogram surface popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Variogram surface</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/variogram_surface.htm" onClick="return popup(this, 'notes')" >Variogram surface</a> operation uses a point map or a raster map as input and calculates a surface of semi-variogram values where each cell (pixel) in the surface represents a directional distance class. The output surface, a raster map with a special kind of georeference, may help you to visualize possible anisotropy of your data and to determine the direction of the anisotropy axis.</p>
+
+<p class=linespacing03after>Subsequently, you can calculate directional semi-variograms by using the directional method in the <a href="spatial_correlation_popup.htm">Spatial correlation</a> operation. From the output table of Spatial correlation, you can prepare a semi-variogram model with its parameters nugget, sill, range, and you can investigate the range of the variable in the semi-variogram model both in the direction of anisotropy as well as in the direction perpendicular to it. Then, you are ready to perform <a href="anisotropic_kriging_popup.htm">Anisotropic Kriging</a>.</p>
+
+</body

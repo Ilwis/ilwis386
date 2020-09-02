@@ -1,0 +1,61 @@
+<html>
+
+<head>
+<title>Densify : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Densify raster map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Densify</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Densify process consists of several steps:</p>
+
+<ul>
+
+<li>	from the specified enlargement factor and the georeference of the input map, a new georeference factor is created; this georeference determines the number of rows and columns in the output map; thus the XY-coordinate is known for each output pixel;</li>
+
+<li>	then these positions are looked up in the input map and, according to the selected interpolation method, the nearest pixel, or 4 (bilinear), 16 (bicubic) input pixels around this position are used to calculate a value for the output map.</li>
+
+</ul>
+
+<p class=defnewpar>For a detailed description of the nearest neighbour method, bilinear and bicubic interpolation, refer to <a href="resample_functionality.htm">Resample : functionality</a> or <a href="resample_algorithm.htm">Resample : algorithm</a>. </p>
+
+<p class=defnewpar>With a nearest neighbour interpolation, the pixels of the output map are assigned the same class names, IDs or values as the pixels of the input map.</p>
+
+<p>A bilinear interpolation takes much less time than a bicubic interpolation.</p>
+
+<p>A bilinear interpolation results in discontinuity of the first derivative. This means that a bilinear interpolation gives artefacts when you for example want to use a <a href="..//ilwisapp/sec/filter_dfdx_sec.htm" onClick="return popup(this, 'notes')" >DFDX</a>, <a href="..//ilwisapp/sec/filter_dfdy_sec.htm" onClick="return popup(this, 'notes')" >DFDY</a>, or a <a href="..//ilwisapp/sec/filter_shadow_sec.htm" onClick="return popup(this, 'notes')" >SHADOW</a> filter on the map later on. </p>
+
+<p>A bicubic interpolation remains continuous up to the second derivative.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwisapp/sec/bilinear_interpolation_sec.htm" onClick="return popup(this, 'notes')" >Bilinear interpolation example</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/sec/bicubic_interpolation_sec.htm" onClick="return popup(this, 'notes')" >Bicubic interpolation example</a></p>
+
+<p class=seealsolinks><a href="resample_algorithm.htm">Resample : algorithm</a></p>
+
+</body

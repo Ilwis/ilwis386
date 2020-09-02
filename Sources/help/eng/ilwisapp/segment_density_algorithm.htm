@@ -1,0 +1,35 @@
+<html>
+
+<head>
+<title>Segment density : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment density">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segment density</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Segment density operation rasterizes an input segment map on a pixel size which is specified in the georeference. </p>
+
+<p class=kopje>Process:</p>
+
+<ul>
+
+<li>All pixels are initialized on value zero. </li>
+
+<li>For each segment, all pixels are found that are crossed by the segment.</li>
+
+<li>For all these pixels, the length of the segment parts within the pixel is added to the current value of the pixel. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segment_density_functionality.htm">Segment density : functionality</a></p>
+
+</body

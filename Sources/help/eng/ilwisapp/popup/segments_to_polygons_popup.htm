@@ -1,0 +1,42 @@
+<html>
+
+<head>
+<title>segments to polygons popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Segments to Polygons</p>
+
+<p>The <a href="..//ilwisapp/segments_to_polygons.htm" onClick="return popup(this, 'notes')" >Segments to Polygons</a> operation automatically polygonizes a supposedly error free segment map. The operation is designed to be used after you have imported vector files from another package. All segments in the segment map must be connected to other segments or to themselves (islands) by nodes; dead ends, self overlap and/or intersections are not allowed. A <a href="../../ilwis/sec/mask_sec.htm">mask</a> can be specified to polygonize specific segments. </p>
+
+<!--<p class=defnewpar>If any errors are found during topological polygonization, you can choose to stop the polygonization or to have the program automatically correct all errors encountered. If you wish to use this Auto Correction option, it is strongly advised to first do a try out on a <b>copy of your segment map</b>, because segments may change during the process. </p>-->
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li><a href="..//ilwismen/segment_editor_check_segments.htm" onClick="return popup(this, 'notes')" >Segment editor : Check Segments</a>: open the segment map in the segment editor and use <span class=arial>Check Segments</span> to check the segments yourself before polygonization and have the possibility to interactively correct any erroneous segments yourself. </li>
+
+<li><a href="..//ilwismen/segment_editor_polygonize.htm" onClick="return popup(this, 'notes')" >Segment editor : Polygonize</a>: open the segment map in the Segment editor and use <span class=arial>Polygonize</span> to polygonize segments while having the possibility to interactively correct erroneous segments yourself.</li>
+
+</ul>
+
+</body

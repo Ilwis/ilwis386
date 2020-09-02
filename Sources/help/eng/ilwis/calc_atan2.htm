@@ -1,0 +1,265 @@
+<html>
+
+<head>
+<title>ATAN2</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ATAN2, Trigonometric functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>ATAN2( ) function</h1>
+
+<p class=defnewpar>Returns the angle in radians of two input values, i.e. the angle from the x-axis to a point (y,x).</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>ATAN2</span>(<i>Value y, Value x</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top" colspan="2"><i>Value y</i></td>
+	<td valign="top">is a value in vertical direction (y-coordinate)</td>
+</tr>
+<tr>
+	<td width="1" valign="top"></td>
+	<td width="99" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top" colspan="2"><i>Value x</i></td>
+	<td valign="top">is a value in horizontal direction (x-coordinate)</td>
+</tr>
+<tr>
+	<td width="1" valign="top"></td>
+	<td width="99" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>ATAN2</span> returns:</td>
+	<td valign="top">a real value in radians</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+<tr>
+	<td width="100" valign="top">Value range:</td>
+	<td valign="top">[-<span class=symbol>p</span>,<span class=symbol>p</span>]</td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>For the function <span class=courier>ATAN2</span>, the <b>output</b> values are in <b>radians</b>. To convert radians to degrees, use the angular function      <a href="calc_raddeg.htm"><span class=courier>RADDEG</span></a>.</li>
+	<!--<li><span class=courier>ATAN(y/x) = ATAN2(y,x)</span> if x and y are both positive.</li>-->
+	<li>When the input value is undefined, the output will also be undefined.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>The <span class=courier>ATAN2</span> function is often used in calculation of slope maps and aspect maps. See <a href="how_to_calculate_aspect_maps.htm"> How to calculate an aspect map</a> for more information.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="170"><p class=calc00>? ATAN2(-1,-1)</p></td>
+	<td><p>returns -2.356</p></td>
+</tr>
+<tr>
+	<td width="170"><p class=calc00>? ATAN2(1.571,PI)</p>
+	<td><p>returns 0.464</p></td>
+</tr>
+<tr>
+	<td width="170"><p class=calc00>? RADDEG(ATAN2(PI,PI)</p>
+	<td><p>returns 45</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>OutMap = ATAN2(DY,DX)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>DY</p></td>
+	<td><p class=courier>DX</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>2.0</td>
+    <td class=calcpict>1.0</td>
+    <td class=calcpict>0.5</td>
+  </tr>
+  <tr>
+    <td class=calcpict>0.2</td>
+    <td class=calcpict>0.3</td>
+    <td class=calcpict>-1.0</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>-0.4</td>
+    <td class=calcpict>-0.1</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>8.1</td>
+    <td class=calcpict>7.3</td>
+    <td class=calcpict>-2</td>
+  </tr>
+  <tr>
+    <td class=calcpict>14.0</td>
+    <td class=calcpict>0.0</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>-1.5</td>
+    <td class=calcpict>-5.8</td>
+    <td class=calcpict>-0.6</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>0.242</td>
+    <td class=calcpict>0.136</td>
+    <td class=calcpict>2.897</td>
+  </tr>
+  <tr>
+    <td class=calcpict>0.014</td>
+    <td class=calcpict>1.571</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>-3.073</td>
+    <td class=calcpict>-2.976</td>
+  </tr>
+</table>
+</td>
+
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol1 = ATAN2(DY,DX)</p>
+<p class=calc00>OutCol2 = RADDEG(ATAN2(DY,DX))</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>DY</p></td>
+	<td valign="top"><p class=tcolhr>DX</p></td>
+	<td valign="top"><p class=tcolhr>OutCol1</p></td>
+	<td valign="top"><p class=tcolhr>OutCol2</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2.0</p></td>
+	<td valign="top"><p class=t1r>8.1</p></td>
+	<td valign="top"><p class=t1r>0.242</p></td>
+	<td valign="top"><p class=t1r>13.87</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1.0</p></td>
+	<td valign="top"><p class=t1r>7.3</p></td>
+	<td valign="top"><p class=t1r>0.136</p></td>
+	<td valign="top"><p class=t1r>7.80</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.5</p></td>
+	<td valign="top"><p class=t1r>-2.0</p></td>
+	<td valign="top"><p class=t1r>2.897</p></td>
+	<td valign="top"><p class=t1r>165.96</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.2</p></td>
+	<td valign="top"><p class=t1r>14.0</p></td>
+	<td valign="top"><p class=t1r>0.014</p></td>
+	<td valign="top"><p class=t1r>0.82</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.3</p></td>
+	<td valign="top"><p class=t1r>0.0</p></td>
+	<td valign="top"><p class=t1r>1.571</p></td>
+	<td valign="top"><p class=t1r>90.00</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-1.0</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>-1.5</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-0.4</p></td>
+	<td valign="top"><p class=t1r>-5.8</p></td>
+	<td valign="top"><p class=t1r>-3.073</p></td>
+	<td valign="top"><p class=t1r>183.95</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-0.1</p></td>
+	<td valign="top"><p class=t1r>-0.6</p></td>
+	<td valign="top"><p class=t1r>-2.976</p></td>
+	<td valign="top"><p class=t1r>189.46</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_sin.htm">SIN</a></p></td>
+	<td valign="top" width="45"><p class=seealsolinks><a href="calc_asin.htm">ASIN</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_sinh.htm">SINH</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_cos.htm">COS</a></p></td>
+	<td valign="top" width="45"><p class=seealsolinks><a href="calc_acos.htm">ACOS</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_cosh.htm">COSH</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_tan.htm">TAN</a></p></td>
+	<td valign="top" width="45"><p class=seealsolinks><a href="calc_atan.htm">ATAN</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_tanh.htm">TANH</a></p></td>
+</tr>
+</table>
+
+</body

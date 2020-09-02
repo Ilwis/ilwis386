@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>contour interpolation popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Contour interpolation</p>
+
+<p><a href="..//ilwisapp/contour_interpolation.htm" onClick="return popup(this, 'notes')" >Contour interpolation</a> is an operation which first rasterizes contour lines of a segment map with a value domain, and then calculates values for pixels that are not covered by segments by means of a linear interpolation. Furthermore, on the command line, this operation can also use an input raster map.</p>
+
+<p></p>
+
+<p>When using Contour interpolation on a segment map containing height (contour) information, the resulting raster map is a Digital Elevation Model (DEM).</p>
+
+</body

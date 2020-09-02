@@ -1,0 +1,56 @@
+<html>
+
+<head>
+<title>aggregation group by column popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>'Group by' column</p>
+
+<p>A 'group by' column is needed when performing an aggregation. </p>
+
+<p class=defnewpar>This can be: </p>
+
+<ul>
+
+<li>during an <a href="..//ilwismen/aggregate_column.htm" onClick="return popup(this, 'notes')" >aggregation</a> within a table, or </li>
+
+<li>during a <a href="..//ilwismen/join_column.htm" onClick="return popup(this, 'notes')" >join</a>, when the values that you wish to joined need to be aggregated; the selected <i>key 2</i> column will act as a 'group by' column. </li>
+
+</ul>
+
+<p class=defnewpar>When a 'group by' column is used: </p>
+
+<ul>
+
+<li>groups are formed for all records in the table that have the same class name, or ID in the specified 'group by' column, </li>
+
+<li>then, the specified <a href="aggregation_functions_popup.htm">aggregation function</a> calculates the sum, average, etc. of values per group. </li>
+
+</ul>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="..//ilwis/calc_aaf.htm" onClick="return popup(this, 'notes')" >TabCalc : aggregate functions</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/calc_joining_columns_from_other_tables.htm" onClick="return popup(this, 'notes')" >TabCalc : joining columns from other tables</a> </p>
+
+</body

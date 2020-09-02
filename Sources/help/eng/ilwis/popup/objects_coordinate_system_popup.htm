@@ -1,0 +1,50 @@
+<html>
+
+<head>
+<title>Objects-coordinate system popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Coordinate system&nbsp;&nbsp;&nbsp;<img src="../../images/coordsy.gif" align=bottom width="15" height="15"></p>
+
+<p class=linespacing03after>A <a href="..//ilwis/ilwis_objects_coordinate_system.htm" onClick="return popup(this, 'notes')" >coordinate system</a> defines the possible XY- or LatLon-coordinates that can be used in your maps and thus stores information on the kind of coordinates you are using in your maps. You may for instance use user-defined coordinates, coordinates defined by a national standard or coordinates of a certain UTM zone. Point, segment and polygon maps always have a coordinate system. Raster maps have a <a href="../../ilwis/popup/objects_georeference_popup.htm">georeference</a> which uses a coordinate system. A coordinate system is a <a href="..//ilwis/ilwis_objects_service_objects.htm" onClick="return popup(this, 'notes')" >service object</a> for point, segment and polygon maps, and for georeferences of raster maps. </p>
+
+<p>There are five main types of coordinate systems:</p>
+
+<ul>
+
+<li>	<b>coordsys boundary only</b>: to define XY-coordinates for maps by only specifying the boundaries of your study area. </li>
+
+<li>	<b>coordsys projection</b>: to define XY-coordinates for maps by specifying the boundaries of your study area and optionally projection information, ellipsoid information and/or datum information. </li>
+
+<li>	<b>coordsys latlon</b>: to define LatLon-coordinates for maps by specifying the boundaries of your study area in Latitudes and Longitudes and optionally ellipsoid information and/or datum information. </li>
+
+<li>	<b>coordsys formula</b>: when you obtained data which is using different XY-coordinates than the coordinate system of your project, and when you know the relation between the two coordinate systems. </li>
+
+<li>	<b>coordsys tiepoints</b>: when you obtained data which is using different XY-coordinates than the coordinate system of your project, and when you do not know the relation between the two coordinate systems. </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>It is advised to use <b> one</b> coordinate system for all your maps. In case you have data of different sources in different projections, it is advised to <i><a href="transform_operations_popup.htm">transform</a></i> all data to one common coordinate system. </p>
+
+</body

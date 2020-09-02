@@ -1,0 +1,119 @@
+<html>
+
+<head>
+<title>ILWIS objects : map views</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map view, ILWIS objects, Container objects, MPV">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Map views&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/mpv.gif" align=bottom width="16" height="12"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A map view is a saved <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>. 
+
+<p class=linespacing03before>In one map window, you can display: </p>
+
+<ul>
+
+<li>one or more <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a>, <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a>, <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a> and/or <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a>; </li>
+
+<li>one or more <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text objects</a> which usually contains the labels of a point, segment or polygon map; </li>
+
+<li><a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a>. </li>
+
+</ul>
+
+<p class=defnewpar>When you save a map window as a map view, all <a href="..//ilwis/popup/layers_popup.htm" onClick="return popup(this, 'notes')" >layers</a> in the map window and their display settings as well as the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of the map window are stored. When you open a map view later on, the map window will appear exactly as it was saved. You do not need to add individual maps to the map window anymore, nor specify their display options. </p>
+
+<p class=defnewpar>Map views MUST be created when you wish to print maps. After saving the map window(s) as map view(s), create a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> to which you can add one or more map views and additional <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> such as <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legends</a>, <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >north arrows</a>, <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bars and scale texts</a>, <a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a>, <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map borders</a> including ticks and coordinates for grid lines or a graticule, a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a>, <a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >boxes</a>, <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmaps</a> and <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >pictures</a>. </p>
+
+<p class=tiptext><span class=tip>Mind: </span>In a layout, a map view may only contain one raster map. </p>
+
+<p class=defnewpar>In the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a>, you can then make a final composition of the map views and the annotation. </p>
+
+<p class=kopje>Names of map views:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a map view:</p>
+
+<p>Display the required data layers, annotation text layers, grid lines, and/or graticule(s) in a map window. Then, from the <a href="map_window_menu_commands.htm">File menu</a> in the map window, select the <span class=arial><a href="../ilwismen/save_view.htm">Save View</a></span> or the <span class=arial><a href="../ilwismen/save_view_as.htm">Save View As</a></span> command. You can also click the <span class=arial>Save</span> button <img src="../images/save.gif" align=bottom width="22" height="22"> in the <a href="map_window_toolbar.htm">toolbar</a> of the map window. When a map window has not been saved before, the <a href="../ilwismen/save_view_as.htm">Save View As</a> dialog box will appear. </p>
+
+<p class=defnewpar>To create a layout, you can choose the <span class=arial><a href="../ilwismen/create_a_layout.htm">Create Layout</a></span> command from the <a href="map_window_menu_commands.htm">File menu</a> in the map window. If the contents of the map window still need to be saved as a map view, you will be asked to do so. Then, a small dialog box will appear in which you can specify a scale for the map view in the layout: the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a> will be opened displaying the map view on the specified scale. </p>
+
+<p>For more information, see also <a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a>. </p>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>Map views that use a coordinate system of type latlon, cannot be properly displayed nor printed in a layout. It is advised: </p>
+
+<ul class=tipul>
+
+<li>to drag a coordinate system of type projection to a map window before saving the map window as a map view, or </li>
+
+<li>to transform the vector maps with a coordinate system of type latlon, to a coordinate system of type projection. </li>
+
+</ul>
+
+<p class=kopje>To display a map view:</p>
+
+<p>The easiest way to display a map view is to double-click it in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. All layers stored by the map view will be directly displayed in a map window. </p>
+
+<p class=kopje>To edit a map view:</p>
+
+<p>Open a map view, and add or remove layers or edit display options of layers. Then, save the map window again as a map view either using the <span class=arial>Save View</span> or <span class=arial>Save View As</span> commands or by clicking the <span class=arial>Save</span> button. </p>
+
+<p>For more information, see also <a href="../ilwis/how_to_use_layers_in_a_map_window.htm">How to use layers in a map window</a> or <a href="../ilwis/map_window_layer_management.htm">Map window : Layer Management</a>. </p>
+
+<p class=defnewpar>Map views can also be edited and saved from within the layout editor. For more information, see <a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a>. </p>
+
+<p class=kopje>Operations on map views:</p>
+
+<p>On a map view, no operations can be performed. When a map view is displayed, you can copy the map view as a picture to clipboard and paste it into another Windows application (see <a href="../ilwismen/copy_map_window_to_clipboard.htm">Map window : Copy to clipboard</a>). When one or more map views are inserted in a layout, you can add annotation such as a legend, print the layout and export the layout as a bitmap (see <a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a>). </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>A map view consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.MPV). This file stores references to all map names that were stored as the map view and further contains the display options of all layers. Furthermore, the georeference of the map window is stored.</p>
+
+<p class=defnewpar>By opening the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a map view, you can see on the <span class=arial>Contains</span> tab, all maps and the annotation text layers that are part of this map view. Grid lines and graticules are not listed. For more information, see the <a href="../ilwismen/map_view_properties.htm">Map View Properties</a> sheet. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_map_views_and_layouts.htm">Basic concepts : map views and layouts</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_layouts.htm">ILWIS objects : layouts</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+</body

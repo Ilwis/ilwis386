@@ -1,0 +1,104 @@
+<html>
+
+<head>
+<title>Catchment extraction : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catchment extraction">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Catchment extraction</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Catchment extraction operation constructs catchments; a catchment will be calculated for each stream found in the output map of the <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation. </p>
+
+<p class="defnewpar">The operation delivers an output raster map, an output polygon map and an output attribute table. </p>
+
+<p class="defnewpar">In the attribute table, you will find information on each catchment, such as: </p>
+
+<ul>
+
+<li>area and perimeter of the catchment, </li>
+
+<li>total upstream area, i.e. the area of all catchments that drain into this catchment, etc. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Drainage network ordering map:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144"><p class="diabox"></p>
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> that is the output of a previous <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Flow direction map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a raster map that is the output of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map and the output polygon map that will contain the uniquely numbered catchments. The name will also be used for the output attribute table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class="defnewpar">The output maps and the attribute table will all use the ID domain of the input drainage network ordering map. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="catchment_extraction_functionality.htm">Catchment extraction : functionality</a></p>
+
+</body

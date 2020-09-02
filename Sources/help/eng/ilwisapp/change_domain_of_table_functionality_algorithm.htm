@@ -1,0 +1,131 @@
+<html>
+
+<head>
+<title>Change domain of table : functionality/algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Change domain of table">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Change domain of table</h1>
+
+<h1 class=secondline>Functionality / Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Change domain of table operation copies the contents of an input table to a new table; the new table will have another domain than the input table. </p>
+
+<p class=defnewpar>For the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the output table, you can choose:</p>
+
+<ul>
+
+<li>	domain <span class=courier>None</span>;</li>
+
+<li>	an existing class or ID domain on disk;</li>
+
+<li>	a class or ID domain of a column in the input table when that column contains unique classes or IDs;</li>
+
+<li>	a class or ID domain of a column in the input table where the column does not contain unique classes or IDs and other column values need to be aggregated (average, minimum, maximum, sum, last value encountered).</li>
+
+</ul>
+
+<p class=kopje>Explanation:</p>
+
+<ol>
+
+<li>	When you choose to obtain an output table with domain <span class=courier>None</span>: </li>
+
+        <ul>
+
+        <li>	All records of the input table will be written into the output table.</li>
+
+        <li>	The order of records in the input and in the output table is the same.</li>
+
+        </ul>
+
+<li>	When you choose to obtain an output table with an existing class or ID domain on disk:</li>
+
+        <ul>
+
+        <li>	The domain items of the input table will be compared with the domain items in the selected domain; when an item (i.e. a class name or an ID) exists in both domains, then the record is written into the output table.</li>
+
+        <li>	The order of records in the output table will be the order of the selected domain.</li>
+
+        <li>	You may use this option when you <i>have</i> a table which contains records for all classes or IDs in a domain and when you want to <i>obtain</i> a table with only a few records on a few classes or IDs of the input table; create a new domain with only a few classes or IDs (a subset), then use the Change domain of table operation and select the domain with the subset. </li>
+
+        <li>	You may also use this option after importing tables and when you know that the imported tables should use the same domain.</li>
+
+        </ul>
+
+<li>	When you choose to obtain an output table which will use the domain of a column in the table and when each field of that column contains another class name or ID, i.e. when the fields in the selected column are unique:</li>
+
+        <ul>
+
+        <li>	For each unique class name or ID, the values found in other columns in the input table will be written into the output table.</li>
+
+        <li>	The order of records in the output table will be the order of the domain of the selected column.</li>
+
+        <li>	When the class names or IDs in the selected column are not unique and when you do not choose the Aggregate option, an error message will follow.</li>
+
+        </ul>
+
+<li>	When you choose to obtain an output table which will use the domain of a column in the input table and when the fields of that column do not contain unique class names or IDs, choose the Aggregate option. </li>
+
+        <ul>
+
+        <li>	For each group of class names or IDs found in the selected column, the values found in all value columns will be aggregated by taking either the average, minimum value, maximum value, or the sum; the answers are then written into the output table. You can also choose to simply use the last value encountered per group of class names or IDs.</li>
+
+        <li>	When an aggregation on an input column is not possible, i.e. when an input column does not have a value domain, the last class name, ID, color, etc. encountered per group will be written into the output table.</li>
+
+        <li>	When you use the Average aggregation function, the precision of output value columns will differ from the precision of the input value columns.</li>
+
+        <li>	When you use the Sum aggregation function, the value range of output value columns will differ from the value ranges of the input value columns.</li>
+
+        <li>	The order of records in the output table will be the order of the domain of the selected column.</li>
+
+        <li>	An extra column Count will appear in the output table; it contains the number of times that a certain class name or ID was found in the selected column. </li>
+
+        </ul>
+
+</ol>
+
+<p class=kopje>Requirements for the input table:</p>
+
+<p>No special requirements.</p>
+
+<p class=kopje>Domain of output table:</p>
+
+<p>The domain of the output table will be the domain which you selected: domain None, an existing class or ID domain on disk, or a class or ID domain of a column in the input table.</p>
+
+<p>The output table will contain an extra column Count when an aggregation function is used.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>The Change domain of table operation can only use <i>one</i> type of aggregation function which will be applied on <i>all value columns</i> in the input table. When you want to use different aggregation functions for various columns or when you want to use weight functions for an aggregation, it is advised to use the <a href="../ilwismen/join_column.htm"><span class=arial>Join Column</a></span> command on the <a href="../ilwis/table_window_menu_commands.htm">Columns menu</a> of the 'output' table.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="change_domain_of_table_dialog_box.htm">Change domain of table : dialog box</a></p>
+
+<p class=seealsolinks><a href="change_domain_of_table_command_line.htm">Change domain of table : command line</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+</body

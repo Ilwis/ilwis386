@@ -1,0 +1,132 @@
+<html>
+
+<head>
+<title>Unique ID : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Unique ID">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Unique ID</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Unique ID operation can be used to assign unique identifiers to all elements in a segment, polygon or point map. The output map contains the same geographic information as the input map, but each point, segment or polygon will have a unique ID. </p>
+
+<p class=defnewpar>Furthermore, an attribute table is created for the output map. The table contains a column with the original classes, IDs or values of the input map; the areas of individual output polygons; the lengths of individual output segments. </p>
+
+<p class=kopje>Example:</p>
+
+<p>In this example, the Unique ID operation is applied on segment map <span class=courier>Water</span>. The input map uses a class domain <span class=courier>Water</span> which contains three classes: River, Stream 1 and Stream 2. The output segment map and its attribute table have a Unique ID domain with IDs named Seg 1 to Seg 5. </p>
+
+<p class=emptyline>&nbsp;&nbsp;  </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>Input segment map:</p>
+
+<p>(Class domain <span class=courier>water</span>)</p>
+
+</td>
+<td valign="top" width=151>
+<p>Output segment map:</p>
+
+<p>(Unique ID domain)</p>
+
+</td>
+<td valign="top">
+<p>Output table:</p>
+
+<p>(Unique ID domain)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/unid.gif" align=bottom width="140" height="110"></p>
+
+</td>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/unidout.gif" align=bottom width="140" height="110"></p>
+
+</td>
+<td valign="top">
+<p><img src="../images/unidtab.gif" align=bottom width="160" height="102"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When no prefix is specified, the output IDs will be: </p>
+
+<ul>
+
+<li>when an input polygon map is used: Pol 1, Pol 2, Pol 3, etc. </li>
+
+<li>when an input segment map is used: Seg 1, Seg 2, Seg 3, etc. </li>
+
+<li>when an input point map is used: Pnt 1, Pnt 2, Pnt 3, etc. </li>
+
+</ul>
+
+<p>When a prefix is used, e.g. My Segments, then the output IDs will be My Segments 1, My Segments 2, etc. </p>
+
+<p class=kopje>Requirements for the input map:</p>
+
+<p>No special requirements for the input point, segment or polygon map.</p>
+
+<p class=kopje>Domain of output map and attribute table:</p>
+
+<p>The output map and its attribute table will use an internally defined <span class=courier>UniqueID</span> domain. The IDs have names as described above. The domain is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </p>
+
+<p class=kopje>Attribute table for output map: </p>
+
+<p>An attribute table will be automatically created for the output map. The table will obtain the same name as the output map. The table will contain the new IDs, and: </p>
+
+<ul>
+
+<li>the names or values of the original input polygons, and the areas of individual output polygons; </li>
+
+<li>the names or values of the original input segments, and the lengths of individual output segments; </li>
+
+<li>the names or values of the original input points. </li>
+
+</ul>
+
+<p class=kopje>Coordinate system of output map:</p>
+
+<p>The output map uses the same coordinate system and coordinate boundaries as the input map.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>For more information on internal domains and representations, refer to <a href="../ilwis/how_to_open_internal_domains_representations_advanced.htm">How to open internal domains/representations.</a></p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="unique_id_dialog_box.htm">Unique ID : dialog box</a></p>
+
+<p class=seealsolinks><a href="unique_id_command_line.htm">Unique ID : command line </a></p>
+
+<p class=seealsolinks><a href="unique_id_algorithm.htm">Unique ID : algorithm</a></p>
+
+</body

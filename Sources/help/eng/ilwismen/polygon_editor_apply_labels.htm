@@ -1,0 +1,70 @@
+<html>
+
+<head>
+<title>Polygon editor : Apply labels</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygon editor, Polygon labels, Labels">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Polygon editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/polygon_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Apply labels</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+ 
+<!--<hr>-->
+
+<p class=defnewpar>Assign names to polygons according to a label point map. </p>
+
+<p class=defnewpar>For each label point in the point map, the surrounding polygon is determined; then the class name, ID, or value of the label point is assigned to that polygon. When multiple labels are found within one polygon, the last point (as seen when you display the point map as a table) is assigned to the polygon.</p>
+
+<p class=diakopje>Dialog box option:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Label points:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the name of a point map which contains labels that you want to assign to the polygons.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To assign label points to polygons, you can also use the <a href="..//ilwisapp/popup/assign_labels_to_polygons_popup.htm" onClick="return popup(this, 'notes')" >Assign labels to polygons</a> (LabelPol) operation. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_functionality.htm">Polygon editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_menu_commands.htm">Polygon editor : menu commands</a></p>
+
+</body

@@ -1,0 +1,221 @@
+<html>
+
+<head>
+<title>DIST2</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="DIST2, Coordinate functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>DIST2( ) function</h1>
+
+<p class=defnewpar>Returns the square of the distance between two coordinates.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>DIST2</span>(<i>Coordinate a</i>, <i>Coordinate b</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>Coordinate a</i></td>
+	<td valign="top">is an (X,Y) coordinate</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">a coordinate system</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>Coordinate b</i></td>
+	<td valign="top">is an (X,Y) coordinate</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">a coordinate system</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>DIST2</span> returns:</td>
+	<td valign="top">a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The <span class=courier>DIST2</span> function returns for two coordinates the sum of squared distance in X-direction and the squared distance in Y-direction (<span class=symbol>D</span>x<sup>2</sup>+<span class=symbol>D</span>y<sup>2</sup>).</li>
+	<li>The coordinate system(s) of the input coordinates are ignored.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p> <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>,&nbsp;<a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" colspan="2"><p class=calc00>? DIST2(COORD(10,15),COORD(20,20))</p></td>
+</tr>
+<tr>
+	<td valign="top" width="50"><p class=calc00></p></td>
+	<td valign="top"><p>returns the square distance between coordinate (10,15) and coordinate (20,20), i.e. 125</p></td>
+</tr>
+<tr>
+	<td valign="top" colspan="2"><p class=calc00>? DIST2(COORD(10,15,LatLon),COORD(20,20,LatLonWGS84))</p>
+</tr>
+<tr>
+	<td valign="top" width="50"><p class=calc00></p>
+	<td valign="top"><p>returns the square distance between coordinate (10,15) and coordinate (20,20) ignoring the coordinate systems, i.e. 125</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p>Point map <span class=courier>Rainfall</span> shows the location of rainfall stations in the area of Cochabamba, Bolivia. To calculate the squared distance between rainfall station <span class=courier>PROMIC</span> and all other rainfall stations, type on the command line of the table window:</p>
+<p class=calc0linsp03befaft>Distance = DIST2(Coordinate,PNTCRD(Rainfall,&quot;PROMIC&quot;))</p>
+
+<table cellspacing=0>
+<table>
+<tr>
+	<td valign="top" colspan="3"><p class=th>Rainfall.mpp opened as table</td>
+	<td valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td valign="top" colspan="2"><p class=th>Working table</td>
+</tr>
+<tr>
+	<td valign="top"><p class=tcolhr>ID</p></td>
+	<td valign="top"><p class=tcolh>Name</p></td>
+	<td valign="top"><p class=tcolhr>Coordinate</p></td>
+	<td valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td valign="top"><p class=tcolhr>Distance</p></td>
+	<td valign="top" width="10"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1>UMSS</p></td>
+	<td valign="top"><p class=t1r>(803429.00, 8074631.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r> 34911760.000</p></td>
+	<td valign="top" width="10"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1>Taquina</p></td>
+	<td valign="top"><p class=t1r>(799748.00, 8082415.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r> 11940849.000</p></td>
+	<td valign="top" width="10"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1>Laguna Santa Rosa</p></td>
+	<td valign="top"><p class=t1r>(803511.00, 8087422.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r> 48956125.000</p></td>
+	<td valign="top" width="10"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1>Laguna Totura</p></td>
+	<td valign="top"><p class=t1r>(801281.00, 8088967.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r> 73752480.000</p></td>
+	<td valign="top" width="10"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1>PROMIC</p></td>
+	<td valign="top"><p class=t1r>(802613.00, 8080483.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>0.000</p></td>
+	<td valign="top" width="10"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1>Aro Caqua</p></td>
+	<td valign="top"><p class=t1r>(806816.00, 8076585.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r> 32859613.000</p></td>
+	<td valign="top" width="10"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1>Colca Pithua</p></td>
+	<td valign="top"><p class=t1r>(797465.00, 8078352.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r> 31043065.000</p></td>
+	<td valign="top" width="10"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>8</p></td>
+	<td valign="top"><p class=t1>Cerro MachaMach</p></td>
+	<td valign="top"><p class=t1r>(796346.00, 8087736.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r> 91881298.000</p></td>
+	<td valign="top" width="10"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>9</p></td>
+	<td valign="top"><p class=t1>Laguna WaraWara</p></td>
+	<td valign="top"><p class=t1r>(806042.00, 8085414.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r> 36072802.000</p></td>
+	<td valign="top" width="10"></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="80"><a href="calc_coord.htm">COORD</a></td>
+	<td valign="top" width="70"><a href="calc_mincrdx.htm">MINCRDX</a></td>
+	<td valign="top" width="70"><a href="calc_mapcrd.htm">MAPCRD</a></td>
+	<td valign="top"><a href="calc_rasvalue.htm">RASVALUE</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_crdx.htm">CRDX</a></td>
+	<td valign="top" width="70"><a href="calc_mincrdy.htm">MINCRDY</a></td>
+	<td valign="top" width="70"><a href="calc_maprow.htm">MAPROW</a></td>
+	<td valign="top"><a href="calc_dist.htm">DIST</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_crdy.htm">CRDY</a></td>
+	<td valign="top" width="70"><a href="calc_maxcrdx.htm">MAXCRDX</a></td>
+	<td valign="top" width="70"><a href="calc_mapcol.htm">MAPCOL</a></td>
+	<td valign="top"></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_transform.htm">TRANSFORM</a></td>
+	<td valign="top" width="70"><a href="calc_maxcrdy.htm">MAXCRDY</a></td>
+	<td valign="top" width="70"><a href="calc_mapvalue.htm">MAPVALUE</a></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

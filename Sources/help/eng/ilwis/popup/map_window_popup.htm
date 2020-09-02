@@ -1,0 +1,43 @@
+<html>
+
+<head>
+<title>Map window popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Map window</p>
+
+<p>A <a href="..//ilwis/map_window.htm" onClick="return popup(this, 'notes')" >map window</a> may display one or more <a href="objects_raster_map_popup.htm">raster maps</a> combined with one or more <a href="objects_polygon_map_popup.htm">polygon maps</a>, <a href="objects_segment_map_popup.htm">segment maps</a> and/or <a href="objects_point_map_popup.htm">point maps</a>. Maps that are displayed in a map window are called <a href="layers_data_layers_popup.htm">data layers</a>. The legend of each map is automatically displayed in the <a href="..//ilwis/map_window_layer_management.htm" onClick="return popup(this, 'notes')" >Layer Management</a> pane of a map window.</p>
+
+<p class=linespacing03before>A map window can also display three images of a <a href="objects_map_list_popup.htm">map list</a> as an <a href="../../ilwisapp/popup/show_map_list_as_color_composite_popup.htm">interactive color composite</a>, or all maps of a map list as a <a href="../../ilwisapp/popup/show_map_list_as_slide_show_popup.htm">slide show</a>. </p>
+
+<p class=linespacing03before>Optionally, you can create an <a href="annotation_text_popup.htm">Annotation Text object</a> which usually contains the labels of a point, segment or polygon map. You can add multiple Annotation Text objects to a map window. </p>
+
+<p class=linespacing03before>Furthermore, you can add <a href="ann_grid_lines_popup.htm">grid lines</a> and <a href="ann_graticule_popup.htm">graticules</a> as a layer to a map window. </p>
+
+<p class=defnewpar>A map window displaying one or more maps, a map list, one or more annotation text layers, optional grid lines and graticules can be saved as a <a href="objects_map_view_popup.htm">map view</a>. Map views can be added to a <a href="objects_layout_popup.htm">layout</a> which is used to make a final composition before printing. To the layout, you can add further <a href="layers_annotation_layers_popup.htm">annotation</a> such as <a href="ann_legend_popup.htm">legends</a>, <a href="ann_map_border_popup.htm">map borders</a> including
+ticks and coordinates for grid lines or a graticule, <a href="ann_north_arrow_popup.htm">north arrows</a>, <a href="ann_scale_bar_popup.htm">scale bars and scale texts</a>, <a href="ann_text_popup.htm">texts</a> (such as a title), <a href="ann_box_popup.htm">boxes</a>, <a href="ann_bitmap_popup.htm">bitmaps</a> and <a href="ann_windows_metafile_popup.htm">pictures</a>, and a <a href="ann_page_border_popup.htm">page border</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>In a layout, a map view may only contain one raster map. </p>
+
+</body

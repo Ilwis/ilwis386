@@ -1,0 +1,44 @@
+<html>
+
+<head>
+<title>Annotation Text popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Annotation Text&nbsp;&nbsp;&nbsp;<img src="../../images/anntxt.gif" align=bottom width="16" height="12"></p>
+
+<p>An <a href="..//ilwis/ilwis_objects_annotation_text.htm" onClick="return popup(this, 'notes')" >Annotation Text object</a>, also called an annotation text layer, is designed to display and store multiple texts (such as labels of points, segments or polygons) at <i>multiple positions</i>. 
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>In a map window, open the <a href="..//ilwis/map_window_menu_commands.htm" onClick="return popup(this, 'notes')" >File menu</a> and choose <span class=arial>Create Annotation Text</span>. The <a href="..//ilwismen/create_an_annotation_text_object.htm" onClick="return popup(this, 'notes')" >Create Annotation Text</a> dialog box will appear, in which you can choose to use a map on which the texts/labels should be based. </li>
+
+<li>Then, in the <a href="annotation_text_editor_popup.htm">Annotation Text editor</a>, you can easily reposition selected texts, and you can specify fonts, font sizes, appearance (bold, italics, underline), colors, rotations, etc. Texts in an Annotation Text object can only consist of one line. </li> 
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When one or more maps, annotation text layers, optional grid lines and graticules that are displayed in a map window are saved as a <a href="objects_map_view_popup.htm">map view</a>, and when the map view is added to a <a href="objects_layout_popup.htm">layout</a>, you can add further <a href="ann_text_popup.htm">texts</a> (such as a title) to the layout. </p>
+
+</body

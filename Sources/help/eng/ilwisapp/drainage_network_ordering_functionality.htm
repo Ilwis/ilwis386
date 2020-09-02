@@ -1,0 +1,326 @@
+<html>
+
+<head>
+<title>Drainage network ordering : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Drainage network ordering">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Drainage network ordering</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p>The Drainage network ordering operation: </p>
+
+<ul>
+
+<li>examines all drainage lines in the drainage network map, i.e. an output map from the <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network extraction</a> operation, </li>
+
+<li>finds the nodes where two or more streams meet, and </li>
+
+<li>assigns a unique ID to each stream in between these nodes, as well as to the streams that only have a single node. </li>
+
+</ul>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="tiptext"><span class="tip">Tip: </span>When you used a high quality DEM, many superfluous streams may have come up with the Drainage network extraction operation. To limit the number of output streams and reduce calculation time for the Drainage network ordering operation, you can specify the minimum drainage length (in meters); then, only external streams with a length greater than this value will remain in the output drainage network. </p>
+
+<p class="defnewpar">The output of this operation is a raster map, a segment map and an attribute table that all use a newly created ID domain. </p>
+
+<p class="defnewpar">The attribute table contains information on each stream, such as: </p>
+
+<ul>
+
+<li>Strahler ordering number, Shreve ordering number, </li>
+
+<li>stream length, calculated along the drainage, and calculated as a straight line between XY-coordinates, </li>
+
+<li>slope values in degrees and in percentages, calculated along the drainage and calculated as a straight line between XY-coordinates, and elevation, </li>
+
+<li>sinuosity of the drainage path as a measure of meandering, </li>
+
+<li>total upstream drainage length, i.e. the total length of the streams that drain into the current one, etc.</li>
+
+</ul>
+
+<p class="defnewpar">The output maps and the attribute table of the Drainage network ordering operation are used as input 
+in many other DEM-hydro processing operations, among others:</p>
+
+<ul>
+
+<li>the <a href="..//ilwisapp/popup/catchment_extraction_popup.htm" onClick="return popup(this, 'notes')" >Catchment extraction</a> operation, </li>
+
+<li>the <a href="..//ilwisapp/popup/catchment_merge_popup.htm" onClick="return popup(this, 'notes')" >Catchment merge</a> operation, and </li>
+
+<li>the <a href="..//ilwisapp/popup/overland_flow_length_popup.htm" onClick="return popup(this, 'notes')" >Overland flow length</a> operation.</li>
+
+</ul>
+
+
+<p class="kopje">Example:</p>
+
+<table cellspacing="0">
+<tr>
+<td width="250">Input drainage network map:</td>
+<td width="250">Output drainage network ordering map:</td>
+<td>Output map including the IDs as points:</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_drain_netwb.gif" width="231" height="188"></td>
+<td><img src="../images/hydro_drain_netw_ord.gif" width="231" height="188"></td>
+<td><img src="../images/hydro_drain_netw_ord2.gif" width="231" height="188"></td>
+</tr>
+<tr>
+<td>True values in green, <br>
+	and False values in gray. </td>
+<td>Every stream segment obtains its own ID; <br>
+	IDs are shown in multiple colors</td>
+</tr>
+<tr><td valign="top" colspan="3"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td>Output map <br> 
+	displayed by attribute Strahler: </td>
+<td>Output map <br>
+	displayed by attribute Shreve: </td>
+</tr>
+<tr>
+<td><img src="../images/hydro_drain_netw_strahler_pseudo.gif" width="231" height="188"></td>
+<td><img src="../images/hydro_drain_netw_shreve_pseudo.gif" width="231" height="188"></td>
+</tr>
+<tr>
+<td>The Strahler (value) column was used, <br>
+	with representation Pseudo.</td>
+<td>The Shreve (value) column was used, <br>
+	with representation Pseudo.</td>
+</tr>
+</table>
+
+<p class="kopje">Principles of Strahler and Shreve network ordering:</p>
+
+<p>In the attribute table, a Strahler column and a Shreve column will be found. These columns contain values that reflect the position of a stream between its adjacent upstream and downstream streams. The ordering systems have a different manner of calculation. </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<ul>
+
+<li>First, the streams are found that form the upper-most starting points of the drainages in the network. These streams obtain ordering number 1 (both in the Strahler and in the Shreve ordering system), until a node is found that connects the stream with a following stream (down-flow). </li>
+
+	<ul>
+
+	<li class="linespacing03before">For next streams down-flow, <i>Strahler ordering numbers</i> are calculated as follows: 
+
+		<ul>
+
+		<li class="li01be">When two (or more) streams of equal order join each other, the stream order value is increased by 1. <br >
+			For example, when two streams with order number 2 join each other, the next stream will receive order number 3. </li>
+
+		<li class="li01be">When a higher-order stream joins a lower-order stream, the order number for the next stream does not increase; instead, the largest order number of the streams that contribute to it is assigned. <br>
+			For example, when a stream with order number 1 joins a stream with order number 2, the next stream will also be assigned order number 2. </li>
+
+		</ul>
+
+	<li class="linespacing03before">For next streams down-flow, <i>Shreve ordering numbers</i> are calculated as: </li>
+
+		<ul>
+	
+    		<li>the sum of the Shreve ordering numbers of the streams that directly contribute to this stream.<br>
+			
+			For example, when a stream with order number 1 joins a stream with order number 2, the next stream will be assigned order number 3. </li>
+
+		</ul>
+	
+</ul>
+
+<p class="defnewpar">Below, you will find two pictures explaining the Strahler and Shreve ordering systems. </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td width="350">Principle of Strahler network ordering:</td>
+<td width="350">Principle of Shreve network ordering:</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_drain_netw_strahler.gif" width="334" height="238"></td>
+<td><img src="../images/hydro_drain_netw_shreve.gif" width="334" height="238"></td>
+</tr>
+</table>
+
+<p class="defnewpar">You can also read about both methods in the explanation of the columns of the attribute table below. </p>
+
+<p class="kopje">Input map requirements:</p>
+<ul>
+<li>A raster map containing height values (DEM); </li>
+<li>a raster map that is the outcome of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation;</li>
+<li>a raster map that is the outcome of a previous <a href="..//ilwisapp/popup/drainage_network_extraction_popup.htm" onClick="return popup(this, 'notes')" >Drainage network extraction</a> operation.</li>
+</ul>
+
+<p class="defnewpar">Furthermore, you can specify a value called Minimum drainage length (in meters); segments with a length smaller than this value will not remain in the output maps. 
+	By choosing a larger value, fewer streams will remain in the drainage network; this will speed up the operation. </p>
+
+<p class="kopje">Domain of output maps and attribute table:</p>
+
+<ul>
+<li>A output raster map and an output segment map will be created; these maps will use a newly created ID domain. </li>
+<li>The new ID domain will obtain the same name as the output raster map. </li>
+<li>An output attribute table will be created, using the same ID domain. </li>
+<li>The output raster map and the output segment map are both linked to the output attribute table. </li>
+</ul>
+
+<p class="defnewpar">Additionally, a new class domain and a class representation are created for the StrahlerClass column in the attribute table (see below). <br>
+	The class domain and the class representation obtain the same name as the output ID domain followed by <span class="courier">__1</span>.</p>
+
+<p class="kopje">The output attribute table will contain the following columns:</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="144"><i>domain</i></td>
+<td valign="top">The IDs of the table's domain, every record (ID) represents a certain stream.</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">UpstreamLinkID</span></td>
+<td valign="top">The IDs of the streams that directly contribute to the current stream, e.g. when streams 5 and 7 flow together into stream 12, then the UpstreamLinkID column will read for the record with ID 12: <span class="courier">{5,7}</span> </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">UpstreamCoord</span></td>
+<td valign="top">The XY-coordinate of the beginning of a stream segment (down-flow); these coordinates are shown as points in the third picture above. This column is a coordinate column. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">UpstreamElevation</span></td>
+<td valign="top">The elevation, as extracted from the DEM, at the position of the upstream coordinate. This column is a value column. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">DownstreamLinkID</span></td>
+<td valign="top">The ID of the stream segment into which the current stream will flow (down-flow). This column is a value column. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">DownstreamCoord</span></td>
+<td valign="top">The XY-coordinate of the end of a stream segment (down-flow). </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">DownstreamElevation</span></td>
+<td valign="top">A column containing the elevation, as extracted from the DEM, at the position of the downstream coordinate. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">ElevationDifference</span></td>
+<td valign="top">Height difference between upstream coordinate and downstream coordinate, i.e. <span class="courier">UpstreamElevation - DownstreamElevation</span>. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">Strahler</span></td>
+<td valign="top">Strahler ordering number; the Strahler ordering number for a stream is calculated as follows: 
+
+	<ul>
+
+	<li>when streams of equal order join each other: the Strahler ordering number of one of the streams that directly contributes to this stream&nbsp;+&nbsp;1 is assigned;</li>
+
+	<li>when streams of unequal order join each other: the largest Strahler ordering number of the streams that directly contribute to this stream is assigned; </li>
+
+	</ul>
+
+</tr>
+<tr>
+<td valign="top"></td>
+<td valign="top">In other words: 
+
+	<ul>
+	
+	<li>the Strahler order values of the UpstreamLinkIDs are found, </li>
+
+	<li>when these order values are equal, the value is increased by 1; </li>
+
+	<li>when these order values are unequal, the maximum value is assigned. </li>
+
+	</ul>	
+	
+	The Strahler column is a <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value column</a>. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">Shreve</span></td>
+<td valign="top">Shreve ordering number; the Shreve ordering number for a stream is calculated as the sum of the Shreve ordering numbers of the streams that directly contribute to this stream, i.e. the sum of the Shreve order values of the UpstreamLinkIDs. The Shreve column is a <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value column</a>. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">Length</span></td>
+<td valign="top">The length of a stream measured along the drainage. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">StraightLength</span></td>
+<td valign="top">The length of a stream calculated as the difference between the upstream coordinate and the downstream coordinate, i.e. |<span class="courier"> UpstreamCoord - DownstreamCoord </span>|</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">SlopeAlongDrainage%</span></td>
+<td valign="top">The average slope in percentages between the upstream coordinate and the downstream coordinate, when the length is measured along the drainage, i.e. <span class="courier">(ElevationDifference/Length)*100% </span></td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">SlopeAlongDrainageDegree</span></td>
+<td valign="top">The average slope angle in degrees between the upstream coordinate and the downstream coordinate, when the length is measured along the drainage, i.e. <span class="courier">tan<sup>-1</sup>(ElevationDifference/Length)</span></td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">SlopeDrainageStraight%</span></td>
+<td valign="top">The average slope in percentages between the upstream coordinate and the downstream coordinate, when the length is the straight length between the upstream coordinate and the downstream coordinate, i.e. <span class="courier">(ElevationDifference/StraightLength)*100% </span></td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">SlopeDrainageStraightDegree</span></td>
+<td valign="top">The average slope angle in degrees between the upstream coordinate and the downstream coordinate, when the length is the straight length between the upstream coordinate and the downstream coordinate, i.e. <span class="courier">tan<sup>-1</sup>(ElevationDifference/StraightLength)</span></td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">Sinuosity</span></td>
+<td valign="top">A measure for meandering of the stream, i.e. <span class="courier">Length / StraightLength</span>
+</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">TotalUpstreamAlongDrainageLength</span></td>
+<td valign="top">The total length of all (upstream) streams that contribute to the current stream</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">StrahlerClass</span></td>
+<td valign="top">An additional class column to be able to display the Strahler ordering numbers as classes. </td>
+</tr>
+</table>
+
+<p class="tip">Tip: </p>
+<p class="tiptext">To obtain label points for the segments, you can perform the <a href="table_to_point_map_functionality_algorithm.htm">Table to point map</a> operation: </p>
+<ul class="tipul">
+<li>As input table, choose the output table of the Drainage network ordering operation, </li>
+<li>as single XY column, either choose the <span class="arial">UpstreamCoord</span> or the <span class="arial">DownstreamCoord</span> column as available in the table, </li>
+<li>for the domain of the output point map: </li>
+	<ul class="tipul">
+	<li>you can simply use the table domain for the output map, </li>
+	<li>or, if you wish to be able edit the colors of the points: </li>
+		<ul>
+		<li>first create another attribute (class) column in the table by using a tabcalc statement like: <span class="courier">MyClassCol = %k</span>, </li>
+		<li>make sure you create a new Class domain in the <span class="arial"><a href="../ilwismen/column_properties.htm">Column Properties</a></span> dialog box; </li>
+		<li>then in the Table to point operation, choose your attribute column to become the output point map's domain.</li> 
+		</ul> 
+	</ul>
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="drainage_network_ordering_dialog_box.htm">Drainage network ordering : dialog box</a></p>
+
+<p class=seealsolinks><a href="drainage_network_ordering_command_line.htm">Drainage network ordering : command line</a></p>
+
+<p class=seealsolinks><a href="drainage_network_ordering_algorithm.htm">Drainage network ordering : algorithm</a></p>
+
+</body

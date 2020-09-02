@@ -1,0 +1,69 @@
+<html>
+
+<head>
+<title>Edit layer</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Edit ..., Layers">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Edit Layer</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Edit a map that is currently displayed in the map window. </p>
+
+<p class=defnewpar>Editing a map means that you want to:</p>
+
+<ul>
+
+<li>	change values or meaning of pixels in a <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a>, or </li>
+
+<li>	change values or meanings of polygons in a <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon map</a>, or</li>
+
+<li>	change values or meanings of segments in a <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment map</a>, change the shape of segments, or insert new segments or delete existing ones, or</li>
+
+<li>	change values or meanings of points in a <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point map</a>, or insert new points or delete existing ones, or move points to a new position.</li>
+
+</ul>
+
+<p class=defnewpar>Depending on the selected layer, the <a href="../ilwis/pixel_editor_functionality.htm">Pixel editor</a>, the <a href="../ilwis/polygon_editor_functionality.htm">Polygon editor</a>, the <a href="../ilwis/segment_editor_functionality.htm">Segment editor</a> or the <a href="../ilwis/point_editor_functionality.htm">Point editor</a> is opened.</p>
+
+<p class=tip>Mind:</p>
+
+<p class=tiptext><a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent maps</a> and maps marked as read-only cannot be edited; also maps using a Picture domain or a Color domain cannot be edited. When you wish to edit a dependent map, you first have to <a href="../ilwis/how_to_break_dependency_links.htm">break the dependency links</a> of the map in the map's <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Properties</a> sheet. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/editors_introduction_to_map_editors.htm">Editors: introduction to map editors</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_break_dependency_links.htm">How to break dependency links</a>
+
+</body

@@ -1,0 +1,59 @@
+<html>
+
+<head>
+<title>Main window : status bar</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Status bar, Main window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Main window</h1>
+
+<h1 class=secondline>Status bar</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A status bar is located at the bottom of the Main window. </p>
+
+<p class=defnewpar>The status bar:</p>
+
+<ul>
+
+<li>	gives a brief explanation on highlighted menu commands, </li>
+
+<li>	gives a brief explanation on the effect of buttons in a <a href="..//ilwis/popup/button_bar_popup.htm" onClick="return popup(this, 'notes')" >toolbar</a> when moving with the mouse pointer over a button, </li>
+
+<li>	displays the description of operations when moving the mouse pointer over an operation in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, </li>
+
+<li>	displays the description of objects when moving the mouse pointer over an object in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, </li>
+
+<li>    displays whether objects are dependent (D), calculated (C), and/or up-to-date (U) when moving the mouse pointer over an object in a Catalog, </li>
+
+<li>    displays the query that is used in a Catalog. </li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When during an operation no description is filled out for the dependent output object, the dependent output object will use its <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition or expression</a> as description. </p>
+
+<p class=defnewpar>For more information, see <a href="how_to_use_the_status_line.htm">How to use the Status bar</a>.</p>
+
+</body

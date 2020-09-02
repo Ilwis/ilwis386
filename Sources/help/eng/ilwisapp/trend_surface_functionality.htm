@@ -1,0 +1,67 @@
+<html>
+
+<head>
+<title>Trend surface : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Trend surface">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Trend surface</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Trend Surface operation is a point interpolation which requires a point map as input and returns a raster map as output. One polynomial surface is calculated by a least squares fit so that the global surface approaches all point values in the map. The calculated surface values are assigned to the output pixels. </p>
+
+<p class=defnewpar>The trend <a href="..//ilwisapp/sec/point_interpolation_surfaces_sec.htm" onClick="return popup(this, 'notes')" >surfaces</a> in this operation range from a simple plane to complex polynomial surfaces. You can usually select a first or second order function to calculate the surface, as these are the least sensitive to produce extreme values. For more information on the available functions which calculate surfaces, see <a href="trend_surface_algorithm.htm">Trend surface : algorithm</a>.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input point map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Furthermore, when a point map uses a class or ID domain and the map is linked to an attribute table, you can also use such a point map and select a column with a value domain from the map's attribute table. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output raster map uses the same value domain as the input point map or the attribute column. The <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> can be adjusted for the output map. The georeference for the output map has to be selected or created; you can usually select an existing georeference corners.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	After performing the Trend surface operation, you can press the <span class=arial>Additional Info</span> button in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the output raster map to display the formula of the calculated surface.</li>
+
+<li>	You can subtract the output map of the trend surface operation from the original point values, e.g. using the MAPVALUE() and PNTCRD() functions in TabCalc. If the residuals of this subtraction do not have a strong spatial correlation, the trend surface is a representative model of your point values.</li>
+
+<li>	Prior to interpolation, you can use the <a href="..//ilwisapp/popup/pattern_analysis_popup.htm" onClick="return popup(this, 'notes')" >Pattern analysis</a> operation to investigate whether your points are randomly distributed, and the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation to investigate whether your points are spatially correlated. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="point_interpolation.htm">Point interpolation</a></p>
+
+<p class=seealsolinks><a href="trend_surface_dialog_box.htm">Trend surface: dialog box</a></p>
+
+<p class=seealsolinks><a href="trend_surface_command_line.htm">Trend surface: command line</a></p>
+
+<p class=seealsolinks><a href="trend_surface_algorithm.htm">Trend surface: algorithm</a></p>
+
+</body

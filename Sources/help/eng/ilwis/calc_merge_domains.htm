@@ -1,0 +1,142 @@
+<html>
+
+<head>
+<title>MapCalc/TabCalc: merge domains (workaround)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Merge domains">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+
+<h1 class=secondline>Merging domains (workaround)</h1>
+
+<p>Due to an error in the ILWIS software, class or ID domains are sometimes <i>merged</i> too early when the <a href="calc_iff.htm"><span class=courier>IFF</span></a> function is used. In case domains are merged during a calculation, a warning is issued, and you may obtain an incorrect output map or output column. </p>
+
+<p class=defnewpar>For example an expression like:</p>
+
+<p class=calc0>OutMap = IFF(ClassMapA=&quot;ClassX&quot;, ClassMapA, ClassMapB)</p>
+
+<p>returns an incorrect output map.</p>
+
+<p class=defnewpar>A workaround for this problem is to split the previous expression into two parts: one part that creates a boolean map and another part that use the boolean map in an IFF statement.</p>
+
+<p class=calc0>ClassX = ClassMapA=&quot;ClassX&quot;</p>
+
+<p class=calc00>OutMap = IFF(ClassX, ClassMapA, ClassMapB)</p>
+
+<p class=calctitle>Example</p>
+
+<p class=calc0>Unsuitable = SuitClass=&quot;Unsuitable&quot;</p>
+
+<p class=calc0>CORRECT = IFF(Unsuitable, SuitClass, Urban)</p>
+
+<table>
+<tr>
+	<td><p class=courier>SuitClass</p></td>
+	<td><p class=courier>Urban</p></td>
+	<td><p class=courier>Unsuitable</p></td>
+	<td><p class=courier>CORRECT</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>S</td>
+    <td class=calcpict>S</td>
+    <td class=calcpict>U</td>
+  </tr>
+  <tr>
+    <td class=calcpict>S</td>
+    <td class=calcpict>M</td>
+    <td class=calcpict>U</td>
+  </tr>
+  <tr>
+    <td class=calcpict>M</td>
+    <td class=calcpict>U</td>
+    <td class=calcpict>S</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>UR</td>
+    <td class=calcpict>UR</td>
+    <td class=calcpict>NU</td>
+  </tr>
+  <tr>
+    <td class=calcpict>NU</td>
+    <td class=calcpict>UR</td>
+    <td class=calcpict>UR</td>
+  </tr>
+  <tr>
+    <td class=calcpict>NU</td>
+    <td class=calcpict>UR</td>
+    <td class=calcpict>NU</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>F</td>
+    <td class=calcpict>F</td>
+    <td class=calcpict>T</td>
+  </tr>
+  <tr>
+    <td class=calcpict>F</td>
+    <td class=calcpict>F</td>
+    <td class=calcpict>T</td>
+  </tr>
+  <tr>
+    <td class=calcpict>F</td>
+    <td class=calcpict>T</td>
+    <td class=calcpict>F</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>UR</td>
+    <td class=calcpict>UR</td>
+    <td class=calcpict>U</td>
+  </tr>
+  <tr>
+    <td class=calcpict>NU</td>
+    <td class=calcpict>UR</td>
+    <td class=calcpict>U</td>
+  </tr>
+  <tr>
+    <td class=calcpict>NU</td>
+    <td class=calcpict>U</td>
+    <td class=calcpict>NU</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The output map <span class=courier>CORRECT</span> may use domain <span class=courier>Urban</span> into which the domain items of map <span class=courier>SuitClass</span> are merged.</p>
+
+<p>You can also choose to create a new domain for the output map; the domain items of the domains used by the <span class=courier>Urban</span> and <span class=courier>SuitClass</span> maps, are then merged into the new domain. </p>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+   <li>Read in the <span class=courier>SuitClass</span>  map for <span class=courier>S</span>=Suitable, <span class=courier>M</span>=Moderately Suitable and for <span class=courier>U</span>=Unsuitable.</li>
+   <li>Read in the <span class=courier>Urban</span>  map for <span class=courier>UR</span>=Urban and for <span class=courier>NU</span>=Non Urban.</li>
+</ul>
+
+<p class="Seealso">See also:</p>
+
+<table cellspacing="0">
+  <tr>
+    <td valign="top"><a href="calc_iff.htm">IFF</a></td>
+  </tr>
+</table>
+
+</body

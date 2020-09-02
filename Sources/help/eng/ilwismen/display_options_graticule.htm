@@ -1,0 +1,118 @@
+<html>
+
+<head>
+<title>Display options - Graticule</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Display options for annotation, Graticule">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window  </h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Layers menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Display Options - Graticule</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Specify <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> for a <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticule</a> to be displayed in a map window. </p>
+
+<p class=defnewpar>A graticule can only be created if the map(s) displayed in the map window use a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that contains projection information. It is not yet possible to have Latitude and Longitude coordinates appear as text next to the graticule. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Graticule distance:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type values in degrees, minutes and seconds for the spacing of the graticule. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Line type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a line type in which the graticule should be drawn: Single, Dot, Dash, Dash dot, or Dash dot dot. The graticule will always be drawn as fine as possible, i.e. using one pixel on the screen and using one dot on the printer.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the graticule. To define your own color, select the 'Custom' item at the bottom of the list or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>; the <a href="custom_colors.htm">Custom Colors</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Scale limits:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when this graticule should be displayed or hidden depending on the scale specified in the scale control of the map window; specify the scale range within which the graticule should be displayed. The graticule will be automatically hidden if the scale of the map window is outside this range. </p>
+
+<p class=diabox>With this option you can achieve for instance, that a certain graticule is only shown when using a large scale in a map window, and/or that another graticule (other spacing) is only shown when using a small scales in a map window, etc. </p>
+
+<p class=diabox>Clear this check box when you wish to display the graticule regardless of the scale of the map window. </p>
+
+</td>
+</tr>
+</table>
+
+<!--<p class=defnewpar>If this is the first <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation layer</a> that you add to a map window, the <a href="../ilwis/annotation_editor_functionality.htm">Layout editor</a> is opened. In the Layout editor, you can position and size annotation, change the display options of an annotation layer, and you can insert new annotation.</p>-->
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<!--<li>	To create more space around maps in a map window, choose the <span class=arial>Extend Window</span> command on the <a href="../ilwis/map_window_menu_commands.htm">Options menu</a>. <!--In the Layout editor, you can also choose <span class=arial>Extend by Percentage</span> or <span class=arial>Extend by Coordinates</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>-->
+
+<li>	To obtain a graticule of:<br>
+        1 degree: use distance values 1°, 0', 0.00&quot;;<br>
+        1 minute: use distance values 0°, 1', 0.00&quot;;<br>
+        30 seconds: use distance values 0°, 0', 30.00&quot;.</li>
+
+<li>	To store the contents of a map window, you need to save the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. Open the <a href="../ilwis/map_window_menu_commands.htm">File menu</a> of the map window and choose the <span class=arial>Save View</span> or the <span class=arial>Save View As</span> command.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<!--<p class=seealsolinks><a href="add_annotation_to_map_window.htm">Add annotation to map window</a></p> -->
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_change_display_options_of_layers_in_a_map_window.htm">How to change the display options of layers in a map window</a></p>
+
+</body

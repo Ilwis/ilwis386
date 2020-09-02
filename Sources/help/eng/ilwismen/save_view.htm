@@ -1,0 +1,66 @@
+<html>
+
+<head>
+<title>Save map view in map window</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Save ..., Map view, Map window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Save View</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Save the contents of the current map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. </p>
+
+<p class=defnewpar>All <a href="..//ilwis/popup/layers_popup.htm" onClick="return popup(this, 'notes')" >layers</a> in the map window and their display settings as well as the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of the map window are stored. When you open a map view later on, the map window will appear exactly as it was saved. You do not need to add individual maps to the map window anymore, nor specify their display options. </p>
+
+<p class=defnewpar>For presentation purposes and printing, you need to create a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> to which you can add one or more <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a> and make a final composition. To the layout, you can further add <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> such as <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legends</a>, <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map borders</a> including ticks and coordinates for grid lines or a graticule, <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >north arrows</a>, <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bars and scale texts</a>, <a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a> (such as a title), <a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >boxes</a>, <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmaps</a> and <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >pictures</a>, and a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a>. </p>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>When you are in the Layout editor and save a map view, please go to topic <a href="../ilwismen/layout_editor_save_map_view.htm">Layout editor : Save Map View</a>.</p>
+
+<p class=defnewpar>When you save the contents of a map window for the first time, the <a href="save_view_as.htm">Save View As</a> dialog box appears. In that dialog box, you can enter a name and a title for the new map view. </p>
+
+<p>Also, when you choose the <span class=arial><a href="../ilwismen/create_a_layout.htm">Create Layout</a></span> command from the <a href="../ilwis/map_window_menu_commands.htm">File menu</a> in a map window, and you have not saved the multiple layers displayed in the map window as a map view before, you will be asked to save the layers as a view first in the <a href="../ilwismen/save_view_as.htm">Save View As</a> dialog box. </p>
+
+<p class=defnewpar>When you use the <span class=arial>Save View</span> command and when the map window already displays an existing map view, the contents of the current window are directly saved. The same map view name and title are used as previously specified in the <span class=arial>Save View As</span> dialog box, i.e. the previously stored map view is overwritten.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/save_view_as.htm">Save View As</a></p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+
+
+</body

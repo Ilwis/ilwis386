@@ -1,0 +1,115 @@
+<html>
+
+<head>
+<title>Mirror/Rotate : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Mirror/Rotate">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Mirror/Rotate</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Mirror/Rotate operation allows you to reflect or mirror a raster map in a horizontal, vertical, or diagonal line, to transpose the map's rows and columns, or to rotate a raster map 90°, 180°, 270° (clock-wise). </p>
+
+<p class=defnewpar>A new georeference mirrorrotate is created with the same name as the output map. </p>
+
+<p class=kopje>Reflect in horizontal line:</p>
+
+<p>All line numbers are switched. </p>
+
+<ul>
+
+<li>	the first line (from left to right) becomes the last line (from left to right),</li>
+
+<li>	the second line (from left to right) becomes the one but last line (from left to right),</li>
+
+<p class=leftmargininlist>etc. </p>
+
+</ul>
+
+<p class=kopje>Reflect in vertical line:</p>
+
+<p>All column numbers are switched. </p>
+
+<ul>
+
+<li>	the first column (from top to bottom) becomes the last column (from top to bottom),</li>
+
+<li>	the second column (from top to bottom) becomes the one but last column (from top to bottom),</li>
+
+<p class=leftmargininlist>etc.</p>
+
+</ul>
+
+<p class=kopje>Transpose:</p>
+
+<p>Row and column numbers are interchanged. All line numbers become column numbers and all column numbers become line numbers. </p>
+
+<ul>
+
+<li>	the first line (from left to right) becomes the first column (from top to bottom),</li>
+
+<li>	the second line (from left to right) becomes the second column (from top to bottom), </li>
+
+<p class=leftmargininlist>etc.</p>
+
+</ul>
+
+<p class=kopje>Reflect in diagonal:</p>
+
+<ul>
+
+<li>	the first line (from left to right), becomes the last column (from bottom to top),</li>
+
+<li>	the second line (from left to right) becomes the one but last column (from bottom to top, </li>
+
+<p class=leftmargininlist>etc.</p>
+
+</ul>
+
+<p class=kopje>Rotate 90° (clock-wise):</p>
+
+<ul>
+
+<li>	the first line (from left to right) becomes the last column (from top to bottom), </li>
+
+<li>	the second line (from left to right) becomes the one but last column (from top to bottom), </li>
+
+<p class=leftmargininlist>etc. </p>
+
+</ul>
+
+<p class=kopje>Rotate 180° (clock-wise):</p>
+
+<ul>
+
+<li>	the first line (from left to right) becomes the last line (from right to left),</li>
+
+<li>	the second line (from left to right) becomes the one but last line (from right to left), </li>
+
+<p class=leftmargininlist>etc. </p>
+
+</ul>
+
+<p class=kopje>Rotate 270° (clock-wise):</p>
+
+<ul>
+
+<li>	the first line (from left to right) becomes the first column (from bottom to top),</li>
+
+<li>	the second line (from left to right) becomes the second column (from bottom to top), </li>
+
+<p class=leftmargininlist>etc. </p>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="mirror_rotate_functionality.htm">Mirror/Rotate : functionality</a></p>
+
+</body

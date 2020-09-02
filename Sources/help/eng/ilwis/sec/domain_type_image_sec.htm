@@ -1,0 +1,60 @@
+<html>
+
+<head>
+<title>Domain type : Image (2)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Domain type Image</p>
+
+<p class=linespacing03after>The <span class=courier>Image</span> domain can only contain whole values between 0 and 255. You can use the <span class=courier>Image</span> domain for satellite images with such values, for instance Landsat, TM and SPOT images. The <span class=courier>Image</span> domain is thus only available for raster maps.</p>
+
+<p class=linespacing03after>All pixel values in the image represent reflection values in a certain wave-lenght interval. These pixel values are also called Digital Numbers (DN). All pixels have a value or DN; there are no undefined values. </p>
+
+<p>The Image domain is available as:</p>
+
+<ul>
+
+<li>	<a href="../popup/yy_system_domain_image_popup.htm">system domain <span class=courier>Image</a></span>.</li>
+
+</ul>
+
+<p class=linespacing03before>The <span class=courier>Image</span> domain has default representation <span class=courier>Gray</span>, but you can also create your own representation value, for instance to slice an image. For more information, see <a href="..//ilwis/how_to_slice_an_image.htm" onClick="return popup(this, 'notes')" >How to slice an image</a>.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>For satellite imagery with values in another range than between 0 and 255, you can use the <a href="../popup/yy_system_domain_noaa_popup.htm">system domain <span class=courier>NOAA</a></span>, the <a href="../popup/yy_system_domain_radar_popup.htm">system domain <span class=courier>Radar</a></span>, or any other <a href="../../ilwis/sec/domain_type_value_sec.htm">Value domain</a>.</li>
+
+<li>If in images with values from 0 to 255 you want to regard value 0 as undefined, use the <a href="../popup/yy_system_domain_byte_popup.htm">system domain <span class=courier>Byte</span></a>.</li>
+
+<li>To convert maps with a certain domain to another domain, see <a href="..//ilwis/how_to_change_the_domain_of_a_map.htm" onClick="return popup(this, 'notes')" >How to change the domain of a map</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_domains.htm" onClick="return popup(this, 'notes')" >Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</a></p>
+
+</body

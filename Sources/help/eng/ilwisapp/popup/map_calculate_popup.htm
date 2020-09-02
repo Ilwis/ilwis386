@@ -1,0 +1,30 @@
+<html>
+
+<head>
+<title>map calculate popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Map Calculation</p>
+
+<p><a href="..//ilwis/calc.htm" onClick="return popup(this, 'notes')" >Map Calculation</a> can be used to perform calculations with raster maps. All maps must use the same <a href="../../ilwis/popup/objects_georeference_popup.htm">georeference</a>. When this is not the case, first use the <a href="../../ilwisapp/popup/resample_popup.htm">Resample</a> operation. </p>
+
+</body

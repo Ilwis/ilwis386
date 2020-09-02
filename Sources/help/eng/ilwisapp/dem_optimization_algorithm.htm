@@ -1,0 +1,103 @@
+<html>
+
+<head>
+<title>DEM optimization : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="DEM optimization">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>DEM optimization</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p>With the DEM optimization operation, the following can be achieved:</p>
+
+<ul>
+
+<li>Gradual drop of (drainage) segments in the output DEM, over a certain distance to the (drainage) segments. </li>
+
+<li>Gradual raise of (watershed-divide) segments on the output DEM, over a certain distance to the (watershed-divide) segments. </li>
+
+<li>Additional sharp drop or raise of segments on top of the gradual drop or raise. </li>
+
+<li>Simple drop or raise of polygons in the output DEM. </li>
+
+</ul>
+
+<p class=defnewpar>The output Digital Elevation Model (DEM) is calculated based on:</p>
+
+<ul>
+
+<li>an input DEM, </li> 
+
+<li>an input segment or polygon map which contains drainage or catchment features, </li>
+
+<li>specified parameters Buffer distance, Smooth drop and Sharp drop.</li>
+
+</ul>
+
+<p class=defnewpar>The parameters Buffer distance, Smooth drop and Sharp drop can be specified: </p>
+
+<ul>
+
+<li>as simple values for all segments, or </li>
+
+<li>in an attribute table of the segment or polygon map for each class/ID of the segments or polygons. </li>
+
+</ul>
+
+<p class=defnewpar>For more information, refer to <a href="dem_optimization_functionality.htm">DEM optimization : functionality</a>. </p>
+
+<p class=kopje>Process:</p>
+
+<ol>
+
+<li class=ls01be>The height values of the input DEM are read into memory (OriginalHeight).</li>
+
+<li class=ls01be>The vector map with the drainage or catchment features is temporarily rasterized. </li>
+
+<li class=ls01be>For each pixel in the DEM, distances are calculated towards the closest drainage/catchment feature. <br />
+        
+        Thus, for each pixel the distance towards the nearest drainage/catchment feature is known (CalcDist). </li>
+
+        <ul>
+
+        <li>In case an attribute table is used, also a temporary Thiessen map is calculated, so that for each pixel in the DEM it is known which BufferDistance, SmoothDrop and SharpDrop values should be used. </li>
+        
+        </ul>
+
+<li class=ls01be>For each pixel: </li>
+
+        <ul>
+
+        <li class=ls01be>if CalcDist &lt; BufferDistance, then</li>
+
+                <p class=leftmargin06>NewTempHeight = OriginalHeight - SmoothDrop * (BufferDistance - CalcDist) / BufferDistance</p>
+        
+        <li class=ls01be>else (pixel outside BufferDistance)</li>
+
+                <p class=leftmargin06>NewTempHeight = OriginalHeight</p>        
+
+        <li class=ls01be>if CalcDist = 0, then</li>
+                 
+                <p class=leftmargin06>NewTempHeight = NewTempHeight - SharpDrop</p>
+
+        <li class=ls01be>NewHeight = NewTempHeight</li>
+
+        </ul>
+
+</ol>
+
+<p class=kopje>Reference:</p>
+
+<p>The DEM optimization operation complies with the AGREE method, developed by Ferdi Hellweger at the University of Texas, Austin, 1997. For more information, refer to: <a href="http://www.ce.utexas.edu/prof/maidment/gishydro/ferdi/research/agree/agree.html">http://www.ce.utexas.edu/prof/maidment/gishydro/ferdi/research/agree/agree.html</a> </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="dem_optimization_functionality.htm">DEM optimization : functionality</a></p>
+
+</body

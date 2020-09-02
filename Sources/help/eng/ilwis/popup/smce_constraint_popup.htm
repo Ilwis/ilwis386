@@ -1,0 +1,89 @@
+<html>
+
+<head>
+<title>SMCE constraint popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>SMCE <img src="../../images/criteria_tree_constraint.gif" width="21" height="15">&nbsp;Constraints</p>
+
+<p>A Constraint in the <a href="..//ilwis/smce_window_functionality.htm" onClick="return popup(this, 'notes')" >SMCE</a> application is a criterion that determines in the calculation of the main goal: </p>
+
+<ul>
+
+<li>which areas should be considered as absolutely NOT suitable/performing; these areas will obtain value 0 in the final output; </li>
+
+<li>calculation of output values will take place only in all other areas, namely according to the inserted (groups of) <a href="../../ilwis/popup/smce_factor_popup.htm">Factors</a>; these areas will obtain a value between 0 and 1 in the final output. </li>
+
+</ul>
+
+<p class=defnewpar>A Constraint is either an input map or an attribute column in an attribute table. </p> 
+
+<p class=defnewpar>As opposed to <a href="../../ilwis/popup/smce_factor_popup.htm">factors</a>, poor performance of a constraint cannot be compensated by good performance of another factor or constraint. This leads to a nil (0) performance value in the composite index map. </p>
+
+<p class=defnewpar>When creating and filling a criteria tree: </p>
+
+
+	<ul>
+
+	<li>constraints can only be inserted directly under the main goal in a criteria tree. </li>
+	
+	<li>you need to specify for each constraint: </li>
+
+		<ul>
+		
+		<li>a name as text (like a description), and </li>
+
+		<li>an input map or an input attribute column (the data). </li>
+
+		</ul>
+	
+	</ul>
+
+<p>For more information, see <a href="..//ilwismen/smce_window_insert_constraint.htm" onClick="return popup(this, 'notes')" >Insert Constraint</a>. </p>
+
+<p class=defnewpar>Before calculating the main goal (i.e. the final composite index map), you also need to: </p>
+
+	<ul>
+	
+	<li>standardize the input data for each constraint. </li>
+
+	</ul>
+
+<p>For more information, see <a href="..//ilwismen/smce_window_standardize.htm" onClick="return popup(this, 'notes')" >Standardize</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>When standardizing constraints, you must select Boolean values (True or False). </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwismen/smce_window_insert_constraint.htm" onClick="return popup(this, 'notes')" >Insert Constraint</a></p>
+
+<p class=seealsolinks><a href="..//ilwismen/smce_window_standardize.htm" onClick="return popup(this, 'notes')" >Standardize</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/smce_window_functionality.htm" onClick="return popup(this, 'notes')" >SMCE window : functionality</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/smce_window_criteria_tree_viewer.htm" onClick="return popup(this, 'notes')" >SMCE window : criteria tree viewer</a></p>
+
+<p class=seealsolinks><a href="../../ilwis/popup/smce_factor_popup.htm">SMCE Factors</a></p>
+
+</body

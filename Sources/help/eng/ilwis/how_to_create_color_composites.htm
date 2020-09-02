@@ -1,0 +1,151 @@
+<html>
+
+<head>
+<title>How to create color composites</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Color composite, Color composite (interactive), How to create ..., Create ..., Display ..., How to display ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to create a color composite</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A color composite is created by combining three raster images (bands/maps). One map is displayed in shades of red, one in shades of green and one in shades of blue. Putting the three bands together in one color composite can give a better visual impression of the reality on the ground, than displaying one band at a time. </p>
+
+<p class=defnewpar>There are three types of color composites: natural color composites, pseudo natural color composites and false color composites. Natural color composites are made of the green, blue and red part of the spectrum. This results in an image with realistic colors. A pseudo color composite is created with other parts of the spectrum, but the result has natural looking colors. In false color composites the colors in the image are not the same as in reality: for instance, healthy vegetation is red and urban areas are blue. </p>
+
+<p class=defnewpar>In ILWIS, there are two ways in which you can display or create a color composite:</p>
+
+<ul>
+
+<li>	by <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >showing a map list as a color composite</a>; the resulting color composite is displayed in a map window (interactive color composite), and</li>
+
+<li>	by using the <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >Color composite</a> operation; the resulting color composite is stored as a raster map on disk (permanent color composite).</li>
+
+</ul>
+
+<p class=kopje>Interactive color composites:</p>
+
+<p>An <i>interactive</i> color composite can be created when your graphics board is configured to use more than 256 colors, for instance High Color 16-bit, or True Color 24-bit (see Display Settings in Windows' Control Panel). </p>
+
+<p class=defnewpar>To obtain an interactive color composite:</p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> in the Main Window, choose <span class=arial>Visualization, Show Map List as Color Composite</span>, </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Visualization</span> item, open the <span class=arial>Show Map List</span> item, and double-click the <span class=arial>Color Composite</span> item, or </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <img src="../images/showtv.gif" align=bottom width="14" height="14"> <span class=arial>ColorComp</span> item. </li>
+
+</ul>
+
+<p>When you use one of these methods, first the <a href="../ilwismen/open_show_map_list_as_color_composite.htm">Show Map List as Color Composite</a> dialog box will appear: you have to select a map list. After you selected a map list, the Display Options Map List as Color Composite dialog box will appear, see below.</p>
+
+<p class=defnewpar>To obtain an interactive color composite, you can also: </p>
+
+<ul>
+
+<li>    open a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> by double-clicking it in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, then click the <span class=arial>Show as Color Composite</span> button <img src="../images/showmap.gif" align=bottom width="22" height="22"> in the map list editor; </li>
+
+<li>	use the right mouse button on a map list in a Catalog and select <span class=arial>Visualization, as Color Composite</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwismen/display_options_map_list_as_color_composite.htm">Display Options - Map List as Color Composite</a> dialog box will appear:</p>
+
+<ul>
+
+<li>	select three raster maps (domain <span class=courier>Image</span> or a value domain) from the map list, which should be displayed in Red, Green and Blue; <br>
+
+        if you wish you can also display bands in Yellow, Magenta, Cyan (YMC) or as Hue, Saturation, Intensity (HSI); </li>
+
+<li>	for each map, specify the stretch range.</li>
+
+</ul>
+
+<p class=defnewpar>The interactive color composite will be displayed in a map window. </p>
+
+<p class=defnewpar>You can easily change intervals, select other bands, etc. by changing the <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> of the map list: </p> 
+
+<ul>
+
+<li>double-click the map list in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of the map window, </li>
+
+<li>open the <a href="map_window_menu_commands.htm">Layers menu</a> in the map window, choose <span class=arial>Display Options</span> and select the map list, or </li>
+
+<li>use the right mouse button in the map window and select the map list from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=defnewpar>To save an interactive color composite, save the contents of the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. Open the <a href="map_window_menu_commands.htm">File menu</a> in the map window and choose the <span class=arial><a href="../ilwismen/save_view.htm">Save View</a></span> command. </p>
+
+</ul>
+
+<p class=kopje>Permanent color composites:</p>
+
+<p>The output of the Color composite operation is stored as a raster map on disk. </p>
+
+<p class=defnewpar>To create a permanent color composite:</p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> in the Main Window, choose <span class=arial>Image Processing, Color Composite</span>, or</li>
+
+<li>	in the Operation-tree, open the <span class=arial>Image Processing</span> item, and double-click the <img src="../images/operat.gif" align=bottom width="16" height="12"> <span class=arial>ColorComp</span> operation, or</li>
+
+<li>	in the Operation-list, double-click the <img src="../images/operat.gif" align=bottom width="16" height="12"> <span class=arial>ColorComp</span> operation, or</li>
+
+<li>	drag an image from a Catalog to the <img src="../images/operat.gif" align=bottom width="16" height="12"> <span class=arial>ColorComp</span> operation in the Operation-tree or Operation-list.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwisapp/color_composite_dialogbox.htm">Color Composite</a> dialog box appears:</p>
+
+<ul>
+
+<li>	select three raster maps (only domain <span class=courier>Image</span> allowed) which should be displayed in Red, Green and Blue.</li>
+
+<li>	specify the type of color composite which you want to create: </li>
+
+<ul>
+
+<li>	standard color composite: choose between linear stretching (values or percentage intervals) and histogram equalization,</li>
+
+<li>	dynamic color composite: specify the number of output colors,</li>
+
+<li>	24-bit color composite (when your graphics board is configured to use more than 256 colors): choose between linear stretching (values or percentage intervals), histogram equalization or use instead of images, Hue, Saturation and Intensity bands as input.</li>
+
+</ul>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/show_map_list_as_color_composite.htm">Show map list as color composite</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/color_composite.htm">Color composite (operation)</a></p>
+
+<p></p>
+
+<p></p>
+
+</body

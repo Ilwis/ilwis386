@@ -1,0 +1,98 @@
+<html>
+
+<head>
+<title>Add map to pixel information window</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Pixel information window, Add ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Pixel information window</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Add Map</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__pixel_info_file_menu_sec2.Click()>File menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Add a raster, polygon, segment or point map to the <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel information window</a>. If the map has an attribute table, also the columns of the attribute table are displayed in the pixel info window. You can add as many maps to the pixel information window as you like. </p>
+
+<p class=defnewpar>The pixel information window shows the class names, identifiers and/or values of all maps and tables that are added to the pixel info window, <i>at the coordinate</i> received from the mouse pointer in a map window or from the digitizer cursor. This provides you with a kind of cross-section at a specific coordinate through all the maps and tables that you added to the pixel info window. The class names, identifiers and/or values found in the different maps and tables at that coordinate are shown in the pixel info window. </p>
+
+<p class=defnewpar>In case a map window only displays a raster map with georeference <span class=courier>None</span>, the pixel info window displays the Row and Column numbers of the actual mouse position.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Select map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a raster, polygon, segment or point map which you want to add to the pixel information window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	You can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> maps from the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> to the pixel info window with the mouse.</li>
+
+<li>	To hide or show maps or columns of an attribute table in the pixel info window, select the <span class=arial>Customize</span> command from the <a href="..//ilwismen/sec2/pixel_info_options_menu_sec2.htm" onClick="return popup(this, 'notes')" >Options menu</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/pixel_information_window_introduction.htm">Pixel information window : introduction</a></p>
+
+<p class=seealsolinks><a href="../ilwis/pixel_information_window_functionality.htm">Pixel information window : functionality</a></p>
+
+</body

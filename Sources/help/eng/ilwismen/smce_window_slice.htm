@@ -1,0 +1,137 @@
+<html>
+
+<head>
+<title>SMCE window : Slice</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Slice SMCE values, Classify">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Generate menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Slice ...</span>&nbsp;&nbsp;&nbsp;<img src="../images/smce_slice_icon.gif" align=bottom width="23" height="23"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Slice or classify the values in the SMCE output maps. The values in the SMCE output maps are divided over a limited number of classes. All alternatives of the SMCE output maps will be sliced. The output maps are called sliced SMCE output maps. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+<li class=ls01be>The number of desired output classes is specified by the user; colors are automatically assigned to the output classes, but these can be edited later. </li>
+<li class=ls01be>By default, 5 classes of equal width are created which run from the minimum value found to the maximum value found in all alternative SMCE output maps, for instance from 0.00 to 0.20, from 0.21 to 0.40, from 0.41 to 0.60, from 0.61 to 0.80 and from 0.81 to 1.00. Values 0.20, 0.40, 0.60, 0.80 and 1.00 are called the upper boundary values of the classes. </li>
+<li class=ls01be>However, if you wish to accentuate certain areas in the sliced SMCE output maps, you can adapt the intervals yourself (i.e. specify your own upper boundary values) by editing the Group domain that is created and used during slicing. </li>
+<li class=ls01be>Using the same example where input values run from 0.00 to 1.00 that are divided over 5 output classes, the default output class names read 'suit.&nbsp;0.00&nbsp;-&nbsp;0.20', 'suit.&nbsp;0.21&nbsp;-&nbsp;0.40', 'suit.&nbsp;0.41&nbsp;-&nbsp;0.60', 'suit.&nbsp;0.61&nbsp;-&nbsp;0.80', 'suit.&nbsp;0.81&nbsp;-&nbsp;1.00'; the output class names can however be edited during the slicing process. </li>
+</ul>
+
+<p class="defnewpar">This dialog box appears, after you selected the main goal or a sub goal in the criteria tree viewer, and: </p>
+<ul>
+<li>clicked the <span class=arial>Slice</span> button in the <a href="../ilwis/smce_window_toolbar.htm">toolbar</a>, </li>
+<li>chose the <span class=arial>Slice ...</span> command from the <a href="../ilwis/smce_window_menu_commands.htm">Generate</a> menu, or </li>
+<li>chose the <span class=arial>Slice ...</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+                                     
+<p class=tiptext><span class=tip>Tip: </span>If you wish to use your own boundary values during Slicing, it is advised to use <a href="../ilwismen/smce_window_histogram.htm">Histogram</a> and <a href="../ilwismen/smce_window_aggregate_values.htm">Aggregate Values</a> prior to Slicing. This will help you decide on the desired boundary values for Slicing. </p>
+
+<p class=emptyline>&nbsp;</p>
+                                     
+<p class=tiptext><span class=tip>Note: </span><span class=arial>Slice</span> is not available when not <i>all</i> SMCE output maps have been generated. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Number of slices:</p>
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the desired number of output classes or accept the default value. You can create any number of slices or output classes between 2 and 99.</p>
+
+<p class=diabox>When you accept 5 slices, the values of the SMCE output maps will be divided over 4 output classes running from the overall minimum value to the overall maximum value found in all alternative SMCE output maps. </p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Min, Max:</p>
+</td>
+<td valign="top">
+<p class=diabox>The overall minimum value found in all alternative SMCE output maps is shown, as well as the overall maximum value. 
+
+	If you wish, you can adapt these values. 
+	
+	<p class=tiptext><span class=tip>Mind: </span>It is not possible to exclude values smaller than the found overall minimum. </p>
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Edit output class names and boundary values: </p>
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diaboxnospacetop>&nbsp;</p>
+</td>
+<td valign="top">
+<ul class=diaboxnospacetop>
+<li>Select this check box if you wish to edit the boundary values or the class names of the output classes. 
+
+		When, subsequently, the <span class=arial>Define</span> button is clicked, first the Domain Group editor is opened, where you can adapt the default upper boundary values (Upper Bound) and the default output class names (Class Name). </li>
+
+<li>Clear this check box if you wish to obtain output classes of equal width and default output class names. </li>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the sliced output maps are automatically defined, calculated and shown. </p>
+
+<p class=defnewpar>When you click the <b>Define</b> button, the sliced output maps will initially only be defined. 
+
+	After you use <a href="../ilwismen/smce_window_show_sliced.htm">Show Sliced</a> (or Show Histogram Sliced or Aggregate Values Sliced), the defined sliced maps will be automatically calculated. </p>
+
+<p class=defnewpar>The sliced output maps are automatically assigned the name of the SMCE output map from which a sliced output map is created, followed by <span class=courier>_sliced</span>. 
+
+Besides the sliced output maps, the following objects will be created: a Group domain and a representation. These objects will obtain the name of the first SMCE output map, followed by <span class=courier>_slices</span>.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>For a general understanding of Group domains and Slicing, you may refer to <a href="../ilwis/how_to_create_domain_group.htm">How to create a Group domain</a> and <a href="../ilwisapp/slicing_functionality.htm">Slicing : functionality</a>. The SMCE window : Slice operation integrates both the <i>creation</i> of the Group domain and the <i>application</i> of the Group domain on a number of value maps at a time. </p>
+     
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_histogram.htm">SMCE window : Histogram</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_aggregate_values.htm">SMCE window : Aggregate Values</a></p>
+<p class=seealsolinks><a href="../ilwis/domain_class_id_editor_functionality.htm">Domain Class/ID/Group editor : functionality</a></p>
+<p class=seealsolinks><a href="../ilwismen/domain_group_editor_edit_item.htm">Domain Group editor: Edit item</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_show_sliced.htm">SMCE window : Show Sliced</a></p>
+
+</body

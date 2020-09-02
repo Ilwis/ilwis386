@@ -1,0 +1,317 @@
+<html>
+
+<head>
+<title>IFUNDEF</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="IFUNDEF, Undefined functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>IFUNDEF( ) function</h1>
+
+<p class="defnewpar">If <i>a</i> is undefined, then return <i>b, </i>else return <i>a</i>.<br>
+If <i>a</i> is undefined, then return <i>b</i>, else return <i>c</i>.</p>
+
+<p class="calctitlesyntax">Syntax</p>
+<p class="syntax"><span class="courier">IFUNDEF</span>(<i>a</i>, <i>b</i>)<br>
+<span class="courier">IFUNDEF</span>(<i>a</i>, <i>b</i>, <i>c</i>)</p>
+
+<p class="calctitle">Input</p>
+<table cellspacing="0">
+  <tr>
+    <td width="110" valign="top"><i>a</i></td>
+    <td valign="top">is the test condition: a boolean expression containing at least one map name or one column name.</td>
+  </tr>
+  <tr>
+    <td width="110" valign="top"><i>b</i>, <i>c</i></td>
+    <td valign="top">an expression containing at least one map name or one column name, or simply a value, class name, ID, etc.</td>
+  </tr>
+</table>
+
+<p class="calctitle">Output</p>
+<table cellspacing="0">
+  <tr>
+    <td width="110" valign="top"><span class="courier">IFUNDEF</span> returns:</td>
+    <td valign="top">if <i>a</i> is undefined, <i>b</i> is returned;<br>
+        if <i>a</i> is not undefined and <i>c</i> is specified, <i>c</i> is returned;<br>
+        if <i>a</i> is not undefined and <i>c</i> is not specified, <i>a</i> is returned.</td>
+  </tr>
+  <tr>
+    <td width="110" valign="top">Domain:</td>
+    <td valign="top"><p><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">Value</span></a>;</p>
+
+      <p>the class/ID domain returned by <i>c</i>;</p>
+
+	  <p>if <i>c</i> returns a string or undefined value, the class/ID domain returned by <i>b;</i></p>
+
+  	  <p>if both <i>b</i> and <i>c</i> return a string, no default output domain;</p>
+
+	  <p>if <i>c</i> is not specified and <i>b</i> returns a string or undefined value, the class/ID domain of <i>a.</i></p>
+
+	  </td>
+  </tr>
+</table>
+
+<p class="tip">Notes:</p>
+
+<ul class="tipul">
+
+  <li>The function <span class="courier">IFUNDEF</span>(<i>a</i>, <i>b</i>, <i>c</i>) gives the same result as the expression <span class="courier">IFF</span>(<span class="courier">ISUNDEF</span>(<i>a</i>), <i>b</i>, <i>c</i>).</li>
+
+  <li>The functions <a href="calc_isundef.htm"><span class=courier>ISUNDEF</span></a>, <a href="calc_ifnotundef.htm"><span class=courier>IFNOTUNDEF</span></a> or <span class=courier>IFUNDEF</span> are the only functions that do NOT return an undefined when the input is undefined.</li>
+
+  <li>When using <span class="courier">IFUNDEF</span>(<i>a</i>, <i>b</i>), the internal calculation will use reals if <i>b</i> uses real values; else integers will be used. </li>
+
+  <li>When using <span class="courier">IFUNDEF</span>(<i>a</i>, <i>b</i>, <i>c</i>), the internal calculation will use reals when either <i>b</i> or <i>c</i> uses real values; else integers will be used. </li>
+			
+  <li>When calculating with a non-value domain, you need to use double quotes around the class names, IDs, etc. If <i>c</i> is a new class name or ID a question will be asked whether you wish to add the new class name or ID to the existing domain of <i>a</i>. You can answer <span class=courier>Yes</span>.</li>
+
+  <li>It is not possible to test for undefined values by using expressions like:<span class="calc1"><br>
+          OUT = IFF(Landuse=&quot;?&quot;,...,...)<br>
+          OUT = IFF(DEM=?,..,....)</span></li>
+
+  <li>To assign undefined values, see <a href="calc_assign_undefined_values.htm">Map and Table Calculation : Assigning undefined values</a>.</li>
+
+</ul>
+
+<p class="tip">Tip:</p>
+<p class="tiptext">When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</p>
+
+<p class="calctitle">Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>MapCalc example using a value map:</p>
+<p class=calc00>OutMap = IFUNDEF(DEM,1000)</p>
+<p class=calc00>OutMap = IFUNDEF(DEM,1000,DEM)</p>
+<p class=emptylinehalf>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>300</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>400</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>100</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>500</td>
+    <td class=calcpict>200</td>
+    <td class=calcpict>600</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>300</td>
+    <td class=calcpict>1000</td>
+    <td class=calcpict>400</td>
+  </tr>
+  <tr>
+    <td class=calcpict>1000</td>
+    <td class=calcpict>100</td>
+    <td class=calcpict>1000</td>
+  </tr>
+  <tr>
+    <td class=calcpict>500</td>
+    <td class=calcpict>200</td>
+    <td class=calcpict>600</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class="tip">Note:</span> The following expression will give the same result: <br> 
+
+<span class=courier>OutMap = IFF(ISUNDEF(DEM),1000,DEM)</span> </p>
+
+<p class=kopje>MapCalc example using a class map:</p>
+<p class=calc00>OutMap = IFUNDEF (Landuse,&quot;Mountains&quot;)</p>
+<p class=calc00>OutMap = IFUNDEF(Landuse,&quot;Mountains&quot;,Landuse)</p>
+<table>
+<tr>
+	<td><p class=courier>Landuse</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>F</td>
+    <td class=calcpict>G</td>
+  </tr>
+  <tr>
+    <td class=calcpict>L</td>
+    <td class=calcpict>L</td>
+    <td class=calcpict>?</td>
+  </tr>
+  <tr>
+    <td class=calcpict>G</td>
+    <td class=calcpict>?</td>
+    <td class=calcpict>F</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>M</td>
+    <td class=calcpict>F</td>
+    <td class=calcpict>G</td>
+  </tr>
+  <tr>
+    <td class=calcpict>L</td>
+    <td class=calcpict>L</td>
+    <td class=calcpict>M</td>
+  </tr>
+  <tr>
+    <td class=calcpict>G</td>
+    <td class=calcpict>M</td>
+    <td class=calcpict>F</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In <span class=courier>OutMap</span>, class name &quot;<span class=courier>Mountains</span>&quot; (i.e. <span class=courier>M</span>) is assigned for every undefined pixel in map <span class=courier>Landuse</span>. To all other pixels, the original class name is assigned (<span class=courier>F</span>=Forest, <span class=courier>G</span>=Grassland, <span class=courier>L</span>=Lake).</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class="tip">Note:</span> The following expression will give the same result: <br> 
+<span class=courier>OutMap = IFF(ISUNDEF(Landuse),&quot;Mountains&quot;,Landuse)</span> </p>
+
+<p class=kopje>TabCalc examples:</p>
+<p class=calc00>OutCol1 = IFUNDEF(Population,0)</p>
+<p class=calc00>OutCol1 = IFUNDEF(Population,0,Population)</p>
+<p class=calc00>OutCol2 = IFF(ISUNDEF(Landuse),&quot;Mountains&quot;)</p>
+<p class=calc00>OutCol2 = IFF(ISUNDEF(Landuse),&quot;Mountains&quot;,Landuse)</p>
+<p class="emptyline">&nbsp;</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top"><p class="tcolh">Sitenr</p></td>
+    <td valign="top"><p class="tcolhr">Population</p></td>
+    <td valign="top" width="75"><p class="tcolh">Landuse</p></td>
+    <td valign="top"><p class="tcolhr">OutCol1</p></td>
+    <td valign="top"><p class="tcolh">OutCol2</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">1</p></td>
+    <td valign="top"><p class="t1r">850</p></td>
+    <td valign="top"><p class="t1">Crops</p></td>
+    <td valign="top"><p class="t1r">850</p></td>
+    <td valign="top"><p class="t1">Crops</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">2</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+    <td valign="top"><p class="t1">Grassland</p></td>
+    <td valign="top"><p class="t1r">0</p></td>
+    <td valign="top"><p class="t1">Grassland</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">3</p></td>
+    <td valign="top"><p class="t1r">600</p></td>
+    <td valign="top"><p class="t1">Urban area</p></td>
+    <td valign="top"><p class="t1r">600</p></td>
+    <td valign="top"><p class="t1">Urban area</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">4</p></td>
+    <td valign="top"><p class="t1r">950</p></td>
+    <td valign="top"><p class="t1">?</p></td>
+    <td valign="top"><p class="t1r">950</p></td>
+    <td valign="top"><p class="t1">Mountains</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">5</p></td>
+    <td valign="top"><p class="t1r">1250</p></td>
+    <td valign="top"><p class="t1">Crops</p></td>
+    <td valign="top"><p class="t1r">1250</p></td>
+    <td valign="top"><p class="t1">Crops</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">6</p></td>
+    <td valign="top"><p class="t1r">450</p></td>
+    <td valign="top"><p class="t1">?</p></td>
+    <td valign="top"><p class="t1r">450</p></td>
+    <td valign="top"><p class="t1">Mountains</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">7</p></td>
+    <td valign="top"><p class="t1r">?</p></td>
+    <td valign="top"><p class="t1">Grassland</p></td>
+    <td valign="top"><p class="t1r">0</p></td>
+    <td valign="top"><p class="t1">Grassland</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">8</p></td>
+    <td valign="top"><p class="t1r">900</p></td>
+    <td valign="top"><p class="t1">Urban area</p></td>
+    <td valign="top"><p class="t1r">900</p></td>
+    <td valign="top"><p class="t1">Urban area</p></td>
+  </tr>
+</table>
+<p class=emptylinehalf>&nbsp;</p>
+<ul>
+	<li>Value <span class=courier>0</span>  is assigned to output column <span class=courier>OutCol1</span>, when a record of column <span class="courier">Population</span> is undefined; else the original value is assigned.</li>
+	<li>Class name &quot;<span class=courier>Mountains</span>&quot; is assigned to output column <span class=courier>OutCol2</span> when a record of column <span class=courier>Landuse</span> is undefined; else the original class name is assigned.</li>
+</ul>
+
+<p class="Seealso">See also:</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top"><a href="calc_isundef.htm">ISUNDEF</a></td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="calc_ifnotundef.htm">IFNOTUNDEF</a></td>
+  </tr>
+  <tr>
+    <td valign="top"><a href="calc_iff.htm">IFF</a></td>
+  </tr>
+  <tr>
+    <td><a href="calc_assign_undefined_values.htm">Map and Table Calculation : Assigning undefined values</a></td>
+  </tr>
+  <tr>
+    <td><a href="how_to_calculate_with_undefineds_in_maps_and_tables.htm">How to calculate with undefineds in maps and tables</a></td>
+  </tr>
+  <tr>
+    <td><a href="calc_merge_domains.htm">Map and Table Calculation : Merging domains (workaround)</a></td>
+  </tr>
+</table>
+
+</body

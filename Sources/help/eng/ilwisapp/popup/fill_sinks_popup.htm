@@ -1,0 +1,58 @@
+<html>
+
+<head>
+<title>fill sinks popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Fill sinks</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/fill_sinks.htm" onClick="return popup(this, 'notes')" >Fill sinks</a> operation 'removes' local depressions (of single pixels and of multiple pixels) from a Digital Elevation Model (DEM). </p>
+
+<ul>
+
+<li>The height value of a single-pixel depression is raised to smallest value of the 8 neighbours of a single-pixel depression. </li>
+
+<li>The height values of a local depression consisting of multiple pixels are raised to the smallest value of a pixel that is both adjacent to the outlet for the depression, and that would discharge into the initial depression. </li>
+
+</ul>
+
+<p class=defnewpar>By using the Fill sinks operation, </p>
+
+<ul>
+
+<li>and a subsequent <a href="../../ilwisapp/popup/flow_direction_popup.htm">Flow direction</a> operation on the output map of the Fill sinks operation, </li>
+
+<li>and a <a href="../../ilwisapp/popup/flow_accumulation_popup.htm">Flow accumulation</a> operation on the output map of Flow direction operation, </li>
+
+</ul>
+
+<p>it is ensured:</p>
+
+<ul>
+
+<li>that a flow direction will be found for every pixel in the map, and </li>
+
+<li>that water in any pixel will be discharged into outlets towards the edges of the map. </li>
+
+</ul>
+
+</body

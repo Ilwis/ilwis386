@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>CoKriging popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>CoKriging</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/cokriging.htm" onClick="return popup(this, 'notes')" >CoKriging</a> can be seen as a <a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" >point interpolation</a>, which requires a point map as input and which returns a raster map with estimations and optionally an error map. CoKriging is a multivariate variant of the Ordinary <a href="../../ilwisapp/popup/kriging_popup.htm">Kriging</a> operation: CoKriging calculates estimates or predictions for a poorly sampled variable (the predictand) with help of a well-sampled variable (the covariable). The variables should be highly correlated (positive or negative).</p>
+
+<p>Before CoKriging, you should perform the <a href="../../ilwisapp/popup/cross_variogram_popup.htm">Cross Variogram</a> operation and determine a semi-variogram model for the predictand, for the covariable and a cross-variogram model for the combination of the variables in a graph window (<a href="..//ilwismen/graph_window_add_semivariogram_model.htm" onClick="return popup(this, 'notes')" >Graph window : Add semi-variogram model</a>). All three models serve as input for the CoKriging operation. </p>
+
+</body

@@ -1,0 +1,151 @@
+<html>
+
+<head>
+<title>Domain Group editor : Add item</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Domain Group, Add ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Domain Group editor</h1>
+
+<h1 class=secondline>Add item</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Add groups to this group domain. </p>
+
+<p class=defnewpar>With a group domain, you can <i>permanently</i> slice or classify a value map with the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation or by using the CLFY function in MapCalc.</p>
+
+<p class=defnewpar>This dialog box appears when in the Domain Group editor:</p>
+
+<ul>
+
+<li>	you choose <span class=arial>Add Item</span> from the <a href="../ilwis/domain_class_id_editor_menu_commands.htm">Edit menu</a>, or</li>
+
+<li>    when you click the <span class=arial>Add Item</span> button in the toolbar, or
+
+<li>    when you press the right mouse button and choose <span class=arial>Add Item</span> from the context-sensitive menu, or
+
+<li>	when you press the <span class=arial>Ins</span> key on the keyboard.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Upper bound:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the upper boundary of a new group. </p>
+
+<p class=diabox>To create for instance a group between 50 and 100, type <span class=courier>100</span>. <br>
+
+You can use boundary value 50 as the upper boundary value for another group, e.g. for values between 0 and 50.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a name for this group, e.g. <span class=courier>medium</span>. Group names can be as long as you like. </p>
+
+<p class="tiptext"><span class="tip">Note: </span>Group names may contain any characters, except the <span class="courier">%</span> character. </p>
+
+<p class=diabox>In the sliced/classified map, you will see the group names when pressing the left mouse button (Info) in a map window; 
+
+you will see the group names as record names when creating an attribute table for this domain (or for a map using this domain); 
+
+and when enclosed in double quotes, you can use the group names in <i>calculations</i>.
+
+You can also show group names in the legend of the sliced/classified map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Code:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a short code for the group name.</p>
+
+<p class="tiptext"><span class="tip">Note: </span>In codes, colons <span class="courier">:</span> and percentages <span class="courier">%</span> may not be used. </p>
+
+<p class=diabox>When displaying the sliced/classified map in a map window and pressing the left mouse button (Info), and in Pixel Info, you will see the code and the group name as <i>code: group name</i>. 
+
+When enclosed in double quotes, you can use codes in <i>calculations</i>.
+
+You can optionally show codes in the legend of a sliced/classified map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a longer description for this group. </p>
+
+<p class=diabox>You can use descriptions for example in the legend of a sliced/classified map.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For more information, see <a href="../ilwis/how_to_create_domain_group.htm">How to create a domain Group</a>.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>    If you like, you can fill out the Name field in this dialog box as <i>code</i><span class=courier>:</span><i>name</i>.
+
+<li>    The order of a group domain is fixed; it is determined by the upper boundary values.
+
+<li>    To edit the colors of groups, you can choose the <span class=arial>Open Representation</span> command from the <a href="../ilwis/domain_class_id_editor_menu_commands.htm">File menu</a>. The <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Class</a> editor will be opened showing the representation that is currently linked to this domain. </li>
+
+<li>	You can use the group domain in the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation or with the <a href="../ilwis/calc_clfy.htm">CLFY</a> function in MapCalc to permanently slice a classify a value map.</li>
+
+<li>    When you are not satisfied with the classification results, edit the group domain and then recalculate the output map via the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> of the output map. </li>
+
+<li>	When performing <a href="../ilwis/calc_aaf.htm">MapCalc</a> or <a href="../ilwis/calc_aaf.htm">TabCalc</a> calculations on the sliced or classified map, you can use group names as well as codes; group names or codes should be enclosed in &quot;double quotes&quot;.</li>
+
+<li>	A similar result can be obtained <i>without</i> creating a domain Group and <i>without</i> performing the Slicing or CLFY operation: simply create a representation value or gradual for the value map in the <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of the map. When you display the value map with such a representation, the value map appears as if it was sliced but the original values are retained.</li>
+
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_domain_group.htm">How to create a domain Group</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_slice_an_image.htm">How to slice an image</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_classify_a_map_or_column.htm">How to classify a map or column</a></p>
+
+</body

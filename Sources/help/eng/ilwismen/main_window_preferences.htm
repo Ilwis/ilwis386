@@ -1,0 +1,1541 @@
+<html>
+
+<head>
+<title>Preferences</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Main window, Preferences, Customize ..., Change ..., Default settings, History of expressions, Double-click in a Catalog, Default position and size of windows, Position and size of windows, Hide/Show Display Options dialog boxes, Hide/Show Raster Map Definition dialog box, Pyramid layers, Font, Progress indicators, Progress Manager, Startup directory, Scripts, Tools, Script directories, Script folders, Tools directories, Tools folders, Extend the Operations menu, Change the Operations menu, Operations menu, External applications">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table id="top" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Main window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Preferences</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Specify some preferred settings that will be used throughout ILWIS. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>Click the links or the arrows <img src="../images/contentsarrt.gif" border=0 width="11" height="11"> to open or to close the explanations. </p>
+
+<table class=contents cellspacing="0" cellpadding="0" width="100%" border="0">
+<tr>
+<td class=contents width="16"><a onclick="doExpandContents(exp1,link1)"><img src="../images/contentsarrt.gif" id="link1" border=0 width="11" height="11"></a>
+</td>
+<td class=contents><a onclick="doExpandContents(exp1,link1)" href="#">Main window</a>
+</td>
+</tr>
+<tr>
+<td></td>
+<td><DIV ID="exp1" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diaboxbold>Command line</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>History entries:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Specify the number of commands, formulae, expressions that should be kept in the history of the command line in the Main window and table windows. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=emptylinehalf>&nbsp;</p>
+    <p class=diaboxbold>General options</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox>Give a warning when an object is opened which is not up-to-date:</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+    </td>
+    <td valign="top">
+    <p class=diaboxnospacetop>Select this check box when you wish to receive a warning when you open an object that is not up-to-date anymore. </p>
+
+    <p class=diaboxnospacetop>Clear this check box when an object should be opened without checking. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox>Show a Raster Map Definition form when calculating:</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+    </td>
+    <td valign="top">
+    <p class=diaboxnospacetop>Select this check box when you wish to get the <a href="../ilwismen/raster_map_definition.htm">Raster Map Definition</a> dialog box after you typed a MapCalc formula on the command line of the Main window; in the Raster Map Definition dialog box, you can specify for instance the desired precision of the output map. </p>
+
+    <p class=diaboxnospacetop>Clear this check box when you do not wish to obtain the Raster Map Definition dialog box, i.e. use defaults during calculations. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=emptylinehalf>&nbsp;</p>
+    <p class=diaboxbold>Default double-click actions</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Filter:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select the action to be performed when double-clicking a <a href="..//ilwis/popup/objects_filters_popup.htm" onClick="return popup(this, 'notes')" >filter</a> in a Catalog:</p>
+
+    <ul class=diaul>
+
+    <li>Open: to open the filter in the filter viewer/editor. </li>
+
+    <li>Filter: to start the Filter operation by opening the <a href="../ilwisapp/filter_dialog_box.htm">Filter : dialog box</a>. </li>
+
+    </ul>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Map list:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select the action to be performed when double-clicking a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> in a Catalog:</p>
+
+    <ul class=diaul>
+
+    <li>Open: to open the map list in the map list editor. </li>
+
+    <li>ColorComp: to open the <a href="../ilwismen/display_options_map_list_as_color_composite.htm">Display Options - Map List as Color Composite</a> dialog box to display three images in the map list as an interactive color composite. </li>
+
+    <li>SlideShow: to open a Display Options - Raster Map dialog box, and then the <a href="../ilwismen/display_options_map_list_as_slide_show.htm">Display Options - Map List as Slide Show</a> dialog box to show all maps in the map list as a slide show. </li>
+
+    </ul>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Stereo pair:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select the action to be performed when double-clicking a <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> in a Catalog:</p>
+
+    <ul class=diaul>
+
+    <li>Anaglyph: to open the <a href="../ilwismen/display_options_stereopair_as_anaglyph.htm">Display Options - Stereo Pair as Anaglyph</a> dialog box, to show the stereo pair as an anaglyph in a map window. </li>
+
+    <li>Stereoscope: to directly open the stereo pair in the <a href="../ilwis/stereopair_stereoscope_window.htm">stereoscope window</a>. </li>
+
+    </ul>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+
+<tr>
+<td><a onclick="doExpandContents(exp2,link2)" href="#link2"><img src="../images/contentsarrt.gif" id="link2" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp2,link2)" href="#link2">Position &amp; size</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp2" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diaboxbold>Default position and size of the Main window</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>X position:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels from left edge of screen) for the location of the upper left corner of the Main window when restarting ILWIS. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>Y position:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels from top edge of screen) for the location of the upper left corner of the Main window when restarting ILWIS. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>Width:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels) for the width of the Main window when restarting ILWIS. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>Height:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels) for the height of the Main window when restarting ILWIS. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox><span class=arial>Reset</span>:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Click this button to remove any previous settings for default position and size of the Main window when restarting ILWIS. If ILWIS is reopened, the Main window will appear at the same position on your screen as when it was when ILWIS was closed. </p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td class=contents><a onclick="doExpandContents(exp3,link3)" href="#link3"><img src="../images/contentsarrt.gif" id="link3" border=0 width="11" height="11"></a>
+</td>
+<td class=contents><a onclick="doExpandContents(exp3,link3)" href="#link3">Map window</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp3" STYLE="display: none;"></DIV>
+</td>
+</tr>
+<tr>
+<td><a onclick="doExpandContents(exp4,link4)" href="#link4"><img src="../images/contentsarrt.gif" id="link4" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp4,link4)" href="#link4">Display</a>
+</td>
+</tr>
+<tr>
+<td width="16">
+</td>
+<td><DIV ID="exp4" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diaboxbold>Default colors for domain Bool</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>True:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select or create a default color for True values in a map with a Bool domain or with system domain <span class=courier>Bit</span>. The selected color will also be the default color when displaying a segment map or a polygon map in a single color. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>False:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select or create a default color for False values in a map with a Bool domain or with system domain <span class=courier>Bit</span>. </p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+</table>
+
+<table class=contents cellspacing="0" cellpadding="0" width="100%" border="0">
+<tr>
+<td width="20">&nbsp;</td>
+<td width="16"><a onclick="doExpandContents(exp5,link5)" href="#link5"><img src="../images/contentsarrt.gif" id="link5" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp5,link5)" href="#link5">Raster maps</a>
+</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td><DIV ID="exp5" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diaboxbold>Show Display Options dialog box for</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>All raster maps:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when you always wish to obtain a <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box when displaying a raster map. </p>
+
+    <p class=diabox>Clear this check box when you wish to show all raster maps with their default display settings, i.e. without a Display Options dialog box. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox>&nbsp;&nbsp;using domain Image, etc.:</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+    </td>
+    <td valign="top">
+    <p class=diaboxnospacetop>Select for which types of raster maps (depending on the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map) you wish to obtain a Display Options dialog box before the map is displayed. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=emptylinehalf>&nbsp;</p>
+    <p class=diaboxbold>Pyramid layers</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox>Create Pyramid layers by default:</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+    </td>
+    <td valign="top">
+    <p class=diaboxnospacetop>Select this check box when <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">pyramid layers</a> should be created for every raster map that will be displayed. When pyramid layers exist for a large raster map (e.g. larger than a few thousand lines and columns), the map can be displayed faster. </p>
+
+    <p class=diabox>Clear this check box when you do not wish to create pyramid layers by default. </p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td><a onclick="doExpandContents(exp6,link6)" href="#link6"><img src="../images/contentsarrt.gif" id="link6" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp6,link6)" href="#link6">Segment maps</a>
+</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td><DIV ID="exp6" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diaboxbold>Show Display Options dialog box for</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>All segment maps:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when you always wish to obtain a <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box when displaying a segment map. </p>
+
+    <p class=diabox>Clear this check box when you wish to show all segment maps with their default display settings, i.e. without a Display Options dialog box. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox>&nbsp;&nbsp;using domain Value, etc.:</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+    </td>
+    <td valign="top">
+    <p class=diaboxnospacetop>Select for which types of segment maps (depending on the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map) you wish to obtain a Display Options dialog box before the map is displayed. </p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td><a onclick="doExpandContents(exp7,link7)" href="#link7"><img src="../images/contentsarrt.gif" id="link7" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp7,link7)" href="#link7">Polygon maps</a>
+</td>
+</tr>
+<tr>
+<td></td>
+<td></td>      
+<td><DIV ID="exp7" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diaboxbold>Show Display Options dialog box for</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>All polygon maps:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when you always wish to obtain a <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box when displaying a polygon map. </p>
+
+    <p class=diabox>Clear this check box when you wish to show all polygon maps with their default display settings, i.e. without a Display Options dialog box. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox>&nbsp;&nbsp;using domain Value, etc.:</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+    </td>
+    <td valign="top">
+    <p class=diaboxnospacetop>Select for which types of polygon maps (depending on the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map) you wish to obtain a Display Options dialog box before the map is displayed. </p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td><a onclick="doExpandContents(exp8,link8)" href="#link8"><img src="../images/contentsarrt.gif" id="link8" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp8,link8)" href="#link8">Point maps</a>
+</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td><DIV ID="exp8" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diaboxbold>Show Display Options dialog box for</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>All point maps:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when you always wish to obtain a <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box when displaying a point map. </p>
+
+    <p class=diabox>Clear this check box when you wish to show all point maps with their default display settings, i.e. without a Display Options dialog box. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox>&nbsp;&nbsp;using domain Value, etc.:</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+    </td>
+    <td valign="top">
+    <p class=diaboxnospacetop>Select for which types of point maps (depending on the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map) you wish to obtain a Display Options dialog box before the map is displayed. </p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+</table>
+
+<table class=contents cellspacing="0" cellpadding="0" width="100%" border="0">
+<tr>
+<td width="16"><a onclick="doExpandContents(exp9,link9)" href="#link9"><img src="../images/contentsarrt.gif" id="link9" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp9,link9)" href="#link9">Default representations</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp9" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox><i>System domain</i></p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox><i>Default representation for the system domain</i></p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><img src="../images/domain.gif" align=top width="16" height="14">&nbsp;<span class=courier><a href="..//ilwis/popup/yy_system_domain_byte_popup.htm" onClick="return popup(this, 'notes')" >Byte</a></span></p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox><img src="../images/rpr.gif" align=top width="16" height="14">&nbsp;<span class=courier>Gray</span>; double-click to change the default representation. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><img src="../images/domain.gif" align=top width="16" height="14">&nbsp;<span class=courier><a href="..//ilwis/popup/yy_system_domain_count_popup.htm" onClick="return popup(this, 'notes')" >Count</a></span></p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox><img src="../images/rpr.gif" align=top width="16" height="14">&nbsp;<span class=courier>Gray</span></p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><img src="../images/domain.gif" align=top width="16" height="14">&nbsp;<span class=courier><a href="..//ilwis/popup/yy_system_domain_distance_popup.htm" onClick="return popup(this, 'notes')" >Distance</a></span></p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox><img src="../images/rpr.gif" align=top width="16" height="14">&nbsp;<span class=courier>Pseudo</span></p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><img src="../images/domain.gif" align=top width="16" height="14">&nbsp;<span class=courier><a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" >Image</a></span></p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox><img src="../images/rpr.gif" align=top width="16" height="14">&nbsp;<span class=courier>Gray</span></p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><img src="../images/domain.gif" align=top width="16" height="14">&nbsp;<span class=courier><a href="..//ilwis/popup/yy_system_domain_min1to1_popup.htm" onClick="return popup(this, 'notes')" >Min1to1</a></span></p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox><img src="../images/rpr.gif" align=top width="16" height="14">&nbsp;<span class=courier>Gray</span></p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><img src="../images/domain.gif" align=top width="16" height="14">&nbsp;<span class=courier><a href="..//ilwis/popup/yy_system_domain_NILto1_popup.htm" onClick="return popup(this, 'notes')" >NILto1</a></span></p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox><img src="../images/rpr.gif" align=top width="16" height="14">&nbsp;<span class=courier>NILto1</span></p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><img src="../images/domain.gif" align=top width="16" height="14">&nbsp;<span class=courier><a href="..//ilwis/popup/yy_system_domain_noaa_popup.htm" onClick="return popup(this, 'notes')" >NOAA</a></span></p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox><img src="../images/rpr.gif" align=top width="16" height="14">&nbsp;<span class=courier>Gray</span></p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><img src="../images/domain.gif" align=top width="16" height="14">&nbsp;<span class=courier><a href="..//ilwis/popup/yy_system_domain_perc_popup.htm" onClick="return popup(this, 'notes')" >Perc</a></span></p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox><img src="../images/rpr.gif" align=top width="16" height="14">&nbsp;<span class=courier>Gray</span></p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><img src="../images/domain.gif" align=top width="16" height="14">&nbsp;<span class=courier><a href="..//ilwis/popup/yy_system_domain_radar_popup.htm" onClick="return popup(this, 'notes')" >Radar</a></span></p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox><img src="../images/rpr.gif" align=top width="16" height="14">&nbsp;<span class=courier>Gray</span></p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><img src="../images/domain.gif" align=top width="16" height="14">&nbsp;<span class=courier><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >Value</a></span></p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox><img src="../images/rpr.gif" align=top width="16" height="14">&nbsp;<span class=courier>Pseudo</span></p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td><a onclick="doExpandContents(exp10,link10)" href="#link10"><img src="../images/contentsarrt.gif" id="link10" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp10,link10)" href="#link10">Position &amp; size</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp10" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diaboxbold>Default position and size of map windows</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>X position:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels from left edge of screen) for the location of the upper left corner of any map window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Y position:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels from top edge of screen) for the location of the upper left corner of any map window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Width:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels) for the width of any map window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Height:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels) for the height of any map window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><span class=arial>Reset</span>:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Click this button to remove any previous settings for default position and size of any map window. </p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td><a onclick="doExpandContents(exp11,link11)" href="#link11"><img src="../images/contentsarrt.gif" id="link11" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp11,link11)" href="#link11">Editors</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp11" STYLE="display: none;"></DIV>
+</td>
+</tr>
+</table>
+
+<table class=contents cellspacing="0" cellpadding="0" width="100%" border="0">
+<tr>
+<td width="20">
+</td>
+<td width="16"><a onclick="doExpandContents(exp12,link12)" href="#link12"><img src="../images/contentsarrt.gif" id="link12" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp12,link12)" href="#link12">Point editor</a>
+</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td><DIV ID="exp12" STYLE="display: none;">
+
+<p>Specify some settings for the point editor, see also <a href="../ilwismen/point_editor_customize.htm">Point editor : Customize</a>. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>Show text:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when you wish to show the class names, IDs, or values of points next to the points. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Text color:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select or create a color for the text that will appear next to the points. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Background:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select or create a color for the background of the text that will appear next to the points. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Symbol type:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select a symbol type with which the points should be displayed. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Symbol size:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Specify a value (in screen pixels) for the size with which the symbols should be displayed. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Pen width:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Specify a value (in screen pixels) for the size with which the outline of the symbols should be drawn. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Color:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select or create a color for (the outline of) the symbols. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Fill color:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>In case of symbol type circle, square, diamond, delta up or delta down: select or create a color to fill these symbols. </p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><a onclick="doExpandContents(exp13,link13)" href="#link13"><img src="../images/contentsarrt.gif" id="link13" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp13,link13)" href="#link13">Segment editor</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+</td>
+<td><DIV ID="exp13" STYLE="display: none;">
+
+<p>Specify some settings for the segment editor, see also <a href="../ilwismen/segment_editor_customize.htm">Segment editor : Customize</a>. Some settings will be used by the point editor and the polygon editor. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox>Color digitizer cursor:</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+    </td>
+    <td valign="top">
+    <p class=diaboxnospacetop>Select or create a color for the digitizer cursor in the segment editor. </p>
+
+    <p class=diabox><span class=tip>Note: </span><span class=tiptext>The selected color will also be used as the <span class=arial>Digitizer Cursor</span> color in the point editor and the polygon editor. </span></p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>Auto snap:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box to automatically snap the begin node and end node of a newly inserted segment (using the mouse) to existing nodes or to existing segments, provided that the distance to the existing node or segment is less than the snap tolerance. </p>
+
+    <p class=diabox>Clear this check box if newly inserted segments should not be automatically snapped to existing nodes or existing segments. If you clear this check box, use the Shift key to snap to an existing node, and use the <span class=arial>Ctrl</span> key to split an existing segment and snap to the newly created node. For more information, see <a href="../ilwis/appendices_mouse_functions.htm">Appendices : mouse functions</a>. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Show nodes:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box to show the nodes of segments when in <a href="../ilwismen/segment_editor_select_mode.htm">Select mode</a> and <a href="../ilwismen/segment_editor_insert_mode.htm">Insert mode</a>. When you are in <a href="../ilwismen/segment_editor_move_points_mode.htm">Move Points mode</a>, segment nodes and intermediate points within segments are always shown. </p>
+
+    <p class=diabox>Clear this check box when segment nodes should not be visible in Select mode and Insert mode. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox><a href="..//ilwismen/popup/segment_editor_customize_snap_tolerance_popup.htm" onClick="return popup(this, 'notes')" >Snap tolerance</a> (pixels):</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Specify a value for the distance interval in which snapping between newly inserted segments and existing ones is allowed, when working with the mouse. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>Normal color:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select or create a color for segments, nodes and intermediate points within segments, for any segment map that is opened in the segment editor. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Retouch color:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select or create a color for segments, nodes and intermediate points within segments, when moving a node or an intermediate point to another position in <a href="../ilwismen/segment_editor_move_points_mode.htm">Move Points mode</a>. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Deleted color:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select or create a color to show deleted segments when using the <a href="../ilwismen/segment_editor_undelete_segments.htm">Undelete Segments</a> option. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox>Find undef color:</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+    </td>
+    <td valign="top">
+    <p class=diaboxnospacetop>Select or create a color to show undefined segments (i.e. segments without value, class name or ID) when using the <a href="../ilwismen/segment_editor_find_undefineds.htm">Find Undefineds</a> option. </p>
+
+    <p class=diabox><span class=tip>Note: </span><span class=tiptext>The selected color will also be used as the <span class=arial>Find Undefineds</span> color in the point editor and the polygon editor. </span></p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+</table>
+
+<table class=contents cellspacing="0" cellpadding="0" width="100%" border="0">
+<tr>
+<td width="16" class=contents><a onclick="doExpandContents(exp14,link14)" href="#link14"><img src="../images/contentsarrt.gif" id="link14" border=0 width="11" height="11"></a>
+</td>
+<td class=contents><a onclick="doExpandContents(exp14,link14)" href="#link14">Table window</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp14" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diaboxbold>Command line</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox>Show command line when showing non-tables:</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+    </td>
+    <td valign="top">
+    <p class=diaboxnospacetop>Select this check box to show the command line when opening objects like histograms, representations, etc. (i.e. objects that are internally stored as tables). </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=emptylinehalf>&nbsp;</p>
+
+    <p class=diaboxbold>Default position and size of table windows</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>X position:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels from left edge of screen) for the location of the upper left corner of any table window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Y position:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels from top edge of screen) for the location of the upper left corner of any table window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Width:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels) for the width of any table window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Height:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels) for the height of any table window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><span class=arial>Reset</span>:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Click this button to remove any previous settings for default position and size of any table window. </p>
+
+    </td>
+    </tr>
+	</table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td><a onclick="doExpandContents(exp15,link15)" href="#link15"><img src="../images/contentsarrt.gif" id="link15" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp15,link15)" href="#link15">Graph window</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp15" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diaboxbold>Default position and size of graph windows</p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>X position:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels from left edge of screen) for the location of the upper left corner of any graph window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Y position:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels from top edge of screen) for the location of the upper left corner of any graph window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Width:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels) for the width of any graph window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Height:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Type a value (in screen pixels) for the height of any graph window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox><span class=arial>Reset</span>:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Click this button to remove any previous settings for default position and size of any graph window. </p>
+
+    </td>
+    </tr>
+	</table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td class=contents><a onclick="doExpandContents(exp16,link16)" href="#link16"><img src="../images/contentsarrt.gif" id="link16" border=0 width="11" height="11"></a>
+</td>
+<td class=contents><a onclick="doExpandContents(exp16,link16)" href="#link16">Font</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp16" STYLE="display: none;"></DIV>
+</td>
+</tr>
+<tr>
+<td><a onclick="doExpandContents(exp17,link17)" href="#link17"><img src="../images/contentsarrt.gif" id="link17" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp17,link17)" href="#link17">General font</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp17" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>Font name:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select the font to be used in the Main window, Catalog(s), and in map windows. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Font size:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Specify the font size. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Bold:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when the font should appear in <b>bold</b>. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Italic:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when the font should appear in <i>italic</i>. </p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td><a onclick="doExpandContents(exp18,link18)" href="#link18"><img src="../images/contentsarrt.gif" id="link18" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp18,link18)" href="#link18">Dialog font</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp18" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>Font name:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select the font to be used in dialog boxes. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Font size:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Specify the font size. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Bold:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when the font should appear in <b>bold</b>. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Italic:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when the font should appear in <i>italic</i>. </p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td><a onclick="doExpandContents(exp19,link19)" href="#link19"><img src="../images/contentsarrt.gif" id="link19" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp19,link19)" href="#link19">Table font</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp19" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>Font name:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select the font to be used in table windows. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Font size:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Specify the font size. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Bold:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when the font should appear in <b>bold</b>. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Italic:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when the font should appear in <i>italic</i>. </p>
+
+    </td>
+    </tr>
+	</table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td><a onclick="doExpandContents(exp20,link20)" href="#link20"><img src="../images/contentsarrt.gif" id="link20" border=0 width="11" height="11"></a>
+</td>
+<td><a onclick="doExpandContents(exp20,link20)" href="#link20">Graphs font</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp20" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" width="108">
+    <p class=diabox>Font name:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select the font to be used in graph windows. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Font size:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Specify the font size. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Bold:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when the font should appear in <b>bold</b>. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Italic:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Select this check box when the font should appear in <i>italic</i>. </p>
+
+    </td>
+    </tr>
+	</table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td class=contents><a onclick="doExpandContents(exp23,link23)" href="#link23"><img src="../images/contentsarrt.gif" id="link23" border=0 width="11" height="11"></a>
+</td>
+<td class=contents><a onclick="doExpandContents(exp23,link23)" href="#link23">General</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp23" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" colspan="2">
+    <p class=diabox>Use old style progress indicators during operations and scripts:</p>
+
+    </td>
+	</tr>
+    <tr>
+    <td valign="top" width="144">
+    <p class=diaboxnospacetop>&nbsp;</p>
+
+	</td>
+    <td valign="top">
+    <p class=diaboxnospacetop>Select this check box to use, for every newly started operation, a progress indicator in a separate window. </p>
+
+    <p class=diabox>Clear this check box to use the <a href="../ilwis/progress_manager_functionality.htm">progress manager</a>: one window which incorporates all progress indicators. </p>
+
+    </td>
+    </tr>
+	</table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td class=contents><a onclick="doExpandContents(exp21,link21)" href="#link21"><img src="../images/contentsarrt.gif" id="link21" border=0 width="11" height="11"></a>
+</td>
+<td class=contents><a onclick="doExpandContents(exp21,link21)" href="#link21">Directories</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp21" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" width="144">
+    <p class=diabox id="tool_folder">Tools directory:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Specify the path(s) for the folder(s) where commonly used external tools are located. 
+		If desired, multiple Tools folders can be specified: separate folders by semicolons <span class="courier">;</span> . 
+		When one or more Tools folders are specified, a <span class=arial>Tools</span> entry will appear on the Operations menu, in the Operation-tree, and in the Operation-list.
+		This will list all tools that are present in the specified folder(s). 
+		See also: <a href="../ilwis/how_to_customize_the_operation_list.htm">How to customize the Operation-tree, the Operation-list and the Operations menu</a>. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox id="script_folder">Script directory:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Specify the path(s) for the folder(s) where commonly used ILWIS scripts are located. 
+		If desired, multiple Script folders can be specified: separate folders by semicolons <span class="courier">;</span> . 
+        When one or more Script folders are specified, a <span class=arial>Script</span> entry will appear on the Operations menu, in the Operation-tree, and in the Operation-list. 
+		This will list all scripts that are present in the specified folder(s). 
+		See also: <a href="../ilwis/how_to_customize_the_operation_list.htm">How to customize the Operation-tree, the Operation-list and the Operations menu</a>. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Directory for LOG file:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Specify the path for the ILWIS.LOG file. The LOG file stores all commands that have been used on the command line of the Main window. </p>
+
+    </td>
+    </tr>
+    <tr>
+    <td valign="top">
+    <p class=diabox>Default startup dir:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>First close all Catalogs in the Main window. Then, specify the path for the directory in which ILWIS should start next time. Close ILWIS. </p>
+
+    <p class=tiptext><span class=tip>Mind: </span>If you close ILWIS while any Catalogs are still open, these Catalogs will be reopened when you restart ILWIS. </p>
+
+	<p>For more information, see also <a href="../ilwis/how_to_change_the_working_or_start_up_directory.htm">How to change the working or startup directory</a>. </p>
+
+    </td>
+	</tr>
+	</table>
+	</DIV>
+</td>
+</tr>
+<tr>
+<td class=contents><a onclick="doExpandContents(exp22,link22)" href="#link22"><img src="../images/contentsarrt.gif" id="link22" border=0 width="11" height="11"></a>
+</td>
+<td class=contents><a onclick="doExpandContents(exp22,link22)" href="#link22">Advanced</a>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td><DIV ID="exp22" STYLE="display: none;">
+
+    <table cellspacing=0>
+    <tr>
+    <td valign="top" width="144">
+    <p class=diabox>Restore defaults:</p>
+
+    </td>
+    <td valign="top">
+    <p class=diabox>Click the button to delete any Preference settings and return to the original installation settings. </p>
+
+    </td>
+    </tr>
+    </table>
+	</DIV>
+</td>
+</tr>
+</table>
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/main_window.htm">Main window</a></p>
+<p class=seealsolinks><a href="../ilwis/how_to_customize_the_catalog.htm">How to customize a Catalog</a></p>
+<p class=seealsolinks><a href="../ilwis/how_to_customize_the_operation_list.htm">How to customize the Operation-tree, the Operation-list and the Operations menu</a></p>
+<p class=seealsolinks><a href="../ilwismen/customize_the_pixel_information_window.htm">Pixel information window : Customize</a></p>
+<p class=seealsolinks><a href="../ilwismen/point_editor_customize.htm">Point editor : Customize</a></p>
+<p class=seealsolinks><a href="../ilwismen/polygon_editor_customize.htm">Polygon editor : Customize</a></p>
+<p class=seealsolinks><a href="../ilwismen/segment_editor_customize.htm">Segment editor : Customize</a></p>
+
+
+</body

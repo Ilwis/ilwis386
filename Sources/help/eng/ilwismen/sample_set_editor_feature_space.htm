@@ -1,0 +1,93 @@
+<html>
+
+<head>
+<title>Sample set editor : Feature space</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sample set editor, Feature space">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Sample set editor</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__sample_set_editor_edit_menu_sec2.Click()>Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Feature Space</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Show a feature space of two bands. A feature space gives a visual overview of the separation of classes of training pixels. The spectral values of one map are put along an horizontal axis, and the spectral values of another map are put along the vertical axis. At the position of a sampled pixel, the color of the assigned class appears. </p>
+
+<p class=defnewpar>You can open as many feature spaces as you like, but as each of them is updated after a new selection of training pixels, speed may decrease. Currently selected pixels appear black in a feature space. Feature spaces can be shown with or without additional grid lines, can be copied to clipboard and printed.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Band 1:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the map to be used for the horizontal axis of the feature space.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Band 2:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the map to be used for the vertical axis of the feature space.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The feature space appears in a separate window; you can size the window by <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> its borders.</p>
+
+<p class=kopje>Example:</p>
+
+<p class=linesp01befafter>Feature space of bands TMB3 and TMB4:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">
+<p><img src="../images/feat.gif" align=bottom width="300" height="300"></p>
+
+</td>
+<td valign="top" width=132>
+<p><img src="../images/featleg.gif" align=bottom width="123" height="112"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/sample_set_editor_functionality1.htm">Sample set editor : functionality (1)</a></p>
+
+</body

@@ -1,0 +1,141 @@
+<html>
+
+<head>
+<title>Add column to table</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Columns, Add ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window </h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Columns menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Add Column</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Add a new <a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >column</a> to the <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >table</a>. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Add Column</span> from the Columns menu, or</li>
+
+<li>	when you choose <span class=arial><a href="column_management.htm">Column Management</a></span> from the Columns menu, and click the <span class=arial>Add Column</span> button in the <span class=arial>Column Management</span> dialog box, or</li>
+
+<li>	when you scroll to the last column in the table, and double-click to the right of the last column in the gray column header area.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Column name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_column_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the column. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> for the new column, or <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> a new domain for the column.</p>
+
+<ul class=diaul> 
+
+<li>If you wish to use values in the new column, you can usually select the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system <span class=courier>Value</span> domain</a>, and specify value range and precision.</li>
+
+<li>You only need to select or create a user-defined value domain when the values have a specific meaning for which you have or want to create a meaningful representation. </li>
+
+<li>If you wish to store coordinates in a new coordinate column, you can select an existing <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> to be used as domain of the column. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If you selected a value domain, specify the minimum and maximum value of this domain; this is called the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If you selected a value domain, type a value for the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of this domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the column. The description of a column is visible on the status bar of the table window when moving the mouse pointer over the column name or the fields of the column.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The new column appears to the right of the last column. <!--The table window automatically scrolls to the new column. -->Initially, the new column is filled with question marks (undefineds). You can start editing the fields of the column.</p>
+
+<p class=tip>Tip:</p>
+
+<ul class=tipul>
+
+<li>	To change the order of columns, you can use <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag and drop</a>. In the table window, click a column name and hold the mouse button down, the mouse pointer changes into a column icon <img src="../images/column.gif" align=bottom width="13" height="14">, drag the column to a new position in the table, then release the left mouse button. </li>
+
+<li>    To change the order of columns, you can also use <a href="column_management.htm">Column Management</a>, and drag columns in the dialog box to another position. </li>
+
+<li>    The <span class=arial>Add Column</span> command is not available when your table is read-only. You can change the read-only flag in the <a href="table_properties.htm">Table Properties</a> sheet. </li> 
+
+</ul>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_toolbar.htm">Table window : toolbar</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_menu_commands.htm">Table window : menu commands</a> </p>
+
+</body

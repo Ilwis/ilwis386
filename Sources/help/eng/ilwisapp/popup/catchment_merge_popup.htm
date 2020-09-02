@@ -1,0 +1,76 @@
+<html>
+
+<head>
+<title>catchment merge popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Catchment Merge</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/catchment_merge.htm" onClick="return popup(this, 'notes')" >Catchment Merge</a> operation is able to merge adjacent catchments, as found by the Catchment Extraction operation. In fact, new catchments will be created on the basis of the Drainage Network Ordering map and its attribute table. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+<li>the output map and attribute table of the Drainage Network Ordering operation, </li>
+<li>the output map of the Flow Direction operation, </li>
+<li>the output map of the Flow Accumulation operation. </li>
+</ul>
+
+<p class="defnewpar">You can merge catchments in two manners: </p>
+
+<ul>
+
+<li>by specifying a point map that contains locations of stream outlets within a catchment; all adjacent catchments that drain into such outlets will be merged, </li>
+
+<li>by simply specifying a Strahler or Shreve ordering value: all adjacent catchments that have this Strahler or Shreve order value (or a lower value) and which drain into a common catchment will be merged. </li>
+
+</ul>
+
+<p class="defnewpar">As output a new catchment raster map, polygon map and attribute table are produced. These all use a new ID domain. </p>
+
+<p class="defnewpar">The attribute table contains information on the new catchments, similar to the output attribute table of the Catchment Extraction operation, but you will also find information on: </p>
+
+<ul>
+
+<li>total drainage length, total upstream area, </li>
+
+<li>drainage density, </li>
+
+<li>longest flow path length and longest drainage length. </li>
+
+</ul>
+
+<p class="defnewpar">Optionally, you can also obtain: </p>
+
+<ul>
+
+<li>a segment map with the longest flow path per catchment and a linked attribute table, </li>
+
+<li>a segment ordering map and attribute table, that only contain the segment streams within the new catchments; other streams will not appear anymore; output is similar to the segment map and attribute table of the Drainage Network Ordering operation. </li>
+
+</ul>
+
+<p>The last option is only available when you use an input point map with outlets. </p>
+
+<p class="defnewpar">Finally, this operation also has an option to include undefined pixels (from the Flow direction map) into a catchment. Then, a point map that only contains a single point is required. </p>
+
+</body

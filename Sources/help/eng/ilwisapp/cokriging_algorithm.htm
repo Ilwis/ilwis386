@@ -1,0 +1,231 @@
+<html>
+
+<head>
+<title>CoKriging : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="CoKriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>CoKriging</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Using semi-variograms instead of covariances is only justified under the unbiasedness conditions for the weights: <span class=symbol>S</span> <span class=symbol>w</span><sub> i</sub> = 1 and  <span class=symbol>S</span> <span class=symbol>h</span> <sub>j</sub> = 0 (see below), and with the Ordinary Kriging method (no trend, second order stationarity) (Deutsch &amp; Journel 1992). </p>
+
+<p class=defnewpar>The direct use of variogram values (given the semi-variogram models <span class=symbol>g</span><sub> A</sub> , <span class=symbol>g</span><sub> B</sub> and cross-variogram model <span class=symbol>g</span><sub> AB</sub>), leads in case of m observations of predictand A<sub>i</sub> and n observations of covariable B<sub>j</sub> to the following system of CoKriging equations:</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<table>
+<tr>
+<td valign="middle" width=512>
+<p><img src="../images/cokrig1.gif" align=bottom width="243" height="100"></p>
+
+</td>
+<td valign="middle" align="right"><p>(1)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If we call map A the collection of points with predictand values A<sub>i</sub>, and map B the points with covariable values B<sub>j</sub> and if A <span class=symbol>&Egrave;</span> B is the 'glued' combination of A and B it means that:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="75">
+<p><b>G</b><sub>AA</sub> </p>
+
+</td>
+<td valign="top">
+<p>has m x m values of <span class=symbol>g</span><sub>A</sub>(<i>h</i>) from the lag vectors <b>h</b><sub>ij </sub> found in map A, <i>h</i> = || <b>h</b><sub>ij</sub> ||</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="75">
+<p><b>G</b><sub>BA</sub> = <b>G'</b><sub>AB</sub> </p>
+
+</td>
+<td valign="top">
+<p>containing m x n values of <span class=symbol>g</span><sub>AB</sub>(<i>h</i>) from the vectors <b>h</b><sub>ij </sub> found in map A <span class=symbol>&Egrave;</span> B. More precisely: the vectors defined by the set A x B (product set consisting of ordered pairs of points taken from A and B).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="75">
+<p><b>G</b><sub>BB</sub></p>
+
+</td>
+<td valign="top">
+<p>has n x n values of <span class=symbol>g</span><sub>B</sub>(<i>h</i>) from the lag vectors <b>h</b><sub>ij</sub> found in map B, <i>h</i> = || <b>h</b><sub>ij</sub> ||</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="75">
+<p><b>1</b><sub>m</sub> and <b>1</b>'<sub>m</sub> </p>
+
+</td>
+<td valign="top">
+<p>are a column and a row vector both of order m; all elements in the vector are equal to 1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="75">
+<p><b>1</b><sub>n</sub> and <b>1</b>'<sub>n</sub></p>
+
+</td>
+<td valign="top">
+<p>are a column and a row vector both of order n; all elements in the vector are equal to 1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="75">
+<p><span class=symbol><b>w</b></span></p>
+
+</td>
+<td valign="top">
+<p>is a column with m weights <span class=symbol>w</span><sub> i</sub> assigned to predictand A, and <span class=symbol>S</span> <span class=symbol>w</span><sub> i</sub> = 1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="75">
+<p><span class=symbol><b>h</b></span> </p>
+
+</td>
+<td valign="top">
+<p>is a column with n weights <span class=symbol>h</span><sub> i </sub> assigned to covariable B, and <span class=symbol>S h</span><sub> j</sub> = 0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="75">
+<p><span class=symbol><b>g</b></span><sub> pA</sub> </p>
+
+</td>
+<td valign="top">
+<p>is a column with m semi-variogram values <span class=symbol>g</span><sub> A </sub>(<i>h</i>), where h = || <b>h</b><sub> pi </sub>||, the distance from the estimated output pixel <i>p</i> to all visited (sampled) points in map A (predictand map).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="75">
+<p><span class=symbol><b>g</b></span><sub> pAB</sub></p>
+
+</td>
+<td valign="top">
+<p>is a column with n cross-variogram values <span class=symbol>g</span><sub> AB </sub>(<i>h</i>), where h = || <b>h</b><sub> pi </sub>||, the distance from the estimated output pixel <i>p</i> to all visited (sampled) points in map B (covariable map).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="75">
+<p><span class=symbol>m</span><sub>1</sub></p>
+
+</td>
+<td valign="top">
+<p>is the Lagrange parameter introduced to formalize the unbiasedness and used to find the error variance of the prediction.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="75">
+<p><span class=symbol>m</span><sub>2</sub></p>
+
+</td>
+<td valign="top">
+<p>is the Lagrange parameter for the covariable.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The solution of the above system gives optimal values for <span class=symbol>w</span>, <span class=symbol>h</span> and <span class=symbol>m</span><sub>1</sub> and <span class=symbol>m</span><sub>2</sub>.</p>
+
+<p>These solutions (weights) do not depend on the sampled values in map A or B, but solely on the variogram models used and on the geometric distribution of the measurements, the so-called sampling scheme. They are used to get the prediction (Formula 2) as a linear combination of predictand measurements A<sub>i</sub> and covariable measurements and B<sub>j</sub>:</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<table>
+<tr>
+<td width=512 valign="middle"><img src="../images/cokrig2.gif" align=bottom width="149" height="41">
+
+</td>
+<td valign="middle" align="right"><p>(2)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The variance of the prediction error (<span class=symbol>s</span><sup>2</sup> , Formula 3) is obtained from inner vector products and <span class=symbol>m</span><sub>1</sub>:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table>
+<tr>
+<td valign="middle" width=512>
+<p><span class=symbol>s</span><sup>2</sup> = <span class=symbol>S w</span><sub>i</sub> <span class=symbol>g</span><sub>A</sub>(h<sub>i</sub>) + <span class=symbol>S h</span><sub>j</sub> <span class=symbol>g</span><sub>  AB</sub>(h<sub>j</sub>) + <span class=symbol>m</span><sub>1</sub> </p>
+
+</td>
+<td valign="middle" align="right"><p>(3)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>This expression depends solely on the variogram models <span class=symbol>g</span><sub> A</sub> , <span class=symbol>g</span><sub> B</sub> and <span class=symbol>g</span><sub> AB</sub> and on the geometric layout of the sampled points (the sampling scheme) in both map A and map B.</p>
+
+<p>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note:</span> When the <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distance</a> option is used, the length of all lag vectors (<i>h</i>) are calculated over the sphere using the projection of the coordinate system that is used by the georeference of the output raster map. </p>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>	Deutsch, C.V., and A.G. Journel. 1992. Geostatistical software library and user's guide. Oxford University Press, New York. 340 pp.</li>
+
+<li>	Isaaks, E. H., and R. M. Srivastava. 1989. An introduction to applied Geostatistics. Oxford University Press, New York. 561 pp.</li>
+
+<li>	Meer, F. D. van der. 1993. Introduction to geostatistics. ITC Lecture Notes. 72 pp.</li>
+
+<li>	Pebesma, E.J. 1996. Mapping Groundwater Quality in the Netherlands. KNAG/Faculteit Ruimtelijke Wetenschappen, Utrecht University. 128 pp.</li>
+
+<li>	Stein, A. and Corsten, L.C.A. 1991. Universal Kriging and CoKriging as a Regression Procedure. Biometrics June 1991. 13 pp.</li>
+
+<li>	Stein, A. 1998. Spatial statistics for soils and the environment. ITC lecture notes. 47 pp.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cokriging_functionality.htm">CoKriging : functionality</a></p>
+
+<p class=seealsolinks><a href="kriging_algorithm.htm">Kriging : algorithm</a></p>
+
+</body

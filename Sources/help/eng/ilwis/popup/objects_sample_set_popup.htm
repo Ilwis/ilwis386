@@ -1,0 +1,44 @@
+<html>
+
+<head>
+<title>objects-sample set popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Sample set&nbsp;&nbsp;&nbsp;<img src="../../images/sample.gif" align=bottom width="16" height="12"></p>
+
+<p>Prior to an image <a href="..//ilwisapp/classify.htm" onClick="return popup(this, 'notes')" >classification</a>, sample pixels or training pixels have to be selected in a <a href="..//ilwis/ilwis_objects_sample_sets.htm" onClick="return popup(this, 'notes')" >sample set</a>. To create a sample set, first a map list and a domain have to be specified. Then, with <a href="../../ilwisapp/popup/sample_popup.htm">sampling</a>, assign <b>class names</b> to groups of pixels that are supposed to represent a known feature on the ground and that have similar spectral values in the maps in the map list. </p>
+
+<p class=linespacing03before>A sample set contains:</p>
+
+<ul>
+
+<li>	a reference to a <a href="objects_map_list_popup.htm">map list</a>, that is the set of images you want to classify in a later stage. The spectral values of the images in the map list, at  the position of the training pixels provide the basis on which decisions are made in the classification. During sampling, these values can be inspected in the sample statistics of a certain class of training pixels, and  can be visualized in feature spaces;</li>
+
+<li>	a reference to a class <a href="objects_domains_ilwobj_popup.htm">domain</a>, that is the collection of class names that you want to assign to your training pixels and that are the classes that you want to obtain from the classification. The representation of this domain determines in which colors the training pixels are displayed during sampling; </li>
+
+<li>	a reference to a raster map which is automatically created and obtains the same name as the sample set. This so-called sample map contains the locations of the training pixels and the class names assigned to them.</li>
+
+</ul>
+
+<p class=linespacing03before>When your graphics board is configured to use 256 colors, you can locate your training pixels on a background map, for instance a <a href="../../ilwisapp/popup/color_composite_popup.htm">color composite</a>. In case your graphics board is configured to use more than 256 colors, you will use an <a href="../../ilwisapp/popup/show_map_list_as_color_composite_popup.htm">interactive color composite</a>; then, a background map is not used.</p>
+
+</body

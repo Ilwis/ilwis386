@@ -1,0 +1,30 @@
+<html>
+
+<head>
+<title>sample set editor popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Sample set editor</p>
+
+<p>In the <a href="..//ilwis/sample_set_editor_functionality1.htm" onClick="return popup(this, 'notes')" >sample set editor</a> you can select sample pixels also called training pixels for certain classes prior to an image <a href="../../ilwisapp/popup/classify_popup.htm">classification</a>. In the sample set editor, the process of assigning class names to groups of pixels with similar spectral values and that are supposed to represent the classes that you want to obtain from the classification is called <a href="../../ilwisapp/popup/sample_popup.htm">sampling</a>.</p>
+
+</body

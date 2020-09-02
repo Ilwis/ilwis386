@@ -1,0 +1,360 @@
+<html>
+
+<head>
+<title>Insert/Edit North arrow in layout</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="North arrow, Layout editor, Layouts, Add ..., Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert/Edit North Arrow</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Insert or edit a <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >North arrow</a> for a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in your <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>.</p>
+
+<p class=defnewpar>The scale bar that will be created is based on the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> used by the raster map in the selected map view; or if the map view does not contain a raster map, by the georeference of the map view itself. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Arrow type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the type of North arrow you wish to obtain (see examples below).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Simple:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose this option button to obtain a North arrow in the shape of a straightforward arrow. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Cross:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose this option button to obtain a North arrow in the shape of a cross/plus sign. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Wing:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose this option button to obtain a North arrow in the shape of a wing. </p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Compass:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Choose this option button to obtain a North arrow in the shape of a compass-card; also choose whether the compass-card should point to 4, 8 or 16 directions.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Half:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For a Simple North Arrow: select this check box if you wish to obtain only half an arrow head. </p>
+
+<p class=diabox>For a Wing North Arrow: select this check box if you wish to obtain half of the wing in white and the other half of the wing in the selected color. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Circle:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you wish to obtain an extra circle in or around your North arrow. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Width (mm):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of a 'simple' or a 'cross' North arrow, specify the line width (mm) of the main part of the North arrow. Value 0 means that the North arrow will be drawn and printed as fine as possible (hairline). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the North arrow and optional accompanying text. To create your own color, select 'Custom' at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>; the Windows <a href="custom_colors.htm">Color</a> dialog box will appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Text:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you wish to obtain additional text for your North arrow such as N, S, E, W. </p>
+
+<p class=diabox>Clear this check box if you wish no text at all for the North arrow. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>All sides:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you wish to obtain text on all sides of the North arrow, i.e. N, S or N, S, E, W. </p>
+
+<p class=diabox>Clear this check box if you only wish to obtain the letter N for North.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the <a href="..//ilwis/popup/font_popup.htm" onClick="return popup(this, 'notes')" >font</a> in which additional text for the North arrow should appear; you can select an installed font from the list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the font size (pt) in which additional text for the North arrow should appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Bold:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have additional text for the North arrow appear in <b>bold</b>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Italic:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have additional text for the North arrow appear in <i>italics</i>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Examples:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/north1.gif" align=top width="22" height="63"></p>
+
+</td>
+<td width=15>
+
+</td>
+<td valign="top" width=22>
+<p><img src="../images/north2.gif" align=top width="22" height="63"></p>
+
+</td>
+<td width=20>
+
+</td>
+<td valign="top" width=18>
+<p><img src="../images/north3.gif" align=top width="18" height="61"></p>
+
+</td>
+<td width=20>
+
+</td>
+<td valign="top" width=50>
+<p><img src="../images/north4.gif" align=top width="50" height="62"></p>
+
+</td>
+<td width=10>
+
+</td>
+<td valign="top" width=75>
+<p><img src="../images/north5.gif" align=top width="75" height="78"></p>
+
+</td>
+</tr>
+<tr>
+<td>
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" align=center>
+1
+
+</td>
+<td width=15>
+
+</td>
+<td valign="top" align=center>
+2
+
+</td>
+<td width=20>
+
+</td>
+<td valign="top" align=center>
+3
+
+</td>
+<td width=20>
+
+</td>
+<td valign="top" align=center>
+4
+
+</td>
+<td width=10>
+
+</td>
+<td valign="top" align=center>
+&nbsp;5
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=64>
+<p>Arrow 1:</p>
+
+</td>
+<td valign="top">
+<p>Simple North arrow with text.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Arrow 2:</p>
+
+</td>
+<td valign="top">
+<p>Cross North arrow with text.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Arrow 3:</p>
+
+</td>
+<td valign="top">
+<p>Wing North arrow, half, with text.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Arrow 4:</p>
+
+</td>
+<td valign="top">
+<p>Wing North arrow with circle and text.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Arrow 5:</p>
+
+</td>
+<td valign="top">
+<p>Compass North arrow, 8 headed, with text on all sides.</p>
+
+</td>
+</tr>
+</table>
+
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	In the Layout editor, a North arrow can be sized by <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> one of the corner <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of a North arrow to a new position. The mouse pointer changes into a double-sided arrow when at the right position to start dragging. The North arrow itself will be automatically adapted to the new size; you have to specify a new font size for accompanying text yourself. </li>
+
+<li>	To store annotation, you need to save the layout. Open the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a> and choose the <span class=arial><a href="../ilwismen/layout_editor_save_layout.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/layout_editor_save_layout_as.htm">Save As</a></span> command. You can also click in the white space of your layout, and click the <span class=arial>Save</span> button in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+</body

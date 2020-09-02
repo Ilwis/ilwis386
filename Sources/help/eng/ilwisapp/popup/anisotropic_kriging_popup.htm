@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>Anisotropic kriging popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Anisotropic Kriging</p>
+
+<p class=linespacing03after><a href="..//ilwisapp/anisotropic_kriging.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a> can be seen as a <a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" >point interpolation</a>, which requires a point map as input and which returns a raster map with estimations and optionally an error map. Anisotropic Kriging is a variant of the Ordinary <a href="../../ilwisapp/popup/kriging_popup.htm">Kriging</a> operation: Anisotropic Kriging incorporates the influence of direction dependency.</p>
+
+<p class=linespacing03after>Before Anisotropic Kriging, you should investigate the direction of anisotropy for instance with <a href="../../ilwisapp/popup/variogram_surface_popup.htm">Variogram Surface</a>, the semi-variogram values in two directions for instance with <a href="../../ilwisapp/popup/spatial_correlation_popup.htm">Spatial Correlation</a>, and determine the range of the semi-variogram values in two directions by preparing semi-variogram models in a graph window (<a href="..//ilwismen/graph_window_add_semivariogram_model.htm" onClick="return popup(this, 'notes')" >Graph window : Add semi-variogram model</a>).</p>
+
+</body

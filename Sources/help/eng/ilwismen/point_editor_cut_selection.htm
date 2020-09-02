@@ -1,0 +1,97 @@
+<html>
+
+<head>
+<title>Point editor : Cut</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point editor, Cut selection">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Point editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/point_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Cut</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar><i>Copy</i> selected points with their coordinates and class names, identifiers or values to the clipboard, and then <i>delete</i> the selected points from the current point map. </p>
+
+<p class=defnewpar>Subsequently, the copied points can be pasted as points into another <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >point editor</a>, as one segment into a <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >segment editor</a>, and/or into any other application which uses the <i>text</i> format (e.g. a word processor or a data base).</p>
+
+<p class=kopje>To cut:</p>
+
+<p>Select one or more points, and: </p>
+
+<ul>
+
+        <li>choose <span class=arial>Cut</span> from the <span class=arial>Edit</span> menu, or</li>
+
+        <li>press <span class=arial>Ctrl+X</span> on the keyboard.</li>
+
+</ul>
+
+<p class=defnewpar>For more information on selecting points, see <a href="point_editor_select_mode.htm">Select Mode</a>.</p>
+
+<p class=defnewpar>A message box will appear asking you to confirm the deletion of the selected points. Answer with:</p>
+
+<ul>
+
+<li>	<span class=courier>yes</span>: to delete the selection;</li>
+
+<li>	<span class=courier>no</span>: to not delete the selected points. </li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To recover points which were accidentally deleted, you can use: </li>
+
+        <ul class=tipul>
+
+        <li><a href="point_editor_undo_all_changes.htm">Undo all changes</a>: to restore all changes made in the point editor until the last time you used <a href="point_editor_save.htm">Save</a>. </li>
+
+        </ul>
+
+<li>You can use Windows' Clipboard/Clipbook Viewer to inspect the copied points on the clipboard in <i>text</i> format. For more information on the Clipboard Viewer, see the Windows Help.</li>
+
+<li>An example of points copied to the clipboard is presented in <a href="point_editor_copy_selection.htm">Point editor : Copy</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_menu_commands.htm">Point editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/point_editor_select_mode.htm">Point editor : Select Mode</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/point_editor_paste_selection.htm">Point editor : Paste</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_paste_selection.htm">Segment editor : Paste</a></p>
+
+</body

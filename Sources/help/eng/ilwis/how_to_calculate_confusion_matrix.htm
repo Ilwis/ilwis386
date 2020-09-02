@@ -1,0 +1,145 @@
+<html>
+
+<head>
+<title>How to calculate confusion matrix</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Confusion matrix, Calculate ..., Post classification">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to calculate </h1>
+
+<h1 class=secondline>a confusion matrix</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To assess the accuracy of an image classification, it is common practice to create a confusion matrix. In a confusion matrix, your classification results are compared to additional ground truth information. The strength of a confusion matrix is that it identifies the nature of classification errors, as well as their quantities.</p>
+
+<p class=kopje>To obtain a confusion matrix:</p>
+
+<ol>
+
+<li class=ls01be>	Have the output raster map of your image classification available; check the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> of the classified image to know which domain and georeference are used by the classified image.</li>
+
+<li class=ls01be>	Create a raster map which contains additional ground truth information, such a map is also known as the test set. There are several ways to create a test set, these are shortly described here; at the end of this topic you will find more details of creating a test set.</li>
+
+        <ul>
+
+        <li>	Create a new raster map with the same domain and georeference as the classified image, and add some test pixels to this map yourself with the pixel editor while using an existing map as a background (for instance a land use map),</li>
+
+        <li>	Use an existing, recent and reliable raster map with the same domain and georeference as the classified image directly as a test set.</li>
+
+        <li>	Use half of your ground truth data for the sample set before classification, and use the other half of your ground truth data for creating a test set. </li>
+
+        </ul>
+
+<p class=leftmargininlist>	Make sure that the ground truth/test set raster map does not contain the same pixels as the sample set raster map from the training phase. Your accuracy assessment will show too optimistic figures when the pixels in the sample set (on which the classification is based) are also used in the test set (with which the classification results are checked).</p>
+
+<li class=ls01be>	Perform a <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a> operation with your ground truth map and the classified image to obtain a cross table. </li>
+
+<p class=leftmargininlist01be>	To start the Cross operation:</p>
+
+        <ul>
+
+        <li>	from the Operations menu in the Main window, select <span class=arial>Raster Operations</span> and then the <span class=arial>Cross</span> command, or</li>
+
+        <li>	double-click the Cross item in the Operation-list, or</li>
+
+        <li>	use the right mouse button on your test set raster map in the Catalog and from the context-sensitive menu select <span class=arial>Raster Operations</span> and <span class=arial>Cross</span>.</li>
+
+        </ul>
+
+        <p class=leftmargininlist01be>	In the <a href="../ilwisapp/cross_dialogbox.htm">Cross</a> dialog box:</p>
+        
+        <ul>
+
+        <li>	for <span class=arial>First Map</span>, select the test set map, </li>
+
+        <li>	accept the default selection of the <span class=arial>Ignore Undefs</span> check box for the first map,</li>
+
+        <li>	for <span class=arial>Second Map</span>, select the classified image, </li>
+
+        <li>	clear the <span class=arial>Ignore Undefs</span> check box for the second map,</li>
+
+        <li>	type a name for the output cross table, and </li>
+
+        <li>	select the <span class=arial>Show</span> check box to directly display the output cross table in a table window.</li>
+
+        </ul>
+
+<li  class=ls01be>	In the table window displaying the cross table, open the View menu and choose <span class=arial>Confusion matrix</span>.</li>
+
+        <p class=leftmargininlist01be>	In the <a href="../ilwismen/confusion_matrix.htm">Confusion matrix</a> dialog box:</p>
+
+        <ul>
+
+        <li>	for <span class=arial>First Column</span>, select the test set column in the table, </li>
+
+        <li>	for <span class=arial>Second Column</span>, select the classified image column in the table,</li>
+
+        <li>	for <span class=arial>Frequency</span>, select the <span class=courier>NPix</span> column in the table. </li>
+
+        </ul>
+
+</ol>
+
+<p class=defnewpar>When you click OK, the confusion matrix is displayed in a matrix window. </p>
+
+<p class=defnewpar>For more information on the interpretation of a confusion matrix, refer to <a href="../ilwismen/confusion_matrix.htm">Table window : Confusion matrix</a>.</p>
+
+<p class=kopje>Additional information to create a test set:</p>
+
+<ol>
+
+<li>	Creating a test set yourself with the pixel editor using a background map:</li>
+
+        <ul>
+
+        <li>	Check the domain and georeference of the classified image in the Properties dialog box of the image. Check the georeference of the background map which can be for instance an existing land use map. If the background map does not have the same georeference as your classified image, you can use the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation to resample the existing map to the georeference of the classified image.</li>
+
+        <li>	Display the background raster map in a map window. </li>
+
+        <li>	From the File menu in the map window, choose the <span class=arial>Create Raster Map</span> command to create an empty ground truth map. In the Create Raster Map dialog box: type a new name for the ground truth map; accept the georeference of the classified image; and select the same domain as used by the classified image,</li>
+
+        <li>	The pixel editor is opened automatically; the background map is displayed. When you zoom in, you can start selecting and giving names to pixels in your ground truth map. </li>
+
+        </ul>
+
+<li>	Using an existing raster map or polygon map of the area: <br>When you have a recent and reliable polygon or raster map of the area, you can directly use this map as the ground truth map. </li>
+
+        <ul>
+
+        <li>If the map does not have the same domain as the classified image, you can first add a column (with the domain of the classified image) to the <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> of the map, assign a class to each class in the map and create an attribute map. </li>        
+
+        <li>If the map does not have the same georeference as the classified image, you can first either <a href="..//ilwisapp/popup/polygons_to_raster_popup.htm" onClick="return popup(this, 'notes')" >rasterize</a> the polygon map on the georeference of the image, or <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >resample</a> the raster map to the georeference of the image. </li>
+
+        <li>Then, cross the raster map with the classified image. </li>
+
+        </ul>        
+
+<li>	When you have collected ground truth data in the field, a calculation-wise correct method is to use half of these data for the sample set, and the other half for the test set. </li>
+
+</ol>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/confusion_matrix.htm">Table window : Confusion matrix</a></p>
+
+</body

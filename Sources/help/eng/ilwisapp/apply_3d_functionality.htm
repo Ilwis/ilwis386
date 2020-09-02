@@ -1,0 +1,89 @@
+<html>
+
+<head>
+<title>Apply 3D : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Apply 3D">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Apply 3D</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Apply 3D operation resamples an input raster map according to a georeference 3D. This enables you to permanently and quickly display the output raster map in three dimensions, i.e. as a 3D view. </p>
+
+<p class=defnewpar>To create a georeference 3D, you need a Digital Elevation Model (DEM) and you have to specify 3D view parameters in the georeference 3D editor. For more information, see <a href="../ilwis/georeference_3d_editor_functionality.htm">Georeference 3D editor</a>.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	In <a href="..//ilwisapp/popup/display3d_popup.htm" onClick="return popup(this, 'notes')" >Display 3D</a>, the georeference 3D can be used to drape a raster map over your height model, but in Apply 3D, an input raster map is resampled according to the georeference 3D. The resampled output map will then always appear in a map window as a 3D view.</li>
+
+<li>	In Display 3D, the calculations to drape a raster map over your height model are performed on the fly and display may therefore be slow, but the resampled output raster map of Apply 3D can be efficiently displayed in a map window as no more complicated 3D calculations have to performed; these are handled by the Apply 3D operation.</li>
+
+</ul>
+
+<p class=defnewpar>The functionality of the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> and the Apply 3D operations are comparable. With the Resample operation, you can resample a raster map to any georeference. The Apply 3D operation is designed to resample a raster map to a georeference 3D but the resampling process has the same result as using the Resample operation. </p>
+
+<p class=defnewpar>When the output raster map of Apply 3D is displayed in a map window, you can add extra point, segment and polygon maps to enhance the 3D view. As usual, you can save the contents of the map window a map view.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special requirements for the input raster map. Further, a georeference 3D is required which you can create and modify according to your wishes with <a href="..//ilwisapp/popup/display3d_popup.htm" onClick="return popup(this, 'notes')" >Display 3D</a> or Apply 3D and the Georeference 3D editor.</p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output raster map uses the same domain as the input raster map.</p>
+
+<p>The output raster map uses the georeference 3D as specified by the user.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext> To obtain rotating 3D views in a map window:</p>
+
+<ul class=tipul>
+
+<li> prepare a number of 3D views (georeferences 3D) that depict the same area but for instance from different angles, </li>
+
+<li> perform the Apply 3D operation a number of times on one input map, using the various georeferences 3D and specifying different output map names,</li>
+
+<li> combine the output maps in a map list and show the map list as a slide show. </li>
+
+</ul>
+
+<p class=tiptext> For more information on slide shows, see <a href="../ilwis/how_to_display_a_map_list_as_a_slide_show.htm">How to display a map list as a slide show</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="apply_3d_dialog_box.htm">Apply 3D : dialog box</a></p>
+
+<p class=seealsolinks><a href="apply_3d_command_line.htm">Apply 3D : command line</a></p>
+
+<p class=seealsolinks><a href="apply_3d_algorithm.htm">Apply 3D : algorithm</a></p>
+
+<p class=seealsolinks><a href="display_3d.htm">Display 3D</a></p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_3d_editor_functionality.htm">Georeference 3D editor</a></p>
+
+</body

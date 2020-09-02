@@ -1,0 +1,113 @@
+<html>
+
+<head>
+<title>How to run scripts</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Scripts, Run ..., How to run scripts">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to run scripts</h1>
+
+<!--<hr>-->
+<p class=defnewpar>In a script you can type map names, table names and column names directly in the
+expressions, but you can also use parameters that replace (parts of) object
+names, operations, etc. The procedure to run a script with parameters is
+different from the one without parameters.</p>
+
+<p class=kopje>To run a script without parameters:</p>
+<ul>
+<li>In the Catalog, select a script with the right mouse button and choose <span class=arial>Run</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or</li>
+<li>in the Operation-tree, expand the <span class=arial>Script</span>  item and double-click your script, or</li>
+<li>in the Script editor, press the <img src="../images/run.gif" alt="Run Script" align=bottom width="22" height="22"> <span class=arial>Run Script</span> button, or</li>
+<li>in the Script editor, open the <a href="script_editor_menu_commands.htm"> File menu</a> and
+  select the <span class=arial>Run Script</span> command, or</li>
+<li>type on the command line of the Main window: <span class=courier>run </span><i>scriptname</i></li>
+</ul>
+
+<p class=linespacing03before>The script will be executed immediately.</p>
+
+<p class=kopje>To run a script with parameters:</p>
+<ul>
+<li>In the Catalog, select a script with the right mouse button and choose <span class=arial>Run</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or</li>
+<li>in the Operation-tree, expand the <span class=arial>Script</span>  item and double-click your script, or</li>
+<li>in the script editor, press the <img src="../images/run.gif" alt="Run Script" align=bottom width="22" height="22"> <span class=arial>Run Script</span> button, or </li>
+<li>in the script editor, open the <a href="script_editor_menu_commands.htm"> File menu</a> and select the <span class=arial>Run Script</span> command, or</li>
+<li>type on the command line of the Main window: <span class=courier>run </span><i>scriptname&nbsp;</i></li>
+</ul>
+
+<p class=linespacing03before>The <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box will appear.</p>
+<p class=defnewpar>In the Run Script dialog box, all parameter names are listed as specified on the <a href="script_editor_functionality.htm#parameters_tab"> Parameters tab</a> of the script editor.</p>
+
+<ul>
+<li>If you did not specify default objects on the <a href="script_editor_functionality.htm#default_values_tab">Default Values tab</a> you will need to select objects for input parameters and/or type object names for output parameters.</li>
+<li>If you did fill out objects on the Default Values tab, the Run Script dialog box will already be filled out with these defaults.</li>
+</ul>
+<p>When the OK button is clicked and when all parameters are correctly specified, the script will be executed.</p>
+
+<p class=defnewpar>You can create your own Help for a script so that you can
+explain the meaning of parameters to other users of the script. For more
+information, see the <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box.</p>
+
+<p class=kopje>To skip the Run Script dialog box: </p>
+<p>Type on the command line of the Main window: </p>
+<ul>
+<p class=linesp01befafter><span class=courier>run </span><i>scriptname parameter parameter</i></p>
+</ul>
+
+<p class=defnewpar>where: </p>
+<table border="0"> 
+  <tr>
+    <td width="75" valign="top"><i>scriptname</i></td>
+    <td>is the name of your script</td>
+  </tr>
+  <tr>
+    <td width="75" valign="top"><i>parameter</i></td>
+    <td>is the name of an ILWIS input object, or an output object, as <i>objectname.ext</i></td>
+  </tr>
+</table>
+
+<p class=defnewpar>When all parameters are correctly filled out on the command line, the Run Script dialog box will not appear, and the script will 
+be executed immediately: </p>
+
+<ul>
+<li>the first string found after the script name will replace %1 in the script, </li>
+<li>the second string will replace %2, etc.</li>
+</ul>
+
+<p class="tip">Notes:</p>
+<ul class="tipul">
+
+<li>It is not advised to use this method, because you have to remember
+exactly what objects need to be specified for which parameters on the command line. </li>
+
+<li>To run a script with parameters from the command line, and when you wish to use long object names as parameters for the script, then you must use single quotes around the object names, excluding the <i>.ext</i> extensions. 
+	For more information, see 
+<a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a> or <a href="how_to_use_long_object_names.htm">How to use long object names</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a></p>
+<p class=seealsolinks><a href="ilwis_objects_scripts.htm">ILWIS objects : scripts</a></p>
+<p class=seealsolinks><a href="script_editor_functionality.htm">Script editor : functionality</a></p>
+<p class=seealsolinks><a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a></p>
+
+</body

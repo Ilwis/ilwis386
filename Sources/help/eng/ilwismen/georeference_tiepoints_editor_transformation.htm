@@ -1,0 +1,129 @@
+<html>
+
+<head>
+<title>Georef Tiepoints editor : Transformation</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Georeference Tiepoints editor, Tiepoint editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Georeference Tiepoints editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Transformation</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__georeference_tiepoints_editor_edit_menu_sec2.Click()>Edit  menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>When editing a georeference tiepoints, select the transformation method with which the relation between Row and Column values and the XY-coordinates of your tiepoints should be calculated.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<p>Select one of the transformation methods:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Conformal:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Plane, minimum of 2 tiepoints required;</p>
+
+<p class=diabox>Xout = aX + bY + c<sub>1</sub>  </p>
+
+<p class=diabox>Yout = bX - aY + c<sub>2</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Affine:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Plane; recommended; minimum of 3 tiepoints required;</p>
+
+<p class=diabox>Xout = a<sub>11</sub>X + a<sub>12</sub>Y + b<sub>1</sub></p>
+
+<p class=diabox>Yout = a<sub>12</sub>X + a<sub>22</sub>Y + b<sub>2</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Second order bilinear:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Second degree linear surface; minimum of 4 tiepoints required;</p>
+
+<p class=diabox>Xout = a<sub>1</sub> + b<sub>1</sub>X + c<sub>1</sub>Y + d<sub>1</sub>XY</p>
+
+<p class=diabox>Yout = a<sub>2</sub> + b<sub>2</sub>X + c<sub>2</sub>Y + d<sub>2</sub>XY</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Full second order:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Full second degree polynomial surface; minimum of 6 tiepoints required;</p>
+
+<p class=diabox>Xout = a<sub>1</sub> + b<sub>1</sub>X + c<sub>1</sub>Y + d<sub>1</sub>XY + e<sub>1</sub>X<sup>2</sup> + f<sub>1</sub>Y<sup>2</sup></p>
+
+<p class=diabox>Yout = a<sub>2</sub> + b<sub>2</sub>X + c<sub>2</sub>Y + d<sub>2</sub>XY + e<sub>2</sub>X<sup>2</sup> + f<sub>2</sub>Y<sup>2</sup></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Third order:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Third degree polynomial surface; minimum of 10 tiepoints required;</p>
+
+<p class=diabox>Xout = a<sub>1</sub> + b<sub>1</sub>X + c<sub>1</sub>Y + d<sub>1</sub>XY + e<sub>1</sub>X<sup>2</sup> + f<sub>1</sub>Y<sup>2</sup> + g<sub>1</sub> X<sup>3</sup> + h<sub>1</sub> X<sup>2</sup>Y + i<sub>1</sub>XY<sup>2</sup> + j<sub>1</sub> Y<sup>3</sup></p>
+
+<p class=diabox>Yout = a<sub>2</sub> + b<sub>2</sub>X + c<sub>2</sub>Y + d<sub>2</sub>XY + e<sub>2</sub>X<sup>2</sup> + f<sub>2</sub>Y<sup>2</sup> + g<sub>2</sub> X<sup>3</sup> + h<sub>2</sub> X<sup>2</sup>Y + i<sub>2</sub>XY<sup>2</sup> + j<sub>2</sub> Y<sup>3</sup></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Projective:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Recommended for oblique vector maps; minimum of 4 tiepoints required;</p>
+
+<p class=diabox>Xout = (aX + bY + c) / (gX + hY +1)</p>
+
+<p class=diabox>Yout = (dX + eY + f) / (gX + hY + 1)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The transformation method and calculated sigma are visible at the top of the tiepoints table.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>For each transformation method, a certain number of tiepoints is mathematically required. It is advised to always add more tiepoints than the absolute minimum number required. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor : functionality</a></p>
+
+</body

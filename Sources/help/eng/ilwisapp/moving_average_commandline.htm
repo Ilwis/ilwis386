@@ -1,0 +1,251 @@
+<html>
+
+<head>
+<title>Moving average : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Moving average, MapMovingAverage">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Moving average</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/moving_average_popup.htm" onClick="return popup(this, 'notes')" >Moving Average</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapMovingAverage</span>(InputPointMap, Georeference, <i>WeightFunction</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapMovingAverage</span>(InputPointMap, Georeference, <i>WeightFunction</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapMovingAverage</span>(InputPointMap.Column, Georeference, <i>WeightFunction</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapMovingAverage</span>(InputPointMap.Column, Georeference, <i>WeightFunction</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapMovingAverage</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Moving Average operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPointMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPointMap.Column</p>
+
+</td>
+<td valign="top">
+<p>is the name of an input point map with a class or ID domain which has a <i>linked</i> attribute table, and the name of a value column in this attribute table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Georeference</p>
+
+</td>
+<td valign="top">
+<p>is the name of an existing georeference for the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>WeightFunction</i></p>
+
+</td>
+<td valign="top">
+<p>is an expressing which defines the type of weight function to be used, as:</p>
+
+<p class=courier>InvDist(<i>Exp,LimDist</i>)</p>
+
+<p class=courier>Linear(<i>Exp,LimDist</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>InvDist</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to indicate the use of the inverse distance method.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>Linear</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to indicate the use of the linear decrease method.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>Exp</i></p>
+
+</td>
+<td valign="top">
+<p>is a value for weight exponent <i>n</i> to be used in the specified weight function (real value, usually a value close to 1.0).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>LimDist</i></p>
+
+</td>
+<td valign="top">
+<p>is a value for the <a href="..//ilwisapp/sec/point_interpolation_limiting_distance_sec.htm" onClick="return popup(this, 'notes')" >limiting distance</a>: points that are farther away from an output pixel than the limiting distance obtain weight zero.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><span class=courier>plane</span> | <span class=courier>sphere</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >sphere</a> by using the projection of the coordinate system as used by the georeference of the output raster map (<span class=courier>sphere</span>). If not specified, distances will be calculated in a plane. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Example:</p>
+
+<p>A full expression for the Moving Average operation, using weights according to the inverse distance method, a weight exponent 1, and a limiting distance of 500 m. might thus read:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=courier>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=courier>=</p>
+
+</td>
+<td valign="top">
+<p class=courier>MapMovingAverage(MapX, GeorefX, InvDist(1,500))</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also: </p>
+
+<p class=seealsolinks><a href="point_interpolation.htm">Point interpolation</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/moving_average_functionality.htm">Moving average : functionality</a></p>
+
+<p class=seealsolinks><a href="moving_average_algorithm.htm">Moving average : algorithm</a></p>
+
+</body

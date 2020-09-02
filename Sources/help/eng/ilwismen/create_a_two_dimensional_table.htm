@@ -1,0 +1,139 @@
+<html>
+
+<head>
+<title>Create a two-dimensional table</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Two-dimensional tables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a two-dimensional table</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_table2dim_popup.htm" onClick="return popup(this, 'notes')" >two-dimensional table</a> is used to combine or reclassify two raster maps or columns which use a class or ID domain. The domains of these two maps or columns are the <i>two input domains</i> for the two-dimensional table. </p>
+
+<p class=defnewpar>The two maps or columns can be reclassified to another class, ID or value domain. This is firstly determined by the <i>output domain</i> of the two-dimensional table, and secondly by the class names, IDs or values which you need to assign to each field in the two-dimensional table. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> of the Main window, you choose the <span class=arial>Create 2 Dimensional Table</span> command, or</li>
+
+<li>	when you double-click the <span class=arial>New 2DimTbl</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Table name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a new name for the two-dimensional table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the two-dimensional table. The description of the table appears in the title bar when the table is displayed. Further, the description is visible on the status bar of the Main window when moving the mouse pointer over the table in the Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Primary Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing class or ID domain, i.e. the domain of the first map or column which you wish to reclassify. The classes or IDs of this domain will appear as <i>rows</i> in the table. </p>
+
+<!-- or create a new class/ID domain with the create button <img src="../images/crea.gif" align=bottom width="17" height="22">-->
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Secondary Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing class or ID domain, i.e. the domain of second map or column which you wish to reclassify. The classes or IDs of this domain will appear as <i>columns</i> in the table.</p>
+
+<!-- or create a new class/ID domain with the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> -->
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select or <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> <img src="../images/crea.gif" align=bottom width="17" height="22"> a domain for the fields in the table. 
+
+The output domain selected here and the values of the fields in the two-dimensional table, which you have to fill out yourself, will determine the values in the output map when applying the two-dimensional table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1><a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >Value Range</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If you you selected a value domain for the fields in the two-dimensional table, type the minimum and maximum value that you want to be able to enter in the fields of the two-dimensional table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1><a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >Precision</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If you selected a value domain for the fields in the two-dimensional table, type a value to define the number of decimals that you can use in the fields of the two-dimensional table.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>After clicking the OK button, the two-dimensional table appears in a table window. </p>
+
+<p class=defnewpar>In the table window, you will see <i>rows</i> which represent the first input domain, and <i>columns</i> which represent the second input domain. In the two-dimensional table, you have to define a value, class name or ID for each possible combination of input classes or IDs. </p>
+
+<p class=defnewpar>When you finished editing a two-dimensional table, you have to apply it on the input maps by typing an expression on the command line of the Main window. For more information, see <a href="../ilwis/calc_classifying_two_maps_with_a_two_dimensional_table.htm">Map calculation : classifying two maps according to a two-dimensional table</a>.</p>
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_two_dimensional_tables.htm">ILWIS objects : two-dimensional tables</a></p>
+
+<p class=seealsolinks><a href="../ilwis/calc_classifying_two_maps_with_a_two_dimensional_table.htm">Map calculation : classfying maps according to a two-dimensional table</a></p>
+
+</body

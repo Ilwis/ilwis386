@@ -1,0 +1,56 @@
+<html>
+
+<head>
+<title>Correlation matrix : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Correlation matrix">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Correlation matrix</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Correlation matrix operation calculates correlation coefficients of the raster maps in a map list. Correlation coefficients characterize the distribution of pixel values in two raster maps. Furthermore, the mean and standard deviation of each individual raster map is calculated. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Map list:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input map list (open the list box and select the desired map list, or drag a map list from the Catalog into this list box) or create a new map list by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. All raster maps in the map list must use the <span class=courier>Image</span> domain or the same value domain and must have the same georeference.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>OK</b> button, the correlation matrix is defined, calculated and shown. The matrix is not stored as a separate object, but the matrix values are stored in the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the map list (.MPL). To show the matrix once more after you have closed the matrix window, you have to perform the operation again.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="correlation_matrix_functionality.htm">Correlation matrix : functionality</a></p>
+
+</body

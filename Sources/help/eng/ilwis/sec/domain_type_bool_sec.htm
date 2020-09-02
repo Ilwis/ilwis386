@@ -1,0 +1,54 @@
+<html>
+
+<head>
+<title>Domain type : Bool</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Domain type Bool</p>
+
+<p class=linespacing03after>Bool domains can only contain boolean values 1 (True), 0 (False) and undefined. Domain type Bool can be used for raster, polygon, segment and point maps and for columns which contains this type of values. You can use a Bool domain for instance to quickly discriminate whether a certain condition is true or not in any map, see the example below. </p>
+
+<p>Bool domains are available as:</p>
+
+<ul>
+
+<li>	<a href="../popup/yy_system_domain_bool_popup.htm">system domain <span class=courier>Bool</a></span>,</li>
+
+<li>	<a href="../popup/yy_system_domain_yesno_popup.htm">system domain <span class=courier>YesNo</a></span>.</li>
+
+</ul>
+
+<p class=linespacing03before>You can also create your own Bool domains, for instance containing &quot;Suitable&quot; and &quot;Not Suitable&quot;. </p>
+
+<p class=defnewpar>Boolean domains have no representation: you have to select colors for True and False values each time you display a map with a Bool domain in the map's <span class=arial>Display Options</span> dialog box. The default colors for True and False can be set through the <a href="..//ilwismen/main_window_preferences.htm" onClick="return popup(this, 'notes')" >Preferences</a> in the Main window. </p>
+
+<p class=kopje>Example:</p>
+
+<p>To find all areas with forest in a land use map, type the following MapCalc statement and accept the <span class=courier>Bool</span> domain:</p>
+
+<p class=calc0>OUT = Landuse = &quot;Forest&quot;</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</a></p>
+
+</body

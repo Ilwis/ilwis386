@@ -1,0 +1,199 @@
+<html>
+
+<head>
+<title>COSH</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="COSH, Hyperbolic functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>COSH( ) function</h1>
+
+<p class=defnewpar>Returns the hyperbolic cosine of an angle.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>COSH</span>(<i>Value</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>Value</i></td>
+	<td valign="top">is the angle specified in radians</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>COSH</span> returns:</td>
+	<td valign="top">a real value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain
+      Value</a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The formula for the hyperbolic cosine is COSH(a)=(e<sup>a</sup>+e<sup>-a</sup>)/2</li>
+	<li>Hyperbolic functions are related to a hyperbole (x<sup>2</sup>-y<sup>2</sup>=r<sup>2</sup>), in the same way as trigonometric functions are related to a circle (x<sup>2</sup>+y<sup>2</sup>=r<sup>2</sup>).</li>
+	<li>When the input value is undefined, the output value will also be undefined.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="80"><p class=calc00>? COSH(4)</p></td>
+	<td><p>returns 27.308</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>OutMap = COSH(InMap)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>2.0</td>
+    <td class=calcpict>1.0</td>
+    <td class=calcpict>0.5</td>
+  </tr>
+  <tr>
+    <td class=calcpict>0.2</td>
+    <td class=calcpict>0.3</td>
+    <td class=calcpict>-1.0</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>-0.4</td>
+    <td class=calcpict>-0.1</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>3.762</td>
+    <td class=calcpict>1.543</td>
+    <td class=calcpict>1.128</td>
+  </tr>
+  <tr>
+    <td class=calcpict>1.020</td>
+    <td class=calcpict>1.045</td>
+    <td class=calcpict>1.543</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>1.081</td>
+    <td class=calcpict>1.005</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = COSH(InCol)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2.0</p></td>
+	<td valign="top"><p class=t1r>3.762</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1.0</p></td>
+	<td valign="top"><p class=t1r>1.543</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.5</p></td>
+	<td valign="top"><p class=t1r>1.128</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.2</p></td>
+	<td valign="top"><p class=t1r>1.020</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.3</p></td>
+	<td valign="top"><p class=t1r>1.045</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-1.0</p></td>
+	<td valign="top"><p class=t1r>1.543</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-0.4</p></td>
+	<td valign="top"><p class=t1r>1.081</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-0.1</p></td>
+	<td valign="top"><p class=t1r>1.005</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_sin.htm">SIN</a></p></td>
+	<td valign="top" width="50"><p class=seealsolinks><a href="calc_asin.htm">ASIN</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_sinh.htm">SINH</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_cos.htm">COS</a></p></td>
+	<td valign="top" width="50"><p class=seealsolinks><a href="calc_acos.htm">ACOS</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_tanh.htm">TANH</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=seealsolinks><a href="calc_tan.htm">TAN</a></p></td>
+	<td valign="top" width="50"><p class=seealsolinks><a href="calc_atan.htm">ATAN</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_atan2.htm">ATAN2</a></p></td>
+</tr>
+</table>
+
+</body

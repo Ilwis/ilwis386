@@ -1,0 +1,169 @@
+<html>
+
+<head>
+<title>%R</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="%R, Predefined variables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>Predefined variable %R</h1>
+
+<p class=defnewpar>Variable to calculate with record numbers in a table.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>%R</span></p>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li><span class=courier>R</span> stands for Record number.</li>
+	<li>When a table uses system domain <span class=courier>None</span>, the record numbers are listed along the left of the table.</li>
+	<li>When a table uses another domain, the order of the domain items in the domain of the table are used.</li>
+	<li>Normally, column calculations are performed on the values of all records of specified columns. However, if you wish to perform an operation on <i> specific records</i>, you can indicate so by using <span class="courier">[%R]</span> as an index behind a column name in an expression.
+	<table cellspacing="0">
+      <tr>
+        <td valign="top" width="180"><p>Column[<i>expr</i>]</p></td>
+        <td valign="top"><p>to use values of a column indexed by record values, class names or IDs</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="180"><p>Table.Column[<i>expr</i>]</p></td>
+        <td vAlign="top"><p>to use values of a column in another table, indexed by record values, class names or IDs</p></td>
+      </tr>
+      <tr>
+        <td valign="top" width="180"><p>Table.Ext.Column[<i>expr</i>]</p></td>
+        <td vAlign="top"><p>to use values of a column in a table with another extension than <span class=courier>.tbt</span> (e.g. <span class=courier>.his</span>), indexed by record values, class names or IDs.</p></td>
+      </tr>
+  	</table>
+  	In between the square brackets, you can write an expression <i>expr</i> containing <span class=courier>%R</span>.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+<p class=kopjeaftertitlesub>TabCalc example:</p>
+
+<p class=calc00>OutCol1 = %R</p>
+<p class=calc00>OutCol2 = OutCol1[%R+1] - OutCol1[%R]</p>
+<p class=calc00>OutCol3 = (OutCol1[%R-1] + OutCol1 + OutCol1[%R+1]) / 3</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolh>Domain</p></td>
+	<td valign="top"><p class=tcolhr>MyValue</p></td>
+	<td valign="top"><p class=tcolhr>OutCol1</p></td>
+	<td valign="top"><p class=tcolhr>OutCol2</p></td>
+	<td valign="top"><p class=tcolhr>OutCol3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Glacial deposits</p></td>
+	<td valign="top"><p class=t1r>10</p></td>
+	<td valign="top"><p class=t1r>1</td>
+	<td valign="top"><p class=t1r>10</td>
+	<td valign="top"><p class=t1r>?</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Lake deposits</p></td>
+	<td valign="top"><p class=t1r>20</p></td>
+	<td valign="top"><p class=t1r>2</td>
+	<td valign="top"><p class=t1r>10</td>
+	<td valign="top"><p class=t1r>20</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Old alluvial deposits</p></td>
+	<td valign="top"><p class=t1r>30</p></td>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1r>40</p></td>
+	<td valign="top"><p class=t1r>40</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Quartzites</p></td>
+	<td valign="top"><p class=t1r>70</p></td>
+	<td valign="top"><p class=t1r>4</td>
+	<td valign="top"><p class=t1r>10</td>
+	<td valign="top"><p class=t1r>60</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Recent alluvial deposits</p></td>
+	<td valign="top"><p class=t1r>80</p></td>
+	<td valign="top"><p class=t1r>5</td>
+	<td valign="top"><p class=t1r>40</td>
+	<td valign="top"><p class=t1r>80</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Shales</p></td>
+	<td valign="top"><p class=t1r>90</p></td>
+	<td valign="top"><p class=t1r>6</td>
+	<td valign="top"><p class=t1r>10</td>
+	<td valign="top"><p class=t1r>100</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Siltstones</p></td>
+	<td valign="top"><p class=t1r>130</p></td>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1r>10</p></td>
+	<td valign="top"><p class=t1r>120</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Slope deposits</p></td>
+	<td valign="top"><p class=t1r>140</p></td>
+	<td valign="top"><p class=t1r>8</td>
+	<td valign="top"><p class=t1r>?</td>
+	<td valign="top"><p class=t1r>?</td>
+</tr>
+</table>
+<p class=emptyline>&nbsp;</p>
+<ul>
+	<li>Column <span class="courier">OutCol1</span> contains the record numbers of the items in domain <span class=courier>Geology</span>; this domain is used by the table.
+	<li>Column <span class="courier">OutCol2</span> contains the difference of each record in column <span class=courier>MyValue</span> and its successive record, e.g. for the first record: 20-10 = 10.
+	<li>Column <span class="courier">OutCol3</span> contains the average value of each three successive records in column <span class=courier>MyValue</span>, e.g. for the second record: (10+20+30) / 3 = 20.00</li>
+</ul>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_x.htm">%X</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_y.htm">%Y</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_l.htm">%L</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_c.htm">%C</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_k.htm">%K</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_d.htm">%D</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_p.htm">%P</a></p></td>
+</tr>
+</table>
+
+</body

@@ -1,0 +1,55 @@
+<html>
+
+<head>
+<title>Domain type : Image</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Domain type Image</p>
+
+<p class=linespacing03after>Maps with the <span class=courier>Image</span> <a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >domain</a> are supposed to contain <i>whole values between 0 and 255</i> without any undefined values. You should use the <span class=courier>Image</span> domain for satellite images which have this kind of values, for instance Landsat, TM and SPOT images. The <span class=courier>Image</span> domain is also suitable for scanned black &amp; white aerial photographs (scanned in 256 colors). <a href="../../ilwis/popup/yy_system_domain_image_popup.htm">System domain <span class=courier>Image</a></span> is only available for raster maps.</p>
+
+<p class=linespacing03after>Pixel values in an image (or band of an image) represent reflection values in a certain wave-lenght interval as measure by the satellite. These values are also called Digital Numbers (DN). All pixels in an image have a value or DN; there are no undefined values. </p>
+
+<p class=linespacing03after>Maps with the <span class=courier>Image</span> domain are by default displayed from black (0) to white (255); this is system representation <span class=courier>Gray</span>. You can choose to stretch the image so that the contrast within the image will increase, or not, for instance to be able to compare different bands. <br>
+You can select another <i>representation gradual</i> to show an image, but you can also create your own <i>representation value</i>, for instance to interactively slice an image (see <a href="..//ilwis/how_to_slice_an_image.htm" onClick="return popup(this, 'notes')" >How to slice an image</a>). For more information on <a href="../../ilwis/popup/objects_representation_popup.htm">representations</a>, see <a href="..//ilwis/ilwis_objects_representations.htm" onClick="return popup(this, 'notes')" >ILWIS objects : representations</a>.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>For satellite imagery with values in another range than between 0 and 255, you can use the <a href="../popup/yy_system_domain_noaa_popup.htm">system domain <span class=courier>NOAA</a></span>, the <a href="../popup/yy_system_domain_radar_popup.htm">system domain <span class=courier>Radar</a></span>, or any other <a href="../../ilwis/sec/domain_type_value_sec.htm">Value domain</a>.</li>
+
+<li>If in images with values from 0 to 255 you want to regard value 0 as undefined, use the <a href="../popup/yy_system_domain_byte_popup.htm">system domain <span class=courier>Byte</span></a>.</li>
+
+<li>To convert maps with a certain domain to another domain, see <a href="..//ilwis/how_to_change_the_domain_of_a_map.htm" onClick="return popup(this, 'notes')" >How to change the domain of a map</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_before_creating_maps_and_tables.htm" onClick="return popup(this, 'notes')" >Before creating ILWIS maps and tables</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_domains.htm" onClick="return popup(this, 'notes')" >Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</a></p>
+
+</body

@@ -1,0 +1,214 @@
+<html>
+
+<head>
+<title>MAPCOL</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="MAPCOL, Coordinate functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>MAPCOL( ) function</h1>
+
+<p class=defnewpar>Returns the column number of a pixel in raster map <i>RasterMap</i> at a certain (X,Y) <i>Coordinate</i>.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>MAPCOL</span>(<i>RasterMap</i>, <i>Coordinate</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>RasterMap</i></td>
+	<td valign="top">is a raster map</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>Coordinate</i></td>
+	<td valign="top">is an (X,Y) coordinate</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">a coordinate system</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>MAPCOL</span> returns:</td>
+	<td valign="top">a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>Depending on the georeference of the raster map, the column number of an XY coordinate is returned</li>
+	<li>The coordinate system of <i>Coordinate</i> is automatically transformed to the coordinate system of <i>RasterMap</i> if <i>Coordinate</i> and <i>RasterMap</i> do not have the same coordinate system.</li>
+</ul>
+
+<p class="tip">Tips:</p>
+<ul class="tipul">
+	<li>This function may be handy to use in <a href="..//ilwis/popup/dde_popup.htm" onClick="return popup(this, 'notes')" >DDE</a> applications.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a></p>
+
+<p class=calctitle>Examples</span></p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="300"><p class=calc00>? MAPCOL(Landuse,COORD(803429, 8074631))</p></td>
+	<td valign="top"><p>returns the column number of the pixel in raster map <span class=courier>Landuse</span> at coordinate (803429, 8074631), e.g. 398</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol1 = MAPCOL(Landuse,Coordinate)</p>
+<p class=calc00>OutCol2 = MAPCOL(Tmb1,Coordinate)</p>
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<table>
+<tr>
+	<td valign="top" colspan="3"><p class=th>Rainfall.mpp opened as table</p></td>
+	<td valign="top" width="40"></td>
+	<td valign="top" colspan="2"><p class=th>Working table</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=tcolhr>ID</p></td>
+	<td valign="top"><p class=tcolh>Name</p></td>
+	<td valign="top"><p class=tcolhr>Coordinate</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=tcolhr>OutCol1</p></td>
+	<td valign="top"><p class=tcolhr>Outcol2</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1>UMSS</p></td>
+	<td valign="top"><p class=t1r>(803429.00, 8074631.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>398</p></td>
+	<td valign="top"><p class=t1r>255</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1>Taquina</p></td>
+	<td valign="top"><p class=t1r>(799748.00, 8082415.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>214</p></td>
+	<td valign="top"><p class=t1r>82</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1>Laguna Santa Rosa</p></td>
+	<td valign="top"><p class=t1r>(803511.00, 8087422.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>402</p></td>
+	<td valign="top"><p class=t1r>167</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1>Laguna Totura</p></td>
+	<td valign="top"><p class=t1r>(801281.00, 8088967.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>291</p></td>
+	<td valign="top"><p class=t1r>85</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1>PROMIC</p></td>
+	<td valign="top"><p class=t1r>(802613.00, 8080483.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>357</p></td>
+	<td valign="top"><p class=t1r>187</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1>Aro Caqua</p></td>
+	<td valign="top"><p class=t1r>(806816.00, 8076585.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>567</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1>Colca Pithua</p></td>
+	<td valign="top"><p class=t1r>(797465.00, 8078352.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>100</p></td>
+	<td valign="top"><p class=t1r>37</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>8</p></td>
+	<td valign="top"><p class=t1>Cerro MachaMach</p></td>
+	<td valign="top"><p class=t1r>(796346.00, 8087736.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>44</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>9</p></td>
+	<td valign="top"><p class=t1>Laguna WaraWara</p></td>
+	<td valign="top"><p class=t1r>(806042.00, 8085414.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>529</p></td>
+	<td valign="top"><p class=t1r>263</p></td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>As raster map <span class=courier>Landuse</span> uses a different georeference than raster map <span class=courier>Tmb1</span>, the values in output columns <span class=courier>OutCol1</span> and <span class=courier>OutCol2</span> are not the same.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="90"><a href="calc_coord.htm">COORD</a></td>
+	<td valign="top" width="80"><a href="calc_mincrdx.htm">MINCRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mapcrd.htm">MAPCRD</a></td>
+	<td valign="top"><a href="calc_rasvalue.htm">RASVALUE</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_crdx.htm">CRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mincrdy.htm">MINCRDY</a></td>
+	<td valign="top" width="80"><a href="calc_maprow.htm">MAPROW</a></td>
+	<td valign="top"><a href="calc_dist.htm">DIST</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_crdy.htm">CRDY</a></td>
+	<td valign="top" width="80"><a href="calc_maxcrdx.htm">MAXCRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mapvalue.htm">MAPVALUE</a></td>
+	<td valign="top"><a href="calc_dist2.htm">DIST2</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_transform.htm">TRANSFORM</a></td>
+	<td valign="top" width="80"><a href="calc_maxcrdy.htm">MAXCRDY</a></td>
+	<td valign="top" width="80"></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

@@ -1,0 +1,108 @@
+<html>
+
+<head>
+<title>Polygon editor : Customize</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygon editor, Customize ..., How to customize ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Polygon editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/polygon_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Customize</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Customize the manner in which polygon boundaries are displayed in the <a href="..//ilwis/popup/polygon_editor_popup.htm" onClick="return popup(this, 'notes')" >polygon editor</a>. </p>
+
+<p class=defnewpar>This dialog box appears when in the Polygon editor:</p>
+
+<ul>
+
+<li>	you selected <span class=arial>Customize</span> from the File menu, or</li>
+
+<li>	you selected <span class=arial>Customize</span> from the <a href="..//ilwis/popup/context_sensitive_menu_editors.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Cursor color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color in which the digitizer cursor should be displayed in the polygon editor; open the list box by clicking it. To create your own custom color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select Custom at the bottom of the drop-down list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Find undef color: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color in which undefined polygons (i.e. polygons without value, class name or ID) should be displayed (boundaries and hatching), in case you use <span class=arial><a href="polygon_editor_find_undefineds.htm">Find Undefineds</a></span> from the <a href="../ilwis/polygon_editor_menu_commands.htm">Edit menu</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In the polygon editor:</p>
+
+<ul>
+
+<li>	polygons of a domain class map are shown according to the colors of the <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> class that is linked to the class <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map.</li>
+
+<li>	polygons of a domain identifier map can be shown in a single color or in multiple colors (7, 15, or 31).</li>
+
+<li>	polygons of a domain value map are not shown in colors, only the polygon boundaries are visible. </li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<ul class=tipul>
+
+<li>	If you changed colors and the polygon  editor does not respond immediately, you may redraw the map by clicking the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22">.</li>
+
+</ul>
+
+<p class=defnewpar>Settings are automatically stored in the registry. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_functionality.htm">Polygon editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_toolbar.htm">Polygon editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_menu_commands.htm">Polygon editor : menu commands</a></p>
+
+</body

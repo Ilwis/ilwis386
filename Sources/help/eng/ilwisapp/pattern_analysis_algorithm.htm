@@ -1,0 +1,96 @@
+<html>
+
+<head>
+<title>Pattern analysis : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Pattern analysis">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Pattern analysis</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Data in a point map represent spatial occurrence of a particular phenomenon. To acquire knowledge about the occurrence of the phenomenon, the spatial distribution of the points in the map can be examined. Point pattern analysis is a technique that is used to obtain information about the arrangement of point data in space to be able to make a statement about the occurrence of certain patterns. </p>
+
+<p class=kopje>Measures of dispersion:</p>
+
+<p>The mean distance between RNNs are tested against the expected distances in a CRS. </p>
+
+<p>First a number of different distance figures are defined. Then from distance 0 to the upper limit of each distance figure, the probability of finding one or more other points is calculated for output columns <span class=courier>Prob1Pnt</span>, <span class=courier>Prob2Pnt</span>, ..., <span class=courier>Prob6Pnt</span> where:</p>
+
+<ul>
+
+<li>	Column <span class=courier>Distance</span> lists distances. These distances should be considered as the distance from any point in the input point map, i.e. a kind of search radius;</li>
+
+<li>	Column <span class=courier>Prob1Pnt</span> lists the probability that within a certain distance (column <span class=courier>Distance</span>) of any point, at least one other point will be found, i.e. the distance at which any point's nearest neighbour can be found;</li>
+
+<li>	Column <span class=courier>Prob2Pnt</span> lists the probability that from any point, at least two other points will be found;</li>
+
+<li>	The same goes for columns <span class=courier>Prob3Pnt</span>, <span class=courier>Prob4Pnt</span>, <span class=courier>Prob5Pnt</span> and <span class=courier>Prob6Pnt</span>;</li>
+
+<li>	For a dataset of <i>n</i> points, <span class=courier>ProbAllPnt</span> is the summation of <span class=courier>Prob1Pnt</span> + <span class=courier>Prob2Pnt</span> + ... + <span class=courier>Probn-1Pnt</span>, divided by (<i>n</i> - 1).</li>
+
+</ul>
+
+<p class=defnewpar>The formula to calculate probabilities within certain distances reads: </p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargin1><img src="../images/fprob1.gif" align=bottom width="136" height="62"></p>
+
+<p class=kopje>Measures of arrangement:</p>
+
+<p>For every order the expected number of reflexive neighbours is calculated. Multiplying the probability that a point in a CSR pattern is a reflexive neighbour by the number of points gives you the expected number. Note that a reflexive point must be a member of a pair, so the observed value will always be an even number.</p>
+
+<p class=defnewpar>To calculate the mean distance to nearest neighbour, the nearest neighbour distance (d) for each of the points is summed and divided by the number of points. The formula reads:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargin1>	<img src="../images/fprob2.gif" align=bottom width="60" height="38"> </p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p>where: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>d<sub>i</sub></p>
+
+</td>
+<td valign="top">
+<p>is the nearest neighbour distance for a point in the map</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>n</p>
+
+</td>
+<td valign="top">
+<p>is the number of points.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Note that the mean distance to nearest neighbour is not corrected for boundary effects.</p>
+
+<p class=kopje>Reference:</p>
+
+<ul>
+
+<li>	Boots, B.N. &amp; A. Getis, 1988, Point Pattern Analysis. Sage University Scientific Geography Series no. 8. Sage Publications, Bevery Hills.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/pattern_analysis_functionality.htm">Pattern analysis : functionality</a></p>
+
+</body

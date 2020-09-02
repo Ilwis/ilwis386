@@ -1,0 +1,263 @@
+<html>
+
+<head>
+<title>How to calculate classified aspect maps (advanced)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to calculate a classified aspect map</h1>
+
+<h1 class=secondline>(Advanced)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>An aspect map shows to which side a slope is directed. A classified aspect map does not show the angle in radians or degrees but only a limited number of classes. To calculate an aspect map, refer to <a href="how_to_calculate_aspect_maps.htm">How to calculate an aspect map</a>. </p>
+
+<p class=defnewpar>When you already calculated an aspect map, you can classify that map by creating a new representation value for the map, or by creating and applying a Group domain on it with the Slicing operation. For more information, refer to <a href="how_to_classify_a_map_or_column.htm">How to classify a map</a>. </p>
+
+<p class=defnewpar>This topic deals with the direct calculation of a classified aspect map by using a neighbourhood function. Although the commands to use are rather simple, this topic is considered to be for advanced users because of the concepts of <a href="calc_special_neighbourhood_operations_and_iterations.htm">neighbourhood operations</a>.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ol>
+
+<li>	Create a segment map with a value domain (it is advised to create a value domain Height). Digitize the contour lines and give the contour lines the height value they represent. </li>
+
+<li>	To create an interpolated height map from segment contour lines: open the <a href="main_window_menu_commands.htm">Operations menu</a> in the Main window, choose <span class=arial>Interpolation</span>, then choose <a href="..//ilwisapp/popup/contour_interpolation_popup.htm" onClick="return popup(this, 'notes')" >Contour Interpolation</a>. The output map is a Digital Elevation Model (DEM). Keep in mind the pixel size that you are using.</li>
+
+<li>	The DEM is used as the input map in a neighbourhood operation. In the neighbourhood function NBMINP, a pixel is assigned the position number of the lowest value of all neighbours in a moving window of 3 by 3 cells. The pixels in the moving window are coded as follows:</li>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>2</td>
+    <td class=calcpict>3</td>
+  </tr>
+  <tr>
+    <td class=calcpict>4</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>6</td>
+  </tr>
+  <tr>
+    <td class=calcpict>7</td>
+    <td class=calcpict>8</td>
+    <td class=calcpict>9</td>
+  </tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargininlist>	The direction of the slope in the classified aspect map is found according the position of the neighbour with the lowest value: </p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;   </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=75>
+<p class=tcolh>Pixel value</p>
+
+</td>
+<td valign="top">
+<p class=tcolh>Direction</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p></p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>1</p>
+
+</td>
+<td valign="top">
+<p class=t1>NW</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>2</p>
+
+</td>
+<td valign="top">
+<p class=t1>N</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>3</p>
+
+</td>
+<td valign="top">
+<p class=t1>NE</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>4</p>
+
+</td>
+<td valign="top">
+<p class=t1>W</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>5</p>
+
+</td>
+<td valign="top">
+<p class=t1>Flat</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>6</p>
+
+</td>
+<td valign="top">
+<p class=t1>E</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>7</p>
+
+</td>
+<td valign="top">
+<p class=t1>SW</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>8</p>
+
+</td>
+<td valign="top">
+<p class=t1>S</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=0>
+<p class=t1></p>
+
+</td>
+<td valign="top" width=75>
+<p class=t1>9</p>
+
+</td>
+<td valign="top">
+<p class=t1>SE</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	To calculate the classified aspect map, type in the command line of the Main window:</li>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=calc1>ASPECT = <a href="calc_special_neighbourhood_operations_and_iterations.htm#NBMINP">NBMINP</a>(DEM#)</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>	The output map contains values 1, 2, 3, ... 9. </p>
+
+</ol>
+
+<p class=defnewparlnsp01aft>As an example, part of a DEM and the corresponding pixels in the classified aspect map are displayed below.</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=189>
+<p>DEM</p>
+
+</td>
+<td valign="top">
+<p>ASPECT</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=189>
+<p class=courier><img src="../images/mc64.gif" align=bottom width="170" height="85"></p>
+
+</td>
+<td valign="top">
+<p class=courier><img src="../images/mc65.gif" align=bottom width="105" height="84"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="calc_special_neighbourhood_operations_and_iterations.htm">Map calculation : neighbourhood operations &amp; iterations</a></p>
+
+<p class=seealsolinks><a href="how_to_calculate_aspect_maps.htm">How to calculate an aspect map</a></p>
+
+<p class=seealsolinks><a href="how_to_calculate_slope_maps.htm">How to calculate a slope map</a></p>
+
+</body

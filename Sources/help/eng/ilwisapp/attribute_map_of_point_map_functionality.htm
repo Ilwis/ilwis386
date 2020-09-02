@@ -1,0 +1,146 @@
+<html>
+
+<head>
+<title>Attribute map of point map : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Attribute map of point map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Attribute map of point map</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>By creating an attribute map of a point map, the class name or ID of each point in the original map is replaced by the value, class or ID found in a certain column in an attribute table. </p>
+
+<p class=defnewpar>A point map using a Class or ID domain, can have extra attribute information on the classes or identifiers in the map. These attributes are stored in columns in an attribute table. The attribute table can be linked to the map to which it refers, or to the domain of the map. You can check whether an attribute table is linked to the point map or to its domain through the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the map or the domain. </p>
+
+<p class=kopje>Example of creating an attribute map:</p>
+
+<p>In the pictures below, an attribute map is created for the average monthly rainfall (mm) for stations A, B, and C.</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>Input map:</p>
+
+</td>
+<td valign="top">
+<p>Attribute table:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/pnt1.gif" align=bottom width="85" height="85"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/pnttab1.gif" align=bottom width="62" height="68"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Output attribute map:</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/attpnt1.gif" align=bottom width="85" height="85"></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Input map requirements:</p>
+
+<ul>
+
+<li>	the input map needs to be a map with a domain of the Class or ID type; </li>
+
+<li>	the table, from which you want to choose a column, should use the same domain as the map;</li>
+
+<li>	the attribute table can be linked to the map or to its domain; </li>
+
+<li>	the attribute table should have one or more columns with attribute values, classes or IDs.</li>
+
+</ul>
+
+<p>An attribute map can be created from any column with a value, class or ID domain, but not from a column using domain <span class=courier>String</span>. </p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The output map uses the same domain as the specified attribute column. </p>
+
+<p>The output map uses the same coordinate system and coordinate boundaries as the input map. </p>
+
+<p class=tip>Tips: </p>
+
+<ol class=tipol>
+
+<li>	This operation creates a permanent attribute map. To temporarily display an attribute map, you can select the option 'Attribute' in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box when displaying a point map.</li>
+
+<li>	The colors and symbols in which an attribute map is displayed, depend on the domain of the specified attribute column: </li>
+
+        <ul class=tipul>
+
+        <li>	if you used a domain Class attribute column and when this domain already has a user-defined representation, then this representation is automatically selected in the Display Options dialog box which appears when you display the attribute map. In the Display Options dialog box, you can also select another existing representation or create a new representation by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. </li>
+
+        <li>	if you used a domain Value attribute column, you can either select one of the standard value representations or create your own representation by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> in the Display Options dialog box which appears when you display the attribute map.</li>
+
+        </ul>
+
+<li>	You can also create <a href="..//ilwisapp/popup/attribute_map_of_raster_map_popup.htm" onClick="return popup(this, 'notes')" >attribute maps of raster maps</a>, <a href="..//ilwisapp/popup/attribute_map_of_polygons_popup.htm" onClick="return popup(this, 'notes')" >attribute maps of polygon maps</a> and <a href="..//ilwisapp/popup/attribute_map_of_segments_popup.htm" onClick="return popup(this, 'notes')" >attribute maps of segment maps</a>. </li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="attribute_map_of_point_map_dialogbox.htm">Attribute map of point map : dialog box</a></p>
+
+<p class=seealsolinks><a href="attribute_map_of_point_map_commandline.htm">Attribute map of point map : command line</a></p>
+
+<p class=seealsolinks><a href="attribute_map_of_point_map_algorithm.htm">Attribute map of point map : algorithm</a></p>
+
+</body

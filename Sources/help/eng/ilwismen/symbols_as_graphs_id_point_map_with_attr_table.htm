@@ -1,0 +1,281 @@
+<html>
+
+<head>
+<title>Symbols as graphs (ID point maps with attr. table)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Symbols, Bar chart, Pie chart, Points as graphs, Volume cubes">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Symbols as graphs</h1>
+
+<h1 class=secondline>Point maps with ID domain and attribute table</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>When the attribute table of an ID point map contains comparable <i>value</i> columns of various <i>categories</i>, specify whether and how, for each point, these values should be represented <i>as pie charts, bar graphs, composed vertical bars, or as volume cubes.</i> </p>
+
+<p class=defnewpar>Furthermore, when the attribute table of an ID point map contains comparable <i>value</i> columns which refer to different <i>time periods,</i> specify how, for each point, these values should be represented as <i>line graphs.</i> </p>
+
+<p class=defnewpar>You have to select a graph type and select multiple comparable value columns from which the graphs will be constructed. Furthermore, you can specify the colors to be used in the graphs, total size of the graph symbols, etc.</p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you open a point map with an ID domain, and an attribute table is linked to the map or to the domain, <br>
+and in the <a href="display_options_point_map.htm">Display Options dialog box of a point map</a>, you selected the Graph option and clicked the <span class=arial>Details</span> button.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Pie chart:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Categories will be represented by colored wedges in pies. For each ID, the values of the selected columns (amounts, percentages, etc.) determine the size of a wedge. The total amount of all categories can represent the total size of the pie.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Bar graph:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Categories will be represented by colored bars next to each other. For each ID, the values of the selected columns (amounts) determine the length of the bars.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Line graph:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Values of subsequent time periods will be connected by a line of a certain color. For each ID, a line graph will be constructed from the values of the selected columns.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Composed bar:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Categories will be represented by colored bars on top of each other. For each ID, the values of the selected columns (amounts) determine the length of parts in the bar.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Volume cubes:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Categories will be represented by colored cubes next to each other. The values of the selected columns (amounts) determine the volume of a cube.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Stretch:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Check box for pie charts only: select this check box when the total size of the pie charts should represent the total amount of all variables depicted in the pie charts. Subsequently, select a value column from the attribute table and specify the stretch range and symbol sizes below. You can select a column which contains the total values of all columns which you want to show in the pie charts. In case of a label point map of a polygon map, you can select a column which contains the area values of the polygons. <br>
+Clear this check box when the total size of all pie charts should be the same; then, specify the desired size in the Size text box below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Stretch (min, max):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For pie charts when you selected the Stretch check box: by default the minimum and maximum values of the column which you selected above are displayed. The <i>minimum stretch value</i> specified here will be used to draw pie charts of minimum size, and the <i>maximum stretch value</i> will be used to pie charts of maximum size as specified in the Size text boxes below. The default values can usually be accepted. </p>
+
+<p class=diabox>For other graph types: type a minimum and maximum value (a range in which the values of all selected columns fit) which you want to use to size the graph symbols. <br>
+The <i>minimum stretch value</i> specified here will always be used for graph symbol size 0. It is therefore advised to specify a minimum stretch value which is smaller than the actual occurring minimum value in your selected columns. <br>
+The <i>maximum stretch value</i> specified here will used to draw graphs of maximum size or height as specified in the Size or Height text boxes below, i.e. the maximum height of bars in bar graphs, maximum length of Y-axis in line graphs, maximum size of parts in vertical composed bars, or maximum size of edges of cubes in volume cubes graphs.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Size (pt):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For pie charts with a fixed size (stretch check box off): specify one value for the size of all your pie charts.</p>
+
+<p class=diabox>For pie charts where the total size depends on a column (stretch check box on): specify values for the minimum size and the maximum size of your pie charts. </p>
+
+<p class=diabox>For volume cubes: specify a value for the maximum length of an edge of your cubes. The maximum value as specified in the Stretch boxes will be represented by a cube with edges of this size. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Radius, Area:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For pie charts where the total size depends on a column (stretch check box on): Select whether the sizes of the pie charts should refer to the radius of the pie charts or to the area of the pie charts. You can select the Radius option to make differences between various symbol sizes more pronounced. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Height (mm):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For bar graphs: type a value for the maximum height of the bars. The maximum value as specified in the Stretch boxes will be represented by a bar of this height. </p>
+
+<p class=diabox>For composed vertical bars: type a value for the maximum height of a part of the vertical bar. The maximum value as specified in the Stretch boxes will be represented by a part in the bar of this height. </p>
+
+<p class=diabox>For line graphs: type a value for the length of the Y-axis of the graphs. The maximum value as specified in the Stretch boxes will be represented by an Y-axis of this length.</p>
+
+<p class=diabox>Height values are specified in mm.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Width (pt):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For bar graphs: type a value for the width of one bar.</p>
+
+<p class=diabox>For line graphs: type a value for the length of the X-axis of the graphs. </p>
+
+<p class=diabox>For composed vertical bars: type a value for the width of the bar.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Line color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line graphs: select a color for line in the graphs; the line will connect the values of all selected columns in the line graph.</p>
+
+<p class=diabox>For pie charts, bar graphs and composed vertical bars: optionally, select a color which will be used to draw outer lines around the elements of the graphs and around the complete graph itself. </p>
+
+<p class=diabox>For volume cubes: select a color which will be used to depict the shape of the cubes.</p>
+
+<p class=diabox>To create your own color, select 'Custom' at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>: the <a href="custom_colors.htm">Custom Colors</a> dialog box will appear. Lines will always be drawn as fine as possible, i.e. using 1 pixel on the screen and using 1 dot on the printer.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Axes color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For line graphs only: select a color for the X- and Y-axes of the graphs. </p>
+
+<p class=diabox>To create your own color, select 'Custom' at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>: the <a href="custom_colors.htm">Custom Colors</a> dialog box will appear. Axes will always be drawn as fine as possible, i.e. using 1 pixel on the screen and using 1 dot on the printer.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Column selection:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The<i> left hand list box</i> lists all available value columns in your attribute table. <br>
+The <i>right hand list box</i> lists the selected columns from which the graphs will be constructed. The selected columns should contain comparable values for different categories (for pie charts, bar graphs, composed vertical bars, or volume cubes) or comparable values for a number of time units (for line graphs).</p>
+
+<p class=diabox>Select one or multiple columns (press and hold the <span class=arial>Shift</span> key down while selecting columns) in the left hand list box, and click the &gt; button. The selected column(s) will be added to the right hand list box and will be preceded by a default color. <br>
+To change the color of a column or category, select a column in the right hand list box and click the <span class=arial>Color</span> button. To change the order of columns, you can <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> a column in the right hand list box to another position. To exclude a selected column, select a column in the right hand list box and click the &lt; button. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Color</span> button:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For all graph types except line graphs: click the <span class=arial>Color</span> command button to change the color in which a category will be represented in the graphs. A <span class=arial>Color</span> dialog box will appear with the usual list of colors and a button to create custom colors. </p>
+
+<p class=diabox>For line graphs, the color of the line is specified by the option Line color. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	When points are displayed as <i>pie charts, bar diagrams, composed bars, or volume cubes</i>, you can add a color legend to this point map. Choose <span class=arial>Add Annotation, Legend</span> from the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> in the map window. <br>
+For more information, see the <a href="display_options_legend_point_id_attributes_symbols_as_graphs_color.htm">Display Options - Legend (symbols as graphs, color)</a> dialog box. </li>
+
+<li>	When points are displayed as <i>stretched pie charts, bar diagrams, composed bars</i>, you can also add a size legend to this point map. For more information, see the <a href="display_options_legend_point_id_attributes_symbols_as_graphs_size.htm">Display Options - Legend (symbols as graphs, size)</a> dialog box. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="display_options_point_map.htm">Display Options Point Map</a> (dialog box)</p>
+
+</body

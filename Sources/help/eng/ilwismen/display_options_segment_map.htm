@@ -1,0 +1,193 @@
+<html>
+
+<head>
+<title>Display options - Segment map</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment maps, Display options ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="65%"><h1 class=firstline>Display&nbsp;options</h1></td>
+<td rowspan="2" class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Layers menu</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Segment map</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Specify <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a> for a segment map. </p>
+
+<p class=defnewpar>Before a map is displayed in a map window, you have to answer some questions on how this layer should be displayed in the map window. Also, once a map is displayed in a map window, you may want to change the display options of a certain layer: </p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> in a map window, choose the <span class=arial>Display Options</span> command, then select a layer from the cascading menu, or </li>
+
+<li>	click the right mouse button in the map window, choose the <span class=arial>Display Options</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_map.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, and select a layer from the cascading menu, or </li>
+
+<li>	double-click a layer in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of a map window. </li>
+
+</ul> 
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Info:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to see the class name, ID, or value of a segment when you press the left mouse button on a segment in a map window. Clear this check box if you do not want to see information on segment class names, IDs or values.</p>
+
+<p class=tiptext><span class=tip>Note: </span>For segment maps, the Info check box is <i>not</i> selected by default. If you wish to view the class names, ID, or values of segments in the map window, you have to select the Info check box yourself. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Scale limits:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when this map should be displayed or hidden depending on the scale specified in the scale control of the map window; specify the scale range within which the map should be displayed. The map will be automatically hidden if the scale of the map window is outside this range. </p>
+
+<p class=diaboxnospace>With this option you can achieve for instance, that very detailed maps (e.g. on cadastral units) are only displayed when using a large scale in a map window, or that very general maps which depict overviews are only displayed when using a small scales in a map window, etc. </p>
+
+<p class=diabox>Clear this check box when you wish to display the map regardless of the scale of the map window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Transparent:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you wish to display this segment layer with a certain transparency. Any layer that has been added to the map window before, e.g. an image or a shadow map, will remain partly visible through the transparent segment layer. Subsequently, type a value for the transparency rate (percentage): value 1 means almost not transparent, and value 99 means almost totally transparent. </p>
+
+<p class=diabox>Clear this check box to just display the layer, i.e. non-transparent. </p>
+
+<p class=tiptext><span class=tip>Mind: </span>For Transparency, the Display Settings of your screen must be set to 32 bit (True Color). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Mask:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when you only want to display segments with specific class name(s), identifier(s) or value(s). Subsequently, specify the <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a>, i.e. the class names, IDs or values of the segments that you want to display. For more information, see <a href="../ilwis/how_to_use_masks.htm">How to use masks</a>. Clear this check box when you want to display all segments of this segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Attribute:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of Class and ID maps with an attribute table linked to the map or its domain:</p>
+
+<p class=diabox>Select this check box if you want to display the map by an attribute column found in the attribute table. Subsequently, select an attribute column from the attribute table and select a representation for the classes, identifiers or values of that column. Clear this check box if you want to display the map itself. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >Representation</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>This option is available for maps using a class or a value <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>. </p>
+
+<p class=diabox>In case of a <i>class map</i>: Select a user-defined representation class for this map, or <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> a new representation with the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Class editor</a>. Colors and line widths are specified in this representation for each class.</p>
+
+<p class=diabox>In case of a <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" ><span class=DefaultStyle><i>value map</i></span></a>: Select a system representation gradual or a user-defined representation value or gradual for the map, or <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> a new representation with the <a href="..//ilwis/popup/representation_value_gradual_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Value/Gradual editor</a>. Colors are specified in such representations, the line width of segments can be specified at the bottom of this dialog box. By using or creating a representation value or gradual, you can make the segments appear as if they were classified.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Single color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select option Single color to display all segments in the same color. Subsequently, select a color from the appearing list box and specify a line width for the segments (see below). To create your own color, select Custom at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. <span class=tip>Tip: </span><span class=tiptext>The default color can be set in the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>, section <span class=arial>Map window, Display</span> (color selected for True in Bool maps). </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Multiple colors:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For maps using an identifier or value domain: Select option Multiple colors to display the segments in this map in different colors. Subsequently, specify whether to use 7, 15, or 31 different colors or random colors.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Stretch:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value maps</a> with a representation gradual: Specify the stretch range. When a histogram is available of the map, the 1% interval values are given as default stretch range, else the 0% interval values are given as the default stretch range. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Line width:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of Single Color or Multiple Colors or in case of a Representation value/gradual, specify the line width for the segments. Line width is expressed in screen pixels.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Light, etc.:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select option Light to display this map a little lighter than normal, select option Normal to display this map with normal brightness, or select option Dark to display this map a little darker than normal. Select option Gray if you want to see the map displayed in gray tones regardless of previously selected colors.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The first text line in this dialog box states the map type and the map name. Furthermore, the dialog box shows the description and domain of the map. In case of a value map, also the minimum and maximum values of the map are shown when these values are available, i.e. when a segment histogram exists.  </p>
+
+<p class=defnewpar>For more information on representations, see <a href="../ilwis/how_to_use_representations.htm">How to use representations</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+</body

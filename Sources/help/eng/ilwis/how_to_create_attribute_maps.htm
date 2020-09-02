@@ -1,0 +1,200 @@
+<html>
+
+<head>
+<title>How to create attribute maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Attribute map, Create ..., How to create ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to create attribute maps</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In ILWIS for Windows, you can create attribute maps of raster maps, polygon maps, segment maps and point maps. The original maps have a Class or ID domain. An attribute table is usually linked to the map or to the domain of the map. The table uses the same domain as the map and stores additional information for each class or ID in the map in attribute columns. For more information on creating an attribute table, see <a href="../ilwis/how_to_create_tables.htm">How to create an attribute table</a>. </p>
+
+<p class=defnewpar>By creating an attribute map, every original class name or ID in the map is replaced by an attribute value, class or ID as found in an attribute column in the attribute table; the geometry of the original map remains. </p>
+
+<p class=kopje>Example:</p>
+
+<p>In this example, an attribute map is created for the acreage of cash crops (ha).</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<table cellspacing=7>
+<tr>
+<td valign="top" width=151>
+<p class=linesp01befafter>Input map:</p>
+
+</td>
+<td valign="top" width=151>
+<p class=linesp01befafter>Input attribute table:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/pol2.gif" align=bottom width="85" height="85"></p>
+
+</td>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/poltab2.gif" align=bottom width="65" height="85"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p></p>
+
+<p class=linesp01befafter>Output attribute map:</p>
+
+</td>
+<td valign="top" width=151>
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/attpol2.gif" align=bottom width="85" height="85"></p>
+
+</td>
+<td valign="top" width=151>
+<p></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>There are two general methods to obtain an attribute map:</p>
+
+<ul>
+
+<li>	Open the map which has an attribute table: in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of the map, select the <span class=arial>Attribute</span> check box and select an attribute column from the attribute table. This results in a 'temporary' attribute map displayed in a map window. For more information, refer to How to display a map by one of its attributes.</li>
+
+<li>	Perform one of the Attribute Map operations on a map that has an attribute table. This results in a 'permanent' attribute map stored on disk. Methods to access the Attribute Map operations are described below. When you edit the attribute table and change attribute values, you can make the output attribute map up-to-date by clicking the <span class=arial>Make Up-to-Date</span> button in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the output attribute map. </li>
+
+</ul>
+
+<h2>Attribute Map of a Polygon Map operation</h2>
+
+<p>By creating an attribute map, each polygon class name or ID in the original map is replaced by the value, class name or ID found in a certain column in the attribute table. </p>
+
+<p class=kopje>To create an attribute map of a polygon map:</p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> in the Main window, choose <span class=arial>Vector Operations</span> and select <span class=arial>Polygons, Attribute Map</span>, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Vector Operations, Polygons</span> item, and double-click the <span class=arial>Attribute Map of Polygon Map</span> item, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Attribute Map of Polygon Map</span> item, or</li>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click a polygon map with the <i>right</i> mouse button, and select <span class=arial>Vector Operations, Attribute Map</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwisapp/attribute_map_of_polygon_map_dialogbox.htm">Attribute Map of Polygon Map dialog box</a> appears.</p>
+
+<h2>Attribute Map of a Segment Map operation</h2>
+
+<p>By creating an attribute map, each segment class name or ID in the original map is replaced by the value, class name or ID found in a certain column in the attribute table. </p>
+
+<p class=kopje>To create a attribute map of a segment map:</p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> in the Main window, choose <span class=arial>Vector Operations</span> and select <span class=arial>Segments, Attribute Map</span>, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Vector Operations, Segments</span> item, and double-click the <span class=arial>Attribute Map of Segment Map</span> item, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Attribute Map of Segment Map</span> item, or</li>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click a segment map with the <i>right</i> mouse button, and select <span class=arial>Vector Operations, Attribute Map</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwisapp/attribute_map_of_segment_map_dialogbox.htm">Attribute Map of Segment Map dialog box</a> appears.</p>
+
+<h2>Attribute Map of a Point Map operation</h2>
+
+<p>By creating an attribute map, each point class name or ID in the original map is replaced by the value, class name or ID found in a certain column in the attribute table. </p>
+
+<p class=kopje>To create a attribute map of a point map:</p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> in the Main window, choose <span class=arial>Vector Operations</span> and select <span class=arial>Points, Attribute Map</span>, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Vector Operations, Points</span> item, and double-click the <span class=arial>Attribute Map of Point Map</span> item, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Attribute Map of Point Map</span> item, or</li>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click a point map with the <i>right</i> mouse button, and select <span class=arial>Vector Operations, Attribute Map</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwisapp/attribute_map_of_point_map_dialogbox.htm">Attribute Map of Point Map dialog box</a> appears.</p>
+
+<h2>Attribute Map of a Raster Map operation</h2>
+
+<p>By creating an attribute map, each class name or ID of the pixels in the original map is replaced by the value, class name or ID found in a certain column in the attribute table.</p>
+
+<p class=kopje>To create an attribute map of a raster map:</p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> in the Main window, choose <span class=arial>Raster Operations</span> and select <span class=arial>Attribute map</span>, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Raster Operations</span> item, and double-click the <span class=arial>Attribute Map of Raster Map</span> item, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Attribute Map of Raster Map</span> item, or</li>
+
+<li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click a raster map with the <i>right</i> mouse button, and select <span class=arial>Raster Operations, Attribute Map</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwisapp/attribute_map_of_raster_map_dialogbox.htm">Attribute Map of Raster Map: dialog box</a> appears.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>The colors in which an attribute map is displayed, depend on the domain of the specified attribute column: </p>
+
+<ul class=tipul>
+
+<li>	If you used a domain Value attribute column, you can either select one of the standard value representations or create your own representation by clicking the create button in the Display Options dialog box which appears when you display the attribute map. </li>
+
+<li>	If you used a domain Class attribute column and this domain already has a user-defined representation, then this representation is automatically selected in the Display Options dialog box which appears when you display the attribute map. In the Display Options dialog box, you can also select another existing representation or create a new representation by clicking the create button.</li>
+
+</ul>
+
+<p class=tiptext>For more information, refer to the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog boxes.</p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/attribute_map_of_raster_map.htm">Attribute map of raster map</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/attribute_map_of_polygon_map.htm">Attribute map of polygon map</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/attribute_map_of_segment_map.htm">Attribute map of segment map</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/attribute_map_of_point_map.htm">Attribute map of point map</a></p>
+
+</body

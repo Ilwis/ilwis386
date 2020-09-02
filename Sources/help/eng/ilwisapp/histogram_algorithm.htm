@@ -1,0 +1,57 @@
+<html>
+
+<head>
+<title>Histogram : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Histogram">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Histogram</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Histogram operation calculates the histogram of a raster, polygon, segment or point map. Histograms list frequency information on the values, classes, or IDs in your map. </p>
+
+<p class=defnewpar>Results are shown in a histogram window as a table and as a graph. </p>
+
+<p class=defnewpar>Histograms of Value raster maps also contain summary information such as mean, standard deviation, and percentage intervals. Summary information is available in a histogram window as well as in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> of the histogram. </p>
+
+<p class=defnewpar>A <b>raster histogram</b> lists the number of pixels, the percentages and the areas per value, class or ID. If the input raster map uses a Value domain, also cumulative number of pixels and cumulative percentages are calculated.</p>
+
+<p>A <b>polygon histogram</b> lists the number of polygons and the perimeter and area of polygons per class, ID, or value. If the input polygon map uses a Value domain, also the cumulative number of polygons, cumulative perimeters and cumulative areas are calculated. <br>
+A <b>segment histogram</b> lists the number of segments and their length per class, ID or value. If the input segment map uses a Value domain, also the cumulative number of segments and cumulative lengths are calculated. <br>
+A <b>point histogram</b> lists the number of points per class, ID or value. If the input point map uses a Value domain, also the cumulative number of points are calculated. </p>
+
+<p class=defnewpar>Raster map histograms are stored in .HIS and .HI#.</p>
+
+<p>Polygon map histograms are stored in .HSA and .HA#.</p>
+
+<p>Segment map histograms are stored in .HSS and .HS#.</p>
+
+<p>Point map histograms are stored in .HSP and .HP#.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="histogram_functionality.htm">Histogram : functionality</a></p>
+
+</body

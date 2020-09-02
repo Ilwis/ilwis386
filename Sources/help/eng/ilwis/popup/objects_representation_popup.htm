@@ -1,0 +1,50 @@
+<html>
+
+<head>
+<title>Objects-representation popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Representation&nbsp;&nbsp;&nbsp;<img src="../../images/rpr.gif" align=bottom width="16" height="14"> </p>
+
+<p>A <a href="..//ilwis/ilwis_objects_representations.htm" onClick="return popup(this, 'notes')" >representation</a> defines the manner in which the <i>classes</i> of a map with a <a href="../../ilwis/sec/domain_class_sec.htm">class domain</a>, or the <i>values</i> of a map with a <a href="../sec/domain_type_value_sec.htm">value domain</a> or the <a href="../sec/domain_image_sec.htm">image domain</a> should be represented on the screen and on a printer. A representation is a <a href="..//ilwis/ilwis_objects_service_objects.htm" onClick="return popup(this, 'notes')" >service object</a> for a <a href="../../ilwis/popup/objects_domains_ilwobj_popup.htm">domain</a>, i.e. a domain may use certain representations. 
+
+Maps which use the same domain are by default displayed in the same colors. </p>
+
+<p class=kopjeaftertitlesub>Representation types:</p>
+
+<ul>
+
+<li>	<b>Representation class</b>: for raster, polygon, segment and point maps with a certain <a href="../../ilwis/sec/domain_class_sec.htm">class domain</a>, and for raster maps with a certain <a href="../sec/domain_type_group_sec.htm">group domain</a> or a certain <a href="../sec/domain_type_picture_sec.htm">picture domain</a>. 
+
+        For each class in the domain, a representation class contains: colors for mapping units in raster maps; colors, hatching or patterns for polygons; colors, line types, line widths, etc. or equally spaced symbols for segments; colors, symbol type, symbol sizes, etc. for points. </li>
+
+<li>	<b>Representation value</b>: for raster, polygon, and segment maps with a certain <a href="../sec/domain_type_value_sec.htm">value domain</a> or the <a href="../sec/domain_image_sec.htm"><span class=courier>Image</span> domain</a>. 
+
+        A representation value contains colors assigned to <i>specific values</i> and to ranges of values. </li>
+
+<li>    <b>Representation gradual</b>: can be created for maps with the <a href="../popup/yy_system_domain_value_popup.htm">system domain Value</a> but can be used to display any value map. 
+
+        A representation gradual contains colors assigned <i>percentage values</i> and to ranges of percentage values. </li>
+
+</ul>
+
+</body

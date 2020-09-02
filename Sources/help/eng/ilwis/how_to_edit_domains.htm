@@ -1,0 +1,110 @@
+<html>
+
+<head>
+<title>How to edit domains</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Domains, How to edit ..., Edit ..., Edit domain, Class domain, ID domain, Value domain, Bool domain, Group domain">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to edit a domain</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> is a set of class names, IDs, or values that can be used in a certain <a href="ilwis_objects_data_objects.htm">data object</a>. All ILWIS data objects have a domain. One domain can be used for several data objects. </p>
+
+<p class=defnewpar>For a domain Class or ID, you might want to add new items to the domain, or you might want to change the names of the classes or IDs. Editing a domain Value is usually not necessary. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When working with maps of different years but of the same theme, or containing the same class names, IDs, or values, you are advised to create <b>one</b> domain for these maps and use this domain for all maps. It is not necessary that every class name or every ID of a domain is present in each map.</p>
+
+<p class=kopje>To edit a domain:</p>
+
+<ul>
+
+<li>	double-click a domain in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, or</li>
+
+<li>	click the right mouse button on a domain in the Catalog, and choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or</li>
+
+<li>	open the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window, choose <span class=arial>Edit Object</span> and select a domain, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Edit</span> item, and select a domain, or</li>
+
+<li>	drag a domain from the Catalog to the <span class=arial>Edit</span> item in the Operation-tree or the Operation-list. </li>
+
+</ul>
+
+<p class=defnewpar>When a map is of the domain type Class or ID, and the map is displayed in a map window, you can also choose the Domain command on the <a href="map_window_menu_commands.htm">Edit menu</a> in a map window.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p>For a Class or ID domain:</p>
+
+<tr>
+<td valign="top" width=76>
+<p></p>
+
+</td>
+<td valign="top">
+<p>the <a href="domain_class_id_editor_functionality.htm">Domain Class/ID editor</a> will be opened; you can add class names or IDs to the domain, add class codes, delete classes, change class names and/or codes etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p>For an editable user-defined Value domain:</p>
+
+<tr>
+<td valign="top" width=76>
+<p></p>
+
+</td>
+<td valign="top">
+<p>the <a href="../ilwismen/edit_domain_value.htm">Edit Value Domain</a> dialog box will be opened; the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of the domain can be changed; you can also specify a unit for the values.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p>For an editable user-defined Bool domain:</p>
+
+<tr>
+<td valign="top" width=76>
+<p></p>
+
+</td>
+<td valign="top">
+<p>the <a href="../ilwismen/edit_domain_bool.htm">Edit Bool Domain</a> dialog box will be opened; the strings that will appear in the user-interface for True and False values can be adapted. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="how_to_create_domains.htm">How to create a domain</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+</body

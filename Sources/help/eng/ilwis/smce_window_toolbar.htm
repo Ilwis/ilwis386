@@ -1,0 +1,221 @@
+<html>
+
+<head>
+<title>SMCE window : toolbar</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Spatial Multi-Criteria Evaluation (SMCE), SMCE, Toolbar, Button bar">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>SMCE window</h1>
+
+<h1 class=secondline>Toolbar</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The toolbar of the SMCE window provides <i>shortcuts</i> for
+  some regularly used menu commands for instance to open and save a criteria
+  tree, to add groups, factors and constraints, to weigh and standardize items
+  or to calculate output maps.</p>
+
+
+<p class=defnewpar><img src="../images/smce_toolbar.gif" width="527" height="26" align=bottom></p>
+
+<p class=defnewpar>When you leave the mouse pointer for a short period of time on top of a button, a tooltip will appear with the name of the button / the menu command that it will perform. Also, the <a href="smce_window_status_bar.htm">status bar</a> at the bottom of the window may provide you with a short explanation on the effect of using the button. </p>
+
+<p class=defnewpar>You can move the toolbar and dock it along an edge of the window; you can also make the toolbar floating. Some of the actions that are available via the toolbar are also available via the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<p class=defnewpar>The following actions can be performed:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing="1%" width="100%" border="0">
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_open_icon.gif" align=bottom width="22" height="22"></p></td>
+<td valign="top" width="96"><p><a href="../ilwismen/smce_window_open_criteria_tree.htm">Open</a>:</p></td>
+<td valign="top"><p>Open an existing criteria tree (<span class="courier">*.smc</span> file).</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_save_icon.gif" align=bottom width="22" height="22"></p></td>
+<td valign="top"><p><a href="../ilwismen/smce_window_save.htm">Save</a>:</p></td>
+<td valign="top"><p>Save the current criteria tree.</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="26" rowspan="2"><p><img src="../images/smce_problem_definition_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top" colspan="2"><p><a href="..//ilwismen/popup/smce_window_problem_definition_mode_popup.htm" onClick="return popup(this, 'notes')" >Problem Definition</a>:</p></td>
+</tr>
+<tr>
+<td valign="top">&nbsp;</td>
+<td valign="top"><p>Switch to Problem Definition mode:</p>
+	<ul>
+	<li>The structure of the criteria tree can be created, i.e. goals, sub goals, groups, factors, constraints, and alternatives can be added. </li>
+	<li>The criteria tree can be filled with maps and attribute tables. </li>
+	<li>The map name for the main goal and the map names for possible sub goals can be entered. </li>
+	<li>Existing criteria can be renamed, other maps can be selected, or criteria can be deleted. </li>
+	</ul>
+</td>
+</tr>
+<tr>
+<td valign="top" width=26 rowspan="2"><p><img src="../images/smce_multicriteria_analysis_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top" colspan="2"><p><a href="..//ilwismen/popup/smce_window_multicriteria_analysis_mode_popup.htm" onClick="return popup(this, 'notes')" >Multicriteria Analysis</a>:</p></td>
+</tr>
+<tr>
+<td valign="top">&nbsp;</td>
+<td valign="top"><p>Switch to Multicriteria Analysis mode: </p>
+	<ul>
+	<li>Individual factors and constraints can be standardized. </li>
+	<li>Groups of factors can be weighed. </li>
+	<li>Output maps can be generated. </li>
+	<li>The names of criteria and the selected maps cannot be changed. </li>
+    </ul>    
+	<p>The Multicriteria Analysis mode should only be selected after completing the Problem Definition mode. </p></td>
+</tr>
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_alternatives_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top"><p><a href="../ilwismen/smce_window_alternatives.htm">Alternatives</a>:</p></td>
+<td valign="top"><p>Change the number of alternatives and/or edit the name(s) of the alternative(s). </p></td>
+</tr>
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_insert_group_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top"><p><a href="../ilwismen/smce_window_insert_group.htm">Insert Group</a>:</p></td>
+<td valign="top"><p>Insert a new group, representing a sub-objective or sub goal: </p>
+	<ul>
+	<li>under the main root of the criteria tree, or </li>
+	<li>under the currently selected group in the criteria tree.</li>
+	</ul>
+</td>
+</tr>
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_insert_factor_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top"><p><a href="../ilwismen/smce_window_insert_factor.htm">Insert Factor</a>:</p></td>
+<td valign="top"><p>Insert a new <a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factor</a> (i.e. a benefit or a cost) under the main root of the criteria tree, or under the currently selected group in the criteria tree. </p>
+	<ul>
+	<li>Benefit: the <i>more</i> you have of such a criterion, the better it is. A benefit is not necessarily monetary.</li>
+    <li>Cost: the <i>less</i> you have of such a criterion, the better it is. A cost is not necessarily monetary.</li>
+	</ul>
+	</td>
+</tr>
+<tr>
+<td valign="top" width=26 rowspan="2"><p><img src="../images/smce_insert_constraint_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top" colspan="2"><p><a href="../ilwismen/smce_window_insert_constraint.htm">Insert Constraint</a>:</p></td>
+</tr>
+<tr>
+<td valign="top">&nbsp;</td>
+<td valign="top"><p>Insert a new <a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >constraint</a> under the main root of the criteria tree.</p></td>
+</tr>
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_edit_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top"><p><a href="../ilwismen/smce_window_edit.htm">Edit</a>:</p></td>
+<td valign="top"><p>Edit the currently selected item in the criteria tree. The
+    actual edit action depends on the mode (Problem Definition mode or Multicriteria
+  Analysis mode) and the type of item selected.</p>
+  </td>
+</tr>
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_delete_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top"><p><a href="../ilwismen/smce_window_delete.htm">Delete</a>:</p></td>
+<td valign="top"><p>Delete the currently selected item from the criteria tree.</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_standardize_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top"><p><a href="../ilwismen/smce_window_standardize.htm">Standardize</a>:</p></td>
+<td valign="top"><p>Standardize the currently selected factor or constraint.</p></td>
+</tr>
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_weigh_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top"><p><a href="../ilwismen/smce_window_weigh.htm">Weigh</a>:</p></td>
+<td valign="top"><p>Weigh the main root or the currently selected group of factors.</p></td>
+</tr>
+<tr>
+<td valign="top" width="26" rowspan="2"><p><img src="../images/smce_generate_selected_map_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top" colspan="2"><p><a href="../ilwismen/smce_window_generate_selected_map.htm">Generate Selected Maps</a>:</p></td>
+</tr>
+<tr>
+<td valign="top">&nbsp;</td>
+<td valign="top"><p>Generate the currently selected map(s). Depending on the selection, one or more output maps will be calculated. </p></td>
+</tr>
+<tr>
+<td valign="top" width="26" rowspan="2"><p><img src="../images/smce_generate_all_composite_index_maps_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top" colspan="2"><p><a href="../ilwismen/smce_window_all_composite_index_maps.htm">Generate All Maps</a>:</p></td>
+</tr>
+<tr>
+<td valign="top">&nbsp;</td>
+<td valign="top"><p>Generate the composite index maps of all alternatives, and all intermediate maps. </p></td>
+</tr>
+<tr>
+<td valign="top" width=26><p class=linespacing01before><img src="../images/smce_view_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top"><p class=linespacing01before>Show:</p></td>
+<td valign="top"><p class=linespacing01before>Show the currently selected input or output map(s).</p></td>
+</tr>
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_show_hist_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top"><p><a href="../ilwismen/smce_window_histogram.htm">Histogram</a>:</p></td>
+<td valign="top"><p>Calculate and show the histogram(s) of the SMCE output map(s). </p></td>
+</tr>
+<tr>
+<td valign="top" width="26" rowspan="2"><p><img src="../images/smce_aggr_vals_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top" colspan="2"><p><a href="../ilwismen/smce_window_aggregate_values.htm">Aggregate Values</a>:</p></td>
+</tr>
+<tr>
+<td valign="top">&nbsp;</td>
+<td valign="top"><p>Aggregate the values of the SMCE output map(s). You can calculate Minimum, Maximum, Sum and Average. </p></td>
+</tr>
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_slice_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top"><p><a href="../ilwismen/smce_window_slice.htm">Slice</a>:</p></td>
+<td valign="top"><p>Classify the values of the SMCE output maps and obtain sliced SMCE output maps. </p></td>
+</tr>
+<tr>
+<td valign="top" width=26><p><img src="../images/smce_show_sliced_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top"><p><a href="../ilwismen/smce_window_show_sliced.htm">Show Sliced</a>:</p></td>
+<td valign="top"><p>Show the sliced SMCE output maps. </p></td>
+</tr>
+<tr>
+<td valign="top" width="26" rowspan="2"><p><img src="../images/smce_show_hist_sliced_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top" colspan="2"><p><a href="../ilwismen/smce_window_histogram_sliced.htm">Histogram Sliced</a>:</p></td>
+</tr>
+<tr>
+<td valign="top"><p class="nospacetop">&nbsp;</p></td>
+<td valign="top"><p class="nospacetop">Calculate and show the histograms of the sliced SMCE output maps. </p></td>
+</tr>
+<tr>
+<td valign="top" width="26" rowspan="2"><p><img src="../images/smce_aggr_vals_sliced_icon.gif" align=bottom width="23" height="23"></p></td>
+<td valign="top" colspan="2"><p><a href="../ilwismen/smce_window_aggregate_values_sliced.htm">Aggregate Values Sliced</a>:</p></td>
+</tr>
+<tr>
+<td valign="top"><p class="nospacetop">&nbsp;</p></td>
+<td valign="top"><p class="nospacetop">Aggregate the values of the sliced SMCE output maps. You can calculate the Shape Index and the Connectivity Index. </p></td>
+</tr>
+</table>
+
+<p class=defnewpar>The toolbar can be hidden or shown with the <span class=arial>Toolbar</span> command on the <a href="smce_window_menu_commands.htm">View menu</a>. If the action of a certain button cannot be performed at a certain moment, the button appears gray.</p>
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="smce_window_status_bar.htm">SMCE window : status bar</a></p>
+<p class=seealsolinks><a href="smce_window_menu_commands.htm">SMCE window : menu commands</a></p>
+
+</body

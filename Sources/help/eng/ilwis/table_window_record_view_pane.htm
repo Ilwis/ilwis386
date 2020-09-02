@@ -1,0 +1,135 @@
+<html>
+
+<head>
+<title>Table window : Record View</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Record View, Records">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Table window</h1>
+
+<h1 class=secondline>Record View</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Record View displays <i>for a single record</i>, all values, class names, IDs etc. of the fields in that record. It thus allows you to inspect and edit the values of a specific record in your table. </p>
+
+<p class=defnewpar>You can move the Record View window and dock it along an edge of a table window; you can also make the Record View window floating. </p>
+
+<p class=defnewpar>Figure 1 below shows the 'Laguna Totura' record of the <span class=courier>Rainfall</span> table in Record View. At the top, the name of the current record is listed; at the left side, the columns in the table are listed; to the right, you can view and edit the values for this record. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/tablerecordviewpane.gif" align="bottom" width="218" height="146"></p>
+
+<p class=captionfig>Fig. 1: Example of Record View. </p> 
+
+<p class=kopje>To hide or show Record View:</p>
+
+<ul>
+
+<li>Choose <span class=arial>Record View</span> from the <a href="table_window_menu_commands.htm">View menu</a> of the table window. </li>
+
+</ul>
+
+<p>Record View is shown when a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7"> appears in front of the menu command. </p>
+
+<p class=defnewpar>Upon closing a table, it is stored whether or not Record View is shown for the current table. This will then be used as the default setting to show or hide Record View when the table is re-opened later on. </p>
+
+<p class=kopje>To edit values, class names, IDs, etc. in Record View:</p>
+
+<ul>
+
+<li>Click the field you wish to edit in record view. </li>
+
+<li>If the field is editable, you can type another value, choose a class name, type an ID, etc. </li>
+
+<li>If the field is not editable, it will appear gray. </li>
+
+<li>After editing a field: </li>
+
+        <ul>
+
+        <li>use the <span class=arial>Enter</span> key to confirm the value and stop editing, or </li>
+
+        <li>use the <span class=arial>Arrow Down</span> key to confirm the value and move to the next field. </li>
+
+        </ul>
+
+</ul>
+
+<p class=defnewpar>As long as the 'Edit box' is open, you can still press <span class=arial>Esc</span> to undo an edit action. After you pressed the <span class=arial>Enter</span> key or an <span class=arial>Arrow</span> key, the edit action is completed and the change is stored. </p>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+
+<li>The contents of fields of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent columns</a> cannot be edited, as these 'values' are the result of a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculation</a> or a column <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>. </li>
+
+<li>Furthermore, you cannot edit fields of read-only columns nor fields in dependent tables. </li>
+
+<li>All changes are directly stored on disk. You CANNOT UNDO a completed edit action. </li>
+
+</ul>
+
+<p class=kopje>To show a next or previous record, etc: </p>
+
+<ul>
+
+<li>Click the <span class=arial>Next</span> button <img src="../images/table_next_rec.gif" align=bottom width="22" height="22"> in the <a href="table_window_toolbar.htm">toolbar</a> of the table window, to display the next record in record view, </li>
+
+<li>Click the <span class=arial>Previous</span> button <img src="../images/table_prev_rec.gif" align=bottom width="22" height="22"> in the toolbar of the table window, to display the previous record in record view. </li>
+
+<li>Similarly, you can use the <span class=arial>First Record</span> button <img src="../images/table_first_rec.gif" align=bottom width="22" height="22">, or the <span class=arial>Last Record</span> button <img src="../images/table_last_rec.gif" align=bottom width="22" height="22">. </li>
+
+<li>Click the <span class=arial><a href="../ilwismen/goto_record.htm">Goto Record</a></span> button <img src="../images/table_goto_rec.gif" align=bottom width="22" height="22">, and select a record, to display that record. </li>
+
+</ul>
+
+<p class=kopje>Other functionality:</p>
+
+<p>You can copy fields or the whole record to the clipboard. </p>
+
+<ul>
+
+<li>Select the field(s) you wish to copy to clipboard, or </li>
+
+<li>click the record name/record number at the top of record view to select the whole record, </li>
+
+<li>then, choose <span class=arial>Copy</span> from the <a href="table_window_menu_commands.htm">Edit menu</a>, click the <span class=arial>Copy</span> button <img src="../images/copy.gif" align=bottom width="22" height="22">, press <span class=arial>Ctrl+C</span> on the keyboard, etc. </li>
+
+</ul>
+
+<p class=linespacing03before>For more information, refer to <a href="../ilwismen/copy_table_selection_to_clipboard.htm">Table window : Copy</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="table_window_statistics_pane.htm">Table window : statistics pane</a></p>
+
+<p class=seealsolinks><a href="table_window_toolbar.htm">Table window : toolbar</a></p>
+
+<p class=seealsolinks><a href="table_window_command_line.htm">Table window : command line</a></p>
+
+<p class=seealsolinks><a href="table_window_menu_commands.htm">Table window : menu commands</a></p>
+
+</body

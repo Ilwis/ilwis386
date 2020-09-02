@@ -1,0 +1,187 @@
+<html>
+
+<head>
+<title>How to join columns of another table into a current table</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Join columns, How to join ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to join</h1>
+
+<h1 class=secondline>Columns of another table into a current table</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The easiest way to join columns from another table into a current table is to use the Join Column wizard. </p>
+
+<p class=defnewpar>To start the Join Column wizard: </p>
+
+<ul>
+
+<li>Open the table into which you wish to join a column from another table. </li>
+
+<li>From the <a href="table_window_menu_commands.htm">Columns menu</a> in the table window, choose the <span class=arial>Join</span> command. </li>
+
+<li>The <a href="../ilwismen/join_column.htm">Join Column</a> wizard appears. </li>
+
+</ul>
+
+<p class=defnewpar>The wizard needs to know the table name from which you wish to get a column, the name of the column that you wish to join from that table into the current table, and the relation or <i>link</i> between the two tables. This link is made via a common domain that is used either by the tables themselves or by a column in the tables. This link or key, through which a join can be performed, should be a (common) Class or ID domain. </p>
+
+<p class=defnewpar>Short explanation of the Join Column wizard: </p>
+
+<ol>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Select table and column: </li>
+
+        <ul>
+
+        <li>	Select the table from which you wish to join a column into the current table.</li>
+
+        <li>	From the selected table, select the column that you wish to join into the current table.</li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Join method: </li>
+        
+        <ul>
+
+        <li>    Select one of the join methods, see the explanation below. </li>
+
+        </ul>
+
+        <p>If you wish to create a link through the common Class or ID domain of both tables, i.e. both tables use the same domain, you will directly continue on the Output column name page. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Link between tables: </li>
+
+        <ul>
+
+        <li>	Select a key column from the current table (<i>key 1</i>), and/or a key column from the second, selected table (<i>key2</i>). </li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Aggregation method: </li>
+
+        <ul>
+
+        <li>	If the values to be joined need to be aggregated, select an <a href="..//ilwis/popup/aggregation_functions_popup.htm" onClick="return popup(this, 'notes')" >aggregation function</a> and, optionally, a weight column from the second table.</li>
+
+        <p>The Aggregation method page will not appear when an aggregation is not necessary. </p>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>Output column name: </li>
+
+        <ul>
+
+        <li>	Type, for the current table, a name for the output column that will contain the joined values.</li>
+
+        </ul>
+
+</ol>
+
+<p class=defnewpar>For more information, refer to the <a href="../ilwismen/join_column.htm">Join Column wizard</a> Help. </p>
+
+<h2 id="join_methods">Join methods to create links between tables</h2>
+
+<p class=kopjeaftertitlesub>1.&nbsp;Two tables which use the same domain:</p>
+
+<p>The tables have a <b>one to one</b> relation. </p>
+
+<p>You don't have to specify a key. </p>
+
+<p>The link between the tables can be directly created through the domain of both tables. </p>
+
+<p class=kopje>2.&nbsp;A column in the current table uses the same domain as the second table:</p>
+
+<p>The relation between the column of the current table and the second, selected table is a <b>many to one</b> relation. </p>
+
+<p>You will need to specify a key column from the current table, i.e. key 1. </p>
+
+<p>The link between the tables can then be created through the domain of the specified key column in the current table (key 1) and the domain of the second, selected table (key 2). </p>
+
+<p class=kopje>3.&nbsp;The current table uses the same domain as a column in the second table:</p>
+
+<p>The relation between the records in the current table and the values in the second, selected table is possibly a <b>one to many</b> relation. </p>
+
+<p>You will need to a key column from the second, selected table, i.e. key 2.</p>
+
+<p>The link between the tables can then be created through the domain of the current table (key 1) and the domain of the specified key column in the second, selected table (key 2). </p>
+
+<ul>
+
+<li>	Furthermore, when the classes or IDs in the key 2 column of the second table are <i>not unique</i> (i.e. one to many relation), then the values to be joined need to be aggregated by the groups of key 2. </li>
+
+        <p>You will then thus need to specify from the second, selected table a key 2 column (the 'group by' column), an <a href="..//ilwis/popup/aggregation_functions_popup.htm" onClick="return popup(this, 'notes')" >aggregation method</a>, and optionally a weight column. </p>
+
+<li>	When the classes or IDs in the key column of the second table are unique (i.e. one to one relation), you should only specify key 2. </li>
+
+</ul>
+
+<p class=kopje>4.&nbsp;A column in the current table uses the same domain as a column in the second table:</p>
+
+<p>The relation between the records in the current table and the second, selected table is possibly a <b>many to many</b> relation. </p>
+
+<p>You will need to specify both a key column from the current table, i.e. key 1, as well as a key column from the second, selected table, i.e. key 2. </p>
+
+<p>The link between the tables can then be created through the domain of the specified key column in the current table (key 1) and the domain of the specified key column in the second, selected table (key 2). </p>
+
+<ul>
+
+<li>	Furthermore, when the classes or IDs in the key 2 column of the second table are <i>not unique</i> (i.e. many to many relation), then the values to be joined need to be aggregated by the groups of key 2. </li>
+        
+        <p>You will then thus need to specify from the second, selected table, a key 2 column from the second table (the 'group by' column), an <a href="..//ilwis/popup/aggregation_functions_popup.htm" onClick="return popup(this, 'notes')" >aggregation method</a>, and optionally a weight column; and from the current table a key 1 column. </p>
+
+<li>	When the classes or IDs in the key column of the second table are unique (i.e. many to one relation), you should only specify key 2. </li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	Links between tables are always through Class or ID domains.</li>
+
+<li>	For more information on column aggregations, refer to <a href="calc_aaf.htm#aggregate_functions">Aggregate functions</a>.</li>
+
+<li>    You can find examples, exact settings of the wizard, and also Join command line syntax in topic <a href="calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a>. </li>
+
+</ul>
+
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/join_column.htm">Join Column wizard</a></p>
+
+<p class=seealsolinks><a href="calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a></p>
+
+</body

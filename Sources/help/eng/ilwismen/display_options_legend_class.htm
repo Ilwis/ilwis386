@@ -1,0 +1,272 @@
+<html>
+
+<head>
+<title>Insert/Edit Legend (Class)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Legend, Layout editor, Layouts, Add ..., Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert/Edit Legend (Class maps)</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Insert or edit a <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legend</a> for a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> Class map. The legend will be added to your <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>. </p>
+
+<p class=defnewpar>A legend for a map which uses a class domain is based on the occurring class names in the domain of the map. Colors for the classes are derived from the <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> of the layer. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>It may be handy to open the domain and/or the representation of the layer for which you are adding a legend: </p>
+
+        <ul class=tipul>
+
+        <li>double-click the map view in the layout editor, </li>
+
+        <li>then, use the appearing <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane to open the domain of the map or the representation used by the domain. </li>
+
+        </ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Number of columns:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the number of columns in which the legend should be displayed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Code:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to obtain the codes of the classes in the domain as legend text. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to obtain the names of the classes in the domain as legend text.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to obtain the description of the classes in the domain as legend text.</p>
+
+<p class=diabox>You can combine the Code, Name and Description for legend texts by selecting multiple check boxes. If codes or descriptions appear to be empty, you can edit them by opening the domain of the map, see the tip above. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Selectable classes:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The left hand list box lists all classes that are present in the domain. </p>
+
+<p class=diabox>You can select one or more classes and add them to the right hand list box by using the &gt; button.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Selected classes:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The right hand list box lists the class names that will be shown in your legend. By default all class names that occur in the domain are listed.</p>
+
+<p class=diabox>You can hide one or more classes from the legend by using the &lt; button, see below. </p>
+
+<p class=diabox>This list box also shows the order of the selected classes in the legend: <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> individual classes up or down in the list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/forw.gif" align=bottom width="60" height="22"></p>
+
+</td>
+<td valign="top">
+<p class=diabox>To <i>add</i> one or more selected classes to the legend: </p>
+
+<ul class=diaul>
+
+<li>	select one or more classes in the left hand list box</li >
+
+        <p>(to select <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >multiple classes</a>, press and hold down the <span class=arial>Shift</span> or the <span class=arial>Ctrl</span> key while selecting);</p>
+
+<li>	then press this &gt; button. </li>
+
+</ul>
+
+<p class=diabox>The classes will be added to the bottom of the list in the right hand list box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/backw.gif" align=bottom width="60" height="22"></p>
+
+</td>
+<td valign="top">
+<p class=diabox>To <i>remove</i> one or more selected classes from the legend: </p>
+
+<ul class=diaul>
+
+<li>	select one or more classes in the right hand list box (to select multiple classes, press and hold down the Shift key while selecting); </li>
+
+<li>	then press this &lt; button. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Font name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the <a href="..//ilwis/popup/font_popup.htm" onClick="return popup(this, 'notes')" >font</a> in which the legend texts should appear; you can select an installed font from the list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Font size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the font size (pt) in which your legend texts should appear. <span class=tiptext><span class=tip>Note: </span>The font size also determines the height of the legend boxes. </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Bold:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have legend texts appear in <b>bold</b>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Italic:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have legend texts appear in <i>italics</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Box width/height ratio:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the width/height ratio of the legend color boxes. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Extra height:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If you wish to obtain extra line spacing between your legend classes (i.e. in vertical direction), type a value. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Transparent:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if the background area within the legend should be transparent; if the legend is displayed on top of other items, these other items will still be partly visible (minimum loss of other displayed items). </p>
+
+<p class=diabox>Clear this check box to have the background of the legend appear as non-transparent white space. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	The order of the classes as appearing in the legend can be easily changed by <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> the classes in the right hand list box up or down to another position. </li>
+
+<li>	You can also change the order of classes in the domain: choose <span class=arial><a href="..//ilwismen/popup/domain_class_id_editor_manual_ordering_popup.htm" onClick="return popup(this, 'notes')" >Manual Ordering</a></span> from the <a href="../ilwis/domain_class_id_editor_menu_commands.htm">Edit menu</a> in the <a href="../ilwis/domain_class_id_editor_functionality.htm">Domain Class editor</a>, and drag classes to a new position in the list. This automatically changes the default order of the classes in the legend, but also for instance the order of records in an attribute table, etc.</li>
+
+<li>	In the Layout editor, a legend can be sized by <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> for instance one of the corner <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of a selected legend to a new position. The mouse pointer changes into a double-sided arrow when at the right position to start dragging. The box sizes and the font in which legend texts are displayed will be automatically adapted to the new size. </li>
+
+<li>	To store annotation, you need to save the layout. Open the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a> and choose the <span class=arial><a href="../ilwismen/layout_editor_save_layout.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/layout_editor_save_layout_as.htm">Save As</a></span> command. You can also click in the white space of your layout, and click the <span class=arial>Save</span> button in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>. </li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+</body

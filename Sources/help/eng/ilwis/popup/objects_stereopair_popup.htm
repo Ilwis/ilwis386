@@ -1,0 +1,60 @@
+<html>
+
+<head>
+<title>objects-stereo pair popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Stereo pair&nbsp;&nbsp;&nbsp;<img src="../../images/obj_stereopair.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="..//ilwis/ilwis_objects_stereopairs.htm" onClick="return popup(this, 'notes')" >stereo pair</a> allows you to view raster maps, scanned photographs or images in stereo, using a stereoscope mounted onto your monitor or red-green or red-blue glasses (anaglyph). </p>
+
+<p class=defnewpar>A stereo pair can be calculated: </p>
+
+<ul>
+
+<li class=ls01be>with the <a href="../../ilwisapp/popup/epipolar_stereopair_popup.htm">Epipolar stereo pair</a> operation which requires <i>two raster maps with overlap</i> as input, for instance two scanned aerial photographs with overlap; in the output stereo pair you can view the area of overlap in stereo; </li>
+
+<li class=ls01be>with the <a href="../../ilwisapp/popup/stereopair_from_dtm_popup.htm">Stereo pair from DTM</a> operation which a <i>single raster map</i> as input, for instance a scanned photograph or an image, and a Digital Terrain Model (DTM); in the output stereo pair, you can view the whole area of the input map displayed over the DTM in stereo. </li>
+
+</ul>
+
+<p class=defnewpar>A stereo pair is automatically calculated when it is opened for display. The stereo pair then contains:</p>
+
+<ul>
+
+<li>	two resampled output raster maps, </li>
+
+<li>	where each raster map uses a new georeference which retains original coordinates. </li>
+
+</ul>
+
+<p class=defnewpar>A stereo pair can be displayed: </p> 
+
+<ul>
+
+        <li>in a <a href="../../ilwisapp/popup/stereoscope_popup.htm">stereoscope</a> window, while using a stereoscope, and </li>
+
+        <li>as an <a href="../../ilwisapp/popup/anaglyph_popup.htm">anaglyph</a> in a map window, while using red-green or red-blue glasses. </li>
+
+</ul>
+
+</body

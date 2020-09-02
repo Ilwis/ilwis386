@@ -1,0 +1,112 @@
+<html>
+
+<head>
+<title>Edit georeference corners</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Edit ..., Georeference">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Edit Georeference Corners</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>View and/or edit a georeference corners. North-oriented raster maps are usually georeferenced by a georeference corners. A georeference corners stores the coordinates of two diagonal corners of the map (lower right corner and upper left corner). From this, the coordinates for all other pixels are calculated. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you double-click a georeference corners in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>,</li>
+
+<li>	when you press the right mouse button on a georference corners in the Catalog and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>,</li>
+
+<li>	when you choose <span class=arial>Edit Object</span> from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> in the Main window and subsequently you select a georeference corners,</li>
+
+<li>	when you choose <span class=arial>Georeference</span> from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in a map window and subsequently you select a layer that uses a georeference corners.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for this georeference.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Coordinate system:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If you have a coordinate system available, you can select this coordinate system; you can also create a new coordinate system by clicking the little <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. If you do not know the coordinate system of your maps, you select coordinate system unknown.</p>
+
+<p class=diabox>Mind: ILWIS expects that all maps that you want to display together in one map window have the same coordinate system. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Center of corner pixels:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if the minimum and maximum X and Y coordinates should be linked to the centers of the corner pixels of the map. </p>
+
+<p class=diabox>Clear this check box if the minimum and maximum X and Y coordinates should be linked to the outer corners of the corner pixels of the map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Min X, Y</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Change the minimum X-coordinate and/or the minimum Y-coordinate of the raster map or accept the minimum XY-coordinates as they are. With the minimum XY-coordinate, the XY-coordinate of the <i>lower left</i> corner of the map is meant. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Max X, Y</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Change the maximum X-coordinate and the maximum Y-coordinate of the raster map or accept the maximum  XY-coordinates as they are. With the maximum XY-coordinate, the XY-coordinate of the <i>upper right</i> corner of the map is meant.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For your information, the number of lines and columns and the pixel size of the raster map are displayed in the dialog box.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/edit_georeference.htm">Map window : View/Edit Georeference</a></p>
+
+</body

@@ -1,0 +1,5849 @@
+<html>
+
+<head>
+<title>Appendices : ILWIS expressions</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS expressions, Expressions, Appendices, Command line, Operations, ILWIS operations, Syntax, ILWIS script language, Quick reference for ILWIS expressions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Appendices&nbsp;&nbsp;</h1></td>
+<td class=menucommand><a class=menlink href="appendices_ilwis_expressions_alphabetic.htm">ILWIS expressions (alphabetic)</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>ILWIS expressions (menu-wise)</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--brackets of expressions in courier -->
+
+<!--<hr>-->
+
+<p class=defnewpar>Any ILWIS <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a> like Filter, Cross and Distance calculation, can be performed by typing an <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >ILWIS expression</a> on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the Main window</a>. You can also use these expressions in <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a>.</p>
+
+<p>In this topic, the syntax of expressions of operations is described. </p>
+
+<p class=defnewpar>For an overview of MapCalc and TabCalc expressions, see <a href="calc_aal.htm">Map and Table Calculation : Alphabetical overview of operators and functions</a> or <a href="calc_aaf.htm">Map and Table Calculation : Functional overview of operators and functions</a> </p>
+
+<p>For details on creating expressions on the command line and in scripts, see <a href="appendices_construction_of_expressions.htm">Appendices : construction of expressions</a>. </p>
+
+<p>For special script commands, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>.</p>
+
+<h2>Introduction</h2>
+
+<p>The general syntax for expressions is:</p>
+
+<p class=leftmargin1>OUTMAP = expression</p>
+
+<p class=leftmargin1>OUTMAP := expression</p>
+
+<p class=linespacing01before>The definition symbol (=) is used to create a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output object</a>; <br>
+the assignment symbol (:= ) is used to create an editable object. </p>
+
+<p>For more information, see also <a href="appendices_construction_of_expressions.htm">Appendices : construction of expressions</a>.</p>
+
+<p class=defnewpar>In the overview below, expression names are followed by parameters (between brackets, separated by commas), and:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Courier</p>
+
+</td>
+<td valign="top">
+<p>is used for obligatory parts in expressions or in parameters;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" width=96>
+<p><i>Italics</i></p>
+
+</td>
+<td valign="top">
+<p>is used for parameters with special requirements, usually a short explanation follows; </p>
+
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" colspan="2">
+<p>a vertical bar<span class=courier> | </span> represents a choice;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" colspan="2">
+<p>a paramater in square brackets [ ] represents an optional parameter;</p>
+
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" colspan="2">
+<p>the phrase '<a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value map</a>' or 'map with a value domain' means that the map should have domain of type Value; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" colspan="2">
+<p>Any operation name in the list below starting with:</p>
+
+</td>
+</tr>
+</table>
+
+<table> 
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>MapList</p>
+
+</td>
+<td valign="top">
+<p>creates an output map list;</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Map</p>
+
+</td>
+<td valign="top">
+<p>creates an output raster map;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>PolygonMap</p>
+
+</td>
+<td valign="top">
+<p>creates an output polygon map;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>SegmentMap</p>
+
+</td>
+<td valign="top">
+<p>creates an output segment map;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>PointMap</p>
+
+</td>
+<td valign="top">
+<p>creates an output point map;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Table</p>
+
+</td>
+<td valign="top">
+<p>creates an output table;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Matrix</p>
+
+</td>
+<td valign="top">
+<p>creates an output matrix;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p>-</p>
+
+</td>
+<td valign="top" colspan="2">
+<p>Furthermore, the following predefined parameters are used: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'rasmap' </p>
+
+</td>
+<td valign="top">
+<p>an input raster map; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'maplist'</p>
+
+</td>
+<td valign="top">
+<p>an input map list (set of raster maps with same domain and same georeference); </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'polmap'</p>
+
+</td>
+<td valign="top">
+<p>an input polygon map; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'segmap' </p>
+
+</td>
+<td valign="top">
+<p>an input segment map; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'pntmap' </p>
+
+</td>
+<td valign="top">
+<p>an input point map; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'table'</p>
+
+</td>
+<td valign="top">
+<p>an input table; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'column' </p>
+
+</td>
+<td valign="top">
+<p>an input column;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'domain'</p>
+
+</td>
+<td valign="top">
+<p>an existing domain; </p>
+
+<p>the domain will be used for the output object;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'georef'</p>
+
+</td>
+<td valign="top">
+<p>an existing georeference except georef <span class=courier>None</span>; </p>
+
+<p>the georeference will be used for the output raster map;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'coordsys' </p>
+
+</td>
+<td valign="top">
+<p>any existing coordinate system; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'sample set'</p>
+
+</td>
+<td valign="top">
+<p>an input sample set; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'newdomain'</p>
+
+</td>
+<td valign="top">
+<p>the output domain that will be created by the expression;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p>'newgeoref'</p>
+
+</td>
+<td valign="top">
+<p>the output georeference that will be created by the expression.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>Some operations need a value input map. When your raster map is of domain type Class, ID or Group, and an attribute table is linked to the map with one or more suitable value columns, then you may type 'map.column' on the command line instead of parameter 'map' listed below. The operation then directly uses the values of the attribute column.</p>
+
+<h2>List of ILWIS expressions</h2>
+
+<p>The list below follows the order of the <a href="main_window_menu_commands.htm">Operations menu</a> in the Main window. For more information about the individual operations, click the hyper-links of the operation names.</p>
+
+<p></p>
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top" width="180">
+<p class=kopjeboldandund>Operation</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=kopjeboldandund>Expression</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" colspan="3">
+<p class=kopjeaftertitlesub>VISUALIZATION</p>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Apply 3D</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/apply_3d_command_line.htm">MapApply3D</a>(</span>rasmap, georef3D<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map cannot have georef <span class=courier>None</span> </p>
+
+</td>
+</tr>        
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>georef3D</i></p>
+
+</td>
+<td valign="top">
+<p>a georeference 3D</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top" colspan="3">
+<p class=kopje>RASTER OPERATIONS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Map Calculate</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><b>expression</b></p>
+
+<p>see <a href="calc.htm">MapCalc</a> and <a href="calc.htm">TabCalc</a></p>
+
+</td>
+</tr>                       
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Attribute Map</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/attribute_map_of_raster_map_commandline.htm">MapAttribute</a>(</span><i>rasmap, column</i><span class=courier>) | </span><span class=DefaultStyle><b><i>Rasmap.column</i></b></span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>raster map with a Class, ID, or Group domain </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>column</i></p>
+
+</td>
+<td valign="top">
+<p>column with Value, Class, ID, Group, Picture, or Color domain; by default a column from the attribute table of the raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Cross</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/cross_commandline.htm">MapCross</a>(</span>rasmap1, <i>rasmap2</i>, output cross table<span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/cross_commandline.htm">TableCross</a>(</span>rasmap1, <i>rasmap2</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/cross_commandline.htm">TableCross</a>(</span>rasmap1, <i>rasmap2</i>, output cross rasmap<span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/cross_commandline.htm">TableCross</a>(</span>rasmap1, <i>rasmap2</i> [, output cross rasmap] [, <span class=courier>IgnoreUndefs</span> <span class=courier>|</span> <span class=courier>IgnoreUndef1</span> <span class=courier>|</span> <span class=courier>IgnoreUndef2</span> ]<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap2</i></p>
+
+</td>
+<td valign="top">
+<p>same georeference as input raster map 1.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Aggregate Map</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><a href="../ilwisapp/aggregate_command_line.htm"><span class=courier>MapAggregate</span><i>AggFunc</i></a><span class=courier>(</span><i>rasmap, groupfactor</i>, <span class=courier>group</span> [, <i>rowoffset, coloffset</i>] [, <i>newgeoref</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><a href="../ilwisapp/aggregate_command_line.htm"><span class=courier>MapAggregate</span><i>AggFunc</i></a><span class=courier>(</span><i>rasmap, groupfactor</i>, <span class=courier>nogroup</span> [, <i>rowoffset, coloffset</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <a href="../ilwisapp/aggregate_command_line2.htm"><span class=courier>MapAggregate</span><i>AggFunc</i></a><span class=courier>(##</span>, <i>groupfactor</i>, <span class=courier>group</span> [, <i>rowoffset, coloffset</i>] [, <i>newgeoref</i>] <span class=courier>))</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <a href="../ilwisapp/aggregate_command_line2.htm"><span class=courier>MapAggregate</span><i>AggFunc</i></a><span class=courier>(##</span>, <i>groupfactor</i>, <span class=courier>nogroup</span> [, <i>rowoffset, coloffset</i>] <span class=courier>))</span> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>AggFunc</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>avg | cnt | max | med | min | prd | std | sum</p>
+
+<p>When no aggregation function is specified, the upper left pixel of each block is used.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>raster map with a value domain for aggregate functions <span class=courier>avg</span>, <span class=courier>max</span>, <span class=courier>min</span>, <span class=courier>std</span>, <span class=courier>sum</span>; raster map with a class, ID, or value domain for aggregate function <span class=courier>med</span> ; raster map with any domain for aggregate function <span class=courier>prd</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>groupfactor</i></p>
+
+</td>
+<td valign="top">
+<p>a value (&gt;= 1) to define the size of the blocks of input pixels to be aggregated; a value of 4 means that each block of 4 x 4 input pixels will be aggregated.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>group</p>
+
+</td>
+<td valign="top">
+<p>each block of input pixels is aggregated to 1 output pixel; a georeference factor is created with the same name as the output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>nogroup</p>
+
+</td>
+<td valign="top">
+<p>each block of input pixels is aggregated and the output value is stored in all pixels of the block. that correspond to the considered block of input pixels; the output map uses the same georeference as the input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rowoffset</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to skip the specified number of rows.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>coloffset</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to skip the specified number of columns.</p>
+
+</td>
+</tr>          
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>newgeoref</i></p>
+
+</td>
+<td valign="top">
+<p>when using option <span class=courier>group</span>, optional parameter to specify the name of the output georeference; if not specified, the output georeference obtains the same name as the output map.</p>
+
+</td>
+</tr>  
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Distance</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/distance_calculation_commandline.htm">MapDistance</a>(</span><i>source rasmap </i>[, <i>weight rasmap</i> <span class=courier>|</span> <span class=courier>1</span>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/distance_calculation_commandline2.htm">MapDistance</a>(</span><i>source rasmap</i>, [<i>weight rasmap</i> <span class=courier>|</span> <span class=courier>1</span>] , <i>output rasmap Thiessen</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/distance_calculation_commandline2.htm">MapThiessen</a>(</span><i>source rasmap</i> [, <i>weight rasmap</i> <span class=courier>|</span> <span class=courier>1</span>] , <i>output rasmap Distance</i><span class=courier>)</span></p>
+
+</td>
+</tr>  
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>source rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map of any domain type; for all pixels with the undefined value, a distance value is calculated</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommline>[<i>weight rasmap</i><span class=courier>| 1</span>]</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p></p>
+
+</td>
+<td valign="top">
+<p><i>weight map</i> is an optional parameter to specify a map with weight factors; raster map of domain type Value. When a 1 is specified or when the parameter is not used, weight factor 1 is used for all pixels.</p>
+
+</td>
+</tr> 
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p><i>output rasmap Thiessen</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p></p>
+
+</td>
+<td valign="top">
+<p>name of output Thiessen raster map</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p><i>output rasmap Distance</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p></p>
+
+</td>
+<td valign="top">
+<p>name of output Distance raster map</p>
+
+</td>
+</tr>        
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Iteration</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/iteration_command_line.htm">MapIter</a>(</span><i>StartMap, IterExpr</i> [, <i>nr of iterations</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/iteration_command_line.htm">MapIterProp</a>(</span>StartMap, <i>IterExpr</i> [, <i>nr of iterations</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>StartMap</i></p>
+
+</td>
+<td valign="top">
+<p>raster map that is used in the <i>IterExpr.</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>IterExpr</i></p>
+
+</td>
+<td valign="top">
+<p>an expression for neighbourhood operations.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>nr of iterations</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify the maximum number of iterations; if not specified, the operation continues until no more changes occur.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Area Numbering</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/areanumbering_commandline.htm">MapAreaNumbering</a>(</span>rasmap, <span class=courier>8|4)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>8 | 4</p>
+
+</td>
+<td valign="top">
+<p>8-connected areas or 4-connected areas</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Sub Map</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline.htm">MapSubMap</a>(</span>rasmap, start row, start col [, nr rows, nr cols] [, <i> newgeoref</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline.htm">MapSubMapCorners</a>(</span>rasmap, start row, start col, end row, end col [, <i> newgeoref</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline.htm">MapSubMapCoords</a>(</span>rasmap, start X-coord, start Y-coord, end X-coord, end Y-coord [, <i> newgeoref</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline2.htm">MapSubMap</a>(##</span>, start row, start col [, nr rows, nr cols] [, <i> newgeoref</i>] <span class=courier>))</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline2.htm">MapSubMapCorners</a>(##</span>, start row, start col, end row, end col [, <i> newgeoref</i>] <span class=courier>))</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/submap_of_raster_map_commandline2.htm">MapSubMapCoords</a>(##</span>, start X-coord, start Y-coord, end X-coord, end Y-coord [, <i> newgeoref</i>] <span class=courier>))</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>newgeoref</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify a name for the output georeference; if not specified, then the output georeference obtains the same name as the output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Glue Maps</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/glue_raster_maps_command_line.htm">MapGlue</a>(</span> [<i>georef</i><span class=courier>.grf</span>,] <i>rasmap1, rasmap2</i> [, <i>rasmaps</i>] [<i>, newdomain</i>] [, <span class=courier>replace</span>] )</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>georef</i><span class=courier>.grf</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify an existing georeference for the output map; extension <span class=courier>.grf</span> is required. </p>
+
+<p>If not specified, then the system will automatically create a georeference for the output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap1</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map; if no existing georeference is specified, the georeference of this first map will be used as a basis for the georeference for the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap2</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map that will be resampled if needed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmaps</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify more input raster maps. You can specify as many input raster maps as you like; comma delimited.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>newdomain</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter, when merging class or two ID maps, to specify the name of the output domain into which all items of the input domains are merged; if not specified, the output domain will be stored by the output raster map (internal domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>replace</p>
+
+</td>
+<td valign="top">
+<p>optional parameter to use for overlapping pixels the values of the last input map; if not specified, the values of the first input map are used for overlapping pixels.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Mirror Rotate</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/mirror_rotate_commandline.htm">MapMirrorRotate</a>(</span>rasmap,<i> rotate type</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/mirror_rotate_commandline2.htm">MapMirrorRotate</a>(##</span>, <i> rotate type</i><span class=courier>))</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rotate type</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>mirrhor | mirrvert | mirrdiag | transpose | rotate90 | rotate180 | rotate270 | normal</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top" colspan="3">
+<p class=kopje>IMAGE PROCESSING</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Filter</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/filter_command_line.htm">MapFilter</a>(</span><i>rasmap, filter name</i>| <i>filter expression</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/filter_command_line2.htm">MapFilter</a>(##</span>, <i>filter name</i>| <i>filter expression</i><span class=courier>))</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>all filters use input raster maps with a value domain; the Binary filters and the Majority filters also work on other domain types.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>filter name</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>avg3x3 | binmajor | conn8to4 | d2fdx2 | d2fdxdy | d2fdy2 | dfddn | dfdup | dfdx | dfdy | dilate4 | dilate8 | edgesenh | inbnd4 | inbnd8 | laplace | lifegame | majority | majundef | majzero | med3x3 | med5x5 | outbnd4 | outbnd8 | peppsalt | shadow | shrink4 | shrink8 |</p>
+
+<p><i> user-defined  filter on disk</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p><i>filter expression</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p></p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>FilterLinear</span>(<i>rows, cols, expression</i>) | <br>
+<span class=courier>Average</span>(<i>rows, cols</i>) | <br>
+<span class=courier>RankOrder</span>(<i>rows, cols, rank</i> [, <i>threshold</i>] ) | <br>
+<span class=courier>Median</span>(<i>rows, cols</i> [, <i>threshold</i>] ) | <br>
+<span class=courier>Majority</span>(<i>rows, cols</i>) | <br>
+<span class=courier>ZeroMajority</span>(<i>rows, cols</i>) | <br>
+<span class=courier>UndefMajority</span>(<i>rows, cols</i>) | <br>
+<span class=courier>Pattern</span>(threshold) | <br>
+<span class=courier>FilterStandardDev</span>(<i>rows, cols</i>)</p>
+
+</td>
+</tr>         
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rows,cols</i></p>
+
+</td>
+<td valign="top">
+<p>size of filter in rows and columns; odd values &gt;= 1. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>threshold</i></p>
+
+</td>
+<td valign="top">
+<p>if the difference between the resulting value and the original pixel value is smaller than or equal to the threshold, the calculated value is used. If the difference between the resulting value and the original pixel value is larger than the threshold, the original pixel value is retained.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rank</i></p>
+
+</td>
+<td valign="top">
+<p>the rank number of which the pixel value is assigned to the central pixel.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>expression</i></p>
+
+</td>
+<td valign="top">
+<p>fill the values in the filter by an expression in which you can use the parameters <span class=courier>x</span>, <span class=courier>y</span>, and <span class=courier>r</span>. </p>
+
+</td>
+</tr>         
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Stretch</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/stretch_command_line.htm">MapStretch[Linear]</a>(</span><i>rasmap, range from, domain</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/stretch_command_line.htm">MapStretch[Linear]</a>(</span><i>rasmap, range from, domain, range to</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/stretch_command_line.htm">MapStretchHistEq</a>(</span><i>rasmap, range from, intervals</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/stretch_command_line2.htm">MapStretch[Linear]</a>(##</span>, <i>range from, domain</i><span class=courier>))</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/stretch_command_line2.htm">MapStretch[Linear]</a>(##</span>, <i>range from, domain, range to</i><span class=courier>))</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/stretch_command_line2.htm">MapStretchHistEq</a>(##</span>, <i>range from, intervals</i><span class=courier>))</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map using a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>range from</i></p>
+
+</td>
+<td valign="top">
+<p>min:max | perc</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>perc</i></p>
+
+</td>
+<td valign="top">
+<p>real value &gt; 0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>intervals</i></p>
+
+</td>
+<td valign="top">
+<p>number of output intervals</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>domain</i></p>
+
+</td>
+<td valign="top">
+<p>output value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>range to</i></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/y_value_range_in_expressions_popup.htm" onClick="return popup(this, 'notes')" >value range of output map</a> as: <br>
+<i>min:max</i> | <i>min:max:prec</i>| <i>::prec</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Slicing</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/slicing_commandline.htm">MapSlicing</a>(</span><i>rasmap</i>, domain group<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map using a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Color Separation</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><a href="../ilwisapp/color_separation_command_line.htm"><span class=courier>MapColorSep</span>[<span class=courier>aration</span>]</a><span class=courier>(</span><i>rasmap, color</i><span class=courier>)</span> <span class=courier>|</span> <i>rasmap.color</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map using a Picture domain or the <span class=courier>Color</span> domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>color</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>red | green | blue | yellow | magenta | cyan | grey | gray | hue | saturation | sat | intensity | intens</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Color Composite</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/color_composite_commandline.htm">MapHeckbert</a>(</span><i>maplist, nr of colors</i><span class=courier>)</span></p>
+
+<p class=calccommline><a href="../ilwisapp/color_composite_commandline.htm"><span class=courier>MapColorComp</span>[<span class=courier>Linear</span>]</a><span class=courier>(</span><i>maplist, range1, range2, range3</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/color_composite_commandline.htm">MapColorCompHistEq</a>(</span><i>maplist, range1, range2, range3</i><span class=courier>)</span></p>
+
+<p class=calccommline><a href="../ilwisapp/color_composite_commandline.htm"><span class=courier>MapColorComp24</span>[<span class=courier>Linear</span>]</a><span class=courier>(</span><i>maplist</i> [, <i> range1, range2, range3</i>]<span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/color_composite_commandline.htm">MapColorComp24HistEq</a>(</span><i>maplist, range1, range2, range3</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/color_composite_commandline.htm">MapColorComp24HSI</a>(</span><i>maplist</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maplist</i></p>
+
+</td>
+<td valign="top">
+<p>existing map list which contains three raster maps of the <span class=courier>Image</span> domain or definition of map list as:</p>
+
+<p class=calccommline><span class=courier>mlist(</span><i>ImageRed, ImageGreen, ImageBlue</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>range1,2,3</i></p>
+
+</td>
+<td valign="top">
+<p>min<span class=courier>:</span>max<span class=courier>|</span><i>perc</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>perc</i></p>
+
+</td>
+<td valign="top">
+<p>0 <span class=symbollarger>£</span> real value &lt; 50</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>nr of colors</i></p>
+
+</td>
+<td valign="top">
+<p>2 <span class=symbollarger>£</span> integer value <span class=symbollarger>£</span> 255 </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Cluster</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/cluster_command_line.htm">MapCluster</a>(</span><i>maplist</i>, <i>nr of clusters</i> [, output attrib table] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maplist</i></p>
+
+</td>
+<td valign="top">
+<p>a map list which contains 1, 2, 3, or 4 raster maps that use the Image domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>nr of clusters</i></p>
+
+</td>
+<td valign="top">
+<p>an integer value between 2 and 60 for the number of clusters in the output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Sample</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b>-</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Classify</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/classify_commandline.htm">MapClassify</a>(</span>sample set, <i>classifier</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>classifier</i></p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>ClassifierBox</span>(factor) | <br>
+<span class=courier>ClassifierMinDist</span> ( [threshold] ) | <br>
+<span class=courier>ClassifierMinMahaDist</span> ( [threshold] ) | <br>
+<span class=courier>ClassifierMaxLikelihood</span> ( [threshold] ) |<br>
+<span class=courier>ClassifierPriorProb</span> (table, column) |<br>
+<span class=courier>ClassifierPriorProb</span> (threshold, table, column)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Resample</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/resample_command_line.htm">MapResample</a>(</span>rasmap, georef<i>, resamp meth</i> [, <span class=courier>Patch | NoPatch</span>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/resample_command_line2.htm">MapResample</a>(##</span>, georef, <i>resamp meth</i> [, <span class=courier>Patch | NoPatch</span>] <span class=courier>))</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>resamp meth</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>NearestNeighbour | BiLinear | BiCubic</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Stereo pair from DTM</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/stereopair_from_dtm_commandline.htm">StereoPairFromDTM</a>(</span>rasmap, <i>DTM</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/stereopair_from_dtm_commandline.htm">StereoPairFromDTM</a>(</span>rasmap, <i>DTM</i> [, <i>look angle</i> [, <i>ref height</i> [, <i>look modus</i> [, <i>resamp modus</i>] ] ] ] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>DTM</i></p>
+
+</td>
+<td valign="top">
+<p>raster map with a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>look angle</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify the 'projection' of the two output raster maps (degrees); 0 <span class=symbollarger>£</span> real value <span class=symbollarger>£</span> 90; 
+if not specified, a default of 30 will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>ref height</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify the height value (real value) that will appear at the level of your monitor; 
+if not specified, a default of ((minimum height value in DTM + maximum height value in DTM) / 2) will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>look modus</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Left | Both | Right</p>
+<p>optional parameter to specify how the <i>look angle</i> should be divided over both output raster maps. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>resamp modus</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Fast | Accurate</p>
+<p>optional parameter to specify manner and speed of resampling. </p>
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=kopje>STATISTICS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Histogram</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/histogram_commandline.htm">TableHistogram</a>(</span><i>rasmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map of any domain type. Mind: the output raster histogram table will always have the same name as the input raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/histogram_commandline.htm">TableHistogramPnt</a>(</span><i>pntmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>input point map of any domain type. Mind: the output point histogram table will always have the same name as the input point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><a href="../ilwisapp/histogram_commandline.htm"><span class=courier>TableHistogramPol</a>(</span><i>polmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>polmap</i></p>
+
+</td>
+<td valign="top">
+<p>input polygon map of any domain type. Mind: the output polygon histogram table will always have the same name as the input polygon map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/histogram_commandline.htm">TableHistogramSeg</a>(</span><i>segmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>segmap</i></p>
+
+</td>
+<td valign="top">
+<p>input segment map of any domain type. Mind: the output segment histogram table will always have the same name as the input segment map.</p>
+
+</td>
+</tr> 
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>RASTER</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Autocorrelation</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/auto_correlation_semivariance_command_line.htm">TableAutoCorrSemiVar</a>(</span>rasmap [, <i>max shift</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>max shift</i></p>
+
+</td>
+<td valign="top">
+<p>maximum pixel shift; integer value &gt; 0; if not specified, a default of 20 will be used, but if either number of rows or number of columns in map is less than 100, a default of (map/5)+1 will be used.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Variogram Surface</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/variogram_surface_command_line.htm">MapVariogramSurfaceRas</a>(</span><i>rasmap</i> [, <i>nr of lags</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map with a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>nr of lags</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify the number of directional distance classes (lags) in both horizontal and vertical direction; 1 &lt;= integer value &lt;= 4000, but not larger than neither the number of rows nor the number of columns in the input map; if not specified, default of 10 lags.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>MAP LIST</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Principal Components</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/principal_component_analysis_command_line.htm">MatrixPrincComp</a>(</span><i>maplist</i> [, nr of output bands] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maplist</i></p>
+
+</td>
+<td valign="top">
+<p>map list containing raster maps with a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Factor Analysis</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/factor_analysis_command_line.htm">MatrixFactorAnal</a>(</span><i>maplist</i> [, nr of output bands] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maplist</i></p>
+
+</td>
+<td valign="top">
+<p>map list containing raster maps with a value domain</p>
+
+</td>
+</tr>                                   
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>POLYGONS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Neighbour Polygons</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/neighbour_polygons_command_line.htm">TableNeighbourPol</a>(</span><i>polmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>polmap</i></p>
+
+</td>
+<td valign="top">
+<p>input polygon map with a Class, ID or Group domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>SEGMENTS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Direction Histogram</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segment_direction_histogram_command_line.htm">TableSegDir</a>(</span>segmap<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>POINTS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Spatial correlation</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/spatial_correlation_commandline.htm">TableSpatCorr</a>(</span><i>pntmap</i> [, <i>lagspacing</i> [, <span class=courier>plane | sphere</span>] ] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/spatial_correlation_commandline.htm">TableSpatCorr</a>(</span><i>pntmap</i> [, <i>lagspacing</i> [, <i>direction</i> [, <i>tolerance</i> [, <i>bandwidth</i>] ] ] ] <span class=courier>)</span></p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>input point map with a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>lagspacing</i></p>
+
+</td>
+<td valign="top">
+<p>parameter to specify length of linear distance intervals; if not specified, the output table will use logarithmic distance intervals</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><span class=courier>plane | sphere</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the sphere by using the projection of the coordinate system of the point map (<span class=courier>sphere</span>); if not specified, distances will be calculated in a plane</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>direction</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to find point pairs in this direction; clockwise angle from Y-axis; 0° <span class=symbol>£</span> direction <span class=symbol>£</span> 90°</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>tolerance</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify half of the opening angle with which points in the specified direction should be found; 0° <span class=symbol>&lt;</span> tolerance <span class=symbol>£</span> 45°</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>bandwidth</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to limit the tolerance angle to a certain maximum width</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Variogram Surface</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/variogram_surface_command_line.htm">MapVariogramSurfacePnt</a>(</span><i>pntmap</i> [, <i>lagspacing</i> [, <i>nr of lags</i>] ] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>input point map with a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>lagspacing</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify the distance in meters for the directional distance classes (lags); 0 &lt; real value &lt; diagonal of point map; if not specified, default of 0.5 <span class=symbollarger>&Ouml;</span> ((point map height <span class=courier>*</span> point map width) / nr of points)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>nr of lags</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify the number of directional distance classes (lags) in both horizontal and vertical direction; 1 &lt;= integer value &lt;= 45; if not specified, default of 10 lags.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Cross Variogram</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/cross_variogram_command_line.htm">TableCrossVariogram</a>(</span><i>pntmap</i>, <i>columnA</i>, <i>columnB</i>, <i>lagspacing</i> [, <span class=courier>plane | sphere</span>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>input point map with an ID domain and linked attribute table</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>columnA</i></p>
+
+</td>
+<td valign="top">
+<p>attribute column with value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>columnB</i></p>
+
+</td>
+<td valign="top">
+<p>attribute column with value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>lagspacing</i></p>
+
+</td>
+<td valign="top">
+<p>parameter to specify length of linear distance intervals</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><span class=courier>plane | sphere</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the sphere by using the projection of the coordinate system of the point map (<span class=courier>sphere</span>); if not specified, distances will be calculated in a plane</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Pattern Analysis</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/pattern_analysis_command_line.htm">TablePattAnal</a>(</span><i>pntmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>input point map with more than two points</p>
+
+</td>
+</tr>     
+</table>
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top" colspan="3">
+<p class=kopje>INTERPOLATION</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Densify map</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/densify_commandline.htm">MapDensify</a>(</span><i>rasmap, factor, interpol meth</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier>MapListApplic(</span>maplist, <span class=courier><a href="../ilwisapp/densify_commandline2.htm">MapDensify</a>(##</span>, <i>factor, interpol meth</i><span class=courier>))</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>raster map with a value domain for a BiLinear or Bicubic interpolation; raster map with any domain for Nearest Neighbour.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>factor</i></p>
+
+</td>
+<td valign="top">
+<p>real value &gt; 1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>interpol meth</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>BiLinear | BiCubic | NearestNeighbour</p>
+
+</td>
+</tr> 
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Kriging from Raster</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/kriging_from_raster_command_line.htm">MapKrigingFromRaster</a>(</span><i>rasmap</i>, <i>SemiVarModel</i> [, <i>LimDist</i> [, <i>Distance Unit</i> [ , <span class=courier>1&nbsp;|&nbsp;0</span> [, <i> min, max</i>] ] ] ] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map with a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>SemiVarModel</i></p>
+
+</td>
+<td valign="top">
+<p class=calccommline><i>Model</i>(<i>nugget, sill, range</i>)<span class=courier> | <br>
+Power</span>(<i>nugget, slope, pow</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>Model</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Spherical | Exponential | Gaussian | Wave | Circular | RatQuad</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>LimDist</i></p>
+
+</td>
+<td valign="top">
+<p>limiting distance either in meters or in number of pixels</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+
+</td>
+<td valign="top" width="144">
+<i>Distance Unit</i>
+
+</td>
+<td valign="top">
+<p class=courier>m | p</p>
+
+<p>defines whether limiting distance is expressed in meters (m) or in pixels (p)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><span class=courier>1 | 0</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to create an error map: <span class=courier>1</span> do create error map, <span class=courier>0</span> do not create error map; if not specified, no error map will be created</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>min, max</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameters to specify the minimum and maximum number of input pixels with a value to be taken into account within the limiting distance</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Contour Interpolation</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/contour_interpolation_command_line.htm">MapInterpolContour</a>(</span><i>segmap</i>, georef<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>segmap</i></p>
+
+</td>
+<td valign="top">
+<p>input segment map with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/contour_interpolation_command_line.htm">MapInterpolContour</a>(</span><i>rasmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map with a value domain; mind: algorithm only works well for rasterized contour lines.</p>
+
+</td>
+</tr>                                
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Point Interpolation:</p>
+
+</td>
+<td valign="top" colspan="2">
+<p>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Nearest Point</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/nearest_point_commandline.htm">MapNearestPoint</a>(</span>pntmap, georef [, <span class=courier>plane | sphere</span>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><span class=courier>plane | sphere</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the sphere by using the projection of the coordinate system as used by the georeference of the output raster map (<span class=courier>sphere</span>); if not specified, distances will be calculated in a plane</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Moving Average</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/moving_average_commandline.htm">MapMovingAverage</a>(</span><i>pntmap</i>, georef, <i>weight func</i> [, <span class=courier>plane | sphere</span>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>input point map with a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>weight func</i></p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>InvDist</span>(<i>Exp,LimDist</i>)<span class=courier> | Linear</span>(<i>Exp,LimDist</i>)</p>
+
+</td>
+</tr>                             
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>Exp</i></p>
+
+</td>
+<td valign="top">
+<p>weight exponent</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>LimDist</i></p>
+
+</td>
+<td valign="top">
+<p>limiting distance</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><span class=courier>plane | sphere</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the sphere by using the projection of the coordinate system as used by the georeference of the output raster map (<span class=courier>sphere</span>); if not specified, distances will be calculated in a plane</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Trend Surface</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/trend_surface_command_line.htm">MapTrendSurface</a>(</span><i>pntmap</i>, georef, <i>surface type</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>input point map with a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>surface type</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Plane | Linear2 | Parabolic2 | 2 | 3 | 4 | 5 | 6</p>
+
+</td>
+</tr>            
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Moving Surface</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/moving_surface_command_line.htm">MapMovingSurface</a>(</span><i>pntmap</i>, georef, <i>surface type, weight func</i> [, <span class=courier>plane | sphere</span>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>input point map with a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>surface type</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Plane | Linear2 | Parabolic2 | 2 | 3 | 4 | 5 | 6</p>
+
+</td>
+</tr>                             
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>weight func</i></p>
+
+</td>
+<td valign="top">
+<p><span class=courier>InvDist</span>(<i>Exp,LimDist</i>) | <span class=courier>Linear</span>(<i>Exp,LimDist</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>Exp</i></p>
+
+</td>
+<td valign="top">
+<p>weight exponent</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>LimDist</i></p>
+
+</td>
+<td valign="top">
+<p>limiting distance</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><span class=courier>plane | sphere</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the sphere by using the projection of the coordinate system as used by the georeference of the output raster map (<span class=courier>sphere</span>); if not specified, distances will be calculated in a plane</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Kriging</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/kriging_command_line.htm">MapKrigingSimple</a>(</span><i>pntmap</i>, georef, <i>SemiVarModel</i> [, <span class=courier>plane | sphere</span>] [, <span class=courier>1&nbsp;|&nbsp;0</span> [, <i>remove duplic</i> [, <i>tolerance</i>] ] ] <span class=courier>)</span> </p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/kriging_command_line.htm">MapKrigingOrdinary</a>(</span><i>pntmap</i>, georef, <i>SemiVarModel</i> [, <span class=courier>plane | sphere</span>] , <i>LimDist</i> [, <span class=courier>1&nbsp;|&nbsp;0</span> [, <i>min, max </i>[, <i>remove duplic</i> [, <i>tolerance</i>] ] ] ] <span class=courier>)</span> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>input point map with a value domain</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>SemiVarModel</i></p>
+
+</td>
+<td valign="top">
+<p class=calccommline><i>Model</i>(<i>nugget, sill, range</i>)<span class=courier> | <br>
+
+Power</span>(<i>nugget, slope, pow</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>Model</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Spherical | Exponential | Gaussian | Wave | Circular | RatQuad</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><span class=courier>plane | sphere</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the sphere by using the projection of the coordinate system as used by the georeference of the output raster map (<span class=courier>sphere</span>); if not specified, distances will be calculated in a plane</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>LimDist</i></p>
+
+</td>
+<td valign="top">
+<p>limiting distance</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><span class=courier>1 | 0</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to create an error map: <span class=courier>1</span> do create error map, <span class=courier>0</span> do not create error map; if not specified, no error map will be created</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>min, max</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameters to specify the minimum and maximum number of points to be taken into account within the limiting distance</p>
+
+</td>
+</tr>                           
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>remove duplic</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>no | average | firstval</p>
+
+<p>optional parameter to handle possible coinciding points</p>
+
+</td>
+</tr>                                         
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>tolerance</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify a distance value in meters with which is determined whether points are coinciding or not</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Anisotropic Kriging</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/anisotropic_kriging_command_line.htm">MapKrigingAnisotropic</a>(</span><i>pntmap</i>, georef, <i>SemiVarModel, LimDist, angle, ratio</i> [, <span class=courier>1 | 0</span> [, <i>min, max</i> [, <i>remove duplic</i> [, <i>tolerance</i>] ] ] ] <span class=courier>)</span> </p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/anisotropic_kriging_command_line.htm">MapKrigingUniversal</a>(</span><i>pntmap</i>, georef, <i>SemiVarModel, LimDist, </i><span class=courier>0</span><i>, angle, ratio</i> [, <span class=courier>1 | 0</span> [, <i>min, max</i> [, <i>remove duplic</i> [, <i>tolerance</i>] ] ] ] <span class=courier>)</span> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>0</p>
+
+</td>
+<td valign="top">
+<p>if using the MapKrigingUniversal syntax, obligatory parameter to indicate that there is no trend</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>angle</i></p>
+
+</td>
+<td valign="top">
+<p>anisotropy angle (clockwise angle in degrees from North; -360 &lt;= <i>angle</i> &lt;= 360)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>ratio</i></p>
+
+</td>
+<td valign="top">
+<p>anisotropy ratio; largest semi-variogram range divided by smallest semi-variogram range (1 &lt; <i>ratio</i> &lt;= 10)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>other parameters</i></p>
+
+</td>
+<td valign="top">
+<p>see Kriging</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Universal Kriging</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/universal_kriging_command_line.htm">MapKrigingUniversal</a>(</span><i>pntmap</i>, georef, <i>SemiVarModel, LimDist, trend type, </i><span class=courier>0</span>, <span class=courier>1</span> [, <span class=courier>1 | 0</span> [, <i>min, max</i> [, <i>remove duplic</i> [, <i>tolerance</i>] ] ] ] <span class=courier>)</span> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>trend type</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>0 | 1 | 2 </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>0,1</p>
+
+</td>
+<td valign="top">
+<p>parameters to indicate that there is no anisotropy (angle and ratio)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>other parameters</i></p>
+
+</td>
+<td valign="top">
+<p>see Kriging</p>
+
+</td>
+</tr>                                  
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>CoKriging</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/cokriging_command_line.htm">MapCoKriging</a>(</span><i>pntmapPred, pntmapCovar, </i>georef, <i>SemiVarModelPred, SemiVarModelCovar, CrossVarModel, LimDist</i> [, <span class=courier>1 | 0</span> [, <i>min, max</i> [, <i>remove duplic</i> [, <i>tolerance</i> [, <span class=courier>plane | sphere</span>] ] ] ] ] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmapPred</i></p>
+
+</td>
+<td valign="top">
+<p>input point map for predictand</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmapCovar</i></p>
+
+</td>
+<td valign="top">
+<p>input point map for covariable</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>SemiVarModelPred</i></p>
+
+<td>
+<p>semi-variogram model for predictand, see Kriging</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>SemiVarModelCovar</i></p>
+
+</td>
+<td valign="top">
+<p>semi-variogram model for covariable, see Kriging</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>CrossVarModel</i></p>
+
+</td>
+<td valign="top">
+<p>cross-variogram model for both variables, see Kriging</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p>&nbsp;</p>
+
+</td>
+<td valign="top" width="144">
+<p><i>other parameters</i></p>
+
+</td>
+<td valign="top">
+<p>see Kriging</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top" colspan="3">
+<p class=kopje>VECTOR OPERATIONS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Unique ID</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/unique_id_command_line.htm">PolygonMapNumbering</a>(</span>polmap [, , <i>prefix</i>] <span class=courier>)</span> </p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/unique_id_command_line.htm">SegmentMapNumbering</a>(</span>segmap [, , <i>prefix</i>] <span class=courier>)</span> </p> 
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/unique_id_command_line.htm">PointMapNumbering</a>(</span>pntmap [, , <i>prefix</i>] <span class=courier>)</span> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>prefix</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify a user-defined prefix for the output IDs; if this parameter is not specified, the output IDs will simply be pol 1, pol 2, pol 3, or seg 1, seg 2, seg 3, or pnt 1, pnt 2, pnt 3, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>POLYGONS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Attribute Map</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/attribute_map_of_polygon_map_commandline.htm">PolygonMapAttribute</a>(</span><i>polmap, column</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>polmap</i></p>
+
+</td>
+<td valign="top">
+<p>polygon map with a Class, ID, or Group domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>column</i></p>
+
+</td>
+<td valign="top">
+<p>column with a Value, Class, ID, or Group domain; by default a column from the attribute table of the polygon map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Mask Polygons</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/mask_polygons_command_line.htm">PolygonMapMask</a>(</span>polmap, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i><span class=courier>&quot;</span>mask<span class=courier>&quot;</span></i></p>
+
+</td>
+<td valign="top">
+<p>a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> consists of (multiple) search strings; asterisks and question marks can be used as wild cards; on the command line, the total mask needs to be surrounded by double quotes.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Assign Labels</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/assign_labels_to_polygons_command_line.htm">PolygonMapLabels</a>(</span>polmap, pntmap<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Transform Polygons</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/transform_polygon_map_command_line.htm">PolygonMapTransform</a>(</span>polmap, targetcoordsys [, <i>interval</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>interval</i></p>
+
+</td>
+<td valign="top">
+<p>distance interval at which additional intermediate points should be inserted along polygon boundaries to densify the coordinates of the polygon boundaries; real value &gt; 0 </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>ID Grid Map</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a  href="../ilwisapp/id_grid_map_command_line.htm">PolygonMapGrid</a></span> 
+ (<i>coordsys</i>, <i>originX</i>, <i>originY</i>, <i>width</i>, <i>height</i>, <i>nrVertical</i>,
+<i>nrHorizontal</i>, , , [<i>directionX</i>], [<i>directionY</i>], [<i>table</i>],
+[<i>label</i>],&nbsp; [<i>order</i>], [<i>startcorner</i>], [<i>startnumber</i>],
+[<i>steps</i>], [<i>prefix</i>], [<i>postfix</i>])<p class=calccommlinelnsp01b><span class=courier><a  href="../ilwisapp/id_grid_map_command_line.htm">PolygonMapGrid</a></span> 
+ (<i>coordsys</i>, <i>originX</i>, <i>originY</i>, <i>width</i>, <i>height</i>, , ,
+<i>oppositeX</i>, <i> oppositeY</i>, [<i>directionX</i>], [<i>directionY</i>], [<i>table</i>],
+[<i>label</i>], [<i>order</i>], [<i>startcorner</i>], [<i>startnumber</i>], [<i>steps</i>],
+[<i>prefix</i>], [<i>postfix</i>])<p class=calccommlinelnsp01b><span class=courier><a  href="../ilwisapp/id_grid_map_command_line.htm">PolygonMapGrid</a></span> 
+ (<i>coordsys</i>, <i>originX</i>, <i>originY</i>, , , <i>nrVertical</i>, <i>nrHorizontal</i>,
+<i>oppositeX</i>, <i> oppositeY</i>
+ [<i>directionX</i>], [<i>directionY</i>], [<i>table</i>], [<i>label</i>], [<i>order</i>],
+[<i>startcorner</i>], [<i>startnumber</i>], [<i>steps</i>], [<i>prefix</i>], [<i>postfix</i>])</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>coordsys</i></p>
+
+</td>
+<td valign="top">
+<p>input coordinate system (metric or latlon) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>originX, originY</i></p>
+
+</td>
+<td valign="top">
+<p>X and Y coordinates of the origin. The origin is the lower left corner of the
+output polygon map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>width, height</i></p>
+
+</td>
+<td valign="top">
+<p>width and height of an ID grid cell </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>nrVertical, nrHorizontal</i></p>
+
+</td>
+<td valign="top">
+<p>number of vertical and horizontal grid cells </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>oppositeX, oppositeY</i></p>
+
+</td>
+<td valign="top">
+<p>X and Y coordinates of the opposite corner coordinate. The opposite corner
+coordinate is the corner opposite the corner specified as 'origin coordinate'. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>directionX, directionY</i></p>
+
+</td>
+<td valign="top">
+<p>X and Y coordinates of the direction point. The direction point is a point on
+the positive Y-axis from the lower left corner (origin) of the ID grid map and
+is used to rotate the grids. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>table</i></p>
+
+</td>
+<td valign="top">
+<p>an existing attribute table with an ID domain </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>label</i></p>
+
+</td>
+<td valign="top">
+<span class="courier">LabelPoints</span> | <span class="courier">NoLabelPoints</span>
+<p>generate a point map with label points. Do not generate a point map. If
+omitted <span class="courier">NoLabelPoints</span> will be assigned.
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>order</i></p>
+
+</td>
+<td valign="top">
+<p>direction for labeling the grid cells. Available option are: Horizontal (<span class="courier">H</span>),
+Horizontal Continues (<span class="courier">HC</span>), Vertical (<span class="courier">V</span>)
+and Vertical Continues (<span class="courier">VC</span>). If omitted Horizontal (<span class="courier">H</span>)
+will be assigned. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>startcorner</i></p>
+
+</td>
+<td valign="top">
+<p>starting corner for labeling. Available option are: Lower Left (<span class="courier">LL</span>),
+Lower Right (<span class="courier">LR</span>), Upper Left (<span class="courier">UL</span>)
+and Upper Right (<span class="courier">UR</span>). If omitted Lower Left (<span class="courier">LL</span>)
+will be assigned. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>startnumber</i></p>
+
+</td>
+<td valign="top">
+<p>an integer that will be used as initial number to start labeling the grid
+cells. If the value for this parameter is omitted, 1 will be assigned. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>steps</i></p>
+
+</td>
+<td valign="top">
+<p>step size. The step size is a positive or negative integer that is used to
+determine the increase/decrease of each individual grid cell during the labeling
+process. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>prefix</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify some characters that should be used as prefix
+for the IDs in the output polygon map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>postfix</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify some characters that should be used as postfix
+for the IDs in the output polygon map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colwidth="3">
+<p class=linespacing01before>SEGMENTS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Attribute Map</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/attribute_map_of_segment_map_commandline.htm">SegmentMapAttribute</a>(</span><i>segmap, column</i><span class=courier>)</span> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>segmap</i></p>
+
+</td>
+<td valign="top">
+<p>segment map with a Class, ID, or Group domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>column</i></p>
+
+</td>
+<td valign="top">
+<p>column with a Value, Class, ID, or Group domain; by default a column from the attribute table of the segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Mask Segments</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/mask_segments_commandline.htm">SegmentMapMask</a>(</span>segmap, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i><span class=courier>&quot;</span>mask<span class=courier>&quot;</span></i></p>
+
+</td>
+<td valign="top">
+<p>a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> consists of (multiple) search strings; asterisks and question marks can be used as wild cards; on the command line, the total mask needs to be surrounded by double quotes.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Assign Labels</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/assign_labels_to_segments_command_line.htm">SegmentMapLabels</a>(</span>segmap, pntmap [, <i>set domain</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>set domain</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>yes | no </p>
+
+<p>optional parameter to set the domain of the output segment map to the domain of the input segment map or to the domain of the input point map; if this parameter is not specified, the output segment map will use the same domain as the input segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>no</p>
+
+</td>
+<td valign="top">
+<p>domain of output segment map is domain of input segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>yes</p>
+
+</td>
+<td valign="top">
+<p>domain of output segment map is domain of input point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Sub Map</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/submap_of_segment_map_commandline.htm">SegmentMapSubMap</a>(</span>segmap, <i>minX, minY, maxX, maxY</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/submap_of_segment_map_commandline.htm">SegmentMapSubMap</a>(</span>segmap, <i>minLon, minLat, maxLon, maxLat</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minX</i></p>
+
+</td>
+<td valign="top">
+<p>minimum X-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minY</i></p>
+
+</td>
+<td valign="top">
+<p>minimum Y-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxX</i></p>
+
+</td>
+<td valign="top">
+<p>maximum X-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxY</i></p>
+
+</td>
+<td valign="top">
+<p>maximum Y-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p>in case input map uses coordinate system of <i>type latlon</i>:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minLon</i></p>
+
+</td>
+<td valign="top">
+<p>minimum Longitude of output map (signed decimal degrees).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minLat</i></p>
+
+</td>
+<td valign="top">
+<p>minimum Latitude of output map (signed decimal degrees).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxLon</i></p>
+
+</td>
+<td valign="top">
+<p>maximum Longitude of output map (signed decimal degrees).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxLat</i></p>
+
+</td>
+<td valign="top">
+<p>maximum Latitude of output map (signed decimal degrees).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Glue Segment Maps</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/glue_segment_maps_commandline.htm">SegmentMapGlue</a>(</span><i>segmap1</i>, <span class=courier>&quot;</span><i>mask1</i><span class=courier>&quot;</span><i>, segmap2</i>, <span class=courier>&quot;</span><i>mask2</i><span class=courier>&quot; </span>[<i>,</i>...]  [<i>, newdomain</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/glue_segment_maps_commandline.htm">SegmentMapGlue</a>(</span><i>minX, minY, maxX, maxY, segmap1,</i><span class=courier>&quot;</span><i>mask1</i><span class=courier>&quot;,</span><i> segmap2</i>, <span class=courier>&quot;</span><i>mask2</i><span class=courier>&quot; </span>[, ... ] [<i>, newdomain</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>segmap1,2, ...</i></p>
+
+</td>
+<td valign="top">
+<p>are the input segment map names to be combined into one output segment map</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i><span class=courier>&quot;</span>mask1<span class=courier>&quot;</span></i></p>
+
+</td>
+<td valign="top">
+<p>a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> consists of (multiple) search strings; asterisks and question marks can be used as wild cards; on the command line, the total mask needs to be surrounded by double quotes.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minX</i></p>
+
+</td>
+<td valign="top">
+<p>minimum X-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minY</i></p>
+
+</td>
+<td valign="top">
+<p>minimum Y-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxX</i></p>
+
+</td>
+<td valign="top">
+<p>maximum X-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxY</i></p>
+
+</td>
+<td valign="top">
+<p>maximum Y-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>newdomain</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter, when merging Class or ID maps, to specify a name for the output domain into which all items of the input domains are merged; if not specified, the output domain will be stored by the output map (internal domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Densify Coords</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/densify_segment_coordinates_commandline.htm">SegmentMapDensifyCoords</a>(</span>segmap, <i>distance</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>distance</i></p>
+
+</td>
+<td valign="top">
+<p>is the distance in meters at which extra intermediate points should be inserted into segments; real value &gt; 0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Transform Segments</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/transform_segment_map_command_line.htm">SegmentMapTransform</a>(</span>segmap, targetcoordsys [, <i>interval</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>interval</i></p>
+
+</td>
+<td valign="top">
+<p>distance interval at which additional intermediate points should be inserted along segments to densify the segment coordinates; real value &gt; 0 </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Tunneling</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/tunnel_segments_commandline.htm">SegmentMapTunneling</a>(</span>segmap, <i>tunnel width, remove node</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>tunnel width</i></p>
+
+</td>
+<td valign="top">
+<p>tunnel width in meters; real value &gt;= 0 </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>remove node</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>yes | no </p>
+
+<p>remove superfluous nodes or not.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>POINTS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Attribute Map</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/attribute_map_of_point_map_commandline.htm">PointMapAttribute</a>(</span><i>pntmap, column</i><span class=courier>)</span> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>point map with a Class, ID, or Group domain </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>column</i></p>
+
+</td>
+<td valign="top">
+<p>column with a Value, Class, ID, or Group domain; by default a column from the attribute table of the point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Mask Points</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/mask_points_command_line.htm">PointMapMask</a>(</span>pntmap, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i><span class=courier>&quot;</span>mask<span class=courier>&quot;</span></i></p>
+
+</td>
+<td valign="top">
+<p>a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> consists of (multiple) search strings; asterisks and question marks can be used as wild cards; on the command line, the total mask needs to be surrounded by double quotes.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Sub Map</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/submap_of_point_map_commandline.htm">PointMapSubMap</a>(</span>pntmap, <i>minX, minY, maxX, maxY</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/submap_of_point_map_commandline.htm">PointMapSubMap</a>(</span>pntmap, <i>minLon, minLat, maxLon, maxLat</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minX</i></p>
+
+</td>
+<td valign="top">
+<p>minimum X-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minY</i></p>
+
+</td>
+<td valign="top">
+<p>minimum Y-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxX</i></p>
+
+</td>
+<td valign="top">
+<p>maximum X-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxY</i></p>
+
+</td>
+<td valign="top">
+<p>maximum Y-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p>in case input map uses coordinate system of <i>type latlon</i>:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minLon</i></p>
+
+</td>
+<td valign="top">
+<p>minimum Longitude of output map (signed decimal degrees).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minLat</i></p>
+
+</td>
+<td valign="top">
+<p>minimum Latitude of output map (signed decimal degrees).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxLon</i></p>
+
+</td>
+<td valign="top">
+<p>maximum Longitude of output map (signed decimal degrees).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxLat</i></p>
+
+</td>
+<td valign="top">
+<p>maximum Latitude of output map (signed decimal degrees).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Glue Point Maps</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/glue_point_maps_commandline.htm">PointMapGlue</a>(</span><i>pntmap1</i>, <span class=courier>&quot;</span><i>mask1</i><span class=courier>&quot;</span><i>,pntmap2</i>, <span class=courier>&quot;</span><i>mask2</i><span class=courier>&quot; </span>[<i>,</i>... ] [<i>, newdomain</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/glue_point_maps_commandline.htm">PointMapGlue</a>(</span><i>minX, minY, maxX, maxY, pntmap1,</i><span class=courier>&quot;</span><i>mask1</i><span class=courier>&quot;</span><i>, pntmap2</i>, <span class=courier>&quot;</span><i>mask2</i><span class=courier>&quot; </span>[, ... ] [<i>, newdomain</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>pntmap1,2, ...</i></p>
+
+</td>
+<td valign="top">
+<p>are the input point map names to be combined into one output point map</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i><span class=courier>&quot;</span>mask1<span class=courier>&quot;</span></i></p>
+
+</td>
+<td valign="top">
+<p>a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> consists of (multiple) search strings; asterisks and question marks can be used as wild cards; on the command line, the total mask needs to be surrounded by double quotes.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minX</i></p>
+
+</td>
+<td valign="top">
+<p>minimum X-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minY</i></p>
+
+</td>
+<td valign="top">
+<p>minimum Y-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxX</i></p>
+
+</td>
+<td valign="top">
+<p>maximum X-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>maxY</i></p>
+
+</td>
+<td valign="top">
+<p>maximum Y-coordinate of output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>newdomain</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter, when merging Class or ID maps, to specify a name for the output domain into which all items of the input domains are merged; if not specified, the output domain will be stored by the output map (internal domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Transform Points</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/transform_point_map_command_line.htm">PointMapTransform</a>(</span>pntmap, targetcoordsys<span class=courier>)</span></p>
+
+</td>
+</tr>
+
+<tr>
+<td colspan="3">
+<p class=kopje>RASTERIZE</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Polygon to Raster</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/polygons_to_raster_commandline.htm">MapRasterizePolygon</a>(</span>polmap, georef<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Segment to Raster</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segments_to_raster_commandline.htm">MapRasterizeSegment</a>(</span>segmap, georef<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Segment Density</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segment_density_command_line.htm">MapSegmentDensity</a>(</span>segmap, &quot;<i>mask</i>&quot;, georef<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i><span class=courier>&quot;</span>mask<span class=courier>&quot;</span></i></p>
+
+</td>
+<td valign="top">
+<p>a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> consists of (multiple) search strings; asterisks and question marks can be used as wild cards; on the command line, the total mask needs to be surrounded by double quotes.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Point to Raster</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/points_to_raster_commandline.htm">MapRasterizePoint</a>(</span>pntmap, georef, <i>point size</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>point size</i></p>
+
+</td>
+<td valign="top">
+<p>size in pixels; integer value &gt; 0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Point Density</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/point_density_command_line.htm">MapRasterizePointCount</a>(</span>pntmap, georef, <i>point size</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/point_density_command_line.htm">MapRasterizePointSum</a>(</span>pntmap, georef, <i>point size</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>point size</i></p>
+
+</td>
+<td valign="top">
+<p>size in pixels; integer value &gt; 0</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top" colspan="3">
+<p class=kopje>VECTORIZE</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Raster to Polygon</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/raster_to_polygons_command_line.htm">PolygonMapFromRas</a>(</span><i>rasmap</i> [, <span class=courier>8|4</span> [,  <span class=courier>smooth|nosmooth</span>] ] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map cannot have georef <span class=courier>None</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>8|4</p>
+
+</td>
+<td valign="top">
+<p>distinguish 8-connected or 4-connected areas;</p>
+
+<p>default <span class=courier>8</span>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>smooth</p>
+
+</td>
+<td valign="top">
+<p>smooth polygon boundaries; default.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>nosmooth</p>
+
+</td>
+<td valign="top">
+<p>do not smooth polygon boundaries.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Raster to Segment</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/raster_to_segments_command_line.htm">SegmentMapFromRasAreaBnd</a>(</span><i>rasmap</i>, <span class=courier>8|4</span>, <span class=courier>smooth|nosmooth</span>, <span class=courier>single|unique)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map cannot have georef <span class=courier>None</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>8|4</p>
+
+</td>
+<td valign="top">
+<p>distinguish 8-connected or 4-connected areas.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>smooth</p>
+
+</td>
+<td valign="top">
+<p>smooth segments.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>nosmooth</p>
+
+</td>
+<td valign="top">
+<p>do not smooth segments.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>single</p>
+
+</td>
+<td valign="top">
+<p>assign the name 'Boundaries' to all output segments (internal output domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>unique</p>
+
+</td>
+<td valign="top">
+<p>assign unique names like 'Boundary 1', 'Boundary 2', etc. to the output segments; an attribute table will be created storing the names of the mapping units on both sides of each output segment and the lengths of the extracted segments. Output map and attribute table will use an internal UniqueID domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Raster to Point</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/raster_to_points_commandline.htm">PointMapFromRas</a>(</span><i>rasmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map cannot have georef <span class=courier>None</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Polygon to Segment</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/polygons_to_segments_command_line.htm">SegmentMapPolBoundaries</a>(</span>polmap, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;</span>, <span class=courier>single</span> | <span class=courier>unique)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i><span class=courier>&quot;</span>mask<span class=courier>&quot;</span></i></p>
+
+</td>
+<td valign="top">
+<p>a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> consists of (multiple) search strings; asterisks and question marks can be used as wild cards; on the command line, the total mask needs to be surrounded by double quotes.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>single</p>
+
+</td>
+<td valign="top">
+<p>assign the name 'Boundary' to all output segments (internal output domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>unique</p>
+
+</td>
+<td valign="top">
+<p>assign unique names like 'Boundary 1', 'Boundary 2', etc. to the output segments; an attribute table will be created storing the names of the polygons on both sides of each output segment and the lengths of the extracted segments. Output map and attribute table will use an internal UniqueID domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Polygon to Point</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/polygons_to_points_commandline.htm">PointMapPolLabels</a>(</span>polmap [<span class=DefaultStyle><small>,</small></span> <span class=courier>AlsoUndefs</span>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>AlsoUndefs</p>
+
+</td>
+<td valign="top">
+<p>optional parameter to also obtain label points for polygons which have no class name, ID or value.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Segment to Polygon</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segments_to_polygons_command_line.htm">PolygonMapFromSegment</a>(</span>segmap [, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;</span> [, <i>labelpntmap</i> | <span class=courier>unique</span> | <i>domain</i> [, <span class=courier>auto</span>] ] <span class=courier>)</span></p>
+                                                                                                                                       
+<p class=calccommline><span class=courier><a href="../ilwisapp/segments_to_polygons_command_line.htm">PolygonMapFromSegmentNonTopo</a>(</span>segmap [, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;</span> [, <span class=courier>segments</span> | <i>labelpntmap</i> | <span class=courier>unique</span> | <i>domain</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i><span class=courier>&quot;</span>mask<span class=courier>&quot;</span></i></p>
+
+</td>
+<td valign="top">
+<p>a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> consists of (multiple) search strings; asterisks and question marks can be used as wild cards; on the command line, the total mask needs to be surrounded by double quotes; if not specified all segments are used.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>labelpntmap</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to automatically assign names to the output polygons according to a specified point map <i>labelpntmap</i> which contains the labels.  </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>segments</p>
+
+</td>
+<td valign="top">
+<p>optional parameter to polygonize non-topological segments while assigning to each polygon the code of the segment which encloses the polygon. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>unique</p>
+
+</td>
+<td valign="top">
+<p>optional parameter to polygonize the segments while assigning unique names to the polygons as Pol 1, Pol 2, etc. (internal domain). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>domain</i></p>
+
+</td>
+<td valign="top">
+<p>mainly used during polygonization in the Segment editor (see <a href="../ilwismen/segment_editor_polygonize.htm">Segment editor, Polygonize</a>); optional parameter to use a specified domain for the output polygon map; in the output map, the polygons will not have names yet: you will need to manually assign names to the polygons according to the selected domain. </p>
+
+<p>If none of the parameters <i>labelpntmap</i>, <span class=courier>segments</span>, <span class=courier>unique</span>, or <i>domain</i> are specified, the <span class=courier>Unique</span> option will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>auto</p>
+
+</td>
+<td valign="top">
+<p>optional parameter during topological polygonization to automatically correct erroneous segments in the input map; deletes false polygons, deletes segments with dead ends, insert nodes when needed; if not specified and an error is found, the program stops and no polygon map is calculated.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Segment to Point</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/segments_to_points_commandline.htm">PointMapSegCoords</a>(</span>segmap<span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/segments_to_points_commandline.htm">PointMapSegDist</a>(</span>segmap, <i>distance</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/segments_to_points_commandline.htm">PointMapSegNodes</a>(</span>segmap<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>distance</i></p>
+
+</td>
+<td valign="top">
+<p>distance interval in meters; real value &gt; 0</p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top" colspan="3">
+<p class=kopje>TABLE OPERATIONS</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Transpose Table</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/transpose_table_command_line.htm">TableTranspose</a>(</span><i>table, col domain</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/transpose_table_command_line.htm">TableTranspose</a>(</span><i>table, col domain, valuerange</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>table</i></p>
+
+</td>
+<td valign="top">
+<p>input table with a domain none, class or ID and maximum 1000 records</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>col domain</i></p>
+
+</td>
+<td valign="top">
+<p>the domain that will be used for all columns in the transposed table </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i><a href="..//ilwis/popup/y_value_range_in_expressions_popup.htm" onClick="return popup(this, 'notes')" >valuerange</a></i></p>
+
+</td>
+<td valign="top">
+<p>if the <i>column domain</i> is a value domain, specify the value range as <i>min</i><span class=courier>:</span><i>max </i>:<i> prec</i> that will be used for all columns in the transposed table</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Change Domain</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/change_domain_of_table_command_line.htm">TableChangeDomain</a>(</span>table, <span class=courier>None</span> | <i>domain</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/change_domain_of_table_command_line.htm">TableChangeDomain</a>(</span>table, <i>column</i>[, <span class=courier>avg</span> <span class=courier>|</span> <span class=courier>min</span> <span class=courier>|</span> <span class=courier>max</span> <span class=courier>|</span> <span class=courier>sum</span> <span class=courier>|</span> <span class=courier>last</span> <span class=courier>|</span> <span class=courier>no</span>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>domain</i></p>
+
+</td>
+<td valign="top">
+<p>parameter to specify the name of an existing class or ID domain on disk. The output table will use this class or ID domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>column</i></p>
+
+</td>
+<td valign="top">
+<p>parameter to specify the name of a class or ID column in the input table; the output table will use the domain of the specified column. When no aggregation function is used, the classes or IDs in the specified column should be unique.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=courier>avg|min|max|sum|last|no</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p></p>
+
+</td>
+<td valign="top">
+<p>parameter to specify the aggregation method for other value columns, when the classes or IDs in the specified column are not unique: average, minimum value, maximum value, sum, last value encountered or no aggregation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Table to PointMap</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/table_to_point_map_command_line.htm">PointMapFromTable</a>(</span>table, <i>XYcoordcolumn</i> [<i>, prefix | attribcolumn</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/table_to_point_map_command_line.htm">PointMapFromTable</a>(</span>table, [<i>Xcolumn, Ycolumn,</i>] coordsys [<i>, prefix | attribcolumn</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>XYcoordcolumn</i></p>
+
+</td>
+<td valign="top">
+<p>parameter to specify name of a coordinate column in the table which contain the XY-coordinates for the points as (X,Y); column should use a coordinate system as its domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>Xcolumn, Ycolumn</i></p>
+
+</td>
+<td valign="top">
+<p>parameters to specify names of columns in the table which contain the X- and Y-coordinates for the points; do not need to be specified when table contains columns with names X and Y.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>prefix</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter for a table with domain <span class=courier>None</span> to create a new ID domain for the output point map and table, the IDs will consist of specified <i>prefix</i> followed by the record number of the table; if not specified, the new IDs will use prefix <span class=courier>Pnt</span> followed by the record numbers of the table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>attribcolumn</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to use a domain of a column in the table as the domain of the output point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Glue Tables</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/glue_tables_command_line.htm">TableGlue</a>(</span>table1, table2 [, <i>more tables</i>] [, <span class=courier>vertical</span>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/glue_tables_command_line.htm">TableGlue</a>(</span>[<i>newdomain,</i>] table1, table2 [, <i>more tables</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>more tables</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to specify more input tables. You can specify as many input tables as you like; comma delimited.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p class=courier>vertical</p>
+
+</td>
+<td valign="top">
+<p>in case the input tables have domain <span class=courier>None</span>: optional parameter to specify that tables should be merged vertically; if not specified, columns of the input tables will all appear as new columns in the output table (horizontally).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>newdomain</i></p>
+
+</td>
+<td valign="top">
+<p>in case the input tables have class or ID domains: optional parameter to specify a name for the domain of the output table; if not specified; the output domain will obtain the same name as the output table. </p>
+
+</td>
+</tr>
+</table>
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top" colspan="3">
+<p class=kopje>DEM-HYDRO PROCESSING</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>FLOW DETERMINATION</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Fill Sinks</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/fill_sinks_commandline.htm">MapFillSinks</a>(</span><i>rasmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map is supposed to be a Digital Elevation Model (DEM), i.e. a raster map with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Flow Direction</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/flow_direction_commandline.htm">MapFlowDirection</a>(</span><i>rasmap</i>, [<span class=courier>slope</span> <span class=courier>|</span> <span class=courier>height</span>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map is supposed to be a sink-free Digital Elevation Model (DEM), i.e. a raster map with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><span class=courier>slope</span> | <span class=courier>height</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to choose how flow direction should be determined: 
+
+<br>
+<span class=courier>Slope</span> : water flows to neighbouring pixel according to steepest slope; <br>
+<span class=courier>Height</span> : water flows to neighbouring pixel with lowest elevation. <br>
+If not specified, <span class=courier>slope</span> will be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Flow Accumulation</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/flow_accumulation_commandline.htm">MapFlowAccumulation</a>(</span><i>flowdir_rasmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>as input map, use the output map of the Flow Direction operation, i.e. raster map with system class domain <span class=courier>FlowDirection</span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>FLOW MODIFICATION</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>DEM optimization</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/dem_optimization_commandline.htm">MapDemOptimization</a>(</span><i>rasmap</i>, <i>segmap</i>, <i>table</i>, <i>col_buffer_dist</i>, <i>col_smooth_drop</i>, <i>col_sharp_drop</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/dem_optimization_commandline.htm">MapDemOptimization</a>(</span><i>rasmap</i>, <i>segmap</i>, <i>bufferdist</i>, <i>smoothdrop</i> [, <i>sharpdrop</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/dem_optimization_commandline.htm">MapDemOptimization</a>(</span><i>rasmap</i>, <i>polmap</i>, <i>poldrop</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map is supposed to be a Digital Elevation Model (DEM), i.e. a raster map with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>segmap</i></p>
+
+</td>
+<td valign="top">
+<p>input segment map (Class or ID domain) containing drainage features or watershed-divide features.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>table</i></p>
+
+</td>
+<td valign="top">
+<p>attribute table of the segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>col_buffer_dist</i></p>
+
+</td>
+<td valign="top">
+<p>column in the attribute table containing buffer distance values for individual segment classes/IDs; real value &gt; 0.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>col_smooth_drop</i></p>
+
+</td>
+<td valign="top">
+<p>column in the attribute table containing smooth drop values for individual segment classes/IDs; positive values represent a drop; negative values represent a raise.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>col_sharp_drop</i></p>
+
+</td>
+<td valign="top">
+<p>column in the attribute table containing additional sharp drop values for individual segment classes/IDs; positive values represent a drop; negative values represent a raise.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>bufferdist</i></p>
+
+</td>
+<td valign="top">
+<p>buffer distance value for all segments (real value &gt; 0).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>smoothdrop</i></p>
+
+</td>
+<td valign="top">
+<p>smooth drop value for all segments; positive value represents a drop; negative value represents a raise.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>sharpdrop</i></p>
+
+</td>
+<td valign="top">
+<p>optional additional sharp drop value for all segments; positive value represents a drop; negative value represents a raise.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>polmap</i></p>
+
+</td>
+<td valign="top">
+<p>input polygon map (any domain) containing drainage features or catchment features.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>poldrop</i></p>
+
+</td>
+<td valign="top">
+<p>(sharp) drop value for all polygons; positive value represents a drop; negative value represents a raise.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Topological Optimization</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/topological_optimization_command_line.htm">MapTopologicalOptimization</a>(</span><i>drainnetwork_rasmap</i>, <i>flowdir_rasmap</i>, <i>stream_segmap</i>, <i>output_modified_flowdir_rasmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>drainnetwork_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Drainage Network Extraction operation, i.e. a raster map with a Bool domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Flow Direction operation, i.e. a raster map with <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>stream_segmap</i></p>
+
+</td>
+<td valign="top">
+<p>a segment map that will be used to improve the drainage network map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>output_modified_flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>the name of a new (updated) flow direction raster map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=linespacing01before>Variable Threshold Computation</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/variable_threshold_computation_command_line.htm">MapVariableThresholdComputation</a>(</span><i>rasmap</i>, <i>filter_size</i>, <i>nr_classes</i>, <span class="courier">&quot;</span><i>UpperBounds_and_ThresholdVals</i><span class="courier">&quot;</span>, <i>output_internal_relief_rasmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>input raster map is supposed to be a Digital Elevation Model (DEM), i.e. a raster map with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>filter_size</i></p>
+
+</td>
+<td valign="top">
+<p>a value to define the size of the window that will move over the input map(s); filter size 3, means that each time 3 x 3 input pixels are considered. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>nr_classes</i></p>
+
+</td>
+<td valign="top">
+<p>value to define the number of output 'classes' that you wish to obtain in the output threshold map (1 <span class="symbollarger">£</span> integer value <span class="symbollarger">£</span> 5) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" colspan="2">
+<p><span class="courier">&quot;</span><i>UpperBounds_and_ThresholdVals</i><span class="courier">&quot;</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p></p>
+
+</td>
+<td valign="top">
+<p>string in which, for each class at a time, the upper boundary value for internal relief values is specified, followed by the desired output threshold value. Boundary values and corresponding threshold values are separated by commas, this is repeated for each output 'class'; on the command line, the total string needs to be surrounded by double quotes. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>output_internal_relief_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p><span class="courier">true</span> | <span class="courier">false</span></p>
+
+<p>specify <span class="courier">true</span> to obtain an additional raster map with the internal relief values. </p>
+
+<p>specify <span class="courier">false</span> if no internal relief map is desired. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>NETWORK AND CATCHMENT EXTRACTION</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Drainage Network Extraction</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/drainage_network_extraction_command_line.htm">MapDrainageNetworkExtraction</a>(</span><i>flowacc_rasmap</i>, <i>threshold</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/drainage_network_extraction_command_line.htm">MapDrainageNetworkExtraction</a>(</span><i>flowacc_rasmap</i>, <i>threshold_rasmap</i>, <i>flowdir_rasmap</i><span class=courier>)</span></p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>flowacc_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Flow Accumulation operation, i.e. a raster map with a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>threshold</i></p>
+
+</td>
+<td valign="top">
+<p>a value (&gt; 0) to define the minimum number of pixels (i.e. the contributing area) that should drain into the pixel examined to form a network channel.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>threshold_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map which pixel values define the minimum number of pixels (i.e. the contributing area) that should drain into the pixel examined to form a network channel.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Flow Direction operation, i.e. a raster map with <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Drainage Network Ordering</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/drainage_network_ordering_command_line.htm">MapDrainageNetworkOrdering</a>(</span><i>DEM_rasmap</i>, <i>flowdir_rasmap</i>, <i>drainnetwork_rasmap</i>, <i>minLength</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>DEM_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map containing height values, i.e. a raster map with a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Flow Direction operation, i.e. a raster map with <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>drainnetwork_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Drainage Network Extraction operation, i.e. a raster map with a Bool domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>minLength</i></p>
+
+</td>
+<td valign="top">
+<p>value for the minimum drainage segment length (in m) that will remain in the drainage network (value &ge; 0)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Catchment Extraction</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/catchment_extraction_command_line.htm">MapCatchmentExtraction</a>(</span><i>drainorder_rasmap</i>, <i>flowdir_rasmap</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>drainorder_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Drainage Network Ordering operation, i.e. a raster map with an Identifier domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Flow Direction operation, i.e. a raster map with <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Catchment Merge</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/catchment_merge_command_line.htm">MapCatchmentMerge</a>(</span><i>drainorder_rasmap</i>, <i>flowdir_rasmap</i>, <i>flowacc_rasmap</i>, <i>outlet_pntmap</i>, <i>include_undefs</i>, <i>extract_segments</i> [,&nbsp;<i>output_segmap_longestFlow</i>] <span class="courier">)</span></p>
+
+<p class=calccommline><span class=courier><a href="../ilwisapp/catchment_merge_command_line.htm">MapCatchmentMerge</a>(</span><i>drainorder_rasmap</i>, <i>flowdir_rasmap</i>, <i>flowacc_rasmap</i>, <i>order_system</i>, <i>stream_order</i> [,&nbsp;<i>output_segmap_longestFlow</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>drainorder_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Drainage Network Ordering operation, i.e. a raster map with an Identifier domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Flow Direction operation, i.e. a raster map with <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>flowacc_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Flow Accumulation operation, i.e. a raster map with a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>outlet_pntmap</i></p>
+
+</td>
+<td valign="top">
+<p>a point map that contains one or more outlets; sub-catchments draining into these outlets will be merged.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>include_undefs</i></p>
+
+</td>
+<td valign="top">
+<p><span class="courier">true | false</span></p>
+
+<p>specify <span class="courier">true</span> to include pixels that have value undefined in the DEM into a catchment; this can only be used when there is a single outlet point in the point map. </p>
+
+<p>specify <span class="courier">false</span> to do nothing special. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>extract_segments</i></p>
+
+</td>
+<td valign="top">
+<p><span class="courier">true | false</span></p>
+
+<p>specify <span class="courier">true</span> to obtain an additional segment map and attribute table with new IDs etc., see Catchment Extraction. </p>
+
+<p>specify <span class="courier">false</span> to <i>not</i> obtain an additional segment map and attribute table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>order_system</i></p>
+
+</td>
+<td valign="top">
+<p><span class="courier">strahler | shreve</span></p>
+
+<p>the drainage order method that should be used to merge catchments; specify either <span class="courier">strahler</span> or <span class="courier">shreve</span>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+
+
+</td>
+<td valign="top" width="144">
+<p><i>stream_order</i></p>
+
+</td>
+<td valign="top">
+<p>a stream order value, according to the Strahler or Shreve method; integer value &gt; 0. Connected sub-catchments that have an order number smaller than or equal to the specified value will be merged. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>output_segmap_longestFlow</i></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to generate an output segment map (specify a name for this segment map) that will contain the longest flow path for each sub-catchment; an extra attribute table will also be created.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>COMPOUND PARAMETER EXTRACTION</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Overland Flow Length</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/overland_flow_length_command_line.htm">MapOverlandFlowLength</a>(</span><i>drainorder_rasmap</i>, <i>flowdir_rasmap</i><span class="courier">)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>drainorder_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Drainage Network Ordering operation, i.e. a raster map with an Identifier domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Flow Direction operation, i.e. a raster map with <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="3">
+<p class=linespacing01before>STATISTICAL PARAMETER EXTRACTION</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Horton Statistics</p>
+
+</td>
+<td valign="top" colspan="2">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwisapp/horton_statistics_command_line.htm">TableHortonPlots</a>(</span><i>catch_extr_rasmap</i>, <i>catch_merge_rasmap</i>, <i>drainorder_rasmap</i><span class="courier">)</span></p>
+</td>
+</tr>
+
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>catch_extr_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Catchment Extraction operation, i.e. a raster map and its linked attribute table, both using an ID domain (in fact the ID domain of the network ordering raster map and its attribute table). </p>
+
+</td>
+</tr>
+
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>catch_merge_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Catchment Merge operation, i.e. a raster map and its linked attribute table, both using an ID domain. </p>
+
+</td>
+</tr>
+
+</tr>
+<tr>
+<td valign="top" width="180">
+<p></p>
+
+</td>
+<td valign="top" width="144">
+<p><i>drainorder_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>a raster map that is the outcome of the Drainage Network Ordering operation, i.e. a raster map and its linked attribute table, both using an ID domain. </p>
+
+</td>
+</tr>
+</table>
+
+
+<table cellspacing=0 width="100%">
+<tr>
+<td valign="top" colspan="2">
+<p id="column_operations" class=kopje>COLUMN OPERATIONS (Table window, Columns menu)</p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>TabCalc</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier>ColumnCalculate</span>, <br>
+        see <a href="calc_aaf.htm">Map and Table Calculation : Alphabetical overview of operators and functions</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Statistics</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b>see <a href="../ilwismen/column_statistics.htm">Column Statistics</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Join</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_joining_columns_from_other_tables.htm">ColumnJoin</a>(</span>table, column [, <i>key1</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier>ColumnJoin2ndKey(</span>table, column [, <i>key1</i>], <i>key2</i><span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier>ColumnJoin</span><i>AggFunc</i><span class=courier>(</span>table, column, <i>key2</i> [, <i>weight</i> [, <i>key1</i>] ] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Aggregation</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier><a href="calc_aaf.htm#aggregate_functions">ColumnAggregate</a></span>[<span class=courier>Cnt|Max|Min|Sum</span>]<span class=courier>(</span>column [, <i>group</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier>ColumnAggregate</span>[<span class=courier>Avg|Med|Prd|Std</span>]<span class=courier>(</span>column [, <i>group</i> [, <i>weight</i>] <span class=courier>)</span></p>
+
+<p class=calccommline><span class=courier>ColumnAggregate</span>[<span class=courier>Avg|Med|Prd|Std</span>]<span class=courier>(</span>column [, , <i>weight</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Cumulative</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwismen/cumulative_column.htm">ColumnCumulative</a>(</span>column [, <i>sortcolumn</i>] <span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Least Squares</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwismen/least_squares_fit.htm">ColumnLeastSquaresFit</a>(</span>column1, column2, <i>Function</i>, n<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="180">
+<p class=linespacing01before>Semi-variogram</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinelnsp01b><span class=courier><a href="../ilwismen/column_semivariogram.htm">ColumnSemiVariogram</a>(</span><i>DistanceColumn, SemiVarModel</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="appendices_ilwis_expressions_alphabetic.htm">Alphabetic list of ILWIS expressions</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_commands.htm">ILWIS commands</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_scripts_language_syntax.htm">ILWIS script language (syntax)</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_as_dde_server.htm">ILWIS as DDE server</a></p>
+
+</body

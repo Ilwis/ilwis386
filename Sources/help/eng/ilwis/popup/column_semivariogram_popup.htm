@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<title>column semivariogram popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Column Semi-variogram</p>
+
+<p>For distance values (<i>h</i>) in a distance column, the <a href="..//ilwismen/column_semivariogram.htm" onClick="return popup(this, 'notes')" >Column Semi-variogram</a> operation calculates semi-variogram values (<span class=symbol>g</span>) according to a semi-variogram model and its parameters as specified by the user. The calculated semi-variogram values are stored in an output column. The aim of storing modelled semi-variogram values in a column is for instance to be able to assess the 'Goodness of Fit (R<sup>2</sup>)' between modelled semi-variogram values and experimental semi-variogram values.</p>
+
+<p></p>
+
+<p>This operation is generally used on the output table of <a href="../../ilwisapp/popup/spatial_correlation_popup.htm">Spatial Correlation</a> and presumably after you have fit some semi-variogram models through the experimental semi-variogram values in a graph window.</p>
+
+<p></p>
+
+</body

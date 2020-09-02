@@ -1,0 +1,422 @@
+<html>
+
+<head>
+<title>Point map properties</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Properties of objects, Point maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Point Map Properties</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Point Map Properties sheet lists all kind of important information on a selected <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point map</a>. In fact, all relevant information that is stored in the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the point map is displayed. Furthermore, Property sheets are designed to handle the properties of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent objects</a>. For more information, refer to <a href="../ilwis/basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a>.</p>
+
+<p class=defnewpar>The Point Map Properties sheet appears:</p>
+
+<ul>
+
+<li>	when you click a point map in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> with the right mouse button, and choose <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>; </li>
+
+<li>	when you select a point map in a Catalog, and choose <span class=arial>Properties</span> from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> in the Main window; </li>
+
+<li>	when you display a point map, and choose <span class=arial>Properties</span> from the <a href="../ilwis/map_window_menu_commands.htm">File menu</a> in a map window; </li>
+
+<li>    when you display a point map, and double-click the word 'Properties' for a raster map in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane in the map window. </li>
+
+</ul>
+
+<table cellspacing=0>
+<tr>
+<td colspan="2">
+<p class=kopje>Point Map tab: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Point Map</b> &quot;Point map name&quot;: the point map is an editable source map.</p>
+
+<p class=diabox><b>Dependent Point Map</b> &quot;Point map name&quot;: the point map is the result of an operation.</p>
+
+<p class=diabox>When you click this flat button, the point map will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >Coordinate system</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The name and the description of the coordinate system used by this point map are listed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Boundaries of map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The coordinate boundaries of this map are listed as (MinX, MinY) and (MaxX, MaxY). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >Domain</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The name of the domain that is used by this point map is listed. Also the description of the domain is listed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >Value range</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case this map uses a value domain, the minimum and maximum values that can be stored by this map are listed. This is also called the value range of the map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >Precision</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case this map uses a value domain, the precision of the values that can be stored by this map is listed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >Attribute table</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case this map uses a class or ID domain, and the map or the domain has an attribute table, then the name and the description of the attribute table is shown.</p>
+
+<p class=diabox>Select this check box to link an attribute table to this point map, or select this check box to <b>create</b> a new attribute table for this point map (click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Definition:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For dependent maps: the expression by which the object was created is listed, i.e. the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >object definition</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Number of points:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The number of points as counted by the system in this point map; this includes points with the undefined value (?) or with invalid coordinates. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>General tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Point Map</b> &quot;Point map name&quot;: the point map is an editable source map.</p>
+
+<p class=diabox><b>Dependent Point Map</b> &quot;Point map name&quot;: the point map is the result of an operation.</p>
+
+<p class=diabox>When you click this flat button, the point map will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Location:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The path and directory where this object is stored. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object date and time:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Date and time when this point map was last changed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Total size of the point map on disk in bytes (.MPP and .PT#).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Read only:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to make the point map read only. Clear this check box to make the point map changeable.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Description of the object; freely editable. The description of a map appears in the title bar of a map window when the map is displayed. Furthermore, the description is visible on the status bar of the Main window when moving the mouse pointer over the map in a Catalog. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>Dependency tab (for dependent maps):</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Dependent Point Map</b> &quot;Point map name&quot;: the point map is the result of an operation. When you click this flat button, the point map will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Definition:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The expression by which the object was created is listed, i.e. the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >object definition</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Up-to-date or not:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Lists whether this point map is up-to-date or not. If not, the name of the object which was changed last is shown including that object's date and time.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Depends on:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In a tree view, the names of the objects are listed on which this point map depends.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Calculate</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When only the object definition file of this point map (.MPP) exists: </p>
+
+<ul class=diaul>
+
+<li>click this button to (re)calculate the data file (.PT#) of this point map by (re)executing the definition of this map.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Make Up-to-Date</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When the point map is <i>not</i> up-to-date anymore, </p>
+
+<p class=diabox>i.e. when one or more objects on which this point map depends have been changed, and when both the object definition file (.MPP) and the data file (.PT#) of this point map exist: </p>
+
+<ul class=diaul>
+
+<li>click this button to check all objects on which this point map depends, see if these are up-to-date, if not, check all objects below, etc., </li>
+
+<li>recalculate all changed objects on which this point map depends, and finally recalculate the data file of this point map using all new changed objects.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Release Disk Space</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When both the object definition file (.MPP) and a calculated data file (.PT#) exist: </p>
+
+<ul class=diaul>
+
+<li>click this button to delete the data file of this point map. </li>
+
+</ul>
+
+<p class=diabox>The expression by which this dependent point map was created remains stored in the object definition file, so this point map can always be recalculated.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Break Dependency Link</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Whether this point map is Up-to-Date or not: </p>
+
+<ul class=diaul>
+
+<li>click this button to break the dependency link between this point map and the objects on which it depends. This point map will become an editable source object.</li>
+
+</ul>
+
+<p class=diabox>Do not break the dependency link if you wish to be able to update this point map in a later stage on the basis of changed input objects.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>Used By tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Point Map</b> &quot;Point map name&quot;: the point map is an editable source map.</p>
+
+<p class=diabox><b>Dependent Point Map</b> &quot;Point map name&quot;: the point map is the result of an operation.</p>
+
+<p class=diabox>When you click this flat button, the point map will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Used By:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In a tree view, it is listed by which other objects this point map is used. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>Additional Info tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Dependent Point Map</b> &quot;Point map name&quot;: the point map is the result of an operation.</p>
+
+<p class=diabox>When you click this flat button, the point map will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Additional Info</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When a dependent point map is the result of a <a href="..//ilwisapp/popup/variogram_surface_popup.htm" onClick="return popup(this, 'notes')" >Variogram Surface</a> operation: the average, variance and the unbiased variance estimate of the input point values are listed. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For editable maps, advanced users may in some cases wish to change properties. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To open the Properties of a point map, you can also type <span class=courier>Prop</span> or <span class=courier>Prop</span> <i>pntmap</i>.<span class=courier>mpp</span> on the command line of the Main window.</li>
+
+<li>	You can also handle object properties from the command line in the Main window or in a script. For more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>.</li>
+
+<li>    To print or to copy the contents of all Property pages to the clipboard, choose <span class=arial>Print</span> or <span class=arial>Copy</span> from the <a href="../ilwis/windows_features_control_menu.htm">Control menu</a>. </li>
+
+<li>    To print or to copy the contents of the currently active Property tab to the clipboard, click with the right mouse button in the white space of the Property page and choose <span class=arial>Print</span> or <span class=arial>Copy</span> from the context-sensitive menu. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_dependent_data_objects.htm">Basic concepts : dependent objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_point_maps.htm">ILWIS objects : point maps</a></p>
+
+</body

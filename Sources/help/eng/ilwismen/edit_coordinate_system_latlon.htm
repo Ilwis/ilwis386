@@ -1,0 +1,177 @@
+<html>
+
+<head>
+<title>Edit coordinate system LatLon</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Edit Coordinate System LatLon</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>View and/or edit a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> latlon. A coordinate system latlon defines the LatLon-coordinates in your maps, and optionally the projection of the maps. Coordinate systems are used by polygon, segment and point maps, and by the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of a raster map. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when in the <a href="../ilwismen/create_a_coordinate_system.htm">Create Coordinate System</a> dialog box, you selected to create a coordinate system of the type latlon, </li>
+
+<li>	when in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, you double-click a coordinate system of the type latlon,</li>
+
+<li>	when in the Catalog, you press the right mouse button on a coordinate system of the type latlon, and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=defnewpar>You should use a coordinate system of the type latlon, when you obtained raster maps and/or vector maps from other sources which are supposed to be using geographic coordinates (Latitude, Longitude), but when the maps do not yet have a coordinate system. </p>
+
+<ul>
+
+<li>	When you want to have LatLon-coordinates for maps which comprise the whole world or when are not interested in choosing an ellipsoid or datum, you can directly link system coordinate system <span class=courier>LatLon</span> to the maps. Edit the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of the maps and select system coordinate system <span class=courier>LatLon</span>.</li>
+
+<li>	When you may want to change the figure used for the radius of the earth or when you may want to add ellipsoid or datum information, you can create a user-defined coordinate system of the type latlon and edit it in this dialog box. </li>
+
+</ul>
+
+<p class=defnewpar>Specify the LatLon-boundaries of the map, and optionally supply ellipsoid or datum information. You can specify ellipsoid or datum information later on or right away. When a map has ellipsoid or datum information, you will be able to transform the map to another coordinate system with another ellipsoid or another datum. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the coordinate system. The description is visible on the status bar of the Main window when moving the mouse pointer over the coordinate system in the Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Min Latitude:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the minimum latitude of your map in degrees, minutes and seconds, and type S when this corner of the map in located on the southern hemisphere or type N when this corner of the map in located on the northern hemisphere.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Max Latitude:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the minimum latitude of your map in degrees, minutes and seconds, and type S when this corner of the map in located on the southern hemisphere or type N when this corner of the map in located on the northern hemisphere. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Min Longitude:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the minimum longitude of your map in degrees, minutes and seconds, and type E when this corner of the map in located on the Eastern hemisphere or type W when this corner of the map in located on the western hemisphere.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Max Longitude:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the maximum longitude of your map in degrees, minutes and seconds, and type E when this corner of the map in located on the eastern hemisphere or type W when this corner of the map in located on the western hemisphere.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p></p>
+
+</td>
+<td valign="top">
+<p class=diabox>The boundary values will only be used to determine:</p>
+
+<ul class=diaul>
+
+<li>	default map coordinate boundaries for vector maps, and </li>
+
+<li>	default coordinate boundaries for a georeference for raster maps.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Ellipsoid</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Click the <span class=arial>Ellipsoid</span> button when you want to specify an ellipsoid for the LatLon-coordinates of this coordinate system. The <a href="../ilwismen/select_ellipsoid.htm">Select Ellipsoid</a> dialog box will appear. </p>
+
+<p class=diabox>You need to select an ellipsoid when you are making maps at medium scale, for instance when mapping areas like countries or provinces. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Datum</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Click the <span class=arial>Datum</span> button when you want to specify datum information for the LatLon-coordinates of this coordinate system. The <a href="../ilwismen/select_datum.htm">Select Datum</a> dialog box will appear. </p>
+
+<p class=diabox>You need to specify a datum when you are making maps at a rather large scale (e.g. 1: 20,000 or less), thus when mapping areas like small provinces, towns, infrastructure as sewage systems, water pipes, electricity cables, etc. By supplying a datum, you will be able to <i>transform</i> coordinates from one datum to another; differences between ellipsoid centers will be taken into account.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Sphere radius (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>This option is only available when no ellipsoid or datum has been selected. That is correct when mapping the entire earth, a hemisphere or larger continents. It is assumed that the earth is a sphere and a spherical model can be used. As default a sphere of 6371007.0m is given. If you wish you can change this value.</p>
+
+<p class=diabox>In case you already selected an ellipsoid or datum, the radius (equatorial and polar) of the ellipsoid is already defined; then, the name of the selected ellipsoid and/or datum will be displayed.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When finished creating a coordinate system latlon, you have to link this coordinate system to the maps which should use it by editing the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of these maps.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate system</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/select_ellipsoid.htm">Select Ellipsoid</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/select_datum.htm">Select Datum</a> (dialog box)</p>
+
+</body

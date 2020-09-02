@@ -1,0 +1,178 @@
+<html>
+
+<head>
+<title>Color separation : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Color separation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Color separation</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Color separation operation allows you to extract different 'bands' for instance from a scanned or digital color photo as if using color filters when taking the picture. After color extraction, you can perform the normal Image Processing operations like Filtering, Classification, etc. on these bands. </p>
+
+<p class=defnewpar>Maps that have a Picture domain or the (24 bit) <span class=courier>Color</span> domain store for each pixel three values: Red, Green and Blue. The Color separation operation allows you to retrieve for each pixel either the Red, Green or Blue value and store these in a separate map. You can also retrieve Yellow, Magenta, Cyan, combined Gray values, or Hue, Saturation or Intensity values for each pixel. </p>
+
+<h2>Color models</h2>
+
+<p>Display devices commonly use the Red, Green, Blue (RGB) additive color system.</p>
+
+<p>Printers commonly use the Yellow, Magenta, Cyan, Black (YMCK) subtractive color system.</p>
+
+<p>Professionals working with colors generally think in Hue, Saturation and Intensity (HSI).</p>
+
+<p class=kopje>RGB color system:</p>
+
+<p>Any color can be regarded as a combination of different contributions of the primary colors Red, Green and Blue (RGB). Figure 1 below presents a color cube with Red, Green and Blue axes. Along each of these axes the 'amount' of a primary color increases from 0 to 255, where 0 means no intensity (no contribution to the final color) and 255 means maximum intensity. Each point in the color cube thus represents a different color depending on the amounts of Red, Green and Blue.</p>
+
+<p class=defnewpar>The Gray scale is presented by a line from Black to White (dashed line in Figure 1). For each Gray color, the amounts of Red, Green, and Blue are equal. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p><img src="../images/colsep2.gif" align=bottom width="270" height="230"></p>
+
+<p class=captionfig>Figure 1: Color cube of Red, Green, Blue and Yellow, Magenta, Cyan and Gray.</p>
+
+<p class=kopje>YMC color system:</p>
+
+<p>The colors Yellow, Magenta, and Cyan (YMC) can be presented in the same color cube as the Red, Green, Blue color cube (Figure 1). The YMC color system uses the Yellow, Magenta, and Cyan subtractive primaries.</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p>Yellow</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top" width=96>
+<p>Red + Green</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top" width=96>
+<p>White - Blue</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Magenta</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top" width=96>
+<p>Red + Blue</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top" width=96>
+<p>White - Green</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Cyan</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top" width=96>
+<p>Green + Blue</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top" width=96>
+<p>White - Red</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>HSI color system:</p>
+
+<p>Colors can also be defined using the Hue, Saturation, and Intensity (HSI) system (see Figure 2). </p>
+
+<ul>
+
+<li>	Hue is the basic component of a color and is the dominant or average wavelength. </li>
+
+<li>	Saturation describes the 'color purity' or the purity of color relative to Gray. The relative amount of Red, Green and Blue determines the Hue and the Saturation. </li>
+
+<li>	Intensity describes the brightness of a color. The total amount of Red+Green+Blue determines the brightness. </li>
+
+</ul>
+
+<p></p>
+
+<p><img src="../images/colsep3.gif" align=bottom width="270" height="230"></p>
+
+<p class=captionfig>Figure 2: Color cube which also shows Hue, Saturation and Intensity.</p>
+
+<p>The Color separation operation gives you the possibility to change to from one color system to one of the other models. The formulas used for the transformation from one model to another are described in <a href="color_separation_algorithm.htm">Color separation : algorithm</a>.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>An input  raster map with a Picture domain or the <span class=courier>Color</span> domain is required. In a map with a picture domain the colors are stored in its representation. In a map with domain <span class=courier>Color</span> the colors are stored in the pixels of the map (map is stored using 4 bytes per pixel).</p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output raster map always obtains the <span class=courier>Image</span> domain. When extracting Red, Green, Blue, Yellow, Magenta, Cyan or Gray, the values in the output map range from 0 to 255. When extracting Hue, Saturation or Intensity, the values in the output map range from 0 to 240. This complies with the Windows definition.</p>
+
+<p>The output raster map uses the same georeference as the input raster map.</p>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>When you for example extract the Red color from an image, the intensities in the output map are measured for this color. When you open the output image, the intensities for Red are given on a gray scale (and not in a red scale). You can select the Red representation (from black to red) in the Display Options dialog box of the map, or you can create your own representation.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>The reverse process of color separation is creating a <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >color composite</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="color_separation_dialog_box.htm">Color separation : dialog box</a></p>
+
+<p class=seealsolinks><a href="color_separation_command_line.htm">Color separation : command line</a></p>
+
+<p class=seealsolinks><a href="color_separation_algorithm.htm">Color separation : algorithm</a></p>
+
+</body

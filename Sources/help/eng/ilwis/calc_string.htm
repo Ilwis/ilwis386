@@ -1,0 +1,137 @@
+<html>
+
+<head>
+<title>STRING</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="STRING, String functions, String conversion functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>STRING( ) function</h1>
+
+<p class=defnewpar>Converts a value to a string.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+
+<p class=syntax><span class=courier>STRING</span>(<i>Value</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>Value</i></td>
+	<td valign="top">is a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+</table>
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>STRING</span>   returns:</td>
+	<td valign="top">a string</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >system domain String</a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The <span class=courier>STRING</span> function is the inverse of the <a href="calc_value.htm"><span class=courier>VALUE</span></a> function.</li>
+	<li>A minus sign or a decimal point in the input value is retained in the output string.</li>
+	<li>When the input is undefined, the output will also be undefined.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+
+<table cellspacing=0>
+<tr>
+	<td width="170"><p class=calc00>? STRING(45)</p></td>
+	<td><p>returns 45.000</p></td>
+</tr>
+<tr>
+	<td width="170"><p class=calc00>? STRING(-38.5)</p>
+	<td><p>returns -38.5000</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = STRING(InCol)</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InCol</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.0</p></td>
+	<td valign="top"><p class="t1r">0.0</td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0.1</p></td>
+	<td valign="top"><p class=t1r>0.1</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>-1.5</p></td>
+	<td valign="top"><p class=t1r>-1.5</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>25.0</p></td>
+	<td valign="top"><p class=t1r>25.0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>999.0</p></td>
+	<td valign="top"><p class=t1r>999.0</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class="t1r">?</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+<td valign="top" width="50"><p class=seealsolinks><a href="calc_value.htm">VALUE</a></p></td>
+</tr>
+<tr>
+<td valign="top" width="50"><p class=seealsolinks><a href="calc_code.htm">CODE</a></p></td>
+</tr>
+<tr>
+<td valign="top" width="50"><p class=seealsolinks><a href="calc_name.htm">NAME</a></p></td>
+</tr>
+</table>
+
+</body

@@ -1,0 +1,146 @@
+<html>
+
+<head>
+<title>Graph window : toolbar</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Toolbar, Graph window, Button bar">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Graph window</h1>
+
+<h1 class=secondline>Toolbar</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The toolbar of a graph window provides <i>shortcuts</i> for some regularly used menu commands for instance to add other graph layers, to remove a graph layer, to save a graph, or to print a graph. </p>
+
+<p class=defnewpar><img src="../images/bb_graph_window.gif" align=bottom width="177" height="26"></p>
+
+<p class=defnewpar>When you leave the mouse pointer for a short period of time on top of a button, a tooltip will appear with the name of the button / the menu command that it will perform. Also the <a href="..//ilwis/popup/status_line_popup.htm" onClick="return popup(this, 'notes')" >status bar</a> at the bottom of the window may provide you with a short explanation on the effect of using the button. </p>
+
+<p class=defnewpar>You can move the toolbar and dock it along an edge of the window; you can also make the toolbar floating. Some of the actions that are available via the toolbar are also available via the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<p class=defnewpar>The following actions can be performed:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing="1%" width="100%">
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/open.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p><a href="../ilwismen/graph_window_open_graph.htm">Open</a>:</p>
+
+</td>
+<td valign="top">
+<p>Open another graph in the current graph window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/save.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p><a href="../ilwismen/graph_window_save_graph.htm">Save</a>:</p>
+
+</td>
+<td valign="top">
+<p>Save the contents of the current graph window. When this is the first time you save the graph, the <a href="../ilwismen/graph_window_save_graph_as.htm">Save Graph As</a> dialog box will appear. The option is not available when a graph has been saved already and has not changed since. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/print.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p>Print:</p>
+
+</td>
+<td valign="top">
+<p>Print the contents of the current graph window. First, a <a href="../ilwismen/graph_window_print_graph.htm">Print Options</a> dialog box will appear. The option is only available when the viewer part of the graph window is active. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/copy.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p><a href="../ilwismen/graph_window_copy_to_clipboard.htm">Copy</a>:</p>
+
+</td>
+<td valign="top">
+<p>Copy the contents of the current graph window as a <i>picture</i> to the clipboard. Subsequently, you can paste the graph into an ILWIS <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> or into any other Windows application, for instance into a word processor. You can also use the <span class=arial>Ctrl+C</span> keys on the keyboard. The option is only available when the viewer part of the graph window is active. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/add_graph_layer.gif" align=bottom width="36" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p><a href="../ilwismen/graph_window_add_graph_from_columns.htm">Add Graph</a>:</p>
+
+</td>
+<td valign="top">
+<p>Add another graph layer (from columns) to the graph window. If you press the arrow down button, you can also add a Graph from Formula, a Least Squares Fit, or a SemiVariogram Model. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=26>
+<p><img src="../images/remlayer.gif" align=bottom width="22" height="22"></p>
+
+</td>
+<td valign="top" width="84">
+<p><a href="../ilwismen/graph_window_remove_layer.htm">Remove Layer</a>:</p>
+
+</td>
+<td valign="top">
+<p>Remove a selected graph layer from the graph window. First select the layer to be removed in the <a href="graph_window_graph_management.htm">Graph Management</a> pane of the graph window. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The toolbar can be hidden or shown with the <span class=arial>Toolbar</span> command on the <a href="graph_window_menu_commands.htm">Options menu</a>. If the action of a certain button cannot be performed at a certain moment, the button appears gray.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="graph_window_functionality.htm">Graph window : functionality</a></p>
+
+<p class=seealsolinks><a href="graph_window_examples_of_graphs.htm">Graph window : examples of graphs</a></p>
+
+<p class=seealsolinks><a href="graph_window_graph_management.htm">Graph window : Graph Management</a></p>
+
+<p class=seealsolinks><a href="graph_window_menu_commands.htm">Graph window : menu commands</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_graphs.htm">ILWIS objects : graphs</a></p>
+
+</body

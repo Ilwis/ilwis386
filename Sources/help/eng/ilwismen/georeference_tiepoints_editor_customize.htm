@@ -1,0 +1,111 @@
+<html>
+
+<head>
+<title>Georef Tiepoints editor : Customize</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Georeference Tiepoints editor, Customize ..., Tiepoint editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Georeference Tiepoints editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Customize</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__georeference_tiepoints_editor_edit_menu_sec2.Click()>Edit menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Customize the way in which tiepoints, also called ground control points, are displayed on the background image in the Tiepoint editor.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Active color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for well positioned tiepoints and for the active tiepoint; open the list box by clicking it. To create your own custom color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select <span class=arial>Custom</span> at the bottom of the drop-down list. <br>A tiepoint is considered well positioned if:<br><span class=symbollarger>&Ouml;</span>(DRow<sup>2&nbsp;</sup>+<sup>&nbsp;</sup>DCol<sup>2</sup>)<sup> </sup>&lt;=<sup>&nbsp;</sup>(1.2<sup>&nbsp;</sup><span class=courier>*</span><sup>&nbsp;</sup>Sigma).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Medium error:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for tiepoints with medium error. <br>A tiepoint is considered to have a medium error if:<br> (1.2<sup>&nbsp;</sup><span class=courier>*</span><sup>&nbsp;</sup>Sigma)<sup> </sup>&lt;<sup> </sup><span class=symbollarger>&Ouml;</span>(DRow<sup>2&nbsp;</sup>+<sup>&nbsp;</sup>DCol<sup>2</sup>)<sup> </sup>&lt;=<sup>&nbsp;</sup>(2<sup>&nbsp;</sup><span class=courier>*</span><sup>&nbsp;</sup>Sigma).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Large error:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for tiepoints with a large error. <br>A tiepoint is considered to have a large error if:<br> <span class=symbollarger>&Ouml;</span>(DRow<sup>2&nbsp;</sup>+<sup>&nbsp;</sup>DCol<sup>2</sup>)<sup> </sup>&gt;<sup>&nbsp;</sup>(2<sup>&nbsp;</sup><span class=courier>*</span><sup>&nbsp;</sup>Sigma).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Passive color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the non-active tiepoints; open the list box by clicking it. To create your own custom color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select Custom at the bottom of the drop-down list.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Fiducial marks:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When editing a georef orthophoto and the <a href="../ilwismen/georef_ortho_locate_fiducial_marks.htm">Locate Fiducial Marks</a> dialog box is open: select a color for the fiducial marks and their numbers; open the list box by clicking it. To create your own custom color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or select <span class=arial>Custom</span> at the bottom of the drop-down list.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Symbol size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value (integer &gt; 0) for the size of the symbols that represent your tiepoints. Tiepoints are always represented by a plus sign.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoints editor : functionality</a></p>
+
+</body

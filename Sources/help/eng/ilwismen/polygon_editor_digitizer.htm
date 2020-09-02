@@ -1,0 +1,99 @@
+<html>
+
+<head>
+<title>Polygon editor : Digitizer</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygon editor, Edit polygon map, Digitize, Map Referencing">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Polygon editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/polygon_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Digitizer</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>When you wish to use the <i>digitizer</i> to edit the class name, ID or value of single polygons in your polygon map:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ol>
+
+<li>Your digitizer should be set up properly:</li>
+
+        <p>the <span class=arial>Setup Digitizer</span> command, on the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> of the Main window should be preceded with a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>You should have performed a <span class=arial><a href="digitizer_map_referencing_coordsys.htm">Map Reference</a></span>, so that the coordinates sent by the digitizer can be translated into real world coordinates: </li>
+
+        <p>the <span class=arial>Map Reference</span> command on the File menu of the Main window, or the <span class=arial>Digitizer, Map Reference</span> command on the File menu of the polygon editor should be preceded with a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>You should make the digitizer <a href="..//ilwismen/popup/polygon_editor_file_digitizer_active_popup.htm" onClick="return popup(this, 'notes')" >Active</a> in the editor, so that a floating window appears with the digitizer commands (the digitizer menu): </li>
+
+        <p>the <span class=arial>Digitizer, Active</span> command on the File menu of the polygon editor should be preceded with a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </p>
+
+</ol>
+
+<p class=defnewpar>The digitizer menu with the digitizer commands looks like: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p><img src="../images/poldig.gif" align=bottom width="150" height="112"></p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>The coordinates at the top of the digitizer menu show the real world coordinates of your map (this is the result of Map Reference); these coordinates should change when you move the digitizer cursor over the digitizer tablet. </p>
+
+<p class=defnewpar>For detailed information on using the <i>digitizer</i> to edit the names, IDs or values of polygons, see <a href="../ilwis/polygon_editor_functionality.htm">Polygon editor : functionality</a>, section <a href="../ilwis/polygon_editor_functionality.htm#poleddigitizer"><span class=bookmark>Working with the digitizer</span></a>. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>You can also use the <i>mouse</i> to edit the names or values of multiple selected polygons. For more information, see <a href="polygon_editor_select_mode.htm">Normal/Select Mode</a> and <a href="polygon_editor_edit_selection.htm">Edit</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_set_up_a_digitizer_and_start_digitizing.htm">How to setup a digitizer and start digitizing</a></p>
+
+<p class=seealsolinks><a href="digitizer_map_referencing_coordsys.htm">Map Reference</a></p>
+
+<p class=seealsolinks><a href="..//ilwismen/popup/polygon_editor_file_digitizer_active_popup.htm" onClick="return popup(this, 'notes')" >Digitizer, Active</a></p> 
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_functionality.htm">Polygon editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_functionality.htm#poleddigitizer">Polygon editor : functionality, working with the digitizer</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_functionality.htm#poledmouse">Polygon editor : functionality, working with the mouse</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_toolbar.htm">Polygon editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/polygon_editor_menu_commands.htm">Polygon editor : menu commands</a></p>
+
+</body

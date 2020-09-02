@@ -1,0 +1,549 @@
+<html>
+
+<head>
+<title>Raster map properties</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Properties of objects, Raster maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Raster Map Properties</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Raster Map Properties sheet lists all kind of important information on a selected <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a>. In fact, all relevant information that is stored in the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the raster map is displayed. Furthermore, Property sheets are designed to handle the properties of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent objects</a>. For more information, refer to <a href="../ilwis/basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a>. </p>
+
+<p class=defnewpar>The Raster Map Properties sheet appears:</p>
+
+<ul>
+
+<li>	when you click a raster map in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> with the right mouse button, and choose <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>;</li>
+
+<li>	when you select a raster map in a Catalog, and choose <span class=arial>Properties</span> from the <a href="../ilwis/main_window_menu_commands.htm">Edit menu</a> in the Main window; </li>
+
+<li>	when you display a raster map, and choose <span class=arial>Properties</span> from the <a href="../ilwis/map_window_menu_commands.htm">File menu</a> in a map window; </li>
+
+<li>    when you display a raster map, and double-click the word 'Properties' for a raster map in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane in the map window. </li>
+
+</ul>
+
+<table cellspacing=0>
+<tr>
+<td colspan="2">
+<p class=kopje>Raster Map tab: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Raster Map</b> &quot;raster map name&quot;: the raster map is an editable source map.</p>
+
+<p class=diabox><b>Map Calculate</b> &quot;raster map name&quot;: the raster map is the result of a MapCalc formula (dependent map).</p>
+
+<p class=diabox><b>Dependent Raster Map</b> &quot;raster map name&quot;: the raster map is the result of another operation (dependent map).</p>
+
+<p class=diabox> When you click this flat button, the raster map will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >Georeference</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The name, the type and the description of the georeference used by this raster map are listed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >Coordinate system</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The name, the type and the description of the coordinate system used by the georeference of this raster map are listed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>(Pixel) Size of raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The number of lines and columns of the raster map are listed. If possible, also an estimation of the pixel size of the raster map is listed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Boundaries of map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>It is listed whether the coordinates of the georeference are used by the Corners of the corner pixels or by the Centers of the corner pixels. </p>
+
+<p class=diabox>Furthermore, the coordinate boundaries of this map are listed as: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167><p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+
+        <table cellspacing=0>
+        
+        <tr><td valign="top"><p class=diaboxnospacetop>Top Left:</p></td><td><p class=diaboxnospacetop>(MinX, MaxY), </p></td></tr>
+
+        <tr><td valign="top"><p class=diaboxnospacetop>Top Right:</td><td><p class=diaboxnospacetop> (MaxX, MaxY), </p></td></tr>
+
+        <tr><td valign="top"><p class=diaboxnospacetop>Bottom Left:</td><td><p class=diaboxnospacetop>(MinX, MinY), </p></td></tr>
+
+        <tr><td valign="top"><p class=diaboxnospacetop>Bottom Right:</td><td><p class=diaboxnospacetop>(MaxX, MinY).</p></td></tr></table>
+
+        <p class=diabox>In case the coordinates of the map are in LatLon, degrees, minutes and seconds will be shown. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Number of bytes per pixel:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The number of bytes used on disk to store each pixel of this raster map is listed (either 1 bit per pixel, or 1, 2, 4, or 8 bytes per pixel).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >Domain</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The name, the type and the description of the domain that is used by this raster map are listed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >Attribute table</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case this map uses a class or ID domain, and the map or the domain has an attribute table, then the name of the attribute table is shown.</p>
+
+<p class=diabox>Select this check box to link an attribute table to this raster map, or select this check box to create a new attribute table for this raster map (click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >Value range</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case this map uses a value domain, the minimum and maximum values that can be stored by this map are listed. This is also called the value range of the map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >Precision</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case this map uses a value domain, the precision of the values that can be stored by this map is listed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Minimum and maximum:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case this is a value map and the actual minimum and maximum values as occurring in the map have been calculated, the actual minimum and maximum value in this map are shown.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Interpolation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value raster maps</a>: Select this check box when within pixels, values should be interpolated. This means that a pixel value of a certain pixel will refer to the center of that pixel only; elsewhere a value will be interpolated on the basis of 4 or 16 neighbouring pixel values. Subsequently choose for <a href="..//ilwisapp/sec/bilinear_interpolation_sec.htm" onClick="return popup(this, 'notes')" >bilinear interpolation</a> or <a href="..//ilwisapp/sec/bicubic_interpolation_sec.htm" onClick="return popup(this, 'notes')" >bicubic interpolation</a>. </p>
+
+<p class=diabox>It is strongly advised to use the interpolation option for Digital Terrain Models (DTMs), also called Digital Elevation Models (DEMS), that are used by a georef direct linear or a georef orthophoto. </p>
+
+<p class=diabox>Furthermore, when you selected the Interpolation option, </p>
+
+<ul class=diaul>
+
+<li>	when you zoomed in in a map window and pressing the left mouse button, you will obtain Info on sub-pixel level,</li>
+
+<li>	the pixel info window will show interpolated values, and </li>
+
+<li>	in a table window, you can retrieve interpolated values by using the <a href="../ilwis/calc_mapvalue.htm">MAPVALUE()</a> function.</li>
+
+</ul>
+
+<p class=diabox>Clear this check box when pixel values should be applied to the whole pixels.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Definition:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For dependent maps: the expression by which the object was created is listed, i.e. the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >object definition</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Edit Definition</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For Map Calculate raster maps, click this button to edit the MapCalc formula by which this raster map is created. The <a href="raster_map_definition.htm">Raster Map Definition</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><span class=arial>'No pyramid layers available' + Create / 'Pyramid layers available' + Remove</span>: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>It is listed whether <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">pyramid layers</a> have been created for this raster map or not. Pyramid layers speed up the display of large raster maps in a map window. </p>
+
+<ul class=diaul>
+
+<li>If no pyramid layers are available for this raster map, click the <span class=arial>Create</span> button to create the pyramid layers. </li>
+
+<li>If pyramid layers are available for this raster map, you can click the <span class=arial>Remove</span> button to delete the pyramid layers. </li>
+
+</ul>
+
+<p class=diabox>The information is not listed, and the <span class=arial>Create/Remove</span> buttons are not available, when the raster map has been defined but has not been calculated yet. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>General tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Raster Map</b> &quot;raster map name&quot;: the raster map is an editable source map.</p>
+
+<p class=diabox><b>Map Calculate</b> &quot;raster map name&quot;: the raster map is the result of a MapCalc formula (dependent map).</p>
+
+<p class=diabox><b>Dependent Raster Map</b> &quot;raster map name&quot;: the raster map is the result of another operation (dependent map).</p>
+
+<p class=diabox> When you click this flat button, the raster map will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Location:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The path and directory where this object is stored. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object date and time:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Date and time when this raster map was last changed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Total size of the raster map on disk in bytes (.MPR and .MP#).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Read only:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to make the raster map read only. Clear this check box to make the raster map changeable.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Description of the object; freely editable. The description of a map appears in the title bar of a map window when the map is displayed. Furthermore, the description is visible on the status bar of the Main window when moving the mouse pointer over the map in a Catalog. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>Dependency tab (for dependent maps):</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Map Calculate</b> &quot;raster map name&quot;: the raster map is the result of a MapCalc formula (dependent map).</p>
+
+<p class=diabox><b>Dependent Raster Map</b> &quot;raster map name&quot;: the raster map is the result of another operation (dependent map).</p>
+
+<p class=diabox> When you click this flat button, the raster map will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Definition:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The expression by which the object was created is listed, i.e. the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >object definition</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Up-to-date or not:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Lists whether this raster map is up-to-date or not. If not, the name of the object which was changed last is shown including that object's date and time.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Depends on:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In a tree view, the names of the objects are listed on which this raster map depends.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Calculate</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When only the object definition file of this raster map (.MPR) exists: </p>
+
+<ul class=diaul>
+
+<li>click this button to (re)calculate the data file (.MP#) of this raster map by (re)executing the definition of this map.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Make Up-to-Date</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When the raster map is <i>not</i> up-to-date anymore, </p>
+
+<p class=diabox>i.e. when one or more objects on which this raster map depends have been changed, and when both the object definition file (.MPR) and the data file (.MP#) of this raster map exist: </p>
+
+<ul class=diaul>
+
+<li>click this button to check all objects on which this raster map depends, see if these are up-to-date, if not, check all objects below, etc., </li>
+
+<li>recalculate all changed objects on which this raster map depends, and finally recalculate the data file of this raster map using all new changed objects.</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Release Disk Space</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When both the object definition file (.MPR) and a calculated data file (.MP#) exist: </p>
+
+<ul class=diaul>
+
+<li>click this button to delete the data file of this raster map. </li>
+
+</ul>
+
+<p class=diabox>The expression by which this dependent raster map was created remains stored in the object definition file, so this raster map can always be recalculated.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Break Dependency Link</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Whether this raster map is Up-to-Date or not: </p>
+
+<ul class=diaul>
+
+<li>click this button to break the dependency link between this raster map and the objects on which it depends. This raster map will become an editable source object. </li>
+
+</ul>
+
+<p class=diabox>Do not break the dependency link if you wish to be able to update this raster map in a later stage on the basis of changed input objects.</p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>Used By tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Raster Map</b> &quot;raster map name&quot;: the raster map is an editable source map.</p>
+
+<p class=diabox><b>Map Calculate</b> &quot;raster map name&quot;: the raster map is the result of a MapCalc formula (dependent map).</p>
+
+<p class=diabox><b>Dependent Raster Map</b> &quot;raster map name&quot;: the raster map is the result of another operation (dependent map).</p>
+
+<p class=diabox> When you click this flat button, the raster map will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Used By:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In a tree view, it is listed by which other objects this raster map is used. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=diakopje>Additional Info tab:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox>Object type and name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox><b>Dependent Raster Map</b> &quot;raster map name&quot;: the raster map is the result of another operation (dependent map).</p>
+
+<p class=diabox> When you click this flat button, the raster map will be (re)opened. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=diabox><span class=arial>Additional Info</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When a dependent raster map is the result of a <a href="..//ilwisapp/popup/trend_surface_popup.htm" onClick="return popup(this, 'notes')" >Trend Surface</a> operation: the equation of the calculated Trend Surface is listed. </p>
+
+<p class=diabox>When a dependent raster map is the result of a <a href="..//ilwisapp/popup/variogram_surface_popup.htm" onClick="return popup(this, 'notes')" >Variogram Surface</a> operation: the average, variance and the unbiased variance estimate of the input pixel values are listed. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For editable maps, advanced users may in some cases wish to change properties. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	To open the Properties of a raster map, you can also type <span class=courier>Prop</span> or <span class=courier>Prop</span> <i>rasmap</i>.<span class=courier>mpr</span> on the command line of the Main window.</li>
+
+<li>	You can also handle object properties from the command line in the Main window or in a script. For more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>.</li>
+
+<li>    To print or to copy the contents of all Property pages to the clipboard, choose <span class=arial>Print</span> or <span class=arial>Copy</span> from the <a href="../ilwis/windows_features_control_menu.htm">Control menu</a>. </li>
+
+<li>    To print or to copy the contents of the currently active Property tab to the clipboard, click with the right mouse button in the white space of the Property page and choose <span class=arial>Print</span> or <span class=arial>Copy</span> from the context-sensitive menu. </li>
+
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_dependent_data_objects.htm">Basic concepts : dependent objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_raster_maps.htm">ILWIS objects : raster maps</a></p>
+
+</body

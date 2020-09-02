@@ -1,0 +1,179 @@
+<html>
+
+<head>
+<title>Symbols for Value point maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Symbols, Point symbols">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Symbol</h1>
+
+<h1 class=secondline>Point maps with a value domain</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Specify symbol type, color, line width and line color for all points. The size of symbols is either the same for all points (no stretch) or proportional to the point values (stretch). </p>
+
+<p class=defnewpar>This dialog box appears when you open a value point map, or display a point map by a value attribute column. In the <a href="display_options_point_map.htm">Display Options - Point Map</a> dialog box, you clicked the <span class=arial>Symbol</span> button.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Symbol Type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the ILWIS Simple symbols or any installed symbol font; open the list box by clicking it. Windows symbol fonts are for example Symbol, Wingdings, etc.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=diakopje>In case of ILWIS Simple symbols:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Symbol ...:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a symbol type from the list box: circle, square, diamond, delta up, delta down, plus, minus, or cross.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Fill Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For circle, square, diamond, delta up, delta down: select a color to fill the symbols with; open the list box by clicking it. To create your own color, select Custom at the bottom of the drop-down list. To obtain symbols which are not filled, select Transparent from the drop-down list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Line width:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the line width of the symbols. Line width is expressed in screen pixels.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color to draw the (outer lines of) symbols; open the list box by clicking it. To create your own color, select Custom at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=diakopje>In case of a Windows symbol font:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Symbol box:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of a Windows symbol font, select a symbol from the symbol box by clicking it.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color to draw the symbols; open the list box by clicking it. To create your own color, select Custom at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=diakopje>For all symbol types:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Stretch:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to size the point symbols proportionally to the point values. Specify the stretch range; by default, the 0% interval values are given. When you want to add a legend later on, it is advised to choose <i>round values</i>.</p>
+
+<p class=diabox>Clear this check box, if you want to display all points with the same size.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of no stretching: Specify a value for the symbol size of all points.</p>
+
+<p class=diabox>In case of stretching: Specify a symbol size for the smallest value in the stretch range and a symbol size for the largest value in the stretch range.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Linear, Logarithmic:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of symbol size stretching, choose between Linear or Logarithmic stretching.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Radius, Area:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of symbol size stretching, choose to make the point values proportional to the Radius or to the Area of the symbol.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When point values are <i>stretched</i> proportionally to symbol sizes, you can add a legend to this point map. Choose <span class=arial>Add Annotation, Legend</span> from the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> in the map window. <a href="display_options_legend_point_values_as_sized_symbols.htm">The Display Options - Legend (point values as symbols)</a> will appear.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="display_options_point_map.htm">Display Options - Point map</a> (dialog box)</p>
+
+</body

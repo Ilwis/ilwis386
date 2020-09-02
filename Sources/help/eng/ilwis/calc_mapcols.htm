@@ -1,0 +1,181 @@
+<html>
+
+<head>
+<title>MAPCOLS</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="MAPCOLS, Data property functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>MAPCOLS( ) function</h1>
+
+<p class=defnewpar>Returns the number of columns of a raster map.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>MAPCOLS</span>(<i>RasterMap</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><i>RasterMap</i></td>
+	<td valign="top">is a raster map</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><span class=courier>MAPCOLS</span> returns:</td>
+	<td valign="top">a value</td>
+</tr>
+<tr>
+	<td width="110" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>This function may be handy to use in <a href="..//ilwis/popup/dde_popup.htm" onClick="return popup(this, 'notes')" >DDE</a> applications.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a>, <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="120"><p class=calc00>? MAPCOLS(DEM)</p></td>
+	<td>returns the number of columns of raster map DEM, e.g. 637</td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>OutMap = MAPCOLS(InMap)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>10</td>
+    <td class=calcpict>35</td>
+    <td class=calcpict>20</td>
+  </tr>
+  <tr>
+    <td class=calcpict>35</td>
+    <td class=calcpict>15</td>
+    <td class=calcpict>40</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>40</td>
+    <td class=calcpict>30</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>3</td>
+    <td class=calcpict>3</td>
+    <td class=calcpict>3</td>
+  </tr>
+  <tr>
+    <td class=calcpict>3</td>
+    <td class=calcpict>3</td>
+    <td class=calcpict>3</td>
+  </tr>
+  <tr>
+    <td class=calcpict>3</td>
+    <td class=calcpict>3</td>
+    <td class=calcpict>3</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = MAPCOLS(InMap)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="80"><a href="calc_mapmax.htm">MAPMAX</a></td>
+	<td valign="top"><a href="calc_pixarea.htm">PIXAREA</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_mapmin.htm">MAPMIN</a></td>
+	<td valign="top"><a href="calc_tblrecs.htm">TBLRECS</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_maprows.htm">MAPROWS</a></td>
+	<td valign="top"><a href="calc_tblcols.htm">TBLCOLS</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_pixsize.htm">PIXSIZE</a></td>
+	<td valign="top"><a href="calc_tblvalue.htm">TBLVALUE</a></p></td>
+</tr>
+</table>
+
+</body

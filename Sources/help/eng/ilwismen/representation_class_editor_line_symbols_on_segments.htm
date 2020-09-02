@@ -1,0 +1,240 @@
+<html>
+
+<head>
+<title>Symbols on segments or lines</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Symbols, Line symbols">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Line Symbols</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Represent a segment or a line by equally spaced symbols; a symbol can be selected from any installed symbol font. </p>
+
+<p class=defnewpar>This option can be used to represent segments or lines in annotation elements by equally spaced symbols 'over' the segments or the lines (see examples below). </p>
+
+<ul>
+
+<li>When you use this option for segments classes (representation class), you can specify symbol type, symbol, symbol size and rotation for each class of segments. </li>
+
+<li>When you use this option for annotation elements, you can specify symbol type, symbol, symbol size and rotation for the whole line in the annotation element. </li>
+
+</ul>
+
+<p class=defnewpar>This dialog box appears: </p>
+
+<ol>
+
+<li>In the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >representation class editor</a>, when you edit the <i>segment form</i> of a representation class: </li>
+
+        <ul>
+
+        <li>in the <a href="../ilwismen/representation_class_editor_edit_item_segment.htm">Edit Item (segment)</a> dialog box, choose Line Type Symbol, and click the <span class=arial>Symbol</span> button; </li>
+
+        </ul>
+
+<li>In the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a>, when you insert or edit a <a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >box</a> in a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>: </li>
+
+        <ul>
+
+        <li>in the <a href="../ilwismen/layout_editor_insert_edit_box.htm">Insert/Edit Box</a> dialog box, choose Line Type Symbol, and click the <span class=arial>Symbol</span> button. </li>
+
+        </ul>
+
+<li>In the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a>, when you insert or edit a <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map outline</a> for a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>: </li>
+
+        <ul>
+
+        <li>in the <a href="layout_editor_insert_edit_map_border_neatline.htm">Insert/Edit Map Border</a> sheet, click the <span class=arial>Outline</span> tab,</li>
+
+        <li>choose Line Type Symbol, and click the <span class=arial>Symbol</span> button. </li>
+
+        </ul>
+
+</ol>
+
+<p class=diakopje><b>Dialog box options:</b></p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Symbol type:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select Simple symbols or any installed True Type <i>symbol font</i>; open the list box by clicking it. Windows symbol fonts are for example Symbol, Wingdings, etc. You can also select an installed Corel Draw symbol font, see also the Tip below.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=diakopje>In case of symbol type Simple:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Symbol:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a symbol type from the list box: circle, square, diamond, delta up, delta down, plus, minus, or cross.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the symbol size. Symbol size is expressed in points (1/72 inch), i.e. as choosing a font size in word processing packages.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Fill color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For symbols circle, square, diamond, delta up, delta down: select a color to fill the symbols with; open the list box by clicking it. To create your own color, select 'Custom' at the bottom of the drop-down list. To obtain symbols which are not filled, select 'Transparent' at the top of the drop-down list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Line width:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the line width with which the selected symbols should be drawn. Line width values are expressed in screen pixels (for on the screen) and in dots (for on the printer).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=diakopje>In case of a Windows symbol font:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Symbol box:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a symbol from the symbol box by clicking it.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a value for the symbol size. Symbol size is expressed in points, i.e. as choosing a font size in word processing packages.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Rotation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the rotation of the symbols. Rotation is expressed in degrees (anti-clock wise).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When finished, one of the following dialog boxes will become activate again: 
+
+<ul>
+
+<li>the <a href="representation_class_editor_edit_item_segment.htm">Representation Class editor : Edit Item (segment)</a> dialog box, </li>
+
+<li>the <a href="../ilwismen/layout_editor_insert_edit_box.htm">Insert/Edit Box</a> dialog box, or </li>
+
+<li>the <a href="layout_editor_insert_edit_map_border_neatline.htm">Insert/Edit Map Border</a> sheet, <span class=arial>Outline</span> tab. </li>
+
+</ul>
+
+<p class=defnewpar>In these dialog boxes, you can specify the <i>color</i> with which the symbol should be drawn, you can choose to obtain an <i>optional support line</i>, and you can specify the <i>distance</i> between the symbols.</p>
+
+<p class=kopje><b>Examples:</b></p>
+
+<table cellspacing=0>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex8.gif" align=bottom width="115" height="9"></p>
+
+</td>
+<td valign="top">
+<p>Color Black; Line type Symbol; Symbol type Symbol; Size 15; Rotation 0; No Support line; Symbol distance 6</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex8a.gif" align=bottom width="115" height="5"></p>
+
+</td>
+<td valign="top">
+<p>Color Red; Line type Symbol; Symbol type Simple; Symbol Circle; Symbol Size 4; Symbol Fill color Red; Symbol Line width 1; Support line; Background color Red; Line width 0.3; Symbol distance 5</p>
+
+</td>
+</tr>
+<tr>
+<td valign="baseline" width=144>
+<p><img src="../images/ltex9.gif" align=bottom width="115" height="16"></p>
+
+</td>
+<td valign="top">
+<p>Color Blue; Line type Symbol; Symbol type Windings; Size 20; Rotation 0; No Support line; Symbol distance 8</p>
+
+</td>
+</tr></table>
+
+<p class=tip>Tips:</p>
+
+<p class=tiptext>To use for instance a Corel Draw symbol font, first make sure that the font is registered by Windows:</p>
+
+        <ul class=tipul>
+
+        <li>	In the Windows Settings, choose Control Panel, and choose Fonts. A list of installed fonts will appear.</li>
+
+        <li>	When the desired symbol fonts are not yet in this list, choose File, Install New Font. The Add Font dialog box will appear.</li>
+
+        <li>	Specify the Corel Draw/Symbols directory, select the fonts you want to use and click OK. </li>
+
+        </ul>
+
+<p class=tiptext>Now that the symbol fonts are registered by Windows, you can use them in ILWIS as well.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+</body

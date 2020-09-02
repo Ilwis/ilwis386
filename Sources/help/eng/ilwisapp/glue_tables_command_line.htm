@@ -1,0 +1,167 @@
+<html>
+
+<head>
+<title>Glue tables : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Glue tables, Merge tables, TableGlue">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Glue tables</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/glue_tables_popup.htm" onClick="return popup(this, 'notes')" >Glue tables</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableGlue</span>(FirstInputTableName, SecondInputTableName [, MoreInputTables])</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableGlue</span>(FirstInputTableName, SecondInputTableName [, MoreInputTables] , <span class=courier>Vertical</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableGlue</span>(NewDomain, FirstInputTableName, SecondInputTableName [, MoreInputTables])</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p>OUTTABLE</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>TableGlue</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Glue tables operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>FirstInputTableName</p>
+
+</td>
+<td valign="top">
+<p>is the name of the first input table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>SecondInputTableName</p>
+
+</td>
+<td valign="top">
+<p>is the name of the second input table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>MoreInputTables</p>
+
+</td>
+<td valign="top">
+<p>optionally, you can specify more input table names, delimited by commas. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>Vertical</p>
+
+</td>
+<td valign="top">
+<p>in case the input tables use domain <span class=courier>None</span>, an optional parameter to specify that the input tables should be merged vertically.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>NewDomain</p>
+
+</td>
+<td valign="top">
+<p>in case of merging two or more Class or ID tables that do not have the same domain: an optional parameter to specify a name for the new output domain in which all input domain items will be merged. </p>
+
+<p>When the Class or ID domains of input tables are not the same and this parameter is not specified, a new output domain will be automatically created with the same name as the output table. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>On the command line, you can specify as many input tables as you like, i.e. you can merge as many tables as you like. When using the dialog box of this operation, only two, three or four input tables can be merged at a time. </p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output table has been calculated. When tables are merged which use different class or ID domains, a new domain will be created for the output table. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/glue_tables_functionality_algorithm.htm">Glue tables : functionality</a></p>
+
+</body

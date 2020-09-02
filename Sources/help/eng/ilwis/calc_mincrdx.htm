@@ -1,0 +1,174 @@
+<html>
+
+<head>
+<title>MINCRDX</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="MINCRDX, Coordinate functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>MINCRDX( ) function</h1>
+
+<p class=defnewpar>Returns the minimum X-coordinate of a map.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>MINCRDX</span>(<i>Map</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><i>Map</i></td>
+	<td valign="top">is a raster, polygon, segment or point map</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><span class=courier>MINCRDX</span> returns:</td>
+	<td valign="top">a value</td>
+</tr>
+<tr>
+	<td width="110" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>By default, this function works on raster maps with extension <span class=courier>.mpr</span>; you can omit the extension <span class=courier>.mpr</span>. To use this function on polygon maps, segment maps or point maps, you need to specify the object's <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >extension</a> (<span class=courier>.mpa</span>, <span class=courier>.mps</span> or <span class=courier>.mpp</span>).</li>
+	<li>This function results in a coordinate value that can be used as input in other calculations.</li>
+</ul>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>This function may be handy to use in <a href="..//ilwis/popup/dde_popup.htm" onClick="return popup(this, 'notes')" >DDE</a> applications.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a>, <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="180"><p class=calc00>? MINCRDX(DEM)</p></td>
+	<td><p>returns the minimum X-coordinate of raster map <span class=courier>DEM</span>, e.g. 795480</p></td>
+</tr>
+<tr>
+	<td width="180"><p class=calc00>? MINCRDX(Rainfall.mpp)</p>
+	<td><p>returns the maximum value of point map <span class=courier>Rainfall</span>, e.g. 795822.50</p></td>
+</tr>
+</table>
+
+<p class="kopje">Example of calculating with minimum and maximum values of coordinates</p>
+<p>It might occur that you have a point data set from which only a part of all points lay inside a certain area. You can select only these points to show or to use them for further calculation. In this example, it will be tested whether the points of a point map lay within the area of an existing
+land use map. The coordinates from the lower left corner of the <span class=courier>Landuse</span> map are: (795480, 8071880) and the coordinates from the upper right corner: (808220, 8090520).</p>
+  
+<p class=calc0linsp03befaft>Select = INRANGE(CRDX(Coordinate), MINCRDX(Landuse), MAXCRDX(Landuse)) AND INRANGE(CRDY(Coordinate), MINCRDY(Landuse), MAXCRDY(Landuse))</p>
+  
+<table cellSpacing="0">
+<tr>
+	<td valign="top"><p class=tcolhr></p></td>
+	<td valign="top"><p class=tcolhr>Coordinate</p></td>
+	<td valign="top"><p class=tcolh>Name</p></td>
+	<td valign="top"><p class=tcolh>Select</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>(799491, 8086120)</p></td>
+	<td valign="top"><p class=t1>SamplePoint1</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1r>(800085, 8080962)</p></td>
+	<td valign="top"><p class=t1>SamplePoint2</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1r>(793710, 8077028)</p></td>
+	<td valign="top"><p class=t1>SamplePoint3</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>(798934, 8183040)</p></td>
+	<td valign="top"><p class=t1>SamplePoint4</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1r>(803610, 8078624)</p></td>
+	<td valign="top"><p class=t1>SamplePoint5</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1r>(803313, 8085712)</p></td>
+	<td valign="top"><p class=t1>SamplePoint6</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1r>(798204, 8123951)</p></td>
+	<td valign="top"><p class=t1>SamplePoint7</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+</table>
+
+<p class="defnewpar">Points 3, 4 and 7 do not lie inside the boundaries of the land use map. The X-coordinate of point
+number 3 is lower than the minimum X-coordinate of the <span class=courier>Landuse</span> map while point numbers 4 and 7 have Y-coordinates which
+are larger than the maximum Y-coordinate in the <span class=courier>Landuse</span> map.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="80"><a href="calc_coord.htm">COORD</a></td>
+	<td valign="top" width="70"><a href="calc_mincrdy.htm">MINCRDY</a></td>
+	<td valign="top" width="70"><a href="calc_mapcrd.htm">MAPCRD</a></td>
+	<td valign="top"><a href="calc_rasvalue.htm">RASVALUE</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_crdx.htm">CRDX</a></td>
+	<td valign="top" width="70"><a href="calc_maxcrdx.htm">MAXCRDX</a></td>
+	<td valign="top" width="70"><a href="calc_maprow.htm">MAPROW</a></td>
+	<td valign="top"><a href="calc_dist.htm">DIST</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_crdy.htm">CRDY</a></td>
+	<td valign="top" width="70"><a href="calc_maxcrdy.htm">MAXCRDY</a></td>
+	<td valign="top" width="70"><a href="calc_mapcol.htm">MAPCOL</a></td>
+	<td valign="top"><a href="calc_dist2.htm">DIST2</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_transform.htm">TRANSFORM</a></td>
+	<td valign="top" width="70"></td>
+	<td valign="top" width="70"><a href="calc_mapvalue.htm">MAPVALUE</a></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

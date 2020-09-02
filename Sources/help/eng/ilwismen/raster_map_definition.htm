@@ -1,0 +1,174 @@
+<html>
+
+<head>
+<title>Raster map definition</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Raster map definition, Edit definition ..., Recalculate raster map, Calculate ..., Definition">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Raster Map Definition</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Raster Map Definition dialog box appears:</p>
+
+<ul>
+
+<li>	after you have typed a <a href="../ilwis/calc.htm">MapCalc</a> formula on the command line of the Main window, or</li>
+
+<li>	when for a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> raster map, you clicked the <span class=arial>Edit Definition</span> button in the <a href="raster_map_properties.htm">Raster Map Properties</a> sheet. You can change the map's expression, domain, value range, precision, or description, i.e. the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> of the raster map.</li>
+
+</ul>
+
+<p class=defnewpar>In this dialog box, you can set or change the MapCalc expression to (re-) create the raster map, and you can set or change the map's domain, value range, precision or description. In other words, the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> of the raster map will be set or changed. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Expression:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept or change the MapCalc expression which defines how this map should be calculated.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Defaults:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Click this button to obtain a default domain, and for value domains, a value range and precision. </p>
+
+<p class=diabox>Or when you changed the default domain, value range or precision, click this button to obtain the defaults again.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default domain, or select or <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create</a> your own output domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Value Range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If the output map uses a value domain, accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, or specify your own range of possible values in the output map (a liberal estimate will do). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If the output map uses a value domain, accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of output values, or specify your own precision. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>After typing a MapCalc formula on the command line (using the <b>=</b> definition symbol): </p>
+
+<ul>
+
+<li>when you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. </li>
+
+<li>when you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </li>
+
+</ul>
+
+<p class=tiptext><span class=tip>Tip: </span>When calculating, it is advised to always use the definition symbol = in order to obtain dependent maps. </p>
+
+<p class=defnewpar>After typing a MapCalc formula on the command line (using the <b>:=</b> assignment symbol): </p>
+
+<ul>
+
+<li>when you click the <b>Show</b> button, the output map will be calculated and shown; </li>
+
+<li>when you click the <b>Calculate</b> button, the output map will just be calculated. </li>
+
+</ul>
+
+<p>The dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=defnewpar>After using the <span class=arial>Edit Definition</span> button in the <a href="raster_map_properties.htm">Raster Map Properties</a> sheet: </p>
+
+<ul>
+
+<li>click the <b>OK</b> button to redefine the definition of the map; the map will be calculated later when required. </li>
+
+<li>to directly recalculate the map, you can click the <span class=arial>Calculate</span> button in the Raster Map Properties sheet.</li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>For more information on the operators and functions that can be used in a MapCalc formula, refer to <a href="../ilwis/calc.htm">Map calculation</a>.</li>
+
+<li>When working with <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>, you can generally accept the <b>default</b> value domain. You only need to select or create a user-defined value domain when the values have a specific meaning for which you have or want to create a meaningful representation.</li>
+
+</ul>
+
+<p class=tip>Note: </p>
+
+<ul class=tipul>
+
+  <li>ILWIS uses its internal defaults to determine whether the internal calculation will be performed in integers or in reals. <br>In general it can be said, that:</p>
+  	<ul>
+		<li>when the input consists of integers, the internal calculation will also be performed in integers; </li>
+		<li>when the input consists of reals, the internal calculation will also be performed in reals. </li>
+	</ul>
+
+  <p class=linespacing01before>Any user specification of the desired output domain and value range can only limit the results from the internal calculation. It is thus not possible, that when all input is in integers, to obtain output in reals by using a precision smaller than 1, for instance by using <span class=calc0>OUT{dom=Value;vr=0:10000:0.001} = ...</span>. </p>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/calc.htm">Map calculation</a></p>
+
+</body

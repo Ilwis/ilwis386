@@ -1,0 +1,204 @@
+<html>
+
+<head>
+<title>Repr Class editor : Edit multiple items</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Representation Class editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Representation Class editor</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Edit multiple items</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__repr_class_editor_edit_menu_sec2.Click()>Edit menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>When editing the representation of a class domain in the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >representation class editor</a>, assign a single color or assign a range of colors to multiple selected classes. </p>
+
+<p class=defnewpar>Assigning a range of colors can be used:</p>
+
+<ul>
+
+<li>	to obtain smooth color changes between multiple classes, for instance from yellow to red, through orange, or </li>
+
+<li>	to obtain similar colors for related classes in a domain, e.g. various forest types in similar shades of green, etc. </li>
+
+</ul>
+
+<p class=defnewpar>This dialog box appears when:</p>
+
+<ul>
+
+<li>	you selected multiple classes in the editor window (see the Multiple Selection information below), and</li>
+
+<ul>
+
+<li>	you choose <span class=arial>Edit Multiple Items</span> from the <a href="..//ilwismen/sec2/repr_class_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a>, or </li>
+
+<li>	you press the <span class=arial>Enter</span> key on the keyboard.</li>
+
+</ul>
+
+</ul>
+
+<p>For more information, refer to <a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor : functionality</a>.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Single color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to assign the same color to all selected classes.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Color range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to assign a range of colors to the selected classes. Specify the color for the first class in your selection in the From Color list box, and specify the color for the last class in your selection in the To Color list box. A straight line will be drawn between these two colors in the Red, Green, Blue color cube; and all other selected classes will obtain a color on this line according to the <i>class order in the domain</i>. To change the order of classes in the domain, see the Tips below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>From color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the first domain item in the selection. To define your own color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or double-click the <span class=arial>Custom</span> item at the bottom of the list; the <a href="custom_colors.htm">Custom Colors</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>To color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for the last domain item in the selection. To define your own color, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> or double-click the <span class=arial>Custom</span> item at the bottom of the list; the <a href="custom_colors.htm">Custom Colors</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Variation:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when a random color variation should be used around the straight line between the specified From and To Color in the RGB color cube. Subsequently, specify a value between 1 and 255 for the maximum variation allowed.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	Once you have assigned a range of colors to multiple domain items, you can refine the colors for individual items:</li>
+
+        <ul class=tipul>
+
+        <li>	by selecting a single class in the editor window and use the Red, Green, Blue slide bars, or</li>
+
+        <li>	by double-clicking a class in the editor window; the <a href="../ilwismen/representation_class_editor_edit_item_raster.htm">Edit Item (raster)</a>, <a href="representation_class_editor_edit_item_polygon.htm">Edit Item (polygon)</a>, <a href="representation_class_editor_edit_item_segment.htm">Edit Item (segment)</a> or <a href="../ilwismen/representation_class_editor_edit_item_point.htm">Edit Item (point)</a> dialog box will appear.</li>
+
+        </ul>
+
+<li>	To change the order of classes in the domain, choose the <a href="..//ilwismen/popup/repr_class_editor_edit_domain_popup.htm" onClick="return popup(this, 'notes')" ><span class=arial>Domain</a></span> command from the <a href="..//ilwismen/sec2/repr_class_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a>. The <a href="../ilwis/domain_class_id_editor_functionality.htm">Domain Class editor</a> will be opened. <br>
+
+        In the Domain Class editor:</li>
+
+        <ul class=tipul>
+
+        <li>	select <span class=arial><a href="..//ilwismen/popup/domain_class_id_editor_manual_ordering_popup.htm" onClick="return popup(this, 'notes')" >Manual Ordering</a></span> from the <a href="../ilwis/domain_class_id_editor_menu_commands.htm">Edit menu</a>; and </li>
+
+        <li>	<a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> the listed domain items (i.e. your classes) in the domain to the desired positions. </li>
+
+        </ul>
+
+<p class=tiptext>	The position of the classes in the representation class editor will change accordingly.</p>
+
+<li>	To apply the changes in the representation in a displayed map (with a domain to which this representation is linked), press the <span class=arial>Redraw</span> <img src="../images/redraw.gif" align=bottom width="22" height="22"> button in the map window. In this way, you can work with the representation editor and a map window simultaneously.</li>
+
+</ol>
+
+<h2>Multiple Selection</h2>
+
+<p class=kopjeaftertitlesub>To select two or more items in sequence:</p>
+
+<ul>
+
+<li>	click the first domain item you want to select, </li>
+
+<li>	keep the left mouse button down, and </li>
+
+<li>	move the mouse pointer to the last domain item you want to select, </li>
+
+<li>	then release the left mouse button;</li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	click the first domain item you want to select,</li>
+
+<li>	press and hold down the <span class=arial>Shift</span> key while you click the last domain item in the group. </li>
+
+</ul>
+
+<p class=kopje>To select two or more items out of sequence:</p>
+
+<ul>
+
+<li>	press and hold down the <span class=arial>Ctrl</span> key while you click each domain item.</li>
+
+</ul>
+
+<p class=kopje>To cancel a selected item:</p>
+
+<ul>
+
+<li>	press and hold down the <span class=arial>Ctrl</span> key while you click a selected domain item.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor : functionality</a></p>
+
+</body

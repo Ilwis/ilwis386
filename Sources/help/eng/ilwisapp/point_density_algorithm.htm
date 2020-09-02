@@ -1,0 +1,49 @@
+<html>
+
+<head>
+<title>Point density : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point density">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Point density</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Point density operation rasterizes a point map on a pixel size which is specified in the georeference. </p>
+
+<p class=defnewpar>The value assigned to an output pixel is either determined:</p>
+
+<ul>
+
+<li>	by the number of points encountered in a pixel; use the dialog box or the <span class=courier>MapRasterizePointCount</span> expression on command line, or </li>
+
+<li>	by the sum of the point values encountered in a pixel, or the sum of attribute values; use the <span class=courier>MapRasterizePointSum</span> expression on the command line. </li>
+
+</ul>
+
+<p class=kopje>Process Count:</p>
+
+<ul>
+
+<li>All pixels are initialized on value zero. </li>
+
+<li>For every point in the input point map, it is determined in which output pixel it is located. </li>
+
+<li>The value of an output pixel is incremented by 1, for each point which has a defined value and which is found in that pixel. </li>
+
+<li>If no points with a defined value are found in a pixel, and you used the default domain <span class=courier>Count</span>, the output pixel obtains value 0. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="point_density_functionality.htm">Point density : functionality</a></p>
+
+<p class=seealsolinks><a href="points_to_raster_functionality.htm">Points to raster: functionality</a></p>
+
+</body

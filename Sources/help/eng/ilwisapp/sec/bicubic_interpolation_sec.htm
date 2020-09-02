@@ -1,0 +1,58 @@
+<html>
+
+<head>
+<title>bicubic interpolation sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Bicubic interpolation example</p>
+
+<p>In a bicubic interpolation, first the position of each pixel in the output map is determined; then the values of 16 surrounding pixels of the input map are used to calculate an interpolated value for each pixel in the output map.</p>
+
+<p></p>
+
+<p class=linespacing01after>Figure 1 below shows the position of a 'new' pixel in the output map, and the position and values of 16 surrounding pixels in the input map. </p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargin1><img src="../../images/bicub.gif" align=bottom width="120" height="138"></p>
+
+<p class=captionfigleft1>	Fig. 1: Principle of bicubic interpolation.</p>
+
+<p>The value of the 'new' pixel in the output map is calculated by:</p>
+
+<ul>
+
+<li>	first 4 interpolations in y-direction,</li>
+
+<li>	then 1 interpolation in x-direction (between the 4 intermediate values, represented in red).</li>
+
+</ul>
+
+<p class=defnewpar>A third order polynomial is fitted through each set of 4 known points and from this the value of the fifth point is known. A bicubic interpolation gives a better estimate of the output value than a bilinear interpolation.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwisapp/densify_functionality.htm" onClick="return popup(this, 'notes')" >Densify : functionality</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/resample_algorithm.htm" onClick="return popup(this, 'notes')" >Resample : algorithm</a></p>
+
+</body

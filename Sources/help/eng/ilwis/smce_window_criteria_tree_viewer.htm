@@ -1,0 +1,518 @@
+<html>
+
+<head>
+<title>SMCE window : criteria tree viewer</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Spatial Multi-Criteria Evaluation (SMCE), SMCE, Criteria tree viewer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>SMCE window</h1>
+
+<h1 class=secondline>Criteria tree viewer</h1>
+
+<!--<hr>-->
+
+<p>The criteria tree viewer shows you the contents of a <a href="..//ilwis/popup/objects_criteria_trees_popup.htm" onClick="return popup(this, 'notes')" >criteria
+    tree</a>. With the criteria tree viewer, you are able to insert and remove constraints,
+    factors and/or groups of factors, associate input maps to criteria, edit labels and start dialog
+	boxes for standardization and weighing. The criteria tree viewer  
+	consists of one criteria tree column and one or more alternative columns.</p>
+
+<h2>Creating and filling a criteria tree</h2>
+
+<p class=kopje>Criteria tree column:</p>
+
+<p>The criteria tree column, i.e. the first column, displays your <a href="..//ilwis/popup/objects_criteria_trees_popup.htm" onClick="return popup(this, 'notes')" >criteria tree</a>. </p>
+
+<p class=defnewpar>A criteria tree may contain:</p> 
+
+<p class=emptylinehalf>&nbsp;</p>
+<table cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="25" valign="top"><img src="../images/criteria_tree_main_goal.gif" width="21" height="15"></td>
+    <td width="25%" valign="top">Main Goal </td>
+	<td>One main goal is obligatory for any criteria tree. The main goal is also called the main root. </td>
+  </tr>
+  <tr>
+    <td valign="top"><img src="../images/criteria_tree_constraint.gif" width="21" height="15"> </td>
+    <td valign="top"><a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >Constraint(s)</a> </td>
+	<td valign="top">Constraints can only appear directly under the main goal. </td>
+  </tr>
+  <tr>
+    <td valign="top" height=18><img src="../images/criteria_tree_benefit_factor.gif" width="21" height="15"> </td>
+    <td valign="top"><a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >Benefit Factor(s)</a> </td>
+	<td valign="top">Factors may appear directly under the main goal or under a group of factors.</td>
+  </tr>
+  <tr>
+    <td valign="top" height=18><img src="../images/criteria_tree_cost_factor.gif" width="21" height="15"> </td>
+    <td valign="top"><a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >Cost Factor(s)</a> </td>
+	<td valign="top">Factors may appear directly under the main goal or under a group of factors.</td>
+  </tr>
+  <tr>
+    <td valign="top" height=18><img src="../images/criteria_tree_group.gif" width="21" height="15"></td>
+    <td valign="top">Group of Factors </td>
+	<td valign="top">A Group defines an intermediate or a partial goal. <br />
+		Under a Group, you can add one or more Factors and/or other Groups of Factors. Click the plus sign in front of a Group of Factors to expand the group. </td>
+  </tr>
+</table>
+
+<p class=tip>Tips:</p>
+<ul class="tipul">
+
+<li>To insert new groups, factors or constraints: </li>
+
+	<ul class=tipul>
+
+	<li>make sure you are in the Problem Definition mode, </li>
+
+	<li>select the main goal or a sub goal under which you wish to insert a new group, factor or constraint, </li>
+
+	<li>use the <span class=arial>Insert</span> command on the <a href="../ilwis/smce_window_menu_commands.htm">Edit menu</a>. </li>
+
+	</ul>
+
+<li>When dealing with a large number of factors, it is best to divide them into groups of factors. A group of factors is usually linked to a particular goal. If necessary, the groups can be divided even further. When designing this kind of hierarchical structure, it is important to maintain a balanced distribution of the factors over the groups of factors.</li>
+</ul>
+
+<p class=kopje>Alternative column:</p>
+<p>In an alternative column, i.e. the second column and any other next column, you can: </p>
+	<ul>
+	<li>associate input maps to criteria, and </li>
+	<li>specify names for the output map(s), i.e. the composite index map(s).</li>
+	</ul>
+
+<p class=defnewpar>The number of alternatives is 1 when performing <span class=arial>Problem
+  Analysis</span> or <span class=arial>Design of Alternatives</span>; the number of alternatives  
+  is greater than 1 when performing <span class=arial>Decision Making</span>. 
+  The SMCE application can handle a maximum of 9 alternatives. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class="tiptext"><span class="tip">Tip: </span>To set the number of alternatives, 
+	use the <a href="../ilwismen/smce_window_alternatives.htm"><span class=arial>Alternatives</span></a> 
+	command on the <a href="../ilwis/smce_window_menu_commands.htm">Edit menu</a>. </p>
+
+<h2>Visual feedback (background colors)</h2>
+
+<p>When building the criteria tree, adding input maps (or columns) to the criteria, 
+	specifying the output map name for the main goal and optional output map names for partial goals, and
+	specifying the standardization and weighing methods for all criteria, 
+	the application gives you some visual feedback on your progress. </p>
+
+<p class=defnewpar>The application thus automatically evaluates the criteria tree against some completeness restrictions 
+	and warns the user accordingly.</p>
+  
+<p class=defnewpar>Items with a <i>red</i> background color indicate incompleteness, for instance: </p>
+	<ul>
+	<li>no output name was defined for the main goal, </li>
+	<li>a group was defined, but no children were added to the group, or </li>
+	<li>an item was not standardized or weighed yet. </li>	
+	</ul>
+
+<p class=defnewpar>A <i>green</i> background color means that an output map name is expected: </p>
+	<ul>
+	<li>for the main goal, an output map name must be specified. </li> 
+	<li>for a partial goal, an output map name is optional. </li>
+    </ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To edit an existing name of an output map, select the output map and either slowly click the map name again, or use the context-sensitive menu, the F2 key or the Enter key. </p>
+
+<p class=defnewpar>When all necessary steps are completed, output maps can be calculated separately (<a href="../ilwismen/smce_window_generate_selected_map.htm"><span class=arial>Generate Selected Maps</span></a>)
+   or all output maps can be calculated at once (<a href="../ilwismen/smce_window_all_composite_index_maps.htm"><span class=arial>Generate All Maps</span></a>). </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>Specifying an output map name for a partial goal, is optional but recommended in order to gain understanding of the composition of the criteria contributions to the composite index. </p>
+
+<h2>Information on Standardization</h2>
+
+<p>As all input data has to be standardized, and as various methods of standardization are available, 
+	information on standardization will appear behind the textual names or descriptions of criteria, 
+	as soon as you have performed the standardization of a criterion. </p>
+
+<p class=kopjeboldandund>1. Standardization of <b>factors</b></p>
+
+<p>Depending on the type of input data that is standardized, the criteria tree column will show some information on the standardization and the selected standardization method.</p>
+
+<p class=defnewpar>When <b>Value input</b> is standardized as a factor, the criteria tree column will show:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td width="40%" valign="top"><i>Criterion name</i>--Std:Maximum</td>
+   	<td valign="top">input values (from 0 to the maximum input value) are standardized to values 0 to 1. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Interval</td>
+   	<td valign="top">input values (from the minimum input value to the maximum input value) are standardized to values 0 to 1. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Goal(<i>Min</i>,<i>Max</i>)</td>
+   	<td valign="top">input values (from user-specified minimum input value to user-specified maximum input value) are standardized to values 0 to 1; 
+		input values smaller than the specified minimum value will obtain value 0, input values larger than the specified maximum will obtain value 1. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top" colspan="2"><p class=linespacing03before>For more information, refer to the <a href="../ilwismen/smce_window_standardize_value.htm">Standardize Value Input</a> dialog box. </p></td>
+  </tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>When <b>Boolean input</b> is standardized as a factor, the criteria tree column will show:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td width="40%" valign="top"><i>Criterion name</i>--Std:T=<i>ValueT</i>, F=<i>ValueF</i></td>
+   	<td valign="top">i.e. True input values are assigned <i>ValueT</i>;<br>False input values are assigned <i>ValueF</i></td>
+  </tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top" colspan="2"><p class=linespacing03before>For more information, refer to the <a href="../ilwismen/smce_window_standardize_boolean.htm">Standardize Boolean Input</a> dialog box. </p></td>
+  </tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>When <b>Class input</b> is standardized as a factor, the criteria tree column will show:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td width="40%" valign="top"><i>Criterion name</i>--Std:Attr='<i>AttributeCol</i>'</td>
+   	<td valign="top">Classes are standardized by using an attribute column; the attribute column should contain values between 0 and 1. </td>
+  </tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top" colspan="2"><p class=linespacing03before>For more information, refer to the <a href="../ilwismen/smce_window_standardize_class.htm">Standardize Class Input</a> dialog box. </p></td>
+  </tr>
+</table>
+
+<p class=kopje>Examples of standardizing factors (benefits and costs): </p>
+
+<p>In the examples below, 6 output maps were calculated, each time using a single factor as input. As input, a value map was used with input values between 10000 and 17250. Each time a different standardization method was selected, and an output map was calculated. This shows the effect of each selected standardization method. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table width="100%" border="0">
+<tr>
+<td><img src="../images/smce_stand_factor_input.gif" width="124" height="90"></td>
+<td><br><img src="../images/smce_stand_legend.gif" width="88" height="99"></td>
+</tr>
+<tr>
+<td valign="top"><b>Input value map</b> <br>
+	Input values range from 10000 to about 17250. <br>
+	&nbsp;</td>
+<td valign="top">Legend for standardized output values</td>
+</tr>
+<tr>
+<td><img src="../images/smce_stand_benefit_max.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_cost_max.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top"><b>Benefit Std:Max</b> <br>
+	0 is standardized to 0 (input value 0 does not occur); <br>
+	maximum input value is standardized to 1 (green).</td>
+</td>
+<td valign="top"><b>Cost Std:Max</b> <br>
+	minimum input value is standardized to 1 (green).<br>
+	</td>
+</tr>
+<tr><td colspan="2"><p class=emptylinehalf>&nbsp;</p></td></tr>
+<tr>
+<td><img src="../images/smce_stand_benefit_interval.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_cost_interval.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top"><b>Benefit Std:Interval</b> <br />
+	minimum input value is standardized to 0 (red); <br>
+	maximum input value is standardized to 1 (green).</td>
+<td valign="top"><b>Cost Std:Interval</b> <br />
+	maximum input value is standardized to 0 (red); <br>
+	minimum input value is standardized to 1 (green).</td>
+</tr>
+<tr><td colspan="2"><p class=emptylinehalf>&nbsp;</p></td></tr>
+<tr>
+<td><img src="../images/smce_stand_benefit_goal.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_cost_goal.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top"><b>Benefit Std:Goal(12500,15000)</b><br>
+	input values &lt;=12500 are standardized to 0 (red); <br>
+	input values &gt;=15000 are standardized to 1 (green). </td>
+<td valign="top"><b>Cost Std:Goal(12500,15000)</b><br>
+	input values &gt;=15000 are standardized to 0 (red); <br>
+	input values &lt;=12500 are standardized to 1 (green).</td>
+</tr>
+</table>
+
+<p class=kopjeboldandund>2. Standardization of <b>constraints</b>:</p>
+
+<p>Standardization of constraints is similar to standardization of factors but it is not completely the same. </p>
+
+<p>Depending on the type of input data that is standardized, the criteria tree column will show some information on the standardization and the selected standardization method.</p>
+
+<p class=defnewpar>When <b>Value input</b> is standardized as a constraint, the criteria tree column will show:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td width="40%" valign="top"><i>Criterion name</i>--Std:&lt;&gt;0</td>
+   	<td valign="top">any area in the selected input map with value 0 will be standardized to 0; 
+				thus, areas in the input map with values smaller than zero or larger than zero will be standardized to 1.</td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Min=<i>Min</i></td>
+   	<td valign="top">any area in the selected input map with values smaller than the specified minimum will be standardized to 0; 
+					 thus, areas in the input map with values larger than or equal to the specified minimum will be standardized to 1. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Max=<i>Max</i></td>
+   	<td valign="top">any area in the selected input map with values greater than the specified maximum will be standardized to 0;
+					 thus, areas in the input map with values smaller than or equal to the specified maximum value will be standardized to 1. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Inside(<i>Min</i>,<i>Max</i>)</td>
+   	<td valign="top">any area in the selected input map with values smaller than the specified minimum and with values greater than the specified maximum will be standardized to 0; 
+				  	 thus, values in the input map between the specified minimum and the specified maximum will be standardized to 1. (<i>Min</i> &lt; <i>Max</i>)</td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Criterion name</i>--Std:Outside(<i>Min</i>,<i>Max</i>)</td>
+   	<td valign="top">any area in the selected input map with values between the specified minimum and the specified maximum will be standardized to 0; 
+				  	 thus, values in the input map smaller than the specified minimum and greater than the specified maximum will be standardized to 1. (<i>Min</i> &lt; <i>Max</i>)</td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+  	<td valign="top">&nbsp;</td>
+	<td valign="top" colspan="2"><p class=linespacing03before>For more information, see the <a href="#example"><span class=bookmark>example below</span></a>, or refer to the <a href="../ilwismen/smce_window_standardize_value.htm">Standardize Value Input</a> dialog box. </p></td>
+  </tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>When <b>Boolean input</b> is standardized as a constraint, the criteria tree column will show:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellpadding="0" cellspacing="0">
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+   	<td width="40%" valign="top"><i>Criterion name</i>--Std:True</td>
+	<td valign="top">areas with value True in the input map will pass; areas with value False in the input map will obtain output value 0. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+   	<td valign="top"><i>Criterion name</i>--Std:False</td>
+    <td valign="top">areas with value False in the input map will pass; areas with value True in the input map will obtain output value 0. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+  	<td valign="top">&nbsp;</td>
+	<td valign="top" colspan="2"><p class=linespacing03before>For more information, refer to the <a href="../ilwismen/smce_window_standardize_boolean.htm">Standardize Boolean Input</a> dialog box. </p></td>
+  </tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>When <b>Class input</b> is standardized as a constraint, the criteria tree column will show:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellpadding="0" cellspacing="0">
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+   	<td width="40%" valign="top"><i>Criterion name</i>--Std:Attr='<i>AttributeCol</i>_bool'</td>
+	<td>an attribute column has to be selected; the attribute column must use the <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >Bool</a> domain. </td>
+  </tr>
+  <tr><td><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+  	<td valign="top">&nbsp;</td>
+	<td valign="top" colspan="2"><p class=linespacing03before>For more information, refer to the <a href="../ilwismen/smce_window_standardize_class.htm">Standardize Class Input</a> dialog box. </p></td>
+  </tr>
+</table>
+
+<p class=kopje id="example">Examples of standardizing constraints: </p>
+
+<p>In the examples below, 5 output maps were calculated, each time using a single constraint (distance to city center) as input. As input, value map DIST was used, representing the distance towards the city center; the input values range between 0 and about 7250. Each time a different standardization method was selected, and an output map was calculated. This shows the effect of each selected standardization method. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table width="100%" border="0">
+<tr>
+<td><img src="../images/smce_stand_constr_input.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_constr_nonzero.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top"><b>Input value map</b>: distance to city center (DIST). <br>
+	Input values range from 0 to about 7250. <br>
+	White represents the city center itself.</td>
+<td valign="top"><b>Std:&lt;&gt;0</b> <br>
+	DIST &lt;&gt; 0 is standardized to 1 (green)<br>
+	all other values are standardized to 0 (red); <br></td>
+</tr>
+<tr><td colspan="2"><p class=emptylinehalf>&nbsp;</p></td></tr>
+<tr>
+<td><img src="../images/smce_stand_constr_min.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_constr_max.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top"><b>Std:Min=500</b> <br />
+	DIST &ge; 500 is standardized to 1 (green); <br>
+	all other values are standardized to 0 (red).</td>
+<td valign="top"><b>Std:Max=1000</b> <br />
+	DIST &le; 1000 is standardized to 1 (green); <br>
+	all other values are standardized to 0 (red).</td>
+</tr>
+<tr><td colspan="2"><p class=emptylinehalf>&nbsp;</p></td></tr>
+<tr>
+<td><img src="../images/smce_stand_constr_inside.gif" width="124" height="90"></td>
+<td><img src="../images/smce_stand_constr_outside.gif" width="124" height="90"></td>
+</tr>
+<tr>
+<td valign="top"><b>Std:Inside(500,1000)</b><br>
+	DIST &ge; 500 and DIST &le; 1000 is standardized to 1 (green); <br>
+	all other values are standardized to 0 (red). </td>
+<td valign="top"><b>Std:Outside(500,1000)</b><br>
+	DIST &ge; 500 and DIST &le; 1000 is standardized to 0 (red); <br>
+	all other values are standardized to 1 (green). </td>
+
+</tr>
+</table>
+
+<h2>Information on Weighing</h2>
+
+<p>The following items can be weighed: </p>
+
+<ul>
+
+<li>multiple factors and optional sub goals under the main goal,</li>
+								  
+<li>multiple factors and optional sub goals under a sub goal. </li>
+
+</ul>
+
+<p class=defnewpar>By weighing the factors and optional sub goals under the main goal, the relative importance is determined of all the factors and sub goals that are part of the main goal. <br>
+The same goes for the factors and optional sub goals under a sub goal. </p>
+
+<p class=defnewpar>Information on assigned weights and on the selected weigh method(s) is shown in the first column, i.e. the criteria column. Constraints cannot be weighed. </p>
+
+<p class=defnewpar>After weights have been assigned, the criteria tree column shows the following: </p>
+
+<ul>
+
+<li>The selected weight method is shown after the group name (selected main goal or selected sub goal). </li>
+
+<li>The assigned weight values are shown in front of the criteria names (factors and groups of factors) that occur under the selected main goal or under the selected sub goal. </li>
+
+</ul>
+
+<p class=defnewpar>In the criteria tree viewer, this looks like:</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellpadding="0" cellspacing="0" border="0">
+  <tr>
+	<td width="3%" valign="top">&nbsp;</td>
+	<td width="40%" valign="top"><i>Main goal or sub goal</i>--Direct<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.7 Criterion name</i>--Std:...<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.3 Criterion name</i>--Std:...
+	</td>
+   	<td valign="top">Direct assignment of weights: user-specified weights for individual factors in a group. 
+	</td>
+  </tr>
+  <tr><td colspan="3"><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Main goal or sub goal</i>--Ranksum<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.67 Criterion name</i>--Std:...<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.33 Criterion name</i>--Std:...	
+	</td>
+   	<td valign="top">Rank Sum: user-defined rank ordering of factors in a group (first item selected receives the highest weight value); slightly different automatic calculation of weights than the Expected Value method. </td>
+  </tr>
+  <tr><td colspan="3"><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Main goal or sub goal</i>--ExpVal<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.75 Criterion name</i>--Std:...<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.25 Criterion name</i>--Std:...	
+	</td>
+   	<td valign="top">Expected Value: user-defined rank ordering of factors in a group (first item selected receives the highest weight value); slightly different automatic calculation of weights than the Rank Sum method. </td>
+  </tr>
+  <tr><td colspan="3"><p class=emptylinehalf>&nbsp;</p></td></tr>
+  <tr>
+	<td valign="top">&nbsp;</td>
+	<td valign="top"><i>Main goal or sub goal</i>--Pairwise<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.21 Criterion name</i>--Std:...<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.42 Criterion name</i>--Std:...<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.31 Criterion name</i>--Std:...<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>0.06 Criterion name</i>--Std:...
+	</td>
+   	<td valign="top">Pair-wise comparison: all factors are considered, but the user needs to specify for each pair of factors considered which of these two factors is more important or less important than the other; the specification of the importance of factors is done in fixed phrases or with a slide bar. </td>
+  </tr>
+</table>
+
+<p class=defnewpar>For more information, refer to <a href="../ilwismen/smce_window_weigh.htm">SMCE window : Weigh</a> or refer to <a href="../ilwismen/smce_window_weigh_methods_additional_info.htm">SMCE window : Weigh methods (additional info)</a>. </p>
+
+<h2>Other functionality</h2>
+
+<p class=kopje>To change the width of columns:</p>
+<p>To change the width of the criteria tree column or an alternative column: </p>
+<ul>
+  <li>position the mouse pointer at the end of a column, </li>
+  <li>the mouse pointer will change into a double-sided arrow, </li>
+  <li>drag the mouse pointer to the right to make the column wider, or drag the 
+  mouse pointer to left to make the column narrower. </li>
+</ul>
+
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="smce_window_status_bar.htm">SMCE window : status bar</a></p>
+<p class=seealsolinks><a href="smce_window_menu_commands.htm">SMCE window : menu commands</a></p>
+<p class=seealsolinks><a href="ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a></p>
+
+</body

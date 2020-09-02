@@ -1,0 +1,592 @@
+<html>
+
+<head>
+<title>Segment editor : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Editors, Map editors, Segment editor, Digitize, Edit segment map, Insert segments">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segment editor</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The segment editor is used to create and/or edit a <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment map</a>. Furthermore, you can create a <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon map</a>, by first digitizing segments with the segment editor, and then polygonizing the segments in the segment editor into a polygon map. For more information on creating a polygon map, see also <a href="how_to_create_polygon_maps.htm">How to create polygon maps</a>. </p>
+
+<p class=defnewpar>With the segment editor, you can: </p>
+
+<ul>
+
+<li>	insert new segments and delete existing segments;</li>
+
+<li>	edit the class name, ID or value of existing segments;</li>
+
+<li>	change the position of intermediate coordinates within a segment;</li>
+
+<li>	insert new nodes with segments (split) or merge two segment with the same code into a new segment;</li>
+
+<li>	check segments and polygonize segments.</li>
+
+</ul>
+
+<p>Additionally, you can copy and paste segments to and from the clipboard, and you can pack, check and polygonize segments. </p>
+
+<p class=defnewpar>The segment editor has a <a href="segment_editor_menu_commands.htm">menu bar</a>, a context-sensitive menu, and a <a href="segment_editor_toolbar.htm">toolbar</a>. </p>
+
+<p class=defnewpar>You can create and edit segments with the <a href="#segedmouse"><span class=bookmark>mouse</span></a> on the screen, but you can also use a <a href="#segeddigitizer"><span class=bookmark>digitizer</a></span> when a map is fixed onto your digitizer tablet. </p>
+
+<ul>
+
+<li>When you wish to use the mouse, the segment editor has a Select mode, a Move Points mode, an Insert mode, and a Split/Merge mode. </li>
+
+<li>When you wish to use a digitizer for the first time, you may have to setup the digitizer, reference the map on the digitizer, and/or make the digitizer active. For more information, see below. </li>
+
+<p>When digitizer is active, a digitizer menu (see Figure 1 below) with the digitizer commands appears. <!--For a flowchart of the different digitizer menus, see Appendix : Flow charts of digitizer menus.--> </p>
+
+</ul>
+
+<p class=defnewpar>Furthermore, in any map editor you can always use existing maps as a background by adding these maps as other data layers to the window, see <a href="how_to_add_extra_layers_to_a_map_window.htm">How to add extra layers to a map window</a>. </p>
+
+<p class=defnewpar>When you wish to create polygons later on, you have to make sure that all segments are properly connected to each other by nodes. This means that during digitizing and/or editing, you must to use snap and split for the beginnings and the ends of all segments that are supposed to be connected to each other.</p>
+
+<p class=kopje>To start the segment editor:</p>
+
+<p>The segment editor is automatically started when you create a new segment map. </p>
+
+<p class=defnewpar>To edit an existing segment map, display the segment map in a map window, open the <a href="map_window_menu_commands.htm">Edit menu</a>, choose <span class=arial><a href="../ilwismen/edit_layer.htm">Edit Layer</a></span>, and select the segment layer from the cascading menu. You can also click a segment map with the right mouse button in a Catalog and choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. For other methods, see <a href="../ilwis/how_to_edit_point_segment_polygon_and_raster_maps.htm">How to edit point, segment, polygon, and raster maps</a>. </p>
+
+<p class=defnewpar><a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent</a> segment maps cannot be edited: first break the dependency links in the <a href="../ilwismen/segment_map_properties.htm">Segment Map's Properties</a> sheet. </p>
+
+<p class=defnewpar>When the segment editor is opened, it starts in Select mode; the mouse pointer appears as a hand. </p>
+
+<h2 id="segeddigitizer">Working with the digitizer</h2>
+
+<p>Make sure that the digitizer is properly set up (<a href="../ilwismen/digitizer_setup_digitizer_select_port.htm">Setup Digitizer wizard</a>) and that the analog map is properly referenced on the digitizer tablet (<a href="../ilwismen/digitizer_map_referencing_coordsys.htm">Map Reference</a>). The <span class=arial>Setup Digitizer</span> and the <span class=arial>Map Reference</span> commands on the <a href="main_window_menu_commands.htm">File menu</a> of the Main window should both be preceded with a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. For more information, see also <a href="how_to_set_up_a_digitizer_and_start_digitizing.htm">How to set up a digitizer and start digitizing</a> or <a href="../ilwismen/segment_editor_digitizer.htm">Segment editor : Digitizer</a>. </p>
+
+<p class=defnewpar>When the digitizer is <img src="../images/chkmark.gif" align="bottom" width="7" height="7"> <a href="..//ilwismen/popup/segment_editor_file_digitizer_active_popup.htm" onClick="return popup(this, 'notes')" >Active</a> in the segment editor, a small, floating window will appear: the digitizer menu (see Figure 1). The digitizer menu contains the commands that will be performed when pressing the buttons on the digitizer cursor. The numbers in front of the commands on the digitizer menu correspond to the numbers of the buttons of your digitizer cursor. </p>
+
+<p class=defnewpar>When in the description below, it is written that you have to press for instance the <span class=arial>Move Points</span> button, you have to press the button of your digitizer cursor which corresponds with the number in front of the <span class=arial>Move Points</span> option on the digitizer menu. In this example, this is the digitizer button corresponding with 3: </p>
+
+<p class=defnewpar><img src="../images/segdig.gif" align=bottom width="150" height="112"></p>
+
+<p class=captionfig>Fig. 1: Example of the digitizer menu in the segment editor. </p> 
+
+<p class=kopje>Zooming/Changing the window:</p>
+
+<p>During digitizing, it is very important that you <a href="..//ilwis/popup/zoom_in_popup.htm" onClick="return popup(this, 'notes')" >zoom in</a> on the part on which you are currently working to ensure proper snapping and splitting. You can use the <span class=arial><a href="../ilwismen/zoom_in_on_maps.htm">Zoom in</a></span> button in the toolbar of the editor, but you can also zoom in with the digitizer cursor. </p>
+
+<p class=defnewpar>To zoom in with the digitizer buttons:</p>
+
+<ul>
+
+<li>	Press the <span class=arial>Change Window</span> button, and move the cursor to the first corner of the area on which you wish to zoom in;</li>
+
+<li>	Press the <span class=arial>1st Point</span> button, you now see the zoom in box tied to the first point, then move the cursor to the 2nd position of the area you wish to zoom in;</li>
+
+<li>	Press the <span class=arial>2nd Point</span> button. </li>
+
+</ul>
+
+<p class=defnewpar>You can also directly position the digitizer cursor on the first corner of the area of interest, press the <span class=arial>Change Window</span> button, then move the cursor to the second corner of the area of interest, and press the <span class=arial>2nd Point</span> button. </p>
+                                
+<p class=defnewpar>To display the entire map again:</p>
+
+<ul>
+
+<li>	Press the <span class=arial>Change Window</span> button;</li>
+
+<li>	Press the <span class=arial>Entire Map</span> button.</li>
+
+</ul>
+
+<p class=kopjeboldandund>Adding segments</p>
+
+<p class=kopjeaftertitlesub>To start segments:</p>
+
+<ol>
+
+<li> To start a segment with a loose end:</li>
+
+        <ul>
+
+        <li>	Position the cursor at the location where you wish to start a new segment. </li>
+
+        <li>	Press the <span class=arial>Begin Segment</span> button, and move the cursor in the direction of the segment you wish to digitize. </li>
+
+        <li>	Press the <span class=arial>Enter Point</span> button. You can either press this button each time you wish to insert another intermediate point, or keep this button down to automatically add intermediate points while moving the cursor along the segment (stream mode).</li>
+
+                <p class=emptylinehalf>&nbsp;</p>
+
+                <p class=tiptext><span class=tip>Note: </span>While 'coordinates' are sent from the digitizer to the segment map, automatic <a href="..//ilwismen/popup/segment_editor_customize_tunnel_tolerance_popup.htm" onClick="return popup(this, 'notes')" >tunneling</a> is applied to reduce the amount of coordinates that need to be stored in the segment map. The so-called tunnel tolerance can be specified in the <a href="../ilwismen/segment_editor_customize.htm">Customize</a> dialog box of the segment editor (File menu). </p>
+
+        </ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<li> To start segments from an existing node on an existing segment (<i>snap</i>):</li>
+
+        <ul>
+
+        <li>	Position the cursor at the node;</li>
+
+        <li>	Press the <span class=arial>Snap Segment</span> button: the selected node changes its color;</li>
+
+        <li>	When you wish to snap to another node than to the one that is currently selected, press the <span class=arial>Snap Other</span> button until the correct node is selected. If necessary, first move the cursor closer to the desired node. </li>
+
+        <li>	When the desired node is selected, press the <span class=arial>Accept</span> button: your new segment is snapped to the existing node.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<li> To start a segment from any other position in an existing segment (<i>snap/split</i>):</li>
+
+        <ul>
+
+        <li>	Position the cursor at the desired location in the segment;</li>
+
+        <li>	Press the <span class=arial>Snap Segment</span> button;</li>
+
+        <li>	Press the <span class=arial>Snap Split</span> button;</li>
+
+        <li>	When you wish to split the existing segment at another location, press the <span class=arial>Return</span> button and repeat the steps above until the correct location is selected;</li>
+
+        <li>	Press the <span class=arial>Accept</span> button: the existing segment is split at the selected location and your segment is snapped to the newly created node. </li>
+
+        </ul>
+
+</ol>
+
+<p class=kopje>To delete intermediate points while inserting a segment:</p>
+
+<ul>
+
+<li>	Press the <span class=arial>Delete Last Point</span> button to remove the last point; continue to do so to remove one intermediate point at a time, or </li>
+
+<li>	Press and hold down the <span class=arial>Delete Last Point</span> button and move the cursor backwards over the segment to delete multiple intermediate point(s).</li>
+
+</ul>
+
+<p class=kopje>To end segments:</p>
+
+<ol>
+
+<li> To end a segment with a loose end:</li>
+
+        <ul>
+
+        <li>	Position the cursor at the last point of the segment. </li>
+
+        <li>	Press the <span class=arial>End Segment</span> button.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<li> To end a segment on an existing node of an existing segment (<i>snap</i>):</li>
+
+        <ul>
+
+        <li>	Position the cursor at the node;</li>
+
+        <li>	Press the <span class=arial>Snap End Segment</span> button;</li>
+
+        <li>	When you wish to snap to another node than to the one that is currently selected, press the <span class=arial>Snap Other</span> button, until the correct node is selected. If necessary, first move the cursor closer to the desired node. </li>
+
+        <li>	When the desired node is selected, press the <span class=arial>Accept</span> button: your segment is snapped to the existing node.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<li> To end a segment at any other position in an existing segment (<i>snap/split</i>):</li>
+
+        <ul>
+
+        <li>	Position the cursor at the desired location in the segment;</li>
+
+        <li>	Press the <span class=arial>Snap End Segment</span> button;</li>
+
+        <li>	Press the <span class=arial>Snap Split </span>button to split the segment: the selected point is shown as a red box;</li>
+
+        <li>	When you wish to split at another location in the same or in another segments, move to that location and press the <span class=arial>Snap Split</span> button until the correct position is selected;</li>
+
+        <li>	When the correct position is selected, press the <span class=arial>Accept</span> button: the existing segment is split at the selected location and your segment is snapped to the newly created node.</li>
+
+        <li>	When you decide not to snap, press the <span class=arial>No Snapping</span> button to return without changes.</li>
+
+        </ul>
+
+</ol>
+
+<p class=kopje>To assign a class name, ID or value to the segment:</p>
+
+<p>Each time that you end a segment, an <span class=arial><a href="../ilwismen/segment_editor_insert_new_segment.htm">Insert/Edit</a></span> dialog box will be opened asking for the class name, ID, or value of the new segment. Whether you can enter a class name, type an ID, or type a value depends on the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map.</p>
+
+<p class=defnewpar>In case the map uses a class or value domain, the class name or value you just entered will be the default for any next segments that you will digitize.</p>
+
+<p class=kopje>Moving points within segments:</p>
+
+<p>To move a segment node or an intermediate point within a segment:</p>
+
+<ul>
+
+<li>	Press the <span class=arial>Move Points</span> button and position the cursor at the point you wish to move;</li>
+
+<li>	Press the <span class=arial>Take Points</span> button to pick up the point;</li>
+
+<li>	When you wish to move another point than the one that is currently selected, press the <span class=arial>Take Points</span> button until the correct point is selected. If necessary, first move the cursor closer to the desired point;</li>
+
+<li>	Move the cursor to the new location of the point;</li>
+
+<li>	Press the <span class=arial>New Position</span> button to drop the node or the intermediate point at its new position. </li>
+
+</ul>
+
+<!--<p class=defnewpar>For more information on digitizer menus, refer to Appendices : Flow charts of digitizer menus.</p>-->
+
+<h2 id="segedmouse">Working with the mouse</h2>
+
+<p class=kopjeaftertitlesub>To zoom in on the map:</p>
+
+<p>You can <a href="..//ilwis/popup/zoom_in_popup.htm" onClick="return popup(this, 'notes')" >zoom in</a> on the segment map by for instance clicking the <span class=arial>Zoom In</span> button in the toolbar. For more information, see <a href="../ilwismen/zoom_in_on_maps.htm">Map window : Zoom in</a>.</p>
+
+<p class=kopje>To choose between different modes:</p>
+
+<p>In the segment editor, you can work in <a href="../ilwismen/segment_editor_select_mode.htm">Select mode</a>, in <a href="../ilwismen/segment_editor_move_points_mode.htm">Move Points mode</a>, in <a href="../ilwismen/segment_editor_insert_mode.htm">Insert mode</a> or in <a href="../ilwismen/segment_editor_split_merge_mode.htm">Split/Merge mode</a>. </p>
+
+<p class=defnewpar>To switch to a certain mode: </p>
+
+<ul>
+
+<li>	select another mode from the <a href="segment_editor_menu_commands.htm">Edit menu</a>, or</li>
+
+<li>	click one of the mode buttons in the <a href="segment_editor_toolbar.htm">toolbar</a>.</li>
+
+</ul>
+
+<p>To go to Select mode, you can also press the <span class=arial>Esc</span> key on the keyboard. </p>
+
+<p class=kopjenoboldnound><u><b>Select mode</b> to select existing segments:</u> <img src="../images/ed_select_mode.gif" align=bottom width="22" height="22"> </p>
+
+<p>In <a href="../ilwismen/segment_editor_select_mode.htm">Select mode</a>, the mouse pointer appears as a hand. You can select one or more segments by clicking them, in order to change their class name, ID, or value. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>	To select a single segment: </li>
+
+        <p>click a segment.</p>
+
+        <p>When you double-click a segment, you can immediately change the class name, ID, or value of the segment.</p>
+
+<li>	To add segments to a selection: </li>
+
+        <p>press and hold down the <span class=arial>Ctrl</span> key and click the other segments you wish to select. When finished, release the <span class=arial>Ctrl</span> key.</p>
+
+<li>	To clear a part of a selection: </li>
+
+        <p>press and hold down the <span class=arial>Ctrl+Shift</span> keys, then click previously selected segments: these segments are deselected. When finished, release the <span class=arial>Ctrl+Shift</span> keys.</p>
+
+<li>	To toggle between select and deselect: </li>
+
+        <p>press and hold down the <span class=arial>Shift</span> key, then click segments: selected segments are deselected, and non-selected segments are selected. When finished, release the <span class=arial>Shift</span> key.</p>
+
+</ul>
+
+<p>For more information, see <a href="../ilwismen/segment_editor_select_mode.htm">Segment editor : Select mode</a>. </p>
+
+<p class=kopje>Editing the code of selected segments:</p>
+
+<p>Depending on the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the segment map that you are editing, you can change the class name, identifier or value of selected segments. </p>
+
+<p class=defnewpar>To edit the class name, ID, or value etc. of one or more segments: </p>
+
+<ul>
+
+<li>	double-click a segment, or</li>
+
+<li>	select one or more segments, and choose <span class=arial><a href="../ilwismen/segment_editor_edit_selection.htm">Edit</a></span> from the <a href="segment_editor_menu_commands.htm">Edit menu</a> or from the context-sensitive menu, or </li>
+
+<li>    select one or more segments, and press the <span class=arial>Enter</span> key on the keyboard. </li>
+
+</ul>
+
+<p class=defnewpar>When you double-click a segment, you can immediately select a class name, type an identifier, or type a value. Segments in a segment map using an identifier domain can only be edited individually. </p>
+
+<p class=defnewpar>When you selected multiple segments, you can select a class name, or type a value for the selection in the appearing <span class=arial><a href="../ilwismen/segment_editor_edit_selection.htm">Edit</a></span> dialog box. For more information, see <a href="../ilwismen/segment_editor_edit_selection.htm">Segment editor : Edit</a>. </p> 
+
+<p class=defnewpar>All changes that you make are immediately stored in the segment map.</p>
+
+<p class=kopje>Deleting selected segments:</p>
+
+<p>To delete segments, first make a selection, and then press the <span class=arial>Del</span> key on the keyboard, or choose <span class=arial><a href="../ilwismen/segment_editor_delete_selection.htm">Delete</a></span> from the <a href="segment_editor_menu_commands.htm">Edit menu</a> or from the context-sensitive menu. For more information, see <a href="../ilwismen/segment_editor_delete_selection.htm">Segment editor : Delete</a>. </p>
+
+<p class=kopje>To cut, copy and paste:</p>
+
+<p>When you choose <span class=arial><a href="../ilwismen/segment_editor_cut_selection.htm">Cut</a></span> from the <a href="segment_editor_menu_commands.htm">Edit menu</a>, the current selection of segments is copied to the clipboard and then deleted from the map. For more information, see <a href="../ilwismen/segment_editor_cut_selection.htm">Segment editor : Cut</a>. </p>
+
+<p class=defnewpar>To copy segments to the clipboard, make a selection and choose <span class=arial><a href="../ilwismen/segment_editor_copy_selection.htm">Copy</a></span> from the <a href="segment_editor_menu_commands.htm">Edit menu</a>. Segment coordinates and segment class names, identifiers or values are copied. The copied segment(s) will also be available as picture. </p>
+
+<p>The copied segments can for instance be pasted as points into a point editor, or as segments into a segment editor. For more information, see <a href="../ilwismen/segment_editor_copy_selection.htm">Segment editor : Copy</a>. </p>
+
+<p class=defnewpar>To paste data from the clipboard into the current segment map, choose <span class=arial><a href="../ilwismen/segment_editor_paste_selection.htm">Paste</a></span> from the <a href="segment_editor_menu_commands.htm">Edit menu</a>. You can paste points, segments, polygon boundaries, and pixels. For more information, see <a href="../ilwismen/segment_editor_paste_selection.htm">Segment editor : Paste</a>. </p>
+
+<p class=kopjenoboldnound><u><b>Insert mode</b> to add segments to the segment map:</u> <img src="../images/ed_insert_mode.gif" align=bottom width="22" height="22"></p>
+
+<p>In <a href="../ilwismen/segment_editor_insert_mode.htm">Insert mode</a>, the mouse pointer appears as a pencil. In Insert Mode you can use Autosnap. When Autosnap is active, the system automatically snaps to nodes and splits when necessary, i.e. there is less need to use the <span class=arial>Shift</span> and/or <span class=arial>Ctrl</span> keys as described below. You can specify a snap tolerance in pixels in the <span class=arial>Customize Segment</span> editor dialog box.</p>
+
+<p class=defnewpar>To insert a new segment:</p>
+
+<ul>
+
+<li>	position the mouse pointer on the location where you wish to start a new segment;</li>
+
+<li>	press the left mouse button to start the segment (begin node);</li>
+
+<li>	hold the left mouse button down and move the mouse to automatically insert segment coordinates (stream mode), or</li>
+
+<li>	click at the positions at which you wish to insert intermediate points;</li>
+
+<li>	double-click or press the space bar to end the segment with a loose end (end node). </li>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <p class=tiptext><span class=tip>Note: </span>While 'coordinates' are sent from the editor window to the segment map, automatic <a href="..//ilwismen/popup/segment_editor_customize_tunnel_tolerance_popup.htm" onClick="return popup(this, 'notes')" >tunneling</a> is applied to reduce the amount of coordinates that need to be stored in the segment map. The so-called tunnel tolerance can be specified in the <a href="../ilwismen/segment_editor_customize.htm">Customize</a> dialog box of the segment editor (File menu). </p>
+
+</ul>
+
+<p class=defnewpar>To delete intermediate points while inserting a segment:</p>
+
+<ul>
+
+<li>	press the right mouse button once to delete the last point, or </li>
+
+<li>    press the <span class=arial>Del</span> key to delete the last point, or </li>
+
+<li>	keep the right mouse button down and move the mouse backwards over the segment to delete multiple points, or</li>
+
+<li>	press the <span class=arial>Esc</span> key to delete all points of an unfinished segment; the whole unfinished segment will be removed. </li>
+
+</ul>
+
+<p class=defnewpar>To connect a new segment to an existing node (<i>snap</i>):</p>
+
+<ul>
+
+<li>	position the mouse pointer on the node to which you wish to snap;</li>
+
+<li>	press and hold down the <b>Shift</b> key and click the node;</li>
+
+<li>	when AutoSnap is active, you can simply click the node.</li>
+
+</ul>
+
+<p class=defnewpar>To start or end a new segment on an existing segment (<i>snap/split</i>):</p>
+
+<ul>
+
+<li>	position the mouse pointer somewhere on a segment;</li>
+
+<li>	press and hold down the <b>Ctrl</b> key and click the segment;</li>
+
+<li>	a message box asks for confirmation to split the segment;</li>
+
+<li>	when you answer Yes, the new segment is snapped to the new node.</li>
+
+</ul>
+
+<p class=defnewpar>Each time that you end a new segment, an <span class=arial><a href="../ilwismen/segment_editor_insert_new_segment.htm">Insert/Edit</a></span> dialog box will be opened asking for the class name, ID, or value of the new segment. Whether you can enter a class name, type an ID, or type a value depends on the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map.</p>
+
+<p class=defnewpar>In case the map uses a class or value domain, the class name or value you just entered will be the default for any next segments that you will insert.</p>
+
+<p class=kopjenoboldnound><u><b>Move Points</b> mode to change the position of a coordinate in a segment:</u> <img src="../images/ed_move_points_mode.gif" align=bottom width="22" height="22"></p>
+
+<p>In <a href="../ilwismen/segment_editor_move_points_mode.htm">Move Points mode</a>, the mouse pointer appears as a pair of tweezers. Furthermore, all segment nodes appear as boxes and all intermediate coordinates appear as crosses. In Move Points mode, you can drag individual coordinates within a segment to a new position.</p>
+
+<p class=defnewpar>There are three ways <i>to move</i> a node or an intermediate point:</p>
+
+<ol>
+
+<li>    Click a begin or end node or an intermediate point; <br>
+        the selected point and its segment change their color;</li>
+
+        <ul>
+
+        <li>	Move the point to another position;</li>
+
+        <li>	Click again to drop the point.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>    Press and hold down the left mouse button on a node or an intermediate point; <br>
+        the selected point and its segment change their color;</li>
+
+        <ul>
+
+        <li>	Move the point to another position;</li>
+
+        <li>	Release the left mouse button to drop the point.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<li>    To pick up a node to which multiple segments are connected: click the node; <br>
+        the node is selected and one segment changes its color;</li>
+
+        <ul>
+
+        <li>	If this is not the segment you wish, do not move the mouse and click again, until the correct segment is selected;</li>
+
+        <li>	Then, move the node to another position.</li>
+
+        <li>	Click again to drop the point.</li>
+
+        </ul>
+
+</ol>
+
+<p class=defnewpar>To <i>snap</i> the selected point to an existing node:</p>
+
+<ul>
+
+<li>	position the selected point on the node to which you wish to snap;</li>
+
+<li>	press and hold down the <b>Shift</b> key and click or release the left mouse button on the node;</li>
+
+<li>	when AutoSnap is active, you can simply click or release the left mouse button on the node.</li>
+
+</ul>
+
+<p class=defnewpar>To <i>split</i> a segment and snap to the selected point to the created node (<i>snap/split</i>):</p>
+
+<ul>
+
+<li>	position the selected point somewhere on a segment;</li>
+
+<li>	press and hold down the <span class=arial><b>Ctrl</b></span><span class=arial> </span>key and click somewhere on the segment;</li>
+
+<li>	a message box asks for confirmation to split the segment to which you wish to snap to. </li>
+
+</ul>
+
+<p class=kopjenoboldnound><u><b>Split/Merge mode</b> to split and merge segments:</u> <img src="../images/ed_split_merge_mode.gif" align=bottom width="22" height="22"></p>
+
+<p>In <a href="../ilwismen/segment_editor_split_merge_mode.htm">Split/Merge</a> mode, the mouse pointer appears as a pair of scissors.</p>
+
+<p class=defnewpar>To split a segment:</p>
+
+<ul>
+
+<li>	Position the mouse pointer at the location in the segment where you wish to split;</li>
+
+<li>	Click the left mouse button;</li>
+
+<li>	A message box asks for confirmation to split the segment.</li>
+
+</ul>
+
+<p class=defnewpar>To merge two segments:</p>
+
+<p>To remove a superfluous node which connects only two segments which have the same code:</p>
+
+<ul>
+
+<li>	Position the mouse pointer at the node; </li>
+
+<li>	Click the left mouse button. </li>
+
+<li>	A message box asks for confirmation to merge the segments.</li>
+
+</ul>
+
+<h2>Other functionality</h2>
+
+<p class=kopjeaftertitlesub>To customize the segment editor:</p>
+
+<p>By choosing <span class=arial><a href="../ilwismen/segment_editor_customize.htm">Customize</a></span> from the <a href="segment_editor_menu_commands.htm">File menu</a> or from the context-sensitive menu, you can specify for instance whether to use <span class=arial>Autosnap</span> or not, the distances that should be used for snapping and tunnelling, and the colors to display your segments. For more information, see <a href="../ilwismen/segment_editor_customize.htm">Segment editor : Customize</a>.</p>
+
+<p class=kopjenoboldnound><u>Save:</u> <img src="../images/save.gif" align=bottom width="22" height="22"></p>
+
+<p>When editing segments in the segment editor, all changes are immediately stored. However, to permanently store changes, you may use the <span class=arial><a href="../ilwismen/segment_editor_save.htm">Save</a></span> button or the <span class=arial><a href="../ilwismen/segment_editor_save.htm">Save</a></span> command on the <a href="../ilwis/segment_editor_menu_commands.htm">File menu</a>. After you used <span class=arial>Save</span>, any changes that you made before using <span class=arial>Save</span>, cannot be undone anymore with the <span class=arial>Undo All Changes</span> button or command. For more information, see <a href="../ilwismen/segment_editor_save.htm">Segment editor : Save</a>. </p>
+
+<p class=kopjenoboldnound><u>To undo all changes:</u> <img src="../images/ed_undo_all.gif" align=bottom width="22" height="22"></p>
+
+<p>When editing segments in the segment editor, all changes are immediately stored. However, you can undo all changes, i.e. restore the segment map until the moment when you last used <span class=arial><a href="../ilwismen/segment_editor_save.htm">Save</a></span>, by choosing <span class=arial><a href="../ilwismen/segment_editor_undo_all_changes.htm">Undo All Changes</a></span> from the <a href="segment_editor_menu_commands.htm">File menu</a>. For more information, see <a href="../ilwismen/segment_editor_undo_all_changes.htm">Segment editor : Undo all changes</a>. </p>
+
+<p class=kopje>Undelete segments:</p>
+
+<p>When segments were accidentally deleted, you can use the <span class=arial><a href="../ilwismen/segment_editor_undelete_segments.htm">Undelete Segments</a></span> command on the <a href="../ilwis/segment_editor_menu_commands.htm">Edit menu</a> to selectively recover deleted segments. For more information, see <a href="../ilwismen/segment_editor_undelete_segments.htm">Segment editor : Undelete segments</a>. </p>
+
+<p class=kopje>Find undefineds:</p>
+
+<p>When you wish to check whether all segments have a valid class name, ID or value, you can use the <span class=arial><a href="../ilwismen/segment_editor_find_undefineds.htm">Find Undefineds</span></a> command on the <a href="../ilwis/segment_editor_menu_commands.htm">Edit menu</a>. By using <span class=arial>Find Undefineds</span>, all undefined segments will appear in a special color, so that you can manually assign a proper class name, ID or value to the segments. For more information, see <a href="../ilwismen/segment_editor_find_undefineds.htm">Segment editor : Find undefineds</a>. </p>
+
+<p class=kopje>To extend or reduce the coordinate boundaries of the map:</p>
+
+<p>While you are in the segment editor, you can extend the map's <a href="..//ilwis/popup/coordinate_boundary_popup.htm" onClick="return popup(this, 'notes')" >coordinate boundaries</a> or reduce the map's coordinate boundaries. This will affect the area in which coordinates can be entered into the map. For more information, see <a href="../ilwismen/segment_editor_bounds_of_map.htm">Boundaries of map</a>. </p>
+
+<p class=kopje>To check segments:</p>
+
+<p>To check whether segments are correctly digitized, choose <span class=arial><a href="../ilwismen/segment_editor_check_segments.htm">Check Segments</a></span> from the <a href="segment_editor_menu_commands.htm">File menu</a>. For regular polygonization, you can perform a check on <span class=arial>Self Overlap</span>, <span class=arial>Dead Ends</span>, and <span class=arial>Intersections</span>. Furthermore, for contour lines, you can perform the <span class=arial>Code Consistency</span> check; and for imported segments where each segment encloses a full future polygon, you can perform the <span class=arial>Closed Segments</span> check.</p>
+
+<p class=kopje>To polygonize segments:</p>
+
+<p>To polygonize segments, choose <span class=arial><a href="../ilwismen/segment_editor_polygonize.htm">Polygonize</a></span> from the <a href="segment_editor_menu_commands.htm">File menu</a>. During regular polygonization, topology is created. You can polygonize the entire segment map or a selection of segments in the current segment map. You can create different polygon maps from one segment map, by using a mask. </p>
+
+<p class=defnewpar>When you polygonize, a check on Self Overlap, Intersections and Dead Ends is automatically performed before the map is polygonized. If there are errors in the segments, the operation is aborted and the errors must first be corrected. After correction the operation can be restarted. It is therefore advised to check segments before polygonization; in case errors are found, you have to correct these. </p>
+
+<p class=defnewpar>When during polygonization you created a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> polygon map, and you have changed or updated the original segment map in the mean time, you can easily update the dependent polygon map by clicking the <span class=arial>Make Up-to-Date</span> button in the <a href="../ilwismen/polygon_map_properties.htm">Polygon Map Properties</a> sheet. </p>
+
+<p class=defnewpar>In case you imported segments of which each segment encloses a full future polygon, you can use the non-topological polygonization method. </p>
+
+<p class=kopje>To remove redundant nodes:</p>
+
+<p>To remove nodes which connect 2 segments only, regardless of segment codes, choose <span class=arial><a href="../ilwismen/segment_editor_remove_redundant_nodes.htm">Remove Redundant Nodes</a></span> from the File menu. This option can for instance be used to reduce the number of segments after importing a segment map from another package, to speed up polygonization, and to improve complex line drawing.</p>
+
+<p>The option combines the 2 segments around a found redundant node into a new segment and this new segment obtains the code of the segment encountered first. It is advised to make a backup of your segment map before performing this command. </p>
+
+<p class=kopje>To pack segments:</p>
+
+<p>To permanently remove segments from a segment map, when you have marked some segments for deletion, choose <span class=arial><a href="../ilwismen/segment_editor_pack.htm">Pack</a></span> from the File menu.</p>
+
+<p class=kopje>To exit the segment editor:</p>
+
+<p>To exit the segment editor, choose the <span class=arial>Exit Editor</span> command on the <span class=arial>File</span> menu or from the context-sensitive menu. You can also click the <span class=arial>Exit editor</span> button in the toolbar. In these cases, the editor is closed but the map(s) remain displayed in a map window. </p>
+
+<p>When you double-click the <span class=arial>Close</span> button or the <a href="..//ilwis/popup/win_controlmenubox_popup.htm" onClick="return popup(this, 'notes')" >Control-menu box</a>, the map and the editor are closed. </p>
+
+<p class=defnewpar>All changes that you make in the polygon map are continuously stored.</p>
+
+<p class=defnewpar>For more information, see also <a href="appendices_keyboard_shortcuts.htm">Appendices : Keyboard shortcuts</a> and <a href="appendices_mouse_functions.htm">Appendices : Mouse functions</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segment_editor_menu_commands.htm">Segment editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="segment_editor_toolbar.htm">Segment editor : toolbar</a></p>
+
+</body

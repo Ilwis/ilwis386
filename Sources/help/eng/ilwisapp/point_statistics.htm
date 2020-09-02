@@ -1,0 +1,79 @@
+<html>
+
+<head>
+<title>Point statistics</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Point statistics, Statistics, Spatial correlation, Pattern analysis, Cross variogram, Variogram surface">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Point statistics</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Point statistics may help to get an impression of the nature of your point data prior to for instance a point interpolation, and to find necessary input parameters for a <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation.</p>
+
+<p class=defnewpar>For point statistics a point map is required in which:</p>
+
+<ul>
+
+<li>	the points themselves are values (point map with a value domain), for instance concentration values, or </li>
+
+<li>	the points have an identifier (point map with a Class or ID domain) and values are stored in a column of the attribute table that is linked to the map.</li>
+
+</ul>
+
+<p>The output of the Spatial correlation, Cross Variogram and the Pattern analysis operations is a table. By displaying the output table, you can also display graphs, especially semi-variograms. The output of the Variogram surface operation is a plot-like raster map.</p>
+
+<p class=kopje>Operations to calculate point statistics:</p>
+
+<ul>
+
+<li class=ls01be>	<a href="spatial_correlation.htm">Spatial correlation</a>: calculates spatial autocorrelation (as Moran's I), spatial variance (as Geary's c) and semi-variogram values <span class=symbol>g</span>(h) for point values that are at certain distances towards each other in a point map. </li>
+
+        <p class=linespacing01before>	Regarding spatial autocorrelation and spatial variance is the user encouraged to compare his or her data set with a data set consisting of the same point locations, with a set of attribute values, approximately in the same range as the measured variable, but created at random (using one of the RND functions in Table Calculation). If the correlation/variance graphs are very much the same for the measured data and the random data, no autocorrelation exists between the data points. Hence, point interpolation is not useful.</p>
+
+        <p class=linespacing01before>	By calculating semi-variogram values, you can display a semi-variogram. By modelling the semi-variogram, you can find the necessary input parameters, such as a model (spherical, exponential, etc.) and sill, range, and nugget values, for a <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation. </p>
+
+<li class=ls01be>	<a href="variogram_surface.htm">Variogram surface</a>: calculates a surface of semi-variogram values where each cell (pixel) in the surface represents a directional distance class. The output surface, a raster map with a special kind of georeference, may help you to visualize possible anisotropy of your data and to determine the direction of the anisotropy axis. As input, you can use a point map or a raster map.</li>
+
+        <p class=linespacing01before>	Subsequently, you can calculate directional semi-variograms by using the directional method in the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. From the output table of Spatial correlation, you can prepare a semi-variogram model and investigate the range of the variable in the semi-variogram model both in the direction of anisotropy as well as in the direction perpendicular to it. Then, you are ready to perform <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a>.</p>
+
+<li class=ls01be>	<a href="cross_variogram.htm">Cross Variogram</a>: calculates experimental semi-variogram values for two variables and cross-variogram values for the combination of both variables. As input for the Cross Variogram operation, you can use a point map with a linked attribute table containing at least two value attribute columns. The Cross Variogram operation is a multivariate form of the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. </li>
+
+        <p class=linespacing01before>	From the output table of the Cross Variogram operation, you can create semi-variogram models for both variables and a cross-variogram model for the combination of the variables. All three models serve as input for the <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a> operation. CoKriging calculates estimates or predictions for a poorly sampled variable (the predictand) with help of a well-sampled variable (the covariable). The variables should be highly correlated (positive or negative).  </p>
+
+<li class=ls01be>	<a href="pattern_analysis.htm">Pattern analysis</a>: a tool to obtain information on the spatial distribution of points in a point map. The output table contains six columns with the probabilities of finding 1 point (<span class=courier>Prob1Pnt</span>) within a certain distance from any point in your input map, then 2 points (<span class=courier>Prob2Pnt</span>), 3 points (<span class=courier>Prob3Pnt</span>), etc. Another column (<span class=courier>ProbAllPnt</span>) contains the sum of <span class=courier>Prob1Pnt</span>, <span class=courier>Prob2Pnt</span>, ..., <span class=courier>Prob(n-1)</span>, in which <i>n</i> is the number of points in the input map. </li>
+
+        <p class=linespacing01before>	By inspecting the graphs of distances against probabilities, you may recognize distribution patterns of your points like random, clustered, regular, paired etc. </p>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="spatial_correlation.htm">Spatial correlation</a></p>
+
+<p class=seealsolinks><a href="variogram_surface.htm">Variogram surface</a></p>
+
+<p class=seealsolinks><a href="cross_variogram.htm">Cross variogram</a></p>
+
+<p class=seealsolinks><a href="pattern_analysis.htm">Pattern analysis</a></p>
+
+</body

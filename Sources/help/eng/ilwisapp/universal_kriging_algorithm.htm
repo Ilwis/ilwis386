@@ -1,0 +1,283 @@
+<html>
+
+<head>
+<title>Universal Kriging : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Universal Kriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Universal Kriging</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The regionalized variable theory assumes that the spatial variation of any variable Z can be expressed as the sum of two major components. These components are:</p>
+
+<ol>
+
+<li>	a structural component, associated with a constant mean value or a constant trend [m(<b>x</b>)]</li>
+
+<li>	a stochastic, spatially correlated component, known as the variation of the regionalized variable [<span class=symbol>e</span>'(<b>x</b>)].</li>
+
+</ol>
+
+<p class=defnewpar>If <b>x</b> is a position in 2 dimensions in space, then the value of variable Z at x is given by:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=512>
+<p>Z(<b>x</b>) = <span class=arial>m</span>(<b>x</b>) + <span class=symbol>e</span>'(<b>x</b>)</p>
+
+</td>
+<td>
+<p>(1)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>While in <a href="kriging_algorithm.htm">Ordinary Kriging</a> it is assumed that the mean is constant across the entire region of study (second order stationarity), in Universal Kriging the mean is a function of the site coordinates. Then, <span class=arial>m</span>(<b>x</b>) in equation (1) reads:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=512>
+<p><img src="../images/univk1.gif" align=bottom width="106" height="31"></p>
+
+</td>
+<td>
+<p>(2)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p><span class=symbol>a</span><sub>k</sub> </p>
+
+</td>
+<td valign="top">
+<p>are the local trend or drift coefficients </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><span class=arial>p</span><sub>k</sub>(<b>x</b>) </p>
+
+</td>
+<td valign="top">
+<p>are functions of the site coordinates (trend equations)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><b>x</b></p>
+
+</td>
+<td valign="top">
+<p>is a two dimensional vector  <img src="../images/univk2.gif" align=middle width="18" height="22"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In ILWIS, the local trend or drift is either represented by a linear expression or by a quadratic expression, so the general equation (2) can be rewritten as:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=512>
+<p><span class=arial>m</span>(<b>x</b>) = <span class=symbol>a</span><sub>0</sub> + <span class=symbol>a</span><sub>1  </sub>x<sub>i</sub> + <span class=symbol>a</span><sub>2  </sub>y<sub>i</sub> + <span class=symbol>a</span><sub>3  </sub>x<sub>i</sub><sup>2</sup> + <span class=symbol>a</span><sub>4  </sub>x<sub>i </sub>y<sub>i</sub> + <span class=symbol>a</span><sub>5  </sub>y<sub>i</sub><sup>2</sup></p>
+
+</td>
+<td>
+<p>(3)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p>x<sub>i</sub>, y<sub>i</sub> </p>
+
+</td>
+<td valign="top">
+<p>are the XY-coordinates of the i th control point </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><span class=symbol>a</span><sub>1</sub>...<span class=symbol>a</span><sub>5</sub> </p>
+
+</td>
+<td valign="top">
+<p>are the unknown trend or drift coefficients.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If the degree = 1, then the local trend is linear and <span class=symbol>a</span><sub>3</sub> =<span class=symbol>a</span><sub>4</sub> = <span class=symbol>a</span><sub>5</sub> = 0. <br>
+Equation (3) will then read:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=512>
+<p><span class=arial>m</span>(<b>x</b>) = <span class=symbol>a</span><sub>0</sub> + <span class=symbol>a</span><sub>1  </sub>x<sub>i</sub> + <span class=symbol>a</span><sub>2  </sub>y<sub>i</sub>  </p>
+
+</td>
+<td>
+<p>(3a)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>If the degree = 2, then the local trend is quadratic.</p>
+
+<p class=defnewpar>Remark that the parameters of equation (3) are recomputed for each output pixel.  </p>
+
+<p class=defnewpar>The expressions for the local trend can be incorporated into the system of simultaneous equations used to find the Kriging weights. For a system of 5 input points and a local linear trend, the set of equations read (in matrix form):</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p><img src="../images/univk3.gif" align=bottom width="417" height="162"></p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p>h<sub>ik</sub> </p>
+
+</td>
+<td valign="top">
+<p>is the distance between input point <i>i</i> and input point <i>k</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>h<sub>pi</sub> </p>
+
+</td>
+<td valign="top">
+<p>is the distance between output pixel <i>p</i> and input point <i>i</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><span class=symbol>g</span>(h<sub>ik</sub>) </p>
+
+</td>
+<td valign="top">
+<p>is the value of the semi-variogram model for distance h<sub>ik</sub>, i.e. the semi-variogram value for the distance between input point <i>i</i> and input point <i>k</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><span class=symbol>g</span>(h<sub>pi</sub>) </p>
+
+</td>
+<td valign="top">
+<p>is the value of the semi-variogram model for the distance h<sub>pi</sub> , i.e. the semi-variogram value for the distance between output pixel <i>p</i> and input point <i>i</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>x<sub>i</sub>, y<sub>i</sub>   </p>
+
+</td>
+<td valign="top">
+<p>are the XY-coordinates of input point <i>i</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>w<sub>i</sub></p>
+
+</td>
+<td valign="top">
+<p>is a weight factor for input point <i>i</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><span class=symbol>l</span></p>
+
+</td>
+<td valign="top">
+<p>is a Lagrange multiplier, used to minimize possible estimation error</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p><span class=symbol>a</span><sub>1</sub>, <span class=symbol>a</span><sub>2</sub></p>
+
+</td>
+<td valign="top">
+<p>are the local trend coefficients of the first order trend</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>x<sub>p</sub>, y<sub>p</sub></p>
+
+</td>
+<td valign="top">
+<p>are the XY-coordinates of output pixel <i>p</i></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>This matrix form has to be solved for each output pixel in the same way as described in <a href="kriging_algorithm.htm">Kriging : algorithm</a>, section on Ordinary Kriging. Once the weights of the input point values are known it is possible to calculate an estimate or predicted value for the output map and to calculate the error variance and the standard error.</p>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>	Burrough, P.A. 1986. Principles of Geographical Information Systems for Land Resources Assessment. Oxford University Press. 194 pp.</li>
+
+<li>	Burrough, P.A. and R.A. McDonnell 1998. Principles of Geographical Information Systems. Oxford University Press. 330 pp. </li>
+
+<li>	Davis, J.C. 1973. Statistics and data analysis in geology. Wiley, New York. 646 pp.</li>
+
+<li>	Pebesma, E.J. 1996. Mapping Groundwater Quality in the Netherlands. KNAG/Faculteit Ruimtelijke Wetenschappen, Utrecht University. 128 pp.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="universal_kriging_functionality.htm">Universal Kriging : functionality</a></p>
+
+<p class=seealsolinks><a href="kriging_algorithm.htm">Kriging : algorithm</a></p>
+
+</body

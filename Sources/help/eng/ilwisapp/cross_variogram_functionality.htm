@@ -1,0 +1,193 @@
+<html>
+
+<head>
+<title>Cross Variogram : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Cross Variogram, Semi-variogram (experimental)">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Cross Variogram</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Cross Variogram calculates experimental semi-variogram values for the two input variables and cross-variogram values for the combination of both variables. As two variables are handled simultaneously, the Cross Variogram operation can be seen as the multivariate form of the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. As input for the Cross Variogram operation, you can use a point map with a linked attribute table containing at least two value attribute columns. </p>
+
+<p class=defnewpar>Often data may be available for more than one attribute per sampled location. One set of samples may be expensive or difficult to measure and is therefore sampled infrequently while another variable may be cheap or easy to measure and has more observations or more accurate ones. If the correlation between the two variables is high (positive or negative), then it may be possible to use the information about the spatial variation of a well-sampled variable (the covariable) to help to interpolate a sparsely sampled variable (the predictand). This estimation method is known as <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a>.</p>
+
+<p class=defnewpar>From the output table of the Cross Variogram operation, you can create semi-variogram models for both variables, and a cross-variogram model for the combination of the variables (see <a href="cross_variogram_functionality.htm#addinfo_semi_cross_var"><span class=bookmark>Additional information</a></span> below or <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>. The models do not need to be identical: for the experimental semi-variogram values of variable A, you may use for instance a spherical model; for the experimental semi-variogram values of variable B, an exponential model; and for the cross-variogram values of variables A and B, yet another model may be used (see Figure 1). The models should obey the Cauchy-Schwarz inequality. For more information, see <a href="cross_variogram_algorithm.htm">Cross Variogram : algorithm</a>. </p>
+
+<p class=defnewpar>All three models are required as input for the <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a> operation. CoKriging calculates estimates or predictions for a poorly sampled variable (the predictand) with help of a well-sampled variable (the covariable). The variables should be highly correlated (positive or negative). </p>
+
+<p class=kopje>Spherical distance:</p>
+
+<p>Optionally, you can choose to calculate with <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distances</a>, i.e. distances calculated over the sphere using the projection that is specified in the coordinate system used by the input point map. It is advised to use this spherical distance option for maps that comprise large areas (countries or regions) and for maps that use LatLon coordinates. In more general terms, spherical distance should be used when there are 'large' scale differences within a map as a consequence of projecting the globe-shaped earth surface onto a plane. </p>
+
+<p>When the spherical distance option is not used, distances will be calculated in a plane as Euclidean distances. </p>
+
+<p class=tip>Tip: </p>
+ 
+<p class=tiptext>When you used the spherical distance option in the Cross Variogram operation, you should also use the spherical distance option in a subsequent <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging operation</a>.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input point map should be a point map with an ID domain. The point map should be linked to an attribute table that contains at least 2 columns with a <a href="..//ilwis/sec/domain_type_value2_sec.htm" onClick="return popup(this, 'notes')" >value domain</a> (column A and column B). </p>
+
+<p class=defnewpar>Cross-variogram values will only be calculated for point pairs that have values in both Columns A and B. This implies that for some locations, you need to have measured values for both variables. </p>
+
+<p class=kopje>Output table:</p>
+
+<p>An output table with domain <span class=courier>None</span> is created. </p>
+
+<p class=defnewpar>The output table will contain 8 columns:</p>
+
+<ul>
+
+<li>	Column <span class=courier>Distance</span> lists the middle values of the distance intervals;</li>
+
+<li>	Column <span class=courier>AvgLag</span> lists for each distance interval, the average distance between points of point pairs in this distance interval;</li>
+
+<li>	Column <span class=courier>NrPairsA</span> lists for each distance interval, the number of point pairs of variable A found at these distances towards each other;</li>
+
+<li>	Column <span class=courier>NrPairsB</span> lists for each distance interval, the number of point pairs of variable B found at these distances towards each other;</li>
+
+<li>	Column <span class=courier>NrPairsAB</span> lists for each distance interval, the number of point pairs with valid A and B value respectively found at these distances towards each other;</li>
+
+<li>	Column <span class=courier>SemivarA</span> lists for each distance interval, the experimental semi-variogram value of the point pairs in this distance interval for variable A;</li>
+
+<li>	Column <span class=courier>SemivarB</span> lists for each distance interval, the experimental semi-variogram value of the point pairs in this distance interval for variable B; </li>
+
+<li>	Column <span class=courier>CrossVarAB</span> lists for each distance interval, the experimental cross-variogram value of the point pairs in this distance interval for the combined variables A and B.</li>
+
+</ul>
+
+<p class=tip>Mind: </p>
+
+<p class=tiptext>when in an distance interval <i>no</i> point pairs are found, then the values in columns <span class=courier>AvgLag</span> and <span class=courier>SemiVarA</span>, <span class=courier>SemivarB</span> and <span class=courier>CrossVarAB</span> will be undefined for these distance intervals.</p>
+
+<h2><a name="addinfo_semi_cross_var">Additional information</a></h2>
+
+<p class=kopjeaftertitlesub>Semi-variogram(s) and Cross-variogram(s):</p>
+
+<p>From the results of the Cross Variogram operation, you can make two semi-variograms and one cross-variogram. In the semi-variograms and the cross-variogram, the discrete experimental semi-variogram values and the cross-variogram values, that are the outcome of the Cross Variogram operation, can be modeled by a continuous function so that a semi-variogram value or a cross-variogram value will be available for any desired distance <i>h</i> for the CoKriging operation later on. </p>
+
+<p class=kopje>How to display Semi-variogram(s) and Cross-variogram(s):</p>
+
+<p>Display the <i>input table</i> of the Cross Variogram operation in a table window. You first have to determine the variance (<span class=symbol>s</span><sup>2</sup>) of your input variables. </p>
+
+<p class=defnewpar>From the <a href="../ilwis/table_window_menu_commands.htm">Columns menu</a> in the table window, choose the <span class=arial>Statistics</span> command. </p>
+
+<p>In the <a href="../ilwismen/column_statistics.htm">Column Statistics</a> dialog box:</p>
+
+<ul>
+
+<li>	select the <span class=arial>Variance</span> function;</li>
+
+<li>	select the input variable for which you want to calculate the variance.</li>
+
+</ul>
+
+<p class=defnewpar>Display the <i>output table</i> of the Cross Variogram operation in a table window. </p>
+
+<p>Inspect the following columns in the output table:</p>
+
+<ul>
+
+<li>	columns <span class=courier>Distance</span> and <span class=courier>AvgLag</span>: usually not more than half of the total sampled distance should be taken into account; the larger the distance between the point pairs, the less point pairs, and the less reliable the outcome;</li>
+
+<li>	columns <span class=courier>NrPairsA</span>, <span class=courier>NrPairsB</span>, <span class=courier>NrPairsAB</span>: for reliable semi-variogram and cross-variogram values, distance classes should at least contain 30 point pairs. When you find many point pairs per distance class, you may consider to decrease the lag spacing. </li>
+
+</ul>
+
+<p class=defnewpar>In the output table of Cross Variogram operation, create point graphs, i.e. experimental semi-variograms and an experimental cross-variogram, from the <span class=courier>Distance</span>, <span class=courier>SemiVar</span> and <span class=courier>CrossVar</span> columns:</p>
+
+<ul>
+
+<li>	From the <a href="../ilwis/table_window_menu_commands.htm">File menu</a> in the table window, choose the <span class=arial>Create Graph</span> command.</li>
+
+<li>	In the <a href="../ilwismen/create_a_graph.htm">Create Graph</a> dialog box:</li>
+
+        <ul>
+
+        <li>	choose for the X-axis, the <span class=courier>Distance</span> column or the <span class=courier>AvgLag</span> column;</li>
+
+        <li>	choose for the Y-axis, a <span class=courier>SemiVar</span> or the <span class=courier>CrossVar</span> column.</li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+<li>	The experimental semi-variogram or cross-variogram values will be automatically displayed as a point graph. </li>
+
+<li>	You may wish to adapt the boundaries of the X-axis from 0 to more or less half of the total distance between the samples, and the Y-axis from 0 to more or less the expected variance (<span class=symbol>s</span><sup>2</sup>) of your input sample values.</li>
+
+</ul>
+
+<p class=defnewpar>In this way, you can create three point graphs (e.g. in three graph windows):</p>
+
+<ul>
+
+<li> <span class=courier>Distance</span> or <span class=courier>AvgLag</span> against <span class=courier>SemiVarA</span> (semi-variogram values of the first variable), </li>
+
+<li> <span class=courier>Distance</span> or <span class=courier>AvgLag</span> against <span class=courier>SemiVarB</span> (semi-variogram values of the second variable),</li>
+
+<li> <span class=courier>Distance</span> or <span class=courier>AvgLag</span> against <span class=courier>CrossVarAB</span> (cross-variogram values).</li>
+
+</ul>
+
+<p class=defnewpar>For more information on semi-variograms, see <a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial correlation : functionality</a>, section <a href="../ilwisapp/spatial_correlation_functionality.htm#semivar"><span class=bookmark>Additional information on Semi-variograms</a></span>, or <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add Semi-variogram Model</a>, section <a href="../ilwismen/graph_window_add_semivariogram_model.htm#semivar"><span class=bookmark>Additional information</a></span>.</p>
+
+<p class=defnewpar>The next step, before <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a>, is to model the discrete values of your experimental semi-variograms and your cross-variogram by a continuous function, which will give an expected value for any desired distance.</p>
+
+<ul>
+
+<li>	From the <a href="../ilwis/graph_window_menu_commands.htm">Edit menu</a> in the graph window, choose the <span class=arial>Add Graph Semi-variogram Model</span> command. </li>
+
+<li>	In the <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Add Graph Semi-variogram Model</a> dialog box, you can choose the type of semi-variogram model or cross-variogram model (spherical, exponential, etc.), and you can fill out values for the sill, range and nugget. A (continuous) line will then be drawn according to the model you selected and the values you selected for sill, range and nugget. </li>
+
+</ul>
+
+<p>You are advised to visually experiment a little with models and sill, range, and nugget values to find the best line through your experimental semi-variogram and cross-variogram values. For more information on creating semi-variogram models, refer to the <a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add Semi-variogram Model</a> dialog box. </p>
+
+<p>To save your graphs, you can choose the <span class=arial><a href="../ilwismen/graph_window_save_graph.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/graph_window_save_graph_as.htm">Save As</a></span> commands from the File menu in a graph window. </p>
+
+<p class=defnewpar>To find which semi-variogram or cross-variogram models fit your experimental semi-variogram or cross-variogram values best, you can also use the <a href="../ilwismen/column_semivariogram.htm">Column Semi-variogram</a> operation. This operation calculates semi-variogram or cross-variogram values according to a user-specified semi-variogram model or cross-variogram model, and it stores calculated semi-variogram values or cross-variogram values in an output column. By calculating the Goodness of Fit (R<sup>2</sup>), you can test which semi-variogram model or cross-variogram model fits best. For more information, see <a href="../ilwismen/column_semivariogram.htm">Column Semi-variogram operation</a>, section <a href="../ilwismen/column_semivariogram.htm#r2"><span class=bookmark>Calculating R<sup>2</sup></span></a>.</p>
+
+<p class=defnewpar>Once you have decided, which semi-variogram or cross-variogram models, and which values for sill, range and nugget fit your data best, you can continue with the <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a> operation. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cross_variogram_dialog_box.htm">Cross Variogram : dialog box</a></p>
+
+<p class=seealsolinks><a href="cross_variogram_command_line.htm">Cross Variogram : command line</a></p>
+
+<p class=seealsolinks><a href="cross_variogram_algorithm.htm">Cross Variogram : algorithm</a></p>
+
+<p class=seealsolinks><a href="point_statistics.htm">Point statistics</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/spatial_correlation_functionality.htm">Spatial Correlation : functionality</a></p>
+
+<p class=seealsolinks><a href="point_interpolation.htm">Point interpolation</a></p>
+
+<p class=seealsolinks><a href="cokriging_functionality.htm">CoKriging : functionality</a></p>
+
+</body

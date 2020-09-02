@@ -1,0 +1,144 @@
+<html>
+
+<head>
+<title>Glue segment maps : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Glue segment maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Glue segment maps</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Glue segment maps operation glues or merges two or more segment maps into one output map. By default, the output segment map then comprises the total area of all input maps. The domains of the input maps are merged when needed. </p>
+
+<p class=defnewpar>For each input map, the user can further specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> to select and retrieve the class names, IDs or values of the segments that are to be copied into the output map. The user can also specify a clip boundary, to copy only those segments to the output map which fall within the specified <a href="..//ilwis/popup/coordinate_boundary_popup.htm" onClick="return popup(this, 'notes')" >coordinate boundaries</a> of the output map. </p>
+
+<p class=defnewpar>In the dialog box, the number of input segment maps is limited to four. On the command line, this limitation is not present.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Number of input maps:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the number of segment maps that you want to glue or merge together (2, 3, or 4).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input map names:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the input segment maps. You can always glue segment maps of the same domain type. For more information on mergeable domain types, see <a href="glue_segment_maps_functionality.htm">Glue segment maps : functionality</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >Masks</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type for each segment map (multiple) search strings to find the segments that you want to be copied into the output map. By default, all segments of all input maps are copied. For more information on masks, see <a href="mask_points_functionality.htm">Mask points : functionality</a> or <a href="../ilwis/how_to_use_masks.htm">How to use masks</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Clip boundary:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to limit or extend the area comprised by the output map: specify the coordinate boundaries for the output map yourself. Clear this check box if the output map should comprise the whole area of all input maps. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxleft1>MinX, MinY:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the minimum X-coordinate and the minimum Y-coordinate for the output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxleft1>MaxX, MaxY:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the maximum X-coordinate and the maximum Y-coordinate for the output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>New domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When merging Class or ID maps that do not use the same domain, select this check box if you want to store the output domain as a separate object (recommended). Subsequently, type a name for the new domain. </p>
+
+<p class=diabox>Clear this check box to obtain an output Class or ID domain which is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output segment map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output segment map that will contain the copied segments.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=defnewpar>If specified, also a new domain is created.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="glue_segment_maps_functionality.htm">Glue segment maps : functionality</a></p>
+
+</body

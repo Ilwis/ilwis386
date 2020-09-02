@@ -1,0 +1,149 @@
+<html>
+
+<head>
+<title>Segment editor : Insert new segment</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment editor, Insert segments, Edit segment map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Segment editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/segment_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert new segment</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Insert a new segment and select a class name, ID, or value for the new segment. </p>
+
+<p class=defnewpar>This dialog box appears: </p>
+
+<ul>
+
+<li>	after you finished inserting a new segment with the <i>digitizer</i>, or</li>
+
+<li>	after you finished inserting a new segment with the <i>mouse</i> in <span class=arial><a href="segment_editor_insert_mode.htm">Insert mode</a></span>. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>For more information on: 
+
+<ul>
+
+<li>using the digitizer, refer to <a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a>, section <a href="../ilwis/segment_editor_functionality.htm#segeddigitizer"><span class=bookmark>Working with the digitizer</span></a>. </li>
+
+<li>using the mouse, refer to the same topic, section <a href="../ilwis/segment_editor_functionality.htm#segedmouse"><span class=bookmark>Working with the mouse</span></a>. </li>
+
+</ul>
+
+<p class=kopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Class name/ID/Value:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To assign a class name, ID, or value to the new segment, and depending on the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment map</a>: select a class name from the drop-down list, type an ID, or type a value.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>Segment codes are mainly important when digitizing contour lines, etc., i.e. segments that contain information on line features. </li>
+
+<li>When digitizing segments that need to be polygonized later on, codes of segments are not very important. For more information, see <a href="../ilwis/how_to_create_polygon_maps.htm">How to create a polygon map</a>. </li>
+
+<li>However, codes are important when you wish to use the same segments in other segment maps, for instance when a segment is a boundary in multiple maps. You should then copy segments into another segment map using a mask. </li>
+
+</ul>
+
+<p class=kopje>Class names, IDs, values, etc.</p>
+
+<ul>
+
+<li class=linespacing01before>For a map using a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>: for each newly inserted segment, by default the class name will be assigned as specified for the <span class=arial><a href="segment_editor_insert_code.htm">Insert code</a></span>. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a>: for each newly inserted segment, an ID will be asked in a dialog box.</li>
+
+        <p>When an ID is assigned that already exists in the map, a question is asked whether you wish to use the same ID again or not. </p>
+
+        <p>A new ID will be automatically added to the ID domain. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>: for each newly inserted segment, a value will be asked in a dialog box. </li>
+
+        <p>The value should fall inside the minimum and maximum value of the value domain used by the map. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using a <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool domain</a>: for each newly inserted segment, a value <span class=arial>True</span>, <span class=arial>False</span>, or <span class=arial>?</span> (= undefined) will be asked in a dialog box. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For a map using a <span class=arial>UniqueID</span> domain: each newly inserted segment will automatically obtain an ID as <span class=courier>seg 1</span>, <span class=courier>seg 2</span>, <span class=courier>seg 3</span>, etc. Optionally, you can type a <span class=courier>Name</span> in the Attribute window. You can also enter other attribute to the attribute table in this window. </li>
+
+        <p>The <span class=courier>Names</span> will be available as a <span class=courier><a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >String</a></span> column in the attribute table of the map. In the attribute table, the <span class=courier>Name</span> column can be easily converted to a regular Class or ID column through the <a href="column_properties.htm">Column Properties</a> dialog box of the column by clicking the <span class=arial><a href="create_domain_class_or_id_from_string_column.htm">Create new domain from Strings</a></span> button. </p>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>When you choose the '?' question mark, the new segment will not get a class name or value; it will have the undefined value. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To <span class=arial>Edit</span> the names, values etc. of existing segments, see <a href="segment_editor_edit_selection.htm">Segment editor : Edit</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_toolbar.htm">Segment editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_menu_commands.htm">Segment editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="segment_editor_digitizer.htm">Segment editor : Digitizer</a></p>
+
+<p class=seealsolinks><a href="segment_editor_insert_code.htm">Segment editor : Insert code</a></p>
+
+<p class=seealsolinks><a href="segment_editor_insert_mode.htm">Segment editor : Insert mode</a></p>
+
+<p class=seealsolinks><a href="segment_editor_edit_selection.htm">Segment editor : Edit</a></p>
+
+</body

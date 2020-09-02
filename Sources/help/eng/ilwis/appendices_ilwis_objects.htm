@@ -1,0 +1,577 @@
+<html>
+
+<head>
+<title>Appendices : ILWIS objects</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ILWIS objects, Objects, Appendices">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Appendices</h1>
+
+<h1 class=secondline>ILWIS objects</h1>                
+
+<!--<hr>-->
+
+<h2>Data objects</h2>
+
+<p>Raster maps, polygon maps, segment maps, point maps, tables and columns are called <a href="ilwis_objects_data_objects.htm">data objects</a>.</p>
+
+<p class=popuptitleinappen>Raster maps&nbsp;&nbsp;<img src="../images/rasmap.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="../ilwis/ilwis_objects_raster_maps.htm">raster map</a> consists of <b>pixels</b> (picture elements) of a certain size, e.g. 20m x 20m. Pixels are either codified by IDs, class names, values, or colors; this is determined by the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map. A raster map should have coordinates, that is a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>. In ILWIS, most spatial operations are performed on raster maps.</p>
+
+<p class=linespacing03before>To obtain a  raster map:</p>
+
+<ul>
+
+<li>	rasterize an existing point, segment or polygon map, or</li>
+
+<li>	create a new raster map and edit it with the pixel editor, </li>
+
+<li>	use a satellite image which is already a raster map, or</li>
+
+<li>	scan a map or photograph and import it into ILWIS.</li>
+
+</ul>
+
+<p class=popuptitleinappen>Polygon maps&nbsp;&nbsp;<img src="../images/polmap.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="../ilwis/ilwis_objects_polygon_maps.htm">polygon map</a> is a vector map containing closed <b>areas</b> and the boundaries making up the areas. Polygon maps can for example contain uniquely codified areas such as cadastral plots, or mapping units such as land use classes, geological units or soil units. The areas are either codified by IDs, class names or values; this is determined by the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map. Further, a polygon map uses a certain <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>.</p>
+
+<p>Polygon maps are generally used as a stepping stone to raster maps. </p>
+
+<p class=linespacing03before>To obtain a polygon map, you first have to create a new segment map and edit it with the <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >segment editor</a> (with or without digitizer); then polygonize these segments within the segment editor or with the <a href="..//ilwisapp/popup/segments_to_polygons_popup.htm" onClick="return popup(this, 'notes')" >Segments to Polygons</a> operation. </p>
+
+<p class=popuptitleinappen>Segment maps&nbsp;&nbsp;<img src="../images/segmap.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="../ilwis/ilwis_objects_segment_maps.htm">segment map</a> is a vector map containing <b>lines</b> (for example roads, rivers or contour lines). Segments are either codified by IDs, class names or values (height map); this is determined by the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map. Further, a segment map uses a certain <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>.</p>
+
+<p class=linespacing03before>To obtain a segment map, you should create one and edit it with the <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >segment editor</a> (with or without digitizer).</p>
+
+<p class=popuptitleinappen>Point maps&nbsp;&nbsp;<img src="../images/pointmap.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="../ilwis/ilwis_objects_point_maps.htm">point map</a> contains <b>points</b>, for example water wells or sample points. Points are either identified by IDs, class names or values; this is determined by the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map. Further, a point map uses a certain <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>.</p>
+
+<p class=linespacing03before>To obtain a point map you should create one and edit it with the <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >point editor</a> (with or without digitizer).</p>
+
+<p class=popuptitleinappen>(Attribute) Table&nbsp;&nbsp;<img src="../images/table.gif" align=bottom width="13" height="14"></p>
+
+<p>A table consists of records and <a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >columns</a>. A table is an <a href="../ilwis/basic_concepts_attribute_tables.htm">attribute table</a> when the table stores additional information on elements in a map; i.e. extra tabular data which relates to mapping units, points, segments, or polygons in maps. </p>
+
+<p class=linespacing03before>Raster, polygon, segment and point maps of the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> type <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> or <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> can have attribute tables. The domain of the attribute table should be the same as the domain of the map to which it relates. An attribute table can be linked to a map or to a domain through the Properties of a map or a domain.</p>
+
+<p class=linespacing03before>An attribute table can be edited when the table is displayed in a table window. When the table is linked to a map or to a domain, and the map is displayed in a map window, you can also double-click the units in the map.</p>
+
+<p class=popuptitleinappen>Columns&nbsp;&nbsp;<img src="../images/column.gif" align=bottom width="13" height="14"></p>
+
+<p>A table consists of <a href="ilwis_objects_columns.htm">columns</a>. You can perform calculations with columns using <a href="calc.htm">TabCalc</a>. </p>
+
+<p class=linespacing03before>Each column has a <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a>. A column with a value domain contains values, a column with a class domain contains class names, a column with domain ID contains IDs, etc. Columns can also have domain String; you can use this to type for instance descriptions.</p>
+
+<p class=linespacing03before>If in an attribute table you have columns with a class domains, or with user-defined value domains, you may consider to prepare a representation for these columns as well. When you open the map to which the attribute table is linked, you can directly display the map by one of its attributes.</p>
+
+<h2>Container objects</h2>
+
+<p>Map lists, object collections, map views, layouts, annotation text objects and graphs are called <a href="../ilwis/ilwis_objects_container_objects.htm">container objects</a>. </p>
+
+<p class=popuptitleinappen>Map lists&nbsp;&nbsp;<img src="../images/mpl.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="../ilwis/ilwis_objects_map_lists.htm">map list</a> is a set of <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a>, for example the bands of a satellite image. All raster maps in the map list must have the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> and the same <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a>.</p>
+
+<p class=linespacing03before>A map list is used for: </p>
+
+<ul>
+
+<li>	<a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a> and <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >classification</a></li>
+
+<li>	creating a <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >color composite</a></li>
+
+<li>	a <a href="..//ilwisapp/popup/principle_components_popup.htm" onClick="return popup(this, 'notes')" >principal components analysis</a>, or</li>
+
+<li>	present multi-temporal changes in maps as a <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>.</li>
+
+</ul>
+
+<p class=linespacing03before>A map list can be created from the <a href="main_window_menu_commands.htm">File menu</a> in the Main window or while starting an operation which requires a map list as input. You can include as many maps in a map list as you like.</p>
+
+<p class=popuptitleinappen>Object collections&nbsp;&nbsp;<img src="../images/objcol.gif" align=bottom width="15" height="13"></p>
+
+<p>An <a href="../ilwis/ilwis_objects_object_collections.htm">object collection</a> is a set of <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >ILWIS objects</a>. </p>
+
+<p class=linespacing03before>An object collection only stores the names and locations of the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition files</a> of the maps, tables, etc. that are included in the object collection. The object definition files of these maps, tables, etc. contain further references to the names and locations of the data files on disk. </p>
+
+<p class=linespacing03before>Object collections:</p>
+
+<ul>
+
+<li>can be created to organize your data as 'projects'; </li>
+
+<li>are the result of importing Aster images through <a href="../ilwismen/import_map.htm">ILWIS Map Import</a>. </li>
+
+</ul>
+
+<p class=linespacing03before>Furthermore, a special case of object collections are <a href="..//ilwis/popup/objects_database_collection_popup.htm" onClick="return popup(this, 'notes')" >database collections</a>. Database collections are the result of accessing an external database, and only contain the <i>Use As</i> tables <img src="../images/table.gif" align=bottom width="13" height="14"><sub class=blue> u</sub> of the external database. For more information, see <a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a>. </p>
+
+<p class=popuptitleinappen>Map views&nbsp;&nbsp;<img src="../images/mpv.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="basic_concepts_map_views_and_layouts.htm">map view</a> is a saved <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>. </p>
+
+<p class=linespacing03before>In one map window, you can display: </p>
+
+<ul>
+
+<li>one or more <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a>, <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a>, <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a> and/or <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a>; </li>
+
+<li>one or more <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text objects</a> which usually contains the labels of a point, segment or polygon map; </li>
+
+<li><a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a>. </li>
+
+</ul>
+
+<p class=defnewpar>When you save a map window as a map view, all <a href="..//ilwis/popup/layers_popup.htm" onClick="return popup(this, 'notes')" >layers</a> in the map window and their display settings as well as the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of the map window are stored. When you open a map view later on, the map window will appear exactly as it was saved. You do not need to add individual maps to the map window anymore, nor specify their display options. </p>
+
+<p class=defnewpar><a href="ilwis_objects_map_views.htm">Map views</a> MUST be created when you wish to print maps. After saving the map window(s) as map view(s), create a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a> to which you can add one or more map views and additional <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> such as <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legends</a>, <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >north arrows</a>, <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bars and scale texts</a>, <a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a> (such as a title), <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map borders</a> including ticks and coordinates for grid lines or a graticule, a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a>, <a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >boxes</a>, <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmaps</a> and <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >pictures</a>. </p>
+
+<p class=tiptext><span class=tip>Mind: </span>A map view in a layout may only contain one raster map. </p>
+
+<p class=defnewpar>In the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a>, you can then make a final composition of the map views and the annotation.  </p>
+
+<p class=popuptitleinappen>Layouts&nbsp;&nbsp;<img src="../images/layout.gif" align=top width="12" height="14"></p>
+
+<p>A <a href="ilwis_objects_layouts.htm">layout</a> is required to print maps with optional annotation. A layout is a virtual sheet of paper on which you can make a composition of one or more <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a>, specify the scale on which these map views should be printed, and on which you can insert <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a>. </p>
+
+<p class=defnewpar>In the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a>, you can add to a layout: </p>
+
+<ul>
+
+<li>one or more <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a>, each of which may include one <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> and/or one or more <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a>, <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a> and/or <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a>, <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text layers</a>, <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and/or <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a>; </li>
+
+<li><a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a> such a titles; </li>
+
+<li><a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >boxes</a>; </li>
+
+<li><a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >pictures</a> and/or <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmaps</a>;</li>
+
+<li>a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a>.</li> 
+
+</ul>
+
+<p class=defnewpar>For each map view, you can add to the layout:</p>
+
+<ul>
+
+<li>a <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legend</a> for a layer in a map view; </li>
+
+<li>a <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map border</a>, including coordinates and ticks for grid lines and/or a graticule;</li>
+
+<li>a <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >North arrow</a>; </li>
+
+<li>a <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bar and scale text</a>. </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>To obtain a layout, first save a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a> containing one or more maps, optionally <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text</a>, <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and/or <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a> as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. Then, create a layout and add one or more map views to it. </p>
+
+<p class=popuptitleinappen>Annotation Text&nbsp;&nbsp;<img src="../images/anntxt.gif" align=bottom width="16" height="12"></p>
+
+<p>An <a href="ilwis_objects_annotation_text.htm">Annotation Text object</a>, also called an annotation text layer, is designed to display and store multiple texts (such as labels of points, segments or polygons) at <i>multiple positions</i>. 
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>In a map window, open the <a href="map_window_menu_commands.htm">File menu</a> and choose <span class=arial>Create Annotation Text</span>. The <a href="../ilwismen/create_an_annotation_text_object.htm">Create Annotation Text</a> dialog box will appear, in which you can choose to use a map on which the texts/labels should be based. </li>
+
+<li>Then, in the <a href="..//ilwis/popup/annotation_text_editor_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text editor</a>, you can easily reposition selected texts, and you can specify fonts, font sizes, appearance (bold, italics, underline), colors, rotations, etc. Texts in an Annotation Text object can only consist of one line. </li> 
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When one or more maps, annotation text layers, optional grid lines and graticules that are displayed in a map window are saved as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>, and when the map view is added to a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>, you can add further <a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a> (such as a title) to the layout. </p>
+
+<p class=popuptitleinappen>Graphs&nbsp;&nbsp;<img src="../images/graphicon.gif" align=bottom width="15" height="15"></p>
+
+<p>A <a href="ilwis_objects_graphs.htm">graph</a> can be created from <a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >columns</a> in a <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >table</a>. </p>
+
+<p class=defnewpar>You can either create a so-called graph from columns (displayed as points, bars, line, step or needle), or a rose diagram. The graph will be shown in a <a href="..//ilwis/popup/graph_window_popup.htm" onClick="return popup(this, 'notes')" >graph window</a>.</p>
+
+<p class=defnewpar>After you displayed a graph from columns, you can add graphs from formula, a least squares fit, or a semi-variogram model. In the graph window, the different graph layers will appear in the <a href="graph_window_graph_management.htm">Graph Management</a> pane. </p>
+
+<p class=defnewpar>A saved graph contains all necessary display options to redisplay the graph after the graph window has been closed. </p>
+
+<p class=defnewpar>For more information, refer to <a href="graph_window_functionality.htm">Graph window : functionality</a>, <a href="graph_window_examples_of_graphs.htm">Graph window : examples of graphs</a>, or <a href="graph_window_graph_management.htm">Graph window : Graph Management</a> pane. </p>
+
+
+
+
+<h2>Service objects</h2>
+
+<p>Domains, representations, georeferences, and coordinate systems are called <a href="ilwis_objects_service_objects.htm">service objects</a>.</p>
+
+<p class=popuptitleinappen>Domains&nbsp;&nbsp;<img src="../images/domain.gif" align=bottom width="16" height="14"></p>
+
+<p>A <a href="ilwis_objects_domains.htm">domain</a> is a set of possible values of a variable. In ILWIS, a domain is the set of possible IDs, class names, or values that can be used for instance in a map. All maps, tables and columns (<a href="ilwis_objects_data_objects.htm">data objects</a>) have a domain; a domain is a <a href="ilwis_objects_service_objects.htm">service object</a> for maps, tables and columns. One domain can be used for several data objects. </p>
+
+<p class=linespacing03before>The four main types of domains are:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<ul>
+
+<li>	<a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> </li>
+
+</ul>
+
+</td>
+<td valign="top">
+<p>for data objects which contain <i>unique identifiers</i> (e.g. plot 1024, plot 1025) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<ul>
+
+<li>	<a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a></li>
+
+</ul>
+
+</td>
+<td valign="top">
+<p>for data objects that contain <i>classes</i> (e.g. soil units: clay, sandy loam)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<ul>
+
+<li>	<a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a></li>
+
+</ul>
+
+</td>
+<td valign="top">
+<p>for data objects that contain <i>measurable, calculated or interpolated values</i> (e.g. height, concentration)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<ul>
+
+<li>	<a href="..//ilwis/sec/domain_image_sec.htm" onClick="return popup(this, 'notes')" >Image</a></li>
+
+</ul>
+
+</td>
+<td valign="top">
+<p>for <i>satellite images</i> containing values between 0 and 255.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=linespacing03before>Maps which use a class, value or the image domain can have a user-defined <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a>.</p>
+
+<p class=popuptitleinappen>Representations&nbsp;&nbsp;<img src="../images/rpr.gif" align=bottom width="16" height="14"></p>
+
+<p>A <a href="../ilwis/ilwis_objects_representations.htm">representation</a> generally defines the manner in which the <i>classes</i> of a map with a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>, or the <i>values</i> of a map with a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a> or the <a href="..//ilwis/sec/domain_image_sec.htm" onClick="return popup(this, 'notes')" >image domain</a> should be represented on the screen and on a printer. A representation is a <a href="ilwis_objects_service_objects.htm">service object</a> for a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>, i.e. a domain uses a certain representation. For maps which have a specific meaning (e.g. land use classes or height values) and which need fixed colors, it is advisable to create a user-defined domain and a user-defined representation. Maps which use the same domain are by default displayed in the same colors. </p>
+
+<p class=linespacing03before>Representation types:</p>
+
+<ul>
+
+<li>	<i>Representation class</i>: for maps that have a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a> and for raster maps with a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >group domain</a> or a <a href="..//ilwis/sec/domain_type_picture_sec.htm" onClick="return popup(this, 'notes')" >picture domain</a>. For each class in the domain, a representation class contains: colors for mapping units in raster maps; colors, hatching or patterns for polygons; colors, line types, line widths, etc. or equally spaced symbols for segments; colors, symbol type, symbol sizes, etc. for points. </li>
+
+<li>	<i>Representation value</i> or <i>representation gradual</i>: for maps that have a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a> or the <a href="..//ilwis/sec/domain_image_sec.htm" onClick="return popup(this, 'notes')" >image domain</a>. Such representations contain colors assigned to ranges of values in raster, polygon, or segment maps. </li>
+
+</ul>
+
+<p class=popuptitleinappen>Georeferences&nbsp;&nbsp;<img src="../images/georef.gif" align=bottom width="16" height="12"></p>
+
+<p>A georeference is a <a href="ilwis_objects_service_objects.htm">service object</a> which stores the relation between rows and columns of a raster map (row,col) and coordinates (X,Y). A georeference is needed for raster maps. A georeference uses a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>. It is advised that raster maps of the same area use the same georeference.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<ul>
+
+<li>	For rasterized vector maps, which are usually North-oriented, you can use a <i>georef corners</i>. </li>
+
+<li>	For other raster maps, for example satellite images, which are not North-oriented and in which the pixels do not represent exactly square areas on the ground, you can use a <a href="..//ilwis/popup/georeference_tiepoints_popup.htm" onClick="return popup(this, 'notes')" >georeference tiepoints</a>. </li>
+
+<li>	To add coordinates to a scanned photograph while using a Digital Terrain Model (DTM), create a georef <i>direct linear</i>.</li>
+
+<li>	To add coordinates to a scanned aerial photograph with fiducial marks for which you have DTM, create a <i>georef orthophoto</i>. </li>
+
+<li>	To create three dimensional views of maps while using a Digital Elevation Model, create a <i>georef 3D</i>.</li>
+
+</ul>
+
+<p class=linespacing03before>To combine raster maps with different georeferences, for instance in <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a> or <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a>, first use the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation, so that all maps will use one georeference. </p>
+
+<p class=popuptitleinappen>Coordinate systems&nbsp;&nbsp;<img src="../images/coordsy.gif" align=bottom width="15" height="15"></p>
+
+<p>A <a href="../ilwis/ilwis_objects_coordinate_system.htm">coordinate system</a> defines the possible XY- or LatLon-coordinates that can be used in your maps and thus stores information on the kind of coordinates you are using in your maps. You may for instance use user-defined coordinates, coordinates defined by a national standard or coordinates of a certain UTM zone. Point, segment and polygon maps always have a coordinate system. Raster maps have a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> which uses a coordinate system. A coordinate system is a <a href="ilwis_objects_service_objects.htm">service object</a> for point, segment and polygon maps, and for georeferences of raster maps. </p>
+
+<p class=defnewpar>There are five main types of coordinate systems:</p>
+
+<ul>
+
+<li>	<i>coordsys boundary only</i>: to define XY-coordinates for maps by only specifying the boundaries of your study area. </li>
+
+<li>	<i>coordsys projection</i>: to define XY-coordinates for maps by specifying the boundaries of your study area and optionally projection information, ellipsoid information and/or datum information. </li>
+
+<li>	<i>coordsys latlon</i>: to define LatLon-coordinates for maps by specifying the boundaries of your study area in Latitudes and Longitudes and optionally ellipsoid information and/or datum information. </li>
+
+<li>	<i>coordsys formula</i>: when you obtained data which is using different XY-coordinates than the coordinate system of your project, and when you know the relation between the two coordinate systems. </li>
+
+<li>	<i>coordsys tiepoints</i>: when you obtained data which is using different XY-coordinates than the coordinate system of your project, and when you do not know the relation between the two coordinate systems. </li>
+
+</ul>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>It is advised to use one coordinate system for all your maps. In case you have data of different sources in different projections, it is advised to <i>transform</i> all data to one common coordinate system. </p>
+
+<h2>Special objects</h2>
+
+<p>Histograms, sample sets, stereo pairs, criteria trees, two-dimensional tables, matrices, filters, functions, scripts are called <a href="ilwis_objects_special_objects.htm">special objects</a>.</p>
+
+<p class=popuptitleinappen>Histograms&nbsp;&nbsp;<img src="../images/hist.gif" align=bottom width="13" height="14"></p>
+
+<p class=linespacing03after>A <a href="ilwis_objects_histograms.htm">histogram</a> is a special object which lists frequency information on values, classes or IDs in a raster, polygon, segment or point map. A histogram is automatically calculated when displaying a value map with stretching; you can also use the <a href="../ilwisapp/histogram.htm">Histogram operation</a>. </p>
+
+<p class=linespacing03after>In a histogram window, a histogram is presented as a table and as a graph.</p>
+
+<p>Summary information of a value histogram, such as mean, standard deviation, and intervals, can be viewed both in the histogram window as well as in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> of the histogram.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hist.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A <b>raster histogram</b> lists the number of pixels, the percentages and the areas per value, class or ID. If the input raster map uses a domain Value, also cumulative number of pixels and cumulative percentages are calculated.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hispol.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A <b>polygon histogram</b> lists the number of polygons and the perimeter and area of polygons per class, ID, or value. If the input polygon map uses a Value domain, also the cumulative number of polygons, cumulative perimeters and cumulative areas are calculated. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hisseg.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A <b>segment histogram</b> lists the number of segments and their length per class, ID or value. If the input segment map uses a Value domain, also the cumulative number of segments and cumulative lengths are calculated. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hispnt.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A <b>point histogram</b> lists the number of points per class, ID or value. If the input point map uses a Value domain, also the cumulative number of points are calculated. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=popuptitleinappen>Sample sets&nbsp;&nbsp;<img src="../images/sample.gif" align=bottom width="16" height="12"></p>
+
+<p>Prior to an image classification, sample pixels or training pixels have to be selected in a <a href="ilwis_objects_sample_sets.htm">sample set</a>. To create a sample set, first a map list and a domain have to be specified. Then, with <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a>, assign <b>class names</b> to groups of pixels that are supposed to represent a known feature on the ground and that have similar spectral values in the maps in the map list. </p>
+
+<p class=linespacing03before>A sample set contains:</p>
+
+<ul>
+
+<li>	a reference to a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, that is the set of images you want to classify in a later stage. The spectral values of the images in the map list, at  the position of the training pixels provide the basis on which decisions are made in the classification. During sampling, these values can be inspected in the sample statistics of a certain class of training pixels, and  can be visualized in feature spaces;</li>
+
+<li>	a reference to a class domain, that is the collection of class names that you want to assign to your training pixels and that are the classes that you want to obtain from the classification. The representation of this domain determines in which colors the training pixels are displayed during sampling; </li>
+
+<li>	a reference to a raster map which is automatically created and obtains the same name as the sample set. This so-called sample map contains the locations of the training pixels and the class names assigned to them.</li>
+
+</ul>
+
+<p class=linespacing03before>When your graphics board is configured to use 256 colors, you can locate your training pixels on a background map, for instance a <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >color composite</a>. In case your graphics board is configured to use more than 256 colors, you will use an <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >interactive color composite</a>; then, a background map is not used.</p>
+
+<p class=popuptitleinappen>Stereo pairs&nbsp;&nbsp;<img src="../images/obj_stereopair.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="ilwis_objects_stereopairs.htm">stereo pair</a> is calculated from a pair of input raster maps, for instance two aerial photographs with overlap, the fiducial marks of the photographs, the principal point of each photograph, the transferred principal points, and optionally one or two scaling points. </p>
+
+<p class=linespacing03before>A stereo pair is automatically calculated when it is opened for display. The stereo pair then contains:</p>
+
+<ul>
+
+<li>	two resampled output raster maps, </li>
+
+<li>	where each raster map uses a new georeference which retains possible original coordinates. </li>
+
+</ul>
+
+<p class=linespacing03before>A stereo pair can be displayed: </p> 
+
+<ul>
+
+        <li>in a <a href="..//ilwisapp/popup/stereoscope_popup.htm" onClick="return popup(this, 'notes')" >stereoscope</a> window, while using a stereoscope, and </li>
+
+        <li>as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >anaglyph</a> in a map window, while using red-green or red-blue glasses. </li>
+
+</ul>
+
+<p class=linespacing03before>To create a stereo pair, use the <a href="..//ilwisapp/popup/epipolar_stereopair_popup.htm" onClick="return popup(this, 'notes')" >Epipolar Stereo Pair</a> operation. </p>
+
+<p class=popuptitleinappen>Criteria trees&nbsp;&nbsp;<img src="../images/criteria_tree.gif" align=bottom width="13" height="14"></p>
+
+<p>A <a href="ilwis_objects_criteria_trees.htm">criteria tree</a> contains the definition of a complicated calculation in which multiple input maps and/or attribute columns are combined, according to certain user-defined rules or criteria, to obtain a final output raster map using <a href="../ilwis/smce_window_functionality.htm">Spatial Multi-Criteria Evaluation (SMCE)</a>. </p>
+
+<p class=defnewpar>Under the <i>main goal</i> of a criteria tree, you can add: </p>
+
+<ul>
+
+<li>criteria: these rules are either <i><a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a></i> or <i><a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >constraints</a></i>. </li>
+
+<li><i>groups</i>: as many criteria may be involved, you can create groups under the main goal of a tree to keep an overview of all rules. A group defines an intermediate or a partial goal. Under a group, you can add one or more <i>factors</i>. </li>
+
+</ul>
+
+<p class=defnewpar>A criteria tree as a whole contains all rules you defined; it thus contains the way in which all input data should be standardized, grouped or weighed, to be able to calculate the final output map. The calculated final output map will show the performance of an area for the main goal that was set. </p>
+
+<p class=defnewpar>To build a criteria tree, you need to: </p>
+
+<ul>
+
+<li class=ls01be>specify the name of the <i>main goal</i> as text, and specify the name of the output raster map that will contain the calculated final result, </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>add criteria under the main goal, i.e.: </li>
+
+	<ul>
+
+	<li>add <i><a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a></i> (benefits and/or costs) and add <i><a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >constraints</a></i>, </li>
+
+	<li>specify the name of each factor or constraint as text, </li>
+
+	<li>select for each factor or constraint the input raster map or the attribute column that needs to be used. </li>
+
+	</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>optionally, add <i>groups</i> (partial goals) under the main goal, or under another partial goal, i.e.: </li>
+
+	<ul>
+
+	<li>specify the name of a group as text, </li>
+
+    <li>optionally, specify the name of the output raster map that will contain the calculated result for this group, </li>
+
+		<ul>
+
+		<li>add <i><a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >factors</a></i> (benefits and/or costs) under the group, </li>
+
+		<li>specify the name of each factor as text, </li>
+
+		<li>select for each factor the input raster map or the attribute column that needs to be used. </li>
+    
+	    </ul>
+
+	</ul>
+
+</ul>
+
+<p class=defnewpar>Optionally, you can calculate performance by multiple <i>scenarios</i> or <i>alternatives</i>, in order to select the best scenario or alternative, and to identify poorly performing scenarios or alternatives. You will use: </p>
+
+<ul>
+
+<li>the same criteria tree, i.e. the same rules for standardization, grouping and weighing of criteria, </li>
+
+<li>for each alternative: other input maps. </li>
+
+</ul>
+
+<p class=popuptitleinappen>Two-dimensional tables&nbsp;&nbsp;<img src="../images/tb2.gif" align=bottom width="14" height="14"></p>
+
+<p class=linespacing03after>A <a href="ilwis_objects_two_dimensional_tables.htm">two-dimensional table</a> is used to combine two raster maps with class or ID domain. It defines a new value for each possible combination of input classes or IDs.</p>
+
+<p>A two-dimensional table view consists of rows which represent the domain of one map and of columns which represent the domain of another map. You have to assign a new value, class name or ID to the fields which represent the combination of the domains. Then you have to apply the two-dimensional table on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line</a> of the Main window. The output raster contains the values, classes or IDs as entered in the two-dimensional table.</p>
+
+<p class=popuptitleinappen>Matrices&nbsp;&nbsp;<img src="../images/matrix.gif" align=bottom width="16" height="13"></p>
+
+<p>A <a href="ilwis_objects_matrices.htm">matrix</a> is a 2-dimensional array of values. Matrices are calculated by the Principal Components operation and by the Factor Analysis operation. The Principal Components operation calculates a.o. a variance-covariance matrix and the Factor Analysis operation calculates a.o. a correlation matrix. The matrices can be shown.</p>
+
+<p class=linespacing03before>In the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> dialog box of a matrix, some additional information of the matrix can be viewed namely the total variances in the output bands. </p>
+
+<p class=popuptitleinappen>Filters&nbsp;&nbsp;<img src="../images/filt.gif" align=bottom width="13" height="13"></p>
+
+<p><a href="../ilwis/ilwis_objects_filters.htm">Filters</a> are used in the <a href="../ilwisapp/filter.htm">Filter operation</a>. </p>
+
+<p class=defnewpar>ILWIS offers you:</p>
+
+<ul>
+
+<li>	a choice of six <a href="../ilwisapp/filters_filter_types.htm">filter types</a>: Linear filters, Rank order filters, Majority filters, Binary filters, a Pattern filter and a Standard deviation filter. Each filter type calculates results by a different method; </li>
+
+<li>	a choice of about 30 <a href="../ilwisapp/filters_standard_filters.htm">standard filters</a>;</li>
+
+<li>	the possibility to create, edit and store your own Linear filters, for instance through the <span class=arial>New Filter</span> option in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>; </li>
+
+<li>	the possibility to modify the Average filter, Majority filters, Median filters, the Pattern filter, Rank Order filters, and the Standard Deviation filter according to your wishes in the <a href="../ilwisapp/factor_analysis_dialog_box.htm">Filter : dialog box</a>.</li>
+
+</ul>
+
+<p class=popuptitleinappen>Functions&nbsp;&nbsp;<img src="../images/func.gif" align=bottom width="15" height="14"></p>
+
+<p>Functions can be used in all calculators in ILWIS: <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a> and the <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >pocket line calculator</a>. Some 50 internal functions are available (see also <a href="calc.htm">Map and Table Calculation</a>), but also <a href="../ilwis/ilwis_objects_functions.htm">user-defined functions</a> can be created. </p>
+
+<p class=linespacing03before>A user-defined function may contain any combination of operators and functions, and may use parameters representing maps and columns. Parameters in a user-defined function can have any name.</p>
+
+<p class=popuptitleinappen>Scripts&nbsp;&nbsp;<img src="../images/script.gif" align=bottom width="16" height="12"></p>
+
+<p>A <a href="ilwis_objects_scripts.htm">script</a> is a sequence of ILWIS expressions. By creating a script, you can build a complete GIS or Remote Sensing analysis for your own research discipline. Scripts are equivalent to batch files in ILWIS version 1.4. </p>
+
+<p class=linespacing03before>For more information about scripts, see <a href="../ilwis/ilwis_objects_scripts.htm">ILWIS objects : scripts</a>. For more information on script syntax, see
+<a href="calc.htm">Map and Table calculation</a>, <a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a> and <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="appendices_relations_between_ilwis_objects.htm">Appendices : Relations between ILWIS objects</a></p>
+
+</body

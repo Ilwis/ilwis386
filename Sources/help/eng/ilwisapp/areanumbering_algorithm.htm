@@ -1,0 +1,88 @@
+<html>
+
+<head>
+<title>Area numbering : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Area numbering">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Area numbering</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Area numbering operates as a 3 x 3 filter: the filter moves over the map and a value is assigned to the center pixel of the filter in the output map, depending on the values of the center pixel itself and its neighbouring pixels in the input map.</p>
+
+<p class=defnewpar>In case of 4-connectivity, the program compares the values of 4 neighbouring pixels with the value of the center pixel, and in case of 8-connectivity, the program compares the values of 8 neighbouring pixels with the value of the center pixel. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>4-connectivity:</p>
+
+</td>
+<td valign="top">
+<p>8-connectivity:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01before><img src="../images/4connect.gif" align=bottom width="64" height="64"></p>
+
+</td>
+<td valign="top">
+<p class=linespacing01before><img src="../images/8connenc.gif" align=bottom width="64" height="64"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The filter runs from left to right line by line, from top to bottom over the input map.</p>
+
+<p class=kopje>Rule:</p>
+
+<p>If one or more of the 4 or 8 pixels neighbouring the center pixel has the same value as the center pixel itself (in the input map), then the center pixel is assigned (in the output map): </p>
+
+<ul>
+
+<li>	a new value, in case the neighbour(s) with the same value as the center pixel was/were  not renumbered yet, or</li>
+
+<li>	the same value as was assigned to the neighbour(s) with the same value as the center pixel, in case this/these neighbour(s) already was/were renumbered.</li>
+
+</ul>
+
+<p>Else, if none of the neighbouring pixels has the same value as the center pixel, a new value will be assigned to the center pixel in the output map.</p>
+
+<p class=defnewpar>Also, an attribute table is created: it lists the new IDs (Area 1, Area 2, etc.); the original class names, IDs or values of the input map; and the size (npix and area) of the output units.</p>
+
+<p class=kopje>Output domain:</p>
+
+<p>The Area numbering operation will use a <span class=courier>UniqueID</span> domain for the output map and its attribute table; the IDs have names like Area 1, Area 2, etc. This domain is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>).</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="areanumbering_functionality.htm">Area numbering : functionality</a></p>
+
+</body

@@ -1,0 +1,107 @@
+<html>
+
+<head>
+<title>Main window : Operation-tree and Operation-list</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Operation-tree, Operation-list, Main window, ILWIS operations, Operations">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Main window</h1>
+
+<h1 class=secondline>Operation-tree and Operation-list</h1>
+
+<!--<hr>-->
+
+<p>The Operation-tree and the Operation-list are located on the first two tabs in the Operations/Navigator pane, by default along the left hand side of the <a href="..//ilwis/popup/main_window_popup.htm" onClick="return popup(this, 'notes')" >Main Window</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li class=linespacing01before>The <i>Operation-tree</i> provides a tree structure for all ILWIS <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operations</a>, similar to the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> in the Main window; </li>
+
+<li class=linespacing01before>The <i>Operation-list</i> contains an alphabetic list of all ILWIS <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operations</a>. </li>
+
+</ul>
+
+<p class=defnewpar>The icon by which an operation is preceded indicates the output data type of the operation. </p>
+
+<p class=defnewpar>The Operation-tree and the Operation-list are mainly used to start operations, bypassing the <a href="main_window_menu_commands.htm">Operations menu</a>. Furthermore, the Operation-tree and the Operation-list contain commands to create new objects, to open and/or edit objects, to view the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of an object, to copy and delete one or more objects, etc. If you wish you can hide the Operations/Navigator pane. </p>
+
+<p class=defnewpar>For some short Help on an operation, you can click an operation with the <i>right</i> mouse button, and choose <span class=arial>Help</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To extend the Operation-tree, the Operation-list and the Operations menu with scripts or external tools, see <a href="../ilwis/how_to_customize_the_operation_list.htm">How to customize the Operation-tree, the Operation-list and the Operations menu</a>.</p>
+
+<p class=kopje>Using the Operation-tree and the Operation-list:</p>
+
+<p>The Operation-tree and the Operation-list are mainly used for the following actions: </p>
+
+<ul>
+
+<li class=linespacing01before>	<i>move the mouse pointer</i> over an operation: <br>
+
+        the <a href="..//ilwis/popup/status_line_popup.htm" onClick="return popup(this, 'notes')" >status bar</a> displays a brief description of that operation;</li>
+
+<li class=linespacing01before>	<i>double-click</i> an operation: <br>
+        
+        the operation is started and the operation's dialog box appears; </li>
+
+<li class=linespacing01before> <i>drag</i> a map or table from the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> to an operation in the Operation-tree or Operation-list: <br>
+
+        the operation's dialog appears and the input map (or table) name is already filled out in the dialog box; </li>
+
+<li class=linespacing01before> <i>drag</i> a map or table from a Catalog to a <a href="..//ilwis/popup/win_text_boxes_popup.htm" onClick="return popup(this, 'notes')" >text box</a> or a <a href="..//ilwis/popup/win_drop_down_list_boxes.htm" onClick="return popup(this, 'notes')" >drop-down list box</a> in a dialog box of an operation: <br>
+        
+        the object is filled out in the field of the dialog box; </li>
+
+<li class=linespacing01before> <i>click an operation with the right mouse button</i>: <br>
+
+        a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> appears; start the operation by choosing the <span class=arial>Run</span> command, or get short Help on the operation by choosing the <span class=arial>Help</span> command. </li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To start an operation, you can also type a <a href="..//ilwis/popup/command_line_main_commands_popup.htm" onClick="return popup(this, 'notes')" >command</a> on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the Main window</a> (see also <a href="appendices_ilwis_commands.htm">Appendices : ILWIS commands</a>).</li>
+
+<li>In all cases mentioned above, a dialog box is opened in which you can enter the input and output object names and other parameters necessary for the operation. </li>
+
+<p class=tiptext>When you click the <span class=arial>Show</span> or <span class=arial>Define</span> button in the operation's dialog box, an ILWIS <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >expression</a> is generated on the command line of the Main window. </p>
+
+<p class=tiptext>Output objects that are obtained through an operation's dialog box are always <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent</a>. </p>
+
+<li>Advanced users can type complete ILWIS expressions on the command line of the Main window or create a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> to execute a series of expressions. For more information, see <a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a> and <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_use_the_operation_list.htm">How to use the Operation-tree and Operation-list</a></p>
+
+<p class=seealsolinks><a href="how_to_customize_the_operation_list.htm">How to customize the Operation-tree and Operation-list</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/ilwis_operations.htm">ILWIS operations</a></p>
+
+</body

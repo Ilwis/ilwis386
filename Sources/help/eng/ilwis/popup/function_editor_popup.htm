@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<title>Function editor popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Function editor </p>
+<p class=defnewpar>The <a href="..//ilwis/function_editor_functionality.htm" onClick="return popup(this, 'notes')" > function editor</a> allows you to <i>view</i> and/or <i>edit</i> user-defined <a href="objects_userdef_functions_popup.htm">functions</a>.</p>
+<p class=defnewpar>With the editor you can for example:</p>
+
+<ul>
+  <li>modify the function,</li>
+  <li>change the domain types of input parameters for the function as well as the domain of the output map or column, or</li>
+  <li>add remarks.</li>
+</ul>
+</body

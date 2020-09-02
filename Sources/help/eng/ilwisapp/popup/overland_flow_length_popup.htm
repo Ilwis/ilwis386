@@ -1,0 +1,40 @@
+<html>
+
+<head>
+<title>overland flow length popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Overland Flow Length</p>
+
+<p class="defnewpar">The <a href="..//ilwisapp/overland_flow_length.htm" onClick="return popup(this, 'notes')" >Overland Flow Length</a> operation calculates for each pixel the overland distance towards the 'nearest' drainage according to the flow paths available in the Flow Direction map. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>the output raster map of the Drainage Network Ordering operation and its linked attribute table, </li>
+
+<li>the output raster map of the Flow Direction operation. </li>
+
+</ul>
+
+</body

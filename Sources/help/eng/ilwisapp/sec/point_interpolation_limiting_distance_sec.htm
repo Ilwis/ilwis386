@@ -1,0 +1,48 @@
+<html>
+
+<head>
+<title>point interpolation limiting distance (sec)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Limiting distance (D<sub><b>0</b></sub>) in point interpolations</p>
+
+<p>In the <a href="../../ilwisapp/popup/moving_average_popup.htm">Moving average</a> and <a href="../../ilwisapp/popup/moving_surface_popup.htm">Moving surface</a> <a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" >point interpolations</a>, and in <a href="../../ilwisapp/popup/kriging_popup.htm">Ordinary Kriging</a>, <a href="../../ilwisapp/popup/anisotropic_kriging_popup.htm">Anisotropic Kriging</a>, etc. you have to specify a limiting distance. The limiting distance is the maximum search radius to find the points which will be taken into account during the calculation of an output pixel value. In other words, for each output pixel, only the values of the points which fall within the limiting distance will be used. Values of points that are farther away from an output pixel than the specified limiting distance will thus not be used to calculate a value for that output pixel. The limiting distance parameter is primarily designed for efficiency purposes. </p>
+
+<p class=kopje>Choosing the limiting distance:</p>
+
+<ul>
+
+<li>	The values of points within the limiting distance are supposed to be spatially correlated. The maximum distance until which spatial correlation exists can be found with the <a href="../../ilwisapp/popup/spatial_correlation_popup.htm">Spatial correlation</a> operation.</li>
+
+<li>	When you specify the limiting distance too large, computation time will increase dramatically while your output results will not be different than when choosing a smaller limiting distance. </li>
+
+<p class=leftmargininlist>	When there are enough points close to a certain output pixel, then the points farther away will have little influence on the output pixel value anyway, as the weight factors assigned to the far away points will resolve to almost zero.</p>
+
+<li>	When you specify a relatively small limiting distance, the number of valid points to calculate an output pixel value may approach the mathematical minimum. This will cause strange, irregular values in the output map and may result in discontinuities.</li>
+
+<li>	When you specify the limiting distance too small, the number of valid points to calculate an output pixel value may be less than mathematically required. This will result in an undefined output pixel value.</li>
+
+</ul>
+
+<p>For <a href="../../ilwisapp/popup/moving_average_popup.htm">Moving average</a>, an output pixel needs at least one point within the specified limiting distance; for <a href="../../ilwisapp/popup/moving_surface_popup.htm">Moving surface</a>, the number of required points for an output pixel depends on the selected <a href="../../ilwisapp/sec/point_interpolation_surfaces_sec.htm">surface</a> type. </p>
+
+</body

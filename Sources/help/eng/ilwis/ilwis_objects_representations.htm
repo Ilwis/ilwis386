@@ -1,0 +1,556 @@
+<html>
+
+<head>
+<title>ILWIS objects : representations</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Representation, ILWIS objects, Service objects, Representation Class, Representation Value, Representation Gradual, RPR">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Representations&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/rpr.gif" align=bottom width="16" height="14"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A representation defines the manner in which <i>classes</i> of a map with a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>, a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >group domain</a> or a <a href="..//ilwis/sec/domain_type_picture_sec.htm" onClick="return popup(this, 'notes')" >picture domain</a>, or the <i>values</i> of a map with a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a> or the <a href="..//ilwis/sec/domain_image_sec.htm" onClick="return popup(this, 'notes')" >image domain</a> should be represented on the screen and on a printer. </p>
+
+<p class=defnewpar>A representation stores colors or ranges of colors for the classes in a class domain, or for specific values or ranges of values for the values in a value domain. Furthermore, for polygon classes, colors, hatching and patterns can be stored; for segment classes, colors, line types and line widths, etc. can be stored; and for point classes, colors, symbols, symbol sizes, etc. can be stored. </p>
+
+<p class=defnewpar>A representation is a <a href="ilwis_objects_service_objects.htm">service object</a> for a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>, i.e. a domain uses a certain representation.</p>
+
+<p class=defnewpar>Maps with a Bool, the <span class=courier>Bit</span>, an ID, or the Color domain do <i>not</i> have a stored representation on disk:</p>
+
+<ul>
+
+<li>	For maps with a <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool domain</a> or the <a href="..//ilwis/sec/domain_type_bit_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Bit</span> domain</a>, you can interactively select colors in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of the map each time you display the map. You can set default colors for True and False values in the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>. </li>
+
+<li>	Maps with an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a> can be shown in 7, 15, or 31 colors to inspect the map  itself. In most cases however, you will display an ID map by one of its attributes as stored in the map's attribute table; to do so, select the <span class=arial>Attribute</span> check box in the Display Options dialog box of the ID map and select an attribute column.</li>
+
+<li>	Raster maps with the <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" >Color domain</a> store colors in each pixel, so no representation is needed.</li>
+
+</ul>
+
+<p>Furthermore, special options for point symbols available in the <span class=arial>Display Options</span> dialog box of a point map.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>You can always create a number of representations for a certain domain, for instance by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the Representation list box in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a map. When you already have a number of representations, you can also select a suitable one in the map's Display Options dialog box.</p>
+
+<p class=kopje>Types of representations:</p>
+
+<p>There are three types of representations:</p>
+
+<ul>
+
+<li>	<b>representation class</b>: for the classes in a class domain, the groups a group domain, or the items in a picture domain. For each class in the domain, a representation class contains: colors for mapping units in raster maps; colors, hatching or patterns for polygons; colors, line types, line widths, etc. or equally spaced symbols for segments; colors, symbol type, symbol sizes, etc. for points. </li>
+
+<li>	<b>representation gradual</b>: defines colors for ranges of values (as <i>percentages</i>) in any <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Any map with a value domain can be displayed with any existing representation gradual. Examples of representations of type gradual are <span class=courier>Gray</span> and <span class=courier>Pseudo</span>. </li>
+
+<li>	<b>representation value</b>: defines colors for ranges of values (as<i> values</i>) in a value map when the map uses <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Image</span></a> (interactive slicing), a <i>user-defined value domain</i> (e.g. a <span class=courier>Height</span> domain), or a <a href="..//ilwis/sec/y_system_domains_sec.htm" onClick="return popup(this, 'notes')" >system value domain</a>. You can create various value representations for an individual value domain. </li>
+
+</ul>
+
+<p class=kopje>Link between domains and representations:</p>
+
+<p>A representation is linked to a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>. The domain of a map thus knows the <i>default</i> representation when the map is displayed. Furthermore, this ensures that: </p>
+
+<ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	All maps which use the same class domain (e.g. <span class=courier>Landuse</span>) will by default use the same representation class: these maps will thus by default be displayed in the same colors. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	All maps which use the same value domain (e.g. <span class=courier>Height</span>) will by default use the same representation value: these maps will thus by default be displayed in the same colors. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>The default representation for a domain can be viewed in the <a href="../ilwismen/domain_properties.htm">Properties of a domain</a>. </p>
+
+<ul>
+
+<li>In the Property sheet of a Class domain or a user-defined value domain, you can also change the default representation for the domain or create a new default representation for the domain; </li>
+
+<li>For <a href="..//ilwis/sec/y_system_domains_sec.htm" onClick="return popup(this, 'notes')" >system domains</a>, which are read-only, the default representation is fixed. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tips: </span>You can always create/select other representations that fit the domain of a map: </p>
+
+<ol class=tipol>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For maps that use a Class domain: </li>
+
+        <ul class=tipul>
+
+        <li>Select or create another default representation Class in the Property sheet of the Class domain; </li>        
+
+        <li>Select or create another representation Class in the Display Options dialog box of a class map; </li>
+
+        <p class=leftmargin03>the selected or created representation will automatically be the new default representation for the Class domain. </p>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For maps that use a user-defined value domain: </li>
+
+        <ul class=tipul>
+
+        <li>Select or create another default representation Value in the Property sheet of the user-defined value domain; </li>
+
+        <li>Select or create another representation Value in the Display Options dialog box of the value map; </li>
+
+        <p class=leftmargin03>the selected or created representation Value will automatically be the new default representation for the user-defined value domain. </p>
+
+        <li>Select one of the system representations Gradual in the Display Options dialog box of the map; </li>
+
+        <p class=leftmargin03>a selected representation Gradual will never become the new default representation for a value domain. </p>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For maps that use a system value domain: </li>
+
+        <ul class=tipul>
+
+        <li>Select or create another representation Value in the Display Options dialog box of the value map; </li>
+
+        <p class=leftmargin03>the selected or created representation Value <i>cannot</i> become the new default representation for a system value domain, as system domains are read-only. </p>
+
+        <li>Select one of the system representations Gradual in the Display Options dialog box of the map; </li>
+
+        <p class=leftmargin03>a selected representation Gradual will never become the new default representation for a value domain. </p>
+
+        </ul>
+</ol>
+
+<p class=defnewpar>Finally, to permanently link a certain representation to a certain user-defined domain, you can make the domain read-only in the <a href="../ilwismen/domain_properties.htm">Domain Properties</a>. </p>
+
+<p class=kopje>Names of representations:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a representation:</p>
+
+<p class=kopjeaftertitlesub>1. Creating a representation class:</p>
+
+<p>When creating a new class or group domain, a representation class is automatically created with default colors; these can of course be edited. </p>
+
+<p class=defnewpar>The easiest way to create another representation class for a map with a class, group or picture domain, is to click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> in the <span class=arial>Display Options</span> dialog box of the map. Then, through the <a href="../ilwismen/create_a_representation.htm">Create Representation</a> dialog box, a new representation class will be created for the domain that is used by the map. Subsequently, the <a href="representation_class_editor_functionality.htm">Representation Class editor</a> will be opened. </p>
+
+<p class=defnewpar>In the Representation Class editor, choose whether you want to adapt the representation for the raster form, the polygon form, the segment form or the point form. Then, edit the colors, etc. of each class for instance by double-clicking individual classes. You can also select multiple classes and choose <span class=arial>Edit Multiple Items</span> from the <a href="..//ilwismen/sec2/repr_class_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a> to assign one color or a smooth range of colors to the selected classes.</p>
+
+<p class=kopje>2. Creating a representation value:</p>
+
+<p>When creating a new value domain, a representation value is <i>not automatically created</i>. You can always show a map with a value domain with an existing representation gradual, e.g. <span class=courier>Pseudo</span>.</p>
+
+<p class=defnewpar>The easiest way to create a representation value for a map with a value domain is to click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> in the <span class=arial>Display Options</span> dialog box of the map. Then, through the <a href="../ilwismen/create_a_representation.htm">Create Representation</a> dialog box, a new representation value will be created for the domain that is used by the map. (For maps which use <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a>, you can <i>clear</i> the <span class=arial>Use Percentages</span> check box in the Create Representation dialog box to create a representation value.) Subsequently, the <a href="representation_value_gradual_editor_functionality.htm">Representation Value editor</a> will be opened. </p>
+
+<p class=defnewpar>In the Representation Value editor, you can insert limits, i.e. <b>boundary values</b> for a representation value, you can choose or create a color for each limit, and you can indicate whether to stretch between the limits or to use the color of the upper of lower boundary. </p>
+
+<p class=kopje>3. Creating a representation gradual:</p>
+
+<p>When you click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> in the <span class=arial>Display Options</span> dialog box of a map which uses <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>, and when, in the <a href="../ilwismen/create_a_representation.htm">Create Representation</a> dialog box, you <i>select</i> the <span class=arial>Use Percentages</span> check box, a new representation gradual will be created with default colors. The <a href="representation_value_gradual_editor_functionality.htm">Representation Gradual editor</a> is opened. </p>
+
+<p class=defnewpar>In the Representation Gradual editor, you can insert limits, i.e. <b>boundary percentages</b> for a representation gradual, you can choose or create a color for each limit, and you can indicate whether to stretch between the limits or to use the color of the upper of lower boundary. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When a map (e.g. <span class=courier>Map1</span>) is currently using <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>, but when a more clearly defined value domain would be more appropriate, for instance because a user-defined value domain can have a certain default representation value (which will ensure that the map will by default display in 'correct colors'), you have to change the domain of the map with system domain Value to a user-defined domain: </p>
+
+<ul class=tipul>
+
+<li>	Perform a simple mapcalc statement like <span class=courier>Map2 = Map1</span> ; </li>
+
+<li>	Create a new value domain in the <span class=arial>Raster Map Definition</span> dialog box by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create domain button</a>; </li>
+
+<li>	Then display <span class=courier>Map2</span> and in the map's <span class=arial>Display Options</span> dialog box, click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create representation button</a>. You have created a representation value and you can assign colors to specific values in the map. </li>
+
+</ul>
+
+<p class=tiptext>For more information, see <a href="how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a>.</p>
+
+<p class=kopje>4. Other ways to create representations:</p>
+
+<p>Furthermore, you can create a representation through the <a href="main_window_menu_commands.htm">File menu</a> of the Main window, by double-clicking the <span class=arial>New Representation</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or via the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of a domain. For more information, see <a href="how_to_create_representations.htm">How to create a representation</a>.</p>
+
+<p class=kopje>To view and edit a representation:</p>
+
+<p>To edit an existing representation, you can for instance double-click a representation in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. When a map is displayed in a map window, you can also open the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window and choose <span class=arial>Representation</span>. Depending on the type of representation you selected, the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Class editor</a> or the <a href="..//ilwis/popup/representation_value_gradual_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Value/Gradual editor</a> is opened. For more information, see <a href="how_to_edit_representations.htm">How to edit a representation</a> or the respective editors.</p>
+
+<p class=defnewpar>Advanced users may wish to open and/or edit a representation class as a table. For more information, see <a href="how_to_open_objects_as_a_table_advanced.htm">How to open objects as a table</a>. System representations and read-only representations cannot be edited. </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>A representation consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.RPR); in case of a representation class also a binary data file (.RP#) is available. The object definition file has no further references to other objects. </p>
+
+<p class=defnewpar>By viewing the properties of a representation, you can see for instance the type of the representation and you can find out to which domain the representation is linked. A representation is a <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >property</a> of a domain.</p>
+
+<p class=defnewpar>A <b>representation class</b> stores, for each class in the domain:</p>
+
+<ul>
+
+<li>	a color (raster form);</li>
+
+<li>	a color, hatching or pattern (polygon form);</li>
+
+<li>	a color, a line type (e.g. single, double, triple, dot, dash dot, blocked), line width, optional support line, optional background color for the support line, and a symbol font and a symbol when a line should be represented by symbols (segment form);</li>
+
+<li>	symbol type, symbol, size, line width, color, fill color, rotation (point form).</li>
+
+</ul>
+
+<p>Advanced users may wish to open and edit a representation class as a table.</p>
+
+<p class=defnewpar>A <b>representation gradual</b> stores:</p>
+
+<ul>
+
+<li>	limits, i.e. boundary values <i>as percentages</i> of the values in the domain,</li>
+
+<li>	a color for each limit, </li>
+
+<li>	for each range of percentages in between two limits, whether to stretch colors or to use the color of the upper of lower boundary (slice), and</li>
+
+<li>	when you stretch the colors in between two limits: the number of steps to be used for stretching.</li>
+
+</ul>
+
+<p class=defnewpar>A <b>representation value</b> stores:</p>
+
+<ul>
+
+<li>	limits, i.e. boundary values <i>as values</i> of the domain,</li>
+
+<li>	a color for each limit, </li>
+
+<li>	for each range of values in between two limits, whether to stretch colors or to use the color of the upper of lower boundary (slice), and</li>
+
+<li>	when you stretch the colors in between two limits: the number of steps to be used for stretching.</li>
+
+</ul>
+
+<p class=kopje>System representations:</p>
+
+<p>The following system representations are <i>representations gradual</i>:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Blue</p>
+
+</td>
+<td valign="top">
+<p>From black to blue in 16 stretch steps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Clrstp6</p>
+
+</td>
+<td valign="top">
+<p>Six times from black to a color (6 colors between blue to red), each time in 8 stretch steps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Clrstp8</p>
+
+</td>
+<td valign="top">
+<p>Eight times from black to a color (8 colors between blue to red), each time in 8 stretch steps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Clrstp10</p>
+
+</td>
+<td valign="top">
+<p>Ten times from black to a color (10 colors between blue to red), each time in 8 stretch steps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Clrstp12</p>
+
+</td>
+<td valign="top">
+<p>Twelve times from black to a color (12 colors between blue to red), each time in 8 stretch steps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Cyan</p>
+
+</td>
+<td valign="top">
+<p>From black to cyan in 16 stretch steps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>FineGray</p>
+
+</td>
+<td valign="top">
+<p>From black to white in 60 stretch steps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Gray</p>
+
+</td>
+<td valign="top">
+<p>From black to white in 30 stretch steps.</p>
+
+<p>Default representation for <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Image</span></a>, and for the system domains <a href="..//ilwis/popup/yy_system_domain_byte_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>Byte</span></a>, <a href="..//ilwis/popup/yy_system_domain_count_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>Count</span></a>, <a href="..//ilwis/popup/yy_system_domain_min1to1_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>Min1to1</span></a>, <a href="..//ilwis/popup/yy_system_domain_noaa_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>NOAA</span></a>, <a href="..//ilwis/popup/yy_system_domain_perc_popup.htm" onClick="return popup(this, 'notes')" >Perc</a> and <a href="..//ilwis/popup/yy_system_domain_radar_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>Radar</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Green</p>
+
+</td>
+<td valign="top">
+<p>From black to green in 16 stretch steps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Inverse</p>
+
+</td>
+<td valign="top">
+<p>From white to black in 30 stretch steps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Magenta</p>
+
+</td>
+<td valign="top">
+<p>From black to magenta in 16 stretch steps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Pseudo</p>
+
+</td>
+<td valign="top">
+<p>From blue to green to red in 6 x 9 stretch steps.</p>
+
+<p>Default representation for <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a> and <a href="..//ilwis/popup/yy_system_domain_distance_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Distance</span></a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Red</p>
+
+</td>
+<td valign="top">
+<p>From black to red in 16 stretch steps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>Yellow</p>
+
+</td>
+<td valign="top">
+<p>From black to yellow in 16 stretch steps.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The following system representation is a <i>representation value</i>:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>NILto1</p>
+
+</td>
+<td valign="top">
+<p>Designed for SMCE standardized maps that have values between 0.00 and 1.00; 
+
+<ul>
+
+<li>from red (0.00) to yellow (0.50) in 10 stretch steps, and </li>
+
+<li>from yellow (0.50) to green (1.00) in 10 stretch steps.</li>
+
+</ul>
+
+<p>Default representation for <a href="..//ilwis/popup/yy_system_domain_nilto1_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>NILto1</span></a>. </p>
+
+</td>
+</tr>
+</table>
+
+
+
+<p class=defnewpar>The following system representations are <i>representations class</i>:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>ColorCmp</p>
+
+</td>
+<td valign="top">
+<p>Designed for output raster maps of the <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >Color Composite</a> operation created with the Standard option; 216 colors.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=11>
+<p></p>
+
+</td>
+<td valign="top" width=96>
+<p class=courier>FlowDirection</p>
+
+</td>
+<td valign="top">
+<p>Designed to display the eight compass directions N, NE, E, SE, S, SW, W, NW, W; 
+default representation for maps using <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>FlowDirection</span></a>. </p>
+<p>Output maps of the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow Direction</a> operation always use system domain <span class=courier>FlowDirection</span> 
+and are therefore by default displayed with the <span class=courier>FlowDirection</span> representation. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>System representations cannot be edited, but you can always create a new representation, for instance by clicking the <span class=arial>Create</span> button <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> entry in a map's Display Options dialog box. For more information, see sections 2 and 3 on creating representations above. </p>
+
+<p class=Seealso>See also: </p>
+
+<p class=seealsolinks><a href="how_to_create_representations.htm">How to create a representation</a></p>
+
+<p class=seealsolinks><a href="how_to_edit_representations.htm">How to edit a representation</a></p>
+
+<p class=seealsolinks><a href="representation_class_editor_functionality.htm">Representation Class editor : functionality</a></p>
+
+<p class=seealsolinks><a href="representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor : functionality</a></p>
+
+</body

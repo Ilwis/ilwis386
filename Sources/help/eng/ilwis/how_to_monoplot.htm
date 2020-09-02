@@ -1,0 +1,180 @@
+<html>
+
+<head>
+<title>How to monoplot</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Monoplot, Aerial photographs, Photographs, How to monoplot">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to monoplot</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Monoplotting is the process of creating and/or editing a segment or point map while a scanned photogrammetric aerial photograph is displayed as a background in a map window. On the photograph, you should be able to distinguish 2, 3, or 4 fiducial marks and you should know the camera's principal distance. Furthermore, a Digital Terrain Model (DTM)  of the area should be available. </p>
+
+<p class=defnewpar>By creating a georeference orthophoto (differential rectification) for the photograph, you will obtain a georeference with corrections for tilt and relief displacement and you can, by using the mouse, directly digitize elements of interest on the scanned aerial photograph.</p>
+
+<p class=defnewpar>When your scanned photograph was taken with a normal camera, i.e. no fiducial marks, but you do have a DTM, you should create a georef direct linear (direct linear transformation; also corrections for tilt and relief displacement, but more tiepoints required).</p>
+
+<p>When your scanned photograph was taken with a normal camera, i.e. no fiducial marks, and you have no DTM, you should create a georef tiepoints (select transformation projective, no corrections for relief displacement). </p>
+
+<p class=kopje>1.  Display the scanned aerial photograph:</p>
+
+<p>Display the scanned photogrammetric photograph which you want to use as background in a map window. When the map already has a correct georeference orthophoto, i.e. check the properties of the map, continue with step 5.</p>
+
+<p class=kopje>2.  Creating a georeference:</p>
+
+<p>When the map is using georef <span class=courier>None</span>, i.e. when the status bar of the map window only shows Row Col values, open the <a href="map_window_menu_commands.htm">File menu</a> in the map window, and choose the <span class=arial>Create Georeference</span> command.</p>
+
+<p class=defnewpar>The <a href="../ilwismen/create_a_georeference_in_map_window.htm">Create Georeference (in map window)</a> dialog box appears:</p>
+
+<ul>
+
+<li>	choose to create a <b>georef orthophoto</b>; </li>
+
+<li class=ls01af>	specify the coordinate system and the DTM you want to use.</li>
+
+</ul>
+
+<p class=tipindent06>Tip: </p>
+
+<p class=tiptextleft06>For a correct behaviour of a georef orthophoto and subsequent monoplotting, it is essential that you have marked the 'Interpolation' check box in the Properties sheet of your DTM raster map. For more information, refer to the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> sheet.</p>
+
+<p class=defnewpar>The <a href="../ilwismen/georef_ortho_locate_fiducial_marks.htm">Locate Fiducial Marks</a> dialog box will appear. </p>
+
+<p class=defnewpar>When your scanned photograph was taken with a normal camera, i.e. no fiducial marks, but you do have a DTM, you should create a <b>georef direct linear</b>.</p>
+
+<p>When your scanned photograph was taken with a normal camera, i.e. no fiducial marks, and you have no DTM, you should create a <b>georef tiepoints</b>. </p>
+
+<p>To digitize on photographs which have no fiducial marks or on satellite imagery, see topic <a href="how_to_screen_digitize.htm">How to screen digitize</a>.</p>
+
+<p class=defnewpar>The remainder of the current topic deals with georefs orthophoto. </p>
+
+<p class=kopje>3.  Registering fiducial marks:</p>
+
+<p>When in the photograph, fiducial marks are available both in the <i>corners</i> of the photo and in the <i>middle along the edges </i>of the photo, then choose which type of fiducial marks you want to use. You may not mix corner fiducials with mid-edge fiducials.</p>
+
+<p class=defnewpar>In the <a href="../ilwismen/georef_ortho_locate_fiducial_marks.htm">Locate Fiducial Marks</a> dialog box, </p>
+
+<ul>
+
+<li>	specify the principal distance of the camera,</li>
+
+<li>	then, zoom in on a fiducial mark in the scanned photo, position the mouse pointer carefully in the middle of a fiducial mark, and press the left mouse button (under heading <small><u><b>RowCol (pixels)</b></u></small>, the row and column number of this fiducial mark will appear),</li>
+
+<li>	type under heading <small><u><b>Photo (mm)</b></u></small>, the location in photo-coordinates in mm of the fiducial mark as precisely as you can (decimals allowed).</li>
+
+<li>	register other fiducial marks in the same way.</li>
+
+</ul>
+
+<p class=linespacing01before>For more information and examples, see the <a href="../ilwismen/georef_ortho_locate_fiducial_marks.htm">Locate Fiducial Marks</a> dialog box.	</p>
+
+<p class=defnewpar>When finished, the <a href="../ilwis/georeference_tiepoints_editor.htm">Tiepoint editor</a> will be opened.</p>
+
+<p class=kopje>4.  Using the Tiepoint editor:</p>
+
+<p>In the Tiepoint editor, you have to insert tiepoints, also called ground control points, which establish relationships between the scanned photo pixels (row,col) and real world XYZ-coordinates. </p>
+
+<p class=defnewpar>To add tiepoints:</p>
+
+<ul>
+
+<li>	first, click at a recognizable point in the photograph displayed in the map window,</li>
+
+<li>	the <a href="../ilwismen/georeference_tiepoints_editor_add_tiepoint.htm">Add Tiepoint</a> dialog box appears. In this dialog box, the row and column values at the position of the click are filled out. <br>
+When you already have some tiepoints, the dialog box will also come up with a suggestion for the XY-coordinates. This suggestion is the result of the calculation with the existing tiepoints and using the current transformation method. This suggestion is a measure of the quality of the current tiepoints. The suggestion is merely a suggestion, it is advised to enter your own XY-coordinates to prevent false accuracy. </li>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<p class=leftmargininlist>	Then:</p>
+
+<li>	click at the same position in a map which already has correct XY-coordinates and which is displayed in another map window (Master/Slave), or</li>
+
+<li>	digitize the same point in an analog paper map on a digitizer, or</li>
+
+<li>	read the correct XY-coordinates for this point from a table or an analog paper map, and type these XY-coordinates in the dialog box.</li>
+
+<li>	you can optionally specify a Z-value for the inserted tiepoint; otherwise the height value as found in the DTM is used.</li>
+
+</ul>
+
+<p class=defnewpar>The inserted tiepoint appears in the map window and in the tiepoint table. </p>
+
+<p class=defnewpar>A georef orthophoto, which performs a differential rectification, has a mathematical minimum of 3 tiepoints. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	You should always insert more tiepoints than is mathematically required. </li>
+
+<li>	Tiepoints should be well spread over the map (XY).</li>
+
+</ul>
+
+<p class=defnewpar>For more information on the Tiepoint editor, see <a href="../ilwis/georeference_tiepoints_editor.htm">Georeference Tiepoint editor : functionality</a>. </p>
+
+<p class=defnewpar>When finished editing the georeference, leave the Tiepoint editor by choosing <span class=arial>Exit</span> from the File menu or by clicking the <span class=arial>Exit Editor</span> button in the toolbar. The photograph map will now use the coordinates as stored in the georeference you just created. The photograph is still displayed in a map window; the status bar now shows Row Col values and XY-coordinates.</p>
+
+<p class=kopje>5. Creating and/or editing a segment or point map on the background map:</p>
+
+<p>Have the raster map which now uses correct XY-coordinates and which you want to use as background displayed in a map window. </p>
+
+<p class=defnewpar>To create a new segment or point map, open the <a href="map_window_menu_commands.htm">File menu</a> in the map window, and choose <span class=arial>Create Segment Map</span> or <span class=arial>Create Point Map</span>. The <a href="../ilwismen/create_a_segment_map.htm">Create Segment Map</a> or the <a href="../ilwismen/create_a_point_map.htm">Create Point Map</a> dialog box appears. Type a map name, specify a domain and optionally type a description. Accept the coordinate system and map boundaries which are already filled out. </p>
+
+<p class=defnewpar>To edit an existing segment or point map, first add the map to the map window by selecting the <span class=arial><a href="../ilwismen/add_layer_to_map_window.htm">Add Layer</a></span> command from the <a href="map_window_menu_commands.htm">Layers menu</a> in the map window. When the segment or point map is displayed, choose the <span class=arial>Edit Layer</span> command from the <a href="map_window_menu_commands.htm">Edit menu</a> of the map window: select the segment or point map which you want to edit. </p>
+
+<p class=defnewpar>The <a href="../ilwis/segment_editor_functionality.htm">Segment editor</a> or the <a href="../ilwis/point_editor_functionality.htm">Point editor</a> is opened. You can now add, edit and delete segments or points by using the mouse as usual. </p>
+
+<p class=defnewpar>When your background map uses a georef orthophoto, you may see that an edited segment or point does not exactly appear at the position of the pencil pointer: this is a measure of the quality of your georeference in the area. Errors will usually be larger along the edges of a photograph.</p>
+
+<ul>
+
+<li>	When the deviation is small, your georeference is good enough;</li>
+
+<li>	When the deviation is large, you can check the number, even distribution and quality of the tiepoints in your georeference, the quality of your DTM, etc. </li>
+
+</ul>
+
+<p class=tip>Tips: </p>
+
+<p class=tiptext>When you add <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> to the photo in the map window, the grid lines will not be straight nor perpendicular to each other; the grid lines indicate the corrections for tilt and relief displacement. </p>
+
+<p class=kopje>6.  Resampling the scanned photograph, yes or no:</p>
+
+<p>The crux of this topic is that you do <b>not</b> need to use the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >resample</a> operation in order to monoplot on scanned photogrammetric aerial photographs which use a georef orthophoto. An advantage of using the original image or photograph instead of a resampled one is that the original image is not disturbed by the resampling; in general, features of interest will be easier to recognize using the original data.</p>
+
+<p class=defnewpar>Performing a resample operation is required to obtain a North-oriented and rectified <a href="..//ilwis/popup/orthophoto_popup.htm" onClick="return popup(this, 'notes')" >orthophoto</a>. In this case, resample the photograph with a georef orthophoto to a georef corners. For more information, see <a href="how_to_create_orthophoto.htm">How to create an orthophoto</a>. </p>
+
+<p class=defnewpar>Furthermore, performing a resample operation is required before using MapCalc when you want to combine raster maps with for instance a georeference corners with a scanned photograph using a georef orthophoto. In this case, before using MapCalc, resample for instance your photograph with the georef orthophoto to a georef corners. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a></p>
+
+<p class=seealsolinks><a href="../ilwis/georeference_tiepoints_editor.htm">Tiepoint editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/point_editor_functionality.htm">Point editor</a></p>
+
+</body

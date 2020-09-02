@@ -1,0 +1,154 @@
+<html>
+
+<head>
+<title>Segment editor : Insert mode</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment editor, Edit segment map, Insert segments, Add ..., Modes in segment editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Segment editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/segment_editor_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Insert mode</span>&nbsp;&nbsp;&nbsp;<img src="../images/ed_insert_mode.gif" align=middle width="22" height="22"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Choose <span class=arial>Insert mode</span> to insert new segments with the <i>mouse</i>. </p>
+
+<p class=linespacing03before>When <span class=arial>Insert mode</span> is active: </p>
+
+<ul>
+
+<li>the mouse pointer appears as a pencil, </li>
+
+<li>an option bullet <img src="../images/optbullet.gif" width="4" height="6"> appears in front of this menu command, and </li>
+
+<li>the <span class=arial>Insert mode</span> button in the toolbar appears down.</li>
+
+</ul>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>In <span class=arial>Insert mode</span>, you can use AutoSnap. When Autosnap is active, the system automatically snaps to nodes and splits when necessary, i.e. there is less need to use the <span class=arial>Shift</span> or <span class=arial>Ctrl</span> keys as described below. You can turn Autosnap on and specify a snap tolerance in the <span class=arial><a href="../ilwismen/segment_editor_customize.htm">Segment editor : Customize</a></span> dialog box.</li>
+
+<li>During the insertion of segments by mouse (but also when using the digitizer), automatic <a href="..//ilwismen/popup/segment_editor_customize_tunnel_tolerance_popup.htm" onClick="return popup(this, 'notes')" >tunneling</a> is applied to reduce the amount of coordinates that need to be stored in the segment map. The so-called tunnel tolerance can be specified in the <a href="../ilwismen/segment_editor_customize.htm">Customize</a> dialog box of the segment editor (File menu). </li>
+
+</ul>
+
+<p class=defnewpar>After you finished inserting a new segment, an <a href="segment_editor_insert_new_segment.htm">Insert/Edit</a> dialog box will usually appear asking for the class name, ID, or value of the new segment. </p>
+
+<p class=kopje>To insert a new segment:</p>
+
+<ul>
+
+<li>	position the mouse pointer on the location where you want to start a new segment;</li>
+
+<li>	press the left mouse button to start the segment (begin node);</li>
+
+<li>	hold the left mouse button down and move the mouse to automatically insert segment coordinates (stream mode), or</li>
+
+<li>	click at the positions at which you want to insert intermediate points;</li>
+
+<li>	double-click or press the space bar to end the segment with a loose end (end node). </li>
+
+</ul>
+
+<p class=kopje>To delete intermediate points while inserting a segment:</p>
+
+<ul>
+
+<li>	press the right mouse button once to delete the last point, or </li>
+
+<li>	keep the right mouse button down and move the mouse to delete multiple points, or</li>
+
+<li>	press <span class=arial>Esc</span> to delete all points, i.e. the complete segment.</li>
+
+</ul>
+
+<p class=kopje>To connect a new segment to an existing node (<i>snap</i>):</p>
+
+<ul>
+
+<li>	position the mouse pointer on the node to which you want to snap;</li>
+
+<li>	press and hold down the <span class=arial><b>Shift</b></span> key and click the node;</li>
+
+<li>	when AutoSnap is active, you can simply click the node.</li>
+
+</ul>
+
+<p class=kopje>To start or end a new segment on an existing segment (<i>snap/split</i>):</p>
+
+<ul>
+
+<li>	position the mouse pointer somewhere on a segment;</li>
+
+<li>	press and hold down the <span class=arial><b>Ctrl</b></span> key and click the segment;</li>
+
+<li>	a message box asks for confirmation to split the segment;</li>
+
+<li>	when you answer Yes, the new segment is snapped to the new node.</li>
+
+</ul>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>You can also add/insert segments with the <i>digitizer</i>. </li>
+
+<li>When inserting a segment and pressing the <span class=arial>Del</span> key on the keyboard: the last intermediate point of the unfinished segment will be cleared. </li>
+
+        <p>This is the same as pressing the <i>right</i> mouse button during the insertion of a new segment. </p>
+
+<li>When inserting a segment and pressing the <span class=arial>Esc</span> key on the keyboard: the whole unfinished segment will be cleared. </li>
+
+<li>To edit the class names, values etc. of existing segments, see <a href="segment_editor_edit_selection.htm">Segment editor : Edit</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_toolbar.htm">Segment editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_menu_commands.htm">Segment editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="segment_editor_digitizer.htm">Segment editor : Digitizer</a></p>
+
+<p class=seealsolinks><a href="segment_editor_insert_code.htm">Segment editor : Insert code</a></p>
+
+<p class=seealsolinks><a href="segment_editor_insert_new_segment.htm">Segment editor : Insert/Edit new segment</a></p>
+
+<p class=seealsolinks><a href="segment_editor_edit_selection.htm">Segment editor : Edit</a></p>
+
+</body

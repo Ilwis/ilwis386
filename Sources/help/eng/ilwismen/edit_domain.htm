@@ -1,0 +1,77 @@
+<html>
+
+<head>
+<title>Edit domain</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Edit ..., Domains, Edit domain, Class domain, ID domain, Value domain">
+<!--Bool domain-->
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>View/Edit Domain</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>View and/or edit the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of a map that is currently displayed in the map window:</p>
+
+<ul>
+
+<li>	edit the class names or their codes of a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>, or</li>
+
+<li>	edit identifiers or their codes of an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >identifier domain</a>, or </li>
+
+<li>	edit the minimum and maximum values and the precision of a user-defined <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>.</li>
+
+</ul>
+
+<p class=defnewpar>When you select:</p>
+
+<ul>
+
+<li>a map using a class or identifier domain, the <a href="../ilwis/domain_class_id_editor_functionality.htm">Domain Class/ID editor</a> will be opened; </li>
+
+<li>a map using a user-defined value domain, the <a href="../ilwismen/edit_domain_value.htm">Edit Value Domain</a> dialog box will appear. </li>
+
+</ul>
+
+<p class=defnewpar>This option is <i>not</i> available for maps using a system domain (<span class=courier>Bit, Bool, Color, ColorCmp, Count, Distance, Image, Min1to1, NILto1, Perc, Value, Yes/No</span> domain). This option is also <i>not</i> available for maps using a Picture domain. Furthermore, this option is <i>not</i> available for read-only domains. </p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To edit a domain, you can also double-click it in the Catalog. To make domains visible in the Catalog, refer to <a href="../ilwis/how_to_customize_the_catalog.htm">How to customize the Catalog</a>.</p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_domains.htm">ILWIS objects : domains</a></p>
+
+<p class=seealsolinks><a href="../ilwis/domain_class_id_editor_functionality.htm">Domain Class/ID editor</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/edit_domain_value.htm">Edit Value Domain</a> (dialog box) </p>
+
+</body

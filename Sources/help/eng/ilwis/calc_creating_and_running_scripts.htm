@@ -1,0 +1,256 @@
+<html>
+
+<head>
+<title>MapCalc/TabCalc : scripts</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Main window, Command line, Map calculation, Table calculation, Calculation, Create ..., Scripts, Slope map, Script editor">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table calculation</h1>
+
+<h1 class=secondline>Creating and running scripts</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>By creating and running a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a>, you can perform a series of ILWIS operations. The
+usage of scripts may save time but is something for more experienced users. </p>
+<p class=defnewpar>With a script, MapCalc and TabCalc expressions can be performed as well as any ILWIS operation.
+Furthermore, some extra commands are possible to show objects, or to perform some file management. For more information on script syntax, see
+<a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a>,
+<a href="appendices_ilwis_commands.htm">Appendices : ILWIS commands</a> and <a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>. </p>
+
+<p class="kopje">To create a script:</p>
+
+<ul>
+  <li>in the Main window, open the <a href="main_window_menu_commands.htm">File menu</a> and choose <span class="arial">Create Script</span>, or
+  <li>in the Operation-tree, expand the <span class="arial">Create</span>  item and double-click <span class="arial">New Script</span>, or
+  <li>in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class="arial">New Script</span> item.</li>
+</ul>
+
+<p class="defnewpar">The <a href="script_editor_functionality.htm">Script editor</a> appears in which you can type your script expressions.</p>
+
+<p class=kopje>Example of a script with parameters:</p>
+<p>To calculate slope maps in percentages and in degrees:</p>
+
+<ol>
+<li class=ls01be>Create a script (e.g. 'Slopes')</li>
+
+<li class=ls01be>On the <a href="script_editor_functionality.htm">Script tab</a> of the script editor where the script can be defined: type, to insert a comment line:</li>
+        <p class=calc0>//script to calculate slope maps in percentages and in degrees</p> 
+        <p>or type</p>
+        <p class=calc0>Rem script to calculate slope maps in percentages and in degrees</p>
+
+<li class=ls01be>To use the <a href="..//ilwisapp/popup/contour_interpolation_popup.htm" onClick="return popup(this, 'notes')" >Contour Interpolation</a> operation to create an interpolated height map from segment contour lines, type:</li>
+        <p class=calc0>%3 = MapInterpolContour(%1, %2)</p>
+        <p class=leftmargininlist>Perform a contour interpolation on segment map <span class=courier>%1</span>, use existing georeference %2, and write the output to map <span class=courier>%3</span>.<br>
+        Advanced users may wish to define a georeference corners beforehand with a script command; see <a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>.</p>
+
+<li class=ls01be>To use the <a href="..//ilwisapp/sec/filter_dfdx_sec.htm" onClick="return popup(this, 'notes')" >dfdx </a>filter
+        on the interpolated contour map to calculate height differences in X-direction, type:</li>
+        <p class=calc0>DX = MapFilter(%3, dfdx)</p>
+        <p class=leftmargininlist>Filter map <span class=courier>%3</span> with the <span class=courier>dfdx</span> filter and write the output to map <span class=courier>DX</span>.</p>
+
+<li class=ls01be>To use the <a href="..//ilwisapp/sec/filter_dfdy_sec.htm" onClick="return popup(this, 'notes')" >dfdy</a>
+  filter on the interpolated contour map to calculate height differences in Y-direction, type:</li>
+        <p class=calc0>DY = MapFilter(%3, dfdy)</p>
+
+        <p class=leftmargininlist>Filter map <span class=courier>%3</span> with the <span class=courier>dfdy</span> filter and write the output to map <span class=courier>DY</span>.</p>
+
+<li class=ls01be>	To calculate a slope map in percentages from the output of step 4 and 5, type:</li>
+        <p class=calc0>%4 = 100 * HYP(DX,DY) / PIXSIZE(%3)</p>
+
+        <p class=leftmargininlist><a href="calc_hyp.htm">HYP</a> is an internal MapCalc/TabCalc function; <br>
+        <span class=courier>DX</span> and <span class=courier>DY</span> are the output maps from the filtering operation;<br>
+        function <span class=courier><a href="calc_pixsize.htm">PIXSIZE</a></span> returns the pixel size of raster map <span class=courier>%3</span>;<br />
+        <span class=courier>%4</span> is the output map name of the map containing slope values in percentages.</p>
+
+<li class=ls01be>To convert the percentage values into degrees, type:</li>
+        <p class=calc0>%5 = RADDEG(ATAN(%4/100))</p>
+        <p class=leftmargininlist>Function <a href="calc_atan.htm">ATAN</a> and <a href="calc_raddeg.htm">RADDEG</a> are internal MapCalc/TabCalc functions, <br />
+        <span class=courier>%5</span> is the output map name of the map containing slope values in degrees.</p>
+
+<li class=ls01be>After running the script (see step 11), the output maps will be available as <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent maps</a>. The expression by which a map is created is stored in the map's object definition file. The data file for an output map will be calculated when you double-click an output map in the Catalog.</li>
+        <p class=leftmargininlist>To let the script calculate the data files for the output maps, you may add the following lines to your script:</p>
+        <p class=calc0>calc %3.mpr<br />
+                       calc %4.mpr<br />
+                       calc %5.mpr</p>
+        <p class=leftmargininlist>In fact, by adding only  <span class=courier>calc %5.mpr</span>, all maps which are part of the process to calculate map <span class=courier>%5</span> will be calculated as well.</p>
+
+<li class=ls01be>On the <a href="script_editor_functionality.htm#parameters_tab">Parameters tab</a> of the script editor, select the number of parameters (in this case 5), type a name for every parameter and select for each
+  input parameter the object type. For example: </li>
+      <p class="emptylinehalf">&nbsp;</p>
+      <table border="0" cellPadding="0" cellSpacing="0">
+        <tbody>
+          <tr>
+            <td width="80"><b>Parameter</b></td>
+            <td width="180"><b>Name</b></td>
+            <td><b>Type</b></td>
+          </tr>
+          <tr>
+            <td width="80">%1</td>
+            <td width="180">Input contour segment map</td>
+            <td>Segment Map</td>
+          </tr>
+          <tr>
+            <td width="80">%2</td>
+            <td width="180">Georef for all output maps</td>
+            <td>Georeference</td>
+          </tr>
+          <tr>
+            <td width="80">%3</td>
+            <td width="180">Output DEM</td>
+            <td>Filename</td>
+          </tr>
+          <tr>
+            <td width="80">%4</td>
+            <td width="180">Output slope map (perc.)</td>
+            <td>Filename</td>
+          </tr>
+          <tr>
+            <td width="80">%5</td>
+            <td width="180">Output slope map (degrees)</td>
+            <td>Filename</td>
+          </tr>
+        </tbody>
+      </table>
+<p class=emptylinehalf>&nbsp;</p>
+
+    <li class=ls01be>On the <a href="script_editor_functionality.htm#default_values_tab">Default Values tab</a>, you may assign default objects to your parameters as you would like to use them in the script and/or as you would like to see them in the Run Script dialog box.</li>
+
+        <p class=linespacing03before>For instance:</p>
+
+        <ul>
+        <li>The default output name for the Output DEM may be: DEM</li>
+        <li>The default output name for the Output slope map (perc.) may be: SlopePct</li>
+        <li>The default output name for the Output slope map (degrees) may be: SlopeDeg</li>
+        </ul>
+        <p class=emptylinehalf>&nbsp;</p>
+
+<li class=ls01be>To run the script:
+  <ul>
+    <li>open the <a href="script_editor_menu_commands.htm">File menu</a> in the script editor and select the <span class="arial">Run Script</span> command, </li>
+
+    <li>press the <img align="bottom" alt="Run Script" src="../images/run.gif" width="22" height="22"> <span class="arial">Run Script</span> button in the toolbar of script editor, or</li>
+
+    <li>type on the command line of the Main window: <span class=courier>Run</span> <i>ScriptName</i></li>
+  </ul>
+  
+  <p class="linespacing03before">The <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box will appear:</p>
+
+        <p class=emptylinehalf>&nbsp;</p>
+        
+        <img src="../images/scriptrun.gif" width="357" height="215" ALT="Run Script dialog box">
+
+  <p class="defnewpar">In the Run Script dialog box, all parameter names are listed as specified on the Parameters tab of the script editor. </p>
+  <ul>
+    <li>If you did <i>not</i> specify default objects on the Default Values tab, you need to select objects for input parameters and/or type object names for output parameters.
+
+    <li>If you did fill out objects on the Default Values tab, the Run Script dialog box will already be filled out with these defaults.</li>
+  </ul>
+
+  <p class="linespacing03before">Choose the objects etc. you wish to use, and click OK to execute the script.</p>
+
+</ol>
+  
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To skip the Run Script dialog box, you can also directly fill out all parameters on the command line of the Main window:<br>
+
+        <p class=calccommline><span class=courier>run Slopes Contour.mps </span><i>MyGeoref</i><span class=courier>.grf&nbsp;DEM&nbsp;SlopePct&nbsp;SlopeDeg</span></p>
+
+        <p>In script <span class=courier>Slopes</span>, <span class=courier>%1</span> is filled out as <span class=courier>Contour.mps</span>, <span class=courier>%2</span> as <i>MyGeoref</i><span class=courier>.grf</span>, <span class=courier>%3</span> as <span class=courier>DEM</span>, <span class=courier>%4</span> as <span class=courier>SlopePct</span>, and <span class=courier>%5</span> as <span class=courier>SlopeDeg</span>.
+
+<li>Of course, you could also directly type objects names inside the script, instead of using parameters. </li>
+
+<li>For more information on running scripts, see also <a href="how_to_run_scripts.htm">How to run scripts</a>.</li>
+
+</ul>
+
+<p class=defnewpar>The result of running this script are maps <span class=courier>SlopePct</span> and <span class=courier>SlopeDeg</span> which are slope maps in percentages and in degrees. Also other maps are calculated during the whole procedure, such as the <span class=courier>DEM</span>, <span class=courier>DX</span> (height differences in X-direction) and <span class=courier>DY</span> (height differences in
+Y-direction). The following maps show the input map <span class=courier>Contour</span> and very small parts of the other
+maps calculated by the script.</p>
+<p class=emptylinehalf>&nbsp;</p>
+<table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td><span class=courier>Contour</span></td>
+      <td>&nbsp;&nbsp;</td>
+      <td><span class=courier>DEM</span></td>
+    </tr>
+    <tr>
+      <td><img border="0" src="../images/mc43.gif" width="137" height="85"></td>
+      <td>&nbsp;&nbsp;</td>
+      <td><img border="0" src="../images/mc44.gif" width="137" height="85"></td>
+    </tr>
+    <tr>
+      <td><span class=courier>DX</span></td>
+      <td>&nbsp;&nbsp;</td>
+      <td><span class=courier>DY</span></td>
+    </tr>
+    <tr>
+      <td><img border="0" src="../images/mc45.gif" width="137" height="85"></td>
+      <td>&nbsp;&nbsp;</td>
+      <td><img border="0" src="../images/mc46.gif" width="137" height="85"></td>
+    </tr>
+  </table>
+
+<p class=defnewpar>Negative values in map <span class=courier>DX</span> mean that the slope is downwards when you go from west to east. A positive value indicates an upwards slope. In map <span class=courier>DY</span> positive values indicate that when you go from the south to north the slope is upwards and negative values mean that the slope is downwards.</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td><span class=courier>SlopePct</span></td>
+      <td>&nbsp;&nbsp;</td>
+      <td><span class=courier>SlopeDeg</span></td>
+    </tr>
+    <tr>
+      <td><img border="0" src="../images/mc47.gif" width="137" height="85"></td>
+      <td>&nbsp;&nbsp;</td>
+      <td><img border="0" src="../images/mc48.gif" width="137" height="85"></td>
+    </tr>
+  </table>
+
+<p class=defnewpar>The slope maps show the steepness of the slopes irrespective of the direction of the slope.</p>
+
+<p class=tip>Mind:</p>
+<p class=tiptext> the following slope values are the same: 30°= 58%, 45°= 100%, 60°= 173%, 80°= 567%. As you see, slope values in the <span class=courier>Slopepct</span> map can be greater than 100%.</p>
+
+<p class=defnewpar>Additionally, you can prepare representations for both maps with the <a href="..//ilwis/popup/representation_value_gradual_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Value/Gradual editor</a>.</p>
+
+<p class=defnewpar>You can also create two domain Groups to classify both output maps, e.g.:<br>
+classes 0-10%, 10-25%, 25-50%, 50-100%, &gt;100% for the slope map in percentages and <br>
+classes 0-6°, 6-12.5°, 12.5-22.5°, 22.5-45°, &gt;45° for the slope map in degrees.</p>
+
+<p>Use these domain groups in the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation.</p>
+
+<p class=defnewpar>You can create your own Help for a script so that you can explain the meaning of parameters to other users of the script. For more information, see the <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box.</p>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="ilwis_objects_scripts.htm">ILWIS objects : scripts</a></p>
+<p class=seealsolinks><a href="script_editor_functionality.htm">Script editor : functionality</a></p>
+<p class=seealsolinks><a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a></p>
+<p class=seealsolinks><a href="how_to_create_scripts.htm">How to create a script</a></p>
+<p class=seealsolinks><a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a></p>
+<p class=seealsolinks><a href="how_to_run_scripts.htm">How to run scripts</a></p>
+
+</body

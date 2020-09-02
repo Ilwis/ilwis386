@@ -1,0 +1,130 @@
+<html>
+
+<head>
+<title>filter dfdy sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>DFDY  filter</p>
+
+<p>The DFDY filter is a standard <a href="../popup/filter_linear_filter_popup.htm">linear filter</a> which works in a 5 by 1 environment. It calculates the first derivative in y-direction (df/dy) per pixel. The values in the matrix are:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>-1</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;8</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>-8</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;1</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargin06>Gain factor = 1/12 = 0.0833333</p>
+
+<p class=defnewpar>When using the DFDY filter on a DEM: </p>
+
+<ul>
+
+<li>	positive values in the output map mean that the terrain goes up from bottom to top (South to North); </li>
+
+<li>	negative values mean that terrain goes down. </li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To find the real first derivative (per meter), the output values have to be divided by the pixel size of the map. You can use the MapCalc expression:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=tiptext>DYOUT</p>
+
+</td>
+<td valign="top" width=18>
+<p class=tiptext>=</p>
+
+</td>
+<td valign="top">
+<p class=tiptext>OUTDFDY / <span class=courier>PixSize(</span>OUTDFDY<span class=courier>)</span></p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_types_linear_filters.htm" onClick="return popup(this, 'notes')" >Filter types : linear filters</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_types_gradient_or_derivative_filters_technical_information.htm" onClick="return popup(this, 'notes')" >Filter types: gradient or derivative filters (technical information)</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_user_defined_linear_filters.htm" onClick="return popup(this, 'notes')" >Filters : user-defined linear filters</a></p>
+
+</body

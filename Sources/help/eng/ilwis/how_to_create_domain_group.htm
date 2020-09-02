@@ -1,0 +1,155 @@
+<html>
+
+<head>
+<title>How to create domain Group</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to create ..., Create ..., Domain Group, Group domain">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to create a domain Group </h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >group domain</a> is used:</p>
+
+<ul>
+
+<li>	to permanently classify or slice a map with a value domain, or </li>
+
+<li>	to classify values in a column. </li>
+
+</ul>
+
+<p>A domain Group lists the upper value boundaries of the groups and the output group names. For ILWIS 1.4 users: a group domain acts as a classify table.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To <i>interactively</i> slice an image or to interactively classify a map, you can create a new representation value or gradual. For more information, see <a href="how_to_slice_an_image.htm">How to slice an image</a> and <a href="how_to_classify_a_map_or_column.htm">How to classify a map</a>.</p>
+
+<p class=kopje>To create a group domain:</p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, choose the <span class=arial>Create Domain</span> command, or </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>New Domain</span> item.</li>
+
+</ul>
+
+<p class=defnewpar>In the <a href="../ilwismen/create_a_domain.htm">Create Domain dialog box</a> which follows:</p>
+
+<ul>
+
+<li>	select the <span class=arial>Class</span> option, and </li>
+
+<li>	select the <span class=arial>Group</span> check box. </li>
+
+</ul>
+
+<p class=defnewpar>The Domain Group editor is opened: </p>
+
+<ul>
+
+<li>	Add groups to the domain by selecting <span class=arial>Add Item</span> from the Edit menu, or by pressing the <span class=arial>Ins</span> key on the keyboard;</li>
+
+<li>	In the appearing <a href="../ilwismen/domain_group_editor_add_item.htm">Add Domain Item</a> dialog box, specify the upper boundary value for this group, the output group name, and optionally a code for the output group name.</li>
+
+</ul>
+
+<p class="tip">Note: </p>
+
+<ul class="tipul">
+<li>In output group names, any characters may be used, except percentages <span class="courier">%</span>.</li>
+<li>In codes for output groups, any characters may be used, except colons <span class=courier>:</span> and percentages <span class="courier">%</span>.</li>
+</ul>
+
+<p class=kopje>Example:</p>
+
+<p class=linespacing03after>To slice or classify a map with slope values that range from 0 to 200% into 5 relief classes as Flat (0-2%), Undulating (2-8%), Rolling (8-16%), Hilly (16-30%), Mountainous (&gt;30%) (FAO), the following domain Group can be created: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top"><p class=tcolhr>Upper<br>
+  Boundary</p></td>
+<td valign="top"><p class=tcolh><br>
+  Group Name</p></td>
+</tr>
+<tr>
+<td valign="top"><p class=t1r>2</p></td>
+<td valign="top"><p class=t1>Flat</p></td>
+</tr>
+<tr>
+<td valign="top"><p class=t1r>8</p></td>
+<td valign="top"><p class=t1>Undulating</p></td>
+</tr>
+<tr>
+<td valign="top"><p class=t1r>16</p></td>
+<td valign="top"><p class=t1>Rolling</p></td>
+</tr>
+<tr>
+<td valign="top"><p class=t1r>30</p></td>
+<td valign="top"><p class=t1>Hilly</p></td>
+</tr>
+<tr>
+<td valign="top"><p class=t1r>200</p></td>
+<td valign="top"><p class=t1>Mountainous</p></td>
+</tr>
+</table>
+
+<p class=kopje>To apply the group domain:</p>
+
+<p>To classify values in a map, use the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation or use the <a href="calc_clfy.htm">CLFY</a> function in MapCalc. The operation and the function produce the same results. </p>
+
+<p>To classify values in a column, use the <a href="calc_clfy.htm">CLFY</a> function in TabCalc. </p>
+
+<p>For more information, see <a href="how_to_classify_a_map_or_column.htm">How to classify a map or column</a>.</p>
+
+<p class=kopje>To edit the representation of (a map with) a group domain:</p>
+
+<p>When you create a group domain, also a representation is created with the same name as the domain. You can edit the colors of the output groups, i.e. classes, by choosing <span class=arial>Representation</span> from the <a href="domain_class_id_editor_menu_commands.htm">Edit menu</a> in the domain editor, or by opening the representation from the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>.</p>
+
+<p class=defnewpar>When you have displayed your output raster map in a map window, you can also choose the <span class=arial>Representation</span> command from the <a href="map_window_menu_commands.htm">Edit menu</a> in the map window:</p>
+
+<ul>
+
+<li>	The <a href="representation_class_editor_functionality.htm">Representation Class</a> editor is opened; </li>
+
+<li>	Modify the colors of the output classes; </li>
+
+<li>	Keep the editor window open and switch to the map window; </li>
+
+<li>	In the map window, press the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22">;</li>
+
+<li>	Switch to the Representation Class editor and continue to modify colors;</li>
+
+<li>	Switch to the map window to redraw the map, until satisfied.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="calc_clfy.htm">Map calculation : classifying a map</a></p>
+
+<p class=seealsolinks><a href="how_to_classify_a_map_or_column.htm">How to classify a map or column</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/slicing.htm">Slicing</a></p>
+
+</body

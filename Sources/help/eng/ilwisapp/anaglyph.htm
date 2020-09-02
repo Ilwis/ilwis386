@@ -1,0 +1,135 @@
+<html>
+
+<head>
+<title>Show stereo pair as anaglyph</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stereo pairs, Epipolar stereo pair, Stereo pair from DTM, Stereo pairs (display), Epipolar stereo pair (display), Visualization, Anaglyph, Show ..., Show as ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Show stereo pair</h1>
+
+<h1 class=secondline>as anaglyph</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Show a calculated <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> as an anaglyph in a map window. The anaglyph is either displayed in Red-Green or in Red-Blue. You will be able to view the height differences in the stereo pair by using red-green or red-blue glasses. </p>
+
+<p class=kopje>To create a stereo pair:</p>
+
+<ul>
+
+<li>use the <a href="..//ilwisapp/popup/epipolar_stereopair_popup.htm" onClick="return popup(this, 'notes')" >Epipolar Stereo Pair</a> operation, or </li>
+
+<li>use the <a href="..//ilwisapp/popup/stereopair_from_dtm_popup.htm" onClick="return popup(this, 'notes')" >Stereo pair from DTM</a> operation. </li>
+
+</ul>
+
+<p class=tip>Notes: </p>
+
+<ul class=tipul> 
+
+<li>To view a stereo pair as an anaglyph in a map window, the output maps calculated by the stereo pair must use the <span class=courier>Image</span> domain or any other value domain. </li>
+
+<li>To convert a map with the <span class=courier>Color</span> domain to the <span class=courier>Image</span> domain, you can use the <a href="..//ilwisapp/popup/color_separation_popup.htm" onClick="return popup(this, 'notes')" >Color Separation</a> operation; choose option <span class=arial>Intensity</span>. See also <a href="../ilwis/how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a>. </li></li>
+
+<li>As the output images of a stereo pair may have a very large file size, it is advised to create <a href="../ilwis/ilwis_objects_raster_maps_pyramids.htm">Pyramid Layers</a> for both output raster maps. This will speed up display in the map window. </li>
+
+</ul>
+
+<p class=kopje>To start showing a stereo pair as an anaglyph: </p>
+
+<ol>
+
+<li>	from the <a href="../ilwis/main_window_menu_commands.htm">Operations menu</a> of the Main window, choose <span class=arial>Visualization, Show Stereo Pair as Anaglyph</span>, or </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Anaglyph</span> item, or </li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, expand the <span class=arial>Visualization</span> item and double-click the <span class=arial>Anaglyph</span> item, or </li>
+
+<li>    click a stereo pair in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> with the right mouse button and choose <span class=arial>Visualization, Anaglyph</span> from the context-sensitive menu. </li>
+
+</ol>
+
+<p class=defnewpar>In the cases 1, 2, and 3, a <a href="../ilwismen/open_stereopair_as_anaglyph.htm">Show stereo pair as anaglyph</a> dialog box will appear: </p>
+
+<ul>
+
+<li>Select a stereo pair. </li>
+
+<li>The stereo pair (and its output maps) will automatically be calculated from the input maps if the stereo pair was not yet calculated. </li>
+
+<li>A <a href="../ilwismen/display_options_stereopair_as_anaglyph.htm">Display Options - Stereo Pair as Anaglyph</a> dialog box will appear. 
+
+<li>Then, the stereo pair will then be shown as an anaglyph in a map window. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>The default <span class=arial>Open</span> behaviour for a stereo pair, for instance when a stereo pair is double-clicked in a Catalog, is that the stereo pair will be shown in a <a href="..//ilwisapp/popup/stereoscope_popup.htm" onClick="return popup(this, 'notes')" >Stereoscope</a> window. If you prefer to show the stereo pair as an anaglyph by a default Open action, you can define this in the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>, section Main window. </p>
+
+<p class=kopje>Anaglyph in map window: </p>
+
+<p>The stereo pair is shown as an anaglyph in a map window; depending on the choice you made in the Display Options - Stereo Pair as Anaglyph dialog box: </p>
+
+<ul>
+
+<li>the left-hand output map of the stereo pair will be shown in Red, </li>
+
+<li>the right-hand output map of the stereo pair will be shown either in Green or in Blue. </li>
+
+</ul>
+
+<p class=defnewpar>You can inspect the anaglyph using Red-Green or Red-Blue glasses. </p>
+
+<p class=defnewpar>In the map window, you can: </p>
+
+<ul>
+
+<li>add a point map or a segment map to the stereo pair (<a href="..//ilwis/popup/screen_digitizing_popup.htm" onClick="return popup(this, 'notes')" >screen digitizing</a>). </li>
+
+</ul>
+
+<p class=defnewpar>If you wish to add a point map or a segment map to the anaglyph, you may first wish to make sure that one of the output maps of the stereo pair has a georeference. Then open the stereo pair as an anaglyph and start screen digitizing. </p>
+
+<p class=defnewpar>In the anaglyph, coordinates are calculated from the positions of the pixels shown in red, i.e. pixels of the left output map. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>A stereo pair can also be viewed with a <a href="..//ilwisapp/popup/stereoscope_popup.htm" onClick="return popup(this, 'notes')" >stereoscope</a> in a Stereo Pair - Stereoscope window. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="epipolar_stereopair.htm">Epipolar Stereo Pair</a> (operation)</p>
+
+<p class=seealsolinks><a href="../ilwis/epipolar_stereopair_creation_window.htm">Epipolar Stereo Pair : Creation window</a></p>
+
+<p class=seealsolinks><a href="stereopair_from_dtm.htm">Stereo pair from DTM</a> (operation)</p>
+
+<p class=seealsolinks><a href="stereoscope.htm">Show stereo pair with stereoscope</a></p>
+
+<p class=seealsolinks><a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope window</a></p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_stereopairs.htm">ILWIS objects : stereo pairs</a></p>
+
+</body

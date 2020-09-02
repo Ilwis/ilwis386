@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>densify segment coordinates popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Densify segment coordinates</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/densify_segment_coordinates.htm" onClick="return popup(this, 'notes')" >Densify segment coordinates</a> operation allows you to obtain more intermediate coordinates within segments. The segments of an input map are copied, and extra intermediate coordinates are added to the segments in the output map at a user-specified distance. </p>
+
+<p>The Densify segment coordinates operation can be used separately before a <a href="../../ilwisapp/popup/transform_segments_popup.htm">Transform segments</a> operation, but you can also use the <span class=arial>Densify coordinates</span> option within the <a href="../../ilwisapp/popup/transform_segments_popup.htm">Transform segments</a> or the <a href="../../ilwisapp/popup/transform_polygons_popup.htm">Transform polygons</a> operations. </p>
+
+</body

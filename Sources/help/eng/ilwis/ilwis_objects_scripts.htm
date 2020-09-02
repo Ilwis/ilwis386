@@ -1,0 +1,163 @@
+<html>
+
+<head>
+<title>ILWIS objects : scripts</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Scripts, ILWIS objects, Special objects, ILWIS script, ISL">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Scripts&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/script.gif" align=bottom width="16" height="12"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Scripts are used to perform a sequenced list of ILWIS commands and expressions. By creating a script, you can build a complete GIS or Remote Sensing analysis for your own research discipline. Scripts are more or less equivalent to batch files in ILWIS version 1.4. </p>
+
+<p class=defnewpar>Lines in a script may contain commands for object management (e.g. copy or delete), display of data objects (open or Show), and for the creation and calculation of data objects. All MapCalc, and TabCalc formulas, and all ILWIS expressions to perform operations may be used. Other scripts and other Windows applications can also be called from within a script. A script can use parameters. For more information on valid script expressions, refer to <a href="appendices_ilwis_commands.htm">Appendices : ILWIS commands</a>, <a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a> or <a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>. For more information on using parameters in scripts, see <a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a>.</p>
+
+<p class=kopje>Names of scripts:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a script:</p>
+
+<ul>
+
+<li>in the Main window, open the <a href="main_window_menu_commands.htm">File menu</a> and choose <span class=arial>Create Script</span>, or</li>
+
+<li>in the Operation-tree, expand the <span class=arial>Create</span> item and double-click <span class=arial>New Script</span> item, or</li> 
+
+<li>in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>New Script</span> item.</li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="script_editor_functionality.htm">Script editor</a> appears in which you can type your script expressions. </p>
+
+<p class=kopje>To edit a script:</p>
+
+<ul>
+
+<li>	in the Catalog, double-click a script, or </li>
+
+<li>	select a script in the Catalog, open the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window and choose <span class=arial>Edit Object</span>, or </li>
+
+<li>	in the Catalog, click a script with the right mouse button, and select <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="script_editor_functionality.htm">Script editor</a> appears.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To show scripts in a Catalog, refer to <a href="how_to_customize_the_catalog.htm">How to customize the Catalog</a>.</li>
+
+<li>To show scripts in the Operation-list, the Operation-tree and on the Operations menu of the Main window, see <a href="how_to_customize_the_operation_list.htm">How to customize the Operation-tree, the Operation-list and the Operations menu</a>. </li>
+
+</ul>
+
+<p class=kopje>Using parameters in scripts:</p>
+
+<p>Parameters in a script replace (parts of) object names, operations, etc. Parameters in scripts work as DOS replaceable parameters in DOS batch files, and must be written on the Script tab in the Script editor as <span class=courier>%1</span>, <span class=courier>%2</span>, <span class=courier>%3</span>, up to <span class=courier>%9</span>. For more information, see <a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a>.&nbsp;</p>
+
+<p class="linespacing03before">&nbsp;</p>
+
+<ul>
+
+<li>On the Script tab, you can type your script commands and expressions. Optionally, you can use parameters %1 until %9. </li>
+
+<li>On the Parameters tab, you can assign names to parameters. Parameter names will be visible in the Run Script dialog box when you run the script. </li>
+
+<li>On the Default Values tab, you can fill out default objects for your parameters so that you can test the script and/or wish to have defaults in the Run Script dialog box.</li>
+
+</ul>
+
+<p class=kopje>To run a script:</p>
+
+<ul>
+
+<li>with the right mouse button, select a script in the Catalog and choose <span class="arial">Run</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, </li>
+
+<li>in the Script editor press the <img align="bottom" alt="Run Script" src="../images/run.gif" width="22" height="22"> <span class="arial">Run Script</span> button, or 
+
+<li>if you copied your script to the ILWIS\scripts directory, you can double-click your script in the Operation-tree and the Operation-list.</li>
+
+</ul>
+
+<p class="linespacing03before">If your script does not contain any parameters it will immediately be executed. If your script does contain parameters the <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box will appear.</p>
+
+<p class="defnewpar">In the Run Script dialog box, all parameter names are listed as specified on the <a href="script_editor_functionality.htm#parameters_tab">Parameters tab</a> of the script editor.</p>
+
+<ul>
+
+<li>If you did not specify default objects on the <a href="script_editor_functionality.htm#default_values_tab">Default Values tab</a> you will need to select objects for input parameters and/or type object names for output parameters. </li>
+
+<li>If you did fill out objects on the Default Values tab, the Run Script dialog box, will already be filled out with these defaults.</li> 
+
+</ul>
+
+<p>When the OK button is clicked and when all parameters are correctly specified, the script will be executed.</p>
+
+<p class="linespacing03before">For more information about running script, e.g. to run a script from the command line see <a href="how_to_run_scripts.htm">How to run scripts</a>.</p>
+
+<p class="linespacing03before">You can create your own Help file for a script so that you can explain the meaning of parameters to other users of the script. For more information, see the <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box.</p>
+
+<p class=kopje>Example:</p>
+
+<p>In <a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a>, two script examples are given. A more elaborate example of a script to create slope maps in percentages and in degrees is presented in <a href="calc_creating_and_running_scripts.htm">Map &amp; Table calculation : creating and running scripts</a>. </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>A script consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.ISL, ILWIS Script Language) and an ASCII data file (.ISF, ILWIS Script File). </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="script_editor_functionality.htm">Script editor : functionality</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_commands.htm">Appendices : ILWIS commands</a></p>
+
+<p class=seealsolinks><a href="appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a></p>
+
+<p class=seealsolinks><a href="how_to_create_scripts.htm">How to create a script</a></p>
+
+<p class=seealsolinks><a href="how_to_edit_scripts.htm">How to edit a script</a></p>
+
+<p class=seealsolinks><a href="how_to_run_scripts.htm">How to run scripts</a></p>
+
+<p class=seealsolinks> <a href="../ilwismen/script_editor_run_script.htm">Run Script (dialog box)</a>&nbsp;</p>
+
+<p class=seealsolinks><a href="calc_creating_and_running_scripts.htm">Map &amp; Table calculation : creating and running scripts (example)</a></p>
+
+<p class=seealsolinks><a href="how_to_use_parameters_in_scripts.htm">How to use parameters in scripts</a></p>
+
+</body

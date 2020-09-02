@@ -1,0 +1,316 @@
+<html>
+
+<head>
+<title>Measure distance</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map window, Measure distance, Distance measured in map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Map&nbsp;window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/map_window_menu_commands.htm">Options menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Measure distance</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Measure the distance between two selected locations (in meters) and the direction or angle (in degrees) with respect to the North. </p>
+
+<p class=defnewpar>The Measure Distance function uses the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> that is used by a map window: </p>
+
+<ul>
+
+<li>when one or more <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a> are displayed in a map window, the map window uses the coordinate system of the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of the raster map(s); </li>
+
+<li>when only vector maps are displayed in a map window, in principle the map window uses the coordinate system of the first vector map; </li>
+
+        <ul>
+
+        <li>however, for vector maps, if you added another coordinate system or another georeference to the map window, by dragging or by choosing <a href="../ilwismen/change_coordinate_system_of_a_map_window.htm">Coordinate System</a> from the <a href="../ilwis/map_window_menu_commands.htm">Options menu</a>, </li>the newly added coordinate system will be used. 
+
+        </ul>
+
+</ul>
+
+<p class=kopje>To start the Measure Distance function:</p>
+
+<ul>
+
+<li>Choose <span class=arial>Measure Distance</span> from the <a href="../ilwis/map_window_menu_commands.htm">Options menu</a> in a map window, or </li>
+
+<li>click the <span class=arial>Measure Distance</span> <img src="../images/dist.gif" align=bottom width="22" height="22"> button in the toolbar of the map window.</li>
+
+</ul>
+
+<p class=defnewpar>When the mouse pointer appears as a pair of compasses:</p>
+
+<ol>
+
+<li>	locate the mouse pointer at the start position from which you wish to measure;</li>
+
+<li>	press and hold down the left mouse button;</li>
+
+<li>	move the mouse pointer to the end position; while moving the mouse pointer, the distance is continuously displayed;</li>
+
+<li>	then, release the left mouse button.</li>
+
+</ol>
+
+<p class=kopje>Results in the Measure Distance message box:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>From:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Shows the XY-coordinate or the LatLon-coordinate of the start position. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>To:</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Shows the XY-coordinate or the LatLon-coordinate of the end position. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Distance on map:</p>
+
+</td>
+<td>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Shortest distance in meters between start position and end position, calculated in a plane (Euclidean distance). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Azimuth on map:</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Angle between the line from start position to end position and the XY North of the map (in degrees, clockwise). <span class=tiptext><span class=tip>Tip: </span>You can show the XY-North of a map by adding <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> to the map window. </span> </p>
+
+<ul>
+
+<li>For North oriented maps, e.g. raster maps with a georef corners, and by default for all vector maps:</li>
+
+<table>
+<tr>
+<td valign="top"><p class=tcolh>Start</p>
+</td>
+<td valign="top"><p class=tcolh>End</p>
+</td>
+<td valign="top"><p class=tcolh>Azimuth</p>
+</td>
+</tr>
+<tr>
+<td valign="top"><p class=t1>South</p>
+</td>
+<td valign="top"><p class=t1>North</p>
+</td>
+<td valign="top"><p class=t1r>0</p>
+</td>
+</tr>
+<tr>
+<td valign="top"><p class=t1>North</p>
+</td>
+<td valign="top"><p class=t1>South</p>
+</td>
+<td valign="top"><p class=t1r>180</p>
+</td>
+</tr>
+<tr>
+<td valign="top"><p class=t1>West</p>
+</td>
+<td valign="top"><p class=t1>East</p>
+</td>
+<td valign="top"><p class=t1r>90</p>
+</td>
+</tr>
+<tr>
+<td valign="top"><p class=t1>East</p>
+</td>
+<td valign="top"><p class=t1>West</p>
+</td>
+<td valign="top"><p class=t1r>270</p>
+</td>
+</tr>
+</table>
+
+<li>For satellite images with a georef tiepoints, etc.: the map North can be located anywhere. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Ellipsoidal Distance:</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Shortest distance in meters (or kilometers) between start position and end position, calculated over the ellipsoid. </p>
+
+<ul class=diabox>
+
+<li>In case the distance is larger than 800 km, the distance will be calculated over the sphere, using the current equatorial radius.  </li>
+
+<li>Also, when system coordinate system <span class=courier>LatLon</span> is used, which has no ellipsoid, the distance will be calculated over the sphere (<a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distance</a>). </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Ellipsoidal Azimuth:</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Angle between the line from start position to end position and the geographic North of the map (in degrees, clockwise). <span class=tiptext><span class=tip>Tip: </span>You can show the geographic North of a map by adding a <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticule</a> to the map window. </span> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Scale Factor:</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Indicator of scale distortion, calculated as <span class=arial>Distance on map / Ellipsoidal Distance</span>. </p>
+
+<p class=diabox>For example, when the Scale Factor is 1.001500, it means that the measured <span class=arial>Distance on map</span> should be divided by 1.001500 to obtain the true distance (<span class=arial>Ellipsoidal Distance</span>). </p>
+
+<p class=diabox>The Scale Factor depends on the position in the map and on the parameters of the map's projection. </p>
+
+<ul>
+
+<li>As the Scale Factor is calculated over the total measured distance, the Scale Factor figure should be regarded as an average. </li>
+
+<li>The Scale Factor is therefore most reliable when measuring very short distances (in theory, an infinitely small distance should be measured). </li>
+
+<li>In literature, Tissot indicatrices are used to graphically represent scale factors in different directions and at different positions in a projected map. </li>
+
+<li>For maps with a conformal projection, the Scale Factor is independent of the direction of measurement. </li>
+
+<li>For other types of projections, the Scale Factor is generally not the same when measuring for instance in North-South direction or in East-West direction, etc. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>Meridian Convergence:</p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;</p>
+<p class=diabox>The difference between the geographic North and the XY-North of the map, calculated as <span class=arial>Ellipsoidal Azimuth - Azimuth on map</span> (degrees). </p>
+
+<ul>
+
+<li>The Meridian Convergence is positive when the XY-North points more to the East than the geographic North. </li>
+
+<li>The Meridian Convergence is calculated for the starting position. </li>
+
+</ul>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>LatLon-coordinates, Ellipsoidal or Spherical Distance, and Ellipsoidal or Spherical Azimuth are shown when the geographic coordinates are available, i.e.:</p>
+
+<ul>
+
+<li>when the coordinate system has a projection (coordinate system of type Projection), </li>
+
+<li>when the coordinate system is system coordinate system <span class=courier>LatLon</span> or <span class=courier>LatLonWGS84</span>, or</li>
+
+<li>when the coordinate system is of type LatLon.</li>
+
+</ul>
+
+<p class=defnewpar><a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >Spherical Distance</a> and Spherical Azimuth are calculated instead of Ellipsoidal Distance and Ellipsoidal Azimuth when geographic coordinates are available, and: </p>
+
+<ul>
+
+<li>when an ellipsoid is available, but when the distance is larger than 800 km, or</li>
+
+<li>when no ellipsoid is available, for instance: </li>
+
+<ul>
+
+<li>when the coordinate system has a projection (coordinate system of type Projection), but when no ellipsoid or datum has been selected, </li>
+
+<li>when the coordinate system is system coordinate system <span class=courier>LatLon</span>. </li>
+
+</ul>
+
+</ul>
+
+<p class=defnewpar>Scale Factor and Meridian Convergence are shown:</p>
+
+<ul>
+
+<li>when the coordinate system has a projection (coordinate system of type Projection), </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>Results are only reliable when the distance between the start position and the end position is not too large.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/map_window_functionality.htm">Map window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate system</a></p>
+
+</body

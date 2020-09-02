@@ -1,0 +1,101 @@
+<html>
+
+<head>
+<title>Mask segments : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Mask segments">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Mask segments</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Mask Segments operation allows you to selectively copy segments of an input segment map into a new segment map. The user has to specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> to select and retrieve the class names, identifiers or values of segments that are to be copied. </p>
+
+<p class=defnewpar>By specifying a mask, you can search for segments with a certain class name, ID or value. A mask is in fact a simple query to find (retrieve), display or use only those segments in a map that have certain class names, identifiers or values. A mask contains one or more search strings in which wild cards, asterisks (<span class=courier>*</span>) and question marks (<span class=courier>?</span>), are allowed. You can enter as many search strings in a mask as you like; separate the strings by commas.</p>
+
+<p class=kopje>Mask syntax:</p>
+
+<ul>
+
+<li>	search strings in a mask are compared with the classes, IDs or values of the domain of a map; when a map uses a class or ID domain and the classes or IDs have codes, the mask works on the codes <i>and</i> on the names <i>and</i> on the combination of codes and names,</li>
+
+<li>	to find/retrieve one specific class name, identifier or value: type that class name, ID or identifier in the mask, </li>
+
+<li>	to find/retrieve multiple class names, identifiers or values: separate the different class names, identifiers or values in the mask by commas (it does not matter whether you use spaces before or after a comma) </li>
+
+<li>	you can use asterisks as wild cards to replace zero or more characters in class names, IDs or values, for example <span class=courier>road*,riv*</span> or  <span class=courier>1*,2*,3*</span> , or even <span class=courier>*25,*50,*75,*00</span>, or <span class=courier>A*b*,D*g*</span></li>
+
+<li>	you can use question marks as wild cards to replace single characters in class names, identifiers or values, for example <span class=courier>Ab?,D?,Gl?</span> or <span class=courier>?p,??i</span>, or <span class=courier>A*b??</span>,<span class=courier>D*g??</span></li>
+
+<li>	in a dialog box, you should not use quotes around class names, identifiers or values,</li>
+
+<li>	on the command line, you must use double quotes around the complete mask.</li>
+
+</ul>
+
+<p class=kopje>Examples:</p>
+
+<ul>
+
+<li>	When a segment map contains topographic features, and you want to copy the segments with class names 'river' and 'road'; use as mask: <span class=courier>river,road</span></li>
+
+<li>	When a segment map contains pipe lines identified by IDs between 1000 and 9999, and you want to copy the segments with an ID that starts with a 1, e.g. IDs 1001, 1002, 1003, etc.; use as mask: <span class=courier>1*</span></li>
+
+<li>	When a segment map contains height values between 0 and 5000m, and you want to copy the segments with a height value between 1000 and 1500; use as mask: <span class=courier>10*,11*,12*,13*,14*,1500</span></li>
+
+</ul>
+
+<p>For more information, see <a href="../ilwis/how_to_use_masks.htm">How to use masks</a>.</p>
+
+<p class=kopje>Requirements for input segment map:</p>
+
+<p>No special input map requirements. </p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The output segment map uses the same domain as the input segment map.</p>
+
+<p>The output segment map uses the same coordinate system and coordinate boundaries as the input segment map.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	This operation creates a new segment map. You can also display specific segments of a segment map in a  map window without creating a new segment map: select the Mask check box on the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of the segment map which appears when you open the segment map. Then, specify the mask, i.e. the class names, identifiers or values of the segments that you want to display.</li>
+
+<li>	To copy a certain area of a segment map into a new segment map, see <a href="..//ilwisapp/popup/sub_map_segments_popup.htm" onClick="return popup(this, 'notes')" >Sub-map of segment map</a>.</li>
+
+<li>	To combine two or more segment maps, see <a href="..//ilwisapp/popup/glue_segment_maps_popup.htm" onClick="return popup(this, 'notes')" >Glue segment maps</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="mask_segments_dialogbox.htm">Mask segments : dialog box</a></p>
+
+<p class=seealsolinks><a href="mask_segments_commandline.htm">Mask segments : command line</a></p>
+
+<p class=seealsolinks><a href="mask_segments_algorithm.htm">Mask segments : algorithm</a></p>
+
+</body

@@ -1,0 +1,137 @@
+<html>
+
+<head>
+<title>Raster to segments : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Raster to segments, SegmentMapFromRasAreaBnd">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Raster to segments</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/raster_to_segments_popup.htm" onClick="return popup(this, 'notes')" >Raster to segments</a> operation can be directly executed by typing the following expression on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapFromRasAreaBnd(</span>InputRasterMapName, <span class=courier>8|4,</span> <span class=courier>smooth|nosmooth,</span> <span class=courier>single|unique)</span></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>SegmentMapFromRasAreaBnd</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Raster to segments operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputRasterMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input raster map (any domain).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>8|4</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to indicate whether to construct 8-connected 4-connected areas (either <span class=courier>8</span> or <span class=courier>4</span>) from which segments should be extracted.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>smooth|nosmooth</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to indicate whether the output segments should be smoothed or not.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>single|unique</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to indicate whether the output segments should obtain one name <span class=courier>Boundaries</span>, or unique names like <span class=courier>Boundary 1</span>, <span class=courier>Boundary 2</span>, etc. </p>
+
+<p>When the <span class=courier>unique</span> parameter is used, an attribute table will be created for the output map; the table will store the names of the mapping units to the right and to the left of the extracted segments and the length of the extracted segments. </p>  
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=defnewpar>Furthermore, the codes for the output segments will be stored by the output segment map: </p>
+
+<ul>
+
+<li>When the <span class=courier>Single</span> parameter is used, the name for the output segments is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </li>
+
+<li>When the <span class=courier>Unique</span> parameter is used, the output map will use a <span class=courier>UniqueID</span> domain (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="raster_to_segments_functionality.htm">Raster to segments : functionality</a></p>
+
+</body

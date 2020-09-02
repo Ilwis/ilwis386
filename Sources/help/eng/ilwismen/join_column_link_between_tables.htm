@@ -1,0 +1,79 @@
+<html>
+
+<head>
+<title>Join column wizard - Link between tables</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Columns, Join columns, Column operations, Table window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table bgcolor="#006699" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Join Column wizard</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Link between tables</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="join_column_join_method.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="join_column_aggregation_method.htm">Next</a>&nbsp;&gt;</td>
+</tr>
+<tr><td bgcolor="FFFFFF" colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>This page appears in the Join Column wizard when you have to select a key column from one table or from both tables to establish a link between the two tables. </p>
+
+<p class=diakopje>Dialog box options: </p>
+
+<p class=linespacing01before>Depending on the choice you made on the previous page of the wizard, the <a href="join_column_join_method.htm">Join method</a> page, select a column from the current table (key1), from the selected table (key2), or from both tables to create a link between the two tables. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td valign="top" width=60>
+<p class=diabox>Key 1:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select, from the current table, a column that should be used to create a link between both tables. You don't have to select a key column when you use the domain of the current table. Key 1 should have a class or ID domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Key 2:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select, from the selected table, a column that should be used to create a link between both tables. You don't have to select a key column when you use the domain of the selected table. Key 2 should have a class or ID domain. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>When you click the <span class=arial>Next</span> button: </p>
+
+        <ul>
+
+        <li>When you selected a column for Key 2, and if the classes or IDs in that column are <i>not unique</i>, the values values that you wish to join need to be aggregated. You will continue on the <b><a href="join_column_aggregation_method.htm">Aggregation method</a></b> page of the wizard. </li>
+
+        <li>If no aggregation is needed, the Aggregation method page will not appear. You will continue on the <b><a href="join_column_output_column.htm">Specify output column name</a></b> page of the wizard. </li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip:</span> Experienced users may also join columns from other tables by typing an expression on the TabCalc command line. For more information, see <a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a>. This topic also provides some examples, both for using the wizard and for using the command line. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="join_column_aggregation_method.htm">Join Column wizard - Aggregation method</a></p>
+
+<p class=seealsolinks><a href="join_column_output_column.htm">Join Column wizard - Output column name</a></p>
+
+<p class=seealsolinks><a href="../ilwis/calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a></p>
+
+</body

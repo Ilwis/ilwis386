@@ -1,0 +1,218 @@
+<html>
+
+<head>
+<title>How to drag and drop</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Drag and drop, How to drag and drop">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to drag and drop</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The idea of drag and drop is that you can pick up one or more <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >ILWIS objects</a> from a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> or from Windows Explorer, move the ojects(s) to another position and release the object(s) at the new position, in order to perform a certain task without using any menu. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ol>
+
+<li>	Select for instance <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >multiple maps</a> in a Catalog or in Window Explorer: </li>
+
+        <ul>
+
+        <li>hold the <span class=arial>Ctrl</span> key down and select the maps by clicking them with the left mouse button, </li>
+
+        <li>when the selection is OK, you can release the <span class=arial>Ctrl</span> key.  </li>
+
+        </ul>
+
+<li>	Click the selection, hold the left mouse button down, and move the mouse for instance to: </li>
+
+        <ul>
+
+
+        <li>another <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, </li>
+
+        <li>a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>, </li>
+
+        <li>a <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel information window</a>, </li>
+
+        <li>an <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a> in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, </li>
+
+        <li>a <a href="..//ilwis/popup/win_drop_down_list_boxes.htm" onClick="return popup(this, 'notes')" >drop-down list box</a> in a dialog box (<b>drag</b>). </li>
+
+        </ul>        
+
+<li>	Then, release the left mouse button (<b>drop</b>).</li>
+
+</ol>
+
+<p class=defnewpar>For more information on <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >multiple selection</a>, see also <a href="basic_concepts_drag_and_drop.htm">Basic concepts : drag and drop</a>. </p>
+
+<p class=kopje>To copy objects between Catalogs:</p>
+
+<ul>
+
+<li>	in a Catalog, select the objects you wish to copy, </li>
+
+<li>    move the selection to another Catalog, and release the left mouse button, </li>
+
+<li>	answer additional Copy questions in case you are copying dependent maps or when the objects to be copied already exist in the other directory. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>You can also drop a selection of objects to be copied on a directory listed in the <a href="..//ilwis/popup/navigator_popup.htm" onClick="return popup(this, 'notes')" >Navigator</a> pane. For more information, see <a href="how_to_copy_objects.htm">How to copy objects</a>. </p>
+
+<p class=kopje>To display multiple maps in one map window:</p>
+
+<ul>
+
+<li>	display a map in a map window, </li>
+
+<li>	in a Catalog, select one or more other point, segment, or polygon maps, or select a raster map or a map list, </li>
+
+<li>    move the selection to the existing map window, and release the left mouse button, </li>
+
+<li>	specify additional display options for the other map(s).</li>
+
+</ul>
+
+<p class=defnewpar>When the map window already displays a raster map (or a map list), and you add another raster map (or map list) with the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> to the map window, then the selected raster map (or map list) will also be added to the map window. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>To display a map with a certain degree of <i>transparency</i> on top of other maps that are already displayed in a map window, see <a href="how_to_add_extra_layers_to_a_map_window.htm">How to add extra layers to a map window</a>. </li>
+
+<li>When you select multiple maps in a Catalog, and select <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, all maps will be opened in separate map windows. </li>
+
+</ul>
+
+<p class=kopje>To add an annotation text object to a map window:</p>
+
+<ul>
+
+<li>	display one or more maps in a map window, </li>
+
+<li>	drag an existing <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text object</a> from a Catalog into the map window.</li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To create an annotation text object, you can open the <a href="../ilwis/map_window_menu_commands.htm">File menu</a> in a map window, and choose <span class=arial><a href="../ilwismen/create_an_annotation_text_object.htm">Create, Annotation Object</a></span>. </p>
+
+<p class=kopje>To change the order of layers in a map window:</p>
+
+<ul>
+
+<li>	display one or more maps, with optional grid lines, graticules, and/or annotation text objects in a map window, </li>
+
+<li>	in the <a href="../ilwis/map_window_layer_management.htm">Layer Management</a> pane of the map window, drag the layers to another position.</li>
+
+</ul>
+
+<p class=kopje>To add maps (and attribute tables) to a pixel information window:</p>
+
+<ul>
+
+<li>	display one or more maps in a map window,</li>
+
+<li>	open the File menu in the map window and choose <span class=arial>Open Pixel Information</span>, </li>
+
+<li>    the maps which are displayed in the map window will be automatically added to the pixel information window, </li>
+
+<li>	if you wish to see the values or attributes of other maps as well: select one or more other maps in a Catalog and drag the map(s) to the pixel info window,</li>
+
+<li>	move with the mouse pointer over the map(s) in the map window. </li>
+
+</ul>
+
+<p class=linespacing03before>The values of all maps are displayed in the pixel information window. When a map has an attribute table, also the attribute values are displayed.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>You can also select one or more maps in a Catalog, and choose <span class=arial>Open Pixel Information</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </p>
+
+<p class=kopje>To start an ILWIS operation with a certain map or table:</p>
+
+<ul>
+
+<li>	drag a <a href="ilwis_objects_data_objects.htm">data object</a> from a Catalog to an operation in the Operation-tree or the Operation-list,</li>
+
+<li>	the dialog box of the operation appears: the input map or table is already selected. </li>
+
+</ul>
+
+<p class=kopje>To use a certain map or table name as input in a dialog box:</p>
+
+<ul>
+
+<li>	when a dialog box appears,</li>
+
+<li>	drag an object from a Catalog into a <a href="..//ilwis/popup/win_drop_down_list_boxes.htm" onClick="return popup(this, 'notes')" >drop-down list box</a> in the dialog box.</li>
+
+</ul>
+
+<p class=kopje>To change the orders of columns when showing a Catalog in Details View: </p>
+
+<p>When a Catalog is displayed in <a href="../ilwismen/catalog_details_view.htm">Details View</a>: </p>
+
+<ul>
+
+<li>	drag a column header to another position. </li>
+
+</ul>
+
+<p class=kopje>To change the orders of columns in a table window:</p>
+
+<ul>
+
+<li>	drag a column header to another position.</li>
+
+</ul>
+
+<p class=kopje>To change the width of a column in a table window:</p>
+
+<ul>
+
+<li>	position the mouse pointer in between two column names, </li>
+
+<li>	the mouse pointer changes into a double-sided arrow, </li>
+
+<li>	drag to the left or right to decrease or increase the width of the left column.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_use_the_catalog.htm">How to use a Catalog</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_use_the_operation_list.htm">How to use the Operation-tree and the Operation-list</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_use_pixel_information.htm">How to use pixel information</a></p>
+
+<p class=seealsolinks><a href="how_to_use_columns.htm">How to use columns</a></p>
+
+</body

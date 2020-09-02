@@ -1,0 +1,255 @@
+<html>
+
+<head>
+<title>Layout editor : context-sensitive menu</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Layout editor</h1>
+
+<h1 class=secondline>Context-sensitive menu</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> appears: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ol>
+
+<li>when there is no selection in the <a a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a> window, and you press the right mouse button;</li>
+
+<li>when you selected a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in the layout editor window, and you press the right mouse button;</li>
+
+<li>when you selected a <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation element</a> in the layout editor window, and you press the right mouse button;</li>
+
+<li>when you click a layer in the Layout Management pane with the right mouse button. </li>
+
+</ol>
+
+<p class=defnewpar>The options that are available on the context-sensitive menu depend on the selected object and on whether the object was clicked with the right mouse button in the layout editor window or in the Layout Management pane. </p>
+
+<p class=kopje>1. Right mouse button in layout editor window when nothing has been selected:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p>Normal:</p>
+
+</td>
+<td valign="top">
+<p>Switch off Zoom In or Zoom Out and return to normal pointing mode. The mouse pointer will change back into a normal pointer. You can also press the <span class=arial>Esc</span> key on the keyboard to return to Normal mode. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>Zoom In:</p>
+
+</td>
+<td valign="top">
+<p>Allows you to zoom in on a selected spot or area in the layout window. The mouse pointer will change into a magnifying-glass with a large plus inside, then: </p>
+
+<ul>
+
+<li>click in the layout window to zoom in on that position with a factor 2, or  </li>
+
+<li>drag the mouse pointer in the layout window from one corner of interest to another (any zoom in factor). </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>Zoom Out: </p>
+
+</td>
+<td valign="top">
+<p>Allows you to zoom out from a selected spot in the layout window. </p>
+
+<p>The mouse pointer will change to a 'magnifying'-glass with a large minus inside, then: </p>
+
+<ul>
+
+<li>click in the layout window to zoom out with a factor 2, or </li>
+
+<li>drag a rectangle with the mouse pointer in the layout window; the smaller the rectangle, the more you will zoom out (any zoom out factor). </li>
+
+</ul>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>2. Right mouse button in layout editor window when a map view has been selected:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>The Normal, Zoom In and Zoom Out options are available <i>plus</i> the options described below. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>Most of the options below are <i>only</i> available on the context-sensitive menu! </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p>Redraw: </p>
+
+</td>
+<td valign="top">
+<p>To redraw the contents of the selected map view. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p><a href="../ilwismen/layout_editor_replace_map_view.htm">Replace Map View</a>: </p>
+
+</td>
+<td valign="top">
+<p>To replace the currently selected map view with another map view. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p><a href="../ilwismen/layout_editor_save_map_view.htm">Save View</a>: </p>
+
+</td>
+<td valign="top">
+<p>To save the selected map view. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p><a href="../ilwismen/layout_editor_save_map_view_as.htm">Save View As</a>: </p>
+
+</td>
+<td valign="top">
+<p>To save the selected map view with a different name. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>Entire Map: </p>
+
+</td>
+<td valign="top">
+<p>To display the entire map view in the area of the currently selected map view. You can enlarge the size of the selected map view area to return to the original size of the map view. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>Set Scale:</p>
+
+</td>
+<td valign="top">
+<p>To set the scale on which a selected map view should be displayed. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>Select Area: </p>
+
+</td>
+<td valign="top">
+<p>To display only a certain part of the selected map view, i.e. <a href="..//ilwis/popup/zoom_in_popup.htm" onClick="return popup(this, 'notes')" >zoom in</a> on a rectangle of the selected map view. The mouse pointer changes into a little box, <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >drag</a> the mouse pointer around an area of interest in the layout window.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>Pan:</p>
+
+</td>
+<td valign="top">
+<p>To roam through the selected map view when the area in which the map view is displayed is smaller than the entire map view. The mouse pointer will change into a hand, then: </p>
+
+<ul>
+
+<li>click somewhere in the selected map view, and drag this part of the map view to another position. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p><a href="../ilwismen/layout_editor_clear_selection.htm">Clear</a>: </p>
+
+</td>
+<td valign="top">
+<p>To delete the selected map view from the layout <i>and</i> any <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> (i.e. legends, map borders, north arrows, scale bars, scale texts) that has been added for this map view. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>3. Right mouse button in layout editor window when an annotation element has been selected:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>The Normal, Zoom In and Zoom Out options are available <i>plus</i> the options described below. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table>
+<tr>
+<td valign="top" width=120>
+<p>Edit:</p>
+
+</td>
+<td valign="top">
+<p>Edit the selected annotation element. Depending on the selected object, an Insert/Edit dialog box will appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p><a href="../ilwismen/layout_editor_clear_selection.htm">Clear</a>: </p>
+
+</td>
+<td valign="top">
+<p>To delete the selected <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> element from the layout. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>4. Right mouse button on layer in Layout Management pane:</p>
+
+<p class=linespacing03before>Depending on whether you used the right mouse button on a map view or on an annotation element in the Layout Management pane: only the options described under 2 or 3 are available. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_menu_commands.htm">Layout editor : menu commands</a></p>
+
+</body

@@ -1,0 +1,166 @@
+<html>
+
+<head>
+<title>Georef 3D editor : Edit</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Georeference 3D editor, Display 3D">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Georeference 3D editor </h1>
+
+<h1 class=secondline>Edit</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To obtain a nice three-dimensional view of your study area, specify some parameters which define your georeference 3D, i.e. the observer's perspective on the 3D model. </p>
+
+<p class=defnewpar>It is advised to adjust:</p>
+
+<ul>
+
+<li>	the View Angle, until you see your whole study area in the map window, </li>
+
+<li>	the Vertical and Horizontal Rotation, until you see your area from a favourable position,</li>
+
+<li>	the View Point, until the 3D view is nicely positioned in the map window,</li>
+
+<li>	the Scale Height, to exaggerate height differences,</li>
+
+<li>	or other parameters as you wish.</li>
+
+</ul>
+
+<p class=defnewpar>To see the effect of changed view parameters, you need to redraw the map window: click the <span class=arial>Redraw</span> button <img src="../images/redraw.gif" align=bottom width="22" height="22"> or press <span class=arial>Ctrl+R</span> on the keyboard. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><a href="..//ilwismen/popup/georef3d_editor_view_angle_popup.htm" onClick="return popup(this, 'notes')" >View Angle</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a view angle in degrees to define how much of the 3D model is observed.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><a href="..//ilwismen/popup/georef3d_editor_scale_height_popup.htm" onClick="return popup(this, 'notes')" >Scale Height</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the vertical exaggeration of the 3D model, i.e. altitude relative to XY-scale.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><a href="..//ilwismen/popup/georef3d_editor_view_point_popup.htm" onClick="return popup(this, 'notes')" >View Point</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the XY-coordinate of the view point, i.e. the point in your model that you want to look at. The Z-coordinate depends on the DEM. The view point is drawn in the center of the map window when you redraw the 3D view.</p>
+
+<p class=diabox>You can also change the View Point in the map window itself: simply click somewhere in the map window where your new view point should be; then redraw the map window. Note that in this way the Location Point and Location Height automatically change. It is clear that this an easu  way to control the View Point in the DEM.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><a href="..//ilwismen/popup/georef3d_editor_horizontal_rotation_popup.htm" onClick="return popup(this, 'notes')" >Horizontal Rotation</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the rotation of the 3D view in horizontal direction in degrees.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><a href="..//ilwismen/popup/georef3d_editor_vertical_rotation_popup.htm" onClick="return popup(this, 'notes')" >Vertical Rotation</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the rotation of the 3D view in degrees away from a vertical through the terrain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><a href="..//ilwismen/popup/georef3d_editor_distance_popup.htm" onClick="return popup(this, 'notes')" >Distance</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the distance between the observer and the view point.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><a href="..//ilwismen/popup/georef3d_editor_location_point_popup.htm" onClick="return popup(this, 'notes')" >Location Point</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the location of the observer in XY-coordinates.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><a href="..//ilwismen/popup/georef3d_editor_location_height_popup.htm" onClick="return popup(this, 'notes')" >Location Height</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the altitude of the observer.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>All changed parameters are immediately stored in your georeference 3D.</p>
+
+<p class=tip>Tips: </p>
+
+<ol class=tipol>
+
+<li>	To see the effect of changed view parameters, you need to redraw the map window: click the Redraw button <img src="../images/redraw.gif" align=bottom width="22" height="22"> in the toolbar of the map window, or press <span class=arial>Ctrl+R</span> on the keyboard. </li>
+
+<li>	To obtain the <a href="display_options_3d_grid.htm">Display Options - 3D Grid</a> dialog box again, for instance to choose another grid size, choose <span class=arial>Display Options</span> from the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> or from the context-sensitive menu.</li>
+
+<li>	To add other layers to the map window, choose <span class=arial>Add Layers</span> from the Layers menu.</li>
+
+<li>	To close the Georeference 3D editor and return to the map window, choose <span class=arial>Exit</span> from the File menu, press the <span class=arial>Exit Editor</span> button in the window. Your 3D view remains displayed in the map window. When you double-click the contol-menu box of the map window, the window is closed.</li>
+
+<li>	To save your 3D view, choose the <span class=arial>Save View</span> or <span class=arial>Save View As</span> command from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> in the map window.</li>
+
+<li>	To permanently display a raster map with a georeference 3D, use the Apply 3D operation.</li>
+
+</ol>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>The 3D view parameters are not independent. When you change one parameter, some others may automatically change as well. When you edit the values of the view point, horizontal rotation, vertical rotation or distance, the values of the location point and/or location height of the observer automatically change, and vice versa.</p>
+
+<p class=defnewpar>Some examples of different perspectives are presented in <a href="../ilwis/georeference_3d_editor_functionality.htm">Georeference 3D editor : functionality</a>.</p>
+
+</body

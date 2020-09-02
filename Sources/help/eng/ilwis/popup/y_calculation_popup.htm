@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<title>Calculation</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Calculations</p>
+
+<p class=linespacing03after>You can calculate with raster maps by typing a <a href="..//ilwis/calc.htm" onClick="return popup(this, 'notes')" >Map Calculation</a> formula on the <a href="command_line_main_window_popup.htm">command line of the Main window</a> or in the Map Calculation dialog box. You can calculate with columns by typing a <a href="..//ilwis/calc.htm" onClick="return popup(this, 'notes')" >Table Calculation</a> formula on the <a href="command_line_table_window_popup.htm">command line of a table window</a>. </p>
+
+<p class=linespacing03after>When the definition symbol = is used in a calculation, the output map or column is <a href="../../ilwis/popup/object_dependent_data_objects_popup.htm">dependent</a>. For dependent maps and columns, the formula by which they are created is stored by these output maps and columns as their <a href="../../ilwis/popup/object_definition_popup.htm">definition</a>. You can easily update dependent objects in case input data have changed. You can also change the formula itself.</p>
+
+<p class=linespacing03after>A simple MapCalc formula reads: 	<span class=courier>Map3 = Map1 + Map2</span></p>
+
+<p class=linespacing03after>When the assignment symbol := is used in a calculation, dependency links are immediately broken.</p>
+
+</body

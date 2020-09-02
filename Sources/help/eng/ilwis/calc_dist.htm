@@ -1,0 +1,253 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>DIST</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="DIST, Coordinate functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>DIST( ) function</h1>
+
+<p class=defnewpar>Returns the distance between two coordinates.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>DIST</span>(<i>Coordinate a</i>, <i>Coordinate b</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>Coordinate a</i></td>
+	<td valign="top">is an (X,Y) coordinate</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">a coordinate system</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>Coordinate b</i></td>
+	<td valign="top">is an (X,Y) coordinate</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">a coordinate system</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>DIST</span> returns:</td>
+	<td valign="top">a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+<li>The coordinate system(s) of the input coordinates are ignored.</li>
+<li>The distance is calculated in a plane as &#8730;(<span class=symbol>D</span>x<sup>2</sup>+<span class=symbol>D</span>y<sup>2</sup>).
+
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p> <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" colspan="2"><p class=calc00>? DIST(COORD(10,10),COORD(13,14))</p></td>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=calc00></p></td>
+	<td valign="top"><p>returns the distance between coordinate (10,10) and coordinate (13,14), i.e. 5</p></td>
+</tr>
+<tr>
+	<td valign="top" colspan="2"><p class=calc00>? DIST(MAPCRD(Geology,1,1),MAPCRD(Geology,1,MAPCOLS(Geology)))</p>
+</tr>
+<tr>
+	<td valign="top" width="40"><p class=calc00></p>
+	<td valign="top"><p>returns the distance (e.g. 12720.000 m) of a pixel at the left boundary and a pixel at the right boundary of map <span class=courier>Geology</span>. Since the map has a rectangular shape you can use any row number you like. In this example the first one is taken.</p>
+	<p class=tiptext><span class=tip>Note: </span>The function <a href="calc_mapcols.htm"><span class=courier>MAPCOLS</span></a> returns the number of columns in a map. Therefore, it is unnecessary to put the map on the screen to find out which column is the last one.</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p>Point map <span class=courier>Rainfall</span> shows the location of rainfall stations in the area of Cochabamba, Bolivia. To calculate the distance between rainfall station <span class=courier>PROMIC</span> and all other rainfall stations, type on the command line of the table window:</p>
+<p class=calc0linsp03befaft>Distance = DIST(Coordinate,PNTCRD(Rainfall,&quot;PROMIC&quot;))</p>
+<table cellspacing=0>
+<table>
+<tr>
+	<td valign="top" colspan="3"><p class=th>Rainfall.mpp opened as table</td>
+	<td valign="top">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+	<td valign="top" colspan="2"><p class=th>Working table</td>
+</tr>
+<tr>
+	<td valign="top"><p class=tcolhr>ID</p></td>
+	<td valign="top"><p class=tcolh>Name</p></td>
+	<td valign="top"><p class=tcolhr>Coordinate</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=tcolhr>Distance</p></td>
+	<td valign="top" width="10"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1>UMSS</p></td>
+	<td valign="top"><p class=t1r>(803429.00, 8074631.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>5908.617</p></td>
+	<td valign="top"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1>Taquina</p></td>
+	<td valign="top"><p class=t1r>(799748.00, 8082415.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>3455.553</p></td>
+	<td valign="top"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1>Laguna Santa Rosa</p></td>
+	<td valign="top"><p class=t1r>(803511.00, 8087422.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>6996.865</p></td>
+	<td valign="top"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1>Laguna Totura</p></td>
+	<td valign="top"><p class=t1r>(801281.00, 8088967.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>8587.926</p></td>
+	<td valign="top"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1>PROMIC</p></td>
+	<td valign="top"><p class=t1r>(802613.00, 8080483.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>0.000</p></td>
+	<td valign="top"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1>Aro Caqua</p></td>
+	<td valign="top"><p class=t1r>(806816.00, 8076585.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>5732.331</p></td>
+	<td valign="top"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1>Colca Pithua</p></td>
+	<td valign="top"><p class=t1r>(797465.00, 8078352.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>5571.630</p></td>
+	<td valign="top"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>8</p></td>
+	<td valign="top"><p class=t1>Cerro MachaMach</p></td>
+	<td valign="top"><p class=t1r>(796346.00, 8087736.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>9585.473</p></td>
+	<td valign="top"></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>9</p></td>
+	<td valign="top"><p class=t1>Laguna WaraWara</p></td>
+	<td valign="top"><p class=t1r>(806042.00, 8085414.00)</p></td>
+	<td valign="top"></td>
+	<td valign="top"><p class=t1r>6006.064</p></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+<p class=tip>Tip</p>
+<p class=tiptext>To interactively measure distances in a map, in a plane and/or on a sphere or ellipsoid, use the <span class=arial><a href="../ilwismen/measure_distance.htm">Measure Distance</a></span> tool in a map window.</p>
+
+<p class="kopje">Applied example:</p>
+<p>By using the function <span class=courier>DIST</span>, you can calculate a map showing an area within a certain distance around a point. When you want to calculate the area within a distance of 2000 m from rainfall station <span class="courier">PROMIC</span>, type in the command line of the Main window:</p>
+<p class="calc0linsp03befaft">DistPromic = DIST(PNTCRD(Rainfall,&quot;PROMIC&quot;), MAPCRD(Rainfall)) &lt;
+2000</p>
+<table cellSpacing="0">
+<tr>
+	<td valign="top" width="100"><p class="courier">Rainfall</p></td>
+	<td valign="top"><p class="courier">DistPromic</p></td>
+</tr>
+<tr>
+	<td valign="top" width="100"><p class="linespacing01before"><img height="85" src="../images/rain.gif" width="85" align="bottom"></p></td>
+	<td valign="top"><p class="linespacing01before"><img height="85" src="../images/mc62.gif" width="85" align="bottom"></p></td>
+</tr>
+</table>
+<p class="defnewpar">Map <span class="courier">Rainfall</span> is a raster map showing the location of several rainfall stations. The
+point indicated by a +, is the rainfall station <span class="courier">PROMIC</span>. Map
+<span class="courier">DistPromic</span> shows the area (with a radius of 2000m) around this station.</p>
+
+<p class="tip">Note:</p>
+<p class="tiptext">This is a an expensive operation in the sense that ILWIS has to calculate for every pixel
+in the raster map the distance to the location of rainfall station
+<span class=courier>PROMIC</span>; this may take time.</p>
+
+
+
+
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="80"><a href="calc_coord.htm">COORD</a></td>
+	<td valign="top" width="70"><a href="calc_mincrdx.htm">MINCRDX</a></td>
+	<td valign="top" width="70"><a href="calc_mapcrd.htm">MAPCRD</a></td>
+	<td valign="top"><a href="calc_rasvalue.htm">RASVALUE</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_crdx.htm">CRDX</a></td>
+	<td valign="top" width="70"><a href="calc_mincrdy.htm">MINCRDY</a></td>
+	<td valign="top" width="70"><a href="calc_maprow.htm">MAPROW</a></td>
+	<td valign="top"><a href="calc_dist2.htm">DIST2</a></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_crdy.htm">CRDY</a></td>
+	<td valign="top" width="70"><a href="calc_maxcrdx.htm">MAXCRDX</a></td>
+	<td valign="top" width="70"><a href="calc_mapcol.htm">MAPCOL</a></td>
+	<td valign="top"></td>
+</tr>
+<tr>
+	<td valign="top" width="80"><a href="calc_transform.htm">TRANSFORM</a></td>
+	<td valign="top" width="70"><a href="calc_maxcrdy.htm">MAXCRDY</a></td>
+	<td valign="top" width="70"><a href="calc_mapvalue.htm">MAPVALUE</a></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

@@ -1,0 +1,126 @@
+<html>
+
+<head>
+<title>Segments to polygons : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segments to polygons">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segments to polygons</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Segments to Polygons operation automatically polygonizes a supposedly error free segment map. The operation is designed to be used after you have imported vector files from another package. All segments in the segment map must be connected to other segments or to themselves (islands) by nodes; dead ends are not allowed. A <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> can be specified to polygonize specific segments. </p>
+
+<p class=kopje>Process:</p>
+
+<ol>
+
+<li>	All segments as specified in the mask are copied to the output map. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>    Segment check and polygonization: </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+        <ol class=abc>
+
+        <li >When using topological polygonization: </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+                <ul>
+
+                <li>	Segments are checked for topological errors. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+                <li>	If Auto Correction is selected (not available from within the segment editor):</li>
+
+                        <ul>
+
+                        <li>	false polygons are automatically deleted;</li>
+
+                        <li>	segments which exactly overlay another segment are deleted;</li>
+
+                        <li>	dead end segments are deleted;</li>
+        
+                        <li>	crossing segments are splitted and snapped to each other.</li>
+
+                        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>       
+
+                <p class=leftmargininlist>Erroneous segments are only deleted in the temporary copy of the segment map, not from the input segment map itself. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+                <li>	Polygon topology is created. Every polygon boundary gets a forward and backward link, and a left and right polygon. For every polygon, the area and perimeter is calculated. </li>
+
+                </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+        <li>When using non-topological polygonization: </li>
+
+<p class=emptylinehalf>&nbsp;</p>       
+
+                <ul>
+
+                <li>	Only segments which have only 1 node are polygonized. The node serves both as the begin node and as the end node of the segment. Each area that is enclosed by a segment which has only 1 node will be a polygon. For every polygon, the area and perimeter is calculated. </li> 
+
+                </ul>
+
+        </ol>
+
+<p class=emptylinehalf>&nbsp;</p>       
+
+<li>	Assigning names to polygons: </li>
+
+<p class=emptylinehalf>&nbsp;</p>  
+
+        <p>When using:</p>
+
+        <ul>
+
+        <li>a Label point map: for each point in the label point map (in the sequence of the point map), the polygon is determined in which the point is located. The name of the point is then assigned to the polygon found. Thus, if a label point is missing for a certain polygon, that polygon will keep the undefined value. </li>
+
+        <li>Unique Identifiers: each polygon obtains a unique identifier by the system. </li>
+
+        <li>Segment Codes (for non-topological polygonization only): each polygon obtains the name of the segment which encloses the polygon, i.e. the name of the segment which defines the boundary of the polygon. </li>
+
+        <li>a Domain: (mainly used when the operation is called from within the segment editor): the specified domain will be linked to the polygon map. All output polygons will have the undefined value, i.e polygons should be assigned names manually in the polygon editor. </li>
+
+        </ul>
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segments_to_polygons_functionality.htm">Segments to polygons : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_check_segments.htm">Segment editor : check segments</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/segment_editor_polygonize.htm">Segment editor : polygonize</a></p>
+
+</body

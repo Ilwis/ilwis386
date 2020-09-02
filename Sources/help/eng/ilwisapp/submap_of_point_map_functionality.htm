@@ -1,0 +1,89 @@
+<html>
+
+<head>
+<title>Sub-map of point map : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sub-map of point map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Sub-map of point map</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Sub-map of point map operation copies all points within a user-specified rectangle into a new point map. </p>
+
+<p class=defnewpar>The user has to specify minimum and maximum XY-coordinates for the new point map. When the input map uses a coordinate system of <i>type latlon</i>, you need to specify minimum and maximum Latitudes and Longitudes. </p></p>
+
+<p class=defnewpar>This operation allows to change the <a href="..//ilwis/popup/coordinate_boundary_popup.htm" onClick="return popup(this, 'notes')" >coordinate boundaries</a> of your point map. The output point map can be smaller than the input map, but it can also be larger.</p>
+
+<ul>
+
+<li>	If the output map is smaller than the input map, then only the points within the rectangle of the specified output coordinates are copied into the new output point map. </li>
+
+<li>	If the output map is larger than the input map, all input points are copied, and extra space is created around the points of the original point map.</li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>The Sub-map of point map operation permanently reduces or enlarges the area covered by a point map.</p>
+
+<ul class=tipul>
+
+<li>	To temporarily reduce the area of a point map, you can <a href="..//ilwis/popup/zoom_in_popup.htm" onClick="return popup(this, 'notes')" >zoom in</a> on the point map in a map window. The result can be stored as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. </li>
+
+<li>	To temporarily enlarge the area of a point map, i.e. to create white space around a point map in a map window for annotation purposes, you can use the Extend Window command on the <a href="../ilwis/map_window_menu_commands.htm">Options menu</a> in the map window, or you can zoom in on the point map and drag a rectangle partly outside the map window. The result can also be stored as a map view.</li>
+
+</ul>
+
+<p class=kopje>Requirements for input point map:</p>
+
+<p>No special input map requirements.</p>
+
+<p class=kopje>Domain and coordinate system of output map:</p>
+
+<p>The output point map uses the same domain as the input point map. </p>
+
+<p>The output point map uses the same coordinate system as the input point map; the coordinate boundaries for this output point map are user-defined (XY-coordinates or LatLon-coordinates). </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	To selectively copy points with a specific code from one point map into a new point map, see <a href="..//ilwisapp/popup/mask_points_popup.htm" onClick="return popup(this, 'notes')" >Mask points</a>.</li>
+
+<li>	To combine two or more point maps into one output map, use the <a href="..//ilwisapp/popup/glue_point_maps_popup.htm" onClick="return popup(this, 'notes')" >Glue point maps</a> operation; for each input map, a mask can be specified, furthermore the coordinate boundaries for the output map can be specified.</li>
+
+<li>    The coordinate boundaries of a point map can also be adapted from within the point editor, see <a href="../ilwismen/point_editor_bounds_of_map.htm">Point editor : Boundaries of map</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="submap_of_point_map_dialogbox.htm">Sub-map of point map : dialog box</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/submap_of_point_map_commandline.htm">Sub-map of point map : command line</a></p>
+
+<p class=seealsolinks><a href="submap_of_point_map_algorithm.htm">Sub-map of point map : algorithm</a></p>
+
+</body

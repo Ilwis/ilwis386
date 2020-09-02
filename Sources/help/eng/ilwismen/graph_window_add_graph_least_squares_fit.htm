@@ -1,0 +1,216 @@
+<html>
+
+<head>
+<title>Add graph by least squares fit</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Graph - Least Squares Fit, Least Squares Fit, Regression, Graph window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Graph window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/graph_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Add Graph by Least Squares Fit</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Perform a least squares fit,<i> i.e. fit the best line</i>, through values that are available in the table. </p>
+
+<p class=defnewpar>Before you can use this option, the graph window should already display a point graph of 2 value columns of a table. For more information, see <a href="create_a_graph.htm">Create a graph</a>. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose the <span class=arial>Add Graph Least Squares Fit</span> command from the <a href="../ilwis/graph_window_menu_commands.htm">Edit menu</a> in a graph window;</li>
+
+<li>	when you click the arrow next to the <span class=arial>Add Graph</span> button <img src="../images/add_graph_layer.gif" align=bottom width="36" height="22"> in the <a href="../ilwis/graph_window_toolbar.htm">toolbar</a> of the graph window, and choose the <span class=arial>Least Squares Fit</span> command;</li>
+
+<li>	when you use the right mouse button in the white space of the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane, and choose the <span class=arial>Add Graph Least Squares Fit</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>X-column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a value column which contains the independent variable. This is the same column that is probably used for the X-values in the current point graph. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Y-column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a value column which contains the dependent variable. This is the same column that is probably used for the Y-values in the current point graph. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Function:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a function that should be used to calculate the least squares fit. The following functions are available: Exponential, Logarithmic, Polynomial, Power Law, and Trigonometric. For more information, see below.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Nr. of terms:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When using the Polynomial or Trigonometric function, specify the number of terms that the function should use.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The least squares fit is calculated and the result is directly shown as a line graph in the graph window. </p>
+
+<p>The resulting least squares fit equation is shown in the <a href="graph_window_options_graph_least_squares_fit.htm">Graph Options - Least Squares Fit</a> dialog box. </p>
+
+<p class=kopje>Available functions:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>Exponential:</p>
+
+</td>
+<td valign="top">
+<p>y = <i>a</i> <span class=courier>*</span> e<sup>bx</sup></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>Logarithmic:</p>
+
+</td>
+<td valign="top">
+<p>y = <i>a</i> <span class=courier>*</span> log(<i>b</i><span class=courier>*</span> x)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>Polynomial:</p>
+
+</td>
+<td valign="top">
+<p>y = <i>a</i> + <i>b</i><span class=courier>*</span> x + <i>c</i><span class=courier>*</span> x<sup>2</sup> + <i>d</i><span class=courier>*</span> x<sup>3</sup> + ...</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>Power Law:</p>
+
+</td>
+<td valign="top">
+<p>y = <i>a</i> <span class=courier>*</span> x<sup>b</sup></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>Trigonometric:</p>
+
+</td>
+<td valign="top">
+<p>y = <i>a</i> + <i>b</i> <span class=courier>*</span> cos(x) + <i>c</i> <span class=courier>*</span> sin(x) + ...</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Examples:</p>
+
+<p class=aftertitlesub><b>Example 1:</b></p>
+
+<p>The values of column ColX and column ColY1 are used to create a Graph from Columns (the red points in Figure 1 below). Then, by adding a Graph by Least Squares Fit, in this case using a polynomial function with 2 terms, the 'best' fit is found through these points (the black line in Figure 1 below). </p>
+
+<p>The resulting formula is Y = 49.101  + 1.276 * X and can be viewed on the <a href="graph_window_options_graph_least_squares_fit.htm">Graph Options - Least Squares Fit</a> dialog box. </p>
+
+<p><img src="../images/lssquarespoly.gif" align=bottom width="389" height="302"></p>
+
+<p class=captionfig>Fig. 1: A least squares fit using a polynomial function. The Least Squares Fit line is defined by Y = 49.101  + 1.276 * X </p>
+
+<p class=kopjeboldnound>Example 2:</p>
+
+<p>The values of column ColX and column ColY2 are used to create a Graph from Columns (the red points in Figure 1 below). Then, by adding a Graph by Least Squares Fit, in this case using an exponential function, the 'best' fit is found through these points (the black line in Figure 1 below). </p>
+
+<p>The resulting formula is Y = 42.341302790409 * exp(0.007566547732 * X) and can be viewed on the <a href="graph_window_options_graph_least_squares_fit.htm">Graph Options - Least Squares Fit</a> dialog box. </p>
+
+<p><img src="../images/lssquaresexpo.gif" align=bottom width="408" height="302"></p>
+
+<p class=captionfig>Fig. 2: A least squares fit using an exponential function. The Least Squares Fit line is defined by Y = 42.341302790409 * exp(0.007566547732 * X) </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>To modify the appearance or the name of the least squares fit graph, double-click the least squares fit layer in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane: the <a href="graph_window_options_graph_least_squares_fit.htm">Graph Options - Least Squares Fit</a> dialog box will appear. </li>
+
+<li>The resulting least squares fit equation is shown in the <a href="graph_window_options_graph_least_squares_fit.htm">Graph Options - Least Squares Fit</a> dialog box. </li>
+
+<li>You can also perform a least squares fit on columns in a table, where the resulting Y-value will be written into a new <i>output column</i>. In the table window, choose the <span class=arial>Least Squares</span> command from the <a href="../ilwis/table_window_menu_commands.htm">Columns menu</a>. For more information, see <a href="least_squares_fit.htm">Table window : Least squares fit</a>.</li>
+
+<li>To adapt the title, the X-axis, or the Y-axis (left or right) of the graph, double-click the appriopriate item in the <a href="../ilwis/graph_window_graph_management.htm">Graph Management</a> pane or in the graph window itself: the <a href="graph_window_options_title.htm">Title</a>, <a href="graph_window_options_x_axis.htm">X-axis</a>, <a href="graph_window_options_y_axis_left.htm">Y-axis (left)</a>, or the <a href="graph_window_options_y_axis_right.htm">Y-axis (right)</a> dialog box will appear. </li>
+
+<p>The grid lines of the graph can be modified in the X-axis and Y-axis dialog boxes. </p>
+
+<li>To create a new graph in a new graph window, choose <span class=arial>Create Graph</span> from the <a href="../ilwis/graph_window_menu_commands.htm">File menu</a> in the graph window: the <a href="create_a_graph.htm">Create Graph</a> dialog box will appear. </li>
+
+<li>To save the contents of a graph window as a graph, choose <span class=arial><a href="graph_window_save_graph.htm">Save</a></span> or <span class=arial><a href="graph_window_save_graph_as.htm">Save As</a></span> from the <a href="../ilwis/graph_window_menu_commands.htm">File menu</a> in the graph window. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_functionality.htm">Graph window : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_graph_management.htm">Graph window : Graph Management</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_toolbar.htm">Graph window : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/graph_window_menu_commands.htm">Graph window : menu commands</a></p>
+
+<p class=seealsolinks><a href="graph_window_options_graph_least_squares_fit.htm">Graph Options - Least Squares Fit</a></p>
+
+<p class=seealsolinks><a href="least_squares_fit.htm">Table window : Least squares fit</a></p>
+
+</body

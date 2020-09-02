@@ -1,0 +1,168 @@
+<html>
+
+<head>
+<title>Column management</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table window, Columns, Column management, Add ..., Delete ..., Change column order, Column Properties, Make up-to-date">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Columns menu</a></td>
+</tr>
+
+<tr>
+<td colspan="2"><h1 class=secondline><span class="middle">Column Management</span>&nbsp;&nbsp;&nbsp;<img src="../images/column.gif" align=middle width="13" height="14"></h1></td>
+</tr>
+<tr><td colspan="2" class=emptylineblue>&nbsp;</td></tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Column Management dialog box offers the following possibilities:</p>
+
+<ul>
+
+<li>	add columns to the table,</li>
+
+<li>	delete columns from the table,</li>
+
+<li>	view and/or edit the properties of a column, </li>
+
+<li>	change the order of columns,</li>
+
+<li>	update <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent columns</a> which are not up-to-date at the moment.</li>
+
+</ul>
+
+<p class=defnewpar>This dialog box appears when: </p>
+
+<ul>
+
+<li>you choose <span class=arial>Column Management</span> from the Columns menu; </li>
+
+<li>you click the <span class=arial>Column Management</span> button <a href="../ilwismen/column_management.htm"><img src="../images/columnmanagement.gif" align=bottom width="45" height="17" border="none"></a> at the upper left corner of the table viewer. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Columns:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>You should select a column if you wish to open the properties of this column, or when you wish to delete this column.</p>
+
+        <ul class=diaul>
+
+        <li>To change the order of columns in the table, select a column and <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> it to another position in the list. The column that appears at the top of the list is the first column in the table. </li>
+
+        <li>If you double-click a column in the list, the <a href="column_properties.htm">Column Properties</a> dialog box of the selected column is directly opened. </li>
+
+        </ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Add Column</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Click this command button to add a new column to the table. The <a href="../ilwismen/add_column_to_table.htm">Add Column</a> dialog box follows. </p>
+
+<p class=diabox>In this <span class=arial>Column Management</span> dialog box, you can also press the <span class=arial>Insert</span> key on the keyboard. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Properties</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Click this command button to view and/or edit the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of the selected column. The <a href="column_properties.htm">Column Properties</a> dialog box of the column will be opened.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Delete</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Click this command button to delete the selected column from the table. </p>
+
+<p class=diabox>In this <span class=arial>Column Management</span> dialog box, you can also press the <span class=arial>Del</span> key on the keyboard. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox><span class=arial>Make Up-to-Date</span>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If you selected a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent column</a> which is not up-to-date at the moment: click this button to check all columns on which this column depends, see if these are up-to-date, if not, check all columns below, etc., and calculate this column again using all new changed columns. </p>
+
+        <ul class=diaul>
+
+        <li>To make all columns of the table up-to-date, you can also select the <span class=arial><a href="../ilwismen/update_all_columns.htm">Update All Columns</a></span> command on the Columns menu, or click the <span class=arial>Update All Columns</span> button <img src="../images/table_update_all_cols.gif" align=bottom width="22" height="22"> in the toolbar.</li>
+
+        </ul>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	To open the properties of a column, you can also double-click a column header in the table.</li>
+
+<li>	To change the order of columns, you can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag and drop</a> columns to another position in the table. </li>
+
+        <p>In the table window, click a column name and hold the mouse button down, the mouse pointer changes into a column icon <img src="../images/column.gif" align=bottom width="13" height="14">, drag the column to a new position in the table, then release the left mouse button. </p>
+
+<li>	To add a column to a table, you can also double-click the gray button to the right of the last column in the table window.</li>
+
+<li>	To delete columns from a table, you can also <a href="..//ilwis/popup/table_selection_popup.htm" onClick="return popup(this, 'notes')" >select one or more columns</a> in the table window, and press the <span class=arial>Del</span> key on the keyboard.</li>
+
+<li>    When you click a column header in the table window to select the column, you can also use the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> to delete the column or view its properties. </li>
+
+</ol>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_toolbar.htm">Table window : toolbar</a> </p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_menu_commands.htm">Table window : menu commands</a> </p>
+
+</body

@@ -1,0 +1,81 @@
+<html>
+
+<head>
+<title>Contour interpolation : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Contour interpolation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Contour interpolation</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Contour interpolation is an operation which first rasterizes contour lines of a segment map with a value domain, and then calculates values for pixels that are not covered by segments by means of a linear interpolation. Furthermore, on the command line, this operation can also use an input raster map. </p>
+
+<p class=defnewpar>When using Contour interpolation on a segment map containing height (contour) information, the resulting raster map is a Digital Elevation Model (DEM). To visualize a DEM you can use <a href="..//ilwisapp/popup/display3d_popup.htm" onClick="return popup(this, 'notes')" >Display3D</a>.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input segment map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. The Contour interpolation operation creates an intermediate raster map with rasterized segments. For all pixel values with undefined values in this intermediate map, an output value is calculated. </p>
+
+<p>When using Contour interpolation from the command line, also a raster map (with rasterized segments) can be used as input.</p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output map uses the same value domain as the input map. The <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> can be adjusted for the output map.</p>
+
+<p>The georeference for the output map has to be selected or created; you can usually select an existing georeference corners.</p>
+
+<p class=kopje>Notes:</p>
+
+<ul>
+
+<li>	At the borders of the area in which interpolation takes place, artefacts may occur. Therefore make sure that the area of interest is smaller than the area in which interpolation takes place. After the contour interpolation, you can perform a map calculation with another raster map which contains your study area by using a mask.</li>
+
+<li>	The contours should touch the boundary of the map, otherwise discontinuities will appear.</li>
+
+<li>	Several megabytes of temporary disk space are required to perform the interpolation. </li>
+
+<li>	The quality of the obtained Digital Elevation Model will not only depend on the density of digitized contour lines or on the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> you choose for the domain of the output map but also on the selected pixel size of the georeference for the output raster map. The smaller the precision and the smaller the pixel size, the better your DEM will be. </li>
+
+<p class=leftmargininlist>	However choosing a small precision will result in a raster map that is stored using 4 or 8 bytes per pixel, while choosing a small pixel size will result in a raster map with more pixels. Choosing a small precision or a small pixel size thus result in a larger output raster map on disk.</p>
+
+<li>	An example of how output values are interpolated from the contour lines is presented in <a href="contour_interpolation_algorithm.htm">Contour interpolation : algorithm</a>.</li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When later on you want to create a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> orthophoto or a georeference direct linear, which will use the created DEM, it is strongly advised to mark the <span class=arial>Interpolation</span> check box in the <a href="../ilwismen/raster_map_properties.htm">Raster Map Properties</a> dialog box of the DEM.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="contour_interpolation_dialog_box.htm">Contour interpolation : dialog box</a></p>
+
+<p class=seealsolinks><a href="contour_interpolation_command_line.htm">Contour interpolation : command line</a></p>
+
+<p class=seealsolinks><a href="contour_interpolation_algorithm.htm">Contour interpolation : algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_calculate_digital_elevation_models.htm">How to calculate a Digital Elevation Model</a></p>
+
+</body

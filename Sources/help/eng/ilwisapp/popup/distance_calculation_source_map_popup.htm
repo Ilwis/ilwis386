@@ -1,0 +1,40 @@
+<html>
+
+<head>
+<title>source map distance popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Source map for distance calculation</p>
+
+<p>A source map is obligatory input for a <a href="..//ilwisapp/distance_calculation.htm" onClick="return popup(this, 'notes')" >distance calculation</a>. In the Distance calculation dialog box, a source map can be any raster map with a class domain or an ID domain. On the command line, you can also use raster maps with a value domain. All pixels in the source map that have a class name, ID or value are considered as sources. For all pixels that have the undefined value, a distance value is calculated.  </p>
+
+<p>Thus, as a source map, you can directly use a rasterized point, segment, or polygon map. Of course, you can also use one or more MapCalc statements to prepare a source map from an existing raster map. </p>
+
+<p>If all parts in your map are equally accessible, there is no need to specify a weight map: the system assumes a weight of 1 for all undefined pixels. </p>
+
+<p></p>
+
+<p class=kopje>For ILWIS 1.4 users:</p>
+
+<p>The input map for a distance calculation is no longer a map in which value 0 is used for sources and value 1 is used for accessible pixels.</p>
+
+</body

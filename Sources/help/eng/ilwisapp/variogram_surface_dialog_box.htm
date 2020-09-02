@@ -1,0 +1,135 @@
+<html>
+
+<head>
+<title>Variogram surface : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Variogram surface">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Variogram surface</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Variogram surface operation uses a point map or a raster map as input and calculates a surface of semi-variogram values where each cell (pixel) in the surface represents a directional distance class. The output surface, a raster map with a special kind of georeference, may help you to visualize possible anisotropy of your data and to determine the direction of the anisotropy axis. </p>
+
+<p class=defnewpar>Subsequently, you can calculate directional semi-variograms by using the bidirectional method in the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. From the output table of Spatial correlation, you can prepare a semi-variogram model and you can investigate the range of the variable in the semi-variogram model both in the direction of anisotropy as well as in the direction perpendicular to it. Then, you are ready to perform Anisotropic Kriging.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=124>
+<p class=diabox>Input map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input point map or an input raster map. Open the list box and select the desired point or raster map, or drag a point or raster map directly from the Catalog into this box. You can select a point or raster map with a value domain, or a point or raster map with a class or ID domain which has a linked attribute table with values (then select an attribute column with a value domain). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=diabox>Lag spacing (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case of an input point map, type a value for the size of the distance classes (lags) that should be used. This also determines the pixel size of the pixels in the output map. For more information on the concept, see <a href="variogram_surface_functionality.htm">Variogram surface : functionality</a>. (0 &lt; real value &lt; diagonal of point map; for more information on limitations, see <a href="variogram_surface_command_line.htm">Variogram surface : command line</a>).</p>
+
+<p class=diabox>For input raster maps, the pixel size of the input map is used as the lag spacing for the output map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=diabox>Number of lags:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the number of distance classes (lags) that should be used both in horizontal and in vertical direction away from the central pixel at the origin in the output map. Together with the lag spacing, this determines the maximum distance between points for which semi-variogram values will be calculated. The number of lags also determines the size of your output map; 10 lags will result in an output map of 19 x 19 pixels. </p>
+
+<p class=diabox>The maximum number of lags is limited to 45 (1 &lt;= integer value &lt;= 45). </p>
+
+<p class=diabox>However, in order to prevent the creation of output maps which contain almost no information, there are some extra limitations:</p>
+
+<ul class=diaul>
+
+<li>	for an input point map, the product of the lag spacing and the number of lags may not exceed twice the length of the diagonal of the point map; </li>
+
+<li>	for an input raster map, the number of lags cannot exceed neither the number of rows nor the number of columns of the input raster map; the program will then automatically round this value down to (the minimum of) the number of rows or the number of columns in the input map. </li>
+
+</ul>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the semi-variogram values for directional distance classes. The output raster map will use <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, or specify your own range of possible values in the output map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of output values, or specify your own precision. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=124>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary, the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=defnewpar>The output map uses an internally defined georeference (not available on disk) which simply stores the lag spacing and the number of lags, and which ensures that the output map can be displayed.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="variogram_surface_functionality.htm">Variogram surface : functionality</a></p>
+
+</body

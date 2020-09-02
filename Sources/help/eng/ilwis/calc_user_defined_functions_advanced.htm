@@ -1,0 +1,414 @@
+<html>
+
+<head>
+<title>MapCalc/TabCalc : user-defined functions (advanced)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Functions, User-defined functions, For loops, While loops, Repeat/until loops">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+<h1 class=firstline>Map and Table calculation</h1>
+<h1 class=secondline>User-defined functions (advanced)</h1>
+
+<p>Besides the normal MapCalc and TabCalc expressions, the ILWIS calculator has the basic functionality of a Pascal like program. With this Pascal like functionality you can build functions that contain IF, THEN, ELSE loops, FOR loops, WHILE loops and REPEAT/UNTIL loops.</p>
+
+<p class=defnewpar>Using loops is an advanced subject and the user should fully understand the basics of user-defined functions. If you are more interested in the basic functionality go to <a href="calc_creating_and_applying_user_defined_functions.htm">Map and Table calculation : User-defined functions</a>.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+
+<p>The syntax for a 'calculator' program/function with parameters is:
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class="syntax"><span class="courier">Function </span>FunctionName (<i>ParamDomain</i> Param [,<i>ParamDomain</i>
+Param]) : <i>OutputDomain</i> 
+<br><span class="courier">Begin</span>
+<br><span class="courier">[Declarations;]</span>
+<br><span class="courier">[Statements;]</span>
+<br><span class="courier">&nbsp;&nbsp;Return</span>&nbsp;&nbsp;<i>Expression</i>;
+<br><span class="courier">End</span>;</p>
+
+<p class="defnewpar">where:</p>
+<table border="0" cellpadding="0" cellspacing="0" class=diabox>
+  <tr>
+    <td width="135" valign="top">FunctionName</td>
+    <td>is the <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> of the function as specified in the Create Function dialog box.</td>
+  </tr>
+  <tr>
+    <td width="135" valign="top"><i>ParamDomain</i></td>
+    <td>is the domain of an input parameter. You can use e.g. <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> | <a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >String</a> | Coord |
+      <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" > Color</a> | <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a>.
+
+      By default, the domain of input parameters is set to Value.</td>
+  </tr>
+  <tr>
+    <td width="135" valign="top">Param</td>
+    <td>is the name of an input parameter.
+
+        <br>Parameter names:
+        
+        <ul>
+
+        <li>must start with a character from A to Z, </li>
+
+        <li>may contain characters from A to Z, digits 0 to 9, and underscores. </li>
+
+        </ul>
+</td>
+  </tr>
+  <tr>
+    <td width="135" valign="top"><i>OutputDomain</i></td>
+    <td>is the name of the domain that should be used for the output object (a
+      column or a map). You can choose any domain available in your data set as
+      well as a coordinate system. By default the output domain is set to the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system Value domain</a>.
+      When you choose a value output domain, the value range is determined by the selected domain.</td>
+  </tr>
+  <tr>
+    <td width="135" valign="top">Declarations</td>
+    <td>is the section where the variables have to be declared before they can
+      be used in expressions. The full set of variable types that are
+      functioning are: Var | Int | Real | Value | String | Coord | Color (Real and
+      Value are synonyms, Var and Int are also synonyms).</td>
+  </tr>
+  <tr>
+    <td width="135" valign="top">Statements</td>
+    <td> are instructions to ILWIS to do something. Statements can be single or
+      multiple. Multiple statements are always grouped inside the keywords
+      <b> Begin</b>  and <b>
+End</b>  and each statement must be separated by a semicolon. A group of
+      statements is often referred to as a <i> Compound statement</i>.&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="135" valign="top"><i>Expression</i></td>
+    <td>is the expression that the function should perform, as defined before in the <a href="../ilwismen/create_a_function.htm">Create Function</a> dialog box.</td>
+  </tr>
+</table>
+
+<p class=defnewpar>The words <b>Function</b>, <b>Begin</b>, <b>Return</b> and <b>End</b> are keywords in ILWIS and have a fixed meaning (see below). </p>
+
+<p class=tip>Note: </p>
+
+<ul class=tipul>
+
+<li>When a function is created, the domain type of all input parameters <i>ParamDomainType</i>, and the output domain <i>OutputDomain</i> for the function are by default set to <span class=functionexpl>Value</span>. </li>
+
+<li>In case your input parameters use <i>another</i> domain type than domain type Value, or if the output domain of the function is another domain than system domain Value, you need to <i>change</i> the word(s) <span class=functionexpl>Value</span> yourself in the appropriate place(s). </li>
+
+<li>In other words, you must make sure that the domain type of each parameter and the output domain of the function are correctly declared. </li>
+
+</ul>
+
+<p class=kopje>Declarations:</p>
+<p>A variable can be thought of as a box that contains data of a
+specific form or type. Before being used in expressions, variables have to be declared in the following way: </p>
+
+<p class=calccommlinelnsp01b><b>int</b> i, j; <b> string</b> s, t;</p>
+
+<p class=calccomline><b>real</b> x; <b> value</b> y;</p>
+
+<p class=kopje>Statements: </p>
+<p>In ILWIS, a statement is an instruction to ILWIS to do something. Multiple statements are always grouped inside the keywords
+<b> Begin</b> and <b>
+End</b> and each statement must be separated by a semicolon. A group of statements is often
+referred to as a <i> Compound statement</i>. </p>
+
+<p class=kopje>Assignment statement:</p>
+<p>One of the most basic kinds of statements is the assignment statement. It is used to store a value into a variable. The general form for an
+assignment statement is:</p>
+
+<p class=calccommlinelnsp01b>Designator := Expression;</p>
+
+<p class=defnewpar>The Designator is just a name of a variable that is to have
+its value set, and the result of the expression is what the variable will be set
+to. Expressions can be quite complicated but they can also be as simple as just
+being a number. </p>
+
+<h2>Examples</h2>
+<a href="#example1"><span class=bookmark>Example 1 : If, then, else statements in user-defined functions</span></a><br>
+<a href="#example2"><span class=bookmark>Example 2 : For loops in user-defined functions</span></a><br>
+<a href="#example3"><span class=bookmark>Example 3 : While loops in user-defined functions</span></a><br>
+<a href="#example4"><span class=bookmark>Example 4 : Repeat/until loops in user-defined functions</span></a><br>
+
+<p class=kopje><a name="example1">Example 1 : If, then, else statements in user-defined functions</a></p>
+<p>The IF statement is used to do different things depending on
+a certain condition. A condition is the result of a logical expression (i.e. a
+Boolean expression). The general syntax for an IF, THEN, ELSE statement is:</p>
+
+<p class=defnewpar><b>if</b> a <b>then</b> b [<b>else</b> c]</p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">a</td>
+<td valign="top"> = a boolean expression</td>
+</tr>
+
+<tr>
+<td valign="top">b</td>
+<td valign="top"> = either a statement or a compound statement</td>
+</tr>
+
+<tr>
+<td valign="top">c</td>
+<td valign="top"> = either a statement or a compound statement</td>
+</tr>
+</table>
+
+<p class=linespacing01before>&nbsp;</p>
+<p class=functionexpl>Function ifthenelse(Value x) : Value</p>
+<p class=functionexpl>Begin</p>
+<p class=functionexpl>var n;</p>
+<p class=functionexpl>if (x&lt;10) then</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;begin</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;n := sq(x);</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;end</p>
+<p class=functionexpl>else&nbsp;</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;begin</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;n :=sqrt(x);</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;end;</p>
+<p class=functionexpl>Return n;</p>
+<p class=functionexpl>End;</p>
+
+<p class=defnewpar>For each input value: if the input value is smaller than 10,
+return the square of the input value, else return the square root of the input
+value.</p>
+<p class=kopje><a name="example2">Example 2 : For loops in user-defined
+functions</a></p>
+<p>The FOR loop used to
+execute a group of statements multiple times. A FOR loop works from an initial
+loop counter value until an end loop counter value. The general syntax for a FOR statement is:</p>
+
+<p class=defnewpar><b>for </b>a <b>to</b> b [<b>step</b> c] <b>do</b> d</p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">a</td>
+<td valign="top"> = loop counter assignment</td>
+</tr>
+
+<tr>
+<td valign="top">b</td>
+<td valign="top"> = end value loop counter</td>
+</tr>
+
+<tr>
+<td valign="top">c</td>
+<td valign="top"> = expression</td>
+</tr>
+
+<tr>
+<td valign="top">d</td>
+<td valign="top"> = either a statement or a compound statement</td>
+</tr>
+</table>
+<p class=linespacing01before>&nbsp;</p>
+<p class=functionexpl>Function forloop(Value a) : Value a</p>
+<p class=functionexpl>Begin</p>
+<p class=functionexpl>var i,b;</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;i :=1;</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;b :=a;</p>
+<p class=functionexpl>for i :=1 to 100 step 4 do&nbsp;</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;b :=b+1;</p>
+<p class=functionexpl>Return b;</p>
+<p class=functionexpl>End;</p>
+
+<p class=defnewpar>For each input value: count from 1 to 100 with steps of 4 (thus 25 times) and, each time, add 1 to the input value.</p>
+<p class=kopje><a name="example3">Example 3 : While loops in user-defined
+functions</a></p>
+
+<p>The WHILE loop is used to execute a group of statements
+multiple times. A WHILE loop works as long as a logical expression for the loop
+counter is true. The general syntax a WHILE statement is:</p>
+
+<p class=defnewpar><b>while</b> a <b> do begin</b> b <b>end</b></p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">a</td>
+<td valign="top"> = logical expression&nbsp;</td>
+</tr>
+
+<tr>
+<td valign="top">b</td>
+<td valign="top"> = either a statement or a compound statement</td>
+</tr>
+
+</table>
+<p class=linespacing01before>&nbsp;</p>
+<p class=functionexpl>Function whileloop (Value a) : Value</p>
+<p class=functionexpl>Begin</p>
+<p class=functionexpl>var i,b;</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;i:=1;</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;b:=a;</p>
+<p class=functionexpl>while i&lt;a do</p>
+<p class=functionexpl>begin</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;b:=b+1;</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;i:=i+1;</p>
+<p class=functionexpl>end;</p>
+<p class=functionexpl>Return b;</p>
+<p class=functionexpl>End;</p>
+
+<p class=defnewpar>For each input value: set the counter to 1, then if the
+counter is smaller than the input value, add 1 to the input value and add 1 to
+the counter. When the counter equals the input value, the output value is
+returned.</p>
+<p class=kopje><a name="example4">Example 4 : Repeat/until loops
+in user-defined functions</a></p>
+
+<p>The REPEAT/UNTIL statement is used to execute a group of
+statements multiple times. A REPEAT/UNTIL loop works until a logical expression
+for the loop counter becomes true. The
+general form a REPEAT/UNTIL statement is:</p>
+
+<p class=defnewpar><b>repeat</b>  a <b> until</b>  b&nbsp;</p>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">a</td>
+<td valign="top"> = either a statement or a compound statement&nbsp;</td>
+</tr>
+
+<tr>
+<td valign="top">b</td>
+<td valign="top"> =&nbsp;boolean expression</td>
+</tr>
+
+</table>
+<p class=linespacing01before>&nbsp;</p>
+<p class=functionexpl>Function repeatloop (Value a) : Value</p>
+<p class=functionexpl>Begin</p>
+<p class=functionexpl>var i,b;</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;i:=1;</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;b:=a;</p>
+<p class=functionexpl>repeat</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;b:=b+1;</p>
+<p class=functionexpl>&nbsp;&nbsp;&nbsp;i:=i+1;</p>
+<p class=functionexpl>until i&gt;=a;</p>
+<p class=functionexpl>Return b;</p>
+<p class=functionexpl>End;</p>
+
+<p class=defnewpar>For each input value: set the counter to 1, then add 1 to the input value, add 1 to the counter, check whether the counter is not yet larger than the input value, and repeat adding.
+When the counter equals the input value, the output value is returned.
+
+<p class=defnewpar>The significant difference between a REPEAT/UNTIL loop and a
+WHILE loop is that every REPEAT/UNTIL loop is entered at least once because the
+test of the Boolean condition occurs at the bottom of the loop; a WHILE loop is
+not entered at all if the Boolean condition is initially false. Also the WHILE
+ends when the Boolean condition becomes false, whereas the REPEAT/UNTIL ends
+when the condition becomes true.</p>
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=calc00>Out1=ifthenelse(Value)</p>
+<p class=calc00>Out2=forloop(Value)</p>
+<p class=calc00>Out3=whileloop(Value)</p>
+<p class=calc00>Out4=repeatloop(Value)</p>
+
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>Value</p></td>
+	<td valign="top"><p class=tcolhr>Out1</p></td>
+	<td valign="top"><p class=tcolhr>Out2</p></td>
+	<td valign="top"><p class=tcolhr>Out3</p></td>
+	<td valign="top"><p class=tcolhr>Out4</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>25</p></td>
+	<td valign="top"><p class=t1r>0</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>26</p></td>
+	<td valign="top"><p class=t1r>1</p></td>
+	<td valign="top"><p class=t1r>2</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>2</p></td>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>27</p></td>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1r>3</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>3</p></td>
+	<td valign="top"><p class=t1r>9</p></td>
+	<td valign="top"><p class=t1r>28</p></td>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1r>5</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>16</p></td>
+	<td valign="top"><p class=t1r>29</p></td>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1r>7</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1r>25</p></td>
+	<td valign="top"><p class=t1r>30</p></td>
+	<td valign="top"><p class=t1r>9</p></td>
+	<td valign="top"><p class=t1r>9</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>6</p></td>
+	<td valign="top"><p class=t1r>36</p></td>
+	<td valign="top"><p class=t1r>31</p></td>
+	<td valign="top"><p class=t1r>11</p></td>
+	<td valign="top"><p class=t1r>11</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>7</p></td>
+	<td valign="top"><p class=t1r>47</p></td>
+	<td valign="top"><p class=t1r>32</p></td>
+	<td valign="top"><p class=t1r>13</p></td>
+	<td valign="top"><p class=t1r>13</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>16</p></td>
+	<td valign="top"><p class=t1r>4</p></td>
+	<td valign="top"><p class=t1r>41</p></td>
+	<td valign="top"><p class=t1r>31</p></td>
+	<td valign="top"><p class=t1r>31</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>25</p></td>
+	<td valign="top"><p class=t1r>5</p></td>
+	<td valign="top"><p class=t1r>50</p></td>
+	<td valign="top"><p class=t1r>49</p></td>
+	<td valign="top"><p class=t1r>49</p></td>
+</tr>
+</table>
+
+<p class="Seealso">See also:</p>
+<p class="seealsolinks"> <a href="function_editor_functionality.htm">Function editor : functionality</a></p>
+<p class="seealsolinks"><a href="ilwis_objects_functions.htm">ILWIS objects : functions</a></p>
+<p class="seealsolinks"><a href="calc_creating_and_applying_user_defined_functions.htm">Map and Table calculation : User-defined functions</a></p>
+</body

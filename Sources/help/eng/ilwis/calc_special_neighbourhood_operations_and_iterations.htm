@@ -1,0 +1,2109 @@
+<html>
+
+<head>
+<title>MapCalc : neighbourhood operations & iterations (advanced)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map calculation, Calculation, Calculate (advanced) ..., Command line, Neighbourhood operations, Iteration, NBMIN, NBMAX, NBSUM, NBPRD, NBCNDP, NBCNT, NBFLT, NBDIS, NBPOS, NBMINP, NBMAXP, NBPRDP, %D, %P, MapIter, MapIterProp">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map calculation</h1>
+<h1 class=secondline>Neighbourhood operations &amp; Iterations</h1>
+
+<p class=defnewpar>This topic deals with: </p>
+
+<ul>
+	<li><a href="#neighbourhood_operations"><span class=bookmark>Neighbourhood operations</span></a></li>
+	<li><a href="#iterations"><span class=bookmark>Iterations</span></a></li>
+</ul>
+
+<h2 id="neighbourhood_operations">Neighbourhood operations</h2>
+<p>Neighbourhood operations are a special spatial analysis in ILWIS. They are calculations on pixels in which the outcome depends on the neighbouring pixels. Neighbourhood operations may be performed on user-selected pixels as well as on whole maps. Just as in filtering procedures, neighbourhood operations make use of a filter. This window of 3 by 3 cells is moved over the raster map. Each cell of the output map is calculated according to the specified neighbourhood expression. The cell numbers in the moving window are coded as follows:</p>
+
+<p class=emptyline>&nbsp;</p>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>1</td>
+    <td class=calcpict>2</td>
+    <td class=calcpict>3</td>
+  </tr>
+  <tr>
+    <td class=calcpict>4</td>
+    <td class=calcpict>5</td>
+    <td class=calcpict>6</td>
+  </tr>
+  <tr>
+    <td class=calcpict>7</td>
+    <td class=calcpict>8</td>
+    <td class=calcpict>9</td>
+  </tr>
+</table>
+<p class=emptylinehalf>&nbsp;</p>
+<p class=captionfig>Fig. 1: The 3x3 neighbourhood matrix with the identifiers for the positions of the neighbour pixels (1, 2, 3, 4, 6, 7, 8, 9) with respect to a central pixel (5). </p>
+
+<p class=defnewpar>This means that the left neighbour of the central pixel is coded number 4 and the lower right pixel number 9. By definition the central pixel itself is included and has value 5. The result of the calculation is stored in the central pixel. </p>
+
+<p class=tip>Note:</p>
+<p class=tiptext>If a neighbourhood operation is performed on a pixel on the top or bottom line or on the very first or last column of a raster map, new neighbours are created by duplicating this boundary line or column. In the case of the neighbour position variable: NBPOS, the outer lines or rows added will have value 0.</p>
+
+<p class=defnewpar>Neighbourhood expressions have to be typed on the command line of the Main window, like MapCalc formulas.</p>
+
+<p class=kopje><b>1. Calculating with the value of a single neighbour:</b></p>
+
+<p>The simplest neighbourhood expression retrieves the value of a single user-selected neighbour: </p> 
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>Outmap = Map#[</span><i>Neighbour</i><span class=courier>]</span></p>
+
+<p class=defnewpar>where:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width=96><p class=courier>Outmap</p></td>
+	<td valign="top"><p>is the name of the output raster map.</p></td>
+</tr>
+<tr>
+	<td valign="top" width=96><p class=courier>Map#</p></td>
+	<td valign="top"><p>is the syntax to specify the name of the input raster map <span class=courier>Map</span> over which a neighbourhood matrix will be moved.</p></td>
+</tr>
+<tr>
+<td valign="top" width=96><p>[<i>Neighbour</i>]</p></td>
+<td valign="top"><p>is the syntax to select a <i>single</i> neighbour from the map over which the neighbourhood matrix is moved.</p>
+<p><i>Neighbour</i> is a number between <span class=courier>1</span> and <span class=courier>9</span> which indicates the position of a certain pixel in the neighbourhood matrix as numbered as in Figure 1; the value of the selected neighbour will be retrieved.&nbsp; </p>
+<p>In fact, for <i>Neighbour</i>, any expression may be used that results in a number between <span class=courier>1</span> and <span class=courier>9</span>. </p>
+</td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>The position of the single neighbour is enclosed in square brackets.</li>
+	<li>An undefined value is returned when the specified value of the expression is outside the range [1,9].</li>
+</ul>
+
+<p class=calctitle>Examples:</p>
+
+<p>The following examples show how you can calculate altitude differences in X and Y directions using neighbourhood expressions in their simplest form. Maps
+<span class=courier>DX</span> and <span class=courier>DY</span> are the output maps; a Digital Elevation Model (<span class=courier>DEM</span>) is used as input map.</p>
+
+<p class=emptyline>&nbsp;</p>
+<p class=calc00>DX = DEM#[4] - DEM#[6]</p>
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+	<td><p class=courier>DEM</p></td>
+	<td><p class=courier>DX</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>0</td>
+  	<td class=calcpict>-10</td>
+  	<td class=calcpict>-20</td>
+  	<td class=calcpict>-10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>10</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>-5</td>
+  	<td class=calcpict>-10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>-10</td>
+  	<td class=calcpict>0</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>10</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>10</td>
+  	<td class=calcpict>5</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>In words: subtract the value of the neighbour to the right of the central pixel (i.e. neighbour pixel on position 6) from the value of the neighbour to the left of the central pixel (i.e. neighbour pixel on position 4) and store the result in the central pixel in output map <span class=courier>DX</span>.</p>
+
+<p class=emptyline>&nbsp;</p>
+<p class=calc00>DY = DEM#[2] - DEM#[8]</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>DEM</p></td>
+	<td><p class=courier>DY</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>0</td>
+  	<td class=calcpict>10</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>10</td>
+  	<td class=calcpict>0</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>40</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>-5</td>
+  	<td class=calcpict>-5</td>
+  	<td class=calcpict>-5</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>-15</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>0</td>
+  	<td class=calcpict>-5</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+<p class=defnewpar>In words: subtract the value of the neighbour below the central pixel (i.e. neighbour pixel on position 8) from the value of the neighbour above the central pixel (i.e. neighbour pixel on position 2) and store the result in the central pixel in output map <span class=courier>DY</span>.</p>
+
+<p class=kopje><b>2. Using neighbourhood functions on multiple neighbours:</b></p>
+<p>This paragraph deals with <i>neighbourhood functions</i>. A neighbourhood function can calculate with all values found by a neighbourhood matrix, or only with the values of some selected neighbours in the matrix.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>Outmap = </span><i>NbFunction</i><span class=courier>(</span><i>NbExpression</i><span class=courier>)</span><br>
+<span class=courier>Outmap = </span><i>NbFunction</i><span class=courier>[</span><i>neighbour, neighbour, ...</i><span class=courier>](</span><i>NbExpression</i><span class=courier>)</span></p>
+
+
+<p class=defnewpar>where: </p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width=96><p class=courier>Outmap</p></td>
+	<td valign="top"><p>is the name of the output raster map.</p></td>
+</tr>
+<tr>
+	<td valign="top" width=96><p><i>NbFunction</i></p></td>
+	<td valign="top"><p>is a <i>neighbourhood function</i> to be used on the values as found by a neighbourhood matrix.
+      The available functions are: NBMIN, NBMAX, NBAVG, NBSUM, NBPRD, NBSTD,
+      NBCNT, NBMINP, NBMAXP, NBPRDP and NBCNDP. For more information, see the list of <a href="#available_neighbourhood_functions"><span class=bookmark>Available neighbourhood functions</span></a> below.</p></td>
+</tr>
+<tr>
+	<td valign="top" colspan="2"><p><span class=courier>[</span><i>neighbour, neighbour, ...</i><span class=courier>]</span></p>
+</td>
+</tr>
+<tr>
+	<td valign="top" width=96><p class=nospacetop>&nbsp;</p></td>
+	<td valign="top"><p class=nospacetop>in case the neighbourhood function is followed by a list of neighbours <span class=courier>[</span><i>neighbour, neighbour, ...</i><span class=courier>]</span>, then the neighbourhood function will only work on the values of these <i>selected neighbours</i>.</p>
+	<p>As in the paragraph 'Calculating with the value of a single neighbour', <i>neighbour</i> is a number between <span class=courier>1</span> and <span class=courier>9</span> which indicates the position of a certain pixel in the neighbourhood matrix (refer to
+    Figure 1).</p>
+	<p>For certain combinations of specific neighbours, the <span class=courier>[</span><i>neighbour, neighbour, ...</i><span class=courier>]</span> syntax can be simplified, see <a href="#aliases_for_specific_multiple_neighbours"><span class=bookmark>Aliases for specific multiple neighbours</span></a> below.</p></td>
+</tr>
+<tr>
+<td valign="top" width=96><p><span class=courier>(</span><i>NbExpression</i><span class=courier>)</span></p></td>
+	<td valign="top"><p>is a neighbourhood expression: a neighbourhood expression is any expression which contains the name(s) of the input map(s) and which contains at least one neighbour operator #.</p>
+	<p class=emptylinehalf>&nbsp;</p>
+	<p><i>NbExpression</i> may read for instance:</p>
+	<p class=emptylinehalf>&nbsp;</p></td>
+</tr>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width=96></td>
+	<td valign="top" width="75"><p class=courier>Map#</p></td>
+	<td><p>a neighbourhood matrix will move over input map <span class=courier>Map</span>; the values of <i>all neighbours</i> found by the matrix will be 'retrieved'. The neighbourhood function will then return the minimum, maximum, average, sum, etc. of these values.</p></td>
+</tr>
+<tr>
+	<td valign="top" width=96></td>
+	<td valign="top" width="75"><p class=courier>Map# &gt; 40</p></td>
+	<td><p>a neighbourhood matrix will move over input map <span class=courier>Map</span>; the values of the neighbours found by the matrix will be 'retrieved' when a neighbour has a value greater than 40. The neighbourhood function will then return the minimum, maximum, average, sum, etc. of these values.</p></td>
+</tr>
+</table>
+</table>
+
+
+<p class=kopje id="available_neighbourhood_functions"><i>NbFunction</i>, list of available neighbourhood functions:</p>
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a href="#NBMIN">NBMIN</a></p>
+
+</td>
+<td valign="top">
+<p>returns the smallest value of the values found by a neighbourhood matrix.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="#NBMAX">NBMAX</a></p>
+
+</td>
+<td valign="top">
+<p>returns the largest value of the values found by a neighbourhood matrix.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="#NBAVG">NBAVG</a></p>
+
+</td>
+<td valign="top">
+<p>returns the average value of the values found by a neighbourhood matrix. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="#NBSUM">NBSUM</a></p>
+
+</td>
+<td valign="top">
+<p>returns the sum of the values found by a neighbourhood matrix; neighbours that have value Undefined are ignored; when all neighbours and the central pixel have value Undefined, value 0 is returned. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="#NBPRD">NBPRD</a></p>
+
+</td>
+<td valign="top">
+<p>returns the predominant value of the values found by a neighbourhood matrix.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="#NBSTD">NBSTD</a></p>
+
+</td>
+<td valign="top">
+<p>returns the standard deviation of the values found by a neighbourhood matrix.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="#NBCNT">NBCNT</a></p>
+
+</td>
+<td valign="top">
+<p>counts the number of neighbour pixels, as found by a neighbourhood matrix, which do NOT have value Undefined nor value False. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="#NBMINP">NBMINP</a></p>
+
+</td>
+<td valign="top">
+<p>returns the position of the neighbour that has the smallest value (i.e. as a number between 1 and 9); when multiple neighbour pixels have the same smallest value, then the precedence is: central pixel number 5, and then 1, 2, 3, 4, 6, 7, 8, 9.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="#NBMAXP">NBMAXP</a></p>
+
+</td>
+<td valign="top">
+<p>returns the position of the neighbour that has the largest value (i.e. as a number between 1 and 9); when multiple neighbour pixels have the same largest value, then the precedence is: central pixel number 5, and then 1, 2, 3, 4, 6, 7, 8, 9. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="#NBPRDP">NBPRDP</a></p>
+
+</td>
+<td valign="top">
+<p>returns the position of the neighbour with the predominant value (i.e. as a number between 1 and 9); when multiple neighbour pixels have this predominant value, then the precedence is: central pixel number 5, and then 1, 2, 3, 4, 6, 7, 8, 9. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p><a href="#NBCNDP">NBCNDP</a></p>
+
+</td>
+<td valign="top">
+<p>returns the position of the neighbouring pixel for which the outcome of a certain condition is NOT Undefined nor False (thus returns a number between 1 and 9); when multiple neighbour pixels satisfy the condition, then the precedence is: central pixel number 5, and then 1, 2, 3, 4, 6, 7, 8, 9; when none of the neighbours satisfies the specified condition the outcome value is undefined. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje id="aliases_for_specific_multiple_neighbours">Aliases for specific multiple neighbours:</p>
+
+<p>Instead of specifying a list of neighbours as <span class=courier>[</span><i>neighbour, neighbour, ...</i><span class=courier>]</span>, you may use a shorter syntax for some combinations of specific neighbours. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="168">
+<p class=th>Regular syntax</p>
+
+</td>
+<td valign="top" width="108">
+<p class=th>Alias</p>
+
+</td>
+<td valign="top">
+<p class=th>Explanation</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="168">
+<p><i>NbFunction</i>[2,4,6,8]</p>
+
+</td>
+<td valign="top" width="108">
+<p><i>NbFunction</i>4</p>
+
+</td>
+<td valign="top">
+<p>to calculate only with the neighbours on positions 2, 4, 6, 8 and thus excluding the central pixel, use <i>NbFunction</i> with suffix 4, e.g. NBAVG4. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="168">
+<p><i>NbFunction</i>[2,4,5,6,8]</p>
+
+</td>
+<td valign="top" width="108">
+<p><i>NbFunction</i>5</p>
+
+</td>
+<td valign="top">
+<p>to calculate only with the neighbours on positions 2, 4, 5, 6, 8 and thus including the central pixel, i.e. the 4-connected pixels, use <i>NbFunction</i> with suffix 5, e.g.
+<a href="#NBAVG5">NBAVG5</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="168">
+<p><i>NbFunction</i>[1,2,3,4,6,7,8,9]</p>
+
+</td>
+<td valign="top" width="108">
+<p><i>NbFunction</i>8</p>
+
+</td>
+<td valign="top">
+<p>to calculate only with the neighbours on positions 1, 2, 3, 4, 6, 7, 8, 9 and thus excluding the central pixel, use <i>NbFunction</i> with suffix
+8, e.g. NBAVG8. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub id="NBMIN">NBMIN Example:</p>
+<p class=calc00>OutMap = NBMIN(InMap#)</p>
+
+<p class=defnewpar><a onclick="doExpandContents(nbminmap,min1)" href="#NBMIN" id="min1">View maps</a></p>
+<DIV ID="nbminmap" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>15</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>10</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>10</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  	<td class=calcpict>10</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the minimum value of each 9 values found by a neighbourhood matrix which moves over <span class=courier>InMap</span>.</p>
+<p class=kopje id="NBMAX">NBMAX Example:</p>
+
+<p class=calc00 >OutMap = NBMAX(InMap#)</p>
+<p class=defnewpar><a onclick="doExpandContents(nbmaxmap,max1)" href="#NBMAX" id="max1">View maps</a></p>
+<DIV ID="nbmaxmap" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the maximum value of each 9 values found by a neighbourhood matrix which moves over <span class=courier>InMap</span>.</p>
+
+<p class=kopje id="NBAVG">NBAVG Examples:</p>
+<p class=calc00>OutMap1 = NBAVG(InMap#)</p>
+
+<p class=defnewpar><a onclick="doExpandContents(nbavgmap,avg1)" href="#NBAVG" id="avg1">View maps</a></p>
+<DIV ID="nbavgmap" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap1</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>27.50</td>
+  	<td class=calcpict>27.50</td>
+  	<td class=calcpict>30.00</td>
+  	<td class=calcpict>32.50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>26.67</td>
+  	<td class=calcpict>26.11</td>
+  	<td class=calcpict>26.67</td>
+  	<td class=calcpict>26.67</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>26.67</td>
+  	<td class=calcpict>23.89</td>
+  	<td class=calcpict>20.00</td>
+  	<td class=calcpict>17.50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>27.50</td>
+  	<td class=calcpict>25.00</td>
+  	<td class=calcpict>20.00</td>
+  	<td class=calcpict>16.25</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: calculate the average of each 9 values found by a neighbourhood matrix which moves over <span class=courier>InMap</span>.</p>
+
+<p class=tip>Note:</p>
+<p class=tiptext>Using this function is the same as using the <a href="..//ilwisapp/sec/filter_avg3x3_sec.htm" onClick="return popup(this, 'notes')" > AVG3X3</a> filter in the <a href="../ilwisapp/filter.htm"> Filter</a> operation.</p>
+<p class=emptyline id="NBAVG5">&nbsp;</p>
+
+<p class=calc00>OutMap2 = NBAVG[2,4,5,6,8](InMap#)</p>
+<p class=calc00 id="NBAVG5">OutMap2 = NBAVG5(InMap#)</p>
+
+<p class=defnewpar><a onclick="doExpandContents(nbavg5map,avg5_1)" href="#NBAVG5" id="avg5_1">View maps</a></p>
+<DIV ID="nbavg5map" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap2</p></td>
+	<td><p class=courier>OutMap2</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30.00</td>
+  	<td class=calcpict>30.00</td>
+  	<td class=calcpict>33.75</td>
+  	<td class=calcpict>38.33</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>25.00</td>
+  	<td class=calcpict>25.00</td>
+  	<td class=calcpict>24.00</td>
+  	<td class=calcpict>25.00</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>28.75</td>
+  	<td class=calcpict>23.00</td>
+  	<td class=calcpict>19.00</td>
+  	<td class=calcpict>17.50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>26.67</td>
+  	<td class=calcpict>27.50</td>
+  	<td class=calcpict>20.00</td>
+  	<td class=calcpict>15.00</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: calculate the average of the values of the
+neighbours on position 2, 4, 5, 6 and 8 (i.e. the 4-connected pixels) as found by a neighbourhood matrix which moves over <span class=courier>InMap</span>.</p>
+<p class=kopje id="NBSUM">NBSUM Examples:</p>
+<p class=calc00>OutMap = NBSUM(InMap#)</p>
+
+<p class=defnewpar><a onclick="doExpandContents(nbsummap,sum1)" href="#NBSUM" id="sum1">View maps</a></p>
+<DIV ID="nbsummap" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>110</td>
+  	<td class=calcpict>165</td>
+  	<td class=calcpict>180</td>
+  	<td class=calcpict>130</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>160</td>
+  	<td class=calcpict>235</td>
+  	<td class=calcpict>240</td>
+  	<td class=calcpict>160</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>160</td>
+  	<td class=calcpict>215</td>
+  	<td class=calcpict>180</td>
+  	<td class=calcpict>105</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>110</td>
+  	<td class=calcpict>150</td>
+  	<td class=calcpict>120</td>
+  	<td class=calcpict>65</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the sum of the values found by a neighbourhood
+matrix which moves over <span class=courier>InMap</span>.</p>
+<p class=emptyline id="NBSUM2">&nbsp;</p>
+<p class=calc00>OutMap = NBSUM(InMap#)/9</p>
+<p class=defnewpar><a onclick="doExpandContents(nbsum2map,sum2_1)" href="#NBSUM2" id="sum2_1">View maps</a></p>
+<DIV ID="nbsum2map" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>12.22</td>
+  	<td class=calcpict>18.33</td>
+  	<td class=calcpict>20.00</td>
+  	<td class=calcpict>14.44</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>17.78</td>
+  	<td class=calcpict>26.11</td>
+  	<td class=calcpict>26.67</td>
+  	<td class=calcpict>17.78</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>17.78</td>
+  	<td class=calcpict>23.89</td>
+  	<td class=calcpict>20.00</td>
+  	<td class=calcpict>11.67</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>12.22</td>
+  	<td class=calcpict>16.67</td>
+  	<td class=calcpict>13.33</td>
+  	<td class=calcpict>7.22</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the sum of the values found by a neighbourhood matrix and divide the sum by the number of neighbours (i.e. return the mean of the pixel values of all neighbours).</p>
+<p class=emptyline id="NBSUM5">&nbsp;</p>
+<p class=calc00>OutMap = NBSUM[2,4,5,6,8](InMap#)/5</p>
+<p class=calc00>OutMap = NBSUM5(InMap#)/5</p>
+<p class=defnewpar><a onclick="doExpandContents(nbsum5map,sum5_1)" href="#NBSUM5" id="sum5_1">View maps</a></p>
+<DIV ID="nbsum5map" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>18.00</td>
+  	<td class=calcpict>24.00</td>
+  	<td class=calcpict>27.00</td>
+  	<td class=calcpict>23.00</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20.00</td>
+  	<td class=calcpict>25.00</td>
+  	<td class=calcpict>24.00</td>
+  	<td class=calcpict>20.00</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>23.00</td>
+  	<td class=calcpict>23.00</td>
+  	<td class=calcpict>19.00</td>
+  	<td class=calcpict>14.00</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>16.00</td>
+  	<td class=calcpict>22.00</td>
+  	<td class=calcpict>16.00</td>
+  	<td class=calcpict>9.00</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the mean of the pixel values of all 4-connected neighbours.
+<p class=kopje id="NBPRD">NBPRD Example:</p>
+<p class=calc00>OutMap = NBPRD(InMap#)</p>
+<p class=defnewpar><a onclick="doExpandContents(nbprdmap,prd1)" href="#NBPRD" id="prd1">View maps</a></p>
+<DIV ID="nbprdmap" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>20</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>20</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the predominant value of all neighbour pixel found by a neighbourhood matrix which moves over <span class=courier>InMap</span>.</p>
+
+<p class=kopje id="NBSTD">NBSTD Example:</p>
+<p class=calc00>OutMap = NBSTD(InMap#)</p>
+<p class=defnewpar><a onclick="doExpandContents(nbstdmap,std1)" href="#NBSTD" id="std1">View maps</a></p>
+<DIV ID="nbstdmap" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>5.0</td>
+  	<td class=calcpict>8.8</td>
+  	<td class=calcpict>13.0</td>
+  	<td class=calcpict>15.5</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5.2</td>
+  	<td class=calcpict>7.8</td>
+  	<td class=calcpict>12.5</td>
+  	<td class=calcpict>15.4</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>6.1</td>
+  	<td class=calcpict>6.5</td>
+  	<td class=calcpict>6.1</td>
+  	<td class=calcpict>5.2</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>6.5</td>
+  	<td class=calcpict>6.3</td>
+  	<td class=calcpict>7.1</td>
+  	<td class=calcpict>4.8</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the standard deviation of the values found by a neighbourhood matrix which moves over <span class=courier>InMap</span>.</p>
+
+<p class=kopje id="NBCNT">NBCNT Examples</p>
+<p class=calc00>OutMap1 = NBCNT(InMap1#)</p>
+<p class=defnewpar><a onclick="doExpandContents(nbcntmap,cnt1)" href="#NBCNT" id="cnt1">View maps</a></p>
+<DIV ID="nbcntmap" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap1</p></td>
+	<td><p class=courier>OutMap1</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>4</td>
+  	<td class=calcpict>6</td>
+  	<td class=calcpict>6</td>
+  	<td class=calcpict>4</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>6</td>
+  	<td class=calcpict>9</td>
+  	<td class=calcpict>9</td>
+  	<td class=calcpict>6</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>6</td>
+  	<td class=calcpict>9</td>
+  	<td class=calcpict>9</td>
+  	<td class=calcpict>6</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>4</td>
+  	<td class=calcpict>6</td>
+  	<td class=calcpict>6</td>
+  	<td class=calcpict>4</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: count the number of neighbour pixels, as found by a neighbourhood
+matrix that moves over <span class=courier>InMap1</span>, which do NOT have an
+undefined value. </p>
+<p class=defnewpar>An area is considered to be flat when in the moving window of
+3 by 3 pixels all pixels have the same value. By using one of the following
+expression you can check which pixels have 8 neighbours with the same altitude
+as the central pixel. </p>
+<p class=emptyline id="NBCNT2">&nbsp;</p>
+<p class=calc00>Flat = NBCNT(DEM#=DEM)=9</p>
+<p class=defnewpar><a onclick="doExpandContents(nbcnt2map,cnt2_1)" href="#NBCNT2" id="cnt2_1">View maps</a></p>
+<DIV ID="nbcnt2map" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>DEM</p></td>
+	<td><p class=courier>Flat</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return <span class=courier>True</span> in map <span class=courier>Flat</span> if all pixels examined by the neighbourhood matrix moving over map <span class=courier>DEM</span> (Dem#) have the same value (=9) as the central pixel in that map
+<span class=courier>DEM</span>. This expression can be used to identify flat areas in your Digital Elevation Model (DEM). You may wish to add additional contour lines inside the flat areas and perform the
+<a href="../ilwisapp/contour_interpolation.htm"> Contour Interpolation</a> operation again to improve your DEM. </p>
+<p class=emptyline id="NBCNT3">&nbsp;</p>
+<p class=calc00>Flat = NBCNT(DEM#=DEM)=8</p>
+<p class=defnewpar><a onclick="doExpandContents(nbcnt3map,cnt3_1)" href="#NBCNT3" id="cnt3_1">View maps</a></p>
+<DIV ID="nbcnt3map" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>DEM</p></td>
+	<td><p class=courier>Flat</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>True</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return <span class=courier>True</span> in map <span class=courier>Flat</span> if 8 of the 8 selected neighbours in map <span class=courier>DEM</span> have the same value as the central pixel in map <span class=courier>DEM</span>.</p>
+
+<p class=emptyline id="NBCNT4">&nbsp;</p>
+<p class=calc00>Streams = NBCNT(DEM#&gt;DEM)&gt;=5</p>
+<p class=defnewpar><a onclick="doExpandContents(nbcnt4map,cnt4_1)" href="#NBCNT4" id="cnt4_1">View maps</a></p>
+<DIV ID="nbcnt4map" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>DEM</p></td>
+	<td><p class=courier>Streams</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>True</td>
+  	<td class=calcpict>True</td>
+  	<td class=calcpict>False</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>True</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return <span class=courier>True</span> in map <span class=courier>Streams</span> if 5 or more of all neighbour pixels in map <span class=courier>DEM</span> have a value greater than the central pixel. </p>
+<p class=emptyline id="NBCNT5">&nbsp;</p>
+
+<p class=calc00>Streams2 = IFF(NBCNT(DEM#&gt;DEM)&gt;=5,NBMAXP(DEM#),?)</p>
+<p class=defnewpar><a onclick="doExpandContents(nbcnt5map,cnt5_1)" href="#NBCNT5" id="cnt5_1">View maps</a></p>
+<DIV ID="nbcnt5map" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>DEM</p></td>
+	<td><p class=courier>Streams2</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>?</td>
+  	<td class=calcpict>?</td>
+  	<td class=calcpict>?</td>
+  	<td class=calcpict>?</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>?</td>
+  	<td class=calcpict>3</td>
+  	<td class=calcpict>3</td>
+  	<td class=calcpict>?</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>?</td>
+  	<td class=calcpict>?</td>
+  	<td class=calcpict>?</td>
+  	<td class=calcpict>2</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>?</td>
+  	<td class=calcpict>?</td>
+  	<td class=calcpict>?</td>
+  	<td class=calcpict>?</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the position of the neighbour that has the largest value in map <span class=courier>Streams</span> if 5 or more of all neighbour pixels in map <span class=courier>DEM</span> have a value greater than the central pixel.
+Return undefined if less than 5 of all neighbour pixels in map <span class=courier>DEM</span> have a value greater than the central pixel.</p>
+
+<p class=kopje id="NBMINP">NBMINP Examples</p>
+<p class=calc00>Aspect = NBMINP(DEM#)</p>
+<p class=defnewpar><a onclick="doExpandContents(nbminpmap,minp_1)" href="#NBMINP" id="minp_1">View maps</a></p>
+<DIV ID="nbminpmap" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>DEM</p></td>
+	<td><p class=courier>Aspect</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>9</td>
+  	<td class=calcpict>9</td>
+  	<td class=calcpict>8</td>
+  	<td class=calcpict>7</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>6</td>
+  	<td class=calcpict>6</td>
+  	<td class=calcpict>9</td>
+  	<td class=calcpict>8</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>3</td>
+  	<td class=calcpict>6</td>
+  	<td class=calcpict>5</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>2</td>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>3</td>
+  	<td class=calcpict>2</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return in map <span class=courier>Aspect</span>, the position of the neighbour with the smallest value of each 9 values as found by a neighbourhood matrix which moves over map <span class=courier>DEM</span>. The returned position will be a value between 1 and 9; these values can be interpreted as the aspect of the slopes in your Digital Elevation Model (DEM). For more information, refer to <a href="how_to_calculate_classified_aspect_maps_advanced.htm">How to calculate a classified aspect map</a>.</p>
+
+<p class=emptyline id="NBMINP2">&nbsp;</p>
+<p class=calc00>Pit = NBMINP(DEM#)=5</p>
+<p class=defnewpar><a onclick="doExpandContents(nbminp2map,minp2_1)" href="#NBMINP2" id="minp2_1">View maps</a></p>
+<DIV ID="nbminp2map" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>DEM</p></td>
+	<td><p class=courier>Pit</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>True</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>True</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  	<td class=calcpict>False</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return <span class=courier>True</span> in map <span class=courier>Pit</span> if the central pixel has the smallest value of all neighbour pixels as found by a neighbourhood matrix which moves over <span class=courier>DEM</span>.</p> 
+<p class=tip>Note:</p>
+<p class=tiptext>This expression can be used to identify local pits in your Digital Elevation Model (DEM).</p>
+
+<p class=kopje id="NBMAXP">NBMAXP Example</p>
+<p class=calc00>OutMap = NBMAXP(InMap#)</p>
+<p class=defnewpar><a onclick="doExpandContents(nbmaxpmap,maxp_1)" href="#NBMAXP" id="maxp_1">View maps</a></p>
+<DIV ID="nbmaxpmap" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>6</td>
+  	<td class=calcpict>6</td>
+  	<td class=calcpict>5</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>3</td>
+  	<td class=calcpict>3</td>
+  	<td class=calcpict>2</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>8</td>
+  	<td class=calcpict>7</td>
+  	<td class=calcpict>4</td>
+  	<td class=calcpict>2</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>4</td>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>1</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the position of the neigbour that has the
+largest value as found by a neighbourhood matrix which moves over <span class=courier>InMap</span>. </p>
+<p class=kopje id="NBPRDP">NBPRDP Example</p>
+<p class=calc00>OutMap = NBPRDP(InMap#)</p>
+<p class=defnewpar><a onclick="doExpandContents(nbprdpmap,prdp_1)" href="#NBPRDP" id="prdp_1">View maps</a></p>
+<DIV ID="nbprdpmap" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>5</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>2</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>4</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>1</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the position of the neighbour with the
+predominant value as found by a neighbourhood matrix which moves over <span class=courier>InMap</span>. </p>
+<p class=kopje id="NBCNDP">NBCNDP Examples</p>
+<p class=calc00>OutMap = NBCNDP(InMap#)</p>
+<p class=defnewpar><a onclick="doExpandContents(nbcndpmap,cndp_1)" href="#NBCNDP" id="cndp_1">View maps</a></p>
+<DIV ID="nbcndpmap" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the position of the neighbouring pixel for
+which the outcome is NOT undefined nor False.</p>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>When multiple pixels satisfy the condition, then the precedence is the central pixel
+      (i.e. number 5), and then 1, 2, 3, 4, 6, 7, 8, 9.</li>
+	<li>When none of the neighbours satisfies the specified condition
+the outcome is undefined.</li>
+</ul>
+<p class=emptyline id="NBCNDP2">&nbsp;</p>
+
+<p class=calc00>OutMap = NBCNDP(InMap#&gt;20)</p>
+<p class=defnewpar><a onclick="doExpandContents(nbcndp2map,cndp2_1)" href="#NBCNDP2" id="cndp2_1">View maps</a></p>
+<DIV ID="nbcndp2map" STYLE="display: none;">
+<table>
+<tr>
+	<td><p class=courier>InMap</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>40</td>
+  	<td class=calcpict>50</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  	<td class=calcpict>25</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>30</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>10</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>35</td>
+  	<td class=calcpict>25</td>
+  	<td class=calcpict>20</td>
+  	<td class=calcpict>15</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>5</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>2</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>3</td>
+  	<td class=calcpict>2</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>?</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</DIV>
+<p class=defnewpar>In words: return the position of the neighbouring pixel for which the outcome of a certain condition (i.e. pixel value &gt; 20) is not undefined nor False.&nbsp;</p>
+
+<p class=kopje><b>3. Using predefined neighbourhood variables</b></p>
+
+<p>This paragraph treats the neighbourhood variables NBDIS, NBPOS, and NBFLT(<i>fltname</i>) and their syntax. NBDIS, NBPOS and NBFLT can only be used in combination with <i>NbFunction</i> and <i>NbExpression</i> as described above.</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p><a name="NBDIS">NBDIS</a></p>
+
+</td>
+<td valign="top">
+<p>returns the distance between the central pixel and its neighbouring ones.</p>
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+<li>NBDIS and <a href="calc_predefined_variable_d.htm">%D</a> are aliases of each
+  other.
+</li>
+<li>The distance to the central pixel is 0, the distance to pixels on positions 2, 4,
+6 and 8 is 1, and the distance to pixels on positions 1, 3, 7 and 9 is &#8730;2
+  (i.e. &#8776; 1.4).
+<table>
+<tr>
+	<td>Position of neighbours:</td>
+	<td>Returned values:</td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>2</td>
+  	<td class=calcpict>3</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>4</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>6</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>7</td>
+  	<td class=calcpict>8</td>
+  	<td class=calcpict>9</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>1.4</td>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>1.4</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>0</td>
+  	<td class=calcpict>1</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>1.4</td>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>1.4</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+
+<p class=tiptext><span class=tip>Tip:</span> NBDIS is generally multiplied by the pixel size of a raster map or a georeference, for instance like: NBDIS <span class=courier>*</span> <a href="calc_pixsize.htm">PIXSIZE</a>(<i>RasterMap</i>) or NBDIS <span class=courier>*</span> PIXSIZE(<i>GeoReference.grf</i>).</p>
+</td>
+
+</tr>
+
+<tr>
+<td valign="top" width=96>
+<p><a name="NBPOS">NBPOS</a></p>
+</td>
+
+<td valign="top">
+<p>returns the position of a neighbour in the neighbourhood expression.</p>
+
+<p class=tiptext><span class=tip>Note:</span> NBPOS and <a href="calc_predefined_variable_p.htm">%P</a> are aliases of each other.
+
+<table>
+<tr>
+	<td>Returned values:</td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+  	<td class=calcpict>1</td>
+  	<td class=calcpict>2</td>
+  	<td class=calcpict>3</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>4</td>
+  	<td class=calcpict>5</td>
+  	<td class=calcpict>6</td>
+  </tr>
+  <tr>
+  	<td class=calcpict>7</td>
+  	<td class=calcpict>8</td>
+  	<td class=calcpict>9</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>NBFLT (<i>FltName</i>)</p>
+
+</td>
+<td valign="top">
+<p>applies a linear 3x3 filter on the values found by a neighbourhood matrix
+where <i>FltName</i> is one of the system filters: <a href="..//ilwisapp/sec/filter_avg3x3_sec.htm" onClick="return popup(this, 'notes')" >AVG3x3</a>,
+<a href="..//ilwisapp/sec/filter_edgesenh_sec.htm" onClick="return popup(this, 'notes')" >EDGESENH</a>, etc. or a <a href="../ilwisapp/filters_user_defined_filters.htm">user-defined
+filter</a>.</p>
+</td>
+</tr>
+</table>
+
+
+<p class=calctitle>Examples</p>
+<p class=kopjeaftertitlesub>NBDIS Example</p>
+<p>See <a href="how_to_calculate_distances_using_iterations_advanced.htm">How to calculate distances using iterations</a>. </p>
+
+<p class=kopje>NBPOS Example</p>
+<p class=calc00>Ridges = NBCNT8(10-Aspect#=NBPOS)</p>
+<p class=defnewpar>Calculate for each pixel the number of neighbour pixels for which the aspect is in the direction of the central pixel. A result of zero indicates a ridge or a flat area.
+
+<p class=kopje>NBFLT Example</p>
+<p class=calc00>OUT = NBSUM(Map1# * NBFLT(Edgesenh))</p>
+<p class=defnewpar>Apply the edge enhancement filter on input map <span class=courier>Map1</span> and sum the values of each neighbourhood matrix (same as using the edge enhancement filter in the <a href="../ilwisapp/filter.htm">Filter</a> operation).</p>
+
+<h2 id="iterations">Iterations</h2>
+
+<p>Iterations are a special type of calculations. They are a successive repetition of a mathematical operation, using the result of one calculation as input for the
+next one. </p>
+
+<p>The calculation stops when the difference of the output compared to the input is negligible or if the number of iterations is reached as previously defined. Iterations are often used in combination with neighbourhood operations. Such an application might be for instance the selection of an item or area which fits a certain condition, starting from one pixel.</p>
+
+<p class=defnewpar>Iteration expressions can directly be typed on the command line of the Main window, or in the <a href="../ilwisapp/iteration_dialog_box.htm">Iteration : dialog box</a>.</p>
+
+<p class=calctitle>Syntax</p>
+
+<p class=syntax><span class=courier>MAPITER</span>(<i>StartMap</i>, <i>IterExpr</i>)<br>
+<span class=courier>MAPITER</span>(<i>StartMap</i>, <i>Iterexpr, Nr of Iterations</i>)</p>
+<p class=defnewpar>where:</p>
+<ul>
+	<li>the first expression performs iterations on the <i>StartMap</i> according to  the iteration expression <i>IterExpr</i> until no pixel changes anymore, and</li>
+	<li>the second expression performs a specified <i>Nr of Iterations</i> on the <i>StartMap</i> according to the iteration expression <i>IterExpr</i>.</li>
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+<p class=syntax><span class=courier>MAPITERPROP</span>(<i>StartMap</i>, <i>IterExpr</i>)<br>
+<span class=courier>MAPITERPROP</span>(<i>StartMap</i>, <i>IterExpr, Nr of
+Iterations</i>)</p>
+<p class=defnewpar>where:</p>
+<ul>
+	<li>the first expression performs iterations with propagation on a <i> StartMap</i> according to the iteration expression <i> IterExpr</i> until no pixel changes anymore; the newly calculated value for a pixel is used in calculating the next line instead of in the next iteration.
+	<li>the second expression performs a specified <i> Nr of iterations</i> with propagation on a <i> StartMap</i> according to the iteration expression <i>IterExpr</i>; the newly calculated value for a pixel is used in calculating the next line instead of in the next iteration.
+</ul>
+<p class=defnewpar>After each iteration ILWIS shows the number of changed pixels. This number is the total of changes after performing one iteration in all directions (up, down, right and left). </p>
+
+<p class=calctitle>Examples</p>
+
+<p>Examples on using iterations are presented in <a href="how_to_calculate_distances_using_iterations_advanced.htm">How to calculate distances using iterations</a> and <a href="how_to_calculate_flooded_area_and_water_volume_advanced.htm">How to calculate flooded area and water volume after construction of a dam</a>. </p>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="calc.htm">Map and Table Calculation</a></p>
+<p class=seealsolinks><a href="calc_predefined_variable_d.htm">%D</a></p>
+<p class=seealsolinks><a href="calc_predefined_variable_p.htm">%P</a></p>
+
+</body

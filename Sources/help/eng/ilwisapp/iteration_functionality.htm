@@ -1,0 +1,104 @@
+<html>
+
+<head>
+<title>Iteration : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Iteration">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Iteration</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Iterations are a special type of map calculations. They are a successive repetition of a mathematical operation, using the result of one calculation as input for the next. These calculations are performed line by line, pixel by pixel and take place in all directions. When a calculation in one direction is finished (for instance from top to bottom) a rotation takes place for the calculation in the next direction. </p>
+
+<p class=defnewpar>The calculation stops when the difference of the output compared to the input is negligible or if the number of steps is reached which was defined before. Iterations are often used in combination with neighbourhood operations. Such an application might be for instance the selection of an item or area which fits a certain condition, starting from one pixel. For more information, see Map Calculation : neighbourhood operations; an example is presented in topic <a href="../ilwis/how_to_calculate_flooded_area_and_water_volume_advanced.htm">How to calculate flooded area and water volume</a> after constructing a dam.</p>
+
+<p class=defnewpar>In ILWIS, four iteration operations are available listed below:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">
+<p class=linesp01befafter>MAPITER(startmap, iterexpr)</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>performs iterations on the startmap according the iteration expression until no pixel changes anymore;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=linesp01befafter>MAPITER(startmap, iterexpr, nr&nbsp;of&nbsp;iterations)</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>performs a specified number of iterations on the startmap according the iteration expression;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=linesp01befafter>MAPITERPROP(startmap, iterexpr)</p>
+
+</td>
+<td valign="top">
+<p class=linesp01befafter>performs iterations with propagation on a startmap until no pixel changes anymore; the newly calculated value for a pixel is used in calculating the next pixel instead of in the next iteration;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=linesp01befafter>MAPITERPROP(startmap, iterexpr, nr&nbsp;of&nbsp;iterations)</p>
+
+</td>
+<td valign="top">
+<p>performs a specified number of iterations with propagation on a startmap; the newly calculated value for a pixel is used in calculating the next pixel instead of in the next iteration.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The input map for an iteration is called a start map and contains one or more pixels which act as the starting point of the calculation.The iteration expression defines a certain condition or defines a calculation to be performed. </p>
+
+<p class=defnewpar>After each iteration ILWIS shows the number of changed pixels. </p>
+
+<p class=kopje>Input map requirements: </p>
+
+<p>The start map should contain one or more starting pixels. The other pixels should not be undefined because then every calculation will result into another undefined, unless you use the IFUNDEF or IFF combined with ISUNDEF (see also <a href="../ilwis/calc_aaf.htm#undefined_functions">Map and Table Calculation : Functional overview of operators and functions</a>).</p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output raster map will generally use the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>. The output map uses the georeference of the input raster map. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/calc_special_neighbourhood_operations_and_iterations.htm">Map calculation : neighbourhood operations &amp; iterations</a></p>
+
+<p class=seealsolinks><a href="iteration_dialog_box.htm">Iteration : dialog box</a></p>
+
+<p class=seealsolinks><a href="iteration_command_line.htm">Iteration : command line</a></p>
+
+<p class=seealsolinks><a href="iteration_algorithm.htm">Iteration : algorithm</a></p>
+
+</body

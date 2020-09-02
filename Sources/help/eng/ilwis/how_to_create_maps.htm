@@ -1,0 +1,111 @@
+<html>
+
+<head>
+<title>How to create maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygon maps, How to create ..., Segment maps, Point maps, Create ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to create a map</h1>
+
+<!--<hr>-->
+
+<p class=kopje>To create a raster map:</p>
+
+<ul>
+
+<li>	rasterize an existing point, segment, or polygon map, or</li>
+
+<li>	choose the <span class=arial>Create</span> command on the File menu in the Main window, or</li>
+
+<li>	in the Operation-tree, open the <span class=arial>Create</span> item and double-click the <span class=arial>New Raster Map</span> item,</li>
+
+<li>	in the Operation-list, double-click the <span class=arial>New Raster Map</span> item.</li>
+
+</ul>
+
+<p>When you do not rasterize an existing point, segment or polygon map but create a new raster map from scratch, you have to assign class names, IDs or values to the pixels with the pixel editor. </p>
+
+<p class=kopje>To create a point map or a segment map:</p>
+
+<ul>
+
+<li>	choose the <span class=arial>Create</span> command on the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Create</span> item, and double-click <span class=arial>New Point Map</span>, or the <span class=arial>New Segment Map</span> item, or</li>
+
+<li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click <span class=arial>New Point Map</span>, or the <span class=arial>New Segment Map</span> item, or</li>
+
+<li>	when you already have or created a <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> or a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> for a map, you can also click this domain or coordinate system with the right mouse button in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, then select a <span class=arial>Create</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. In the appearing Create dialog box, the selected domain or coordinate system is automatically filled out, or</li>
+
+<li>	when you already have a map of the same dimensions, and you displayed this map in a map window, you can also open the <a href="map_window_menu_commands.htm">File menu</a> in the map window and select a <span class=arial>Create</span> command. In the appearing Create dialog box, the coordinate system and map boundaries are filled out automatically for the new map.</li>
+
+</ul>
+
+<p class=defnewpar>In the <span class=arial>Create</span> dialog box which follows, you have to specify for instance the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> to use, the map boundaries of this map, the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> to use, etc. If you do not yet have a coordinate system or a domain you have to create them (you can use the little create buttons <img src="../images/crea.gif" align=bottom width="17" height="22"> in the dialog box). </p>
+
+<p class=tip>Tip 1: </p>
+
+<p class=tiptext>When you have multiple neighbouring map sheets, you should create one coordinate system that covers all the map sheets. This coordinate system should then be used for all maps. </p>
+
+<p class=tiptext>For the map boundaries, you should stick to the coordinates of each map sheet that you digitize. </p>
+
+<p class=tip>Tip 2: </p>
+
+<p class=tiptext>When you want to digitize several maps of the same theme but of different years, you should create one domain and use this domain for all maps. Not every item present in a domain needs to be present in each map that uses that domain.</p>
+
+<p class=kopje>To use the point or segment editor:</p>
+
+<p>After one of the <span class=arial>Create</span> dialog boxes, a <a href="editors_introduction_to_map_editors.htm">map editor</a> is automatically started. Fill the map with points or segments with or without digitizer. For more information, see <a href="../ilwis/how_to_set_up_a_digitizer_and_start_digitizing.htm">How to setup a digitizer</a>, <a href="point_editor_functionality.htm">Point editor : functionality</a>, or <a href="segment_editor_functionality.htm">Segment editor : functionality</a>. </p>
+
+<p class=kopje>To create a polygon map:</p>
+
+<p>First create a segment map and digitize the polygon boundaries. It is advised to simultaneously create a point map and digitize for each polygon a point (a label) with the class name, ID, or value for each polygon. Then, check the segments (i.e. the polygon boundaries) and polygonize the segments (preferably using the label points). </p>
+
+<p>For more information, see <a href="how_to_create_polygon_maps.htm">How to create a polygon map</a>.</p>
+
+<p class=kopje>To rasterize vector maps:</p>
+
+<p>When finished creating point, segment and polygon maps, you can rasterize them:</p>
+
+<ul>
+
+<li>	choose the <a href="../ilwisapp/rasterize.htm">Rasterize</a> command from the Operations menu in the Main window, or </li>
+
+<li>	in the Operation-tree, open the <span class=arial>Rasterize</span> item, and double-click the <span class=arial>PntToRas</span>, <span class=arial>SegToRas</span> or <span class=arial>PolToRas</span> operation, </li>
+
+<li>	in the Operation-list, double-click the <span class=arial>PntToRas</span>, <span class=arial>SegToRas</span> or <span class=arial>PolToRas</span> operation.</li>
+
+</ul>
+
+<p class=defnewpar>In the rasterize dialog box which follows, you have to specify the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of the output map. If you do not have a georeference yet, you have to create one. You may need to think about an appropriate pixel size for the output raster map(s). </p>
+
+<p class=tip>Tip 3: </p>
+
+<p class=tiptext>It is advised to use one georeference for all raster maps of the same area.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/create_a_point_map.htm">Create point map (dialog box)</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/create_a_segment_map.htm">Create a segment map (dialog box)</a></p>
+
+</body

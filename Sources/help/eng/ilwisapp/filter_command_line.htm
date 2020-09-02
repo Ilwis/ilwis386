@@ -1,0 +1,163 @@
+<html>
+
+<head>
+<title>Filter : command line (1)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filter operation, MapFilter">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Filter</h1>
+
+<h1 class=secondline>Command line (1)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName, <i>FilterName</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapFilter</span>(InputMapName, <i>FilterExpression</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapFilter</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Filter operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>FilterName</i></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwisapp/sec/filter_avg3x3_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>avg3x3</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_binmajor_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>binmajor</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_eighttofour_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>conn8to4</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_d2fdx2_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>d2fdx2</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_d2fdxdy_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>d2fdxdy</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_d2fdy2_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>d2fdy2</a></span> <span class=courier>|</span>  <a href="..//ilwisapp/sec/filter_dfddn_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>dfddn</a></span> 
+<span class=courier>|</span> <a href="..//ilwisapp/sec/filter_dfdup_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>dfdup</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_dfdx_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>dfdx</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_dfdy_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>dfdy</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_dilate4_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>dilate4</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_dilate8_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>dilate8</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_edgesenh_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>edgesenh</a></span> <span class=courier>|</span> 
+<a href="..//ilwisapp/sec/filter_inbdn4_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>inbnd4</a></span>
+<span class=courier>|</span> <a href="..//ilwisapp/sec/filter_inbnd8_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>inbnd8</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_laplace_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>laplace</a></span> <span class=courier>|</span> <span class=courier>lifegame</span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_majority_filter_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>majority</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_majority_filter_undef_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>majundef</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_majority_filter_zero_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>majzero</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_med3x3_sec.htm" onClick="return popup(this, 'notes')" >
+<span class=courier>med3x3</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_med5x5_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>med5x5</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_outbnd4_sed.htm" onClick="return popup(this, 'notes')" ><span class=courier>outbnd4</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_outbnd8_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>outbnd8</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_peppsalt_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>peppsalt</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_shadow_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>shadow</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_shrink4_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>shrink4</a></span> <span class=courier>|</span> <a href="..//ilwisapp/sec/filter_shrink_8_sec.htm" onClick="return popup(this, 'notes')" >
+<span class=courier>shrink8</a></span> <span class=courier>|</span> <i>name of user-defined linear filter </i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>FilterExpression</i></p>
+
+</td>
+<td valign="top">
+<p><span class=courier>FilterLinear(</span><i>rows,cols,expression</i><span class=courier>)</span> <span class=courier>|</span></p>
+
+<p><span class=courier>Average(</span><i>rows,cols</i><span class=courier>)</span> <span class=courier>|<br>
+RankOrder(</span><i>rows,cols,rank</i>[<i>,threshold</i>]<span class=courier>)</span> <span class=courier>|</span> <br>
+<span class=courier>Median(</span><i>rows,cols</i>[<i>,threshold</i>] <span class=courier>)</span> <span class=courier>|</span> <br>
+<span class=courier>Majority(</span><i>rows,cols</i><span class=courier>)</span> <span class=courier>|</span> <br>
+<span class=courier>ZeroMajority(</span><i>rows,cols</i><span class=courier>)</span> <span class=courier>|</span> <br>
+<span class=courier>UndefMajority(</span><i>rows,cols</i><span class=courier>)</span> <span class=courier>|</span> <br>
+<span class=courier>Pattern(</span><i>threshold</i><span class=courier>)</span> <span class=courier>|</span> <br>
+<span class=courier>FilterStandardDev(</span><i>rows,cols</i><span class=courier>)</span>  </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>For more information and some examples of using standard and user-defined filters on the command line, refer to <a href="../ilwisapp/filters_user_defined_filters.htm">Filters : user-defined filters</a>.</li>
+
+<li>To use this operation on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, see <a href="filter_command_line2.htm">Filter : command line (2)</a>. </li>
+
+</ul>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="filter_command_line2.htm">Filter : command line (2)</a></p>
+
+<p class=seealsolinks><a href="filter_functionality.htm">Filter : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_filter_types.htm">Filters : filter types</a></p>
+
+<p class=seealsolinks><a href="filters_standard_filters.htm">Filters : standard filters</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_user_defined_filters.htm">Filters : user-defined filters</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_filters.htm">ILWIS objects : filters</a></p>
+
+</body

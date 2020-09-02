@@ -1,0 +1,1276 @@
+<html>
+
+<head>
+<title>Appendices : ILWIS operations</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Appendices, ILWIS operations">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Appendices</h1>
+
+<h1 class=secondline>ILWIS operations</h1>
+
+<!--<hr>-->
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=kopjeboldandund>VISUALIZATION</p>
+
+<p class=popuptitleinappen>Show Map</p>
+
+<p>Show a map in a new map window.</p>
+
+<p class=popuptitleinappen>Show Table</p>
+
+<p>Show a table in a table window.</p>
+
+<p class=popuptitleinappen>Show Map List as Color Composite</p>
+
+<p>Display three images, or other raster maps with a value domain, present in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> as a color composite. You will show an <a href="../ilwisapp/show_map_list_as_color_composite.htm">Interactive color composite</a>.</p>
+
+<p class="defnewpar">By using an <i>interactive</i> color composite, you can easily change intervals, select other bands, etc. The resulting color composite is displayed in a map window which can be saved as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. Interactive color composites are very suitable to be used as a background during <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a> or during screen digitizing. <br>
+Your graphics board needs to be configured to use more than 256 colors, for instance High Color 16-bit, or True Color 24-bit (see Display Settings in Windows' Control Panel).</p>
+
+<p class="defnewpar">A <i>permanent</i> color composite can always be created with the <span class=arial>Color Composite</span> operation on the <a href="../ilwis/main_window_menu_commands.htm">Operations, Image Processing</a> menu.</p>
+
+<p class=popuptitleinappen>Show Map List as Slide Show</p>
+
+<p>Show multiple raster maps which are combined in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, one after the other in a map window at a user-specified rate. You will show a <a href="../ilwisapp/show_map_list_as_slide_show.htm">Slide Show</a>. This visualization technique is designed to present multi-temporal changes in maps. All maps in the map list must use the same domain and the same georeference.</p>
+
+<p class="defnewpar">You can use a slide show:</p>
+
+<ul>
+
+<li>	to present the temporal changes of maps with the same theme but of different years,</li>
+
+<li>	to display a number of classified satellite images of different months or years,</li>
+
+<li>	to display derived products from satellite images such as NDVI maps of different months,</li>
+
+<li>	to display a number of 3D views one after the other.</li>
+
+</ul>
+
+<p class=popuptitleinappen>Display 3D</p>
+
+<p>With <a href="../ilwisapp/display_3d.htm">Display 3D</a>, you can create and edit a georeference 3D in order to obtain a three dimensional view of one or more maps. A Digital Elevation Model (DEM) is required to create a georeference 3D. The DEM can then be displayed as 3D grid lines with or without a drape of a raster map.The georeference 3D can be edited with the <a href="..//ilwis/popup/georeference_3d_editor_popup.htm" onClick="return popup(this, 'notes')" >Georeference 3D editor</a>. </p>
+
+<p class="defnewpar">When finished editing the 3D view, you can add point, segment and/or polygon maps and/or annotation to improve the 3D view.</p>
+
+<p class=popuptitleinappen>Apply 3D</p>
+
+<p>The <a href="../ilwisapp/apply_3d.htm">Apply 3D</a> operation resamples an input raster map according to a georeference 3D. This enables you to permanently and quickly display the output raster map in three dimensions, i.e. as a 3D view. </p>
+
+<p class="defnewpar">You can create a georeference 3D with <a href="..//ilwisapp/popup/display3d_popup.htm" onClick="return popup(this, 'notes')" >Display 3D</a> or Apply 3D; a Digital Elevation Model is required and you have to specify 3D view parameters using the <a href="..//ilwis/popup/georeference_3d_editor_popup.htm" onClick="return popup(this, 'notes')" >Georeference 3D editor</a>.</p>
+
+<p class=popuptitleinappen>Show stereo pair as anaglyph</p>
+
+<p><a href="../ilwisapp/anaglyph.htm">Anaglyph</a> will show a calculated <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> in a map window; the anaglyph is either displayed in Red-Green or in Red-Blue. You will be able to view the height differences in the stereo pair by using red-green or red-blue glasses. </p>
+
+<p class="defnewpar">To create a stereo pair, use the <a href="..//ilwisapp/popup/epipolar_stereopair_popup.htm" onClick="return popup(this, 'notes')" >Epipolar Stereo Pair</a> operation. </p>
+
+<p class="defnewpar">A stereo pair can also be shown in a <a href="..//ilwisapp/popup/stereoscope_popup.htm" onClick="return popup(this, 'notes')" >Stereoscope</a> window where you can view the stereo pair with a stereoscope. </p>
+
+<p class=popuptitleinappen>Show stereo pair with stereoscope</p>
+
+<p><a href="../ilwisapp/stereoscope.htm">Stereoscope</a> will show a calculated <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> in a <a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope</a> window; you will be able to view the height differences in the stereo pair by using a stereoscope. </p>
+
+<p class="defnewpar">To create a stereo pair, use the <a href="..//ilwisapp/popup/epipolar_stereopair_popup.htm" onClick="return popup(this, 'notes')" >Epipolar Stereo Pair</a> operation. </p>
+
+<p class="defnewpar">A stereo pair can also be shown as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >Anaglyph</a> in a map window. </p>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=kopjeboldandund>RASTER OPERATIONS</p>
+
+<p class=popuptitleinappen>Map Calculation</p>
+
+<p><a href="../ilwisapp/map_calculation_dialog_box.htm">Map Calculation</a> can be used to perform calculations with raster maps. Map calculation is used for the execution of most spatial analysis functions and modelling operations. It integrates spatial and tabular data. The program enables the user to perform overlay, retrieval operations, and queries. Type map calculation formulae on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the Main Window</a>.</p>
+
+<p class="defnewpar">The following operations can be executed:</p>
+
+<ul>
+
+<li>	manipulation of one or more raster maps by performing arithmetical, relational, logical, conditional, exponential, logarithmic and other operations,</li>
+
+<li>	creation of attribute maps from map-related tables with attribute data,</li>
+
+<li>	classification of domain Value maps according to a domain Group,</li>
+
+<li>	application of user-defined functions.</li>
+
+</ul>
+
+<p class=popuptitleinappen>Attribute map of raster map</p>
+
+<p>By creating an <a href="../ilwisapp/attribute_map_of_raster_map.htm">attribute map of a raster map</a>, the class name or ID of each pixel in the original map is replaced by the value, class or ID found in a certain column in an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>. </p>
+
+<p class="defnewpar">A raster map using a Class or ID domain, can have extra attribute information on the classes or identifiers in the map. These attributes are stored in columns in an attribute table. The attribute table can be linked to the map to which it refers, or to the domain of the map. You can check whether an attribute table is linked to the raster map or to its domain through the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the map or the domain. </p>
+
+<p class=popuptitleinappen>Cross</p>
+
+<p>The <a href="../ilwisapp/cross.htm">Cross</a> operation performs an overlay of two raster maps. Pixels on the same positions in both maps are compared; the occurring combinations of class names, identifiers or values of pixels in the first input map and those of pixels in the second input map are stored. These combinations give an output cross map and a cross table. The cross table also includes the number of pixels that occur for each combination.</p>
+
+<p class=popuptitleinappen>Aggregate map</p>
+
+<p>The <a href="../ilwisapp/aggregate.htm">Aggregate map</a> operation aggregates blocks of input pixels by applying an aggregation function: Average, Count, Maximum, Median, Minimum, Predominant, Standard Deviation or Sum. The Aggregate Map operation either creates a new georeference in which each block of input pixels corresponds to one output pixel (group) or the output raster map uses the same georeference as the input map (no group).</p>
+
+<p class=popuptitleinappen>Distance calculation</p>
+
+<p><a href="../ilwisapp/distance_calculation.htm">Distance calculation</a> assigns to each pixel the smallest distance in meters towards user-specified source pixels, for example to schools, to roads etc. The output is called a distance map. </p>
+
+<p class="defnewpar">The input map for a distance calculation is called a <a href="..//ilwisapp/popup/distance_calculation_source_map_popup.htm" onClick="return popup(this, 'notes')" >source map</a>: all pixels with a class name, ID, or value are regarded as source pixels, and distance values will be calculated for all pixels that are undefined. In the Distance calculation dialog box, a source map can be any raster map with a class domain or an ID domain. On the command line, you can also use raster maps with a value domain. </p>
+
+<p class="defnewpar">Inaccessible or less accessible areas can be indicated in a <a href="..//ilwisapp/popup/distance_calculation_weight_map_popup.htm" onClick="return popup(this, 'notes')" >weight map</a>. The weight factors in such a map represent the relative difficulty, a 'resistance', to surpass pixels. By using weight factors that are inversely proportional to the possible speed that can be obtained in different mapping units, a so-called <a href="..//ilwisapp/popup/distance_calculation_time_travel_map_popup.htm" onClick="return popup(this, 'notes')" >travel time map</a> can be calculated.</p>
+
+<p class="defnewpar">Through a distance calculation, also a <a href="..//ilwisapp/popup/distance_calculation_thiessen_map_popup.htm" onClick="return popup(this, 'notes')" >Thiessen map</a> can be calculated. A weight map can be used, but is not obligatory.</p>
+
+<p class=popuptitleinappen>Iteration</p>
+
+<p><a href="../ilwisapp/iteration.htm">Iterations</a> are a special type of map calculations. They are a successive repetition of a mathematical operation, using the result of one calculation as input for the next. These calculations are performed line by line, pixel by pixel and take place in all directions. When a calculation in one direction is finished (for instance from top to bottom), a rotation takes place for the calculation in the next direction. The calculation stops when there are no more differences between an output map compared to the previous output map, or when a certain number of iterations is reached as defined before. Iterations are often used in combination with neighbourhood operations.</p>
+
+<p class=popuptitleinappen>Area numbering</p>
+
+<p><a href="../ilwisapp/areanumbering.htm">Area numbering</a> is a raster operation which assigns unique identifiers to pixels with the same class names or values that are horizontally, vertically or diagonally connected. </p>
+
+<p class="defnewpar">The output of Area numbering is a map in which these connected areas are codified as Area 1, Area 2, etc. Furthermore, an attribute table is created for the output map. The table contains the new IDs; the class names, IDs, or values of the original mapping units; and the size (npix and area) of the unique output units. </p>
+
+<p class="defnewpar">Area numbering can be used to make a decision based on the size of individual groups of pixels with the same class name or value (uniquely identified areas) instead of on all pixels with the same class name or value.</p>
+
+<p class=popuptitleinappen>Sub-map of raster map</p>
+
+<p>The <a href="../ilwisapp/submap_of_raster_map.htm">Sub-map of raster map</a> operation copies a rectangular part of a raster map into a new raster map. The user has to specify row and column numbers or XY-coordinates of the input map to indicate the part of the input map that should be copied into the new raster map.</p>
+
+<p class=popuptitleinappen>Glue raster maps</p>
+
+<p>The <a href="../ilwisapp/glue_raster_maps.htm">Glue raster maps</a> operation glues or merges two or more georeferenced input raster maps into one output raster map. The output map then comprises the total area of all input maps. The domains of the input maps are merged when needed. A resampling is performed when needed.</p>
+
+<p class="defnewpar">With the Glue raster maps operation, you can thus merge two or more adjacent or partly overlapping raster maps (i.e. make a mosaic), or glue smaller raster maps onto a larger one. </p>
+
+<p class=popuptitleinappen>Mirror Rotate</p>
+
+<p>The <a href="../ilwisapp/mirror_rotate.htm">Mirror/Rotate</a> operation allows you to reflect a raster map in a horizontal, vertical, or diagonal line, to transpose the map's rows and columns, or to rotate a raster map 90°, 180°, 270° (clock-wise).</p>
+
+<p class=popuptitleinappen>Spatial Multi-Criteria Evaluation (SMCE)</p>
+
+<p><a href="../ilwis/smce_window.htm">Spatial Multi-Criteria Evaluation (SMCE)</a> is an application that assists and guides a user in doing Multi-Criteria Evaluation (MCE) in a spatial way.</p> 
+
+<p class="defnewpar">As input for the application, you need to build a <a href="..//ilwis/popup/objects_criteria_trees_popup.htm" onClick="return popup(this, 'notes')" >criteria tree</a>: </p>
+
+<ol>
+
+	<li>specify a main goal and supply a name for the final output map, </li>
+
+	<li>optionally, add groups to the main goal; a group is supposed to contain multiple factors, </li>
+
+	<li>add criteria to the main goal, and specify whether a criterion is a factor or a constraint. </li>
+
+</ol>
+
+<p class="defnewpar">For each factor and for each constraint, you need to specify a name as text (like a description), and an input map or input attribute column. </p>
+
+<p class="defnewpar">A criteria tree lists and defines: 
+
+<ul>
+
+<li>all inserted groups, factors and constraints, </li>
+
+<li>the way in which all groups, factors and constraints should be grouped, standardized and weighed, </li>
+
+<li>in order to calculate the final output map. </li>
+
+</ul>
+
+<p class="defnewpar">The output of the operation is a so-called 'composite index' raster map. This map combines all input data according to the rules for weighing and standardization of the factors and/or constraints. The output map shows the suitability for the goal that was set, and can be an aid in planning and decision-making.</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=kopjeboldandund>IMAGE PROCESSING</p>
+
+<p class=popuptitleinappen>Filter</p>
+
+<p><a href="../ilwisapp/filter.htm">Filtering</a> is a raster operation in which each pixel value in a raster map is replaced with a new value. </p>
+
+<p class="defnewpar">The new value is obtained by applying a certain function to each input pixel and its direct neighbours. These neighbours are usually the 8 adjacent pixels (in a 3 x 3 filter) or the 24 surrounding pixels (in a 5 x 5 filter). When you create your own filters, any odd sized matrix is allowed (5 x 1, 11 x 23, 25 x 25). </p>
+
+<p class="defnewpar">Filtering is for instance used to sharpen a satellite image, to detect line features, etc. </p>
+
+<p class=popuptitleinappen>Stretch</p>
+
+<p>The <a href="../ilwisapp/stretch.htm">Stretch</a> operation re-distributes values of an input map over a wider or narrower range of values in an output map. Stretching can for instance be used to enhance the contrast in your map when it is displayed. Two stretch methods are available: linear stretching and histogram equalization.</p>
+
+<p class=popuptitleinappen>Slicing</p>
+
+<p>The <a href="../ilwisapp/slicing.htm">Slicing</a> operation classifies ranges of values of an input raster map into classes of an output map. A domain Group should be created beforehand; it lists the upper value boundaries of the groups and the output class names. </p>
+
+<p class="defnewpar">To perform an interactive slicing, you can create a representation value for the input map and change value boundaries and colors of the representation value.</p>
+
+<p class=popuptitleinappen>Color separation</p>
+
+<p>The <a href="../ilwisapp/color_separation.htm">Color separation</a> operation allows you to extract different 'bands' for instance from a scanned or digital color photo as if using color filters when taking the picture. After color extraction, you can perform the normal Image Processing operations like Filtering, Classification, etc. on these bands.</p>
+
+<p class="defnewpar">Maps that have a Picture domain or the (24 bit) Color domain store for each pixel three values: Red, Green and Blue. The Color separation operation allows you to retrieve for each pixel either the Red, Green or Blue value and store these in a separate map. You can also retrieve Yellow, Magenta, Cyan, combined Gray values, or Hue, Saturation or Intensity values for each pixel. </p>
+
+<p class=popuptitleinappen>Color composite</p>
+
+<p>A color composite is a combination of three raster bands. One band is displayed in shades of red, one in shades of green and one in shades of blue. Putting three bands together in one color composite map can give a better visual impression of the reality on the ground, than by displaying one band at a time. Examples of color composites are false color (or IR) images and 'natural color' images. </p>
+
+<p class="defnewpar">The <a href="../ilwisapp/color_composite.htm">Color Composite</a> operation on the <a href="../ilwis/main_window_menu_commands.htm">Operations, Image Processing</a> menu creates a <i>permanent</i> color composite raster map. </p>
+
+<p class="defnewpar">To <i>interactively</i> create a color composite, choose <span class=arial>Show MapList as Color Composite</span> from the <a href="../ilwis/main_window_menu_commands.htm">Operations, Visualization</a> menu. Interactively created color composites can be stored by saving the map window as a map view.</p>
+
+<p class=popuptitleinappen>Cluster</p>
+
+<p><a href="../ilwisapp/cluster.htm">Clustering</a>, or unsupervised classification, is a rather quick process in which image data is grouped into spectral clusters based on the statistical properties of all pixel values. It is an automated classification approach with a maximum of 4 input bands.</p>
+
+<p class="defnewpar">Optionally, an attribute table can be created for the output map. The table will contain statistical information on the output clusters: the average, predominant and minimum and maximum value of each cluster as found in the input bands. </p>
+
+<p class=popuptitleinappen>Sample</p>
+
+<p><a href="../ilwisapp/sample.htm">Sample</a> is an interactive process of selecting training pixels in a <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> prior to an image <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >classification</a>. </p>
+
+<p class="defnewpar">In the <a href="../ilwis/sample_set_editor_functionality1.htm">sample set editor</a>, select pixels that are characteristic for a certain type of a certain natural resource on the ground and that have similar spectral values in the maps in the map list, and assign a class name to them. The spectral values of these sampled pixels or training pixels provide the basis on which decisions are made during classification. These values can be inspected in the sample statistics of a certain class of training pixels and can be visualized in feature spaces. The result of Sampling is a filled sample set. </p>
+
+<p class=popuptitleinappen>Classify</p>
+
+<p>The <a href="../ilwisapp/classify.htm">Classify</a> operation performs a multi-spectral image classification according to training pixels in a sample set (supervised classification).</p>
+
+<p class="defnewpar">The following classification methods can be used: </p>
+
+<ul>
+
+<li>	Box, </li>
+
+<li>	Minimum Distance to Mean, </li>
+
+<li>	Minimum Mahalanobis Distance, </li>
+
+<li>	Maximum Likelihood, </li>
+
+<li>    Maximum Likelihood including Prior Probabilities.</li>
+
+</ul>
+
+<p class=popuptitleinappen>Resample</p>
+
+<p>The <a href="../ilwisapp/resample.htm">Resample</a> operation resamples a <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> from the map's current <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> to another target georeference. The coordinate of each output pixel is used to calculate a new value from close-by pixel values in the input map. Three resampling methods are available: nearest neighbour, bilinear interpolation, and bicubic interpolation. </p>
+
+<p class="defnewpar">In raster operations (e.g. <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a>), all input raster maps must have the same georeference. Thus, prior to such operations, use Resample:</p>
+
+<ul>
+
+<li>	<i>to combine raster maps from various sources</i>, when maps use different coordinate systems (projections) or different georeferences (pixel size): resample the maps to one common georeference; </li>
+
+<li>	<i>to combine satellite imagery of different dates or resolutions</i>: create a georef tiepoints for each set of images, then resample the images preferably to a georef corners;</li>
+
+<li>	<i>to combine satellite images with rasterized vector maps</i>: rasterize the vector data on the georef tiepoints of the satellite images, or, in case you prefer North-oriented raster maps, rasterize the vector maps with a georef corners, and resample the images with the georef tiepoints to this georef corners;</li>
+
+<li>	<i>to combine scanned photographs with rasterized vector data</i>, or <i>to rectify scanned aerial photographs</i>: create a georef tiepoints, a georef direct linear or a georef orthophoto for the photo, then resample the photo to a georef corners.</li>
+
+</ul>
+
+<p class=popuptitleinappen>Epipolar stereo pair</p>
+
+<p>With the <a href="../ilwisapp/epipolar_stereopair.htm">Epipolar Stereo Pair</a> operation, you will create a <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> from two scanned aerial photographs with overlap. </p>
+
+<p class="defnewpar">In short, the process is as follows: </p>
+
+<ul>
+
+<li>Specify the left input map and the right input map; one of the maps may already have a georeference. </li>
+
+<li>Specify the output name of the stereo pair that will be created. </li>
+
+</ul>
+
+<p class="defnewpar">Then, in the <a href="../ilwis/epipolar_stereopair_creation_window.htm">Epipolar Stereo Pair - Creation window</a>: </p>
+
+<ul>
+
+<li>Mark on each photograph two, three, or four fiducial marks. </li>
+
+<li>Mark the calculated principal point of the left photograph, on the right photograph (transferred principal point). </li>
+
+<li>Mark the principal point of the right photograph, on the left photograph (transferred principal point). </li>
+
+<li>In case of large scale differences between the two input maps, specify one or two scaling points in both photographs. </li>
+
+</ul>
+
+<p class="defnewpar">When you close the Epipolar Stereo Pair - Creation window, both input photographs will be resampled to output maps, i.e. the stereo pair is calculated. Rotation differences and possible scale differences between the photographs will be removed. </p>
+
+<p class="defnewpar">A calculated stereo pair can be viewed: </p> 
+
+<ul>
+
+        <li>in a <a href="..//ilwisapp/popup/stereoscope_popup.htm" onClick="return popup(this, 'notes')" >stereoscope</a> window, while using a stereoscope, and </li>
+
+        <li>as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >anaglyph</a> in a map window, while using red-green or red-blue glasses. </li>
+
+</ul>
+
+<p class=popuptitleinappen>Stereo pair from DTM</p>
+
+<p>The <a href="../ilwisapp/stereopair_from_dtm.htm">Stereo pair from DTM</a> operation creates a <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> from an input photograph or image and a Digital Terrain Model (DTM). </p>
+
+<p class="defnewpar">In the output stereo pair, the input photograph or image is displayed over the terrain. </p>
+
+<p class="defnewpar">The result can be viewed in stereo, either: <p>
+
+<ul>
+
+<li>in a <a href="../ilwis/stereopair_stereoscope_window.htm">Stereo Pair - Stereoscope</a> window: use a stereoscope that is mounted onto your monitor, </li>
+
+<li>as an <a href="..//ilwisapp/popup/anaglyph_popup.htm" onClick="return popup(this, 'notes')" >Anaglyph</a> in a map window: use red-green or red-blue glasses. </li>
+
+</ul> 
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=kopjeboldandund>STATISTICS</p>
+
+<p class=popuptitleinappen>Histogram</p>
+
+<p>The <a href="../ilwisapp/histogram.htm">Histogram</a> operation calculates the histogram of a raster, polygon, segment or point map. Histograms list frequency information on the values, classes, or IDs in your map. </p>
+
+<p class="defnewpar">Results are presented in a histogram window as a table and as a graph. For Value raster maps, summary information, such as mean, standard deviation, and percentage intervals, is available in the histogram window as well as in the properties of the histogram.</p>
+
+<p class="defnewpar">A <b>raster histogram</b> lists the number of pixels, the percentages and the areas per value, class or ID. If the input raster map uses a Value domain, also cumulative number of pixels and cumulative percentages are calculated.</p>
+
+<p>A <b>polygon histogram</b> lists the number of polygons and the perimeter and area of polygons per class, ID, or value. If the input polygon map uses a Value domain, also the cumulative number of polygons, cumulative perimeters and cumulative areas are calculated. <br>
+A <b>segment histogram</b> lists the number of segments and their length per class, ID or value. If the input segment map uses a Value domain, also the cumulative number of segments and cumulative lengths are calculated. <br>
+A <b>point histogram</b> lists the number of points per class, ID or value. If the input point map uses a Value domain, also the cumulative number of points are calculated. </p>
+
+<p class=popuptitleinappen>Raster:</p>
+
+<p class=popuptitleinappe2>Autocorrelation - Semivariance</p>
+
+<p>The <a href="../ilwisapp/auto_correlation_semivariance.htm">Autocorrelation - Semivariance</a> operation calculates the autocorrelation and semivariance of a raster map. The autocorrelation of a raster map is generated by calculating the correlation between pixel values of a raster map and pixel values of the same raster map for different shifts (lags) in horizontal and vertical directions. The semivariance, a measure for the spatial variability of a raster map, is calculated for the same shifts. </p>
+
+<p class=popuptitleinappen>Variogram Surface</p>
+
+<p>The <a href="../ilwisapp/variogram_surface.htm">Variogram surface</a> operation uses a point map or a raster map as input and calculates a surface of semi-variogram values where each cell (pixel) in the surface represents a directional distance class. The output surface, a raster map with a special kind of georeference, may help you to visualize possible anisotropy of your data and to determine the direction of the anisotropy axis.</p>
+
+<p class="defnewpar">Subsequently, you can calculate directional semi-variograms by using the directional method in the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. From the output table of Spatial correlation, you can prepare a semi-variogram model and you can investigate the range of the variable in the semi-variogram model both in the direction of anisotropy as well as in the direction perpendicular to it. Then, you are ready to perform Anisotropic Kriging.</p>
+
+<p class=popuptitleinappen>Map list:</p>
+
+<p class=popuptitleinappe2>Principal Components</p>
+
+<p>The <a href="../ilwisapp/principal_component_analysis.htm">Principal Components Analysis</a> operation is mathematical method to uncover relationships among many variables (as found in a set of raster maps in a map list) and to reduce the amount of data needed to define the relationships. With Principal Component Analysis each variable is transformed into a linear combination of orthogonal common components (output raster maps) with decreasing variation. The linear transformation assumes the components will explain all of the variance in each variable. Hence each component (output raster map) carries different information which is uncorrelated with other components. </p>
+
+<p class=popuptitleinappen>Factor Analysis</p>
+
+<p>The <a href="../ilwisapp/factor_analysis.htm">Factor analysis</a> is used to uncover relationships among many variables (as found in a set of raster maps in a map list) and to reduce the amount of data needed to define the relationships. With Factor analysis each variable is transformed into a linear combination of orthogonal common factors (output raster maps) with decreasing variation. The linear transformation assumes the factors will explain all of the correlation in each variable. Hence each factor (output raster map) carries different information which is uncorrelated with other factors. </p>
+
+<p class=popuptitleinappen>Variance-covariance matrix</p>
+
+<p>The <a href="../ilwisapp/variance_covariance_matrix.htm">Variance-Covariance matrix</a> operation calculates variances and covariances of raster maps in a map list. The variance is a means to express the variation of pixel values within a single raster map, i.e. a measure of the variation to the mean of the DN (Digital Number) values in a raster map. The covariance is a measure to express the variation of pixel values in two raster maps. It denotes the joint variation to the common mean of pixel values of the maps. Furthermore, the mean and standard deviation of each individual raster map is calculated. </p>
+
+<p class=popuptitleinappen>Correlation matrix</p>
+
+<p>The <a href="../ilwisapp/correlation_matrix.htm">Correlation matrix</a> operation calculates correlation coefficients of input raster maps of a map list. Correlation coefficients characterize the distribution of pixel values in two raster maps.  Furthermore, the mean and standard deviation of each individual raster map is calculated. </p>
+
+<p class=popuptitleinappen>Polygons:</p>
+
+<p class=popuptitleinappe2>Neighbour polygons</p>
+
+<p>The <a href="../ilwisapp/neighbour_polygons.htm">Neighbour polygons</a> operation finds adjacent (or neighbouring) polygons in a polygon map and calculates the length of the boundaries of adjacent polygons.</p>
+
+<p class=popuptitleinappen>Segments:</p>
+
+<p class=popuptitleinappe2>Segment direction histogram</p>
+
+<p>The <a href="../ilwisapp/segment_direction_histogram.htm">Segment direction histogram</a> operation calculates directions and lengths within segments, i.e. between all stored coordinates of the segments. The output is a table with directions from 0 to 179° and the length and number of the segment parts in that direction. The results can be shown in a rose diagram.</p>
+
+<p class=popuptitleinappen>Points:</p>
+
+<p class=popuptitleinappe2>Spatial correlation</p>
+
+<p><a href="../ilwisapp/spatial_correlation.htm">Spatial correlation</a> calculates some point statistics: spatial autocorrelation (as Moran's I), spatial variance (as Geary's c) and semi-variogram values g(h). Semi-variogram values are either calculculated in all directions (omnidirectional) or in a certain direction and the perpendicular direction (bidirectional). This may help you to get an impression of the nature of your point data, for instance prior to a point interpolation. Furthermore, from the output table of the Spatial Correlation operation, you can create semi-variogram models in a graph window so that necessary input parameters for a <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a>, <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a> or <a href="..//ilwisapp/popup/universal_kriging_popup.htm" onClick="return popup(this, 'notes')" >Universal Kriging</a> operation can be determined.</p>
+
+<p class="defnewpar">As input for this operation, you can use a point map with a value domain, or a point map with a class or ID domain with an attribute table that contains one or more value columns (the attribute table must be linked to the map). The output of this operation is a table from which you can create graphs such as a semi-variogram.</p>
+
+<p class=popuptitleinappen>Variogram Surface</p>
+
+<p>The <a href="../ilwisapp/variogram_surface.htm">Variogram surface</a> operation uses a point map or a raster map as input and calculates a surface of semi-variogram values where each cell (pixel) in the surface represents a directional distance class. The output surface, a raster map with a special kind of georeference, may help you to visualize possible anisotropy of your data and to determine the direction of the anisotropy axis.</p>
+
+<p class="defnewpar">Subsequently, you can calculate directional semi-variograms by using the directional method in the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. From the output table of Spatial correlation, you can prepare a semi-variogram model and you can investigate the range of the variable in the semi-variogram model both in the direction of anisotropy as well as in the direction perpendicular to it. Then, you are ready to perform <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a>.</p>
+
+<p class=popuptitleinappen>Cross Variogram</p>
+
+<p>The <a href="../ilwisapp/cross_variogram.htm">Cross Variogram</a> operation calculates experimental semi-variogram values for two variables and cross-variogram values for the combination of both variables. As input for the Cross Variogram operation, you can use a point map with a linked attribute table containing at least two value attribute columns. The Cross Variogram operation is a multivariate form of the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation. </p>
+
+<p class="defnewpar">From the output table of the Cross Variogram operation, you can create semi-variogram models for both variables and a cross-variogram model for the combination of the variables in a graph window (<a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>). All three models serve as input for the <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a> operation. CoKriging calculates estimates or predictions for a poorly sampled variable (the predictand) with help of a well-sampled variable (the covariable). The variables should be highly correlated (positive or negative).</p>
+
+<p class=popuptitleinappen>Pattern Analysis</p>
+
+<p>The <a href="../ilwisapp/pattern_analysis.htm">Pattern analysis</a> operation is a tool to obtain information on the spatial distribution of points in a point map. The output table contains six columns with the probabilities of finding 1 point (<span class=courier>Prob1Pnt</span>) within a certain distance from any point in your input map, then 2 points (<span class=courier>Prob2Pnt</span>), 3 points (<span class=courier>Prob3Pnt</span>), etc. Another column (<span class=courier>ProbAllPnt</span>) contains the sum of <span class=courier>Prob1Pnt</span>, <span class=courier>Prob2Pnt</span>, ..., <span class=courier>Prob(n-1)</span>, in which <span class=courier>n</span> is the number of points in the input map.</p>
+
+<p class="defnewpar">By inspecting the graphs of distances against probabilities, you may recognize distribution patterns of your points like random, clustered, regular, paired etc. </p>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=kopjeboldandund>INTERPOLATION</p>
+
+<p class=popuptitleinappen>Raster:</p>
+
+<p class=popuptitleinappe2>Densify raster map</p>
+
+<p>The <a href="../ilwisapp/densify.htm">Densify raster map</a> operation reduces the pixel size of your map. The number of rows and columns is increased and the new pixels in between the existing ones are assigned a value by means of a bilinear or bicubic interpolation.</p>
+
+<p class="defnewpar">You should use densify after a point interpolation. Further, densify can be used to improve the quality of printed raster maps. </p>
+
+<p class=popuptitleinappen>Raster:</p>
+
+<p class=popuptitleinappe2>Kriging from raster</p>
+
+<p><a href="../ilwisapp/kriging_from_raster.htm">Kriging from Raster</a> 
+is similar to the Ordinary Kriging interpolation c.q. prediction method but requires a raster map
+as input, instead of a point map. The operation can be seen as a raster interpolation
+and returns a raster map with estimations and optionally an error map. The estimations are weighted averaged input point values, similar to the
+</a> <a href="..//ilwisapp/popup/moving_average_popup.htm" onClick="return popup(this, 'notes')" >Moving Average</a> operation. The weight factors in Kriging
+from Raster are determined by using a user-specified semi-variogram model (based on the output of the
+<a href="..//ilwisapp/popup/autocorrelation_popup.htm" onClick="return popup(this, 'notes')" >Autocorrelation -
+Semivariance</a> operation), the distribution of input pixels, and are calculated in such a way that they minimize the estimation error in each output pixel. The estimated or predicted values are thus a linear combination of the input values and have a minimum estimation error. The optional error map contains the standard errors of the estimates.
+
+<p class="defnewpar">If you have an input point map, you can use the <a href="../ilwisapp/point_interpolation.htm">point interpolation</a> operations <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Simple and Ordinary Kriging</a>, <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a>, <a href="..//ilwisapp/popup/universal_kriging_popup.htm" onClick="return popup(this, 'notes')" >Universal Kriging</a> and <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a>.</p>
+
+<p class=popuptitleinappen>Segments:</p>
+
+<p class=popuptitleinappe2>Contour interpolation</p>
+
+<p><a href="../ilwisapp/contour_interpolation.htm">Contour interpolation</a> is an operation which first rasterizes segments of a domain Value segment map, and then calculates values for pixels that are not covered by segments by means of a linear interpolation. </p>
+
+<p class="defnewpar">When using Contour interpolation on a segment map containing height (contour) information, the resulting raster map is a Digital Elevation Model.</p>
+
+<p class=popuptitleinappen>Points:</p>
+
+<p class=popuptitleinappe2>Point interpolation</p>
+
+<p>In a <a href="../ilwisapp/point_interpolation.htm">point interpolation</a>, the input map is a point map, and the output map is a raster map. The pixel values in the raster output map are interpolated from the point values.</p>
+
+<p class="defnewpar">There are four point interpolations, Nearest point, Moving average, Trend surface, and Moving surface. For  more information, see below.</p>
+
+<p class=popuptitleinappen>Nearest point   (Point interpolation)</p>
+
+<p>The <a href="../ilwisapp/nearest_point.htm">Nearest point</a> operation requires a point map as input and returns a raster map as output. Each pixel in the output map is assigned the class name, identifier, or value of the nearest point, according to Euclidean distance. This method is also called Nearest Neighbour or Thiessen. The points in the input point map for the Nearest point operation do not need to be values necessarily; point maps (or attribute columns) with a class, ID or bool domain are also accepted.</p>
+
+<p class="defnewpar">For example, schools, hospitals, water wells, etc. can be represented by points. The output map of a nearest point operation on such a point map gives the 'service area' of the schools, hospitals or water wells, based on the shortest distance (as the crow flies) between points and pixels.</p>
+
+<p class="defnewpar">When you have many points or when you wish to use weights to indicate accessibilities, it is advised to rasterize the points, and then use <a href="..//ilwisapp/popup/distance_calculation_popup.htm" onClick="return popup(this, 'notes')" >Distance calculation</a> to make a Thiessen map.</p>
+
+<p class=popuptitleinappen>Moving average    (Point interpolation)</p>
+
+<p>The <a href="../ilwisapp/moving_average.htm">Moving average</a> operation is a <a href="..//ilwisapp/popup/point_interpolation_popup.htm" onClick="return popup(this, 'notes')" >point interpolation</a> which requires a point map as input and returns a raster map as output. To the output pixels, weighted averaged point values are assigned. </p>
+
+<p class="defnewpar">The weight factors for the points are calculated by a user-specified weight function. The weight function ensures that points close to an output pixel obtain larger weights than points which are farther away. Furthermore, the weight functions are implemented in such a way that points which are farther away from an output pixel than a user-defined limiting distance obtain weight zero. </p>
+
+<p class="defnewpar">When interpolating point values, it is for time efficiency reasons, strongly advised to choose a rather large pixel size for the output map. Further interpolation on the raster map values can be performed using the <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a> operation or the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation.</p>
+
+<p class=popuptitleinappen>Trend surface      (Point interpolation)</p>
+
+<p>The <a href="../ilwisapp/trend_surface.htm">Trend surface</a> operation is a <a href="..//ilwisapp/popup/point_interpolation_popup.htm" onClick="return popup(this, 'notes')" >point interpolation</a> which requires a point map as input and returns a raster map as output. One polynomial surface is calculated by a least squares fit so that the surface approaches all point values in the map. The calculated surface values are assigned to the output pixels. </p>
+
+<p class=popuptitleinappen>Moving surface      (Point interpolation)</p>
+
+<p>The <a href="../ilwisapp/moving_surface.htm">Moving surface</a> operation is a <a href="..//ilwisapp/popup/point_interpolation_popup.htm" onClick="return popup(this, 'notes')" >point interpolation</a> which requires a point map as input and returns a raster map as output. For each output pixel, a polynomial surface is calculated by a least squares fit; for each output pixel, the surface will approach the weighted point values of the points which fall within the specified limiting distance. </p>
+
+<p class="defnewpar">Weight factors for the input points are calculated by a user-specified weight function. The weight function ensures that points close to an output pixel obtain larger weights than points which are farther away. Furthermore, the weight functions are implemented in such a way that points which are farther away from an output pixel than a user-defined limiting distance obtain weight zero. </p>
+
+<p class="defnewpar">When interpolating point values, it is for time efficiency reasons, strongly advised to choose a rather large pixel size for the output map. Further interpolation on the raster map values can be performed using the <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a> operation or the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation.</p>
+
+<p class=popuptitleinappen>Kriging</p>
+
+<p><a href="../ilwisapp/kriging.htm">Kriging</a> can be seen as a <a href="..//ilwisapp/popup/point_interpolation_popup.htm" onClick="return popup(this, 'notes')" >point interpolation</a> which requires a point map as input and returns a raster map with estimations and optionally an error map. The estimations are weighted averaged input point values, similar to the <a href="..//ilwisapp/popup/moving_average_popup.htm" onClick="return popup(this, 'notes')" >Moving Average</a> operation. The weight factors in Kriging are determined by using a user-specified semi-variogram model (based on the output of the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation), the distribution of input points, and are calculated in such a way that they minimize the estimation error in each output pixel. The estimated or predicted values are thus a linear combination of the input values and have a minimum estimation error. Two methods are available: Simple Kriging and Ordinary Kriging. The optional error map contains the standard errors of the estimates.</p>
+
+<p class="defnewpar">Besides Simple and Ordinary Kriging, you can also use the operations <a href="..//ilwisapp/popup/anisotropic_kriging_popup.htm" onClick="return popup(this, 'notes')" >Anisotropic Kriging</a>, <a href="..//ilwisapp/popup/universal_kriging_popup.htm" onClick="return popup(this, 'notes')" >Universal Kriging</a>, <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a>, or <a href="..//ilwisapp/popup/kriging_from_raster_popup.htm" onClick="return popup(this, 'notes')" >Kriging from Raster</a>.</p>
+
+<p class=popuptitleinappen>Anisotropic Kriging</p>
+
+<p><a href="../ilwisapp/anisotropic_kriging.htm">Anisotropic Kriging</a> can be seen as a <a href="../ilwisapp/point_interpolation.htm">point interpolation</a>, which requires a point map as input and which returns a raster map with estimations and optionally an error map. Anisotropic Kriging is a variant of the Ordinary <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation: Anisotropic Kriging incorporates the influence of <i>direction dependency</i>.</p>
+
+<p class="defnewpar">Before Anisotropic Kriging, you should investigate the direction of anisotropy for instance with <a href="..//ilwisapp/popup/variogram_surface_popup.htm" onClick="return popup(this, 'notes')" >Variogram Surface</a>, the semi-variogram values in two directions for instance with <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial Correlation</a>, and determine the range of the semi-variogram values in two directions by preparing semi-variogram models in a graph window (<a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>).</p>
+
+<p class=popuptitleinappen>Universal Kriging</p>
+
+<p><a href="../ilwisapp/universal_kriging.htm">Universal Kriging</a> can be seen as a <a href="../ilwisapp/point_interpolation.htm">point interpolation</a>, which requires a point map as input and which returns a raster map with estimations and optionally an error map. Universal Kriging is a variant of the Ordinary <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation: Universal Kriging is Kriging with a <i>local trend</i>. The local trend or drift is a continuous and slowly varying trend surface on top of which the variation to be interpolated is superimposed. The local trend is recomputed for each output pixel and the operation is therefore more similar to the <a href="..//ilwisapp/popup/moving_surface_popup.htm" onClick="return popup(this, 'notes')" >Moving Surface</a> operation than to the <a href="..//ilwisapp/popup/trend_surface_popup.htm" onClick="return popup(this, 'notes')" >Trend Surface</a> operation.</p>
+
+<p class="defnewpar">Before Universal Kriging, you should perform the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial Correlation</a> operation, and determine a semi-variogram model in a graph window (<a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>).</p>
+
+<p class=popuptitleinappen>CoKriging</p>
+
+<p><a href="../ilwisapp/cokriging.htm">CoKriging</a> can be seen as a <a href="../ilwisapp/point_interpolation.htm">point interpolation</a>, which requires a point map as input and which returns a raster map with estimations and optionally an error map. CoKriging is a multi-variate variant of the Ordinary <a href="..//ilwisapp/popup/kriging_popup.htm" onClick="return popup(this, 'notes')" >Kriging</a> operation: CoKriging calculates estimates or predictions for a poorly sampled variable (the predictand) with help of a well-sampled variable (the covariable). The variables should be highly correlated (positive or negative).</p>
+
+<p class="defnewpar">Before CoKriging, you should perform the <a href="..//ilwisapp/popup/cross_variogram_popup.htm" onClick="return popup(this, 'notes')" >Cross Variogram</a> operation and determine a semi-variogram model for the predictand, for the covariable and a cross-variogram model for the combination of the variables in a graph window (<a href="../ilwismen/graph_window_add_semivariogram_model.htm">Graph window : Add semi-variogram model</a>). All three models serve as input for the CoKriging operation. </p>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=kopjeboldandund>VECTOR OPERATIONS</p>
+
+<p class=popuptitleinappen>Unique ID</p>
+
+<p>The <a href="../ilwisapp/unique_id.htm">Unique ID</a> operation can be used to assign unique identifiers to all elements in a segment, polygon or point map. The output map contains the same geographic information as the input map, but each point, segment or polygon will have a unique ID. </p>
+
+<p class="defnewpar">Furthermore, an attribute table is created for the output map. The table contains a column with the original classes, IDs or values of the input map; the areas of individual output polygons; the lengths of individual output segments. </p>
+
+<p class=popuptitleinappen>Polygons:</p>
+
+<p class=popuptitleinappe2>Attribute map of polygon map</p>
+
+<p>By creating an <a href="../ilwisapp/attribute_map_of_polygon_map.htm">attribute map of a polygon map</a>, the class name or ID of each polygon in the original map is replaced by the value, class or ID found in a certain column in an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>. </p>
+
+<p class="defnewpar">A polygon map using a Class or ID domain, can have extra attribute information on the classes or identifiers in the map. These attributes are stored in columns in an attribute table. The attribute table can be linked to the map to which it refers, or to the domain of the map. You can check whether an attribute table is linked to the polygon map or to its domain through the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the map or the domain.</p>
+
+<p class=popuptitleinappen>Mask polygons</p>
+
+<p>The <a href="../ilwisapp/mask_polygons.htm">Mask polygons</a> operation allows you to selectively copy polygons of an input polygon map into a new output polygon map. The user has to specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> to select and retrieve the class names, IDs or values of the polygons that are to be copied.</p>
+
+<p class=popuptitleinappen>Assign labels to polygons</p>
+
+<p>The Assign labels to polygons operation can be used to recode polygons in a polygon map according to label points in a point map. For each label point, the surrounding polygon is determined; then the class name, ID, or value of the label point is assigned to that polygon.</p>
+
+<p class=popuptitleinappen>Transform polygon map</p>
+
+<p>The <a href="../ilwisapp/transform_polygon_map.htm">Transform polygon map</a> operation transforms the coordinates of polygon boundaries in a polygon map from the map's current <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> to another target coordinate system. You can choose whether coordinates of polygon boundaries should be densified before the transformation takes place. </p>
+
+<p class="defnewpar">The Transform operation can only be used when a transformation between the input and target coordinate systems is possible.</p>
+
+<p class=popuptitleinappen>ID Grid map</p>
+
+<p>The <a href="../ilwisapp/id_grid_map.htm">ID Grid map map</a> operation uses a coordinate system and optionally an attribute table as input and creates a polygon map as output. The output polygon map consists of rectangular grid cells with a unique ID, and can be linked to a table with attribute data when sample data is available for the rectangular grid cells (e.g. biodiversity data in 5x5 km blocks).</p> 
+
+<p class="defnewpar">Besides the above, the operation can create an additional point map with label points at the center of each grid cell.</p>
+
+<p class=popuptitleinappen>Segments:</p>
+
+<p class=popuptitleinappe2>Attribute map of segment map</p>
+
+<p>By creating an <a href="../ilwisapp/attribute_map_of_segment_map.htm">attribute map of a segment map</a>, the class name or ID of each segment in the original map is replaced by the value, class or ID found in a certain column in an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>. </p>
+
+<p class="defnewpar">A segment map using a Class or ID domain, can have extra attribute information on the classes or identifiers in the map. These attributes are stored in columns in an attribute table. The attribute table can be linked to the map to which it refers, or to the domain of the map. You can check whether an attribute table is linked to the segment map or to its domain through the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the map or the domain. </p>
+
+<p class=popuptitleinappen>Mask segments</p>
+
+<p>The <a href="../ilwisapp/mask_segments.htm">Mask segments</a> operation allows you to selectively copy segments of an input segment map into a new output segment map. The user has to specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> to select and retrieve the class names, identifiers or values of the segments that are to be copied.</p>
+
+<p class=popuptitleinappen>Assign labels to segments</p>
+
+<p>The <a href="../ilwisapp/assign_labels_to_segments.htm">Assign labels to segments</a> operation can be used to recode segments in a segment map according to label points in a point map. For each label point, the closest segment  is determined; then the class name, ID or value of the label point is assigned to that segment. </p>
+
+<p class=popuptitleinappen>Sub-map of segment map</p>
+
+<p>The <a href="../ilwisapp/submap_of_segment_map.htm">Sub-map of segment map</a> operation copies a rectangular part of a segment map into a new segment map. </p>
+
+<p class="defnewpar">The user has to specify minimum and maximum XY-coordinates for the new segment map. When the input map uses a coordinate system of <i>type latlon</i>, you need to specify minimum and maximum Latitudes and Longitudes. </p>
+
+<p class=popuptitleinappen>Glue segment maps</p>
+
+<p>The <a href="../ilwisapp/glue_segment_maps.htm">Glue segment maps</a> operation glues or merges two or more segment maps into one output map. By default, the output map then comprises the total area of all input maps. The domains of the input maps are merged when needed.</p>
+
+<p class="defnewpar">For each input map, the user can specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> to select and retrieve the class names, IDs or values of the segments that are to be copied into the output map. The user can also specify a clip boundary, to copy only those segments to the output map which fall within the specified coordinate boundaries of the output map.</p>
+
+<p class=popuptitleinappen>Densify segment coordinates</p>
+
+<p>The <a href="../ilwisapp/densify_segment_coordinates.htm">Densify segment coordinates</a> operation allows you to obtain more intermediate coordinates within segments. The segments of an input map are copied, and extra intermediate coordinates are added to the segments in the output map at a user-specified distance. </p>
+
+<p class="defnewpar">The Densify segment coordinates operation can be used separately before a <a href="..//ilwisapp/popup/transform_segments_popup.htm" onClick="return popup(this, 'notes')" >Transform segments</a> operation, but you can also use the <span class=arial>Densify coordinates</span> option within the <a href="..//ilwisapp/popup/transform_segments_popup.htm" onClick="return popup(this, 'notes')" >Transform segments</a> or the <a href="..//ilwisapp/popup/transform_polygons_popup.htm" onClick="return popup(this, 'notes')" >Transform polygons</a> operations. </p>
+
+<p class=popuptitleinappen>Tunnel segments</p>
+
+<p>The <a href="../ilwisapp/tunnel_segments.htm">Tunnel segments</a> operation reduces the amount of intermediate points within segments in a segment map. The segments of the input map are copied into a new segment map. However, for every three consecutive intermediate points within a segment, the middle one is omitted if it falls within a user-defined tunnel-width. Redundant nodes can also be removed.</p>
+
+<p class=popuptitleinappen>Transform segment map</p>
+
+<p>The <a href="../ilwisapp/transform_segment_map.htm">Transform segment map</a> operation transforms the coordinates of segments in a segment map from the map's current <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> to another target coordinate system. You can choose whether segment coordinates should be densified before the transformation takes place. </p>
+
+<p class="defnewpar">The Transform operation can only be used when a transformation between the input and target coordinate systems is possible.</p>
+
+<p class=popuptitleinappen>Points:</p>
+
+<p class=popuptitleinappe2>Attribute map of point map</p>
+
+<p>By creating an <a href="../ilwisapp/attribute_map_of_point_map.htm">attribute map of a point map</a>, the class name or ID of each point in the original map is replaced by the value, class or ID found in a certain column in an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a>. </p>
+
+<p class="defnewpar">A point map using a Class or ID domain, can have extra attribute information on the classes or identifiers in the map. These attributes are stored in columns in an attribute table. The attribute table can be linked to the map to which it refers, or to the domain of the map. You can check whether an attribute table is linked to the point map or to its domain through the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Properties</a> dialog box of the map or the domain. </p>
+
+<p class=popuptitleinappen>Mask points</p>
+
+<p>The <a href="../ilwisapp/mask_points.htm">Mask points</a> operation allows you to selectively copy points of an input point map into a new output point map. The user has to specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> to select and retrieve the class names, IDs or values of the points that are to be copied.</p>
+
+<p class=popuptitleinappen>Sub-map of point map</p>
+
+<p>The <a href="../ilwisapp/submap_of_point_map.htm">Sub-map of point map</a> operation copies all points within a user-specified rectangle into a new point map. </p>
+
+<p class="defnewpar">The user has to specify minimum and maximum XY-coordinates for the new point map. When the input map uses a coordinate system of <i>type latlon</i>, you need to specify minimum and maximum Latitudes and Longitudes. </p>
+
+<p class=popuptitleinappen>Glue point maps</p>
+
+<p>The <a href="../ilwisapp/glue_point_maps.htm">Glue point maps</a> operation glues or merges two or more point maps into one output map. By default, the output map then comprises the total area of all input maps. The domains of the input maps are merged when needed.</p>
+
+<p class="defnewpar">For each input map, the user can specify a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> to select and retrieve the class names, IDs or values of the points that are to be copied into the output map. The user can also specify a clip boundary, to copy only those points to the output map which fall within the specified coordinate boundaries of the output map.</p>
+
+<p class=popuptitleinappen>Transform point map</p>
+
+<p>The <a href="../ilwisapp/transform_point_map.htm">Transform point map</a> operation transforms the coordinates of points in a point map from the map's current <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> to another target coordinate system. </p>
+
+<p class="defnewpar">The Transform operation can only be used when a transformation between the input and target coordinate systems is possible.</p>
+
+<p class=popuptitleinappen>Coordinates:</p>
+
+<p class=popuptitleinappe2>Transform coordinates</p>
+
+<p>The <a href="../ilwisapp/transform_coordinates.htm">Transform coordinates</a> allows you to: </p>
+
+<ul> 
+
+<li>select a certain input <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>, </li>
+
+<li>type a XY-coordinate or a LatLon coordinate, using this input coordinate system, </li>
+
+<li>select another target coordinate system, </li>
+
+<li>then, the entered XY-coordinate or LatLon-coordinate will be shown in the selected target coordinate system. </li>
+
+</ul>
+
+<p>In this way, you can interactively check whether a certain transformation is correct. </p>
+
+<p class=defnewpar>The Transform Coordinates dialog box can only be used when a transformation between the input coordinate system and the target coordinate system is possible. </p>
+
+<p class=popuptitleinappen>Find datum transformation parameters</p>
+
+<p>The <a href="../ilwisapp/find_datum_trans_params_inputpage.htm">Find datum transformation parameters</a> operation enables you to find datum transformation parameters between the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate systems</a> of two point maps, where: </p>
+
+<ul>
+
+	<li>the coordinate system of the first point map is supposed to use a local (unknown) datum, </li>
+
+	<li>the coordinate system of the second point map is supposed to use a global datum, preferably WGS 84. </li>
+
+</ul>
+
+<p class=defnewpar>You can choose to use one of the following calculation methods:</p>
+
+<ul>
+
+<li>Geo-centric datum shift</li>
+
+<li>Molodensky</li>
+
+<li>Bursa Wolf</li>
+
+<li>Molodensky Badekas</li>
+
+</ul>
+
+<p class=defnewpar>Optionally, you can save the calculated transformation parameters (into the coordinate system of the first point map). </p>
+
+<ul>
+
+	<li>The datum of the first coordinate system will then be changed. </li>
+
+	<li>The first coordinate system will then be compatible with the WGS 84 datum, and thus with any other known datum. </li>
+
+	<li>Automatic coordinate transformations during display etc. are then possible for any map that uses the first coordinate system. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=kopjeboldandund>RASTERIZE</p>
+
+<p class=popuptitleinappen>Polygons to raster </p>
+
+<p>The <a href="../ilwisapp/polygons_to_raster.htm">Polygons to raster</a> operation rasterizes a polygon map. The class names, IDs, or values in the polygon map are also used in the raster map, i.e. the domain of the polygon map is also the domain of the raster map. The user has to select or create a georeference for the output raster map.</p>
+
+<p class=popuptitleinappen>Segments to raster</p>
+
+<p>The <a href="../ilwisapp/segments_to_raster.htm">Segments to raster</a> operation rasterizes a segment map. The class names, IDs, or values in the segment map are also used in the raster map, i.e. the domain of the segment map is also the domain of the raster map. The user has to select or create a georeference for the output raster map.</p>
+
+<p class=popuptitleinappen>Segment density</p>
+
+<p>The <a href="../ilwisapp/segment_density.htm">Segment density</a> operation rasterizes a segment map. For each output pixel, the total length of segment parts within the boundaries the output pixel is <i>summed</i>: this is the output value for the pixel. By using a <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> you can specify the elements of the input map that are to be used in the calculation.</p>
+
+<p class=popuptitleinappen>Points to raster</p>
+
+<p>The <a href="../ilwisapp/points_to_raster.htm">Points to raster</a> operation rasterizes a point map. The class names, IDs, or values in the point map are also used in the raster map; i.e. the domain of the point map is also the domain of the raster map. The user has to select or create a georeference for the output raster map.</p>
+
+<p class=popuptitleinappen>Point density</p>
+
+<p>The <a href="../ilwisapp/point_density.htm">Point density</a> operation rasterizes a point map. For each output pixel, the number of points with a class name, ID or value located in the output pixel is <i>counted</i>: this is the output value for the pixel. When using the command line, you can also <i>sum</i> the values of points (or of point attributes). This operation can be used to examine the regional distribution of points or point values. </p>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=kopjeboldandund>VECTORIZE</p>
+
+<p class=popuptitleinappen>Raster to Polygons</p>
+
+<p>The <a href="../ilwisapp/raster_to_polygons.htm">Raster to polygons</a> operation extracts polygons from units in a raster map. The output polygon map uses the same domain as the input raster map, i.e. the class names or IDs in the input raster map will also be used for the polygons in the output polygon map. No polygons are created for pixels with the undefined value.</p>
+
+<p class=popuptitleinappen>Raster to Segments</p>
+
+<p>The <a href="../ilwisapp/raster_to_segments.htm">Raster to segments</a> operation extracts segments from the boundaries of mapping units in a raster map. You can choose to extract segments from 4-connected or 8-connected areas, and to smooth output segments or not. </p>
+
+<p class="defnewpar">Furthermore, you can choose to assign a single name 'Boundaries' to all output segments or to assign unique names like 'Boundary 1', 'Boundary 2', etc. to the output segments. In the latter case, an attribute table will be created for the output map which contains the original mapping unit names or values on either side of an extracted segment as well the lengths of the extracted segments. </p>
+
+<p class=popuptitleinappen>Raster to Points</p>
+
+<p>The <a href="../ilwisapp/raster_to_points.htm">Raster to Points</a> operation extracts a point from each pixel in the raster map. Each point gets the value, class name or ID of the corresponding pixel.</p>
+
+<p class=popuptitleinappen>Polygons to Segments</p>
+
+<p>The <a href="../ilwisapp/polygons_to_segments.htm">Polygons to Segments</a> operation extracts polygon boundaries and creates a segment map out of them. By default, the operation extracts segments from all polygon boundaries of the input map. A <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> can be specified to extract segments of specific polygons. </p>
+
+<p class="defnewpar">You can choose whether to assign a single name 'Boundary' to all output segments, or to assign unique names (like 'Boundary 1', 'Boundary 2', etc.) to the output segments. In the latter case, an attribute table will be created for the output map which contains the original polygon names or values on either side of an extracted segment as well the lengths of the extracted segments. </p>
+
+<p class="defnewpar">The operation is useful when you want to edit/update boundaries of polygons. </p>
+
+<p class=popuptitleinappen>Polygons to Points</p>
+
+<p>The <a href="../ilwisapp/polygons_to_points.htm">Polygon to Points</a> operation creates a point for each polygon in the polygon map. Each point obtains the class name, ID, or value of the corresponding polygon. In this way, polygon label points are created. Optionally, you can also obtain label points for polygons which have no class name, no ID or no value, i.e. for undefined polygons.</p>
+
+<p class=popuptitleinappen>Segments to Polygons</p>
+
+<p>The <a href="../ilwisapp/segments_to_polygons.htm">Segments to Polygons</a> operation automatically polygonizes a supposedly error free segment map. The operation is designed to be used after you have imported vector files from another package. All segments in the segment map must be connected to other segments or to themselves (islands) by nodes; dead ends, self overlap and/or intersections are not allowed. A <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> can be specified to polygonize specific segments. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>to interactively check or polygonize segments, use the <span class=arial>Check Segments</span> or the <span class=arial>Polygonize</span> option in the <a href="../ilwis/segment_editor_functionality.htm">Segment editor</a>.</p>
+
+<p class=popuptitleinappen>Segments to Points</p>
+
+<p>The <a href="../ilwisapp/segments_to_points.htm">Segments to Points</a> operation creates a point map from a segment map. The output point map can contain either:</p>
+
+<ul>
+
+<li>	a point for each node in the segment map, or</li>
+
+<li>	points at a regular distance along the segments in the segment map, or</li>
+
+<li>	points for all stored coordinates in the segment map.</li>
+
+</ul>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=kopjeboldandund>TABLE OPERATIONS</p>
+
+<p class=popuptitleinappen>Transpose table</p>
+
+<p>The <a href="../ilwisapp/transpose_table.htm">Transpose table</a> operation interchanges the rows and columns of a table. Each row of the input table becomes a column in the output table; while column names of the input table become output domain records.</p>
+
+<p class=popuptitleinappen>Change domain of table</p>
+
+<p>The <a href="../ilwisapp/change_domain_of_table.htm">Change domain of table</a> operation copies the contents of an input table to a new table; the new table will have another domain than the input table. </p>
+
+<p class="defnewpar">For the domain of the output table, you can choose:</p>
+
+<ul>
+
+<li>	domain <span class=courier>None</span>;</li>
+
+<li>	an existing class or ID domain on disk;</li>
+
+<li>	a class or ID domain of a column in the input table when that column contains unique classes or IDs;</li>
+
+<li>	a class or ID domain of a column in the input table where the column does not contain unique classes or IDs and other column values need to be aggregated (average, minimum, maximum, sum, last value encountered).</li>
+
+</ul>
+
+<p class=popuptitleinappen>Table to point map</p>
+
+<p>The <a href="../ilwisapp/table_to_point_map.htm">Table to point map</a> operation creates a point map out of a table. </p>
+
+<p class="defnewpar">For the coordinates of the points, you can use from the table: </p>
+
+<ul>
+
+<li>a coordinate column which contains the XY-coordinates for the points as (X,Y); the domain of this column should be a coordinate system; </li>
+
+<li>a value column which contains the X-coordinates for the points and another value column which contains the Y-coordinates for the points. </li>
+
+</ul>
+
+<p class="defnewpar">Depending on the domain of the input table, you can furthermore choose between the following possibilities:</p>
+
+<ul>
+
+<li>	Input table with an ID domain: <br>
+        the points in the output point map should use the same IDs as found in the domain of the table; <br>
+        the input table will be linked as attribute table to the output point map.</li>
+
+<li>	Input table with domain <span class=courier>None</span>: <br>
+        the points in the output point map should use the IDs of a new ID domain in which the IDs are based on the record numbers of the table and a user-defined prefix; <br>
+        also the input table will obtain this new ID domain and the table will be linked as attribute table to the output point map. </li>
+
+<li>	Any input table: <br>
+        the points in the output point map should use the class names, IDs, or values as found in a column of the table; <br>
+        the output point map will have no attribute table. </li>
+
+</ul>
+
+<p class=popuptitleinappen>Glue tables</p>
+
+<p>The <a href="../ilwisapp/glue_tables.htm">Glue tables</a> operation allows you to glue or merge two or more tables together. As input tables, you may use: </p>
+
+<ul>
+
+<li>	tables with domain <span class=courier>None</span>, </li>
+
+<li>	tables with class domains,</li>
+
+<li>	tables with ID domains,</li>
+
+<li>	tables with class domains and ID domains.</li>
+
+</ul>
+
+<p class="defnewpar">The Glue tables operation should be regarded as a tool to combine different tables. You can for instance combine or integrate attribute tables of different years. Tables with domain <span class=courier>None</span> can also be glued vertically one below the other. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=kopjeboldandund>HYDROLOGIC FLOW</p>
+
+<p class="popuptitleinappen">DEM visualization</p>
+
+<p class="defnewpar">The <a href="../ilwisapp/dem_visualization.htm">DEM visualization</a> script creates a color composite for you from a DEM. First, three shadow maps are created by the script, using three different shadow filters. The combination of them in a color composite gives a very good impression of the relief in your area. </p> 
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>a DEM, </li>
+
+</ul>
+
+<p class="defnewpar">At the end of the script, the color composite of the shadow maps is displayed. </p>
+
+<p class="defnewpar">For more information, refer to <a href="../ilwisapp/dem_visualization.htm">DEM visualization</a>. </p>
+
+<p class="popuptitleinappen">Flow determination:</p>
+
+<p class="popuptitleinappe2">Fill sinks</p>
+
+<p>The <a href="../ilwisapp/fill_sinks.htm">Fill sinks</a> operation 'removes' local depressions (of single pixels and of multiple pixels) from a Digital Elevation Model (DEM). </p>
+
+<ul>
+
+<li>The height value of a single-pixel depression is raised to smallest value of the 8 neighbours of a single-pixel depression. </li>
+
+<li>The height values of a local depression consisting of multiple pixels are raised to the smallest value of a pixel that is both adjacent to the outlet for the depression, and that would discharge into the initial depression. </li>
+
+</ul>
+
+<p class="defnewpar">By using the Fill sinks operation, </p>
+
+<ul>
+
+<li>and a subsequent <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation on the output map of the Fill sinks operation, </li>
+
+<li>and a <a href="..//ilwisapp/popup/flow_accumulation_popup.htm" onClick="return popup(this, 'notes')" >Flow accumulation</a> operation on the output map of Flow direction operation, </li>
+
+</ul>
+
+<p>it is ensured:</p>
+
+<ul>
+
+<li>that a flow direction will be found for every pixel in the map, and </li>
+
+<li>that water in any pixel will be discharged into outlets towards the edges of the map. </li>
+
+</ul>
+
+<p class="popuptitleinappen">Flow direction</p>
+
+<p>The <a href="../ilwisapp/flow_direction.htm">Flow direction</a> operation determines into which neighbouring pixel any water in a central pixel will flow. </p>
+
+<p class="defnewpar">Flow direction is calculated for every central pixel in input blocks of 3 by 3 pixels, each time comparing the value of the central pixel with the value of its 8 neighbouring pixels. 
+
+The output map contains flow directions as N (to the North), NE (to the North East), etc. </p>
+
+<p class="defnewpar">You can choose to calculate flow direction according to steepest slope or according to lowest neighbour. </p>
+
+<p class="popuptitleinappen">Flow accumulation</p>
+
+<p>The <a href="../ilwisapp/flow_accumulation.htm">Flow accumulation</a> operation determines the number of pixels that naturally drain into outlets. The operation can be used to find the drainage pattern of a terrain. </p>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<ul>
+<li>As input the operation uses the output map of the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation. </li>
+<li>The output map contains cumulative hydrologic flow values that represent the number of input pixels which contribute any water to the outlets (or sinks if these have not been removed). </li>
+</ul>
+
+<p class="popuptitleinappen">Flow modification:</p>
+
+<p class="popuptitleinappe2">DEM optimization</p>
+
+<p>The <a href="../ilwisapp/dem_optimization.htm">DEM optimization</a> operation enables you to 'burn' existing drainage features into a Digital Elevation Model (DEM), so that a subsequent <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation on the output DEM will better follow the existing drainage pattern. </p>
+
+<p class="defnewpar">The DEM optimization operation offers the following possibilities: </p>
+
+<ul>
+
+<li>Gradual drop of (drainage) segments in the output DEM, over a certain distance to the (drainage) segments. </li>
+
+<li>Gradual raise of (watershed-divide) segments on the output DEM, over a certain distance to the (watershed-divide) segments. </li>
+
+<li>Additional sharp drop or raise of segments on top of the gradual drop or raise. </li>
+
+<li>Simple drop or raise of polygons in the output DEM. </li>
+
+</ul>
+
+<p class="popuptitleinappen">Topological optimization</p>
+
+<p>When a DEM and/or a flow direction map have undefined values, e.g. when there are lakes in the study area, the <a href="../ilwisapp/topological_optimization.htm">Topological Optimization</a> operation can improve the results of a previous Flow Direction operation and a Drainage Network Extraction operation to ensure a proper flow through this lake. </p>
+
+<p class="defnewpar">As input, this operation requires: </p>
+
+<ul>
+
+<li>an existing output map of the Drainage Network Extraction operation, </li>
+
+<li>an existing output map of the Flow Direction operation, </li>
+
+<li>a segment map with one or more segments that connect the <i>inlet(s) of a lake</i> with the <i>outlet(s) of lake</i> (down flow). </li>
+
+</ul>
+
+<p class="defnewpar">As output, the operation delivers: </p>
+
+<ul>
+
+<li>a new continuous drainage network raster map, and </li>
+
+<li>a new flow direction raster map.</li>
+
+</ul>
+
+<p class="defnewpar">The output of this operation can serve as a new basis for the other hydrologic operations, e.g. to obtain new Strahler or Shreve order numbers, new catchments etc. </p>
+
+<p class="popuptitleinappen">Variable threshold computation</p>
+
+<p class="defnewpar">The <a href="../ilwisapp/variable_threshold_computation.htm">Variable threshold computation</a> operation helps you to prepare a threshold map that can be used in a Drainage network extraction operation. </p>
+
+<p class="defnewpar">You can base the threshold map on a height map (DEM), or on attribute values from an attribute table of a raster map with a class or ID domain (e.g. infiltration attribute values in a table linked to a geological unit map). </p>
+
+<p class="defnewpar">As a user, you have to: </p>
+
+<ul>
+
+<li>specify the size of a kernel or moving window, so that for the calculation of each output pixel, only 3 x 3 or 5 x 5, etc. input pixels will be considered; </li>
+
+<li>specify the number of desired output classes; </li>
+
+<li>specify a boundary value and a desired output value for each output class that you wish to obtain. </li>
+
+</ul>
+
+<p class="defnewpar">When height values are used as input, you can optionally obtain an internal relief map as additional output. </p>
+
+<p class="defnewpar">For more information on the calculations that will take place, refer to <a href="../ilwisapp/variable_threshold_computation_functionality.htm">Variable threshold computation : functionality</a>. </p>
+
+<p class="popuptitleinappen">Network and Catchment Extraction:</p>
+
+<p class="popuptitleinappe2">Drainage network extraction</p>
+
+<p>The <a href="../ilwisapp/drainage_network_extraction.htm">Drainage network extraction</a> operation extracts a basic drainage network (boolean raster map). </p>
+
+<p class="defnewpar">As input is required: the output raster map of the Flow Accumulation operation. </p>
+
+<p class="defnewpar">You can choose to use as additional input:</p>
+
+<ul>
+
+<li>a threshold value, to set a minimum for the number of pixels that should drain into a pixel that is examined; </li>
+
+<li>a threshold raster map, where pixels can have a threshold value based on e.g. their geological unit or height values; </li>
+
+	<ul>
+
+	<li>when using a threshold map, also the output map of a previous Flow Direction operation is required. </li>
+
+	</ul>
+</ul>
+
+<p class="defnewpar">When using a threshold map, the operation will furthermore fill possible gaps between drainage lines.</p>
+
+<p class="defnewpar">The output raster map will show the basic drainage as pixels with value True, while other pixels have value False. </p>
+
+<p class="popuptitleinappen">Drainage network ordering</p>
+
+<p>The <a href="../ilwisapp/drainage_network_ordering.htm">Drainage network ordering</a> operation: </p>
+
+<ul>
+
+<li>examines all drainage lines in the drainage network map, i.e. output map from the Drainage Network Extraction operation, </li>
+
+<li>finds the nodes where two or more streams meet, and </li>
+
+<li>assigns a unique ID to each stream in between these nodes, as well as to the streams that only have a single node. </li>
+
+</ul>
+
+<p class="defnewpar">To limit the number of output streams and reduce calculation time, you can specify the minimum length that streams should have to remain in the network. </p>
+
+<p class="defnewpar">The output of this operation is a raster map, a segment map and an attribute table that all use a newly created ID domain. </p>
+
+<p class="defnewpar">The attribute table contains information on each stream, such as: </p>
+
+<ul>
+
+<li>Strahler ordering number, Shreve ordering number, </li>
+
+<li>stream length, calculated along the drainage, and calculated as a straight line between XY-coordinates, </li>
+
+<li>slope values in degrees and in percentages, calculated along the drainage and calculated as a straight line between XY-coordinates, and elevation, </li>
+
+<li>sinuosity of the drainage path as a measure of meandering, </li>
+
+<li>total upstream drainage length, i.e. the total length of the streams that drain into the current one, etc.</li>
+
+</ul>
+
+<p class="popuptitleinappen">Catchment extraction</p>
+
+<p>The <a href="../ilwisapp/catchment_extraction.htm">Catchment extraction</a> operation constructs catchments; a catchment will be calculated for each stream found in the output map of the Drainage Network Ordering operation. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>the output raster map of the Drainage Network Ordering operation, </li>
+
+<li>the output raster map of the Flow Direction operation. </li>
+
+</ul>
+
+<p class="defnewpar">As output a raster map, a polygon map and an attribute table are produced which all use the ID domain of the input Drainage Network Ordering map. </p>
+
+<p class="defnewpar">The attribute table contains information on each catchment, such as: </p>
+
+<ul>
+
+<li>area and perimeter of the catchment, </li>
+
+<li>total upstream area, i.e. the area of all catchments that drain into this catchment, etc. </li>
+
+</ul>
+
+<p class="popuptitleinappen">Catchment merge</p>
+
+<p>The <a href="../ilwisapp/catchment_merge.htm">Catchment merge</a> operation is able to merge adjacent catchments, as found by the Catchment Extraction operation. In fact, new catchments will be created on the basis of the Drainage Network Ordering map and its attribute table. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+<li>the output map and attribute table of the Drainage Network Ordering operation, </li>
+<li>the output map of the Flow Direction operation, </li>
+<li>the output map of the Flow Accumulation operation. </li>
+</ul>
+
+<p class="defnewpar">You can merge catchments in two manners: </p>
+
+<ul>
+
+<li>by specifying a point map that contains locations of stream outlets within a catchment; all adjacent catchments that drain into such outlets will be merged, </li>
+
+<li>by simply specifying a Strahler or Shreve ordering value: all adjacent catchments that have this Strahler or Shreve order value (or a lower value) and which drain into a common catchment will be merged. </li>
+
+</ul>
+
+<p class="defnewpar">As output a new catchment raster map, polygon map and attribute table are produced. These all use a new ID domain. </p>
+
+<p class="defnewpar">The attribute table contains information on the new catchments, similar to the output attribute table of the Catchment Extraction operation, but you will also find information on: </p>
+
+<ul>
+
+<li>total drainage length, total upstream area, </li>
+
+<li>drainage density, </li>
+
+<li>longest flow path length and longest drainage length. </li>
+
+</ul>
+
+<p class="popuptitleinappen">Compound Parameter Extraction:</p>
+
+<p class="popuptitleinappe2">Overland flow length</p>
+
+<p class="defnewpar">The <a href="../ilwisapp/overland_flow_length.htm">Overland Flow Length</a> operation calculates for each pixel the overland distance towards the 'nearest' drainage according to the flow paths available in the Flow Direction map. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>the output raster map of the Drainage Network Ordering operation and its linked attribute table, </li>
+
+<li>the output raster map of the Flow Direction operation. </li>
+
+</ul>
+
+<p class="popuptitleinappen">Compound Index calculation</p>
+
+<p class="defnewpar">The <a href="../ilwisapp/compound_parameter_extraction.htm">Compound Index Calculation</a> script calculates: </p> 
+
+<ul>
+
+<li>Wetness Index, </li>
+
+<li>Stream Power Index, and </li>
+
+<li>Sediment Transport Index. </li>
+
+</ul>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>a DEM, </li>
+
+<li>the output of a previous Flow Accumulation operation. </li>
+
+</ul>
+
+<p class="defnewpar">For more information, refer to <a href="../ilwisapp/compound_parameter_extraction.htm">Compound Index Calculation</a>. </p>
+
+<p class="popuptitleinappen">Statistical Parameter Extraction:</p>
+
+<p class="popuptitleinappe2">Horton statistics</p>
+
+<p class="defnewpar">The <a href="../ilwisapp/horton_statistics.htm">Horton statistics</a> operation calculates for each (Strahler) stream order number and for each merged catchment: </p> 
+
+<ul>
+<li class="ls01be">the number of streams, </li>
+<li class="ls01be">the average stream length (km), and </li>
+<li class="ls01be">the average area of catchments (km<sup>2</sup>), and </li>
+<li class="ls01be">expected values for these by means of a least squares fit. </li>
+</ul>
+
+<p class="emptylinehalf">&nbsp;</p>
+
+<p class="defnewpar">The output is stored in a table which can be used to construct so-called Horton plots in a graph window. </p>
+
+<p class="defnewpar">Horton plots enable you to inspect the regularity of your extracted stream network based on the (Strahler) stream order numbers, and may serve as a quality control indicator for the entire stream network extraction process. It is expected that: </p>
+
+<ul>
+<li class="ls01be">the number of streams show a relative decrease for subsequent Strahler order numbers, </li>
+<li class="ls01be">the length of streams and the catchment areas show a relative increase for subsequent Strahler order numbers. </li>
+</ul>
+
+<p class="defnewpar">As input is required: </p>
+<ul>
+<li>the output of a previous Catchment extraction operation, </li>
+<li>the output of a previous Catchment merge operation, </li>
+<li>the output of a previous Drainage network ordering operation. </li>
+</ul>
+
+<p class="popuptitleinappen">Aggregate statistics</p>
+
+<p class="defnewpar">The <a href="../ilwisapp/aggregate_statistics.htm">Aggregate statistics</a> script allows you to cross a merged catchments map with a DEM (or any other map): you will obtain for each catchment the following values: <span class="courier">average</span>, <span class="courier">minimum</span>, <span class="courier">maximum</span>, <span class="courier">std</span>, <span class="courier">predominant</span>, <span class="courier">median</span>, <span class="courier">sum</span>, <span class="courier">count</span>. </p>
+
+<p>The results are added as new columns to your existing merged catchments table. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>the output table of a previous Catchment Merge operation, </li>
+
+<li>the output map of a previous Catchment Merge operation, </li>
+
+<li>another raster map containing values, e.g. your DEM. </li>
+
+</ul>
+
+<p class="defnewpar">For more information, refer to <a href="../ilwisapp/aggregate_statistics.htm">Aggregate statistics</a>. </p>
+
+<p class="popuptitleinappen">Cumulative hypsometric curve</p>
+
+<p class="defnewpar">The <a href="../ilwisapp/cumulative_hypsometric_curve.htm">Cumulative hypsometric curve</a> script crosses a merged catchments map with your DEM. The script will ask for the ID of a single catchment that you wish to use in the Cross. In the resulting cross table, cumulative values are calculated for the Area of subsequent height values in square kilometers and in percentages. The output is stored in columns: <span class="courier">cum_area</span> and <span class="courier">cum_percent</span>. </p>
+
+<p class="defnewpar">With the output cross table and its newly calculated columns, you can create graphs: </p>
+
+<ul>
+
+<li>use column <span class="courier">cum_area</span> or column <span class="courier">cum_percent</span> on the X-axis, </li>
+
+<li>use the column with the height values on the Y-axis.</li>
+
+</ul>
+
+<p>This will give you a so-called cumulative hypsometric curve. </p>
+
+<p class="defnewpar">As input, this script requires: </p>
+
+<ul>
+
+<li>an output map of a previous Catchment Merge operation, and the ID of a catchment in this map, </li>
+
+<li>a DEM, </li>
+
+</ul>
+
+<p class="defnewpar">For more information, refer to <a href="../ilwisapp/cumulative_hypsometric_curve.htm">Cumulative hypsometric curve</a>. </p>
+
+<p class="popuptitleinappen">Class coverage statistics</p>
+
+<p class="defnewpar">The <a href="../ilwisapp/class_coverage_statistics.htm">Class coverage statistics</a> script crosses a selected catchment from a merged catchments map with a raster map that has a class domain, for instance land use classes or land cover classes. </p>
+
+<p class="defnewpar">Then, for each class, the area in percentages is calculated, i.e. the area that is occupied by each class in the selected catchment. The output is stored in column <span class="courier">area_percent</span>. </p>
+
+<p class="defnewpar">As input, this script requires: </p>
+
+<ul>
+
+<li>an output map of a previous Catchment Merge operation, and the ID of a catchment in this map, </li>
+
+<li>a raster map with a class domain, for instance a land use map or a land cover map, </li>
+
+</ul>
+
+<p class="defnewpar">When the script is finished, the output cross table is displayed. </p>
+
+<p class="defnewpar">For more information, refer to <a href="../ilwisapp/class_coverage_statistics.htm">Class coverage statistics</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=kopjeboldandund>IMPORT</p>
+
+<p class=defnewpar>Import files from another package into ILWIS 3.</p>
+
+<p class="defnewpar">You can choose to use: </p>
+
+<ul>
+
+<li><a href="../ilwismen/import_map.htm">ILWIS Map Import</a></li>
+
+<li><a href="../ilwismen/import_general_raster.htm">Import General Raster</a></li>
+
+<li><a href="../ilwismen/import_table_input_table_name.htm">Import Table wizard</a></li>
+
+</ul>
+
+</body

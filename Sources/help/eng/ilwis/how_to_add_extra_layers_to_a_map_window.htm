@@ -1,0 +1,102 @@
+<html>
+
+<head>
+<title>How to add extra layers to a map window</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to add ..., Data layers, Add ..., Layers, Map window, Raster maps, Polygon maps, Segment maps, Point maps, Map lists, Annotation Text, Grid lines, Graticule">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to add</h1>
+
+<h1 class=secondline>extra layers to a map window</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To a map window, you may add several <a href="..//ilwis/popup/layers_popup.htm" onClick="return popup(this, 'notes')" >layers</a>: a <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a>, one or more <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point</a>, <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment</a> or <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a>, a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text objects</a>, <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and/or <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a>. </p>
+
+<p class=kopje>To add a map to an existing map window:</p>
+
+<p>To add a raster map, or one or more polygon, segment or point map(s), a map list, or annotation text object(s) to a map window: </p>
+
+<ul>
+
+<li>	from the <a href="map_window_menu_commands.htm">Layers menu</a>, choose the <span class=arial><a href="../ilwismen/add_layer_to_map_window.htm">Add Layer</a></span> command, or </li>
+
+<li>	in the <a href="map_window_toolbar.htm">toolbar of a map window</a>, click the <span class=arial>Add Layer</span> <img src="../images/addlayer.gif" align=bottom width="22" height="22"> button, or</li>
+
+<li>	in the white space of the <a href="map_window_layer_management.htm">Layer Management</a> pane in a map window, click the right mouse button and choose <span class=arial>Add Layer</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or </li>
+
+<li>    press the <span class=arial>Ins</span> key on the keyboard when a map window is active, or </li>
+
+<li>	<a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >one or more</a> point, segment, or polygon map(s), a raster map, a map list and/or annotation text objects from a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> or from Windows Explorer into a map window. </li>
+
+</ul>
+
+<p class=defnewpar>When using one of the first four methods, the <a href="../ilwismen/add_layer_to_map_window.htm">Add Layer</a> dialog box will appear. In this dialog box, you can select the raster, polygon, segment or point map (or the map list or the annotation text object) which you wish to add to the map window. Then, a <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box will appear in which you can specify <i>how</i> the map should be displayed. </p>
+
+<p class=defnewpar>You can add multiple point, segment and polygon maps to the map window. These will be displayed on top of the other layers that are already displayed in the map window. </p>
+
+<p class=defnewpar>Similarly, when the map window already displays a raster map (or a map list), and you add another raster map (or map list) with the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> to the map window, then the selected raster map (or map list) will also be added to the map window. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>In the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of a layer, you can specify whether a layer has to be displayed with a certain <i>transparency</i>. If you use the Transparency option, any layer that has been added to the map window before, e.g. an image or a shadow map, will remain partly visible through the transparent layer. In this manner, you can display thematic information on top of images, a shadow map etc. and view both types of information simultaneously. Click the following link for an <a href="..//ilwis/popup/map_window_transparent_layers_example.htm" onClick="return popup(this, 'notes')" >Example of transparent layers</a>. </p>
+
+<p class=kopje>To add an annotation text object to a map window: </p>
+
+<p>To create a new <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text object</a> and display it in the map window: </p>
+
+<ul>
+
+<li>    open the <a href="map_window_menu_commands.htm">File menu</a> in the map window, and choose <span class=arial><a href="../ilwismen/create_an_annotation_text_object.htm">Create, Annotation Text</a></span>. </li>
+
+</ul>
+
+<p class=defnewpar>If you already have an annotation text object, you can use one of the methods described above to add maps to a map window. </p>
+
+<p class=kopje>To add grid lines or a graticule to a map window: </p>
+
+<ul>
+
+<li>	from the <a href="map_window_menu_commands.htm">Layers menu</a>, choose the <span class=arial><a href="../ilwismen/display_options_grid_lines.htm">Add Grid Lines</a></span>, or the <span class=arial><a href="../ilwismen/display_options_graticule.htm">Add Graticule</a></span> command, or </li>
+
+<li>	in the white space of the <a href="map_window_layer_management.htm">Layer Management</a> pane in a map window, click the right mouse button and choose <span class=arial>Add Grid Lines</span> or <span class=arial>Add Graticule</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=defnewpar>A map window displaying a raster map or a map list, and/or one or more point, segment and/or polygon maps, optional annotation text layers, and optional grid lines and graticules can be saved as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. </p>
+
+<p class=defnewpar>Map views can be added to a <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>, which is used to make a final composition before printing. </p>
+
+<p class=defnewpar>To a layout, you can then add further <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> such as <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legends</a>, <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map borders</a> including
+ticks and coordinates for grid lines or a graticule, <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >north arrows</a>, <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bars and scale texts</a>, <a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a> (such as a title), <a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >boxes</a>, <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmaps</a> and <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >pictures</a>, and a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="how_to_display_maps_and_tables.htm">How to display maps and tables &amp; zoom</a></p>
+
+<p class=seealsolinks><a href="map_window_functionality.htm">Map window : functionality</a> </p>
+
+<p class=seealsolinks><a href="how_to_use_layers_in_a_map_window.htm">How to use layers in a map window</a></p>
+
+<p class=seealsolinks><a href="how_to_change_display_options_of_layers_in_a_map_window.htm">How to change display options of layers in a map window</a></p>
+
+</body

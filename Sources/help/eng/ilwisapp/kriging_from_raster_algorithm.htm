@@ -1,0 +1,514 @@
+<html>
+
+<head>
+<title>Kriging from Raster : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Kriging from Raster, Raster Kriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Kriging from Raster</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Kriging from Raster can be seen as a raster interpolation which requires a raster map as input and returns a raster map with estimations and optionally an error map. </p>
+
+<p class=defnewpar>The estimations or predictions are calculated as weighted averages of known input pixel values, similar to the <a href="..//ilwisapp/popup/moving_average_popup.htm" onClick="return popup(this, 'notes')" >Moving Average</a> operation. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargin1>The estimate to be calculated, i.e. an output pixel value <img src="../images/zest.gif" align=bottom width="8" height="16">, is a linear combination of weight factors (w<sub>i</sub>) and known input pixel midpoint values (Z<sub>i</sub>): <br>
+
+<img src="../images/zest.gif" align=bottom width="8" height="16"> = <span class=symbollarger>S</span>(w<sub>i </sub><span class=courier>*</span> Z<sub>i</sub>)</p>
+
+<p class=leftmargin1>In case the value of an output pixel would only depend on 3 input pixels, this would read: <br>
+
+<img src="../images/zest.gif" align=bottom width="8" height="16"> = w<sub>1 </sub><span class=courier>*</span> Z<sub>1</sub> + w<sub>2 </sub><span class=courier>*</span> Z<sub>2</sub> + w<sub>3 </sub><span class=courier>*</span> Z<sub>3</sub></p>
+
+<p class=leftmargin1>Thus, to calculate one output pixel value <img src="../images/zest.gif" align=bottom width="8" height="16">, first, three weight factors w<sub>1</sub>, w<sub>2</sub>, w<sub>3</sub> have to be found (one for each input pixel value Z<sub>1</sub>, Z<sub>2</sub>, Z<sub>3</sub>), then, these weight factors can be multiplied with the corresponding input pixel values, and summed. </p>
+
+<p class=defnewpar>In Moving average, the weight factors are simply determined by the distances of the input
+pixels towards an output pixel. In Kriging from Raster, however, the weight factors are calculated by finding the semi-variogram values for all distances between input
+pixels and by finding semi-variogram values for all distances between an output pixel and all input
+pixels; then a set of simultaneous equations has to be solved.</p>
+
+<p>All semi-variogram values are calculated by using a user-specified <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >semi-variogram model</a> (based on the output of the <a href="..//ilwisapp/popup/autocorrelation_popup.htm" onClick="return popup(this, 'notes')" >Autocorrelation - Semivariance</a> operation). The weight factors are calculated in such a way that the estimation error in each output pixel is minimized. </p>
+
+<p class=defnewpar>The optional error map contains the standard errors of the estimates.</p>
+
+<p class=kopje>Process Kriging from Raster:</p>
+
+<ol>
+
+<li>	Find the valid input pixels:</li>
+
+        <ul>
+
+        <li>	input pixels which coordinates are undefined are ignored, </li>
+
+        <li>	input pixels which value is undefined are ignored, </li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<li>	<i>For the first output pixel</i>, determine the input pixels (n) which will make a contribution to the output value depending on the specified limiting distance and minimum and maximum number of points:</li>
+
+        <ul>
+
+        <li>	input pixels that are farther away from this output pixel than the specified limiting distance are ignored,</li>
+
+        <li>	if the number of pixels found within the limiting distance is smaller than the specified minimum nr of pixels, assign the undefined value to this output pixel,</li>
+
+        <li>	use only the specified maximum number of pixels within the limiting distance, and, in case more pixels are found within the limiting distance than the specified maximum number of pixels, use only the pixels that are nearest to this output pixel.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp;</p>
+
+<li>	Determine the distances between all input pixels that will make a contribution to this output pixel (result of step 2), and find the semi-variogram value for these distances.</li>
+
+        <ul>
+
+        <li>	for each combination of 2 contributing input pixels, the distance between the pixels is determined,</li>
+
+        <li>	for each combination of 2 contributing input pixels, the distance value is substituted in the user-selected selected <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >semi-variogram function</a>, using the user-specified nugget, sill, and range parameters; this gives a semi-variogram value.</li>
+
+        <li>	the semi-variogram values are filled out in matrix C below (eq. 1).</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	Determine the distances of this output pixel towards all input pixels, and find the semi-variogram value for these distances:</li>
+
+        <ul>
+
+        <li>	semi-variogram values are determined using the selected semi-variogram function or model and its parameters as above,</li>
+
+        <li>	the semi-variogram values are filled out in vector D (eq. 1).</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	Calculate the weight factors (vector w):</li>
+
+        <ul>
+
+        <li>	by first inverting matrix C (result of step 3), </li>
+
+        <li>	by solving the set of simultaneous equations.</li>
+
+        </ul>
+
+<p class=leftmargininlist>	The obtained weight factors apply to the current output pixel only.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	Calculate the estimated or predicted values for this output pixel:</li>
+
+        <ul>
+
+        <li>	as the sum of the products of the weight factors and the input pixel values (eq. 4).</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	Optionally, calculate the error variance and standard error for this output pixel:</li>
+
+        <ul>
+
+        <li>	error variance: by multiplying vector w (result of step 4) with vector D (result of step 3), according to Equation 5a.</li>
+
+        <li>	standard error or standard deviation: as the square root of the error variance, according to Equation 5b.</li>
+
+        </ul>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<li>	Consider the next output pixel and repeat steps 2-8, until all output pixels are done.</li>
+
+</ol>
+
+<p class=kopje>Formulae to calculate weight factors:</p>
+
+<p>The Kriging weight factors of n valid input pixels <i>i</i> (i = 1, ..., n) are found by solving the following matrix equation:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=264>
+<p class=leftmargin2>[ C ]</p>
+
+</td>
+<td valign="top" width=18>
+<p><span class=courier>*</span></p>
+
+</td>
+<td valign="top" width=30>
+<p>[ w ]</p>
+
+</td>
+<td valign="top" width=18>
+<p>=</p>
+
+</td>
+<td valign="top" width=120>
+<p>[ D ]</p>
+
+</td>
+<td valign="top" align=right>
+<p>(1)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p><img src="../images/krigmat.gif" align=bottom width="375" height="118"></p>
+
+<p class=defnewpar>This matrix equation can be written as a set of n +1 simultaneous equations:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=226>
+<p><span class=symbollarger>S</span><sub>i</sub> ( w<sub>i</sub> <span class=courier>*</span> <span class=symbol>g </span>(h<sub>ik</sub>) ) + <span class=symbol>l</span> = <span class=symbol>g </span>(h<sub>pi</sub>)</p>
+
+</td>
+<td valign="top" width=226>
+<p>for k = 1, ..., n</p>
+
+</td>
+<td valign="top">
+<p>(2)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=226>
+<p><span class=symbollarger>S</span><sub>i</sub>  w<sub>i</sub>  = 1</p>
+
+</td>
+<td valign="top" width=226>
+<p></p>
+
+</td>
+<td valign="top">
+<p>(3)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>h<sub>ik</sub> </p>
+
+</td>
+<td valign="top">
+<p>is the distance between input pixel <i>i</i> and input pixel <i>k</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>h<sub>pi</sub> </p>
+
+</td>
+<td valign="top">
+<p>is the distance between the output pixel <i>p</i> and input pixel <i>i</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p><span class=symbol>g</span>(h<sub>ik</sub>) </p>
+
+</td>
+<td valign="top">
+<p>is the value of the semi-variogram model for the distance h<sub>ik</sub>, i.e. the semi-variogram value for the distance between input pixels <i>i</i> and input pixel <i>k</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p><span class=symbol>g</span>(h<sub>pi</sub>) </p>
+
+</td>
+<td valign="top">
+<p>is the value of the semi-variogram model for the distance h<sub>pi</sub> , i.e. the semi-variogram value for the distance between the output pixel <i>p</i> and input pixel <i>i</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>w<sub>i</sub></p>
+
+</td>
+<td valign="top">
+<p>is a weight factor for input pixel <i>i</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p><span class=symbol>l</span></p>
+
+</td>
+<td valign="top">
+<p>is a Lagrange multiplier, used to minimize possible estimation error</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Matrix C thus contains the semi-variogram values for all combinations of valid input pixels that will make a contribution to the output pixel value. </p>
+
+<p>Vector w thus contains the weight factors for all valid input pixels that will make a contribution to the output pixel value.</p>
+
+<p>Vector D thus contains the semi-variogram for an output pixel and all combinations of valid input pixels. </p>
+
+<p>Equation (3) guarantees unbiasedness of the estimates. The solutions w<sub>i</sub> minimize the Kriging error variance <span class=symbol>s</span><sup>2</sup>.</p>
+
+<p class=kopje>Formulae to calculate an estimate or predicted value for an output pixel:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=226>
+<p><img src="../images/zest.gif" align=bottom width="8" height="16"> = <span class=symbollarger>S</span><sub>i </sub>(w<sub>i </sub><span class=courier>*</span> Z<sub>i</sub>)</p>
+
+</td>
+<td valign="top" width=226>
+<p></p>
+
+</td>
+<td valign="top">
+<p>(4)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p><img src="../images/zest.gif" align=bottom width="8" height="16"></p>
+
+</td>
+<td valign="top">
+<p>is the estimate or predicted value for one output pixel to be calculated</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>w<sub>i</sub></p>
+
+</td>
+<td valign="top">
+<p>is the weight factor for input pixel <i>i</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>Z<sub>i</sub> </p>
+
+</td>
+<td valign="top">
+<p>is the value of input pixel <i>i</i> </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Formulae to calculate error variance and standard error:</p>
+
+<p>The error variance is calculated as:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=226>
+<p><span class=symbol>s</span><sup>2</sup> = <span class=symbollarger>S</span><sub>i</sub> ( w<sub>i</sub> <span class=courier>*</span> <span class=symbol>g </span>(h<sub>pi</sub>))  + <span class=symbol>l</span></p>
+
+</td>
+<td valign="top" width=226>
+<p></p>
+
+</td>
+<td valign="top">
+<p>(5a)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The standard error or standard deviation is the square root of the error variance, thus:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=226>
+<p><span class=symbol>s</span> =  <span class=symbollarger>&Ouml;</span> ( <span class=symbollarger>S</span><sub>i</sub> ( w<sub>i</sub> <span class=courier>*</span> <span class=symbol>g </span>(h<sub>pi</sub>))  + <span class=symbol>l</span> )</p>
+
+</td>
+<td valign="top" width=226>
+<p><b></b></p>
+
+</td>
+<td valign="top">
+<p>(5b)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p><span class=symbol>s</span><sup>2</sup></p>
+
+</td>
+<td valign="top">
+<p>is the error variance for the output pixel estimate</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p><span class=symbol>s</span></p>
+
+</td>
+<td valign="top">
+<p>is the standard error or the standard deviation of the output pixel estimate</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>h<sub>pi</sub></p>
+
+</td>
+<td valign="top">
+<p>is the distance between the output pixel <i>p</i> and input pixel <i>i</i></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p><span class=symbol>g </span>(h<sub>pi</sub>) </p>
+
+</td>
+<td valign="top">
+<p>is the value of the semi-variogram model for the distance h<sub>pi</sub> , i.e. the semi-variogram value for the distance between the output pixel <i>p</i> and input pixel <i>i</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>w<sub>i</sub></p>
+
+</td>
+<td valign="top">
+<p>is a weight factor for input pixel <i>i</i> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p><span class=symbol>l</span></p>
+
+</td>
+<td valign="top">
+<p>is a Lagrange multiplier, used to minimize possible estimation error</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+
+<ol class=tipol>
+
+<li>	The contents of matrix C depends on the semi-variogram model selected by the user, its parameters nugget, sill and range, and the geometric distribution of the pixels within the limiting circle in the input map.</li>
+
+<li>	The contents of vector D is determined by the location of the estimated pixel value with respect to the surrounding input pixels (inside the limiting circle) and the semi-variogram.</li>
+
+<li>	The estimates <img src="../images/zest.gif" align=bottom width="8" height="16"> are computed as linear combinations of the n point sample values with the weights w<sub>i</sub> as coefficients (the w<sub>i</sub> are found from equation (1)). Therefore the estimates are called 'linear predictors'.</li>
+
+<li>	Equation (3) guarantees unbiasedness of the estimates. The solutions w<sub>i</sub> minimize the Kriging error variance <span class=symbol>s</span><sup>2</sup>.</li>
+
+<li>	Equation (5) does not contain the sample attribute information. This means that the error variances solely depend on the spatial distribution of the samples and not on their measurement values (the attribute values).</li>
+
+<li>	In Kriging from Raster the number of points used (n &lt;= N) and hence the size of the Kriging matrix (n+1) will change from pixel to pixel while calculating the output map(s). Hence it is theoretically possible that for each output pixel a new Kriging system of order n+1 has to be solved. The algorithm also takes care that for each new set of surrounding input pixels, this set is sorted according to distance from the estimated pixel in order to enable to select the closest pixels satisfying the max nr of pixels condition.</li>
+
+</ol>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>	Clark, I. 1979. Practical geostatistics. Applied Science Publishers, London. 129 pp.</li>
+
+<li>	Cressie, N.A.C. 1993. Statistics for spatial data. Wiley, New York. 900 pp.</li>
+
+<li>	Davis, J. C. 1973. Statistics and data analysis in geology. Wiley, New York. 646 pp.</li>
+
+<li>	Deutsch, C.V., and A.G. Journel. 1992. Geostatistical software library and user's guide. Oxford University Press, New York. 340 pp.</li>
+
+<li>	Isaaks, E. H., and R. M. Srivastava. 1989. An introduction to applied geostatistics. Oxford University Press, New York. 561 pp.</li>
+
+<li>	Journel, A. G. and Ch. J. Huijbregts. 1978. Mining geostatistics. Academic Press, London, 600 pp.</li>
+
+<li>	Krige, D.G. Two-dimensional weighted moving average trend surfaces for ore-valuation, in Proc. Symposium on Mathematical Statistics and Computer Applications in Ore Valuation: Journ. South African Inst. Mining and Metallurgy, Johannesburg, 1966, Mar. 7-8, pp. 13-38.</li>
+
+<li>	Matheron, G.F. Principles of geostatistics: Economic Geology, 1963, vol. 58, pp.1246-1266.</li>
+
+<li>	Meer, F. D. van der. Introduction to geostatistics. ITC lecture notes. 72 pp.</li>
+
+<li>	Olea, R.A. 1991. Geostatistical glossary and multilingual dictionary. Oxford University Press, New York. </li>
+
+<li>	Stein, A. 1998. Spatial statistics for soils and the environment. ITC lecture notes. 47 pp.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="kriging_from_raster_functionality.htm">Kriging from Raster : functionality</a></p>
+
+</body

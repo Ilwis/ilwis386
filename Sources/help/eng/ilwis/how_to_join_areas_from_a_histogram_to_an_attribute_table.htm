@@ -1,0 +1,170 @@
+<html>
+
+<head>
+<title>How to join areas from a histogram into an attribute table</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Join columns, How to join ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to join</h1>
+
+<h1 class=secondline>Areas from a histogram into an attribute table</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Suppose you have a polygon map and a raster map <span class=courier>Landuse</span> with domain <span class=courier>Landuse</span>. The maps have an <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> <span class=courier>Landuse</span>; the attribute table also uses domain <span class=courier>Landuse</span>. </p>
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_histogram_popup.htm" onClick="return popup(this, 'notes')" >histogram</a> can be created both for the polygon map <span class=courier>Landuse</span> as well as for the raster map <span class=courier>Landuse</span>; both histograms will contain a column <span class=courier>Area</span> which are the areas of all classes in polygon map <span class=courier>Landuse</span> and raster map <span class=courier>Landuse</span>. The histograms use domain <span class=courier>Landuse</span> which is also the domain of the map.</p>
+
+<p class=kopje>To join <span class=courier>Area</span> values from a <i>polygon histogram</i> into an attribute table:</p>
+
+<p>When you wish to use the Join Column wizard: </p>
+
+<ul>
+
+<li>	open the attribute table,</li>
+
+<li>	from the <a href="table_window_menu_commands.htm">Columns menu</a> in the table window, choose the <span class=arial>Join</span> command, </li>
+
+<li>    the <a href="../ilwismen/join_column.htm">Join Column wizard</a> is started: </li>
+
+        <ul>
+
+        <li>on the Specify Table and Column page: select for Table, <i>polygon histogram</i> <img src="../images/hispol.gif" align=bottom width="13" height="14"> Landuse; and select for Column, <span class=courier>Area</span> which contains area values for the polygons. </li>
+
+        <li>on the Join method page: select the option <span class=arial>Use Domain of current table (key1) and use Domain of selected table (key2)</span>. </li>
+
+        <li>on the Output column page: type a name for the output column, or accept the default. </li>
+
+        </ul>
+
+</ul>
+
+<p class=defnewpar>When you wish to type an expression on the command line: </p>
+
+<ul>
+
+<li>	type one of the following expressions on the command line of the table window:</li>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <p class=leftmargininlist><span class=courier>LandArea = Landuse.hsa.Area</span></p>
+
+        <p>or</p>
+
+        <p class=leftmargininlist><span class=courier>LandArea = ColumnJoin(Landuse.hsa, Area) </span></p>
+
+<p class=linespacing03before>where:</p>
+
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td valign="top" width="96">
+<p><span class=courier>LandArea</span></p>
+
+</td>
+<td valign="top">
+<p>is the new column in the attribute table</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><span class=courier>Landuse.hsa</span></p>
+
+</td>
+<td valign="top">
+<p>is the polygon histogram of polygon map <span class=courier>Landuse</span>, it stores a column <span class=courier>Area</span>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p><span class=courier>Area</span></p>
+
+</td>
+<td valign="top">
+<p>is the column in <span class=courier>Landuse.hsa</span> that you wish join into the attribute table.</p>
+
+</td>
+</tr>
+</table>
+
+</ul>
+
+
+<p class=kopje>To join Area values from a <i>raster histogram</i> into an attribute table:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=linespacing>You can use practically the same procedure as described above. The only differences are: </p>
+
+<ul>
+
+<li class=ls01be>In the Join Column wizard: on the Select Table and Column page, select for Table <i>raster histogram</i> <img src="../images/hist.gif" align=bottom width="13" height="14"> <span class=courier>Landuse</span>. </li>
+
+<li class=ls01be>On the command line, type one of the following expressions:</li>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <p class=leftmargininlist><span class=courier>LandArea = Landuse.his.Area</span></p>
+
+        <p>or</p>
+
+        <p class=leftmargininlist><span class=courier>LandArea = ColumnJoin(Landuse.his, Area) </span></p>
+
+<p class=linespacing03before>where:</p>
+
+<table cellspacing="0" cellpadding="0">
+<tr>
+<td valign="top" width="96">
+<p><span class=courier>Landuse.his</span></p>
+
+</td>
+<td valign="top">
+<p>is the raster histogram of raster map <span class=courier>Landuse</span>, it stores a column <span class=courier>Area</span>.</p>
+
+</td>
+</tr>
+</table>
+
+</ul>
+
+<p class=kopje>Example:</p>
+
+<p>Polygon histogram of polygon map <span class=courier>Landuse</span>:</p>
+
+<p class=linespacing01before><img src="../images/histcl.gif" align=bottom width="534" height="329"></p>
+
+<p class=defnewpar>Attribute table <span class=courier>Landuse</span> with joined column <span class=courier>LandArea</span>:</p>
+
+<p class=linespacing01before><img src="../images/tabcl.gif" align=bottom width="439" height="354"></p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/join_column.htm">Join Column wizard</a></p>
+
+<p class=seealsolinks><a href="calc_joining_columns_from_other_tables.htm">Table calculation : joining columns from other tables</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/histogram_functionality.htm">Histogram : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_join_columns_of_another_table_to_the_current_table.htm">How to join columns of another table into the current table</a></p>
+
+</body

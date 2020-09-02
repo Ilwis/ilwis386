@@ -1,0 +1,171 @@
+<html>
+
+<head>
+<title>Polygons to segments : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygons to segments, SegmentMapPolBoundaries">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Polygons to segments</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/polygons_to_segments_popup.htm" onClick="return popup(this, 'notes')" >Polygons to segments</a> operation can be directly executed by typing one of the following expressions on the command line of the Main Window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapPolBoundaries(</span>InputPolygonMap, <span class=courier>&quot;*&quot;</span>, <span class=courier>single)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapPolBoundaries(</span>InputPolygonMap, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;</span>, <span class=courier>single)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapPolBoundaries(</span>InputPolygonMap,<span class=courier> &quot;*&quot;</span>, <span class=courier>unique)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapPolBoundaries(</span>InputPolygonMap, <span class=courier>&quot;</span><i>mask</i><span class=courier>&quot;</span>, <span class=courier>unique)</span></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output segment map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>SegmentMapPolBoundaries</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Polygons to segments operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPolygonMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input polygon map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>&quot;<i>mask</i>&quot;</p>
+
+</td>
+<td valign="top">
+<p>are the (multiple) search strings to extract segments of specific polygons; on the command line, the total <a href="..//ilwis/sec/mask_sec.htm" onClick="return popup(this, 'notes')" >mask</a> needs to be surrounded by double quotes.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>single</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to assign the name '<span class=courier>Boundary</span>' to all output segments. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>unique</p>
+
+</td>
+<td valign="top">
+<p>is the parameter assign unique names like 'Boundary 1', 'Boundary 2', etc. to the output segments; the attribute table which is created for the output map will then store the names of the polygons to the right and to the left of the extracted segments and the length of the extracted segments. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=defnewpar>When the <span class=courier>Single</span> parameter is used, the name for the output segments is stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </p>
+
+<p>When the <span class=courier>Unique</span> parameter is used, a <span class=courier>UniqueID</span> domain will be used for the names for the output segments (internal domain). </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/polygons_to_segments_functionality_algorithm.htm">Polygons to segments : functionality</a></p>
+
+</body

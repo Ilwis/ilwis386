@@ -1,0 +1,95 @@
+<html>
+
+<head>
+<title>Pixel info window : introduction</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Pixel information window">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Pixel information window</h1>
+
+<h1 class=secondline>Introduction</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Pixel info allows you to interactively inspect class names, IDs or values in one or more raster, polygon, segment and point maps and attribute values in attribute tables. </p>
+
+<p class=defnewpar>First, the pixel information window receives the XY-coordinate from the mouse pointer (located in a map window) or the digitizer cursor (located on a referenced paper map on the digitizer). </p>
+
+<p>Then, for this received coordinate, information of all raster, polygon, segment and point maps that were added to the pixel info window is retrieved and displayed simultaneously. For raster maps, the retrieved information refers to the pixel pointed at with the mouse pointer, hence pixel info. </p>
+
+<p class=defnewpar>Open the pixel information window, add maps to the pixel info window (when an attribute table is linked to a map or a domain these are also added), and move the mouse pointer through a map window. The pixel info window displays:</p>
+
+<ul>
+
+<li>	the XY-coordinate of the position of the mouse pointer in the map window;</li>
+
+<li>	class names, IDs or values found in the maps at that position;</li>
+
+<li>	attribute information found in attribute tables.</li>
+
+</ul>
+
+<p class=kopje>Example:</p>
+
+<p class=linesp01befafter><img src="../images/pixinfo.gif" align=bottom width="423" height="235"></p>
+
+<p class=defnewpar>In this example the following information is retrieved for the current XY-coordinate:</p>
+
+<ul>
+
+<li>	class name of polygon map Geology, and attribute information found in columns GeolUnit, Lithology, and GeolAge,</li>
+
+<li>	value of raster map Slopepct,</li>
+
+<li>	class name of polygon map LandUse,</li>
+
+<li>	class name of polygon map Geom, and attribute information found in columns Description and Slides.</li>
+
+</ul>
+
+<p class=defnewpar>Whether pixel info displays class name, IDs or values of maps depends on the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain(s)</a> of the maps. </p>
+
+<p class=defnewpar>Attributes from an attribute table are retrieved when:</p>
+
+<ol>
+
+<li>	the domain of a map is a class domain or an identifier domain, and </li>
+
+<li>	the domain of the attribute table is the same as the domain of the map to which it relates, and</li>
+
+<li>	the attribute table is linked to the map or to the domain of the map. </li>
+
+</ol>
+
+<p class=defnewpar>The advantage of using pixel info, above using the left mouse button in a map window (Info), is that you can get information on several maps at the same time and also on attribute values. </p>
+
+<p class=defnewpar>For information on minimizing or maximizing the pixel information window, using scroll bars, etc., see <a href="windows_features_introduction.htm">Introduction on Windows features</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/pixel_information_window_functionality.htm">Pixel information window : functionality</a></p>
+
+<p class=seealsolinks><a href="pixel_information_window_menu_commands.htm">Pixel information window : menu commands</a></p>
+
+<p class=seealsolinks><a href="pixel_information_window_mouse_functions.htm">Pixel information window : mouse functions</a></p>
+
+</body

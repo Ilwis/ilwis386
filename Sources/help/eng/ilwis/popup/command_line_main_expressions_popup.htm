@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<title>command line main expressions popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>ILWIS expressions on the command line</p>
+
+<p class=linespacing03after>By typing an expression on the <a href="command_line_main_window_popup.htm">command line of the Main window</a>, you can perform a <a href="../../ilwis/popup/y_calculation_popup.htm">calculation</a> or another <a href="../../ilwis/popup/y_operation_popup.htm">operation</a>. To calculate with raster maps, type a MapCalc formula; to perform an operation, type a complete expression that includes all parameters required by that operation. The operation's dialog box is skipped. </p>
+
+<p class=linespacing03after>When you use the definition sign = in an expression, the output map, table or column will be <a href="../../ilwis/popup/object_dependent_data_objects_popup.htm">dependent</a>. The expression by which these dependent maps, tables and columns are created is stored by these maps, tables and columns as their <a href="../../ilwis/popup/object_definition_popup.htm">definition</a>.</p>
+
+<p class=linespacing03after>A simple ILWIS expression reads:  <span class=courier>OUTMAP = MapFilter(band1, avg3x3)</span></p>
+
+<p class=linespacing03after>A list of ILWIS expressions for operations is presented in <a href="..//ilwis/appendices_ilwis_expressions.htm" onClick="return popup(this, 'notes')" >Appendices : ILWIS expressions</a>. Advanced users can create a <a href="../../ilwis/popup/objects_script_popup.htm">script</a> to execute a series of expressions. </p>
+
+</body

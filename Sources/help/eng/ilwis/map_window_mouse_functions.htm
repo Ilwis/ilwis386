@@ -1,0 +1,89 @@
+<html>
+
+<head>
+<title>Map window : mouse functions</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map window, Mouse functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map window</h1>
+
+<h1 class=secondline>Mouse functions</h1>
+
+<!--<hr>-->
+
+<p class=kopje>Moving with the mouse over:</p>
+
+<ul>
+
+<li>	A map in a map window: the status bar displays XY-coordinates when a raster map in the map window has a georeference other than georeference <span class=courier>None</span>, and when vector maps in the map window have a coordinate system other than coordinate system <span class=courier>Unknown</span>;</li>
+
+<p class=leftmargininlist>	When the map window contains a <b>raster</b> map, also row and column numbers of the raster map are displayed. </p>
+
+<p class=leftmargininlist>	When the maps in the map window have a coordinate system with projection information, the status bar also shows the coordinates in LatLon-coordinates;</p>
+
+<li>	A command on a menu: the <a href="..//ilwis/popup/status_line_popup.htm" onClick="return popup(this, 'notes')" >status bar</a> displays information that helps explain the task of the highlighted menu command. Highlight a menu command by opening a menu and drag the mouse pointer along the commands on the menu. You can also use the <span class=arial>Up Arrow</span> and <span class=arial>Down Arrow</span> keys on the keyboard to move through the commands on a menu;</li>
+
+<li>	A button in the <a href="..//ilwis/popup/button_bar_popup.htm" onClick="return popup(this, 'notes')" >toolbar</a>: the status bar gives a short explanation of the function of the button. </li>
+
+</ul>
+
+<p class=kopje>Clicking:</p>
+
+<ul>
+
+<li>	A map in a map window: the class names, IDs or values in the map are displayed depending on the domain of the map. To retrieve information of a map layer, make sure that the <span class=arial>Info</span> check box is selected in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of that layer;</li>
+
+<li>	A button in the toolbar: performs the action of the button.</li>
+
+</ul>
+
+<p class=kopje>Continuously pressing the left mouse button:</p>
+
+<ul>
+
+<li>	On a map in a map window: continuous display of class names, IDs or values of the data layers information in the window of which the Info box is marked. </li>
+
+</ul>
+
+<p class=kopje>Double-clicking on:</p>
+
+<ul>
+
+<li>	A map in a map window: allows you to edit the attributes of this selection if an attribute table is linked to the map, or allows you to edit the colors of this selection. Choose the <span class=arial>Double-Click Action</span> command on the <a href="map_window_menu_commands.htm">Layers menu</a> to select to edit attributes or colors.</li>
+
+</ul>
+
+<p class=kopje>Clicking the right mouse button:</p>
+
+<ul>
+
+<li>	On a map in a map window: a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> appears. You can choose to go to <a href="..//ilwismen/popup/map_window_normal_popup.htm" onClick="return popup(this, 'notes')" >Normal</a> pointing mode, to <a href="../ilwismen/zoom_in_on_maps.htm">Zoom In</a>, to <a href="..//ilwismen/popup/options_zoomout_popup.htm" onClick="return popup(this, 'notes')" >Zoom Out</a>, or to <a href="..//ilwismen/popup/map_window_pan_popup.htm" onClick="return popup(this, 'notes')" >Pan</a>, or to Display the <a href="..//ilwismen/popup/map_window_entire_map_popup.htm" onClick="return popup(this, 'notes')" >Entire Map</a>. Furthermore, you can select a layer of this map window to change its display options.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="how_to_use_the_status_line.htm">How to use the status bar</a></p>
+
+<p class=seealsolinks><a href="windows_features_introduction.htm">Introduction on Windows features</a></p>
+
+</body

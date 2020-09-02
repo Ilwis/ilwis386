@@ -1,0 +1,172 @@
+<html>
+
+<head>
+<title>How to use long object names</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to use ..., Long file names, Long object names, Object names, Use ..., File names">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to use long object names</h1>
+
+<!--<hr>-->
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names.</p> 
+
+<ul>
+
+<li>In object names, any character may be used except<span class=courier> \ / : * ? &lt; &gt; | &quot;</span></li>
+
+<li>The maximum length of an object name is 255 characters including the full path.</li>
+
+</ul>
+
+<p>Furthermore, it is not allowed to use <span class=courier>%</span> in any ILWIS object name. </p>
+
+<p class=kopje>Long object names in dialog boxes:</p>
+
+<p>In dialog boxes, long object names can be used freely. When creating objects or when specifying an output object name in a dialog box, you may thus specify object names that start with or contain: </p>
+
+<ul>
+
+<li>characters from A to Z, </li>
+
+<li>digits from 0 to 9, </li>
+
+<li>underscores, </li>
+
+<li>spaces, or </li>
+
+<li>any of the following special characters <span class=courier> ` ~ ! @ # $ ^ &amp; ( ) - + = [ ] { } ; ' , . </span></li>
+
+</ul>
+
+<p class=defnewpar>The following oject names are thus all valid: <span class=courier>My_output_map</span>, <span class=courier>My output map</span>, <span class=courier>map'99</span>, <span class=courier>99 map</span>, <span class=courier>#1map</span>, and <span class=courier>My.Map</span>. </p>
+
+<p>In dialog boxes, the use of single quotes around object names (as explained below) is permitted but not required.</p>
+
+<p class=kopje>Long object names on the command line and in scripts:</p>
+
+<p>On the command line and in scripts, you <b>must</b> use <i>single quotes</i> around object names which:
+
+<ul>
+
+<li>start with a digit between 0 and 9,</li>
+
+<li>start with a space, or contain one or more spaces,</li>
+
+<li>start with or contain any of the following special characters<span class=courier> ` ~ ! @ # $ ^ &amp; ( ) - + = [ ] { } ; ' , .</span></li>
+
+</ul>
+
+<p>Object extensions should be left outside the quotes. </p> 
+
+<p>When an object name already contains a single quote <span class=courier>'</span>, this single quote must be duplicated.</p>
+
+<p class=defnewpar>On the command line and in scripts, single quotes around object names can only be omitted when object names start with a character between A to Z and do not contain spaces nor special characters. </p>
+
+<p class=kopje>Command line/script examples:</p>
+
+<p>To demonstrate the use of single quotes around object names on the command line and/or in scripts, some examples of expressions are given below.</p>
+
+<table border="0">
+<tr>
+<td valign="top" width="50%"><span class=calc0>MyOutputMap = map1 + map2</span>
+</td>
+<td valign="top"><i>input maps and output map without spaces or special characters</i>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="50%"><span class=calc0>My_Output_Map = map1 + map2</span>
+</td>
+<td valign="top"><i>input maps and output map without spaces or special characters</i>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="50%"><span class=calc0>'My Output Map' = map1 + map2</span>
+</td>
+<td valign="top"><i>output map contains spaces</i>
+</td>
+</tr>
+
+<tr>
+<td valign="top"><span class=calc0>'Map1+2' = 'map.1' + 'map 2'</span>
+</td>
+<td valign="top"><i>output map and first input map contain a special character; second input map contains a space</i>
+</td>
+</tr>
+
+<tr>
+<td valign="top"><span class=calc0>'Map1&amp;2' = 'map.1' + 'map 2'</span>
+</td>
+<td valign="top"><i>output map and first input map contain a special character; second input map contains a space</i>
+</td>
+</tr>
+
+<tr>
+<td colspan=2>
+<span class=calc0>'99Edges' = MapFilter('map''99',edgesenh)</span>
+</td>
+<tr>
+<td>&nbsp;</td>
+<td><i>output map starts with a digit; 
+<br>input map contains a special character (a single quote which has to be duplicated) </i>
+</td>
+</tr>
+
+<tr>
+<td colspan=2>
+<span class=calc0>'99Edges'.mpr = MapFilter('map''99'.mpr,edgesenh)</span>
+</td>
+<tr>
+<td>&nbsp;</td>
+<td><i>same as previous</i>
+</td>
+</tr>
+
+<tr>
+<td colspan=2>
+<span class=calc0>attrib_map_main_crop_99 = 'My.Map'.'99Landuse'.'Main Crop'</span>
+</td>
+<tr>
+<td>&nbsp;</td>
+<td><i>input map contains a special character; 
+<br>table name starts with a digit; 
+<br>column name contains a space</i>
+</td>
+</tr>
+
+</table>
+
+<p class=kopje>UNC paths:</p>
+
+<p>Furthermore, in ILWIS 3, Universal Naming Convention (UNC) paths are supported. A UNC path starts with <span class=courier>\\<i>ServerName</i>\</span>... rather than with <span class=courier><i>DriveLetter</i>:\</span>...</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="calc_general_syntax.htm">Map calculation : general syntax of MapCalc formulae</a></p>
+
+<p class=seealsolinks><a href="calc_general_syntax.htm">Table calculation : general syntax of TabCalc formulae</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_construction_of_expressions.htm">Appendices : construction of expressions</a></p>
+
+</body

@@ -1,0 +1,337 @@
+<html>
+
+<head>
+<title>Appendices : relations between ILWIS objects</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Appendices, ILWIS objects, Relations between ILWIS objects, Properties of objects">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Appendices</h1>
+
+<h1 class=secondline>Relations between ILWIS objects</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar><a href="ilwis_objects_data_objects.htm">ILWIS data objects</a> (maps, tables and columns) contain references to other objects (e.g. <a href="ilwis_objects_service_objects.htm">service objects</a>) and to other binary files (e.g. binary data file). All these references are listed in an object's <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a>. </p>
+
+<p class=defnewpar>This topic deals with the relations that each object has with other objects by means of the references mentioned above. In the software, these internal relations of one object with other objects are visible as the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of an object. Any object's properties can be viewed and edited. </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<p class=leftmargin1>ILWIS data objects may also depend on other data objects: when a map is calculated from other maps or when a map is the outcome of an operation on another map. Such relations are called dependency links. For more information, see <a href="basic_concepts_dependent_data_objects.htm">Basic concepts: Dependent data objects</a>. </p>
+
+<p class=defnewpar>In the text below, the word 'use' is used for the references that each object has to other objects. Instead of 'use', you may also read 'have' or 'have a reference to'.</p>
+
+<p class=kopje>Data objects:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rasmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >Raster maps</a> use a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> and a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/polmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >Polygon maps</a> use a domain and a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/segmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >Segment maps</a> use a domain and a coordinate system. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/pointmap.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >Point maps</a> use a domain and a coordinate system. </p>
+
+</td>
+</tr>
+</table>
+
+<p>Maps of a domain type Class, ID, or Group may have an attribute table.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/table.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >Tables</a> use a domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/column.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >Columns</a> use a domain.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Container objects:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/mpl.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >Map lists</a> contain references to a number of raster maps which use the same georeference and the same domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/objcol.gif" align=bottom width="15" height="13"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >Object collections</a> contain references to a number of objects that are included in the object collection.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/mpv.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >Map views</a> contain references to one or more raster maps, polygon maps, segment maps, and/or point maps and optional annotation text objects. Information on grid lines and graticules is stored in-line.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/layout.gif" align=top width="12" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >Layouts</a> contain references to one or more map views. Information on annotation is stored in-line.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/anntxt.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text objects</a> have no direct relations with other objects. Annotation text objects are designed to display and store multiple texts at <i>multiple positions</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/graphicon.gif" align=bottom width="15" height="15"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_graph_popup.htm" onClick="return popup(this, 'notes')" >Graphs</a> contain a reference to the table(s) which store the columns that are used in a graph. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Service objects:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/domain.gif" align=bottom width="16" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >Domains</a> of the Class, Group, Value and Picture type use a <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a>.</p>
+
+<p>	A class, group and picture domain have a representation Class; a value domain has a representation value or a representation gradual. Other domains use 1, 7, 15, or 31 system colors.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/rpr.gif" align=bottom width="16" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >Representations</a> use a domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/georef.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >Georeferences</a> use a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>. A georeference tiepoints also uses a background raster map on which you can position your tiepoints.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/coordsy.gif" align=bottom width="15" height="15"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >Coordinate systems</a> may contain information on a projection. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Special objects:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/hist.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_histogram_popup.htm" onClick="return popup(this, 'notes')" >Histograms</a> are tables. Histograms calculated from images or from existing raster, polygon, segment or point with a  Class or ID domain, use the same domain as the map. Histograms calculated from maps with a Value domain, obtain domain None.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/sample.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>A <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> uses a map list, a sample set raster map which stores the positions of the training pixels, a domain that contains the class names of training pixels. When your graphics board is configured to use 256 colors, the sample set also uses a background raster map on which you can position your training pixels.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/obj_stereopair.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p>A <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> contains references to two input raster maps, locations of fiducial marks, principal points, transferred principal points, and optionally scaling points. When calculated, it also contains references to two resampled output raster maps. </p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/criteria_tree.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A <a href="..//ilwis/popup/objects_criteria_trees_popup.htm" onClick="return popup(this, 'notes')" >criteria tree</a> has no direct relations to other objects.</p></td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/tb2.gif" align=bottom width="14" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A <a href="..//ilwis/popup/objects_table2dim_popup.htm" onClick="return popup(this, 'notes')" >two-dimensional table</a> uses two domains which contain the classes or IDs that should be reclassified and one domain which contains the classes, IDs or values after reclassification.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/matrix.gif" align=bottom width="16" height="13"></p>
+
+</td>
+<td valign="top">
+<p>A <a href="..//ilwis/popup/objects_matrices_popup.htm" onClick="return popup(this, 'notes')" >matrix</a> has no direct relations to other objects. A matrix is a dependent object, created by the operations Principal Components and Factor Analysis. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/filt.gif" align=bottom width="13" height="13"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_filters_popup.htm" onClick="return popup(this, 'notes')" >Filters</a> have no direct relations with other objects. Filters can be applied on raster maps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/func.gif" align=bottom width="15" height="14"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_userdef_functions_popup.htm" onClick="return popup(this, 'notes')" >Functions</a> have no direct relations with other objects. Functions can be used on the command lines, in <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a> and <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a> to calculate with maps and/or tables, in <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >scripts</a>, and in the <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >pocket line calculator</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../images/script.gif" align=bottom width="16" height="12"></p>
+
+</td>
+<td valign="top">
+<p><a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >Scripts</a> have no direct relations with other objects. Scripts may perform any calculation or operation on any data object, as defined in the script. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li> When you create a domain for data with a meaning, do not forget create one or more representations for this domain as well. When creating a class domain, a representation is automatically created, but you have to edit the colors yourself. The domain and representation together determine in what colors the map or attribute column can be displayed.</li>
+
+<li> Service objects can be shared by more than one data object.</li>
+
+<li> Some special service objects exist: <span class=courier>None.dom</span>, <span class=courier>None.grf</span>, and <span class=courier>Unknown.csy</span>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit properties of an object</a></p>
+
+</body

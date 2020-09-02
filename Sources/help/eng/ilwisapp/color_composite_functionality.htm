@@ -1,0 +1,133 @@
+<html>
+
+<head>
+<title>Color composite : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Color composite">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Color composite</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A color composite is created by combining 3 raster images (bands/maps). One band is displayed in shades of red, one in shades of green and one in shades of blue. </p>
+
+<p class=defnewpar>A color composite can be created:</p>
+
+<ul>
+
+<li>	to serve as a background image during <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a> and subsequent image <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >classification</a>,</li>
+
+<li>	for visual interpretation purposes, a printed color composite may be useful as a field map, but you can also use a color composite as a background image during on-screen digitizing, or</li>
+
+<li>	for illustration purposes, for instance by using a color composite as a drape over a <a href="..//ilwisapp/popup/display3d_popup.htm" onClick="return popup(this, 'notes')" >3D model</a>. </li>
+
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>This operation creates a permanent color composite map. When your graphics board is configured to use more than 256 colors, for instance High Color 16-bit or True Color 24-bit (see Display Settings in Windows' Control Panel), you can also interactively display a color composite by selecting the <span class=arial>Show MapList as Color Composite</span> command from the <a href="../ilwis/main_window_menu_commands.htm">Operations, Visualization</a> menu. By creating an interactive color composite (very suitable for sampling or on-screen digitizing), you can easily change intervals, select other bands, etc. Another advantage is that besides maps with the Image domain, also maps with a Value domain are accepted. The resulting color composite is displayed in a map window. To store such a color composite, you can save the map window as a map view.</p>
+
+<p class=kopje>General information on color composites:</p>
+
+<ul>
+
+<li>	A color composite gives a visual impression of 3 raster bands. Putting the three bands together in one color composite map can give a better visual impression of the reality on the ground, than by displaying one band at a time. Examples of color composites are false color (or IR) images and 'natural color' images.</li>
+
+<li>	The input pixel values of each band are measures of the amount of reflection in a certain wavelength interval. The values in the output color composite map just refer to certain colors; the output values themselves have no meaning.</li>
+
+<li>	Before creating a color composite, you might <a href="filter.htm">filter</a> the bands in order to increase sharpness of features of interest. </li>
+
+</ul>
+
+<p class=defnewpar>By using this operation, color composites can be created in various ways:</p>
+
+<ul>
+
+<li>	<b>Standard</b>:</li>
+
+        <ul>
+
+        <li>	Linear stretching: input values are linearly stretched; user-defined input intervals; </li>
+
+        <li>	Histogram equalization: input values are equally divided over output colors; user-defined input intervals; </li>
+
+        </ul>
+
+<li>	<b>Dynamic</b> (Heckbert): input values are automatically distributed over a user-defined number of colors.</li>
+
+<li>	<b>24 Bit RGB</b>:</li>
+
+        <ul>
+
+        <li>	Linear stretching: input values are linearly stretched; user-defined input intervals; </li>
+
+        <li>	Histogram equalization: input values are equally divided over output colors; user-defined input intervals;</li>
+
+        </ul>
+
+<li>	<b>24 Bit HSI</b>: input values are interpreted as hue, saturation and intensity.</li>
+
+</ul>
+
+<p class=defnewpar>The different methods of creating a color composite are merely a matter of scaling the input values over the output colors. The exact methods by which this is done are described in <a href="color_composite_algorithm.htm">Color Composite : algorithm</a>.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The three input maps should use the <span class=courier>Image</span> domain. A georeference is not required for the input maps. If the maps do have a georeference, all input maps should use the same georeference.</p>
+
+<p class=kopje>Domain of output map:</p>
+
+<p>For a <b>standard</b> color composite: the operation always uses system Picture domain <span class=courier>ColorCmp</span> for the output color composite. This domain always uses system representation <span class=courier>ColorCmp</span>.</p>
+
+<p>For a <b>dynamic</b> color composite: the operation creates a new domain (type Picture) for the output color composite and a new representation for this domain. This output domain and representation are always stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a> and internal representation).</p>
+
+<p>For a <b>24-bit</b> color composite: the operation always uses the <span class=courier>Color</span> domain for the output color composite.</p>
+
+<p class=kopje>Georeference of output map:</p>
+
+<p>The output color composite always uses the same georeference as the input maps.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	If the user is interested in the image as a whole, it is best to use the Dynamic option. This usually results in a composite with good contrast. The Dynamic option does not take into account the structure of the input bands. Therefore, if the user is interested in specific intervals of the input bands, it is better to use the Standard option, using linear stretching. However, if the pixels that are of less interest can be masked, the user can calculate a Dynamic composite using only the pixels that are of interest.</li>
+
+<li>	When there are more bands available than can be used to create a color composite (e.g. 7 TM-bands), you can first calculate the <a href="..//ilwisapp/popup/optimum_index_factor_popup.htm" onClick="return popup(this, 'notes')" >Optimum Index Factor</a> (OIF); this may help you to decide which bands to select for a color composite.</li>
+
+<li>	The reverse process of creating a color composite is <a href="..//ilwisapp/popup/color_separation_popup.htm" onClick="return popup(this, 'notes')" >color separation</a>.</li>
+
+<li>	For more information on internal domains and representations, refer to <a href="../ilwis/how_to_open_internal_domains_representations_advanced.htm">How to open internal domains/representations</a>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="color_composite_dialogbox.htm">Color composite : dialog box</a></p>
+
+<p class=seealsolinks><a href="color_composite_commandline.htm">Color composite : command line</a></p>
+
+<p class=seealsolinks><a href="color_composite_algorithm.htm">Color composite : algorithm</a></p>
+
+</body

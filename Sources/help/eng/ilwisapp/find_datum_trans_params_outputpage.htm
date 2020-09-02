@@ -1,0 +1,162 @@
+<html>
+
+<head>
+<title>Find datum transformation parameters - Output page</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Datum transformation parameters, Find datum parameters, Coordinate system, Datum, Geodetic datum, User-defined datums, Geo-centric datum shifts, Molodensky datum transformation, Bursa Wolf datum transformation, Molodensky Badekas datum transformation, WGS 84">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table bgcolor="#006699" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Find datum transformation parameter</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Calculated datum transformation parameters</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="find_datum_trans_params_methodpage.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="../ilwis/main_window_menu_commands.htm">Finish</a>&nbsp;&gt;</td>
+</tr>
+<tr><td bgcolor="FFFFFF" colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>On this last page of the Datum transformation parameters wizard, you can view the calculated datum transformation parameters. Optionally, you can save the results as a new user-defined datum; the calculated datum parameters, which enable a transformation to the global (WGS 84) datum, are stored in the coordinate system of the first input map. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td colspan="2">Listing of calculated datum transformation parameters: </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2"><p class=diabox>Rotation point Xo, Yo, Zo:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="120"><p class=diaboxnospacetop>&nbsp;</p>
+</td>
+<td valign="top"><p class=diaboxnospacetop>For Molodensky Badekas calculation method. <br />The rotation center is specified in geocentric coordinates of the first point map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="120"><p class=diabox>Nr of points used:</p>
+
+</td>
+<td valign="top"><p class=diabox>For all calculation methods.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2"><p class=diabox>Translations dX, dY, dZ:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="120"><p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top"><p class=diaboxnospacetop>For all calculation methods. <br />Translations are calculated between the geocentric coordinates of the first and the second coordinate system, and are specified in meters. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2"><p class=diabox>Rotations Rot X, Rot Y, Rot Z:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="120"><p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top"><p class=diaboxnospacetop>For Bursa Wolf and Molodensky Badekas calculation methods. <br />Rotation angles are calculated between the geocentric coordinates of the first and the second coordinate system, and are specified in microradians and in arc seconds. Rot X, Rot Y and Rot Z correspond to <i><span class=symbollarger>a</span>, <span class=symbollarger>b</span>, <span class=symbollarger>g</span></i> as mentioned on the Method page. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2"><p class=diabox>Scale difference dScale: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="120"><p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top"><p class=diaboxnospacetop>For Bursa Wolf and Molodensky Badekas calculation methods. <br />The scale difference is a unitless figure as 10<sup>-6</sup>, or ppm (e.g. 1 mm per km).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2"><p class=diabox>Save datum parameters:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="120"><p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+
+	<ul class=diaul>
+
+	<li>Select this check box to save the calculated datum transformation parameters into the coordinate system of the first point map. This coordinate system will then have a user-defined datum, and will be compatible with the WGS 84 datum, and thus with any other known datum. </li>
+
+	<li>Clear this check box if you do not wish to store the calculated transformation parameters.</li>
+
+	</ul>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <span class=arial>Finish</span> button while you <i>selected</i> the <span class=arial>Save as</span> check box: </p>
+
+        <ul>
+
+        <li>The datum of the coordinate system of the first point will be adapted; the calculated datum transformation parameters will be included in this coordinate system. </li>
+
+		<li class="ls01be">The coordinate system of the first point map will then use a user-defined datum that is compatible with the WGS 84 datum, and thus with any other known datum. </li>
+
+		<p>Compatible with WGS 84 means: coordinates can be transformed from and to WGS 84. </p>
+
+		<li class="ls01be">By opening the coordinate system of the first point map, and clicking the <span class=arial>Datum </span> button, the <a href="../ilwismen/select_datum.htm">Select datum</a> dialog box will appear, in which you can inspect the new datum. </li>
+        
+        </ul>
+
+<p class=defnewpar>When you click the <span class=arial>Finish</span> button while you <i>cleared</i> the <span class=arial>Save as</span> check box: </p>
+
+        <ul>
+
+        <li>The coordinate system of the first point map will not be updated. </li>
+
+		</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>For a general explanation of the calculation methods of the datum transformation parameters, see the <a href="find_datum_trans_params_methodpage.htm">Find datum transformation parameters - Method page</a>. </p>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>Bursa, M., 1966. Fundamentals of the theory of geometric satellite geodesy. Travaux de l'Institut G&eacute;ophysique de l'Acad&eacute;mie Tch&eacute;coslovaque de Sciences. </li>
+
+<li>D.M.A., 1991. World Geodetic System 1984; its definition and relationships with local geodetic systems. U.S. Defense Mapping Agency, Department of Defense, Technical Report 8350.2, 2nd ed.</li>
+
+<li>Kadaster - Rijksdriehoeksmeting, 2000. Het stelsel van de Rijksdriehoeksmeting en het European Terrestrial Reference System 1989; gebruik en definitie. <a href="http://www.rdnap.nl/download/rdnaptrans.pdf">http://www.rdnap.nl/download/rdnaptrans.pdf</a> </li>
+
+<li>Kotoglu, H.S., Mekik, C., Akcin, H., 2002. A comparison of two well known models for 7-parameter transformation. <a href="http://www.isaust.org.au/resources/theAustralianSurveyor/">The Australian Surveyor</a> 47(1), pp. 24-30. </li>
+
+<li>Wolf, H., 1963. Geometric connection and re-orientation of three dimensional triangulation nets. Bulletin Geodesy 68, pp. 165-169.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/select_datum.htm">Select datum</a></p>
+
+</body

@@ -1,0 +1,224 @@
+<html>
+
+<head>
+<title>Stretch : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Stretch">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Stretch</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Stretch operation re-distributes values of an input map over a wider or narrower range of values in an output map. Stretching can for instance be used to enhance the contrast in your map when it is displayed. Two stretch methods are available: <a href="..//ilwisapp/popup/stretch_linear_popup.htm" onClick="return popup(this, 'notes')" >linear stretching</a> and <a href="..//ilwisapp/popup/stretch_histequa_popup.htm" onClick="return popup(this, 'notes')" >histogram equalization</a>.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> or an input <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. Open the list box and select the desired input map or map list, or directly drag a raster map or map list from a Catalog into this box. The input map(s) must be <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map(s)</a>. </p>
+
+<p class=diabox>When you select an input map list, the operation will be performed on all raster maps in the map list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Method:</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  <a href="..//ilwisapp/popup/stretch_linear_popup.htm" onClick="return popup(this, 'notes')" >Linear Stretching</a></p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2" width=226>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  <a href="..//ilwisapp/popup/stretch_histequa_popup.htm" onClick="return popup(this, 'notes')" >Histogram Equalization</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxleft1>Intervals:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For histogram equalization: specify the number of output intervals. When 256 intervals are specified, the output values will range from 0 to 255; when another number of output intervals is specified, the first interval will obtain output value 1, the second value 2, etc.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Stretch from:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the range of input values to be stretched.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12">  Min Max:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Enter lower and upper values to define the range of input values that will be stretched.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12">  Percentage:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Enter a percentage of pixels not to be taken into account by during stretching.  When entering for instance 1%, this means that 1% of the smallest values in the map and 1% of the largest values in the map are ignored. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the stretched values.</p>
+
+<p class=diabox>If you selected an input map list, then you can type a name for the output map list; all raster maps in the output map list will obtain this name followed by _1, _2, _3, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For linear stretching: select an existing value domain for the output map(s). 
+
+<ul class=diaul>
+
+<li>When working with images, it is suggested to select system domain <span class=courier>Image</span>; the values in the input map are then stretched to 0 - 255. </li>
+
+<li>When working with other <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>, it is suggested to accept system domain <span class=courier>Value</span>; then also adjust the value range and precision of the selected domain; this determines the '<b>stretch to</b>' range for linear stretching. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For linear stretching with an output value domain but not domain <span class=courier>Image</span>: adjust these values to the values to which you want to stretch to.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For linear stretching with an output value domain but not domain <span class=courier>Image</span>: adjust the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> if you want to change the 'resolution' of possible values in the output map.	</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+</td>
+<td valign="top">
+<p class=emptylinehalf>&nbsp;&nbsp; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map or the output map list. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map or the output map list will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you selected a single raster map as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when it is opened to be displayed. </li>
+
+</ul>
+
+<p class=defnewpar>When you selected a map list as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map list</a> and its dependent raster maps will be defined and calculated. Then, the output map list will be shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map list will only be defined. When you open the output map list later on, the map list will be calculated, which means that the output raster maps will be defined and calculated. </li>
+
+</ul>
+
+<p class=defnewpar>The output map(s) are always value map(s). For histogram equalization, the output domain is always a value domain, and the 'stretch to' value range is determined from the number of specified intervals. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="stretch_functionality.htm">Stretch : functionality</a></p>
+
+</body

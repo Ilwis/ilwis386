@@ -1,0 +1,46 @@
+<html>
+
+<head>
+<title>resample popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Resample</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/resample.htm" onClick="return popup(this, 'notes')" >Resample</a> operation resamples a
+<a href="../../ilwis/popup/objects_raster_map_popup.htm"> raster map</a> from the map's current
+<a href="../../ilwis/popup/objects_georeference_popup.htm"> georeference</a> to another target <a href="../../ilwis/popup/objects_georeference_popup.htm">georeference</a>. The coordinate of each output pixel is used to calculate a new value from close-by pixel values in the input map. Three resampling methods are available: nearest neighbour, bilinear interpolation, and bicubic interpolation. </p>
+
+<p>In raster operations (e.g. <a href="map_calculate_popup.htm">MapCalc</a>, <a href="cross_popup.htm">Cross</a>), all input raster maps must have the same georeference. Thus, prior to such operations, use Resample:</p>
+
+<ul>
+
+<li>	<i>to combine raster maps from various sources</i>, when maps use different coordinate systems (projections) or different georeferences (pixel size): resample the maps to one common georeference; </li>
+
+<li>	<i>to combine satellite imagery of different dates or resolutions</i>: create a georef tiepoints for each set of images, then resample the images preferably to a georef corners;</li>
+
+<li>	<i>to combine satellite images with rasterized vector maps</i>: rasterize the vector data on the georef tiepoints of the satellite images, or, in case you prefer North-oriented raster maps, rasterize the vector maps with a georef corners, and resample the images with the georef tiepoints to this georef corners;</li>
+
+<li>	<i>to combine scanned photographs with rasterized vector data</i>, or <i>to rectify scanned aerial photographs</i>: create a georef tiepoints, a georef direct linear or a georef orthophoto for the photo, then resample the photo to a georef corners.</li>
+
+</ul>
+
+</body

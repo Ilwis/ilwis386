@@ -1,0 +1,318 @@
+<html>
+
+<head>
+<title>How to use a Catalog</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catalog, How to use ..., Use ..., Drag and drop, Double-click in a Catalog">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to use a Catalog</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>One or more <a href="../ilwis/main_window_catalog.htm">Catalogs</a> can be shown in the right-central part of the <a href="..//ilwis/popup/main_window_popup.htm" onClick="return popup(this, 'notes')" >Main window</a>. </p>
+
+<p class=defnewpar>A Catalog provides an overview of:
+
+<ul>
+
+<li>the <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >ILWIS objects</a> in a directory, </p>
+
+<li>the raster maps that are available in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, </li>
+
+<li>the objects that are available in an <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object-collection</a>. </li>
+
+</ul>
+
+<p class=kopje>To get more information on an object:</p>
+
+<ul>
+
+<li>	move the mouse pointer over an object in a Catalog: <br>
+
+        the <a href="..//ilwis/popup/status_line_popup.htm" onClick="return popup(this, 'notes')" >status bar</a> displays the description of that object, and whether the object is Dependent (D), Calculated (C) and/or Up-to-Date (U); </li>
+
+<li>    switch to <a href="../ilwismen/catalog_details_view.htm">Details View</a> by choosing the <span class=arial>Details</span> command from the <a href="main_window_menu_commands.htm">View menu</a> or click the <span class=arial>Details</span> button <a href="../ilwismen/catalog_details_view.htm"><img src="../images/catdetails.gif" width="22" height="22" border="none"></a> in the <a href="main_window_standard_toolbar.htm">standard toolbar</a> of the Main window. </li>
+
+</ul>
+
+<p class=kopje>To show or hide certain object types and/or certain objects in a Catalog:</p>
+
+<ul>
+
+<li>    choose the <a href="../ilwismen/catalog_show.htm">Show</a> command on the <a href="main_window_menu_commands.htm">View menu</a> in the Main window; </li>
+
+<li>    use the <a href="main_window_object_selection_toolbar.htm">object selection toolbar</a> in the Main window; or </li>
+
+<li>    choose the <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog</a> command on the View menu, or click the <a href="../ilwismen/customize_catalog_selection.htm"><img src="../images/custcat.gif" align=bottom width="22" height="22" border="none"></a> button in the <a href="main_window_standard_toolbar.htm">standard toolbar</a> of the Main window; use the <a href="../ilwismen/customize_catalog_selection.htm">Object selection tab</a>. </li>
+
+<li>    choose the <a href="../ilwismen/catalog_predefined_query.htm">Catalog Queries</a> command on the View menu;  </li>
+
+<li>    choose the <a href="../ilwismen/customize_catalog_query.htm">Customize Catalog</a> command on the View menu, or click the <a href="../ilwismen/customize_catalog_query.htm"><img src="../images/custcat.gif" align=bottom width="22" height="22" border="none"></a> button and select the <a href="../ilwismen/customize_catalog_query.htm">Query tab</a>. </li>
+
+</ul>
+
+<h2>Double-click</h2>
+
+<p>When you double-click an object in a Catalog, the object is generally opened (if necessary calculated) and shown in a new window, editor or dialog box: </p>
+
+<ul>
+
+<li>	double-click a map in a Catalog in order to display the map in a new map window; </li>
+
+<li>	double-click a table, a two-dimensional table, a histogram or an annotation text object, in order to display the table, the histogram or the annotation text object in a new table window, etc.; </li>
+
+<li>    double-click a layout, domain, representation, georeference, coordinate system, sample-set, function, script to open the object in the appropriate editor. </li>
+
+</ul>
+
+<p class=defnewpar>For <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map lists</a>, <a href="..//ilwis/popup/objects_filters_popup.htm" onClick="return popup(this, 'notes')" >filters</a> and <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereopairs</a>, there are multiple reactions to a double-click possible; you can select the default Open behaviour upon a double-click in the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>, section Main window. </p>
+
+<ol>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >Map lists</a> that are double-clicked, you can choose in the Preferences: </li>
+
+        <ul>
+
+        <li>    to open a map list as a special kind of <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> (default), </p></li>
+
+        <li>    to open a map list by default as <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >color composite</a>, or </li>
+
+        <li>    to open a map list by default as <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>.</li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For user-defined linear <a href="..//ilwis/popup/objects_filters_popup.htm" onClick="return popup(this, 'notes')" >filters</a> that are double-clicked, you can choose in the Preferences: </li>
+
+        <ul>
+
+        <li>    to open a filter in the Filter editor (default), </li>
+
+        <li>	to start the <a href="..//ilwisapp/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter</a> operation; the <a href="../ilwisapp/filter_dialog_box.htm">Filter</a> dialog box will appear, the filter name is already filled out. </li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>For <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >Stereo pairs</a> that are double-clicked, you can choose in the Preferences: </li>
+
+        <ul>
+
+        <li>    to open a stereo pair in a <a href="../ilwis/stereopair_stereoscope_window.htm">Stereoscope window</a> (default), </li>
+
+        <li>	to open a stereo pair as an anaglyph; the <a href="../ilwismen/display_options_stereopair_as_anaglyph.htm">Display Options - Stereo pair as Anaglyph</a> dialog box will appear. Mind: Analglyphs can only be created from a stereo pair that contains black &amp; white images. </li>
+
+        </ul>
+
+</ol>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When you double-click a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> in a Catalog, the <a href="script_editor_functionality.htm">script editor</a> is opened. If you wish, you can run the script from within the script editor. </p>
+
+<p class=tiptext>To run a script, you can also click a script with the right mouse button in a Catalog, and choose <span class=arial>Run</span> from the context-sensitive menu. </p>
+
+<p class=tiptext>You can also move a script to the ILWIS\Scripts directory and then double-click the script in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>: </p>
+
+<ul class=tipul>
+
+<li>    if the script needs parameters: a <a href="../ilwismen/script_editor_run_script.htm">Run Script</a> dialog box will appear.</li>
+
+<li>    if the script does not have any parameters: the script will simply be run. </li>
+
+</ul>
+
+
+<h2>Drag and drop</h2>
+
+<p class=kopjeaftertitlesub>Drag from a Catalog into a map window:</p>
+
+<ul>
+
+<li class=linespacing01before>	<a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >Drag</a> one or more selected <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon map(s)</a>, <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment map(s)</a> and/or <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point map(s)</a> from a Catalog and drop them into a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a>: </li>
+
+        <p>the map(s) will be added as extra data layer(s) to that map window. </p>
+
+<li class=linespacing01before>	Drag a <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> from a Catalog into a map window:  </li>
+
+        <ul>
+
+        <li>When the map window does not yet contain a raster map, the map is added as an extra data layer to that map window. </li>
+
+        <li>When the map window already contains a raster map, the selected raster map will be added to the map window when it uses the same georeference as the raster map that is already displayed. </li>
+
+        </ul>
+
+        <p>For more information, see also <a href="how_to_add_extra_layers_to_a_map_window.htm">How to add extra layers to a map window</a>. </p>
+                                                                                                                                  
+<li class=linespacing01before>	Drag a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> from a Catalog into a map window: <br>
+
+        a small dialog box will appear asking you whether the maps in the map list should be displayed as a Color Composite or as a Slide Show. </li>
+
+        <ul>
+
+        <li>	when you choose <span class=arial>Color Composite</span> and the maps in the map list use the <span class=courier>Image</span> domain or another value domain and your graphics board is configured to use more than 256 colors, then an <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >interactive color composite</a> will be shown in the map window;</li>
+
+        <li>	when you choose <span class=arial>Slide Show</span>, the maps in the map list will be shown one after the other in the map window, as a <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>;</li>
+
+        </ul>
+
+<li class=linespacing01before>	Drag a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> or a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> which has for instance a different projection, from a Catalog into a map window without a raster map: <br>
+
+        if a transformation between both coordinate systems is possible, the map window will show the maps using the dragged coordinate system.</li>
+
+<li class=linespacing01before>	Drag an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text object</a> from a Catalog into a map window: <br>
+
+         the annotation text displayed in the map window.</li>
+
+</ul>
+
+<p class=kopje>Drag from a Catalog into the Operation-tree or the Operation-list:</p>
+
+<ul>
+
+<li class=linespacing01before>	Drag a <a href="ilwis_objects_data_objects.htm">data object</a> from a Catalog and drop it on an operation in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>: <br>
+
+        the operation's dialog box is opened and the name of the input object is already filled out.</li>
+
+</ul>
+
+<p class=kopje>Drag from a Catalog into a dialog box:</p>
+
+<ul>
+
+<li class=linespacing01before>	Drag an object from a Catalog into a <a href="..//ilwis/popup/win_drop_down_list_boxes.htm" onClick="return popup(this, 'notes')" >drop-down list box</a> in a dialog box: <br>
+
+        the object is filled out in the field of the dialog box. </li>
+
+</ul>
+
+<p class=kopje>Drag from a Catalog into a Pixel info window:</p>
+
+<ul>
+
+<li class=linespacing01before>	Drag one or more point, segment, polygon and/or raster maps from a Catalog into a <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel information window</a>: <br>
+
+        all maps are added to the pixel information window, and <br>
+
+        when an attribute table is linked to a map, this columns of the attribute table are also displayed in the pixel info window. </li>
+
+<li class=linespacing01before>	Drag a map list from a Catalog into the pixel information window: <br>
+
+        all raster maps in the map list will be added to the pixel information window. </li>
+
+<li class=linespacing01before>	Drag a coordinate system which has for instance a different projection, from a Catalog and drop it into the pixel info window: <br>
+
+        the new coordinate system is added to the pixel information window, and <br>
+        
+        if a conversion between both coordinate systems is possible, the pixel info window will also show coordinates in the dragged coordinate system. </li>
+
+</ul>
+
+<p class=kopje>Dragging objects within a Catalog:</p>
+
+<ul>
+
+<li class=linespacing01before>	Drag a georeference to a polygon, segment or point map or vice versa: <br>
+
+        the appropriate Rasterize dialog box is opened in which both the Georeference and the Input Map are already filled out.</li>
+
+<li class=linespacing01before>	Drag a georeference to a raster map or vice versa: <br>
+
+        the Resample dialog box is opened in which both the Georeference and the Input Raster Map are already filled out.</li>
+
+<li class=linespacing01before>	Drag a filter to a raster map or vice versa: <br>
+
+        the Filter dialog box is opened in which both the Filter and the Input Raster Map are already filled out.</li>
+
+<li class=linespacing01before>	Drag a coordinate system to a polygon, segment or point map or vice versa: <br>
+
+        the appropriate Transform dialog box is opened in which both the Coordinate System and the Input Map are already filled out.</li>
+
+</ul>
+
+<p class=kopje>Dragging objects between Catalogs:</p>
+
+<ul>
+
+<li class=linespacing01before>Drag one or more selected objects into another Catalog: <br>
+
+        the selected object(s) are copied into the second Catalog. <br>
+        
+        For more information, see <a href="how_to_copy_objects.htm">How to copy objects</a>. </p>
+
+</ul>
+
+<h2>Right mouse button</h2>
+
+<p>By clicking the <b>right</b> mouse button on an object in a Catalog, a <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> appears which contains all actions that can be performed on the selected object.</p>
+
+<p class=linespacing03before>When you select <i>multiple</i> objects in a Catalog, and then click the selection with right mouse button, only the <span class=arial>Open, Open Pixel Information, Copy, Paste</span> and <span class=arial>Delete</span> commands are available on the context-sensitive menu. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>	<span class=arial>Open</span>, to open the object(s);</li>
+
+<li>	any operation, to start the selected operation with the selected object as input;</li>
+
+<li>	<span class=arial>Open As Table</span>, to show a table, a class, ID or Picture domain, a representation class or georeference tiepoints as a table (for advanced users);</li>
+
+<li>    <span class=arial>Open Pixel Information</span>, to add multiple selected maps to a new pixel information window; </li>
+
+<li>	<span class=arial>Properties</span>, to open the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >Property</a> sheet of an object;</li>
+
+<li>	<span class=arial>Edit</span>, to open an object in the appropriate editor or to open a dialog box in which you can edit it (<a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent data objects</a> cannot be edited);</li>
+
+<li>	<span class=arial>Copy</span>, to copy the selected object(s) to clipboard; </li>
+
+<li>	<span class=arial>Paste</span>, to paste the object(s) in the clipboard into the current directory, map list or object collection; </li>
+
+<li>	<span class=arial>Delete</span>, to delete the selected object(s);</li>
+
+<li>	<span class=arial>Help</span> to obtain short Help on a selected object type.</li>
+
+</ul>
+
+<p class=defnewpar>When dependent maps use an internal domain or an internal representation (these kind of domains and representations are stored by the map itself and not as separate objects), the context-sensitive menu also contains the commands: </p>
+
+<ul>
+
+<li>	<span class=arial>Open As Domain</span>, to open the internal domain;</li>
+
+<li>	<span class=arial>Open As Representation</span>, to open the internal representation. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="how_to_customize_the_catalog.htm">How to customize a Catalog</a></p>
+
+<p class=seealsolinks><a href="../ilwis/main_window_catalog.htm">Main window : Catalog</a></p>
+
+<p class=seealsolinks><a href="how_to_drag_and_drop.htm">How to drag and drop</a></p>
+
+</body

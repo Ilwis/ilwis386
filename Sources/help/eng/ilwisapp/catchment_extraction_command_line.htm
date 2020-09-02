@@ -1,0 +1,117 @@
+<html>
+
+<head>
+<title>Catchment extraction : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catchment extraction, MapCatchmentExtraction">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Catchment extraction</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/catchment_extraction_popup.htm" onClick="return popup(this, 'notes')" >Catchment Extraction</a> operation can be directly executed by typing the following expression on the command line of the Main window: </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width="68">
+<p class=calccommline>OUTNAME</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCatchmentExtraction</span>(<i>drainorder_rasmap</i>, <i>flowdir_rasmap</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTNAME</p>
+
+</td>
+<td valign="top">
+<p>is an output name that will be used for the output raster map, the output polygon map and the output attribute table. The output maps will contain all sub-catchments (one for each stream); the attribute table will contain information on each sub-catchment. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>MapCatchmentExtraction</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+
+</td>
+<td valign="top">
+<p>is the command to start the Catchment Extraction operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>drainorder_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster map that is the outcome of the <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage Network Ordering</a> operation, i.e. a raster map with an Identifier domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>flowdir_rasmap</i></p>
+
+</td>
+<td valign="top">
+<p>is a raster that is the outcome of the <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow Direction</a> operation, i.e. a raster map with <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class="courier">FlowDirection</span></a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class="defnewpar">The output maps and the output attribute table use the ID domain of the input <i>drainorder_rasmap</i>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="catchment_extraction_functionality.htm">Catchment extraction : functionality</a></p>
+
+<p class=seealsolinks><a href="catchment_extraction_dialog_box.htm">Catchment extraction : dialog box</a></p>
+
+<p class=seealsolinks><a href="catchment_extraction_algorithm.htm">Catchment extraction : algorithm</a></p>
+
+
+</body

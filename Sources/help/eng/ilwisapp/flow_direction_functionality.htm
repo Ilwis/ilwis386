@@ -1,0 +1,141 @@
+<html>
+
+<head>
+<title>Flow direction : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Flow direction">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Flow direction</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In a (sink-free) Digital Elevation Model (DEM), the Flow direction operation determines into which neighbouring pixel any water in a central pixel will flow naturally. </p>
+
+<p class=defnewpar>Flow direction is calculated for every central pixel of input blocks of 3 by 3 pixels, each time comparing the value of the central pixel with the value of its 8 neighbours. The output map contains flow directions as N (to the North), NE (to the North East), etc. </p>
+
+<p class=defnewpar>You can choose whether you wish to calculate the flow direction for the central pixels:</p>
+
+<ul>
+
+<li>by steepest slope: find the steepest downhill slope of a central pixel to one of its 8 neighbour pixels, or </li>
+
+<li>by lowest height: simply find the neighbour pixel that has the smallest value of all 8 neighbours, while this value should also be smaller than the value of the central pixel. </li>
+
+</ul>
+
+<p class=defnewpar>When the position of the steepest-slope-neighbour pixel or the lowest-height-neighbour pixel is determined, the flow direction for the central pixel is known. </p>
+
+
+<p class=kopje>Example Steepest Slope method: </p>
+
+<p>For each block of 3x3 input pixels, height differences are calculated between the central pixel and the 8 neighbours. </p> 
+
+<p class=defnewpar>To compensate for distances: 
+
+        <ul>
+
+        <li>the height difference values of the 4 <i>corner</i> neighbours are divided by 1.4; </li>
+
+        <li>the height difference values of the 2 horizontal neighbours and the 2 vertical neighbours are divided by 1.</li>
+
+        </ul>
+
+<p class=defnewpar>Then, the neighbour with the largest downhill slope steepness value is found. </p>
+
+<p>The position of this neighbour determines the flow direction of the current central pixel. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td width="150" valign="bottom">Input DEM</td>
+<td width="150">Calculating according to steepest slope</td>
+<td width="150" valign="bottom">Output flow direction map</td>
+</tr>
+<tr>
+<td><img src="../images/flowdir_input.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowdir_steep.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowdir_outsteep.gif" height="125" width="125"></td>
+
+</tr>
+</table>
+
+<p class=defnewpar>For more information and additional rules that are applied, see <a href="flow_direction_algorithm.htm">Flow direction : algorithm</a>.</p>
+
+
+<p class=kopje>Example Lowest Height method: </p>
+
+<p>For each block of 3x3 input pixels, height differences are calculated between the central pixel and the 8 neighbours. </p> 
+
+<p class=defnewpar>Then, from the neighbours with values smaller than the current central pixel, the neighbour with the smallest value is found. </p>
+
+<p>The position of this neighbour determines the flow direction of the current central pixel. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table>
+<tr>
+<td width="150" valign="bottom">Input DEM</td>
+<td width="150">Calculating according to lowest height</td>
+<td width="150" valign="bottom">Output flow direction map</td>
+</tr>
+<tr>
+<td><img src="../images/flowdir_input.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowdir_height.gif" height="125" width="125"></td>
+
+<td><img src="../images/flowdir_outheight.gif" height="125" width="125"></td>
+
+</tr>
+</table>
+
+<p class=defnewpar>For more information and additional rules that are applied, see <a href="flow_direction_algorithm.htm">Flow direction : algorithm</a>.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>; the input map is expected to be a sink-free Digital Elevation Model (DEM). </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output map will use <a href="..//ilwis/popup/yy_system_domain_flow_direction_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>FlowDirection</span></a>. </p>
+
+<p>The output map will use the same georeference as the input map. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>The output map of the Flow direction operation can be used as input map for the <a href="..//ilwisapp/popup/flow_accumulation_popup.htm" onClick="return popup(this, 'notes')" >Flow accumulation</a> operation. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="flow_direction_dialogbox.htm">Flow direction : dialog box</a></p>
+
+<p class=seealsolinks><a href="flow_direction_commandline.htm">Flow direction : command line</a></p>
+
+<p class=seealsolinks><a href="flow_direction_algorithm.htm">Flow direction : algorithm</a></p>
+
+<p class=seealsolinks><a href="flow_accumulation_functionality.htm">Flow accumulation : functionality</a></p>
+
+</body

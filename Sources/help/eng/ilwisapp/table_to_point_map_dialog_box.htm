@@ -1,0 +1,356 @@
+<html>
+
+<head>
+<title>Table to point map : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table to point map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Table to point map</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Table to Point Map operation creates a point map out of a table. </p>
+
+<p class=defnewpar>For the coordinates of the points, you can use from the table: </p>
+
+<ul>
+
+<li>a coordinate column which contains the XY-coordinates for the points as (X,Y); the domain of this column should be a coordinate system; </li>
+
+<li>a value column which contains the X-coordinates for the points and another value column which contains the Y-coordinates for the points. </li>
+
+</ul>
+
+<p class=defnewpar>Depending on the domain of the input table, you can furthermore choose between the following possibilities:</p>
+
+<ul>
+
+<li>	Input table with an ID domain: <br>
+        the points in the output point map should use the same IDs as found in the domain of the table; <br>
+        the input table will be linked as attribute table to the output point map.</li>
+
+<li>	Input table with domain <span class=courier>None</span>: <br>
+        the points in the output point map should use the IDs of a new ID domain in which the IDs are based on the record numbers of the table and a user-defined prefix; <br>
+        also the input table will obtain this new ID domain and the table will be linked as attribute table to the output point map. </li>
+
+<li>	Any input table: <br>
+        the points in the output point map should use the class names, IDs, or values as found in a column of the table; <br>
+        the output point map will have no attribute table. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input table. Open the list box and select the desired input map, or drag a raster map directly from the Catalog into this box. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Use single column with XY-coordinates:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select this check box when your input table contains a certain column which contains the XY-coordinates of your points as (X,Y); the domain of such a column is a coordinate system. Any point map created or edited in ILWIS version 3 has such a column; it is called <span class=courier>Coordinate</span>.</p>
+
+<p class=diabox>If you select this check box, you will be asked for a single column containing the XY-coordinates. </p>
+
+<p class=diabox>If you clear this check box, you will be asked for a column containing the X-coordinates, for a column with the Y-coordinates and for a coordinate system. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><u>Check box 'Use single column with XY-coordinates' is <i>selected</i>:</u> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxnospacetop>XY column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a column from the table which contains the XY-coordinates of the points as (X,Y). The domain of the column should be a coordinate system. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><u>Check box 'Use single column with XY-coordinates' is <i>cleared</i>:</u> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxnospacetop>X column:</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select a column from the table which contains the X-coordinates of the points. The column should have a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Y column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a column from the table which contains the Y-coordinates of the points. The column should have a value domain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Coordinate system:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing coordinate system for the output point map or create a new coordinate system (<a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>) in which the coordinates of the selected X-coordinate column and Y-coordinate column fit.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Domain of output map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case your input table uses an ID domain, choose whether the points in the output point map: </p> 
+
+<ul class=diaul>
+
+<li> should obtain the same IDs as found in the domain of the input table, or </li>
+
+<li> should obtain the class names, IDs, or values as found in an attribute column of the table. </li>
+
+</ul>
+
+<p class=diabox>In case your input table uses a class domain, the points in the output point map: </p> 
+
+<ul class=diaul>
+
+<li> will obtain the class names, IDs, or values as found in an attribute column of the table. </li>
+
+</ul>
+
+<p class=diabox>In case your input table is a table with domain <span class=courier>None</span>, choose whether the points in the output point map: </p>
+
+<ul class=diaul>
+
+<li> should obtain new IDs, based on the record numbers of the table, or </li>
+
+<li> should obtain the class names, IDs, or values as found in an attribute column of the table. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td>
+<p class=emptylinehalf>&nbsp;</p>
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><u>Input table uses an ID domain:</u> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Use table domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option when the points in the output point map should obtain the same IDs as found in the domain of the input table. Your input table will be linked as an attribute table to the output point map. </p> 
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Use attribute column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option when the points in the output point map should obtain the class names, IDs, or values as found in an attribute column of the table. Subsequently, select the attribute column.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxleft1>Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>From the input table, select an attribute column which contains the class names, IDs, or values that should be assigned to the output points. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><u>Input table uses domain <span class=courier>None</span>:</u> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Use record numbers as IDs:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select this option when the points in the output point map should obtain new IDs that are based on the record numbers of the table. The following will happen: </p>
+
+<ul class=diaul>
+
+<li>a new ID domain will be created (with the same name as output point map), </li>
+
+<li>the IDs in the new domain will start with the Domain Prefix as specified below, followed by the record numbers as found in the input table, </li>
+
+<li>the output point map will use the new ID domain, </li>
+
+<li>the domain of the input table will be changed from domain <span class=courier>None</span> to the new ID domain, </li>
+
+<li>the table will be linked as attribute table to the output point map. </li>
+
+</ul>
+
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=144>
+<p class=diaboxleft1>Domain prefix:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default prefix or type your own prefix. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Use column of table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option when the points in the output point map should obtain the class names, IDs, or values as found in a column in the input table. Subsequently, select the column.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diaboxleft1>Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>From the input table, select a column which contains the class names, IDs, or values that should be assigned to the output points. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox><u>Input table uses any other domain: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>From the input table, select an attribute column which contains the class names, IDs, or values that should be assigned to the output points. </p>
+
+</td>
+</tr>
+<tr>
+<td>
+<p class=emptylinehalf>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output point map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output point map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary, the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="table_to_point_map_functionality_algorithm.htm">Table to point map : functionality / algorithm</a></p>
+
+</body

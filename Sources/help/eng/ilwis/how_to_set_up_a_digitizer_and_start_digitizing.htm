@@ -1,0 +1,251 @@
+<html>
+
+<head>
+<title>How to set up a digitizer and start digitizing</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Digitizer setup, Setup digitizer, Map Referencing, How to set up ..., How to start digitizing, Digitize, WinTab driver">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to set up a digitizer</h1>
+
+<h1 class=secondline>and how to start digitizing</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>This topic contains the following sections: </p>
+
+<p><a href="#setupdig"><span class=bookmark>Setting up a digitizer</span></a></p>
+
+<p><a href="#mapref"><span class=bookmark>Map Reference</span></a></p>
+
+<p><a href="#dignewmap"><span class=bookmark>Start digitizing a new map</span></a></p>
+
+<p><a href="#digexistmap"><span class=bookmark>Continue to digitize an existing map</span></a></p>
+
+<h2 id="setupdig">Setting up a digitizer</h2>
+
+<ol>
+
+<li>	First, connect all cables of the digitizer to the proper components. </li>
+
+<li>    Then, 
+
+<ul>
+
+<li>either download and install the WinTab driver, or </li>
+
+<li>configure the digitizer tablet yourself. </li>
+
+<p>You must make sure that the digitizer works in Run mode, uses No Increment, No Prompt, a Date Rate of about 20 points per second, a certain Resolution, will send information in ASCII format, etc. While configuring the tablet, write the settings down you used for Resolution (lines per inch or per mm), Baud Rate, Data Bits, and Parity. For more information, refer to your digitizer manual. </p>
+
+</ul>
+
+<li>	Connect the digitizer to a serial port on your computer and note the port number. </li>
+
+<li>	Start ILWIS:</li>
+
+<ul>
+
+<li>	In the Main window, open the <a href="main_window_menu_commands.htm">File menu</a>, and choose Setup Digitizer. The <a href="../ilwismen/digitizer_setup_digitizer_select_port.htm">Setup Digitizer wizard</a> is started. </li>
+
+<li>	First, the <a href="../ilwismen/digitizer_setup_digitizer_select_port.htm">Setup Digitizer - Select Port</a> page appears on which you can choose to use the WinTab driver, or the serial port to which your digitizer is connected. <br>
+
+        <ul>
+
+        <li>When you installed the WinTab driver, click the <span class=arial>Finish</span> button: the Setup Digitizer wizard will be closed and your digitizer will be ready for use. </li>
+
+        <p>The <span class=arial>Setup Digitizer</span> command on the File menu of the Main window will now be preceded by a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </p>
+
+        <li>When you did not install the WinTab driver, click the <span class=arial>Next</span> button: three more pages of the Setup Digitizer wizard need to be filled out. </li>
+
+        <ul>        
+
+        <li class=ls01be>The <a href="../ilwismen/digitizer_setup_digitizer_port_settings.htm">Setup Digitizer - Port Settings</a> page appears which lists the communication settings of the selected port (baud rate, data bits, parity, stop bits). </li>
+
+        <p>If necessary, change these port settings so that the port settings are <i>exactly</i> the same as used during the configuration of the digitizer tablet. Then, click the <span class=arial>Next</span> button. </p>
+
+        <li class=ls01be>The <a href="../ilwismen/digitizer_setup_digitizer_autodetect.htm">Set Up Digitizer - Automatic Detection</a> page appears. </li>
+
+        <p>When you have communication between your digitizer and the port, you should now see coordinates as readable numbers that change when you move the digitizer mouse on the digitizer tablet. </p>
+
+        <p>If so, follow the instructions on this page for automatic setup and press digitizer cursor buttons 0, 1, 2, 3. </p>
+
+        <p>If not, check the setup of the digitizer tablet itself, go back to the Digitizer Set Up - Select Port page and make the settings equal to the digitizer settings until you have communication. </p>
+
+        <li class=ls01be>When Automatic Setup has succeeded, the <a href="../ilwismen/digitizer_setup_digitizer_size.htm">Set Up Digitizer - Size, Resolution and Final Check</a> page appears. </li>
+
+        <p>In the upper left part of this page: check if all buttons work, and check whether the X-values increase by moving the digitizer cursor to the right, and Y-values increase by moving the cursor up. </p>
+
+        <p>Then, fill out the resolution used by the tablet (lines per mm or per inch), and the size of the tablet (mm or inches). Subsequently, check the feedback in the upper right part of the page. </p>
+
+        <p>When everything is correct, you can click the <span class=arial>Finish</span> button. </p>
+
+        <p>The <span class=arial>Setup Digitizer</span> command on the File menu of the Main window will now be preceded by a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </p>
+
+        </ul>
+
+        </ul>
+
+</ol>
+
+<h2 id="mapref">Map Reference</h2>
+
+<p>To establish a relation between digitizer coordinates and map coordinates, you have to do a Map Reference.</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ol>
+
+<li>	Fix an analog map onto your digitizer. Write down the map coordinates that you want to use as reference or control points (usually the four corners of the map). </li>
+
+<li>	From the Main window in ILWIS, open the <a href="main_window_menu_commands.htm">File menu</a>, and choose Map Reference.</li>
+
+<li>	First, the <a href="../ilwismen/digitizer_map_referencing_coordsys.htm">Map Reference - Coordinate System</a> dialog box appears. </li>
+
+        <p>Select a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> or create one using the little create button <img src="../images/crea.gif" align=bottom width="17" height="22">, and choose for metric coordinates or geographic coordinates. </p>
+
+<li>	Then, the <a href="../ilwismen/digitizer_map_referencing_dig_ctrl_points.htm">Map Reference - Digitizer Control Points</a> dialog box appears. </li>
+
+        <p>Do the following: </p>
+
+        <ul>
+
+        <li>	Click a reference point in the map with the digitizer cursor;</li>
+
+        <li>	In the left-hand part of the dialog box, the digitizer 'coordinates' as received from the digitizer appear;</li>
+
+        <li>	In the right-hand part of the dialog box, <i>type</i> the corresponding map coordinates for this point as read from the paper map in step 1; </li>
+
+        <p> (map coordinates should fall inside the selected coordinate system of step 3),</p>
+
+        <li>	Continue with the other reference or control points;</li>
+
+        <li>	Check the feedback values for diff X and diff Y; for a good map reference, these figures should be in the range of -0.3&lt;= diff X diff Y &lt;= 0.3. </li>
+
+        <p>Also check the feedback values for Sigma and Scale (of the map). </p>
+
+        <li>	click the OK button when finished. </li>
+
+        <p>The <span class=arial>Map Reference</span> command on the File menu of the Main window will now be preceded by a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </p>
+
+        </ul>
+
+</ol>
+
+<p class=defnewpar>Map reference settings are stored even when you switch your computer off. When you continue digitizing later on, and when the map is still at the same position on the digitizing tablet, you do not need to reference your map again. </p>
+
+<h2 id="dignewmap">Start digitizing a new map</h2>
+
+<p>With the digitizer, you can add points to a point map and add segments to a segment map. You can also delete points or segments, rename points or segments, and move points or move intermediate points within a segment. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ol>
+
+<li>	On the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, check whether the <span class=arial>Setup Digitizer</span> and the <span class=arial>Map Reference</span> commands are both preceded by a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </li>
+
+<li>	Create a new point or segment map by choosing for instance the <span class=arial>Create</span> command from the File menu (see also <a href="how_to_create_maps.htm">How to create a map</a>). </li>
+
+        <p>In the <a href="../ilwismen/create_a_point_map.htm">Create Point Map</a> or the <a href="../ilwismen/create_a_segment_map.htm">Create Segment Map</a> dialog box: </p>
+
+        <ul>
+
+        <li>Select the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> you wish to use; this is normally the coordinate system which was selected or created during <a href="#mapref"><span class=bookmark>Map Reference</span></a>. </li>
+
+        <li>Decide on the <a href="..//ilwis/popup/objects_domains_intro_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the map, i.e. the set of class names, IDs or values that you want to assign to your points or segments. You can also edit or create a representation for a domain of type Class or Value. </li>
+
+        </ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+        <p class=tiptext><span class=tipnospace>Tip:</span> To obtain a polygon map, you first have to digitize segments, then check the segments and polygonize them, see also <a href="how_to_create_polygon_maps.htm">How to create polygon maps</a>. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>	When you click OK in the <span class=arial>Create Point Map</span> or the <span class=arial>Create Segment Map</span> dialog box, the <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >point editor</a> or the <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >segment editor</a> will be started. </li>
+
+        <ul>
+
+        <li>Choose <span class=arial>Digitizer, Active</span> from the <a href="../ilwis/point_editor_menu_commands.htm">File menu of the point editor</a> or from the <a href="../ilwis/segment_editor_menu_commands.htm">File menu of the segment editor</a>. </li>
+
+        </ul>
+
+        <p>The <span class=arial>Digitizer, Active</span> command on the File menu of the editor will then be preceded by a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </p>
+
+</ol>
+
+<p class=linespacing03before>You can now start digitizing your map. </p>
+
+<p class=defnewpar>For more information on the functionality of the editors, see <a href="point_editor_functionality.htm">Point editor : functionality</a> and/or <a href="segment_editor_functionality.htm">Segment editor : functionality</a>, or press F1 in the editor.</p>
+
+<h2 id="digexistmap">Continue to digitize an existing map or <br>edit an existing map with the digitizer</h2>
+
+<p>With the digitizer, you can add points to a point map and add segments to a segment map. You can also delete points or segments, rename points, segments or polygons, and move points or move intermediate points within a segment. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ol>
+
+<li>	On the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, check whether the <span class=arial>Setup Digitizer</span> and the <span class=arial>Map Reference</span> commands are both preceded by a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </li>
+
+<li>	If your map is still at the same position on your digitizer tablet, you can directly continue digitizing. If you fix a map onto the digitizer now, first do <a href="#mapref"><span class=bookmark>Map Reference</span></a> again. </li>
+        
+<li>	To open the appropriate map editor:</li>
+
+        <ul>
+
+        <li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click with the right mouse button on the point, segment or polygon map which should be edited, and choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or</li>
+
+        <li>	open the map in a map window, open the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a>, and choose the <a href="../ilwismen/edit_layer.htm">Edit Layer</a> command.</li>
+
+        </ul>
+
+        <p>The <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >point editor</a>, the <a href="..//ilwis/popup/segment_editor_popup.htm" onClick="return popup(this, 'notes')" >segment editor</a> or the <a href="..//ilwis/popup/polygon_editor_popup.htm" onClick="return popup(this, 'notes')" >polygon editor</a> will be opened. </p>
+
+<li>	In the point editor, the segment editor or the polygon editor: </li> 
+
+        <ul>
+
+        <li>make sure that the <span class=arial>Digitizer, Active</span> command on the <a href="../ilwis/point_editor_menu_commands.htm">File menu of the point editor</a>, on the <a href="../ilwis/segment_editor_menu_commands.htm">File menu of the segment editor</a>, or on the <a href="../ilwis/polygon_editor_menu_commands.htm">File menu of the polygon editor</a> is preceded by a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </li>
+
+        </ul>
+
+</ol>
+
+<p class=linespacing03before>You can now continue to digitize your map or edit your map with the digitizer. For more information, refer to <a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a>, <a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a>, and/or <a href="../ilwis/polygon_editor_functionality.htm">Polygon editor : functionality</a>, or press F1 in the editor. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/digitizer_setup_digitizer_select_port.htm">Setup Digitizer wizard</a>
+
+<p class=seealsolinks><a href="../ilwismen/digitizer_map_referencing_coordsys.htm">Map Reference - Coordinate System</a>
+
+<p class=seealsolinks><a href="../ilwismen/digitizer_map_referencing_dig_ctrl_points.htm">Map Reference - Digitizer Control Points</a>
+
+<p class=seealsolinks><a href="point_editor_functionality.htm">Point editor : functionality</a></p>
+
+<p class=seealsolinks><a href="segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="how_to_create_polygon_maps.htm">How to create a polygon map</a></p>
+
+<p class=seealsolinks><a href="polygon_editor_functionality.htm">Polygon editor : functionality</a></p>
+
+</body

@@ -1,0 +1,520 @@
+<html>
+
+<head>
+<title>Import Table wizard - Edit Column Details</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table import, Import table wizard">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Import Table wizard</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">Main window, File menu</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Edit Column Details</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="import_table_view_file.htm">Back</a>&nbsp;|&nbsp;<a class=menlink2 href="import_table_output_table_name.htm">Next</a>&nbsp;&gt;
+</tr>
+</table>
+
+<!--<hr>-->
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>Specify for each <a href="..//ilwis/popup/objects_column_popup.htm" onClick="return popup(this, 'notes')" >column</a>: the name and type of the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> that should be used for the column. Optionally, you can specify the domain that should be used by the <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >table</a>.</p>
+
+<p class=diakopje>Page options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="120">
+<p class=diabox>Column name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Required to assign names to the output columns. If you like, change the default names for the output columns to nicer ones. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Width:</p>
+
+</td>
+<td valign="top">
+
+<ul class=diaul>
+
+<li>Required for Fixed format: for each column, specify the number of characters used by that column. Use the previous <a href="../ilwismen/import_table_view_file.htm">View File</a> page to count the number of characters for each column. </li>
+
+<li>For any other format than Fixed format: the value for Width will not be used; so you can keep default Width value 0. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>New Domain, Domain type, Domain Name, Extend: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>For each column to be imported, these parameters represent a group of possibilities. </p>
+
+<p class=tiptext><span class=tip>Tip: </span>It is strongly recommended to read the <a href="#additional_info"><span class=bookmark>Additional Information</span></a> below. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diaboxleft1>New Domain: </p>
+
+</td>
+<td valign="top">
+<p class=diabox><span class=courier>Yes</span> or <span class=courier>No</span> </p>
+
+<p class=diabox>Specify whether you wish to create a new domain for a column (<span class=courier>Yes</span>) or not (<span class=courier>No</span>). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diaboxleft1>Domain type: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>'<a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a>', '<a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a>', '<a href="..//ilwis/sec/domain_type_value2_sec.htm" onClick="return popup(this, 'notes')" >Value</a>', '<a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a>', or '<a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >String</a>'. </p>
+
+<p class=diabox>Specify the type of <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> that should be used by a column. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diaboxleft1>Domain name: </p>
+
+</td>
+<td valign="top">
+
+<p class=diabox>Specify the name of the domain for a column. </p>
+
+<ul class=diaul>
+
+<li>When <span class=arial>Domain type</span> is set to 'Class', 'ID', or 'Value', and when <span class=arial>New Domain</span> is set to <span class=courier>Yes</span>: </li>
+
+        <p class=diabox>type a new <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for a domain; you may specify for instance the name of the column that uses this domain. </p>
+
+<li>When <span class=arial>Domain type</span> is set to 'Class', 'ID', or 'Value', and when <span class=arial>New Domain</span> is set to <span class=courier>No</span>: </li>
+
+        <p class=diabox>select an existing domain. </p>
+
+</ul>
+
+<p class=diabox>When you chose <span class=arial>Domain Type</span> 'String', the column will always use <span class=courier><a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >system domain String</a></span>. </p>
+
+<p class=diabox>When you chose <span class=arial>Domain Type</span> 'Bool', the column will always use <span class=courier><a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain Bool</a></span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diaboxleft1>Extend: </p>
+
+</td>
+<td valign="top">
+
+<p class=diabox><span class=courier>Yes</span> or <span class=courier>No</span> </p>
+
+<ul class=diabox>
+
+<li>When <span class=arial>Domain type</span> is set to 'Class' or 'ID': specify whether the class names or identifiers of a new or existing Class or ID domain should be extended with any new strings found in the column or not. </li>
+
+<p class=diabox>When creating a <i>new</i> Class or ID domain for a column, the <span class=arial>Extend</span> field MUST be set to <span class=courier>Yes</span> for that column. </p>
+
+<li>For other <span class=arial>Domain type</span> settings: - blank -</li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Min:</p>
+
+</td>
+<td valign="top">
+
+<p class=diabox>When <span class=arial>Domain type</span> is set to 'Value': to check whether the default minimum value as found in this column is OK. The values specified for <span class=arial>Min</span> and <span class=arial>Max</span> together define the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> for the output column. </p>
+
+<p class=diabox>For other <span class=arial>Domain type</span> settings: - blank -. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Max:</p>
+
+</td>
+<td valign="top">
+
+<p class=diabox>When <span class=arial>Domain type</span> is set to 'Value': to check whether the default maximum value as found in this column is OK. The values specified for <span class=arial>Min</span> and <span class=arial>Max</span> together define the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> for the output column.  </p>
+
+<p class=diabox>For other <span class=arial>Domain type</span> settings: - blank -. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+
+<p class=diabox>When <span class=arial>Domain type</span> is set to 'Value': to check whether the number of decimals as found in this column is OK. This is also called the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of the output column. </p>
+
+<p class=diabox>For other <span class=arial>Domain type</span> settings: - blank -. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Undef:</p>
+
+</td>
+<td valign="top">
+
+<p class=diabox>When <span class=arial>Domain type</span> is set to 'Value': in case a certain value is used in the column to define 'Undefined' (e.g. 999), you can optionally specify the value in the column that should be imported as ILWIS 'Undefined', i.e. in the output column, this value will appear as ?.</p>
+
+<p class=diabox>For other <span class=arial>Domain type</span> settings: - blank -. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox><span class=emptylinehalf>&nbsp;</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Table Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, you can select this check box and select a Class or ID column that should be used as the domain of the table. The specified column will not appear as a column in the output table.  </p>
+
+<p class=diabox>Purpose of setting a <span class=arial>Table Domain</span>: when an output table itself uses a certain Class or ID domain, you can link the output table to a map which uses the same Class or ID domain; the output table will then become an attribute table of the map to which you linked it. You can also link the output table to the Class or ID domain itself; then the table will be the (default) attribute table of all maps which use that domain. </p>
+
+<ul class=diabox>
+
+<li>Select this check box and select the Class or ID column that contains unique strings which will be the 'record numbers' in the output table. A star will appear at the column which will be used as the domain of the table. </li>
+
+<li>Clear this check box when you wish to obtain a table with system domain <span class=courier>None</span>. The table will have record numbers like 1, 2, 3, etc. You may have to use the <a href="../ilwisapp/change_domain_of_table.htm">Change domain of table</a> operation after import to convert the table to an attribute table. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox><span class=emptylinehalf>&nbsp;</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Nr. of columns:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For a file in ASCII format: check the number of columns in the input table. When you selected the correct input format on a previous page (excluding Fixed format), the number of columns should be correct by default on this page. When the file is in Fixed format, you may need to change the number of columns to the expected value (use the previous <a href="../ilwismen/import_table_view_file.htm">View File</a> page). </p>
+
+<p class=diabox>This option is not available when your file is in dBase DBF format. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p class=diabox>Nr. of lines to skip:</p>
+</td>
+
+<td valign="top">
+<p class=diabox>For a file in ASCII format: when your file has a header, specify the number of lines that should be skipped at the beginning of the file. When your file is for instance in ILWIS 1.4 table format, the first line should be skipped. You can check the number of lines that should be skipped at the previous <a href="../ilwismen/import_table_view_file.htm">View File</a> page. </p>
+
+<p class=diabox>This option is not available when your file is in dBase DBF format. </p>
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>After clicking the <span class=arial>Next</span> button, the <b><a href="../ilwismen/import_table_output_table_name.htm">Import Table - Specify ILWIS Table Name</a></b> page will appear. There you can specify the name of the ILWIS table that will be the result of import. </p>
+
+<h2 id="additional_info">Additional information </h2>
+
+<p class=kopjeaftertitlesub>Importing a column containing <b>characters (strings)</b>:</p>
+
+<p class=linespacing03before>To import a column containing strings (such as a dBase Character column), it is advised to create a <i>new</i> Class or ID domain for the column. </p>
+
+<p class=defnewpar>You can use the following combinations: </p>
+
+<table cellspacing=0>
+<tr>
+<td colspan="2">
+<p class=emptylinehalf>&nbsp;</p>
+<p>1. To create a new Class or ID domain for a column:</p>
+<p class=emptylinehalf>&nbsp;</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="96">
+<p>New Domain:</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>Yes</span><p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Domain type:</p>
+
+</td>
+<td valign="top">
+<ul>
+
+<li><span class=courier><a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a></span>, when the strings in the column of the external file may occur more than once in this column, e.g. classes of soil types. </li>
+
+<li><span class=courier><a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a></span>, i.e. Identifiers, when each string in the column of the external file (generally) occurs only once in this column, e.g. identifiers of cadastral plots. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Domain name:</p>
+
+</td>
+<td valign="top">
+<p>Accept a default domain name as generated by the system, or type new <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the domain yourself; you can use for instance the same name as the name of the column. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Extend:</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>Yes</span>, required. </p> 
+
+</td>
+</tr>
+<tr>
+<td colspan="2">
+<p class=emptyline>&nbsp;</p>
+<p>2. To use system domain <span class=courier>String</span> for a column:</p>
+<p class=emptylinehalf>&nbsp;</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="96">
+<p>New Domain:</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>No</span><p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Domain type:</p>
+
+</td>
+<td valign="top">
+<p><span class=courier><a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >String</a></span> </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Domain name:</p>
+
+</td>
+<td valign="top">
+<p>Accept <span class=courier><a href="..//ilwis/popup/yy_system_domain_string_popup.htm" onClick="return popup(this, 'notes')" >system domain String</a></span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Extend:</p>
+
+</td>
+<td valign="top">
+<p>- blank -</p> 
+
+</td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>Columns which use the system domain <span class=courier>String</span> can be converted to regular Class or ID columns by opening the table, double-clicking the column header of String column, and clicking the <span class=arial><a href="create_domain_class_or_id_from_string_column.htm">Create New Domain from Strings in Column</a></span> button in the <a href="column_properties.htm">Column Properties</a> dialog box. </p>
+
+<p class=kopje>Importing a column containing <b>values</b>: </p>
+
+<p class=linespacing03before>To import a column containing values (such as a dBase Numeric column), you can generally use <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a>. </p>
+
+<p class=defnewpar>You can use the following combination: </p>
+
+
+        <ul class=diaul>
+
+
+        </ul>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="96">
+<p>New Domain:</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>No</span><p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Domain type:</p>
+
+</td>
+<td valign="top">
+<p><span class=courier><a href="..//ilwis/sec/domain_type_value2_sec.htm" onClick="return popup(this, 'notes')" >Value</a></span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Domain:</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>Value</span>, i.e. this is <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Extend:</p>
+
+</td>
+<td valign="top">
+<p>- blank -</p> 
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>To import a column which contains percentage values from 0 to 100, select for <span class=arial>Domain</span>: <span class=courier>Perc</span>. This is <a href="..//ilwis/popup/yy_system_domain_perc_popup.htm" onClick="return popup(this, 'notes')" >system domain Perc</a>. Other settings as above. </p>
+
+<p class=linespacing03before>Similarly, to import a column which contains values between -1 and 1, select for <span class=arial>Domain</span>: <span class=courier>Min1to1</span>. This is <a href="..//ilwis/popup/yy_system_domain_min1to1_popup.htm" onClick="return popup(this, 'notes')" >system domain Min1to1</a>. Other settings as above. </p>
+
+<p class=linespacing03before>You can use the same method for other existing value domains (system value domains or user-defined value domains that were created before). </p>
+
+<p class=defnewpar>When you wish to create a specific <i>new</i> value domain for a column, select for <span class=arial>New Domain</span>: <span class=courier>Yes</span>. For <span class=arial>Domain</span>, type a new domain <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a>. Other settings as above. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Importing a column containing <b>only values 0 and 1, or True and False</b>, etc.: </p>
+
+<p class=linespacing03before>To import a column containing values 0 and 1, or True and False, etc. (such as a dBase Logical column), you can generally use <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Bool</span></a>. </p>
+
+<p class=defnewpar>You can use the following combination: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="96">
+<p>New Domain:</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>No</span><p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Domain type:</p>
+
+</td>
+<td valign="top">
+<p><span class=courier><a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool</a></span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Domain:</p>
+
+</td>
+<td valign="top">
+<p><span class=courier>Bool</span>, i.e. this is <a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Bool</span></a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Extend:</p>
+
+</td>
+<td valign="top">
+<p>- blank -</p> 
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>You can also import such a column using the <a href="..//ilwis/popup/yy_system_domain_yesno_popup.htm" onClick="return popup(this, 'notes')" >system domain YesNo</a>. Select for <span class=arial>Domain</span>: <span class=courier>YesNo</span>. Other settings as above. In the output column, the values of the column will be <span class=courier>Yes</span> and <span class=courier>No</span> only. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/import_table_output_table_name.htm">Import Table - Specify ILWIS Table Name</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_import_data.htm">How to import data</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwistableimport_commandline">Appendices : ILWIS script language (syntax), section ILWIS Table import</a></p>
+
+</body

@@ -1,0 +1,93 @@
+<html>
+
+<head>
+<title>How to open objects as a table (advanced)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Open as ..., How to open (advanced)">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to open objects as a table</h1>
+
+<h1 class=secondline>(Advanced)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Some objects are internally stored as a table and can therefore be opened as a table. Histograms and two-dimensional tables are automatically opened as a table, but you can also open a <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point map</a>, a class/ID <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>, a class/picture <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a>, a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> tiepoints, or a <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate</a> system tiepoint as a table. </p>
+
+<p class=defnewpar>The main idea behind opening these objects as a table is to allow the user to perform calculations with TabCalc on or with the columns of the objects. A special set of functions was designed to be able to calculate with XY-coordinate columns, color columns, etc. </p>
+
+<p class=kopje>Examples:</p>
+
+<ul>
+
+<li>	by opening a point map as a table, you can perform calculations on the coordinate columns which define the location of the points using special Coordinate functions, </li>
+
+<li>	by opening a domain as a table, you can perform calculations on the class names or IDs of this domain with String functions, </li>
+
+<li>	by opening a representation as a table, you can perform calculations on the colors of this representation with special Color functions,</li>
+
+<li>	by opening a georeference tiepoints as a table, you can perform calculations on the coordinate columns and the rows and columns which define the location of the tiepoints, etc.</li>
+
+<li>	by opening a coordinate system tiepoints as a table, you can perform calculations on the two sets of coordinate columns which define the location of the tiepoints, etc.</li>
+
+</ul>
+
+<p class=defnewpar>Opening point maps and class/picture representations as a table will look familiar to ILWIS 1.4 users as in ILWIS 1.4 point maps and color look-up-tables were stored as ASCII tables.</p>
+
+<p class=kopje>To open objects as a table:</p>
+
+<ul>
+
+<li>	from the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, choose the <span class=arial>Open as Table</span> command, </li>
+
+<li>	the <a href="../ilwismen/open_show_object_as_table.htm">Open As Table</a> dialog box appears, and select an object,</li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	click a point map, a class/ID domain, a class/picture representation, a georeference tiepoints in the Catalog with the right mouse button and </li>
+
+<li>	select <span class=arial>Open As Table</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, </li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	on the command line of the Main window, type <span class=courier>ShowAsTbl</span> <i>object.ext.</i></li>
+
+</ul>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>The option <span class=arial>Open As Table</span> is designed for experienced users. Opening an object as a table means that you can touch the object as it is stored on disk; you can see and edit the binary data files of an object which are otherwise not readable in ASCII now. Editing leads to changes with the risk of making an object unusable. Keep in mind that names and codes of domain items should be unique; furthermore it is not advised to edit the values in columns <span class=courier>Ind</span> and <span class=courier>Ord</span> of a domain as this can lead to serious problems like missing domain items, wrong colors, wrongly linked attributes, etc. Be wise and keep a backup of your data. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="calc_aaf.htm#coordinate_functions">Coordinate functions</a></p>
+<p class=seealsolinks><a href="calc_aaf.htm#point_functions">Point functions</a></p>
+<p class=seealsolinks><a href="how_to_calculate_a_cross_section_through_the_terrain_advanced.htm">How to calculate a cross-section through the terrain</a></p>
+
+</body

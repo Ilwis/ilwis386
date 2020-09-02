@@ -1,0 +1,42 @@
+<html>
+
+<head>
+<title>dem visualization popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>DEM Visualization</p>
+
+<p class="defnewpar">The <a href="..//ilwisapp/dem_visualization.htm" onClick="return popup(this, 'notes')" >DEM Visualization</a> script creates a color composite for you from a DEM. First, three shadow maps are created by the script, using three different shadow filters. The combination of them in a color composite gives a very good impression of the relief in your area. </p> 
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+
+<li>a DEM. </li>
+
+</ul>
+
+<p class="defnewpar">At the end of the script, the color composite of the shadow maps is displayed. </p>
+
+<p class="defnewpar">For more information, refer to <a href="..//ilwisapp/dem_visualization.htm" onClick="return popup(this, 'notes')" >DEM Visualization</a>. </p>
+
+</body

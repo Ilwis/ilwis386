@@ -1,0 +1,197 @@
+<html>
+
+<head>
+<title>Print a layout with maps and annotation</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Print, Layouts, Layout editor, Annotation, Postscript">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Print</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Print the contents of the current <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>. All <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a> and <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a> that were added to the layout will be sent to the printer.  </p>
+
+<p class=defnewpar>The options that can be selected in the dialog box depend on the available installed printer(s) and on the selected default printer for your layouts. For more information, refer to the <a href="layout_editor_page_setup.htm">Page Setup</a> dialog box. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Printer:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>&nbsp;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the printer that you wish to use to print this layout. </p>
+
+<p class=diabox>For your information, the status, type and server name of the printer are shown. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Print to file:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you wish to print this layout to a file, e.g. a Postscript file. </p>
+
+<p class=diabox>Clear this check box if you wish to print this layout directly on the selected printer. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1><span class=arial>Properties<span> button:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Inspect the properties of the selected printer. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Print range:</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>All:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>You can only print the entire layout. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Copies:</p>
+
+</td>
+<td valign="top">
+<p></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Nr. of copies:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify the number of copies you wish to obtain. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Collate:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>This check box currently has no function. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip:</p>
+
+<ul class=tipul>
+
+<li>	To choose a default printer, select paper size and orientation of the paper, etc., see the <a href="layout_editor_page_setup.htm">Page Setup</a> dialog box. </li>
+
+</ul>
+
+<p class=kopje>Printing to a Postscript file (.PS): </p>
+
+<ol>
+
+<li>	To 'export' a layout to <b>Postscript</b> format:</li>
+
+        <ul>
+
+        <li>	From the Windows Start menu, choose Settings, Printers. Double-click the Add Printer icon. </li>
+        
+        <li>	Select Local Printer.</li>
+
+        <li>	Choose any Postscript printer.</li>
+
+        <li>	Instead of choosing a printer port, choose FILE:</li>
+
+        <li>	Type a name by which you want to recognize this 'printer'.</li>
+
+        <li>	Do not ask for a test page.</li>
+
+        </ul>
+
+<li> Create a layout to which you add your map views, and annotation, and in the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a> :</li>
+
+        <ul>
+
+        <li>	Choose File Print,</li>
+
+        <li>	Select the Postscript 'printer' to File.</li>
+
+        <li>	Print.</li>
+
+        </ul>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/layout_editor_page_setup.htm">Page Setup</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_layouts.htm">ILWIS objects : layouts</a></p>
+
+</body

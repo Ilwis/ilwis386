@@ -1,0 +1,77 @@
+<html>
+
+<head>
+<title>objects-histogram popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Histogram&nbsp;&nbsp;&nbsp;<img src="../../images/hist.gif" align=bottom width="13" height="14"></p>
+
+<p>A <a href="..//ilwis/ilwis_objects_histograms.htm" onClick="return popup(this, 'notes')" >histogram</a> is a special object which lists frequency information on values, classes or IDs in a raster, polygon, segment or point map. A histogram is automatically calculated when displaying a <a href="../../ilwis/sec/y_value_maps_sec.htm">value map</a> with stretching; you can also use the <a href="..//ilwisapp/histogram.htm" onClick="return popup(this, 'notes')" >Histogram operation</a>.
+
+<p class=linespacing03before>In a histogram window, the histogram is presented as a table and as a graph. Summary information of a histogram of a value raster map, such as mean, standard deviation, and percentage intervals, can be viewed both in the histogram window as well as <a href="object_properties_popup.htm">Properties</a> of the histogram.</p>
+
+<p class=emptyline>&nbsp;&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p><img src="../../images/hist.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A <b>raster histogram</b> lists the number of pixels, the percentages and the areas per value, class or ID. If the input raster map uses a Value domain, also cumulative number of pixels and cumulative percentages are calculated.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../../images/hispol.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A <b>polygon histogram</b> lists the number of polygons and the perimeter and area of polygons per class, ID, or value. If the input polygon map uses a Value domain, also the cumulative number of polygons, cumulative perimeters and cumulative areas are calculated. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../../images/hisseg.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A <b>segment histogram</b> lists the number of segments and their length per class, ID or value. If the input segment map uses a Value domain, also the cumulative number of segments and cumulative lengths are calculated. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p><img src="../../images/hispnt.gif" align=bottom width="13" height="14"></p>
+
+</td>
+<td valign="top">
+<p>A <b>point histogram</b> lists the number of points per class, ID or value. If the input point map uses a Value domain, also the cumulative number of points are calculated. </p>
+
+</td>
+</tr>
+</table>
+
+</body

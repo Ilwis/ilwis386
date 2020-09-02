@@ -1,0 +1,101 @@
+<html>
+
+<head>
+<title>georeference transformation method sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Georef Tiepoints and Coordsys Tiepoints: transformation methods</p>
+
+<table cellspacing=7>
+<tr>
+<td valign="top" width=151>
+<p>Conformal:</p>
+
+</td>
+<td valign="top">
+<p>minimum of 2 tiepoints required;</p>
+
+<p>Col = aX + bY + c<sub>1</sub></p>
+
+<p>Row = bX - aY + c<sub>2</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Affine:</p>
+
+</td>
+<td valign="top">
+<p>recommended for satellite images and for most vector maps with a coordinate system tiepoints; minimum of 3 tiepoints required;</p>
+
+<p>Col = a<sub>11</sub>X + a<sub>12</sub>Y + b<sub>1</sub></p>
+
+<p>Row = a<sub>12</sub>X + a<sub>22</sub>Y + b<sub>2</sub></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Second order bilinear:</p>
+
+</td>
+<td valign="top">
+<p>minimum of 4 tiepoints required;</p>
+
+<p>Col = a<sub>1</sub> + b<sub>1</sub>X + c<sub>1</sub>Y + d<sub>1</sub>XY</p>
+
+<p>Row = a<sub>2</sub> + b<sub>2</sub>X + c<sub>2</sub>Y + d<sub>2</sub>XY</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Full second order:</p>
+
+</td>
+<td valign="top">
+<p>minimum of 6 tiepoints required;</p>
+
+<p>Col = a<sub>1</sub> + b<sub>1</sub>X + c<sub>1</sub>Y + d<sub>1</sub>XY + e<sub>1</sub>X<sup>2</sup> + f<sub>1</sub>Y<sup>2</sup></p>
+
+<p>Row = a<sub>2</sub> + b<sub>2</sub>X + c<sub>2</sub>Y + d<sub>2</sub>XY + e<sub>2</sub>X<sup>2</sup> + f<sub>2</sub>Y<sup>2</sup></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Third order:</p>
+
+</td>
+<td valign="top">
+<p>minimum of 10 tiepoints required;</p>
+
+<p>Col = a<sub>1</sub> + b<sub>1</sub>X + c<sub>1</sub>Y + d<sub>1</sub>XY + e<sub>1</sub>X<sup>2</sup> + f<sub>1</sub>Y<sup>2</sup> + g<sub>1</sub> X<sup>3</sup> + h<sub>1</sub> X<sup>2</sup>Y + i<sub>1</sub>XY<sup>2</sup> + j<sub>1</sub> Y<sup>3</sup></p>
+
+<p>Row = a<sub>2</sub> + b<sub>2</sub>X + c<sub>2</sub>Y + d<sub>2</sub>XY + e<sub>2</sub>X<sup>2</sup> + f<sub>2</sub>Y<sup>2</sup> + g<sub>2</sub> X<sup>3</sup> + h<sub>2</sub> X<sup>2</sup>Y + i<sub>2</sub>XY<sup>2</sup> + j<sub>2</sub> Y<sup>3</sup></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Projective:</p>
+
+</td>
+<td valign="top">
+<p>recommended for scanned photographs when a DTM is not available; minimum of 4 tiepoints required;</p>
+
+<p>Col = (aX + bY + c) / (gX + hY +1)</p>
+
+<p>Row = (dX + eY + f) / (gX + hY + 1)</p>
+
+</td>
+</tr>
+</table>
+
+<p></p>
+
+</body

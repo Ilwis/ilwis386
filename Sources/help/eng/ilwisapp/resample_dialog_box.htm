@@ -1,0 +1,166 @@
+<html>
+
+<head>
+<title>Resample : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Resample">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Resample</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation resamples a raster map from the map's current <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> to another target georeference. The coordinate of each output pixel is used to calculate a new value from close-by pixel values in the input map. Three resampling methods are available: nearest neighbour, bilinear, and bicubic. </p>
+
+<p class=defnewpar>In raster operations (e.g. <a href="..//ilwisapp/popup/map_calculate_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a>), all input raster maps must have the same georeference. Thus, prior to such operations, you can use Resample:</p>
+
+<ul>
+
+<li>	to combine raster maps obtained from various sources (different projections, pixel size), </li>
+
+<li>	to combine satellite imagery of different dates or resolutions, </li>
+
+<li>	to combine satellite images or scanned photographs with existing rasterized vector data. </li>
+
+</ul>
+
+<p>Furthermore, you can use Resample to rectify scanned aerial photographs. </p>
+
+<p class=defnewpar>You will usually resample raster maps from their current georeference to one common georeference corners. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Input raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> or an input <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. Open the list box and select the desired input map or map list, or directly drag a raster map or map list from a Catalog into this box. The input raster map(s) may not use georef <span class=courier>None</span>. </p>
+
+<p class=diabox>When you select an input map list, the operation will be performed on all raster maps in the map list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Resampling method:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a resampling method: Nearest Neighbour, Bilinear, or Bicubic. </p>
+
+<ul class=diaul> 
+
+<li>For nearest neighbour resampling, the input map can have any domain.</li>
+
+<li>For bilinear resampling, the input map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a> or a map using the <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Color</span></a> domain. </li>
+
+<li>For bicubic resampling, the input map needs to be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>.</li>
+
+</ul>
+
+<p class=diabox>For more information, see <a href="resample_functionality.htm">Resample : functionality</a> or <a href="resample_algorithm.htm">Resample : algorithm</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain resampled pixels.</p>
+
+<p class=diabox>If you selected an input map list, then you can type a name for the output map list; all raster maps in the output map list will obtain this name followed by _1, _2, _3, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Georeference:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing <i>target</i> georeference for the output raster map(s) to which the input map(s) should be resampled; open the list box by clicking it. Or create a new georeference by clicking the little <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case the output map(s) use a value domain: accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, or specify your own range of possible values in the output map(s). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of output values, or specify your own precision.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map or the output map list. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map or the output map list will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you selected a single raster map as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when it is opened to be displayed. </li>
+
+</ul>
+
+<p class=defnewpar>When you selected a map list as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map list</a> and its dependent raster maps will be defined and calculated. Then, the output map list will be shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map list will only be defined. When you open the output map list later on, the map list will be calculated, which means that the output raster maps will be defined and calculated. </li>
+
+</ul>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="resample_functionality.htm">Resample : functionality</a></p>
+
+</body

@@ -1,0 +1,189 @@
+<html>
+
+<head>
+<title>Polygon editor : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Editors, Map editors, Polygon editor, Digitize, Edit polygon map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Polygon editor</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The polygon editor is used to edit a <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon map</a>. With the polygon editor, you can only edit the class names, IDs or values of polygons. The polygon editor has a <a href="polygon_editor_menu_commands.htm">menu bar</a>, a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a> and a <a href="polygon_editor_toolbar.htm">toolbar</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptextleft06><span class=tip>Tip: </span>To <i>create</i> a polygon map, first digitize your segments with the segment editor and then polygonize the segment map in the segment editor. For more information, see <a href="how_to_create_polygon_maps.htm">How to create a polygon map</a>. </p>
+
+<p class=defnewpar>You can edit polygons with the <i>mouse</i> on the screen but you can also use a <i>digitizer</i> when a map is fixed onto your digitizer tablet. When you wish to use the digitizer for the first time, you may have to setup the digitizer, reference the map on the digitizer, and/or make the digitizer active. For more information, see below. </p>
+
+<!-- <p class=defnewpar>When you are using the digitizer, a digitizer menu (see Figure 1 below) appears as a small floating window. The numbers in front of the commands on a digitizer menu correspond to the numbers of the buttons of your digitizer cursor. --><!--For a flowchart of the different digitizer menus, see Appendix : Flow charts of digitizer menus.--> <!--</p>-->
+
+<p class=defnewpar>Furthermore, in any map editor you can always use existing maps as a background by adding these maps as other data layers to the window, see <a href="how_to_add_extra_layers_to_a_map_window.htm">How to add extra layers to a map window</a>.</p>
+
+<p class=kopje>To edit a polygon map:</p>
+
+<p>To edit a polygon map, display the polygon map in a map window, open the <a href="map_window_menu_commands.htm">Edit menu</a>, choose <span class=arial><a href="../ilwismen/edit_layer.htm">Edit Layer</a></span>, and select the polygon layer from the cascading menu. You can also click a polygon map with the right mouse button in a Catalog and choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. For other methods, see <a href="../ilwis/how_to_edit_point_segment_polygon_and_raster_maps.htm">How to edit point, segment, polygon, and raster maps</a>. </p>
+
+<p class=defnewpar><a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent</a> polygon maps cannot be edited: first break the dependency links in the <a href="../ilwismen/polygon_map_properties.htm">Polygon Map's Properties</a> sheet.</p>
+
+<p class=defnewpar>When the polygon editor is opened, it starts in Normal/Select mode; the mouse pointer appears as a hand. </p>
+
+<h2 id="poleddigitizer">Working with the digitizer</h2>
+
+<p>Make sure that the digitizer is properly set up (<a href="../ilwismen/digitizer_setup_digitizer_select_port.htm">Setup Digitizer wizard</a>) and that the analog map is properly referenced on the digitizer tablet (<a href="../ilwismen/digitizer_map_referencing_coordsys.htm">Map Reference</a>). The <span class=arial>Setup Digitizer</span> and the <span class=arial>Map Reference</span> commands on the <a href="main_window_menu_commands.htm">File menu</a> of the Main window should both be preceded with a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">. </p>
+
+<p>For more information, see <a href="how_to_set_up_a_digitizer_and_start_digitizing.htm">How to set up a digitizer and start digitizing</a> or <a href="../ilwismen/polygon_editor_digitizer.htm">Polygon editor : Digitizer</a>. </p>
+
+<p class=defnewpar>When the digitizer is <img src="../images/chkmark.gif" align="bottom" width="7" height="7"> <a href="..//ilwismen/popup/polygon_editor_file_digitizer_active_popup.htm" onClick="return popup(this, 'notes')" >Active</a> in the polygon editor, a small floating window will appear: the digitizer menu (see Figure 1). The digitizer menu contains the commands that will be performed when pressing the buttons on the digitizer cursor. The numbers in front of the commands on the digitizer menu correspond to the numbers of the buttons of your digitizer cursor. </p>
+
+<p class=defnewpar>When in the description below, it is written that you have to press for instance the <span class=arial>Change Window</span> button, you have to press the cursor button of your digitizer cursor, which corresponds with the number in front of the <span class=arial>Change Window</span> option on the digitizer menu. In this example, this is the digitizer button corresponding with 2: </p>
+
+<p class=defnewpar><img src="../images/poldig.gif" align=bottom width="150" height="112"></p>
+
+<p class=captionfig>Fig. 1: Example of the digitizer menu in the polygon editor. </p> 
+
+<p class=kopje>Editing a selected polygon:</p>
+
+<p>Locate the digitizer cursor on the polygon you wish to edit. Press the <span class=arial>Edit Value</span> button to open the <span class=arial>Edit</span> dialog box. In the <span class=arial>Edit</span> dialog box, the area and length of the polygon are displayed; depending on the domain of the map that you are editing, you can enter a new class, ID or value. </p>
+
+<p class=kopje>Zooming/Changing the window:</p>
+
+<p>Press the <span class=arial>Change Window</span> button. Move the cursor to the first corner of the area on which you wish to zoom in. Press the <span class=arial>1st Point</span> button: you now see the zoom in box tied to the first point. Move the cursor to the 2nd position of the area on which you wish to zoom in. Press the <span class=arial>2nd Point</span> button. </p>
+
+<p class=defnewpar>You can also directly position the digitizer cursor on the first corner of the area of interest, press the <span class=arial>Change Window</span> button, then move the cursor to the second corner of the area of interest, and press the <span class=arial>2nd Point</span> button. </p>
+
+<p class=defnewpar>To display the entire map after a zoom in command, press the <span class=arial>Entire Map</span> button. </p>
+
+<h2 id="poledmouse">Working with the mouse</h2>
+
+<p class=kopjeaftertitlesub>To zoom in on the map:</p>
+
+<p>You can <a href="..//ilwis/popup/zoom_in_popup.htm" onClick="return popup(this, 'notes')" >zoom in</a> on the polygon map by for instance clicking the <span class=arial>Zoom In</span> button in the toolbar. For more information, see <a href="../ilwismen/zoom_in_on_maps.htm">Map window : Zoom in</a>.</p>
+
+<p class=kopjenoboldnound><u>Selecting polygons:</u> <img src="../images/ed_select_mode.gif" align=bottom width="22" height="22"> </p>
+
+<p>The polygon editor has one mode, <span class=arial><a href="../ilwismen/polygon_editor_select_mode.htm">Normal/Select mode</a></span>, to select polygons of which you wish to change the class name, ID or value. In <span class=arial>Normal/Select mode</span>, the mouse pointer appears as a hand. You can select one or more polygons by clicking them, in order to change their class name, ID, or value. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<ul>
+
+<li>	To select a single polygon: </li>
+
+        <p>click a polygon.</p>
+
+        <p>When you double-click a polygon, you can immediately change the class name, ID, or value of the polygon.</p>
+
+<li>	To add polygons to a selection: </li>
+
+        <p>press and hold down the <span class=arial>Ctrl</span> key and click the other polygons you wish to select. When finished, release the <span class=arial>Ctrl</span> key.</p>
+
+<li>	To clear a part of a selection: </li>
+
+        <p>press and hold down the <span class=arial>Ctrl+Shift</span> keys, then click previously selected polygons: these polygons are deselected. When finished, release the <span class=arial>Ctrl+Shift</span> keys.</p>
+
+<li>	To toggle between select and deselect: </li>
+
+        <p>press and hold down the <span class=arial>Shift</span> key, then click polygons: selected polygons are deselected, and non-selected polygons are selected. When finished, release the <span class=arial>Shift</span> key.</p>
+
+</ul>
+
+<p>For more information, see <a href="../ilwismen/polygon_editor_select_mode.htm">Polygon editor : Normal/Select mode</a>. </p>
+
+<p class=kopje>Editing the value of selected polygons:</p>
+
+<p>Depending on the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the polygon map that you are editing, you can change the class name, identifier or value of selected polygons. </p>
+
+<p class=defnewpar>To edit the class name, ID, or value etc. of one or more polygons: </p>
+
+<ul>
+
+<li>	double-click a polygon, or</li>
+
+<li>	select one or more polygons, then choose <span class=arial><a href="../ilwismen/polygon_editor_edit_selection.htm">Edit</a></span> from the <a href="polygon_editor_menu_commands.htm">Edit menu</a> or from the context-sensitive menu, </li>
+
+<li>	select one or more polygons, and press the <span class=arial>Enter</span> key on the keyboard. </li>
+
+</ul>
+
+<p class=defnewpar>When you double-click a polygon, you can immediately select a class name, type an identifier, or type a value. Polygons in a polygon map using an identifier domain can only be edited individually. </p>
+
+<p class=defnewpar>When you selected multiple polygons, you can select a class name, or type a value for the selection in the appearing <span class=arial><a href="../ilwismen/polygon_editor_edit_selection.htm">Edit</a></span> dialog box. For more information, see <a href="../ilwismen/polygon_editor_edit_selection.htm">Polygon editor : Edit</a>. </p>
+
+<p class=defnewpar>All changes that you make are immediately stored in the polygon map.</p>
+
+<h2>Other functionality</h2>
+
+<p class=kopjenoboldnoundaftertitlesub><u>Save:</u> <img src="../images/save.gif" align=bottom width="22" height="22"></p>
+
+<p>When editing polygons in the polygon editor, all changes are immediately stored. However, to permanently store changes, you may use the <span class=arial><a href="../ilwismen/polygon_editor_save.htm">Save</a></span> button or the <span class=arial><a href="../ilwismen/polygon_editor_save.htm">Save</a></span> command on the <a href="../ilwis/polygon_editor_menu_commands.htm">File menu</a>. After you used <span class=arial>Save</span>, any changes that you made before using <span class=arial>Save</span>, cannot be undone anymore with the <span class=arial>Undo All Changes</span> button or command. For more information, see <a href="../ilwismen/polygon_editor_save.htm">Polygon editor : Save</a>. </p>
+
+<p class=kopjenoboldnound><u>To undo all changes:</u> <img src="../images/ed_undo_all.gif" align=bottom width="22" height="22"></p>
+
+<p>When editing polygons in the polygon editor, all changes are immediately stored. However, you can undo all changes, i.e. restore the polygon map until the moment when you last used <span class=arial><a href="../ilwismen/polygon_editor_save.htm">Save</a></span>, by choosing <a href="../ilwismen/polygon_editor_undo_all_changes.htm">Undo All Changes</a> from the <a href="polygon_editor_menu_commands.htm">File menu</a>. For more information, see <a href="../ilwismen/polygon_editor_undo_all_changes.htm">Polygon editor : Undo all changes</a>. </p>
+
+<p class=kopje>Find undefineds:</p>
+
+<p>When you wish to check whether all polygons have a valid class name, ID or value, you can use the <span class=arial><a href="../ilwismen/polygon_editor_find_undefineds.htm">Find Undefineds</span></a> command on the <a href="segment_editor_menu_commands.htm">Edit menu</a>. By using <span class=arial>Find Undefineds</span>, all undefined polygons will appear in a special color, so that you can manually assign a proper class name, ID or value to the polygons. For more information, see <a href="../ilwismen/polygon_editor_find_undefineds.htm">Polygon editor : Find undefineds</a>. </p>
+
+<p class=kopje>To customize the polygon editor:</p>
+
+<p>By choosing <span class=arial>Customize</span> from the <a href="polygon_editor_menu_commands.htm">File menu</a> or from the context-sensitive menu, you can select the colors in which you wish to see your digitizer cursor and undefined polygons. For more information, see <a href="../ilwismen/polygon_editor_customize.htm">Polygon editor : Customize</a>.</p>
+
+<p class=kopje>Extract segments:</p>
+
+<p>To extract all segments from the polygon map and create an editable segment map, select <span class=arial>Extract Segments</span> from the <a href="polygon_editor_menu_commands.htm">File menu</a>. For more information, see <a href="../ilwismen/polygon_editor_extract_segments.htm">Polygon editor : Extract Segments</a>.</p>
+
+<p class=kopje>Create labels:</p>
+
+<p>To create an editable point map in which each polygon has a label point, select <span class=arial>Create Labels</span> from the File menu. For more information, see <a href="../ilwismen/polygon_editor_create_labels.htm">Polygon editor : Create Labels</a>.</p>
+
+<p class=kopje>Apply labels:</p>
+
+<p>To apply point labels to the polygons, select <span class=arial>Apply Labels</span> from the File menu. For more information, see <a href="../ilwismen/polygon_editor_apply_labels.htm">Polygon editor : Apply Labels</a>.</p>
+
+<p class=kopje>Copy polygons to clipboard:</p>
+
+<p>You can copy selected polygons with their coordinates and class names, IDs, or values to the clipboard. Select the polygons you wish to copy and choose <span class=arial><a href="../ilwismen/polygon_editor_copy_selection.htm">Copy</a></span> from the Edit menu. The coordinates of polygon boundaries and the polygon class names, IDs or values are copied. The copied polygon(s) will also be available as picture. </p>
+
+<p class=defnewpar>Copied polygons can be pasted for instance as points in a point editor, or as segments in a segment editor. For more information, see <a href="../ilwismen/polygon_editor_copy_selection.htm">Polygon editor : Copy</a>.</p>
+
+<p class=kopje>To exit the polygon editor:</p>
+
+<p>To exit the polygon editor, choose the <span class=arial>Exit editor</span> option from the <span class=arial>File</span> menu or from the context-sensitive menu. You can also click the <span class=arial>Exit editor</span> button in the toolbar. In these cases, the editor is closed but the map(s) remain displayed in a map window. </p>
+
+<p>When you double-click the <span class=arial>Close</span> button or the <a href="..//ilwis/popup/win_controlmenubox_popup.htm" onClick="return popup(this, 'notes')" >Control-menu box</a>, the map and the editor are closed. </p>
+
+<p class=defnewpar>All changes that you make in the polygon map are continuously stored.</p>
+
+<p class=defnewpar>For more information, see also <a href="appendices_keyboard_shortcuts.htm">Appendices : Keyboard shortcuts</a> and <a href="appendices_mouse_functions.htm">Appendices : Mouse functions</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="polygon_editor_menu_commands.htm">Polygon editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="polygon_editor_toolbar.htm">Polygon editor : toolbar</a></p>
+
+</body

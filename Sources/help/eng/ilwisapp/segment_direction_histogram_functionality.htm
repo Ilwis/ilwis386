@@ -1,0 +1,116 @@
+<html>
+
+<head>
+<title>Segment direction histogram : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment direction histogram">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Segment direction histogram</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Segment direction histogram operation calculates directions and lengths within segments, i.e. between all stored coordinates of the segments. The output is a table with directions from 0 to 179° and the length and number of the segment parts in that direction. </p>
+
+<p class=defnewpar>This operation can be used to analyze the pattern of  lines (segments) in a segment map. To get information on, for instance, the structure and lithology of rocks, the direction, length, and frequencies of features such as faulting and jointing can be calculated.</p>
+
+<p class=kopje>Example:</p>
+
+<p>When segments only consist of begin and end nodes without any intermediate points (see Fig. 1), directions and lengths will be calculated for the complete segments.</p>
+
+<p>Usually however segments consist of a begin and end node and multiple intermediate points (see Fig. 2). Directions and lengths will then be calculated between all stored coordinates in the segments, i.e. for all segments from the begin node to the first intermediate point, from the first intermediate point to the second, etc., until the end node.</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p class=linespacing01after><img src="../images/segdir1.gif" align=bottom width="105" height="100"></p>
+
+</td>
+<td valign="top" width=151>
+<p class=linespacing01after><img src="../images/segdir2.gif" align=bottom width="105" height="100"></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p class=captionfig>Fig. 1: Segments without intermediate points.</p>
+
+</td>
+<td valign="top" width=151>
+<p class=captionfig>Fig. 2: Segments with intermediate points.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special requirements for the input segment map.</p>
+
+<p class=kopje>Output table:</p>
+
+<p>An output table with domain <span class=courier>None</span> is created. </p>
+
+<p class=defnewpar>The output table has three columns: </p>
+
+<ul>
+
+<li>	Column <span class=courier>Direction</span> shows the compass direction in degrees from 0 (north-south trending) to179°, </li>
+
+<li>	Column <span class=courier>Length</span> shows the total length of all segment parts in that direction; and </li>
+
+<li>	Column <span class=courier>Nrseg</span> (frequency) shows the total number of the segment parts in that direction.</li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	For a better understanding of the pattern of segments, you can display graphically the output data as a <a href="../ilwismen/create_a_rose_diagram.htm">rose diagram</a>. </li>
+
+<li>	To reduce the number of intermediate points within segments of a segment map, you can use the <a href="..//ilwisapp/popup/tunnel_segments_popup.htm" onClick="return popup(this, 'notes')" >Tunnel segments</a> operation.</li>
+
+</ul>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+
+<li>	The operation calculates direction, length and frequency for all segments in the map. Therefore, the input segment map has to contain only those segments of which directions are of interest; the map should not contain segments which show, for example, a frame or boundary of an area. To select the proper segments, you can use the <a href="..//ilwisapp/popup/segment_mask_popup.htm" onClick="return popup(this, 'notes')" >Mask segments</a> operation prior to the Segment direction histogram operation.</li>
+
+<li>	The operation is only useful when your segments are rather straight lines. As this operation calculates directions and lengths between all stored coordinates of segments, it is generally not very practical to use this operation on segment maps which store for instance roads or rivers; these features often contain too many curves.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="segment_direction_histogram_dialog_box.htm">Segment direction histogram : dialog box</a></p>
+
+<p class=seealsolinks><a href="segment_direction_histogram_command_line.htm">Segment direction histogram : command line</a></p>
+
+<p class=seealsolinks><a href="segment_direction_histogram_algorithm.htm">Segment direction histogram : algorithm</a></p>
+
+</body

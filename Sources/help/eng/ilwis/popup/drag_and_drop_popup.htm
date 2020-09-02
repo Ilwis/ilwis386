@@ -1,0 +1,60 @@
+<html>
+
+<head>
+<title>drag and drop popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Drag and drop</p>
+
+<p class=linespacing03after>The idea of <a href="..//ilwis/basic_concepts_drag_and_drop.htm" onClick="return popup(this, 'notes')" >drag and drop</a> is that you can pick up one or more <a href="../../ilwis/sec/ilwis_objects_sec.htm">objects</a>, e.g. a map from a <a href="../../ilwis/popup/catalog_popup.htm">Catalog</a> or from Windows Explorer, to move the object(s) to another position, and to release the object(s) at the new position in order to perform a certain task without using any menu. </p>
+
+<p class=linespacing03after><a href="../../ilwis/popup/multiple_selection_popup.htm">Select one or more objects</a> in a Catalog or in Windows Explorer, and move the object(s) to another position while holding the left mouse button down. Then release the left mouse button. </p>
+
+<p class=kopje>Examples:</p>
+
+<ul>
+
+<li>    When you drag one or more selected objects from a <a href="../../ilwis/popup/catalog_popup.htm">Catalog</a> and drop them in an another Catalog, the objects are copied to the other Catalog. </li>
+
+<li>    When you drag one or more selected objects from a <a href="../../ilwis/popup/catalog_popup.htm">Catalog</a> and drop them on a directory listed in the <a href="..//ilwis/main_window_navigator.htm" onClick="return popup(this, 'notes')" >Navigator</a>, the objects are copied to the other directory. </li>
+
+<li>	When you drag one or more selected maps from a <a href="../../ilwis/popup/catalog_popup.htm">Catalog</a> and drop them in an existing <a href="../../ilwis/popup/map_window_popup.htm">map window</a>, the maps are added as extra data layers to the map window.</li>
+
+<li>	When you drag one or more selected maps from a <a href="../../ilwis/popup/catalog_popup.htm">Catalog</a> and drop them in a <a href="../../ilwis/popup/pixel_information_window_popup.htm">pixel information window</a>, the maps and optional attribute tables are added to the pixel information window. </li>
+
+<li>	When you drag a map from a Catalog and drop it on an <a href="../../ilwis/popup/y_operation_popup.htm">operation</a> in the <a href="operation_tree_list_popup.htm">Operation-tree</a> or in the Operation-list, the dialog box for the operation appears and the dragged object serves as input for the operation.</li>
+
+<li>    In the <a href="..//ilwis/map_window_layer_management.htm" onClick="return popup(this, 'notes')" >Layer Management</a> pane of a map window, you can change the order of the layers drawn in the map window. </li>
+
+<li>	In a <a href="..//ilwis/table_window_functionality.htm" onClick="return popup(this, 'notes')" >table window</a>, you can change the order of the columns by dragging a column name to a new position.</li>
+
+<li>	In the domain class editor, you can change the order of the classes in that domain by dragging a class to a new position.</li>
+
+<li>	In the dialog boxes for legends of class maps, etc., you can change the order of the classes in the legend by dragging classes to a new position.</li>
+
+</ul>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_drag_and_drop.htm" onClick="return popup(this, 'notes')" >Basic concepts : drag and drop</a> 
+
+</body

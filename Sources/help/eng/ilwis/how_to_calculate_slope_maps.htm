@@ -1,0 +1,136 @@
+<html>
+
+<head>
+<title>How to calculate slope maps</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Slope map, Calculate ..., How to calculate ..., How to create ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to calculate a slope map</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To calculate slope maps in percentages and in degrees:</p>
+
+<table cellspacing=1>
+<tr>
+<td valign="top" width=22>
+<p>1.</p>
+
+</td>
+<td valign="top">
+<p>Create a segment map with a value domain (it is advised to create a value domain Height). Digitize the contour lines and give the contour lines the height value they represent. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p>2.</p>
+
+</td>
+<td valign="top">
+<p>To create an interpolated height map from segment contour lines: open the Operations menu in the Main window, choose Interpolation, then choose <a href="..//ilwisapp/popup/contour_interpolation_popup.htm" onClick="return popup(this, 'notes')" >Contour Interpolation</a>. The output map is a Digital Elevation Model. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p>3.</p>
+
+</td>
+<td valign="top">
+<p>To calculate height differences in X-direction: start the <a href="..//ilwis/popup/filter_popup.htm" onClick="return popup(this, 'notes')" >Filter operation</a>, select the Digital Elevation Model as the input map and select <a href="..//ilwisapp/sec/filter_dfdx_sec.htm" onClick="return popup(this, 'notes')" >linear filter dfdx</a>. Call the output map for example DX.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p>4.</p>
+
+</td>
+<td valign="top">
+<p>To calculate height differences in Y-direction: start the Filter operation again, select the Digital Elevation Model as input map and select <a href="..//ilwisapp/sec/filter_dfdy_sec.htm" onClick="return popup(this, 'notes')" >linear filter dfdy</a>. Call the output map for example DY.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p>5.</p>
+
+</td>
+<td valign="top">
+<p>To calculate a slope map in percentages from these maps DX and DY, type on the command line of the Main window: </p>
+
+<p class=calc0>SLOPEPCT = 100 * HYP(DX,DY)/ PIXSIZE(DEM)</p>
+
+<p><a href="calc_hyp.htm">HYP</a> is an internal Mapcalc/Tabcalc function.</p>
+
+<p>Function PIXSIZE returns the pixel size of a raster map; for <i>DEM</i>, fill out the name of your DEM created in step 2.</p>
+
+<p>SLOPEPCT is the output map name of the slope map in percentages.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p>6.</p>
+
+</td>
+<td valign="top">
+<p>To convert the percentage values into degrees, type:</p>
+
+<p class=calc0>SLOPEDEG = RADDEG(ATAN(SLOPEPCT/100))</p>
+
+<p>Function <a href="calc_atan.htm">ATAN</a> and <a href="calc_raddeg.htm">RADDEG</a> are internal MapCalc/TabCalc functions. SLOPEDEG is the output map name of the slope map in degrees. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Mind: the following slope values are the same: 30°= 58%, 45°= 100%, 60°= 173%, 80°= 567%. As you see, slope values in the SLOPEPCT map can be greater than 100%.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	When you start creating the segment map for the contour lines, it is advised to create a user-defined value domain Height. Afterwards you can then create a user-defined representation Height for this domain. You can change the colors of this representation in the Representation Value/Gradual editor. </li>
+
+<li>	You can also create a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> to perform steps 2 through 6 described above. For more information, see <a href="calc_creating_and_running_scripts.htm">Map &amp; Table calculation : creating and running scripts</a>.</li>
+
+<li>	To classify the values of the slope maps, there are two possibilities: </li>
+
+        <ol class=tipol>
+
+        <li> Create a new representation value for the output slope map and adapt the colors in the <a href="..//ilwis/popup/representation_value_gradual_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Value/Gradual editor</a>. For more information, see <a href="../ilwis/how_to_classify_a_map_or_column.htm">How to classify a map.</a></li>
+
+        <li> Create two domain Groups, for example: classes 0-10%, 10-25%, 25-50%, 50-100%, &gt;100% for the slope map in percentages and classes 0-6°, 6-12.5°, 12.5-22.5°, 22.5-45°, &gt;45° for the slope map in degrees. Then, use these domain groups in the <a href="..//ilwisapp/popup/slicing_popup.htm" onClick="return popup(this, 'notes')" >Slicing</a> operation.</li>
+
+        </ol>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_classify_a_map_or_column.htm">How to classify a map</a></p>
+
+<p class=seealsolinks><a href="how_to_calculate_aspect_maps.htm">How to calculate an aspect map</a></p>
+
+</body

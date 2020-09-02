@@ -1,0 +1,106 @@
+<html>
+
+<head>
+<title>Add coordinate system to pixel info window</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Pixel information window, Add ..., Coordinate system">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td colspan="2"><h1 class=firstline>Pixel information window</h1></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Add coordinate system</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__pixel_info_file_menu_sec2.Click()>File menu</a></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Add an extra <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> to the <a href="..//ilwis/popup/pixel_information_window_popup.htm" onClick="return popup(this, 'notes')" >pixel information window</a>. If ILWIS is able to convert the coordinates as received from the coordinate system of the map window or the digitizer into the 'new' coordinate system, then the pixel information window also displays the XY-coordinates of the position of the mouse pointer in the 'new' coordinate system.  </p>
+
+<p class=defnewpar>The <span class=arial>Add Coordinate System</span> command can be used to compare XY- coordinates of projections that consist of multiple zones such as Lambert Transverse Mercator (Gauss-Kr&uuml;ger) and UTM projections. When a map window displays a map which has a coordinate system with a projection of a particular zone, and you add a second coordinate system to the pixel information window with a projection of the next zone, then the pixel info window also displays the XY-coordinates as received from the map window expressed in the second coordinate system.</p>
+
+<p>An example of adding multiple coordinate systems to a pixel information window is described in <a href="../ilwis/pixel_information_window_functionality_advanced.htm">Pixel information window : functionality (advanced)</a>. </p>
+
+<p class=diakopje>Dialog box:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Select coordinate system:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Select a coordinate system to be used by the pixel information window. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=72>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	Instead of choosing the menu command <span class=arial>Add Coordinate System</span>, you can also <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> a coordinate system from the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a> to the pixel info window. This has the same effect.</li>
+
+<li>	To permanently change the coordinate system of a vector map, use one of the Transform operations.</li>
+
+<li>	To show raster maps with a different coordinate system or georeference, the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation should be used.</li>
+
+</ul>
+
+<p class=seealso>See also: </p>
+
+<p class=seealsolink><a href="../ilwis/pixel_information_window_functionality.htm">Pixel information window : functionality</a></p>
+
+<p class=seealsolink><a href="../ilwis/pixel_information_window_functionality_advanced.htm">Pixel information window : functionality (advanced)</a></p>
+
+</body

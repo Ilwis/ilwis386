@@ -1,0 +1,238 @@
+<html>
+
+<head>
+<title>How to import data from other packages</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Import, How to import ..., ASTER, HDF, ASC, ASCII, Bitmap, BMP, Atlas, BNA, AutoCad, DXF, Arc/Info, E00, LIN, PTS, Erdas, GIS (Erdas format), LAN, GARtrip (GPS data), GPS, GIF, IDA, IMG (format), Idrisi, DOC (Idrisi format), PaintBrush, PCX, InfoCam, SEQ, Arc/View, Shape files, SHP, SMT (ILWIS 1.x ASCII vector format), TIFF, GeoTIFF, ILWIS import, Map import, General Raster import, Table import, Import table wizard, dBase, DBF, Delimited, Comma delimited, Space delimited, Fixed format, Standard format, SDF, Databases, Database collections, MS Excel, Excel, XLS, MS Access, Access, MDB">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<script language="JavaScript" src="../master.js"></script>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to import ...</h1>
+
+<h1 class=secondline>data from other packages</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>To import <b>maps</b>, you can use <a href="../ilwismen/import_map.htm">ILWIS Map Import</a> and <a href="../ilwismen/import_general_raster.htm">Import General Raster</a>. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<ul>
+
+<li>ILWIS Map import imports only files in the formats as described below. For
+  ASTER (1A/1B) images you can choose to convert the data files to ILWIS data
+  files or to import with UseAs. All other external file formats will always be converted to the ILWIS data format. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>ILWIS Import General Raster is designed to import satellite imagery/raster maps with a known header. You can choose to convert the data files to the ILWIS data format or to import with UseAs. </li>
+
+</ul>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>You can choose the method which suits your needs best. </p>
+
+<p class=defnewpar>To import <b>tables</b>, you can use the ILWIS <a href="../ilwismen/import_table_input_table_name.htm">Import Table wizard</a>. The Import Table wizard can be used: </p>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <ol>
+
+        <li>To import a file in a foreign format (ASCII or DBF) into ILWIS. The formats that are allowed are described below. ILWIS import routines will be used. The table will be converted to the ILWIS table format <img src="../images/table.gif" align=bottom width="13" height="14">.
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <li>To access or import a single table from a file-based database format (DBF, XLS, MDB). </li>
+
+        <p>A Windows access method is used, which makes use of an OLE DB Provider which, in turn, probably uses installed ODBC drivers. You can choose to use the table in its original format and obtain a <i>Use As</i> table <img src="../images/table.gif" align=bottom width="13" height="14"><sub class=blue> u</sub>, or to <i>convert</i> the table to the ILWIS table format <img src="../images/table.gif" align=bottom width="13" height="14">. </p>
+
+        </ol>
+
+<p class=defnewpar>To access a file-based <b>database</b>, you can also: </p>
+
+        <ul>
+
+        <li>make a foreign file extension visible in the Catalog, and double-click the external file. </li>
+
+        </ul>
+
+        <p>Also here, an OLE DB Provider and probably an installed ODBC driver will be used. You will obtain a database collection <img src="../images/objcol.gif" align=bottom width="15" height="13"> with <i>Use As</i> tables <img src="../images/table.gif" align=bottom width="13" height="14"><sub class=blue> u</sub>. </p>
+
+        <p>For more information on databases, see <a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a>. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>When you wish to import multiple files, it is advised to use the ILWIS command line or an ILWIS script. Import expressions are described in <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#import_commandline">Appendices : ILWIS script language (syntax), section Import expressions</a>. </p>
+
+<h2>Importing maps through ILWIS Import</h2>
+
+<p class=linespacing03after>You can use ILWIS Map Import to import maps from the following packages and in the following formats:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p>Raster:</p>
+
+</td>
+<td valign="top">
+<p>Arc/Info non-compressed ASCII (.ASC or .NAS), Arc/Info .E00 interchange format (.E00), ASTER (1A/1B), Compuserve GIF images (.GIF), Erdas .GIS and .LAN files (.GIS, .LAN), IDA images (.IMG), Idrisi maps (.DOC), ILWIS ASCII raster (.ASC), PaintBrush pictures (.PCX), Tagged Image File Format (.TIF) including GeoTIFF images (.TIF), and Windows bitmaps (.BMP).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p>Vector:</p>
+
+</td>
+<td valign="top">
+<p>Arc/Info .E00 interchange format (.E00), Arc/Info .LIN .PTS (ASCII vector), Arc/View Shape (.SHP, .SHX, .DBF), Atlas segments (.BNA), AutoCad .DXF, GARtrip Text (.TXT), ILWIS ASCII segments (.SMT), InfoCam Sequential (.SEQ).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>To start importing single maps: </p>
+
+<ul>
+
+<li>	Open the <a href="main_window_menu_commands.htm">File menu</a> from the Main window and choose <span class=arial>Import Map</span>, </li>
+
+<li>	Expand the <span class=arial>Import/Export</span> item in the Operation-tree and double-click the <span class=arial>Import Map</span> item, or</li>
+
+<li>	Double-click the <span class=arial>Import</span> item in the Operation-list.</li>
+
+</ul>
+
+<p class=defnewpar>The <a href="../ilwismen/import_map.htm">Import Map</a> dialog box will be opened:
+<ul>
+<li>select the <span class=arial>Import Format</span>, </li>
+<li>select the file you wish to import, </li>
+<li>specify a name for the ILWIS output object(s) without extension. </li>
+</ul>
+
+<p class=defnewpar>The Import Map dialog box, furthermore asks the following: </p>
+<ul>
+<li>For ASTER level 1A and level 1B images, decide whether you wish to convert the data:</li>
+	<ul>
+	<li>to Radiances (W/m<sup>2</sup>/sr/µm) or to sensor calibrated DN values;</li>
+	<li>to the ILWIS data format(s) or to use the data files as they are (UseAs).</li>
+	</ul>
+	<p class=linespacing01before>For more information about importing ASTER images, see <a href="../ilwismen/import_aster.htm">Import ASTER</a>.</p>
+
+<li class=ls01be>For the GARtrip (GPS data) import format, optionally specify an altitude correction value. </li>
+</ul>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To import (multiple) maps, you can also type expressions on the command line or create a script containing one or more import expressions. For more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="appendices_ilwis_scripts_language_syntax.htm#ilwismapimport_commandline">ILWIS Map Import</a>.</p>
+
+
+<h2>Importing general raster data through ILWIS Import</h2>
+
+<p class=defnewpar>To start importing general raster files: </p>
+
+<ul>
+
+<li>	Open the <a href="main_window_menu_commands.htm">File menu</a> of the Main window and choose <span class=arial>Import General Raster</span>, </li>
+
+<li>	Expand the <span class=arial>Import/Export</span> item in the Operation-tree and double-click the <span class=arial>Import General Raster</span> item, or</li>
+
+<li>	Double-click the <span class=arial>Import General Raster</span> item in the Operation-list.</li>
+
+</ul>
+
+<p class=defnewpar>First, the <a href="../ilwismen/import_general_raster.htm">Import</a> dialog box will be opened; for <span class=arial>Import Format</span>, <img src="../images/rasmap.gif" align=top width="16" height="12">&nbsp;&nbsp;<b>Use General Raster Import</b> is already selected. After selecting an input file and clicking OK, the <a href="../ilwismen/import_general_raster.htm">Import General Raster Data</a> dialog box will appear. You should decide on whether you wish to convert the data to the ILWIS data format(s) or to use the data files as they are (UseAs). </p>
+
+<p class=defnewpar>To import (multiple) general raster files, you can also type expressions on the command line or create a script containing one or more import expressions. For more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#generalrasterimport_commandline">ILWIS General Raster Import</a>.</p>
+
+
+
+<h2>Importing tables through Import Table wizard</h2>
+
+<p class=defnewpar>To start the Import Table wizard: </p>
+
+<ul>
+
+<li>	Open the <a href="main_window_menu_commands.htm">File menu</a> of the Main window and choose <span class=arial>Import Table</span>, </li>
+
+<li>	Expand the <span class=arial>Import/Export</span> item in the Operation-tree and double-click the <span class=arial>Import Table</span> item, or</li>
+
+<li>	Double-click the <span class=arial>Import Table</span> item in the Operation-list.</li>
+
+</ul>
+
+<p class=linespacing01before>The <a href="../ilwismen/import_table_input_table_name.htm">Import Table wizard</a> will be started.</p>
+
+<p class=kopje>a. Import Table wizard to import a foreign table with ILWIS import:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" colspan="2">
+<p>Foreign table formats:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=nospacetop>&nbsp;</p>
+</td>
+
+<td valign="top">
+<p class=nospacetop>dBase III/IV files (DBF), ILWIS 1.4 tables (ASCII), Comma delimited files (ASCII), Space delimited (ASCII), and Standard format files (SDF, ASCII) also known as Fixed format. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The imported table is always <i>converted</i> to the ILWIS table format <img src="../images/table.gif" align=bottom width="13" height="14">. </p>
+
+<p class=defnewpar>To import (multiple) foreign table files, you can also type expressions on the command line or create a script containing one or more import expressions. For more information, see <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">Appendices : ILWIS script language (syntax)</a>, section <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwistableimport_commandline">ILWIS Table Import</a>.</p>
+
+<p class=kopje>b. Import Table wizard to import a foreign file-based database (OLE DB/ODBC): </p>
+
+<p>The Import Table wizard can also be used to import a <i>single table (or view)</i> from a file-based database format, such as dBase .DBF, Excel .XLS or Access .MDB. </p>
+
+<p class=defnewpar>The file-based database formats that are actually supported depend on the installed OLE DB Provider(s) and probably on installed ODBC drivers. For a standard Windows database such as Access, the required ODBC driver is already present. </p>
+
+<p class=defnewpar>You can choose to use the table in its original format and obtain a <i>Use As</i> table <img src="../images/table.gif" align=bottom width="13" height="14"><sub class=blue> u</sub>, or to <i>convert</i> the table to the ILWIS table format <img src="../images/table.gif" align=bottom width="13" height="14">. </p>
+
+<h2>Accessing a database (OLE DB/ODBC)</h2>
+
+<p>For a file-based database format: </p>
+
+        <ul>
+
+        <li>use <a href="../ilwismen/customize_catalog_selection.htm">Customize Catalog</a>, to show the external file extension in a Catalog, </li>
+
+        <li>double-click the foreign file in the Catalog. </li>
+
+        </ul>
+
+<p class=defnewpar>You will obtain a database collection <img src="../images/objcol.gif" align=bottom width="15" height="13"> in your Catalog. When you double-click the database collection, the tables <img src="../images/table.gif" align=bottom width="13" height="14"> in the database collection will appear. When you double-click a table, it will be opened in <i>Use As</i> manner <img src="../images/table.gif" align=bottom width="13" height="14"><sub class=blue> u</sub>. </li>
+
+<p class=defnewpar>For more information, refer to <a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/import_map.htm">Import Map</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/import_aster.htm">Import ASTER</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/import_general_raster.htm">Import General Raster</a></p>
+
+<p class=seealsolinks><a href="../ilwismen/import_table_input_table_name.htm">Import Table wizard</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a></p>
+
+<p class=seealsolinks><a href="basic_concepts.htm">Basic concepts</a></p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_before_creating_maps_and_tables.htm">Basic concepts : before creating maps and tables</a></p>
+
+<p class=seealsolinks><a href="basic_concepts_domains.htm">Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#import_commandline">Appendices : ILWIS script language (syntax), section Import expressions</a></p>
+
+</body

@@ -1,0 +1,177 @@
+<html>
+
+<head>
+<title>ILWIS objects : columns</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Data objects, ILWIS objects, Columns">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr><td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Columns&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/column.gif" align=bottom width="13" height="14"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A column is a <a href="ilwis_objects_data_objects.htm">data objects</a> that is part of a table; a column can be used to store attributes, results of calculations, results of operations, etc. Fields in a column may contain class names, IDs, values, X- and Y-coordinates, colors, text, etc.; this is determined by the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the column. </p>
+
+<p class=defnewpar>Columns are displayed and edited in a <a href="..//ilwis/popup/table_window_popup.htm" onClick="return popup(this, 'notes')" >table window</a>. You can calculate with columns by typing a <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >Table Calculation formula</a> on the <a href="..//ilwis/popup/command_line_table_window_popup.htm" onClick="return popup(this, 'notes')" >command line of a table window</a>. For more complicated calculations, you can use the <a href="table_window_menu_commands.htm">Columns menu</a> in the table window. </p>
+
+<p class=defnewpar>For more information on the domain of a table and the structure of a table, see <a href="ilwis_objects_tables.htm">ILWIS objects : tables</a>.</p>
+
+<p class=kopje>Contents of columns:</p>
+
+<p>The contents of a column is defined by the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> that the column is using. For each new column that you add to a table, you have to select (or create) a domain which fits the kind of data you want to store in that column, similar to the selection or creation of a domain when you make a new map. In a <span class=courier>Soil</span> table for example, you can select the system <span class=courier>String</span> domain for a column <span class=arial>Description</span> that should store descriptions of soil types, and you can select the system <span class=courier>Value</span> domain or create your own value domain <span class=courier>pH</span> for a column <span class=arial>pH</span> that should store pH values. </p>
+
+<p>When calculating with columns, it is normally enough to select system domain <span class=courier>Value</span> or one of the other system domains. You only have to create a new value domain, if the column will contain values that have a special 'standardized' meaning.</p>
+
+<p class=defnewpar>A column may store for example:</p>
+
+<ul>
+
+<li>	names of districts, provinces, regions, etc. for instance in a table containing all building blocks of a city, the district of the city in which each building block occurs (for aggregations); the column uses an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a>, </li>
+
+<li>	class names like suitable, moderately suitable, not suitable or slope classes that apply for the records; the column uses a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>,</li>
+
+<li>	rainfall values, pH values for boreholes, number of people per building block, etc.; the column uses a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>, </li>
+
+<li>	free text for instance to describe the records of the table; the column uses the String domain,</li>
+
+<li>	true or false values; the column uses the <a href="..//ilwis/sec/domain_type_bit_sec.htm" onClick="return popup(this, 'notes')" >Bit domain</a>,</li>
+
+<li>	true, false or undefined values; the column uses a Bool domain,</li>
+
+<li>	percentage values; the column can use the Perc domain,</li>
+
+<li>	colors; the column uses the Color domain,</li>
+
+<li>	X- or Y-coordinates; the column uses a value domain, </li>
+
+<li>	output values after a <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >table calculation</a> (any domain),</li>
+
+<li>	output values (any domain) in tables that are the result of an operation, e.g. values and percentages after a <a href="..//ilwisapp/popup/histogram_operation_popup.htm" onClick="return popup(this, 'notes')" >Histogram</a> operation, classes of two input maps and values after a <a href="..//ilwisapp/popup/cross_popup.htm" onClick="return popup(this, 'notes')" >Cross</a> operation on two class maps, distances and probabilities (values) after the Pattern Analysis operation, directions, lengths and number of segments (all values) after the Segment directions operation, etc.</li>
+
+</ul>
+
+<p>For more information on domains, refer to <a href="basic_concepts_domains.htm">Basic concepts : working with domains</a>.</p>
+
+<p class=defnewpar>The domain of a column may have a <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a>. This may be useful if the table is an attribute table; when displaying a map, you can directly display the map by an attribute column, thus without physically creating an attribute map. To display a map by attribute, select the Attribute check box in the <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box which appears when opening the map. </p>
+
+<p class=kopje>Types of columns:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=151>
+<p>Source columns:</p>
+
+</td>
+<td valign="top">
+<p>Normal editable columns.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p><a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >Dependent columns</a>:</p>
+
+</td>
+<td valign="top">
+<p>Columns that store the result of a calculation: ColumnCalculate, ColumnJoin, ColumnAggregate,  ColumnCumulative, ColumnLeastSquares.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=151>
+<p>Table-owned columns:</p>
+
+</td>
+<td valign="top">
+<p>Columns that are part of a dependent table and store the results of an operation e.g. output columns of the Histogram and Cross operation, and other statistical operations. </p>
+
+<p>Also objects that internally use a table for storage (point maps; class, ID and picture domains; class representations; georeference tipeoints) and which thus can be opened as a table have table-owned columns.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>To protect the results of calculations or operations, fields of dependent columns and table-owned columns in a dependent table are not editable unless you break the dependency links of the dependent column or unless you break the dependency links of the dependent table.</p>
+
+<p class=kopje>Names of columns:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a column:</p>
+
+<p>An easy way to add a new column to a table is to open the <a href="table_window_menu_commands.htm">Columns menu</a> and select the <span class=arial>Add Column</span> command. In the appearing Add Column dialog box, enter a name and description for the column and select or create a domain. For other create methods, see <a href="how_to_add_a_column_to_a_table.htm">How to add a column to a table</a>. Columns added in this way are always source columns, i.e. editable columns. Even if you use such a column later on as the output column of a calculation, the column remains a source column.</p>
+
+<p class=defnewpar>You can also directly add a new column to a table by typing a <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >Table Calculation</a> formula on the <a href="..//ilwis/popup/command_line_table_window_popup.htm" onClick="return popup(this, 'notes')" >command line of the table window</a> which contains a new column name, or by using the <a href="table_window_menu_commands.htm">Columns menu</a> to join columns from another table, to perform aggregations or to calculate cumulative sums of columns or perform a least squares fit.</p>
+
+<p>New columns created by typing a TabCalc formula on the command line in which you use an equal symbol (=) are <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent columns</a>. Columns that contain the result of a join, aggregation, cumulative sum or least squares fit obtained through a dialog box are also dependent columns. When you use the assignment symbol (:=) in a TabCalc formula, the new column is an editable source column.</p>
+
+<p class=defnewpar>You may add as many columns to a table as you like. To change the order and width of columns or to sort the records of a table, see <a href="../ilwis/table_window_functionality.htm">Table window : functionality</a>. </p>
+
+<p class=kopje>To edit fields of a column:</p>
+
+<p>When a table is displayed in a <a href="..//ilwis/popup/table_window_popup.htm" onClick="return popup(this, 'notes')" >table window</a>, you can edit the fields of source columns directly both in the table viewer and in record view. First select a field in the table, then type a new value of ID when the column uses a value or identifier domain, or open the drop-down list box of the field and then select a class name from the drop-down list box when the column uses a class domain. For more information, see <a href="../ilwis/how_to_edit_tables.htm">How to edit a table</a>.</p>
+
+<p class=defnewpar>Fields in dependent columns are not editable unless you break the dependency link of the column; you can do this in the Properties dialog box of the column. Further, fields in table-owned columns in dependent tables are not editable unless you break the dependency links of the table; you can do this in the Properties dialog box of the table. However, the fields in table-owned columns in objects that are internally stored as a table and that can be opened as a table (e.g. point maps and class representations), can usually be edited.</p>
+
+<p class=kopje>Operations on columns:</p>
+
+<p>Mostly, you will calculate with columns using the operators and functions that are available in <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >Table Calculation</a>. You can type your table calculation formulae on the <a href="..//ilwis/popup/command_line_table_window_popup.htm" onClick="return popup(this, 'notes')" >command line of a table window</a>. When you use the definition symbol = in a TabCalc formula that contains a new column name, a <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >dependent</a> column is created. For more information, see also <a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a> and <a href="calc.htm">Table Calculation</a>. </p>
+
+<p>When you use the assignment symbol := in a Table Calculation formula, a source column is created. </p>
+
+<p class=defnewpar>Further, you can use the <a href="table_window_menu_commands.htm">Columns menu</a> to join, aggregate, calculate a cumulative sum or a least squares fit. Subsequently, fill out the appearing dialog box of that column operation and click the OK button; this generates an expression on the command line of the table window. Output columns that are obtained through an operation's dialog box are always dependent. Advanced users can type these complete expressions on the command line of a table window, or ILWIS expressions on the command line of the Main window or create a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a> to execute a series of expressions. </p>
+
+<p class=defnewpar>Lastly, the columns of a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent table</a> in which the results are stored of an operation such as the Histogram operation or statistical operations on maps are table-owned columns. For more information, refer to the Histogram operation, etc.</p>
+
+<p class=defnewpar>When calculating with columns and you want to store values in a column, you can usually select the <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span>, and specify <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a>, see below. </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>Columns have no object definition file of their own. All necessary information to display, edit and calculate with columns is stored in the <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> of the table (.TBT) to which the column belongs. Column data is stored in the binary file of the table (.TB#). </p>
+
+<p class=defnewpar>Each column has a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>, which is a <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >property</a> of a column. By viewing the properties of a column, you can see whether the column is dependent or not, which domain the column is using and in case of dependent columns which other columns the column is using, etc. For dependent columns, you can also manage dependencies: break dependencies, make dependent columns up-to-date, delete a dependent column's data file, etc. For more information, see <a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a> and <a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view the properties of objects</a>. </p>
+
+<p class=defnewpar>Columns are stored as bit, byte, 2-byte, 4-byte or 8-byte columns. The store type of a column is primarily defined by the domain that the column is using. For value columns this is determined by the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> that you specify for the output column during a calculation or operation. Usually, ILWIS will come up with defaults, but you can adjust these values. Choosing a wide value range and a very small precision results in a large data file on disk as more bytes are needed to store the column values. </p>
+
+<p class=kopje>Limitations:</p>
+
+<p>In principle, the maximum number of columns in a table is 32000 and the maximum number of records in a table is 2 billion. In practice however, limitations will occur by available memory. Furthermore, ILWIS is not designed to work with very large data sets: to speed up processing you may need to split tables into smaller logical parts.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="ilwis_objects_tables.htm">ILWIS objects : tables</a></p>
+
+<p class=seealsolinks><a href="../ilwis/table_window_functionality.htm">Table window : functionality</a></p>
+
+<p class=seealsolinks><a href="how_to_add_a_column_to_a_table.htm">How to add columns to a table</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_tables.htm">How to edit a table</a></p>
+
+</body

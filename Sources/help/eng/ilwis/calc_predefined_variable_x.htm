@@ -1,0 +1,88 @@
+<html>
+
+<head>
+<title>%X</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="%X, Predefined variables">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>Predefined variable %X</h1>
+
+<p class=defnewpar>Variable to calculate with X-coordinates of raster maps.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>%X</span></p>
+
+<p class=tip>Note:</p>
+<p class=tiptext><span class=courier>X</span> stands for X-coordinate.</p>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a></p>
+
+<p class=calctitle>Examples</p>
+<p class=kopjeaftertitlesub>MapCalc example:</p>
+<p class="calc00">SubMap = IFF((%X &gt; 80000) AND (%Y &lt; 8080000), InMap, &quot;?&quot;)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellpadding="0" cellspacing="0">
+<tr>
+	<td><p class=courier>InMap</p></td>	
+	<td>&nbsp;&nbsp;</td>
+	<td><p class=courier>SubMap</p></td>
+</tr>
+<tr>
+	<td><img border="0" src="../images/predefined.gif" width="85" height="85"></td>	
+	<td>&nbsp;&nbsp;</td>
+	<td><img border="0" src="../images/predefined_xy.gif" width="85" height="85"></td>
+</tr>
+</table>
+<p class="defnewpar"><span class="courier">SubMap</span>  has the same content as <span class="courier">InMap</span> if the X-coordinate is larger than 800000 and the Y-coordinate is smaller than 8080000. Outside this area <span class="courier">SubMap</span> is undefined.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_y.htm">%Y</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_l.htm">%L</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_c.htm">%C</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_r.htm">%R</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_k.htm">%K</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_d.htm">%D</a></p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=seealsolinks><a href="calc_predefined_variable_p.htm">%P</a></p></td>
+</tr>
+</table>
+
+</body

@@ -1,0 +1,164 @@
+<html>
+
+<head>
+<title>Factor analysis : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Factor analysis, MatrixFactorAnal">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Factor analysis</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/factor_analysis_popup.htm" onClick="return popup(this, 'notes')" >Factor analysis</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=76>
+<p class=calccommline>OUTMATRIX</p>
+
+</td>
+<td valign="top" width=15>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MatrixFactorAnal(</span>InputMaplist<span class=courier>)</span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=76>
+<p class=calccommline>OUTMATRIX</p>
+
+</td>
+<td valign="top" width=15>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MatrixFactorAnal(</span>InputMaplist, <i>nr of output bands</i><span class=courier>)</span></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p>OUTMATRIX</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output matrix; the output map list will obtain the same name; the output raster maps also use this name followed by _1, _2, _3, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=courier>MatrixFactorAnal</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Factor analysis operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p>InputMaplist</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input map list; all raster maps in the input map list must use the <a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" ><span class=courier>Image</span> domain</a> or the same <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value domain</a>, and have the same georeference.</p>
+
+<p>If you like you can also define a map list on the fly as: </p>
+
+<p class=leftmargin06><span class=courier>mlist</span>(<i>map1, map2, ...</i>) </p>
+
+<p>where <span class=courier>mlist</span> is fixed syntax to define a temporary map list without name, and </p>
+
+<p>where <i>map1, map2</i> etc. are the names of the raster maps that should be part of the map list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p><i>nr of output bands</i></p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to specify the number of desired output bands (1 &lt;= integer value &lt;= nr of input bands). If not specified, the same number of output bands will be defined as found in the input map list. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used: </p>
+
+<ul>
+
+<li>A <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output matrix</a> will be created containing the Factor Analysis coefficients. </li>
+
+<li>A <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map list</a> is automatically created (defined); it will contain the resulting transformed raster maps (factor maps). The definition of the output map list reads: </li>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=76>
+<p class=calccommline>OUTMAPLIST</p>
+
+</td>
+<td valign="top" width=15>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapListMatrixMultiply</span>(InputMapList, OUTMATRIX, <i>nr of output maps</i>)</p>
+
+</td>
+</tr>
+</table>
+
+</ul>
+
+<p class=defnewpar>When the assignment symbol := is used: </p>
+
+<ul>
+
+<li>The dependency link of the output matrix will be immediately broken after the output matrix has been calculated. </li>
+
+<li>The dependent map list will be created as above. </li>
+
+</ul>
+
+<p class=defnewpar>The dependent raster maps of the dependent output map list will only be calculated when the map list is opened, e.g. by double-clicking the map list in a Catalog. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="factor_analysis_functionality.htm">Factor analysis : functionality</a></p>
+
+</body

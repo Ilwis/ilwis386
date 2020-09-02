@@ -1,0 +1,123 @@
+<html>
+
+<head>
+<title>How to aggregate column values</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="How to aggregate column values">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to aggregate column values</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Several functions are available to aggregate values of a <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value column</a>. Aggregation means that you get one aggregate value, for instance the average or the sum, of a whole column, or one value per group of class names. In this way, you can for instance calculate the total area of each class. Sometimes one item is considered to be more important than another item. Then, weight values may be used during the calculation to express this difference in importance.</p>
+
+<p class=defnewpar>Aggregations:</p>
+
+<ul>
+
+<li>	aggregating values of all records of column <i>a</i>, </li>
+
+<li>	aggregating values in column <i>a</i> for a group of records of the same class (key/group column <i>g</i>) ,  or</li>
+
+<li>	aggregating values in column <i>a</i>, while using weight factors in a weight column <i>w</i>.</li>
+
+<li>	aggregating values in column <i>a</i> for a group of records of the same class (key/group column <i>g</i>)  while using weight factors in a weight column <i>w</i>.</li>
+
+</ul>
+
+<p class=kopje>To perform an aggregation through the menu of a table window:</p>
+
+<ul>
+
+<li>	open a table containing the column to be aggregated,</li>
+
+<li>	open the <a href="table_window_menu_commands.htm">Columns menu</a>, choose <span class=arial>Aggregation</span>.</li>
+
+</ul>
+
+<p>The <a href="../ilwismen/aggregate_column.htm">Aggregate Column</a> dialog box appears. </p>
+
+<p class=defnewpar>In the Aggregate Column dialog box: </p>
+
+<ul>
+
+<li>	select the <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value column</a> which contains the data to be aggregated,</li>
+
+<li>	select the <a href="..//ilwis/popup/aggregation_functions_popup.htm" onClick="return popup(this, 'notes')" >aggregation function</a> that you want to use,</li>
+
+<li>	if you to group the data (e.g. according to soil classes), mark the <span class=arial>Group By</span> check box and select a <a href="..//ilwis/popup/aggregation_group_by_column_popup.htm" onClick="return popup(this, 'notes')" >'group by'</a> column,</li>
+
+<li>	if you want to use weights in a weight column (e.g. large areas are more important than smaller ones), mark the <span class=arial>Weight</span> check box and select a weight column,</li>
+
+<li>	if you want to write the aggregation results into a separate table, mark the <span class=arial>Output Table</span> check box and type a table name,</li>
+
+<li>	type an <span class=arial>Output Column Name</span> of the aggregation.</li>
+
+</ul>
+
+<p class=defnewpar>For examples of aggregations, click the aggregations functions described below. </p>
+
+<p class=kopje>To perform aggregations using the command line of a table window:</p>
+
+<ul>
+
+<li>	open a table containing the column to be aggregated,</li>
+
+<li>	on the command line of the table window, type a TabCalc expression, using one of the following aggregation functions: <a href="calc_aggavg.htm">AGGAVG</a>, <a href="calc_aggcnt.htm">AGGCNT</a>, <a href="calc_aggmin.htm">AGGMIN</a>, <a href="calc_aggmed.htm">AGGMED</a>, <a href="calc_aggmax.htm">AGGMAX</a>, <a href="calc_aggprd.htm">AGGPRD</a>, <a href="calc_aggstd.htm">AGGSTD</a>, <a href="calc_aggsum.htm">AGGSUM</a>.</li>
+
+</ul>
+
+<p class=defnewpar>Aggregation 'functions' can have 1, 2, or sometimes 3 arguments: </p>
+
+<ul>
+
+<li>	aggregation functions with one argument (<i>col</i>) return one answer for all entries of column <i>col</i>.</li>
+
+<li>	aggregation functions with two parameters (<i>col, g</i>) return one answer per group <i>g</i>.</li>
+
+<li>	aggregation function with two parameters (<i>col, , w</i>) return one answer for all entries of column <i>col</i>, and use weights in column <i>w</i> during the calculation. In fact parameter <i>g</i> is left blank.</li>
+
+<li>	aggregation functions with three parameters (<i>col, g, w</i>) return one answer per group <i>g</i>, and use weights in column <i>w</i> during the calculation.</li>
+
+</ul>
+
+<p class=tip>Notes:</p>
+
+<ul class=tipul>
+
+<li>	When no weight column is specified, then all data get the same weight value which is per default 1. </li>
+
+<li>	When you want to use a weight column but when an aggregation by group is not necessary, then only omit the group column name but leave the two commas in the syntax. For example: AGGAVG(<i>col, ,w</i>). </li>
+
+<p class=tiptext>	If you would use only one comma, ILWIS will interpret the second column specified as the group column and not as the weight column. </p>
+
+<li>	Within the brackets of an aggregation function, no expressions can be used. </li>
+
+<li>	For ILWIS 1.41 users: argument <i>g</i> can be considered as the key column.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="calc_aaf.htm#aggregate_functions">Aggregate functions</a></p>
+
+</body

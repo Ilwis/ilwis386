@@ -1,0 +1,267 @@
+<html>
+
+<head>
+<title>ILWIS objects : layouts</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Layouts, ILWIS objects, Container objects, Map view, Annotation, Text, Box, Bitmap, Picture, Metafile, Page border, Legend, Map border, North arrow, Scale bar, Scale text, Grid lines, Graticule, ILO">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Layouts&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/layout.gif" align=bottom width="12" height="14"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A layout is required to print maps with annotation. A layout is a virtual sheet of paper on which you can make a composition of one or more <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a>, specify the scale on which these map views should be printed, and on which you can insert <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >annotation</a>. </p>
+
+<p class=defnewpar>In the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >layout editor</a>, you can add to a layout: </p>
+
+<ul>
+
+<li>one or more <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a>, each of which may include one <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> and/or one or more <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a>, <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a> and/or <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a>, <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text layers</a>, <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and/or <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a>; </li>
+
+<li><a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a>; </li>
+
+<li><a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >boxes</a>; </li>
+
+<li><a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >pictures</a> and/or <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmaps</a>;</li>
+
+<li>a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a>.</li> 
+
+</ul>
+
+<p class=defnewpar>For each map view, you can add to the layout:</p>
+
+<ul>
+
+<li>a <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legend</a> for each layer in the map view; </li>
+
+<li>a <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map border</a>, including coordinates and ticks for grid lines and/or a graticule;</li>
+
+<li>a <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >North arrow</a>; </li>
+
+<li>a <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bar and scale text</a>. </li>
+
+</ul>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>To obtain a layout, first <b>save a <a href="..//ilwis/popup/map_window_popup.htm" onClick="return popup(this, 'notes')" >map window</a></b> containing one or more maps, and optionally <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text</a>, <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and/or <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticules</a> <b>as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a></b>. Then, create a layout and add one or more map views to it. </li>
+
+<li>Multiple texts, e.g. names or values of points in a point map, names or values of segments in a segment map, or names of polygons in a polygon map, can be created in a map window as an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text</a> object; this can be edited in the <a href="..//ilwis/popup/annotation_text_editor_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text editor</a> in which you can for instance easily move texts, specify fonts, font size, colors, etc. .</li>
+
+</ul>
+
+<p class=kopje>Names of layouts:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a layout:</p>
+
+<p>You can create a layout in the Main window or in a map window: </p>
+
+<ul>
+
+<li>in the Main window, choose the <span class=arial>Create Layout</span> command from the <a href="../ilwis/main_window_menu_commands.htm"><span class=arial>File</span> menu</a>; </li>
+
+<li>in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, click a map view with the right mouse button and choose the <span class=arial>Create Layout</span> command from the <a href="..//ilwis/popup/context_sensitive_menu_catalog.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>; </li>
+
+<li>in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a>, open the <span class=arial>Create</span> item, and select the <span class=arial>New Layout</span> command; </li>
+
+<li>in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>New Layout</span> command; </li>
+
+<li>in a map window, choose the <span class=arial>Create Layout</span> command from the <span class=arial><a href="../ilwis/map_window_menu_commands.htm">File menu</a></span>. </li>
+
+</ul>
+
+<p class=defnewpar>The <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >Layout editor</a> is started. You can choose a page size, add map views and additional annotation. For more information, refer to <a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a>. </p>
+
+<p class=kopje>To edit a layout using the layout editor:</p>
+
+<p>For more information on inserting or modifying map views in a layout, and on inserting or editing annotation in a layout, please refer to one Layout editor topics: </p>
+
+<ul>
+
+<li><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a>, <!--Layout editor : Layout management, --> </li>
+
+<li><a href="../ilwis/layout_editor_standard_toolbar.htm">Layout editor : standard toolbar</a>, <a href="../ilwis/layout_editor_layout_toolbar.htm">Layout editor : Layout toolbar</a>, </li>
+
+<li><a href="../ilwis/layout_editor_menu_commands.htm">Layout editor : menu commands</a>, or <a href="../ilwis/layout_editor_context_sensitive_menu.htm">Layout editor : context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=kopje>To save a layout:</p>
+
+<p>A layout can be saved by choosing the <span class=arial><a href="../ilwismen/layout_editor_save_layout.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/layout_editor_save_layout_as.htm">Save As</a></span> commands from the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a> of the Layout editor, or by clicking the <span class=arial>Save</span> button <img src="../images/save.gif" align=bottom width="22" height="22"> in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a> of the layout editor. </p>
+
+<p class=defnewpar>A changed map view in a layout will only be saved: </p>
+
+<ul>
+
+<li>when you select the changed map view and click the <span class=arial>Save</span> button in the standard toolbar, or </li>
+
+<li>when you select the changed map view, and you click the right mouse button and choose <span class=arial><a href="../ilwismen/layout_editor_save_map_view.htm">Save View</a></span> or <span class=arial><a href="../ilwismen/layout_editor_save_map_view_as.htm">Save View As</a></span> from the <a href="../ilwis/layout_editor_context_sensitive_menu.htm">context-sensitive menu</a>. </li>
+
+</ul>
+
+<p class=kopje>Technical information:</p>
+
+<p>A layout only consists of an <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.ILO). The object definition file stores the paper size, the margins, the name of the current printer, etc., and it contains references to the <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view(s)</a> that were included in the layout. The object definition files of the map views in turn contain further references to the maps and annotation text objects present in the map view. Furthermore, when a layout contains any bitmaps and/or pictures, these are stored in-line in the .ILO file. </p>
+
+<p class=defnewpar>By opening the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a layout, you can see the size of the object and the time it was last changed. You can also see which map views the layout contains. For more information, see <a href="../ilwis/basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a> or the <a href="../ilwismen/layout_properties.htm">Layout Properties</a> sheet. </p>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>Map views that use a coordinate system of type latlon, cannot be properly displayed nor printed in a layout. It is advised: </p>
+
+<ul class=tipul>
+
+<li>to drag a coordinate system of type projection to a map window before saving the map window as a map view, or </li>
+
+<li>to transform the vector maps with a coordinate system of type latlon, to a coordinate system of type projection. </li>
+
+</ul>
+
+<h2>Annotation types in a layout</h2>
+
+<p class=kopjeboldnound>Text&nbsp;&nbsp;<img src="../images/annsitxt.gif" align=bottom width="22" height="22"></p>
+
+<p class=linespacing01before>You can add <a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >texts</a> to a layout for instance to add a title or some other textual information. The text may actually consist of multiple text lines; use the <span class=arial>Enter</span> key or the <span class=arial>Shift+Enter</span> key when inserting the text. Texts can be rotated, you can choose a color, font, etc. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When you wish to obtain label-like texts for all points, segment or polygons of a map, or when you want to store multiple texts at multiple positions, it is advised to create an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text object</a> in a map window. </p>
+
+<p class=kopjeboldnound>Box&nbsp;&nbsp;&nbsp;<img src="../images/annbox.gif" align=bottom width="22" height="22"></p>
+
+<p class=linespacing01before><a href="..//ilwis/popup/ann_box_popup.htm" onClick="return popup(this, 'notes')" >Boxes</a> can be added to a layout for instance to obtain a box around a legend, a title, etc. You can choose line type and color; for line type Single, you can also choose the line width. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<p class=tiptext>Besides boxes, you can add: </p>
+
+<li>a <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map border</a> as a neatline with or without graduation tightly fitting a map view and/or as an outline at a certain distance around a map view; </li>
+
+<li>a <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a> along the margins of the complete layout. </li>
+
+</ul>
+
+<p class=kopjeboldnound>Bitmaps or Pictures from disk&nbsp;&nbsp;<img src="../images/annbp.gif" align=bottom width="22" height="22"></p>
+
+<p class=linespacing01before>A <a href="..//ilwis/popup/ann_bitmap_popup.htm" onClick="return popup(this, 'notes')" >bitmap</a> is a standard Windows graphic file format (.BMP) in 'raster' form. Bitmaps can use a 2, 16 or 256 color palette, or 24-bit colors. </p>
+
+<p>A Windows metafile or a <a href="..//ilwis/popup/ann_windows_metafile_popup.htm" onClick="return popup(this, 'notes')" >picture</a> is a standard Windows graphic file format (.WMF, .EMF) in 'vector' form. A metafile consists of a set of Windows drawing instructions. </p>
+
+<p class=defnewpar>In the layout, you can size bitmaps while the height-width ratio is maintained. Pictures can be sized in all directions, i.e. maintaining the heigh-width ratio or not. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>You can also <a href="../ilwismen/layout_editor_paste_selection.htm">paste</a> texts, bitmaps, or pictures from the clipboard into a layout. Pasted objects will appear as a new text, a new picture or a new bitmap in your layout. </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=kopjeboldnound>Page border</p>
+
+<p class=linespacing01before>A <a href="..//ilwis/popup/ann_page_border_popup.htm" onClick="return popup(this, 'notes')" >page border</a> can be added to a layout from the <a href="../ilwis/layout_editor_menu_commands.htm">Edit menu</a> of the layout editor. The page border will automatically fit the paper margins as specified during <a href="../ilwismen/layout_editor_page_setup.htm">Page Setup</a>. </p>
+
+<p class=kopjeboldnound>Legends&nbsp;&nbsp;&nbsp;<img src="../images/annleg.gif" align=bottom width="22" height="22"></p>
+
+<p class=linespacing01before>For each layer in a selected <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a> in your layout, you can add a <a href="..//ilwis/popup/ann_legend_popup.htm" onClick="return popup(this, 'notes')" >legend</a>. Class names and values are obtained from the <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of the layers, colors are derived from the <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> of the layer. For more information, see <a href="../ilwismen/layout_editor_legend_select_map_layer.htm">Insert a legend</a>. </p>
+
+<p class=kopjeboldnound>Map border&nbsp;&nbsp;<img src="../images/annborder.gif" align=bottom width="22" height="22"></p>
+
+<p class=linespacing01before>When a map view is selected in a layout, you can add a <a href="..//ilwis/popup/ann_map_border_popup.htm" onClick="return popup(this, 'notes')" >map border</a>. This includes the following possibilities: </p>
+
+<ul>
+
+<li>a neatline around the map view as a thin single line or as an alternating black and white pattern; </li>
+
+<li>ticks for <a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >grid lines</a> and optionally coordinates for the grid line ticks; </li>
+
+<li>ticks for a <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticule</a> and optionally coordinates for the graticule ticks; </li>
+
+<li>coordinates for the corners of the map(s) in the map view; </li>
+
+<li>an extra outline at a certain distance around the map view. </li>
+
+</ul>
+
+<p class=kopjeboldnound>North arrow&nbsp;&nbsp;&nbsp;<img src="../images/annnor.gif" align=bottom width="22" height="22"></p>
+
+<p class=linespacing01before>When a map view is selected, you can add a <a href="..//ilwis/popup/ann_north_arrow_popup.htm" onClick="return popup(this, 'notes')" >North arrow</a> to a layout. The North is determined from the <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> of the maps in the selected map view. The North is defined as the positive Y-direction. You can choose between different types of North arrows and you can specify the type of text that should appear. </p>
+
+<p class=kopjeboldnound>Scale bar and scale information&nbsp;&nbsp;&nbsp;<img src="../images/annsca.gif" align=bottom width="22" height="22">&nbsp;&nbsp;<img src="../images/annscatxt.gif" align=bottom width="22" height="22"></p>
+
+<p class=linespacing01before>When a map view is selected, you can add a <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale bar</a> and <a href="..//ilwis/popup/ann_scale_bar_popup.htm" onClick="return popup(this, 'notes')" >scale information</a> to a layout. Both are determined from the specified scale on which the selected map view should be printed. </p>
+
+<h3>Other possibilities</h3>
+
+<p class=kopje>Extra inset-maps in a layout:</p>
+
+<p>As you can insert multiple map views into a layout <i>on different scales</i>, you can add one map view to a layout depicting the map(s) of study area and another map view depicting for instance the location of your study area in the country. You then add a scale bar or scale text, etc. for the second map view as usual. </p>
+
+<p class=kopje>Pasting text, pictures and bitmaps from clipboard:</p>
+
+<p>Any text, picture or bitmap that has been copied into the clipboard from any Windows application, can be pasted as text, picture or bitmap into a layout. The pasted object will not have any coordinates anymore. </p>
+
+<p class=defnewpar>To copy an ILWIS table to clipboard, you can for instance use the <span class=arial>Alt+PrintScrn</span> keys in a table window, then use <a href="../ilwismen/layout_editor_paste_selection.htm">Edit, Paste</a> in the layout editor. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>You can use Windows clipboard viewer to inspect the current contents of the clipboard. </p>
+
+<p class=kopje>Grid lines/Graticule:</p>
+
+<p><a href="..//ilwis/popup/ann_grid_lines_popup.htm" onClick="return popup(this, 'notes')" >Grid lines</a> (lines parallel to the X- and Y-axes of the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a>) and a <a href="..//ilwis/popup/ann_graticule_popup.htm" onClick="return popup(this, 'notes')" >graticule</a> (parallels and meridians of the coordinate system) can be be added to a map view both when in a map window and when in the layout editor. Coordinate ticks, X- and Y-coordinates etc. have to be added via the <span class=arial>Map Border</span> option (see above). </p>
+
+<p class=kopje>Annotation Text object:</p>
+
+<p>By creating an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text</a> object or layer in a map window and using an existing map as the base map, you can easily obtain label-like texts for all points, segment or polygons of the selected map. You can edit the Annotation Text object for instance in the <a href="..//ilwis/popup/annotation_text_editor_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text</a> editor: you can reposition selected texts, specify fonts, font sizes, etc. Texts in an Annotation Text object can only consist of one line. The annotation text layer can be saved as part of a map view and the map view can be added to a layout. For more information, see <a href="ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="layout_editor_standard_toolbar.htm">Layout editor : standard toolbar</a></p>
+
+<p class=seealsolinks><a href="layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+<p class=seealsolinks><a href="layout_editor_menu_commands.htm">Layout editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_map_views.htm">ILWIS objects : map views</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a></p>
+
+<p class=seealsolinks><a href="annotation_text_editor_functionality.htm">Annotation Text editor : functionality</a></p>
+
+</body

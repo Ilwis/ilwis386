@@ -1,0 +1,103 @@
+<html>
+
+<head>
+<title>filter majority filter zero sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Zero-Majority filter      (MAJZERO)</p>
+
+<p>The MAJZERO filter is a standard <a href="../popup/filter_majority_popup.htm">majority filter</a> which works in a 3x3 enviroment. Of each 9 pixels considered, the predominant value or class name of the other 8 pixels is assigned to the center pixel in the output map, <i>only if </i>the center pixel in the input map has value zero.</p>
+
+<p>If the central pixel in the input map does not have value 0, the value or class name remains the same in the output map.</p>
+
+<p class=defnewpar>When 9 pixel values encountered in the input map are:</p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;9</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;3</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;9</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>11</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;0</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;7</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<p class=filtcour></p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;7</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour> &nbsp;7</p>
+
+</td>
+<td valign="top" width=30>
+<p class=filtcour>13</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p>The predominant (most frequently occurring) value is <b>7</b>. The value for the output pixel is thus 7. If you use the MAJZERO filter on a domain Class map, the predominant class name is selected.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_types_majority_filters.htm" onClick="return popup(this, 'notes')" >Filter types : majority filters</a></p>
+
+<p class=seealsolinks><a href="..//ilwisapp/filters_user_defined_majority_filters.htm" onClick="return popup(this, 'notes')" >Filters : user-defined majority filters</a></p>
+
+</body

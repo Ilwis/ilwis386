@@ -1,0 +1,141 @@
+<html>
+
+<head>
+<title>Trend surface : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Trend surface, MapTrendSurface">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Trend surface</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/trend_surface_popup.htm" onClick="return popup(this, 'notes')" >Trend surface</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapTrendSurface</span>(InputPointMap, Georeference, <i>SurfaceType</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapTrendSurface</span>(PointMap.Column, Georeference, <i>SurfaceType</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapTrendSurface</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Trend surface operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPointMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>PointMap.Column</p>
+
+</td>
+<td valign="top">
+<p>is the name of an input point map with a class or ID domain which has a <i>linked</i> attribute table, and the name of a value column in this attribute table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Georeference</p>
+
+</td>
+<td valign="top">
+<p>is the name of an existing georeference that should be used for the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>SurfaceType</i></p>
+
+</td>
+<td valign="top">
+<p>is the parameter which specifies the function with which a <a href="..//ilwisapp/sec/point_interpolation_surfaces_sec.htm" onClick="return popup(this, 'notes')" >surface</a> should be calculated; use one of the following: </p>
+
+<p class=courier>Plane | Linear2 | Parabolic2 | 2 | 3 | 4 | 5 | 6</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="trend_surface_functionality.htm">Trend surface : functionality</a></p>
+
+</body

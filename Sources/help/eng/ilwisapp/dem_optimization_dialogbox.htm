@@ -1,0 +1,176 @@
+<html>
+
+<head>
+<title>DEM optimization : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="DEM optimization">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>DEM optimization</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The DEM optimization operation enables you to 'burn' existing drainage features into a Digital Elevation Model (DEM), so that a subsequent <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation on the output DEM will better follow the existing drainage pattern. </p>
+
+<p class=defnewpar>The DEM optimization operation offers the following possibilities: </p>
+
+<ul>
+
+<li>Gradual drop of (drainage) segments in the output DEM, over a certain distance to the (drainage) segments. </li>
+
+<li>Gradual raise of (watershed-divide) segments on the output DEM, over a certain distance to the (watershed-divide) segments. </li>
+
+<li>Additional sharp drop or raise of segments on top of the gradual drop or raise. </li>
+
+<li>Simple drop or raise of polygons in the output DEM. </li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input DEM:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a>. Open the list box and select the desired input map, or directly drag a raster map from a Catalog into this box. </p>
+
+<p class=diabox>The input map is supposed to be a Digital Elevation Model (DEM). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input drainage map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment map</a> which contains: </p>
+
+        <ul>
+
+        <li>drainage segments which should be dropped in the output DEM, or </li>
+
+        <li>watershed-divide segments that should be raised in the output DEM. </li>        
+
+        </ul>
+
+        <p class=diabox>You can also select an input <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon map</a> when polygons should be dropped or raised in the output DEM. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If a segment map was selected: optionally, select the <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >attribute table</a> belonging to this segment map in case you wish to use different buffer distances, smooth drop values, and/or sharp drop values for individual segment classes or IDs. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Buffer distance (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If an attribute table was selected for a segment drainage map, select a value column in the table that contains buffer values for the segment classes/IDs. 
+
+        Else, type a buffer distance value that will be applied to all segments. </p>
+
+<p class=diabox>The Buffer distance(s) indicate the 'area' at either side of the segments that will be affected by the gradual drop or raise. Buffer distance(s) should be larger than zero. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Smooth drop (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If an attribute table was selected for a segment drainage map, select a value column in the table that contains smooth drop values for the segment classes/IDs. 
+
+        Else, type a smooth drop value that will be applied to all segments. </p>
+
+        <ul>
+
+        <li>Smooth drop value(s) indicate the height with which segments should be dropped or raised in the output DEM. The drop or raise value(s) will be reached gradually on either side of the segments, using the buffer distance(s). </li>
+
+        <li>Smooth drop value(s) &gt; 0 represent a drop; smooth drop value(s) &lt; 0 represent a raise; smooth drop value(s) of 0 represent no drop and no raise. </li>
+
+        </ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Sharp drop (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If an attribute table was selected for a segment drainage map, select a value column in the table that contains additional sharp drop values for the segment classes/IDs. 
+
+        Else, type a sharp drop value that will be applied to all segments or to all polygons. </p>
+
+        <ul>
+
+        <li>Sharp drop value(s) indicate the height with which segments should additionally be dropped or be raised in the output DEM on top of the Smooth drop value(s). </li>
+
+        <li>Sharp drop value(s) &gt; 0 represent an additional drop; sharp drop value(s) &lt; 0 represent an additional raise; sharp drop value(s) of 0 represent no additional drop and no additional raise. </li>
+
+        </ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map (output DEM) that will contain the 'corrected' height values. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="dem_optimization_functionality.htm">DEM optimization : functionality</a></p>
+
+</body

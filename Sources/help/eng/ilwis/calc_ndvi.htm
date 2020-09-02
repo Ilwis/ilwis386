@@ -1,0 +1,222 @@
+<html>
+
+<head>
+<title>NDVI</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="NDVI, Index functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>NDVI( ) function</h1>
+
+<p class=defnewpar>Returns Normalized Difference Vegetation Index (NDVI) values, i.e. (b-a)/(b+a). NDVI values are a measure for the presence and condition of green vegetation.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>NDVI</span>(<i>Value a</i>, <i>Value b</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>Value a</i></td>
+	<td valign="top">is the satellite band containing visible or red reflectance values</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">an <a href="..//ilwis/sec/domain_type_image_sec.htm" onClick="return popup(this, 'notes')" >Image</a> domain</td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>Value b</i></td>
+	<td valign="top">is the satellite band containing near-infrared reflectance values</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">an <a href="..//ilwis/sec/domain_type_image_sec.htm" onClick="return popup(this, 'notes')" >Image</a> domain</td>
+</tr>
+
+</table>
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>NDVI</span> returns:</td>
+	<td valign="top">a value</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_min1to1_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Min1to1</span></a></td>
+</tr>
+<tr>
+	<td width="100" valign="top">Value range:</td>
+	<td valign="top">[-1,1]</td>
+</tr>
+
+</table>
+<p class=tip>Notes:</p>
+<ul class=tipul>
+	<li>Vegetated areas will generally yield high values because of their relatively high near-infrared reflectance and low visible reflectance.</li>
+	<li>In contrast, water, clouds, and snow have larger visible reflectance than near-infrared reflectance. Thus, these features yield negative index values.</li>
+	<li>Rock and bare soil areas have similar reflectances in the two bands and result in vegetation indices near zero.</li>
+	<li>When one input value is undefined, or when both input values are undefined, the output value will also be undefined.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="100"><p class=calc00>? NDVI(46,78)</p></td>
+	<td><p>returns 0.258</p></td>
+</tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>OutMap = NDVI(TMBand3,TMBand4)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>TMBand3</p></td>
+	<td><p class=courier>TMBand4</p></td>
+	<td><p class=courier>OutMap</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>18</td>
+    <td class=calcpict>25</td>
+    <td class=calcpict>28</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>53</td>
+    <td class=calcpict>44</td>
+  </tr>
+  <tr>
+    <td class=calcpict>80</td>
+    <td class=calcpict>92</td>
+    <td class=calcpict>73</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>28</td>
+    <td class=calcpict>30</td>
+    <td class=calcpict>34</td>
+  </tr>
+  <tr>
+    <td class=calcpict>39</td>
+    <td class=calcpict>44</td>
+    <td class=calcpict>55</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>71</td>
+    <td class=calcpict>175</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>0.217</td>
+    <td class=calcpict>0.091</td>
+    <td class=calcpict>0.097</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>-0.092</td>
+    <td class=calcpict>0.111</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>-0.129</td>
+    <td class=calcpict>0.411</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = NDVI(InColA,IncolB)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolhr>InColA</p></td>
+	<td valign="top"><p class=tcolhr>InColB</p></td>
+	<td valign="top"><p class=tcolhr>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>18</p></td>
+	<td valign="top"><p class=t1r>28</p></td>
+	<td valign="top"><p class=t1r>0.217</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>25</p></td>
+	<td valign="top"><p class=t1r>30</p></td>
+	<td valign="top"><p class=t1r>0.091</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>28</p></td>
+	<td valign="top"><p class=t1r>34</p></td>
+	<td valign="top"><p class=t1r>0.097</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>39</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>53</p></td>
+	<td valign="top"><p class=t1r>44</p></td>
+	<td valign="top"><p class=t1r>-0.092</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>44</p></td>
+	<td valign="top"><p class=t1r>55</p></td>
+	<td valign="top"><p class=t1r>0.111</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>80</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+	<td valign="top"><p class=t1r>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>92</p></td>
+	<td valign="top"><p class=t1r>71</p></td>
+	<td valign="top"><p class=t1r>-0.129</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1r>73</p></td>
+	<td valign="top"><p class=t1r>75</p></td>
+	<td valign="top"><p class=t1r>0.411</p></td>
+</tr>
+</table>
+
+</body

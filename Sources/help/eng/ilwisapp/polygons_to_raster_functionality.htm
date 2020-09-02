@@ -1,0 +1,84 @@
+<html>
+
+<head>
+<title>Polygons to raster : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Polygons to raster">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Polygons to raster</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Polygons to raster operation rasterizes a polygon map. The output raster map always uses the same domain as the input polygon map. This means that the class names, IDs, or values used in the polygon map are also used in the raster map. </p>
+
+<p class=defnewpar>For the output raster map, an existing <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> has to be selected or a new one can be created. The georeference determines<b> </b>the number of lines and columns of the output map and the pixel size of the map, see also the examples in the Additional info below. It is strongly advised that vector maps of the same area are rasterized on the same georeference: any map calculation or spatial operation performed later on a combination of raster maps will only make sense if the pixels in these maps refer to the same area on the ground. </p>
+
+<p class=defnewpar>When a polygon map has an attribute table or when the domain of the polygon map has an attribute table, the Polygons to raster operation automatically links this attribute table to the output raster map.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special input map requirements. However, at the moment it is not yet possible to rasterize a polygon map with a value domain into a raster map which is stored using 8 bytes per pixel. In that case it is advised to set the <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> of the output raster map in such a way that the raster map can be stored with 1, 2, or 4 bytes per pixel.</p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output raster map uses the same domain as the input polygon map.</p>
+
+<p>The georeference for the output map has to be selected or created; you can usually select an existing georeference corners. The georeference for the raster map must use the same <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> as the polygon map. Georeference <span class=courier>None</span> cannot be selected for the output map.</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>To obtain frequency information on polygons, you can calculate the histogram of a polygon map with the <a href="..//ilwisapp/popup/histogram_operation_popup.htm" onClick="return popup(this, 'notes')" >Histogram</a> operation.</p>
+
+<p class=kopje>Additional information:</p>
+
+<p>The georeference you use for the output raster map determines the pixel size of the raster map and thus whether shapes of polygons are well retained. Below you find three examples of rasterized polygon maps, each one with a different pixel size.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=189>
+<p><img src="../images/polras1.gif" align=bottom width="151" height="151"></p>
+
+</td>
+<td valign="top" width=189>
+<p><img src="../images/polras2.gif" align=bottom width="151" height="151"></p>
+
+</td>
+<td valign="top">
+<p><img src="../images/polras3.gif" align=bottom width="151" height="151"></p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="polygons_to_raster_dialogbox.htm">Polygons to raster : dialog box</a></p>
+
+<p class=seealsolinks><a href="polygons_to_raster_commandline.htm">Polygons to raster : command line</a></p>
+
+<p class=seealsolinks><a href="polygons_to_raster_algorithm.htm">Polygons to raster : algorithm</a></p>
+
+</body

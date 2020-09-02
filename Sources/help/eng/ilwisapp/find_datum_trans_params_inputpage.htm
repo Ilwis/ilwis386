@@ -1,0 +1,193 @@
+<html>
+
+<head>
+<title>Find datum transformation parameters - Input page</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Datum transformation parameters, Find datum parameters, Vector operations, Coordinate operations, Coordinate system, Datum, Geodetic datum, User-defined datums, Geo-centric datum shifts, Molodensky datum transformation, Bursa Wolf datum transformation, Molodensky Badekas datum transformation, WGS 84">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table bgcolor="#006699" cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Find datum transformation parameters</h1></td>
+<td class=menucommand><a class=menlink href="../ilwisapp/vector_operations.htm">Vector operations</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Select input point maps and optional height columns</h1></td>
+<td class=menucommand><a class=menlink2 href="find_datum_trans_params_methodpage.htm">Next</a>&nbsp;&gt;</td>
+</tr>
+<tr><td bgcolor="FFFFFF" colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=kopje>Introduction:</p>
+
+<p>With this Datum transformation parameters wizard, you can find geodetic datum transformation parameters between the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate systems</a> of two <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a>, where: </p>
+
+	<ul>
+	<li>the coordinate system of the first point map is supposed to use a local (unknown) geodetic datum, </li>
+	<li>the coordinate system of the second point map is supposed to use a global geodetic datum, preferably WGS 84. </li>
+	</ul>
+
+<p>Optionally, you can specify height columns containing the height values of the points in the input point maps. </p>
+
+<p class=defnewpar>You can choose to use one of the following calculation methods:</p>
+
+	<ul>
+	<li>Geo-centric datum shift</li>
+	<li>Molodensky</li>
+	<li>Bursa Wolf</li>
+	<li>Molodensky Badekas</li>
+	</ul>
+
+<p class=defnewpar>Optionally, you can save the calculated transformation parameters in the coordinate system of the first point map. </p>
+	
+	<ul>
+	<li>The datum of the first coordinate system will then be changed. </li>
+	<li>The first coordinate system will then be compatible with the WGS 84 datum, and thus with any other known datum. </li>
+	<li>Automatic coordinate transformations during display etc. are then possible for any map that uses the first coordinate system. </li>
+	</ul>
+
+<p class=kopje>Purpose of this page:</p>
+
+<p>On this first page of the wizard, you should select two input point maps, each containing a set of common control points. For each point map, you can optionally select a column containing the height values for that set of control points. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td colspan="2"><p class=diabox>Point map with local datum:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120><p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top"><p class=diaboxnospacetop>Select the first input <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point map</a>. Open the list box and select the desired point map. </p>
+
+	<ul class=diaul>
+
+	<li>The point map must use an <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a>. </li>
+
+	<li>The point map's <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> must be: </li>
+
+		<ul class=diaul>
+
+		<li>of type <i>projection</i> (coords in meters), and the coordinate system must include an ellipsoid, and may optionally include a datum; or </li>
+
+		<li>of type <i>latlon</i> (coords in degrees, minutes, seconds), and the coordinate system must include an ellipsoid, and may optionally include a datum. </li>
+
+		<p class=tiptextls01be><span class=tip>Tip:</span> For more information, refer to <a href="../ilwismen/create_a_coordinate_system.htm">Create a coordinate system</a>, <a href="../ilwismen/edit_coordinate_system_projection.htm">Edit a coordinate system of type projection</a>, or <a href="../ilwismen/edit_coordinate_system_latlon.htm">Edit a coordinate system of type latlon</a>. </p>
+
+		</ul>
+
+	<li class=ls01be>The first coordinate system is supposed to use a <i>local datum</i>. </li>
+
+	<li class=ls01be>The aim of the wizard is to enable a transformation between the coordinate system with this local datum (1st point map) to the global WGS 84 datum (2nd point map), and thus enable transformations to any other datum. </li>
+
+	</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120><p class=diabox>Use heights (m):</p>
+
+</td>
+<td valign="top"><p class=diabox>Select this check box to include the height values of the points in the first point map. </p>
+
+	<ul class=diaul>
+
+	<li>From an attribute table of the first point map, select a column that contains height values for the points. </li>
+
+	<li>The height values are supposed to be specified in meters above the ellipsoid. For instance, for the Dutch RD datum, height values are relative to NAP, and corrected for geoid-ellipsoid separation. </li>
+
+	</ul>
+
+	<p class=diabox>Clear this check box when you do not wish to include height values for the first set of control points. </p>
+
+</td>
+</tr>
+<tr>
+<td colspan="2"><p class=diaboxnospace>Point map with global datum:</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=120><p class=diaboxnospacetop></p>
+
+</td>
+<td valign="top"><p class=diaboxnospacetop>Select the second input <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point map</a>. </p>
+
+	<ul class=diaul>
+
+	<li>This second point map must use the <i>same</i> <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a> as the first point map. <br /> The control points are <b>common</b> points: 'Point 1' in the first map must refer to 'Point 1' in the second point map, etc.; the wizard will compare the locations of the points in the two point maps to each other. </li>
+
+	<li>The <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> of the second point map is supposed to use a globally defined datum. </li>
+
+	<li>When you wish to save calculated transformation parameters later on, the second point map must use a coordinate system that uses the <b>WGS 84 datum</b>. </li>
+
+	</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120><p class=diabox>Use heights (m):</p>
+
+</td>
+<td valign="top"><p class=diabox>Select this check box to include the height values of the points in the second point map. </p>
+
+	<ul class=diaul>
+
+	<li>From an attribute table of the second point map, select a column that contains height values for the points. </li>
+
+	<li>The height values are supposed to be specified in meters above the ellipsoid, as used by the coordinate system of the second point map. </li>
+
+	</ul>
+
+	<p class=diabox>Clear this check box when you do not wish to include height values for the second set of control points. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For your information, the page lists for each point map: </p>
+
+	<ul>
+
+	<li>the number of points in the map, </li>
+
+	<li>the coordinate system of the map, and </li>
+
+	<li>the coordinate system's ellipsoid, </li> 
+
+	<li>the coordinate system's datum. </li>
+
+	</ul>
+
+<p class=defnewpar>When finished selecting the two sets of control points (the two point maps and their optional height columns), you can click the <span class=arial>Next</span> button and continue on the <b><a href="find_datum_trans_params_methodpage.htm">Method</a></b> page. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="find_datum_trans_params_methodpage.htm">Find datum transformation parameters - Method page</a></p>
+
+<p class=seealsolinks><a href="find_datum_trans_params_outputpage.htm">Find datum transformation parameters - Output page</a></p>
+
+</body

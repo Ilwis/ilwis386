@@ -1,0 +1,89 @@
+<html>
+
+<head>
+<title>ILWIS objects : sample sets</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sample sets, ILWIS objects, Special objects, SMS">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>ILWIS objects</h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr>
+<td><h1 class=secondline>Sample sets&nbsp;&nbsp;&nbsp;&nbsp;<img src="../images/sample.gif" align=bottom width="16" height="12"></h1></td>
+</tr>
+<tr><td class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>A sample set stores training pixels for supervised classification. Prior to an image <a href="../ilwisapp/classify.htm">classification</a>, sample pixels or training pixels have to be selected in a sample set. A map list, containing the set of images used for classification and a background map on which you can locate training pixels and a class domain have to be specified. Then, during <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a>, <b>class names</b> need to be assigned to groups of pixels that are supposed to represent a known feature on the ground and that have similar spectral values in the maps in the map list.  A sample set is used as input in the <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >Classify</a> operation.</p>
+
+<p class=defnewpar>A sample set consists of:</p>
+
+<ul>
+
+<li>	a reference to a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, that is the set of images you want to classify in a later stage. The spectral values of the images in the map list, at  the position of the training pixels provide the basis on which decisions are made in the classification. During sampling, these values can be inspected in the sample statistics of a certain class of training pixels, and  can be visualized in feature spaces. Usually, you will use a set of satellite images in the map list, but you can also work with the <a href="..//ilwisapp/popup/principle_components_popup.htm" onClick="return popup(this, 'notes')" >Principal Components</a>.</li>
+
+<li>	a reference to a class domain, that is the collection of class names that you want to assign to your training pixels and that are the classes that you want to obtain from the classification. The representation of this domain determines in which colors the training pixels are displayed during sampling. You can also add classes to the domain during sampling, or delete or merge classes;</li>
+
+<li>	a reference to a raster map which is automatically created and obtains the same name as the sample set. This so-called sample map contains the locations of the training pixels and the class names assigned to them.</li>
+
+</ul>
+
+<p class=defnewpar>When your graphics board is configured to use 256 colors, you can locate your training pixels on a background map, for instance a <a href="..//ilwisapp/popup/color_composite_popup.htm" onClick="return popup(this, 'notes')" >color composite</a>. In case your graphics board is configured to use more than 256 colors, you will use an <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >interactive color composite</a>; then, a background map is not used.</p>
+
+<p class=kopje>Names of a sample set:</p>
+
+<p>In ILWIS 3, <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object names</a> comply with Windows long file names. Also Universal Naming Convention (UNC) paths are supported. For more information, see <a href="../ilwis/how_to_use_long_object_names.htm">How to use long object names</a>.</p>
+
+<p class=kopje>To create a sample set:</p>
+
+<p>A sample set can be created by for instance double-clicking the <span class=arial>Sample Map</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or select <span class=arial>Sample</span> from the <a href="main_window_menu_commands.htm">Operations menu</a>, <span class=arial>Image Processing</span>. For other methods, see <a href="../ilwis/how_to_create_sample_sets.htm">How to create a sample set</a>. The <a href="../ilwis/sample_set_editor_functionality1.htm">sample set editor</a> is opened. </p>
+
+<p class=kopje>Editing a sample set:</p>
+
+<p>The easiest way to edit an existing sample set is by double-clicking it in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. See also, How to edit a sample set. For other methods, see <a href="../ilwis/how_to_edit_sample_sets.htm">How to edit a sample set</a>. The <a href="../ilwis/sample_set_editor_functionality1.htm">sample set editor</a> is opened. </p>
+
+<p class=kopje>Technical information:</p>
+
+<p>A sample set consists of an ASCII <a href="..//ilwis/popup/object_definition_files_popup.htm" onClick="return popup(this, 'notes')" >object definition file</a> (.SMS). This file contains further references to a domain (containing the class names of sampled pixels), a map list (containing the satellite bands), an optional background map, and to a raster map that is automatically created, with the same name as the sample set, and which contains the locations of training pixels and class names assigned to them (this map is called the sample map).</p>
+
+<p class=defnewpar>By viewing the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of a sample set, you can see the domain, the name of the sample map, and the name of the map list that are used by the sample set; if your screen is configured for 256 colors only, also the background map used by the sample set is listed. These are properties of the sample set.</p>
+
+<p class=kopje>Limitations:</p>
+
+<p>The maximum number of raster maps that can be included in a map list is 100 million. In practice however limitations will occur by available memory and disk space. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/sample_set_editor_functionality1.htm">Sample set editor</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_sample_sets.htm">How to create a sample set</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_sample_sets.htm">How to edit a sample set</a></p>
+
+<p class=seealsolinks><a href="how_to_create_color_composites.htm">How to create a color composite</a></p>
+
+</body

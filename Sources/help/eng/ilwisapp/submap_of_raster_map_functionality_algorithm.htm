@@ -1,0 +1,109 @@
+<html>
+
+<head>
+<title>Sub-map of raster map : functionality/algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sub-map of raster map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Sub-map of raster map</h1>
+
+<h1 class=secondline>Functionality / Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Sub-map of raster map operation copies a rectangular part of a raster map into a new raster map. The user has to specify row and column numbers or XY-coordinates of the input map to indicate the part of the input map that should be copied into the new raster map.</p>
+
+<p class=defnewpar>This operation allows you to cut out a part of your raster map.</p>
+
+<p class=defnewpar>You can choose to specify the part of the input map that should be copied as:</p>
+
+<ul>
+
+<li> <i>start</i> line and column (upper left) and the <i>number of</i> lines and columns, </li>
+
+<li> <i>start</i> line and column (upper left) and <i>end</i> line and column (lower right), </li>
+
+<li> <i>start</i> XY-coordinate and <i>end</i> XY-coordinate (opposite start XY-coordinate). </li>
+
+</ul>
+
+<p>The last option is only available when the input map is North-oriented. </p>
+
+
+<p class=tip>Tips: </p>
+
+<p class=tiptext>The Sub-map of raster map operation permanently reduces the area covered by a raster map.</p>
+
+<ul class=tipul>
+
+<li>	To temporarily reduce the area of a raster map, you can <a href="..//ilwis/popup/zoom_in_popup.htm" onClick="return popup(this, 'notes')" >zoom in</a> on the raster map in a map window. The result can be stored as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>. </li>
+
+<li>	To temporarily enlarge the area of a raster map, i.e. to create extra space around a raster map in a map window for annotation purposes, you can use the <span class=arial>Extend Window</span> command on the <a href="../ilwis/map_window_menu_commands.htm">Options menu</a> in the map window, or you can zoom in on the raster map and drag a rectangle partly outside the map window. Also this result can be stored as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>.</li>
+
+</ul>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>No special input map requirements. </p>
+<p>The option to specify coordinates is only available when the input map is North-oriented. </p>
+
+<p class=defnewpar>The operation can also be applied on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output map uses the same domain as the input map.</p>
+
+<p class=defnewpar>The operation always creates a new georeference for the output map. When using the dialog box, the new georeference will always obtain the same name as the specified output map name. On the command line, you can specify a name for the output georeference yourself. </p>
+
+<ul>
+
+<li> When the <span class=arial>Lines and Columns</span> option is used, a georeference of type SubMap will be created for the output map. </li>
+
+<li> When the <span class=arial>Corners</span> option is used, a georeference of type SubMapCorners will be created for the output map. </li>
+
+<li> When the <span class=arial>Coordinates</span> option is used, a georeference of type SubMapCoords will be created for the output map. </li> 
+
+</ul>
+
+<p> For more information, see <a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a>. </p>
+
+<p class=defnewpar>When the operation is performed on an input map list, you will obtain an output map list. When the output map list is opened, the output raster maps will be (defined and) calculated. </p>
+
+<ul>
+
+<li>The output raster maps will obtain the same name as the output map list followed by _1, _2, _3, etc. </li>
+
+<li>All output raster maps will use the georeference created for the first raster map in the map list, e.g. <i>Out</i>_1. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="submap_of_raster_map_dialogbox.htm">Sub-map of raster map : dialog box</a></p>
+
+<p class=seealsolinks><a href="submap_of_raster_map_commandline.htm">Sub-map of raster map : command line (1)</a></p>
+
+<p class=seealsolinks><a href="submap_of_raster_map_commandline2.htm">Sub-map of raster map : command line (2)</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_georeferences.htm">ILWIS objects : georeferences</a></p>
+
+</body

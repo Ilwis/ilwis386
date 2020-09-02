@@ -1,0 +1,149 @@
+<html>
+
+<head>
+<title>Aggregate column</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Aggregate column values, Columns, Column operations, Table window, Average, Minimum, Maximum, SUM, Median, Predominant, Standard deviation, Count">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Table window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/table_window_menu_commands.htm">Columns menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Aggregate Column</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Aggregate the values of a column in the current table. The following <a href="..//ilwis/popup/aggregation_functions_popup.htm" onClick="return popup(this, 'notes')" >aggregation functions</a> are available: Average, Count, Maximum, Median, Minimum, Predominant, Standard deviation, Sum.</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<ol>
+
+<li>	All aggregation functions can be used to aggregate the values of a <i>whole column</i>: you obtain one output value. For all records, the same aggregation value will appear.</li>
+
+<li>	All aggregation functions can be used to aggregate values in a column <i>per group</i>: use a <a href="..//ilwis/popup/aggregation_group_by_column_popup.htm" onClick="return popup(this, 'notes')" >'group by'</a> column. Then, for all records that have the same class names or IDs in the selected 'group by' column, the same aggregation value will appear. </li>
+
+<li>	The Average, Median, Predominant and Standard Deviation functions can be used to calculate <i>weighted</i> averages, etc.: use a weight column. </li>
+
+<ul>
+
+<li>	If you do not select a 'group by' column, you will obtain one output value. </li>
+
+<li>	If you also select a 'group by' column, you will obtain one aggregation value per group.</li>
+
+</ul>
+
+</ol>
+
+<p class=defnewpar>You can choose to create a new dependent column in the current table or to create a new dependent column in another table.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a column that contains the data that you want to aggregate. This will usually be a column with a value domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Function:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an <a href="..//ilwis/popup/aggregation_functions_popup.htm" onClick="return popup(this, 'notes')" >aggregation function</a>: Average, Count, Maximum, Median, Minimum, Predominant, Standard Deviation, or Sum.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox><a href="..//ilwis/popup/aggregation_group_by_column_popup.htm" onClick="return popup(this, 'notes')" >Group by</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you want to obtain aggregation values per group. Subsequently select the 'group by' column. This is usually a column with a class or ID domain; you can also select a column with a Bool domain. </p>
+
+<p class=diabox>Clear this check box if you want to aggregate the values of a whole column. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Weight:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For the functions Average, Median, Predominant and Standard Deviation, you can select this check box if you want to use a weight column to calculate weighted averages, etc. A weight column is a column with a value domain.</p>
+
+<p class=diabox>Clear this check box if you do not want to use a weight column.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Output table:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>When you use a 'group by' column, you can create a new dependent column in another table, that table needs to have the same domain as the 'group by' column.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Output column:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_column_name_popup.htm" onClick="return popup(this, 'notes')" >new column name</a>. A <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent column</a> is created. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <a href="column_properties.htm">Column Properties</a> dialog box will appear.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>All aggregation functions expect a value column on which the aggregation should be performed; however, the functions Count, Median and Predominant also work on a class or ID input column. </li>
+
+<li>You can also aggregate values by typing an expression on the TabCalc command line. For more information, see <a href="../ilwis/calc_aaf.htm#aggregate_functions">Aggregate functions</a>.</li>
+
+</ul>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/calc_aaf.htm#aggregate_functions">TabCalc : aggregate functions</a></p>
+
+</body

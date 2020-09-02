@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>glue segment maps popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Glue segment maps</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/glue_segment_maps.htm" onClick="return popup(this, 'notes')" >Glue segment maps</a> operation glues or merges two or more segment maps into one output map. By default, the output map then comprises the total area of all input maps. The domains of the input maps are merged when needed.</p>
+
+<p class=linespacing03after>For each input map, the user can specify a <a href="../../ilwis/sec/mask_sec.htm">mask</a> to select and retrieve the class names, IDs or values of the segments that are to be copied into the output map. The user can also specify a clip boundary, to copy only those segments to the output map which fall within the specified <a href="../../ilwis/popup/coordinate_boundary_popup.htm">coordinate boundaries</a> of the output map.</p>
+
+</body

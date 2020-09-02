@@ -1,0 +1,479 @@
+<html>
+
+<head>
+<title>Glue raster maps : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Glue raster maps, Merge raster maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Glue raster maps</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Glue raster maps operation glues or merges two or more georeferenced input raster maps into one output raster map. The output map then comprises the total area of all input maps. The domains of the input maps are merged when needed. With the Glue raster maps operation, you can thus merge two or more adjacent or partly overlapping raster maps (i.e. make a mosaic) or glue smaller raster maps onto a larger one. </p>
+
+<p class=defnewpar>When the input raster maps have attribute tables, also the tables will be automatically merged; for more information see the <a href="..//ilwisapp/popup/glue_tables_popup.htm" onClick="return popup(this, 'notes')" >Glue tables</a> operation. </p>
+
+<p class=defnewpar><b>Input maps</b>: In the dialog box, you can select 2, 3, or 4 input raster maps. On the command line, you can specify as many input maps as you like. The input maps may be purely adjacent to one another, partly overlapping, or totally overlapping. When the input maps are (partly) overlapping, the input maps form a pile of maps on top of each other. </p>
+
+<p class=defnewpar>Map on top: When the pile of input maps are (partly) overlapping the same area, you have to decide which map should be considered as the map on top. When for a pixel a value is found in the map on top, that value will appear in the output map. When the undefined value is found in the map on top, the operation will look in the map 'below' it. Undefined pixels thus act as being transparent and provide 'openings' to enable the operation to find a value in the map below the current one. </p>
+
+<p class=defnewpar>In the dialog box, you can select the check box '<span class=arial>Last Map on Top</span>' to order the input maps as: </p>
+
+<ul>
+
+<li>	the map which was selected last, to appear on top, </li>
+
+<li>	the map selected one but last, below that one, </li>
+
+<li>	until the map selected first. </li>
+
+</ul>
+
+<p>On the command line, you can use the <span class=courier>Replace</span> option to this end. </p>
+
+<p class=defnewpar>Then, for each pixel, the operation will do:</p>
+
+<ul>
+
+<li>	when a value is encountered in the map you selected last: that value will appear in the output map;</li>
+
+<li>	when the undefined value is encountered in the map you selected last: the operation will look in the map that was selected one but last;</li>
+
+        <ul>
+
+        <li>	when a value is encountered in the map you selected one but last: that value will appear in the output map;</li>
+
+        <li>	when the undefined value is encountered in the map you selected one but last: the operation will look in the map that was selected second but last, etc.</li>
+
+        </ul>
+
+</ul>
+
+<p>Only when no value is found at all, the output pixel will be assigned the undefined value. Mind: when the output map uses the Image domain, this means value 0; when the output map uses a Picture domain or the <span class=courier>Color</span> domain, this means color (0,0,0), i.e. black.</p>
+
+<p class=defnewpar><b>Output georeference</b> / <b>First input map</b>: </p>
+
+<p>If you wish, you can specify to use an existing georeference for the output map (both dialog box and command line), or you can create a new georeference corners yourself for the output map (dialog box only). <span class=tiptext><span class=tip>Tip: </span>When you choose an existing georeference corners or create a new georeference corners, then the output map will always be North-oriented. </span></p>
+
+<p class=defnewpar>When <i>no</i> existing georeference is specified, and when you did <i>not</i> create a georeference yourself, the system will, if required, automatically construct a georeference for the output map; it will be sized in such a way that all input raster maps will fit in the new georeference.  </p>
+
+<ul>
+
+<li>This output georeference will be based on the first input map; the georeference of the first input map will directly determine the pixel size and the coordinate system for the output georeference. </li>
+
+<li>Furthermore, this type of output georeference will automatically obtain the same name as the output raster map; the output georeference created by the system is a georeference of type submap.  </li>
+
+</ul>
+
+<p>See also the section Georeference of output map below.</p>
+
+<p class=defnewpar><b>Domain combinations</b>: You can always merge maps that use the same domain, and maps that use domains of the same type. In some cases, you can also merge maps of different domain types. The list below shows the possible combinations of input domain types and also shows the output domain type.</p>
+
+<p class=emptyline>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p><b>In</b></p>
+
+</td>
+<td valign="top" width=75>
+<p><b>In</b></p>
+
+</td>
+<td valign="top" width=75>
+<p><b>Out</b></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Image</p>
+
+</td>
+<td valign="top" width=75>
+<p>Image</p>
+
+</td>
+<td valign="top" width=75>
+<p>Image</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Image</p>
+
+</td>
+<td valign="top" width=75>
+<p>Value</p>
+
+</td>
+<td valign="top" width=75>
+<p>Value</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Image</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Value</p>
+
+</td>
+<td valign="top" width=75>
+<p>Value</p>
+
+</td>
+<td valign="top" width=75>
+<p>Value</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Value</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Class</p>
+
+</td>
+<td valign="top" width=75>
+<p>Image</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Class</p>
+
+</td>
+<td valign="top" width=75>
+<p>Value</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Class</p>
+
+</td>
+<td valign="top" width=75>
+<p>Class</p>
+
+</td>
+<td valign="top" width=75>
+<p>Class</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Class</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>ID</p>
+
+</td>
+<td valign="top" width=75>
+<p>ID</p>
+
+</td>
+<td valign="top" width=75>
+<p>ID</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Picture</p>
+
+</td>
+<td valign="top" width=75>
+<p>Picture</p>
+
+</td>
+<td valign="top" width=75>
+<p>Picture</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Picture</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+<td valign="top" width=75>
+<p>Color</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Bool</p>
+
+</td>
+<td valign="top" width=75>
+<p>Bool</p>
+
+</td>
+<td valign="top" width=75>
+<p>Bool</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Bit</p>
+
+</td>
+<td valign="top" width=75>
+<p>Bool</p>
+
+</td>
+<td valign="top" width=75>
+<p>Bool</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Bit</p>
+
+</td>
+<td valign="top" width=75>
+<p>Bit</p>
+
+</td>
+<td valign="top" width=75>
+<p>Bit</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For more information, see also the section Domain of output map below.</p>
+
+<p class=kopje>Example:</p>
+
+<p>To show a certain landuse type (of a class map) on a satellite image:</p>
+
+<ul>
+
+<li>	Select an image that you want to use as background and stretch the image with the <a href="..//ilwisapp/popup/stretch_popup.htm" onClick="return popup(this, 'notes')" >Stretch</a> operation.</li>
+
+<li>	To obtain for instance a landuse map showing only agricultural units, perform MapCalc statements like:</li>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<table cellpadding="0" cellspacing="0">
+<tr>
+<td valign="top" width=0>
+<p class=courier></p>
+
+</td>
+<td valign="top" width=45>
+<p class=courier>Agri</p>
+
+</td>
+<td valign="top" width=18>
+<p class=courier>=</p>
+
+</td>
+<td valign="top">
+<p class=courier>iff ((landuse=&quot;agriculture&quot;) or (landuse=&quot;agriculture (irrigated)&quot;), landuse, &quot;?&quot;)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;&nbsp;</p>
+
+<p class=leftmargininlist>	Explanation: if map landuse is classified as agriculture, then have these classes remain, else assign undefined.</p>
+
+<li>	Use the Glue Raster Maps operation to merge the map Agri with your stretched image. The results may look like below. </li>
+
+<li>	The result of the Glue Raster Map operation is shown in Figure 1 below.</li>
+
+</ul>
+
+<p><img src="../images/glueras.gif" align=bottom width="270" height="331"></p>
+
+<p class=captionfig>Fig. 1:	Agricultural land use over a satellite image. The light green part is agriculture with irrigation, the dark green part is rainfed agriculture. </p>
+
+<p>For presentation and printing purposes, you could of course also use the <a href="..//ilwisapp/popup/mask_polygons_popup.htm" onClick="return popup(this, 'notes')" >Mask Polygons</a> operation, use as mask <span class=courier>agri*</span> . Then, display the output polygon map on top of the satellite image in a map window.</p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The domains of the input maps should be mergeable, see the list of domain combinations above. </p>
+
+<p>All input raster maps must have a georeference, which is not georeference <span class=courier>None</span>.</p>
+
+<p class=kopje>Domain of output map:</p>
+
+<p class=linespacing01after>The domain type for the output map can be found in the list of domain combinations above. Here some extra information will be given on how the system deals with the domains for the output maps.</p>
+
+<ul>
+
+<li class=ls01af>	The output map will use <i>system domain Image</i> when you are combining images with each other. </li>
+
+<li class=ls01af>	The output map will use <i>system domain Value</i> when you are combining value maps with value maps or images with value maps. The value range for the output map is determined by the smallest minimum and the largest maximum of all input maps; the precision is the smallest precision of the input maps.</li>
+
+<li class=ls01af>	The output map will use a <i>class domain</i> when all input maps use a class domain. When all input maps use the same class domain, then the output map will also use this class domain. When the input maps use different class domains and when the class names in the input domains are different, then all class names of all input domains will be merged automatically into a new output domain. You can choose whether the new domain should be stored as a separate object, or whether it should be stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). Also the representations of the input class domains will be merged into a new output representation; the new representation is either stored as a separate object or by the output map (internal representation).</li>
+
+<li class=ls01af>	The output map will use an <i>ID domain</i> when all input maps use an ID domain. The same procedure is followed as for class maps. There are no representations involved.</li>
+
+<li class=ls01af>	The output map will use a <i>Picture domain</i> when all input maps use a Picture domain. When all input maps use the same Picture domain, the output map will also use this Picture domain. When the input maps use different Picture domains and when the colors in the input Picture domains are different, then the colors of all input domains will be merged automatically into a new output Picture domain. You have to keep in mind though that a Picture domain can only contain a maximum of 256 colors. Thus, when the total number of all input colors is 256 or less, the colors of the input pictures will be retained in the output picture. The new Picture domain will always be stored by the output map (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>) and not as a separate object.</li>
+
+<li class=ls01af>	The output map will use <i>system domain Color</i> when you are combining images, value maps, class maps or pictures with a map that uses the Color domain, and when you are combining class maps with images or class maps with value maps. For class maps and pictures, the output colors will be retrieved from the representation of the input domains; for images and value maps, the output color will be retrieved from system representation Gray is used.</li>
+
+</ul>
+
+<p class=kopje>Georeference of output map:</p>
+
+<ol>
+
+<li>If all input maps use the same georeference, then that georeference will also be used for the output map. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>If you specified to use an existing georeference, or if you created a new georeference yourself in the dialog box, then that georeference will be used for the output map. </li>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<li>When no existing georeference was used, and when no new georeference was created by the user, and when the input maps use different georeferences, then the system will automatically create a new georeference (type submap) for the output map. </li>
+
+        <p>This new georeference submap, created by the system, will always use the pixel size and coordinate system of your <i>first input map</i>; the size of this georeference will be such that all input maps fit in it; the name of this new georeference will be the same as the name of output map. </p>
+
+</ol>
+
+<p class=defnewpar>If necessary, all input maps are <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >resampled</a> with the Nearest Neighbour method to the output georeference. </p>
+
+<p class=defnewpar>Usually, the input georeferences will use the same coordinate system which covers the whole area already. In case input georeferences use different but compatible coordinate systems (e.g. different projections), the coordinate system of the <i>first input map</i> is used for the output georef, and a coordinate transformation is performed for the other input maps.</p>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>	When input maps are resampled to a new output georeference, this will be done with the Nearest Neighbour method. When working with <i>value maps</i> which use different georeferences, and when you would like to calculate with the output value map of the Glue Raster maps operation, you will obtain better interpolation results from the Glue Raster maps operation, when:</li>
+
+        <ul class=tipul>
+
+        <li> you first make one new large georeference, </li>
+
+        <li> resample your maps to this new georeference by using the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation with the <a href="..//ilwisapp/sec/bilinear_interpolation_sec.htm" onClick="return popup(this, 'notes')" >Bilinear</a> or <a href="..//ilwisapp/sec/bicubic_interpolation_sec.htm" onClick="return popup(this, 'notes')" >BiCubic</a> interpolation method, and</li>
+
+        <li> only when all maps use the same new large georeference, use the Glue Raster Maps operation. </li>
+
+        </ul>
+
+<li>	When you wish to combine <i>class</i> maps with <i>ID</i> maps, you first have to convert either the class domain into an ID domain or the ID domain into a class domain. In fact, it is quite easy to convert Class and ID domain(s) to each other: open the <a href="../ilwismen/domain_properties.htm">Domain Properties</a> dialog box of the domain that you want to convert, and click the <span class=arial>Convert to Classes</span> or the <span class=arial>Convert to IDs</span> button. When converting IDs to classes, you can create a representation class for your map; when converting from classes to IDs, you will loose your representation class.</li>
+
+<li>	When you wish to combine a <i>class</i> map with one <i>image</i>, it is advised to first <a href="..//ilwisapp/popup/stretch_popup.htm" onClick="return popup(this, 'notes')" >stretch</a> the image; this will improve the contrast in the output map with the <span class=courier>Color</span> domain.</li>
+
+<li>	When you wish to combine a <i>class</i> map with multiple <i>images</i>, it is advised to first use the glue raster maps operation only with all images, then <a href="..//ilwisapp/popup/stretch_popup.htm" onClick="return popup(this, 'notes')" >stretch</a> the output image and finally use the glue raster maps operation again to merge the class map in it. This will improve the contrast in the output map with the <span class=courier>Color</span> domain.</li>
+
+</ol>
+
+<p class=tip>Note:</p>
+
+<p class=tiptext>When merging class maps or ID maps, by default an <a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a> is created for the output map to reduce the number of separately stored domains. Internal domains are stored by an output map. If you like, you can select the New Domain check box in the dialog box and specify a new name for the output domain if you want the output domain to be stored as a separate object. </p>
+
+<p class=defnewpar>For more information on <a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domains and representations</a>, refer to <a href="../ilwis/how_to_open_internal_domains_representations_advanced.htm">How to open internal domains/representations</a>.</p>
+
+<p class=Seealso>See also: </p>
+
+<p class=seealsolinks><a href="glue_raster_maps_dialog_box.htm">Glue raster maps : dialog box</a></p>
+
+<p class=seealsolinks><a href="glue_raster_maps_command_line.htm">Glue raster maps : command line</a></p>
+
+<p class=seealsolinks><a href="glue_raster_maps_algorithm.htm">Glue raster maps : algorithm</a></p>
+
+<p class=seealsolinks><a href="resample_functionality.htm">Resample : functionality</a></p>
+
+<p class=seealsolinks><a href="resample_algorithm.htm">Resample : algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/glue_tables_functionality_algorithm.htm">Glue tables : functionality</a></p>
+
+</body

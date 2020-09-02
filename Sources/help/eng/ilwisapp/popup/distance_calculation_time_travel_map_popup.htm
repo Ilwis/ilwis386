@@ -1,0 +1,42 @@
+<html>
+
+<head>
+<title>Distance calculation time travel map popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Travel time map</p>
+
+<p>By calculating a travel time map, each pixel is assigned the time required to reach that pixel from user-specified source pixels, for example time to reach schools, villages etc.</p>
+
+<p class=linespacing03before>A <a href="..//ilwisapp/distance_calculation_travel_time_map.htm" onClick="return popup(this, 'notes')" >travel time map</a> can be created in three steps:</p>
+
+<ul>
+
+<li>	prepare a source map and a weight map. The weight (resistance) factors in the weight map reflect the relative decrease of speed in less accessible terrains compared to the best accessible terrain;</li>
+
+<li>	perform a distance calculation using both maps; </li>
+
+<li>	perform a MapCalc operation to convert the obtained output values from the distance calculation into time units (seconds, minutes, hours, etc.).</li>
+
+</ul>
+
+</body

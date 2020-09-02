@@ -1,0 +1,88 @@
+<html>
+
+<head>
+<title>Symbols as arrows (ID point map with attr. table)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Symbols, Points as arrows">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Symbols as arrows</h1>
+
+<h1 class=secondline>Point map with ID domain and attribute table</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>For an ID point map with an attribute table which contains a column with directional attribute information, specify how the directional attributes should be represented as arrows. The length, thickness and colors of arrows can also be specified by choosing attribute columns. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you open a point map with an ID domain, and an attribute table is linked to the map or to the domain, <br>
+and in the <a href="display_options_point_map.htm">Display Options - Point Map</a> dialog box, you selected the Arrow option and clicked the <span class=arial>Details</span> button.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the color of the arrows should be determined by a column in the attribute table of your ID point map. You can select a class column, or a column with a Picture domain or the <span class=courier>Color</span> domain. When you want to add a legend for the arrows later on, you should select a class column.</p>
+
+<p class=diabox>Clear this check box when you want to use default colors; the Windows text color will be used.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Length:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the length of the arrows should be determined by a column from the attribute table of your ID point map.</p>
+
+<p class=diabox>You can select any value column. You can for instance select a column containing wind speeds. Clear this check box when you want to use default arrow length 10. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Line width:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box when the line width of the arrows should be determined by a column from the attribute table of your ID point map.</p>
+
+<p class=diabox>You can select any value column. You can for instance select a column containing wind speeds. <br>
+Clear this check box when you want to use default length 0.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Direction:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the column in the attribute table which contains the directions of the arrows. You can select any value column; direction values of 0 or 360 will result in an arrows pointing to the North, a direction value of 90 will result in arrows pointing to the East. Values larger than 360 are also allowed (modulo 360).</p>
+
+</td>
+</tr>
+</table>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When points are displayed as <i>arrows</i>, and when you selected to use a <i>class column for the color</i> of the arrows, you can add a legend to this point map. Choose <span class=arial>Add Annotation, Legend</span> from the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a> in the map window. The <a href="display_options_legend_point_id_attributes_symbols_as_arrows.htm">Display Options - Legend (symbols as arrows)</a> dialog box will appear. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="display_options_point_map.htm">Display Options Point Map</a> (dialog box)</p>
+
+</body

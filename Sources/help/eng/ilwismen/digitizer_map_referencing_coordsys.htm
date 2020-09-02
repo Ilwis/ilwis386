@@ -1,0 +1,121 @@
+<html>
+
+<head>
+<title>Map Reference - Coordinate System</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Map referencing, Digitizer setup, Setup digitizer, Digitize, Control points">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+
+<h1 class=firstline>Map Reference</h1>
+
+<h1 class=secondline>Coordinate System</h1>
+
+<!--<hr>-->
+
+
+<p class=defnewpar>First dialog box to establish a relation between digitizer coordinates (as received from your digitizer) and map coordinates. </p>
+
+<p class=defnewpar>The purpose of using <span class=arial>Map Reference</span> is to be able <i>to use a digitizer</i>:</p>
+
+<ul>
+
+<li>to add points or segments to a new digital point or segment map, and/or </li>
+
+<li>to edit an existing digital point, segment or polygon map.</li>
+
+</ul>
+
+
+<p class=defnewpar>This dialog box appears: </p>
+
+<ul>
+
+<li>when you choose <span class=arial>Map Reference</span> from the <a href="../ilwis/main_window_menu_commands.htm">File menu of the Main window</a>, or </li>
+
+<li>when you choose <span class=arial>Digitizer, Map Reference</span> from the <a href="../ilwis/point_editor_menu_commands.htm">File menu of the point editor</a>, from the <a href="../ilwis/segment_editor_menu_commands.htm">File menu of the segment editor</a>, or from the <a href="../ilwis/polygon_editor_menu_commands.htm">File menu of the polygon editor</a>. </li>
+
+</ul>
+
+<p class=defnewpar>Before you can use <span class=arial>Map Reference</span>, you should have: </p>
+
+<ul>
+
+<li>	set up your digitizer correctly: 
+
+        <ul>
+
+        <li>the <span class=arial>Setup Digitizer</span> command on the <a href="../ilwis/main_window_menu_commands.htm">File menu of the Main window</a> should be preceded by a check mark <img src="../images/chkmark.gif" align="bottom" width="7" height="7">; </li>
+
+        </ul>        
+
+<li>	you fixed an analog map onto your digitizer; </li>
+
+<li>	you know the real world map coordinates of at least three points in your analog map; these points will be used as reference or control points. You can use for instance the coordinates of the corners of your analog map or the coordinates of crossings of grid lines on your analog map. </li>
+
+</ul>
+
+<p class=kopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Coordinate System:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> which fits the map(s) that you will digitize, or create a new coordinate system by clicking the little create button <img src="../images/crea.gif" align=bottom width="17" height="22">. </p>
+
+<p class=diaboxnospace>It is advised to use a <i>coordinate system of type Projection</i>: for the time being you can just specify the coordinates of the outer boundaries of your study area; specific information on a projection, ellipsoid or datum may be added to the coordinate system in a later stage or not at all. </p>
+
+<p class=diaboxnospace>You can use a coordinate system of type Boundaries Only when you are sure that you will not work with projections at all in your project. </p>
+
+<p class=tiptextls01be><span class=tipnospace>Mind: </span>It is not allowed to select or create a coordinate system of type LatLon, nor to select system coordsys <span class=courier>LatLon.csy</span>, nor system coordsys <span class=courier>LatLonWGS84.csy</span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Metric Coordinates:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option when, in the next dialog box, you want to enter the map coordinates of your control points as XY-coordinates in <i>meters</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  Geographic Coords:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option when you can only read Latitudes and Longitudes from your analog map. In the next dialog box, enter the map coordinates of your control points as LatLong-coordinates in <i>minutes</i>, <i>degrees</i> and <i>seconds</i>. </p>
+
+<p class=tiptextls01be><span class=tipnospace>Mind: </span>to use geographic coordinates, the selected coordinate system MUST have projection information. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click OK, the <a href="digitizer_map_referencing_dig_ctrl_points.htm"><b>Map Reference - Digitizer Control Points</b></a> dialog box will appear.</p>
+
+</body

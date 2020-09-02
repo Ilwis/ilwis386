@@ -1,0 +1,180 @@
+<html>
+
+<head>
+<title>Densify : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Densify raster map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Densify</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Densify operation allows you to reduce the pixel size of a map. </p>
+
+<p class=defnewpar>The user is asked to enter an enlargement factor which determines the number of rows and columns in the output map. For example, when using an enlargement factor of 2.5 on an input map consisting of 400 lines and 400 columns (e.g. pixel size of 25m); the output map will contain 1000 lines by 1000 columns (resulting in a pixel size of 10m). </p>
+
+<p class=defnewpar>Thus the number of rows and columns in the map is increased and, as the position of each pixel in the output map is known, values are assigned to these pixels by means of nearest neighbour, or a <a href="..//ilwisapp/popup/bilinear_interpolation_popup.htm" onClick="return popup(this, 'notes')" >bilinear</a> or <a href="..//ilwisapp/popup/bicubic_interpolation_popup.htm" onClick="return popup(this, 'notes')" >bicubic interpolation</a> using values from the input map. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> or an input <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>. Open the list box and select the desired input map or map list, or directly drag a raster map or map list from a Catalog into this box. </p>
+
+<p class=diabox>When you select an input map list, the operation will be performed on all raster maps in the map list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Densify factor:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Enter a value by which the number of rows and columns of the input map should be multiplied (real value &gt;= 1).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Interpolation method:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an interpolation method which is used to determine the pixel values in the output map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12"> Nearest Neighbour:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To assign to each output pixel the value of the nearest pixel in the input map; this option is available for input maps with any domain.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  <a href="..//ilwisapp/sec/bilinear_interpolation_sec.htm" onClick="return popup(this, 'notes')" >Bilinear</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To calculate for each output pixel a value from 4 surrounding pixels in the input map; this option is available for value maps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">  <a href="..//ilwisapp/sec/bicubic_interpolation_sec.htm" onClick="return popup(this, 'notes')" >Bicubic</a>:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>To calculate for each output pixel a value from 16 surrounding pixels in the input map; this option is available for value maps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output raster map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map. </p>
+
+<p class=diabox>If you selected an input map list, then you can type a name for the output map list; all raster maps in the output map list will obtain this name followed by _1, _2, _3, etc. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Value range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>, or specify your own range of possible values in the output map(s). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Accept the default <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of output values, or specify your own precision.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map or the output map list. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map or the output map list will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you selected a single raster map as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when it is opened to be displayed. </li>
+
+</ul>
+
+<p class=defnewpar>When you selected a map list as input:</p>
+
+<ul>
+
+<li>and you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map list</a> and its dependent raster maps will be defined and calculated. Then, the output map list will be shown. </li>
+
+<li>and you click the <b>Define</b> button, the dependent output map list will only be defined. When you open the output map list later on, the map list will be calculated, which means that the output raster maps will be defined and calculated. </li>
+
+</ul>
+
+<p class=defnewpar>Furthermore, a new georeference will be created for the output map; this georeference obtains the same name as the output map, or the same name as the output map list followed by _1.</p>
+
+<p class=kopje>Restriction:</p>
+
+<p>For a Bilinear or a Bicubic interpolation, the input raster map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="densify_functionality.htm">Densify : functionality</a></p>
+
+<p class=seealsolinks><a href="densify_algorithm.htm">Densify : algorithm</a></p>
+
+</body

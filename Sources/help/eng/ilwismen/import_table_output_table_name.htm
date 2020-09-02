@@ -1,0 +1,155 @@
+<html>
+
+<head>
+<title>Import Table wizard - Specify ILWIS Table Name</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Table import, Import table wizard, Databases">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Import Table wizard</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/main_window_menu_commands.htm">Main window, File menu</a></td>
+</tr>
+<tr>
+<td class=menucommand2 rowspan="2"><h1 class=secondline>Specify ILWIS Table Name</h1></td>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="import_table_edit_column_details.htm">Back, ILWIS Import</a>&nbsp;|&nbsp;<a class=menlink2 href="../ilwis/main_window_menu_commands.htm">Finish</a>&nbsp;&gt;</td>
+</tr>
+<tr>
+<td class=menucommand>&lt;&nbsp;<a class=menlink2 href="import_database_sql_query.htm">Back, Database</a>&nbsp;|&nbsp;<a class=menlink2 href="../ilwis/main_window_menu_commands.htm">Finish</a>&nbsp;&gt;</td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf><h1>&nbsp;</h1></td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<p class=defnewpar>Specify a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output ILWIS <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >table</a>. </p>
+
+<p class=diakopje>Page options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="108">
+<p class=diabox>Output Table: </p>
+
+</td>
+<td valign="top">
+<p class=diabox>Specify a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output table. The table will appear in the current directory. </p>
+
+<p class=diabox>When you used ILWIS import (i.e. when not importing a table from a database through ODBC), the output table is always in ILWIS format <img src="../images/table.gif" align=bottom width="13" height="14">. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diabox>Convert to ILWIS format: </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="108">
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>In case you imported a table from a database through ODBC: </p>
+
+<ul class=diaul>
+
+<li>Select this check box when you wish to obtain an ILWIS table <img src="../images/table.gif" align=bottom width="13" height="14">. </li>
+
+<li>Clear the check box when you wish to use the data from the database itself; you will obtain a <i>Use As</i> table <img src="../images/table.gif" align=bottom width="13" height="14"><sub class=blue> u</sub>. </li>
+
+</ul>
+
+<p>For more information, refer to <a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a>. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Finish</b> button, the external file will be imported. You can inspect the result by double-clicking the output <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >table</a> in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p>
+
+<h2>Additional information</h2>
+
+<p class=defnewpar>The following files are created: </p>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>.TBT:</p>
+
+</td>
+<td valign="top">
+<p>the object definition file for the table; contains all properties. This file will be visible in a Catalog.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.TB#:</p>
+
+</td>
+<td valign="top">
+<p>contains all the table information; i.e. the data of all fields in the table. This file is only created: </p>
+
+<ul>
+
+<li>when you used ILWIS import to import a .DBF or an ASCII file, or </li>
+
+<li>when you imported a table of a database, and chose to <i>convert</i> the table to ILWIS format. </li>
+
+</ul>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>Furthermore, when you used ILWIS import, <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domains</a> and <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representations</a> may be created.</p>
+
+<p class=tip>Tips: </p>
+
+<p class=tiptext>When the output table is in ILWIS table format, i.e. not for <i>Use As</i> tables:</p>
+
+<ul class=tipul>
+
+<li>After initial import, you can change the domain of a String column through the <a href="../ilwismen/column_properties.htm">Column Properties</a> of a column. Double-click a column header in the ILWIS table, and click the <span class=arial>Create new domain from strings in column</span> button. </li>
+
+<li>After initial import, you can change the domain of a table through the <a href="..//ilwisapp/popup/change_domain_of_table_popup.htm" onClick="return popup(this, 'notes')" >Change domain of table</a> operation. For instance when an imported table uses domain <span class=courier>None</span>, you can choose to use a class or ID column of this table to be used as the domain of the table. Then, the table can be linked to a map through the Properties of the map. </li>
+
+</ul>
+
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_tables.htm">ILWIS objects : tables</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_tables_databases.htm">ILWIS objects : tables - databases</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#import_commandline">Appendices : ILWIS script language (syntax), section Import expressions</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm#ilwistableimport_commandline">Appendices : ILWIS script language (syntax), section ILWIS Table import</a></p>
+
+</body

@@ -1,0 +1,214 @@
+<html>
+
+<head>
+<title>Insert/Edit Text in layout</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Text, Layout editor, Layouts, Add ..., Annotation">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Layout editor</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/layout_editor_menu_commands.htm">Insert menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert/Edit Text</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Insert or edit some <a href="..//ilwis/popup/ann_text_popup.htm" onClick="return popup(this, 'notes')" >text</a> in your <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layout</a>. </p>
+
+<p class=defnewpar>You can insert multiple lines of text, but the text is always displayed in one font, one font size, appears either as normal, or as bold and/or italics, and it is linked to <i>one</i> specific position in the layout. </p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>When you wish to obtain multiple texts, for instance the names or values of all points, segments or polygons in a certain map, or when you wish to store multiple texts using <i>multiple fonts, multiple font sizes, different formatting</i> and when text should be linked to <i>multiple positions</i> within a map view, it is advised to create an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text object</a>. An Annotation Text object differs from Text. </li>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Text:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type the text that should appear in your layout.</p>
+
+<p class=diabox>You can create multiple lines of texts by using the <span class=arial>Enter</span> key or the <span class=arial>Shift+Enter</span> keys in this text box.</p>
+
+<p class=diabox>You can simulate a <span class=arial>Tab</span> by using the <span class=arial>Ctrl+Tab</span> keys in this text box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Alignment:</p>
+
+</td>
+<td valign="top">
+<p class=diabox></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12">  Left</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Horizontally position the text at the left hand side of its selection box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12">  Center</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Horizontally position the text at the center of its selection box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12">  Right</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Horizontally position the text at the right hand side of its selection box.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Color:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a color for your text; select a color from the list. To create your own color, select 'Custom' at the bottom of the drop-down list, or click the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22">; the Windows <a href="custom_colors.htm">Color</a> dialog box will appear.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select the <a href="..//ilwis/popup/font_popup.htm" onClick="return popup(this, 'notes')" >font</a> in which your text should appear; you can select an installed font from the list. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Font size:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the font size (pt) in which your text should appear. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Rotate:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value to rotate your text anti-clockwise; if you type 90, the text will be readable from bottom to top. </p>
+
+<p class=tiptext><span class=tip>Note: </span>The user-interface does not behave correctly for rotations; you may need to use the <span class=arial>Redraw</span> button. If you use a rotation and text falls outside its selection box (difficult to select again in Layout editor), it is advised to use the Layout Management pane to select and edit your text. </span></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Bold:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have text appear in <b>bold</b>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Italic:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have text appear in <i>italics</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Transparent:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box to have the text appear with minimum loss of other layers that are displayed 'below' the text. </p>
+
+<p class=diabox>Clear this check box to create some (white) space on top of which the text is positioned.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Examples:</p>
+
+<p class=arial10bold>This is my text in Arial, bold, point 10.</p>
+
+<p class=times10>This is my text in Times, regular, point 10.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	You can add as many texts to a layout as you like.</li>
+
+<li>    You can copy texts in another program and paste it into this Insert/Edit Text dialog box (use <span class=arial>Ctrl+V</span>).</li>
+
+<li>	In the Layout editor, text can be sized by <a href="..//ilwis/popup/drag_popup.htm" onClick="return popup(this, 'notes')" >dragging</a> for instance one of the corner <a href="..//ilwis/popup/size_handles_popup.htm" onClick="return popup(this, 'notes')" >size handles</a> of a selected text to a new position. The mouse pointer changes into a double-sided arrow when at the right position to start dragging. The font in which a text is displayed will be automatically adapted to the new size. </li>
+
+<li>	To store annotation, you need to save the layout. Open the <a href="../ilwis/layout_editor_menu_commands.htm">File menu</a> and choose the <span class=arial><a href="../ilwismen/layout_editor_save_layout.htm">Save</a></span> or the <span class=arial><a href="../ilwismen/layout_editor_save_layout_as.htm">Save As</a></span> command. You can also click in the white space of your layout, and click the <span class=arial>Save</span> button in the <a href="../ilwis/layout_editor_standard_toolbar.htm">standard toolbar</a>. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_functionality.htm">Layout editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/layout_editor_layout_toolbar.htm">Layout editor : layout toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_layouts.htm">ILWIS objects : layouts</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_annotation_text.htm">ILWIS objects : annotation text</a></p>
+
+<p class=seealsolinks><a href="../ilwis/annotation_text_editor_functionality.htm">Annotation Text editor : functionality</a></p>
+
+</body

@@ -1,0 +1,1044 @@
+<html>
+
+<head>
+<title>ASTER import: radiometric and geometric corrections (technical information)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="ASTER, HDF, Import">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>ASTER import</h1>
+
+<h1 class=secondline>Radiometric and geometric corrections (technical information)</h1>
+
+<!--<hr>-->
+<h3>Introduction</h3>
+
+<p class=defnewpar>ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer)
+images are files written in the Earth Observation System Hierarchical Data Format
+(EOS-HDF) format, which is a type of the HDF4 file format. An ASTER image is
+acquired by three different telescopes and contains 15 bands:</p>
+
+<ul>
+	<li>4 Visible and Near-Infra Red (VNIR) bands with a ground resolution of 15 meters;</li>
+	<li>6 ShortWave Infra Red (SWIR) bands with a ground resolution of 30 meters, and;</li>
+	<li>5 Thermal Infra Red (TIR) bands with a ground resolution of 90 meters.</li>
+</ul>
+
+<p class=defnewpar>The individual ASTER bands have the following properties:</p>
+
+<table>
+<tr>
+<td>ASTER band</td>
+<td>Wave length (µm)</td>
+</tr>
+<tr>
+<td>VNIR band 1</td>
+<td align="right">0.520-0.600</td>
+</tr>
+<tr>
+<td>VNIR band 2</td>
+<td align="right">0.630-0.690</td>
+</tr>
+<tr>
+<td>VNIR band 3N</td>
+<td align="right">0.760-0.860</td>
+</tr>
+<tr>
+<td>VNIR band 3B</td>
+<td align="right">0.760-0.860</td>
+</tr>
+<tr>
+<td>SWIR band 4</td>
+<td align="right">1.600-1.700</td>
+</tr>
+<tr>
+<td>SWIR band 5</td>
+<td align="right">2.145-2.185</td>
+</tr>
+<tr>
+<td>SWIR band 6</td>
+<td align="right">2.185-2.225</td>
+</tr>
+<tr>
+<td>SWIR band 7</td>
+<td align="right">2.235-2.285</td>
+</tr>
+<tr>
+<td>SWIR band 8</td>
+<td align="right">2.295-2.365</td>
+</tr>
+<tr>
+<td>SWIR band 9</td>
+<td align="right">2.360-2.430</td>
+</tr>
+<tr>
+<td>TIR band 10</td>
+<td align="right">8.125-8.475</td>
+</tr>
+<tr>
+<td>TIR band 11</td>
+<td align="right">8.475-8.825</td>
+</tr>
+<tr>
+<td>TIR band 12</td>
+<td align="right">8.925-9.275</td>
+</tr>
+<tr>
+<td>TIR band 13</td>
+<td align="right">10.250-10.950</td>
+</tr>
+<tr>
+<td>TIR band 14</td>
+<td align="right">10.950-11.650</td>
+</tr>
+</table>
+
+
+<p class=tip>Notes:</p>
+<ul class=tipul>
+<li>ILWIS ASTER Import supports the HDF4 format but does not support the HDF5 format.</li>
+<li>Data acquired in ASTER VNIR bands 3N (Nadir looking) and 3B (Backward
+  looking) can be used to create a Digital Elevation Model (DEM).</li>
+</ul>
+
+<p class="tip">Tip:</p>
+<p class="tiptext">Detailed information on the ASTER sensor can currently be found at <a href="http://asterweb.jpl.nasa.gov/instrument.asp">http://asterweb.jpl.nasa.gov/instrument.asp</a>.</p>
+
+<p class=defnewpar>ILWIS ASTER import supports two types of ASTER images:
+<ul>
+<li>ASTER level 1A files</li>
+<li>ASTER level 1B files</li>
+</ul>
+
+<p class=defnewpar>The level 1A raw data are reconstructed, unprocessed instrument digital counts. This product contains
+image data with geometric correction coefficients and radiometric calibration coefficients appended but not applied. This includes correcting for SWIR parallax as well as registration within and between telescopes. The spacecraft ancillary and instrument engineering data are also included. The radiometric calibration coefficients consisting of offset and sensitivity information is generated from a database for all detectors. The geometric correction is the coordinate transformation for band-to-band registration.</p>
+
+<p class=defnewpar>The level 1B product contains radiometrically calibrated and geometrically coregistered data for all channels. This product is created by applying the radiometric and geometric coefficients to the level 1A
+data. After that the radiances are scaled back to DN values making use of a
+single calibration coefficient &quot;Linc&quot; for each band (see formula 3). The bands have been coregistered both between and within the telescopes, and the data have been resampled to apply the geometric corrections. As for level 1A products these level 1B radiances are generated at
+15 meter, 30 meter and 90 meter resolutions corresponding to the VNIR, SWIR and TIR channels.
+Calibrated, at-sensor radiances are given in Wm<sup>-2</sup>sr<sup>-1</sup>µm<sup>-1</sup>. Level 1B data is path oriented
+and destriping and bad pixel replacement have been applied.</p>
+
+<p class="tip">Tip:</p>
+<p class="tiptext">Detailed information about the ASTER products can currently be found at
+<a href="http://asterweb.jpl.nasa.gov/data_products.asp">http://asterweb.jpl.nasa.gov/data_products.asp</a>.</p>
+
+<h3>Radiometric Corrections</h3>
+<p class=defnewpar>The Digital Numbers in a <i> ASTER level 1A</i> file are values describing the voltage output of a sensor mapped within a suitable
+range (0-255 for the VNIR and SWIR channels and 0-4094 for the TIR channels). These
+raw DN values can be converted to an actual physical value, called radiance (in Wm<sup>-2</sup>sr<sup>-1</sup>µm<sup>-1</sup>), using the corrections of the
+radiometric correction table that is embedded in the HDF file. Radiometrically correcting the ASTER level 1A
+image will remove, as far as possible the striping (slight systematic differences in DN values between adjacent columns in the
+map) caused by different characteristics of the sensors. When applying radiometric corrections two cases have to be handled:</p>
+
+
+<ul>
+<li>correction for VNIR and SWIR bands, and;</li>
+<li>correction for TIR bands.</li>
+</ul>
+
+
+<p class=defnewpar>The VNIR and SWIR bands use a pushbroom sensor technology so that each line will be captured in full by an array of 4100 sensors. The
+radiometric correction has to be applied for each of the 4100 sensors. The formula used
+in ILWIS to convert the raw DN values of each individual VNIR and SWIR band to radiance
+values (L) is:</p>
+
+<table width="100%">
+<tr>
+<td>L<sub>ij</sub> = A<sub>j</sub>V<sub>ij</sub> / G + D<sub>j</sub></td>
+<td align="right">formula 1</td>
+</tr>
+</table>
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=25>
+L<sub>ij</sub> 
+
+</td>
+<td valign="top">
+= Radiance value at a specific row, column position
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>
+A<sub>j</sub> 
+
+ </p>
+
+</td>
+<td valign="top">
+<p> = the Amplification (column 2 in the VNIR/SWIR radiometric correction table) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+V<sub>ij</sub> 
+
+</td>
+<td valign="top">
+= raw DN value at a specific row, column position
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+G
+
+</td>
+<td valign="top">
+= the Gain (column 3 in the VNIR/SWIR radiometric correction table)
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>D<sub>j</sub> 
+
+ </p>
+
+</td>
+<td valign="top">
+<p>= an Offset (column 1 in the VNIR/SWIR radiometric correction table) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p><sub>ij</sub> </p>
+
+</td>
+<td valign="top">
+<p>= is respectively the row and the column number (VNIR i=1-4200, j=1-4100,
+SWIR i=2100, j=2048) </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The TIR bands use a whiskbroom technology so another correction is needed. Blocks of an image are scanned in a 10 x 700 matrix that moves across the scene (70 blocks). Each of the
+10 lines in a block has a separate set of parameters for radiometric correction. For
+each individual TIR band the formula to convert DN values to radiance values
+(L) is:</p>
+
+<table width="100%">
+<tr>
+<td>L<sub>ij</sub> = C<sub>0,i</sub> + C<sub>1,i</sub>V<sub>ij</sub> + C<sub>2,i</sub>V<sub>ij</sub><sup>2</sup></td>
+<td align="right">formula 2</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=25>
+<p>L<sub>ij</sub> </p>
+
+</td>
+<td valign="top">
+<p>= the radiance value at a specific row, column position </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p> C<sub>0,i</sub> </p>
+
+</td>
+<td valign="top">
+<p>= is the Offset (column 1 in the TIR radiometric correction table, i=1-10) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p> C<sub>1,i</sub> </p>
+
+</td>
+<td valign="top">
+<p>= is the first constant (column 2 in the TIR radiometric correction table, i=1-10) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p> C<sub>2,i</sub> </p>
+
+</td>
+<td valign="top">
+<p>= is the second constant (column 3 in the TIR radiometric correction table, i=1-10) </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>V<sub>ij</sub> </p>
+
+</td>
+<td valign="top">
+<p>= the raw DN value at a specific row, column position </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p><sub>ij</sub> </p>
+
+</td>
+<td valign="top">
+<p>= is respectively the row and the column number </p>
+
+</td>
+</tr>
+</table>
+
+
+<p class=tip>Notes:</p>
+
+<ul class="tipul">
+<li>Even after the radiometric correction process some striping may remain as the radiometric correction table
+  may diverge from the actual correction needed. A <a href="../ilwis/ilwis_objects_filters.htm">filter</a> may be required to
+  further remove striping.</li>
+<li>All calculations for radiometric correction will use a precision of 0.001.</li>
+<li>The user may want to convert radiance values back to sensor calibrated DN
+values. These sensor calibrated DN values are not the actual digital unprocessed numbers
+of the file but radiometric corrected radiance values scaled back into an appropriate
+range using the formula:
+
+<table>
+<tr>
+<td>DN<sub>calibrated</sub> = L/C</td>
+<td align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;formula 3</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=25>
+<p>DN<sub>calibrated</sub> </p>
+
+</td>
+<td valign="top">
+<p> = sensor calibrated DN value </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>L </p>
+
+</td>
+<td valign="top">
+<p> = calculated radiance value </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>C </p>
+
+</td>
+<td valign="top">
+<p> = unit conversion coefficient; a linear scale factor for each band read from
+  the meta data in the HDF file</p></td>
+</tr>
+</table>
+</li>
+</ul>
+
+<p class=defnewpar>An <i> ASTER level 1B</i> file already contains radiometrically calibrated
+DN values. The formula used
+in ILWIS to convert these radiometrically calibrated
+DN values to radiance
+values (L) is:</p>
+<table width="100%">
+<tr>
+<td>L = (DN-1) * C</td>
+<td align="right">formula 4</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=25>
+<p>L </p>
+
+</td>
+<td valign="top">
+<p> = radiance value </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>DN </p>
+
+</td>
+<td valign="top">
+<p> = radiometrically corrected DN value of the ASTER level 1B file </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>C </p>
+
+</td>
+<td valign="top">
+<p> = unit conversion coefficient; a linear scale factor for each type of sensor read from
+  the meta data in the HDF file</p></td>
+</tr>
+</table>
+
+<p class=defnewpar>&nbsp;</p>
+
+<p class=defnewpar><b>Output</b></p>
+
+<table>
+<tr>
+<td></td>
+<td colspan="2">Digital Numbers</td>
+<td colspan="2">Radiances</td>
+</tr>
+<tr>
+<td>ASTER band</td>
+<td>Domain type</td>
+<td>Value range</td>
+<td>Domain type</td>
+<td>Value range</td>
+</tr>
+<tr>
+<td>VNIR band 1</td>
+<td>Image</td>
+<td>0-255</td>
+<td>Value</td>
+<td>0-250</td>
+</tr>
+<tr>
+<td>VNIR band 2</td>
+<td>Image</td>
+<td>0-255</td>
+<td>Value</td>
+<td>0-250</td>
+</tr>
+<tr>
+<td>VNIR band 3N</td>
+<td>Image</td>
+<td>0-255</td>
+<td>Value</td>
+<td>0-250</td>
+</tr>
+<tr>
+<td>VNIR band 3B</td>
+<td>Image</td>
+<td>0-255</td>
+<td>Value</td>
+<td>0-250</td>
+</tr>
+<tr>
+<td>SWIR band 4</td>
+<td>Image</td>
+<td>0-255</td>
+<td>Value</td>
+<td>0-250</td>
+</tr>
+<tr>
+<td>SWIR band 5</td>
+<td>Image</td>
+<td>0-255</td>
+<td>Value</td>
+<td>0-250</td>
+</tr>
+<tr>
+<td>SWIR band 6</td>
+<td>Image</td>
+<td>0-255</td>
+<td>Value</td>
+<td>0-250</td>
+</tr>
+<tr>
+<td>SWIR band 7</td>
+<td>Image</td>
+<td>0-255</td>
+<td>Value</td>
+<td>0-250</td>
+</tr>
+<tr>
+<td>SWIR band 8</td>
+<td>Image</td>
+<td>0-255</td>
+<td>Value</td>
+<td>0-250</td>
+</tr>
+<tr>
+<td>SWIR band 9</td>
+<td>Image</td>
+<td>0-255</td>
+<td>Value</td>
+<td>0-250</td>
+</tr>
+<tr>
+<td>TIR band 10</td>
+<td>Value
+<td>0-4094</td>
+<td>Value</td>
+<td>0-20</td>
+</tr>
+<tr>
+<td>TIR band 11</td>
+<td>Value</td>
+<td>0-4094</td>
+<td>Value</td>
+<td>0-20</td>
+</tr>
+<tr>
+<td>TIR band 12</td>
+<td>Value</td>
+<td>0-4094</td>
+<td>Value</td>
+<td>0-20</td>
+</tr>
+<tr>
+<td>TIR band 13</td>
+<td>Value</td>
+<td>0-4094</td>
+<td>Value</td>
+<td>0-20</td>
+</tr>
+<tr>
+<td>TIR band 14</td>
+<td>Value</td>
+<td>0-4094</td>
+<td>Value</td>
+<td>0-20</td>
+</tr>
+</table>
+
+<h3>Geometric corrections</h3>
+
+
+<p class=defnewpar>Geometrical knowledge of the imported ASTER bands is defined by the Georeference (relation between pixel
+RowCol positions and plane XY coordinates) and the Coordinate System parameters (either geographic
+or geodetic LatLons  or projected map coordinates).</p>
+<p class=defnewpar><i>ASTER level 1A</i> data contains sets of tiepoints with given geocentric LatLons on the WGS84 spheroid.
+The Aster User’s Guide Version 3.1 Part 1, March/June 2001 gives formulas to convert them to geodetic
+LatLons, at least for the center of each scene.&nbsp;The following calculations
+are carried out when importing an ASTER image. The results are found under the
+Additional Info of the created UTM coordinate system.</p>
+
+<p>
+
+&nbsp;
+
+</p>
+
+<p>
+
+<img border="0" src="../images/aster_orbit.gif" width="338" height="330">
+
+</p>
+
+<p>
+
+&nbsp;
+
+</p>
+
+<p class=defnewpar>The <i> geocentric latitude</i> PSI for scene number K is calculated as (Aster User's
+Guide Part 1, March 2001):</p>
+<table width="100%">
+<tr>
+<td>PSI  = <a href="../ilwis/calc_asin.htm">ASIN</a>(<a href="../ilwis/calc_cos.htm">COS</a>(360(K -
+0.5)/K<sub>max</sub>)<a href="../ilwis/calc_sin.htm">SIN</a>(A))</td>
+<td align="right">formula 5</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=25>
+<p>
+ASIN </p>
+
+</td>
+<td valign="top">
+<p> =&nbsp;the arc sine, i.e. the inverse sine (sin<sup>-1</sup>),
+of a value </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>COS </p>
+
+</td>
+<td valign="top">
+<p> = the cosine of an angle&nbsp; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+K
+
+</td>
+<td valign="top">
+= a scene number
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+K<sub>max</sub> 
+
+</td>
+<td valign="top">
+= 670; the maximum number of scenes
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>SIN </p>
+
+</td>
+<td valign="top">
+<p>= the sine of an angle </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>A </p>
+
+</td>
+<td valign="top">
+<p> = 81.8°; the complementary angle of the orbit inclination </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The geocentric latitude PSI found in the HDF file can be converted into the <i> geodetic
+(WGS84) latitude</i> PHI using the following
+formula (Aster User's Guide Part 1, March 2001):</p>
+<table width="100%">
+<td>PHI = <a href="../ilwis/calc_atan.htm">ATAN</a>(C*<a href="../ilwis/calc_tan.htm">TAN</a>(PSI))</td>
+<td align="right">formula 6</td>
+</tr>
+</table>
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=25>
+<p>
+ATAN </p>
+
+</td>
+<td valign="top">
+<p> =&nbsp;the arc tangent, i.e. the inverse tangent (tan<sup>-1</sup>),
+of a value </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>C </p>
+
+</td>
+<td valign="top">
+<p>= 1.0067394967422764; the squared ratio of the Earth radius at the equator to that of
+the pole of the WGS84 spheroid&nbsp;&nbsp; </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+TAN
+
+</td>
+<td valign="top">
+ = the tangent of an angle
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>PSI </p>
+
+</td>
+<td valign="top">
+<p> = the geocentric Latitude </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The longitude in the center of the scene can be found from the scene number K
+and the path number J using the following formulas:</p>
+
+<p class=defnewpar>The <i> longitude L<sub>K=168,J</sub> of the descending node at the Equator for the path J</i>
+can be expressed as follows:</p>
+<table width="100%">
+<tr>
+<td>L<sub>K=168,J </sub>= -64.60-360(J-1)/233</td>
+<td>(for J=1-75)</td>
+<td align="right">formula 7</td>
+</tr>
+<tr>
+<td>L<sub>K=168,J </sub>= 295.40-360(J-1)/233</td>
+<td>(for J=76-233)</td>
+<td align="right">formula 8</td>
+</tr>
+</table
+
+<p class=defnewpar>where:
+<table cellspacing=0>
+<tr>
+<td valign="top" width=25>
+<p>J </p></td>
+<td valign="top">
+<p> =&nbsp;the path </p>
+</td>
+</tr>
+</table>
+
+
+<p class=defnewpar>The <i> longitude L<sub>K,J </sub>of row K and path J</i> can be
+expressed as follows: </p>
+
+<p class=defnewpar>For the descending path: </p>
+<table width="100%">
+<tr>
+<td>L<sub>k,J</sub>- L<sub>k=168,J </sub>=<a href="../ilwis/calc_atan.htm">ATAN</a>(<a href="../ilwis/calc_tan.htm">TAN</a>(360(168-K)/K<sub>max</sub>)<a href="../ilwis/calc_cos.htm">COS</a>(A))+(168-K)(T*w<sub>e</sub>/K<sub>max</sub>)+360*N</td>
+<td>(for K=1-335)</td>
+<td align="right">formula 9</td>
+</tr>
+</table>
+
+<p class=defnewpar>For the ascending path: </p>
+<table width="100%">
+<tr>
+<td>L<sub>k,J</sub>- L<sub>k=168,J </sub>=<a href="../ilwis/calc_atan.htm">ATAN</a>(<a href="../ilwis/calc_tan.htm">TAN</a>(360(503-K)/K<sub>max</sub>)<a href="../ilwis/calc_cos.htm">COS</a>(A))+180+(168-K)(T*w<sub>e</sub>/K<sub>max</sub>)+360*N</td>
+<td>(for K=1-335)</td>
+<td align="right">formula 10</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+<table cellspacing=0>
+<tr>
+<td valign="top" width=25>
+<p>ATAN </p></td>
+<td valign="top">
+<p> =&nbsp;the arc tangent, i.e. the inverse tangent (tan<sup>-1</sup>),
+of a value </p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+TAN
+
+</td>
+<td valign="top">
+ = the tangent of an angle
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>K </p>
+
+</td>
+<td valign="top">
+<p> = a scene number </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>K<sub>max </sub> </p>
+
+</td>
+<td valign="top">
+<p>= 670; the maximum number of scenes </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>COS </p>
+
+</td>
+<td valign="top">
+<p> = the cosine of an angle </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+T
+
+</td>
+<td valign="top">
+= 16*24*60/233 = 98.884; the orbit period of the spacecraft in minutes
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+w<sub>e</sub> 
+
+</td>
+<td valign="top">
+ = 360/86400 = 0.0041666667; the angular velocity of the rotating earth in
+degrees/second
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=25>
+<p>N </p>
+
+</td>
+<td valign="top">
+<p> = an integer needed to adjust the obtained longitude to a value &gt; -180º
+and &lt;= 180º </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The LatLon tiepoints of ASTER level 1A are converted to Universal Transverse Mercator (UTM) coordinates of the appropriate zone, similar to what is done for
+ASTER level 1B data. However for the level 1A data the full set of tiepoints
+available in the HDF file and a 3<sup>rd</sup> order transformation are used.</p>
+
+
+<p class=tip>Note:</p>
+<p class=tiptext>The number of tiepoints is variable depending on the telescope.</p>
+
+<p>
+&nbsp;</p>
+
+<p>
+<i>
+ASTER level 1B</i> data contains images already resampled to the geometry of the appropriate UTM projection with the WGS84 Datum.
+The images are however not
+north-oriented but path-oriented. ILWIS creates for this purpose a georeference with
+the 4 corners as tiepoints</p>
+
+<p>The tiepoints coordinates (in UTM) can be obtained from the lattice of 13 X 11,
+107x104 and 12x11 LatLons given for respectively VNIR, SWIR and TIR, simply by applying the relevant projection transformation. The applicable UTM
+zone can be found in the metadata of the HDF file.</p>
+
+<p class=defnewpar><b>Output</b></p>
+<table>
+<tr>
+<td></td>
+<td></td>
+<td colspan="2">Level 1A</td>
+<td colspan="2">
+  <p align="center">Level 1B</td>
+</tr>
+<tr>
+<td>ASTER band</td>
+<td>Georeference</td>
+<td>Nr. of tiepoints</td>
+<td>Size (RowCol)</td>
+<td>Nr. of tiepoints</td>
+<td>Size(RowCol )</td>
+</tr>
+<tr>
+<td>VNIR band 1</td>
+<td>Tiepoints</td>
+<td>13x11=143</td>
+<td align="left">4200 x 4100</td>
+<td align="center">4</td>
+<td align="left">4200 x 4980</td>
+</tr>
+<tr>
+<td>VNIR band 2</td>
+<td>Tiepoints</td>
+<td>13x11=143</td>
+<td align="left">4200 x 4100</td>
+<td align="center">4</td>
+<td align="left">4200 x 4980</td>
+</tr>
+<tr>
+<td>VNIR band 3N</td>
+<td>Tiepoints</td>
+<td>13x11=143</td>
+<td align="left">4200 x 4100</td>
+<td align="center">4</td>
+<td align="left">4200 x 4980</td>
+</tr>
+<tr>
+<td>VNIR band 3B</td>
+<td>Tiepoints</td>
+<td>16x11=176</td>
+<td align="left">5400 x 5000</td>
+<td align="center">4</td>
+<td align="left">4600 x 4980</td>
+</tr>
+<tr>
+<td>SWIR band 4</td>
+<td>Tiepoints</td>
+<td>
+107 X 104 =11128</td>
+<td align="left">2100 x 2048</td>
+<td align="center">4</td>
+<td align="left">2100 x 2490</td>
+</tr>
+<tr>
+<td>SWIR band 5</td>
+<td>Tiepoints</td>
+<td>
+107 X 104=11128</td>
+<td align="left">2100 x 2048</td>
+<td align="center">4</td>
+<td align="left">2100 x 2490</td>
+</tr>
+<tr>
+<td>SWIR band 6</td>
+<td>Tiepoints</td>
+<td>
+107 X 104=11128</td>
+<td align="left">2100 x 2048</td>
+<td align="center">4</td>
+<td align="left">2100 x 2490</td>
+</tr>
+<tr>
+<td>SWIR band 7</td>
+<td>Tiepoints</td>
+<td>
+107 X 104=11128</td>
+<td align="left">2100 x 2048</td>
+<td align="center">4</td>
+<td align="left">2100 x 2490</td>
+</tr>
+<tr>
+<td>SWIR band 8</td>
+<td>Tiepoints</td>
+<td>
+107 X 104=11128</td>
+<td align="left">2100 x 2048</td>
+<td align="center">4</td>
+<td align="left">2100 x 2490</td>
+</tr>
+<tr>
+<td>SWIR band 9</td>
+<td>Tiepoints</td>
+<td>
+107 X 104=11128</td>
+<td align="left">2100 x 2048</td>
+<td align="center">4</td>
+<td align="left">2100 x 2490</td>
+</tr>
+<tr>
+<td>TIR band 10</td>
+<td>Tiepoints</td>
+<td>
+12 X 11 = 132
+<td align="left">700 x 700</td>
+<td align="center">4</td>
+<td align="left">700 x 830</td>
+</tr>
+<tr>
+<td>TIR band 11</td>
+<td>Tiepoints</td>
+<td>
+12 X 11 = 132</td>
+<td align="left">700 x 700</td>
+<td align="center">4</td>
+<td align="left">700 x 830</td>
+</tr>
+<tr>
+<td>TIR band 12</td>
+<td>Tiepoints</td>
+<td>
+12 X 11 = 132</td>
+<td align="left">700 x 700</td>
+<td align="center">4</td>
+<td align="left">700 x 830</td>
+</tr>
+<tr>
+<td>TIR band 13</td>
+<td>Tiepoints</td>
+<td>
+12 X 11 = 132</td>
+<td align="left">700 x 700</td>
+<td align="center">4</td>
+<td align="left">700 x 830</td>
+</tr>
+<tr>
+<td>TIR band 14</td>
+<td>Tiepoints</td>
+<td>
+12 X 11 = 132</td>
+<td align="left">700 x 700</td>
+<td align="center">4</td>
+<td align="left">700 x 830</td>
+</tr>
+</table>
+
+<p class=tip>Notes:</p>
+<p class=tiptext>The georeferences for ASTER level 1B are the same per sensor group (VNIR, SWIR and TIR) except
+VNIR band 3B which has a separate one.</p>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+<li>With the <a href="create_a_stereopair.htm">Epipolar Stereo Pair</a> 
+  operation you can create a <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pair</a> from the two ASTER bands VNIR 3N and
+  VNIR 3B.</li>
+
+<li>The Coordinate System Properties sheet gives additional information that can
+be relevant in case of mosaicking ASTER images. The Additional Info tab gives
+information about:<br>
+Zone:<br>
+Central Meridian:<br>
+Scale Factor at Central Meridian:<br>
+Geographic area:<br>
+Latitude limits: rMinLat, rMaxLat<br>
+Longitude limits: rMinLon, rMaxLon<br>
+Scene (Row-) Number: iSceneNr&nbsp;<br>
+Orbit Path Number:  iPathNr&nbsp;<br>
+Geocentric Latitude at Row SceneNr<br>
+Geodetic Latitude at Row SceneNr<br>
+Longitude at Row SceneNr</li>
+</ul>
+
+<p class="Seealso">See also:</p>
+<p class="seealsolinks"><a href="import_aster.htm">Import ASTER</a></p>
+<p class="seealsolinks"><a href="import_map.htm">Import Map</a></p>
+</body

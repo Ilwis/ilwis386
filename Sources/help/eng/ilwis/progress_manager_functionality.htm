@@ -1,0 +1,109 @@
+<html>
+
+<head>
+<title>Progress manager : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Progress manager, Progress indicators, ILWIS window types">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Progress manager</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The progress manager lists all actions, <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculations</a> and <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operations</a> that are currently performed by ILWIS and which will take some time. The progress manager shows the progress of each of these background processes. </p>
+
+<p class=defnewpar>For each operation that is running, the progress manager shows: </p>
+
+<ul>
+
+<li>the name of the operation and the name of the output map or table that is being calculated, </li>
+
+<li>the operation's progress indicator (if applicable), </li>
+
+<li>the amount of completion (if applicable) as: </li>
+
+	<ul>
+
+	<li>number of lines processed (in case of raster maps), or </li>
+	
+	<li>number of points, segments, polygons processed (in case of point, segment or polygon maps), or </li> 
+	
+	<li>number of records processed (in case of tables), </li>
+
+	</ul>
+
+<li>additional information about the operation that is performed. </li>
+
+</ul>
+
+<p class=defnewpar>When multiple calculations or operations are performed at the same time, the progress manager will list these on multiple lines. </p>
+
+<p class=kopje>To interrupt an operation before it has finished: </p>
+
+<p>When only a single operation is running: </p>
+
+	<ul>
+	
+		<li>Directly click the <span class=arial>Stop</span> button in the progress manager.</li>
+	
+	</ul>
+
+<p class=defnewpar>When multiple operations are running: </p>
+
+	<ul>
+	
+		<li>In the progress manager, select the operation you wish to stop, and</li>
+
+		<li>click the <span class=arial>Stop</span> button in the progress manager. </li>
+
+	</ul>
+
+<p class=kopje>To view the Algorithm Help topic of an operation while the operation is running: </p>
+
+<ul>
+
+<li>Select the operation in the progress manager, and</li>
+
+<li>click the <span class=arial>Help</span> button in the progress manager. </li>
+
+</ul>
+
+<p class=kopje>Additional information:</p>
+
+<ul>
+
+<li>The progress manager will only appear if a calculation or operation takes longer than 2 seconds. </li>
+
+<li>If no calculations or operations are performed anymore, the progress manager will automatically disappear. </li>
+
+</ul>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>Optionally, you can use the old style progress indicators, i.e. progress indicators in separate windows for each operation; use the <span class=arial>General</span> entry in the <a href="../ilwismen/main_window_preferences.htm">Preferences</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwismen/main_window_preferences.htm">Main window : Preferences</a></p>
+
+</body

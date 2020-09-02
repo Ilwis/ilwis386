@@ -1,0 +1,174 @@
+<html>
+
+<head>
+<title>STRLE</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="STRLE, String functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>STRLE( ) function</h1>
+
+<p class=defnewpar>Returns true if, in alphabetical order, <i>String a</i> comes before or on the same place as <i>String b</i>, i.e. <i> a</i> &lt;= <i>b</i>.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>STRLE</span>(<i>String a</i>, <i>String b</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><i>String a</i></td>
+	<td valign="top">is a string</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> or <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> domain, or <a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>String</span></a></td>
+</tr>
+<tr>
+	<td width="100" valign="top"><i>String b</i></td>
+	<td valign="top">is a string</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >Class</a> or <a href="..//ilwis/sec/domain_type_id_sec.htm" onClick="return popup(this, 'notes')" >ID</a> domain, or <a href="..//ilwis/sec/domain_type_string_sec.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>String</span></a></td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="100" valign="top"><span class=courier>STRLE</span> returns:</td>
+	<td valign="top">a boolean value, i.e. True, False, or undefined</td>
+</tr>
+<tr>
+	<td width="100" valign="top">Domain type:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_bool_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Bool</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>When one of the input parameters is undefined, or when both input parameters are undefined, the output will also be undefined.</p>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li><span class=courier>STRLE</span>(<i>String a</i>, <i>String b</i>) is equivalent to <i>String a &lt;=</i> <i>String b</i>.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td width="225"><p class=calc00>? STRLE(&quot;Landuse&quot;,&quot;Forest&quot;)</p></td>
+	<td><p>returns False</p></td>
+</tr>
+<tr>
+	<td width="225"><p class=calc00>? &quot;Airport&quot; &lt;= &quot;Industrial&quot;</p>
+	<td><p>returns True</p></td>
+</tr>
+</table>
+
+<p class=kopje>TabCalc example:</p>
+<p class=calc00>OutCol = STRLE(Landuse,Geomorphology)</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top"><p class=tcolh>Landuse</p></td>
+	<td valign="top"><p class=tcolh>Geomorphology</p></td>
+	<td valign="top"><p class=tcolh>OutCol</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Institutional</p></td>
+	<td valign="top"><p class=t1>Glacial slope</td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Commercial</p></td>
+	<td valign="top"><p class=t1>Glacial lake</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Residential</p></td>
+	<td valign="top"><p class=t1>Old landslide</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>?</p></td>
+	<td valign="top"><p class=t1>Active landslide</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Industrial</p></td>
+	<td valign="top"><p class=t1>Heavily eroded area</p></td>
+	<td valign="top"><p class=t1>False</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Recreational</p></td>
+	<td valign="top"><p class=t1>River floodplain</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Transport</p></td>
+	<td valign="top"><p class=t1>Valley in alluvial fan</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Airport</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+	<td valign="top"><p class=t1>?</p></td>
+</tr>
+<tr>
+	<td valign="top"><p class=t1>Water</p></td>
+	<td valign="top"><p class=t1>Water</p></td>
+	<td valign="top"><p class=t1>True</p></td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_left.htm">LEFT</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strpos.htm">STRPOS</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_in.htm">IN</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_right.htm">RIGHT</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strlt.htm">STRLT</a></p></td>
+	<td valign="top"><p class=seealsolinks><a href="calc_inmask.htm">INMASK</a></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_sub.htm">SUB</a></p></td>
+	<td valign="top" width="60"><p class=seealsolinks><a href="calc_strgt.htm">STRGT</a></p></td>
+	<td valign="top"><p class=seealsolinks></p></td>
+</tr>
+<tr>
+	<td valign="top" width="65"><p class=seealsolinks><a href="calc_length.htm">LENGTH</a></p></td>
+	<td valign="top" width="60"><a href="calc_strge.htm">STRGE</a></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

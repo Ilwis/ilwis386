@@ -1,0 +1,35 @@
+<html>
+
+<head>
+<title>sampling popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Sampling</p>
+
+<p>Sampling is an interactive process of selecting training pixels in a <a href="../../ilwis/popup/objects_sample_set_popup.htm">sample set</a> prior to an image <a href="classify_popup.htm">classification</a>. </p>
+
+<p class=linespacing03before>In the <a href="..//ilwis/sample_set_editor_functionality1.htm" onClick="return popup(this, 'notes')" >sample set editor</a>, select pixels that are characteristic for a certain type of a certain natural resource on the ground and that have similar spectral values in the maps in the map list, and assign a
+<b> class name</b> to them. The spectral values of these sampled pixels or training pixels provide the basis on which decisions are made during classification. These values can be inspected in the sample statistics of a certain class of training pixels and can be visualized in feature spaces. The result of Sampling is a filled <a href="../../ilwis/popup/objects_sample_set_popup.htm">sample set</a>. </p>
+
+<p class=linespacing03before>To start sampling, double-click the Sample Map item in the <a href="../../ilwis/popup/operation_tree_list_popup.htm">Operation-list</a>, or choose Image Processing, Sample on the <a href="..//ilwis/main_window_menu_commands.htm" onClick="return popup(this, 'notes')" >Operations menu</a> in the Main window. After creating a new sample set or specifying the name of an existing sample set, the <a href="..//ilwis/sample_set_editor_functionality1.htm" onClick="return popup(this, 'notes')" >sample set editor</a> is started.</p>
+
+</body

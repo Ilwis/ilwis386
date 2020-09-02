@@ -1,0 +1,34 @@
+<html>
+
+<head>
+<title>filter pattern popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Pattern filters</p>
+
+<p>A <a href="..//ilwisapp/filters_types_pattern_filters.htm" onClick="return popup(this, 'notes')" >pattern filter</a> always works in a 3x3 environment. For each neighbour, it checks whether the absolute difference between the value of the center pixel and the value of the neighbour is smaller than or equal to a specified threshold value. According to the position of a <b>true</b> neighbour, a certain bit is set. The value assigned to the output center pixel is the bitwise combination of all true neighbours.</p>
+
+<p class=linespacing03before>The pattern filter is thus able to detect <b>areas</b> where pixels have more or less the same value (value 255 in the output map), <b>outliers </b>where there are large differences between the center pixel and all neighbouring pixel values (value 0 in the output map), and bitwise the <b>directions</b> in which differences are found (other output value).</p>
+
+<p class=linespacing03before>As there is no standard pattern filter, you always use <a href="..//ilwisapp/filters_user_defined_pattern_filters.htm" onClick="return popup(this, 'notes')" >user-defined pattern filters</a>: specify the threshold value.</p>
+
+</body

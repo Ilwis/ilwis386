@@ -1,0 +1,207 @@
+<html>
+
+<head>
+<title>COORD</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="COORD, Coordinate functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>COORD( ) function</h1>
+
+<p class=defnewpar>Returns (X,Y) coordinates from separate X coordinates and Y coordinates (and a coordinate system).</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>COORD</span>(<i>X</i>, <i>Y</i>)<br>
+<span class=courier>COORD</span>(<i>X</i>, <i>Y</i>, <i>CoordinateSystem</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><i>X</i></td>
+	<td valign="top">is an X coordinate</td>
+</tr>
+<tr>
+	<td width="110" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="110" valign="top"><i>Y</i></td>
+	<td valign="top">is an Y coordinate</td>
+</tr>
+<tr>
+	<td width="110" valign="top">Domain type:</td>
+	<td valign="top">any <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >Value</a> domain</td>
+</tr>
+<tr>
+	<td width="110" valign="top"><i>CoordinateSystem</i></td>
+	<td valign="top">is a coordinate system</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="110" valign="top"><span class=courier>COORD</span> returns:</td>
+	<td valign="top">an (X,Y) coordinate</td>
+</tr>
+<tr>
+	<td width="110" valign="top">Domain:</td>
+	<td valign="top">a coordinate system</td>
+</tr>
+</table>
+
+<p class="tip">Notes:</p>
+<ul class="tipul">
+	<li>The <span class=courier>COORD</span> function can be used to combine separate X-coordinates and Y-coordinates into XY-coordinates.</li>
+	<li>In coordinate calculations, you can either use:<br>
+  	- a coordinate column with combined XY-coordinates;<br>
+  	- the <span class=courier>COORD</span> function when you have 2 separate columns with X-coordinates and Y-coordinates.</li>
+	<li>When using a LatLon coordinate system, the syntax is <span class=courier>COORD</span>(<i>Lon</i>,
+      <i>Lat</i>, <i>LatLon</i>).</li>
+	<li>You can produce columns that use a coordinate system as domain, but you cannot create maps that use a coordinate system as domain.</li>
+	<li><i>CoordinateSystem</i> must refer to a coordinate system in which the XY-coordinates fit (e.g. the coordinates of the point map); <i>CoordinateSystem</i>
+      is not a target coordinate system; to transform coordinates to another coordinate system use the <a href="calc_transform.htm"><span class=courier>TRANSFORM</span></a> function.</li>
+</ul>
+
+<p class=tip>Tip:</p>
+<p class=tiptext>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output
+column has been calculated.</p>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a></p>
+
+<p class=calctitle>Examples</p>
+
+<p class=kopjeaftertitlesub>Pocket line calculator examples:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" colspan="2"><p class=calc00>? TRANSFORM (COORD(803429,8074631,Cochabamba),LATLON)</p></td>
+	<td valign="top"><p></p></td>
+</tr>
+<tr>
+	<td valign="top" width="100"><p class=calc00></p></td>
+	<td valign="top"><p>returns the (X,Y) coordinate according to the X coordinate and the Y coordinate and coordinate system LatLon, i.e. 17°23'36.51"S, 66°08'40.01"W</p></td>
+</tr>
+</table>
+
+<p class="kopje">TabCalc example:</p>
+<p class="calc00">XYCoord = COORD(X,Y,Cochabamba)</p>
+<p class="calc00">XYLatLon = TRANSFORM(XYCoord,LATLON)</p>
+<p class="calc00">XYLatLon = TRANSFORM(COORD(X,Y,Cochabamba),LATLON)</p>
+<p class=defnewpar>Point data from the Cochabam area currently using coordinate system <span class="courier">Cochabamba</span> (Cochabamba, Bolivia) will be transformed into longitudes and latitudes (<span class="courier">LatLon</span> coordinate system).</p>
+<p class=emptyline>&nbsp;</p>
+<table cellspacing="0">
+  <tr>
+    <td valign="top"><p class="tcolhr">X</p></td>
+    <td valign="top"><p class="tcolhr">Y</p></td>
+    <td valign="top"><p class="tcolhr">XYCoord</p></td>
+    <td valign="top"><p class="tcolhr">XYLatLon</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">803429</p></td>
+    <td valign="top"><p class="t1r">8074631</p></td>
+    <td valign="top"><p class="t1r">(803429,8074631)</p></td>
+    <td valign="top"><p class="t1r">17°21'30.66&quot;S, 73°42'04.21&quot;W</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">799748</p></td>
+    <td valign="top"><p class="t1r">8082415</p></td>
+    <td valign="top"><p class="t1r">(799748,8082415)</p></td>
+    <td valign="top"><p class="t1r">17°19'25.29&quot;S, 66°10'48.48&quot;W</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">803511</p></td>
+    <td valign="top"><p class="t1r">8087422</p></td>
+    <td valign="top"><p class="t1r">(803511,8087422)</p></td>
+    <td valign="top"><p class="t1r">17°16'40.76&quot;S, 66°08'43.67&quot;W</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">801281</p></td>
+    <td valign="top"><p class="t1r">8088967</p></td>
+    <td valign="top"><p class="t1r">(801281,8088967)</p></td>
+    <td valign="top"><p class="t1r">17°15'51.61&quot;S, 66°09'59.87&quot;W</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">802613</p></td>
+    <td valign="top"><p class="t1r">8080483</p></td>
+    <td valign="top"><p class="t1r">(802613,8080483)</p></td>
+    <td valign="top"><p class="t1r">17°20'26.71&quot;S, 66°09'10.57&quot;W</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">806816</p></td>
+    <td valign="top"><p class="t1r">8076585</p></td>
+    <td valign="top"><p class="t1r">(806816,8076585)</p></td>
+    <td valign="top"><p class="t1r">17°22'31.35&quot;S, 66°06'46.37&quot;W</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">797465</p></td>
+    <td valign="top"><p class="t1r">8078352</p></td>
+    <td valign="top"><p class="t1r">(797465,8078352)</p></td>
+    <td valign="top"><p class="t1r">17°21'38.43&quot;S, 66°12'03.73&quot;W</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">796346</p></td>
+    <td valign="top"><p class="t1r">8087736</p></td>
+    <td valign="top"><p class="t1r">(796346, 8087736)</p></td>
+    <td valign="top"><p class="t1r">17°16'33.96&quot;S, 66°12'46.21&quot;W</p></td>
+  </tr>
+  <tr>
+    <td valign="top"><p class="t1r">806042</p></td>
+    <td valign="top"><p class="t1r">8085414</p></td>
+    <td valign="top"><p class="t1r">(806042, 8085414)</p></td>
+    <td valign="top"><p class="t1r">17°17'44.79&quot;S, 66°07'17.04&quot;W</p></td>
+  </tr>
+</table>
+
+<p class="defnewpar">In words the above mentioned expressions read:</p>
+<p>Take the X-component of a coordinate belonging to coordinate system <span class="courier">Cochabamba</span> and transform it to a longitude value. Take the Y-component of a coordinate belonging to coordinate system <span class="courier">Cochabamba</span> and transform it to a latitude value.</p>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="90"><a href="calc_crdx.htm">CRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mincrdx.htm">MINCRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mapcrd.htm">MAPCRD</a></td>
+	<td valign="top"><a href="calc_rasvalue.htm">RASVALUE</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_crdy.htm">CRDY</a></td>
+	<td valign="top" width="80"><a href="calc_mincrdy.htm">MINCRDY</a></td>
+	<td valign="top" width="80"><a href="calc_maprow.htm">MAPROW</a></td>
+	<td valign="top"><a href="calc_dist.htm">DIST</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"><a href="calc_transform.htm">TRANSFORM</a></td>
+	<td valign="top" width="80"><a href="calc_maxcrdx.htm">MAXCRDX</a></td>
+	<td valign="top" width="80"><a href="calc_mapcol.htm">MAPCOL</a></td>
+	<td valign="top"><a href="calc_dist2.htm">DIST2</a></td>
+</tr>
+<tr>
+	<td valign="top" width="90"></td>
+	<td valign="top" width="80"><a href="calc_maxcrdy.htm">MAXCRDY</a></td>
+	<td valign="top" width="80"><a href="calc_mapvalue.htm">MAPVALUE</a></td>
+	<td valign="top"></td>
+</tr>
+</table>
+
+</body

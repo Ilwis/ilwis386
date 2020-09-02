@@ -1,0 +1,129 @@
+<html>
+
+<head>
+<title>Transpose table : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Transpose table, TableTranspose">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Transpose table</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/transpose_table_popup.htm" onClick="return popup(this, 'notes')" >Transpose table</a> operation can be directly executed by typing one of the following expressions on the command line of the Main Window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableTranspose</span>(InputTableName, ColumnDomain)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=79>
+<p class=calccommlinetable>OUTTABLE</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommlinetable>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommlinetable><span class=courier>TableTranspose</span>(InputTableName, ColumnDomain, ValueRange)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTTABLE</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>TableTranspose</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Transpose table operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>InputTableName</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input table.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>ColumnDomain</p>
+
+</td>
+<td valign="top">
+<p>is the name of an existing domain that will be used for all output columns.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>ValueRange</p>
+
+</td>
+<td valign="top">
+<p>is the value range that will be used for all output columns.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output table</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output table has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="transpose_table_functionality.htm">Transpose table : functionality</a></p>
+
+</body

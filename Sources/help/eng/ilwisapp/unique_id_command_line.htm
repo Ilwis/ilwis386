@@ -1,0 +1,205 @@
+<html>
+
+<head>
+<title>Unique ID : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Unique ID, PointMapNumbering, SegmentMapNumbering, PolygonMapNumbering">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Unique ID</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/unique_id_popup.htm" onClick="return popup(this, 'notes')" >Unique ID</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=defnewpar>To apply the Unique ID operation on point maps:</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=14>
+<p class=calccommline><span class=courier>=</span></p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapNumbering</span>(InputMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=14>
+<p class=calccommline><span class=courier>=</span></p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PointMapNumbering</span>(InputMap, , <i>prefix</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>To apply the Unique ID operation on segment maps:</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=14>
+<p class=calccommline><span class=courier>=</span></p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapNumbering</span>(InputMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=14>
+<p class=calccommline><span class=courier>=</span></p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>SegmentMapNumbering</span>(InputMap, , <i>prefix</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>To apply the Unique ID operation on polygon maps:</p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=14>
+<p class=calccommline><span class=courier>=</span></p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapNumbering</span>(InputMap)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=56>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=14>
+<p class=calccommline><span class=courier>=</span></p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapNumbering</span>(InputMap, , <i>prefix</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=167>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output point, segment or polygon map. This name will also be used for the output attribute table. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>PointMapNumbering</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Unique ID operation on point maps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>SegmentMapNumbering</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Unique ID operation on segment maps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p class=courier>PolygonMapNumbering</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Unique ID operation on polygon maps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p>InputMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of your input point, segment or polygon map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=167>
+<p><i>prefix</i></p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to specify a user-defined prefix for the output IDs; if this parameter is not specified, the output IDs will simply be Pol 1, Pol 2, Pol 3, or Seg 1, Seg 2, Seg 3, or Pnt 1, Pnt 2, Pnt 3, etc. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. The output IDs will be stored by the output map, i.e. in a <span class=courier>UniqueID</span> domain (<a href="..//ilwis/popup/objects_internal_domains_popup.htm" onClick="return popup(this, 'notes')" >internal domain</a>). </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="unique_id_functionality.htm">Unique ID : functionality</a></p>
+
+</body

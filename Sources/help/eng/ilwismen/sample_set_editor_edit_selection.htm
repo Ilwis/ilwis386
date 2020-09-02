@@ -1,0 +1,117 @@
+<html>
+
+<head>
+<title>Sample set editor : Edit selection</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sample set editor, Edit ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Sample set editor</h1></td>
+<td class=menucommand><a class=menlink href=JavaScript:__ilwismen__sec2__sample_set_editor_edit_menu_sec2.Click()>Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Edit ...</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Assign a class name to the current selection of pixels; these pixels in the map list will become training pixels. Or edit the class name of the current selection of existing training pixels. The process of assigning class names to training pixels is called <a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >sampling</a>. </p>
+
+<p class=defnewpar>In the <a href="..//ilwis/popup/sample_set_editor_popup.htm" onClick="return popup(this, 'notes')" >sample set editor</a>, you can assign class names to pixels:</p>
+
+<ul>
+
+<li>	by selecting one or more pixels, then </li>
+
+<ul>
+
+<li>	choose <span class=arial>Edit</span> from the Edit menu, or </li>
+
+<li>	choose <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_editors.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, or </li>
+
+<li>	press <span class=arial>Enter</span> on the keyboard, or </li>
+
+<li>	double-click the selection while holding the <span class=arial>Ctrl</span> key on the keyboard,</li>
+
+</ul>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	by double-clicking a single pixel.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>New value:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing class name that you want to assign to the selected pixel(s). Or assign a new class name to this selection by selecting <b>&lt;new&gt;</b> from the list; subsequently enter a new class name, (optional) code and color. The new class name will be added to the domain as used by the sample map of this sample set. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>This dialog box only appears when you selected multiple pixels. When you selected a single pixel to edit, you can directly choose a class name in a little edit box.</p>
+
+<p class=kopje>To select pixels:</p>
+
+<ul>
+
+<li>	To select a single pixel: click a pixel.</li>
+
+<li>	To select multiple pixels: drag a box around the pixels you want to select. You can also use the <span class=arial>Ctrl</span> key to add more pixels to a selection.</li>
+
+<li>	To clear a selection: click a selected pixel again, or use the <span class=arial>Shift</span> key or a combination of the <span class=arial>Shift</span> and <span class=arial>Ctrl</span> keys.</li>
+
+</ul>
+
+<p>For more information, see <a href="../ilwis/sample_set_editor_functionality1.htm">Sample set editor : functionality (1)</a>.</p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>	When you make a selection, the lower half of the Sample Statistics window under the heading Current Selection displays the mean, standard deviation, number of pixels with predominant value, predominant value of the currently selected pixels for all maps in the map list, and the total number of currently selected pixels. <br>
+You can compare the values of the current selection with the values of existing classes of training pixels as listed in the upper half of the Sample Statistics window.</li>
+
+<li>	The width of class names as shown in the Edit dialog box, depends on the width of the domain. You can change the width of a domain by editing the properties of the domain.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/sample_set_editor_functionality1.htm">Sample set editor : functionality (1)</a></p>
+
+</body

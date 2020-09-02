@@ -1,0 +1,35 @@
+<html>
+
+<head>
+<title>Pixel information window popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Pixel information window</p>
+
+<p class=linespacing03after>The <a href="..//ilwis/pixel_information_window.htm" onClick="return popup(this, 'notes')" >pixel information window</a> allows you to interactively inspect class names, IDs or values in multiple raster, polygon, segment and point maps with the same or a compatible <a href="objects_coordinate_system_popup.htm">coordinate system</a>. When one map is displayed in a map window, the pixel information window is capable of retrieving values of all maps added to the pixel info window, at the position of the mouse pointer in the map window. In the same way, when you have an analog paper map on the digitizer and you performed MapReference, the pixel information window is capable of retrieving values of all maps added to the pixel info window, at the position of the digitizer cursor.</p>
+
+<p class=linespacing03after>Raster maps as well as polygon, segment and point maps can be added to the pixel information window. When an <a href="objects_table_popup.htm">attribute table</a> is linked to one of those maps or to the domains of the maps, the attribute information is shown as well. </p>
+
+<p class=linespacing03after>Also, when of a <a href="object_dependent_data_objects_popup.htm">dependent map</a> only the <a href="object_definition_files_popup.htm">object definition file</a> exists, pixel info is able to actually calculate output values of the dependent map on the fly. This is possible for output maps of map calculation, and for output maps of the
+Mapcalc, Filter, Classify, Densify, Slicing and Attribute map operations.</p>
+
+</body

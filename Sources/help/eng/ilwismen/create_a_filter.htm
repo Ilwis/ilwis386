@@ -1,0 +1,106 @@
+<html>
+
+<head>
+<title>Create a filter</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Filters, Linear filters, User-defined filters">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a filter</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Filtering is a process in which each pixel value in a raster map is replaced with a new value. The new value is obtained by applying a certain function to each input pixel and its neighbourhood. </p>
+
+<p class=defnewpar>You can create your own <a href="..//ilwis/popup/obj_linear_filter_popup.htm" onClick="return popup(this, 'notes')" >linear filter</a>. Linear filters use a linear combination of all pixels in a rectangle around the input pixel. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> of the Main window, you choose the <span class=arial>Create Filter</span> command, or</li>
+
+<li>	when you double-click the <span class=arial>New Filter</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or</li>
+
+<li>	when you click the create filter button <img src="../images/crea.gif" align=bottom width="17" height="22"> in the dialog box of the <a href="../ilwisapp/filter.htm">Filter</a> operation.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Filter name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for your linear filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the filter. The description is visible on the status bar of the Main window when moving the mouse pointer over the filter in the Catalog. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Rows:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type an odd value to define the number of rows for the filter.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Columns:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type an odd value to define the number of columns for the filter.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>After clicking the OK button, the <a href="../ilwis/filter_editor.htm">Filter editor</a> is opened. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_filters.htm">ILWIS objects : filters</a></p>
+
+<p class=seealsolinks><a href="../ilwis/filter_editor.htm">Filter editor</a> </p>
+
+<p class=seealsolinks><a href="../ilwisapp/filter_functionality.htm">Filter : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_types_linear_filters.htm">Filter types : linear filters</a></p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_user_defined_linear_filters.htm">Filters: user-defined linear filters</a></p>
+
+</body

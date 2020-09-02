@@ -1,0 +1,484 @@
+<html>
+
+<head>
+<title>Select projection</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Projections">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Select Projection</h1>
+
+<!--<hr>-->
+
+<p class=kopje>General information:</p>
+
+<p>When you know the projection of your maps, e.g. from a national mapping agency, you can attach this projection information to the coordinate system(s) of your maps. </p>
+
+<p class=defnewpar>Creating a coordinate system with projection information enables you:</p>
+
+<ul>
+
+<li>	to see the geographic coordinates of the map (Lat, Long) on the status bar when the map is displayed in a map window, </li>
+
+<li>	to add a graticule on top of the map in a map window,</li>
+
+<li>	to easily present the map in another projection,</li>
+
+<li>	to transform maps from one coordinate system to another,</li>
+
+<li>	to resample raster maps from one georeference to another.</li>
+
+</ul>
+
+<p class=defnewpar>Projections are designed to solve the problem of drawing objects which are located in a spherical coordinate system (on the earth's surface) in a planar coordinate system (XY-coordinate system), i.e. on a piece of paper. The problem can be compared by making a whole orange, halve an orange peel or part of an orange peel appear flat.</p>
+
+<p class=kopje>Presentation purposes:</p>
+
+<ul>
+
+<li>	You can use multiple projections.</li>
+
+<li>	To interactively present one or more maps in various projections:</li>
+
+<ul>
+
+<li>	create a couple of coordinate systems each using a different projection or different projection parameters; you can choose required projection parameters yourself,</li>
+
+<li>	display a map in a map window, and add a coordinate system with a projection by <i>dragging</i> a coordinate system from the Catalog to the map window (or choose <span class=arial>Coordinate System</span> from the <a href="../ilwis/map_window_menu_commands.htm">Options menu</a> in the map window),</li>
+
+<li>	if you like you can refine your projection information by choosing <span class=arial>Coordinate System</span> from the <a href="../ilwis/map_window_menu_commands.htm">Edit menu</a> in a map window,</li>
+
+<li>	add a graticule to each map window; choose <span class=arial>Add Annotation, Graticule</span> from the <a href="../ilwis/map_window_menu_commands.htm">Layers menu</a>. This enables you to see the meridians, parallels. etc. and you can see the influence of the projection attached to the map,</li>
+
+<li>	save the map window as a map view.</li>
+
+</ul>
+
+<li>	To permanently make maps appear in a different projection, you can use the <a href="..//ilwisapp/popup/transform_polygons_popup.htm" onClick="return popup(this, 'notes')" >Transform Polygon Map</a>, <a href="..//ilwisapp/popup/transform_segments_popup.htm" onClick="return popup(this, 'notes')" >Transform Segment Map</a>, or the <a href="..//ilwisapp/popup/transform_points_popup.htm" onClick="return popup(this, 'notes')" >Transform Point Map</a> operation (vector maps) or the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample operation</a> (raster maps):</li>
+
+<ul>
+
+<li>	use one input map and perform the operation several times, each time using another target coordinate system (with a different projection) and using different output map names, </li>
+
+<li>	display each output map in a map window and add a graticule. </li>
+
+</ul>
+
+<p class=leftmargininlist>	For more information, refer to the specific operations. </p>
+
+</ul>
+
+
+<p class=kopje>Calculation purposes:</p>
+
+<ul>
+
+<li>	All your maps must use one and the same projection before you can perform overlay operations with these maps.</li>
+
+<li>	When you obtained input data in a certain projection and want to create a coordinate system with projection information that can be used by these maps, you must be absolutely sure that you use the exact same parameters (central meridian, central parallel or standard parallel(s), etc.) as were used when the input data was created. </li>
+
+<li>	When your input data use for example UTM projections of different zones, first carefully add the correct projections to the different maps, then:</li>
+
+<ul>
+
+<li>	transform all maps to one of these UTM projections, or</li>
+
+<li>	create a totally different projection that also suits your maps and transform all maps to that projection.</li>
+
+</ul>
+
+<li>	Before calculations, make sure that all maps use the same projection: </li>
+
+<ul>
+
+<li>	use the <a href="..//ilwisapp/popup/transform_polygons_popup.htm" onClick="return popup(this, 'notes')" >Transform Polygon Map</a>, the <a href="..//ilwisapp/popup/transform_segments_popup.htm" onClick="return popup(this, 'notes')" >Transform Segment Map</a> and/or the <a href="..//ilwisapp/popup/transform_points_popup.htm" onClick="return popup(this, 'notes')" >Transform Point Map</a> operation to transform <i>existing</i> vector maps from their original coordinate system to one new or one other coordinate system (for instance with another projection), or </li>
+
+<li>	use the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation to transform <i>existing</i> raster maps from their original georeference (using a certain coordinate system) to one new or one other georeference (using another coordinate system with another projection).</li>
+
+</ul>
+
+<li>	When your analyses will involve area calculations (e.g. Histogram operations), you should use an Equal Area projection so that areas are comparable in all parts of your maps. You can choose the required parameters for such an Equal Area projection yourself.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=96>
+<p class=diabox>Projection:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a projection. For a list of available projections and some of their characteristics, see further below. To choose a projection, see also <a href="projections_suggested_projections.htm">Suggested projections</a>.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When finished, the <a href="edit_coordinate_system_projection.htm">Edit Coordinate System Projection</a> dialog box will reappear. </p>
+
+<p class=defnewpar>In the reappearing Edit Coordinate System Projection dialog box:</p>
+
+<ul>
+
+<li>	For most projections, you will have to fill out the <i>other projection parameters</i> that are necessary for the selected projection such as for instance: false Easting, false Northing, central meridian, central parallel or standard parallels, scale factor, latitude of true scale, etc. Furthermore, if required, you can specify an ellipsoid or a datum for some projections.</li>
+
+<li>	When selecting one of the following projections: UTM, Gauss-Boaga (Italy), Gauss (Colombia), Gauss-Kr&uuml;ger (Germany) or Lambert Conform Conic (France), 
+you will need to fill out in the Edit Coordinate System Projection dialog box a <i>zone number</i>. These projections are designed for certain regions on earth (UTM) or specific countries. For UTM, you will need to specify a datum. For the other country projections, the datum that belongs to the selected country projection will be used. <span class=DefaultStyle><b><br>
+</b></span>All other necessary parameters for these projections are defined by the selected zone. </li>
+
+</ul>
+
+<p class=diakopje>Available projections:</p>
+
+<p class=diabox>Azimuthal Equidistant:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_azimuthal_popup.htm" onClick="return popup(this, 'notes')" >Azimuthal</a> projection. Map is <a href="..//ilwis/popup/projection_equidistant_popup.htm" onClick="return popup(this, 'notes')" >equidistant</a>. Also known as Postel or Hatt projection. </p>
+
+<p class=diaboxleft1><i>Polar aspect</i>: Meridians are equally spaced straight lines intersecting at the central pole. Angles between meridians are true angles. Parallels are equally spaced circles, centered at a pole, which is a point. The entire earth can be shown, but the opposite pole is a bounding circle having a radius twice that of the equator. </p>
+
+<p class=diaboxleft1><i>Equatorial aspect</i>: Central meridian is a straight line. Meridian 90° away is a circle. Other meridians are complex curves, equally spaced along the Equator and intersecting at each pole. The Equator is a straight line. Other parallels are complex curves concave towards the nearest pole and equally spaced along the central meridian and the meridian 90° from the central meridian. </p>
+
+<p class=diaboxleft1><i>Oblique aspect</i>: Central meridian is a straight line. Other meridians are complex curves intersecting at each pole. Parallels are complex curves equally spaced along the central meridian. </p>
+
+<p class=diaboxleft1>The entire earth can be shown but the projection is convenient on one hemisphere. Scale is true on any straight line radiating from the center of projection. Scale increases in a direction perpendicular to the radius as the distance to the center increases. Only the center is free of distortion. Distortion is moderate for one hemisphere but becomes extreme for a map of the entire earth. The distance between any two points on a straight line passing through the center of projection is shown at true scale; this feature is especially true when one of these points is the center. </p>
+
+<p class=diaboxleft1>In its equatorial aspect it is used (mostly under spherical assumption) for atlas maps of scale 1 : 1000000 and smaller. In its polar aspect it is used for maps of polar regions and the Northern and Southern hemispheres. The oblique aspect is frequently used for world maps centered on important cities, and world maps for radio and aviation use, furthermore occasionally for maps of continents. Useful for showing airline distances from center of projection. </p>
+
+<p class=diaboxleft1>In oblique aspect (in its ellipsoidal form), it is also used in hydrography, navigation, telecommunication, seismology etc. where the equidistant property is important. Some countries use topographic map series with a 'polycentric' Hatt projection, which means that for different zones (e.g. quadrangles of 30' by 30') a different center of projection is used. </p>
+
+<p class=diaboxleft1>Available in spherical form and in ellipsoidal form.</p>
+
+<p class=diabox>Albers Equal Area Conic:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_conical_popup.htm" onClick="return popup(this, 'notes')" >Conic</a> projection. Map is <a href="..//ilwis/popup/projections_equal_area_popup.htm" onClick="return popup(this, 'notes')" >equal area</a>. Meridians are equally spaced straight lines converging at a common point, which is usually beyond a pole. Parallels are unequally spaced concentric circular arcs centered on the point of convergence of the meridians. Spacing of the parallels decreases away from the central latitudes. Poles are shown as circular arcs. Scale is true along one or two chosen standard parallels, usually on the same side of the equator. Map is free of angular and scale distortion only along the (one or two) standard parallels. </p>
+
+<p class=diaboxleft1>Frequently used for maps of the United States, for thematic maps and for world atlases. Recommended for equal area maps of regions that are mainly east-west in extent. Available in spherical form and in ellipsoidal form.</p>
+
+<p class=diabox>Bonne:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_conical_popup.htm" onClick="return popup(this, 'notes')" >Pseudo-conic</a> projection. Map is <a href="..//ilwis/popup/projections_equal_area_popup.htm" onClick="return popup(this, 'notes')" >equal area</a>. The central meridian is a straight line. Other meridians are complex curves. Parallels are concentric circular arcs. Poles are shown as points. Graticule is symmetric about the central meridian. Scale is true along the central meridian and along all parallels. Map is free of all distortion along the central meridian and the central or standard parallel. Frequently used until mid-20th century for atlas maps of continents and for topographic mapping of some countries. Available in spherical form and in ellipsoidal form.</p>
+
+<p class=diabox>Cassini:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Cylindrical</a> projection. Map is <a href="..//ilwis/popup/projection_equidistant_popup.htm" onClick="return popup(this, 'notes')" >equidistant</a>. Transverse aspect of Plate Carree; conceptually projected onto a cylinder tangent to the globe at the central meridian. The central meridian, each meridian 90° from the central meridian and the Equator are straight lines. Other meridians and parallels are complex curves. Poles are shown as points along the central meridian. Graticule is symmetric about any straight meridian or the Equator. Scale is true along the central meridian and along any straight line perpendicular to the central meridian. Scale increases with distance from the central meridian, along a direction parallel to the central meridian. Distortion is a function of the distance from the central meridian. No distortion occurs along the central meridian, but there is both area and local shape distortion elsewhere. 
+
+Used in ellipsoidal form for topographic mapping of Great Britain before the 1920's (supposedly Airy ellipsoid) and detailed mapping of German states in the same period; also used for topographic mapping of France in the 18th century. Available in spherical form and in ellipsoidal form.</p>
+
+<p class=diabox>Central Cylindrical:</p>
+
+<p class=diaboxleft1>Also known as Simple Perspective Cylindrical. <a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Cylindrical</a> projection. Map is <a href="..//ilwis/popup/projection_perspective_popup.htm" onClick="return popup(this, 'notes')" >perspective</a> and neither conformal nor equal area. Projected perspectively from the center of the earth onto a cylinder tangent to the equator. Looks like <a href="#mercator">Mercator</a>. Equator and other parallels are straight lines (spacing increases towards the poles) and meet meridians (equally spaced straight lines) at right angles. Parallel spacing increases more rapidly towards the poles than Mercator. Poles cannot be shown. Scale is true along the equator. Shape, area and scale distortion increases rapidly away from the equator. Only used for teaching purposes. Only used in spherical form.</p>
+
+<p class=diabox><a name="dutch_rd">Dutch RD</a>:</p>
+
+<p class=diaboxleft1>Dutch topographic map projection. Map is <a href="..//ilwis/popup/projection_conformal_popup.htm" onClick="return popup(this, 'notes')" >conformal</a>. The <a href="#stereographic">Stereographic</a> projection of the Netherlands is a so-called double projection. This means that first the points are projected from the Bessel ellipsoid on a tangent sphere according to the conformal Gauss transformation. The sphere and the ellipsoid coincide at the central projection point, i.e. at the geodetic base point in Amersfoort (Netherlands). The sphere has as its radius the geometric mean of the two principal radii of curvature of the ellipsoid in Amersfoort. </p>
+
+<p class=diaboxleft1>Secondly,the projected points are stereographically projected from the sphere onto the map plane. The projected coordinates have a false origin such that the base point in Amersfoort has coordinates 155&nbsp;000&nbsp;East, 463&nbsp;000&nbsp;North; this ensures that all coordinates in the Netherlands are positive and that Eastings are always different from Northings.</p>
+
+<p class=diaboxleft1>The datum Rijksdriehoeksmeting, which implies the Bessel 1841 ellipsoid, will be used automatically.</p>
+
+<p class=diabox>Eckert I:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Pseudo-cylindrical</a> projection. Map has equally spaced parallels and is neither conformal nor equal area. Meridians are equally spaced converging  straight lines broken at the equator. Central meridian is half as long as the Equator. Parallels are equally spaced parallel lines, perpendicular to the central meridian. Poles are shown as lines half a long as the Equator. Scale is true along latitudes 47°10' N and S and constant along any given latitude. Map is never free of distortion. Used for showing straight line equal-area graticule. Only available in spherical form. </p>
+
+<p class=diabox>Eckert II:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Pseudo-cylindrical</a> projection. Map is <a href="..//ilwis/popup/projections_equal_area_popup.htm" onClick="return popup(this, 'notes')" >equal area</a>. Meridians are equally spaced straight lines broken at the Equator. Central meridian is half as long as the Equator. Parallels are unequally spaced straight parallel lines, widest separation near the Equator. Poles are lines half as long as the Equator. Scale is true along latitudes 55°10' N and S. Map is free of distortion only at latitudes 55°10' N and S at the central meridian. Used for showing straight line equal-area graticule. Only available in spherical form. </p>
+
+<p class=diabox>Eckert III:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Pseudo-cylindrical</a> projection. Map has equally spaced parallels and is neither conformal nor equal area. Central meridian is a straight line half as long as the Equator. Other meridians are equally spaced semi-ellipses, concave toward the central meridian. The outer meridians are semicircles. Parallels are equally spaced straight parallel lines and are perpendicular to the central meridian. Poles are lines half as long as the Equator. Scale is true along latitudes 35°58' N and S. No point is free of distortion, but the Equator is free of angular distortion. Only available in spherical form. </p>
+
+<p class=diabox>Equidistant Conic:</p>
+
+<p class=diaboxleft1>Also called Simple Conic. <a href="..//ilwis/popup/projection_conical_popup.htm" onClick="return popup(this, 'notes')" >Conic</a> projection. Map is <a href="..//ilwis/popup/projection_equidistant_popup.htm" onClick="return popup(this, 'notes')" >equidistant</a>. Meridians are equally spaced straight lines converging at a common point, which is normally beyond a pole. Parallels are equally spaced concentric circular arcs centered on the point of convergence of the meridians. Poles are normally circular arcs. Scale is true along the two standard parallels which are usually on the same side of the equator. Map is free of distortion at the standard parallels. The most common projection in atlases for small countries on higher latitudes. Also used by the former Soviet Union for mapping that nation. Available in spherical form and in ellipsoidal form.</p>
+
+<p class=diabox>Gauss-Boaga (Italy):</p>
+
+<p class=diaboxleft1><a href="#transversemercator">Transverse Mercator</a> used in topographic maps of Italy. Consists of two zones of 6° next to each other. Central meridian of zone 1 at 9° E; central meridian of zone 2 at 15° E. </p>
+
+<p class=diaboxleft1>The user only needs to select a zone; the scale (0.9996), false Northing (0), and central or standard parallel (0) are already defined. The false Easting is defined by the selected zone: 1&nbsp;500&nbsp;000 for zone 1; and 2&nbsp;520&nbsp;000 for zone 2. </p>
+
+<p class=diaboxleft1>The datum Rome 1940, which implies the International 1924 ellipsoid, will be used automatically.</p>
+
+<p class=diabox>Gauss (Colombia):</p>
+
+<p class=diaboxleft1><a href="#transversemercator">Transverse Mercator</a> used in topographic maps of Colombia; the projection is oriented at the observatory in Bogot&aacute;. Consists of four zones of 3° next to each other. </p>
+
+<p class=diaboxleft1>The user only needs to select a zone; the scale (1.0), false Easting (1&nbsp;000&nbsp;000); false Northing (1&nbsp;000&nbsp;000), and central or standard parallel (4°35'56&quot;57 N) are already defined. The central meridians are defined by 
+the selected zone: <br>
+central meridian for zone 1 (West) at 77°04'51&quot;30 W; <br>
+central meridian for zone 2 (Center) at 74°04'51&quot;30 W;<br>
+central meridian for zone 3 (East) at 71°04'51&quot;30 W; and<br>
+central meridian for zone 4 (East-East) at 68°04'51&quot;30 W. </p>
+
+<p class=diaboxleft1>The datum Bogot&aacute; Observatory, which implies the International 1924 ellipsoid, will be used automatically.</p>
+
+<p class=diabox>Gauss-Kr&uuml;ger (Germany):</p>
+
+<p class=diaboxleft1><a href="#transversemercator">Transverse Mercator</a> used in topographic maps of Germany. Consists of three zones of 3° next to each other. Central meridian of zone 1 at 6° E; central meridian of zone 2 at 9° E; central meridian of zone 3 at 12° E. </p>
+
+<p class=diaboxleft1>The user only needs to select a zone; the scale (1.0), false Northing (0), and central or standard parallel (0) are already defined. The false Easting is defined by the selected zone: 2&nbsp;500&nbsp;000 for zone 1; 3&nbsp;500&nbsp;000 for zone 2; and 4&nbsp;500&nbsp;000 for zone 3.</p>
+
+<p class=diaboxleft1>The datum ED50, which implies the International 1924 ellipsoid, will be used automatically. </p>
+
+<p class=diabox>General Perspective:</p>
+
+<p class=diaboxleft1>Shows the earth as seen from space. Projection is <a href="..//ilwis/popup/projection_perspective_popup.htm" onClick="return popup(this, 'notes')" >perspective</a>. </p>
+
+<p class=diaboxleft1><i>Vertical Perspective</i> projections: camera precisely faces the center of the earth, projection on a plane tangent to the earth, plane of projection is perpendicular to line from camera to center of earth, tilt=0. Projection is also <a href="..//ilwis/popup/projection_azimuthal_popup.htm" onClick="return popup(this, 'notes')" >azimuthal</a>. Little distortion at the center; considerable distortion near the projection limit. Directions from the center are true on the sphere. Only available in spherical form.</p>
+
+<p class=diaboxleft1>Related projections:</p>
+
+<ul class=dialeft1ul>
+
+<li>	If the point of perspective is at infinite distance, you have an <a href="#orthographic"><span class=bookmark>Orthographic</a></span> projection.</li>
+
+<li>	If the point of perspective is on the surface of the Earth opposite the center of projection, you have a <a href="#stereographic"><span class=bookmark>Stereographic</a></span> projection.</li>
+
+<li>	If the point of perspective is at the center of the Earth, you have a <a href="#gnomonic"><span class=bookmark>Gnomonic</a></span> projection.</li>
+
+</ul>
+
+<p class=diaboxleft1><i>Tilted Perspectives</i> projections: camera is not facing the center of the earth, projection on a tilted plane secant to the earth. Projection is modified azimuthal. Used for space photographs. The horizon or outline of the map depends on the angle of tilt and the point of perspective. Scale normally varies widely if a large area is covered. Substantial distortion of shape, area and scale if a large area is covered. Specify tilt and optionally rotation. Only available in spherical form. </p>
+
+<p class=diabox><a name="gnomonic">Gnomonic</a>:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_azimuthal_popup.htm" onClick="return popup(this, 'notes')" >Azimuthal</a> projection. Map is <a href="..//ilwis/popup/projection_perspective_popup.htm" onClick="return popup(this, 'notes')" >perspective</a>. Less than one hemisphere can be shown on one map. Convenient for continents, oceans or smaller regions. The outstanding (and only useful) feature of the Gnomonic projection is that all great circles are shown as straight lines. Therefore, the shortest path between any two points on the map is a straight line. Used to show great circle paths as straight lines and thus to assist navigators and aviators in determining appropriate courses. </p>
+
+<p class=diaboxleft1>Polar aspect: Meridians are equally spaced straight lines intersecting at the central pole. Angles between them are true angles. Parallels are unequally spaced circles centered at the pole, which is a point. The Equator and the opposite pole cannot be shown. Spacing increases rapidly away from the pole. Graticule is symmetric about any meridian.</p>
+
+<p class=diaboxleft1>Equatorial aspect: Meridians are unequally spaced straight parallel lines. Only meridians within 90° of the central meridian can be shown. Spacing increases away from the central meridian. The Equator is a straight line perpendicular to the meridians. Other parallels are hyperbolic arcs concave towards the nearest pole. Spacing increases rapidly away from the Equator. Poles cannot be shown. Graticule is symmetric about the central meridian or the Equator.</p>
+
+<p class=diaboxleft1>Oblique aspect: Meridians are unequally spaced straight lines intersecting at the pole nearest to the center of projection. Equator is a straight line perpendicular to the central meridian. All parallels are ellipses, parabolas or hyperbolas because of spherical assumption. Graticule is symmetric about the central meridian.</p>
+
+<p class=diaboxleft1>Scale is only true where the central meridian crosses the standard parallel and increases rapidly away from the center. Only the center is free from distortion; distortion increases rapidly away from the center. Directions from the center are true. Used only in spherical form.</p>
+
+<p class=diabox>Goode:</p>
+
+<p class=diaboxleft1>Also known as Homolosine projection; combination of <a href="#sinusoidal"><span class=bookmark>Sinusoidal</span></a> and <a href="#mollweide"><span class=bookmark>Mollweide</span></a> projection, smoothly connecting the two projections. The Goode projection:</p>
+
+<ul><ul>
+
+<li>equals the Sinusoidal projection between the latitudes 40&#176; 43' 00&quot; South and 40&#176; 43' 00&quot; North; </li>
+
+<li>equals the Mollweide projection at the polar sides of these parallel circles.</li>
+
+</ul></ul>
+
+<p class=diaboxleft1>The Goode projection is like its component projections <a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >pseudo-cylindrical</a> and <a href="..//ilwis/popup/projections_equal_area_popup.htm" onClick="return popup(this, 'notes')" >equal-area</a>. The projection combines the advantages of the Sinusoidal projection at low latitudes with the advantages of the Mollweide projection near the poles. A user can define a central meridian of choice to minimize shape distortion of certain continents or oceans. Only available in spherical form. </p>
+
+<p class=diabox>Hammer-Aitoff:</p>
+
+<p class=diaboxleft1>Also called Hammer projection. Modified form of the <a href="#lambert_azimuthal_equal_area"><span class=bookmark>Lambert Azimuthal Equal Area</span></a> projection. Modified <a href="..//ilwis/popup/projection_azimuthal_popup.htm" onClick="return popup(this, 'notes')" >azimuthal</a>. Map is <a href="..//ilwis/popup/projections_equal_area_popup.htm" onClick="return popup(this, 'notes')" >equal area</a>. </p>
+
+<p class=diaboxleft1>In this projection, the vertical coordinates of the equatorial aspect of one hemisphere are halved while the values of the meridians from the center are doubled. Central meridian is a straight line half the length of the Equator. Other meridians are complex curves, unequally spaced along the Equator and concave toward the central meridian. Parallel at the Equator is straight. Other parallels are complex curves, unequally spaced along the central meridian and concave toward the nearest pole. Poles are displayed as points. Graticule is symmetric about the central meridian and the Equator. Scale decreases along the central meridian and the Equator with distance from the center. Moderate distortion. Elliptical border. </p>
+
+<p class=diaboxleft1>Used for whole-world maps. Available in spherical form and ellipsoidal form. </p>
+
+<p class=diabox><a name="lambert_azimuthal_equal_area">Lambert Azimuthal Equal Area</a>:</p>
+
+<p class=diaboxleft1>Also called Zenithal Equal-Area or Zenithal Equivalent. <a href="..//ilwis/popup/projection_azimuthal_popup.htm" onClick="return popup(this, 'notes')" >Azimuthal</a> projection. Map is <a href="..//ilwis/popup/projections_equal_area_popup.htm" onClick="return popup(this, 'notes')" >equal area</a> and nonperspective. Convenient on one hemisphere.</p>
+
+<p class=diaboxleft1>Polar aspect: Meridians are equally spaced straight lines intersecting at the central pole. Angle between them are true angles. Parallels are unequally spaced circles, centered at the pole, which is a point. Spacing of the circles gradually decreases away from the pole.</p>
+
+<p class=diaboxleft1>Equatorial aspect: Central meridian is a straight line. Meridian 90° away is a circle. Other meridians are complex curves, unequally spaced along the Equator and intersecting at each pole. Spacing decreases away from the central meridian.</p>
+
+<p class=diaboxleft1>Parallel at the Equator is a straight line. Other parallels are complex curves concave toward the nearest pole, unequally spaced along the central meridian, and spacing decreases away from the Equator. Parallels are equally spaced along the meridian 90° from the central meridian.</p>
+
+<p class=diaboxleft1>Oblique aspect: Central meridian is a straight line. Other meridians are complex curves intersecting at each pole shown. Parallels are complex curves unequally spaced along the central meridian; spacing decreases away from the center of projection. Scale decreases gradually away from the center point. Distortion of shapes increases away from the center point. Used for maps of continents and hemispheres. Also suited for regions extending equally in all directions from a center point, such as Asia and the Pacific Ocean. Normally used in the spherical form.</p>
+
+<p class=diabox>Lambert Conformal Conic:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_conical_popup.htm" onClick="return popup(this, 'notes')" >Conic</a> projection. Map is <a href="..//ilwis/popup/projection_conformal_popup.htm" onClick="return popup(this, 'notes')" >conformal</a>. Meridians are equally spaced lines converging at a common point, which is one of the poles. Parallels are unequally spaced concentric circular arcs centered on the pole of convergence of the meridians. Spacing of parallels increases away from the central latitudes. The pole nearest to a standard parallel is shown as a point; the other pole cannot be shown. Scale is true along one or two chosen standard parallels which are usually on the same side of the equator. Map is free of distortion along the one or two standard parallels. Map is conformal everywhere except at the poles. Extensively used for large-scale mapping of regions predominantly east-west in extent. Further widely used for topographic maps. Available in spherical form and in ellipsoidal form.</p>
+
+<p class=diabox>Lambert Conform Conic (France):</p>
+
+<p class=diaboxleft1>Lambert conformal conic projection used in topographic maps of France. Consists of four zones 'on top' of each other, all using the meridian of Paris (2.3372291667° E). The user only needs to select a zone; all necessary parameters are already defined for the selected zone. </p>
+
+<p class=diaboxleft1><u>Zone 1</u>: standard parallel at 49.5°; false Easting 600&nbsp;000; false Northing 1&nbsp;200&nbsp;000; scale at standard parallel 0.99987734.</p>
+
+<p class=diaboxleft1><u>Zone 2</u>: standard parallel at 46.8°; false Easting 600&nbsp;000; false Northing 2&nbsp;200&nbsp;000; scale at standard parallel 0.99987742.</p>
+
+<p class=diaboxleft1><u>Zone 3</u>: standard parallel at 44.1°; false Easting 600&nbsp;000; false Northing 3&nbsp;200&nbsp;000; scale at standard parallel 0.9998775.</p>
+
+<p class=diaboxleft1><u>Zone 4</u>: standard parallel at 42.165°; false Easting 234&nbsp;358; false Northing 4&nbsp;185&nbsp;861.369; scale at standard parallel 0.99994471.</p>
+
+<p class=diaboxleft1>The datum NTF (Nouvelle Triangulation de France), which implies the Clark 1880 ellipsoid, will be used automatically. </p>
+
+<p class=diabox>Lambert Cylind Equal Area:</p>
+
+<p class=diaboxleft1>Also called Cylindrical Equal Area. <a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Cylindrical</a> projection. Map is <a href="..//ilwis/popup/projections_equal_area_popup.htm" onClick="return popup(this, 'notes')" >equal-area</a>. Equator and other parallels are straight lines (spacing decreases towards the poles) and meet meridians (equally spaced straight lines) at right angles. Scale is true along the equator. Scale increases away from the Equator in the direction of the poles, but decreases away from meridians to maintain equal area. Thus there is shape distortion but no area distortion. Shape distortion is extreme in polar regions. Mainly used for educational purposes. Only available in spherical form. </p>
+
+<p class=diabox><a name="mercator">Mercator</a>:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Cylindrical</a> projection for world maps, and principally for oceans. Map is <a href="..//ilwis/popup/projection_conformal_popup.htm" onClick="return popup(this, 'notes')" >conformal</a>. Standard for marine charts. Designed for navigational use: sailing route between two points is shown as a straight line if the direction of the ship remains constant with respect to the north (constant compass course). This kind of route is usually longer than the great circle path (shortest possible route on the sphere). </p>
+
+<p class=diaboxleft1>Equator and other parallels are straight lines (spacing increases towards the poles) and meet meridians (equally spaced straight lines) at right angles. Poles cannot be shown. Scale is true at the Equator or along two parallels equidistant from the equator. Scale increases away from the Equator to infinity at the poles. Areas and shapes of large shapes are distorted. Distortion increases away from the Equator and is extreme in polar regions. Reasonably true shapes and distances within 15° of the equator. </p>
+
+<p class=diaboxleft1>Recommended use for conformal mapping of regions predominantly bordering the equator. Often and inappropriately used as a world map in atlases and for wall charts. It presents a misleading view of the world because of excessive area distortion. Available in spherical form and in ellipsoidal form.</p>
+
+<p class=diabox>Miller:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Cylindrical</a> projection for world maps compromising distortion. Map is neither conformal nor equal area. Looks like <a href="#mercator"><span class=bookmark>Mercator</a></span>. Equator and other parallels are straight lines (spacing increases towards the poles) and meet meridians (equally spaced straight lines) at right angles. Parallel spacing increases towards poles but less than Mercator. Poles are shown as straight lines. Scale is true along the Equator in all directions. Shape, area and scale distortion increases moderately away from the Equator but becomes severe at poles. Used in numerous world maps. Used only in spherical form.</p>
+
+<p class=diabox><a name="mollweide">Mollweide</a>:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Pseudo-cylindrical</a> projection for world maps. Map is <a href="..//ilwis/popup/projections_equal_area_popup.htm" onClick="return popup(this, 'notes')" >equal area</a>. The whole world is shown as an ellipse with the Equator twice as long as the central meridian. Central meridian is a straight line. Meridians at 90° E and W of  the central meridian form a circle. Other meridians are equally spaced semi-ellipses intersecting at the poles and concave to the central meridian. Parallels are unequally spaced straight lines, farthest apart near the equator; spacing changes gradually. Poles are shown as points. Scale is true along latitudes 40°44' N and S. Distortion is severe near outer meridians at high latitudes. Used only in spherical form. </p>
+
+<p class=diabox>Oblique Mercator:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Cylindrical</a> projection. Map is <a href="..//ilwis/popup/projection_conformal_popup.htm" onClick="return popup(this, 'notes')" >conformal</a>. Oblique aspect of <a href="#mercator"><span class=bookmark>Mercator</a></span>. Mathematically projected on a cylinder tangent along any great circle but not the Equator or a meridian. Two meridians 180° apart are straight lines; other meridians are complex curves concave toward the great circle. Equator and other parallels are complex curves concave toward the nearest pole. Graticule spacing increases away from the great circle but conformality is retained. Both poles can be shown. Scale is true along a chosen central line (a great circle at an oblique angle) or along two straight lines on the map parallel to the central line. The central line appears horizontally on the map and goes through the center of projection (= intersection of central meridian and central parallel). Scale increases with distance from the central line and becomes infinite at 90° from the central line. Distortion of areas, distances and shapes increases away from the great circle. Directions, areas and distances are reasonably accurate only within 15° of the line of tangency. Distortion is excessive toward the edges of a world map except near the path of the great circle.</p>
+
+<p class=diaboxleft1>This kind of map can be made to show as a straight line the shortest distance between any two selected points along the selected great circle. Used to show regions along a great circle other than the Equator or a meridian. Recommended for conformal mapping of regions having predominant extent in oblique direction, neither east-west nor north-south. If the Equator is the central line: <a href="#mercator"><span class=bookmark>Mercator</a></span>. If a meridian is a central line: <a href="#transversemercator"><span class=bookmark>Transverse Mercator</a></span>. Used for larger scale mapping in Switzerland, Madagascar and Borneo, and for atlas maps of regions having a greater extent in an oblique direction, such as Hawaii. Available in spherical form and in ellipsoidal form.</p>
+
+<p class=diabox><a name="orthographic">Orthographic</a>:</p>
+
+<p class=diaboxleft1>The earth appears as it would on a photograph from a very distant point in space. </p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_azimuthal_popup.htm" onClick="return popup(this, 'notes')" >Azimuthal</a> projection. Map is <a href="..//ilwis/popup/projection_perspective_popup.htm" onClick="return popup(this, 'notes')" >perspective</a>. Closely resembles a globe in appearance, since it is a perspective projection from infinite distance. Only one hemisphere can be shown. Scale is true at the center of projection and along any circle having its center at the projection center but only in the direction of the circumference of the circle. Scale decreases rapidly with distance from the center. Directions are only true from the center point of projection. Distortion rapidly increases away from the center point  and is extreme near the edge of a hemisphere. Used for perspective views of the earth, moon, etc. Used only in spherical form.</p>
+
+<p class=diabox>Plate Carree:</p>
+
+<p class=diaboxleft1>Also called Simple Cylindrical or Equidistant Cylindrical. <a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Cylindrical</a> projection. Equator is standard parallel. Map is <a href="..//ilwis/popup/projection_equidistant_popup.htm" onClick="return popup(this, 'notes')" >equidistant</a> along the Equator and along all meridians. Meridians are exactly half as long as the Equator (assuming a sphere). All parallels and meridians are equally spaced straight lines and meet at straight angles. Scale is true along the Equator and all meridians but increases for east-west directions towards the poles. Distortion in shapes and sizes increases towards the poles. </p>
+
+<p class=diaboxleft1>Used for mapping the earth taken as a sphere. Used for raster maps which store information of the whole world: each pixel represents a square block of LatLon coordinates, i.e. information is stored per degree, per minute, etc. A map in Plate Carree projection corresponds to a map using a LatLon coordinate system where you have angular intervals (graticule spacing in degrees); in Plate Carree you have linear spacing in meters depending on the radius of the earth. Used only in spherical form. </p>
+
+<p class=diabox>Plate Rectangle:</p>
+
+<p class=diaboxleft1>Also called Equirectangular, Equidistant rectangular.</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Cylindrical</a> projection. Map is <a href="..//ilwis/popup/projection_equidistant_popup.htm" onClick="return popup(this, 'notes')" >equidistant</a>. Variant of Plate Carree, Plate Rectangle having east-west compression. Two standard parallels are symmetrical about the Equator. Meridians are equally spaced straight parallel lines more than half as long as the Equator. Parallels are equally spaced straight parallel lines, perpendicular to and having wider spacing than the meridians. Poles are straight lines equal in length to the Equator. Scale is true along the standard parallels equidistant from the Equator and along all meridians. Scale increases with the distance from the Equator along the parallels. Thus, there is distortion of both shape and area. Used for raster maps which store information of the whole world: each pixel represents a rectangular block of LatLon coordinates. Used only in spherical form.</p>
+
+<p class=diabox>PolyConic:</p>
+
+<p class=diaboxleft1>Also called American Polyconic. <a href="..//ilwis/popup/projection_conical_popup.htm" onClick="return popup(this, 'notes')" >Polyconic</a> projection. Map is neither conformal nor equal area. Central meridian is a straight line. Other meridians are complex curves, equally spaced at the Equator and concave towards the central meridian. The Equator is a straight line, poles are points, and all other parallels are nonconcentric circular arcs spaced at true distances along the central meridian. Many cones are involved, hence polyconic. Scale is true along the central meridian and along each parallel. Map is free of distortion along the central meridian. Extensive distortion if the range extends very far east-west. The sole projection used for large scale mapping in the ellipsoidal form of the United States by the USGS until the 1950's. Not recommended for regional maps because other projections are better. Available in spherical form and in ellipsoidal form. </p>
+
+<p class=diabox>Robinson:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Pseudo-cylindrical</a> projection for world maps compromising distortion. Map is neither conformal nor equal area. Central meridian is a straight line 0.51 as long as the Equator. Other meridians resemble elliptical arcs, are equally spaced, and are concave toward the central meridian. Parallels are straight lines, equally spaced between latitudes 38° N and S; space decreases beyond these limits. Poles are lines 0.53 as long as the Equator. Graticule is symmetrical about the central meridian or the Equator. Scale is true along latitudes 38° N and S. Map is never free of distortion, but is very low within about 45° of the center and along the Equator. Used for world maps, for example, by Rand McNally in Goode’s Atlas for thematic world maps. Only used in spherical form.</p>
+
+<p class=diabox><a name="sinusoidal">Sinusoidal</a>:</p>
+
+<p class=diaboxleft1>Also called Mercator Equal Area. <a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Pseudo-cylindrical</a> projection for world maps. Map is <a href="..//ilwis/popup/projections_equal_area_popup.htm" onClick="return popup(this, 'notes')" >equal area</a>. Central meridian is a straight line; other meridians ares equally spaced sinusoidal curves. Parallels are equally spaced straight lines perpendicular to the central meridian. Poles are shown as points. Graticule is symmetrical about the central meridian or the Equator. Scale is true along the central meridian and along all parallels. Distortion is severe near outer meridians at high latitudes but can be substantially reduced by choosing an interrupted form (see below). Used in atlas maps of South America and Africa. Occasionally used for world maps. Normally used in spherical form.</p>
+
+<p class=diabox><a name="sinusoidal_interrupted">Sinusoidal Interrupted</a>:</p>
+
+<p class=diaboxleft1>A modification of the <a href="#sinusoidal"><span class=bookmark>Sinusoidal</a></span> projection. The Interrupted Sinusoidal projection is bounded by a meridian in the Pacific Ocean and is interrupted at another meridian in the Atlantic Ocean (at 0° E). Has two fixed central meridians (at 90° W and 90° E) to reduce the distortion at high latitudes. Interruptions are symmetrical about the Equator. Interruptions and central meridians can be shifted by using an offset longitude different from 0 (default). Only used in spherical form.</p>
+
+<p class=diabox><a name="sinusoidal_2x_interrupted">Sinusoidal 2x Interrupted</a>:</p>
+
+<p class=diaboxleft1>Like the <a href="#sinusoidal_interrupted"><span class=bookmark>Sinusoidal Interrupted</a></span> projection, but with an extra interruption in the Asian continent. The interruptions reduce the distortion of shapes and size of the continents. Has three fixed central meridians. Interruptions at 18° W and 60° E; central meridians at 99° W, 21° E, and 120° E. Only used in spherical form.</p>
+
+<p class=diabox>Sinusoidal 3x Interrupted:</p>
+
+<p class=diaboxleft1>Like the <a href="#sinusoidal_2x_interrupted"><span class=bookmark>Sinusoidal 2x Interrupted</a></span> projection, but with an extra interruption in the Indian Ocean. The interruptions reduce the distortion of shapes and size of the continents. Has four fixed central meridians. Interruption at 18° W at the Northern hemisphere; central meridians at 99° W and 81° E. Other interruptions at 18° W and 60° E at the Southern hemisphere; central meridians at 99° W, 21° E, and 120° E. Only used in spherical form.</p>
+
+<p class=diabox><a name="stereographic">Stereographic</a>:</p>
+
+<p class=diaboxleft1><a href="..//ilwis/popup/projection_azimuthal_popup.htm" onClick="return popup(this, 'notes')" >Azimuthal</a> projection. Map is <a href="..//ilwis/popup/projection_conformal_popup.htm" onClick="return popup(this, 'notes')" >conformal</a> and <a href="..//ilwis/popup/projection_perspective_popup.htm" onClick="return popup(this, 'notes')" >perspective</a>. Convenient on one hemisphere in spherical form. </p>
+
+<p class=diaboxleft1>Polar aspect: Meridians are equally spaced straight lines intersecting at the pole. Parallels are unequally spaced circles centered at the pole, which is a point. Opposite pole cannot be shown. Spacing gradually increases away from the pole.</p>
+
+<p class=diaboxleft1>Equatorial aspect: Central meridian is a straight line. Other meridians are unequally spaced circular arcs intersecting at each pole. Spacing gradually increases away from the central meridian. Equator is a straight line. Other parallels are unequally spaced circular arcs concave towards the nearest pole. Spacing gradually increases away from the Equator along the central meridian.</p>
+
+<p class=diaboxleft1>Oblique aspect: Central meridian is a straight line. Other meridians are circular arcs intersecting at each pole. Spacing gradually increases away from the central meridian. </p>
+
+<p class=diaboxleft1>Scale is true where the central latitude crosses the central meridian, or, alternatively, along a circle concentric about the projection center (or a parallel on the polar aspect). Scale moderately increases with distance from the center. Only the center or the circle of true scale are free from all distortion. Directions are only true from the center point of projection. </p>
+
+<p class=diaboxleft1>Used in combination with <a href="#utm"><span class=bookmark>UTM</a></span> projection as Universal Polar Stereographic (<a href="#ups"><span class=bookmark>UPS</a></span>) for mapping poles and in navigation charts for latitudes above 80°. Used as double projection in the <a href="#dutch_rd"><span class=bookmark>Dutch RD</a></span> projection. Recommended for conformal mapping of regions that are approximately circular in shape. Available in spherical form and in ellipsoidal form. </p>
+
+<p class=diabox><a name="transversemercator">Transverse Mercator</a>:</p>
+
+<p class=diaboxleft1>Also called Gauss Conformal or Gauss Kr&uuml;ger. <a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Transverse cylindrical</a> projection. Map is <a href="..//ilwis/popup/projection_conformal_popup.htm" onClick="return popup(this, 'notes')" >conformal</a>. Transverse form of <a href="#mercator"><span class=bookmark>Mercator</a></span>. Basis for <a href="#utm"><span class=bookmark>UTM</a></span>. Central meridian, each meridian 90° from central meridian and Equator are straight lines. Other meridians and parallels are complex curves. Scale is true along the central meridian or along two straight lines equidistant from and parallel to the central meridian. Scale increases away from the central meridian and becomes infinite at 90° from the central meridian. Distances and sizes of areas are reasonably correct within a 15° zone around the central meridian. Used for many topographic maps at scales of 1: 20,000 to 1: 250,000. Recommended for conformal mapping of regions having predominantly north-south extent. 
+
+Available in spherical form and in ellipsoidal form. </p>
+
+<p class=diabox><a name="ups">UPS</a>:</p>
+
+<p class=diaboxleft1>Universal Polar Stereographic. <a href="..//ilwis/popup/projection_azimuthal_popup.htm" onClick="return popup(this, 'notes')" >Azimuthal</a> and <a href="..//ilwis/popup/projection_perspective_popup.htm" onClick="return popup(this, 'notes')" >perspective</a> projection. Map is <a href="..//ilwis/popup/projection_conformal_popup.htm" onClick="return popup(this, 'notes')" >conformal</a>. Meridians are equally spaced straight lines intersecting at the pole. Parallels are unequally spaced circles centered at the pole, which is a point. Opposite pole cannot be shown. Spacing gradually increases away from the pole. Graticule is symmetric about any meridian. Used in combination with UTM projection as Universal Polar Stereographic (<a href="#ups"><span class=bookmark>UPS</a></span>) in Arctic and Antarctic maps and in navigation charts for latitudes above 80°. Available in spherical form and in ellipsoidal form. </p>
+
+<p class=diabox><a name="utm">UTM</a>:</p>
+
+<p class=diaboxleft1>Universal Transverse Mercator. Standardized form of <a href="#transversemercator"><span class=bookmark>Transverse Mercator</a></span>. <a href="..//ilwis/popup/projection_cylindrical_popup.htm" onClick="return popup(this, 'notes')" >Transverse cylindrical</a> projection. Map is <a href="..//ilwis/popup/projection_conformal_popup.htm" onClick="return popup(this, 'notes')" >conformal</a>. Widely used for topographic maps and military maps. Central meridian, each meridian 90° from central meridian, and Equator are straight lines. Poles as displayed as points along the central meridian. </p>
+
+<p class=diaboxleft1>For UTM, the whole earth is divided into 60 (vertical) zones with a width of 6° degrees longitude. These zones are identified by numbers and cover the complete surface of the Earth from 0° to 180° W and from 0° to 180° E. For zone numbers, see <a href="projections_utm_zones.htm">UTM zones</a>.</p>
+
+<p class=diaboxleft1>A further subdivision is made into 20 (horizontal) belts of 8°  degrees latitude, except for the most northern belt which covers 12° in latitude. These belts are identified by letters and cover the Earth from 80° S to 84° N. Polar regions are mapped in <a href="#ups"><span class=bookmark>UPS</a></span>. </p>
+
+<p class=diaboxleft1>By definition, all zones have a false Easting of 500,000m at their central meridian. The false Northing is 0 at the Equator for maps on the northern hemisphere, and 10,000,000 at the Equator for maps on the southern hemisphere. Furthermore, by definition, the scale factor at the central meridian is 0.9996.</p>
+
+<p class=diaboxleft1>Depending on the region in which your map is located, you can select one of the following ellipsoids:</p>
+
+<ul class=dialeft1ul>
+
+<li>	Bessel 1941: for Japan, North Korea, South Korea, Manchuria, Indonesia (except Irian Jaya),</li>
+
+<li>	Clarke 1866: for North America (except Greenland), Central America, Philippines, </li>
+
+<li>	Clarke 1880: for African countries located south of 5° N latitude and located south of the Equator, except Congo-Brazzaville, Gabon, Equatorial Guinea, Madagascar,</li>
+
+<li>	Everest 1830: for Pakistan, India, Nepal, Bhutan, Bangladesh, Myanmar (Burma), Thailand, Laos, Cambodia, Vietnam, Malaysia,</li>
+
+<li>	International 1924: for all other regions.</li>
+
+</ul>
+
+<p class=diaboxleft1>Available in spherical form and in ellipsoidal form. </p>
+
+<p class=diabox>VanderGrinten:</p>
+
+<p class=diaboxleft1>Also called Van der Grinten I. <a href="..//ilwis/popup/projection_conical_popup.htm" onClick="return popup(this, 'notes')" >Polyconic</a> projection for world maps. Shows the entire earth within one circle. Map is neither conformal nor equal area. Central meridian is straight. Other meridians are circular, equally spaced along the Equator and concave toward the central meridian. Parallel at the Equator is straight. Other parallels are circular arcs, concave toward the nearest pole. Poles are displayed as points. Scale is true along the Equator and increases rapidly with distance from the Equator. All areas, shapes and angles are greatly distorted. Great distortion of area near the poles. Only used in spherical form.</p>
+
+<p class=diabox>VanHuut:</p>
+
+<p class=diaboxleft1>Comic organic projection for world maps according to the architect of the new ITC building. Rarely used and only in spherical form.</p>
+
+<p class=kopje>References:</p>
+
+<ul>
+
+<li>	Maling, D.H., 1973. Coordinate systems and map projections. Philip Ltd, London.</li>
+
+<li>	Maling, D.H., 1989, Measurements from maps; principles and methods of cartography. Pergamon Press.</li>
+
+<li>	Snyder, J.P., 1982. Map projections used by the U.S. Geological Survey. Washington.</li>
+
+<li>	Snyder, J.P., 1987, Map projections, a working manual. U.S. Geological Survey professional paper 1395. United States Government Printing Office, Denver. </li>
+
+<li>	Snyder, J.P. &amp; Voxland, P.M., 1989. An album of map projections. U.S. Geological Survey professional paper 1453. United States Government Printing Office, Denver. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a></p>
+
+<p class=seealsolinks><a href="edit_coordinate_system_projection.htm">Edit Coordinate System Projection</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="select_ellipsoid.htm">Select Ellipsoid</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="select_datum.htm">Select Datum</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="projections_suggested_projections.htm">Suggested projections</a></p>
+
+</body

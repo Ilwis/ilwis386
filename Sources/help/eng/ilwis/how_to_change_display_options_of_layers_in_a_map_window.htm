@@ -1,0 +1,209 @@
+<html>
+
+<head>
+<title>How to change display options of layers in a map window</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Display options ..., Change ..., How to change ..., Colors">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>How to change display options</h1>
+
+<h1 class=secondline>of layers in a map window</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Before a raster, polygon, segment or point map (or grid lines, a graticule, a map list, or an annotation text layer) is displayed in a map window, you have to answer some questions on <b>how</b> this <a href="..//ilwis/popup/layers_popup.htm" onClick="return popup(this, 'notes')" >layer</a> should be displayed in the map window: you have to specify the <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a>. Also, once one or more layers are displayed in a map window, you might want to change the display options of a certain layer. </p>
+
+<p class=kopje>To change general display options of a layer:</p>
+
+<p>When a raster, polygon, segment, point map (maps with any domain), a map list, grid lines, a graticule, or an annotation text layer is displayed in a map window: </p>
+
+<ul>
+
+<li>	open the <a href="map_window_menu_commands.htm">Layers menu</a> in a map window, choose <span class=arial>Display Options</span>, and select a layer from the cascading menu, or</li>
+
+<li>	click the <b>right</b> mouse button in a map window, choose <span class=arial>Display Options</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, and select a layer from the cascading menu, or </li>
+
+<li>	in the <a href="map_window_layer_management.htm">Layer Management pane</a> of a map window, double-click a layer. </li>
+
+</ul>
+
+<p class=defnewpar>A <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box follows in which you can change the colors of the layer, line width, etc.</p>
+
+<p class=kopje>To open the representation of a map displayed in a map window:</p>
+
+<p>When a raster, polygon, segment, point map is displayed in a map window and when the domain (class or value) of the map uses a representation: </p>
+
+<ul>
+
+<li>    open the <a href="map_window_menu_commands.htm">Edit menu</a> in a map window, choose <span class=arial>Representation</span>, and select the layer of which you wish to change the colors, or</li>
+
+<li>	in the <a href="map_window_layer_management.htm">Layer Management pane</a> of a map window, double-click the word 'Legend'. </li>
+
+</ul>
+
+<p class=defnewpar>Depending on the domain used by the selected map, the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >representation Class editor</a>, or the <a href="..//ilwis/popup/representation_value_gradual_editor_popup.htm" onClick="return popup(this, 'notes')" >representation Value/Gradual editor</a> will be opened. For more information, see also <a href="../ilwismen/edit_representation.htm">Map window : Edit representation</a>. </p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>When a map uses a <a href="..//ilwis/sec/y_system_domains_sec.htm" onClick="return popup(this, 'notes')" >system domain</a> and a <a href="..//ilwis/sec/y_system_representations_sec.htm" onClick="return popup(this, 'notes')" >system representation</a>, the representation cannot be edited. You can create a new, custom representation for the map through the map's Display Options dialog box. </li>
+
+<li>For maps with a <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool domain</a>, you can set the default colors for True and False through the <a href="../ilwismen/main_window_preferences.htm">Preferences</a> command on the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> of the Main window. </li>
+
+</ul>
+
+<p class=kopje>To change specific colors of an item in a map with a class domain:</p>
+
+<p>When a raster, polygon, segment or point map is displayed in a map window, and when the map has a class domain: </p>
+
+<ul>
+
+<li>	in the <a href="map_window_layer_management.htm">Layer Management pane</a> of a map window, double-click a class. </li>
+
+</ul>
+
+<!--<p class=kopje>To change the display options of an annotation layer:</p>
+
+<p>When you are in the <a href="..//ilwis/popup/annotation_editor_popup.htm" onClick="return popup(this, 'notes')" >Layout editor</a> you can simply double-click an annotation layer, except a grid line layer or a graticule layer. For these layers and when you are in a map window, you can use one of the methods described above. </p>
+
+<p>A <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box follows. </p>-->
+
+<p class=kopje>Additional information:</p>
+
+<p>In the Layer Management pane, all layers are preceded by their icon: </p>
+
+<table cellspacing="0" width="90%">
+<tr>
+<td width="30%"> 
+<table cellspacing="0">
+<tr>
+<td valign="top" width=22>
+<img src="../images/rasmap.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+raster maps, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/polmap.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+polygon maps, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/segmap.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+segment maps, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/pointmap.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+point maps, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/mpl.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+map lists, 
+</td>
+</tr>
+</table>
+</td>
+
+<td width="40%">
+<table cellspacing="0">
+<tr>
+<td valign="top" width=22>
+<img src="../images/gridmapw.gif" align=bottom width="14" height="14"> 
+</td>
+<td valign="top">
+grid lines, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/gratmapw.gif" align=bottom width="13" height="13"> 
+</td>
+<td valign="top">
+graticules, 
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/anntxt.gif" align=bottom width="16" height="12"> 
+</td>
+<td valign="top">
+annotation text layers. 
+</td>
+</tr>
+</table>
+</td>
+</table>
+
+<p class=defnewpar>Furthermore, in the Layer Management pane, layers are preceded by: </p>
+
+<table>
+<tr>
+<td valign="top" width=22>
+<img src="../images/layeron.gif" align=bottom width="14" height="12"> 
+</td>
+<td valign="top">
+<p>a marked check box when the layer is displayed, </p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/layeroff.gif" align=bottom width="14" height="12"> 
+</td>
+<td valign="top">
+<p>an empty check box when a layer is hidden, and </p>
+</td>
+</tr>
+<tr>
+<td valign="top" width=22>
+<img src="../images/layerinfo.gif" align=bottom width="5" height="11"> 
+</td>
+<td valign="top">
+<p>when the <span class=arial>Info</span> check box has been selected in a map's Display Options dialog box. </p>
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="how_to_use_layers_in_a_map_window.htm">How to use layers in a map window</a></p>
+
+<p class=seealsolinks><a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display options</a></p>
+
+<p class=seealsolinks><a href="map_window_layer_management.htm">Map window : Layer Management</a></p>
+
+</body

@@ -1,0 +1,36 @@
+<html>
+
+<head>
+<title>objects-histogram polygon popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Histogram of a polygon map&nbsp;&nbsp;&nbsp;<img src="../../images/hispol.gif" align=bottom width="13" height="14"></p>
+
+<p class=linespacing03after>A <a href="..//ilwis/ilwis_objects_histograms.htm" onClick="return popup(this, 'notes')" >histogram</a> is a special object which lists frequency information on values, classes or IDs in a map. A polygon histogram lists the number of polygons and the total perimeter and total area of polygons per class, ID, or value in the map. If the input polygon map uses a value domain, also the cumulative number of polygons, cumulative perimeters and cumulative areas are calculated. </p>
+
+<p class=linespacing03after>In a histogram window, the histogram is presented as a table and as a graph. </p>
+
+<p class=linespacing03after>A polygon histogram is obtained by performing the <a href="..//ilwisapp/histogram.htm" onClick="return popup(this, 'notes')" >Histogram</a> operation on a polygon map. For polygon maps that use a value domain and of which no histogram is available yet, a histogram is automatically calculated just before such a value map is displayed. </p>
+
+<p class=linespacing03after>With the Histogram operation, you can also calculate histograms of raster, segment and point maps.</p>
+
+</body

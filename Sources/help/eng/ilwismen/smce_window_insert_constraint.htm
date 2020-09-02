@@ -1,0 +1,96 @@
+<html>
+
+<head>
+<title>SMCE window : Insert a constraint</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="SMCE window, Insert constraint">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>SMCE window</h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/smce_window_menu_commands.htm">Edit menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Insert a constraint</h1></td>
+</tr>
+</table>
+
+<p class=emptylinehalf>&nbsp;</p>
+
+<!--<hr>-->
+
+<p class=defnewpar>Insert a new <img src="../images/criteria_tree_constraint.gif" width="21" height="15"> <a href="..//ilwis/popup/smce_constraint_popup.htm" onClick="return popup(this, 'notes')" >constraint</a> under the main goal of the criteria tree. 
+
+Constraints are binding criteria so no compensation is allowed. Areas in an input map (added as a constraint) that do not satisfy a constraint condition, will obtain a composite index value of 0, no matter how well these areas perform in any other factor. </p>
+
+<p class=defnewpar><a href="..//ilwis/popup/smce_factor_popup.htm" onClick="return popup(this, 'notes')" >Factors</a> on the other hand allow for compensation. Poor performance in one criterion can be compensated by good performance in another criterion. </p>
+
+<p class=defnewpar>The Constraint dialog box appears:</p>
+
+<ol>
+
+<li>when you are in the <img src="../images/smce_problem_definition_icon.gif" align=bottom width="23" height="23"> Problem Definition mode, and </li>
+
+<li>when you selected the <img src="../images/criteria_tree_main_goal.gif" width="21" height="15"> main goal, or when you selected a sub goal (i.e. a group), and </li>
+
+<li>do one of the following: </li>
+
+<ul>
+
+	<li>choose <span class=arial>Insert Constraint</span> from the <a href="../ilwis/smce_window_menu_commands.htm">Edit menu</a> in the SMCE window, </li>
+
+	<li>click the <span class=arial>Insert Constraint</span> button <img src="../images/smce_insert_constraint_icon.gif" width="23" height="23"> in the <a href="../ilwis/smce_window_toolbar.htm">toolbar</a> of the SMCE window, </li>
+
+	<li>click the main goal with the right mouse button and choose <span class=arial>Insert Constraint</span> from the context-sensitive menu, </li>
+
+	<li>press the <span class=arial>Insert</span> Key on the keyboard and choose <span class=arial>Insert Constraint</span> from the context-sensitive menu.</li>
+
+	</ul>
+</ol>
+
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="96"><p class=diabox>Name:</p></td>
+	<td valign="top"><p class=diabox>Type a new textual name for this constraint to describe it.</p></td>
+</tr>
+</table>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Note: </span>Constraints will always appear under the main goal. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>Next, select the input map or an input attribute column which will be used to calculate with this constraint. </p>
+
+<p class=Seealso>See also:</p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_insert_factor.htm">Insert a factor</a></p>
+<p class=seealsolinks><a href="../ilwismen/smce_window_insert_group.htm">Insert a group</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_functionality.htm">SMCE window : functionality</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_toolbar.htm">SMCE window : toolbar</a></p>
+<p class=seealsolinks><a href="../ilwis/smce_window_criteria_tree_viewer.htm">SMCE window : criteria tree viewer</a></p>
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_criteria_trees.htm">ILWIS objects : criteria trees</a></p>
+
+</body

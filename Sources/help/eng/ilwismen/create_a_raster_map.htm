@@ -1,0 +1,144 @@
+<html>
+
+<head>
+<title>Create a raster map</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Create ..., Raster maps">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Create a raster map</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>Usually, a <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster map</a> is created by other means, namely by <a href="../ilwisapp/rasterize.htm">rasterizing</a> an existing point, segment or polygon map. The option you chose here is to create a new raster map from scratch: you are expected to assign all IDs, class names or pixels values to all pixels yourself. </p>
+
+<p class=defnewpar>This dialog box appears when creating a new raster map:</p>
+
+<ul>
+
+<li>	from the <a href="../ilwis/main_window_menu_commands.htm">File menu</a> of the Main window, choose the <span class=arial>Create Raster Map</span> command, or </li>
+
+<li>	by double-clicking the <span class=arial>New Map</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, or </li>
+
+<li>	from the <a href="../ilwis/map_window_menu_commands.htm">File menu</a> in an existing map window, choose the <span class=arial>Create</span> command. The georeference is already filled out. This ensures that the new raster map will fit on the map(s) displayed in the map window.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Map name:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >new name</a> for the raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a description for the map. The description of a map appears in the title bar when the map is displayed. Further, the description is visible on the status bar of the Main window when moving the mouse pointer over the map in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Georeference:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> for the raster map; open the listbox by clicking it. Or create a new georeference by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. </p>
+
+<p class=diabox>When you work with multiple maps of the same area, you should use the same georeference for all these maps.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diabox>Domain:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> for the map; open the list box by clicking it. Or create a new domain by clicking the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a> <img src="../images/crea.gif" align=bottom width="17" height="22">: the <a href="create_a_domain.htm">Create Domain</a> dialog box follows. A domain contains the set of valid IDs, class names or values in a map.</p>
+
+<p class=diabox>When creating more maps of the same theme, or when creating maps that contain the same class names, IDs or values as an existing map, select the same domain as used before. You can always add extra class names or IDs to an existing class or ID domain. Not every class name, ID or value present in a domain, needs to be used in the maps that use that domain. A <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> can be linked to a domain, so that maps using the same domain can be displayed with the same colors.</p>
+
+</td>
+</tr>
+<tr>
+<td  valign="top" width=120>
+<p class=diaboxleft1>Value Range:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case you selected a value domain, type the minimum and maximum values of this domain or accept the default <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=120>
+<p class=diaboxleft1>Precision:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>In case this value domain uses decimals, type a value for the <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> of this domain or accept the default precision.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>The <a href="../ilwis/pixel_editor_functionality.htm">Pixel editor</a> is opened: assign class names, IDs or values to the pixels in the map.</p>
+
+<p class=tip>Additional information:</p>
+
+<p class=tipemptylinehalf>&nbsp; </p>
+
+<p class=tiptext><u>Georeference:</u> You should only create a new <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a> when this is the only raster map or the first raster map of a series of raster map in one area. When you already have raster maps of the same area, you should <i>select</i> the georeference of the existing maps.</p>
+
+<p class=tipemptyline>&nbsp; </p>
+
+<p class=tiptext><u>Domain:</u> The <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> of a raster map defines the kind of codes that are used to name the pixels:</p>
+
+<ul class=tipul>
+
+<li> use or create a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a> when the pixels in your map refer to classes,</li>
+
+<li> use or create an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a> when the pixels in your map refer to unique IDs, or</li>
+
+<li> use or create a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a> when the pixels in your map represent measurable values.</li>
+
+</ul>
+
+<p class=tiptext>For more information on domains, refer to <a href="../ilwis/basic_concepts_before_creating_maps_and_tables.htm">Basic concepts : before creating maps and tables</a> and <a href="../ilwis/basic_concepts_domains.htm">Basic concepts : domains</a>. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_raster_maps.htm">ILWIS objects : raster maps</a></p>
+
+<p class=seealsolinks><a href="../ilwis/pixel_editor_functionality.htm">Pixel editor : functionality</a></p>
+
+</body

@@ -1,0 +1,32 @@
+<html>
+
+<head>
+<title>edit popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Edit</p>
+
+<p class=linespacing03after>Select a map, table or any other object, open it and <a href="..//ilwismen/edit_object_select_object.htm" onClick="return popup(this, 'notes')" >edit</a> it. </p>
+
+<p class=linespacing03after>Objects marked as read-only and <a href="../../ilwis/popup/object_dependent_data_objects_popup.htm">dependent data objects</a> cannot be edited.</p>
+
+</body

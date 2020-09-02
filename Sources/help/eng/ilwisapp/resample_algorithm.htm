@@ -1,0 +1,107 @@
+<html>
+
+<head>
+<title>Resample : algorithm</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Resample, Bilinear interpolation, Bicubic interpolation, Cubic spline interpolation, Nearest neighbour">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Resample</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation resamples a raster map from the map's current <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>. to another target georeference. The coordinate of each output pixel is used to calculate a new value from close-by pixel values in the input map. Three resampling methods are available: nearest neighbour, bilinear interpolation, and bicubic interpolation. </p>
+
+<p class=defnewpar>The resampling process consists of several steps:</p>
+
+<ul>
+
+<li>	the selected output georeference determines the number of rows and columns in the output map; thus the XY-coordinate for each output pixel is known;</li>
+
+<li>	then these positions are looked up in the original map and, according to the selected interpolation method, 1 (nearest neighbour), 4 (bilinear) or 16 (bicubic) neighbour pixels around this position in the input map are used to calculate a value for the output map.</li>
+
+</ul>
+
+<p class=defnewpar>Nearest neighbour resampling is the fastest method, but results in discontinuities because some input values may be used more than once as output value, while other input values may not be used at all. Bilinear resampling takes much less time than a bicubic resampling. A bilinear interpolation results in discontinuity of the first derivative. A bicubic interpolation remains continuous up to the second derivative.</p>
+
+<p class=kopje>Nearest neighbour resampling:</p>
+
+<p>With nearest neighbour resampling, first the coordinate of each pixel in the output map is determined. Then, for each output pixel, the pixel value of input pixel closest to this coordinate is used as output value.</p>
+
+<p class=defnewpar>Figure 1 below shows the position of a 'new' pixel in the output map, and the position and values of 4 surrounding pixels in the input map.</p>
+
+<p class=linespacing03before><img src="../images/nearn.gif" align=bottom width="135" height="130"></p>
+
+<p class=captionfig>Fig. 1:	Nearest Neighbour resampling. The coordinates of input pixels are represented by black and grey dots. The coordinate of an output pixel is represented by a cross. The red arrow shows how the value of the nearest input pixel is assigned to the output pixel.</p>
+
+<p>The value for the 'new' pixel in the output map is the value in the input map closest to the new coordinate (19). </p>
+
+<p class=kopje>Bilinear resampling:</p>
+
+<p>With bilinear resampling, first the coordinate of each pixel in the output map is determined. Then the values of 4 surrounding pixels of the input map are used to calculate an interpolated value for each pixel in the output map.</p>
+
+<p class=defnewpar>Figure 2 below shows the position of a 'new' pixel in the output map, and the position and values of 4 surrounding pixels in the input map. </p>
+
+<p class=linespacing03before><img src="../images/bilin.gif" align=bottom width="111" height="116"></p>
+
+<p class=captionfig>Fig. 2:	Bilinear interpolation in Bilinear Resampling. The coordinates of 4 neighbouring input pixels are represented by black dots. The coordinate of an output pixel is represented by a black cross. The straight black lines represent the interpolations; intermediate answers are represented by red dots.</p>
+
+<p>The value of the 'new' pixel in the output map is calculated by:</p>
+
+<ul>
+
+<li>	first 2 interpolations in y-direction (between values 15 and 17, and between values 16 and 19; resulting in two intermediate values which are represented in red), </li>
+
+<li>	then 1 interpolation in x-direction (between the two intermediate values in red).</li>
+
+</ul>
+
+<p class=defnewpar>A straight line is drawn through each set of 2 points, and from this the value of the third point is known. A bilinear interpolation should not be used when you intend to calculate a derivative of the output map.</p>
+
+<p class=kopje>Bicubic resampling:</p>
+
+<p>With bicubic resampling, first the coordinate of each pixel in the output map is determined; then the values of 16 surrounding pixels of the input map are used to calculate an interpolated value for each pixel in the output map.</p>
+
+<p class=defnewpar>Figure 3 below shows the position of a 'new' pixel in the output map, and the position and values of 16 surrounding pixels in the input map. </p>
+
+<p class=linespacing03before><img src="../images/bicub.gif" align=bottom width="120" height="138"></p>
+
+<p class=captionfig>Fig. 3:	Bicubic interpolation in Bicubic resampling. The coordinates of 16 neighbouring input pixels are represented by black dots. The coordinate of an output pixel is represented by a black cross. The straight black lines represent the interpolations; intermediate answers are represented by red dots.</p>
+
+<p>The value of the 'new' pixel in the output map is calculated by:</p>
+
+<ul>
+
+<li>	first 4 interpolations in y-direction,</li>
+
+<li>	then 1 interpolation in x-direction (between the 4 intermediate values, represented in red).</li>
+
+</ul>
+
+<p class=defnewpar>A third order polynomial is fitted through each set of 4 known points and from this the value of the fifth point is known. A bicubic interpolation gives a better estimate of the output value than a bilinear interpolation.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="resample_functionality.htm">Resample : functionality</a></p>
+
+</body

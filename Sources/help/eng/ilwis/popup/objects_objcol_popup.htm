@@ -1,0 +1,50 @@
+<html>
+
+<head>
+<title>Objects-object collection popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Object collection&nbsp;&nbsp;&nbsp;<img src="../../images/objcol.gif" align=bottom width="15" height="13"></p>
+
+<p>An <a href="..//ilwis/ilwis_objects_object_collections.htm" onClick="return popup(this, 'notes')" >object collection</a> is a set of <a href="../../ilwis/sec/ilwis_objects_sec.htm">ILWIS objects</a>. </p>
+
+<p class=linespacing03before>An object collection only stores the names and locations of the <a href="../../ilwis/popup/object_definition_files_popup.htm">object definition files</a> of the maps, tables, etc. that are included in the object collection. The object definition files of these maps, tables, etc. contain further references to the names and locations of the data files on disk. </p>
+
+<p class=linespacing03before>Object collections: </p>
+
+<ul>
+
+<li>can be created to organize your data as 'projects'; </li>
+
+<li>are the result of importing Aster images through <a href="..//ilwismen/import_map.htm" onClick="return popup(this, 'notes')" >ILWIS Map Import</a>. </li>
+
+</ul>
+
+<p class=linespacing03before>Furthermore, a special case of object collections are <a href="objects_database_collection_popup.htm">database collections</a>. Database collections are the result of accessing an external database, and only contain the <i>Use As</i> tables <img src="../../images/table.gif" align=bottom width="13" height="14"><sub class=blue> u</sub> of the external database. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_object_collections.htm" onClick="return popup(this, 'notes')" >ILWIS objects : object collections</a>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_tables_databases.htm" onClick="return popup(this, 'notes')" >ILWIS objects : tables - databases</a></p>
+
+</body

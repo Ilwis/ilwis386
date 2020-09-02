@@ -1,0 +1,361 @@
+<html>
+
+<head>
+<title>Appendices : object definition files</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Object definition files, File extensions, Extensions, Appendices, MPL, MPR, MPA, MPS, MPP, TBT, DOM, RPR, GRF, CSY, MPV, HIS, HSA, HSS, HSP, SMS, STP, SMC, TA2, MAT, FIL, FUN, ISL, ATX, ILO, IOC, GRH">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Appendices</h1>
+
+<h1 class=secondline>Object definition files</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>All <a href="..//ilwis/sec/ilwis_objects_sec.htm" onClick="return popup(this, 'notes')" >ILWIS objects</a> have an object definition file which stores all information on an object. </p>
+
+<p class=defnewpar>Object definition files are almost always plain ASCII files divided into sections, similar to the Windows WIN.INI and SYSTEM.INI files. In the user-interface, the relevant contents of an object definition file are shown in the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of an object.</p>
+
+<p class=defnewpar>Object definition files list for instance:
+
+<ul>
+
+<li>the name, description, and creation time of the object, </li>
+
+<li>the name and store type of the data files of the object, </li>
+
+<li>references to other required objects such as domain, georeference, representation, etc., </li>
+
+<li>whether the object is dependent or not. </li>
+
+</ul>
+
+<p class=defnewpar>The object definition files of <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent data objects</a> list furthermore: </p>
+
+<ul>
+
+<li>the <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> or expression of how a dependent map, table or column was created; this includes the names of the objects on which the current object depends, </li>
+
+<li>whether the object is calculated or not, whether the object is up-to-date or not, etc. </li>
+
+</ul>
+
+<p class=defnewpar>For dependent maps and tables, in principle only the small object definition files are stored on disk. The data files are automatically calculated and stored on disk when the dependent map or table is displayed. Dependent data objects can be recalculated in case the input data have changed. </p>
+
+<p class=defnewpar>For <a href="ilwis_objects_data_objects.htm">data objects</a>, the following object definition files exist: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>.MPR</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_raster_map_popup.htm" onClick="return popup(this, 'notes')" >raster maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.MPA</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_polygon_map_popup.htm" onClick="return popup(this, 'notes')" >polygon maps</a> (area)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.MPS</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_segment_map_popup.htm" onClick="return popup(this, 'notes')" >segment maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.MPP</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_point_map_popup.htm" onClick="return popup(this, 'notes')" >point maps</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.TBT</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_table_popup.htm" onClick="return popup(this, 'notes')" >tables</a></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For containers, the following object definition files exist:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>.MPL</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map lists</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.IOC</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_objcol_popup.htm" onClick="return popup(this, 'notes')" >object collections</a> and <a href="..//ilwis/popup/objects_database_collection_popup.htm" onClick="return popup(this, 'notes')" >database collections</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.MPV</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map views</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.ILO</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_layout_popup.htm" onClick="return popup(this, 'notes')" >layouts</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.ATX</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >annotation text</a> objects</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.GRH</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_graph_popup.htm" onClick="return popup(this, 'notes')" >graphs</a></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For <a href="ilwis_objects_service_objects.htm">service objects</a>, the following object definition files exist:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>.DOM</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domains</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.RPR</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.GRF</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.CSY</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a></p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>For special objects, the following object definition files exist:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>.HIS</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_histogram_raster_popup.htm" onClick="return popup(this, 'notes')" >histograms</a> of raster maps</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.HSA</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_histogram_polygon_popup.htm" onClick="return popup(this, 'notes')" >histograms</a> of polygon maps</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.HSS</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_histogram_segment_popup.htm" onClick="return popup(this, 'notes')" >histograms</a> of segment maps</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.HSP</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_histogram_point_popup.htm" onClick="return popup(this, 'notes')" >histograms</a> of point maps</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.SMS</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample sets</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.STP</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_stereopair_popup.htm" onClick="return popup(this, 'notes')" >stereo pairs</a></p>
+
+
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.SMC</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_criteria_trees_popup.htm" onClick="return popup(this, 'notes')" >criteria trees</a></p></td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.TA2</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_table2dim_popup.htm" onClick="return popup(this, 'notes')" >two-dimensional tables</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.MAT</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_matrices_popup.htm" onClick="return popup(this, 'notes')" >matrices</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.FIL</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_filters_popup.htm" onClick="return popup(this, 'notes')" >filters</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.FUN</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_userdef_functions_popup.htm" onClick="return popup(this, 'notes')" >user-defined functions</a></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>.ISL</p>
+
+</td>
+<td valign="top">
+<p>for <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >user-written scripts</a> (ILWIS Script Language)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_relations_between_ilwis_objects.htm">Appendices : relations between objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/appendices_file_extensions.htm">Appendices : file extensions</a></p>
+
+</body

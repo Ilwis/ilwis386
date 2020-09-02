@@ -1,0 +1,46 @@
+<html>
+
+<head>
+<title>objects-georeference popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Georeference&nbsp;&nbsp;&nbsp;<img src="../../images/georef.gif" align=bottom width="16" height="12"></p>
+
+<p class=linespacing03after>A <a href="..//ilwis/ilwis_objects_georeferences.htm" onClick="return popup(this, 'notes')" >georeference</a> is a <a href="..//ilwis/ilwis_objects_service_objects.htm" onClick="return popup(this, 'notes')" >service object</a> which stores the relation between rows and columns of a <a href="../../ilwis/popup/objects_raster_map_popup.htm">raster map</a> (row,col) and coordinates (X,Y). A georeference is needed for raster maps. A georeference uses a <a href="objects_coordinate_system_popup.htm">coordinate system</a>. It is advised that raster maps of the same area use the same georeference. </p>
+
+<ul>
+
+<li>	For rasterized vector maps (usually North-oriented), use a <i>georef corners</i>.</li>
+
+<li>	For other raster maps, for example satellite images, which are not North-oriented and in which the pixels do not represent exactly square areas on the ground, use a <a href="../../ilwis/popup/georeference_tiepoints_popup.htm"><span class=DefaultStyle><i>georef tiepoints</i></span></a>. </li>
+
+<li>	To add coordinates to a scanned photograph while using a Digital Terrain Model (DTM), create a georef <i>direct linear</i>.</li>
+
+<li>	To add coordinates to a scanned aerial photograph with fiducial marks for which you have DTM, create a <i>georef orthophoto</i>. </li>
+
+<li>	To obtain three dimensional views of maps using a DTM, create a <i>georef 3D</i>.</li>
+
+</ul>
+
+<p class=linespacing03before>To combine raster maps with different georeferences, for instance in <a href="map_calculation_popup.htm">MapCalc</a> or <a href="../../ilwisapp/popup/cross_popup.htm">Cross</a>, first use the <a href="../../ilwisapp/popup/resample_popup.htm">Resample</a> operation, so that all maps will use one georeference. </p>
+
+</body

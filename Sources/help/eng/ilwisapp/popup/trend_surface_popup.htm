@@ -1,0 +1,30 @@
+<html>
+
+<head>
+<title>trend surface popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Trend surface      (Point interpolation)</p>
+
+<p class=linespacing03after>The <a href="..//ilwisapp/trend_surface.htm" onClick="return popup(this, 'notes')" >Trend surface</a> operation is a <a href="..//ilwisapp/point_interpolation.htm" onClick="return popup(this, 'notes')" >point interpolation</a> which requires a point map as input and returns a raster map as output. One polynomial surface is calculated by a least squares fit so that the surface approaches all point values in the map. The calculated surface values are assigned to the output pixels. A trend surface may give a general impression of the data. </p>
+
+</body

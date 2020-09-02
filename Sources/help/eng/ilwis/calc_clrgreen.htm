@@ -1,0 +1,250 @@
+<html>
+
+<head>
+<title>CLRGREEN</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="CLRGREEN, Color functions">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Map and Table Calculation</h1>
+<h1 class=secondline>CLRGREEN( ) function</h1>
+
+<p class=defnewpar>Returns the Green component of an (R,G,B) color.</p>
+
+<p class=calctitlesyntax>Syntax</p>
+<p class=syntax><span class=courier>CLRGREEN</span>(<i>Color</i>)</p>
+
+<p class=calctitle>Input</p>
+<table cellspacing=0>
+<tr>
+	<td width="115" valign="top"><i>Color</i></td>
+	<td valign="top">is a map or a column with the <span class=courier>Color</span> domain or a picture domain, or an expression which results in a color</td>
+</tr>
+<tr>
+	<td width="115" valign="top">Domain type:</td>
+	<td valign="top"><a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Color</span></a> or a <a href="..//ilwis/sec/domain_type_picture_sec.htm" onClick="return popup(this, 'notes')" >Picture</a> domain</td>
+</tr>
+</table>
+
+<p class=calctitle>Output</p>
+<table cellspacing=0>
+<tr>
+	<td width="115" valign="top"><span class=courier>CLRGREEN</span> returns:</td>
+	<td valign="top">a value</td>
+</tr>
+<tr>
+	<td width="115" valign="top">Domain:</td>
+	<td valign="top"><a href="..//ilwis/popup/yy_system_domain_image_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Image</span></a></td>
+</tr>
+</table>
+
+<p class=tip>Note:</p>
+<p class=tiptext>The <span class="courier">CLRGREEN</span>(<i>Color</i>) function is equivalent to <span class="courier">MAPCOLORSEP</span>(<i>InMap</i>, <i>Green</i>) operation.</p>
+
+<p class=tip>Tips:</p>
+<ul class=tipul>
+	<li>The function can also be used to calculate with colors in a representation class that is opened as a table.</li>
+	<li>For more information on color, see <a href="../ilwisapp/color_separation_functionality.htm">Color separation : functionality</a> or <a href="../ilwisapp/color_separation_algorithm.htm">Color separation : algorithm</a>.</li>
+	<li>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> or <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output column</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map/column has been calculated.</li>
+</ul>
+
+<p class=calctitle>Usable in</p>
+<p><a href="..//ilwis/popup/map_calculation_popup.htm" onClick="return popup(this, 'notes')" >MapCalc</a>, <a href="..//ilwis/popup/table_calculation_popup.htm" onClick="return popup(this, 'notes')" >TabCalc</a>, <a href="..//ilwis/popup/command_line_pocket_calculator_popup.htm" onClick="return popup(this, 'notes')" >Simple calculators</a></p>
+
+<p class=calctitle>Examples</p>
+<p class=kopjeaftertitlesub>Pocket line calculator example:</p>
+<table cellspacing=0
+<tr>
+	<td valign="top" width="290"><p class=calc00>? CLRGREEN(RPRCOLOR(Landuse,&quot;Forest&quot;))</p></td>
+	<td><p>returns the green component of class &quot;Forest&quot; from representation Landuse, e.g. 128.</p></td>
+</table>
+
+<p class="kopje">TabCalc example:</p>
+<p class="calc00">Green = CLRGREEN(Color)</p>
+<p class="emptyline">&nbsp;</p>
+<table>
+<tr>
+	<td><p class=th>Landuse.rpr</p></td>
+</tr>
+</table>
+<table cellspacing="0">
+  <tr>
+    <td valign="top" width="70"><p class="tcolh">Landunit</p></td>
+    <td valign="top" width="85"><p class="tcolh">Colorname</p></td>
+    <td valign="top" width="100"><p class="tcolhr">Color</p></td>
+    <td valign="top"><p class="tcolhr">Green</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Agriculture</p></td>
+    <td valign="top" width="85"><p class="t1">Yellow</p></td>
+    <td valign="top" width="100"><p class="t1r">(255, 255, 0)</p></td>
+    <td valign="top"><p class="t1r">255</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Airport</p></td>
+    <td valign="top" width="85"><p class="t1">Red</p></td>
+    <td valign="top" width="100"><p class="t1r">(255, 0, 0)</p></td>
+    <td valign="top"><p class="t1r">0</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Bare soils</p></td>
+    <td valign="top" width="85"><p class="t1">Brown</p></td>
+    <td valign="top" width="100"><p class="t1r">(164, 40, 40)</p></td>
+    <td valign="top"><p class="t1r">40</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Forest</p></td>
+    <td valign="top" width="85"><p class="t1">Forest Green</p></td>
+    <td valign="top" width="100"><p class="t1r">(48, 128, 76)</p></td>
+    <td valign="top"><p class="t1r">128</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Grass</p></td>
+    <td valign="top" width="85"><p class="t1">Yellow Green</p></td>
+    <td valign="top" width="100"><p class="t1r">(98, 98, 98)</p></td>
+    <td valign="top"><p class="t1r">98</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Lake</p></td>
+    <td valign="top" width="85"><p class="t1">Blue</p></td>
+    <td valign="top" width="100"><p class="t1r">(0, 0, 255)</p></td>
+    <td valign="top"><p class="t1r">0</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Riverbed</p></td>
+    <td valign="top" width="85"><p class="t1">Cyan</p></td>
+    <td valign="top" width="100"><p class="t1r">(0, 255, 255)</p></td>
+    <td valign="top"><p class="t1r">255</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Rocks</p></td>
+    <td valign="top" width="85"><p class="t1">Gray</p></td>
+    <td valign="top" width="100"><p class="t1r">(128, 128, 128)</p></td>
+    <td valign="top"><p class="t1r">128</p></td>
+  </tr>
+  <tr>
+    <td valign="top" width="70"><p class="t1">Shrubs</p></td>
+    <td valign="top" width="85"><p class="t1">Magenta</p></td>
+    <td valign="top" width="100"><p class="t1r">(255, 0, 255)</p></td>
+    <td valign="top"><p class="t1r">0</p></td>
+  </tr>
+</table>
+
+<p class=kopje>MapCalc example:</p>
+<p class=calc00>LandColor = MAPCOLOR(Landuse)</p> 
+<p class=calc00>Green = CLRGREEN(LandColor)</p>
+<p class=emptyline>&nbsp;</p>
+<table>
+<tr>
+	<td><p class=courier>Landuse</p></td>
+	<td><p class=courier>LandColor</p></td>
+	<td><p class=courier>Green</p></td>
+</tr>
+<tr>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>Forest</td>
+    <td class=calcpict>Forest</td>
+    <td class=calcpict>Rocks</td>
+  </tr>
+  <tr>
+    <td class=calcpict>Shrubs</td>
+    <td class=calcpict>Lake</td>
+    <td class=calcpict>Grass</td>
+  </tr>
+  <tr>
+    <td class=calcpict>?</td>
+    <td class=calcpict>Grass</td>
+    <td class=calcpict>Airport</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpictlarge cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpictlarge>(48,128,76)</td>
+    <td class=calcpictlarge>(48,128,76)</td>
+    <td class=calcpictlarge>(128,128,128)</td>
+  </tr>
+  <tr>
+    <td class=calcpictlarge>(255,0,255)</td>
+    <td class=calcpictlarge>(0,0,255)</td>
+    <td class=calcpictlarge>(98,98,98)</td>
+  </tr>
+  <tr>
+    <td class=calcpictlarge>(0,0,0)</td>
+    <td class=calcpictlarge>(98,98,98)</td>
+    <td class=calcpictlarge>(255,0,0)</td>
+  </tr>
+</table>
+</td>
+<td>
+<table class=calcpict cellspacing="0" cellpadding="0">
+  <tr>
+    <td class=calcpict>128</td>
+    <td class=calcpict>128</td>
+    <td class=calcpict>128</td>
+  </tr>
+  <tr>
+    <td class=calcpict>0</td>
+    <td class=calcpict>0</td>
+    <td class=calcpict>98</td>
+  </tr>
+  <tr>
+    <td class=calcpict>0</td>
+    <td class=calcpict>98</td>
+    <td class=calcpict>0</td>
+  </tr>
+</table>
+</td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+<table cellspacing=0>
+<tr>
+	<td valign="top" width="70"><a href="calc_color.htm">COLOR</a></td>
+	<td valign="top" width="70"><a href="calc_clrred.htm">CLRRED</a></td>
+	<td valign="top" width="85"><a href="calc_clryellow.htm">CLRYELLOW</a></td>
+	<td valign="top"><a href="calc_clrhue.htm">CLRHUE</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70"><a href="calc_mapcolor.htm">MAPCOLOR</a></td>
+	<td valign="top" width="70"><a href="calc_clrblue.htm">CLRBLUE</a></td>
+	<td valign="top" width="85"><a href="calc_clrmagenta.htm">CLRMAGENTA</a></td>
+	<td valign="top"><a href="calc_clrsat.htm">CLRSAT</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70"><a href="calc_rprcolor.htm">RPRCOLOR</a></td>
+	<td valign="top" width="70"></td>
+	<td valign="top" width="85"><a href="calc_clrcyan.htm">CLRCYAN</a></td>
+	<td valign="top"><a href="calc_clrintens.htm">CLRINTENS</a></td>
+</tr>
+<tr>
+	<td valign="top" width="70">&nbsp;</td>
+	<td valign="top" width="70">&nbsp;</td>
+	<td valign="top" width="85"><a href="calc_clrgrey.htm">CLRGREY</a></td>
+	<td valign="top"><a href="calc_colorhsi.htm">COLORHSI</a></td>
+</tr>
+</table>
+</body

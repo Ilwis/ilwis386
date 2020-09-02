@@ -1,0 +1,267 @@
+<html>
+
+<head>
+<title>Aggregate map : command line (1)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Aggregate map, MapAggregate">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Aggregate map</h1>
+
+<h1 class=secondline>Command line (1)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/aggregate_map_popup.htm" onClick="return popup(this, 'notes')" >Aggregate Map</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapAggregate</span><i>AggFnc</i>(InputMapName, <i>Groupfactor</i>, <span class=courier>group</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapAggregate</span><i>AggFnc</i>(InputMapName, <i>Groupfactor</i>, <span class=courier>nogroup</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapAggregate</span><i>AggFnc</i>(InputMapName, <i>Groupfactor</i>, <span class=courier>group</span>, <i>RowOffset</i>, <i>ColOffset</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapAggregate</span><i>AggFnc</i>(InputMapName, <i>Groupfactor</i>, <span class=courier>nogroup</span>, <i>RowOffset</i>, <i>ColOffset</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapAggregate</span><i>AggFnc</i>(InputMapName, <i>Groupfactor</i>, <span class=courier>group</span>, NewGeoref)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapAggregate</span><i>AggFnc</i>(InputMapName, <i>Groupfactor</i>, <span class=courier>group</span>, <i>RowOffset</i>, <i>ColOffset</i>, NewGeoref)</p>
+
+<!--</td>
+</tr>
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAPLIST</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapListApplic</span>(InputMapListName, MapAggregate<i>AggFnc</i>(<span class=courier>##</span>, <i>Groupfactor</i>, <span class=courier>group</span> [, <i>RowOffset</i>, <i>ColOffset</i> [, NewGeoref ]] )</p>-->
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>MapAggregate</p>
+
+</td>
+<td valign="top">
+<p>is the first part of the command to start the Aggregate Map operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>AggFnc</i></p>
+
+</td>
+<td valign="top">
+<p>is the second part of the command to start the Aggregate Map operation. Type an aggregation function directly after <span class=courier>MapAggregate</span> (no spaces allowed): <span class=courier>Avg</span> | <span class=courier>Max</span> <span class=courier>|</span> <span class=courier>Med</span> <span class=courier>|</span> <span class=courier>Min</span> <span class=courier>|</span> <span class=courier>Prd</span> <span class=courier>|</span> <span class=courier>Std</span> <span class=courier>|</span> <span class=courier>Sum</span></p>
+
+<p>If no aggregation function is specified on the command line, the operation will use the pixel in the upper left corner of each block of input pixels as output value.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>InputMapName</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>Groupfactor</i></p>
+
+</td>
+<td valign="top">
+<p>is a value for the size of the blocks of input pixels to be aggregated; group factor 4 means that the aggregation is performed on each block of 4 x 4 input pixels (integer &gt;= 2).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>group</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to indicate to group the aggregated value into one output pixel.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=courier>nogroup</p>
+
+</td>
+<td valign="top">
+<p>is the parameter to indicate to use the georeference of the input map for the output map. In this case, each output aggregation value is assigned to all output pixels that correspond to the blocks of input pixels.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>RowOffset</i></p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to skip the specified number of lines at the top of the input map, i.e. the aggregation will start at line <i>RowOffset</i>+1. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p><i>ColOffset</i></p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to skip the specified number of columns at the left of the input map, i.e. the aggregation will start at <i>ColOffset</i>+1.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p>NewGeoref</p>
+
+</td>
+<td valign="top">
+<p>is an optional parameter to specify a name for the output georeference; if not specified, the output georeference will obtain the same name as the output map. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>All Aggregation functions work on input <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value maps</a>; the Count, Median and Predominant aggregation functions also work on maps of other domain types. </p>
+
+<p class=defnewpar>To specify the domain and value range of the output map, you can use curly brackets after the output map name, for instance:</p>
+
+<p>OUTMAP<span class=courier>{dom=</span><i>MyDom</i><span class=courier>}</span> <span class=courier>=</span> expression</p>
+
+<p>OUTMAP<span class=courier>{dom=</span><i>MyDom</i><span class=courier>;vr=</span><i>min</i><span class=courier>:</span><i>max</i><span class=courier>:</span><i>prec</i><span class=courier>}</span> <span class=courier>=</span> expression</p>
+
+<p>For more information, see <a href="../ilwis/appendices_ilwis_expressions.htm">Appendices : ILWIS expressions</a>. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Tip: </span>To use this operation on all raster maps in a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a>, see <a href="aggregate_command_line2.htm">Aggregate map : command line (2)</a>. </p>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. Further, when the Group option is used, a georeference factor is created with the same name as the output map, unless you specify a new georeference name yourself.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="aggregate_command_line2.htm">Aggregate map : command line (2)</a></p>
+
+<p class=seealsolinks><a href="aggregate_functionality.htm">Aggregate map : functionality</a></p>
+
+</body

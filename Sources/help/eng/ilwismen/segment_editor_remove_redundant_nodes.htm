@@ -1,0 +1,85 @@
+<html>
+
+<head>
+<title>Segment editor : Remove redundant nodes</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Segment editor, Nodes, Remove redundant nodes">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td><h1 class=firstline>Segment editor </h1></td>
+<td class=menucommand><a class=menlink href="../ilwis/segment_editor_menu_commands.htm">File menu</a></td>
+</tr>
+<tr>
+<td colspan="2"><h1 class=secondline>Remove Redundant Nodes</h1></td>
+</tr>
+<tr><td colspan="2" class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>Permanently removes redundant nodes from the current segment map. Any node which connects only 2 segments is deleted, regardless of segment codes. The two segments are glued together and the new segment obtains the code of the segment encountered first. </p>
+
+<p class=emptyline>&nbsp;</p>
+
+<p class=tiptext><span class=tip>Mind: </span>The Remove Redundant Nodes option may change your segment codes!</p>
+
+<p class=defnewpar>You can use the Remove Redundant Nodes command:</p>
+
+<ul>
+
+<li>	to reduce the number of segments in a segment map, for instance after importing segments from other packages; </li>
+
+<li>	to improve the continuity of segments when using complex segment line types during display or printing;</li>
+
+<li>	to speed up polygonization of segment maps in which all segments have the same code.</li>
+
+</ul>
+
+<p class=tip>Tips and restrictions:</p>
+
+<ol class=tipol>
+
+<li>	It is advised to make a backup of your segment map before performing this command. </li>
+
+<li>	As long as the progress bar is active, you cannot edit the segment map any further.</li>
+
+<li>	The Remove Redundant Nodes command in the segment editor <i>does not take codes of segments into account</i>; any node between two segments is removed regardless of the codes of the segments on either side of the node and any new segment will obtain the code of the segment encountered first. <br>
+
+        If you wish to remove only those superfluous nodes which connect two segments of the same code, it is strongly advised to use the <a href="..//ilwisapp/popup/tunnel_segments_popup.htm" onClick="return popup(this, 'notes')" >Tunnel segments</a> operation.</li>
+
+<li>    With the <a href="../ilwisapp/tunnel_segments_functionality_algorithm.htm">Tunnel segments</a> operation, you can also reduce the amount of intermediate points within segments. </li>
+
+</ol>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/tunnel_segments_functionality_algorithm.htm">Tunnel segments : functionality/algorithm</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_functionality.htm">Segment editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_toolbar.htm">Segment editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/segment_editor_menu_commands.htm">Segment editor : menu commands</a></p>
+
+</body

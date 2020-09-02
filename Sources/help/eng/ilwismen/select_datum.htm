@@ -1,0 +1,321 @@
+<html>
+
+<head>
+<title>Select datum</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Projections, Datum, Geodetic datum, Datum transformation parameters, User-defined datums, Molodensky datum transformation, Bursa Wolf datum transformation, Molodensky Badekas datum transformation, WGS 84">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>Select Datum</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>For large scale maps (small areas such as cities, regions, provinces etc.) it can be necessary to supply a datum for a coordinate system.  </p>
+
+<p class=defnewpar>A geodetic datum defines a reference ellipsoid for a particular region, oriented to the landscape, with an 'initial point' of reference on the surface. The 'initial point' is assigned a latitude, longitude, an elevation above the ellipsoid, a direction of the vertical, and the azimuth of a point in the vicinity (to fix the North). Once a datum is adopted, features on the ground in a given area can be mapped relative to the adopted ellipsoid and the adopted 'initial point'. </p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you click the <span class=arial>Datum</span> button in the <a href="edit_coordinate_system_projection.htm">Edit Coordinate System Projection</a> dialog box, or</li>
+
+<li>	when you click the <span class=arial>Datum</span> button in the <a href="edit_coordinate_system_latlon.htm">Edit Coordinate System LatLon</a> dialog box.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="144">
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Predefined datum:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select a datum from the list box. The last line in the dialog box lists the name of the country (or region) for which the selected datum can be used.</p>
+
+<p class=tiptext><span class=tip>Tip: </span>After selecting a predefined datum; the ellipsoid is automatically defined.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxleft1>Area:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>For some datums, you can select a specific area (country). For these areas averaged shift estimates are used in x, y and z position in meters. For example for the datum 'Adindan' shifts are estimated for the countries: Burkina Faso, Cameroon, Ethiopia, Mali, Mean (Mean for Ethiopia, Mali, Senegal and Sudan).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;User-defined datum:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option if you know the necessary transformation parameters to enable a transformation from the current coordinates to the globally defined WGS 84 datum. </p>
+
+    <p class=tiptextls01be><span class=tip>Note: </span>This option is automatically selected and all transformation parameters are automatically filled out when you used the <a href="..//ilwisapp/popup/find_datum_trans_params_popup.htm" onClick="return popup(this, 'notes')" >Find datum transformation parameters</a> operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Molodensky:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to use Molodensky datum transformation parameters: </p>
+
+	<ul class=diaul>
+	
+	<li class=ls01be>translations dX, dY, dZ (in meters) between the geocentric coordinates of the current datum and the WGS 84 datum. </li>
+	
+	</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Bursa Wolf:</p>
+
+</td>
+<td valign="top">
+<p class=diaboxno>Select this option to use Bursa Wolf datum transformation parameters: </p>
+
+	<ul class=diaul>
+	
+	<li class=ls01be>translations dX, dY, dZ (in meters) between the geocentric coordinates of the current datum and the WGS 84 datum. </li>
+	
+	<li class=ls01be>rotation angles Rot X, Rot Y, Rot Z (in arc seconds) between the geocentric coordinates of the current datum and the WGS 84 datum, and </li>
+	
+	<li class=ls01be>a scale factor dScale (as 10<sup>-6</sup>, or ppm) between the current datum and the WGS 84 datum. </li>
+
+	</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxleft1><img src="../images/option.gif" align=top width="12" height="12">&nbsp;&nbsp;Badekas:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this option to use Molodensky Badekas datum transformation parameters: </p>
+
+	<ul class=diaul>
+	
+	<li class=ls01be>translations dX, dY, dZ (in meters) between the geocentric coordinates of the current datum and the WGS 84 datum. </li>
+	
+	<li class=ls01be>rotation angles Rot X, Rot Y, Rot Z (in arc seconds) between the geocentric coordinates of the current datum and the WGS 84 datum, </li>
+	
+	<li class=ls01be>a scale factor dScale (as 10<sup>-6</sup>, or ppm) between the current datum and the WGS 84 datum, and </li>
+
+	<li class=ls01be>a rotation center (pivot) Xo, Yo, Zo (in geocentric coordinates), between the current datum and the WGS 84 datum. </li>
+
+	</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=diaboxleft1>dX, dY, dZ, Rot X, Rot Y, Rot Z, dScale, Xo, Yo, Zo:</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diaboxnospacetop>&nbsp;</p>
+
+</td>
+<td valign="top">
+<p class=diaboxnospacetop>Depending on the selected datum transformation method, fill out the required parameters. </p>
+
+	<p class=tiptextls01be><span class=tip>Tip: </span>To find transformation parameters between the coordinate systems of two point maps, where: </p>
+
+	<ul class=tipul>
+
+	<li>the coordinate system of the first point map is supposed to use a local (unknown) datum, </li>
+	<li>the coordinate system of the second point map is supposed to use a global datum, preferably WGS 84, </li>
+	</ul>
+
+	<p class=tiptext>use the <a href="../ilwisapp/find_datum_trans_params_inputpage.htm">Find datum transformation parameters</a> wizard. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Next dialog boxes:</p>
+
+<ul>
+
+<li>	When you clicked the <span class=arial>Datum</span> button in the <a href="edit_coordinate_system_projection.htm">Edit Coordinate System Projection</a> dialog box, that dialog box will reappear; you will need to fill out the remaining projection parameters.</li>
+
+<li>	When you clicked the <span class=arial>Datum</span> button in the <a href="edit_coordinate_system_latlon.htm">Edit Coordinate System LatLon</a> dialog box, that dialog box will reappear.</li>
+
+</ul>
+
+<p class=kopje>Using national coordinate systems:</p>
+
+<p class=linespacing03after>When you use one of the following <i>country projections</i>, the <i>predefined datum</i> which belongs to the national system of that country is automatically selected for you by the system:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">
+<p><b>Projection:</b></p>
+
+</td>
+<td>&nbsp;
+
+</td>
+<td valign="top">
+<p><b>Datum:</b></p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Dutch RD</p>
+
+</td>
+<td>&nbsp;
+
+</td>
+<td valign="top">
+<p>Rijksdriehoeksmeting; this implies the Bessel 1841 ellipsoid.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Gauss Boaga (Italy)</p>
+
+</td>
+<td>&nbsp;
+
+</td>
+<td valign="top">
+<p>Rome 1940; this implies the International 1924 ellipsoid.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Gauss (Colombia)</p>
+
+</td>
+<td>&nbsp;
+
+</td>
+<td valign="top">
+<p>Bogota Observatory; this implies the International 1924 ellipsoid.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Gauss-Krueger (Germany)</p>
+
+</td>
+<td>&nbsp;
+
+</td>
+<td valign="top">
+<p>Rauenberg (currently not available), or ED50 (for small scale maps); this implies the International 1924 ellipsoid.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+<p>Lambert Conform Conic (France)</p>
+
+</td>
+<td>&nbsp;
+
+</td>
+<td valign="top">
+<p>NTF (Nouvelle Triangulation de France); this implies the Clark 1880 ellipsoid.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Using a user-defined datum:</p>
+
+<p>If two maps have different coordinate systems, both with a known projection, it could be that the underlying ellipsoids have different datums. This means that, apart from different <i>a</i> and <i>f</i> values, the centers of the ellipsoids do not coincide; and it could mean that even the polar axes are not parallel, let alone coincide. To relate the two map coordinate systems, one need in such a case a so-called datum transformation. </p>
+
+<p class=defnewpar>Mathematically this is feasible via 3 dimensional geocentric coordinates, implying a 3D similarity (Helmert) transformation; and transformations between the geocentric coordinates (X,Y,Z) and ellipsoidal latitude and longitude (<span class=symbollarger>j</span> and <span class=symbollarger>l</span>) in both datum systems. However, a good approximation of this is given by the Molodensky equations relating directly the ellipsoidal <span class=symbollarger>j</span> and <span class=symbollarger>l</span> of both systems. In ILWIS, this is combined with forward and inverse map projection equations. It solves the problem of projection change between different geodetic datums. The Molodensky equations require the shift vector of the ellipsoid centers involved with respect to the WGS84 ellipsoid. Recent measurement results are provided by the US DMA (Defense Mapping Agency). The choice of a geodetic datum defines the choice of the ellipsoid and overrules a possibly previous selection of an ellipsoid for the projection.</p>
+
+<p class=defnewpar>An overview of available datums can be found in the <span class=courier>datum.def</span> file in the ILWIS system directory. It defines:</p>
+
+<ul>
+
+<li>	the datum name followed by an equal sign, </li>
+
+<li>	followed by the name of the ellipsoid, and </li>
+
+<li>	the estimated shifts in x, y and z position in meters, averaged for the specific region.</li>
+
+</ul>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+	<li>To find transformation parameters between the coordinate systems of two point maps, where: </li>
+
+	<ul class=tipul>
+
+	<li>the coordinate system of the first point map is supposed to use a local (unknown) datum, </li>
+	<li>the coordinate system of the second point map is supposed to use a global datum, preferably WGS 84, </li>
+	</ul>
+
+	<p class=tiptext>use the <a href="../ilwisapp/find_datum_trans_params_inputpage.htm">Find datum transformation parameters</a> wizard. </p>
+
+<li>For a general explanation of the Molodensky, Bursa Wolf and Badekas calculation methods for datum transformation parameters, see the <a href="../ilwisapp/find_datum_trans_params_methodpage.htm">Find datum transformation parameters - Method page</a>. </li>
+
+</ol>
+
+<p class=kopje>Reference: </p>
+
+<ul>
+
+<li>D.M.A., 1991. World Geodetic System 1984, its definition and relationships with local geodetic systems. U.S. Defense Mapping Agency, Department of Defense, Technical Report 8350.2, 2nd ed.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_coordinate_system.htm">ILWIS objects : coordinate systems</a></p>
+
+<p class=seealsolinks><a href="edit_coordinate_system_projection.htm">Edit Coordinate System Projection</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/select_projection.htm">Select Projection</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwismen/select_ellipsoid.htm">Select Ellipsoid</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="edit_coordinate_system_latlon.htm">Edit Coordinate System LatLon</a> (dialog box)</p>
+
+<p class=seealsolinks><a href="../ilwisapp/find_datum_trans_params_inputpage.htm">Find datum transformation parameters</a> wizard</p>
+
+</body

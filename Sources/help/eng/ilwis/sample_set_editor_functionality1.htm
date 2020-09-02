@@ -1,0 +1,137 @@
+<html>
+
+<head>
+<title>Sample set editor : functionality (1)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Sampling, Sample set editor, Editors">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Sample set editor</h1>
+
+<h1 class=secondline>Functionality (1)</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>In the sample set editor you can select sample pixels also called training pixels for certain classes prior to an <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >image classification</a>. The sample set editor has a <a href="..//ilwismen/sec2/sample_set_editor_sec2.htm" onClick="return popup(this, 'notes')" >menu bar</a>, a context-sensitive menu, a <a href="sample_set_editor_toolbar.htm">toolbar</a> and a status bar.  </p>
+
+<p class=defnewpar><a href="..//ilwisapp/popup/sample_popup.htm" onClick="return popup(this, 'notes')" >Sampling</a> creates a <a href="..//ilwis/popup/objects_sample_set_popup.htm" onClick="return popup(this, 'notes')" >sample set</a> which is needed for a <a href="..//ilwisapp/popup/classify_multispectral_popup.htm" onClick="return popup(this, 'notes')" >multi-spectral</a> image classification. </p>
+
+<p>Sampling is the assignment of <b>class names</b> to groups of pixels which have similar spectral values and that are supposed to represent the classes that you want to obtain from the classification. The sampled pixels or training pixels are thus supposed to be characteristic for a certain type of a natural resource. For instance, to perform a land use classification, you might sample the classes: forest, grass land, arable land etc.</p>
+
+<p class=kopje>Requirements:</p>
+
+<p>For sampling you need an image which can be easily interpreted (e.g. a color composite), a map list, that is the set of images which you want to classify in a later stage, and a class domain containing the set of class names that you want to assign to training pixels. All maps must have the same georeference (or georef <span class=courier>None</span>).</p>
+
+<p class=tip>Tip:</p>
+
+<p class=tiptext>When your graphics board is configured to use more than 256 colors, you can also use an <a href="..//ilwisapp/popup/show_map_list_as_color_composite_popup.htm" onClick="return popup(this, 'notes')" >interactive color composite</a>; then, a background map on disk is not required. For more information, refer to <a href="how_to_create_color_composites.htm">How to create a color composite</a>.</p>
+
+<p class=defnewpar>To start the sample set editor, refer to <a href="../ilwis/how_to_create_sample_sets.htm">How to create a sample set</a>. </p>
+
+<p class=kopje>General working of the sample set editor:</p>
+
+<ul>
+
+<li>	select one or more pixels on the 'background' image</li>
+
+<li>	assign a class name for the selected pixels</li>
+
+<li>	view <a href="..//ilwis/popup/sample_statistics_popup.htm" onClick="return popup(this, 'notes')" >sample statistics</a></li>
+
+<li>	view <a href="..//ilwis/popup/sampling_feature_space_popup.htm" onClick="return popup(this, 'notes')" >feature spaces</a></li>
+
+</ul>
+
+<p>During sampling, you probably need to zoom in on the map. You can still add new classes to the domain while sampling. It is advised to use the same domains as far as possible (not every class has to be used).</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	If you have an existing map of the area, you can add this map to the pixel info window. This may help you to select training pixels during sampling.</li>
+
+<li>	You can create <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output maps</a> with the <a href="..//ilwisapp/popup/classify_popup.htm" onClick="return popup(this, 'notes')" >Classify operation</a> (various methods, various parameters) using the current sample set as input. When you add these dependent maps to the pixel info window, you may already see the results of classifying during sampling.</li>
+
+<p class=tiptext>As pixel info works on XY-coordinates in maps, all maps should be georeferenced. </p>
+
+</ul>
+
+<p class=kopje>Selection of pixels:</p>
+
+<ul>
+
+<li>	to select a pixel, click it; or move the pixel selection cursor with the arrow keys on the keyboard and press the space bar;</li>
+
+<li>	to select all pixels within a selected area: drag a box with the left mouse button. All pixels in the box are selected;</li>
+
+<li>	to add pixels to a selection: press and hold down <span class=arial>Ctrl</span> and click the pixels you want to select. When finished, release the <span class=arial>Ctrl</span> key.</li>
+
+<li>	to clear a part of a selection: press and hold down <span class=arial>Ctrl+Shift</span>, click pixels or drag a box around pixels: these pixels are deselected. When finished, release the <span class=arial>Ctrl+Shift</span> keys.</li>
+
+<li>	to toggle between select and deselect: press and hold down <span class=arial>Shift</span>, click pixels or drag a box around pixels: selected pixels are deselected, and non-selected pixels are selected. When finished, release the <span class=arial>Shift</span> key.</li>
+
+</ul>
+
+<p>Inspect the Sample Statistics to see the statistics of the current selection.</p>
+
+<p class=kopje>Assignment of a class name to a selection:</p>
+
+<ul>
+
+<li>	double-click a pixel and choose a class name from the list, or enter a new class name, or </li>
+
+<li>	select multiple pixels, press the right mouse button and select <span class=arial>Edit</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>. In a small dialog box that appears you can choose a class name from the list or enter a new class name. <br>
+Instead of using the context-sensitive menu, you can also choose <span class=arial>Edit</span> from the Edit menu in the normal menu bar.</li>
+
+</ul>
+
+<p>When a new class is added, also a color can be selected. Class names in the domain that you are using can be as long as you want: set the width of the domain through the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of the domain. Sampled pixels appear in the color of the assigned class in the background map; when you move the mouse over a sampled pixel, the
+status line shows the class name of the pixel.</p>
+
+<p class=kopje>View Sample Statistics:</p>
+
+<p><a href="..//ilwis/popup/sample_statistics_popup.htm" onClick="return popup(this, 'notes')" >Sample Statistics</a> are displayed in a separate window. In the upper half of the window, you can select a class name, then some statistics are calculated for the training pixels belonging to this class: mean, standard deviation, number of pixels with the predominant value, predominant value, and total number of training pixels belonging to this class. In the lower half of the Sample Statistics window, statistics are shown for currently selected pixels.</p>
+
+<p class=kopje>View Feature Spaces:</p>
+
+<p>To view a <a href="..//ilwis/popup/sampling_feature_space_popup.htm" onClick="return popup(this, 'notes')" >feature space</a>, press the right mouse button in the sample set editor, and select Feature Space from the context-sensitive menu. You can also click the <span class=arial>Feature Space</span> button in the toolbar, or choose <span class=arial>Feature Space</span> from the normal Edit menu. Select which bands you want to be displayed by the feature space. </p>
+
+<p>You can open as many feature spaces as you like, but as each of them is updated after a new selection of training pixels, speed may decrease. Feature spaces can be shown with or without additional grid lines, can be copied to clipboard and printed.</p>
+
+<p>On the basis of the sample statistics and the feature spaces, you can for instance decide to sample more training pixels of a certain class, merge classes with too much overlap, delete classes, etc. For more information on merging and deleting classes, changing the color of classes, see <a href="../ilwis/sample_set_editor_functionality2.htm">Sample set editor : functionality (2)</a>.</p>
+
+<p class=kopje>Exit the sample set editor:</p>
+
+<p>To exit the sample set editor, double-click the <a href="..//ilwis/popup/win_controlmenubox_popup.htm" onClick="return popup(this, 'notes')" >Control-menu box</a> of the sample set editor window or the sample statistics window. You can also click the <span class=arial>Exit Editor</span> button in the toolbar, or choose <span class=arial>Exit</span> from the File menu in the sample set editor.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwis/sample_set_editor_functionality2.htm">Sample set editor : functionality (2)</a></p>
+
+<p class=seealsolinks><a href="..//ilwismen/sec2/sample_set_editor_sec2.htm" onClick="return popup(this, 'notes')" >Sample set editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="sample_set_editor_toolbar.htm">Sample set editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_create_sample_sets.htm">How to create a sample set</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_edit_sample_sets.htm">How to open an existing sample set</a></p>
+
+</body

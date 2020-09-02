@@ -1,0 +1,79 @@
+<html>
+
+<head>
+<title>Moving average : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Moving average">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Moving average</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Moving average operation is a <a href="point_interpolation.htm">point interpolation</a> which requires a point map as input and returns a raster map as output. The values for the output pixels are the weighted averages of input point values. Weighted averaging is the calculation of the sum of the products of weights and point values, divided by the sum of weights. </p>
+
+<p class=defnewpar>The weight factors for the input points are calculated by a user-specified weight function. There are two methods: inverse distance and linear decrease. Both methods ensure that points which are close to an output pixel obtain large weights and that points which are farther away from an output pixel obtain small weights. Values of points which are close to an output pixel are thus of greater importance to this output pixel value than the values of points which are farther away. </p>
+
+<p class=defnewpar>By specifying a <a href="..//ilwisapp/sec/point_interpolation_limiting_distance_sec.htm" onClick="return popup(this, 'notes')" >limiting distance</a>, you can influence until which distance from any output pixel, points will be taken into account for the calculation a value for that output pixel; for each output pixel, only the values of the points which fall within the limiting distance to this output pixel will be used. Values of points that are farther away from an output pixel than the specified limiting distance, obtain weight zero by the weight calculation, and these values will thus not be used in the output pixel value calculation. This speeds up the calculation and prevents artifacts. </p>
+
+<p class=defnewpar>For more information on the calculation of weight factors, see <a href="moving_average_algorithm.htm">Moving average : algorithm</a>.</p>
+
+<p class=defnewpar>Optionally, you can choose to calculate with <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >spherical distances</a>, i.e. distances calculated over the sphere using the projection that is specified in the coordinate system used by the georeference of the output raster map. It is advised to use this spherical distance option for maps that comprise large areas (countries or regions) and for maps that use LatLon coordinates. In more general terms, spherical distance should be used when there are 'large' scale differences within a map as a consequence of projecting the globe-shaped earth surface onto a plane. </p>
+
+<p>When the spherical distance option is not used, distances will be calculated in a plane as Euclidean distances. </p>
+
+<p class=kopje>Input map requirements:</p>
+
+<p>The input point map should be a <a href="..//ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Furthermore, when a point map uses a class or ID domain and the map is linked to an attribute table, you can also use such a point map and select a column with a value domain from the map's attribute table. </p>
+
+<p class=kopje>Domain and georeference of output map:</p>
+
+<p>The output raster map uses the same value domain as the input point map or the attribute column. The <a href="..//ilwis/popup/y_value_range_popup.htm" onClick="return popup(this, 'notes')" >value range</a> and <a href="..//ilwis/popup/y_precision_popup.htm" onClick="return popup(this, 'notes')" >precision</a> can be adjusted for the output map. The georeference for the output map has to be selected or created; you can usually select an existing georeference corners.</p>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>	For time efficiency reasons, it is advisable to choose a rather large pixel size for the output raster map. Further interpolation on the raster values can be performed with the <a href="..//ilwisapp/popup/densify_popup.htm" onClick="return popup(this, 'notes')" >Densify</a> operation or the <a href="..//ilwisapp/popup/resample_popup.htm" onClick="return popup(this, 'notes')" >Resample</a> operation (using bilinear or bicubic interpolation).</li>
+
+<li>	Prior to interpolation, you can use the <a href="..//ilwisapp/popup/pattern_analysis_popup.htm" onClick="return popup(this, 'notes')" >Pattern analysis</a> operation to investigate whether your points are randomly distributed, and the <a href="..//ilwisapp/popup/spatial_correlation_popup.htm" onClick="return popup(this, 'notes')" >Spatial correlation</a> operation to investigate whether your points are spatially correlated and until which distance from any point this correlation occurs. The limiting distance should not be specified larger than the distance until which correlation occurs. </li>
+
+<li>	Make sure that there are enough points within the limiting distance; in other words, choose a limiting distance which is large enough. <br></li>
+
+        To check whether you have enough points within the limiting distance, you can perform the calculation again with a limiting distance increased by a factor 2. When you find profound differences in outcomes, you have chosen the limiting distance too small in the first calculation.</li>
+
+<li>    When you used the spherical distance option in the Spatial Correlation operation, it is advised to also use the spherical distance option in the Moving average operation. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="point_interpolation.htm">Point interpolation</a></p>
+
+<p class=seealsolinks><a href="moving_average_dialogbox.htm">Moving average : dialog box</a></p>
+
+<p class=seealsolinks><a href="moving_average_commandline.htm">Moving average : command line</a></p>
+
+<p class=seealsolinks><a href="moving_average_algorithm.htm">Moving average : algorithm</a></p>
+
+</body

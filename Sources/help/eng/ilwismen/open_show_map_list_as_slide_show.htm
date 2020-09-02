@@ -1,0 +1,112 @@
+<html>
+
+<head>
+<title>Show map list as slide show : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Open ..., Show ..., Map lists, Slide show, Open as ..., Show as ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Show Map List as slide show</h1>
+
+<h1 class=secondline>Dialog box</h1>
+ 
+<!--<hr>-->
+
+<p class=defnewpar>Select a <a href="..//ilwis/popup/objects_map_list_popup.htm" onClick="return popup(this, 'notes')" >map list</a> and show its maps as a <a href="..//ilwisapp/popup/show_map_list_as_slide_show_popup.htm" onClick="return popup(this, 'notes')" >slide show</a>: all raster maps in the map list will be displayed one after the other in the map window at a user-specified rate. This visualization technique is designed to present multi-temporal changes in maps. All maps in the map list must use the same domain and the same georeference. </p>
+
+<p class=defnewpar>The first step of making a slide show is thus to create a map list of all the raster maps that you want to show. For more information, refer to <a href="create_a_map_list.htm">Create a map list</a>. All raster maps in a map list need to have the same <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a> and the same <a href="..//ilwis/popup/objects_georeference_popup.htm" onClick="return popup(this, 'notes')" >georeference</a>. Further, in a slide show, all maps in the map list will be displayed using one set of <a href="..//ilwis/popup/display_options_popup.htm" onClick="return popup(this, 'notes')" >display options</a>. When the maps in the map list use a class domain, a slide show always works fine. When the maps in the map list use a value domain, it is important that the stretch range of these maps is approximately the same. </p>
+
+<p class=defnewpar>Raster maps that you can include in a map list for a slide show may be:</p>
+
+<ul>
+
+<li>	satellite images of the same area of for instance different months,</li>
+
+<li>	derived products from satellite images, such as NDVI maps, of for instance different months,</li>
+
+<li>	classified satellite images of for instance different months or years,</li>
+
+<li>	thematic raster maps (e.g. land use maps) of for instance different years,</li>
+
+<li>	output raster maps of the Apply 3D operation that depict the same area in 3D but for instance from different angles.</li>
+
+</ul>
+
+<p class=defnewpar>It is generally not very useful to display a slide show of a map list which contains the bands (different wave-length intervals) of one satellite image (taken at a certain time), as the values in each band may strongly vary. By specifying a stretch range from 0 to 255 for all these bands, one band may appear quite dark, another one quite light, etc. It is often better to display the individual bands of an image in separate map windows; each band stretched according to the values that occur in that band.</p>
+
+<p class=defnewpar>This dialog box appears:</p>
+
+<ul>
+
+<li>	when you choose <span class=arial>Show Map List as Slide Show</span> from the Operations, Visualization menu in the Main window, or</li>
+
+<li>	when you double-click the <span class=arial>Slide Show</span> item in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>.</li>
+
+</ul>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Select a map list:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing map list which you want to display as a slide show. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Directories:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current directory.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=119>
+<p class=diabox>Drives:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>If necessary, change the current drive.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>A <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> - Raster Map dialog box is opened. This dialog box shows information on one raster map in the map list. The display options specified in this dialog box will be used to display <i>all</i> raster maps in the map list. In case your map list contains value maps, pay special attention to the stretch range as all maps will be displayed using the same stretch range. </p>
+
+<p class=defnewpar>After the display options are specified, the <a href="display_options_map_list_as_slide_show.htm">Display Options - Map List as Slide Show</a> dialog box appears.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/show_map_list_as_slide_show.htm">Show map list as slide show</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_map_lists.htm">ILWIS objects : map lists</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_display_a_map_list_as_a_slide_show.htm">How to display a map list as a slide show</a></p>
+
+</body

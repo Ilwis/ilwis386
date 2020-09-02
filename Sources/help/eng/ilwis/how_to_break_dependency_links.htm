@@ -1,0 +1,131 @@
+<html>
+
+<head>
+<title>How to break dependency links</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Break dependency links, How to break dependency links, Dependency links, Dependent data objects, Properties of objects">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to break dependency links</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar><a href="basic_concepts_dependent_data_objects.htm">Dependent maps, tables and columns</a> are the result of a <a href="..//ilwis/popup/y_calculation_popup.htm" onClick="return popup(this, 'notes')" >calculation</a> with MapCalc or TabCalc (in which you used the definition sign =) or the result of another <a href="..//ilwis/popup/y_operation_popup.htm" onClick="return popup(this, 'notes')" >operation</a>. The complete <a href="..//ilwis/popup/command_line_main_expressions_popup.htm" onClick="return popup(this, 'notes')" >expression</a> by which dependent output objects are created is stored by the output maps, tables and columns as their <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a>. Dependent data objects thus know how they were created and on which input data they depend.</p>
+
+<p class=defnewpar>In principle, dependent data objects cannot be edited as the results of calculations or operations need to be protected. If you do want to edit a dependent map, a dependent table or a dependent column, you need to break the dependency links first. Breaking dependency links means that the map, table or column no longer knows how it is created nor from which maps, tables or columns it was created.</p>
+
+<p class=kopje>To break dependency links of dependent maps and dependent tables:</p>
+
+<ul>
+
+<li>	select <a href="..//ilwis/popup/multiple_selection_popup.htm" onClick="return popup(this, 'notes')" >one or more</a> dependent maps and/or tables in a <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>,</li>
+
+<li>	press the right mouse button,</li>
+
+<li>	choose <span class=arial>Properties</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>,</li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	select one or more dependent data objects in a Catalog, </li>
+
+<li>	open the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window,</li>
+
+<li>	choose <span class=arial>Properties</span>. </li>
+
+</ul>
+
+<p class=defnewpar>The <a href="..//ilwismen/sec/properties_sec.htm" onClick="return popup(this, 'notes')" >Property sheet(s)</a> of the selected dependent map(s) and/or table(s) will appear: </p>
+
+<ul>
+
+<li>    go to the <span class=arial>Dependency</span> tab, and </li>
+
+<li>    click the button <span class=arial>Break Dependency Link</span>.</li>
+
+</ul>
+
+<p class=defnewpar>When a dependent map is displayed in a map window, or when a dependent table is displayed in a table window, you can also open the File menu in the map or table window and select the <span class=arial>Properties</span> command. The Property sheet of that map or table then appears. To break the dependency link, go to the <span class=arial>Dependency</span> tab, and click the button <span class=arial>Break Dependency Link</span>.</p>
+
+<p class=kopje>To break dependency links of dependent columns:</p>
+
+<ul>
+
+<li>	open a table in a table window, </li>
+
+<li>	double-click a column header (displaying the column name) of a dependent column,</li>
+
+</ul>
+
+<p>or</p>
+
+<ul>
+
+<li>	from the <a href="table_window_menu_commands.htm">Columns menu</a>, choose <span class=arial>Column Management</span>, a dialog box appears in which all columns are listed, then </li>
+
+<li>	double-click a column in the list, or select a column in the list and click the <span class=arial>Properties</span> button.</li>
+
+</ul>
+
+<p class=linespacing03before>The <a href="../ilwismen/column_properties.htm">Column Properties</a> dialog box will appear; click the button <span class=arial>Break Dependency Link</span>.</p>
+
+<p class=kopje>To break dependency links on the command line or in scripts:</p>
+
+<p>You can also break dependency links by typing the following on the <a href="..//ilwis/popup/command_line_main_window_popup.htm" onClick="return popup(this, 'notes')" >command line in the Main window</a> or in a <a href="..//ilwis/popup/objects_script_popup.htm" onClick="return popup(this, 'notes')" >script</a>:</p>
+
+<p class=calc1>breakdep <i>object.ext </i></p>
+
+<p>For <span class=courier><i>object.ext</i></span> fill out the <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >object name</a> and its <a href="..//ilwis/sec/obj_extensions_sec.htm" onClick="return popup(this, 'notes')" >extension</a>. </p>
+
+<p>It is allowed to use the DOS wildcards <span class=courier>*</span> and <span class=courier>?</span>. </p>
+
+<p>For more information, <a href="../ilwis/appendices_ilwis_scripts_language_syntax.htm">see Appendices : script language (syntax)</a>.</p>
+
+<p class=defnewpar>Examples of using wildcards:</p>
+
+<ul>
+
+<li>	to break the dependencies of all raster maps starting with <span class=courier>A</span>, you can thus type:</li>
+
+</ul>
+
+<p class=calc1>breakdep a*.mpr</p>
+
+<ul>
+
+<li>	to break the dependencies of all objects in this directory, you can thus type: </li>
+
+</ul>
+
+<p class=calc1>breakdep *.*</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="basic_concepts_dependent_data_objects.htm">Basic concepts : dependent data objects</a></p>
+
+<p class=seealsolinks><a href="basic_concepts_properties_of_objects.htm">Basic concepts : properties of objects</a></p>
+
+<p class=seealsolinks><a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit the properties of an object</a></p>
+
+</body

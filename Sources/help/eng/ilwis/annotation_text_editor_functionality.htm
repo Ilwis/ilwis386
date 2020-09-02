@@ -1,0 +1,326 @@
+<html>
+
+<head>
+<title>Annotation Text editor : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Annotation Text editor, Editors">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Annotation Text editor</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Annotation Text editor allows you to edit text items stored in an <a href="..//ilwis/popup/annotation_text_popup.htm" onClick="return popup(this, 'notes')" >Annotation Text object</a>. </p>
+
+<p class=defnewpar>With the Annotation Text editor, you can:</p>
+
+<ul>
+
+<li>	insert new texts and delete selected existing texts,</li>
+
+<li>	move one or more selected texts to another position,</li>
+
+<li>	make text duplicates, and</li>
+
+<li>	specify fonts, sizes, colors, etc. for (multiple) selected texts.</li>
+
+</ul>
+
+<p>Additionally, you can cut, copy and paste text items to and from the clipboard, and change the working scale.</p>
+
+<p class=defnewpar>The Annotation Text editor has a <a href="..//ilwismen/sec2/annotation_text_editor_sec2.htm" onClick="return popup(this, 'notes')" >menu bar</a>, a <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>, and a <a href="..//ilwis/popup/button_bar_popup.htm" onClick="return popup(this, 'notes')" >toolbar</a>. All changes that you make in the annotation text object are continuously stored. </p>
+
+<p class=defnewpar>You can also edit an annotation text object in table form. This may provide quicker, easier or more precise possibilities to edit texts, positions and other settings like font, font sizes, colors, etc. To open an annotation text object as a table, you can double-click the object in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, or open the <a href="main_window_menu_commands.htm">File menu</a> in the Main window, choose <span class=arial>Open As Table</span> and select an annotation text object.</p>
+
+<p class=tip>Tip: </p>
+
+<p class=tiptext>While annotation text is edited in the Annotation Text editor, <a href="..//ilwis/popup/layers_annotation_layers_popup.htm" onClick="return popup(this, 'notes')" >other annotation types</a> like texts, legends, boxes, North arrows, scale bars, grid lines, graticule, bitmaps or metafiles are edited with the <a href="..//ilwis/popup/layout_editor_popup.htm" onClick="return popup(this, 'notes')" >Layout editor</a>.</p>
+
+<p class=tip>Note: </p>
+
+<p class=tiptext>For vector maps that use a coordinate system of type latlon, an annotation text layer cannot be properly created. It is advised: </p>
+
+<ul class=tipul>
+
+<li>to transform the vector map with a coordinate system of type latlon, to a coordinate system of type projection. </li>
+
+</ul>
+
+<p class=kopje>To start the Annotation Text editor:</p>
+
+<p>The Annotation Text editor is automatically started when you create a new annotation text object. For more information, see the <a href="../ilwismen/create_an_annotation_text_object.htm">Create Annotation Text</a> dialog box. </p>
+
+<p>To edit an annotation text object which is displayed in a map window, open the <a href="map_window_menu_commands.htm">Edit menu</a>, choose <span class=arial>Edit Layer</span> and select the annotation text layer. For more information, see <a href="ilwis_objects_annotation_text.htm">ILWIS objects : annotation text objects</a>.</p>
+
+<p class=kopje>To insert more annotation text items:</p>
+
+<p>In the <span class=arial>Create Annotation Text</span> dialog box, you will usually base a new annotation text object on an existing polygon, segment or point map. You will then automatically obtain texts (class names, IDs, or values) of all polygons, segments or points in that map. </p>
+
+<p class=defnewpar>To add more or other text items:</p>
+
+<ul>
+
+<li>	double-click at a new position in the editor window;</li>
+
+<li>	locate the mouse pointer at a position where you want to insert a new text and press the <span class=arial>Ins</span> key on the keyboard;</li>
+
+<li>	open the Edit menu and choose the <span class=arial>Add Text</span> command;</li>
+
+<li>	press the right mouse button and select <span class=arial>Add Text</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+<p>The <a href="../ilwismen/annotation_text_editor_add_text_edit_text.htm">Add Text / Edit Text</a> dialog box will appear. When you use the Edit menu or the context-sensitive menu, you may have to position the text later on.</p>
+
+<p class=kopje>To change the text string, font, font size, colors, etc, of text items:</p>
+
+<p>To change text and settings of a text:</p>
+
+<ul>
+
+<li>	double-click a text item;</li>
+
+<li>	select a text item, press the right mouse button and choose <span class=arial>Edit</span> from the context-sensitive menu;</li>
+
+<li>	select a text item, and press the <span class=arial>Enter</span> key. </li>
+
+</ul>
+
+<p>The <a href="../ilwismen/annotation_text_editor_add_text_edit_text.htm">Add Text / Edit Text</a> dialog box will appear in which you can edit the existing text, the font in which this text item appears, the font size, the color, etc.</p>
+
+<p class=defnewpar>To change settings of multiple selected texts:</p>
+
+<ul>
+
+<li>	select multiple text items, press the right mouse button and choose <span class=arial>Edit</span> from the context-sensitive menu;</li>
+
+<li>	select multiple text items, and press the <span class=arial>Enter</span> key. </li>
+
+</ul>
+
+<p>The <a href="../ilwismen/annotation_text_editor_edit_texts.htm">Edit Texts</a> dialog box will appear in which you can edit the font in which all these text items appear, the font size, the color, etc.</p>
+
+<p class=defnewpar>To change only one setting for one or more selected text items: choose the <span class=arial>Change</span> command from the <a href="..//ilwismen/sec2/annotation_text_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a> or from the context-sensitive menu. You can either change the font, the font size, whether the selected text(s) appear in bold, italics or underlined (toggles), the color, the justification, whether rectangles around the text should be transparent (toggle) and the rotation. For font, font size, color, justification and rotation, a little dialog box will appear; the other settings are toggles without dialog box.</p>
+
+<p class=defnewpar>To change only one setting for one or more selected text items, you can also use the following short cut keys on the keyboard:</p>
+
+<p class=emptylinehalf>&nbsp;&nbsp;&nbsp;</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=75>
+<p>Shift + F</p>
+
+</td>
+<td valign="top">
+<p>to select another font;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Shift + S</p>
+
+</td>
+<td valign="top">
+<p>to change the font size;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Shift + B</p>
+
+</td>
+<td valign="top">
+<p>toggle between bold / not bold;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Shift + I</p>
+
+</td>
+<td valign="top">
+<p>toggle between italics / not italics;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Shift + U</p>
+
+</td>
+<td valign="top">
+<p>toggle between underlined / not underlined;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Shift + C</p>
+
+</td>
+<td valign="top">
+<p>to select another color;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Shift + J</p>
+
+</td>
+<td valign="top">
+<p>to select another justification method;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Shift + T</p>
+
+</td>
+<td valign="top">
+<p>toggle between transparent / not transparent;</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=75>
+<p>Shift + R</p>
+
+</td>
+<td valign="top">
+<p>to select another rotation.</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>To select multiple text items:</p>
+
+<ul>
+
+<li>	open the <a href="..//ilwismen/sec2/annotation_text_editor_edit_menu_sec2.htm" onClick="return popup(this, 'notes')" >Edit menu</a> and choose <span class=arial>Select All</span>: all text items will be selected, or</li>
+
+<li>	drag a box around the text items which you want to select, or</li>
+
+<li>	press and hold the <span class=arial>Shift</span> key down and click the text items which you want to select.</li>
+
+</ul>
+
+<p class=kopje>To position annotation text items:</p>
+
+<ul>
+
+<li>	click a text item and <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> it to another position;</li>
+
+<li>	double-click a text item and fill out XY-coordinate or RowCol numbers in the <span class=arial>Add Text / Edit Text</span> dialog box, or</li>
+
+<li>	select multiple text items and <a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> them to another position.</li>
+
+</ul>
+
+<p class=kopje>To cut, copy and paste selected text items:</p>
+
+<p>Select one or more text items, and:</p>
+
+<ul>
+
+<li>	press Ctrl+X (cut) to remove the selected items from the editor window and copy them into the clipboard;</li>
+
+<li>	press <span class=arial>Ctrl+C</span> (copy) to copy the selected items to the clipboard;</li>
+
+<li>	press <span class=arial>Ctrl+V</span> (paste) to paste the contents (first line) of the clipboard into the editor window, at the current position of the mouse pointer.</li>
+
+</ul>
+
+<p class=defnewpar>You can also use the Cut, <span class=arial>Copy</span> and <span class=arial>Paste</span> commands on the Edit menu or on the context-sensitive menu.</p>
+
+<p class=kopje>To make duplicates of annotation text items:</p>
+
+<ul>
+
+<li>	Select one or more text items, </li>
+
+<li>	press and hold the <span class=arial>Ctrl</span> key down, then </li>
+
+<li>	press and hold the left mouse button down, and </li>
+
+<li>	move the mouse pointer to another position.</li>
+
+</ul>
+
+<p class=kopje>To delete annotation text items:</p>
+
+<p>Select one or more text items, and:</p>
+
+<ul>
+
+<li>	press the <span class=arial>Del</span> key on the keyboard;</li>
+
+<li>	select <span class=arial>Delete</span> from the Edit menu or from the context-sensitive menu.</li>
+
+</ul>
+
+<p class=kopje>To change the working scale:</p>
+
+<p>You can change the working scale which determines the relation between font sizes on your screen and on the printer. The working scale is usually the scale on which you want to print your maps later on. To change the working scale: open the File menu and choose Options. The Options dialog box will appear in which you can specify another value for your working scale. </p>
+
+<p class=defnewpar>Subsequently, a question will be asked: <span class=courier>Update all font sizes?</span></p>
+
+<ul>
+
+<li>	answer <span class=courier>Yes</span> if you want to keep your texts in the same proportions;</li>
+
+<li>	answer <span class=courier>No</span> if you want to keep the font sizes as specified before; then, if you <span class=arial>Redraw</span> the editor window, the texts may appear larger or smaller depending on whether you specified a larger or smaller value for the working scale.</li>
+
+</ul>
+
+<p class=kopje>To exit the Annotation Text editor:</p>
+
+<ul>
+
+<li>	double-click the <a href="..//ilwis/popup/win_controlmenubox_popup.htm" onClick="return popup(this, 'notes')" >Control-menu box</a>, or</li>
+
+<li>	in the toolbar, click the Exit Editor button <img src="../images/ed_stoped.gif" align=bottom width="22" height="22">, or</li>
+
+<li>	from the <a href="..//ilwismen/sec2/annotation_text_editor_file_menu_sec2.htm" onClick="return popup(this, 'notes')" >File menu</a>, choose <span class=arial>Exit Editor</span>.</li>
+
+</ul>
+
+<p>All changes that you make in the annotation text object are continuously stored.</p>
+
+<p class=defnewpar>For more information, see also <a href="appendices_keyboard_shortcuts.htm">Appendices : Keyboard shortcuts</a> and <a href="appendices_mouse_functions.htm">Appendices : Mouse functions</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwismen/sec2/annotation_text_editor_sec2.htm" onClick="return popup(this, 'notes')" >Annotation Text editor : menu commands</a></p>
+
+<p class=seealsolinks><a href="annotation_text_editor_toolbar.htm">Annotation Text editor : toolbar</a></p>
+
+<p class=seealsolinks><a href="ilwis_objects_annotation_text.htm">ILWIS objects : annotation text objects</a></p>
+
+</body

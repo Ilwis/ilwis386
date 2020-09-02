@@ -1,0 +1,112 @@
+<html>
+
+<head>
+<title>Transform polygon map : dialog box</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Transform polygon map">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Transform polygon map</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The Transform polygon map operation transforms the coordinates of polygon boundaries in a polygon map from the map's current <a href="..//ilwis/popup/objects_coordinate_system_popup.htm" onClick="return popup(this, 'notes')" >coordinate system</a> to another target coordinate system. You can choose whether coordinates of polygon boundaries should be densified before the transformation takes place. </p>
+
+<p class=linespacing03before>The Transform operation can only be used when a transformation between the input and target coordinate systems is possible. For more information, refer to <a href="transform_polygon_map_functionality_algorithm.htm">Transform polygon map : functionality/algorithm</a>.</p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Input polygon map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input polygon map. Open the list box and select the desired input map, or drag a polygon map directly from the Catalog into this box. </p>
+
+<p class=diabox>For your information, when you have selected a polygon map, a text line will appear showing the name and type of the coordinate system that is used by the input polygon map. This is the coordinate system from which you will transform coordinates <i>from</i>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Densify coordinates:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select this check box if you wish to densify the intermediate points in the polygon boundaries before the transformation will take place. This may ensure better shapes of polygons in the output map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Distance (m):</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a value for the distance interval at which intermediate points should be inserted. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Output polygon map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output polygon map that will contain the transformed polygons.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Coordinate system:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an existing target coordinate system or create a new coordinate system by using the <a href="..//ilwis/popup/win_create.htm" onClick="return popup(this, 'notes')" >create button</a>. This is the coordinate system to which you will transform the coordinates of your input map <i>to</i>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=132>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary, the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=seealso>See also:</p>
+
+<p class=seealsolinks><a href="transform_polygon_map_functionality_algorithm.htm">Transform polygon map : functionality / algorithm</a></p>
+
+<p class=seealsolinks><a href="densify_segment_coordinates_functionality_algorithm.htm">Densify segment coordinates : functionality / algorithm</a></p>
+
+</body

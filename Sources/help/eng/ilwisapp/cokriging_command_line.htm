@@ -1,0 +1,467 @@
+<html>
+
+<head>
+<title>CoKriging : command line</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="CoKriging, MapCoKriging">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>CoKriging</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/cokriging_popup.htm" onClick="return popup(this, 'notes')" >CoKriging</a> operation can be directly executed by typing one of the following expressions on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCoKriging</span>(InputPointMap<i>Pred</i>, InputPointMap<i>Covar</i>, Georef, <i>SemiVarModelPred, SemiVarModelCovar, CrossVarModel, LimDist</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCoKriging</span>(InputPointMap<i>Pred</i>, InputPointMap<i>Covar</i>, </i>Georef, <i>SemiVarModelPred, SemiVarModelCovar, CrossVarModel, LimDist</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCoKriging</span>(InputPointMap<i>Pred</i>, InputPointMap<i>Covar</i>, </i>Georef, <i>SemiVarModelPred, SemiVarModelCovar, CrossVarModel, LimDist, </i><span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <i>min, max</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCoKriging</span>(InputPointMap<i>Pred</i>, InputPointMap<i>Covar</i>, </i>Georef, <i>SemiVarModelPred, SemiVarModelCovar, CrossVarModel, LimDist, </i><span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <i>min, max, </i><span class=courier>No</span> | <span class=courier>Average</span> | <span class=courier>Firstval</span>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCoKriging</span>(InputPointMap<i>Pred</i>, InputPointMap<i>Covar</i>, </i>Georef, <i>SemiVarModelPred, SemiVarModelCovar, CrossVarModel, LimDist</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <i>min, max, </i><span class=courier>Average</span> | <span class=courier>Firstval</span>, <i>Tolerance</i>)</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=50>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapCoKriging</span>(InputPointMap<i>Pred</i>, InputPointMap<i>Covar</i>, </i>Georef, <i>SemiVarModelPred, SemiVarModelCovar, CrossVarModel, LimDist</i>, <span class=courier>1</span>&nbsp;|&nbsp;<span class=courier>0</span>, <i>min, max, </i><span class=courier>Average</span> | <span class=courier>Firstval</span>, <i>Tolerance</i>, <span class=courier>plane</span> | <span class=courier>sphere</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>MapCoKriging</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the CoKriging operation.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPointMap<i>Pred</i></p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map with the predictand (value domain) that is poorly sampled. <br> 
+
+To use a value attribute column from an attribute table which is linked to an ID point map, use <i>InputPointMap.Columnname</i>.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPointMap<i>Covar</i></p>
+
+</td>
+<td valign="top">
+<p>is the name of the input point map with the covariable (value domain) that is well sampled. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>Georef</p>
+
+</td>
+<td valign="top">
+<p>is the name of an existing georeference for the output raster map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>SemiVarModelPred</i></p>
+
+</td>
+<td valign="top">
+<p><i>Model</i>(<i>nugget, sill, range</i>) | <span class=courier>Power</span>(<i>nugget, slope, power</i>)</p>
+
+<p>This expression defines the <a href="..//ilwisapp/sec/semivar_models_sec.htm" onClick="return popup(this, 'notes')" >semi-variogram model</a> and its parameters that should be used for the predictand. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>SemiVarModelCovar</i></p>
+
+</td>
+<td valign="top">
+<p><i>Model</i>(<i>nugget, sill, range</i>) | <span class=courier>Power</span>(<i>nugget, slope, power</i>)</p>
+
+<p>This expression defines the semi-variogram model and its parameters that should be used for the covariable. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>CrossVarModel</i></p>
+
+</td>
+<td valign="top">
+<p><i>Model</i>(<i>nugget, sill, range</i>) | <span class=courier>Power</span>(<i>nugget, slope, power</i>)</p>
+
+<p>This expression defines the cross-variogram model and its parameters that should be used. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>Model</i></p>
+
+</td>
+<td valign="top">
+<p class=courier>Spherical | Exponential | Gaussian | Wave | RatQuad | Circular</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>nugget</i></p>
+
+</td>
+<td valign="top">
+<p>value for the nugget, according to each semi- or cross-variogram (real value).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>sill</i></p>
+
+</td>
+<td valign="top">
+<p>value for the sill, according to each semi- or cross-variogram (real value). </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>range</i></p>
+
+</td>
+<td valign="top">
+<p>value for the range, according to each semi- or cross-variogram (real value &gt; 0).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>slope</i></p>
+
+</td>
+<td valign="top">
+<p>when using the <span class=courier>Power</span> model: value for the 'slope'. When <i>pow</i> is specified as 1 (i.e. thus using a linear model), then <i>slope</i> is the direction coefficient, i.e. <span class=symbol>Dg</span>/<span class=symbol>D</span>h (real value &gt;= 0).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=leftmargin1><i>pow</i></p>
+
+</td>
+<td valign="top">
+<p>when using the <span class=courier>Power</span> model: an exponent 0 &lt; real value &lt;
+2. When you use value 1, the <span class=courier>Power</span> model will become
+linear and the slope will be constant. If the power exponent is 2 the assumed stochastic model (‘randomness’) is not always justifiable and the interpolation can become pathological. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>LimDist</i></p>
+
+</td>
+<td valign="top">
+<p>a value for the limiting distance: points that are further away from an output pixel than the limiting distance will not be used in the Kriging equations. Normally, this is a value smaller than the range of the predictand semi-variogram model (0 &lt;= real value &lt; diagonal size of map).</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>1 | 0</p>
+
+</td>
+<td valign="top">
+<p>Specify whether or not an error map has to be created. The error map will contain the square root of the Kriging error variance values, i.e. standard deviations per pixel. When this parameter is not specified, no error map will be created. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>1</p>
+
+</td>
+<td valign="top">
+<p>Create an error map. The error map will obtain the same name as specified for the output Kriging map followed by the additional string <span class=courier>_Error</span>. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>0</p>
+
+</td>
+<td valign="top">
+<p>Do not create an error map. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>min</i>, <i>max </i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameters (integer values) to specify the minimum and maximum number of points that should be taken into account per Kriging estimate/prediction, i.e. the number of points within the limiting distance of an output pixel that should be taken into account in the calculation of the output value for that pixel.</p>
+
+<ul>
+
+<li>When the minimum is not specified a minimum value 1 will be used. When, for an output pixel, less points than the specified minimum are found within the specified limiting distance, no Kriging is performed and the output pixel will become undefined. If the whole map contains less points than the specified minimum, an error message will appear and no output will be produced. </li>
+
+<li>When the maximum is not specified, value 16 will be used. When, for an output pixel, more points than the specified maximum are found within the specified limiting distance, only the specified maximum number of points that are nearest to the output pixel will be used. </li>
+
+</ul>
+
+</td>
+</tr>
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>No | Average | Firstval</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>&nbsp;</p>
+  
+</td>
+<td valign="top">
+<p>Choose how handle possible coinciding points or duplicates should be handled. When no method is specified, <span class=courier>Average</span> will be used.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>No</p>
+
+</td>
+<td valign="top">
+<p>No removal of duplicates. Mind: when there are coinciding points, the Kriging system may become unsolvable and will give undefined values for the pixels for which coinciding points are found.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>Average</p>
+
+</td>
+<td valign="top">
+<p>Values of duplicates are replaced by the average (arithmetic mean); the coordinates of the first point are taken as new position.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courierleft1>Firstval</p>
+
+</td>
+<td valign="top">
+<p>Values of duplicates (and their coordinates) are replaced by those of the first point.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><i>Tolerance</i></p>
+
+</td>
+<td valign="top">
+<p>Optional parameter to specify the distance within which 2 sample points are considered to coincide. When not specified, a tolerance of 0.1 m will be used.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p><span class=courier>plane</span> | <span class=courier>sphere</span></p>
+
+</td>
+<td valign="top">
+<p>optional parameter to calculate distances in a plane (<span class=courier>plane</span>), or on the <a href="..//ilwisapp/sec/spherical_distance_sec.htm" onClick="return popup(this, 'notes')" >sphere</a> by using the projection of the coordinate system as used by the georeference of the output raster map (<span class=courier>sphere</span>). If not specified, distances will be calculated in a plane. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated.</p>
+
+<p class=kopje>Example:</p>
+
+<p>The following expression:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=50>
+<p class=courier>OutCoKr</p>
+
+</td>
+<td valign="top" width=18>
+<p class=courier>=</p>
+
+</td>
+<td valign="top">
+<p class=courier>MapCoKriging (MyPoints.MyAttrA, MyPoints.MyAttrB, MyGeoref, Spherical(10,70,800), Gaussian(30,80,1000), Power(20,40,2), 200,
+1, 6, 20, Firstval, 0.2)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>performs CoKriging:</p>
+
+<ul>
+
+<li>	on point map <span class=courier>MyPoints</span>, using attribute columns <span class=courier>MyAttrA</span> (the predictand) and <span class=courier>MyAttrB</span> (the covariable); </li>
+
+<li>	using georeference <span class=courier>MyGeoref</span> for the output raster maps;</li>
+
+<li>	using for the predictand a Spherical semi-variogram model with a nugget of 10, a sill of 70 and a range of 800 meter;</li>
+
+<li>	using for the covariable a Gaussian semi-variogram model with a nugget of 30, a sill of 80 and a range of 1000 meter;</li>
+
+<li>	using Power cross variogram model with a nugget of 20, a slope of 40 and a power of 2;</li>
+
+<li>	using a limiting distance of 200 meter;</li>
+
+<li>	while each Kriging equation should use at least 6 and at most 20 points (min, max);</li>
+
+<li>	while considering points as coinciding when the distance between them is less than 0.2 m (tolerance);</li>
+
+<li>	while for coinciding points only the value and coordinates of the first point encountered will be used.</li>
+
+</ul>
+
+<p class=defnewpar>The results of the expression are: </p>
+
+<ul>
+
+<li>	output raster map <span class=courier>OutCoKr</span> using existing georeference <span class=courier>MyGeoref</span>;</li>
+
+<li>	output error map <span class=courier>OutCoKr_Error</span>.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="cokriging_functionality.htm">CoKriging : functionality</a></p>
+
+</body

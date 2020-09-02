@@ -1,0 +1,415 @@
+<html>
+
+<head>
+<title>Catchment merge : functionality</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Catchment merge">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Catchment merge</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+<p class="defnewpar">The Catchment merge operation is able to merge adjacent catchments, as found by the <a href="..//ilwisapp/popup/catchment_extraction_popup.htm" onClick="return popup(this, 'notes')" >Catchment extraction</a> operation. In fact, new catchments will be created on the basis of the <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> map and its attribute table. </p>
+
+<p class="defnewpar">As input is required: </p>
+
+<ul>
+<li>the output map and table of a previous <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation, </li>
+<li>the output map of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation, </li>
+<li>the output map of a previous <a href="..//ilwisapp/popup/flow_accumulation_popup.htm" onClick="return popup(this, 'notes')" >Flow accumulation</a> operation. </li>
+</ul>
+
+<p class="defnewpar">You can merge catchments in two manners: </p>
+
+<ul>
+
+<li>by specifying a point map that contains locations of stream outlets within a catchment; all adjacent catchments that drain into such outlets will be merged, </li>
+
+<li>by simply specifying a Strahler or Shreve ordering value: all adjacent catchments that have this Strahler or Shreve order value (or a lower value) and which drain into a common catchment will be merged. </li>
+
+</ul>
+
+<p class="defnewpar">As output a new catchment raster map, polygon map and attribute table are produced. These all use a new ID domain. </p>
+
+<p class="defnewpar">The attribute table contains information on the new catchments, similar to the output attribute table of the Catchment Extraction operation, but you will also find information on: </p>
+
+<ul>
+
+<li>total drainage length, total upstream area, </li>
+
+<li>drainage density, </li>
+
+<li>longest flow path length and longest drainage length. </li>
+
+</ul>
+
+<p class="defnewpar">Optionally, you can also obtain: </p>
+
+<ul>
+
+<li>a segment map with the longest flow path per catchment and a linked attribute table, </li>
+
+<li>a segment ordering map and attribute table, that only contain the segment streams within the new catchments; other streams will not appear anymore; output is similar to the segment map and attribute table of the Drainage Network Ordering operation. </li>
+
+</ul>
+
+<p>The last option is only available when you use an input point map with outlets. </p>
+
+<p class="defnewpar">Finally, this operation also has an option to include undefined pixels (from the Flow direction map) into a catchment. Then, a point map that only contains a single point is required. </p>
+
+<p class="tip">Tips: </p>
+
+<ul class="tipul">
+
+<li>A point map can be created in a map window, using for instance the input flow direction map and the input drainage network ordering segment map as background. </li>
+
+<li>Choose <span class="arial">File, Create Point Map</span> in the map window and the <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >Point editor</a> will be opened. For more information, refer to <a href="../ilwis/point_editor_functionality.htm">Point editor : functionality</a>, section <a href="../ilwis/point_editor_functionality.htm#pntedmouse"><span class="bookmark">Working with the mouse</span></a>. </li>
+
+</ul>
+
+<p class="kopje"><b>1. Example using a point map with multiple points:</b></p>
+
+<p class="defnewpar">In this example, a user first performed the Drainage network extraction, the Drainage network ordering and the Catchment extraction operations as usual. The catchments obtained from Catchment extraction are shown in the third picture in green. </p>
+
+<p>Then, a point map is created containing the locations of the outlets of the desired catchments. These points are also shown in the third picture (6 points in gray). </p>
+
+<p>When the Catchment merge operation is now performed using the point map with the outlets, only 6 catchments will be created (see the fourth and fifth picture). An output attribute table will give additional information. </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td width="350">Drainage network ordering map: <br>
+	displayed by attribute Strahler </td>
+<td width="350">Drainage network ordering map: <br>
+	displayed by attribute Shreve</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_drain_netw_strahler_large.gif" width="334" height="334"></td>
+<td><img src="../images/hydro_drain_netw_shreve_large.gif" width="334" height="334"></td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td>Input catchments (in green) from catchment extraction<br>
+	 and input point map with 6 outlet points (in gray): 
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_catch_merge_initial_pnt.gif" width="334" height="334"></td>
+<td></td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td>Output merged catchments (bounds only, in red)<br>
+	other layers for reference</td>
+<td>Output merged catchments<br>
+	(polygons and new IDs)
+</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_catch_merge_pnt.gif" width="334" height="334"></td>
+<td><img src="../images/hydro_catch_merge_pnt2.gif" width="334" height="334"></td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td>Output merged catchments (bounds only, in red) and <br>
+	additional output extracted segments (light blue);<br>
+	outlet points for reference
+</td>
+<td>Output merged catchments (bounds only, in red) and <br>
+	additional output longest flow paths (light blue); <br>
+	outlet points for reference</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_catch_merge_pnt3.gif" width="334" height="334"></td>
+<td><img src="../images/hydro_catch_merge_pnt4.gif" width="334" height="334"></td>
+</tr>
+</table>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="kopje"><b>2. Example using Strahler or Shreve ordering values:</b></p>
+
+<p class="defnewpar">In this example, a user first performed the Drainage network extraction, the Drainage network ordering and the Catchment extraction operations as usual. The catchments obtained from Catchment extraction are shown in the second picture in green. </p>
+
+<p>For your information, a point map with labels representing Shreve ordering values for the drainages was created from the attribute table of the Drainage network ordering operation. This was done just for reference purposes and is not a required step to be able to perform Catchment merge; the Shreve labels are also shown in the second picture. </p>
+
+<p class="defnewpar">Then, the Catchment merge operation was performed. All contiguous catchments which drainages had Shreve order values up to 15 were merged. The new catchments are shown in the third picture in red. The fourth picture also shows the IDs of the new catchments. </p>
+
+<p class="defnewpar">Similarly, catchments can be merged for connected drainages according to the Strahler method; such a merge up to Strahler order 3 is shown in the fifth and sixth picture. </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td width="350">Drainage network ordering map: <br>
+	displayed by attribute Shreve
+</td>
+<td>Input catchments (in green) from catchment extraction<br>
+	 with Shreve label points: 
+</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_drain_netw_shreve_large.gif" width="334" height="334"></td>
+<td><img src="../images/hydro_catch_merge_shreve1.gif" width="334" height="334"></td>
+</tr>
+<tr><td valign="top"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td>When merging catchments up to <b>Shreve</b> order 15: <br>
+	Output catchment merge map (bounds only, in red), <br>
+	other layers for reference
+</td>
+<td>Output merged Shreve catchments<br>
+	(polygons bounds and new IDs)
+</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_catch_merge_shreve2.gif" width="334" height="334"></td>
+<td><img src="../images/hydro_catch_merge_shreve3.gif" width="334" height="334"></td>
+</tr>
+<tr><td valign="top"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td>When merging catchments up to <b>Strahler</b> order 3: <br>
+	Output catchment merge map (bounds only, in red), <br>
+	other layers for reference
+</td>
+<td>Output merged Strahler catchments<br>
+	(polygons bounds and new IDs)
+</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_catch_merge_strahler2.gif" width="334" height="334"></td>
+<td><img src="../images/hydro_catch_merge_strahler3.gif" width="334" height="334"></td>
+</tr>
+</table>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="kopje"><b>3. Example using the &quot;Include Undefined Pixels&quot; option:</b></p>
+
+<p class="defnewpar">In the last example, a user had a DEM in which lakes were excluded. After a Flow direction operation, you see that there are no flow direction values for the lake area(s) (first picture). When subsequently Drainage network extraction and Drainage network ordering are performed, no drainages are found in the lake area(s) (second picture). </p>
+
+<p class="defnewpar">To remove these white spots, some segment maps were created, and the <a href="..//ilwisapp/popup/topological_optimization_popup.htm" onClick="return popup(this, 'notes')" >Topological optimization</a> operation was performed several times. For more information, refer to <a href="topological_optimization_functionality.htm">Topological optimization : functionality</a>. </p>
+
+<p class="defnewpar">The output Flow direction map from the Topological optimization operation, then shows flow direction values also in the lake area(s) (third picture). The Flow accumulation operation should not be performed again now. </p>
+
+<p class="defnewpar">Then, the Drainage network extraction and the Drainage network ordering operations were performed again (fourth picture). You now see a continuous drainage network. </p>
+
+<p class="defnewpar">Subsequently, a point map was created, containing a single point. This point represents the outlet of a single catchment in the lake area. The point is shown in the fifth picture. </p>
+
+<p class="defnewpar">When now the Catchment merge operation is performed, using the latest Drainage network ordering map and the latest Flow direction map, and when choosing the <span class="arial">Use Outlet Locations</span> and the <span class="arial">Include Undefined Pixels</span> options, a single new catchment will be created for the lake area. The new catchment is shown in the fifth picture. </p>
+
+<p class="emptyline">&nbsp;</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="350">Initial flow direction map
+</td>
+<td valign="top">Initial drainage network ordering map</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_catch_merge_inclundef1.gif" width="334" height="334"></td>
+<td><img src="../images/hydro_catch_merge_inclundef2.gif" width="334" height="334"></td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td valign="top">Updated flow direction map <br>
+	from Topological optimization</td>
+<td valign="top">Improved drainage network order map <br>
+	from a subsequent Drainage network ordering operation
+</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_catch_merge_inclundef3.gif" width="334" height="334"></td>
+<td><img src="../images/hydro_catch_merge_inclundef4.gif" width="334" height="334"></td>
+</tr>
+<tr><td valign="top" colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td colspan="2">Output of Catchment merge when using the <span class="arial">Include Undefined Pixels</span> option: <br>
+	output polygon (in red); other layers for reference
+</td>
+</tr>
+<tr>
+<td><img src="../images/hydro_catch_merge_inclundef.gif" width="334" height="334"></td>
+<td></td>
+</tr>
+</table>
+
+<p class="emptyline">&nbsp;</p>
+
+<p class="kopje">Other general options for the Catchment merge operation:</p>
+
+<table cellspacing="0"> 
+<tr>
+<td valign="top" colspan="2">
+	<ul>
+	<li>Longest flow path segment map: </li>
+	</ul>
+</td>
+</tr>
+<tr>
+<td valign="top" width="96"></td>
+<td valign="top">Optionally, you can obtain an additional segment map (and attribute table) containing the longest possible flow path within each new catchment, based on the flow direction and flow accumulation input maps. 
+The attribute table will contain information like <span class="courier">Length</span> and <span class="courier">StraightLength</span> and <span class="courier">Sinuosity</span> for each longest flow path.   
+You can specify a name for this segment map yourself. The attribute table will obtain the same name. </td>
+</tr>
+<tr><td colspan="2"><p class="emptyline">&nbsp;</p></td></tr>
+<tr>
+<td valign="top" colspan="2">
+	<ul>
+	<li>Extract stream segments and attributes: </li>
+	</ul>
+</td>
+</tr>
+<tr>
+<td valign="top"></td>
+<td valign="top">Optionally, you can obtain an additional segment map (and attribute table) that only contains those segment streams that fall within the new catchments; other streams will not appear anymore. 
+The attribute table for this segment map will contain information like the drainage network ordering attribute table. <br>
+Compared to the previous drainage network ordering attribute table: 
+<ul>
+<li>stream IDs are kept the same, </li>
+<li>records of streams that no longer fall within a new catchment are simply deleted. </li>
+</ul>
+This segment map will obtain the same name as the output catchment merge map. 
+The attribute table (and the domain of this segment map and attribute table) will generally obtain the same name, followed by <span class="courier">__1</span>. <br>
+This option can only be used when you selected the option <span class="arial">Use Outlet Locations</span>.
+</td>
+</tr>
+</table>
+
+
+<p class="kopje">Determination of whether an outlet point in a point map is close enough to a stream:</p>
+
+<p>When using one or more outlet points: any outlet point should be within a 5x5 pixel window near an existing drainage line, otherwise the outlet point will be ignored. You can check whether a point is close enough to a stream in a map window; you can adjust the position of points in the <a href="..//ilwis/popup/point_editor_popup.htm" onClick="return popup(this, 'notes')" >Point editor</a>. 
+
+For more information, refer to <a href="../ilwismen/point_editor_move_points_mode.htm">Point editor : Move Points Mode</a>. </p>
+
+<p class="kopje">Input map requirements:</p>
+
+<ul>
+<li>the output map and attribute table of a previous <a href="..//ilwisapp/popup/drainage_network_ordering_popup.htm" onClick="return popup(this, 'notes')" >Drainage network ordering</a> operation, </li>
+<li>the output map of a previous <a href="..//ilwisapp/popup/flow_direction_popup.htm" onClick="return popup(this, 'notes')" >Flow direction</a> operation, </li>
+<li>the output map of a previous <a href="..//ilwisapp/popup/flow_accumulation_popup.htm" onClick="return popup(this, 'notes')" >Flow accumulation</a> operation. </li>
+</ul>
+
+<p class="kopje">Domain of output maps and attribute tables:</p>
+
+<p>Standard output of the Catchment merge operation:</p>
+
+<ul>
+<li>an output raster map and an output polygon map will be created containing one or more catchments; the maps will use a newly created ID domain; </li>
+<li>the new ID domain will obtain the same name as the output maps;  </li>
+<li>an output attribute table will be created, it also uses this ID domain; </li>
+<li>the output raster map and the output polygon map are both linked to the output attribute table; </li>
+<li>for more information on the contents of the output attribute table, see below. </li>
+</ul>
+
+<p class="defnewpar">When the option <span class="arial">Longest Flow Path Segment Map</span> is used: </p>
+<ul>
+<li>an additional segment map is created containing the longest possible flow path within each new catchment, based on the flow direction and flow accumulation input maps; </li>
+<li>an additional attribute table is created containing information like <span class="courier">Length</span>, <span class="courier">StraightLength</span>, and <span class="courier">Sinuosity</span> for these longest flow paths; </li>
+<li>the name of this segment map is specified by the user; the attribute table will obtain the same name; </li>
+<li>the additional segment map and the table use the same domain as the maps and table that are standard output of Catchment merge. </li>
+</ul>
+
+<p class="defnewpar">When the option <span class="arial">Extract Stream Segments and Attributes</span> is used: </p>
+<ul>
+<li>an additional segment map is created containing only those segment streams that are located within the new catchments; other segments will not appear anymore; </li>
+<li>these segments will keep their 'original' (input) IDs from Drainage network ordering; </li>
+<li>an additional attribute table is created containing the same information as the Drainage network ordering output attribute table; </li>
+<li>as the segments keep their 'original' (input) IDs, there are <i>no</i> records in the table for segments that do <i>not</i> fall within the new catchments; </li>
+<li>the segment map will use the same name as the standard output of Catchment merge; </li>
+<li>the attribute table will use a similar name as the segment map, generally followed by <span class="courier">__1</span>; </li>
+<li>the segment map and the attribute table will use a new ID domain; </li>
+<li>this new ID domain has a similar name as the segment map, generally followed by <span class="courier">__1</span>. </li>
+</ul>
+
+<p class="kopje">Columns in the Catchment merge output attribute table:</p>
+
+<table cellspacing="0">
+<tr>
+<td valign="top" width="144"><i>domain</i></td>
+<td valign="top">The IDs of the table's domain, every record (ID) represents a new catchment.</td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">DrainageID</span></td>
+<td valign="top">A column listing the IDs of all streams located within a new catchment. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">UpstreamLinkCatchment</span></td>
+<td valign="top">The ID(s) of the new catchments that directly contribute to this new catchment, e.g. when catchments 1, 2, 3, and 4 flow together into catchment 5, then the UpstreamLinkCatchment column will read for the record with ID 5: <span class="courier">{1, 2, 3, 4}</span> </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">DownstreamLinkCatchment</span></td>
+<td valign="top">The ID of the new catchment into which a current new catchment will flow (down-flow), e.g. when catchment 5 flows into catchment 6, then the DownstreamLinkCatchment column will read for the record with ID 5: <span class="courier">6</span>. This column is a value column. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">Perimeter</span></td>
+<td valign="top">The perimeter of each new catchment. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">CatchmentArea</span></td>
+<td valign="top">The area (m<sup>2</sup>) of each new catchment. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">TotalUpstreamArea</span></td>
+<td valign="top">The total area (m<sup>2</sup>) of the catchments that directly contribute to a current catchment, i.e. the sum of the areas of the catchments listed in column UpstreamLinkCatchment. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">TotalDrainageLength</span></td>
+<td valign="top">The sum of the lengths of all drainages in a catchment. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">DrainageDensity(m/km2)</span></td>
+<td valign="top">The drainage density within a catchment as <span class="courier">TotalDrainageLength</span> / <span class="courier">CatchmentArea</span></td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">LongestFlowPathLength</span></td>
+<td valign="top">The length of the longest flow path found in a catchment, from the catchment's outlet to the most distant source on the catchment boundary, according to the Flow direction and Flow accumulation input maps. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">LongestDrainageLength</span></td>
+<td valign="top">The length of the longest actual stream within this catchment. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">CenterDrainage</span></td>
+<td valign="top">The XY-coordinate in the middle of a longest flow path. This column is a coordinate column. </td>
+</tr>
+<tr>
+<td valign="top"><span class="courier">CenterCatchment</span></td>
+<td valign="top">The XY-coordinate at the center of a catchment. This column is a coordinate column. </td>
+</tr>
+</table>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="catchment_merge_dialog_box.htm">Catchment merge : dialog box</a></p>
+
+<p class=seealsolinks><a href="catchment_merge_command_line.htm">Catchment merge : command line</a></p>
+
+<p class=seealsolinks><a href="catchment_merge_algorithm.htm">Catchment merge : algorithm</a></p>
+
+</body

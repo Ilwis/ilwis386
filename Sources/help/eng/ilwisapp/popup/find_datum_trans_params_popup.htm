@@ -1,0 +1,64 @@
+<html>
+
+<head>
+<title>Find datum transformation parameters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Find datum transformation parameters</p>
+
+<p>The <a href="..//ilwisapp/find_datum_trans_params_inputpage.htm" onClick="return popup(this, 'notes')" >Find datum transformation parameters</a> operation enables you to find datum transformation parameters between the <a href="../../ilwis/popup/objects_coordinate_system_popup.htm">coordinate systems</a> of two point maps, where: </p>
+
+<ul>
+	
+	<li>the coordinate system of the first point map is supposed to use a local (unknown) datum, </li>
+
+	<li>the coordinate system of the second point map is supposed to use a global datum, preferably WGS 84. </li>
+
+</ul>
+
+<p class=defnewpar>You can choose to use one of the following calculation methods:</p>
+
+<ul>
+
+<li>Geo-centric datum shift</li>
+
+<li>Molodensky</li>
+
+<li>Bursa Wolf</li>
+
+<li>Molodensky Badekas</li>
+
+</ul>
+
+<p class=defnewpar>Optionally, you can save the calculated transformation parameters (into the coordinate system of the first point map). </p>
+
+<ul>
+
+	<li>The datum of the first coordinate system will then be changed. </li>
+
+	<li>The first coordinate system will then be compatible with the WGS 84 datum, and thus with any other known datum. </li>
+
+	<li>Automatic coordinate transformations during display etc. are then possible for any map that uses the first coordinate system. </li>
+
+</ul>
+
+</body

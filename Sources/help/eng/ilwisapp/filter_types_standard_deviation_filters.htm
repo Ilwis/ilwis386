@@ -1,0 +1,94 @@
+<html>
+
+<head>
+<title>Filter types : standard deviation filters</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Filter types, Standard deviation filters">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+</head>
+
+<body text="#000000" bgcolor="#FFFFFF">
+
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="70%"><h1 class=firstline>Filter types</h1></td>
+<td rowspan="2" class="menucommand"><a class=menlink href=JavaScript:__ilwisapp__sec__filter_standard_deviation_filter_sec.Click()>Example standard deviation filters</a></td>
+</tr>
+<tr>
+<td><h1 class=secondline>Standard deviation filters</h1></td>
+</tr>
+<tr><td class=emptylinehalf>&nbsp;</td></tr>
+</table>
+
+<!--<hr>-->
+
+<p class=defnewpar>For each group of pixels in the input map, a standard deviation filter calculates the standard deviation and assigns this value to the center pixel in the output map. </p>
+
+<p class=defnewpar>Standard deviation filters can be useful for radar images. The interpretation of radar images is often difficult: you can not rely on spectral values because of back scatter (return of the pulse sent by the radar). This often causes a lot of 'noise'. By using a standard deviation filter, you may be able to recognize some patterns. </p>
+
+<p class=defnewpar>The formula to calculate the standard deviation reads:</p>
+
+<p class=emptyline>&nbsp; </p>
+
+<p class=leftmargin1><img src="../images/stdev1.gif" align=bottom width="147" height="47"> </p>
+
+<p class=defnewpar>where: </p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=48>
+<p>x<sub>i</sub></p>
+
+</td>
+<td valign="top">
+<p>are the individual pixel values of the input map considered by the filter</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p><img src="../images/stdev3.gif" align=bottom width="12" height="14"></p>
+
+</td>
+<td valign="top">
+<p>is the mean of the pixel values considered by the filter</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>r</p>
+
+</td>
+<td valign="top">
+<p>is the size of the filter in rows</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=48>
+<p>c</p>
+
+</td>
+<td valign="top">
+<p>is the size of the filter in columns</p>
+
+</td>
+</tr>
+</table>
+
+<p class=kopje>Standard standard deviation filters:</p>
+
+<p>There is no standard standard deviation filter stored on disk. </p>
+
+<p class=kopje>User-defined standard deviation filters:</p>
+
+<p>In the Filter dialog box as well as on the command line, you can define a standard deviation filter: specify the size of the filter. For more information and some examples, refer to <a href="../ilwisapp/filters_user_defined_standard_deviation_filters.htm">User-defined standard deviation filters</a>.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../ilwisapp/filters_user_defined_standard_deviation_filters.htm">Filters : user-defined standard deviation filters</a></p>
+
+<p class=seealsolinks><a href="filter.htm">Filter (operation)</a></p>
+
+</body

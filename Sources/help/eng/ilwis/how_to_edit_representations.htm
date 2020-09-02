@@ -1,0 +1,289 @@
+<html>
+
+<head>
+<title>How to edit representations</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<meta name="keywords" content="Representation, Colors, How to edit ..., Edit ...">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=only1>How to edit a representation</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>A <a href="..//ilwis/popup/objects_representation_popup.htm" onClick="return popup(this, 'notes')" >representation</a> defines the manner in which
+
+the <i>classes</i> of a map with a <a href="..//ilwis/sec/domain_class_sec.htm" onClick="return popup(this, 'notes')" >class domain</a>, a <a href="..//ilwis/sec/domain_type_group_sec.htm" onClick="return popup(this, 'notes')" >group domain</a> or a <a href="..//ilwis/sec/domain_type_picture_sec.htm" onClick="return popup(this, 'notes')" >picture domain</a>, or 
+
+the <i>values</i> of a map with a <a href="..//ilwis/sec/domain_type_value_sec.htm" onClick="return popup(this, 'notes')" >value domain</a> or the <a href="..//ilwis/sec/domain_image_sec.htm" onClick="return popup(this, 'notes')" >image domain</a>
+
+should be represented on the screen and on a printer. When a map is shown by an attribute column, the domain of the attribute column determines the (default) representation. A representation is a <a href="ilwis_objects_service_objects.htm">service object</a> of a <a href="..//ilwis/popup/objects_domains_ilwobj_popup.htm" onClick="return popup(this, 'notes')" >domain</a>.</p>
+
+<p class=defnewpar>Representations can be edited:
+
+<ul>
+
+<li>by opening a representation class in the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Class editor</a>, or
+
+<br>by opening a representation value or gradual in the <a href="..//ilwis/popup/representation_value_gradual_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Value/Gradual editor</a>, </li>
+
+<li>interactively in a map window when the map window displays a map with a class domain,</li>
+
+<li>by opening a representation class as a table (advanced).</li>
+
+</ul>
+
+<P class=tip>Mind:</p>
+
+<ul class=tipul>
+
+<li>System representations such as the representations gradual <span class=arial>Pseudo</span> or <span class=arial>Gray</span> are <i>read-only</i> and cannot be edited. </li>  
+
+<li>Some special display possibilities exist for point maps and point attributes that use a Value domain or an ID domain. </li>  
+
+<li>Maps that use a Bool, Bit, ID or the Color domain do not have a representation. </li>
+
+</ul>
+
+<p class=tiptext>For more information, see <a href="#addinfo"><span class=bookmark>Additional Info</span></a> below.</p>
+
+
+<h2>Opening a representation editor</h2>
+
+<p>Depending on the type of the representation you open, either the <a href="..//ilwis/popup/representation_class_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Class editor</a> or the <a href="..//ilwis/popup/representation_value_gradual_editor_popup.htm" onClick="return popup(this, 'notes')" >Representation Value/Gradual editor</a> will be opened.</p>
+
+
+<p class=kopje>To open a representation editor from the Main window:</p>
+
+        <ul>
+
+        <li>	in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, double-click a representation,</li>
+
+        <li>	in the Catalog, click a representation with the right mouse button, and choose <span class=arial>Open</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>,</li>
+
+        <li>	in the Catalog, select a representation, then open the <a href="main_window_menu_commands.htm">Edit menu</a> in the Main window and choose the <a href="../ilwismen/edit_object_select_object.htm"><span class=arial>Edit Object</a></span> command, </li>
+
+        <li>	in the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-tree</a> or the <a href="..//ilwis/popup/operation_tree_list_popup.htm" onClick="return popup(this, 'notes')" >Operation-list</a>, double-click the <span class=arial>Edit</span> item and select any representation, </li>
+
+        <li>	<a href="..//ilwis/popup/drag_and_drop_popup.htm" onClick="return popup(this, 'notes')" >drag</a> any representation from the Catalog to the <span class=arial>Edit</span> item in the Operation-tree or the Operation-list.</li>
+
+        </ul>
+
+<p class=kopje>To open a representation editor from a map window:</p>
+
+        <ul>
+
+        <li>    in the Layer Management pane of a map window, double-click the word &quot;<span class=arial>Legend</span>&quot;, 
+
+        <li>	choose the <a href="../ilwismen/edit_representation.htm"><span class=arial>Representation</a></span> command from the <a href="map_window_menu_commands.htm">Edit menu</a> of a map window.</li>
+
+        </ul>
+
+<p class=kopje>To open a representation editor from the domain Class/ID editor:</p>
+
+        <ul>
+
+        <li>	click the <span class=arial>Representation button</span> in the toolbar, or
+
+        <li>    choose the <span class=arial>Open Representation</span> command from the <a href="domain_class_id_editor_menu_commands.htm">File menu</a>.</li>
+
+        </ul>
+
+<p class=tip>Tips:</p>
+
+<ol class=tipol>
+
+<li>For descriptions on how to use the Representation editors, see <a href="../ilwis/representation_class_editor_functionality.htm">Representation Class editor : functionality</a> and <a href="../ilwis/representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor : functionality</a>.</li>
+
+<li>When you opened a representation editor from a map window, and you want to see how the changes you made in the representation editor actually look in your map:</li>
+
+        <ul class=tipul>
+
+        <li>keep the representation editor open, 
+
+        <li>click the <span class=arial>Redraw</span> <img src="../images/redraw.gif" align=bottom width="22" height="22"> button in the map window,</li>
+
+        <li>continue to change the representation in the representation editor and to redraw the map window until satisfied.</li>
+
+        </ul>
+
+</ol>
+
+<P class=emptylinehalf>&nbsp;</p>
+
+<h2><a name="interactivecolors">Interactively editing classes in a map window</a></h2>
+
+<p>When a map with a class or group domain is displayed in a map window, you can also directly edit specific classes of the representation that is currently used.</p>
+
+<p class=kopje>Double-clicking classes in the Legend of the Layer Management pane:</p>
+
+<ol>
+
+<li>Display the map in a map window;</li>
+
+<li>Expand the Legend in the Layer Management pane of the map window if necessary; </li>
+
+<li>Double-click a class in the Legend; </li>
+
+<li>An <span class=arial>Edit Repr Item</span> dialog box will appear in which you can directly change colors, polygon patterns, segment line types, line widths, point symbols, etc.</li>
+
+</ol>
+
+<p>The map window will directly show the map in the changed representation. </p>
+
+<p class=kopje>Double-clicking mapping units in the map window:</p>
+
+<ol>
+
+<li>	Display the map in a map window and make sure that the <span class=arial>Info</span> check box in the map's <span class=arial>Display Options</span> dialog box is marked; </li>
+
+<li>	Open the <a href="map_window_menu_commands.htm">Layers menu</a> in the map window, choose the <a href="../ilwismen/double_click_action.htm"><span class=arial>Double-Click Action</a></span> command and select the <span class=arial>Edit Representation</span> option;</li>
+
+<li>	Then, double-click the pixels, polygons, segments or points in the map: each time an <span class=arial>Edit Repr Item</span> dialog box will appear in which you can directly change colors, polygon patterns, segment line types, line widths, point symbols, etc.</li>
+
+<li>	The map window will directly show the map in the changed representation. 
+
+<li>	Continue double-clicking units in the map and editing the representation of that class until satisfied.</li>
+
+</ol>
+
+<p>See also <a href="map_window_functionality_advanced.htm">Map window : advanced functionality</a>.</p>
+
+
+<h2>Opening a representation class as a table (advanced)</h2>
+
+<p>Advanced users may wish to edit a <i>representation class</i> in table form:
+
+<ul>
+
+<li>click a representation class with the right mouse button in the <a href="..//ilwis/popup/catalog_popup.htm" onClick="return popup(this, 'notes')" >Catalog</a>, and </li>
+
+<li>choose <span class=arial>Open As Table</span> from the <a href="..//ilwis/popup/context_sensitive_menu_popup.htm" onClick="return popup(this, 'notes')" >context-sensitive menu</a>.</li>
+
+</ul>
+
+For more information, see the <a href="../ilwismen/open_show_object_as_table.htm">Open/Show As Table</a> dialog box.
+
+        
+<h2 id=addinfo>Additional information</h2>
+
+<p class=kopje>Dealing with system domains, system representations and read-only representations:</p>
+
+<p>The <span class=arial><a href="../ilwismen/edit_representation.htm">Representation</a></span> command on the <a href="map_window_menu_commands.htm">Edit menu</a> of a map window is <span class=grayish>grayed out</span> when for instance:
+
+<ul>
+
+<li>you displayed a value map that uses a <i>system domain</i> and you accepted the default <i>system representation</i> in the map's Display Options dialog box, </li>
+
+<li>when you selected a <i>system representation</i> in a map's Display Options dialog box, </li>
+
+<li>when you selected a <i>read-only</i> representation in a map's Display Options dialog box.</li>
+
+</ul>
+
+<p><a href="..//ilwis/sec/y_system_representations_sec.htm" onClick="return popup(this, 'notes')" >System representations</a> (e.g. <span class=courier>Pseudo</span> or <span class=courier>Gray</span>) are always read-only and read-only objects cannot be edited.</p>
+
+<p class=defnewpar>You have two options to solve this 'problem': </p>
+
+<ol>
+
+<li><u>Create a new representation:</u> </li>
+        
+        <p>Reopen the map's <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box, and click the create button <img src="../images/crea.gif" align=bottom width="17" height="22"> next to the <span class=arial>Representation</span> list box.</p>
+
+        <p class=emptylinehalf>&nbsp;</p>
+
+        <p>The <a href="../ilwismen/create_a_representation.htm">Create Representation</a> dialog box will appear:</p>
+
+        <ul>
+
+        <li>in case a <a href="..//ilwis/sec/y_value_maps_sec.htm" onClick="return popup(this, 'notes')" >value map</a> uses <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span> and you want to create a <i>representation value</i> (which works in values), you should CLEAR the <span class=arial>Use Percentages</span> check box in the Create Representation dialog box. </li>
+              
+        </ul>
+
+        <p>For more information on creating representations, see the <a href="../ilwismen/create_a_representation.htm">Create Representation</a> dialog box.</p>
+
+        <p class=emptylinehalf>&nbsp;</p>
+        
+        <p>You can edit the new representation as usual. </p>
+
+        <P class=emptylinehalf>&nbsp;</p>
+
+<li><u>Change the domain of a map from a system value domain to a user-defined value domain:</u></li>
+
+        <p>When values in a map (<a href="..//ilwis/sec/domain_type_value2_sec.htm" onClick="return popup(this, 'notes')" >domain type Value</a>) have a specific meaning, are in a specific range and should be represented by specific colors or ranges of colors, it is advised to create a <i>user-defined value domain</i>. <br>
+
+        To convert a map with <a href="..//ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</a></span> to a map with a user-defined value domain, see <a href="how_to_change_the_domain_of_a_map.htm">How to change the domain of a map</a>.</p>
+
+</ol>
+
+<p class=tip>Tips:</p>
+
+<ul class=tipul>
+
+<li>    To view the domain of a map and to view the representation of a domain, expand the <span class=arial>Properties</span> item in the <a href="map_window_layer_management.htm">Layer Management pane</a> of a map window.  </li>
+
+<li>    You can also inspect the <a href="..//ilwis/popup/object_properties_popup.htm" onClick="return popup(this, 'notes')" >properties</a> of individual objects from the Catalog.</li>
+
+<li>    For more information, see <a href="../ilwis/how_to_view_and_edit_the_properties_of_an_object.htm">How to view and edit the properties of an object</a>. </li>
+
+</ul>
+
+<p class=kopje>Symbols for point maps:</p>
+
+<ul>
+
+<li>For point maps with a <i>class domain</i>, you can use Single Symbols or create a <i>representation class</i> as described above. In the <a href="../ilwismen/representation_class_editor_edit_item_point.htm">Edit Item (point)</a> dialog box in the Representation Class editor, you then define symbol type, point size and colors for the points. </li>
+
+<li>For point maps with a <i>value domain</i>, you can click the <span class=arial>Symbols</span> button in the <a href="../ilwismen/display_options_point_map.htm">Display Options - Point Map</a> dialog box. In the <a href="../ilwismen/symbols_for_value_point_maps.htm">Symbol</a> dialog box, you can then define symbol type, point sizes, colors, etc. </li>
+
+<li>For point maps with an <i>ID domain</i> and which have a linked attribute table, you can use the options Single Symbol, <a href="../ilwismen/symbols_by_attributes_id_point_map_with_attr_table.htm">Symbols by Attributes</a>, <a href="../ilwismen/symbols_as_arrows_id_point_map_with_attr_table.htm">Symbols as Arrows</a>, <a href="../ilwismen/symbols_as_graphs_id_point_map_with_attr_table.htm">Symbols as Graphs</a> as available in the <a href="../ilwismen/display_options_point_map.htm">Display Options - Point Map</a> dialog box. </li>
+
+</ul>
+
+<p>To store the display settings of point maps with a value or an ID domain, you can save the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>.</p>
+
+<p class=kopje>Colors for maps with a Bool, Bit, ID, or the Color domain:</p>
+
+<p>Maps with a Bool, the <span class=courier>Bit</span>, an ID, or the Color domain do <i>not</i> have a stored representation on disk.</p>
+
+<ul>
+
+<li>    For maps with a <a href="..//ilwis/sec/domain_type_bool_sec.htm" onClick="return popup(this, 'notes')" >Bool domain</a> or the <a href="..//ilwis/sec/domain_type_bit_sec.htm" onClick="return popup(this, 'notes')" ><span class=courier>Bit</span> domain</a>, you can interactively select colors in the <a href="..//ilwismen/sec/display_options_sec.htm" onClick="return popup(this, 'notes')" >Display Options</a> dialog box of the map each time you display the map. 
+
+        You can save the display settings of a map by saving the map window as a <a href="..//ilwis/popup/objects_map_view_popup.htm" onClick="return popup(this, 'notes')" >map view</a>.</li>
+
+<li>	Maps with an <a href="..//ilwis/sec/domain_id_sec.htm" onClick="return popup(this, 'notes')" >ID domain</a> can be shown in 7, 15, or 31 colors to inspect the map itself. In most cases however, you will display an ID map by one of its attributes as stored in the map's attribute table; to do so, select the <span class=arial>Attribute</span> check box in the Display Options dialog box of the ID map and select an attribute column.</li>
+
+<li>	Raster maps or attributes with the <a href="..//ilwis/sec/domain_type_color_sec.htm" onClick="return popup(this, 'notes')" >Color domain</a> store colors in each pixel or in each field of the column, so no representation is needed.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="representation_class_editor_functionality.htm">Representation Class editor : functionality</a></p>
+
+<p class=seealsolinks><a href="representation_value_gradual_editor_functionality.htm">Representation Value/Gradual editor : functionality</a></p>
+
+<p class=seealsolinks><a href="../ilwis/ilwis_objects_representations.htm">ILWIS objects : representations</a></p>
+
+<p class=seealsolinks><a href="how_to_create_representations.htm">How to create a representation</a></p>
+
+</body

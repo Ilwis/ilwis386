@@ -1,0 +1,54 @@
+<html>
+
+<head>
+<title>Table calculation popup</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Table calculation</p>
+
+<p><a href="..//ilwis/calc.htm" onClick="return popup(this, 'notes')" >Table calculation</a> is used to perform calculations with columns in a table. You can
+perform calculation on columns in attribute tables, but you can also perform calculations on columns of histograms and on columns
+of tables that are the result of an operation. </p>
+
+<p class=defnewpar>Type table calculation formulae on the <a href="command_line_table_window_popup.htm">command line of a table window</a>. 
+
+For complicated table calculations such as aggregations, join, cumulative values and least square fits, you can use the <a href="..//ilwis/table_window_menu_commands.htm" onClick="return popup(this, 'notes')" >Columns menu</a> of the table window.</p>
+
+<p class=defnewpar>The following list gives an overview of the functionalities:</p>
+
+<ul>
+
+<li>	column and record calculations using arithmetical, relational, logical, conditional, exponential, logarithmic and other operators and functions, </li>
+
+<li>	creation, storing and application of user-defined functions, </li>
+
+<li>	aggregation of values by using a group column, </li>
+
+<li>	calculation with columns of another table on disk (join), </li>
+
+<li>	least squares fit, </li>
+
+<li>	retrieval of data from raster maps based on coordinates columns in the table.</li>
+
+</ul>
+
+</body

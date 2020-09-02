@@ -1,0 +1,30 @@
+<html>
+
+<head>
+<title>filter pattern sec</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>PATTERN filter</p>
+
+<p>With a pattern filter (3x3 environment) you can detect: <b>areas</b> where pixels have more or less the same value, <b>outliers</b> where the values of all 8 neighbours are largely different from the center pixel. For all 8 <b>directions</b>, it is stored whether the differences between the center pixel and its neighbours are large or small. Whether or not 3x3 neighbouring pixels are considered to have more or less the same value, is determined by the threshold value that you have to specify. </p>
+
+<p class=defnewpar>When using the PATTERN filter on an image:</p>
+
+<ul>
+
+<li>	value 255 in the output map represents small absolute differences between the center pixel and all 8 neighbours (= area),</li>
+
+<li>	value 0 in the output map represents large absolute differences between the center pixel and all 8 neighbours (= outlier),</li>
+
+<li>	all other output values bitwise represent the directions in which differences are found.</li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="../../ilwisapp/sec/filter_pattern_example_sec.htm">Example pattern filters</a></p>
+
+</body

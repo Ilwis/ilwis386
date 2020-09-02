@@ -1,0 +1,77 @@
+<html>
+
+<head>
+<title>Domain type : Value (1)</title>
+<meta name="author" content="Petra Budde, Raymond Nijmeijer">
+<link rel=stylesheet type="text/css" href="../../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<p class=popuptitle>Domain type Value</p>
+
+<p class=linespacing03after><a href="y_value_maps2_sec.htm">Value maps</a> and value columns are supposed to contain values in contrast to maps and columns that contain for instance class names or identifiers. Elements in value maps (raster, polygon, segment, or points) or fields in value columns represent measured, calculated, or interpolated values. Values in a value domain are defined by a minimum and maximum value (the <a href="../popup/y_value_range_popup.htm">value range</a>) and a <a href="../popup/y_precision_popup.htm">precision</a>; values smaller than the minimum or larger than the maximum are considered undefined. <br>
+It is not possible to link attributes to a map with a value domain.</p>
+
+<p>There are a number of <a href="../../ilwis/popup/yy_system_domain_value_all_popup.htm">system value domains</a> available that can be used for value maps and columns, but you can also create <i>your own value domain</i>. </p>
+
+<ul>
+
+<li>	When calculating with value maps or value columns, you can usually select <a href="../popup/yy_system_domain_value_popup.htm">system domain <span class=courier>Value</a></span>, and adjust the value range and precision for the output map or output column during each individual operation. </li>
+
+<li>	It is advised to create a user-defined value domain when values in a map or column have a specific meaning, are in a specific range and should be represented by specific colors or ranges of colors. </li>
+
+<li>	For the system domain <span class=courier>Value</span>, you can choose to create a <i>representation gradual</i> (boundaries in percentages) or a <i>representation value</i> (boundaries in values). For all other system value domains and for user-defined value domains, you can create a <i>representation value</i> (boundaries in value).</li>
+
+<li>    A representation gradual can be used to display any value map; <br> 
+
+        a representation value can be used to display maps which use the value domain for which the representation value was created. </li>
+
+</ul>
+
+<p class=linespacing01before>For more information on <a href="../popup/objects_representation_popup.htm">representations</a> for a value domain, see <a href="..//ilwis/representation_value_gradual_editor_functionality.htm" onClick="return popup(this, 'notes')" >Representation Value/Gradual editor</a>. </p>
+
+<p class=kopje>Examples:</p>
+
+<ul>
+
+<li>	point maps with height values, </li>
+
+<li>	segment map with height values (contour lines), </li>
+
+<li>	raster map of rasterized point, segment, or polygon maps with values,</li>
+
+<li>	raster map with interpolated height values (Digital Elevation Model),</li>
+
+<li>	columns containing calculated values,</li>
+
+<li>	attribute maps of attributes stored in a value column in map-related tables,</li>
+
+<li>	output maps of calculations with maps that use a value domain or the image domain.</li>
+
+</ul>
+
+<p class=defnewpar>For a height map of a mountainous area, you can create a user-defined value domain <span class=courier>Height</span> with values between 3500 and 5000m. You can then create a representation value <span class=courier>Height</span> in which you can define the colors for various ranges of values.</p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="..//ilwis/basic_concepts_domains.htm" onClick="return popup(this, 'notes')" >Basic concepts : working with domains</a></p>
+
+<p class=seealsolinks><a href="..//ilwis/ilwis_objects_domains.htm" onClick="return popup(this, 'notes')" >ILWIS objects : domains</a></p>
+
+</body
