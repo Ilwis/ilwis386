@@ -24,7 +24,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="if exist (SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis exit&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec2&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images"
+				CommandLine="if exist (SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis exit&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec2&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -34,7 +34,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\*.htm&#x0D;&#x0A;$(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\popup*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\sec\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\sec&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\*.htm&#x0D;&#x0A;$(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\popup\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\sec\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\sec&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\popup\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\sec\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\sec2\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec2&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\images\*.htm&#x0D;&#x0A;$(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\*.css&#x0D;&#x0A;$(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng"
+				CommandLine="xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\*.htm&#x0D;&#x0A;$(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\popup*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\sec\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\sec&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\*.htm&#x0D;&#x0A;$(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\popup\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\sec\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\sec&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\popup\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\sec\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\sec2\*.htm $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec2&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\images\*.htm&#x0D;&#x0A;$(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\*.css&#x0D;&#x0A;$(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
@@ -115,6 +115,14 @@
 			Name="htm files"
 			Filter="htm;html;jpg;gif"
 			>
+			<File
+				RelativePath="..\..\..\Sources\help\eng\__chmv__.html"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\Sources\help\eng\__chmvf__.html"
+				>
+			</File>
 			<File
 				RelativePath="..\..\..\Sources\help\eng\ilwis.css"
 				>
@@ -3659,6 +3667,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\Sources\help\eng\ilwisapp\Buffer_Polygon_commandline.htm"
+					DeploymentContent="true"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\Sources\help\eng\ilwisapp\buffer_polygon_dialog_box.html"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\Sources\help\eng\ilwisapp\catchment_extraction.htm"
 					DeploymentContent="true"
 					>
@@ -4994,6 +5011,11 @@
 				</File>
 				<File
 					RelativePath="..\..\..\Sources\help\eng\ilwisapp\points_to_raster_functionality.htm"
+					DeploymentContent="true"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\Sources\help\eng\ilwisapp\polygons_buffer.htm"
 					DeploymentContent="true"
 					>
 				</File>
@@ -8802,6 +8824,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\Sources\help\eng\images\animation.gif"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\Sources\help\eng\images\anis1.gif"
 					>
 				</File>
@@ -8962,6 +8988,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\Sources\help\eng\images\background.gif"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\Sources\help\eng\images\backw.gif"
 					>
 				</File>
@@ -9055,6 +9085,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\Sources\help\eng\images\binm2.gif"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\Sources\help\eng\images\BufferPolygonDialog.png"
 					>
 				</File>
 				<File
@@ -9987,6 +10021,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\Sources\help\eng\images\layerinfo.gif"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\Sources\help\eng\images\layermanagement1.gif"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\Sources\help\eng\images\layermanagement2.gif"
 					>
 				</File>
 				<File
@@ -11159,6 +11201,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\Sources\help\eng\images\thrand.gif"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\Sources\help\eng\images\threeD.gif"
 					>
 				</File>
 				<File

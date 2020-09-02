@@ -1,0 +1,105 @@
+<html>
+
+<head>
+<title>Polygons to points : dialog box</title>
+<meta name="author" content="Martin Schouwenburg">
+<meta name="keywords" content="Buffer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Buffer</h1>
+<p>This function allows you to create a set of one or more buffers around point, line or polygon features</p>
+<p></p>
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar></p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top">Dialog box</td>
+<td><p class=defnewpar>
+<img src="../images/BufferPolygonDialog.png" width="338" height="256" alt="">
+</p></td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Input polygon map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Select an input feature map. Open the list box and select the desired input map, or drag a feature map directly from the Catalog into this box. No special input map requirements.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Buffer distance:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The distance of the boundary of the output polygon(s) to the boundary of the input feature(s). This number must be positive for all non-polygon features. For Polygons the number maybe negative or positive. Positive number expands the polygon. Negative distance shrinks the polygon </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>End Cap style:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>The style of the ending of the lines that where buffered. Options are 'Round', 'Square' or 'Butt'</p>
+
+<p class=diabox>Square creates a rectangular ending at the buffer distance of the end of the line. Butt cuts it directly at the end of the line and Round creates a rounded ending at the buffer distance of the end of the line</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Output point map:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output point map that will contain the polygon label points.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary, the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="polygons_to_points_functionality.htm">Buffer : functionality</a></p>
+
+</body

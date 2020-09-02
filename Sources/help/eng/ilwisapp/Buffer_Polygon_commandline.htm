@@ -1,0 +1,117 @@
+<html>
+
+<head>
+<title>Buffer Polygons : command line</title>
+<meta name="author" content="schouwenburg" >
+<meta name="keywords" content="Buffer Polygons, PolygonMapBuffer">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Buffer Polygons</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The <a href="..//ilwisapp/popup/buffer_polygons_popup.htm" onClick="return popup(this, 'notes')" >Buffer Polygons</a> operation can be directly executed by typing the following expression on the command line of the Main window:</p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+
+<tr>
+<td valign="top" width=68>
+<p class=calccommline>OUTMAP</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>PolygonMapBuffer</span>(InputPolygonMap, <span class=courier>distance, endstyle</span>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=144>
+<p>OUTMAP</p>
+
+</td>
+<td valign="top">
+<p>is the name of your output polygon map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>PolygonMapBuffer</p>
+
+</td>
+<td valign="top">
+<p>is the command to start the Buffer Polygons operation. </p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p>InputPolygonMap</p>
+
+</td>
+<td valign="top">
+<p>is the name of the input polygon map.</p>
+
+</td>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>Distance</p>
+
+</td>
+<td valign="top">
+<p>The distance between the boundary of the bufferd polygon and the old boundary. Negative numbers indicate a buffer to the inside of the Polygon.</p>
+
+</td>
+</tr>
+</tr>
+<tr>
+<td valign="top" width=144>
+<p class=courier>End style</p>
+
+</td>
+<td valign="top">
+<p>The shape of the ending of vertices forming the buffered polygon. Possible styles are 'Round', 'Butt' and 'Square'</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="Buffer_Polygon_functionality.htm">Buffer Polygons : functionality</a></p>
+
+</body>
