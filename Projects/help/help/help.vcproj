@@ -24,7 +24,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="if exist $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis exit&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec2&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;"
+				CommandLine="if exist $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis exit&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec2&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images\smac&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -34,77 +34,30 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\popup\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\sec\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\sec&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\popup\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\sec\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\sec&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\popup\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\sec\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\sec2\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec2&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\images\*.* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\*.css $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng"
+				CommandLine="echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\popup\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\sec\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\sec&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\popup\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\sec\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\sec&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\popup\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\sec\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\sec2\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec2&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\images\*.* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\images\smac\*.* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images\smac&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\*.css $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\*.js $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="10"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="if exist $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis exit&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\popup&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec2&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;mkdir  $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images\smac&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
 			/>
 			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
 				Name="VCMIDLTool"
 			/>
 			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				EnableIntrinsicFunctions="true"
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				WarningLevel="3"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				GenerateDebugInformation="true"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				TargetMachine="1"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\popup\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwis\sec\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwis\sec&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\popup\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwisapp\sec\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwisapp\sec&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\popup\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\popup&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\sec\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\ilwismen\sec2\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\ilwismen\sec2&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\images\*.* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\images\smac\*.* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng\images\smac&#x0D;&#x0A;echo $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\*.css $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\*.htm* $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng&#x0D;&#x0A;xcopy /D /Y $(SolutionDir)Sources\help\eng\*.js $(SolutionDir)$(ConfigurationName)\Ilwis3\help\eng&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -125,6 +78,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\Sources\help\eng\ilwis.css"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\Sources\help\eng\master.js"
 				>
 			</File>
 			<Filter
@@ -5391,6 +5348,31 @@
 				</File>
 				<File
 					RelativePath="..\..\..\Sources\help\eng\ilwisapp\slicing_functionality.htm"
+					DeploymentContent="true"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\Sources\help\eng\ilwisapp\smac.htm"
+					DeploymentContent="true"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\Sources\help\eng\ilwisapp\smac_algorithm.htm"
+					DeploymentContent="true"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\Sources\help\eng\ilwisapp\smac_command_line.htm"
+					DeploymentContent="true"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\Sources\help\eng\ilwisapp\smac_dialog_box.htm"
+					DeploymentContent="true"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\Sources\help\eng\ilwisapp\smac_functionality.htm"
 					DeploymentContent="true"
 					>
 				</File>

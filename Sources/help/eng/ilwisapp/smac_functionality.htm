@@ -1,0 +1,210 @@
+<html>
+
+<head>
+<title>Atmospheric Effect Correction (SMAC) : functionality</title>
+<meta name="author" content="Gabriel Parodi, Bas Retsios">
+<meta name="keywords" content="Atmospheric Effect Correction SMAC, SEBS Tools, Pre-processing">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Atmospheric Effect Correction (SMAC)</h1>
+
+<h1 class=secondline>Functionality</h1>
+
+<!--<hr>-->
+
+
+<p class="defnewpar">The Atmospheric Effect Correction (SMAC) operation performs atmospheric correction on a Top Of Atmosphere reflectance image. The output raster map is computed by eliminating the effects of the atmosphere, and contains the reflectance on the Earth's surface. </p>
+
+<p class="defnewpar">The algorithm is an adaptation of the software SMAC (Rahman, H and Dedieu G., 1994). SMAC is a simplification of the Code 5s (Tanré D., et al., 1990) for the atmospheric correction of visible and near visible bands of several satellite sensors. </p>
+
+<p class="defnewpar">The input is an image with the reflectance at the Top of Atmosphere. </p>
+
+<p class="defnewpar">Then the correct coefficient file must be selected. Note that the coefficient file depends on both the sensor and the channel (for each sensor, several coefficient files are provided, one for each channel). </p>
+
+<p class="defnewpar">Subsequently, data must be provided for Optical thickness, Water vapor content, Ozone content, Surface pressure, Solar zenith and azimuth angles, and Sensor zenith and azimuth angles. </p>
+
+<p class="defnewpar">For each of the eight parameters you can provide: </p>
+
+<ul>
+
+<li>a <i>single value</i>, i.e. a value that will be used for the entire reflectance image; </li>
+
+<li>a <i>raster map</i> whereby each pixel has the value of that parameter at the specific location. </li>
+
+</ul>
+
+<p class="defnewpar">The specifics of the SMAC computation are described in the following publications: </p>
+
+<p class="defnewpar">Rahman, H., and G. Dedieu, 1994 " SMAC : A Simplified&nbsp; Method for&nbsp; the&nbsp; Atmospheric&nbsp; Correction of Satellite Measurements&nbsp; in the Solar Spectrum ". International Journal of Remote Sensing, 16:1:123-143. </p>
+
+<p class="defnewpar">Tanré, D., C. Deroo, et al. (1990). "Description of a computer code to simulate the satellite signal in the solar spectrum: the 5s code." International Journal of Remote Sensing 11: 659-668. </p>
+
+<p class="tip">Tips: </p>
+
+<ul class="tipul">
+
+<li>When available, it is preferred to use a raster map for a parameter (compared to a single value), as a more accurate surface-reflectance image will be computed. </li>
+
+</ul>
+
+<p class="kopje">Input requirements:</p>
+
+<ul>
+
+<li>TOA Reflectance map
+<ul>
+<li>This is a map of the reflectance at the top of atmosphere (TOA) of a specific channel from the sensors supported by SMAC.</li>
+</ul>
+</li>
+
+<li>Coefficient file: ASCII file containing the sensor calibration curve and responses needed to run SMAC for a particular sensor and channel.
+<ul>
+<li>An updated set of files can be downloaded from: <a href=http://tully.ups-tlse.fr/olivier/smac-python/tree/master/COEFS>http://tully.ups-tlse.fr/olivier/smac-python/tree/master/COEFS</a></li>
+<li>Location in the ILWIS fileset: ilwis-installation-folder\system\smac-coefs</li>
+<li>SMAC will read the files in the same way as it is provided by the authors.</li>
+</ul>
+</li>
+
+<li>Optical thickness (at 550 nm): this can be a constant value for the entire image, or a <a href="../ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Unit: Non-dimensional [-]: Domain: value [0.05-0.8]. Precision: 0.01 . The aerosol extinction optical thickness (OT) is defined as: <img src="../images/smac/optical_thickness_eq.GIF" width="126" height="52" />, where:
+<ul>
+<li>'k<font face="Symbol">l</font>' is the monochromatic extinction (optical thickness or optical depth) or attenuation coefficient of the atmosphere at 550 <font face="Symbol">m</font>m.</li>
+<li>'m' is the optical path length</li>
+<li>Optical depth at 550 <font face="Symbol">m</font>m: brief theory</li>
+<li>When a beam of electromagnetic energy in any wavelength crosses a dense media, the density of the molecules attenuate the monochromatic radiation.</li>
+<li>The more the density of molecules, the more the attenuation.</li>
+<li>Moreover and in general: the longer the path the radiation has to run, the more the attenuation.</li>
+<li>If there are no molecules affecting the radiation, then there is no attenuation whatever the path length.</li>
+<li>For huge density of molecules, the attenuation reaches full depletion of energy in very short paths.</li>
+<li>The "optical path [m]" integrates these two concepts: density of molecules and running path. <img src="../images/smac/optical_path_eq.GIF" width="75" height="44" /></li>
+<li>The optical path length depends on both the density of molecules at different levels in the atmosphere and the radiance path of these levels. This effect happens regardless the property of the media where the light goes trough.</li>
+<li>The monochromatic extinction coefficient, also called optical depth "k" accounts for the ability or capacity of an specific atmospheric component to attenuate the light. Each atmospheric component (air molecules,&nbsp; aerosols, water vapor, ozone, CO2, and others have a particular behaviour to selectively diminish or attenuate a beam of light at different wavelength. For instance ozone absorbs all the electromagnetic energy in the ultraviolet spectral range. In this sense, the attenuation of ozone is very high in this specific range of the spectrum. Even if the optical path is very small, light is attenuated heavily. Normally attenuation of gases, aerosols and water vapor is very small in the "atmospheric windows".<br />
+<img src="../images/smac/optical_path_fig.GIF" width="679" height="174" /> <img src="../images/smac/optical_path_atmosphere_fig.GIF" width="189" height="282" /></li>
+<li>The 550 <font face="Symbol">m</font>m wavelength is normally chosen for the measurement of the optical depth. The Angstrom equation, relates the value of the attenuation in one wavelength with attenuation in other ranges. In this sense, SMAC only requires the optical depth in this standard wavelength, and relies in an internal code to evaluate the overall attenuation in the bandwidth of the sensor.</li>
+</ul>
+</li>
+
+<li>Water vapor content: this can be a constant value for the entire image, or a <a href="../ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Unit: grams/cm2: Domain: value [0 to 6]. Precision: 0.01 .
+<ul>
+<li>Represents a physical simplification of the vertical distribution of water vapor in the different atmospheric stratus. It is the weight of a column of 1 cm2 of atmospheric water, assuming that all the atmospheric moisture can be condensed.</li>
+<li>Water vapor column: brief theory</li>
+<li>Water vapor is one of the major absorbers of energy in the visible spectrum. Water vapour presence is mainly in the lowest atmospheric layers, and practically disappears at higher altitudes, after the tropopause. <br /><img src="../images/smac/water_vapor_fig.GIF" width="326" height="479" /></li>
+<li>In an effort to describe the complexity of the atmospheric composition, scientists defined "standard atmospheres", as kind of profiles of pressure, temperature and gases in the atmosphere for different latitudes and seasons. The water vapor is a common parameter the characterises these standard atmospheres. "Tropical", atmospheres normally have very high water vapor content. Mid-latitudes atmospheres have medium to low and "dessertic" environments posses the driest values. Water vapor is very variable in nature. Accurate measurements can only be done by sounding. However data must be obtain within not more than 20 to 30 minutes from satellite pass and certainly no more than 50 km (these are values that do not intend to be more than a rule of thumb). This kind of information is rare, and then water vapor remains a common uncertainty during the atmospheric processing of satellite imagery. The alternative is to evaluate water vapor by alternative sensors on board of the same satellite. The evaluation of water vapor columns is out of the scope of this help file.</li>
+</ul>
+</li>
+
+<li>Ozone content: this can be a constant value for the entire image, or a <a href="../ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Unit: atm-cm (atmosphere centimeter) = Dobson Units/1000: Domain: value [0 to 0.7]. Precision: 0.01 .
+<ul>
+<li>Represents a physical simplification of the vertical concentration of ozone in the different atmospheric stratus.</li>
+<li>Ozone content: brief theory</li>
+<li>The figure shows a column of air, at a certain position on Earth. The amount of ozone in this column (i.e. covering the 10 x 5 deg area) is conveniently measured in Dobson Units. <br /><img src="../images/smac/ozone_fig.GIF" width="421" height="329" /></li>
+<li>If all the ozone in this column were to be compressed to standard temperature and pressure (STP) (0 <font face="Symbol">°</font>C and 1 atmosphere pressure) and spread out evenly over the area, it would form a slab approximately 3mm thick.</li>
+<li>1 Dobson Unit (DU) is defined to be 0.01 mm thickness at STP; the ozone layer in the example is 300 DU.</li>
+<li>The unit is named after G.M.B. Dobson, one of the first scientists to investigate atmospheric ozone (~1920 - 1960). He designed the 'Dobson Spectrometer' - the standard instrument used to measure ozone from the ground. The Dobson spectrometer measures the intensity of solar UV radiation at four wavelengths, two of which are absorbed by ozone and two of which are not.</li>
+</ul>
+</li>
+
+<li>Surface pressure: this can be a constant value for the entire image, or a <a href="../ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Unit: hectopascal (1 hectopascal = 1 millibar). Domain: value [1 to 1400]. Precision: 1. Note that this version of SMAC is not suitable for elevations above 3000 meters (pressure below 700 hPa).
+<ul>
+<li>This is the measurement of the air pressure at the site of the image. Assuming a normal air pressure at sea level equal to 1013.25 HPa, the variation of the pressure can be calculated using a DEM.</li>
+</ul>
+</li>
+
+<li>Solar zenith angle: this can be a constant value for the entire image, or a <a href="../ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Unit: degrees. Domain: value [0 to 90]. Precision: 0.01.
+<ul>
+<li>In an image, every pixel has a specific value of these four angles for the instant that the image was captured. The information required to build the geometric angle maps is normally included in the signal sent from the satellite an stored in the header or the stream band information. For high resolution satellites, the solar zenith angle (the most important map of all these four) is not very variable and it might be considered constant for calibration purposes. <br /><img src="../images/smac/view_geometry.GIF" width="617" height="405" /></li>
+</ul>
+</li>
+
+<li>Solar azimuth angle: this can be a constant value for the entire image, or a <a href="../ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Unit: degrees. Domain: value [0 to 360]. Precision: 0.01.
+</li>
+
+<li>Sensor zenith angle: this can be a constant value for the entire image, or a <a href="../ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Unit: degrees. Domain: value [0 to 90]. Precision: 0.01.
+</li>
+
+<li>Sensor azimuth angle: this can be a constant value for the entire image, or a <a href="../ilwis/sec/y_value_maps2_sec.htm" onClick="return popup(this, 'notes')" >value map</a>. Unit: degrees. Domain: value [0 to 360]. Precision: 0.01.
+</li>
+
+</ul>
+
+<p class="kopje">Domain and georeference of output map:</p>
+
+<p>The ouput map will use <a href="../ilwis/popup/yy_system_domain_value_popup.htm" onClick="return popup(this, 'notes')" >system domain <span class=courier>Value</span></a>; the output map will use the same georeference as the input map(s). </p>
+
+<ul>
+<li>Output: Surface reflectance</li>
+<li>Unit: Reflectance [-]: Domain: value [0-1]. Precision: 0.0001</li>
+<li>Map of surface reflectance of the atmospherically corrected channel after SMAC calculations.</li>
+</ul>
+
+<p class="kopje">Authors:</p>
+<ul>
+<li>Ir. Valentijn Venus: Idea, testing</li>
+<li>MSc. Lichun Wang: programming, design, testing</li>
+<li>Ir. Gabriel Parodi: Adaptations, testing, help file</li>
+</ul>
+
+<p class="kopje">Acknowledgments:</p>
+<ul>
+<li>To Dr. Gerard Didieu, whom facilitated his source codes and provided his valuable assistance to allow the testing.</li>
+<li>G. DEDIEU</li>
+<li>LERTS</li>
+<li>CT/ED/LT bpi2801</li>
+<li>18 avenue Edouard BELIN</li>
+<li>31055 TOULOUSE Cedex</li>
+<li>France.</li>
+<li>Tel : (+33) 61.27.47.80</li>
+<li>Fax : (+33) 61.28.14.10</li>
+<li>dedieu@lerts.cnes.fr (internet)</li>
+<li>dedieu@cnesta.span.cnes.fr (internet)</li>
+<li>CNESTA::DEDIEU (SPAN)</li>
+</ul>
+
+<p class="kopje">Credits:</p>
+The SMAC coefficient files were computed by Béatrice Berthelot, François Cabot, Olivier Hagolle, Sophie Lacherade, Sebastien Marcq ou Manuel Grizonnet.
+
+<p class="kopje">External links:</p>
+<ul>
+<li>Atmospheric data access</li>
+<li><a href="http://www.xdc.arm.gov/docs/data_info/">http://www.xdc.arm.gov/docs/data_info/</a></li>
+<li>access at <a href="http://www.archive.arm.gov/cgi-bin/arm-archive">http://www.archive.arm.gov/cgi-bin/arm-archive</a></li>
+<BR>
+<li>twpgms5X1.a1</li>
+<li><a href="http://www.xdc.arm.gov/docs/data_info/release_forms/twpgms5.release.html">http://www.xdc.arm.gov/docs/data_info/release_forms/twpgms5.release.html</a></li>
+<BR>
+<li>Instrument catalogue</li>
+<li><a href="http://ceos.cnes.fr:8100/cdrom-00b2/ceos1/instrum/instr33.htm">http://ceos.cnes.fr:8100/cdrom-00b2/ceos1/instrum/instr33.htm</a></li>
+<li><a href="http://www.ncdc.noaa.gov/oa/coare/catalog/data/atmosphere_large_scale/gms_mri_cdrom.html">http://www.ncdc.noaa.gov/oa/coare/catalog/data/atmosphere_large_scale/gms_mri_cdrom.html</a></li>
+<BR>
+<li>Aerosol from geo-stationary satellites</li>
+<li><a href="http://vortex.nsstc.uah.edu/~sundar/papers/2003/ace_jgr_revise.pdf">http://vortex.nsstc.uah.edu/~sundar/papers/2003/ace_jgr_revise.pdf</a></li>
+<li><a href="http://vortex.nsstc.uah.edu/~sundar/papers/conf/ams_2003_jun_paper2_.pdf">http://vortex.nsstc.uah.edu/~sundar/papers/conf/ams_2003_jun_paper2_.pdf</a></li>
+<li><a href="http://capita.wustl.edu/CAPITA/CapitaReports/CoRetriaval/NonshphericalDust.pdf">http://capita.wustl.edu/CAPITA/CapitaReports/CoRetriaval/NonshphericalDust.pdf</a></li>
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="smac_dialog_box.htm">Atmospheric Effect Correction (SMAC) : dialog box</a></p>
+
+<p class=seealsolinks><a href="smac_algorithm.htm">Atmospheric Effect Correction (SMAC) : algorithm</a></p>
+
+<p class=seealsolinks><a href="smac_command_line.htm">Atmospheric Effect Correction (SMAC) : command line</a></p>
+
+</body>

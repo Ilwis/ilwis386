@@ -51,6 +51,7 @@
 #include "Client\ilwis.h"
 #include "Headers\constant.h"
 #include "Client\FormElements\DatFileLister.h"
+#include "Engine\Base\System\engine.h"
 
 
 //////////////////////////////////////////////////////////////////////
@@ -2015,12 +2016,12 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 						sOutMap = fn.sFullName(false);
 		}
 	}
-	  
-	new FieldDataType(root, TR("Top atmo. reflectance channel"), &m_sMapRef, new MapListerDomainType(".mpr", dmVALUE, false),true);
-	new FieldDataType(root, TR("Coefficient file for sensor"), &m_coef_file, new DatFileLister(".dat"), true);
-	new StaticText(root, TR("Atmospheric correction data (source)"));
+
+	new FieldDataType(root, TR("Top of atmosphere reflectance channel"), &m_sMapRef, new MapListerDomainType(".mpr", dmVALUE, false),true);
+	new FieldDataType(root,TR("Coefficient file for sensor and channel"), &m_coef_file, ".*.dat", true, 0, FileName(getEngine()->getContext()->sStdDir() + "\\smac_coefs\\"), false);
+	new StaticText(root, TR("Atmospheric correction data"));
 	m_fMapOpticalDepth = false;
-	m_chkMapOpticalDepth = new CheckBox(root, TR("Optical thickness map (nm)"), &m_fMapOpticalDepth);
+	m_chkMapOpticalDepth = new CheckBox(root, TR("Optical thickness map (at 550 nm)"), &m_fMapOpticalDepth);
 	m_chkMapOpticalDepth ->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapOpticalDepth , "", &m_sMapOpticalDepth, new MapListerDomainType(".mpr", dmVALUE, false), true);
 	m_r_taup550 = rUNDEF;
@@ -2029,7 +2030,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	m_fldOpticalDepth->Align(m_chkMapOpticalDepth,AL_AFTER);
 
 	m_fMapWaterVapor = false;
-	m_chkMapWaterVapor = new CheckBox(root, TR("Water vapor content map(g.cm^-2)"), &m_fMapWaterVapor);
+	m_chkMapWaterVapor = new CheckBox(root, TR("Water vapor content map (g/cm2)"), &m_fMapWaterVapor);
 	m_chkMapWaterVapor->Align(m_chkMapOpticalDepth , AL_UNDER);
 	m_chkMapWaterVapor->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapWaterVapor, "", &m_sMapWaterVapor, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2038,7 +2039,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	m_fldWaterVapor->Align(m_chkMapWaterVapor,AL_AFTER);
 
 	m_fMapOzoneContent= false;
-	m_chkMapOzoneContent= new CheckBox(root, TR("Ozone content map (atm.cm)"), &m_fMapOzoneContent);
+	m_chkMapOzoneContent= new CheckBox(root, TR("Ozone content map (atm-cm)"), &m_fMapOzoneContent);
 	m_chkMapOzoneContent->Align(m_chkMapWaterVapor, AL_UNDER);
 	m_chkMapOzoneContent->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapOzoneContent, "", &m_sMapOzoneContent, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2048,7 +2049,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 
 	ValueRange vr(-1e300, 1e300, 1e-2);
 	m_fMapSurfacePressure= false;
-	m_chkMapSurfacePressure= new CheckBox(root, TR("Surface pressure map (hpa)"), &m_fMapSurfacePressure);
+	m_chkMapSurfacePressure= new CheckBox(root, TR("Surface pressure map (hPa)"), &m_fMapSurfacePressure);
 	m_chkMapSurfacePressure->Align(m_chkMapOzoneContent, AL_UNDER);
 	m_chkMapSurfacePressure->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapSurfacePressure, "", &m_sMapSurfacePressure, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2059,10 +2060,10 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	FieldBlank *fb2 = new FieldBlank(root, 0.2);
 	fb2->Align(m_chkMapSurfacePressure, AL_UNDER);
 	ValueRange vr2(-360, 360, 0.0001);
-	StaticText* st2 = new StaticText(root, TR("Sun/satellite angle data (source)"));
+	StaticText* st2 = new StaticText(root, TR("Sun/satellite angle data"));
 	st2->Align(fb2, AL_UNDER);
 	m_fMapSolarZenithAngle= false;
-	m_chkMapSolarZenithAngle= new CheckBox(root, TR("Solar zenith angle map (degree)"), &m_fMapSolarZenithAngle);
+	m_chkMapSolarZenithAngle= new CheckBox(root, TR("Solar zenith angle map (degrees)"), &m_fMapSolarZenithAngle);
 	m_chkMapSolarZenithAngle->Align(st2, AL_UNDER);
 	m_chkMapSolarZenithAngle->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapSolarZenithAngle, "", &m_sMapSolarZenithAngle, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2071,7 +2072,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	m_fldSolarZenithAngle->Align(m_chkMapSolarZenithAngle,AL_AFTER);
 
 	m_fMapSolarAzimutAngle= false;
-	m_chkMapSolarAzimutAngle= new CheckBox(root, TR("Solar azimut angle map (degree)"), &m_fMapSolarAzimutAngle);
+	m_chkMapSolarAzimutAngle= new CheckBox(root, TR("Solar azimuth angle map (degrees)"), &m_fMapSolarAzimutAngle);
 	m_chkMapSolarAzimutAngle->Align(m_chkMapSolarZenithAngle, AL_UNDER);
 	m_chkMapSolarAzimutAngle->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapSolarAzimutAngle, "", &m_sMapSolarAzimutAngle, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2080,7 +2081,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	m_fldSolarAzimutAngle->Align(m_chkMapSolarAzimutAngle,AL_AFTER);
 
 	m_fMapViewZenithAngle= false;
-	m_chkMapViewZenithAngle= new CheckBox(root, TR("Sensor zenith angle map (degree)"), &m_fMapViewZenithAngle);
+	m_chkMapViewZenithAngle= new CheckBox(root, TR("Sensor zenith angle map (degrees)"), &m_fMapViewZenithAngle);
 	m_chkMapViewZenithAngle->Align(m_chkMapSolarAzimutAngle, AL_UNDER);
 	m_chkMapViewZenithAngle->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapViewZenithAngle, "", &m_sMapViewZenithAngle, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2089,7 +2090,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
 	m_fldViewZenithAngle->Align(m_chkMapViewZenithAngle,AL_AFTER);
 
 	m_fMapViewAzimutAngle= false;
-	m_chkMapViewAzimutAngle= new CheckBox(root, TR("Sensor azimut angle map (degree)"), &m_fMapViewAzimutAngle);
+	m_chkMapViewAzimutAngle= new CheckBox(root, TR("Sensor azimuth angle map (degrees)"), &m_fMapViewAzimutAngle);
 	m_chkMapViewAzimutAngle->Align(m_chkMapViewZenithAngle, AL_UNDER);
 	m_chkMapViewAzimutAngle->SetCallBack((NotifyProc)&FormMapSmac::MapOnSelect);
 	new FieldDataType(m_chkMapViewAzimutAngle, "", &m_sMapViewAzimutAngle, new MapListerDomainType(".mpr", dmVALUE, false), true);
@@ -2101,7 +2102,7 @@ FormMapSmac::FormMapSmac(CWnd* mw, const char* sPar)
     fb3->Align(m_chkMapViewAzimutAngle, AL_UNDER);
     	
     initMapOut(false, false);
-    //SetHelpItem("ilwisapp\\flow_direction.htm");
+    SetHelpItem("ilwisapp\\smac_dialog_box.htm");
 	create();
 }
 

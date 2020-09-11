@@ -1,0 +1,128 @@
+<html>
+
+<head>
+<title>Atmospheric Effect Correction (SMAC) : algorithm</title>
+<meta name="author" content="Gabriel Parodi, Bas Retsios">
+<meta name="keywords" content="Atmospheric Effect Correction SMAC, SEBS Tools, Pre-processing">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Atmospheric Effect Correction (SMAC)</h1>
+
+<h1 class=secondline>Algorithm</h1>
+
+<!--<hr>-->
+
+
+<p class="defnewpar"><b>Atmospheric correction: visible channels</b></p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">The correction of the atmospheric absorption and scattering in the <U>visible channels</U> is essential for any approach dealing with the energy balance equation. If atmosphericaly corrected maps are already available they can be imported into the project and this step can be skipped.</p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">The algorithm availabe in ILWIS to perform the atmospheric calibration of the visible channels is the SMAC algorithm ( Rahman H., Dedieu G. (1994).<b> </b>Smac: A Simplified Method for the Atmospheric Correction of Satellite Measurements in the Solar Spectrum. <i>Int. J. Remote Sensing.</i> <b>15 </b>(1),<b> </b>123-143.). THE READING OF THIS ARTICLE IS COMPULSORY BEFORE APPLYING THE PROCEDURE. The operator should have proven skills on atmospheric correction.</p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">IMPORTANT NOTE: According to the authors of SMAC, the model can't be applied for solar zenith angles greater than 60 degrees and/or satellite zenith angles greater than 50 degrees. So be aware on the use of MODIS images in winter time. The SEBS algorithm is able to accept atmospherically corrected maps from external sources, in case other algorithm is used.</p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar"><b><i><U>Data required for SMAC</U></i></b></p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">SMAC requires the information of the total amounts of ozone and water vapor in the atmosphere, the aerosol optical depth and a standard atmospheric model for the distribution of these components. This is perhaps the most difficult information to required for the procedure.</p>
+<p class="defnewpar">There are many sources of information on atmospheric components, the most accurate ones are atmospheric soundings and sunphotometer measurements at the location of interest and the time of satellite pass.</p>
+<p class="defnewpar">MERIS i.e. has sensors products that can be used directly for SMAC. In this text we don't discuss the best sources for every situation, but we indicate some alternatives that may be considered or not by the program users.</p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">A better description of the three atmospheric components is:</p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar"><b>Aerosol optical thickness</b> (evaluated for 0.55 um): The the value ranges between 0.05 to 0.8.</p>
+<p class="defnewpar">Aerosol in the atmosphere have an extreme dynamic behaviour. As a reference aerosol conditions may change in time scales less than an hour with high spatial variation. At such it is difficult to get accurate information on the aerosol optical thickness.</p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">Use could be made of the aeronet service <a href="http://aeronet.gsfc.nasa.gov/">http://aeronet.gsfc.nasa.gov/</a> (that might help to evaluate a reasonable value of aerosols in case that a station is located close to the area of interest).</p>
+<p class="defnewpar">By exploring the Aeronet site information of the kind showed in the graph below can be retrieved for the sunphotometer stations closest to the area of interest and at the time of the image.</p>
+<p class="defnewpar">The vertical line indicates the time of the satellite pass.</p>
+<p class="defnewpar">&nbsp;</p>
+<img src="../images/smac/aeronet_AOT.png" width="642" height="483" /></p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">The Aerosol Optical Thickness (AOT) is evaluated from sunphotometers at different wavelenghts. In case that the 0.55 um is not evaluated, used of the Angstron theory is made (Angstrom A. (1929).<b> </b>On the Atmospheric Transmission of Sun Radiation and on Dust in the Air. <i>Geografis. Annal.</i> <b>2 </b>(3),<b> </b>130-159.):</p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">For each measurement in a day, aerosol optical depth and wavelength logarithms are calculated for each non-polarized wavelength between two channels: 340-440, 380-500, 440-675, 440-870, 500-870, and polar 440-675 (i.e., only non-polarized channels 440 and 675 for the polarized instrument).&nbsp;</p>
+<p class="defnewpar">The vertical line in the previous figure indicates the satellite pass. This lines dissects in the following values:</p>
+<p class="defnewpar">&nbsp;</p>
+<img src="../images/smac/aot_table.png" width="358" height="200" /></p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">These numbers are used to form a least squares regression fit to the data. The negative slope of this line to the x-axis is the Angstrom exponent.</p>
+<p class="defnewpar">The AOT for a certain wavelength can be written as (Angstrom 1929):</p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar"><img src="../images/smac/eq1_AOT.png" width="113" height="28" /></p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">Taking logarithms</p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar"><img src="../images/smac/eq2_AOT.png" width="188" height="28" /></p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">Where,</p>
+<p class="defnewpar">kal= AOT</p>
+<p class="defnewpar">'a' is the Angstrom exponent and 'b' the Angstrom's turbidity coefficient.</p>
+<p class="defnewpar">'lambda' is the wavelength in micrometers.</p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">To extrapolate for a value of ka550 required for SMAC, the extrapolation has to be done by evaluating the 'a' and 'b' coefficients.</p>
+<p class="defnewpar">If a wavelength does not exist, the aerosol optical depth for this wavelength is estimated by determining the slope of the two closest wavelengths to predict the value of 'ka550' at the given wavelength.&nbsp;</p>
+<p class="defnewpar">By plotting the aerosol optical thickness against the wavelength and adjusting a power equation trendline using excel, the value of 'a' and 'b' coefficients can be determined.</p>
+<img src="../images/smac/AOT550_evaluation.png" width="495" height="257" /></p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar"><b>Water vapor content</b> refers to the total column of water. The unit of the value is grams/cm2, and the value range is between 0.0 to 6.0.</p>
+<p class="defnewpar">In general it is less variable than the aerosols in time and space, however the influence on the absorption of the visible (and thermal) bands makes an accurate evaluation essential.</p>
+<p class="defnewpar">Water vapor information can be obtained from meteorological sources in the area, from satellites and from Aeronet as well.</p>
+<p class="defnewpar">The figure below shows the Water Vapor evolution for an example location during the day. The information can be directly used in the SMAC algorithm.</p>
+<p class="defnewpar">&nbsp;</p>
+<img src="../images/smac/Aeronet_WV.png" width="480" height="360" /></p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar"><b>Ozone content: </b>The unit of it is atm-cm, and the value range is 0.0 to 0.7. Ozone can also be measured in DU (Dobson Units; 1000 DU = 1 atm-cm). If you have measures in DU, divide them by 1000.</p>
+<p class="defnewpar">Ozone content is less dynamic that the other two components changes during days or weeks. Ozone is monitored quite intensively from satellites and other ground resources.</p>
+<p class="defnewpar">A good source for ozone on the Internet is <a href="http://macuv.gsfc.nasa.gov/">http://macuv.gsfc.nasa.gov/</a>.</p>
+<p class="defnewpar">Daily images of ozone spatial distribution are similar to the one below, and can be obtained on global/world basis.</p>
+<p class="defnewpar">&nbsp;</p>
+<img src="../images/smac/OZONE_globe.png" width="643" height="477" /></p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">The value of Ozone for SMAC can be estimated directly from this image, dividing the result by 1000.</p>
+<p class="defnewpar">The SMAC interface allows the user to enter an single value of the atmospheric constituents for the whole image, or a map with the spatial distribution. If a map exists, this map should be in the ILWIS format sharing the same georeference as the other input maps. The user needs to "check" the check box to the left of the input and then enter the location of the map. <i>These is valid for all atmospheric input maps in the SMAC interface.</i></p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">The SMAC model has built-in standard coefficients for different sensors and two types of atmosphere (desert and continental). SMAC allows the user to select the sensor coefficient file from a list. If needed, this list can be updated with new files.</p>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">Apart from the atmospheric constituents the rest of the data required to run SMAC is:</p>
+<ul>
+<li><b>Surface pressure map: </b>Check the option when you wish to use a map that contains surface pressure values. Otherwise provide a constant value for all pixels. The unit of the value is hPa (Hecto Pascal or millibars). This map could be derived from the DEM of the area if available.</li>
+<li><b>Solar zenith angle map:</b> Check the option when you wish to use a map that contains solar zenith angle values. Otherwise type a value for all pixels. Unit is degrees.</li>
+<li><b>Solar azimuth angle map: </b>Check the option when you wish to use a map that contains solar azimuth angle values. Otherwise type a value for all pixels. Unit is degrees.</li>
+<li><b>Sensor zenith angle map:&nbsp; </b>Check the option when you wish to use a map that contains satellite azimuth angle values. Otherwise type a value for all pixels. Unit is degrees.</li>
+<li><b>Sensor azimuth angle map: </b>Check the option when you wish to use a map that contains satellite azimuth angle values. Otherwise type a value for all pixels. Unit is degrees.</li>
+<li><b>Output raster map:&nbsp; </b>Type<b> </b>a name for the output raster map.</li>
+</ul>
+<p class="defnewpar">&nbsp;</p>
+<p class="defnewpar">The procedure of atmospheric correction in the visible needs to be repeated seven times (one for each visible channel).</p>
+<p class="defnewpar">In it final version, the Interface of SMAC should look like:</p>
+<p class="defnewpar">&nbsp;</p>
+
+<p><img src="../images/smac/SMAC4ILWIS_interface.png" width="420" height="469" /></p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="smac_dialog_box.htm">Atmospheric Effect Correction (SMAC) : dialog box</a></p>
+
+<p class=seealsolinks><a href="smac_functionality.htm">Atmospheric Effect Correction (SMAC) : functionality</a></p>
+
+<p class=seealsolinks><a href="smac_command_line.htm">Atmospheric Effect Correction (SMAC) : command line</a></p>
+
+</body>

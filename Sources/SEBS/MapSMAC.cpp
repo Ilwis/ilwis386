@@ -139,6 +139,7 @@ MapSMAC::MapSMAC(const FileName& fn, MapPtr& p)
 	
 	fNeedFreeze = true;
 	sFreezeTitle = "Atmospheric Effect Correction (SMAC)";
+	htpFreeze = "ilwisapp\\smac_algorithm.htm";
 }
 
 MapSMAC::MapSMAC(const FileName& fn, 
@@ -231,6 +232,7 @@ MapSMAC::MapSMAC(const FileName& fn,
 	ptr.Store(); 
 	fNeedFreeze = true;
 	sFreezeTitle = TR("Atmospheric Effect Correction (SMAC)");
+	htpFreeze = "ilwisapp\\smac_algorithm.htm";
 }
 
 MapSMAC::MapSMAC(const FileName& fn, 
@@ -315,6 +317,7 @@ MapSMAC::MapSMAC(const FileName& fn,
 	ptr.Store(); 
 	fNeedFreeze = true;
 	sFreezeTitle = TR("Atmospheric Effect Correction (SMAC)");
+	htpFreeze = "ilwisapp\\smac_algorithm.htm";
 }
 
 MapSMAC::~MapSMAC()

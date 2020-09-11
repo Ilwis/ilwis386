@@ -1,0 +1,254 @@
+<html>
+
+<head>
+<title>Atmospheric Effect Correction (SMAC) : command line</title>
+<meta name="author" content="Gabriel Parodi, Bas Retsios">
+<meta name="keywords" content="Atmospheric Effect Correction SMAC, , MapSMAC, SEBS Tools, Pre-processing">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Atmospheric Effect Correction (SMAC)</h1>
+
+<h1 class=secondline>Command line</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The SMAC operation can be directly executed by typing the following expression on the command line of the Main window: </p>
+
+<p class=emptyline>&nbsp;&nbsp; </p>
+
+<table class=syntax cellspacing=0>
+<tr>
+<td valign="top" width="68">
+<p class=calccommline>OUTNAME</p>
+
+</td>
+<td valign="top" width=18>
+<p class=calccommline>=</p>
+
+</td>
+<td valign="top">
+<p class=calccommline><span class=courier>MapSMAC</span>(<i>Reflectance_rasmap</i>, <i>coefficient_file</i>, <i>true|false</i>, <i>optical_thickness</i>, <i>true|false</i>, <i>water_vapor</i>, <i>true|false</i>, <i>ozone_content</i>, <i>true|false</i>, <i>surface_pressure</i>, <i>true|false</i>, <i>solar_zenith_angle</i>, <i>true|false</i>, <i>solar_azimuth_angle</i>, <i>true|false</i>, <i>sensor_zenith_angle</i>, <i>true|false</i>, <i>sensor_azimuth_angle</i>)</p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>where:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width=119>
+<p>OUTNAME</p>
+</td>
+<td valign="top">
+<p>is an output name that will be used for the output raster map. The output map will contain the surface reflectance of the atmospherically corrected channel after SMAC calculations.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" colspan="2">
+<p class=courier>MapSMAC</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+</td>
+<td valign="top">
+<p>is the command to start the SMAC operation.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>Reflectance_rasmap</i></p>
+</td>
+<td valign="top">
+<p>This is a raster map with reflectance values at the top of atmosphere (TOA) to which the SMAC atmospheric correction will be applied. </p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>coefficient_file</i></p>
+</td>
+<td valign="top">
+<p>is the full path to the ASCII file containing the sensor calibration coefficients. </p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>true|false</i></p>
+</td>
+<td valign="top">
+<p>indicates whether the optical_thickness is a raster map (true) or a single value (false).</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>optical_thickness</i></p>
+</td>
+<td valign="top">
+<p>is a raster map or a single value with the optical thickness at 550 nm.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>true|false</i></p>
+</td>
+<td valign="top">
+<p>indicates whether the water_vapor is a raster map (true) or a single value (false).</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>water_vapor</i></p>
+</td>
+<td valign="top">
+<p>is a raster map or a single value with the water vapor content.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>true|false</i></p>
+</td>
+<td valign="top">
+<p>indicates whether the ozone_content is a raster map (true) or a single value (false).</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>ozone_content</i></p>
+</td>
+<td valign="top">
+<p>is a raster map or a single value with the ozone content.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>true|false</i></p>
+</td>
+<td valign="top">
+<p>indicates whether the surface_pressure is a raster map (true) or a single value (false).</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>surface_pressure</i></p>
+</td>
+<td valign="top">
+<p>is a raster map or a single value with the surface pressure.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>true|false</i></p>
+</td>
+<td valign="top">
+<p>indicates whether the solar_zenith_angle is a raster map (true) or a single value (false).</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>solar_zenith_angle</i></p>
+</td>
+<td valign="top">
+<p>is a raster map or a single value with the solar zenith angle.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>true|false</i></p>
+</td>
+<td valign="top">
+<p>indicates whether the solar_azimuth_angle is a raster map (true) or a single value (false).</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>solar_azimuth_angle</i></p>
+</td>
+<td valign="top">
+<p>is a raster map or a single value with the solar azimuth angle.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>true|false</i></p>
+</td>
+<td valign="top">
+<p>indicates whether the sensor_zenith_angle is a raster map (true) or a single value (false).</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>sensor_zenith_angle</i></p>
+</td>
+<td valign="top">
+<p>is a raster map or a single value with the sensor zenith angle.</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>true|false</i></p>
+</td>
+<td valign="top">
+<p>indicates whether the sensor_azimuth_angle is a raster map (true) or a single value (false).</p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width=119>
+<p><i>sensor_azimuth_angle</i></p>
+</td>
+<td valign="top">
+<p>is a raster map or a single value with the sensor azimuth angle.</p>
+</td>
+</tr>
+
+</table>
+
+<p class=defnewpar>When the definition symbol = is used, a <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> is created; when the assignment symbol := is used, the dependency link is immediately broken after the output map has been calculated. </p>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="smac_functionality.htm">Atmospheric Effect Correction (SMAC) : functionality</a></p>
+
+<p class=seealsolinks><a href="smac_dialog_box.htm">Atmospheric Effect Correction (SMAC) : dialog box</a></p>
+
+<p class=seealsolinks><a href="smac_algorithm.htm">Atmospheric Effect Correction (SMAC) : algorithm</a></p>
+
+</body>

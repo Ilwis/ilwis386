@@ -1,0 +1,173 @@
+<html>
+
+<head>
+<title>Atmospheric Effect Correction (SMAC) : dialog box</title>
+<meta name="author" content="Gabriel Parodi, Bas Retsios">
+<meta name="keywords" content="Atmospheric Effect Correction SMAC, SEBS Tools, Pre-processing">
+<link rel=stylesheet type="text/css" href="../ilwis.css">
+<SCRIPT TYPE="text/javascript"> 
+ <!-- 
+ function popup(mylink, windowname) 
+ { 
+ if (! window.focus)return true; 
+ var href; 
+ if (typeof(mylink) == 'string') 
+    href=mylink; 
+ else 
+   href=mylink.href; 
+window.open(href, windowname, 'width=500,height=400,scrollbars=yes'); 
+
+return false;
+}
+//-->
+</SCRIPT>
+</head>
+<body text="#000000" bgcolor="#FFFFFF">
+
+<h1 class=firstline>Atmospheric Effect Correction (SMAC)</h1>
+
+<h1 class=secondline>Dialog box</h1>
+
+<!--<hr>-->
+
+<p class=defnewpar>The SMAC operation performs atmospheric correction on a top-of-atmosphere reflectance channel, resulting in a reflectance map on the Earth's surface. </p>
+
+<p class=diakopje>Dialog box options:</p>
+
+<table cellspacing=0>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Top of atmosphere reflectance channel:</p>
+</td>
+<td valign="top">
+<p class=diabox>Map of top of the atmosphere reflectance of one specific channel for the sensors supported by SMAC. First select this channel, and then select the adequate calibration coefficient file from the database. Unit: Reflectance [-]: Domain: value [0-1]. Precision: 0.0001 . </p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Coefficient file for sensor and channel:</p>
+</td>
+<td valign="top">
+<p class=diabox>File containing the sensor calibration curve and responses needed to run SMAC for a particular sensor and channel. </p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Optical thickness map (at 550 nm)</p>
+</td>
+<td valign="top">
+<p class=diabox>Value or map of the optical thickness measured at 550 nanometers. Unit: Non-dimensional [-]: Domain: value [0.05-0.8]. Precision: 0.01 . </p>
+<p class=diabox>The optical thickness (OT), also known as optical depth is defined as: </p>
+<p class=diabox>OT= k<font face="Symbol">l</font> . m </p>
+<p class=diabox>Where: </p>
+<p class=diabox>'k<font face="Symbol">l</font>' is the monochromatic extinction or attenuation coefficient of the atmosphere at 550 <font face="Symbol">m</font>m. </p>
+<p class=diabox>'m' is the optical path length </p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Water vapor content map (g/cm2)</p>
+</td>
+<td valign="top">
+<p class=diabox>Represents a physical simplification of the vertical distribution of water vapor in the different atmospheric stratus. It is the weight of a column of 1 cm2 of atmospheric water, assuming that all the atmospheric moisture can be condensed. Unit: grams . cm-2: Domain: value [0 to 6]. Precision: 0.01 . </p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Ozone content map (atm-cm)</p>
+</td>
+<td valign="top">
+<p class=diabox>Represents a physical simplification of the vertical concentration of ozone in the different atmospheric stratus. Unit: atm-cm = Dobson Units/1000: Domain: value [0 to 0.7]. Precision: 0.01 . </p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Surface pressure map (hPa)</p>
+</td>
+<td valign="top">
+<p class=diabox>The air pressure at the site of the image. Assuming a normal air pressure at sea level equal to 1013.25 hPa, the variation of pressure can be calculated with a DEM. Unit: hectopascal (1 hectopascal = 1 millibar): Domain: value [1 to 1400]. Precision: 1. Note that this version of SMAC is not suitable for elevations above 3000 meters (pressure below 700 hPa). </p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Solar zenith angle map (degrees)</p>
+</td>
+<td valign="top">
+<p class=diabox>The solar zenith angle, in degrees (0 to 90 degrees, precision 0.01). </p>
+<p class=diabox>In an image, every pixel has a specific value of these four angles for the instant that the image was captured. The information required to build the geometric angle maps is normally included in the signal sent from the satellite an stored in the header or the stream band information. For high resolution satellites, the solar zenith angle (the most important map of all these four) is not very variable and it might be considered constant for calibration purposes. </p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Solar azimuth angle map (degrees)</p>
+</td>
+<td valign="top">
+<p class=diabox>The solar azimuth angle, in degrees (0 to 360 degrees, precision 0.01). </p>
+</td>
+</tr>
+
+
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Sensor zenith angle map (degrees)</p>
+</td>
+<td valign="top">
+<p class=diabox>The sensor zenith angle, in degrees (0 to 90 degrees, precision 0.01). </p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Sensor azimuth angle map (degrees)</p>
+</td>
+<td valign="top">
+<p class=diabox>The sensor azimuth angle, in degrees (0 to 360 degrees, precision 0.01). </p>
+</td>
+</tr>
+
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Output raster map:</p>
+</td>
+<td valign="top">
+<p class=diabox>Type a <a href="..//ilwis/popup/object_name_popup.htm" onClick="return popup(this, 'notes')" >name</a> for the output raster map that will contain the surface reflectance of the atmospherically corrected channel after SMAC calculations</p>
+</td>
+</tr>
+<tr>
+<td valign="top" width="144">
+<p class=diabox>Description:</p>
+
+</td>
+<td valign="top">
+<p class=diabox>Optionally, type a description for the output map. The description will appear in the status bar of the Main window when moving the mouse pointer over the map in a Catalog, and in the title bar of a map window when the output map is displayed. If no description is supplied, the output map will use its own <a href="..//ilwis/popup/object_definition_popup.htm" onClick="return popup(this, 'notes')" >definition</a> as description. </p>
+
+</td>
+</tr>
+</table>
+
+<p class=defnewpar>When you click the <b>Show</b> button, the <a href="..//ilwis/popup/object_dependent_data_objects_popup.htm" onClick="return popup(this, 'notes')" >dependent output map</a> will be defined, calculated and shown. When you click the <b>Define</b> button, the dependent output map will only be defined; if necessary the map will be calculated later, for instance when the map is opened to be displayed. </p>
+
+<p class=tip>Tips: </p>
+
+<ul class=tipul>
+
+<li>Map check box: check this box before each input, if the input is an ILWIS raster map. Uncheck it if the input is an average value of the considered parameter for the entire image. </li>
+
+</ul>
+
+<p class=Seealso>See also:</p>
+
+<p class=seealsolinks><a href="smac_functionality.htm">Atmospheric Effect Correction (SMAC) : functionality</a></p>
+
+<p class=seealsolinks><a href="smac_algorithm.htm">Atmospheric Effect Correction (SMAC) : algorithm</a></p>
+
+<p class=seealsolinks><a href="smac_command_line.htm">Atmospheric Effect Correction (SMAC) : command line</a></p>
+
+</body>
