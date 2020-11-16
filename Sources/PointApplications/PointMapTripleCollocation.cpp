@@ -322,9 +322,9 @@ void PointMapTripleCollocation::tripleCollocation(const RealMatrix & matrix, dou
 	rhosq1 = sqr(w1);
 	rhosq2 = sqr(w2);
 	rhosq3 = sqr(w3);
-	errVar1 = (Qhat(0,0)-Qhat(0,1)*Qhat(0,2)/Qhat(1,2));
-	errVar2 = (Qhat(1,1)-Qhat(0,1)*Qhat(1,2)/Qhat(0,2));
-	errVar3 = (Qhat(2,2)-Qhat(0,2)*Qhat(1,2)/Qhat(0,1));
+	errVar1 = abs(Qhat(0,0)-Qhat(0,1)*Qhat(0,2)/Qhat(1,2));
+	errVar2 = abs(Qhat(1,1)-Qhat(0,1)*Qhat(1,2)/Qhat(0,2));
+	errVar3 = abs(Qhat(2,2)-Qhat(0,2)*Qhat(1,2)/Qhat(0,1));
 }
 
 
