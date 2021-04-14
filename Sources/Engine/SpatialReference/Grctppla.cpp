@@ -538,6 +538,8 @@ bool GeoRefCTPplanar::fEqual(const IlwisObjectPtr& obj) const
   }  
   if (transf != grc->transf)
     return false;
+  if (rAvgX != grc->rAvgX || rAvgY != grc->rAvgY || rAvgCol != grc->rAvgCol || rAvgRow != grc->rAvgRow)
+	  return false;
   int i, iMax = 2;  
   switch (transf) {
     case THIRDORDER:
