@@ -320,7 +320,6 @@ void MapGlue::LegalMapCollection()
 void MapGlue::MakeNewRowColLimitsAndCrdBounds(const GeoRef& gr1, const GeoRef& gr2,
                                   MinMax& mmMapLimits, CoordBounds& cb)
 {
-  cb = CoordBounds();
   bool fTransformCoords = (gr1->cs() != gr2->cs());
   MinMax mmLimits;
   // doorloop de hele rand van grf2 RowCols
@@ -379,7 +378,6 @@ bool MapGlue::fFreezing()
 	GeoRef grf0 = maps[0]->gr();
 	if (!fCreateGeoRef)
 		grf0 = gr();  // use the user supplied georef for checking
-	
 	MinMax mmMapLimits;
 	mmMapLimits.rcMin = RowCol(0L, 0L);
 	mmMapLimits.rcMax = grf0->rcSize();
