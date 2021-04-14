@@ -598,10 +598,10 @@ bool ObjectCollectionPtr::getStatusFor(int query) const {
 				if ( !dm.fValid()) {
 					dm = bmp->dm();
 				} else {
-					if ( !dm->pdv())
+					if ( !dm->pdv() && !dm->pdp())
 						sameDomain = dm == bmp->dm();
-					else { // we are less strict with domain value, need only to be same type in general
-						sameDomain = dm->pdv() !=0 && bmp->dm()->pdv() != 0;
+					else { // we are less strict with domain value and domain picture, need only to be same type in general
+						sameDomain = (dm->pdv() !=0 && bmp->dm()->pdv() != 0) || (dm->pdp() !=0 && bmp->dm()->pdp() != 0);
 					}
 				}
 			}
@@ -641,8 +641,9 @@ RangeReal ObjectCollectionPtr::getRange() {
 				BaseMap bmp(fnMap);
 				if ( bmp->dm()->pdv()) {
 					range += bmp->rrMinMax();
+				} else if ( bmp->dm()->pdp()) {
+					range += RangeReal(0, 255);
 				}
-
 			} 
 		}
 		fChanged = true;
