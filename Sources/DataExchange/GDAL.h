@@ -70,6 +70,11 @@ typedef const char* (__stdcall *GDALGetMetadataItemFunc)(GDALMajorObjectH hObjec
 typedef int (__stdcall *GDALGetGCPCountFunc)(GDALDatasetH);
 typedef const char* (__stdcall *GDALGetGCPProjectionFunc)(GDALDatasetH);
 typedef const GDAL_GCP* (__stdcall *GDALGetGCPsFunc)(GDALDatasetH);
+typedef	GDALColorInterp (__stdcall *GDALGetRasterColorInterpretationFunc)(GDALRasterBandH);
+typedef GDALColorTableH (__stdcall *GDALGetRasterColorTableFunc)(GDALRasterBandH);
+typedef GDALPaletteInterp (__stdcall *GDALGetPaletteInterpretationFunc)(GDALColorTableH);
+typedef int (__stdcall *GDALGetColorEntryCountFunc)(GDALColorTableH);
+typedef const GDALColorEntry* (__stdcall *GDALGetColorEntryFunc)(GDALColorTableH, int);
 typedef void(__stdcall *CPLSetConfigOptionFunc)(const char *pszEnvVar, const char *pszVal);
 
 typedef const char* (__stdcall *CPLGetLastErrorFunc)(void);
@@ -109,9 +114,6 @@ typedef int (*GetFeatureCountFunc)(OGRLayerH,int);
 typedef OGRErr 	(*GetLayerExtentFunc)(OGRLayerH, OGREnvelope *, int);
 typedef const char * (*GetFieldNameFunc)(OGRFieldDefnH);
 
-
-
-
 struct GDALCFunctions {
 	GDALCloseFunc close;
 	GDALAllRegisterFunc registerAll;
@@ -142,6 +144,11 @@ struct GDALCFunctions {
 	GDALGetGCPCountFunc getGCPCount;
 	GDALGetGCPProjectionFunc getGCPProjection;
 	GDALGetGCPsFunc getGCPs;
+	GDALGetRasterColorInterpretationFunc getRasterColorInterpretation;
+	GDALGetRasterColorTableFunc getRasterColorTable;
+	GDALGetPaletteInterpretationFunc getPaletteInterpretation;
+	GDALGetColorEntryCountFunc getColorEntryCount;
+	GDALGetColorEntryFunc getColorEntry;
 	CPLSetConfigOptionFunc setConfigOption;
 
 	CPLGetLastErrorFunc errorMsg;
@@ -181,11 +188,6 @@ struct GDALCFunctions {
 	GetFeatureCountFunc ogrGetFeatureCount;
 	GetLayerExtentFunc ogrGetLayerExtent;
 	GetFieldNameFunc ogrGetFieldName;
-
-
-
-
-
 };
 
 struct GDALImportFormat : ImportFormat {

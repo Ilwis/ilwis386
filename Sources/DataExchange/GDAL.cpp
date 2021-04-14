@@ -63,6 +63,7 @@
 #include "Engine\Domain\dminfo.h"
 #include "Engine\Domain\dmsort.h"
 #include "Engine\Domain\DomainUniqueID.h"
+#include "Engine\Representation\Rprclass.h"
 #include "Engine\DataExchange\TableForeign.h"
 #include "Engine\Base\File\objinfo.h"
 #include "Engine\SpatialReference\prj.h"
@@ -477,6 +478,11 @@ void GDALFormat::LoadMethods() {
 				funcs.getGCPCount = (GDALGetGCPCountFunc)GetProcAddress(hm,"_GDALGetGCPCount@4");
 				funcs.getGCPProjection = (GDALGetGCPProjectionFunc)GetProcAddress(hm,"_GDALGetGCPProjection@4");
 				funcs.getGCPs = (GDALGetGCPsFunc)GetProcAddress(hm,"_GDALGetGCPs@4");
+				funcs.getRasterColorInterpretation = (GDALGetRasterColorInterpretationFunc)GetProcAddress(hm,"_GDALGetRasterColorInterpretation@4");
+				funcs.getRasterColorTable = (GDALGetRasterColorTableFunc)GetProcAddress(hm,"_GDALGetRasterColorTable@4");
+				funcs.getPaletteInterpretation = (GDALGetPaletteInterpretationFunc)GetProcAddress(hm,"_GDALGetPaletteInterpretation@4");
+				funcs.getColorEntryCount = (GDALGetColorEntryCountFunc)GetProcAddress(hm,"_GDALGetColorEntryCount@4");
+				funcs.getColorEntry = (GDALGetColorEntryFunc)GetProcAddress(hm,"_GDALGetColorEntry@8");
 				funcs.setConfigOption = (CPLSetConfigOptionFunc)GetProcAddress(hm,"_CPLSetConfigOption@8");
 
 				funcs.errorMsg = (CPLGetLastErrorFunc)GetProcAddress(hm, "_CPLGetLastErrorMsg@0");
@@ -697,7 +703,6 @@ void GDALFormat::GetRasterLayer(int iLayerIndex, Map& mp, Array<FileName>& arMap
 		if ( grf.fValid() ) // only one georef has to be created;
 			li.grf = grf;
 		// get csy, grf and domain info
-		GetRasterInfo(li, iLayerIndex, fBitMap);
 		String sPath =  fnGetForeignFile().sPath() != fnBaseOutputName.sPath() ? 
 				            fnGetForeignFile().sFullPathQuoted() : fnGetForeignFile().sRelativeQuoted();
 		li.sExpr = String("GDAL(%S, %d)", sPath, iLayerIndex); // bitmaps will have a negative index as they use the segment routines
@@ -713,6 +718,7 @@ void GDALFormat::GetRasterLayer(int iLayerIndex, Map& mp, Array<FileName>& arMap
 			fnRasMap = FileName(FileName::fnUnique(fnM));			
 
 		li.fnObj = fnRasMap;
+		GetRasterInfo(li, iLayerIndex, fBitMap);
 
 		bool fUseAs = !fImport;
 		String sMethod = fUseAs ? ": use as" : ": import ";
@@ -955,11 +961,38 @@ void GDALFormat::GetRasterInfo(LayerInfo& inf, int iChannel, bool fBitMap)
 	if (!currentLayer )
 		currentLayer = OpenLayer(iChannel);
 
-
 	GetGeoRef(inf.grf);
-	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);			
-	int type = funcs.getDataType(currentLayer);
-    switch ( type )
+	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);
+	bool fDomainColor = false;
+	GDALColorInterp colorInterp = funcs.getRasterColorInterpretation(currentLayer);
+	if (colorInterp == GCI_PaletteIndex) {
+		GDALColorTableH colorTable = funcs.getRasterColorTable(currentLayer);
+		if (colorTable != 0) {
+			GDALPaletteInterp paletteInterp = funcs.getPaletteInterpretation(colorTable);
+			if (paletteInterp == GPI_RGB) {
+				int count = funcs.getColorEntryCount(colorTable);
+				if (count <= 256) {
+					FileName fnDom(FileName::fnUnique(FileName(inf.fnObj,".dom")));
+					Domain dm = Domain(fnDom, count, dmtPICTURE);
+					Representation rpr = dm->rpr();
+					RepresentationClass* prprc = dynamic_cast<RepresentationClass*>( rpr.ptr() );
+					for (int i = 0; i < count; i++ ) {
+						const GDALColorEntry * colorEntry = funcs.getColorEntry(colorTable, i);
+						if (colorEntry != 0) {
+							long color = colorEntry->c1 | (colorEntry->c2 << 8) | (colorEntry->c3 << 16) | (colorEntry->c4 << 24);
+							prprc->PutColor(i, color);
+						} else
+							prprc->PutColor(i, 0);
+					}
+					inf.dvrsMap = DomainValueRangeStruct(dm);
+					fDomainColor = true;
+				}
+			}
+		}
+	}
+	if (!fDomainColor) {
+		int type = funcs.getDataType(currentLayer);
+		switch ( type )
 		{
 			case GDT_Byte:
 				inf.dvrsMap = DomainValueRangeStruct(Domain("image"));
@@ -978,12 +1011,12 @@ void GDALFormat::GetRasterInfo(LayerInfo& inf, int iChannel, bool fBitMap)
 				break;
 			case GDT_Float64:
 			case GDT_Float32:
-
 				inf.dvrsMap = DomainValueRangeStruct(-1e100, 1e100, 0.0);;
 				break;
 			default:
 				throw ErrorObject(String("Unknown data type : %d",type));
 		}
+	}
 	lock.Unlock();
 }
 void GDALFormat::GetGeoRef(GeoRef& grf)
