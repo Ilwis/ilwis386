@@ -103,7 +103,7 @@ void SetDrawer::prepare(PreparationParameters *pp){
 						if (rasterset) {
 							if ( rrMinMax.fValid())
 								rasterset->setMinMax(rrMinMax);
-							if (i == 0)
+							if ((i == 0) || bmp->dm()->pdp())
 								palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
 							else
 								rasterset->SetPalette(palette);
@@ -153,7 +153,7 @@ void SetDrawer::prepare(PreparationParameters *pp){
 				rasterset->setThreaded(false); // This is here since 2011. It is probably done to ensure that during animation, the entire frame belongs to the same moment.
 				if ( rrMinMax.fValid())
 					rasterset->setMinMax(rrMinMax);
-				if (i == 0)
+				if ((i == 0) || mp->dm()->pdp())
 					palette = rasterset->SetPaletteOwner(); // create only the palette of the first rasterset, and share it with the other rastersets
 				else
 					rasterset->SetPalette(palette);

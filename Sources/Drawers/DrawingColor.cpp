@@ -52,7 +52,7 @@ double IlwisData::rValByRaw(int raw, const RangeReal& range) const{
 			return r;
 		}
 	}
-	if ( dm()->pdsrt())
+	if ( dm()->pdsrt() || dm()->pdp())
 		return raw;
 
 	if ( range.fValid()) {
