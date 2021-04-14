@@ -344,6 +344,8 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 			double * ptrBufIn1 = bufIn1.buf();
 			double * ptrBufIn2 = bufIn2.buf();
 			double * ptrBufIn3 = bufIn3.buf();
+			RealBuf bufIntermediate(xSizeOut);
+			double * ptrBufIntermediate = bufIntermediate.buf();
 			LongBuf bufColor(xSizeOut);
 			long * ptrBufColor = bufColor.buf();
 			memset(ptrBufIn1, 0, sizeX * 8); // to prevent NAN values in bufIn.
@@ -363,8 +365,9 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 					byte v2 = byteConv((ptrBufIn2[iDataInXPos] - rOffG) * rFactG);
 					byte v3 = byteConv((ptrBufIn3[iDataInXPos] - rOffB) * rFactB);
 					ptrBufColor[iDataOutXPos] = (v1) | (v2 << 8) | (v3 << 16);
+					ptrBufIntermediate[iDataOutXPos] = ptrBufIn1[iDataInXPos]; // backup R values for properly "patching" undefs in PutLine
 				}
-				PutLine(bufColor, bufColor, iDataOutYPos, texSizeX, outbuf);
+				PutLine(bufIntermediate, bufColor, iDataOutYPos, texSizeX, outbuf);
 			}
 		}
 		else // !fRealMap
@@ -375,6 +378,8 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 			long * ptrBufIn1 = bufIn1.buf();
 			long * ptrBufIn2 = bufIn2.buf();
 			long * ptrBufIn3 = bufIn3.buf();
+			LongBuf bufIntermediate(xSizeOut);
+			long * ptrBufIntermediate = bufIntermediate.buf();
 			LongBuf bufColor(xSizeOut);
 			long * ptrBufColor = bufColor.buf();
 			for (long iDataOutYPos = 0, iDataInYPos = 0; iDataOutYPos < ySizeOut; ++iDataOutYPos, iDataInYPos += zoomFactor)
@@ -396,9 +401,10 @@ bool CCTexture::DrawTexture(long offsetX, long offsetY, long texSizeX, long texS
 					byte v2 = byteConv((ptrBufIn2[iDataInXPos] - rOffG) * rFactG);
 					byte v3 = byteConv((ptrBufIn3[iDataInXPos] - rOffB) * rFactB);
 					ptrBufColor[iDataOutXPos] = (v1) | (v2 << 8) | (v3 << 16);
+					ptrBufIntermediate[iDataOutXPos] = ptrBufIn1[iDataInXPos]; // backup R values for properly "patching" undefs in PutLine
 				}
 
-				PutLine(bufColor, bufColor, iDataOutYPos, texSizeX, outbuf);
+				PutLine(bufIntermediate, bufColor, iDataOutYPos, texSizeX, outbuf);
 			}
 		}                 
 	}
