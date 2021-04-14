@@ -542,7 +542,7 @@ bool MapSequenceSelector::fCheckDomains(const Map& mp, String& sErr) const
 		sErr = TR("Map in List cannot have Domain None");
 		return false;
 	}
-	if (arr[0]->dm() != mp->dm())
+	if ((arr[0]->dm() != mp->dm()) && !(arr[0]->dm()->pdp() && mp->dm()->pdp()))
 	{
 		sErr = String(TR("Incompatible domains: %S and %S").c_str(), arr[0]->dm()->sName(true), mp->dm()->sName(true));
 		return false;

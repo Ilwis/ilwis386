@@ -606,8 +606,9 @@ void MapListPtr::CheckDomains() const
 	Domain dom0 = ma[iLower()]->dm();
 	if (dom0 == Domain("none"))
 		throw ErrorObject(WhatError(TR("Map in List cannot have Domain None"), errMapList+2), fnObj.sPath());
+	bool pdp = dom0->pdp();
 	for (int i = iLower()+1; i <= iUpper(); i++)
-		if (dom0 != ma[i]->dm())
+		if ((dom0 != ma[i]->dm()) && !(pdp && ma[i]->dm()->pdp()))
 			IncompatibleDomainsError(dom0->sName(true, fnObj.sPath()),
 			ma[i]->dm()->sName(true, fnObj.sPath()), sTypeName(), errMapList+3);
 }
