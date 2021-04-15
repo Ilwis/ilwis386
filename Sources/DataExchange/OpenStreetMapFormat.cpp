@@ -89,7 +89,8 @@
 OpenStreetMapFormat::OpenStreetMapFormat()
 : urlOpenStreetMap("")
 , rxo(0)
-,grfOpenStreetMap(0)
+, grfOpenStreetMap(0)
+, fNoExtension(false)
 {
 	gdalDataSet = NULL;
 	grfOpenStreetMap = NULL;
@@ -98,7 +99,8 @@ OpenStreetMapFormat::OpenStreetMapFormat()
 OpenStreetMapFormat::OpenStreetMapFormat(const FileName& fn, ParmList& pm)
 : urlOpenStreetMap("")
 , rxo(0)
-,grfOpenStreetMap(0)
+, grfOpenStreetMap(0)
+, fNoExtension(false)
 {
 
 	URL url(pm.sGet("url"));
@@ -118,6 +120,10 @@ OpenStreetMapFormat::OpenStreetMapFormat(const FileName& fn, ParmList& pm)
 			if (pm.fExist(String("HeaderLine%d", i)))
 				vsRequestHeaders.push_back(pm.sGet(String("HeaderLine%d", i)));
 		}
+	}
+
+	if (pm.fExist("NoExtension")) {
+		fNoExtension = pm.fGet("NoExtension");
 	}
 
 	LayerInfo info;
@@ -167,6 +173,9 @@ void OpenStreetMapFormat::ReadParameters(const FileName& fnObj, ParmList& pm)
 			pm.Add(new Parm(String("HeaderLine%d", i), sV));
 		}
 	}
+	ObjectInfo::ReadElement("ForeignFormat", "NoExtension", fnObj, fNoExtension);
+	if (fNoExtension)
+		pm.Add(new Parm("NoExtension", true));
 }
 
 ForeignFormat *CreateImportObjectOpenStreetMap(const FileName& fnFO, ParmList& pm) {
@@ -245,10 +254,12 @@ String OpenStreetMapFormat::getMapRequest(const CoordBounds& cb2, const RowCol r
 		url = url.substr(0, index1);
 	}
 	String ext = url.sRight(4);
-	if ((!fCIStrEqual(ext,".png")) && (!fCIStrEqual(ext,".jpg")))
-		ext = ".png"; // use this as default
-	else
+	if (fCIStrEqual(ext,".png") || fCIStrEqual(ext,".jpg"))
 		url = url.sLeft(url.length() - 4);
+	else if (fNoExtension)
+		ext = "";
+	else
+		ext = ".png"; // use this as default when no extension is provided
 	url += String("%d/%d/%d%S",zoom,xtile,ytile,ext) + query_string;
 	TRACE(String("[ %d,%d ]\n", xtile, ytile).c_str());
 
@@ -289,6 +300,8 @@ void OpenStreetMapFormat::Store(IlwisObject obj) {
 		for (int i = 0; i < vsRequestHeaders.size(); ++i)
 			obj->WriteElement("ForeignFormat", String("HeaderLine%d", i).c_str(), vsRequestHeaders[i]);
 	}
+	if (fNoExtension)
+		obj->WriteElement("ForeignFormat", "NoExtension", true);
 }
 
 int OpenStreetMapFormat::long2tilex(double lon, int z) const

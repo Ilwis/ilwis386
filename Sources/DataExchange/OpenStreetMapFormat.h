@@ -95,6 +95,7 @@ private:
 
 	URL	urlOpenStreetMap;
 	std::vector<String> vsRequestHeaders;
+	bool fNoExtension;
 
 	GeoRef grf;
 	GeoRefOSM *grfOpenStreetMap;
