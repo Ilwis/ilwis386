@@ -117,7 +117,8 @@ String DomainPicture::sValueByRaw(long iRaw, short iWidth, short) const
 
 long DomainPicture::iRaw(const Color& col) const
 {
-  RepresentationClass* rprc = rpr()->prc();
+  Representation rpr = DomainPicture::rpr(); // to keep it in memory
+  RepresentationClass* rprc = rpr->prc();
   for (long i = 0; i < iColors(); ++i)
     if (col == rprc->clrRaw(i))
       return i;
@@ -130,7 +131,8 @@ void DomainPicture::Add(const Color& col)
   if (iRaw != iUNDEF)
     return;
   _iColors++;
-  RepresentationClass* rprc = rpr()->prc();
+  Representation rpr = DomainPicture::rpr(); // to keep it in memory
+  RepresentationClass* rprc = rpr->prc();
   rprc->iAdd(col);
 }
 

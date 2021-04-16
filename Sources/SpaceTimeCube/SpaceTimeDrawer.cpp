@@ -797,7 +797,8 @@ bool SpaceTimeDrawer::draw(const DrawLoop drawLoop, const CoordBounds& cbArea) c
 			RangeReal rrMinMax = getValueRange(attributeColumnColors);
 			double width = rrMinMax.rWidth();
 			double minMapVal = rrMinMax.rLo();
-			RepresentationClass * prc = attributeColumnColors->dm()->rpr()->prc();
+			Representation rpr = attributeColumnColors->dm()->rpr(); // to keep it in memory
+			RepresentationClass * prc = rpr->prc();
 			const long transparent = Color(-2); // in the old days this was the transparent value
 			long * buf = new long [iTextureSize];
 			for (int i = 0; i < iTextureSize; ++i)
