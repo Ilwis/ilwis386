@@ -1147,11 +1147,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
+				RelativePath=".\GNC.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\GNC.ico"
+				RelativePath="..\..\Sources\Client\Resources\GNC.ico"
 				>
 			</File>
 			<File
@@ -4893,6 +4893,14 @@
 						>
 					</File>
 					<File
+						RelativePath="..\..\Sources\Client\Editors\Map\PixelEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\Map\PixelEditor.h"
+						>
+					</File>
+					<File
 						RelativePath="..\..\Sources\Client\Editors\Map\PointEditor.cpp"
 						>
 					</File>
@@ -5079,6 +5087,34 @@
 					</File>
 					<File
 						RelativePath="..\..\Sources\Client\Editors\TextWindow.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="SampleSet"
+					>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\FSWindow.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\FSWindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleSetEditor.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleSetEditor.h"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleStatWindow.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\Sources\Client\Editors\SampleSet\SampleStatWindow.h"
 						>
 					</File>
 				</Filter>

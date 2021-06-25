@@ -174,11 +174,25 @@ int FormCreateSampleSet::ChangeMapList(Event*)
 
 int FormCreateSampleSet::exec()
 {
-  FileName  fnSMS = FileName(*sMap, ".sms");
+  FormWithDest::exec();
+  FileName fn(*sMap, ".sms");
+  try {
+    Domain dm(sDom);
+    FileName fnML(sMapList);
+    MapList ml(fnML);
+    SampleSet ms(fn, ml, dm);
+    ms->sDescription = sDescr;
+    ms->fInitStat();
+  }
+  catch (ErrorObject& err) {
+    err.Show(SSSErrCreateSampleSet);
+  }
+  return 0;
+  /*FileName  fnSMS = FileName(*sMap, ".sms");
   FormWithDest::exec();
   if ( useExisting) {
-	/*  SampleSet ms(fnSMS);
-	  ms->fInitStat();*/
+	 SampleSet ms(fnSMS);
+	  ms->fInitStat();
 	  return 1;
   }
 
@@ -193,6 +207,6 @@ int FormCreateSampleSet::exec()
   }
   catch (ErrorObject& err) {
     err.Show(TR("Create Sample Set"));
-  }  
+  }*/
   return 0;
 }

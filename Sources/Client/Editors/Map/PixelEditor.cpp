@@ -43,7 +43,10 @@
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Polygon\POL.H"
 #include "Client\Mapwindow\Positioner.h"
-#include "Client\Mapwindow\Drawers\BaseDrawer.h"
+#include "Engine\Drawers\RootDrawer.h"
+#include "Engine\Drawers\SpatialDataDrawer.h"
+#include "Engine\Drawers\ComplexDrawer.h"
+
 #include "Client\Editors\Editor.h"
 #include "Client\Base\ButtonBar.h"
 #include "Client\Editors\Map\PixelEditor.h"
@@ -60,6 +63,8 @@
 #include "Engine\Domain\dmclass.h"
 #include "Headers\Htp\Ilwis.htp"
 #include "Client\Mapwindow\MapWindow.h"
+#include "Engine\Drawers\TextDrawer.h"
+#include "Engine\Drawers\OpenGLText.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -81,16 +86,17 @@ BEGIN_MESSAGE_MAP(PixelEditor, Editor)
   ON_UPDATE_COMMAND_UI(ID_CLEAR, OnUpdateCopy)
 	ON_COMMAND(ID_CUT, OnCut)
   ON_UPDATE_COMMAND_UI(ID_CUT, OnUpdateCopy)
+	ON_COMMAND(ID_SELECTAREA, OnAreaSelected)
 		// NOTE - the ClassWizard will add and remove mapping macros here.
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-#define sMen(ID) ILWSF("men",ID).scVal()
+#define sMen(ID) ILWSF("men",ID).c_str()
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
 PixelEditor::PixelEditor(MapPaneView* mpvw, Map m, int iMaxSelection)
-: Editor(mpvw), mp(m), 
-	rFactVisibleLimit(0.6),
+: Editor(mpvw), mp(m),
+	rFactVisibleLimit(0.1),
 	bmTmp(0), iMAXSEL(iMaxSelection)
 {
 	iFmtPnt = RegisterClipboardFormat("IlwisPoints");
@@ -113,8 +119,34 @@ PixelEditor::PixelEditor(MapPaneView* mpvw, Map m, int iMaxSelection)
   zPoint pnt;
   pnt.x = rect.left()/2 + rect.right()/2;
   pnt.y = rect.top()/2 + rect.bottom()/2;
+
+  RowCol rc = RowCol(pnt.y,pnt.x);
+
+  Coord crd = mpv->GetDocument()->rootDrawer->screenToOpenGL(rc);
+  rcCursor = mp->gr()->rcConv(crd);
   rcCursor = mpv->rcPos(pnt);
   iShift(true);
+
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	vector<NewDrawer *> allDrawers;
+	mcd->rootDrawer->getDrawers(allDrawers);
+	for(int i = 0; i < allDrawers.size(); ++i) {
+		SpatialDataDrawer *dr = dynamic_cast<SpatialDataDrawer *>(allDrawers.at(i));
+		if ( dr) {
+			if ( dr->getBaseMap()->fnObj == mp->fnObj) {
+				Editor::drw = dr->getDrawer(0);
+				break;
+			}
+		}
+	}
+
+	if (0 == Editor::drw) {
+		SpatialDataDrawer *dr = dynamic_cast<SpatialDataDrawer *>(mcd->drAppend(mp, IlwisDocument::otEDIT, IlwisWinApp::osNormal));
+		if (dr) {
+			Editor::drw = dr->getDrawer(0);
+		}
+		mcd->UpdateAllViews(mpv,2);
+	}
 
   CMenu men;
 	men.CreateMenu();
@@ -138,15 +170,22 @@ PixelEditor::PixelEditor(MapPaneView* mpvw, Map m, int iMaxSelection)
 		dw->bbDataWindow.LoadButtons("pixedit.but");
 		dw->RecalcLayout();
 	}
-  htpTopic = htpPixelEditor;
+  help = "ilwis\\pixel_editor_functionality.htm";
 	sHelpKeywords = "Pixel editor";
 	mp->DeletePyramidFile();
+
+	drawSelect(rc);
 }
 
 PixelEditor::~PixelEditor()
 {
 	if (0 != bmTmp)
 		delete bmTmp;
+	mp->KeepOpen(false);
+	if (Editor::drw) {
+		PreparationParameters pp(NewDrawer::ptREDRAW, 0);
+		Editor::drw->prepare(&pp);
+	}
 }
 
 IlwisObject PixelEditor::obj() const
@@ -241,6 +280,7 @@ int PixelEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDra
    		  if (*fDrawStop)
 	  		  break;
 				rc = RowCol(iRow,iCol);
+				Coord crd = mp->gr()->cConv(rc);
 				Color clr(iUNDEF);
 				if (fRealValues) {
 				  double rVal = mp->rValue(rc);
@@ -255,13 +295,12 @@ int PixelEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDra
         if ((long)clr != iUNDEF) {
 					CBrush br(clr);
           CBrush* brOld = cdc->SelectObject(&br);
-          pnt = mpv->pntPos(rc);
+          pnt = mpv->pntPos(crd);
           cdc->Rectangle(pnt.x+i1,pnt.y+i1,pnt.x+i2,pnt.y+i2);
           cdc->SelectObject(brOld);
         }
 				if (rFact < 0.04) {
-					c = mp->gr()->cConv(rc);
-					pnt = mpv->pntPos(c);
+					pnt = mpv->pntPos(crd);
 					String str = mp->sValue(rc,0);
 					char* s = str.sVal();
 					int iLen = strlen(s);
@@ -280,46 +319,13 @@ int PixelEditor::draw(CDC* cdc, zRect rect, Positioner* psn, volatile bool* fDra
   mp->KeepOpen(false);
 
 	drawSelect();
-  drawCursor();
+ // drawCursor();
 
 	return 0;
 }
 
 void PixelEditor::drawCursor()
 {
-  if (rcCursor.fUndef()) return;
-  int iShft = iShift();
-  if (iShft == 0)
-    return;
-  zPoint pnt = mpv->pntPos(rcCursor);
-	zRect rect(pnt,pnt);
-  rect.right() += iShft;
-  rect.bottom() += iShft;
-
-	CClientDC cdc(mpv);
-
-	if (0 != bmTmp)
-    delete bmTmp;
-	bmTmp = new CBitmap;
-	bmTmp->CreateCompatibleBitmap(&cdc,iShft,iShft);
-
-	CDC cdcTmp;
-	cdcTmp.CreateCompatibleDC(&cdc);
-	CBitmap* bmOld = cdcTmp.SelectObject(bmTmp);
-	cdcTmp.BitBlt(0,0,iShft,iShft,&cdc,pnt.x,pnt.y,SRCCOPY);
-  cdcTmp.SelectObject(bmOld);
-
-  Color col(0,0,0);
-	cdc.SetBkColor(col);
-  col = Color(255,255,255);
-
-	CPen pen, *penOld;
-	pen.CreatePen(PS_DOT, 1, col);
-	penOld = cdc.SelectObject(&pen);
-	CGdiObject* brOld = cdc.SelectStockObject(NULL_BRUSH);
-	cdc.Rectangle(&rect);
-	cdc.SelectObject(penOld);
-	cdc.SelectObject(brOld);
 }
 
 void PixelEditor::removeCursor()
@@ -330,7 +336,9 @@ void PixelEditor::removeCursor()
   int iShft = iShift();
   if (iShft == 0)
     return;
-  zPoint pnt = mpv->pntPos(rcCursor);
+
+  Coord crd = mp->gr()->cConv(rcCursor);
+  zPoint pnt = mpv->pntPos(crd);
   zRect rect(pnt,pnt);
   rect.right() += iShft;
   rect.bottom() += iShft;
@@ -383,7 +391,7 @@ bool PixelEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			rcCursor = rcUNDEF;
 			mpv->UpdateWindow();
 			rcCursor = rcNew;
-      drawCursor();
+      //drawCursor();
 			break; 
     case VK_ESCAPE: 
       removeCursor();
@@ -391,7 +399,7 @@ bool PixelEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 			rcCursor = rcUNDEF;
 			mpv->UpdateWindow();
 			rcCursor = rcNew;
-      drawCursor();
+      //drawCursor();
       break; 
     case VK_DELETE:
 //      OnEditClear();
@@ -412,11 +420,11 @@ bool PixelEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 				switchSelect(rcCursor);
     zRect rect;
     mpv->GetClientRect(rect);
-    RowCol rc = rcNew;
-    zPoint pnt1 = mpv->pntPos(rc);
-    rc.Col += 1;
-    rc.Row += 1;
-    zPoint pnt2 = mpv->pntPos(rc);
+	Coord crd = mp->gr()->cConv(rcNew);
+    zPoint pnt1 = mpv->pntPos(crd);
+    crd.x += 1;
+    crd.y += 1;
+    zPoint pnt2 = mpv->pntPos(crd);
     if (pnt1.x < rect.left()   || pnt2.x < rect.left()  ||
 		    pnt1.x > rect.right()  || pnt2.x > rect.right() ||
 		    pnt1.y < rect.top()    || pnt2.y < rect.top()   ||
@@ -438,13 +446,12 @@ bool PixelEditor::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		      break;
 			}
     }
-    else
-      drawCursor();
+  //else
+  //     drawCursor();
   }
   //PutStatusLine(rcNew);
   if (fEdit) {
-    Coord c = mpv->cConv(rcCursor);
-    Edit(c);
+	  Edit(mp->gr()->cConv(rcCursor));
   }
 	return true;
 }
@@ -462,16 +469,15 @@ bool PixelEditor::OnLButtonDown(UINT nFlags, CPoint point)
 	Coord crd = mpv->crdPnt(point);
   RowCol rc = mp->gr()->rcConv(crd);
   if (!fCtrl && !fShift) {
-    clrSelect();
+    clrSelect(RowCol());
 		if (DragDetect(*mpv, point)) {
 			mpv->UpdateWindow();
 			rcCursor = rc;
-			drawCursor();
-			if (mpv->as)
-				return true;
-			mpv->as = new AreaSelector(mpv, this, (NotifyRectProc)&PixelEditor::AreaSelected);
-			mpv->as->OnLButtonDown(nFlags, point);
-			SetCursor(curActive);
+			//drawCursor();
+			AreaSelector * as = new AreaSelector(mpv, this, (NotifyRectProc)&PixelEditor::AreaSelected);
+			as->OnLButtonDown(nFlags, point);
+			mpv->addTool(as, ID_SELECTAREA);
+//			SetCursor(curActive);
 			return true;
 		}
   }
@@ -483,7 +489,9 @@ bool PixelEditor::OnLButtonDown(UINT nFlags, CPoint point)
   else 
     switchSelect(rc);
   rcCursor = rc;
-  drawCursor();
+  //drawCursor();
+  SelectionChanged();
+  mpv->PostMessage(WM_COMMAND, ID_SELECTAREA);
   return true;
 }
 
@@ -498,15 +506,15 @@ void PixelEditor::addSelect(RowCol rc)
     return;
   }
   rcSelect &= rc;
-  drawSelect(rc);
 }
 
 void PixelEditor::clearSelect(RowCol rc)
 {
   for(int i = 0; i < rcSelect.iSize(); ++i)
     if (rcSelect[i] == rc) {
+	  drawSelectPix(rc,false,false);
       rcSelect.Remove(i,1);
-      clrSelect(rc);
+      //clrSelect(rc);
       return;
     }
 }
@@ -516,7 +524,7 @@ void PixelEditor::switchSelect(RowCol rc)
   for(int i = 0; i < rcSelect.iSize(); ++i)
     if (rcSelect[i] == rc) {
       rcSelect.Remove(i,1);
-      clrSelect(rc);
+      drawSelectPix(rc,false,false);
     	SelectionChanged();
       return;
     }
@@ -531,35 +539,12 @@ void PixelEditor::switchSelect(RowCol rc)
 
 void PixelEditor::errorMaxSelect()
 {
-	String s(SEDErrPixMaxSelect_i.scVal(), iMAXSEL);
-	mpv->MessageBox(s.sVal(), SEDErrPixEditor.sVal(), MB_ICONSTOP|MB_OK);
-	mpv->as->Stop();
+	String s(TR("Maximum %i pixels can be selected").c_str(), iMAXSEL);
+	mpv->MessageBox(s.c_str(), SEDErrPixEditor.sVal(), MB_ICONSTOP|MB_OK);
 }
 
-void PixelEditor::drawSelect(RowCol rc)
+void PixelEditor::drawSelect(RowCol rc) // to do openGL
 {
-  int iShft = iShift();
-//	if (iShft == 0)
-//		return;
-	CClientDC cdc(mpv);
-
-	CBitmap bm;
-  short bits[8] = { 0x99, 0x66, 0x66, 0x99, 0x99, 0x66, 0x66, 0x99 };
-	bm.CreateBitmap(8,8,1,1,bits);
-	CBrush br(&bm);
-	CBrush* brOld = cdc.SelectObject(&br);
-	CGdiObject* penOld = cdc.SelectStockObject(NULL_PEN);
-  Color col = SysColor(COLOR_WINDOW); //zColor(255,255,255);
-  cdc.SetBkColor(col);
-  col = SysColor(COLOR_HIGHLIGHT); //zColor(0,0,0);
-  cdc.SetTextColor(col);
-  if (rc.fUndef())
-    for(int i = 0; i < rcSelect.iSize(); ++i)
-      drawSelectPix(&cdc, rcSelect[i], iShft);
-  else
-    drawSelectPix(&cdc, rc, iShft);
-	cdc.SelectObject(brOld);
-	cdc.SelectObject(penOld);
 }
 
 void PixelEditor::drawSelectPix(CDC* cdc, RowCol rc, int iShft)
@@ -567,7 +552,8 @@ void PixelEditor::drawSelectPix(CDC* cdc, RowCol rc, int iShft)
   int i1, i2;
   i1 = iShft > 4 ? 1 : 0;
   i2 = iShft + 1 - i1;
-  zPoint pnt = mpv->pntPos(rc);
+  Coord crd = mp->gr()->cConv(rc);
+  zPoint pnt = mpv->pntPos(crd);
 	if (iShft <= 4)
     cdc->Rectangle(pnt.x+i1,pnt.y+i1,pnt.x+i2,pnt.y+i2);
   else {
@@ -600,42 +586,53 @@ void PixelEditor::clrSelect(RowCol rc)
 
 void PixelEditor::clrSelectPix(RowCol rc, int iShft)
 {
-  int i1, i2;
-  i1 = iShft > 4 ? 1 : 0;
-  i2 = iShft - i1;
-  zPoint pnt = mpv->pntPos(rc);
-	CRect rect(pnt.x+i1-1,pnt.y+i1-1,pnt.x+i2+1,pnt.y+i2+1);
-  mpv->InvalidateRect(&rect);
+  drawSelectPix(rc,false,false);
+ // int i1, i2;
+ // i1 = iShft > 4 ? 1 : 0;
+ // i2 = iShft - i1;
+ // Coord crd = mp->gr()->cConv(rc);
+ // zPoint pnt = mpv->pntPos(crd);
+	//CRect rect(pnt.x,pnt.y,pnt.x+i2+1,pnt.y+i2+1);
+ // mpv->InvalidateRect(&rect);
 }
 
 void PixelEditor::AreaSelected(CRect rect)
 {
-  MinMax mm = mpv->mmRect(rect);
-	if (mm.width() == 0 && mm.height() == 0 &&
-		  rect.Height() < 2 && rect.Width() < 2) {
-	  mpv->as->Stop();
+	Coord c1 = mpv->crdPnt(rect.TopLeft());
+	Coord c2 = mpv->crdPnt(rect.BottomRight());
+
+	RowCol rcTLeft = mp->gr()->rcConv(c1);
+	RowCol rcBRight = mp->gr()->rcConv(c2);
+
+	long iSize = (rcBRight.Row - rcTLeft.Row + 1) *
+	       (rcBRight.Col - rcTLeft.Col + 1);
+	if (iSize > iMAXSEL)
+	{
+		errorMaxSelect();
 		return;
 	}
-  RowCol rc;
-  long iSize = (mm.MaxRow() - mm.MinRow() + 1) *
-	       (mm.MaxCol() - mm.MinCol() + 1);
-  if (iSize > iMAXSEL) {
-    errorMaxSelect();
-    return;
-  }
-  rcSelect.Reset();
-  rcSelect.Resize(iSize);
-  long i = 0;
-  for (rc.Row = mm.MinRow(); rc.Row <= mm.MaxRow(); rc.Row++)
-    for (rc.Col = mm.MinCol(); rc.Col <= mm.MaxCol(); rc.Col++, ++i)
-      rcSelect[i] = rc;
-  int iShft = iShift();
-//  if (iShft == 0)
-//    return;
-  InflateRect((LPRECT)&rect,iShft,iShft);
-  mpv->InvalidateRect(&rect);
-  mpv->as->Stop();
-	SelectionChanged();
+
+	RowCol rc;
+	rcSelect.Reset();
+    rcSelect.Resize(iSize);
+	long i=0;
+	for (rc.Row = rcTLeft.Row; rc.Row <= rcBRight.Row; rc.Row++)
+	{
+		for (rc.Col = rcTLeft.Col; rc.Col <= rcBRight.Col; rc.Col++, ++i)
+			rcSelect[i] = rc;
+	}
+    mpv->InvalidateRect(&rect);
+
+    SelectionChanged();
+	mpv->PostMessage(WM_COMMAND, ID_SELECTAREA);
+	if (rcSelect.size()>0)
+		drawSelect();
+}
+
+void PixelEditor::OnAreaSelected()
+{
+	mpv->changeStateTool(ID_SELECTAREA, false);
+	mpv->Invalidate();
 }
 
 Color PixelEditor::clrGet(RowCol rc)
@@ -688,7 +685,7 @@ Color PixelEditor::clrRaw(long iRaw) const
     if (_rpr.fValid()) 
 			return _rpr->clrRaw(iRaw);
   }
-  clr = clrPrimary(1+iRaw%31);
+  clr = Color::clrPrimary(1+iRaw%31);
   return clr;
 }
 
@@ -706,10 +703,10 @@ Color PixelEditor::clrVal(double rVal) const
 
 void PixelEditor::OnEdit()
 {
-	Coord c = mpv->cConv(rcCursor);
+	Coord c = mp->gr()->cConv(rcCursor);
 	Edit(c);
 }
- 
+
 int PixelEditor::Edit(const Coord& c)
 {
   return Edit(c,htpPixEditorAskValue);
@@ -717,43 +714,36 @@ int PixelEditor::Edit(const Coord& c)
 
 int PixelEditor::Edit(const Coord& c, unsigned int htp)
 {
-  int iShft = iShift(true);
-  if (iShft == 0)
-    return 1;
-  rcCursor = mpv->rcConv(c);
-  if (rcSelect.iSize() == 0) {
-    removeCursor();
-    switchSelect(rcCursor);
-    drawCursor();
-  }
-  RowCol rc = mpv->rcConv(c);
-  sValue = mp->sValue(rc,0);
+  rcCursor = mp->gr()->rcConv(c);
+  if (rcSelect.iSize() == 0)
+	  return 1;
+
+  sValue = mp->sValue(c,0);
   if (rcSelect.iSize() == 1)
+  {
     EditFieldStart(c, sValue);
+  }
   else {
     long iSel = rcSelect.iSize();
     String sRemark(SEDRemPixSel_i.sVal(), iSel);
-    if (AskValue(sRemark, htp)) {
-			CWaitCursor cw;
-			bool fFast = rcSelect.iSize() < 10000;
-      for(int i = 0; i < rcSelect.iSize(); ++i) {
-				mp->PutVal(rcSelect[i],sValue);
-				zPoint pnt = mpv->pntPos(rcSelect[i]);
-				zRect rect(pnt,pnt);
-				rect.right() += iShft;
-				rect.bottom() += iShft;
-				if (fFast)
-					mpv->InvalidateRect(&rect);
-      }
-      mp->Updated();
-			if (!fFast)
-				mpv->Invalidate();
-			FrameWindow* fw = mpv->fwParent();
-			if (fw) {
-				MapCompositionDoc* mcd = mpv->GetDocument();
-				if (mp == mcd->mp)
-					fw->status->SetWindowText(SEDMsgRedrawToUpdate.sVal());
-			}
+    if (AskValue(sRemark, "ilwismen\\pixsel_editor_edit.htm"))
+	{
+		CWaitCursor cw;
+		for(int i = 0; i < rcSelect.iSize(); ++i) {
+			mp->PutVal(rcSelect[i],sValue);
+		}
+
+		mp->Updated();
+		FrameWindow* fw = mpv->fwParent();
+		if (fw) {
+			//MapCompositionDoc* mcd = mpv->GetDocument();
+			//if (mp == mcd->mp)
+			fw->status->SetWindowText(SEDMsgRedrawToUpdate.sVal());
+		}
+
+		PreparationParameters pp(NewDrawer::ptREDRAW, 0);
+		Editor::drw->prepare(&pp);
+		mpv->Invalidate();
     }
     else 
       return 0;
@@ -769,20 +759,15 @@ void PixelEditor::EditFieldOK(Coord crd, const String& s)
   mp->PutVal(rc,s);
   mp->Updated();
   //PutStatusLine(rc);
-  zPoint pnt = mpv->pntPos(rc);
-  zRect rect(pnt,pnt);
-  int iShft = iShift();
-  if (iShft == 0)
-    return;
-  rect.right() += iShft;
-  rect.bottom() += iShft;
-  mpv->InvalidateRect(&rect);
 	FrameWindow* fw = mpv->fwParent();
 	if (fw) {
-		MapCompositionDoc* mcd = mpv->GetDocument();
-		if (mp == mcd->mp)
-			fw->status->SetWindowText(SEDMsgRedrawToUpdate.sVal());
+		//MapCompositionDoc* mcd = mpv->GetDocument();
+		//if (mp == mcd->mp)
+		fw->status->SetWindowText(SEDMsgRedrawToUpdate.sVal());
 	}
+	PreparationParameters pp(NewDrawer::ptREDRAW, 0);
+	Editor::drw->prepare(&pp);
+	mpv->Invalidate();
 }
 
 RangeReal PixelEditor::rrStretchRange() const
@@ -802,17 +787,17 @@ RangeReal PixelEditor::rrStretchRange() const
   return rr;
 }
 
-void PixelEditor::PreDraw()
-{
-	removeCursor();
-}
+//void PixelEditor::PreDraw()
+//{
+//	removeCursor();
+//}
 
 void PixelEditor::OnUpdateCopy(CCmdUI* pCmdUI)
 {
   bool fCopy = rcSelect.iSize() > 0;
-  int iShft = iShift();
-	if (iShft == 0)
-		fCopy = false;
+//  int iShft = iShift();
+//	if (iShft == 0)
+//		fCopy = false;
 	pCmdUI->Enable(fCopy);
 }
 
@@ -823,13 +808,18 @@ void PixelEditor::OnCopy()
 		return;
 	EmptyClipboard();
 
-  // Ilwis Point Format
+ // Ilwis Point Format
   long iSize = rcSelect.iSize();
   IlwisPoint* ip = new IlwisPoint[1+iSize];
-  ip[0].c = Coord();
-  ip[0].iRaw = iSize;
+  if (0 == ip)
+	  return;
+  ip[0].x = rUNDEF;
+  ip[0].y = rUNDEF;
+  ip[0].iRaw = iSize-1;
+
   for (int i = 0; i < iSize; ++i) {
-    ip[1+i].c = mpv->cConv(rcSelect[i]);
+	ip[1+i].x = rcSelect[i].Col;
+	ip[1+i].y = rcSelect[i].Row;
     ip[1+i].iRaw = mp->iRaw(rcSelect[i]);
   }
 	int iLen = (1+iSize) * sizeof(IlwisPoint);
@@ -860,12 +850,12 @@ void PixelEditor::OnCopy()
     for (long i = 1; i <= iSize; ++i) {
       String str, sVal;
       sVal = dvrs().sValueByRaw(ip[i].iRaw,0);
-      str = String("%.3f\t%.3f\t%S\r\n", ip[i].c.x, ip[i].c.y, sVal);
+      str = String("%.3f\t%.3f\t%S\r\n", ip[i].x, ip[i].y, sVal);
       iLen = str.length();
       iTotLen += iLen;
       if (iTotLen >= iSIZE)
         break;
-      strcpy(s, str.scVal());
+	  strcpy(s, str.c_str());
       s += iLen;
     }
     *s = '\0';
@@ -912,9 +902,6 @@ void PixelEditor::OnCopy()
 		SetClipboardData(CF_BITMAP, bm);
 		bm.Detach();
   }
-	
-	// metafile format
-	// was commented away in 2.2
 
 	CloseClipboard();
 }
@@ -992,7 +979,8 @@ void PixelEditor::OnPaste()
   rcSelect.Resize(iSize);
   int iShft = iShift();
   for (int i = 0; i < iSize; ++i) {
-    RowCol rc =  mpv->rcConv(ip[1+i].c);
+	Coord crd = Coord(ip[1+i].y,ip[1+i].x);
+	RowCol rc = mp->gr()->rcConv(crd);
     rcSelect[i] = rc;
     long iRaw = ip[1+i].iRaw;
     if (iUNDEF != iRaw) {
@@ -1039,9 +1027,9 @@ void PixelEditor::OnPaste()
         }
       }
       else
-        mp->PutRaw(rc, iRaw);
+        mp->PutRaw(crd, iRaw);
     }
-    zPoint pnt = mpv->pntPos(rc);
+    zPoint pnt = mpv->pntPos(crd);
     zRect rect(pnt,pnt);
     rect.right() += iShft;
     rect.bottom() += iShft;
@@ -1071,7 +1059,7 @@ bool PixelEditor::OnContextMenu(CWnd* pWnd, CPoint point)
   men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
 	return true;
 }
-																									 
+
 void PixelEditor::OnClear()
 {
   int iShft = iShift();
@@ -1085,7 +1073,7 @@ void PixelEditor::OnClear()
     for(int i = 0; i < iSize; ++i) {
       mp->PutVal(rcSelect[i],"?");
 			if (iSize < 10000) {
-				zPoint pnt = mpv->pntPos(rcSelect[i]);
+				zPoint pnt = mpv->pntPos(mp->gr()->cConv(rcSelect[i]));
 				zRect rect(pnt,pnt);
 				rect.right() += iShft;
 				rect.bottom() += iShft;
@@ -1118,4 +1106,375 @@ String PixelEditor::sTitle() const
 void PixelEditor::SelectionChanged()
 {
 	// nothing
+}
+
+MinMax PixelEditor::getMinMax(CoordBounds cb)
+{
+	Coord minpnt;
+	Coord maxpnt;
+
+	minpnt.x = cb.MinX();
+	minpnt.y = cb.MinY();
+	minpnt.z = 0.0;
+
+	maxpnt.x = cb.MaxX();
+	maxpnt.y = cb.MaxY();
+	maxpnt.z = 0.0;
+
+	RowCol minrc = mp->gr()->rcConv(minpnt);
+	RowCol maxrc = mp->gr()->rcConv(maxpnt);
+	return MinMax(minrc,maxrc);
+}
+
+int PixelEditor::draw(volatile bool* fDrawStop)
+{
+	double rsz = mp->gr()->rPixSize();
+	drawSelection();
+
+	if (mpv->fBusyDrawing()) // back ground is being drawn
+		return 0;
+
+	double zfactor = 0;
+
+	MapCompositionDoc* mcd = mpv->GetDocument();
+	RowCol pixArea (mcd->rootDrawer->getViewPort());
+	GeoRef gr = mp->gr();
+	if (gr.fValid()) {
+		CoordBounds cb = gr->cb();
+		if (gr->cs().fValid() && mcd->rootDrawer->fConvNeeded(gr->cs()))
+			cb = mcd->rootDrawer->getCoordinateSystem()->cbConv(gr->cs(), cb);
+		RowCol rcSize = gr->rcSize();
+		CoordBounds cbZoom = mcd->rootDrawer->getCoordBoundsZoom();
+		if (pixArea.Col > pixArea.Row) { // the largest side will give the most accurate result
+			zfactor = ((double)rcSize.Col * cbZoom.width()) / ((double)pixArea.Col * cb.width());
+		} else {	
+			zfactor = ((double)rcSize.Row * cbZoom.height()) / ((double)pixArea.Row * cb.height());
+		}
+	}
+
+	FrameWindow* fw = mpv->fwParent();
+    if (fw)
+    {
+		if (zfactor >= rFactVisibleLimit)
+			  fw->status->SetWindowText(SEDMsgZoomInToEdit.sVal());
+		else
+			  fw->status->SetWindowText("");
+    }
+
+	if (zfactor > rFactVisibleLimit || zfactor>0.4)
+		return 0;
+
+	CoordBounds mpcb = mcd->rootDrawer->getMapCoordBounds();
+
+	MinMax mpmm = getMinMax(mpcb);
+	if (mpmm.rcMin.Row<0)
+		mpmm.rcMin.Row = 0;
+
+	if (mpmm.rcMin.Col<0)
+		mpmm.rcMin.Col = 0;
+
+	CRect rect;
+	rect.top = mpmm.rcMin.Row;
+	rect.left = mpmm.rcMin.Col;
+	rect.right = mpmm.rcMax.Col;
+	rect.bottom = mpmm.rcMax.Row;
+
+	CoordBounds cb = mcd->rootDrawer->getCoordBoundsZoomExt();
+	if (cb.fUndef())
+		return 0;
+
+	MinMax mm = getMinMax(cb);
+
+	bool fIntMap = mp->dm()->stNeeded() > stBYTE;
+	if (mm.MinCol() < 0) {
+		rect.left -= round(mm.MinCol() / zfactor);
+		mm.MinCol() = 0;
+	}
+	if (mm.MinRow() < 0) {
+		rect.top -= round(mm.MinRow() / zfactor);
+		mm.MinRow() = 0;
+	}
+	long iRow, iCol;
+	iRow = mp->rcSize().Row;
+	iCol = mp->rcSize().Col;
+	if (mm.MaxCol() >= iCol) {
+		rect.right -= round((mm.MaxCol()-iCol) / zfactor);
+		mm.MaxCol() = iCol - 1;
+	}
+	if (mm.MaxRow() >= iRow) {
+		rect.bottom -= round((mm.MaxRow()-iRow) / zfactor);
+		mm.MaxRow() = iRow - 1;
+	}
+	RowCol rc;
+	Coord c;
+	zPoint pnt;
+	mp->KeepOpen(true);
+
+    Color col = SysColor(COLOR_WINDOW);
+
+	RootDrawer * rootDrawer = mcd->rootDrawer;
+	CoordBounds cbZoom = rootDrawer->getCoordBoundsZoom();
+	double delta = 3 * cbZoom.width() / 2000.0;
+
+	Color cText, cBack, cFgBr, cBgBr;
+	cFgBr = SysColor(COLOR_HIGHLIGHT);
+	cBgBr = SysColor(COLOR_WINDOW);
+
+	Color colText, colBack;
+	colText = (Color)-1;
+	colBack = (Color)-2;
+
+	cText.alpha() = 255;
+	cText = SysColor(COLOR_WINDOWTEXT);
+	if ((long)colBack != -2)
+	{
+		cBack = colBack;
+	}
+
+	ILWIS::DrawerParameters dpLayerDrawer (rootDrawer, 0);
+	ILWIS::TextLayerDrawer *textLayerDrawer = (ILWIS::TextLayerDrawer *)NewDrawer::getDrawer("TextLayerDrawer", "ilwis38",&dpLayerDrawer);
+	ILWIS::DrawerParameters dpTextDrawer (rootDrawer, textLayerDrawer);
+	ILWIS::TextDrawer *textDrawer = (ILWIS::TextDrawer *)NewDrawer::getDrawer("TextDrawer","ilwis38",&dpTextDrawer);
+	OpenGLText * font = new OpenGLText (rootDrawer, "arial.ttf", 14, true, 0, -14);
+	textLayerDrawer->setFont(font);
+
+	glEnable(GL_LINE_SMOOTH);
+	glHint(GL_LINE_SMOOTH_HINT,GL_NICEST);
+	glLineWidth(1.0);
+
+	///
+
+	for (iRow = mm.MinRow(); iRow <= mm.MaxRow(); ++iRow)
+	{
+		if (*fDrawStop || zfactor==0 )
+			break;
+		for (iCol = mm.MinCol(); iCol <= mm.MaxCol(); ++iCol)
+		{
+			if (*fDrawStop || zfactor==0 )
+				break;
+			rc = RowCol(iRow,iCol);
+			Color clr(iUNDEF);
+			if ((long)clr == iUNDEF)
+				int a =0;
+
+			if (fRealValues)
+			{
+				double rVal = mp->rValue(rc);
+				if (rVal != rUNDEF)
+					clr = clrVal(rVal);
+			}
+			else
+			{
+				long iRaw = mp->iRaw(rc);
+				if (iRaw != iUNDEF)
+					clr = clrRaw(iRaw);
+			}
+			if (clr.iVal() != iUNDEF)
+			{
+				drawSelectPix(rc,true,true);
+			}
+			if (zfactor < 0.04 )
+			{
+				// draw selected pixels
+				c = mp->gr()->cConv(rc);
+				if (!rootDrawer->is3D()) c.z = 0;
+
+				String str = mp->sValue(rc,0);
+				char* s = str.sVal();
+
+				if ((long)colBack != -2)
+				{
+					glColor4f(cBack.redP(), cBack.greenP(), cBack.blueP(), 1);
+					CoordBounds cbText = font->getTextExtent(s);
+
+					c.x -= cbText.width()/2.0;
+					c.y += cbText.height()/2.0;
+
+					cbText.cMin += c;
+					cbText.cMax += c;
+					cbText.cMin.y -= textDrawer->getHeight();
+					cbText.cMax.y -= textDrawer->getHeight();
+					cbText *= 1.1;
+					double heightIncrease = cbText.height() / 8.0;
+
+					cbText.cMax.y += heightIncrease;
+					cbText.cMin.y -= heightIncrease;
+
+					glBegin(GL_QUADS);
+					glColor3f(1.0f, 1.0f, 1.0f); // white
+					glVertex3f(cbText.cMin.x, cbText.cMin.y, 0);
+					glVertex3f(cbText.cMax.x, cbText.cMin.y, 0);
+					glVertex3f(cbText.cMax.x, cbText.cMax.y, 0);
+					glVertex3f(cbText.cMin.x, cbText.cMax.y, 0);
+					glEnd();
+				}
+				textDrawer->setText(c,s);
+				textDrawer->draw(ILWIS::NewDrawer::drl2D);
+			}
+		}
+	}
+
+	delete textLayerDrawer;
+	return 0;
+}
+
+void PixelEditor::drawSelection()
+{
+	if (rcSelect.size()==0)
+		return;
+	for (int i=0; i<rcSelect.size();i++)
+		drawSelectPix(rcSelect.at(i),false,true);
+}
+
+void PixelEditor::drawSelectPix(RowCol rc,bool inside,bool enable)
+{
+	if (rc.fUndef())
+		return;
+	double rsz = mp->gr()->rPixSize();
+	Coord c = mp->gr()->cConv(rc);
+
+	Coord org;
+	org.x = c.x-rsz/2;
+	org.y = c.y-rsz/2;
+
+	//struct PLGCRD { Coord c1,c2,c3,c4;};
+	PLGCRD p1,p2,p3,p4,p5,p6;
+
+	// polygon 1, bottom
+	p1.c1.x = org.x;
+	p1.c1.y = org.y;
+
+	p1.c2.x = org.x+rsz;
+	p1.c2.y = org.y;
+
+	p1.c3.x = p1.c2.x;
+	p1.c3.y = org.y+rsz/4;
+
+	p1.c4.x = p1.c1.x;
+	p1.c4.y = p1.c3.y;
+
+	// polygon 2, left
+	p2.c1 = p1.c4;
+	p2.c2.x = p2.c1.x+rsz/4;
+	p2.c2.y = p2.c1.y;
+
+	p2.c3.x = p2.c2.x;
+	p2.c3.y = p2.c2.y+2*rsz/4;
+
+	p2.c4.x = p2.c1.x;
+	p2.c4.y = p2.c3.y;
+
+	// polygon 3, top
+
+	p3.c1 = p2.c4;
+
+	p3.c2.x = p3.c1.x+rsz;
+	p3.c2.y = p3.c1.y;
+
+	p3.c3.x = p3.c2.x;
+	p3.c3.y = p3.c2.y+rsz/4;
+
+	p3.c4.x = p3.c1.x;
+	p3.c4.y = p3.c3.y;
+
+	// polygon 4, right
+
+	p4.c1.x = p3.c2.x-rsz/4;
+	p4.c1.y = p3.c2.y;
+
+	p4.c2.x = p4.c1.x + rsz/4;
+	p4.c2.y = p4.c1.y;
+
+	p4.c3.x = p4.c2.x;
+	p4.c3.y = p4.c2.y-2*rsz/4;
+
+	p4.c4.x = p4.c1.x;
+	p4.c4.y = p4.c3.y;
+
+	// polygon 5, inside polygon
+	p5.c1 = p2.c2;
+	p5.c2 = p2.c3;
+	p5.c3 = p4.c1;
+	p5.c4 = p4.c4;
+
+	// polygon 5, outside polygon
+	p6.c1 = p1.c1;
+	p6.c2 = p1.c2;
+	p6.c3 = p3.c3;
+	p6.c4 = p3.c4;
+
+	if (!inside)
+	{
+		drawPolygon(p1,false,Color(1.0f,1.0f,1.0f),enable);
+		drawPolygon(p2,false,Color(1.0f,1.0f,1.0f),enable);
+		drawPolygon(p3,false,Color(1.0f,1.0f,1.0f),enable);
+		drawPolygon(p4,false,Color(1.0f,1.0f,1.0f),enable);
+
+		// draw inside and outside box
+		drawPolygon(p5,true,Color(),enable);
+		drawPolygon(p6,true,Color(),enable);
+	}
+	else
+	{
+		Color clr;
+		if (fRealValues)
+		{
+			double rVal = mp->rValue(rc);
+			if (rVal != rUNDEF)
+				clr = clrVal(rVal);
+		}
+		else
+		{
+			long iRaw = mp->iRaw(rc);
+			if (iRaw != iUNDEF)
+				clr = clrRaw(iRaw);
+		}
+		drawPolygon(p5,false,clr,enable);
+	}
+}
+
+void PixelEditor::drawPolygon(PLGCRD pcrd,bool drawbox, Color insideclr, bool enable)
+{
+	if( !drawbox)
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glColor4f(insideclr.red(), insideclr.green(), insideclr.blue(),enable);
+		glRectf(pcrd.c1.x,pcrd.c1.y, pcrd.c3.x,pcrd.c3.y);
+		glDisable(GL_BLEND);
+		enable = false;
+	}
+	GLubyte halftone[] ={
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66,
+		0x99, 0x99, 0x99, 0x99, 0x66, 0x66, 0x66, 0x66};
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_POLYGON_STIPPLE);
+		glColor4f(insideclr.red(), insideclr.green(), insideclr.blue(),enable);
+		glPolygonStipple(halftone);
+		glRectf(pcrd.c1.x,pcrd.c1.y, pcrd.c3.x,pcrd.c3.y);
+		glDisable(GL_POLYGON_STIPPLE);		// Disable the POLYGON STIPPLE
+
+	glBegin(GL_LINE_LOOP);                 // Each set of 4 vertices form a quad
+	glColor4f(1.0f, 1.0f, 1.0f, enable);   // white
+	glVertex3f(pcrd.c1.x,pcrd.c1.y,0);     // Define vertices in counter-clockwise (CCW) order
+	glVertex3f(pcrd.c2.x,pcrd.c2.y,0);     //  so that the normal (front-face) is facing you
+	glVertex3f(pcrd.c3.x,pcrd.c3.y,0);
+	glVertex3f(pcrd.c4.x,pcrd.c4.y,0);
+	glEnd();
 }

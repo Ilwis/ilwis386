@@ -52,7 +52,8 @@ public:
 	virtual ~PixelEditor();
   virtual IlwisObject obj() const;
   virtual RangeReal rrStretchRange() const;
-  virtual void PreDraw(); // called before all other draw routines
+  //virtual void PreDraw(); // called before all other draw routines
+  virtual int draw(volatile bool* fDrawStop);
   virtual int draw(CDC*, zRect, Positioner*, volatile bool* fDrawStop);
 	virtual bool OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	virtual bool OnLButtonDown(UINT nFlags, CPoint point);
@@ -63,6 +64,7 @@ public:
 	virtual String sTitle() const;
 	virtual void SelectionChanged();
 protected:
+  struct PLGCRD { Coord c1,c2,c3,c4;};
   int iShift(bool fMessage = false) const;
 	Color clrGet(RowCol rc);
 	Color clrRaw(long iRaw) const;
@@ -73,10 +75,14 @@ protected:
   void switchSelect(RowCol);
   virtual void drawSelect(RowCol rc = rcUNDEF);
   int Edit(const Coord&, unsigned int htp);
+
 private:
 	void clrSelect(RowCol rc = rcUNDEF);
 	void clrSelectPix(RowCol rc, int iShft);
 	void drawSelectPix(CDC* cdc, RowCol rc, int iShft);
+	void drawSelection();
+	void drawSelectPix(RowCol rc,bool inside,bool enable = true);
+	void drawPolygon(PLGCRD pcrd,bool drawbox, Color insideclr, bool enable);
 protected:
 	void drawCursor();
 	void removeCursor();
@@ -88,9 +94,12 @@ protected:
 private:
 	CBitmap* bmTmp;
 	void AreaSelected(CRect);
+	MinMax getMinMax(CoordBounds cb);
+
 	int iFmtPnt, iFmtDom;
 	bool fValues, fImage, fRealValues, fBool, fBit;
 	DomainClass* pdc;
+
 //	Array<Color> clrClass;
 //{{AFX_VIRTUAL(PixelEditor)
 	//}}AFX_VIRTUAL
@@ -102,6 +111,7 @@ private:
 	afx_msg void OnEdit();
 	afx_msg void OnClear();
 	afx_msg void OnCut();
+	void OnAreaSelected();
 //}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -116,7 +116,7 @@ void AssociationSelector::AddOperMenuItems(CMenu& men, const ActionList* actList
 	if (menSub.m_hMenu) {
 		if (iSub == 1) {
 			String s = sLastSubOpt;
-			if ( s == "") {
+			if ( s != "") {
 			s &= "...";
 				men.AppendMenu(MF_STRING, iLastOpt, s.c_str());
 				menSub.DestroyMenu();

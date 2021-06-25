@@ -390,8 +390,7 @@ bool SampleSetPtr::fInitStat()
 					if (dNum <= 1)
 						dStd = 0;
 					else {
-						double rV = _sSumXY(bKey, b, b) - dNum* dMean * dMean;
-						dStd  = rV * rV / (dNum - 1);
+						dStd  = sqrt(( _sSumXY(bKey, b, b) - dNum*sqr(dMean) ) / (dNum - 1));
 					}
 				}
 				_smplS(bKey, b, CLASSMEAN) = dMean;
@@ -608,8 +607,7 @@ void SampleSetPtr::IncrementSmplS(byte bNew)
 			if (dNum == 1)
 				dStd = 0;
 			else
-				dStd = sqrt((  _sSumXY(bNew, b, b) - dNum* dMean * dMean  ) /
-				(dNum - 1));
+		        dStd = sqrt(( _sSumXY(bNew, b, b) - dNum*sqr(dMean) ) / (dNum - 1));
 		}
 		_smplS(bNew, b, CLASSMEAN) = dMean;
 		_smplS.bMean(bNew, b) = byteConv(dMean);

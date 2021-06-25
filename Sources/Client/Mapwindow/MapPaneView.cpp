@@ -101,6 +101,7 @@ Created on: 2007-02-8
 #include "Client\Mapwindow\MapCompositionSrvItem.h"
 #include "Client\FormElements\fldmap.h"
 #include "Engine\SampleSet\SAMPLSET.H"
+#include "Client\Editors\SampleSet\SampleSetEditor.h"
 #include "Client\MainWindow\Catalog\Catalog.h"
 #include "Client\Mapwindow\MapStatusBar.h"
 #include "Engine\Base\System\RegistrySettings.h"
@@ -550,7 +551,7 @@ void MapPaneView::EditNamedLayer(const FileName& fn)
 	}
 	delete edit;
 	edit = 0;
-	/*if (".sms" == fn.sExt) {
+	if (".sms" == fn.sExt) {
 		SampleSet smp(fn);
 		if (smp->fInitStat())
 			edit = new SampleSetEditor(this, smp);
@@ -559,7 +560,7 @@ void MapPaneView::EditNamedLayer(const FileName& fn)
 		Map mp(fn);
 		edit = new PixelEditor(this, mp);
 	}
-	else */if (".mpp" == fn.sExt) {
+	else if (".mpp" == fn.sExt) {
 		PointMap mp(fn);
 		edit = new PointEditor(this, mp);
 	}

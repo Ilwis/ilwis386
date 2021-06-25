@@ -477,9 +477,12 @@ BOOL MapCompositionDoc::OnOpenDocument(LPCTSTR lpszPathName, OpenType ot, int os
 			MapList mpl = sms->mpl();
 			if (!mpl.fValid())
 				return FALSE;
-			NewDrawer *drw;
-			if (!( drw = drAppend(mpl,otCOLORCOMP)) != 0)
+			if (!OnOpenMapList(mpl,otNORMAL))
 				return FALSE;
+			mpvGetView()->EditNamedLayer(fn);
+			//NewDrawer *drw;
+			//if (!( drw = drAppend(mpl,otCOLORCOMP)) != 0)
+			//	return FALSE;
 			/*ILWIS::DrawerTool *dt = DrawerTool::createTool("SampleSetEditor",mpvGetView(),ltvGetView(),drw);
 			ltvGetView()->getRootTool()->addTool(dt);*/
 			return TRUE;
@@ -1837,6 +1840,7 @@ NewDrawer* MapCompositionDoc::drAppend(const MapList& maplist,IlwisDocument::Ope
 		drawer->prepare(&pp);
 		rootDrawer->addDrawer(drawer, fExtendBounds);
 		addToPixelInfo(maplist, (ComplexDrawer *)drawer);
+		return drawer;
 	} else {
 		for(int i = 0; i < maplist->iSize(); ++i) {
 			drAppend(maplist[i]->fnObj);
