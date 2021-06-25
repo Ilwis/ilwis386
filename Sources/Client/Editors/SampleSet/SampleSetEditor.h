@@ -49,16 +49,16 @@ Last change:  WK   18 Aug 97    6:36 pm
 
 #ifndef SMPLEDIT_H
 #define SMPLEDIT_H
-//#include "Client\Editors\Map\PixelEditor.h"
+#include "Client\Editors\Map\PixelEditor.h"
 #include "Engine\SampleSet\SAMPLSET.H"
 
 class _export SampleStatWindow;
 class FeatureSpaceWindow;
 
-class _export SampleSetEditor : public DrawerTool
+class _export SampleSetEditor: public PixelEditor
 {
 public:
-	SampleSetEditor(MapPaneView* zv, LayerTreeView *view, NewDrawer *drw, const SampleSet& smss);
+	SampleSetEditor(MapPaneView*, const SampleSet&);
 	~SampleSetEditor();
 	virtual int Edit(const Coord&);
 	virtual void Paste();
@@ -71,6 +71,7 @@ public:
 	virtual void SelectionChanged();
 	virtual void PreSaveState();
 	void MakeFSWindow(FeatureSpaceWindow* fsw, CPoint pos, int iID);
+	void OnUpdateEdit(CCmdUI* pCmdUI);
 	//{{AFX_MSG(SampleSetEditor)
 	afx_msg void OnDelClass();
 	afx_msg void OnMergeClass();
@@ -78,23 +79,12 @@ public:
 	afx_msg void OnFeatureSpace();
 	afx_msg void OnStatisticsPane();
 	afx_msg void OnUpdateStatisticsPane(CCmdUI* pCmdUI);
-
-	SampleSetEditor(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw);
-	bool isToolUseableFor(ILWIS::DrawerTool *tool);
-	HTREEITEM configure( HTREEITEM parentItem);
-	String getMenuString() const;
-
 	//}}AFX_MSG
 private:  
 	SampleSet sms;
 	SampleStatWindow* wSmplStat;
-	Array<RowCol> rcSelect;
-	HMENU hmenFile, hmenEdit;
-	Representation _rpr;
-	String sValue;
-	bool fOk;
 	vector<GeneralBar*>	vgb;
-	//DECLARE_MESSAGE_MAP()
+	DECLARE_MESSAGE_MAP()
 };
 
 #endif // SMPLEDIT_H

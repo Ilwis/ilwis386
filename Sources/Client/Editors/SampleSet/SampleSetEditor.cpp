@@ -34,19 +34,29 @@ Software Foundation, http://www.fsf.org.
 
 Created on: 2007-02-8
 ***************************************************************/
-
+/*/ Revision 1.5  1998/09/16 17:35:47  Wim
+// 22beta2
+//
+// Revision 1.4  1997/09/27 12:22:55  Wim
+// Disable samplesetstatistics window when processing a command
+//
+// Revision 1.3  1997-08-18 19:51:33+02  Wim
+// Implemented Clear() which updates sample set
+//
+/* SampleSetEditor
+   by Wim Koolhoven, sep. 1994
+   (c) Ilwis System Development ITC
+	Last change:  WK   11 Aug 98    6:04 pm
+*/
 
 #include "Client\Headers\formelementspch.h"
 #include "Client\Mapwindow\MapPaneView.h"
 #include "Engine\Map\Segment\Seg.h"
 #include "Engine\Map\Polygon\POL.H"
 #include "Client\Mapwindow\Positioner.h"
+#include "Client\Editors\Editor.h"
 #include "Client\Base\ButtonBar.h"
 #include "Client\ilwis.h"
-#include "Client\Mapwindow\LayerTreeView.h"
-#include "Client\Mapwindow\MapPaneViewTool.h"
-#include "Client\Mapwindow\Drawers\DrawerTool.h"
-#include "Client\Mapwindow\LayerTreeItem.h"
 #include "Headers\Hs\Editor.hs"
 #include "Client\FormElements\syscolor.h"
 #include "Client\Mapwindow\AreaSelector.h"
@@ -64,61 +74,49 @@ Created on: 2007-02-8
 #include "Client\Editors\SampleSet\SampleSetEditor.h"
 #include "Client\Editors\SampleSet\SampleStatWindow.h"
 #include "Client\Editors\SampleSet\FSWindow.h"
-#include "DrawersUI\ColorCompositeTool.h"
 #include "Client\Editors\Utils\GeneralBar.h"
 #include "Client\GraphWindow\GraphView.h"
 //#include "dsp/graphfsp.h"
 //#include "dsp/secewind.h"
 
-//BEGIN_MESSAGE_MAP(SampleSetEditor, PixelEditor)
-//	//{{AFX_MSG_MAP(SampleSetEditor)
-//	ON_COMMAND(ID_DELCLASS, OnDelClass)
-//	ON_COMMAND(ID_MERGECLASS, OnMergeClass)
-//  ON_COMMAND(ID_DOMRPR, OnShowRpr)
-//  ON_COMMAND(ID_FEATURESPACE, OnFeatureSpace)
-//	ON_COMMAND(ID_SMPLSTATPANE, OnStatisticsPane)
-//	ON_UPDATE_COMMAND_UI(ID_SMPLSTATPANE, OnUpdateStatisticsPane)
-//	//}}AFX_MSG_MAP
-//END_MESSAGE_MAP()
-
+BEGIN_MESSAGE_MAP(SampleSetEditor, PixelEditor)
+  //{{AFX_MSG_MAP(SampleSetEditor)
+  ON_COMMAND(ID_DELCLASS, OnDelClass)
+  ON_COMMAND(ID_MERGECLASS, OnMergeClass)
+  ON_COMMAND(ID_DOMRPR, OnShowRpr)
+  ON_COMMAND(ID_FEATURESPACE, OnFeatureSpace)
+  ON_COMMAND(ID_SMPLSTATPANE, OnStatisticsPane)
+  ON_UPDATE_COMMAND_UI(ID_SMPLSTATPANE, OnUpdateStatisticsPane)
+  ON_UPDATE_COMMAND_UI(ID_EDIT, OnUpdateEdit)
+  //}}AFX_MSG_MAP
+END_MESSAGE_MAP()
 
 #define sMen(ID) ILWSF("men",ID).c_str()
 #define addmen(ID) men.AppendMenu(MF_STRING, ID, sMen(ID)); 
 
+SampleSetEditor::SampleSetEditor(MapPaneView* pane, const SampleSet& smss)
+: PixelEditor(pane, smss->map(), 8000), sms(smss)
 
-SampleSetEditor::SampleSetEditor(ZoomableView* zv, LayerTreeView *view, NewDrawer *drw) : DrawerTool("ColorTool",zv, view, drw){
-
-}
-
-bool SampleSetEditor::isToolUseableFor(ILWIS::DrawerTool *tool){
-	ColorCompositeTool *cct = dynamic_cast<ColorCompositeTool *>(tool);
-	if ( !cct)
-		return false;
-	parentTool = tool;
-	return true;
-}
-
-HTREEITEM SampleSetEditor::configure( HTREEITEM parentItem){
-	RasterLayerDrawer *rdrw = (RasterLayerDrawer *)drawer;
-	DisplayOptionTreeItem *item = new DisplayOptionTreeItem(tree, parentItem, drawer);
-	//item->setDoubleCickAction(this, (DTDoubleClickActionFunc)(DisplayOptionItemFunc)&ColorCompositeTool::displayOptionCC);
-	htiNode = insertItem(TR("Sample Set Editor"),".sms",item);
-
-	String s(TR("Sample Set Editor: %S").c_str(), sms->sName());
-	mpvGetView()->mwParent()->SetWindowText(s.c_str());
+{
+	Map mp = smss->map();
+	help = "ilwis\\sample_set_editor_functionality1.htm";
+	rFactVisibleLimit = 0.1;
+	String winTitle = String(TR("Sample Set Editor: %S"));
+	String s(winTitle.c_str(), sms->sName());
+	pane->mwParent()->SetWindowText(s.c_str());
 	fOk = sms->fInitStat();
 	if (!fOk)
-		return parentItem;
+		return;
 	sms->SetSlct(rcSelect);
 	wSmplStat = new SampleStatWindow(sms);
-	wSmplStat->Create(mpvGetView()->mwParent());
-	mpvGetView()->mwParent()->EnableDocking(CBRS_ALIGN_ANY);
+	wSmplStat->Create(pane->mwParent());
+	pane->mwParent()->EnableDocking(CBRS_ALIGN_ANY);
 	// position the statistics window
 	CRect rectWin;
-	mpvGetView()->mwParent()->GetWindowRect(&rectWin); // this is not yet it's final size
+	pane->mwParent()->GetWindowRect(&rectWin); // this is not yet it's final size
 	CPoint pnt(rectWin.left, rectWin.top); // so only can use top left corner
 	pnt += CPoint(100, 100);
-	mpvGetView()->mwParent()->FloatControlBar(wSmplStat, pnt);
+	pane->mwParent()->FloatControlBar(wSmplStat, pnt);
 	CMenu men;
 	men.CreateMenu();
 
@@ -148,8 +146,8 @@ HTREEITEM SampleSetEditor::configure( HTREEITEM parentItem){
 	hmenEdit = men.GetSafeHmenu();
 	men.Detach();
 
-	//UpdateMenu();
-	DataWindow* dw = mpvGetView()->dwParent();
+	UpdateMenu();
+	DataWindow* dw = mpv->dwParent();
 	if (dw) {
 		dw->bbDataWindow.LoadButtons("smpledit.but");
 		dw->RecalcLayout();
@@ -170,14 +168,13 @@ HTREEITEM SampleSetEditor::configure( HTREEITEM parentItem){
 			iID = dw->iNewBarID();
 		MakeFSWindow(fsw, CPoint(100+50*i,100+50*i), iID);
 	}
-
-	return htiNode;
+	drawSelect();
 }
 
-String SampleSetEditor::getMenuString() const{
-	return TR("Sample set editor");
-
-
+void SampleSetEditor::OnUpdateEdit(CCmdUI* pCmdUI)
+{
+	bool fEdit=true;
+	pCmdUI->Enable(fEdit);
 }
 
 SampleSetEditor::~SampleSetEditor()
@@ -209,29 +206,25 @@ bool SampleSetEditor::OnContextMenu(CWnd* pWnd, CPoint point)
 	addmen(ID_PANAREA);
 	men.AppendMenu(MF_SEPARATOR);
 	addmen(ID_EDIT);
-	men.AppendMenu(MF_SEPARATOR);
+	bool fEdit = rcSelect.iSize() != 0;
+	men.EnableMenuItem(ID_EDIT, fEdit ? MF_ENABLED : MF_GRAYED);
 	addmen(ID_FEATURESPACE);
 	addmen(ID_DELCLASS);
 	addmen(ID_MERGECLASS);
-	//  addmen(ID_STATTOCLIP);
 	men.AppendMenu(MF_SEPARATOR);
-	//  addmen(ID_OPENCLOSELEGEND);
-	//  bool fLegendAct = 0 != legWnd;
-	//  men.EnableMenuItem(ID_OPENCLOSELEGEND, fLegendAct ? MF_ENABLED : MF_GRAYED);
 	addmen(ID_DOMRPR);
 	men.TrackPopupMenu(TPM_LEFTALIGN|TPM_RIGHTBUTTON, point.x, point.y, pWnd);
 	return true;
 }
 
-
 class AskFeatureSpaceForm: public FormWithDest
 {
 public:
 	AskFeatureSpaceForm(CWnd* wPar, const MapList& ml, int* b1, int* b2)
-		: FormWithDest(wPar, TR("        Feature Space"))
+		: FormWithDest(wPar, TR("Feature Space"))
 	{
-		new FieldMapFromMapList(root, TR("  Band &1"), ml, b1);
-		new FieldMapFromMapList(root, TR("  Band &2"), ml, b2);
+		new FieldMapFromMapList(root, TR("Band &1"), ml, b1);
+		new FieldMapFromMapList(root, TR("Band &2"), ml, b2);
 		SetHelpItem("ilwismen\\sample_set_editor_feature_space.htm");
 		create();
 	}
@@ -241,10 +234,10 @@ class AskMergeClassForm: public FormWithDest
 {
 public:
 	AskMergeClassForm(CWnd* wPar, const SampleSet& sms, long* iClass1, long* iClass2)
-		: FormWithDest(wPar, TR("        Merge Classes"))
+		: FormWithDest(wPar, TR("Merge Classes"))
 	{
-		new FieldClass(root, TR(" &Merge Class"), iClass2, sms->dm()->pdsrt());
-		new FieldClass(root, TR(" &Into Class"), iClass1, sms->dm()->pdsrt());
+		new FieldClass(root, TR("&Merge Class"), iClass2, sms->dm()->pdsrt());
+		new FieldClass(root, TR("&Into Class"), iClass1, sms->dm()->pdsrt());
 		SetHelpItem("ilwismen\\sample_set_editor_merge_classes.htm");
 		create();
 	}
@@ -254,9 +247,9 @@ class AskDeleteClassForm: public FormWithDest
 {
 public:
 	AskDeleteClassForm(CWnd* wPar, const SampleSet& sms, long* iClass)
-		: FormWithDest(wPar, TR("         Clear Class"))
+		: FormWithDest(wPar, TR("Clear Class"))
 	{
-		new FieldClass(root, TR("  &Class"), iClass, sms->dm()->pdsrt());
+		new FieldClass(root, TR("&Class"), iClass, sms->dm()->pdsrt());
 		SetHelpItem("ilwismen\\sample_set_editor_delete_class.htm");
 		create();
 	}
@@ -314,25 +307,27 @@ void SampleSetEditor::MakeFSWindow(FeatureSpaceWindow* fsw, CPoint p, int iID)
 {
 	GeneralBar* gb = new GeneralBar;
 	gb->view = fsw;
-	gb->Create(((MapPaneView*)mpv)->mwParent(), iID, CSize(400,400));
+	gb->Create(mpv->mwParent(), iID, CSize(400,400));
 	gb->EnableDocking(0);
 	fsw->Create(gb);
 	vgb.push_back(gb);
 	int iLower = sms->mpl()->iLower();
 	Map b1(sms->mpl()->map(iLower + fsw->iBand1()));
 	Map b2(sms->mpl()->map(iLower + fsw->iBand2()));
-	String s(TR(" Feature space for %S and %S").c_str(), b1->sName(), b2->sName());
+	String s(TR("Feature space for %S and %S").c_str(), b1->sName(), b2->sName());
 	gb->SetWindowText(s.c_str());
-	((MapPaneView*)mpv)->GetDocument()->AddView(fsw);
+	mpv->GetDocument()->AddView(fsw);
 	fsw->OnInitialUpdate();
-	((MapPaneView*)mpv)->mwParent()->FloatControlBar(gb,p);
-	((MapPaneView*)mpv)->mwParent()->ShowControlBar(gb,TRUE,FALSE);
+	mpv->mwParent()->FloatControlBar(gb,p);
+	mpv->mwParent()->ShowControlBar(gb,TRUE,FALSE);
 }
 
 int SampleSetEditor::Edit(const Coord& c)
 {
 	wSmplStat->EnableWindow(false);
 	sms->SaveOldSampleMapValues(rcSelect);
+	if (0 == PixelEditor::Edit(c))
+		return 0;
 	sms->AppClass(sValue);
 	sms->UpdateStat(rcSelect);
 	sms->SetSlct(rcSelect);
@@ -365,6 +360,7 @@ void SampleSetEditor::Clear()
 void SampleSetEditor::EditFieldOK(Coord c, const String& s)
 {
 	sms->SaveOldSampleMapValues(rcSelect);
+	PixelEditor::EditFieldOK(c,s);
 	sms->AppClass(s);
 	sms->UpdateStat(rcSelect);
 	sms->SetSlct(rcSelect);
@@ -375,7 +371,9 @@ void SampleSetEditor::EditFieldOK(Coord c, const String& s)
 
 void SampleSetEditor::drawSelect(RowCol rc)
 {
-	sms->SetSlct(rcSelect);
+	//PixelEditor::drawSelect(rc);
+	if ( rcSelect.size()!=0 )
+		sms->SetSlct(rcSelect);
 	wSmplStat->SelChange();
 }
 
@@ -389,7 +387,7 @@ void SampleSetEditor::PreSaveState()
 {
 	int iFSWin = 0;
 	// remove all feature space windows
-	MapWindow* mw = ((MapPaneView*)mpv)->mwParent();
+	MapWindow* mw = mpv->mwParent();
 	POSITION pos = mw->m_listControlBars.GetHeadPosition();
 	while (pos != NULL) {
 		CControlBar* pBar =
@@ -436,7 +434,7 @@ zIcon SampleSetEditor::icon() const
 
 String SampleSetEditor::sTitle() const
 {
-	String s(TR("Sample Set Editor: %S").c_str(), sms->sName());
+  String winTitle = String(TR("Sample Set Editor: %S"));
+  String s(winTitle.c_str(), sms->sName());
 	return s;
 }
-
