@@ -419,13 +419,12 @@ bool MapGlue::fFreezing()
 		ptr.SetSize(grNew->rcSize());
 	}
 	
-	// First set domain none, to force removal of current domain (possibly with the wrong storetype)
-	Domain dom = dm();
+	// First set domain/dvrs none, to force removal of current domain (possibly with the wrong storetype); this deletes histogram and .mp#
+	DomainValueRangeStruct dvrs_computed = dvrs();
 	DomainValueRangeStruct dvrs("none");
 	SetDomainValueRangeStruct(dvrs);
-	// Then set the domain again, but now with the correct storetype
-	dvrs = DomainValueRangeStruct(dom);
-	SetDomainValueRangeStruct(dvrs);
+	// Then set the domain/dvrs again, but now with the correct storetype
+	SetDomainValueRangeStruct(dvrs_computed);
 
 	CreateMapStore();
 	Store();
