@@ -101,6 +101,7 @@ private:
 	GeoRefOSM *grfOpenStreetMap;
 	GDALDatasetH gdalDataSet;
 	RemoteObject * rxo;
+	MemoryStruct * image;
 	CoordSystem pseudoMercator;
 	CoordSystem llwgs84;
 };

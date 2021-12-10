@@ -124,6 +124,8 @@ void RemoteObject::setRequestHeaders(const std::vector<String> & requestHeaders)
 }
 
 void RemoteObject::getRequest(const String& url) {
+	if(chunk.memory)
+		free(chunk.memory);
     chunk.memory=NULL; /* we expect realloc(NULL, size) to work */
     chunk.size = 0;    /* no data at this point */
 	struct curl_slist *list = NULL;

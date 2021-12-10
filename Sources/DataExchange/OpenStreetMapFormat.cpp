@@ -89,6 +89,7 @@
 OpenStreetMapFormat::OpenStreetMapFormat()
 : urlOpenStreetMap("")
 , rxo(0)
+, image(0)
 , grfOpenStreetMap(0)
 , fNoExtension(false)
 {
@@ -99,6 +100,7 @@ OpenStreetMapFormat::OpenStreetMapFormat()
 OpenStreetMapFormat::OpenStreetMapFormat(const FileName& fn, ParmList& pm)
 : urlOpenStreetMap("")
 , rxo(0)
+, image(0)
 , grfOpenStreetMap(0)
 , fNoExtension(false)
 {
@@ -135,11 +137,15 @@ OpenStreetMapFormat::OpenStreetMapFormat(const FileName& fn, ParmList& pm)
 }
 
 OpenStreetMapFormat::~OpenStreetMapFormat() {
-	//delete image;
-	if (rxo != 0)
-		delete rxo;
 	if ( gdalDataSet != NULL)
 		getEngine()->gdal->close(gdalDataSet);
+	if (image) {
+		if (image->memory)
+			free(image->memory);
+		delete image;
+	}
+	if (rxo != 0)
+		delete rxo;
 }
 
 ForeignFormat* CreateQueryObjectOpenStreetMap()
@@ -335,13 +341,22 @@ bool OpenStreetMapFormat::retrieveImage(const CoordBounds & cb, const RowCol & r
 		throw ErrorObject(TR("Georeference not correctly set"));
 		return false;
 	}
+	if ( gdalDataSet != NULL) {
+		getEngine()->gdal->close(gdalDataSet);
+		const_cast<GDALDatasetH>(gdalDataSet) = NULL;
+	}
+	if (image) {
+		if (image->memory)
+			free(image->memory);
+		delete image;
+		image = 0;
+	}
 
 	String sExpr = getMapRequest(cb, rc);
 	if (rxo == 0)
 		rxo = new RemoteObject();
 	rxo->setRequestHeaders(vsRequestHeaders);
 	rxo->getRequest(sExpr);
-	MemoryStruct *image;
 	image = rxo->get();
 	if ( image == 0) {
 		return false;
