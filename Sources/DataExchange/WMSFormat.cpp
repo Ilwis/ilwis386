@@ -89,6 +89,7 @@
 WMSFormat::WMSFormat()
 : urlWMS("")
 , rxo(0)
+, image(0)
 {
 	gdalDataSet = NULL;
 	grfWMS = NULL;
@@ -97,6 +98,7 @@ WMSFormat::WMSFormat()
 WMSFormat::WMSFormat(const FileName& fn, ParmList& pm)
 : urlWMS("")
 , rxo(0)
+, image(0)
 {
 	String sC = pm.sGet("collection");
 	FileName fnCollection(sC);
@@ -160,11 +162,15 @@ WMSFormat::WMSFormat(const FileName& fn, ParmList& pm)
 }
 
 WMSFormat::~WMSFormat() {
-	//delete image;
-	if (rxo != 0)
-		delete rxo;
 	if ( gdalDataSet != NULL)
 		funcs.close(gdalDataSet);
+	if (image) {
+		if (image->memory)
+			free(image->memory);
+		delete image;
+	}
+	if (rxo != 0)
+		delete rxo;
 }
 
 ForeignFormat* CreateQueryObjectWMS()
@@ -189,7 +195,13 @@ void WMSFormat::Init() {
 				funcs.registerJPEG = (GDALAllRegisterFunc)GetProcAddress(hm,"GDALRegister_JPEG");
 				funcs.registerPNG = (GDALAllRegisterFunc)GetProcAddress(hm,"GDALRegister_PNG");
 				funcs.open = (GDALOpenFunc)GetProcAddress(hm,"_GDALOpen@8");
+				funcs.count = (GDALGetNumbersDataSet)GetProcAddress(hm,"_GDALGetRasterCount@4");
 				funcs.getBand = (GDALGetRasterBandFunc)GetProcAddress(hm,"_GDALGetRasterBand@8");
+				funcs.getRasterColorInterpretation = (GDALGetRasterColorInterpretationFunc)GetProcAddress(hm,"_GDALGetRasterColorInterpretation@4");
+				funcs.getRasterColorTable = (GDALGetRasterColorTableFunc)GetProcAddress(hm,"_GDALGetRasterColorTable@4");
+				funcs.getPaletteInterpretation = (GDALGetPaletteInterpretationFunc)GetProcAddress(hm,"_GDALGetPaletteInterpretation@4");
+				funcs.getColorEntryCount = (GDALGetColorEntryCountFunc)GetProcAddress(hm,"_GDALGetColorEntryCount@4");
+				funcs.getColorEntry = (GDALGetColorEntryFunc)GetProcAddress(hm,"_GDALGetColorEntry@8");
 				funcs.newSRS = (OSRNewSpatialReferenceFunc)GetProcAddress(hm, "_OSRNewSpatialReference@4");
 				funcs.srsImportFromEPSG = (OSRImportFromEPSGFunc)GetProcAddress(hm,"_OSRImportFromEPSG@8");
 				funcs.isProjected = (OSRIsProjectedFunc)GetProcAddress(hm,"OSRIsProjected");
@@ -393,8 +405,22 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 
 	OGRSpatialReferenceH handle = funcs.newSRS(NULL);
 	OGRErr err = funcs.srsImportFromEPSG( handle, srsName.sTail(":").iVal());
-	if ( err == OGRERR_UNSUPPORTED_SRS )
+	if ( err == OGRERR_UNSUPPORTED_SRS ) {
+		if (srsName.sTail(":").iVal() == 3857) { // exception for pseudomercator
+			FileName fnCsy(FileName::fnUnique(FileName(fnBase, ".csy")));
+			CoordSystemProjection *csp =  new CoordSystemProjection(fnCsy, 1);
+			csp->datum = new MolodenskyDatum("WGS 1984","");
+			Ellipsoid ell("WGS 84");
+			csp->ell = ell;
+			csp->prj = Projection(String("Pseudo Mercator"),csp->ell);
+			csp->prj->Prepare();
+			CoordSystem csy;
+			csy.SetPointer(csp);
+			csy->Store();
+			return csy;
+		}
 		throw ErrorObject(String("The SRS %S is not supported, Unknown will be used", srsName));
+	}
 
 	String datumName(funcs.getAttribute(handle, "Datum",0));
 	//map<String, ProjectionConversionFunctions>::iterator where = mpCsyConvers.find(projectionName);
@@ -429,10 +455,7 @@ CoordSystem WMSFormat::getCoordSystem(const FileName& fnBase, const String& srsN
 				throw ErrorObject(String(TR("Ellipsoid %S could not be found").c_str(),spheroid));
 			csp->ell = Ellipsoid(ma, ifl);
 			csp->ell.sName = spheroid;
-
-
-		} 
-
+		}
 
 		double easting  = getEngine()->gdal->getProjParam(handle, "false_easting",rUNDEF,&err);
 		double northing = getEngine()->gdal->getProjParam(handle, "false_northing",rUNDEF,&err);
@@ -494,7 +517,7 @@ String WMSFormat::getMapRequest(const CoordBounds& cb, const String& layers, con
     mapRequest += "REQUEST=GetMap&";
 	mapRequest += "BBOX=" + String("%f,%f,%f,%f", cb.MinX(), cb.MinY(),cb.MaxX(),cb.MaxY()) + "&";
 	mapRequest += "SRS=" + srsName + "&";
-	mapRequest += "FORMAT=image/jpeg&";
+	mapRequest += "FORMAT=image/png&";
 	mapRequest += String("HEIGHT=%d&", rc.Row);
 	mapRequest += "WIDTH=" + String("%i&",rc.Col);
 	mapRequest += "Layers=" + toLegalLayer(layers) + "&";
@@ -597,11 +620,20 @@ void WMSFormat::Store(IlwisObject obj) {
 }
 
 bool WMSFormat::retrieveImage(const CoordBounds & cb, const RowCol & rc) {
+	if ( gdalDataSet != NULL) {
+		funcs.close(gdalDataSet);
+		const_cast<GDALDatasetH>(gdalDataSet) = NULL;
+	}
+	if (image) {
+		if (image->memory)
+			free(image->memory);
+		delete image;
+		image = 0;
+	}
 	String sExpr = getMapRequest(cb, layers, srsName, rc);
 	if (rxo == 0)
 		rxo = new RemoteObject();
 	rxo->getRequest(sExpr);
-	MemoryStruct *image;
 	image = rxo->get();
 	if (image == NULL)
 		throw ErrorObject("GetMap request failed: couldn't connect to server");
@@ -611,7 +643,7 @@ bool WMSFormat::retrieveImage(const CoordBounds & cb, const RowCol & rc) {
 		HandleError(error);
 	}
 	//funcs.registerAll();
-	funcs.registerJPEG();
+	funcs.registerPNG();
 
 	funcs.vsiClose( funcs.vsiFileFromMem( "/vsimem/work.dat", image->memory,
                                        image->size, FALSE ) );
@@ -619,7 +651,7 @@ bool WMSFormat::retrieveImage(const CoordBounds & cb, const RowCol & rc) {
 	void *hDS = (void *)funcs.open( "/vsimem/work.dat", GA_ReadOnly );
 
 	if ( hDS == NULL) {
-		funcs.registerPNG();
+		funcs.registerJPEG();
 		funcs.vsiClose( funcs.vsiFileFromMem( "/vsimem/work.dat", image->memory,
                                        image->size, FALSE ) );
 
@@ -645,23 +677,62 @@ void WMSFormat::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long iNum) cons
 	unsigned char *data1 = new unsigned char[iNum];
 	unsigned char *data2 = new unsigned char[iNum];
 	unsigned char *data3 = new unsigned char[iNum];
-	int fact = 1;
+	unsigned char *data4 = new unsigned char[iNum];
 
-	GDALRasterBandH  gdalRasterBand = funcs.getBand( gdalDataSet, 1);
-
-	funcs.rasterIO(gdalRasterBand,GF_Read, iFrom, iLine, iNum, 1, data1, iNum, 1, GDT_Byte, 0, 0);								
-	gdalRasterBand = funcs.getBand( gdalDataSet, 2);
-    funcs.rasterIO(gdalRasterBand,GF_Read, iFrom, iLine, iNum, 1, data2, iNum, 1, GDT_Byte, 0, 0);								
-	gdalRasterBand = funcs.getBand( gdalDataSet, 3);
-    funcs.rasterIO(gdalRasterBand, GF_Read, iFrom, iLine, iNum, 1, data3, iNum, 1, GDT_Byte, 0, 0);
-	
-	for(int j = 0; j < iNum; ++j) {
-		buf[j] = (data1[j]) | (data2[j] << 8) | (data3[j] << 16);
+	GDALRasterBandH gdalRasterBand = funcs.getBand( gdalDataSet, 1);
+	funcs.rasterIO(gdalRasterBand,GF_Read, iFrom, iLine, iNum, 1, data1, iNum, 1, GDT_Byte, 0, 0);
+	GDALColorInterp colorInterp = funcs.getRasterColorInterpretation(gdalRasterBand);
+	if (colorInterp == GCI_PaletteIndex) {
+		GDALColorTableH colorTable = funcs.getRasterColorTable(gdalRasterBand);
+		GDALPaletteInterp paletteInterp = funcs.getPaletteInterpretation(colorTable);
+		if (paletteInterp == GPI_RGB) {
+			int count = funcs.getColorEntryCount(colorTable);
+			LongBuf palette (count);
+			for (int i = 0; i < count; ++i) {
+				const GDALColorEntry * colorEntry = funcs.getColorEntry(colorTable, i);
+				if (colorEntry != 0) {
+					long color = colorEntry->c1 | (colorEntry->c2 << 8) | (colorEntry->c3 << 16) | (colorEntry->c4 << 24);
+					palette[i] = color;
+				} else
+					palette[i] = 0;
+			}
+			for(int j = 0; j < iNum; ++j) {
+				unsigned char index = data1[j];
+				buf[j] = (index >= 0 && index < count) ? palette[index] : 0;
+			}
+		} else {
+			for(int j = 0; j < iNum; ++j) { // grayscale
+				buf[j] = (data1[j]) | (data1[j] << 8) | (data1[j] << 16) | (255 << 24);
+			}
+		}
+	} else {
+		int iBands = funcs.count( gdalDataSet );
+		gdalRasterBand = funcs.getBand( gdalDataSet, 2);
+		if (gdalRasterBand)
+			funcs.rasterIO(gdalRasterBand,GF_Read, iFrom, iLine, iNum, 1, data2, iNum, 1, GDT_Byte, 0, 0);
+		gdalRasterBand = funcs.getBand( gdalDataSet, 3);
+		if (gdalRasterBand)
+			funcs.rasterIO(gdalRasterBand, GF_Read, iFrom, iLine, iNum, 1, data3, iNum, 1, GDT_Byte, 0, 0);
+		if (iBands > 3) { // alpha
+			gdalRasterBand = funcs.getBand( gdalDataSet, 4);
+			funcs.rasterIO(gdalRasterBand, GF_Read, iFrom, iLine, iNum, 1, data4, iNum, 1, GDT_Byte, 0, 0);
+		}
+		
+		if (iBands > 3) { // has alpha channel
+			for(int j = 0; j < iNum; ++j) {
+				buf[j] = (data1[j]) | (data2[j] << 8) | (data3[j] << 16) | (data4[j] << 24);
+			}
+		} else { // set alpha to max
+			for(int j = 0; j < iNum; ++j) {
+				buf[j] = (data1[j]) | (data2[j] << 8) | (data3[j] << 16) | (255 << 24);
+			}
+		}
 	}
 
 	delete [] data1;
 	delete [] data2;
 	delete [] data3;
+	delete [] data4;
 }
 
 void WMSFormat::GetLineVal(long iLine, LongBuf&, long iFrom, long iNum) const {

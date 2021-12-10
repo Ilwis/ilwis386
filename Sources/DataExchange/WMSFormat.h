@@ -43,8 +43,14 @@ class WMSCollectionPtr;
 
 typedef void(__stdcall *GDALCloseFunc)(GDALDatasetH);
 typedef void(__stdcall *GDALAllRegisterFunc)();
+typedef int (__stdcall *GDALGetNumbersDataSet)(GDALDatasetH);
 typedef GDALDatasetH (__stdcall *GDALOpenFunc) (const char *, GDALAccess );
 typedef GDALRasterBandH (__stdcall *GDALGetRasterBandFunc) (GDALDatasetH, int);
+typedef	GDALColorInterp (__stdcall *GDALGetRasterColorInterpretationFunc)(GDALRasterBandH);
+typedef GDALColorTableH (__stdcall *GDALGetRasterColorTableFunc)(GDALRasterBandH);
+typedef GDALPaletteInterp (__stdcall *GDALGetPaletteInterpretationFunc)(GDALColorTableH);
+typedef int (__stdcall *GDALGetColorEntryCountFunc)(GDALColorTableH);
+typedef const GDALColorEntry* (__stdcall *GDALGetColorEntryFunc)(GDALColorTableH, int);
 typedef OGRSpatialReferenceH (__stdcall *OSRNewSpatialReferenceFunc)( const char *);
 typedef OGRErr (__stdcall *OSRImportFromEPSGFunc)( OGRSpatialReferenceH, int );
 typedef int (*OSRIsProjectedFunc)( OGRSpatialReferenceH );
@@ -61,7 +67,13 @@ struct WMSGDALCFunctions {
 	GDALAllRegisterFunc registerJPEG;
 	GDALAllRegisterFunc registerPNG;
 	GDALOpenFunc open;
+	GDALGetNumbersDataSet count;
 	GDALGetRasterBandFunc getBand;
+	GDALGetRasterColorInterpretationFunc getRasterColorInterpretation;
+	GDALGetRasterColorTableFunc getRasterColorTable;
+	GDALGetPaletteInterpretationFunc getPaletteInterpretation;
+	GDALGetColorEntryCountFunc getColorEntryCount;
+	GDALGetColorEntryFunc getColorEntry;
 	OSRNewSpatialReferenceFunc newSRS;
 	OSRImportFromEPSGFunc srsImportFromEPSG;
 	OSRIsProjectedFunc isProjected;
@@ -135,5 +147,6 @@ private:
 	map<String, String> ellipseMapping;
 	WMSGDALCFunctions funcs;
 	RemoteObject * rxo;
+	MemoryStruct *image;
 };
 
