@@ -26,6 +26,7 @@ namespace ILWIS {
 		virtual void CreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
 		virtual void ReCreateTexture(DrawerContext * drawerContext, bool fInThread, volatile bool * fDrawStop);
 		virtual void BindMe(DrawerContext * drawerContext); // To be called before glBegin
+		virtual void PutLine(const LongBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf);
 		const CoordBounds & cb() {return cbBounds;};
 		const long iRaw(Coord & crd) const;
 

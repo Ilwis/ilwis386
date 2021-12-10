@@ -40,7 +40,7 @@ namespace ILWIS {
 
 	protected:
 		void PutLine(const RealBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf);
-		void PutLine(const LongBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf);
+		virtual void PutLine(const LongBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf);
 		void ConvLine(const RealBuf& buf, LongBuf& bufColor);
 		void ConvLine(const LongBuf& buf, LongBuf& bufColor);
 		virtual bool DrawTexture(long offsetX, long offsetY, long texSizeX, long texSizeY, unsigned int zoomFactor, char * outbuf, volatile bool* fDrawStop);

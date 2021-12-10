@@ -116,6 +116,15 @@ void WMSTexture::BindMe(DrawerContext * drawerContext)
 	glTranslated(-s, -t, 0);
 }
 
+void WMSTexture::PutLine(const LongBuf& bufOriginal, const LongBuf& bufColor, const int iLine, const long texSizeX, char * outbuf)
+{
+	long iLen = bufColor.iSize();
+	long * ptrBufOriginal = bufOriginal.buf();
+	long * ptrBufColor = bufColor.buf();
+	char *c = &outbuf[iLine * texSizeX * 4];
+	memcpy(c, ptrBufColor, iLen * 4);
+}
+
 bool WMSTexture::DrawTexture(int textureSize, char * outbuf, volatile bool* fDrawStop)
 {
 	if (*fDrawStop)
