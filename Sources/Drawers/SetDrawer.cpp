@@ -147,7 +147,10 @@ void SetDrawer::prepare(PreparationParameters *pp){
 					rpr = mp->dm()->rpr();
 				RasterLayerDrawer *rasterset;
 				if ( !isRestore) {
-					rasterset = (RasterLayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", "Ilwis38", &parms);
+					if ( mp.ptr()->gr()->pgWMS())
+						rasterset = (RasterLayerDrawer *)NewDrawer::getDrawer("WMSDrawer", "Ilwis38", &parms);
+					else
+						rasterset = (RasterLayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", "Ilwis38", &parms);
 				} else
 					rasterset = (RasterLayerDrawer *)getDrawer(i);
 				rasterset->setThreaded(false); // This is here since 2011. It is probably done to ensure that during animation, the entire frame belongs to the same moment.
@@ -197,7 +200,10 @@ LayerDrawer *SetDrawer::createIndexDrawer(int index, const BaseMap& basem,ILWIS:
 				layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("PolygonLayerDrawer", pp, &dp); 
 				break;
 			case IlwisObject::iotRASMAP:
-				layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", pp, &dp); 
+				if ( ((MapPtr*)basem.ptr())->gr()->pgWMS())
+					layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("WMSDrawer", pp, &dp);
+				else
+					layerDrawer = (LayerDrawer *)NewDrawer::getDrawer("RasterLayerDrawer", pp, &dp);
 				break;
 		}
 	}
