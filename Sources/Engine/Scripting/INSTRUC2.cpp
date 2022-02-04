@@ -487,8 +487,8 @@ void InstPntCrd::Exec()
   else 
 	{
     soIndex->GetVal(bufIndex);
-//    for (int i=0; i<bufIndex.iSize(); i++) // correct between raw and rec
-//      bufIndex[i] -= 1;
+    for (int i=0; i<bufIndex.iSize(); i++) // correct between raw and rec; in other words, convert incoming iRaw value (1-offset) to iRec (0-offset)
+      bufIndex[i] -= 1;
   }
   StackObject* soRes = new StackObject(sotCoordVal, dvsCoord, inst->env.iBufSize);
 //  CoordBuf bufRes;

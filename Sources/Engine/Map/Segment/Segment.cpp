@@ -631,9 +631,9 @@ String ILWIS::LSegment::sValue(const DomainValueRangeStruct& dvrs, short iWidth,
 {
    ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE, SOURCE_LOCATION);
   if (dvrs.fUseReals()) 
-     return dvrs.sValue(rValue(),0);
+     return dvrs.sValue(rValue(),iWidth);
   else if (dvrs.dm().fValid())
-     return dvrs.sValueByRaw(iValue(),0);
+     return dvrs.sValueByRaw(iValue(),iWidth,iDec);
   else
      return sUNDEF;
 }
@@ -698,10 +698,13 @@ double ILWIS::RSegment::rValue() const
 
 String ILWIS::RSegment::sValue(const DomainValueRangeStruct& dvs, short iWidth, short iDec) const
 {
-	if ( dvs.fUseReals())
-		return String("%f",value);
-	else
-		return dvs.sValueByRaw(value, iWidth, iDec);
+  ILWISSingleLock sl(const_cast<CCriticalSection *>(&csAccess), TRUE, SOURCE_LOCATION);
+  if (dvs.fUseReals()) 
+     return dvs.sValue(rValue(),iWidth);
+  else if (dvs.dm().fValid())
+     return dvs.sValueByRaw(dvs.iRaw(rValue()),iWidth,iDec);
+  else
+     return sUNDEF;
 }
 
 void ILWIS::RSegment::segSplit(long iAfter, Coord crdAt, ILWIS::Segment **seg)

@@ -94,11 +94,12 @@ double ILWIS::LPoint::rValue() const {
 }
 
  String ILWIS::LPoint::sValue(const DomainValueRangeStruct& dvs, short iWidth, short iDec) const {
-	if ( iWidth == 0)
-		return String("%d",value);
-	if ( iWidth < 0)
-		iWidth = dvs.dm()->iWidth();
-	return  String("%*d", -iWidth, value);
+  if (dvs.fUseReals()) 
+     return dvs.sValue(rValue(),iWidth);
+  else if (dvs.dm().fValid())
+     return dvs.sValueByRaw(iValue(),iWidth,iDec);
+  else
+     return sUNDEF;
 }
 
  void ILWIS::LPoint::PutVal(long iV) {
@@ -147,11 +148,12 @@ long ILWIS::RPoint::iValue() const {
 }
 
  String ILWIS::RPoint::sValue(const DomainValueRangeStruct& dvs, short iWidth, short iDec) const {
-	if ( iWidth == 0)
-		return String("%f",value);
-	if ( iWidth < 0)
-		iWidth = dvs.dm()->iWidth();
-	return  String("%*f", -iWidth, value);
+  if (dvs.fUseReals()) 
+     return dvs.sValue(rValue(),iWidth);
+  else if (dvs.dm().fValid())
+     return dvs.sValueByRaw(dvs.iRaw(rValue()),iWidth,iDec);
+  else
+     return sUNDEF;
 }
 
  void ILWIS::RPoint::PutVal(double rV) {

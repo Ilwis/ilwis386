@@ -306,7 +306,7 @@ String ILWIS::RPolygon::sValue(const DomainValueRangeStruct& dvrs, short iWidth,
   if (dvrs.fUseReals()) 
      return dvrs.sValue(rValue(),iWidth);
   else if (dvrs.dm().fValid())
-     return dvrs.sValueByRaw(rValue() + 1,iWidth,iDec);
+     return dvrs.sValueByRaw(dvrs.iRaw(rValue()),iWidth,iDec);
   else
      return sUNDEF;
 }
