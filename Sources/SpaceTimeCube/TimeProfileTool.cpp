@@ -954,6 +954,7 @@ int TimeProfileForm::CallBackSegmentMapChanged(Event*)
 	frRadiusThreshold->StoreData();
 	if (sSegmentMapProfile.length() > 0)
 		ComputeGraphs();
+	pgw->Replot();
 	return 0;
 }
 
