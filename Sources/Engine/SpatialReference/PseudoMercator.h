@@ -50,6 +50,7 @@ public:
   ProjectionPseudoMercator(const Ellipsoid&);
   virtual XY xyConv(const PhiLam&) const;
   virtual PhiLam plConv(const XY&) const;
+  virtual Datum* datumDefault() const;
   
   virtual void Param(ProjectionParamValue, double);
 };

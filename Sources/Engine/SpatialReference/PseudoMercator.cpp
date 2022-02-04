@@ -76,7 +76,10 @@ void ProjectionPseudoMercator::Param(ProjectionParamValue pv, double rValue)
   }    
 }            
 
-
+Datum* ProjectionPseudoMercator::datumDefault() const
+{
+  return new MolodenskyDatum("WGS 1984", "");
+}
 
 
 
