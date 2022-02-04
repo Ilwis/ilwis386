@@ -63,21 +63,29 @@ Coord CoordBuf::operator[](int i) const{
 }
 
 void CoordBuf::Size(int sz) {
-	for(int i = size(); i<sz; ++i) {
-		add(Coord(rUNDEF,rUNDEF));
+	if (sz > size()) {
+		for(int i = size(); i<sz; ++i) {
+			add(Coord(rUNDEF,rUNDEF));
+		}
+	} else if (sz < size()) {
+		for(int i = size()-1; i>=sz; --i) {
+			deleteAt(i);
+		}
 	}
 }
 
 CoordBuf& CoordBuf::operator=(const CoordBuf& b) {
+	Size(b.size());
 	for(int i = 0; i<b.size(); ++i) {
-		add(b[i]);
+		setAt(b[i], i);
 	}
 	return *this;
 }
 
 CoordBuf& CoordBuf::operator=(const CoordinateSequence *b) {
+	Size(b->size());
 	for(int i = 0; i<b->size(); ++i) {
-		add(b->getAt(i));
+		setAt(b->getAt(i), i);
 	}
 	return *this;
 }

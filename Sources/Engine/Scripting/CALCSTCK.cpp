@@ -524,7 +524,7 @@ void StackObject::GetVal(StringBuf& bf, int iWid, int iDec) const
     case sotCoordVal:
       { bf.Size(cBuf->iSize());
         DomainCoord* dmcrd = dvs.dm()->pdcrd();
-        for (int i = 0; i < iBuf->iSize(); i++)
+        for (int i = 0; i < cBuf->iSize(); i++)
           bf[i] = dmcrd->sValue((*cBuf)[i], iWid, iDec);
       }
       break;
