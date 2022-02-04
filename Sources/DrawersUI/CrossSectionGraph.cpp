@@ -156,7 +156,7 @@ public:
 void CrossSectionGraph::saveAsTbl() {
 	if (values.size() == 0)
 		return;
-	String fname("CrossSection");
+	String fname("LayerProfile");
 	if ( TableNameForm(this, &fname).DoModal() == IDOK) {
 		int maxNo = values[0][0].size();
 		FileName fnTable = FileName::fnUnique(FileName(fname,".tbt"));

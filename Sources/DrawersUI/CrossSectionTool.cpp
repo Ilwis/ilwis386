@@ -130,7 +130,7 @@ HTREEITEM CrossSectionTool::configure( HTREEITEM parentItem) {
 	checkItem = new DisplayOptionTreeItem(tree,parentItem,drawer);
 	checkItem->setDoubleCickAction(this,(DTDoubleClickActionFunc)&CrossSectionTool::displayOptionAddList);
 	checkItem->setCheckAction(this,0, (DTSetCheckFunc)&CrossSectionTool::setcheckTool);
-	htiNode = insertItem(TR("Cross section"),"CrossSection",checkItem,working);
+	htiNode = insertItem(TR("Layer Profile"),"CrossSection",checkItem,working);
 
 	DrawerTool::configure(htiNode);
 
@@ -194,7 +194,7 @@ void CrossSectionTool::uncheckTool() {
 }
 
 String CrossSectionTool::getMenuString() const {
-	return TR("Cross Section");
+	return TR("Layer Profile");
 }
 
 void CrossSectionTool::displayOptionAddList() {
@@ -320,7 +320,7 @@ int ChooseCrossSectionForm::exec() {
 
 //========================================================================
 CrossSectionGraphFrom::CrossSectionGraphFrom(CWnd *wPar, LayerDrawer *dr, vector<IlwisObject>& sources, CrossSectionTool *t) :
-DisplayOptionsForm2(dr,wPar,TR("Cross section Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON,true)
+DisplayOptionsForm2(dr,wPar,TR("Layer Profile Graph"),fbsBUTTONSUNDER | fbsSHOWALWAYS | fbsNOCANCELBUTTON,true)
 , tool(t)
 , yStretch(false)
 , iScaleMethod(MAP)
