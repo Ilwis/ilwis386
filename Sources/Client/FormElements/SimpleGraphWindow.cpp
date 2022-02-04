@@ -278,8 +278,9 @@ void SimpleGraphWindow::Replot()
 void SimpleGraphWindow::DrawFunction(CDC* pDC, const SimpleFunction * pFunc)
 {
 	// create and select a thin, blue pen
-	CPen penBlue;
+	CPen penBlue, penRed;
 	penBlue.CreatePen(PS_SOLID, 0, RGB(0, 0, 255));
+	penRed.CreatePen(PS_DOT, 0, RGB(255, 0, 0));
 	CPen* pOldPen = pDC->SelectObject(&penBlue);
 
 	// Draw the function here
@@ -295,6 +296,10 @@ void SimpleGraphWindow::DrawFunction(CDC* pDC, const SimpleFunction * pFunc)
 		{
 			rX = rScreenToX(iX);
 			rY = pFunc->rGetFx(rX);
+			if ( rY == rUNDEF)
+				pDC->SelectObject(&penRed);
+			else
+				pDC->SelectObject(&penBlue);
 			iY = iYToScreen(rY);
 			pDC->LineTo(iX, iY);
 		}
@@ -414,7 +419,11 @@ const int SimpleGraphWindow::iXToScreen(const double rX) const
 const int SimpleGraphWindow::iYToScreen(const double rY) const
 {
 	double rYFactor = rYToRFactor();
-	return floor((m_XYFunctionDomain.top - rY) * rYFactor + 0.5) + m_iTopBorderThickness;
+	double rV = rY;
+	if (rY == rUNDEF)
+		rV = (m_XYFunctionDomain.top + m_XYFunctionDomain.bottom) / 2;
+
+	return floor((m_XYFunctionDomain.top - rV) * rYFactor + 0.5) + m_iTopBorderThickness;
 }
 
 const double SimpleGraphWindow::rScreenToX(int iScreenX) const

@@ -84,6 +84,8 @@ double MaplistGraphFunction::rGetFx(double x) const
 		{
 			double rLeftFx = m_rData[iX];
 			double rRightFx = m_rData[iX + 1];
+			if ( rLeftFx == rUNDEF || rRightFx == rUNDEF)
+				return rUNDEF;
 			double rRemaining = x - iX - m_iStartBand + m_iOffset;
 			double rResult = rLeftFx + rRemaining * (rRightFx - rLeftFx);
 			return rResult;
@@ -124,22 +126,17 @@ void MaplistGraphFunction::ReadData()
 			m_csyMpl = m_grfMpl->cs();
 			// convert m_crd to the coordsytem of the map
 			m_crdMpl = m_csyMpl->cConv(m_csy, m_crd);
-			double rMin;
-			double rMax;
+			double rMin = +1e100;
+			double rMax = -1e100;
 			for (int i = m_iStartBand; i <= m_iEndBand; ++i)
 			{
 				double rVal = m_mpl->map(i)->rValue(m_crdMpl);
 				m_rData[i - m_iStartBand] = rVal;
-				if (i == m_iStartBand)
-				{
-					rMin = rVal;
-					rMax = rVal;
-				}
-				else
-				{
-					rMin = min(rVal, rMin);
-					rMax = max(rVal, rMax);
-				}
+				if ( rVal == rUNDEF)
+					continue;
+
+				rMin = min(rVal, rMin);
+				rMax = max(rVal, rMax);
 			}
 			if (m_fFixedStretch)
 			{
