@@ -419,7 +419,7 @@ void OpenStreetMapFormat::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long 
 			}
 		} else {
 			for(int j = 0; j < iNum; ++j) {
-				buf[j] = (data1[j]) | (data1[j] << 8) | (data1[j] << 16);
+				buf[j] = (data1[j]) | (data1[j] << 8) | (data1[j] << 16) | (255 << 24);
 			}
 		}
 	} else {
@@ -431,11 +431,11 @@ void OpenStreetMapFormat::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long 
 			getEngine()->gdal->rasterIO(gdalRasterBand, GF_Read, iFrom, iLine, iNum, 1, data3, iNum, 1, GDT_Byte, 0, 0);
 		if ( gdalRasterBand) {
 			for(int j = 0; j < iNum; ++j) {
-				buf[j] = (data1[j]) | (data2[j] << 8) | (data3[j] << 16);
+				buf[j] = (data1[j]) | (data2[j] << 8) | (data3[j] << 16) | (255 << 24);
 			}
 		} else {
 			for(int j = 0; j < iNum; ++j) {
-				buf[j] = (data1[j]) | (data1[j] << 8) | (data1[j] << 16);
+				buf[j] = (data1[j]) | (data1[j] << 8) | (data1[j] << 16) | (255 << 24);
 			}
 		}
 	}
