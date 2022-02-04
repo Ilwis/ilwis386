@@ -215,6 +215,10 @@ void RasterLayerDrawer::init() const
 	if ( !gr()->rcSize().fUndef()) {
 		data->imageWidth = gr()->rcSize().Col;
 		data->imageHeight = gr()->rcSize().Row;
+		if (rastermap.fValid()) { // prevent crash but show something when the rastermap is smaller than the georeference (corrupt data)
+			data->imageWidth = min(data->imageWidth, rastermap->rcSize().Col);
+			data->imageHeight = min(data->imageHeight, rastermap->rcSize().Row);
+		}
 	} else if ( rastermap.fValid()) {
 		data->imageWidth = rastermap->rcSize().Col;
 		data->imageHeight = rastermap->rcSize().Row;

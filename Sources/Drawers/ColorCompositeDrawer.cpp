@@ -94,6 +94,10 @@ void ColorCompositeDrawer::init() const
 	if ( !gr()->rcSize().fUndef()) {
 		data->imageWidth = gr()->rcSize().Col;
 		data->imageHeight = gr()->rcSize().Row;
+		if (mpl.fValid()) { // prevent crash but show something when the rastermap is smaller than the georeference (corrupt data)
+			data->imageWidth = min(data->imageWidth, mpl->rcSize().Col);
+			data->imageHeight = min(data->imageHeight, mpl->rcSize().Row);
+		}
 	} else if ( mpl.fValid()) {
 		data->imageWidth = mpl->rcSize().Col;
 		data->imageHeight = mpl->rcSize().Row;
