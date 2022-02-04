@@ -47,7 +47,6 @@
 
 
 #include "Client\FormElements\formbase.h"
-#include "Engine\Function\SpectralAngle.h"
 
 LRESULT Cmdmaplistgraph(CWnd *wnd, const String& s);
 
@@ -102,14 +101,6 @@ private:
 	double m_rStretchMin;
 	double m_rStretchMax;
 	ValueRange vrPrecision;
-	CheckBox* m_cbRefSpectrum;
-	bool m_fShowSpectrum;
-	CheckBox* m_cbSpectralAngle;
-	bool m_fSpectralAngle;
-	StaticText * m_sInfoText3;
-	ClassifierSpectralAngle* clfSpAngle;
-	String sInfoText3;
-	int ShowSpectAngle(Event *);
 
 	DECLARE_MESSAGE_MAP()
 };
