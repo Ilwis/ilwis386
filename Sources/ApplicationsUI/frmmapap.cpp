@@ -89,7 +89,7 @@ FormDistanceMap::FormDistanceMap(CWnd* mw, const char* sPar)
   }
   sDomain = "distance.dom";
   fldSourceMap = new FieldDataType(root, TR("&Source Map"), &sSourceMap, 
-                                   new MapListerDomainType(".mpr", dmCLASS|dmIDENT|dmBOOL, true), true);
+                                   new MapListerDomainType(".mpr", dmCLASS|dmIDENT|dmBOOL|dmVALUE, true), true);
   fldSourceMap->SetCallBack((NotifyProc)&FormDistanceMap::CallBack);
   CheckBox* cb = new CheckBox(root, TR("&Weight Map"), &fWeightMap);
   fldWeightMap = new FieldDataType(cb, "", &sWeightMap, new MapListerDomainType(".mpr", dmVALUE, true), true);
