@@ -74,7 +74,7 @@ void TableSelection::setMinCol(long c) {
 
 	if ( c >= cols.size() || c < 0)
 		return;
-	if (boundary.MinCol() == iUNDEF) {
+	if (boundary.MinCol() == iUNDEF || boundary.MinCol() == -iUNDEF) {
 		for (long x = 0; x < c; ++x)
 			cols[x] = false;
 		cols[c] = true;
@@ -111,7 +111,7 @@ void TableSelection::setMinRow(long r) {
 
 	if ( r > rows.size() || r < 1)
 		return;
-	if (boundary.MinRow() == iUNDEF) {
+	if (boundary.MinRow() == iUNDEF || boundary.MinRow() == -iUNDEF) {
 		for (long y = 0; y < r - 1; ++y)
 			rows[y] = false;
 		rows[r - 1] = true;
