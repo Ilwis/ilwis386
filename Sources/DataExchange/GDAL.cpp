@@ -1731,7 +1731,37 @@ void GDALFormat::ogr(const String& name, const String& source, const String& tar
 		}
 		
 	}
+}
 
+String GDALFormat::unicodeDecode(const String & s) {
+	// See https://www.codeproject.com/Articles/38242/Reading-UTF-8-with-C-streams
+	// Unicode
+	// UTF-8 encoding scheme
+	// The encoding used to represent Unicode into bytes is based on rules that define how to break-up the bit-string representing an UCS into bytes.
+	// Unicode was introduced mainly to try to cleanup all of this mess: assuming that the world cannot fit into 8 bits, it gave a distinct ID to every encoded symbol.
+	// This is known as UCS - Universal Character Set.
+	// If an UCS fits 7 bits, its coded as 0xxxxxxx. This makes ASCII character represented by themselves
+	// If an UCS fits 11 bits, it is coded as 110xxxxx 10xxxxxx
+	// If an UCS fits 16 bits, it is coded as 1110xxxx 10xxxxxx 10xxxxxx
+	// If an UCS fits 21 bits, it is coded as 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+	// If an UCS fits 26 bits, it is coded as 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+	// If an UCS fits 31 bits, it is coded as 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
+	// Only the 2nd case (11 bits) is implemented here, cropped to 8 bits.
+	String sout;
+	if (s.length() > 0) {
+		int i = 0;
+		for(; i < s.length() - 1; ++i) {
+			if (((s[i] & 0xE0) == 0xC0) && ((s[i+1] & 0xC0) == 0x80)) { // 0xE0 = 11100000, 0xC0 = 11000000, 0x80 = 10000000
+				char c = (((s[i] & 0x1F) << 6) | (s[i+1] & 0x3F)) & 0xFF; // 0x1F = 00011111, 0x3F = 00111111
+				sout += c;
+				i = i + 1; // skip one manually; the other is skipped by the for
+			} else
+				sout += s[i];
+		}
+		if (i < s.length())
+			sout += s[i];
+	}
+	return sout;
 }
 
 struct ScannedColumn {
@@ -1776,6 +1806,7 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 				columns[field].values.push_back(v);
 			} else if ( type ==  OFTString) {
 				String v("%s",funcs.ogrsVal(hFeature, field));
+				v = unicodeDecode(v); // workaround for encoded strings returned by ogr
 				columns[field].strings.push_back(v);
 				columns[field].useClass &= v.find(":") == string::npos;
 				if ( v.size() > 0)

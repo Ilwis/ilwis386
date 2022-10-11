@@ -317,6 +317,7 @@ private:
 	void           DetermineOutputType(const FileName& fnMp, int& iBands, GDALDataType& iDataType);
 
 	void		   LoadMethods();
+	String		   unicodeDecode(const String & s); // workaround for encoded strings returned by ogr
 	Feature::FeatureType getFeatureType(OGRLayerH hLayer) const;
 	Feature::FeatureType getFeatureTypeFromFirstGeometry(OGRLayerH hLayer) const;
 	FileName	createFileName( const String& name, Feature::FeatureType ftype, int layerCount, int layer);
