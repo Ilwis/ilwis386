@@ -132,7 +132,7 @@ TableIlwis14::TableIlwis14(const FileName& fnIn, const FileName& fnObj, TablePtr
 //              values in the records.
 void TableIlwis14::Scan(const FileName& fnIn, int& iSkipLines, int& iSpecFields, vector<ClmInfo> &columnInfo, bool fFullScan, bool fUseColInfo)
 {
-	if (File::fIsBinary(fnIn))
+	if (false && File::fIsBinary(fnIn)) // Experimental: disable binary check; files with ext-ascii chars are false-detected as binary
 		throw ErrorObject(String(TR("%S is not a text file").c_str(), fnIn.sFullPath()));
 
 	File InputFile(fnIn);

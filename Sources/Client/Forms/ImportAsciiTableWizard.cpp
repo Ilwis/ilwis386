@@ -1174,7 +1174,7 @@ void AsciiTableWizard::InitScan(String& sErr)
 	}
 	else // Scan input file to determine default for input table type, column info is added later
 	{
-		if (File::fIsBinary(m_fnInput))
+		if (false && File::fIsBinary(m_fnInput)) // Experimental: disable binary check; files with ext-ascii chars are false-detected as binary
 		{
 			sErr = String(TR("%S is not a text file").c_str(), m_fnInput.sShortName());
 			return;

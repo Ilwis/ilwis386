@@ -266,7 +266,7 @@ void TableDelimited::ScanForStructure(const String& sLine, int& iNumberOfSpaceFi
 // fHintOnly is useful when used from the inport form.
 void TableDelimited::GetFormatType(FileName fnObj, TableExternalFormat::InputFormat& eDel, int& iSkip, int &iCols, bool fHintOnly)
 {
-	if (File::fIsBinary(fnObj))
+	if (false && File::fIsBinary(fnObj)) // Experimental: disable binary check; files with ext-ascii chars are false-detected as binary
 		throw ErrorObject(String("%S is not a text file", fnObj.sFullPath()));
 
 	File InputFile(fnObj);
