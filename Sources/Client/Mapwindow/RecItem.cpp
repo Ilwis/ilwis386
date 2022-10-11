@@ -183,8 +183,10 @@ RecItemGeoRef* RecItem::AddGeoRef(const GeoRef& grf)
 RecItemTable* RecItem::AddTable(Table tbl) {
 	tbl->MakeUsable();
 	RecItemTable* ri = new RecItemTable(this,tbl);
-	for (int i = 0; i < tbl->iCols(); ++i)
-		ri->AddColumn(tbl->col(i));
+	for (int i = 0; i < tbl->iCols(); ++i) {
+		if (tbl->col(i).fValid())
+			ri->AddColumn(tbl->col(i));
+	}
 	children.append(ri);
 	return ri;
 }
@@ -193,8 +195,10 @@ RecItemTable* RecItem::AddTable(Table tbl, bool fAllowEdit)
 {
 	tbl->MakeUsable();
 	RecItemTable* ri = new RecItemTable(this,tbl);
-	for (int i = 0; i < tbl->iCols(); ++i)
-		ri->AddColumn(tbl->col(i), fAllowEdit);
+	for (int i = 0; i < tbl->iCols(); ++i) {
+		if (tbl->col(i).fValid())
+			ri->AddColumn(tbl->col(i), fAllowEdit);
+	}
 	ri->AllowEdit(fAllowEdit);
 	children.append(ri);
 	return ri;

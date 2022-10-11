@@ -74,7 +74,7 @@ HTREEITEM AttributeTool::configure( HTREEITEM parentItem) {
 		long colNr = 1;
 		for(int i=0; i < attTable->iCols(); ++i) {
 			Column col = attTable->col(i);
-			if ( col->dm()->pdsrt() || col->dm()->pdv() || col->dm()->pdcol()) {
+			if ( col.fValid() && (col->dm()->pdsrt() || col->dm()->pdv() || col->dm()->pdcol())) {
 				ritem = new DisplayOptionRadioButtonItem(col->sName(),tree, htiNode,drawer);
 				ritem->setCheckAction(this,attrCheck, (DTSetCheckFunc)&AttributeTool::setcheckattr);
 				if ( col->dm()->pdv())
