@@ -324,7 +324,7 @@ bool MapMirrorRotate::fFreezing()
 		ok = fCompute(mp.ptr(), &ptr, MirrorRotateType(iMethod), &trq);
 
 	unsigned int rot90s = mrR90 | mrR270 | mrTRANS;
-	if ( iMethod != mrR90 && iMethod != mrR270 && iMethod != mrTRANS) {
+	if ( iMethod != mrR90 && iMethod != mrR270 && iMethod != mrTRANS && iMethod != mrDIAG) {
 		ptr.SetGeoRef(mp->gr());
 	} else {
 		if ( mp->gr()->pgc()) {
