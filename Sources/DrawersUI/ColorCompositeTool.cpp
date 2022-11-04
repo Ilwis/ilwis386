@@ -194,6 +194,8 @@ SetStretchCCForm::SetStretchCCForm(CWnd *wPar, ColorCompositeDrawer *dr,int _ind
 	, DisplayOptionsForm2((ComplexDrawer *)dr,wPar,"Set stretch")
 	, rrAllowedRange (dr->getMapList()[dr->getColorCompositeBand(_index)]->rrMinMax())
 	, rStep (dr->getMapList()[dr->getColorCompositeBand(_index)]->dvrs().rStep())
+	, inRace(false)
+	, fStarting(true)
 {	
 	RangeReal rrCurrentLoHi = dr->getColorCompositeRange(index);
 	if (!rrCurrentLoHi.fValid())
@@ -207,6 +209,7 @@ SetStretchCCForm::SetStretchCCForm(CWnd *wPar, ColorCompositeDrawer *dr,int _ind
 	sliderLow->SetCallBack((NotifyProc)&SetStretchCCForm::check);
 	sliderHigh->SetCallBack((NotifyProc)&SetStretchCCForm::check);
 	create();
+	fStarting = false;
 }
 
 FormEntry *SetStretchCCForm::CheckData() {
@@ -221,18 +224,22 @@ FormEntry *SetStretchCCForm::CheckData() {
 	return 0;
 }
 int  SetStretchCCForm::check(Event *) {
+	if (fStarting)
+		return 1;
 	sliderLow->StoreData();
 	sliderHigh->StoreData();
 
 	if ( low == rUNDEF || high == rUNDEF)
 		return 1;
 
-	if ( low > high){
+	if ( low > high && !inRace){
 		low = high;
+		inRace = true;
 		sliderLow->SetVal(low);
 	}
-	if ( high < low){
+	if ( high < low && !inRace){
 		high = low;
+		inRace = true;
 		sliderHigh->SetVal(high);
 	}
 	
@@ -244,6 +251,7 @@ int  SetStretchCCForm::check(Event *) {
 		setdr->prepareChildDrawers(&pp);
 		updateMapView();
 	}
+	inRace = false;
 	return 1;
 }
 

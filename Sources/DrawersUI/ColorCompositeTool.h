@@ -54,6 +54,8 @@ namespace ILWIS {
 		const RangeReal rrAllowedRange;
 		const double rStep;
 		double low, high;
+		bool inRace;
+		bool fStarting;
 		int index;
 
 		int check(Event *);
