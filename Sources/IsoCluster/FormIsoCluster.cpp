@@ -64,7 +64,7 @@ int FormIsoCluster::changeInput(Event *ev) {
 	MapList mpl = MapList(FileName(mplName));
 	if ( mpl.fValid() && mpl->iSize() > 0) {
 		long sz = mpl->rcSize().Row * mpl->rcSize().Col;
-		minsamplesize = sz * 0.1;
+		minsamplesize = sz * 0.025;
 		minsamplesize = rRound(minsamplesize);
 		fsamplesize->SetVal(minsamplesize);
 	}
