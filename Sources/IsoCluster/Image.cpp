@@ -57,6 +57,7 @@
 #include "Engine\Map\Raster\MapList\maplist.h"
 #include "IsoCluster\MapIsoCluster.h"
 #include "Engine\Domain\dmsort.h"
+#include "Engine\Representation\Rprclass.h"
 #include "Image.h"
 #include "Point.h"
 #include "KMrand.h"
@@ -70,7 +71,11 @@ extern vector<vector<int> > clusters;
 /**********************************************************************/
 /* Constructor                                                        */
 /**********************************************************************/
-Image::Image(const MapList& _mpl , int NumClus, int SAMPRM, Tranquilizer& _trq) : mpl(_mpl), trq(_trq)
+Image::Image(const MapList& _mpl , int NumClus, int SAMPRM, Tranquilizer& _trq)
+: mpl(_mpl)
+, trq(_trq)
+, filter(0)
+, data(0)
 {
 	int i;
 	Map mp = mpl[mpl->iLower()];
@@ -134,6 +139,16 @@ Image::~Image()
 {
 	int i;
 
+	if (filter!=NULL)
+	{
+		delete filter;
+		filter=NULL;
+	}
+	if (data!=NULL)
+	{
+		delete data;
+		data=NULL;
+	}
 
 	if (io_image!=NULL)
 	{
@@ -146,7 +161,7 @@ Image::~Image()
 	trq.SetText("Cleaning up");
 	for (i=0; i < ImageSizeInByte && !is_rand ; i++)
 	{  
-		if ( i % 1000)
+		if ( i % 10000 == 0)
 			trq.fUpdate(i, ImageSizeInByte);
 		delete allPoints[i];
 
@@ -155,7 +170,17 @@ Image::~Image()
 	DeleteCenters();
 
 	delete [] allPoints;
-	delete [] average_distances;
+	//delete [] average_distances; // already deleted in filter
+
+	if (Vmax !=NULL)
+	{
+		delete [] Vmax;
+	}
+
+	if (Vmax_index !=NULL)
+	{
+		delete [] Vmax_index;
+	}
 
 	io_image=NULL;
 	allPoints=NULL;
@@ -181,6 +206,8 @@ void Image:: setPoints(KMpointArray all )
 
 	for (int i=0; i< ImageSizeInByte; i++)
 	{
+		if (allPoints[i])
+			delete allPoints[i];
 		allPoints[i]=new IsoCluster::Point(NumBands, all[i]);
 
 
@@ -289,25 +316,59 @@ void Image::writeClassifiedImage(MapPtr& ptr, Domain& dm )
 	int num_clusters=clusters.size();
 	int size;
 
-	for (i=0; i < num_clusters; i++)
-	{
-		size=clusters[i].size();
-		for (j=0; j < size; j++) 
-			io_image[0][clusters[i][j]]=i+1;
-	}
+	if (num_clusters > 0) {
+		// sort clusters from small to large average center values
+		vector<std::pair<double, int>> averages;
+		for (i = 0; i < centers.size(); ++i) {
+			IsoCluster::Point * center = centers[i];
+			int dim = center->getDimension();
+			double average = 0;
+			for (j = 0; j < dim; ++j)
+				average += center->getCoordinate(j);
+			average /= dim;
+			averages.push_back(std::pair<double, int>(average, i));
+		}
+		std::sort(averages.begin(), averages.end());
 
-	for(int row = 0; row < ptr.rcSize().Row; ++row) {
+		for (i=0; i < num_clusters; i++)
+		{
+			int ix = averages[i].second;
+			size=clusters[ix].size();
+			for (j=0; j < size; j++) 
+				io_image[0][clusters[ix][j]]=i+1;
+		}
+
+		for(int row = 0; row < ptr.rcSize().Row; ++row) {
+			LongBuf buf(ptr.rcSize().Col);
+			for(int col = 0; col < ptr.rcSize().Col; ++col) {
+				byte v = *(io_image[0]+ row * ptr.rcSize().Col + col);
+				buf[col] = v;
+			}
+			ptr.PutLineRaw(row, buf);
+		}
+	} else { // no clusters found; min_nr_pixels_per_cluster was too strict; how do we inform the user?
 		LongBuf buf(ptr.rcSize().Col);
 		for(int col = 0; col < ptr.rcSize().Col; ++col) {
-			byte v = *(io_image[0]+ row * ptr.rcSize().Col + col);
-			buf[col] = v;
+			buf[col] = iUNDEF;
 		}
-		ptr.PutLineRaw(row, buf);
-
-
+		for(int row = 0; row < ptr.rcSize().Row; ++row) {
+			ptr.PutLineRaw(row, buf);
+		}
 	}
-	for(int i = 1 ; i <= NumClusters; ++i)
+	dm->pdsrt()->Resize(num_clusters);
+	for(int i = 1 ; i <= num_clusters; ++i) {
 		dm->pdsrt()->SetVal(i, String("class %d", i));
+		dm->pdsrt()->SetOrd(i, i);
+	}
+	dm->pdsrt()->Resize(num_clusters); // SetOrd() "destroys" the size if the representation existed on disk and the size increased; so .. resize again.
+	dm->Store();
+	Representation rprg = Representation(FileName("HSI_PURD.RPR"));
+	Representation rpr = dm->rpr();
+	RepresentationClass * prc = rpr->prc();
+	for(int i = 1 ; i <= num_clusters; ++i) {
+		Color clr = rprg->clr((double)(i-1) / (num_clusters-1));
+		prc->PutColor(i, clr);
+	}
 }
 /********************************************************************************/
 /* This function looks at the io_image (which its dimensions are number of      */
@@ -321,20 +382,16 @@ IsoCluster::Point* Image::points_helper(int PointCount)
 	if (!p)
 	{
 		throw ErrorObject(TR("Memory Allocation Failed"));
-		exit(1);
-
 	}
 	for (int i=0; i< NumBands; i++)
 	{
 		p[i]=io_image[i][PointCount];	
-
 	}
 
 	to_return=new IsoCluster::Point(NumBands, p);
 	if (!to_return)
 	{
 		throw ErrorObject(TR("Memory Allocation Failed"));
-		exit(1);
 	}
 	return to_return;
 
@@ -415,7 +472,7 @@ void Image::sampleCenters()
 	int i, to_add;
 	for (i=0; i < NumClusters ; i++)
 	{
-		to_add=rand()%ImageSizeInByte;
+		to_add=((rand() & 0x7fff) << 15 | (rand() & 0x7fff)) % ImageSizeInByte; // call rand() twice, to account for RAND_MAX (32767); good enough for images up to 32767x32767 pixels; assumption: RAND_MAX == 0x7fff
 
 		//If the random point is not a duplicate, add it to the list of centers.
 		IsoCluster::Point* p;
@@ -425,16 +482,17 @@ void Image::sampleCenters()
 			p=points_helper(to_add);
 		if (!p)
 		{
-			cout<<"Error 7: Memory Allocation Failed"<<endl;
-			exit(1);
+			throw ErrorObject(TR("Memory Allocation Failed"));
 		}
 
 		if (find_center(p)== -1)
 		{
 			centers.push_back(p);
 		}
-		else 
+		else {
+			delete p;
 			i--;
+		}
 	}//for
 
 
@@ -462,8 +520,11 @@ void Image::samplePoints(double s)
 		if (x <= probability)
 		{
 			samples.push_back(i);
-			if (!is_rand)
+			if (!is_rand) {
+				if (allPoints[i])
+					delete allPoints[i];
 				allPoints[i]=points_helper(i);  	
+			}
 
 			s=s-1;
 		}
@@ -1008,11 +1069,12 @@ void Image::Lump(const vector<PairDistanceNode>& to_lump)
 
 			} // if
 		} // for
+		delete [] used_centers;
 	} //try
 	catch ( bad_alloc exception)
 	{
 		//*IsoErr<<"Exception occured in Image::Lump function: "<<exception.what() <<endl;
-		exit(1);
+		throw ErrorObject(TR("Exception occured in Image::Lump function"));
 	}
 
 
@@ -1024,6 +1086,16 @@ void Image::preFinalClustering()
 {
 	//since it is going to be the last round, we need to classify every single point
 
+	if (filter!=NULL)
+	{
+		delete filter;
+		filter=NULL;
+	}
+	if (data!=NULL)
+	{
+		delete data;
+		data=NULL;
+	}
 	samples.clear();
 	for (int i=0; i<ImageSizeInByte; i++)
 	{
@@ -1035,16 +1107,6 @@ void Image::preFinalClustering()
 	}
 	// since it is the last iteration, build a new KMfilterCenters to consider all points
 	// and the latest centers.
-	if (filter!=NULL)
-	{
-		delete filter;
-		filter=NULL;
-	}
-	if (data!=NULL)
-	{
-		delete data;
-		data=NULL;
-	}
 	BuildKMfilterCenters();
 }  
 /****************************************************************************************/
