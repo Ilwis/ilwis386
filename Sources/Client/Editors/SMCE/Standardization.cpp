@@ -1551,7 +1551,7 @@ public:
 		pbCreateColumn->Align(fldCol, AL_AFTER);
 		pbCreateColumn->SetIndependentPos();
 
-		if (!fIsConstraint && m_ds && m_ds->iNettoSize() <= 15) // max. 15 classes .. could be improved but needs more time
+		if (!fIsConstraint && m_ds && m_ds->iNettoSize() <= 20) // max. 20 classes .. could be improved but needs more time
 		{
 			m_fWizardAvailable = true;
 			PushButton* pbApplyWizard = new PushButton(root, TR("Apply Weigh Wizard"), (NotifyProc)&StandardizationClassForm::CallBackApplyWizard);
