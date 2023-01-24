@@ -84,30 +84,35 @@ void kmDeallocPt(KMpoint &p)		// deallocate one point
 
 KMpointArray kmAllocPts(int n, int dim)	// allocate n pts in dim
 {
-    KMpointArray pa = new KMpoint[n];		// allocate points
-    /* Nargess: added  memory allocation check */
-    if (!pa)
-        kmError("Memory Allocation failed in 'kmAllocPts' for 'pa' ", KMabort);
+	if (n > 0) {
+		KMpointArray pa = new KMpoint[n];		// allocate points
+		/* Nargess: added  memory allocation check */
+		if (!pa)
+			kmError("Memory Allocation failed in 'kmAllocPts' for 'pa' ", KMabort);
 
-    KMpoint	  p  = new KMcoord[n*dim];	// allocate space for coords
+		KMpoint	  p  = new KMcoord[n*dim];	// allocate space for coords
 
-    /* Nargess: added  memory allocation check */
-    if (!p)
-        kmError("Memory Allocation failed in 'kmAllocPts' for 'p'", KMabort);
+		/* Nargess: added  memory allocation check */
+		if (!p)
+			kmError("Memory Allocation failed in 'kmAllocPts' for 'p'", KMabort);
 
-	
-    for (int i = 0; i < n; i++) {
-	pa[i] = &(p[i*dim]);
-    }
+		
+		for (int i = 0; i < n; i++) {
+		pa[i] = &(p[i*dim]);
+		}
 
-    return pa;
+		return pa;
+	} else
+		return 0;
 }
 
 void kmDeallocPts(KMpointArray &pa)	// deallocate points
 {
-    delete [] pa[0];				// dealloc coordinate storage
-    delete [] pa;				// dealloc points
-    pa = NULL;
+	if (pa != 0) {
+		delete [] pa[0];				// dealloc coordinate storage
+		delete [] pa;				// dealloc points
+		pa = NULL;
+	}
 }
    
 //----------------------------------------------------------------------
