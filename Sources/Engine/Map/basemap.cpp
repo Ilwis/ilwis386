@@ -758,7 +758,7 @@ void BaseMapPtr::GetObjectStructure(ObjectStructure& os)
 	IlwisObjectPtr::GetObjectStructure(os);
 	// beeuh solving internal objects at this level is bad. But ilwis has
 	// no other option. (obj(..) function can not retrieve internal objects )	
-	if ( fnObj == dm()->fnObj )	
+	if ( dm().fValid() && (fnObj == dm()->fnObj) )	
 	{
 		os.AddFile(fnObj, "dom:TableStore", "data");
 		os.AddFile(fnObj, "rpr:TableStore", "data");				
