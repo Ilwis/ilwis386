@@ -176,7 +176,8 @@ void KMfilterCenters::computeDistortion() // compute distortions
 
 	KCtree* t = getData().getKcTree();
 	assert(t != NULL);				// tree better exist
-	t->getNeighbors(*this);			// get neighbors
+	if (kCtrs > 0)
+		t->getNeighbors(*this);			// get neighbors
 
 	double totDist = 0;
 	double local_cDotS=0,local_cDotC=0;           //Nargess added
@@ -302,7 +303,7 @@ void KMfilterCenters::UpdateCenters(vector<int>& to_keep)
 	int old=ctrs.size(), j=0;
 	for (i=0; i < old; i++)
 	{
-		if ( i==to_keep[j])
+		if (j < to_keep.size() && i==to_keep[j])
 		{	
 			KMpoint P=new KMcoord[getDim()];
 			kmCopyPt(getDim(), ctrs[i], P);
