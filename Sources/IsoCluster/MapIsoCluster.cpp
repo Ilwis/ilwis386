@@ -219,7 +219,7 @@ bool MapIsoCluster::fFreezing()
 {
 	trq.SetTitle("Isocluster");
 
-	maxSampleSize = 1000000;
+	maxSampleSize = 100000; // Should this be user-defined?
 	long pixels = mpl->rcSize().Col * mpl->rcSize().Row;
 	if (maxSampleSize > pixels)
 		maxSampleSize = pixels; 
