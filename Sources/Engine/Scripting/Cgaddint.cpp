@@ -159,7 +159,7 @@ void CodeGenerator::AddInstMinMaxVal(const String& sFunc,
     FuncNotAllowedInUserDefFunc(sFunc);
   BaseMap bmap(sVal);
   if (bmap->fRealValues()) {
-    RangeReal rrMinMax = bmap->rrMinMax();
+    RangeReal rrMinMax = bmap->rrMinMax(BaseMapPtr::mmmCALCULATE);
     double r;
     if (fCIStrEqual(sFunc , "mapmin"))
       r =  rrMinMax.rLo();
@@ -168,7 +168,7 @@ void CodeGenerator::AddInstMinMaxVal(const String& sFunc,
     AddInst1("constr", String("%g",r));
   }
   else if (bmap->fValues()) {
-    RangeInt riMinMax = bmap->riMinMax();
+    RangeInt riMinMax = bmap->riMinMax(BaseMapPtr::mmmCALCULATE);
     long i;
     if (fCIStrEqual(sFunc , "mapmin"))
       i =  riMinMax.iLo();
