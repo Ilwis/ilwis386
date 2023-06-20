@@ -329,17 +329,20 @@ bool ObjectCopierUI::GatherFiles(ObjectStructure& osStruct, bool fBreakDep, bool
 			bool fDependent = obj->fDependent() || obj->fUsesDependentObjects();
 			if ( fDependent )
 			{
-				bool fBreak = osStruct.fBreakDependencies();
-				if ( chBreakDependencies == chANY)
-				{
-					String sMessage(TR("Break Dependencies of %S").c_str(), obj->fnObj.sRelative(false));
-					int iRet = IlwWinApp()->GetMainWnd()->MessageBox(sMessage.c_str(), TR("Break Dependencies").c_str(), MB_YESNOCANCEL | MB_ICONQUESTION );
-					if ( iRet == IDCANCEL)
-						return false;
-					fBreak = iRet == IDNO ? false : true;
-					chBreakDependencies = fBreak ? chYES : chNO;
+				String sHisType = obj->sType().sLeft(9); // Exception for histograms; they can't live without their dependency; TableHistogram is derived from TableVirtual
+				if (!fCIStrEqual(sHisType, "Histogram")) { 
+					bool fBreak = osStruct.fBreakDependencies();
+					if ( chBreakDependencies == chANY)
+					{
+						String sMessage(TR("Break Dependencies of %S").c_str(), obj->fnObj.sRelative(false));
+						int iRet = IlwWinApp()->GetMainWnd()->MessageBox(sMessage.c_str(), TR("Break Dependencies").c_str(), MB_YESNOCANCEL | MB_ICONQUESTION );
+						if ( iRet == IDCANCEL)
+							return false;
+						fBreak = iRet == IDNO ? false : true;
+						chBreakDependencies = fBreak ? chYES : chNO;
+					}
+					osStruct.SetBreakDependencies( fBreak );
 				}
-				osStruct.SetBreakDependencies( fBreak );
 			}
 			// if the object is a container ask if its contents should also move
 			if ( ObjectStructure::fIsContainer( *file) )
