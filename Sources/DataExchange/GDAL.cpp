@@ -183,6 +183,9 @@ GDALFormat::GDALFormat()
 	dataSet = NULL;	
 	buffer = NULL;
 	fCombine = f4BytesInt = false;
+	fUpsideDown = false;
+	iLines = 0;
+	rNoData = rUNDEF;
 	gdalDriver = NULL;
 	fShowCollection = false;
 	currentLayer= NULL;
@@ -222,6 +225,9 @@ GDALFormat::GDALFormat(const FileName& fn, ParmList& pm, ForeignFormat::mtMapTyp
 	buffer(0),
 	fImport(false),
 	fExport(false),
+	fUpsideDown(false),
+	rNoData(rUNDEF),
+	iLines(0),
 	fShowCollection(false),
 	currentLayer(NULL)
 {
@@ -483,6 +489,8 @@ void GDALFormat::LoadMethods() {
 				funcs.getPaletteInterpretation = (GDALGetPaletteInterpretationFunc)GetProcAddress(hm,"_GDALGetPaletteInterpretation@4");
 				funcs.getColorEntryCount = (GDALGetColorEntryCountFunc)GetProcAddress(hm,"_GDALGetColorEntryCount@4");
 				funcs.getColorEntry = (GDALGetColorEntryFunc)GetProcAddress(hm,"_GDALGetColorEntry@8");
+				funcs.setUndefinedValue = (GDALSetRasterNoDataValueFunc)GetProcAddress(hm,"_GDALSetRasterNoDataValue@12");
+				funcs.getUndefinedValue = (GDALGetRasterNoDataValueFunc)GetProcAddress(hm,"_GDALGetRasterNoDataValue@8");
 				funcs.setConfigOption = (CPLSetConfigOptionFunc)GetProcAddress(hm,"_CPLSetConfigOption@8");
 
 				funcs.errorMsg = (CPLGetLastErrorFunc)GetProcAddress(hm, "_CPLGetLastErrorMsg@0");
@@ -1124,9 +1132,9 @@ void GDALFormat::GetLineRaw(long iLine, ByteBuf& buf, long iFrom, long iNum) con
 	if ( buffer == NULL)
 		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
-	funcs.rasterIO(currentLayer, GF_Read, iFrom, iLine,iNum,1,(unsigned char *)buffer, iNum, 1, GDT_Byte,0,0);								
-	for( int i = 0; i< iNum; ++i)
-		buf[i] = buffer[i];		
+	funcs.rasterIO(currentLayer, GF_Read, iFrom, fUpsideDown ? (iLines - iLine - 1) : iLine,iNum,1,(unsigned char *)buffer, iNum, 1, GDT_Byte,0,0);								
+	for( int i = 0; i< iNum; ++i) // no UNDEF available in ILWIS Byte format
+		buf[i] = buffer[i];
 }
 
 void GDALFormat::GetLineRaw(long iLine, IntBuf& buf, long iFrom, long iNum) const
@@ -1135,10 +1143,20 @@ void GDALFormat::GetLineRaw(long iLine, IntBuf& buf, long iFrom, long iNum) cons
 	if ( buffer == NULL)
 		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
-	funcs.rasterIO(currentLayer, GF_Read, iFrom, iLine,iNum,1,(unsigned char *)buffer, iNum, 1, GDT_Int16, 0,0);								
+	funcs.rasterIO(currentLayer, GF_Read, iFrom, fUpsideDown ? (iLines - iLine - 1) : iLine,iNum,1,(unsigned char *)buffer, iNum, 1, GDT_Int16, 0,0);								
 
-	for( int i = 0; i< iNum; ++i)
-		buf[i] = ((short *)buffer)[i * 2];
+	if (rNoData != rUNDEF) {
+		short val;
+		for( int i = 0; i< iNum; ++i) {
+			val = ((short *)buffer)[i * 2];
+			if (val == rNoData)
+				val = shUNDEF;
+			buf[i] = val;
+		}
+	} else {
+		for( int i = 0; i< iNum; ++i)
+			buf[i] = ((short *)buffer)[i * 2];
+	}
 }
 
 void GDALFormat::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long iNum) const
@@ -1147,45 +1165,116 @@ void GDALFormat::GetLineRaw(long iLine, LongBuf& buf, long iFrom, long iNum) con
 	if ( buffer == NULL)
 		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
-	CPLErr ret = funcs.rasterIO (currentLayer, GF_Read, iFrom, iLine,iNum, 1, buffer, iNum, 1, dataType,0, 0);								
+	CPLErr ret = funcs.rasterIO (currentLayer, GF_Read, iFrom, fUpsideDown ? (iLines - iLine - 1) : iLine,iNum, 1, buffer, iNum, 1, dataType,0, 0);								
 
 	int i = 0;
 	switch(dataType)
 	{
 		case GDT_Int16:
-			for( i = 0; i< iNum; ++i)
-				buf[i] = ((short *)buffer)[i];
+			if (rNoData != rUNDEF) {
+				long val;
+				for( i = 0; i< iNum; ++i) {
+					val = ((short *)buffer)[i];
+					if (val == rNoData)
+						val = iUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)
+					buf[i] = ((short *)buffer)[i];
+			}
 			break;
 		case GDT_UInt16:
 		{
 			//DomainValueRangeStruct dvrs(0, USHRT_MAX - 2);			
 			unsigned short n;
-			for( i = 0; i< iNum; ++i)
-			{
-				n = (((unsigned short *)buffer)[i]);
-				buf[i] = n;
+			if (rNoData != rUNDEF) {
+				for( i = 0; i< iNum; ++i)
+				{
+					n = (((unsigned short *)buffer)[i]);
+					if (n == rNoData)
+						buf[i] = iUNDEF;
+					else
+						buf[i] = n;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)
+				{
+					n = (((unsigned short *)buffer)[i]);
+					buf[i] = n;
+				}
 			}
 			break;
 		}
 		case GDT_UInt32:
-			for( i = 0; i< iNum; ++i)
-				buf[i] = ((unsigned int *)buffer)[i];
+			if (rNoData != rUNDEF) {
+				long val;
+				for( i = 0; i< iNum; ++i) {
+					val = ((unsigned int *)buffer)[i];
+					if (val == rNoData)
+						val = iUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)
+					buf[i] = ((unsigned int *)buffer)[i];
+			}
 			break;
 		case GDT_Int32:
-			for( i = 0; i< iNum; ++i)
-				buf[i] = ((int *)buffer)[i];
+			if (rNoData != rUNDEF) {
+				long val;
+				for( i = 0; i< iNum; ++i) {
+					val = ((int *)buffer)[i];
+					if (val == rNoData)
+						val = iUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)
+					buf[i] = ((int *)buffer)[i];
+			}
 			break;
 		case GDT_Byte:
-			for( i = 0; i< iNum; ++i)
-				buf[i] = buffer[i];
+			if (rNoData != rUNDEF) {
+				long val;
+				for( i = 0; i< iNum; ++i) {
+					val = buffer[i];
+					if (val == rNoData)
+						val = iUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)
+					buf[i] = buffer[i];
+			}
 			break;
 		case GDT_Float32:
-			for( i = 0; i< iNum; ++i)				
-				buf[i] = fpu_error(((float *)buffer)[i])?iUNDEF:((float *)buffer)[i];
+			if (rNoData != rUNDEF) {
+				long val;
+				for( i = 0; i< iNum; ++i) {
+					val = fpu_error(((float *)buffer)[i])?iUNDEF:((float *)buffer)[i];
+					if (val == rNoData)
+						val = iUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)				
+					buf[i] = fpu_error(((float *)buffer)[i])?iUNDEF:((float *)buffer)[i];
+			}
 			break;
 		case GDT_Float64:
-			for( i = 0; i< iNum; ++i)
-				buf[i] = fpu_error(((double *)buffer)[i])?iUNDEF:((double *)buffer)[i];
+			if (rNoData != rUNDEF) {
+				long val;
+				for( i = 0; i< iNum; ++i) {
+					val = fpu_error(((double *)buffer)[i])?iUNDEF:((double *)buffer)[i];
+					if (val == rNoData)
+						val = iUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)
+					buf[i] = fpu_error(((double *)buffer)[i])?iUNDEF:((double *)buffer)[i];
+			}
 			break;
 	};
 }
@@ -1197,42 +1286,113 @@ void GDALFormat::GetLineVal(long iLine, RealBuf& buf, long iFrom, long iNum) con
 		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
 
 	int gdalDataType = funcs.getDataType(dataSet);
-	funcs.rasterIO(currentLayer, GF_Read, iFrom, iLine,iNum,1, (unsigned char *)buffer, iNum, 1, dataType, 0,0);								
+	funcs.rasterIO(currentLayer, GF_Read, iFrom, fUpsideDown ? (iLines - iLine - 1) : iLine,iNum,1, (unsigned char *)buffer, iNum, 1, dataType, 0,0);								
 
 	int i = 0;
 	switch(dataType)
 	{
 		case GDT_Int16:
-			for( i = 0; i< iNum; ++i)
-				buf[i] = ((short *)buffer)[i];
+			if (rNoData != rUNDEF) {
+				double val;
+				for( i = 0; i< iNum; ++i) {
+					val = ((short *)buffer)[i];
+					if (val == rNoData)
+						val = rUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)
+					buf[i] = ((short *)buffer)[i];
+			}
 			break;
 		case GDT_UInt16:
 		{
-			for( i = 0; i< iNum; ++i)
-			{
-				buf[i] = (((unsigned short *)buffer)[i]); 
+			if (rNoData != rUNDEF) {
+				double val;
+				for( i = 0; i< iNum; ++i)
+				{
+					val = (((unsigned short *)buffer)[i]); 
+					if (val == rNoData)
+						val = rUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)
+				{
+					buf[i] = (((unsigned short *)buffer)[i]); 
+				}
 			}
 		}			
 		break;
 		case GDT_UInt32:
-			for( i = 0; i< iNum; ++i)
-				buf[i] = ((unsigned int *)buffer)[i];
+			if (rNoData != rUNDEF) {
+				double val;
+				for( i = 0; i< iNum; ++i) {
+					val = ((unsigned int *)buffer)[i];
+					if (val == rNoData)
+						val = rUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)
+					buf[i] = ((unsigned int *)buffer)[i];
+			}
 			break;
 		case GDT_Int32:
-			for( i = 0; i< iNum; ++i)
-				buf[i] = ((int *)buffer)[i];
+			if (rNoData != rUNDEF) {
+				double val;
+				for( i = 0; i< iNum; ++i) {
+					val = ((int *)buffer)[i];
+					if (val == rNoData)
+						val = rUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)
+					buf[i] = ((int *)buffer)[i];
+			}
 			break;
 		case GDT_Byte:
-			for( i = 0; i< iNum; ++i)
-				buf[i] = buffer[i];
+			if (rNoData != rUNDEF) {
+				double val;
+				for( i = 0; i< iNum; ++i) {
+					val = buffer[i];
+					if (val == rNoData)
+						val = rUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)
+					buf[i] = buffer[i];
+			}
 			break;
 		case GDT_Float32:
-			for( i = 0; i< iNum; ++i)				
-				buf[i] = fpu_error(((float *)buffer)[i])?rUNDEF:((float *)buffer)[i];
+			if (rNoData != rUNDEF) {
+				double val;
+				for( i = 0; i< iNum; ++i) {
+					val = fpu_error(((float *)buffer)[i])?rUNDEF:((float *)buffer)[i];
+					if (val == rNoData)
+						val = rUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)				
+					buf[i] = fpu_error(((float *)buffer)[i])?rUNDEF:((float *)buffer)[i];
+			}
 			break;
 		case GDT_Float64:
-			for( i = 0; i< iNum; ++i)				
-				buf[i] = fpu_error(((double *)buffer)[i])?rUNDEF:((double *)buffer)[i];
+			if (rNoData != rUNDEF) {
+				double val;
+				for( i = 0; i< iNum; ++i) {
+					val = fpu_error(((double *)buffer)[i])?rUNDEF:((double *)buffer)[i];
+					if (val == rNoData)
+						val = rUNDEF;
+					buf[i] = val;
+				}
+			} else {
+				for( i = 0; i< iNum; ++i)				
+					buf[i] = fpu_error(((double *)buffer)[i])?rUNDEF:((double *)buffer)[i];
+			}
 			break;
 	};
 }
@@ -1252,6 +1412,19 @@ void GDALFormat::CreateLineBuffer()
 	buffer = new unsigned char [ iSize * iDataSize/8 ];
 	memset(buffer, 0, iSize * iDataSize/8);
 	f4BytesInt = dataType == GDT_Int16 || dataType == GDT_UInt16 || dataType == GDT_Float32 || dataType == GDT_UInt32 || dataType == GDT_Int32;		
+	double geosys[6];
+	CPLErr ret = funcs.geotransform(dataSet, geosys);
+	if ( ret == 0 )
+	{	
+		double b2;
+		b2 = geosys[5];
+		fUpsideDown = (b2 > 0);
+	}
+	iLines = funcs.ySize( dataSet );
+	int pbSuccess;
+	rNoData = funcs.getUndefinedValue( currentLayer, &pbSuccess );
+	if (!pbSuccess)
+		rNoData = rUNDEF;
 }
 
 long GDALFormat::iRaw(RowCol rc) const
@@ -1259,23 +1432,43 @@ long GDALFormat::iRaw(RowCol rc) const
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);			
 	if ( buffer == NULL )
 		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
-	funcs.rasterIO(currentLayer, GF_Read, rc.Col, rc.Row, 1,1, (unsigned char *)buffer, 1, 1, GDT_Int32, 0,0);								
+	funcs.rasterIO(currentLayer, GF_Read, rc.Col, fUpsideDown ? (iLines - rc.Row - 1) : rc.Row, 1,1, (unsigned char *)buffer, 1, 1, GDT_Int32, 0,0);								
 	switch (funcs.getDataType(currentLayer))
 	{
 		case GDT_Byte:
+			if (rNoData != rUNDEF) {
+				return (buffer[0] != rNoData) ? buffer[0] : iUNDEF;
+			} else {
 				return buffer[0];
-				break;
+			}
+			break;
 		case GDT_Int16:
+			if (rNoData != rUNDEF) {
+				return (((int *)buffer)[0] != rNoData) ? ((int *)buffer)[0] : iUNDEF;
+			} else {
 				return (((int *)buffer)[0]);
-				break;
+			}
+			break;
 		case GDT_UInt16:
-			return (long)(((unsigned int *)buffer)[0]);
+			if (rNoData != rUNDEF) {
+				return (((unsigned int *)buffer)[0] != rNoData) ? (long)(((unsigned int *)buffer)[0]) : iUNDEF;
+			} else {
+				return (long)(((unsigned int *)buffer)[0]);
+			}
 			break;
 		case GDT_Int32:
-			return ((long *)buffer)[0];
+			if (rNoData != rUNDEF) {
+				return (((long *)buffer)[0] != rNoData) ? ((long *)buffer)[0] : iUNDEF;
+			} else {
+				return ((long *)buffer)[0];
+			}
 			break;
 		case GDT_UInt32:
-			return ((unsigned int *)buffer)[0];
+			if (rNoData != rUNDEF) {
+				return (((unsigned int *)buffer)[0] != rNoData) ? ((unsigned int *)buffer)[0] : iUNDEF;
+			} else {
+				return ((unsigned int *)buffer)[0];
+			}
 			break;
 
 	};
@@ -1292,30 +1485,58 @@ double GDALFormat::rValue(RowCol rc) const
 	ILWISSingleLock lock(&m_CriticalSection, TRUE, SOURCE_LOCATION);					
 	if ( buffer == NULL )
 		(const_cast<GDALFormat *>(this))->CreateLineBuffer();
-	funcs.rasterIO(currentLayer, GF_Read, rc.Col, rc.Row,1,1,(unsigned char *)buffer, 1, 1, dataType, 0,0);
+	funcs.rasterIO(currentLayer, GF_Read, rc.Col, fUpsideDown ? (iLines - rc.Row - 1) : rc.Row,1,1,(unsigned char *)buffer, 1, 1, dataType, 0,0);
 	double rVal;
 	switch(dataType)
 	{
 		case GDT_Int16:
-			rVal = ((short *)buffer)[0];
+			if (rNoData != rUNDEF) {
+				rVal = (((short *)buffer)[0] != rNoData) ? ((short *)buffer)[0] : rUNDEF;
+			} else {
+				rVal = ((short *)buffer)[0];
+			}
 			break;
 		case GDT_UInt16:
-			rVal = (((unsigned short *)buffer)[0]); 
+			if (rNoData != rUNDEF) {
+				rVal = (((unsigned short *)buffer)[0] != rNoData) ? ((unsigned short *)buffer)[0] : rUNDEF;
+			} else {
+				rVal = (((unsigned short *)buffer)[0]);
+			}
 			break;
 		case GDT_UInt32:
-			rVal = ((unsigned int *)buffer)[0];
+			if (rNoData != rUNDEF) {
+				rVal = (((unsigned int *)buffer)[0] != rNoData) ? ((unsigned int *)buffer)[0] : rUNDEF;
+			} else {
+				rVal = ((unsigned int *)buffer)[0];
+			}
 			break;
 		case GDT_Int32:
-			rVal = ((int *)buffer)[0];
+			if (rNoData != rUNDEF) {
+				rVal = (((int *)buffer)[0] != rNoData) ? ((int *)buffer)[0] : rUNDEF;
+			} else {
+				rVal = ((int *)buffer)[0];
+			}
 			break;
 		case GDT_Byte:
-			rVal = buffer[0];
+			if (rNoData != rUNDEF) {
+				rVal = (buffer[0] != rNoData) ? buffer[0] : rUNDEF;
+			} else {
+				rVal = buffer[0];
+			}
 			break;
 		case GDT_Float32:
 			rVal = fpu_error(((float *)buffer)[0])?rUNDEF:((float *)buffer)[0];
+			if (rNoData != rUNDEF) {
+				if (rVal == rNoData)
+					rVal = rUNDEF;
+			}
 			break;
 		case GDT_Float64:
 			rVal = fpu_error(((double *)buffer)[0])?rUNDEF:((double *)buffer)[0];
+			if (rNoData != rUNDEF) {
+				if (rVal == rNoData)
+					rVal = rUNDEF;
+			}
 			break;
 		default:
 			rVal = rUNDEF;
@@ -1352,7 +1573,7 @@ void GDALFormat::PutLineVal(const FileName& fnMap, long iLine, const RealBuf& bu
 	 ((double *)buffer)[i] = (double )(buf[i]);
 	}		 
 
-	funcs.rasterIO(currentLayer, GF_Write, iFrom,iLine, iNum,1,(double*)buffer, iNum, 1 , GDT_Float64,0,0);	
+	funcs.rasterIO(currentLayer, GF_Write, iFrom,fUpsideDown ? (iLines - iLine - 1) : iLine, iNum,1,(double*)buffer, iNum, 1 , GDT_Float64,0,0);	
 }
 
 void GDALFormat::PutLineVal(const FileName& fnMap,long iLine, const LongBuf& buf, long iFrom, long iNum) 
@@ -1393,9 +1614,9 @@ void GDALFormat::PutLineVal(const FileName& fnMap,long iLine, const LongBuf& buf
 	};	
 
 	if ( !f4BytesInt)
-	  funcs.rasterIO(currentLayer, GF_Write, iFrom,iLine, iNum, 1,(unsigned char *)buffer,iNum, 1 , GDT_Int32,0,0);
+	  funcs.rasterIO(currentLayer, GF_Write, iFrom,fUpsideDown ? (iLines - iLine - 1) : iLine, iNum, 1,(unsigned char *)buffer,iNum, 1 , GDT_Int32,0,0);
 	else
-	  funcs.rasterIO(currentLayer, GF_Write, iFrom,iLine, iNum, 1,(int *)buffer, iNum, 1 , GDT_Int32,0,0);
+	  funcs.rasterIO(currentLayer, GF_Write, iFrom,fUpsideDown ? (iLines - iLine - 1) : iLine, iNum, 1,(int *)buffer, iNum, 1 , GDT_Int32,0,0);
 }
 
 void GDALFormat::PutLineRaw(const FileName& fnMap, long iLine, const LongBuf& buf, long iFrom, long iNum) 
@@ -1485,9 +1706,9 @@ void GDALFormat::PutLineRaw(const FileName& fnMap, long iLine, const LongBuf& bu
 
 	
 	if ( !f4BytesInt)
-	  funcs.rasterIO(currentLayer, GF_Write, iFrom,iLine, iNum,1,(unsigned char *)buffer, iNum, 1 , GDT_Int32,0,0);
+	  funcs.rasterIO(currentLayer, GF_Write, iFrom,fUpsideDown ? (iLines - iLine - 1) : iLine, iNum,1,(unsigned char *)buffer, iNum, 1 , GDT_Int32,0,0);
 	else
-	  funcs.rasterIO(currentLayer, GF_Write, iFrom,iLine, iNum, 1,(int *)buffer, iNum, 1 , GDT_Int32,0,0);
+	  funcs.rasterIO(currentLayer, GF_Write, iFrom,fUpsideDown ? (iLines - iLine - 1) : iLine, iNum, 1,(int *)buffer, iNum, 1 , GDT_Int32,0,0);
 }
 
 void GDALFormat::PutLineRaw(const FileName& fnMap, long iLine, const IntBuf& buf, long iFrom, long iNum) 
@@ -1501,7 +1722,7 @@ void GDALFormat::PutLineRaw(const FileName& fnMap, long iLine, const IntBuf& buf
 		((short *)buffer)[i] = (short)(mp->dvrs().iValue(buf[i]));
 
 	int iChannel = iLayer;
-    funcs.rasterIO(currentLayer, GF_Write, iFrom,iLine, iNum, 1,(int *)buffer, iNum, 1 , GDT_Int32,0,0);
+    funcs.rasterIO(currentLayer, GF_Write, iFrom,fUpsideDown ? (iLines - iLine - 1) : iLine, iNum, 1,(int *)buffer, iNum, 1 , GDT_Int32,0,0);
 }
 
 void GDALFormat::PutLineRaw(const FileName& fnMap, long iLine, const ByteBuf& buf, long iFrom, long iNum) 
@@ -1516,7 +1737,7 @@ void GDALFormat::PutLineRaw(const FileName& fnMap, long iLine, const ByteBuf& bu
 	for( int i = 0; i< iNum; ++i)
 		buffer[i] = mp->dvrs().iValue(buf[i]);	
 
-    funcs.rasterIO(currentLayer, GF_Write, iFrom,iLine, iNum,1, buffer, iNum, 1 , GDT_Byte,0,0);
+    funcs.rasterIO(currentLayer, GF_Write, iFrom,fUpsideDown ? (iLines - iLine - 1) : iLine, iNum,1, buffer, iNum, 1 , GDT_Byte,0,0);
 
 }
 

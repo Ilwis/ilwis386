@@ -75,6 +75,8 @@ typedef GDALColorTableH (__stdcall *GDALGetRasterColorTableFunc)(GDALRasterBandH
 typedef GDALPaletteInterp (__stdcall *GDALGetPaletteInterpretationFunc)(GDALColorTableH);
 typedef int (__stdcall *GDALGetColorEntryCountFunc)(GDALColorTableH);
 typedef const GDALColorEntry* (__stdcall *GDALGetColorEntryFunc)(GDALColorTableH, int);
+typedef CPLErr (__stdcall *GDALSetRasterNoDataValueFunc)(GDALRasterBandH ,double);
+typedef double (__stdcall *GDALGetRasterNoDataValueFunc)(GDALRasterBandH ,int * );
 typedef void(__stdcall *CPLSetConfigOptionFunc)(const char *pszEnvVar, const char *pszVal);
 
 typedef const char* (__stdcall *CPLGetLastErrorFunc)(void);
@@ -149,6 +151,8 @@ struct GDALCFunctions {
 	GDALGetPaletteInterpretationFunc getPaletteInterpretation;
 	GDALGetColorEntryCountFunc getColorEntryCount;
 	GDALGetColorEntryFunc getColorEntry;
+	GDALSetRasterNoDataValueFunc setUndefinedValue;
+	GDALGetRasterNoDataValueFunc getUndefinedValue;
 	CPLSetConfigOptionFunc setConfigOption;
 
 	CPLGetLastErrorFunc errorMsg;
@@ -336,6 +340,9 @@ private:
 	bool fExport;
 	bool fShowCollection;
 	bool f4BytesInt; // used for raster; 
+	bool fUpsideDown; // raster images that are stored upside down
+	long iLines; // y-size of the raster layer (for computations in upsidedown images)
+	double rNoData;
 	FileName fnBaseOutputName;
 	list<CoordSystem> addedCsy;
 	static map<int, FormatInfo> mapFormatInfo;

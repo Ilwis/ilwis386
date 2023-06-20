@@ -60,6 +60,8 @@ void GdalProxy::loadMethods(const String& ilwDir) {
 				getPaletteInterpretation = (GDALGetPaletteInterpretationFunc)GetProcAddress(hm,"_GDALGetPaletteInterpretation@4");
 				getColorEntryCount = (GDALGetColorEntryCountFunc)GetProcAddress(hm,"_GDALGetColorEntryCount@4");
 				getColorEntry = (GDALGetColorEntryFunc)GetProcAddress(hm,"_GDALGetColorEntry@8");
+				setUndefinedValue = (GDALSetRasterNoDataValueFunc)GetProcAddress(hm,"_GDALSetRasterNoDataValue@12");
+				getUndefinedValue = (GDALGetRasterNoDataValueFunc)GetProcAddress(hm,"_GDALGetRasterNoDataValue@8");
 
 				ogrOpen = (OGROpenFunc)GetProcAddress(hm,"OGROpen");
 				ogrRegAll = (OGRRegisterAllFunc)GetProcAddress(hm,"OGRRegisterAll");
