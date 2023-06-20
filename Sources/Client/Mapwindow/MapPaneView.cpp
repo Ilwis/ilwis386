@@ -269,6 +269,8 @@ void MapPaneView::OnScaleOneToOne()
 				if ( IOTYPE(ptr->fnObj) == IlwisObject::iotRASMAP) {
 					MapPtr * mp = (MapPtr*)ptr;
 					gr = mp->gr();
+					if (gr->pgWMS())
+						continue; // Retry to find another layer for the 1:1 computation if this was WMS or OSM.
 					break;
 				} else if ( IOTYPE(ptr->fnObj) == IlwisObject::iotMAPLIST) {
 					MapListPtr * mplp = (MapListPtr*)ptr;
