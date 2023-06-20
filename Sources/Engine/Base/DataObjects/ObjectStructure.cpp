@@ -968,8 +968,11 @@ void ObjectStructure::BreakDependencies()
 			IlwisObject obj = IlwisObject::obj((*cur).fnDestination);
 			if ( obj.fValid())
 			{
-				if (obj->fDependent())
-					obj->BreakDependency();
+				if (obj->fDependent()) {
+					String sHisType = obj->sType().sLeft(9); // Exception for histograms; they can't live without their dependency; TableHistogram is derived from TableVirtual
+					if (!fCIStrEqual(sHisType, "Histogram"))
+						obj->BreakDependency();
+				}
 			}				
 		}
 		getEngine()->SetCurDir(sCurDir);
