@@ -88,6 +88,7 @@ void GeoRefCornersView::CreateForm()
 
 void GeoRefCornersView::create()
 {
+	m_fInSetVal = true;
 	GeneralFormView::create();
 
 	GeoRefCorners* pgcr = GetDocument()->gr()->pgc();
