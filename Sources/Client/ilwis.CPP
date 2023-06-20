@@ -568,17 +568,21 @@ void IlwisWinApp::LoadSettings(const String& sSettingName)
 	lstrcpy(logFont.lfFaceName, "MS Sans Serif");
 
 	CFont *fnt = new CFont();
-	if ( prop.fKeyExists("FormFont"))
-		prop.GetFont("FormFont", fnt);
-	else // default;
+	if ( prop.fKeyExists("FormFont")) {
+		if (!prop.GetFont("FormFont", fnt)) // false -> corrupt font
+			fnt->CreatePointFontIndirect(&logFont);
+	} else // default;
 		fnt->CreatePointFontIndirect(&logFont);
 
 	StandardFonts[sfFORM] = fnt;
 
 	fnt = new CFont();
-	if ( prop.fKeyExists("WindowsFont") )
-		prop.GetFont("WindowsFont", fnt);
-	else //default'
+	if ( prop.fKeyExists("WindowsFont") ) {
+		if (!prop.GetFont("WindowsFont", fnt)) {
+			logFont.lfHeight = 80;
+			fnt->CreatePointFontIndirect(&logFont);
+		}
+	} else //default'
 	{
 		logFont.lfHeight = 80;
 		fnt->CreatePointFontIndirect(&logFont);
@@ -586,9 +590,14 @@ void IlwisWinApp::LoadSettings(const String& sSettingName)
 	StandardFonts[sfWindowMedium] = fnt;
 
 	fnt = new CFont();
-	if ( prop.fKeyExists("TableFont") )
-		prop.GetFont("TableFont", fnt);
-	else // default
+	if ( prop.fKeyExists("TableFont") ) {
+		if (!prop.GetFont("TableFont", fnt)) {
+			logFont.lfHeight = 100;
+			logFont.lfPitchAndFamily = FIXED_PITCH | FF_SWISS | FF_ROMAN | FF_MODERN | FF_SCRIPT;
+			lstrcpy(logFont.lfFaceName, "Courier New");
+			fnt->CreatePointFontIndirect(&logFont);
+		}
+	} else // default
 	{
 		logFont.lfHeight = 100;
 		logFont.lfPitchAndFamily = FIXED_PITCH | FF_SWISS | FF_ROMAN | FF_MODERN | FF_SCRIPT;
@@ -598,9 +607,14 @@ void IlwisWinApp::LoadSettings(const String& sSettingName)
 	StandardFonts[sfTABLE] = fnt;
 
 	fnt = new CFont();
-	if ( prop.fKeyExists("GraphFont") )
-		prop.GetFont("GraphFont", fnt);
-	else // default
+	if ( prop.fKeyExists("GraphFont") ) {
+		if (!prop.GetFont("GraphFont", fnt)) {
+			logFont.lfHeight = 100;
+			logFont.lfPitchAndFamily = VARIABLE_PITCH | FF_SWISS | FF_ROMAN | FF_MODERN | FF_SCRIPT;
+			lstrcpy(logFont.lfFaceName, "Arial");
+			fnt->CreatePointFontIndirect(&logFont);
+		}
+	} else // default
 	{
 		logFont.lfHeight = 100;
 		logFont.lfPitchAndFamily = VARIABLE_PITCH | FF_SWISS | FF_ROMAN | FF_MODERN | FF_SCRIPT;

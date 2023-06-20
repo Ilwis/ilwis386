@@ -112,7 +112,7 @@ public:
 	void SetValue(const String& sValueName, const CRect& rctV);
 	WINDOWPLACEMENT GetWindowPlacement(const String& sValueName, WINDOWPLACEMENT& wplDefault);
 	void SetWindowPlacement(const String& sValueName, const WINDOWPLACEMENT wplValue);
-	void GetFont(const String& sValueName, CFont* fnt) const;
+	bool GetFont(const String& sValueName, CFont* fnt) const;
 	void SetFont(const String& sValueName, CFont* fnt);
 
 	static bool fDeletePossible();

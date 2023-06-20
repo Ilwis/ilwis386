@@ -591,12 +591,14 @@ void IlwisSettings::SetWindowPlacement(const String& sValueName, const WINDOWPLA
 	reg.SetValue("NormalizedPosition", CRect(wplValue.rcNormalPosition));
 }
 
-void IlwisSettings::GetFont(const String& sValueName, CFont *fnt) const
+bool IlwisSettings::GetFont(const String& sValueName, CFont *fnt) const
 {
 	String sWpl("%S\\%S", sPath, sValueName);
 	RegistrySettings reg;
 	if ( reg.SetCurrentKey(hPrimaryKey, sWpl, false) != ERROR_SUCCESS )
-		return;
+		return false;
+	if (reg.sValue("FaceName").size() == 0)
+		return false;
 
 	LOGFONT lfFont;
 
@@ -616,7 +618,7 @@ void IlwisSettings::GetFont(const String& sValueName, CFont *fnt) const
 	strcpy(lfFont.lfFaceName, reg.sValue("FaceName").c_str());
 
 	fnt->CreateFontIndirect(&lfFont);
-
+	return true;
 }
 
 void IlwisSettings::SetFont(const String& sValueName, CFont *fnt)
