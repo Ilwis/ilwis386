@@ -377,10 +377,16 @@ void RootDrawer::setCoordinateSystem(const CoordSystem& _cs, bool overrule){
 		if (fUseGeoRef)
 			clearGeoreference();
 		if ( overrule) {
-			cbMap = _cs->cbConv(cs, cbMap);
-			cbZoom = _cs->cbConv(cs, cbZoom);
-			cbView = _cs->cbConv(cs, cbView);
-			RecomputeAnnotationBorder();
+			if (cbZoom.width() < cbMap.width() || cbZoom.height() < cbMap.height()) { // is it actually zoomed in?
+				CoordBounds cbZ = cbZoom;
+				cbMap = _cs->cbConv(cs, cbMap);
+				setCoordBoundsView(cbMap, true);
+				cbZ = _cs->cbConv(cs, cbZ);
+				setCoordBoundsZoom(cbZ);
+			} else { // otherwise leave it as entire-map
+				cbMap = _cs->cbConv(cs, cbMap);
+				setCoordBoundsView(cbMap, true);
+			}
 		}
 		cs = _cs;
 	}
