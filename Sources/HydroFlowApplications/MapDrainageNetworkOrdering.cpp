@@ -981,7 +981,7 @@ void MapDrainageNetworkOrdering::PatchSegment(SegmentMap sm, long iSegID)
 		if (segCur->iValue() == iSegID)
 		{
 				CoordinateSequence *crdbuf1 = segCur->getCoordinates();
-			segCur->Delete();
+			segCur->Delete(true);
 			long iCount = crdbuf1->size() + m_vStreamLink.size();
 			CoordBuf crdbuf2(iCount);				
 			for (int i = 0; i < crdbuf1->size(); ++i)
