@@ -242,7 +242,8 @@ void PolygonFeatureDrawer::prepare(PreparationParameters *p){
 			((LineProperties *)boundary->getProperties())->drawColor = lp->drawColor;
 		}
 		if ( bmpptr->fTblAtt()) {
-			setTableSelection(bmpptr->tblAtt()->dm()->fnObj,feature->iValue(), p);
+			if ( bmpptr->tblAtt().fValid()) // incase of missing/ corrput data
+				setTableSelection(bmpptr->tblAtt()->dm()->fnObj,feature->iValue(), p);
 		}
 		setActive(fColorVisible && fRawEnabled);
 		if ( label)

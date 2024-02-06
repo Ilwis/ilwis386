@@ -157,7 +157,8 @@ void LineFeatureDrawer::prepare(PreparationParameters *p){
 
 		BaseMapPtr *bmpptr = ((BaseMap*)fdr->getDataSource())->ptr();
 		if ( bmpptr->fTblAtt()) {
-			setTableSelection(bmpptr->tblAtt()->dm()->fnObj,feature->iValue(), p);
+			if ( bmpptr->tblAtt().fValid()) // incase of missing/ corrput data
+				setTableSelection(bmpptr->tblAtt()->dm()->fnObj,feature->iValue(), p);
 		}
 		if (p->filteredRaws.size() == 1 && p->filteredRaws[0] == iUNDEF) {
 			fRawEnabled = true;
