@@ -509,7 +509,7 @@ void MainWindow::OnClose()
 		  IlwWinApp()->iOpeningDoc > 0 ||
 			iNrReportWindows > 0)
 	{
-		int iRet = MessageBox(TR("Are your sure( Data still in use)?").c_str(), TR("Close ILWIS").c_str(),
+		int iRet = MessageBox(TR("Are you sure? (Data still in use)").c_str(), TR("Close ILWIS").c_str(),
 	       MB_YESNO | MB_ICONEXCLAMATION | MB_TOPMOST);
 		if (IDYES != iRet)
 			return;
