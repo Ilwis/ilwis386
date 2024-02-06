@@ -2040,6 +2040,8 @@ void GDALFormat::createTable(const FileName& fn, const Domain& dm,OGRFeatureDefn
 						columns[field].min = min((double)t,columns[field].min); 
 						columns[field].max = max((double)t,columns[field].max);
 						columns[field].values.push_back((double)t);
+					} else {
+						columns[field].values.push_back(rUNDEF);
 					}
 			}
 
