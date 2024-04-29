@@ -520,7 +520,7 @@ SQLITE_PRIVATE   void sqlite3Coverage(int);
 
 char *sqlite3_temp_directory;
 
-#include "headers\spatialite\sqlite3.h"
+#include "SpatialDB\headers\spatialite\sqlite3.h"
 
 const char *sqlite3_version = SQLITE_VERSION;
 /************** Continuing where we left off in sqliteInt.h ******************/
