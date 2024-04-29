@@ -65,7 +65,7 @@ public:
 	virtual CoordinateSequence *create(size_t size,
 			size_t dimension) const=0;
 
-	virtual ~CoordinateSequenceFactory() {}
+	virtual ~CoordinateSequenceFactory();
 };
 
 } // namespace geos::geom
