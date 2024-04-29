@@ -36,6 +36,7 @@
  ***************************************************************/
 #pragma warning( disable : 4786 )
 
+#include <functional>
 #include "Headers\toolspch.h"
 #include "Engine\Base\DataObjects\ilwisobj.h"
 #include "Engine\Applications\objvirt.h"
