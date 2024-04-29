@@ -22013,7 +22013,7 @@ static int getTempname(int nBuf, char *zBuf){
 	for(i=sqlite3Strlen30(zTempPath); i>0 && zTempPath[i-1]=='\\'; i--){}
 	zTempPath[i] = 0;
 	sqlite3_snprintf(nBuf-30, zBuf,
-		"%s\\"SQLITE_TEMP_FILE_PREFIX, zTempPath);
+		"%s\\%s", zTempPath, SQLITE_TEMP_FILE_PREFIX);
 	j = sqlite3Strlen30(zBuf);
 	sqlite3_randomness(20, &zBuf[j]);
 	for(i=0; i<20; i++, j++){

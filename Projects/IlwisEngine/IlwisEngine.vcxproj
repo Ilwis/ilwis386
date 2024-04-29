@@ -73,7 +73,7 @@
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(SolutionDir)Sources\Headers;$(SolutionDir)Sources\Geos\headers;$(SolutionDir)Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;ILWISENGINE;_WIN32_DCOM;_CRTDBG_MAP_ALLOC;_WIN32_WINNT=0x0600;_WIN32_IE=0x0600;_CRT_SECURE_NO_WARNINGS;_SECURE_SCL=0;_HAS_ITERATOR_DEBUGGING=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;ILWISENGINE;_WIN32_DCOM;_CRTDBG_MAP_ALLOC;_WIN32_WINNT=0x0600;_WIN32_IE=0x0600;_CRT_SECURE_NO_WARNINGS;_SECURE_SCL=0;_HAS_ITERATOR_DEBUGGING=0;SQLITE_TEMP_FILE_PREFIX="ilwis386";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
