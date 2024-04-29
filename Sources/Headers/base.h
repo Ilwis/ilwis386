@@ -50,7 +50,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <direct.h>
-#include <typeinfo.h>
+#include <typeinfo>
 #include <io.h>
 #include <fstream>
 
