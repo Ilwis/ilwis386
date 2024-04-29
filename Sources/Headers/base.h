@@ -65,7 +65,7 @@
 #include "Headers\stdafx.h"
 
 inline char * pcYesNo(bool f) { return f ? "Yes" : "No"; }
-inline long round(float x)
+inline long round(float x, bool dum = false)
   {  return (long)floor(x + 0.5); }
 inline long rounding(double x)
   {  return (long)floor(x + 0.5); }
