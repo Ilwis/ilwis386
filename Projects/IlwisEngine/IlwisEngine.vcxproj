@@ -1,0 +1,1851 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}</ProjectGuid>
+    <RootNamespace>IlwisEngine</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfAtl>false</UseOfAtl>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <UseOfAtl>false</UseOfAtl>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.33626.349</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <BuildLog>
+      <Path>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\BuildLog.htm</Path>
+    </BuildLog>
+    <CustomBuildStep>
+      <Command />
+    </CustomBuildStep>
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <OutputDirectory>$(SolutionDir)\Sources\Engine\COMInterface</OutputDirectory>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sources\Headers;$(SolutionDir)Sources\Geos\headers;$(SolutionDir)Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;ILWISENGINE;_WIN32_DCOM;_CRTDBG_MAP_ALLOC;_WIN32_WINNT=0x0600;_WIN32_IE=0x0600;_CRT_SECURE_NO_WARNINGS;_SECURE_SCL=0;_HAS_ITERATOR_DEBUGGING=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>8Bytes</StructMemberAlignment>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader />
+      <ObjectFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\vc80.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>RpcRT4.Lib;opengl32.lib;proj4.lib;glu32.lib;ftgl.lib;freetype.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)$(Configuration)\Ilwis3\$(ProjectName).dll</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\import;$(SolutionDir)libraries\$(Configuration);$(SolutionDir)\libraries\debug;C:\Program Files\Microsoft Visual Studio 8\VC\PlatformSDK\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ManifestFile>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(TargetFileName).intermediate.manifest</ManifestFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(TargetName).pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(SolutionDir)libraries\$(Configuration)\$(ProjectName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <BuildLog>
+      <Path>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\BuildLog.htm</Path>
+    </BuildLog>
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>false</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sources\Headers\Xquila;$(SolutionDir)Sources\Geos\headers;$(SolutionDir)Sources\Headers;$(SolutionDir)Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;ILWISENGINE;_WIN32_DCOM;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_WIN32_IE=0x0400;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader />
+      <ObjectFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>RpcRT4.Lib;ftgl.lib;opengl32.lib;zlib.lib;proj4.lib;glu32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)$(Configuration)\Ilwis3\$(ProjectName).dll</OutputFile>
+      <Version>3.8</Version>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\import;$(SolutionDir)libraries\$(Configuration);D:\Projects\ILWISrevised\ILWIS32005\libraries\debug;C:\Program Files\Microsoft Visual Studio 8\VC\PlatformSDK\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ManifestFile>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(TargetFileName).intermediate.manifest</ManifestFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AssemblyDebug>false</AssemblyDebug>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(SolutionDir)libraries\$(Configuration)\$(ProjectName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\Engine\Applications\bmapvirt.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\Colvirt.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\MAPFMAP.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\MAPFMPL.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\MAPFPNT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\MAPFPOL.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\MAPFSEG.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\MapListVirtual.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\Mapvirt.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\ModuleMap.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\ObjectCollectionVirtual.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\objvirt.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\Pntvirt.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\POLVIRT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\SEGVIRT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\Tbl2DimVirt.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Applications\Tblvirt.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\CLIPLINE.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\FPOLYNOM.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\GROUPLIM.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\LSF.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\LSTSQRS.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\MaplistGraphFunction.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\NetworkDistance.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\QSORT.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\QuadTree.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\QuadTreeNode.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\RANDOM.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\REALMAT.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\Rijndael.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\semivar.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\SimpleFunction.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\SOLVEOBL.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\triangulationAlg\Triangulator.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\Algorithm\TUNNEL.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\APPERR.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\AssertD.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\BASETLS.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\BUF.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\BUFLIST.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\Color.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\CriteriaTreeObject.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\DAT2.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\DownLoader.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\DT.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\ERR.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\ExternalCommand.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\ilwisobj.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\ObjectCollection.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\ObjectStructure.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\PARM.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\RemoteXMLObject.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\SET.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\strng.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\TRANQ.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\Uploader.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\URL.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\URLEncode.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\valrange.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\Version.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\WAITCURS.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\WPSMetaData.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\DataObjects\XMLDocument.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\BaseCopier.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\Copier.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\Directory.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\ElementContainer.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\ElementMap.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\FILE.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\FILENAME.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\ioapi.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\iowin32.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\ObjectCopier.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\objinfo.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\objinfrd.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\objinfwr.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\unzip.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\File\Zipper.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\mask.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\MSM.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\objdepen.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\ROUND.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\STRTOD.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\APPCONT.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\CommandHandler.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\Database.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\Engine.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\ILWISSingleLock.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\LOGGER.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\MibAccess.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\module.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\mutex.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\RegistrySettings.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\SysInfo.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\System\SYSVAR.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\TOKBASE.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Base\XML\ObjectDefinition.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Base\XML\pugixml.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\COMInterface\BaseFactory.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\COMInterface\ComCaller.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\COMInterface\COMCmdLineThread.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\COMInterface\CommandLine.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\COMInterface\ComRegistration.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\COMInterface\ComServer.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\COMInterface\dlldata.c" />
+    <ClCompile Include="..\..\Sources\Engine\COMInterface\ICommandLine_i.c" />
+    <ClCompile Include="..\..\Sources\Engine\COMInterface\ICommandLine_p.c" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\CONV.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\CONVERR.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\curlIncludes\CurlProxy.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\DatabaseCollection.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\DBF.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPASC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPBMP.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPBNA.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPCSY.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPDBF.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPDXF.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPE00.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\ExpGeoGateway.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPGIS.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPIC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\expidaimg.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\Expidris.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPLAN.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPLIN.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPMPL.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\ExpNas.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\ExportCsy2EsriPrj.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPPNT.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPPOL.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPPTS.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPRAS.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPSDF.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPSEG.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPSEQ.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPSHPPL.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPSHPPT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPSHPSG.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPSMT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\EXPTBL.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\ExpTiff.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\Exptxt.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\ForeignCollection.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\ForeignFormat.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\ForeignFormatMap.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\ForeignStore.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\GdalProxy.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\HDFReader.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPASC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPBMP.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPBNA.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\Impdbf.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\Impdxf.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\Impe00.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\ImpGartrip.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPGIF.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPGIS.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\Impidr.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPIMG.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPLIN.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPNAS.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPOTH.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPPACK.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPPCX.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPPNT.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPPOL.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPPTS.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPSEG.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\impshp.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPSMT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPTBL.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\Imptif.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\IMPVEC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\LIBMAIN.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\MAPIMP.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\MapStoreForeignFormat.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\OLEDBProvider.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\Pntimp.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\PointMapStoreForeign.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\POLIMP.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\PolygonMapStoreForeign.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\SEGIMP.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\SegmentMapStoreForeign.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\SegmentMapStoreFormat20.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\SHPFILE.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\TableDBF.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\TableDelimited.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\TableExternalFormat.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\TableForeign.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\TableIlwis14.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\TableIlwis20.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\TBLIMP.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\DataExchange\WMSCollection.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dm.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmbinary.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmclass.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmcolor.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmcoord.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmcoordbuf.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmgroup.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmident.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dminfo.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmnone.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmpict.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmsort.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmstring.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\dmvalue.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\DomainTime.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\DomainUniqueID.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Domain\groupfnc.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\ComplexDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\Drawer.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\DrawerContext.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\OpenGLText.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\RootDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\SelectionRectangle.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\SimpleDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\SpatialDataDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\SVGContainer.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\SVGElements.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\SVGLoader.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\SVGPath.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\TextDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\TimeMessages.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Drawers\ZValueMaker.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\BOX.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\CLASSIFR.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\FILTER.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\FLTBIN.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\FLTLIN.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\FLTMAJOR.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\FLTPATT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\FLTRADAR.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\FLTRANK.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\FLTSTDEV.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\FUNCTION.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\FUNCUSER.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\MINDIST.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\MINMAHAD.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\MXLIKELI.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\PRIORPRB.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Function\SpectralAngle.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\basemap.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Feature.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\LayoutObject.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\mapview.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Point\IlwPoint.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Point\PNT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Point\Pntstore.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Polygon\POL.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Polygon\Polstore.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Polygon\POLYGON.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Polygon\PolygonMapStoreFormat20.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Polygon\PolygonStore30.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Polygon\PolygonStore37.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\Map.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MAPBIT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MAPBYT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MapFloat.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MAPINT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MAPLINE.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MapList\maplist.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MAPLONG.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MAPPATCH.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MAPREAL.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MAPSTORE.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MPPTBIT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MPPTBYT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MPPTINT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MPPTLONG.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Raster\MPPTREAL.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Segment\Seg.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Segment\Segcheck.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Segment\Segment.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\Segment\SEGSTORE.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Map\txtann.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Matrix\confmat.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Matrix\MatrixObjectVirtual.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Matrix\Matrxobj.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Matrix\Princcmp.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Matrix\Varcovmt.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Representation\Rpr.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Representation\RPRATTR.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Representation\Rprclass.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Representation\RPRGRAD.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Representation\Rpritems.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Representation\RPRVALUE.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SampleSet\FSPACE.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\SampleSet\SAMPLSET.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\SampleSet\SMPLHS.CPP" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Calc.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\CALCERR.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\CALCSTCK.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\CalculateAggregateValue.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Calcvar.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Cgaddint.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\CGADD_I.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\CGADD_S.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\CGADD_SS.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Codegen.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Dmmerger.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\FNCSMATH.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\FNCSMISC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Fncsmsc2.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Funcs.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Funcsdm.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\FUNCSDM1.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\InstAggregateValue.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\INSTRNB.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Instruc1.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\INSTRUC2.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Instrucs.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Parser.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Script.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Script2.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Scripting\Scriptok.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialDB\iconv.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialDB\spatialite.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialDB\sqlite3.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\AEQD.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\aitoff.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\ALBERS.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\AZIMUTHA.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\BONNE.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\CASSINI.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\CC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\CONIC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Coordsys.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\CoordSystemDirectLinear.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\CoordSystemOrthoPhoto.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\CoordSystemTiePoints.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\csbonly.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\csctp.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Csdiff.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\csdirect.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\csformul.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Cslatlon.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Csproj.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\csviall.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\CYLEQARE.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\DATUM.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Distance.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Dutchrd.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\ECKERT1.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\ECKERT2.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\ECKERT3.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\ELLIPS.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\EOV_Hungary.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\EQDCON.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Gauboaga.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Genpersp.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GeoStatSat.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GeoStatSatGoes.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GeoStatSatView.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\gkcolomb.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\gkgerman.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GNOMONIC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Goode.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GoodeINT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Gr.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Gr3d.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Grcornrs.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GrcOSM.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Grctp.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Grctppla.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GrcWMS.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Grdiff.Cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Grdirlin.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GrEpipolar.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Grfactor.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GRMRROT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GRNONE.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Grortho.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GrParallProj.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GrScaleRotate.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Grsmpl.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\GrStereoMate.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Grsub.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\HAMMER.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\HammerAitoff.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\LaBelge08.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\LaBelge72.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\LAEA.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\LaFrance.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\LCONCON.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\LPOLEQA.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\MERC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\MERCscaled.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\MILLER.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\MOLL.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\MSGpersp.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Oblimerc.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\ORTHOGR.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\ORTHOGRA.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\PC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\PLCARREE.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\PLRECTAN.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\POLYCON.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\Prj.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\PRJCALC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\PseudoMercator.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\ROBINSON.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\SCHREIB.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\SINUS.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\SINUSIN2.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\SINUSIN3.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\SINUSINT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\SolveDirectLinear.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\SolveOblique.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\SolveOrthoPhoto.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\SolveParallelProjective.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\STEREO.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\StereoPolar.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\TMERC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\UPS.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\UTM.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\VANDG.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\VANHUUT3.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\verticpersp.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\wagner7.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\winkel1.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\winkel2.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\SpatialReference\winkel3.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Stereoscopy\StereoPair.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Stereoscopy\StereoPairEpiPolar.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Stereoscopy\StereoPairFromDTM.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Stereoscopy\StereoPairVirtual.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\Col.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\Colbinar.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\COLBYTE.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\COLCOORD.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\COLINFO.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\COLINT.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\COLLONG.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\COLREAL.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\Colstore.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\COLSTRNG.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\ColumnCoordBuf.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\GraphObject.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\NewTableStore.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\REC.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\TableStoreIlwis3.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\tbl.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\tbl2dim.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\Tblbin.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\Tblhist.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\Tblhstpl.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\Tblhstpt.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\Tblhstsg.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\tblinfo.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\tblstore.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\tbltbl.cpp" />
+    <ClCompile Include="..\..\Sources\Engine\Table\tblview.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\Angle.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\BoundaryNodeRule.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\CentroidArea.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\CentroidLine.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\CentroidPoint.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\CGAlgorithms.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\ConvexHull.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\distance\DiscreteHausdorffDistance.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\distance\DistanceToPoint.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\HCoordinate.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\InteriorPointArea.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\InteriorPointLine.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\InteriorPointPoint.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\LineIntersector.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\locate\IndexedPointInAreaLocator.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\locate\PointOnGeometryLocator.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\locate\SimplePointInAreaLocator.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\MCPointInRing.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\MinimumDiameter.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\NotRepresentableException.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\PointLocator.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\RayCrossingCounter.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\RobustDeterminant.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\SimplePointInRing.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\algorithm\SIRtreePointInRing.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\capi\geos_c.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\capi\geos_ts_c.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\Depth.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\DirectedEdge.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\DirectedEdgeStar.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\Edge.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\EdgeEnd.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\EdgeEndStar.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\EdgeIntersection.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\EdgeIntersectionList.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\EdgeList.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\EdgeNodingValidator.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\EdgeRing.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\GeometryGraph.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\GraphComponent.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\index\MonotoneChainEdge.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\index\MonotoneChainIndexer.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\index\SegmentIntersector.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\index\SimpleEdgeSetIntersector.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\index\SimpleMCSweepLineIntersector.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\index\SimpleSweepLineIntersector.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\index\SweepLineEvent.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\index\SweepLineSegment.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\Label.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\Node.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\NodeFactory.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\NodeMap.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\PlanarGraph.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\Position.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\Quadrant.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geomgraph\TopologyLocation.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\geomgraph\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geomgraph\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geom\Coordinate.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\CoordinateArraySequence.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\CoordinateArraySequenceFactory.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\CoordinateSequence.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\CoordinateSequenceFactory.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\Dimension.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\Envelope.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\Geometry.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\GeometryCollection.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\GeometryComponentFilter.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\GeometryFactory.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\GeometryList.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\IntersectionMatrix.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\LinearRing.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\LineSegment.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\LineString.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\Location.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\MultiLineString.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\MultiPoint.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\MultiPolygon.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\Point.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\Polygon.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\Polygon\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\geom\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\geom\PrecisionModel.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\AbstractPreparedPolygonContains.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\BasicPreparedGeometry.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\PreparedGeometry.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\PreparedGeometryFactory.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\PreparedLineString.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\PreparedLineStringIntersects.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\PreparedPoint.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\PreparedPolygon.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\PreparedPolygonContains.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\PreparedPolygonContainsProperly.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\PreparedPolygonCovers.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\PreparedPolygonIntersects.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\prep\PreparedPolygonPredicate.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\Triangle.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\util\ComponentCoordinateExtracter.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\util\CoordinateOperation.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\util\GeometryCombiner.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\util\GeometryEditor.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\util\GeometryTransformer.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\geom\util\ShortCircuitedGeometryVisitor.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\index\bintree\Bintree.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\Index\Bintree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\bintree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\bintree\Interval.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\Index\Bintree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\bintree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\bintree\Key.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\Index\Bintree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\bintree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\bintree\Node.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\Index\Bintree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\bintree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\bintree\NodeBase.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\Index\Bintree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\bintree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\bintree\Root.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\Index\Bintree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\bintree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\chain\MonotoneChain.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\index\chain\MonotoneChainBuilder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\index\chain\MonotoneChainOverlapAction.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\index\chain\MonotoneChainSelectAction.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\index\intervalrtree\IntervalRTreeBranchNode.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\index\intervalrtree\IntervalRTreeLeafNode.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\index\intervalrtree\IntervalRTreeNode.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\index\intervalrtree\SortedPackedIntervalRTree.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\index\quadtree\DoubleBits.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\quadtree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\quad\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\quadtree\IntervalSize.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\quadtree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\quad\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\quadtree\Key.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\quadtree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\quad\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\quadtree\Node.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\quadtree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\quad\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\quadtree\NodeBase.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\quadtree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\quad\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\quadtree\Quadtree.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\quadtree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\quad\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\quadtree\Root.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\quadtree\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\quad\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\strtree\AbstractNode.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\strtree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\strtree\AbstractSTRtree.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\strtree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\strtree\Interval.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\strtree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\strtree\ItemBoundable.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\strtree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\strtree\SIRtree.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\strtree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\strtree\STRtree.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\strtree\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\sweepline\SweepLineEvent.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\Index\Sweepline\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\sweepline\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\sweepline\SweepLineIndex.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\Index\Sweepline\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\sweepline\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\index\sweepline\SweepLineInterval.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\Geos\Index\Sweepline\</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\geos\index\sweepline\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Geos\io\ByteOrderDataInStream.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\io\ByteOrderValues.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\io\CLocalizer.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\io\ParseException.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\io\StringTokenizer.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\io\Unload.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\io\WKBReader.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\io\WKBWriter.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\io\WKTReader.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\io\WKTWriter.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\io\Writer.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\linearref\ExtractLineByLocation.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\linearref\LengthIndexedLine.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\linearref\LengthIndexOfPoint.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\linearref\LengthLocationMap.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\linearref\LinearGeometryBuilder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\linearref\LinearIterator.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\linearref\LinearLocation.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\linearref\LocationIndexOfLine.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\linearref\LocationIndexOfPoint.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\BasicSegmentString.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\FastNodingValidator.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\FastSegmentSetIntersectionFinder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\IntersectionAdder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\IntersectionFinderAdder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\IteratedNoder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\MCIndexNoder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\MCIndexSegmentSetMutualIntersector.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\NodedSegmentString.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\NodingValidator.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\Octant.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\OrientedCoordinateArray.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\ScaledNoder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\SegmentIntersectionDetector.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\SegmentNode.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\SegmentNodeList.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\SegmentString.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\SegmentStringUtil.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\SimpleNoder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\SingleInteriorIntersectionFinder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\snapround\HotPixel.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\snapround\MCIndexPointSnapper.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\snapround\MCIndexSnapRounder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\noding\snapround\SimpleSnapRounder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\buffer\BufferBuilder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\buffer\BufferInputLineSimplifier.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\buffer\BufferOp.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\buffer\BufferParameters.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\buffer\BufferSubgraph.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\buffer\OffsetCurveBuilder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\buffer\OffsetCurveSetBuilder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\buffer\RightmostEdgeFinder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\buffer\SubgraphDepthLocater.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\distance\ConnectedElementLocationFilter.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\distance\ConnectedElementPointFilter.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\distance\DistanceOp.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\distance\GeometryLocation.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\GeometryGraphOperation.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\IsSimpleOp.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\linemerge\EdgeString.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\linemerge\LineMergeDirectedEdge.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\linemerge\LineMergeEdge.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\linemerge\LineMergeGraph.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\linemerge\LineMerger.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\linemerge\LineSequencer.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\EdgeSetNoder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\ElevationMatrix.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\ElevationMatrixCell.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\LineBuilder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\MaximalEdgeRing.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\MinimalEdgeRing.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\OverlayNodeFactory.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\OverlayOp.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\PointBuilder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\PolygonBuilder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\snap\GeometrySnapper.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\snap\LineStringSnapper.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\snap\SnapIfNeededOverlayOp.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\snap\SnapOverlayOp.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\validate\FuzzyPointLocator.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\validate\OffsetPointGenerator.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\overlay\validate\OverlayResultValidator.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\polygonize\EdgeRing.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\polygonize\PolygonizeDirectedEdge.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\polygonize\PolygonizeEdge.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\polygonize\PolygonizeGraph.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\polygonize\Polygonizer.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\predicate\RectangleContains.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\predicate\RectangleIntersects.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\predicate\SegmentIntersectionTester.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\relate\EdgeEndBuilder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\relate\EdgeEndBundle.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\relate\EdgeEndBundleStar.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\relate\RelateComputer.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\relate\RelateNode.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\relate\RelateNodeFactory.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\relate\RelateNodeGraph.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\relate\RelateOp.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\union\CascadedPolygonUnion.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\valid\ConnectedInteriorTester.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\valid\ConsistentAreaTester.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\valid\IndexedNestedRingTester.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\valid\IsValidOp.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\valid\QuadtreeNestedRingTester.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\valid\RepeatedPointTester.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\valid\SimpleNestedRingTester.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\valid\SweeplineNestedRingTester.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\operation\valid\TopologyValidationError.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\planargraph\algorithm\ConnectedSubgraphFinder.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\planargraph\DirectedEdge.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\planargraph\DirectedEdgeStar.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\planargraph\Edge.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\planargraph\Node.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\planargraph\NodeMap.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\planargraph\PlanarGraph.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\planargraph\Subgraph.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\precision\CommonBits.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\precision\CommonBitsOp.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\precision\CommonBitsRemover.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\precision\EnhancedPrecisionOp.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\precision\SimpleGeometryPrecisionReducer.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\simplify\DouglasPeuckerLineSimplifier.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\simplify\DouglasPeuckerSimplifier.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\simplify\LineSegmentIndex.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\simplify\TaggedLineSegment.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\simplify\TaggedLinesSimplifier.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\simplify\TaggedLineString.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\simplify\TaggedLineStringSimplifier.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\simplify\TopologyPreservingSimplifier.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\util\Assert.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\util\GeometricShapeFactory.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\util\math.cpp" />
+    <ClCompile Include="..\..\Sources\Geos\util\Profiler.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\Engine\Applications\bmapvirt.h" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\COLVIRT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\MAPFMAP.H" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\MAPFMPL.H" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\MAPFPNT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\MAPFPOL.H" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\MAPFSEG.H" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\MapListVirtual.h" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\MAPVIRT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\ModuleMap.h" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\ObjectCollectionVirtual.h" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\objvirt.h" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\PNTVIRT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\POLVIRT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\SEGVIRT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\Tbl2DimVirt.h" />
+    <ClInclude Include="..\..\Sources\Engine\Applications\TBLVIRT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Basemat.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\CachedRelation.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Clipline.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Fpolynom.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Grouplim.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Lsf.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Lstsqrs.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\MaplistGraphFunction.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\NetworkDistance.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Octantmatrix.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Qsort.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\QuadTree.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\QuadTreeNode.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Random.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Realmat.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Rijndael.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\semivar.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\SimpleFunction.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Solveobl.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Solveort.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\triangulationAlg\Triangulator.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Algorithm\Tunnel.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\AssertD.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\ARRAY.H" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Buf.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Buflist.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Color.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\CriteriaTreeObject.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Dat2.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Dlist.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\DownLoader.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\DT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\ERR.H" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\ExternalCommand.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Hash.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\hmap.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\ilwisobj.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\ObjectCollection.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\ObjectStructure.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Pair.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Parm.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Patch.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\RemoteXMLObject.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Set.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Slist.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Stack.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\strng.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Tranq.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Uploader.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\URL.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\URLEncode.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\valrange.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Version.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\Waitcurs.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\WPSMetaData.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\DataObjects\XMLDocument.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\BaseCopier.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\COPIER.H" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\crypt.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\Directory.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\ElementContainer.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\ElementMap.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\File.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\FILENAME.H" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\ioapi.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\iowin32.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\ObjectCopier.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\objinfo.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\unzip.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\zconf.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\zip.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\Zipper.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\File\zlib.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\mask.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Msm.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\objdepen.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Round.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\StlExtensions.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\strtod.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\Appcont.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\commandhandler.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\Database.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\Engine.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\HTP.H" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\ILWSingleLock.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\LOGGER.H" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\MemoryManager.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\MibAccess.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\module.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\mutex.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\RegistrySettings.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\SysInfo.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\System\SYSVAR.H" />
+    <ClInclude Include="..\..\Sources\Engine\Base\tlspch.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Tokbase.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\toolspch.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\XML\ObjectDefinition.h" />
+    <ClInclude Include="..\..\Sources\Engine\Base\XML\pugiconfig.hpp" />
+    <ClInclude Include="..\..\Sources\Engine\Base\XML\pugixml.hpp" />
+    <ClInclude Include="..\..\Sources\Engine\Base\Zappext.h" />
+    <ClInclude Include="..\..\Sources\Engine\COMInterface\BaseFactory.h" />
+    <ClInclude Include="..\..\Sources\Engine\COMInterface\ComCaller.h" />
+    <ClInclude Include="..\..\Sources\Engine\COMInterface\COMCmdLineThread.h" />
+    <ClInclude Include="..\..\Sources\Engine\COMInterface\CommandLine.h" />
+    <ClInclude Include="..\..\Sources\Engine\COMInterface\ComRegistration.h" />
+    <ClInclude Include="..\..\Sources\Engine\COMInterface\ComServer.h" />
+    <ClInclude Include="..\..\Sources\Engine\COMInterface\ICommandLine.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\CONV.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\CONVERR.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\Convloc.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\curlIncludes\curl.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\curlIncludes\CurlProxy.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\curlIncludes\curlver.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\curlIncludes\easy.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\curlIncludes\mprintf.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\curlIncludes\multi.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\curlIncludes\stdcheaders.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\curlIncludes\types.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\DatabaseCollection.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\DBF.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\expbmp.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\EXPE00.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\expgislan.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\expidaimg.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\ExportCsy2EsriPrj.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\EXPSEQ.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\ExpTiff.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\ForeignCollection.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\ForeignFormat.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\ForeignFormatMap.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\ForeignStore.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\GdalProxy.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\atom.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\bitvect.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\cdeflate.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\cnbit.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\cnone.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\crle.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\cskphuff.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\df.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\dfan.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\dfgr.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\dfi.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\dfrig.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\dfsd.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\dfstubs.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\dfufp2i.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\dynarray.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hbitio.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hchunks.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hcomp.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hcompi.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hconv.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hdf.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hdf2netcdf.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hdfi.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\herr.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hfile.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hkit.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hlimits.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hntdefs.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\hproto.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\htags.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\jconfig.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\jerror.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\jmorecfg.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\jpeglib.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\linklist.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\local_nc.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\mfan.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\mfgr.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\mfhdf.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\mstdio.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\netcdf.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\tbbt.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\trace.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\vattr.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\vg.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\vgint.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\zconf.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\hdfincludes\zlib.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\HDFReader.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\Impdbf.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\IMPDXF.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\IMPE00.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\IMPGartrip.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\IMPLIN.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\IMPPTS.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\impshp.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\Imptbl.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\imptif.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\IMPVEC.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\INFOCAM.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\MAPIMP.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\MapStoreForeignFormat.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\OLEDBProvider.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\PNTIMP.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\PointMapIlwis20.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\PointMapStoreForeign.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\POLIMP.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\PolygonMapIlwis20.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\PolygonMapStoreForeign.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\RECSTRUC.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\SEGIMP.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\SegmentMapIlwis20.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\SegmentMapStoreForeign.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\SegmentMapStoreFormat20.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\SHPFILE.H" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\TableDBF.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\TableDelimited.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\TableExternalFormat.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\TableForeign.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\TableIlwis14.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\TableIlwis20.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\Tblimp.h" />
+    <ClInclude Include="..\..\Sources\Engine\DataExchange\WMSCollection.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dm.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dmbinary.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dmclass.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dmcolor.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dmcoord.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dmcoordbuf.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dmgroup.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dmident.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dminfo.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dmnone.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dmpict.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dmsort.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\dmstring.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\Dmvalue.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\DomainTime.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\DomainUniqueID.h" />
+    <ClInclude Include="..\..\Sources\Engine\Domain\groupfnc.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\ComplexDrawer.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\DrawerContext.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\Drawer_n.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\OpenGLText.H" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\RootDrawer.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\SelectionRectangle.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\SimpleDrawer.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\SpatialDataDrawer.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\SVGContainer.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\SVGElements.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\SVGLoader.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\SVGPath.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\TextDrawer.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\TimeMessages.h" />
+    <ClInclude Include="..\..\Sources\Engine\Drawers\ZValueMaker.h" />
+    <ClInclude Include="..\..\Sources\Engine\Function\BOX.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\CLASSIFR.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\FILTER.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\FLTBIN.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\FLTLIN.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\FLTMAJOR.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\FLTPATT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\FLTRADAR.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\FLTRANK.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\FLTSTDEV.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\FUNCTION.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\FUNCUSER.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\MINDIST.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\MINMAHAD.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\MXLIKELI.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\PRIORPRB.H" />
+    <ClInclude Include="..\..\Sources\Engine\Function\SpectralAngle.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\basemap.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Feature.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\LayoutObject.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Mapview.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Point\ilwPoint.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Point\PNT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Point\PNTSTORE.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Polygon\POL.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Polygon\POL14.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Polygon\POLSTORE.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Polygon\PolygonMapStoreFormat20.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Polygon\PolygonStore30.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Polygon\PolygonStore37.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\Grid.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\Map.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MAPBIT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MAPBYT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MapFloat.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MAPINT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MAPLINE.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MapList\maplist.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MAPLONG.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MAPPATCH.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MAPREAL.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MAPSTORE.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MPPTBIT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MPPTBYT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MPPTINT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MPPTLONG.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Raster\MPPTREAL.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Segment\Seg.h" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Segment\SEG14.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\Segment\SEGSTORE.H" />
+    <ClInclude Include="..\..\Sources\Engine\Map\txtann.h" />
+    <ClInclude Include="..\..\Sources\Engine\Matrix\Confmat.h" />
+    <ClInclude Include="..\..\Sources\Engine\Matrix\MatrixObjectVirtual.h" />
+    <ClInclude Include="..\..\Sources\Engine\Matrix\Matrxobj.h" />
+    <ClInclude Include="..\..\Sources\Engine\Matrix\Princcmp.h" />
+    <ClInclude Include="..\..\Sources\Engine\Matrix\Varcovmt.h" />
+    <ClInclude Include="..\..\Sources\Engine\Representation\Rpr.h" />
+    <ClInclude Include="..\..\Sources\Engine\Representation\RPRATTR.H" />
+    <ClInclude Include="..\..\Sources\Engine\Representation\Rprclass.h" />
+    <ClInclude Include="..\..\Sources\Engine\Representation\Rprgrad.h" />
+    <ClInclude Include="..\..\Sources\Engine\Representation\Rpritems.h" />
+    <ClInclude Include="..\..\Sources\Engine\Representation\RPRVALUE.H" />
+    <ClInclude Include="..\..\Sources\Engine\SampleSet\FSPACE.H" />
+    <ClInclude Include="..\..\Sources\Engine\SampleSet\SAMPLSET.H" />
+    <ClInclude Include="..\..\Sources\Engine\SampleSet\SMPLHS.H" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\Calc.h" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\CALCERR.H" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\CALCSTCK.H" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\CalculateAggregateValue.h" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\Calcvar.h" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\CODEGEN.H" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\DMMERGER.H" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\FNCSMATH.H" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\Fncsmisc.h" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\FUNCS.H" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\Funcsdm.h" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\InstAggregateValue.h" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\INSTRUC.H" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\Instrucs.h" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\Parscnst.h" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\Parser.h" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\Script.h" />
+    <ClInclude Include="..\..\Sources\Engine\Scripting\SCRIPTOK.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialDB\headers\iconv.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialDB\headers\spatialite.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\AEQD.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\aitoff.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\ALBERS.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\AZIMUTHA.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\BONNE.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\CASSINI.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\CC.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\CONIC.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Coordsys.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\CoordSystemDirectLinear.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\CoordSystemOrthoPhoto.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\CoordSystemTiePoints.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\csbonly.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\csctp.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Csdiff.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\csdirect.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\csformul.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Cslatlon.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Csproj.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\csviall.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\CYLEQARE.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\DATUM.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Distance.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Dutchrd.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\ECKERT1.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\ECKERT2.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\ECKERT3.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Ellips.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\EOV_Hungary.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\EQDCON.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\gauBoaga.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GENPERSP.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GeoStatSat.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GeoStatSatGoes.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GeoStatSatView.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\gkcolomb.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\gkgerman.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GNOMONIC.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Goode.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GoodeINT.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Gr.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GR3D.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Grcornrs.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GrcOSM.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GRCTP.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Grctppla.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GrcWMS.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Grdiff.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\grdirlin.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GrEpipolar.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Grfactor.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GRMRROT.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GRNONE.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Grortho.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GrParallProj.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GrScaleRotate.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Grsmpl.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\GrStereoMate.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Grsub.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\HAMMER.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\HammerAitoff.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\LaBelge08.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\LaBelge72.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\LAEA.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\LaFrance.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\LCONCON.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\LPOLEQA.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\MERC.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\MERCscaled.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\MILLER.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\MOLL.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\MSGpersp.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Oblimerc.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\ORTHOGR.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\ORTHOGRA.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\PC.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\PLCARREE.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\PLRECTAN.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\POLYCON.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\prj.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\PRJCALC.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\PRJELLIP.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\PseudoMercator.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\ROBINSON.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\SCHREIB.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\SINUS.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\SINUSIN2.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\SINUSIN3.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\SINUSINT.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\SolveCameraPosition.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\SolveDirectLinear.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\SolveOblique.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\SolveOrthoPhoto.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\SolveParallelProjective.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\STEREO.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\STEREOGR.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\StereoPolar.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\TMERC.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\UPS.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\UTM.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\VANDG.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\VANHUUT3.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\verticpersp.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\wagner7.h" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Winkel1.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Winkel2.H" />
+    <ClInclude Include="..\..\Sources\Engine\SpatialReference\Winkel3.H" />
+    <ClInclude Include="..\..\Sources\Engine\Stereoscopy\StereoPair.h" />
+    <ClInclude Include="..\..\Sources\Engine\Stereoscopy\StereoPairEpiPolar.h" />
+    <ClInclude Include="..\..\Sources\Engine\Stereoscopy\StereoPairFromDTM.h" />
+    <ClInclude Include="..\..\Sources\Engine\Stereoscopy\StereoPairVirtual.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\Col.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\Colbinar.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\COLBYTE.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\COLCOORD.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\COLINFO.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\COLINT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\COLLONG.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\COLRC.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\COLREAL.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\COLSTORE.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\COLSTRNG.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\ColumnCoordBuf.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\GraphObject.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\NewTableStore.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\Rec.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\TableStoreIlwis3.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\tbl.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\tbl2dim.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\TBLBIN.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\TBLHIST.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\TBLHSTPL.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\TBLHSTPT.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\TBLHSTSG.H" />
+    <ClInclude Include="..\..\Sources\Engine\Table\tblinfo.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\tblstore.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\tbltbl.h" />
+    <ClInclude Include="..\..\Sources\Engine\Table\tblview.h" />
+    <ClInclude Include="..\..\Sources\Geos\capi\geos_c.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\Angle.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\BoundaryNodeRule.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\CentralEndpointIntersector.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\CentroidArea.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\CentroidLine.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\CentroidPoint.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\CGAlgorithms.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\ConvexHull.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\distance\DiscreteHausdorffDistance.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\distance\DistanceToPoint.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\distance\PointPairDistance.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\HCoordinate.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\InteriorPointArea.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\InteriorPointLine.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\InteriorPointPoint.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\LineIntersector.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\locate\IndexedPointInAreaLocator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\locate\PointOnGeometryLocator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\locate\SimplePointInAreaLocator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\MCPointInRing.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\MinimumDiameter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\NotRepresentableException.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\PointInRing.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\PointLocator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\RayCrossingCounter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\RobustDeterminant.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\SimplePointInRing.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\algorithm\SIRtreePointInRing.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\export.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraphindex.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\Depth.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\DirectedEdge.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\DirectedEdgeStar.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\Edge.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\EdgeEnd.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\EdgeEndStar.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\EdgeIntersection.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\EdgeIntersectionList.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\EdgeList.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\EdgeNodingValidator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\EdgeRing.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\GeometryGraph.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\GraphComponent.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\index\EdgeSetIntersector.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\index\MonotoneChain.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\index\MonotoneChainEdge.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\index\MonotoneChainIndexer.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\index\SegmentIntersector.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\index\SimpleEdgeSetIntersector.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\index\SimpleMCSweepLineIntersector.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\index\SimpleSweepLineIntersector.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\index\SweepLineEvent.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\index\SweepLineEventObj.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\index\SweepLineSegment.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\Label.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\Node.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\NodeFactory.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\NodeMap.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\PlanarGraph.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\Position.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\Quadrant.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomgraph\TopologyLocation.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geomUtil.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\BinaryOp.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\Coordinate.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\CoordinateArraySequence.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\CoordinateArraySequenceFactory.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\CoordinateFilter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\CoordinateList.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\CoordinateSequence.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\CoordinateSequenceFactory.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\CoordinateSequenceFilter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\Dimension.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\Envelope.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\Geometry.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\GeometryCollection.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\GeometryComponentFilter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\GeometryFactory.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\GeometryFilter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\GeometryList.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\IntersectionMatrix.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\LinearRing.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\LineSegment.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\LineString.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\Location.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\MultiLineString.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\MultiPoint.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\MultiPolygon.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\Point.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\Polygon.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\PrecisionModel.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\AbstractPreparedPolygonContains.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\BasicPreparedGeometry.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\PreparedGeometry.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\PreparedGeometryFactory.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\PreparedLineString.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\PreparedLineStringIntersects.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\PreparedPoint.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\PreparedPolygon.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\PreparedPolygonContains.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\PreparedPolygonContainsProperly.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\PreparedPolygonCovers.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\PreparedPolygonIntersects.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\prep\PreparedPolygonPredicate.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\Triangle.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\util\ComponentCoordinateExtracter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\util\CoordinateOperation.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\util\GeometryCombiner.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\util\GeometryEditor.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\util\GeometryEditorOperation.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\util\GeometryTransformer.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\util\LinearComponentExtracter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\util\PointExtracter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\util\PolygonExtracter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geom\util\ShortCircuitedGeometryVisitor.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\geosAlgorithm.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\indexBintree.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\indexChain.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\indexQuadtree.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\indexStrtree.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\indexSweepline.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\bintree\Bintree.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\bintree\Interval.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\bintree\Key.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\bintree\Node.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\bintree\NodeBase.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\bintree\Root.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\chain\MonotoneChain.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\chain\MonotoneChainBuilder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\chain\MonotoneChainOverlapAction.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\chain\MonotoneChainSelectAction.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\intervalrtree\IntervalRTreeBranchNode.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\intervalrtree\IntervalRTreeLeafNode.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\intervalrtree\IntervalRTreeNode.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\intervalrtree\SortedPackedIntervalRTree.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\ItemVisitor.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\quadtree\DoubleBits.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\quadtree\IntervalSize.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\quadtree\Key.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\quadtree\Node.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\quadtree\NodeBase.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\quadtree\Quadtree.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\quadtree\Root.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\SpatialIndex.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\strtree\AbstractNode.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\strtree\AbstractSTRtree.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\strtree\Boundable.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\strtree\Interval.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\strtree\ItemBoundable.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\strtree\SIRtree.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\strtree\STRtree.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\sweepline\SweepLineEvent.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\sweepline\SweepLineIndex.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\sweepline\SweepLineInterval.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\index\sweepline\SweepLineOverlapAction.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\inline.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\io.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\linearref\ExtractLineByLocation.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\linearref\LengthIndexedLine.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\linearref\LengthIndexOfPoint.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\linearref\LengthLocationMap.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\linearref\LinearGeometryBuilder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\linearref\LinearIterator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\linearref\LinearLocation.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\linearref\LocationIndexOfLine.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\linearref\LocationIndexOfPoint.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\nodingSnapround.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\BasicSegmentString.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\FastNodingValidator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\FastSegmentSetIntersectionFinder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\IntersectionAdder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\IntersectionFinderAdder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\IteratedNoder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\MCIndexNoder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\MCIndexSegmentSetMutualIntersector.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\NodableSegmentString.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\NodedSegmentString.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\Noder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\NodingValidator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\Octant.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\OrientedCoordinateArray.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\ScaledNoder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\SegmentIntersectionDetector.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\SegmentIntersector.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\SegmentNode.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\SegmentNodeList.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\SegmentSetMutualIntersector.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\SegmentString.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\SegmentStringUtil.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\SimpleNoder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\SingleInteriorIntersectionFinder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\noding\SinglePassNoder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\opBuffer.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\opDistance.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\buffer\BufferBuilder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\buffer\BufferOp.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\buffer\BufferSubgraph.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\buffer\OffsetCurveBuilder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\buffer\OffsetCurveSetBuilder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\buffer\RightmostEdgeFinder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\buffer\SubgraphDepthLocater.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\distance\ConnectedElementLocationFilter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\distance\ConnectedElementPointFilter.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\distance\DistanceOp.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\distance\GeometryLocation.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\EndpointInfo.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\GeometryGraphOperation.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\IsSimpleOp.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\linemerge\EdgeString.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\linemerge\LineMergeDirectedEdge.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\linemerge\LineMergeEdge.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\linemerge\LineMergeGraph.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\linemerge\LineMerger.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\linemerge\LineSequencer.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\EdgeSetNoder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\ElevationMatrix.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\ElevationMatrixCell.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\LineBuilder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\MaximalEdgeRing.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\MinimalEdgeRing.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\OffsetPointGenerator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\OverlayNodeFactory.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\OverlayOp.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\OverlayResultValidator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\PointBuilder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\PolygonBuilder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\snap\GeometrySnapper.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\snap\LineStringSnapper.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\snap\SnapIfNeededOverlayOp.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\snap\SnapOverlayOp.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\validate\FuzzyPointLocator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\validate\OffsetPointGenerator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\overlay\validate\OverlayResultValidator.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\polygonize\EdgeRing.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\polygonize\PolygonizeDirectedEdge.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\polygonize\PolygonizeEdge.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\polygonize\PolygonizeGraph.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\polygonize\Polygonizer.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\predicate\RectangleContains.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\predicate\RectangleIntersects.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\predicate\SegmentIntersectionTester.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\relate\EdgeEndBuilder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\relate\EdgeEndBundle.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\relate\EdgeEndBundleStar.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\relate\RelateComputer.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\relate\RelateNode.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\relate\RelateNodeFactory.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\relate\RelateNodeGraph.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\relate\RelateOp.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\union\CascadedPolygonUnion.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\valid\ConnectedInteriorTester.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\valid\ConsistentAreaTester.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\valid\IsValidOp.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\valid\QuadtreeNestedRingTester.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\valid\RepeatedPointTester.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\valid\SimpleNestedRingTester.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\valid\SweeplineNestedRingTester.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\operation\valid\TopologyValidationError.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\opLinemerge.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\opOverlay.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\opPolygonize.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\opPredicate.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\opRelate.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\opValid.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\planargraph.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\planargraph\algorithm\ConnectedSubgraphFinder.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\planargraph\DirectedEdge.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\planargraph\DirectedEdgeStar.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\planargraph\Edge.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\planargraph\GraphComponent.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\planargraph\Node.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\planargraph\NodeMap.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\planargraph\PlanarGraph.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\planargraph\Subgraph.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\platform.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\precision.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\profiler.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\spatialIndex.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\timeval.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\unload.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\util.h" />
+    <ClInclude Include="..\..\Sources\Geos\headers\geos\version.h" />
+    <ClInclude Include="..\..\Sources\Geos\operation\buffer\BufferInputLineSimplifier.h" />
+    <ClInclude Include="..\..\Sources\Geos\operation\buffer\OffsetCurveVertexList.h" />
+    <ClInclude Include="..\..\Sources\Geos\operation\valid\IndexedNestedRingTester.h" />
+    <ClInclude Include="..\..\Sources\Headers\base.h" />
+    <ClInclude Include="..\..\Sources\Headers\baseconst.h" />
+    <ClInclude Include="..\..\Sources\Headers\compatib.h" />
+    <ClInclude Include="..\..\Sources\Headers\constant.h" />
+    <ClInclude Include="..\..\Sources\Headers\dragdrop.h" />
+    <ClInclude Include="..\..\Sources\Headers\ft2build.h" />
+    <ClInclude Include="..\..\Sources\Headers\ftgl\ftgl.h" />
+    <ClInclude Include="..\..\Sources\Headers\hourglss.h" />
+    <ClInclude Include="..\..\Sources\Headers\htmlhelp.h" />
+    <ClInclude Include="..\..\Sources\Headers\messages.h" />
+    <ClInclude Include="..\..\Sources\Headers\proj_api.h" />
+    <ClInclude Include="..\..\Sources\Headers\stdafx.h" />
+    <ClInclude Include="..\..\Sources\Headers\toolspch.h" />
+    <ClInclude Include="..\..\Sources\Headers\version.h" />
+    <ClInclude Include="..\..\Sources\SpatialDB\headers\spatialite\sqlite3.h" />
+    <ClInclude Include="ApplicationPlugin.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="..\..\Sources\Engine\COMInterface\ICommandLine.idl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Sources\Engine\COMInterface\IlwisComProxy.def" />
+    <None Include="..\..\Sources\Geos\headers\geos\algorithm\ConvexHull.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geomgraph\DirectedEdge.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geomgraph\GeometryGraph.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geom\Coordinate.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geom\CoordinateArraySequenceFactory.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geom\Envelope.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geom\Geometry.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geom\GeometryCollection.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geom\GeometryFactory.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geom\LineSegment.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geom\MultiLineString.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geom\MultiPolygon.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\geom\PrecisionModel.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\Makefile.in" />
+    <None Include="..\..\Sources\Geos\headers\geos\noding\MCIndexNoder.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\noding\SegmentString.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\operation\overlay\MinimalEdgeRing.inl" />
+    <None Include="..\..\Sources\Geos\headers\geos\platform.h.in" />
+    <None Include="..\..\Sources\Geos\headers\geos\version.h.in" />
+    <None Include="..\..\Sources\Geos\headers\geos\version.h.vc" />
+    <None Include="..\..\Sources\Headers\Err\Ilwisapp.err" />
+    <None Include="..\..\Sources\Headers\Err\ILWISDAT.ERR" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

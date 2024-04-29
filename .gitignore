@@ -1,0 +1,6 @@
+Backup*
+temp/
+.vs
+
+*.user
+upgrade*.htm

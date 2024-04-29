@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header">
+      <UniqueIdentifier>{f8550cc4-55db-4981-a400-aacb2692b24c}</UniqueIdentifier>
+      <Extensions>h;hpp</Extensions>
+    </Filter>
+    <Filter Include="Source files">
+      <UniqueIdentifier>{566ef7c3-b7a3-40fe-a179-f045ea47d0c0}</UniqueIdentifier>
+      <Extensions>c;cpp</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\LargeVector.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapCatchmentExtraction.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapCatchmentMerge.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapDEMOptimization.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapDrainageNetworkExtraction.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapDrainageNetworkOrdering.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapFillSinks.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapFlowAccumulation.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapFlowDirection.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapFlowLengthToOutlet.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapSlopeLengths.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapTopologicalOptimization.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\MapVariableThresholdComputation.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\ParallelFlowDirectionAlgorithm.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\TblFlowPathLonsitudinalProfile.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\HydroFlowApplications\TblHortonPlots.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\Apps.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\LargeVector.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapCatchmentExtraction.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapCatchmentMerge.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapDEMOptimization.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapDrainageNetworkExtraction.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapDrainageNetworkOrdering.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapFillSinks.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapFlowAccumulation.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapFlowDirection.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapFlowLengthToOutlet.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapSlopeLengths.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapTopologicalOptimization.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\MapVariableThresholdComputation.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\ParallelFlowDirectionAlgorithm.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\TblFlowPathLonsitudinalProfile.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\HydroFlowApplications\TblHortonPlots.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

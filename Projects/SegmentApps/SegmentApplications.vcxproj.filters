@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="headers">
+      <UniqueIdentifier>{c1e03612-3273-454b-8352-1a83d5cd60e7}</UniqueIdentifier>
+      <Extensions>h;hpp</Extensions>
+    </Filter>
+    <Filter Include="source files">
+      <UniqueIdentifier>{39614ade-4cc7-4358-892e-bbb446cd6091}</UniqueIdentifier>
+      <Extensions>cpp</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\SegmentApplications\CNFRMRSV.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\DT_Matrix.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SEGATTRB.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SegBound.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SEGDENSF.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\segdifference.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SEGGLUE.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\segIntersect.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SEGLABEL.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SEGMASK.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SegmentMapFromPoints.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SEGNUMB.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SEGPLBND.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\segRelate.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SEGSUBMP.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\segSymDifference.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\segTIN.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SEGTRNSF.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SEGTUNNL.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\segUnion.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\segVoronoi.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\SGFRMRSP.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\tricommon.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\SegmentApplications\VoronoiDiagramGenerator.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\SegmentApplications\Apps.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\CNFRMRSV.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\SEGATTRB.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\SEGDENSF.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\segdifference.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\Segglue.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\segIntersect.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\SEGLABEL.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\SEGMASK.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\SegmentMapFromPoints.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\SEGNUMB.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\SEGPLBND.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\segRelate.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\SEGSUBMP.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\segSymDifference.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\segTIN.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\SEGTRNSF.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\SEGTUNNL.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\segUnion.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\segVoronoi.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\SGFRMRSP.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\tri_algebra.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\tri_geometry.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\tri_triangulation.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\tri_utility.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\SegmentApplications\VoronoiDiagramGenerator.cpp">
+      <Filter>source files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

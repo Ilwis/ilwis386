@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="headers">
+      <UniqueIdentifier>{621d64a4-4710-4b91-af1e-27594bec3851}</UniqueIdentifier>
+      <Extensions>h;hpp</Extensions>
+    </Filter>
+    <Filter Include="Source files">
+      <UniqueIdentifier>{22ce3d8f-06de-406e-93ae-afb32850aa70}</UniqueIdentifier>
+      <Extensions>c;cpp</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\PolygonApplications\ConvexHull.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\difference.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\Intersect.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\POLATTRB.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\PolBuffer.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\POLFRMRS.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\POLFRMSG.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\POLLABEL.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\POLMASK.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\POLNUMB.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\polRelate.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\POLTRNSF.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\PolygonMapGrid.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\SymDifference.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PolygonApplications\Union.H">
+      <Filter>headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\PolygonApplications\Apps.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\ConvexHull.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\difference.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\Intersect.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\POLATTRB.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\PolBuffer.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\POLFRMRS.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\POLFRMSG.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\POLLABEL.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\POLMASK.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\POLNUMB.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\polRelate.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\POLTRNSF.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\PolygonMapGrid.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\SymDifference.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PolygonApplications\Union.cpp">
+      <Filter>Source files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

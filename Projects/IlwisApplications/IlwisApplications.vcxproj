@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{4DD37A5C-C37E-4F80-AD34-F098472B8A6D}</ProjectGuid>
+    <RootNamespace>IlwisApplications</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.33626.349</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <BuildLog>
+      <Path>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\BuildLog.htm</Path>
+    </BuildLog>
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>false</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sources\Geos\headers;$(SolutionDir)Sources\Headers;$(SolutionDir)Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;IlwisApplications;_WIN32_WINNT=0x0400;_WIN32_IE=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader />
+      <ObjectFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\vc80.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ILWISEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)$(Configuration)\Ilwis3\Extensions\IlwisApp.dll</OutputFile>
+      <Version>3.5</Version>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\import;$(SolutionDir)libraries\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ManifestFile>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(TargetFileName).intermediate.manifest</ManifestFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(TargetName).pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(SolutionDir)libraries\$(Configuration)\$(ProjectName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <BuildLog>
+      <Path>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\BuildLog.htm</Path>
+    </BuildLog>
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>false</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sources\Geos\headers;$(SolutionDir)Sources\Headers;$(SolutionDir)Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;IlwisApplications;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_WIN32_IE=0x0400;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader />
+      <ObjectFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\vc80.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ILWISEngine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)$(Configuration)\Ilwis3\Extensions\IlwisApp.dll</OutputFile>
+      <Version>3.8</Version>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\import;$(SolutionDir)libraries\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ManifestFile>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(TargetFileName).intermediate.manifest</ManifestFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(TargetName).pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(SolutionDir)libraries\$(Configuration)\$(ProjectName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\Applications\Apps.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\MapList\MapLisExpand.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\MapList\MapListApplic.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\MapList\MapListCalculate.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\MapList\MapListChangeDetection.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\MapList\MapListMatrixMultiply.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAP3D.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapaggr.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapAggregateMapList.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPARN.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapattrb.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapcalc.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapclass.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapclcmp.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPCLUST.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapcokri.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapColorFromRpr.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPCOLSP.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapComputedElsewhere.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPCROSS.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPDENSF.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPDIST.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPFILTR.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapglue.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPHECK.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPITER.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPITPCN.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapkrig.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapKrigingFromRaster.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapMaplistStatistics.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPMRROT.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPMVAVG.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPMVSRF.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPNRPNT.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapParallaxCorrection.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mappntrs.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapresmp.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapresmp2.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPSLICE.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPSTRCH.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPSUB.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPTHIES.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapToAttrb.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Maptrnds.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapVisibility.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mpsegdns.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\POLRAS.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\Segras.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\varcross.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\variosfm.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Raster\variosrf.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Aggfunc2.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Aggfunc3.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\AGGFUNCS.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Autcsemv.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Colaggr.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Colcalc.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\COLCUM.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Collsf.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Colsvm.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\coltimefromcolumns.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\ColumnToTime.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Neighpol.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Pattanal.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\SEGDIR.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Spatcorr.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\TableCreateTimeColumn.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\TableNetworkDistance.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\TblBursaWolf.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\tblchdom.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Tblcomma.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Tblcross.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Tblcrvar.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\TblGlue.cpp" />
+    <ClCompile Include="..\..\Sources\Applications\Table\Tbltrnsp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\Applications\MapList\MapListApplic.h" />
+    <ClInclude Include="..\..\Sources\Applications\MapList\MapListCalculate.h" />
+    <ClInclude Include="..\..\Sources\Applications\MapList\MapListChangeDetection.h" />
+    <ClInclude Include="..\..\Sources\Applications\MapList\MapListExpand.h" />
+    <ClInclude Include="..\..\Sources\Applications\MapList\MapListMatrixMultiply.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAP3D.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPAGGR.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MapAggregateMapList.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPARN.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPATTRB.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCALC.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCLASS.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCLCMP.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCLUST.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCOKRI.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MapColorFromRpr.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCOLSP.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCROSS.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPDENSF.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPDIST.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPFILTR.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\Mapglue.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPHECK.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPITER.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPITPCN.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\Mapkrig.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPMRROT.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPMVAVG.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPMVSRF.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPNRPNT.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MapParallaxCorrection.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\Mappntrs.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\Mapresmp.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\Mapresmp2.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPRSMPL.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPSLICE.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPSTRCH.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPSUB.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPTHIES.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MapToAttrb.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPTRNDS.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MapVisibility.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\MPSEGDNS.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\POLRAS.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\SEGRAS.H" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\varcross.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\variosfm.h" />
+    <ClInclude Include="..\..\Sources\Applications\Raster\variosrf.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\AGGFUNCS.H" />
+    <ClInclude Include="..\..\Sources\Applications\Table\AUTCSEMV.H" />
+    <ClInclude Include="..\..\Sources\Applications\Table\COLAGGR.H" />
+    <ClInclude Include="..\..\Sources\Applications\Table\COLCALC.H" />
+    <ClInclude Include="..\..\Sources\Applications\Table\COLCUM.H" />
+    <ClInclude Include="..\..\Sources\Applications\Table\COLLSF.H" />
+    <ClInclude Include="..\..\Sources\Applications\Table\COLSVM.H" />
+    <ClInclude Include="..\..\Sources\Applications\Table\coltimefromcolumns.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\ColumnToTime.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\LINANAL.H" />
+    <ClInclude Include="..\..\Sources\Applications\Table\Neighpol.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\PATTANAL.H" />
+    <ClInclude Include="..\..\Sources\Applications\Table\SEGDIR.H" />
+    <ClInclude Include="..\..\Sources\Applications\Table\Spatcorr.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\TableCreateTimeColumn.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\TableNetworkDistance.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\TblBursaWolf.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\tblchdom.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\Tblcomma.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\Tblcross.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\Tblcrvar.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\TblGlue.h" />
+    <ClInclude Include="..\..\Sources\Applications\Table\TBLTRNSP.H" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IlwisEngine\IlwisEngine.vcxproj">
+      <Project>{903cdf6b-45ed-4c7d-83bf-9ecc12b051d3}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

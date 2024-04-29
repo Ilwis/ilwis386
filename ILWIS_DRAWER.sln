@@ -1,106 +1,70 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IlwisEngine", "Projects\IlwisEngine\IlwisEngine.vcproj", "{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33712.159
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IlwisEngine", "Projects\IlwisEngine\IlwisEngine.vcxproj", "{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IlwisClient", "Projects\IlwisClient\IlwisClient.vcproj", "{12042408-86EA-4501-8797-F358A5447A86}"
 	ProjectSection(ProjectDependencies) = postProject
 		{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3} = {903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IlwisApplications", "Projects\IlwisApplications\IlwisApplications.vcproj", "{4DD37A5C-C37E-4F80-AD34-F098472B8A6D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3} = {903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IlwisApplications", "Projects\IlwisApplications\IlwisApplications.vcxproj", "{4DD37A5C-C37E-4F80-AD34-F098472B8A6D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IlwisAppUI", "Projects\IlwisAppUI\IlwisAppUI.vcproj", "{1D43E8C9-3563-4CC7-A3D1-B69C8BB736E8}"
-	ProjectSection(ProjectDependencies) = postProject
-		{12042408-86EA-4501-8797-F358A5447A86} = {12042408-86EA-4501-8797-F358A5447A86}
-		{84A04E1D-6972-4BA9-B8D1-C0943F0540C8} = {84A04E1D-6972-4BA9-B8D1-C0943F0540C8}
-		{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3} = {903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IlwisAppUI", "Projects\IlwisAppUI\IlwisAppUI.vcxproj", "{1D43E8C9-3563-4CC7-A3D1-B69C8BB736E8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SEBS", "Projects\SEBS\SEBS.vcproj", "{350CC3D5-3024-437A-990E-7B6C9018F13D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{12042408-86EA-4501-8797-F358A5447A86} = {12042408-86EA-4501-8797-F358A5447A86}
-		{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3} = {903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}
-		{1D43E8C9-3563-4CC7-A3D1-B69C8BB736E8} = {1D43E8C9-3563-4CC7-A3D1-B69C8BB736E8}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SEBS", "Projects\SEBS\SEBS.vcxproj", "{350CC3D5-3024-437A-990E-7B6C9018F13D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IlwisDataExchangeUI", "Projects\IlwisDataExchangeUI\IlwisDataExchangeUI.vcproj", "{4693AA8A-6072-42AD-B66E-A65167820179}"
-	ProjectSection(ProjectDependencies) = postProject
-		{12042408-86EA-4501-8797-F358A5447A86} = {12042408-86EA-4501-8797-F358A5447A86}
-		{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3} = {903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IlwisDataExchangeUI", "Projects\IlwisDataExchangeUI\IlwisDataExchangeUI.vcxproj", "{4693AA8A-6072-42AD-B66E-A65167820179}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SEBSUI", "Projects\SEBSUI\SEBSUI.vcproj", "{FF0C20A1-ED3C-4379-9FA6-5B85E39766CB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SEBSUI", "Projects\SEBSUI\SEBSUI.vcxproj", "{FF0C20A1-ED3C-4379-9FA6-5B85E39766CB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PointApplications", "Projects\PointApps\PointApplications.vcproj", "{84A04E1D-6972-4BA9-B8D1-C0943F0540C8}"
-	ProjectSection(ProjectDependencies) = postProject
-		{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3} = {903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PointApplications", "Projects\PointApps\PointApplications.vcxproj", "{84A04E1D-6972-4BA9-B8D1-C0943F0540C8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PolygonApplications", "Projects\PolygonApps\PolygonApplications.vcproj", "{0AAF337A-DFE9-41BB-B880-764615BD589F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3} = {903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PolygonApplications", "Projects\PolygonApps\PolygonApplications.vcxproj", "{0AAF337A-DFE9-41BB-B880-764615BD589F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SegmentApplications", "Projects\SegmentApps\SegmentApplications.vcproj", "{6EC64F36-6111-4B42-8D0F-2B0B4DD31E22}"
-	ProjectSection(ProjectDependencies) = postProject
-		{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3} = {903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SegmentApplications", "Projects\SegmentApps\SegmentApplications.vcxproj", "{6EC64F36-6111-4B42-8D0F-2B0B4DD31E22}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HydroFlowApplications", "Projects\HydroFlow\HydroFlowApplications.vcproj", "{69319B13-CC4A-4111-84F2-1D499EB5C02E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HydroFlowApplications", "Projects\HydroFlow\HydroFlowApplications.vcxproj", "{69319B13-CC4A-4111-84F2-1D499EB5C02E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SegmentApplicationsUI", "Projects\SegmentAppsUI\SegmentApplicationsUI.vcproj", "{A05EF560-57A0-46C6-A2F7-684AA626388C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SegmentApplicationsUI", "Projects\SegmentAppsUI\SegmentApplicationsUI.vcxproj", "{A05EF560-57A0-46C6-A2F7-684AA626388C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PointApplicationsUI", "Projects\PointAppUI\PointApplicationsUI.vcproj", "{7754DA7E-7D50-49CC-A369-CD424C28F0D9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PointApplicationsUI", "Projects\PointAppUI\PointApplicationsUI.vcxproj", "{7754DA7E-7D50-49CC-A369-CD424C28F0D9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PolygonApplicationsUI", "Projects\PolygonAppsUI\PolygonApplicationsUI.vcproj", "{10B770DF-3948-47C8-A86B-BF2CBFEB4D0A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PolygonApplicationsUI", "Projects\PolygonAppsUI\PolygonApplicationsUI.vcxproj", "{10B770DF-3948-47C8-A86B-BF2CBFEB4D0A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HydroFlowApplicationsUI", "Projects\HydroFlowUI\HydroFlowUI.vcproj", "{E577AEFC-CB7A-4E50-A195-63BAAB0CCB49}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HydroFlowApplicationsUI", "Projects\HydroFlowUI\HydroFlowUI.vcxproj", "{E577AEFC-CB7A-4E50-A195-63BAAB0CCB49}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IlwisDataExchange", "Projects\IlwisDataExchange\IlwisDataExchange.vcproj", "{B3067711-75E4-4789-BF21-3D6316371994}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IlwisDataExchange", "Projects\IlwisDataExchange\IlwisDataExchange.vcxproj", "{B3067711-75E4-4789-BF21-3D6316371994}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILWISDrawers", "Projects\IlwisDrawers\ILWISDrawers.vcproj", "{FD4E2ECC-451A-40CD-9391-6806EBEC9BF4}"
-	ProjectSection(ProjectDependencies) = postProject
-		{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3} = {903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ILWISDrawers", "Projects\IlwisDrawers\ILWISDrawers.vcxproj", "{FD4E2ECC-451A-40CD-9391-6806EBEC9BF4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrawersUI", "Projects\DrawerTools\DrawersUI.vcproj", "{8DF70E96-104A-4E41-8A67-633B975E6A6D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{12042408-86EA-4501-8797-F358A5447A86} = {12042408-86EA-4501-8797-F358A5447A86}
-		{903CDF6B-45ED-4C7D-83BF-9ECC12B051D3} = {903CDF6B-45ED-4C7D-83BF-9ECC12B051D3}
-		{FD4E2ECC-451A-40CD-9391-6806EBEC9BF4} = {FD4E2ECC-451A-40CD-9391-6806EBEC9BF4}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DrawersUI", "Projects\DrawerTools\DrawersUI.vcxproj", "{8DF70E96-104A-4E41-8A67-633B975E6A6D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HttpServer", "Projects\HttpServer\HttpServer.vcproj", "{6F221FFE-6260-44CB-974D-7DABA1EFF9A7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HttpServer", "Projects\HttpServer\HttpServer.vcxproj", "{6F221FFE-6260-44CB-974D-7DABA1EFF9A7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tracking", "Projects\Tracking\Tracking.vcproj", "{953FCD15-CD11-4540-B748-12E4CC9F2F28}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tracking", "Projects\Tracking\Tracking.vcxproj", "{953FCD15-CD11-4540-B748-12E4CC9F2F28}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MOGA", "Projects\MOGA\MOGA.vcproj", "{3DA424D0-7148-4660-A90B-244D1899521D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MOGA", "Projects\MOGA\MOGA.vcxproj", "{3DA424D0-7148-4660-A90B-244D1899521D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpaceTimeCube", "Projects\SpaceTimeCube\SpaceTimeCube.vcproj", "{8BA0490E-BA8E-4284-A9E9-1305C4A05EA9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpaceTimeCube", "Projects\SpaceTimeCube\SpaceTimeCube.vcxproj", "{8BA0490E-BA8E-4284-A9E9-1305C4A05EA9}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlockFPM", "Projects\FlockFPM\FlockFPM.vcproj", "{463A2C98-A7AC-42C3-9278-3F2C746BE54A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FlockFPM", "Projects\FlockFPM\FlockFPM.vcxproj", "{463A2C98-A7AC-42C3-9278-3F2C746BE54A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProbabilityDensity", "Projects\ProbabilityDensity\ProbabilityDensity.vcproj", "{F6C4F969-1028-4E4F-A40F-F4E6FE6A7654}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProbabilityDensity", "Projects\ProbabilityDensity\ProbabilityDensity.vcxproj", "{F6C4F969-1028-4E4F-A40F-F4E6FE6A7654}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Geonetcast-Toolbox", "Projects\GeonetcastToolboxUI\GeonetcastToolboxUI.vcproj", "{2DCF4376-A5D6-4E98-8AA3-96FF526B11A2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Geonetcast-Toolbox", "Projects\GeonetcastToolboxUI\GeonetcastToolboxUI.vcxproj", "{2DCF4376-A5D6-4E98-8AA3-96FF526B11A2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IsoCluster", "Projects\IsoCluster\IsoCluster.vcproj", "{27A93563-BD89-409E-B401-D52A08369D77}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IsoCluster", "Projects\IsoCluster\IsoCluster.vcxproj", "{27A93563-BD89-409E-B401-D52A08369D77}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapListFiltering", "Projects\MapListFiltering\MapListFiltering.vcproj", "{79879E04-71E4-46AC-A21F-F964305FA9ED}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MapListFiltering", "Projects\MapListFiltering\MapListFiltering.vcxproj", "{79879E04-71E4-46AC-A21F-F964305FA9ED}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Services", "Projects\Services\Services.vcproj", "{2608FBD3-A680-4386-A04E-1384DF2B5234}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Services", "Projects\Services\Services.vcxproj", "{2608FBD3-A680-4386-A04E-1384DF2B5234}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "help", "Projects\help\help\help.vcproj", "{3E5A42CC-255E-4D5E-89BD-292DE60909AB}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "help", "Projects\help\help\help.vcxproj", "{3E5A42CC-255E-4D5E-89BD-292DE60909AB}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
@@ -225,5 +189,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F75AEC9E-F5A4-4D72-8234-C33CAF810E63}
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

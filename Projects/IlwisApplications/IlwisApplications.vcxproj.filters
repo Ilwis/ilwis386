@@ -1,0 +1,469 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{038782e6-e305-4619-bfb4-98f4d2e9c08e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Raster">
+      <UniqueIdentifier>{852c0596-0236-430c-a476-550df9aa3d6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Raster\headers">
+      <UniqueIdentifier>{ebe4919e-ff62-43d2-afc8-0dff60ffed7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Table">
+      <UniqueIdentifier>{529b5820-fb59-4f24-b2b3-38829e4e8676}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Table\headers">
+      <UniqueIdentifier>{b7b3c903-82ad-4e39-8803-05503c7d5b92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MapList">
+      <UniqueIdentifier>{4c7eef40-453f-4fa9-b1d5-43ec02ead5ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\MapList\headers">
+      <UniqueIdentifier>{25bd0e3c-4ba2-4b3d-9d2c-601f9f8232d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ObjectCollection">
+      <UniqueIdentifier>{e1c862d7-d79d-430a-9a64-52372c477072}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAP3D.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapaggr.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapAggregateMapList.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPARN.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapattrb.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapcalc.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapclass.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapclcmp.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPCLUST.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapcokri.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapColorFromRpr.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPCOLSP.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapComputedElsewhere.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPCROSS.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPDENSF.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPDIST.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPFILTR.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapglue.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPHECK.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPITER.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPITPCN.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapkrig.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapKrigingFromRaster.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapMaplistStatistics.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPMRROT.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPMVAVG.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPMVSRF.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPNRPNT.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapParallaxCorrection.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mappntrs.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapresmp.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mapresmp2.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPSLICE.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPSTRCH.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPSUB.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MAPTHIES.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapToAttrb.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Maptrnds.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\MapVisibility.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Mpsegdns.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\POLRAS.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\Segras.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\varcross.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\variosfm.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Raster\variosrf.cpp">
+      <Filter>Source Files\Raster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Aggfunc2.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Aggfunc3.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\AGGFUNCS.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Autcsemv.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Colaggr.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Colcalc.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\COLCUM.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Collsf.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Colsvm.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\coltimefromcolumns.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\ColumnToTime.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Neighpol.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Pattanal.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\SEGDIR.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Spatcorr.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\TableCreateTimeColumn.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\TableNetworkDistance.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\TblBursaWolf.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\tblchdom.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Tblcomma.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Tblcross.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Tblcrvar.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\TblGlue.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Table\Tbltrnsp.cpp">
+      <Filter>Source Files\Table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\MapList\MapLisExpand.cpp">
+      <Filter>Source Files\MapList</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\MapList\MapListApplic.cpp">
+      <Filter>Source Files\MapList</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\MapList\MapListCalculate.cpp">
+      <Filter>Source Files\MapList</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\MapList\MapListChangeDetection.cpp">
+      <Filter>Source Files\MapList</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\MapList\MapListMatrixMultiply.cpp">
+      <Filter>Source Files\MapList</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Applications\Apps.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAP3D.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPAGGR.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MapAggregateMapList.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPARN.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPATTRB.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCALC.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCLASS.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCLCMP.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCLUST.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCOKRI.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MapColorFromRpr.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCOLSP.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPCROSS.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPDENSF.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPDIST.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPFILTR.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\Mapglue.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPHECK.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPITER.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPITPCN.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\Mapkrig.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPMRROT.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPMVAVG.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPMVSRF.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPNRPNT.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MapParallaxCorrection.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\Mappntrs.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\Mapresmp.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\Mapresmp2.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPRSMPL.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPSLICE.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPSTRCH.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPSUB.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPTHIES.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MAPTRNDS.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MapVisibility.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MPSEGDNS.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\POLRAS.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\SEGRAS.H">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\varcross.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\variosfm.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\variosrf.h">
+      <Filter>Source Files\Raster\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\coltimefromcolumns.h">
+      <Filter>Source Files\Table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\TableCreateTimeColumn.h">
+      <Filter>Source Files\Table</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\AGGFUNCS.H">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\AUTCSEMV.H">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\COLAGGR.H">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\COLCALC.H">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\COLCUM.H">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\COLLSF.H">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\COLSVM.H">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\ColumnToTime.h">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\LINANAL.H">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Raster\MapToAttrb.h">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\Neighpol.h">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\PATTANAL.H">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\SEGDIR.H">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\Spatcorr.h">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\TableNetworkDistance.h">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\TblBursaWolf.h">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\tblchdom.h">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\Tblcomma.h">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\Tblcross.h">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\Tblcrvar.h">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\TblGlue.h">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\Table\TBLTRNSP.H">
+      <Filter>Source Files\Table\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\MapList\MapListExpand.h">
+      <Filter>Source Files\MapList</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\MapList\MapListApplic.h">
+      <Filter>Source Files\MapList\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\MapList\MapListCalculate.h">
+      <Filter>Source Files\MapList\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\MapList\MapListChangeDetection.h">
+      <Filter>Source Files\MapList\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Applications\MapList\MapListMatrixMultiply.h">
+      <Filter>Source Files\MapList\headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

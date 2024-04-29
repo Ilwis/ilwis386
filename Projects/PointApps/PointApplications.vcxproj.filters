@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{28ee9b9a-a9ee-4f8d-bfad-cc28a2daf0ec}</UniqueIdentifier>
+      <Extensions>h;hpp</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{9afaa08a-cc95-42f0-b990-79ff54bedfc8}</UniqueIdentifier>
+      <Extensions>cpp</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\PointApplications\PNTATTRB.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\pntdifference.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\PNTFRMRS.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\pntfrtbl.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\PNTGLUE.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\pntIntersect.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\PNTMASK.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\PNTNUMB.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\Pntpollb.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\pntRelate.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\PNTSGDST.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\PNTSUB.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\pntSymDifference.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\PNTTRNSF.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\pntUnion.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\PointInSegment.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\PointMapCross.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\PointMapFromSeg.H">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\PointApplications\PointMapTripleCollocation.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\PointApplications\Apps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\PNTATTRB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\pntdifference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\PNTFRMRS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\pntfrtbl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\Pntglue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\pntIntersect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\PNTMASK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\PNTNUMB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\Pntpollb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\pntRelate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\PNTSGDST.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\PNTSUB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\pntSymDifference.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\PNTTRNSF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\pntUnion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\PointInSegment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\PointMapCross.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\PointMapFromSeg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PointApplications\PointMapTripleCollocation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

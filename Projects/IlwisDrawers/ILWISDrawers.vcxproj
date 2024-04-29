@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{FD4E2ECC-451A-40CD-9391-6806EBEC9BF4}</ProjectGuid>
+    <RootNamespace>ILWISDrawers</RootNamespace>
+    <Keyword>MFCDLLProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.33626.349</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <BuildLog>
+      <Path>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\BuildLog.htm</Path>
+    </BuildLog>
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sources\Headers;$(SolutionDir)Sources\Geos\headers;$(SolutionDir)Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;IlwisApplicationsUI;_WIN32_WINNT=0x0400;_WIN32_IE=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_CRTDBG_MAP_ALLOC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <ObjectFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\vc80.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ILWISEngine.lib;opengl32.lib;glu32.lib;vfw32.lib;ftgl.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)$(Configuration)\Ilwis3\Extensions\ILWISDrawers.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\import;$(SolutionDir)libraries\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile />
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(TargetName).pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(SolutionDir)libraries\$(Configuration)\$(ProjectName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sources\Geos\headers;$(SolutionDir)Sources\Headers;$(SolutionDir)Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;IlwisApplicationsUI;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_WIN32_IE=0x0400;_WIN32_DCOM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <ObjectFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\vc80.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ILWISEngine.lib;opengl32.lib;glu32.lib;vfw32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)$(Configuration)\Ilwis3\Extensions\ILWISDrawers.dll</OutputFile>
+      <Version>3.8</Version>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\import;$(SolutionDir)libraries\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile />
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(TargetName).pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(SolutionDir)libraries\$(Configuration)\$(ProjectName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\Drawers\AnimationDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\AnnotationDrawers.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\AviFile.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\BoxDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\CanvasBackgroundDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\CCTexture.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\CollectionDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\ColorCompositeDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\DEMTriangulator.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\Drawers.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\DrawingColor.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\FeatureDataDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\FeatureLayerDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\GraticuleDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\GridDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\LayerDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\LineDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\LineFeatureDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\LineLayerDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\OpenstreetmapDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\PointDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\PointFeatureDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\PointLayerDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\PolygonDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\PolygonFeatureDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\PolygonLayerDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\RasterDataDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\RasterLayerDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\SetDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\Texture.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\TextureHeap.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\WMSDrawer.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\WMSTexture.cpp" />
+    <ClCompile Include="..\..\Sources\Drawers\WMSTextureHeap.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\Drawers\AnimationDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\AnnotationDrawers.h" />
+    <ClInclude Include="..\..\Sources\Drawers\AviFile.h" />
+    <ClInclude Include="..\..\Sources\Drawers\BoxDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\CanvasBackgroundDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\CCTexture.h" />
+    <ClInclude Include="..\..\Sources\Drawers\CollectionDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\ColorCompositeDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\DEMTriangulator.h" />
+    <ClInclude Include="..\..\Sources\Drawers\DrawingColor.h" />
+    <ClInclude Include="..\..\Sources\Drawers\FeatureDataDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\FeatureLayerDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\GLToMovie.h" />
+    <ClInclude Include="..\..\Sources\Drawers\GraticuleDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\GridDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\LayerDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\LineDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\LineFeatureDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\LineLayerDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\OpenstreetmapDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\PointDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\PointFeatureDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\PointLayerDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\PolygonDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\PolygonFeatureDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\PolygonLayerDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\RasterDataDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\RasterLayerDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\SetDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\Texture.h" />
+    <ClInclude Include="..\..\Sources\Drawers\TextureHeap.h" />
+    <ClInclude Include="..\..\Sources\Drawers\WMSDrawer.h" />
+    <ClInclude Include="..\..\Sources\Drawers\WMSTexture.h" />
+    <ClInclude Include="..\..\Sources\Drawers\WMSTextureHeap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IlwisEngine\IlwisEngine.vcxproj">
+      <Project>{903cdf6b-45ed-4c7d-83bf-9ecc12b051d3}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

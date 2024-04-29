@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{8DF70E96-104A-4E41-8A67-633B975E6A6D}</ProjectGuid>
+    <RootNamespace>DrawersUI</RootNamespace>
+    <Keyword>MFCDLLProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v143</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.33626.349</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <BuildLog>
+      <Path>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\BuildLog.htm</Path>
+    </BuildLog>
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sources\Geos\headers;$(SolutionDir)Sources;$(SolutionDir)Sources\Headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;IlwisApplicationsUI;_WIN32_WINNT=0x0400;_WIN32_IE=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <ObjectFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\vc80.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ILWISEngine.lib;IlwisClient.lib;opengl32.lib;ILWISDrawers.lib;glu32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)$(Configuration)\Ilwis3\Extensions\DrawersUI.dll</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\import;$(SolutionDir)libraries\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile />
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(TargetName).pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(SolutionDir)libraries\$(Configuration)\$(ProjectName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)Sources\Geos\headers;$(SolutionDir)Sources;$(SolutionDir)Sources\Headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;IlwisApplicationsUI;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_WARNINGS;_HAS_ITERATOR_DEBUGGING=0;_SECURE_SCL=0;_WIN32_IE=0x0400;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <ObjectFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\</ObjectFileName>
+      <ProgramDataBaseFileName>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\vc80.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ILWISEngine.lib;htmlhelp.lib;IlwisClient.lib;opengl32.lib;gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)$(Configuration)\Ilwis3\Extensions\DrawersUI.dll</OutputFile>
+      <Version>3.8</Version>
+      <AdditionalLibraryDirectories>$(SolutionDir)libraries\import;$(SolutionDir)libraries\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ModuleDefinitionFile />
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)\temp\$(Configuration)\$(ProjectName)\$(TargetName).pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <LargeAddressAware>true</LargeAddressAware>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(SolutionDir)libraries\$(Configuration)\$(ProjectName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\DrawersUI\AnimationManagement.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\AnimationManagementTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\AnimationTimeSelection.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\AnimationTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\AnnotationBorderTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\AnnotationDrawerTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\AnnotationLegendDrawerTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\AnnotationNorthArrowTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\AnnotationScaleBarDrawerTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\AttributeTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\BackgroundTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\BooleanColorsTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\CollectionTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\ColorCompositeTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\ColorTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\CoordSystemTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\CrossSectionGraph.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\CrossSectionTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\DistanceMeasurer.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\DrawersToolList.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\FeatureSetEditor.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\FeatureSetEditor2.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\FeatureTextTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\FSWindow.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\GeometryTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\GeoreferenceTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\GlobalAnnotationTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\GlobalOperationTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\GlobalTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\GraticukleTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\Grid3DTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\GridTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\HighlightTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\HistogramRasterTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\HovmollerGraph.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\HovMollerTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\InfoTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\InteractiveRepresentationTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\LayerDrawerTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\LegendTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\LineSetEditor2.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\LineSetTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\LineStyleTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\NonRepresentationTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\OperationTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\PointDirectionTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\PointScalingTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\PointSetEditor.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\PointSymbolizationTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\PolygonSetTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\RepresentationTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\SampleSetEditor.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\SampleStatWindow.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\SelectableTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\SetDrawerTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\StretchTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\ThreeDGlobalTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\ThreeDStack.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\ThreeDTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\TrackProfileGraph.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\TrackProfileTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\TransparencyTool.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\ValueSlicer.cpp" />
+    <ClCompile Include="..\..\Sources\DrawersUI\WhitespaceTool.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\DrawersUI\AnimationManagement.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\AnimationManagementTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\AnimationTimeSelection.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\AnimationTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\AnnotationBorderTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\AnnotationDrawerTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\AnnotationLegendDrawerTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\AnnotationNorthArrowTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\AnnotationScaleBarDrawerTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\AttributeTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\BackgroundTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\BooleanColorsTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\CollectionTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\ColorCompositeTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\ColorTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\CoordSystemTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\CrossSectionGraph.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\CrossSectionTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\DistanceMeasurer.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\FeatureSetEditor.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\FeatureSetEditor2.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\FeatureTextTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\FSWindow.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\GeometryTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\GeoreferenceTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\GlobalAnnotationTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\GlobalOperationTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\GlobalTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\GraticuleTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\Grid3dTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\GridTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\HighlightTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\HistogramRasterTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\HovMollerGraph.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\HovMollerTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\InfoTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\InteractiveRepresentationTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\LayerDrawerTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\LegendTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\LineSetEditor2.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\LineSetTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\LineStyleTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\NonRepresentationTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\OperationTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\PointDirectionTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\PointScalingTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\PointSetEditor.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\PointSymbolizationTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\PolygonSetTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\RepresentationTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\SampleSetEditor.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\SampleStatWindow.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\SelectableTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\SetDrawerTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\StretchTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\ThreeDGlobalTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\ThreeDStack.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\ThreeDTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\TrackProfileGraph.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\TrackProfileTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\TransparencyTool.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\ValueSlicer.h" />
+    <ClInclude Include="..\..\Sources\DrawersUI\WhitespaceTool.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
