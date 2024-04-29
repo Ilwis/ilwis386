@@ -1,5 +1,4 @@
 #include "Headers\toolspch.h"
-#include <shfolder.h>
 #include "Engine\Drawers\RootDrawer.h"
 #include "Engine\Drawers\OpenGLText.h"
 
