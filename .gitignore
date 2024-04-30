@@ -1,6 +1,7 @@
 Backup*
 temp/
 .vs
+freetype*
 
 *.user
 upgrade*.htm
