@@ -157,7 +157,7 @@ void SimpleFunction::SetAnchor(DoublePoint pAnchor)
 	if (m_Anchors.size() > 0)
 	{
 		int iPoint = 0;
-		for (int i = 1; i < m_Anchors.size(); ++i)
+		for (size_t i = 1; i < m_Anchors.size(); ++i)
 		{
 			if (rUnitDist2(pAnchor, m_Anchors[i]) < rUnitDist2(pAnchor, m_Anchors[iPoint]))
 				iPoint = i;
@@ -186,7 +186,7 @@ bool bLessThan(DoublePoint &dp1, DoublePoint &dp2)
 void SimpleFunction::SeparateAnchorPoints()
 {
 	double rMinSeparation = m_Domain.Width() / 1000.0;
-	for (int i = 1; i < m_Anchors.size(); ++i)
+	for (size_t i = 1; i < m_Anchors.size(); ++i)
 	{
 		if (m_Anchors[i].X < (m_Anchors[i-1].X + rMinSeparation))
 			m_Anchors[i].X = m_Anchors[i-1].X + rMinSeparation;
