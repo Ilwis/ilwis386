@@ -434,7 +434,7 @@ void TableDelimited::ScanLine(FieldValues& sFields, vector<FldInfo> &scanInfo, b
 			fi.rMin = rMIN(rV, fi.rMin);
 			String sFrac = sField.sTail(".").sTrimSpaces();
 			if ( rV - int(rV) == 0.0 ) sFrac = ""; // maybe its all zero's
-			int iSz = -sFrac.size();
+			int iSz = -1 * sFrac.size();
 			double rS = rMIN(fi.rStep, pow(10.0, iSz));
 			fi.rStep = rMIN(fi.rStep, rS);
 		}
