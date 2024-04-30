@@ -1,5 +1,5 @@
-#include "Headers\toolspch.h"
-#include "Engine\SpatialDB\headers\spatialite\sqlite3.h"
+#include "toolspch.h"
+#include "SpatialDB\headers\spatialite\sqlite3.h"
 #include "Engine\Base\System\Database.h"
 
 using namespace ILWIS;
