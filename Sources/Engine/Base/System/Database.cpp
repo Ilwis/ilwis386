@@ -94,8 +94,7 @@ bool SpatialLite::executeQuery(const String& query, QueryResults& results, vecto
 
 	bool isOK = sqlite3_exec(db, query.c_str(), callback, &results, &db_err) == SQLITE_OK;
 	if ( db_err) {
-		String err(db_err);
-		MessageBox(0,err.c_str(), "Bah", MB_OK);
+		MessageBox(0, TEXT(db_err), TEXT("Bah"), MB_OK);
 		sqlite3_free(db_err);
 	}
 
