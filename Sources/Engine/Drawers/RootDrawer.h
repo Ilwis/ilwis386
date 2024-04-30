@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 
 #include "ComplexDrawer.h"
 #include "Engine\SpatialReference\Gr.h"
