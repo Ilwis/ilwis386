@@ -123,7 +123,6 @@ String CURLEncode::URLEncode(String pcsEncode)
 	String csEncode;
 	String csEncoded;	
 	int m_length;
-	int ascii_value;
 
 	csEncode = pcsEncode;
 	m_length = csEncode.size();
