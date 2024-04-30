@@ -1570,7 +1570,7 @@ void change_file_date(const char *filename,uLong dosdate,tm_unz tmu_date)
 int mymkdir(const char* dirname)
 {
     int ret=0;
-    ret = mkdir(dirname);
+    ret = _mkdir(dirname);
     return ret;
 }
 
