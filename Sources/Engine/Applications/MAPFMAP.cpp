@@ -51,12 +51,12 @@ MapFromMap* MapFromMap::create(const FileName& fn, MapPtr& p)
 
   	vector<CommandInfo *> infos;
     Engine::modules.getCommandInfo(sType, infos);
-	if ( infos.size() > 0 ) {
-		vector<void *> extraParms = vector<void *>();
-		return (MapFromMap *)(infos[0]->createFunction)(fn, p, "", extraParms);
+	if ( infos.size() <= 0 ) {
+	 	InvalidTypeError(fn, "MapFromMap", sType);
 	}
 
- 	InvalidTypeError(fn, "MapFromMap", sType);
+	vector<void*> extraParms = vector<void*>();
+	return (MapFromMap*)(infos[0]->createFunction)(fn, p, "", extraParms);
 }
 
 MapFromMap::MapFromMap(const FileName& fn, MapPtr& p)

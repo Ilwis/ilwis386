@@ -50,12 +50,12 @@ MapFromMapList* MapFromMapList::create(const FileName& fn, MapPtr& p)
 
 	vector<CommandInfo *> infos;
     Engine::modules.getCommandInfo(sType, infos);
-	if ( infos.size() > 0 ) {
-		vector<void *> extraParms = vector<void *>();
-		return (MapFromMapList *)(infos[0]->createFunction)(fn, p, "", extraParms);
+	if (infos.size() <= 0) {
+		InvalidTypeError(fn, "MapFromMapList", sType);
 	}
 
-	InvalidTypeError(fn, "MapFromMapList", sType);
+	vector<void*> extraParms = vector<void*>();
+	return (MapFromMapList*)(infos[0]->createFunction)(fn, p, "", extraParms);
 }
 
 MapFromMapList::MapFromMapList(const FileName& fn, MapPtr& p)
