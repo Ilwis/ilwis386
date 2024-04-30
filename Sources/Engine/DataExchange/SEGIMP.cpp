@@ -99,7 +99,7 @@ struct segtype        // compatible with ILWIS 1.4 record
 
 static int iCompSegCodes(const String* a, const String* b)
 {
-  return stricmp((*a).c_str(), (*b).c_str());
+  return _stricmp((*a).c_str(), (*b).c_str());
 }
 
 static void GetCodes(File& filSeg, ArrayLarge<String>& aSegCodes, long& iDeleted, Tranquilizer* trq)
