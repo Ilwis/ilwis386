@@ -2,6 +2,12 @@ Backup*
 temp/
 .vs
 freetype*
+ftgl-master
+temp_headers
+*.tar
 
+*.zip
+*.gz
+*.bz*
 *.user
 upgrade*.htm
