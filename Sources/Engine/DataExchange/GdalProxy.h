@@ -46,7 +46,7 @@ typedef const GDALColorEntry* (__stdcall *GDALGetColorEntryFunc)(GDALColorTableH
 typedef CPLErr (__stdcall *GDALSetRasterNoDataValueFunc)(GDALRasterBandH ,double);
 typedef double (__stdcall *GDALGetRasterNoDataValueFunc)(GDALRasterBandH ,int * );
 
-typedef  OGRDataSourceH (*OGROpenFunc)(const char *, int, OGRSFDriverH *);
+typedef OGRDataSourceH (*OGROpenFunc)(const char *, int, OGRSFDriverH *);
 typedef void (__stdcall *OGRRegisterAllFunc)();
 typedef int (*OGRGetDriverCountFunc)();
 typedef OGRSFDriverH (*OGRGetDriverFunc) (int);
